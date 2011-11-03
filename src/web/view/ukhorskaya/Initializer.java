@@ -18,6 +18,8 @@ import java.net.URLClassLoader;
 public class Initializer {
     private static Initializer initializer = new Initializer();
 
+    private static String javaHome;
+
     public static Initializer getInstance() {
         return initializer;
     }
@@ -48,12 +50,26 @@ public class Initializer {
         javaCoreEnvironment.registerParserDefinition(new JetParserDefinition());
     }
 
-    private Initializer() { }
+    public static void reInitJavaCoreEnvironment() {
+        File rtJar = initJdk();
+        if (rtJar == null) return;
+        javaCoreEnvironment.addToClasspath(rtJar);
+    }
+
+    private Initializer() {
+    }
+
+    public static void setJavaHome(String path) {
+        javaHome = path;
+        reInitJavaCoreEnvironment();
+        System.out.println("JAVA_HOME = " + javaHome);
+    }
 
     private static File initJdk() {
-        //String javaHome = System.getenv("JAVA_HOME");
         //TODO set javaHome variable
-        String javaHome = System.getenv("JAVA_HOME");
+        if (javaHome == null) {
+            javaHome = System.getenv("JAVA_HOME");
+        }
         File rtJar = null;
         if (javaHome == null) {
             ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();

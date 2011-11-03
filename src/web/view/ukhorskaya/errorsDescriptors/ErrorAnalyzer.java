@@ -1,5 +1,6 @@
 package web.view.ukhorskaya.errorsDescriptors;
 
+import com.google.common.base.Predicates;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -32,7 +33,7 @@ public class ErrorAnalyzer {
     private final Document currentDocument;
     private final Project currentProject;
 
-    private final long startTime = System.currentTimeMillis();
+    private final long startTime = System.nanoTime();
 
     public ErrorAnalyzer(PsiFile currentPsiFile) {
         this.currentPsiFile = currentPsiFile;
@@ -63,15 +64,15 @@ public class ErrorAnalyzer {
             Interval interval = new Interval(start, end, currentDocument);
             errors.add(new ErrorDescriptor(interval, errorElement.getErrorDescription(), Severity.ERROR, "red_wavy_line"));
         }
-        //System.out.print("3 " + (System.currentTimeMillis() - startTime) + " ");
+        long startAnalyzeNamespace = System.nanoTime();
 
-        BindingContext bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeFileWithCache((JetFile) currentPsiFile);
-        /*BindingContext bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
+        BindingContext bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
                 currentProject,
                 Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                JetControlFlowDataTraceFactory.EMPTY);*/
+                Predicates.<PsiFile>equalTo(currentPsiFile),
+                JetControlFlowDataTraceFactory.EMPTY);
 
-        //System.out.print("4 " + (System.currentTimeMillis() - startTime) + " ");
+        System.out.print("analyze, " + (System.nanoTime() - startAnalyzeNamespace)/1000000 + ", ");
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 
         for (Diagnostic diagnostic : diagnostics) {

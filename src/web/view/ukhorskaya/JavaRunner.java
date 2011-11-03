@@ -42,12 +42,13 @@ public class JavaRunner {
                     InputStreamReader(p.getErrorStream()));
 
             // read the output from the command
-            //if (stdInput.ready()) {
+            //TODO check why there is a problem with input stream
+            if (stdInput.ready()) {
                 while ((s = stdInput.readLine()) != null) {
                     resultString.append(s);
                     resultString.append("<br>");
                 }
-            //}
+            }
 
             // read any errors from the attempted command
             while ((s = stdError.readLine()) != null) {

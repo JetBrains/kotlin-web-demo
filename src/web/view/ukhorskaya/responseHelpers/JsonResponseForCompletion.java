@@ -1,5 +1,6 @@
 package web.view.ukhorskaya.responseHelpers;
 
+import com.google.common.base.Predicates;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -34,6 +35,8 @@ public class JsonResponseForCompletion {
     private final int charNumber;
     private int caretPositionOffset;
 
+    private final long startTime = System.nanoTime();
+
     public JsonResponseForCompletion(int lineNumber, int charNumber, PsiFile currentPsiFile) {
         this.lineNumber = lineNumber;
         this.charNumber = charNumber;
@@ -44,13 +47,11 @@ public class JsonResponseForCompletion {
 
     public String getResult() {
         addExpressionAtCaret();
-
-        BindingContext bindingContext = AnalyzingUtils.getInstance(
-                JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
-                    currentProject,
-                    Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                    JetControlFlowDataTraceFactory.EMPTY);
-
+        BindingContext bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
+                       currentProject,
+                       Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
+                       Predicates.<PsiFile>equalTo(currentPsiFile),
+                       JetControlFlowDataTraceFactory.EMPTY);
         PsiElement element = getExpressionForScope();
         PsiElement parent = element.getParent();
 
@@ -64,7 +65,6 @@ public class JsonResponseForCompletion {
             resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, (JetExpression) element);
         }
 
-
         JSONArray jsonArray = new JSONArray();
         if (resolutionScope != null) {
             Collection<DeclarationDescriptor> descriptors = resolutionScope.getAllDescriptors();
@@ -77,7 +77,7 @@ public class JsonResponseForCompletion {
                 jsonArray.put(map);
             }
         }
-
+        System.out.print("5 " + (System.nanoTime() - startTime) + " ");
         return jsonArray.toString();
     }
 

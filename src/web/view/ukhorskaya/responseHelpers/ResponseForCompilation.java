@@ -1,5 +1,6 @@
 package web.view.ukhorskaya.responseHelpers;
 
+import com.google.common.base.Predicates;
 import com.intellij.execution.*;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.impl.RunManagerImpl;
@@ -70,6 +71,7 @@ public class ResponseForCompilation {
             BindingContext bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
                     currentProject,
                     namespaces,
+                    Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
             GenerationState generationState = new GenerationState(currentProject, false);
             generationState.compileCorrectNamespaces(bindingContext, namespaces);

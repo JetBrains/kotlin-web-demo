@@ -22,7 +22,7 @@ public class BaseHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        long time = System.currentTimeMillis();
+        long time = System.nanoTime();
         if (!sendNonSourceFile(exchange)) {
             HttpSession session = new HttpSession(time);
             session.handle(exchange);

@@ -43,7 +43,6 @@ public class HttpSession {
 
     protected Project currentProject;
     protected PsiFile currentPsiFile;
-    protected Document currentDocument;
 
     private HttpExchange exchange;
 
@@ -83,7 +82,7 @@ public class HttpSession {
         if (exchange.getRequestURI().toString().contains("stopTest=true")) {
             try {
                 String response = getTextFromPostRequest();
-                File file = new File("C:/Development/testData/testConnection" + System.currentTimeMillis() + ".csv");
+                File file = new File("C:/Development/testData/testConnection" + System.nanoTime() + ".csv");
                 file.createNewFile();
                 //System.out.println("RESULT: " + response);
                 FileWriter writer = new FileWriter(file);
@@ -122,7 +121,7 @@ public class HttpSession {
                 exchange.sendResponseHeaders(400, response.toString().length());
                 os = exchange.getResponseBody();
                 os.write(response.toString().getBytes());
-                //System.out.println("end writeResponse() = " + (System.currentTimeMillis() - startTime));
+                //System.out.println("end writeResponse() = " + (System.nanoTime() - startTime));
             } catch (IOException e) {
                 //This is an exception we can't send data to client
             } catch (Throwable e) {
@@ -176,9 +175,9 @@ public class HttpSession {
                     "    System.err?.println(\"ERROR\"); \n" +
                     "}  ";
         }
-
+        long startCreateFile = System.nanoTime();
         currentPsiFile = JetPsiFactory.createFile(currentProject, text);
-        currentDocument = currentPsiFile.getViewProvider().getDocument();
+        System.out.print("createFile, " + (System.nanoTime() - startCreateFile) / 1000000 + ", ");
     }
 
 
@@ -187,7 +186,12 @@ public class HttpSession {
         String param = exchange.getRequestURI().getQuery();
         String[] position = new String[0];
         if (param.contains("cursorAt")) {
-            position = (param.substring(param.indexOf("cursorAt=") + 9)).split(",");
+            if (param.contains("&time")) {
+                position = (param.substring(param.indexOf("cursorAt=") + 9, param.indexOf("&time="))).split(",");
+            } else {
+                position = (param.substring(param.indexOf("cursorAt=") + 9)).split(",");
+            }
+
         }
 
         setGlobalVariables(getTextFromPostRequest());
@@ -200,11 +204,11 @@ public class HttpSession {
         String param = exchange.getRequestURI().getQuery();
 
         if ((param != null) && (param.contains("sendData=true"))) {
+            System.out.print("1, " + (System.nanoTime() - startTime) / 1000000 + ", ");
             setGlobalVariables(getTextFromPostRequest());
-            //System.out.print("3 " + (System.currentTimeMillis() - startTime) + " ");
+            System.out.print("2, " + (System.nanoTime() - startTime) / 1000000 + ", ");
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile);
             String response = responseForHighlighting.getResult();
-            //System.out.print("4 " + (System.currentTimeMillis() - startTime) + " ");
             response = response.replaceAll("\\n", "");
             writeResponse(response, HttpStatus.SC_OK, true);
         } else {
@@ -214,7 +218,7 @@ public class HttpSession {
     }
 
     private String getTextFromPostRequest() {
-        StringBuilder reqResponse = new StringBuilder();
+        StringBuilder reqResponse = new StringBuilder(4016);
         InputStreamReader reader = null;
 
         try {
@@ -222,14 +226,15 @@ public class HttpSession {
         } catch (UnsupportedEncodingException e) {
             LOG.error("Impossible to write to file in UTF-8");
         }
-
         try {
             BufferedReader bufferedReader = new BufferedReader(reader);
 
             String tmp;
+            long time = System.nanoTime();
             while ((tmp = bufferedReader.readLine()) != null) {
                 reqResponse.append(tmp);
             }
+            System.out.print("bufferedReader.readLine(), " + (System.nanoTime() - time) / 1000000 + ", " + reqResponse.capacity() + ",");
         } catch (NullPointerException e) {
             reqResponse.append("Resource file not found");
             writeResponse(reqResponse.toString(), HttpStatus.SC_NOT_FOUND);
@@ -244,9 +249,7 @@ public class HttpSession {
         } catch (UnsupportedEncodingException e) {
             LOG.error("Impossible to write to file in UTF-8");
         }
-
         finalResponse = finalResponse.replaceAll("<br>", "\n");
-
         if (finalResponse.length() > 5) {
             return finalResponse.substring(5);
         } else {
@@ -341,13 +344,13 @@ public class HttpSession {
             exchange.sendResponseHeaders(errorCode, finalResponse.length());
             os = exchange.getResponseBody();
             os.write(finalResponse.getBytes());
-            //long time = (System.currentTimeMillis() - startTime);
+            //long time = (System.nanoTime() - startTime);
             //if (time == 0) {
-            //     System.out.println(startTime + " " + System.currentTimeMillis() + " " + finalResponse);
+            //     System.out.println(startTime + " " + System.nanoTime() + " " + finalResponse);
             // }
-            //long timeDiff = System.currentTimeMillis() - startTime;
+            //long timeDiff = System.nanoTime() - startTime;
             //System.out.println(exchange.getRequestURI().toString() + " " + timeDiff + " " + (timeDiff / 1000000) + ";");
-            System.out.println((System.currentTimeMillis() - startTime));
+            System.out.println((System.nanoTime() - startTime) / 1000000);
         } catch (IOException e) {
             //This is an exception we can't send data to client
         } catch (Throwable e) {

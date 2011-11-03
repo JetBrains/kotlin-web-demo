@@ -31,7 +31,7 @@ public class GlobalCssMap {
 
     private List<Integer> fontTypes = new ArrayList<Integer>();
 
-    long startTime = System.currentTimeMillis();
+    long startTime = System.nanoTime();
 
     public static GlobalCssMap getInstance() {
         return MAP;
@@ -50,7 +50,6 @@ public class GlobalCssMap {
         putColors();
         putEffectTypes();
         putFontTypes();
-        System.out.println("put to map " + (System.currentTimeMillis() - startTime));
         int i = 0;
         for (Color c : foregroundColors) {
             for (Color b : backgroundColors) {
@@ -71,7 +70,6 @@ public class GlobalCssMap {
                 }
             }
         }
-        System.out.println("generate map size=" + i + " - " + (System.currentTimeMillis() - startTime));
         //generateCssStyles();
     }
 
@@ -164,9 +162,9 @@ public class GlobalCssMap {
                 buffer = buffer.delete(position, buffer.length());
             }
         }
-        System.out.println("genearte string with css " + (System.currentTimeMillis() - startTime));
+        System.out.println("genearte string with css " + (System.nanoTime() - startTime));
         System.out.println(buffer);
-        System.out.println("print css " + (System.currentTimeMillis() - startTime));
+        System.out.println("print css " + (System.nanoTime() - startTime));
     }
 
     private static class MyTextAttributes {
