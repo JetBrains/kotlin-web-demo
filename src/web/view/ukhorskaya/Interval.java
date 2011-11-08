@@ -7,8 +7,8 @@ import com.intellij.openapi.editor.Document;
  * User: Natalia.Ukhorskaya
  * Date: 10/28/11
  * Time: 11:30 AM
- * To change this template use File | Settings | File Templates.
  */
+
 public class Interval {
     public final Point startPoint;
     public final Point endPoint;

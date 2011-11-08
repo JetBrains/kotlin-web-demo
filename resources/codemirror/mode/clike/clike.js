@@ -215,7 +215,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     keywords: words( "namespace continue return object while break class trait throw super" +
                       "when type this else This try val var fun for is in if do as true false null"),
     blockKeywords: words(""),
-    soft: words("import where by get set abstract enum open annotation override private public internal protected catch out err vararg inline finally final ref"),
+    soft: words("import where by get set abstract enum open annotation override private public internal protected catch out vararg inline finally final ref"),
     hooks: {
       "!in": function(stream, state) {
         stream.eatWhile(/[\w\$_]/);

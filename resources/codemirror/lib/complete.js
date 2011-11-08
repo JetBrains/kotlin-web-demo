@@ -81,8 +81,21 @@
             }
 
         },
-        onChange:runTimerForNonPrinting
+        onChange: runTimerForNonPrinting,
+        onCursorActivity: updateStatusBar
     });
+
+    function updateStatusBar() {
+        var lineNumber = editor.getCursor(true).line;
+        var text = editor.lineInfo(lineNumber).markerText;
+        if (text != null) {
+            text = text.substring(text.indexOf("title=\"") + 7);
+            text = text.substring(0, text.indexOf("\""));
+            document.getElementById("statusBar").innerHTML = "line " + lineNumber + " - " + text;
+        } else {
+            document.getElementById("statusBar").innerHTML = "";
+        }
+    }
 
     /*var editorConsole = CodeMirror.fromTextArea(document.getElementById("console"), {
      lineNumbers: true,
@@ -136,17 +149,19 @@
 
     var compilationInProgress = false;
 
+    $("#arguments").val("");
+
     function runOrCompile(param, text, error) {
         compilationInProgress = true;
-
+        var arguments = $("#arguments").val();
         var i = editor.getValue();
         $.ajax({
             url:document.location.href + "?" + param + "=true",
             context:document.body,
             success:onCompileSuccess,
-            dataType:"html",
+            dataType:"json",
             type:"POST",
-            data:{text:i},
+            data:{text:i, consoleArgs:arguments},
             //timeout: 30000,
             error:function () {
                 document.getElementById("compilationResult").innerHTML = "Your request is aborted. Impossible to get data from server. " + error;
@@ -178,8 +193,39 @@
 
 
     function onCompileSuccess(data) {
-        if (data.length > 0) {
-            document.getElementById("compilationResult").innerHTML = data;
+        if (data != null) {
+            var i = 0;
+            document.getElementById("compilationResult").innerHTML = "";
+            var errors = document.createElement("div");
+            while (typeof data[i] != "undefined") {
+                //If there is a compilation error
+                if (typeof data[i].message != "undefined") {
+                    alert("a")
+                    var p = document.createElement("p");
+                    var image = document.createElement("img");
+                    if (data[i].type == "ERROR") {
+                        p.className = "newLineError";
+                        image.src = "icons/error.png";
+                    } else if (data[i].type == "WARNING") {
+                        p.className = "newLineWarning";
+                        image.src = "icons/warning.png";
+                    }
+                    p.appendChild(image);
+                    var text = document.createElement("span");
+                    text.innerHTML = data[i].message;
+                    p.appendChild(text);
+                    errors.appendChild(p);
+                } else {
+                    var p = document.createElement("p");
+                    if (data[i].type == "err") {
+                        p.className = "newLineError";
+                    }
+                    p.innerHTML = data[i].text;
+                    errors.appendChild(p);
+                }
+                i++;
+            }
+            document.getElementById("compilationResult").appendChild(errors);
         }
         compilationInProgress = false;
     }
@@ -237,7 +283,6 @@
                 var title = data[i].titleName;
                 var start = eval('(' + data[i].x + ')');
 
-
                 if ((data[i].severity == 'WARNING') || (data[i].severity == 'TYPO')) {
                     document.getElementById("compilationResult1").innerHTML = document.getElementById("compilationResult1").innerHTML + editor.lineInfo(start.line).markerText;
                     //editor.setMarker(start.line, '<img src="/icons/warning.png" title="' + title + '"/>%N%');
@@ -248,6 +293,7 @@
                 arrayLinesMarkers[i] = start.line;
                 var el = document.getElementById(start.line + " " + start.ch);
                 if (el != null) {
+                    alert("aaa");
                     el.setAttribute("title", title);
                 }
 
@@ -255,6 +301,7 @@
             }
             document.getElementById("compilationResult2").innerHTML = "after all " + (new Date().getTime() - now);
         }
+        updateStatusBar();
         isLoadingHighlighting = false;
     }
 

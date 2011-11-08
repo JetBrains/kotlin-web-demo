@@ -7,10 +7,10 @@
     <script src="/codemirror/lib/codemirror-2.16.js?type=jquery_lib"></script>
 
     <script src="/codemirror/mode/clike/clike.js?type=jquery_lib"></script>
-	
-	<script src="/jquery/jquery.min.js?type=jquery_lib"></script>
-	<script src="/jquery/js/jquery-ui-1.8.16.custom.min.js?type=jquery_lib" type="text/javascript"></script>
-	<script src="/jquery/development-bundle/jquery-1.6.2.js?type=jquery_lib"></script>
+
+    <script src="/jquery/jquery.min.js?type=jquery_lib"></script>
+    <script src="/jquery/js/jquery-ui-1.8.16.custom.min.js?type=jquery_lib" type="text/javascript"></script>
+    <script src="/jquery/development-bundle/jquery-1.6.2.js?type=jquery_lib"></script>
 
     <link rel="stylesheet" href="/codemirror/theme/default.css?type=jquery_lib">
     <link rel="stylesheet" href="/codemirror/css/docs.css?type=jquery_lib">
@@ -40,18 +40,28 @@
         .CodeMirror {
             border: 1px solid #eee;
         }
+
+        .arguments {
+            border: 1px solid #eee;
+            width: 770px;
+            height: 20px;
+            resize: none;
+        }
     </style>
 </head>
-<body>
+<body spellcheck="false">
 <h2>Editor</h2>
 
 <div style="margin-top: 10px;">
     <img src="/icons/execute.png" id="run" title="Run file"/>
     <img src="/icons/compile.png" id="compile" title="Compile file"/>
-   <!-- <img src="/icons/markAll.png" id="markAll" title="Copy all content to clipboard"/>-->
+    <!-- <img src="/icons/markAll.png" id="markAll" title="Copy all content to clipboard"/>-->
 </div>
+<form><textarea class="arguments" id="arguments" name="arguments"></textarea></form>
 <form><textarea class="CodeMirror" id="code" name="code">RESPONSEBODY</textarea></form>
+<div id="statusBar"></div>
 <h2>Console</h2>
+
 <div id="compilationResult"></div>
 <div id="compilationResult0"></div>
 <div id="compilationResult1"></div>

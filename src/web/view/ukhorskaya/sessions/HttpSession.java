@@ -3,27 +3,22 @@ package web.view.ukhorskaya.sessions;
 import com.intellij.openapi.actionSystem.KeyboardShortcut;
 import com.intellij.openapi.actionSystem.ShortcutSet;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.project.ex.ProjectEx;
 import com.intellij.psi.PsiFile;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.Initializer;
-import web.view.ukhorskaya.KotlinHttpServer;
+import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.handlers.BaseHandler;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForCompletion;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting;
-import web.view.ukhorskaya.responseHelpers.ResponseForCompilation;
+import web.view.ukhorskaya.responseHelpers.JsonResponseForCompilation;
 
 import java.awt.event.InputEvent;
 import java.io.*;
 import java.net.URLDecoder;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by IntelliJ IDEA.
@@ -55,43 +50,25 @@ public class HttpSession {
     }
 
     public void handle(final HttpExchange exchange) {
-        //System.out.println(exchange.getRequestURI());
         this.exchange = exchange;
-       // mainThread = new Thread(new Runnable() {
-       //     @Override
-       //     public void run() {
-                String param = exchange.getRequestURI().toString();
-                if (param.contains("testConnection")) {
-                    sendTestConnection();
-                    return;
-                }
-                if (param.contains("path=")) {
-                    if (param.contains("compile=true") || param.contains("run=true")) {
-                        sendExecutorResult();
-                        return;
-                    } else if (param.contains("complete=true")) {
-                        sendCompletionResult();
-                        return;
-                    } else if (param.contains("stop=true")) {
-                        stopSession();
-                        return;
-                    } else {
-                        sendProjectSourceFile();
-                        return;
-                    }
-                }
-         //   }
-        //});
 
-        //mainThread.start();
-        //try {
-        //    mainThread.join(1000);
-       // } catch (InterruptedException e) {
-       //     System.out.println("inter");
-            /* if somebody interrupts us he knows what he is doing */
-       // }
-        //main
-
+        String param = exchange.getRequestURI().toString();
+        if (param.contains("testConnection")) {
+            sendTestConnection();
+            return;
+        }
+        if (param.contains("path=")) {
+            if (param.contains("compile=true") || param.contains("run=true")) {
+                sendExecutorResult();
+                return;
+            } else if (param.contains("complete=true")) {
+                sendCompletionResult();
+                return;
+            } else {
+                sendProjectSourceFile();
+                return;
+            }
+        }
 
         writeResponse("Wrong request: " + exchange.getRequestURI().toString(), HttpStatus.SC_NOT_FOUND, true);
     }
@@ -99,10 +76,9 @@ public class HttpSession {
     private void sendTestConnection() {
         if (exchange.getRequestURI().toString().contains("stopTest=true")) {
             try {
-                String response = getTextFromPostRequest();
+                String response = getPostDataFromRequest().text;
                 File file = new File("C:/Development/testData/testConnection" + System.nanoTime() + ".csv");
                 file.createNewFile();
-                //System.out.println("RESULT: " + response);
                 FileWriter writer = new FileWriter(file);
                 writer.write(response);
                 writer.close();
@@ -142,9 +118,6 @@ public class HttpSession {
                 //System.out.println("end writeResponse() = " + (System.nanoTime() - startTime));
             } catch (IOException e) {
                 //This is an exception we can't send data to client
-            } catch (Throwable e) {
-                //For do not stop server in all cases
-                LOG.error(e);
             } finally {
                 try {
                     if (os != null) {
@@ -155,24 +128,6 @@ public class HttpSession {
                 }
             }
         }
-    }
-
-    private void sendConsoleInputResponse() {
-
-    }
-
-    private void stopSession() {
-        KotlinHttpServer.stopServer();
-
-        FileDocumentManager.getInstance().saveAllDocuments();
-
-        Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
-        for (Project openProject : openProjects) {
-            ProjectEx project = (ProjectEx) openProject;
-            project.save();
-        }
-
-        System.exit(0);
     }
 
     private void setGlobalVariables(@Nullable String text) {
@@ -189,9 +144,12 @@ public class HttpSession {
                     "\n" +
                     "fun main(args : Array<String>) {\n" +
                     "  var s = \"Natalia\";\n" +
+                    "  //Thread.sleep(16000)\n" +
                     "    System.out?.println(\"Hello, \" + s) \n" +
-                    "    System.err?.println(\"ERROR\"); \n" +
-                    "}  ";
+                    "    System.out?.println(\"ERROR\"); \n" +
+                    "  //Thread.sleep(16000)\n" +
+                    "  //java.io.FileWriter(\"sdfs.kt\")\n" +
+                    "} ";
         }
         long startCreateFile = System.nanoTime();
         currentPsiFile = JetPsiFactory.createFile(currentProject, text);
@@ -202,17 +160,9 @@ public class HttpSession {
     private void sendCompletionResult() {
 
         String param = exchange.getRequestURI().getQuery();
-        String[] position = new String[0];
-        if (param.contains("cursorAt")) {
-            if (param.contains("&time")) {
-                position = (param.substring(param.indexOf("cursorAt=") + 9, param.indexOf("&time="))).split(",");
-            } else {
-                position = (param.substring(param.indexOf("cursorAt=") + 9)).split(",");
-            }
+        String[] position = ResponseUtils.substringBetween(param, "cursorAt=", "&time=").split(",");
 
-        }
-
-        setGlobalVariables(getTextFromPostRequest());
+        setGlobalVariables(getPostDataFromRequest().text);
 
         JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(Integer.parseInt(position[0]), Integer.parseInt(position[1]), currentPsiFile);
         writeResponse(jsonResponseForCompletion.getResult(), HttpStatus.SC_OK, true);
@@ -222,7 +172,7 @@ public class HttpSession {
         String param = exchange.getRequestURI().getQuery();
 
         if ((param != null) && (param.contains("sendData=true"))) {
-            setGlobalVariables(getTextFromPostRequest());
+            setGlobalVariables(getPostDataFromRequest().text);
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile);
 
             String response = responseForHighlighting.getResult();
@@ -234,7 +184,7 @@ public class HttpSession {
         }
     }
 
-    private String getTextFromPostRequest() {
+    private PostData getPostDataFromRequest() {
         StringBuilder reqResponse = new StringBuilder(4016);
         InputStreamReader reader = null;
 
@@ -266,27 +216,30 @@ public class HttpSession {
         }
         finalResponse = finalResponse.replaceAll("<br>", "\n");
         if (finalResponse.length() > 5) {
-            return finalResponse.substring(5);
+            if (finalResponse.contains("&consoleArgs=")) {
+                return new PostData(ResponseUtils.substringBetween(finalResponse, "text=", "&consoleArgs="), ResponseUtils.substringAfter(finalResponse, "&consoleArgs="));
+            } else {
+                return new PostData(ResponseUtils.substringAfter(finalResponse, "text="));
+            }
         } else {
             writeResponse("Post request is too short", HttpStatus.SC_BAD_REQUEST);
         }
-        return "";
+        return null;
     }
 
     private void sendExecutorResult() {
-        setGlobalVariables(getTextFromPostRequest());
-
+        PostData data = getPostDataFromRequest();
+        setGlobalVariables(data.text);
+        boolean isOnlyCompilation = true;
         if (exchange.getRequestURI().getQuery().contains("compile")) {
-            compileOrRunProject(true);
+            isOnlyCompilation = true;
         } else if (exchange.getRequestURI().getQuery().contains("run")) {
-            compileOrRunProject(false);
+            isOnlyCompilation = false;
         } else {
             writeResponse("Incorrect url: absent run or compile parameter", HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
-    }
 
-    private void compileOrRunProject(final boolean isOnlyCompilation) {
-        ResponseForCompilation responseForCompilation = new ResponseForCompilation(isOnlyCompilation, currentPsiFile);
+        JsonResponseForCompilation responseForCompilation = new JsonResponseForCompilation(isOnlyCompilation, currentPsiFile, data.arguments);
         writeResponse(responseForCompilation.getResult(), HttpStatus.SC_OK, true);
     }
 
@@ -372,9 +325,6 @@ public class HttpSession {
             System.out.println((System.nanoTime() - startTime) / 1000000);
         } catch (IOException e) {
             //This is an exception we can't send data to client
-        } catch (Throwable e) {
-            //For do not stop server in all cases
-            LOG.error(e);
         } finally {
             //mainThread.interrupt();
             try {
@@ -436,6 +386,21 @@ public class HttpSession {
         private KeyModifier(int modifier, int key) {
             this.modifier = modifier;
             this.key = key;
+        }
+    }
+
+
+    private class PostData {
+        public final String text;
+        public String arguments = null;
+
+        private PostData(String text) {
+            this.text = text;
+        }
+
+        private PostData(String text, String arguments) {
+            this.text = text;
+            this.arguments = arguments;
         }
     }
 

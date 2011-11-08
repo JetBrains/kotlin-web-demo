@@ -4,6 +4,7 @@ import com.intellij.core.JavaCoreEnvironment;
 import com.intellij.openapi.Disposable;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.plugin.JetFileType;
+import web.view.ukhorskaya.server.ServerSettings;
 
 import java.io.File;
 import java.net.URL;
@@ -18,16 +19,26 @@ import java.net.URLClassLoader;
 public class Initializer {
     private static Initializer initializer = new Initializer();
 
-    private static String javaHome;
-
     public static Initializer getInstance() {
         return initializer;
+    }
+
+    private Initializer() {
     }
 
     private static JavaCoreEnvironment javaCoreEnvironment;
 
     public static JavaCoreEnvironment getEnvironment() {
         return javaCoreEnvironment;
+    }
+
+    public static void setJavaCoreEnvironment() {
+        File rtJar = initJdk();
+        if (rtJar == null) return;
+        javaCoreEnvironment.addToClasspath(rtJar);
+        javaCoreEnvironment.registerFileType(JetFileType.INSTANCE, "kt");
+        javaCoreEnvironment.registerFileType(JetFileType.INSTANCE, "jet");
+        javaCoreEnvironment.registerParserDefinition(new JetParserDefinition());
     }
 
     public void initJavaCoreEnvironment() {
@@ -40,38 +51,18 @@ public class Initializer {
         };
         javaCoreEnvironment = new JavaCoreEnvironment(root);
 
-        File rtJar = initJdk();
-        if (rtJar == null) return;
-
-        javaCoreEnvironment.addToClasspath(rtJar);
-
-        javaCoreEnvironment.registerFileType(JetFileType.INSTANCE, "kt");
-        javaCoreEnvironment.registerFileType(JetFileType.INSTANCE, "jet");
-        javaCoreEnvironment.registerParserDefinition(new JetParserDefinition());
-    }
-
-    public static void reInitJavaCoreEnvironment() {
-        File rtJar = initJdk();
-        if (rtJar == null) return;
-        javaCoreEnvironment.addToClasspath(rtJar);
-    }
-
-    private Initializer() {
+        setJavaCoreEnvironment();
     }
 
     public static void setJavaHome(String path) {
-        javaHome = path;
-        reInitJavaCoreEnvironment();
-        System.out.println("JAVA_HOME = " + javaHome);
+        ServerSettings.JAVA_HOME = path;
+        setJavaCoreEnvironment();
+        System.out.println("JAVA_HOME = " + ServerSettings.JAVA_HOME);
     }
 
     private static File initJdk() {
-        //TODO set javaHome variable
-        if (javaHome == null) {
-            javaHome = System.getenv("JAVA_HOME");
-        }
         File rtJar = null;
-        if (javaHome == null) {
+        if (ServerSettings.JAVA_HOME == null) {
             ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
             if (systemClassLoader instanceof URLClassLoader) {
                 URLClassLoader loader = (URLClassLoader) systemClassLoader;
@@ -94,11 +85,11 @@ public class Initializer {
                 return null;
             }
         } else {
-            rtJar = findRtJar(javaHome);
+            rtJar = findRtJar(ServerSettings.JAVA_HOME);
         }
 
         if (rtJar == null || !rtJar.exists()) {
-            System.out.println("No rt.jar found under JAVA_HOME=" + javaHome);
+            System.out.println("No rt.jar found under JAVA_HOME=" + ServerSettings.JAVA_HOME);
             return null;
         }
         return rtJar;

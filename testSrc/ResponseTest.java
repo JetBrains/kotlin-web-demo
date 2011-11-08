@@ -1,7 +1,8 @@
 import junit.framework.TestCase;
 import org.jetbrains.annotations.Nullable;
 import web.view.ukhorskaya.Initializer;
-import web.view.ukhorskaya.KotlinHttpServer;
+import web.view.ukhorskaya.server.KotlinHttpServer;
+import web.view.ukhorskaya.ResponseUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -50,30 +51,30 @@ public class ResponseTest extends TestCase {
     }
 
     public void test$execution$FooOutErr() throws IOException, InterruptedException {
-        String expectedResult = "Generated classfiles: <br>namespace.class<br><br>Hello<br><font color=\"red\">ERROR<br></font>";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
     public void test$execution$FooOut() throws IOException, InterruptedException {
-        String expectedResult = "Generated classfiles: <br>namespace.class<br><br>Hello<br>";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
     public void test$execution$FooErr() throws IOException, InterruptedException {
-        String expectedResult = "Generated classfiles: <br>namespace.class<br><br><font color=\"red\">ERROR<br></font>";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
     //Runtime.getRuntime().exec() Exception
     public void test$errors$securityExecutionError() throws IOException, InterruptedException {
-        String expectedResult = "Generated classfiles: <br>namespace.class<br><br><font color=\"red\">Exception in thread \"main\" java.security.AccessControlException: access denied (java.io.FilePermission <<ALL FILES>> execute)<br></font><font color=\"red\">\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br></font><font color=\"red\">\tat java.security.AccessController.checkPermission(AccessController.java:546)<br></font><font color=\"red\">\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br></font><font color=\"red\">\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br></font><font color=\"red\">\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br></font><font color=\"red\">\tat java.lang.Runtime.exec(Runtime.java:593)<br></font><font color=\"red\">\tat java.lang.Runtime.exec(Runtime.java:431)<br></font><font color=\"red\">\tat java.lang.Runtime.exec(Runtime.java:328)<br></font><font color=\"red\">\tat namespace.main(dummy.jet:2)<br></font>";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission <<ALL FILES>> execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat namespace.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
 
     //Exception when read file from other directory
     public void test$errors$securityFilePermissionError() throws IOException, InterruptedException {
-        String expectedResult = "Generated classfiles: <br>namespace.class<br><br><font color=\"red\">Exception in thread \"main\" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br></font><font color=\"red\">\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br></font><font color=\"red\">\tat java.security.AccessController.checkPermission(AccessController.java:546)<br></font><font color=\"red\">\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br></font><font color=\"red\">\tat java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br></font><font color=\"red\">\tat java.io.File.exists(File.java:731)<br></font><font color=\"red\">\tat namespace.main(dummy.jet:3)<br></font>";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br/>\\tat java.io.File.exists(File.java:731)<br/>\\tat namespace.main(dummy.jet:3)<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
@@ -85,27 +86,27 @@ public class ResponseTest extends TestCase {
 
     //Compilation with error
     public void test$errors$compilationWithError() throws IOException, InterruptedException {
-        String expectedResult = "<p class=\"newLineClass\"><img src=\"/icons/error.png\"/>ERROR: <font color=\"red\">(1, 44) - Only safe calls (?.) are allowed on a nullable receiver of type PrintStream?</font></p>";
+        String expectedResult = "[{\"message\":\"(1, 44) - Only safe calls (?.) are allowed on a nullable receiver of type PrintStream?\",\"type\":\"ERROR\"}]";
         String data = "fun main(args : Array<String>) { System.err.println(\"ERROR\") }";
         compareResponseForPostRequest(expectedResult, "compile=true", data);
     }
 
     //run with error
     public void test$errors$runWithError() throws IOException, InterruptedException {
-        String expectedResult = "<p class=\"newLineClass\"><img src=\"/icons/error.png\"/>ERROR: <font color=\"red\">(1, 44) - Only safe calls (?.) are allowed on a nullable receiver of type PrintStream?</font></p>";
+        String expectedResult = "[{\"message\":\"(1, 44) - Only safe calls (?.) are allowed on a nullable receiver of type PrintStream?\",\"type\":\"ERROR\"}]";
         String data = "fun main(args : Array<String>) { System.err.println(\"ERROR\") }";
         compareResponseForPostRequest(expectedResult, "run=true", data);
     }
 
     public void test$timeout$RunTimeout() throws IOException, InterruptedException {
-        String expectedResult = "Generated classfiles: <br>demo/namespace.class<br>demo/Main.class<br><br><font color=\"red\">Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br>demo/namespace.class<br>demo/Main.class<br>\",\"type\":\"out\"},{\"text\":\"Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
     //Completion after point
     public void test$completion$completionAfterPoint() throws IOException, InterruptedException {
         String expectedResult = "[{\"icon\":\"/icons/method.png\",\"name\":\"setJavaLangAccess()\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"setSecurityManager(p0 : SecurityManager?...\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"nanoTime()\",\"tail\":\"Long\"},{\"icon\":\"/icons/property.png\",\"name\":\"in\",\"tail\":\"InputStream?\"},{\"icon\":\"/icons/method.png\",\"name\":\"runFinalizersOnExit(p0 : Boolean)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"arraycopy(p0 : Any?, p1 : Int, p2 : Any?...\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"setProperties(p0 : Properties?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"nullInputStream()\",\"tail\":\"InputStream?\"},{\"icon\":\"/icons/method.png\",\"name\":\"setIn0(p0 : InputStream?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"setProperty(p0 : String?, p1 : String?)\",\"tail\":\"String?\"},{\"icon\":\"/icons/method.png\",\"name\":\"checkKey(p0 : String?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"setErr0(p0 : PrintStream?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/property.png\",\"name\":\"err\",\"tail\":\"PrintStream?\"},{\"icon\":\"/icons/method.png\",\"name\":\"clearProperty(p0 : String?)\",\"tail\":\"String?\"},{\"icon\":\"/icons/property.png\",\"name\":\"security\",\"tail\":\"SecurityManager?\"},{\"icon\":\"/icons/method.png\",\"name\":\"setErr(p0 : PrintStream?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/property.png\",\"name\":\"cons\",\"tail\":\"Console?\"},{\"icon\":\"/icons/method.png\",\"name\":\"getenv()\",\"tail\":\"Map<String?, String?>?\"},{\"icon\":\"/icons/method.png\",\"name\":\"setOut(p0 : PrintStream?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"getProperty(p0 : String?, p1 : String?)\",\"tail\":\"String?\"},{\"icon\":\"/icons/method.png\",\"name\":\"registerNatives()\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"getProperties()\",\"tail\":\"Properties?\"},{\"icon\":\"/icons/method.png\",\"name\":\"runFinalization()\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"setSecurityManager0(p0 : SecurityManager...\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"gc()\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"getSecurityManager()\",\"tail\":\"SecurityManager?\"},{\"icon\":\"/icons/method.png\",\"name\":\"checkIO()\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"console()\",\"tail\":\"Console?\"},{\"icon\":\"/icons/property.png\",\"name\":\"out\",\"tail\":\"PrintStream?\"},{\"icon\":\"/icons/method.png\",\"name\":\"getProperty(p0 : String?)\",\"tail\":\"String?\"},{\"icon\":\"/icons/method.png\",\"name\":\"setIn(p0 : InputStream?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"mapLibraryName(p0 : String?)\",\"tail\":\"String?\"},{\"icon\":\"/icons/method.png\",\"name\":\"identityHashCode(p0 : Any?)\",\"tail\":\"Int\"},{\"icon\":\"/icons/method.png\",\"name\":\"exit(p0 : Int)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"nullPrintStream()\",\"tail\":\"PrintStream?\"},{\"icon\":\"/icons/method.png\",\"name\":\"loadLibrary(p0 : String?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"setOut0(p0 : PrintStream?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"getenv(p0 : String?)\",\"tail\":\"String?\"},{\"icon\":\"/icons/method.png\",\"name\":\"nanoTime()\",\"tail\":\"Long\"},{\"icon\":\"/icons/method.png\",\"name\":\"load(p0 : String?)\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"inheritedChannel()\",\"tail\":\"Channel?\"},{\"icon\":\"/icons/method.png\",\"name\":\"initProperties(p0 : Properties?)\",\"tail\":\"Properties?\"},{\"icon\":\"/icons/property.png\",\"name\":\"props\",\"tail\":\"Properties?\"},{\"icon\":\"/icons/method.png\",\"name\":\"initializeSystemClass()\",\"tail\":\"Tuple0\"},{\"icon\":\"/icons/method.png\",\"name\":\"getCallerClass()\",\"tail\":\"Class<out Any?>?\"}]";
-        String data = "test=fun main(args : Array<String>) { System. }";
+        String data = "text=fun main(args : Array<String>) { System. }";
         String actualResult = getActualResultForRequest(getUrlFromFileName(getNameByTestName()), data, "complete=true&cursorAt=0,40");
         assertNotNull(actualResult);
         //compareResponseForPostRequest(expectedResult, "complete=true&cursorAt=0,40", data);
@@ -124,11 +125,8 @@ public class ResponseTest extends TestCase {
     //Get name of file to load content for test
     private String getNameByTestName() {
         String testName = this.getName();
-        int pos = testName.indexOf("test");
-        if (pos != -1) {
-            testName = testName.substring(pos + 5);
-            testName = testName.replace("$", "/");
-        }
+        testName = ResponseUtils.substringAfter(testName, "test$");
+        testName = testName.replace("$", "/");
         return testName;
     }
 

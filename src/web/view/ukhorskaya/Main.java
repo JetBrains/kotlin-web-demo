@@ -1,5 +1,8 @@
 package web.view.ukhorskaya;
 
+import web.view.ukhorskaya.server.KotlinHttpServer;
+import web.view.ukhorskaya.server.ServerSettings;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -41,24 +44,32 @@ public class Main {
                                 KotlinHttpServer.stopServer();
                                 kotlinHttpServer.startServer();
                             } else if (tmp.startsWith("set JAVA_HOME")) {
-                                Initializer.setJavaHome(tmp.substring(14));
+                                Initializer.setJavaHome(ResponseUtils.substringAfter(tmp, "set JAVA_HOME "));
                             } else if (tmp.startsWith("set output")) {
-                                JavaRunner.OUTPUT_DIRECTORY = tmp.substring(11);
+                                ServerSettings.OUTPUT_DIRECTORY = ResponseUtils.substringAfter(tmp, "set output ");
+                                System.out.println("done: " + ServerSettings.OUTPUT_DIRECTORY);
+                            } else if (tmp.startsWith("set timeout")) {
+                                ServerSettings.TIMEOUT_FOR_EXECUTION = Integer.parseInt(ResponseUtils.substringAfter(tmp, "set timeout "));
+                                System.out.println("done: " + ServerSettings.TIMEOUT_FOR_EXECUTION);
+                            } else if (tmp.startsWith("set kotlinLib")) {
+                                ServerSettings.PATH_TO_KOTLIN_LIB = ResponseUtils.substringAfter(tmp, "set kotlinLib ");
+                                System.out.println("done: " + ServerSettings.PATH_TO_KOTLIN_LIB);
                             } else if (tmp.equals("-h") || tmp.equals("--help")) {
-                                System.out.println("The most commonly used commands are:");
+                                System.out.println("List of commands:");
                                 System.out.println("set JAVA_HOME pathToJavaHome - without \"\"");
+                                System.out.println("set        timeout int - set timeout for execution");
                                 System.out.println("set output pathToOutputDir - without \"\", set directory to create a class files until compilation");
+                                System.out.println("set kotlinLib pathToKotlinLibDir - without \"\", set path to kotlin library jar files");
                                 System.out.println("stop - to stop server and exit application");
                                 System.out.println("restart - to restart server");
                             }
                         }
                     } catch (IOException e) {
-                        System.out.println("Error while reading console");
+                        System.err.println("Error while reading console");
                     }
                 }
             }
         });
         t.start();
-
     }
 }

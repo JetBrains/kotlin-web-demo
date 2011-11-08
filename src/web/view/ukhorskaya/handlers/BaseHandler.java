@@ -27,9 +27,15 @@ public class BaseHandler implements HttpHandler {
     public void handle(final HttpExchange exchange) throws IOException {
 
         final long time = System.nanoTime();
-        if (!sendNonSourceFile(exchange)) {
-            HttpSession session = new HttpSession(time);
-            session.handle(exchange);
+        try {
+            if (!sendNonSourceFile(exchange)) {
+                HttpSession session = new HttpSession(time);
+                session.handle(exchange);
+            }
+        } catch (Throwable e) {
+            //Do not stop server
+            e.printStackTrace();
+            writeResponse(exchange, "Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
