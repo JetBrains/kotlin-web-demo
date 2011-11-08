@@ -4,7 +4,6 @@ import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import org.jetbrains.annotations.Nullable;
 import web.view.ukhorskaya.ResponseUtils;
-import web.view.ukhorskaya.handlers.BaseHandler;
 
 import java.awt.*;
 import java.util.ArrayList;

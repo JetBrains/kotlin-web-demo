@@ -9,11 +9,10 @@
     </content>
     <orderEntry type="jdk" jdkName="IDEA 10.x" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="json" level="application" />
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit.jar!/" />
+          <root url="jar://$IDEA_HOME$/lib/junit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -22,13 +21,14 @@
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/annotations.jar!/" />
+          <root url="jar://$IDEA_HOME$/lib/annotations.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="library" name="kotlin-compiler" level="application" />
+    <orderEntry type="library" name="json" level="project" />
   </component>
 </module>
 

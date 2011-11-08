@@ -16,6 +16,7 @@ import java.net.URL;
 public class ResponseTest extends TestCase {
 
     private final String LOCALHOST = "http://localhost/";
+    private final String TEST_SRC = "C://Development/git-contrib/jet-contrib/WebView/testData/";
 
     public void testServerStarted() {
         assertTrue("Server didn't start", KotlinHttpServer.isServerRunning());
@@ -48,11 +49,27 @@ public class ResponseTest extends TestCase {
         compareResponseForPostRequest(expectedResult, "sendData=true", null);
     }
 
+    public void test$execution$FooOutErr() throws IOException, InterruptedException {
+        String expectedResult = "Generated classfiles: <br>namespace.class<br><br>Hello<br><font color=\"red\">ERROR<br></font>";
+        compareResponseForPostRequest(expectedResult, "run=true", null);
+    }
+
+    public void test$execution$FooOut() throws IOException, InterruptedException {
+        String expectedResult = "Generated classfiles: <br>namespace.class<br><br>Hello<br>";
+        compareResponseForPostRequest(expectedResult, "run=true", null);
+    }
+
+    public void test$execution$FooErr() throws IOException, InterruptedException {
+        String expectedResult = "Generated classfiles: <br>namespace.class<br><br><font color=\"red\">ERROR<br></font>";
+        compareResponseForPostRequest(expectedResult, "run=true", null);
+    }
+
     //Runtime.getRuntime().exec() Exception
     public void test$errors$securityExecutionError() throws IOException, InterruptedException {
         String expectedResult = "Generated classfiles: <br>namespace.class<br><br><font color=\"red\">Exception in thread \"main\" java.security.AccessControlException: access denied (java.io.FilePermission <<ALL FILES>> execute)<br></font><font color=\"red\">\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br></font><font color=\"red\">\tat java.security.AccessController.checkPermission(AccessController.java:546)<br></font><font color=\"red\">\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br></font><font color=\"red\">\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br></font><font color=\"red\">\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br></font><font color=\"red\">\tat java.lang.Runtime.exec(Runtime.java:593)<br></font><font color=\"red\">\tat java.lang.Runtime.exec(Runtime.java:431)<br></font><font color=\"red\">\tat java.lang.Runtime.exec(Runtime.java:328)<br></font><font color=\"red\">\tat namespace.main(dummy.jet:2)<br></font>";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
+
 
     //Exception when read file from other directory
     public void test$errors$securityFilePermissionError() throws IOException, InterruptedException {
@@ -78,6 +95,11 @@ public class ResponseTest extends TestCase {
         String expectedResult = "<p class=\"newLineClass\"><img src=\"/icons/error.png\"/>ERROR: <font color=\"red\">(1, 44) - Only safe calls (?.) are allowed on a nullable receiver of type PrintStream?</font></p>";
         String data = "fun main(args : Array<String>) { System.err.println(\"ERROR\") }";
         compareResponseForPostRequest(expectedResult, "run=true", data);
+    }
+
+    public void test$timeout$RunTimeout() throws IOException, InterruptedException {
+        String expectedResult = "Generated classfiles: <br>demo/namespace.class<br>demo/Main.class<br><br><font color=\"red\">Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.";
+        compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
     //Completion after point
@@ -167,7 +189,7 @@ public class ResponseTest extends TestCase {
     }
 
     private String getDataFromFile(String fileName) throws IOException {
-        String filePath = "C://Development/KotlinCompiler/KotlinStandCompiler/testData/" + fileName;
+        String filePath = TEST_SRC + fileName;
         File file = new File(filePath);
         StringBuilder resultData = new StringBuilder();
         if (file.exists()) {
@@ -181,10 +203,11 @@ public class ResponseTest extends TestCase {
                 }
             }
         }
-        if (resultData.equals("")) {
+        String result = resultData.toString();
+        if (result.equals("")) {
             System.err.println("Incorrect format for test name: test$path to file with test data (if there is a subdirectory - use $)");
         }
-        return resultData.toString();
+        return result;
     }
 
     private String processString(String inputString) {

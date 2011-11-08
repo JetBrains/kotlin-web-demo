@@ -1,26 +1,14 @@
 package web.view.ukhorskaya.responseHelpers;
 
 import com.google.common.base.Predicates;
-import com.intellij.execution.*;
-import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.impl.RunManagerImpl;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessListener;
-import com.intellij.execution.process.ProcessOutputTypes;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.compiler.*;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.codegen.ClassBuilderFactory;
 import org.jetbrains.jet.codegen.ClassFileFactory;
 import org.jetbrains.jet.codegen.GenerationState;
+import org.jetbrains.jet.compiler.CompileEnvironment;
+import org.jetbrains.jet.compiler.CompileEnvironmentException;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.psi.JetFile;
@@ -28,15 +16,13 @@ import org.jetbrains.jet.lang.psi.JetNamespace;
 import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
-import org.json.JSONArray;
 import web.view.ukhorskaya.JavaExecuteSecurityManager;
 import web.view.ukhorskaya.JavaRunner;
 import web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer;
 import web.view.ukhorskaya.errorsDescriptors.ErrorDescriptor;
 
 import java.io.File;
-import java.io.IOException;
-import java.security.Policy;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -73,7 +59,22 @@ public class ResponseForCompilation {
                     namespaces,
                     Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
-            GenerationState generationState = new GenerationState(currentProject, false);
+
+            /*CompileEnvironment environment = new CompileEnvironment();
+
+            try {
+                environment.setJavaRuntime(CompileEnvironment.findRtJar(true));
+                if (!environment.initializeKotlinRuntime()) {
+                    System.out.println("No runtime library found");
+
+                }
+
+                environment.compileBunchOfSources("C://Development/testProject/src/Test.kt", "dummy.jar", "C:/Development/testProject/tmp");
+                 environment.setErrorStream(System.err);
+            } catch (CompileEnvironmentException e) {
+                System.out.println(e.getMessage());
+            }*/
+            GenerationState generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
             generationState.compileCorrectNamespaces(bindingContext, namespaces);
 
             /*SecurityManager securityManager = System.getSecurityManager();
@@ -81,26 +82,26 @@ public class ResponseForCompilation {
                 securityManager = new JavaExecuteSecurityManager();
                 System.setSecurityManager(securityManager);
             }*/
-            
 
+
+            StringBuilder stringBuilder = new StringBuilder("Generated classfiles: <br>");
             final ClassFileFactory factory = generationState.getFactory();
             List<String> files = factory.files();
 
-            StringBuilder stringBuilder = new StringBuilder("Generated classfiles: <br>");
             for (String file : files) {
                 //TODO setup tmp directory
                 File target = new File(JavaRunner.OUTPUT_DIRECTORY, file);
-               // try {
-                    try {
+                // try {
+                try {
 
-                        //securityManager.checkWrite(target.getAbsolutePath());
-                        FileUtil.writeToFile(target, factory.asBytes(file));
-                        stringBuilder.append(file).append("<br>");
-                    } catch (Exception e) {
-                        stringBuilder.append("You doesn't have an access to write in ").append(target.getAbsolutePath()).append("<br>");
-                        System.out.println("You doesn't have an access to write in" + target.getAbsolutePath());
-                        return stringBuilder.toString();
-                    }
+                    //securityManager.checkWrite(target.getAbsolutePath());
+                    FileUtil.writeToFile(target, factory.asBytes(file));
+                    stringBuilder.append(file).append("<br>");
+                } catch (Exception e) {
+                    stringBuilder.append("You doesn't have an access to write in ").append(target.getAbsolutePath()).append("<br>");
+                    System.out.println("You doesn't have an access to write in" + target.getAbsolutePath());
+                    return stringBuilder.toString();
+                }
 
                 /*} catch (IOException e) {
                     stringBuilder.append("Impossible to generate classfile");

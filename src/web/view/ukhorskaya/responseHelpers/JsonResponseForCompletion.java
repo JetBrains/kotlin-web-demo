@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.descriptors.*;
-import org.jetbrains.jet.lang.psi.*;
+import org.jetbrains.jet.lang.psi.JetExpression;
+import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.jet.lang.psi.JetPsiFactory;
+import org.jetbrains.jet.lang.psi.JetQualifiedExpression;
 import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
@@ -17,7 +20,10 @@ import org.jetbrains.jet.resolve.DescriptorRenderer;
 import org.json.JSONArray;
 import web.view.ukhorskaya.MyDeclarationDescriptorVisitor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -60,7 +66,11 @@ public class JsonResponseForCompletion {
             JetQualifiedExpression qualifiedExpression = (JetQualifiedExpression) parent;
             JetExpression receiverExpression = qualifiedExpression.getReceiverExpression();
             final JetType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE, receiverExpression);
-            resolutionScope = expressionType.getMemberScope();
+            if (expressionType != null) {
+                resolutionScope = expressionType.getMemberScope();
+            } else {
+                resolutionScope = null;
+            }
         } else {
             resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, (JetExpression) element);
         }
@@ -76,6 +86,8 @@ public class JsonResponseForCompletion {
 
                 jsonArray.put(map);
             }
+        } else {
+            System.err.println("WARN: resolutionScope is null");
         }
         System.out.print("5 " + (System.nanoTime() - startTime) + " ");
         return jsonArray.toString();

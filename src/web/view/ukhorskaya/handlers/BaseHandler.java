@@ -4,11 +4,14 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
+import org.junit.rules.Timeout;
 import web.view.ukhorskaya.sessions.HttpSession;
 
 import javax.imageio.ImageIO;
+import javax.management.timer.Timer;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.TimerTask;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,8 +24,9 @@ public class BaseHandler implements HttpHandler {
     private static final Logger LOG = Logger.getInstance(BaseHandler.class);
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        long time = System.nanoTime();
+    public void handle(final HttpExchange exchange) throws IOException {
+
+        final long time = System.nanoTime();
         if (!sendNonSourceFile(exchange)) {
             HttpSession session = new HttpSession(time);
             session.handle(exchange);

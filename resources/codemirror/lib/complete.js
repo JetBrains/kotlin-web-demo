@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     var goToSymbolShortcutKeys = [17, 32];
 
@@ -73,7 +73,7 @@
         lineNumbers:true,
         matchBrackets:true,
         mode:"text/kotlin",
-        onKeyEvent:function(i, event) {
+        onKeyEvent:function (i, event) {
             // Hook into ctrl-space
             if (isGotoKeysPressed(event, goToSymbolShortcutKeys)) {
                 event.stop();
@@ -148,7 +148,7 @@
             type:"POST",
             data:{text:i},
             //timeout: 30000,
-            error:function() {
+            error:function () {
                 document.getElementById("compilationResult").innerHTML = "Your request is aborted. Impossible to get data from server. " + error;
             }
         });
@@ -157,15 +157,15 @@
 
     }
 
-    $("#compile").click(function() {
+    $("#compile").click(function () {
         runOrCompile("compile", "Compilation in progress...", "Compilation failed.");
     });
 
-    $("#run").click(function() {
+    $("#run").click(function () {
         runOrCompile("run", "Run project...", "Run action failed.");
     });
 
-    $("#markAll").click(function() {
+    $("#markAll").click(function () {
         var lineCount = editor.lineCount();
         var lastLine = editor.getLine(lineCount - 1);
         var end = lastLine.length;
@@ -218,7 +218,7 @@
                 type:"POST",
                 data:{text:i},
                 //timeout: 10000,
-                error:function() {
+                error:function () {
                     isLoadingHighlighting = false;
                 }
             });
@@ -324,16 +324,18 @@
         function insert(str) {
             if (typeof str != "undefined") {
                 var position = str.indexOf("(");
-                if ((position != "undefined") || (position != -1)) {
-                    //If this is a string with a package after
-                    if (str.charAt(position - 1) == ' ') {
-                        position = position - 2;
+                if (position != "undefined") {
+                    if (position != -1) {
+                        //If this is a string with a package after
+                        if (str.charAt(position - 1) == ' ') {
+                            position = position - 2;
+                        }
+                        //if this is a method without args
+                        if (str.charAt(position + 1) == ')') {
+                            position++;
+                        }
+                        str = str.substring(0, position + 1);
                     }
-                    //if this is a method without args
-                    if (str.charAt(position + 1) == ')') {
-                        position++;
-                    }
-                    str = str.substring(0, position + 1);
                 }
                 if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
                     editor.replaceRange(str, {line:cur.line, ch:token.end}, {line:cur.line, ch:token.end});
@@ -414,13 +416,13 @@
             insert(text);
             //insert(sel.options[sel.selectedIndex].text);
             close();
-            setTimeout(function() {
+            setTimeout(function () {
                 editor.focus();
             }, 50);
         }
 
         connect(sel, "blur", close);
-        connect(sel, "keydown", function(event) {
+        connect(sel, "keydown", function (event) {
             var code = event.keyCode;
             // Enter and space
             if (code == 13 || code == 32) {
@@ -443,7 +445,7 @@
 
         sel.focus();
         // Opera sometimes ignores focusing a freshly created node
-        if (window.opera) setTimeout(function() {
+        if (window.opera) setTimeout(function () {
             if (!done) sel.focus();
         }, 100);
         return true;
@@ -473,7 +475,7 @@
         return found;
     }
 
-    String.prototype.hashCode = function() {
+    String.prototype.hashCode = function () {
         var hash = 0;
         if (this.length == 0) return hash;
         for (i = 0; i < this.length; i++) {

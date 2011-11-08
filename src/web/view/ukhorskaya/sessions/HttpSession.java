@@ -3,7 +3,6 @@ package web.view.ukhorskaya.sessions;
 import com.intellij.openapi.actionSystem.KeyboardShortcut;
 import com.intellij.openapi.actionSystem.ShortcutSet;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -11,7 +10,6 @@ import com.intellij.openapi.project.ex.ProjectEx;
 import com.intellij.psi.PsiFile;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.Initializer;
@@ -24,7 +22,8 @@ import web.view.ukhorskaya.responseHelpers.ResponseForCompilation;
 import java.awt.event.InputEvent;
 import java.io.*;
 import java.net.URLDecoder;
-import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by IntelliJ IDEA.
@@ -48,32 +47,51 @@ public class HttpSession {
 
     private final long startTime;
 
+    private Thread mainThread;
+
+
     public HttpSession(long startTime) {
         this.startTime = startTime;
     }
 
-    public void handle(HttpExchange exchange) {
+    public void handle(final HttpExchange exchange) {
+        //System.out.println(exchange.getRequestURI());
         this.exchange = exchange;
-        String param = exchange.getRequestURI().toString();
-        if (param.contains("testConnection")) {
-            sendTestConnection();
-            return;
-        }
-        if (param.contains("path=")) {
-            if (param.contains("compile=true") || param.contains("run=true")) {
-                sendExecutorResult();
-                return;
-            } else if (param.contains("complete=true")) {
-                sendCompletionResult();
-                return;
-            } else if (param.contains("stop=true")) {
-                stopSession();
-                return;
-            } else {
-                sendProjectSourceFile();
-                return;
-            }
-        }
+       // mainThread = new Thread(new Runnable() {
+       //     @Override
+       //     public void run() {
+                String param = exchange.getRequestURI().toString();
+                if (param.contains("testConnection")) {
+                    sendTestConnection();
+                    return;
+                }
+                if (param.contains("path=")) {
+                    if (param.contains("compile=true") || param.contains("run=true")) {
+                        sendExecutorResult();
+                        return;
+                    } else if (param.contains("complete=true")) {
+                        sendCompletionResult();
+                        return;
+                    } else if (param.contains("stop=true")) {
+                        stopSession();
+                        return;
+                    } else {
+                        sendProjectSourceFile();
+                        return;
+                    }
+                }
+         //   }
+        //});
+
+        //mainThread.start();
+        //try {
+        //    mainThread.join(1000);
+       // } catch (InterruptedException e) {
+       //     System.out.println("inter");
+            /* if somebody interrupts us he knows what he is doing */
+       // }
+        //main
+
 
         writeResponse("Wrong request: " + exchange.getRequestURI().toString(), HttpStatus.SC_NOT_FOUND, true);
     }
@@ -204,10 +222,9 @@ public class HttpSession {
         String param = exchange.getRequestURI().getQuery();
 
         if ((param != null) && (param.contains("sendData=true"))) {
-            System.out.print("1, " + (System.nanoTime() - startTime) / 1000000 + ", ");
             setGlobalVariables(getTextFromPostRequest());
-            System.out.print("2, " + (System.nanoTime() - startTime) / 1000000 + ", ");
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile);
+
             String response = responseForHighlighting.getResult();
             response = response.replaceAll("\\n", "");
             writeResponse(response, HttpStatus.SC_OK, true);
@@ -230,11 +247,9 @@ public class HttpSession {
             BufferedReader bufferedReader = new BufferedReader(reader);
 
             String tmp;
-            long time = System.nanoTime();
             while ((tmp = bufferedReader.readLine()) != null) {
                 reqResponse.append(tmp);
             }
-            System.out.print("bufferedReader.readLine(), " + (System.nanoTime() - time) / 1000000 + ", " + reqResponse.capacity() + ",");
         } catch (NullPointerException e) {
             reqResponse.append("Resource file not found");
             writeResponse(reqResponse.toString(), HttpStatus.SC_NOT_FOUND);
@@ -283,6 +298,10 @@ public class HttpSession {
     //disableHeaders - disable html header for answer
     private void writeResponse(String responseBody, int errorCode, boolean disableHeaders) {
         //EditorFactoryImpl.getInstance().releaseEditor(currentEditor);
+        /*if ((System.nanoTime() - startTime)/1000000 > 500) {
+            System.err.println("Interrupted");
+            Thread.currentThread().interrupt();
+        }*/
         OutputStream os = null;
         StringBuilder response = new StringBuilder();
 
@@ -357,6 +376,7 @@ public class HttpSession {
             //For do not stop server in all cases
             LOG.error(e);
         } finally {
+            //mainThread.interrupt();
             try {
                 if (os != null) {
                     os.close();
