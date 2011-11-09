@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_webview" default="compile.module.webview">
+  <dirname property="module.webview.basedir" file="${ant.file.module_webview}"/>
+  
+  <property name="module.jdk.home.webview" value="${jdk.home.idea_10.x}"/>
+  <property name="module.jdk.bin.webview" value="${jdk.bin.idea_10.x}"/>
+  <property name="module.jdk.classpath.webview" value="jdk.classpath.idea_10.x"/>
+  
+  <property name="compiler.args.webview" value="${compiler.args}"/>
+  
+  <property name="webview.output.dir" value="${module.webview.basedir}/out/production/WebView"/>
+  <property name="webview.testoutput.dir" value="${module.webview.basedir}/out/test/WebView"/>
+  
+  <path id="webview.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="webview.module.production.classpath">
+    <path refid="${module.jdk.classpath.webview}"/>
+    <path refid="library.kotlin-compiler.classpath"/>
+    <path refid="library.json.classpath"/>
+  </path>
+  
+  <path id="webview.runtime.production.module.classpath">
+    <pathelement location="${webview.output.dir}"/>
+    <path refid="library.kotlin-compiler.classpath"/>
+    <path refid="library.json.classpath"/>
+  </path>
+  
+  <path id="webview.module.classpath">
+    <path refid="${module.jdk.classpath.webview}"/>
+    <pathelement location="${webview.output.dir}"/>
+    <pathelement location="${path.variable.idea_home}/lib/junit.jar"/>
+    <pathelement location="${path.variable.idea_home}/lib/annotations.jar"/>
+    <path refid="library.kotlin-compiler.classpath"/>
+    <path refid="library.json.classpath"/>
+  </path>
+  
+  <path id="webview.runtime.module.classpath">
+    <pathelement location="${webview.testoutput.dir}"/>
+    <pathelement location="${webview.output.dir}"/>
+    <pathelement location="${path.variable.idea_home}/lib/junit.jar"/>
+    <pathelement location="${path.variable.idea_home}/lib/annotations.jar"/>
+    <path refid="library.kotlin-compiler.classpath"/>
+    <path refid="library.json.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.webview">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.webview">
+    <patternset refid="excluded.from.module.webview"/>
+  </patternset>
+  
+  <path id="webview.module.sourcepath">
+    <dirset dir="${module.webview.basedir}">
+      <include name="src"/>
+      <include name="resources"/>
+    </dirset>
+  </path>
+  
+  <path id="webview.module.test.sourcepath">
+    <dirset dir="${module.webview.basedir}">
+      <include name="testSrc"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.webview" depends="compile.module.webview.production,compile.module.webview.tests" description="Compile module WebView"/>
+  
+  <target name="compile.module.webview.production" depends="register.custom.compilers" description="Compile module WebView; production classes">
+    <mkdir dir="${webview.output.dir}"/>
+    <javac2 destdir="${webview.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.webview}/javac">
+      <compilerarg line="${compiler.args.webview}"/>
+      <bootclasspath refid="webview.module.bootclasspath"/>
+      <classpath refid="webview.module.production.classpath"/>
+      <src refid="webview.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.webview"/>
+    </javac2>
+    
+    <copy todir="${webview.output.dir}">
+      <fileset dir="${module.webview.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.webview.basedir}/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.webview.tests" depends="register.custom.compilers,compile.module.webview.production" description="compile module WebView; test classes" unless="skip.tests">
+    <mkdir dir="${webview.testoutput.dir}"/>
+    <javac2 destdir="${webview.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.webview}/javac">
+      <compilerarg line="${compiler.args.webview}"/>
+      <bootclasspath refid="webview.module.bootclasspath"/>
+      <classpath refid="webview.module.classpath"/>
+      <src refid="webview.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.webview"/>
+    </javac2>
+    
+    <copy todir="${webview.testoutput.dir}">
+      <fileset dir="${module.webview.basedir}/testSrc">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.webview" description="cleanup module">
+    <delete dir="${webview.output.dir}"/>
+    <delete dir="${webview.testoutput.dir}"/>
+  </target>
+</project>
