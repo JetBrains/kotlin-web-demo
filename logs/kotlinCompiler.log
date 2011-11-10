@@ -1,0 +1,7 @@
+2011-11-10 19:50:13 (HttpSession.java:264) [INFO] userId=1213052237 ALL SESSION: 733 request=/?sessionId=1213052237&complete=true&cursorAt=10,21
+2011-11-10 19:50:13 (ServerHandler.java:108) [INFO] resource request /icons/method.png
+2011-11-10 19:50:18 (HttpSession.java:138) [INFO] userId=1213052237 PARSER 9
+2011-11-10 19:50:18 (ErrorAnalyzer.java:77) [INFO] userId=1213052237 ANALYZE namespaces 106
+2011-11-10 19:50:18 (HttpSession.java:264) [INFO] userId=1213052237 ALL SESSION: 165 request=/?sessionId=1213052237&sendData=true
+2011-11-10 19:50:19 (ServerHandler.java:108) [INFO] resource request /wavyline-red.gif
+2011-11-10 19:50:19 (ServerHandler.java:108) [INFO] resource request /icons/error.png

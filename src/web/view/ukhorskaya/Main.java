@@ -4,7 +4,6 @@ import web.view.ukhorskaya.server.KotlinHttpServer;
 import web.view.ukhorskaya.server.ServerSettings;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
@@ -15,18 +14,19 @@ import java.io.InputStreamReader;
  */
 
 public class Main {
-
+    
     public static void main(String[] args) {
+
         try {
             Initializer.getInstance().initJavaCoreEnvironment();
         } catch (Exception e) {
-            System.err.println("FATAL ERROR: Initialisation of java core environment failed, server didn't start");
-            e.printStackTrace();
+            ApplicationErrorsWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
             System.exit(1);
         }
 
         final KotlinHttpServer kotlinHttpServer = KotlinHttpServer.getInstance();
         kotlinHttpServer.startServer();
+        ApplicationErrorsWriter.writeInfoToConsole("Use -h or --help to look at all options");
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -39,33 +39,46 @@ public class Main {
                             tmp = reader.readLine();
                             if (tmp.equals("stop")) {
                                 KotlinHttpServer.stopServer();
+                            } else if (tmp.equals("stopAndExit")) {
+                                KotlinHttpServer.stopServer();
                                 System.exit(0);
                             } else if (tmp.equals("restart")) {
                                 KotlinHttpServer.stopServer();
                                 kotlinHttpServer.startServer();
-                            } else if (tmp.startsWith("set JAVA_HOME")) {
-                                Initializer.setJavaHome(ResponseUtils.substringAfter(tmp, "set JAVA_HOME "));
+                            } else if (tmp.equals("start")) {
+                                kotlinHttpServer.startServer();
+                            } else if (tmp.startsWith("java home")) {
+                                Initializer.setJavaHome(ResponseUtils.substringAfter(tmp, "java home "));
                             } else if (tmp.startsWith("set output")) {
                                 ServerSettings.OUTPUT_DIRECTORY = ResponseUtils.substringAfter(tmp, "set output ");
-                                System.out.println("done: " + ServerSettings.OUTPUT_DIRECTORY);
+                                ApplicationErrorsWriter.writeInfoToConsole("done: " + ServerSettings.OUTPUT_DIRECTORY);
+                            } else if (tmp.startsWith("set hostname")) {
+                                ServerSettings.HOSTNAME = ResponseUtils.substringAfter(tmp, "set hostname ");
+                                ApplicationErrorsWriter.writeInfoToConsole("done: " + ServerSettings.OUTPUT_DIRECTORY);
                             } else if (tmp.startsWith("set timeout")) {
                                 ServerSettings.TIMEOUT_FOR_EXECUTION = Integer.parseInt(ResponseUtils.substringAfter(tmp, "set timeout "));
-                                System.out.println("done: " + ServerSettings.TIMEOUT_FOR_EXECUTION);
+                                ApplicationErrorsWriter.writeInfoToConsole("done: " + ServerSettings.TIMEOUT_FOR_EXECUTION);
                             } else if (tmp.startsWith("set kotlinLib")) {
                                 ServerSettings.PATH_TO_KOTLIN_LIB = ResponseUtils.substringAfter(tmp, "set kotlinLib ");
-                                System.out.println("done: " + ServerSettings.PATH_TO_KOTLIN_LIB);
+                                ApplicationErrorsWriter.writeInfoToConsole("done: " + ServerSettings.PATH_TO_KOTLIN_LIB);
                             } else if (tmp.equals("-h") || tmp.equals("--help")) {
-                                System.out.println("List of commands:");
-                                System.out.println("set JAVA_HOME pathToJavaHome - without \"\"");
-                                System.out.println("set        timeout int - set timeout for execution");
-                                System.out.println("set output pathToOutputDir - without \"\", set directory to create a class files until compilation");
-                                System.out.println("set kotlinLib pathToKotlinLibDir - without \"\", set path to kotlin library jar files");
-                                System.out.println("stop - to stop server and exit application");
-                                System.out.println("restart - to restart server");
+                                ApplicationErrorsWriter.writeInfoToConsole("List of commands:");
+                                ApplicationErrorsWriter.writeInfoToConsole("java home pathToJavaHome - without \"\"");
+                                ApplicationErrorsWriter.writeInfoToConsole("set timeout int - set maximum running time for user program");
+                                ApplicationErrorsWriter.writeInfoToConsole("set output pathToOutputDir - without \"\", set directory to create a class files until compilation");
+                                ApplicationErrorsWriter.writeInfoToConsole("set kotlinLib pathToKotlinLibDir - without \"\", set path to kotlin library jar files");
+                                ApplicationErrorsWriter.writeInfoToConsole("set hostname String - without \"\", set hostname for server");
+                                ApplicationErrorsWriter.writeInfoToConsole("start - to start server");
+                                ApplicationErrorsWriter.writeInfoToConsole("stop - to stop server");
+                                ApplicationErrorsWriter.writeInfoToConsole("stopAndExit - to stop server and exit application");
+                                ApplicationErrorsWriter.writeInfoToConsole("restart - to restart server");
+                                ApplicationErrorsWriter.writeInfoToConsole("-h or --help - help");
+                            } else {
+                                ApplicationErrorsWriter.writeInfoToConsole("Incorrect command: use -h or --help to look at all options");
                             }
                         }
-                    } catch (IOException e) {
-                        System.err.println("Error while reading console");
+                    } catch (Exception e) {
+                        ApplicationErrorsWriter.writeExceptionToConsole(e);
                     }
                 }
             }

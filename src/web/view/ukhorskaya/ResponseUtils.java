@@ -2,10 +2,18 @@ package web.view.ukhorskaya;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.util.Pair;
+import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -74,6 +82,15 @@ public class ResponseUtils {
         return "";
     }
 
+    //Substring str and return all str if after not found
+    public static String substringAfterReturnAll(String str, String after) {
+        int pos = str.indexOf(after);
+        if (pos != -1) {
+            return str.substring(pos + after.length());
+        }
+        return str;
+    }
+
     public static String substringBefore(String str, String before) {
         int pos = str.indexOf(before);
         if (pos != -1) {
@@ -96,4 +113,22 @@ public class ResponseUtils {
         }
         return "";
     }
+
+    public static String addNewLine() {
+        return "<br/>";
+    }
+
+    public static String readData(InputStream is) throws IOException {
+        InputStreamReader reader = new InputStreamReader(is);
+        StringBuilder response = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(reader);
+
+        String tmp;
+        while ((tmp = bufferedReader.readLine()) != null) {
+            response.append(tmp);
+        }
+
+        return response.toString();
+    }
+
 }

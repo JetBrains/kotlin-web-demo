@@ -1,22 +1,21 @@
 package web.view.ukhorskaya.sessions;
 
-import com.intellij.openapi.actionSystem.KeyboardShortcut;
-import com.intellij.openapi.actionSystem.ShortcutSet;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.lang.math.RandomUtils;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.Initializer;
 import web.view.ukhorskaya.ResponseUtils;
-import web.view.ukhorskaya.handlers.BaseHandler;
+import web.view.ukhorskaya.TimeManager;
+import web.view.ukhorskaya.handlers.ServerHandler;
+import web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForCompletion;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting;
-import web.view.ukhorskaya.responseHelpers.JsonResponseForCompilation;
 
-import java.awt.event.InputEvent;
 import java.io.*;
 import java.net.URLDecoder;
 
@@ -28,51 +27,48 @@ import java.net.URLDecoder;
  */
 
 public class HttpSession {
-    private static final Logger LOG = Logger.getInstance(HttpSession.class);
-
-    private static final KeyModifier SHIFT = new KeyModifier(InputEvent.SHIFT_DOWN_MASK + InputEvent.SHIFT_MASK, 16);
-    private static final KeyModifier CTRL = new KeyModifier(InputEvent.CTRL_DOWN_MASK + InputEvent.CTRL_MASK, 17);
-    private static final KeyModifier ALT = new KeyModifier(InputEvent.ALT_DOWN_MASK + InputEvent.ALT_MASK, 18);
-    private static final KeyModifier META = new KeyModifier(InputEvent.META_DOWN_MASK + InputEvent.META_MASK, 19);
+    private static final Logger LOG = Logger.getLogger(HttpSession.class);
+    public static TimeManager TIME_MANAGER;
+    public static int SESSION_ID;
 
     protected Project currentProject;
     protected PsiFile currentPsiFile;
 
     private HttpExchange exchange;
 
-    private final long startTime;
-
-    private Thread mainThread;
-
-
-    public HttpSession(long startTime) {
-        this.startTime = startTime;
+    public HttpSession() {
+        TIME_MANAGER = new TimeManager();
     }
 
     public void handle(final HttpExchange exchange) {
         this.exchange = exchange;
-
         String param = exchange.getRequestURI().toString();
+
+        //FOR TEST ONLY
         if (param.contains("testConnection")) {
             sendTestConnection();
             return;
         }
-        if (param.contains("path=")) {
-            if (param.contains("compile=true") || param.contains("run=true")) {
-                sendExecutorResult();
-                return;
-            } else if (param.contains("complete=true")) {
-                sendCompletionResult();
-                return;
-            } else {
-                sendProjectSourceFile();
-                return;
-            }
+
+        String sId = ResponseUtils.substringBetween(param, "?sessionId=", "&");
+        if (sId.equals("") || sId.equals("undefined")) {
+            SESSION_ID = RandomUtils.nextInt();
+            ServerHandler.numberOfUsers++;
+            LOG.info("Number of users since start server: " + ServerHandler.numberOfUsers);
+        } else {
+            SESSION_ID = Integer.parseInt(sId);
         }
 
-        writeResponse("Wrong request: " + exchange.getRequestURI().toString(), HttpStatus.SC_NOT_FOUND, true);
+        if (param.contains("compile=true") || param.contains("run=true")) {
+            sendExecutorResult();
+        } else if (param.contains("complete=true")) {
+            sendCompletionResult();
+        } else {
+            sendProjectSourceFile();
+        }
     }
 
+    //FOR TEST ONLY
     private void sendTestConnection() {
         if (exchange.getRequestURI().toString().contains("stopTest=true")) {
             try {
@@ -91,31 +87,19 @@ public class HttpSession {
             StringBuilder response = new StringBuilder();
             OutputStream os = null;
             String path = "/testConnection.html";
-            InputStream is = BaseHandler.class.getResourceAsStream(path);
-            InputStreamReader reader = new InputStreamReader(is);
-
+            InputStream is = ServerHandler.class.getResourceAsStream(path);
             try {
-                BufferedReader bufferedReader = new BufferedReader(reader);
-
-                String tmp;
-                while ((tmp = bufferedReader.readLine()) != null) {
-                    response.append(tmp);
-                }
-            } catch (NullPointerException e) {
-                response.append("Resource file not found");
-                writeResponse(response.toString(), HttpStatus.SC_NOT_FOUND);
+                response.append(ResponseUtils.readData(is));
             } catch (IOException e) {
-                response.append("Error while reading from file in writeResponse()");
-                writeResponse(response.toString(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            } catch (RuntimeException e) {
-                writeResponse(e.getMessage(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                LOG.error("Cannot read data from file", e);
+                writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
+                return;
             }
 
             try {
                 exchange.sendResponseHeaders(400, response.toString().length());
                 os = exchange.getResponseBody();
                 os.write(response.toString().getBytes());
-                //System.out.println("end writeResponse() = " + (System.nanoTime() - startTime));
             } catch (IOException e) {
                 //This is an exception we can't send data to client
             } finally {
@@ -131,8 +115,6 @@ public class HttpSession {
     }
 
     private void setGlobalVariables(@Nullable String text) {
-        String requestURI = exchange.getRequestURI().getPath().substring(6);
-        requestURI = requestURI.replace("%20", " ");
         currentProject = Initializer.getEnvironment().getProject();
         if (text == null) {
             text = "namespace demo\n" +
@@ -151,9 +133,9 @@ public class HttpSession {
                     "  //java.io.FileWriter(\"sdfs.kt\")\n" +
                     "} ";
         }
-        long startCreateFile = System.nanoTime();
+        TIME_MANAGER.saveCurrentTime();
         currentPsiFile = JetPsiFactory.createFile(currentProject, text);
-        System.out.print("createFile, " + (System.nanoTime() - startCreateFile) / 1000000 + ", ");
+        LOG.info("userId=" + SESSION_ID + " PARSER " + TIME_MANAGER.getMillisecondsFromSavedTime());
     }
 
 
@@ -185,27 +167,13 @@ public class HttpSession {
     }
 
     private PostData getPostDataFromRequest() {
-        StringBuilder reqResponse = new StringBuilder(4016);
-        InputStreamReader reader = null;
-
+        StringBuilder reqResponse = new StringBuilder();
         try {
-            reader = new InputStreamReader(exchange.getRequestBody(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            LOG.error("Impossible to write to file in UTF-8");
-        }
-        try {
-            BufferedReader bufferedReader = new BufferedReader(reader);
-
-            String tmp;
-            while ((tmp = bufferedReader.readLine()) != null) {
-                reqResponse.append(tmp);
-            }
-        } catch (NullPointerException e) {
-            reqResponse.append("Resource file not found");
-            writeResponse(reqResponse.toString(), HttpStatus.SC_NOT_FOUND);
+            reqResponse.append(ResponseUtils.readData(exchange.getRequestBody()));
         } catch (IOException e) {
-            reqResponse.append("Error while reading from file sendProjectSourceFile()");
-            writeResponse(reqResponse.toString(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            LOG.error("Cannot read data from file", e);
+            writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
+            return new PostData("", "");
         }
 
         String finalResponse = null;
@@ -214,16 +182,22 @@ public class HttpSession {
         } catch (UnsupportedEncodingException e) {
             LOG.error("Impossible to write to file in UTF-8");
         }
-        finalResponse = finalResponse.replaceAll("<br>", "\n");
-        if (finalResponse.length() > 5) {
-            if (finalResponse.contains("&consoleArgs=")) {
-                return new PostData(ResponseUtils.substringBetween(finalResponse, "text=", "&consoleArgs="), ResponseUtils.substringAfter(finalResponse, "&consoleArgs="));
+        if (finalResponse != null) {
+            finalResponse = finalResponse.replaceAll("<br>", "\n");
+            if (finalResponse.length() > 5) {
+                if (finalResponse.contains("&consoleArgs=")) {
+                    return new PostData(ResponseUtils.substringBetween(finalResponse, "text=", "&consoleArgs="), ResponseUtils.substringAfter(finalResponse, "&consoleArgs="));
+                } else {
+                    return new PostData(ResponseUtils.substringAfter(finalResponse, "text="));
+                }
             } else {
-                return new PostData(ResponseUtils.substringAfter(finalResponse, "text="));
+                writeResponse("Post request is too short", HttpStatus.SC_BAD_REQUEST);
             }
         } else {
-            writeResponse("Post request is too short", HttpStatus.SC_BAD_REQUEST);
+            LOG.error("Cannot read data from post request: " + exchange.getRequestURI());
+            writeResponse("Cannot read data from post request: ", HttpStatus.SC_BAD_REQUEST, true);
         }
+
         return null;
     }
 
@@ -231,15 +205,13 @@ public class HttpSession {
         PostData data = getPostDataFromRequest();
         setGlobalVariables(data.text);
         boolean isOnlyCompilation = true;
-        if (exchange.getRequestURI().getQuery().contains("compile")) {
+        if (exchange.getRequestURI().getQuery().contains("compile=true")) {
             isOnlyCompilation = true;
-        } else if (exchange.getRequestURI().getQuery().contains("run")) {
+        } else if (exchange.getRequestURI().getQuery().contains("run=true")) {
             isOnlyCompilation = false;
-        } else {
-            writeResponse("Incorrect url: absent run or compile parameter", HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
 
-        JsonResponseForCompilation responseForCompilation = new JsonResponseForCompilation(isOnlyCompilation, currentPsiFile, data.arguments);
+        CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(isOnlyCompilation, currentPsiFile, data.arguments);
         writeResponse(responseForCompilation.getResult(), HttpStatus.SC_OK, true);
     }
 
@@ -250,145 +222,59 @@ public class HttpSession {
     //Send Response
     //disableHeaders - disable html header for answer
     private void writeResponse(String responseBody, int errorCode, boolean disableHeaders) {
-        //EditorFactoryImpl.getInstance().releaseEditor(currentEditor);
-        /*if ((System.nanoTime() - startTime)/1000000 > 500) {
-            System.err.println("Interrupted");
-            Thread.currentThread().interrupt();
-        }*/
         OutputStream os = null;
         StringBuilder response = new StringBuilder();
 
         String path;
         if (!disableHeaders) {
             path = "/header.html";
-            InputStream is = BaseHandler.class.getResourceAsStream(path);
+            InputStream is = ServerHandler.class.getResourceAsStream(path);
             if (is == null) {
+                LOG.error("Cannot find header.html for request: " + exchange.getRequestURI());
                 writeResponse("File not found", HttpStatus.SC_NOT_FOUND);
                 return;
             }
-            InputStreamReader reader = new InputStreamReader(is);
-
             try {
-                BufferedReader bufferedReader = new BufferedReader(reader);
-
-                String tmp;
-                while ((tmp = bufferedReader.readLine()) != null) {
-                    response.append(tmp);
-                }
-            } catch (NullPointerException e) {
-                response.append("Resource file not found");
-                writeResponse(response.toString(), HttpStatus.SC_NOT_FOUND);
+                response.append(ResponseUtils.readData(is));
             } catch (IOException e) {
-                response.append("Error while reading from file in writeResponse()");
-                writeResponse(response.toString(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            } catch (RuntimeException e) {
-                writeResponse(e.getMessage(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                LOG.error("Cannot read data from file", e);
+                writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
+                return;
             }
         } else {
-            response.append("RESPONSEBODY");
+            response.append("$RESPONSEBODY$");
         }
 
-        //ShortcutSet gotofile = ActionManager.getInstance().getAction("GotoFile").getShortcutSet();
-        //ShortcutSet gotoclass = ActionManager.getInstance().getAction("GotoClass").getShortcutSet();
-        //ShortcutSet gotosymbol = ActionManager.getInstance().getAction("GotoSymbol").getShortcutSet();
-
         String finalResponse = response.toString();
-        //finalResponse = finalResponse.replaceFirst("GOTOFILESHORTCUT", getKeyboardShortcutFromShortcutSet(gotofile));
-        //finalResponse = finalResponse.replaceFirst("GOTOCLASSSHORTCUT", getKeyboardShortcutFromShortcutSet(gotoclass));
-        //finalResponse = finalResponse.replaceFirst("GOTOSYMBOLSHORTCUT", getKeyboardShortcutFromShortcutSet(gotosymbol));
-
-        //if (currentProject != null) {
-        //   finalResponse = finalResponse.replaceFirst("PROJECTNAME", currentProject.getName());
-        //}
-
-        //finalResponse = finalResponse.replaceFirst("GOTOFILESHORTCUTSTRING", gotofile.getShortcuts()[0].toString());
-        // finalResponse = finalResponse.replaceFirst("GOTOCLASSSHORTCUTSTRING", gotoclass.getShortcuts()[0].toString());
-        // finalResponse = finalResponse.replaceFirst("GOTOSYMBOLSHORTCUTSTRING", gotosymbol.getShortcuts()[0].toString());
-
-        finalResponse = finalResponse.replace("RESPONSEBODY", responseBody);
-
+        finalResponse = finalResponse.replace("$RESPONSEBODY$", responseBody);
+        if (!disableHeaders) {
+            finalResponse = finalResponse.replace("$SESSIONID$", String.valueOf(SESSION_ID));
+        }
         try {
+            //ONLY FOR TEST
             if (exchange.getRequestURI().toString().contains("&time=")) {
                 String query = exchange.getRequestURI().getQuery();
                 query = query.substring(query.indexOf("&time=") + 6);
                 exchange.getResponseHeaders().add("time", query);
             }
+
             exchange.sendResponseHeaders(errorCode, finalResponse.length());
             os = exchange.getResponseBody();
             os.write(finalResponse.getBytes());
-            //long time = (System.nanoTime() - startTime);
-            //if (time == 0) {
-            //     System.out.println(startTime + " " + System.nanoTime() + " " + finalResponse);
-            // }
-            //long timeDiff = System.nanoTime() - startTime;
-            //System.out.println(exchange.getRequestURI().toString() + " " + timeDiff + " " + (timeDiff / 1000000) + ";");
-            System.out.println((System.nanoTime() - startTime) / 1000000);
+            LOG.info("userId=" + SESSION_ID + " ALL SESSION: " + TIME_MANAGER.getMillisecondsFromStart() + " request=" + exchange.getRequestURI());
         } catch (IOException e) {
             //This is an exception we can't send data to client
+            LOG.error("Error while writing response.", e);
         } finally {
-            //mainThread.interrupt();
             try {
                 if (os != null) {
                     os.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-                //LOG.error(e);
+                LOG.error("Error while closing outputStream.", e);
             }
         }
-
     }
-
-    private String getKeyboardShortcutFromShortcutSet(ShortcutSet set) {
-        StringBuilder result = new StringBuilder();
-        int modifiers = ((KeyboardShortcut) (set.getShortcuts()[0])).getFirstKeyStroke().getModifiers();
-        result.append(setModifiers(modifiers));
-        int keyCode = ((KeyboardShortcut) (set.getShortcuts()[0])).getFirstKeyStroke().getKeyCode();
-        result.append(keyCode);
-        return result.toString();
-    }
-
-    private String setModifiers(int modifiers) {
-        String result = "";
-        if (modifiers == SHIFT.modifier) {
-            result += SHIFT.key + ",";
-        } else if (modifiers == CTRL.modifier) {
-            result += CTRL.key + ",";
-        } else if (modifiers == ALT.modifier) {
-            result += ALT.key + ",";
-        } else if (modifiers == META.modifier) {
-            result += META.key + ",";
-        } else if (modifiers == SHIFT.modifier + CTRL.modifier) {
-            result += SHIFT.key + "," + CTRL.key + ",";
-        } else if (modifiers == SHIFT.modifier + ALT.modifier) {
-            result += SHIFT.key + "," + ALT.key;
-        } else if (modifiers == CTRL.modifier + ALT.modifier) {
-            result += CTRL.key + "," + ALT.key + ",";
-        } else if (modifiers == SHIFT.modifier + ALT.modifier + CTRL.modifier) {
-            result += SHIFT.key + "," + ALT.key + "," + CTRL.key + ",";
-        } else if (modifiers == SHIFT.modifier + META.modifier) {
-            result += SHIFT.key + "," + META.key;
-        } else if (modifiers == CTRL.modifier + META.modifier) {
-            result += CTRL.key + "," + META.key + ",";
-        } else if (modifiers == SHIFT.modifier + META.modifier + CTRL.modifier) {
-            result += SHIFT.key + "," + META.key + "," + CTRL.key + ",";
-        } else if (modifiers != 0) {
-            LOG.error("Error: there isn't a value for modifiers: " + modifiers);
-        }
-        return result;
-    }
-
-
-    private static class KeyModifier {
-        public final int modifier;
-        public final int key;
-
-        private KeyModifier(int modifier, int key) {
-            this.modifier = modifier;
-            this.key = key;
-        }
-    }
-
 
     private class PostData {
         public final String text;

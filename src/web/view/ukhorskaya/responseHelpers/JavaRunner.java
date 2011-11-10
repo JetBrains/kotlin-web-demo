@@ -1,10 +1,15 @@
 package web.view.ukhorskaya.responseHelpers;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.ServerSettings;
+import web.view.ukhorskaya.sessions.HttpSession;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -14,14 +19,14 @@ import java.util.*;
  * Time: 12:38 PM
  */
 
-
 public class JavaRunner {
-    //public static final String OUTPUT_DIRECTORY = "C:\\Documents and Settings\\Natalia.Ukhorskaya\\Local Settings\\Temp\\newProject";
+    private final Logger LOG = Logger.getLogger(JavaRunner.class);
+
     private final List<String> files;
     private final String arguments;
     private final JSONArray jsonArray;
 
-    private boolean isTimeoutException = false;
+    private volatile boolean isTimeoutException = false;
 
     public JavaRunner(List<String> files, String arguments, JSONArray array) {
         this.files = files;
@@ -32,7 +37,7 @@ public class JavaRunner {
     public String getResult() {
         String commandString = generateCommandString();
         Process process;
-
+        HttpSession.TIME_MANAGER.saveCurrentTime();
         try {
             process = Runtime.getRuntime().exec(commandString);
             process.getOutputStream().close();
@@ -50,6 +55,7 @@ public class JavaRunner {
             public void run() {
                 isTimeoutException = true;
                 finalProcess.destroy();
+                LOG.info("userId=" + HttpSession.SESSION_ID + " Timeout exception.");
                 errStream.append("Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.");
             }
         }, ServerSettings.TIMEOUT_FOR_EXECUTION);
@@ -58,16 +64,9 @@ public class JavaRunner {
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
         try {
-            String tmp = "";
-            while ((!isTimeoutException) && ((tmp = stdError.readLine()) != null)) {
-                errStream.append(tmp);
-                errStream.append("<br/>");
-            }
+            readStream(errStream, stdError);
+            readStream(outStream, stdInput);
 
-            while ((!isTimeoutException) && ((tmp = stdInput.readLine()) != null)) {
-                outStream.append(tmp);
-                outStream.append("<br/>");
-            }
         } catch (IOException e) {
             e.printStackTrace();
             return getJsonStringFromErrorMessage("Impossible to run your program: IOException handled until execution");
@@ -76,11 +75,10 @@ public class JavaRunner {
         try {
             process.waitFor();
         } catch (InterruptedException e) {
-            System.err.println("InterruptedException");
-            e.printStackTrace();
+            LOG.error("Interrupted exception during java process excution", e);
             return getJsonStringFromErrorMessage("Impossible to run your program: InterruptedException handled.");
         }
-
+        LOG.info("userId=" + HttpSession.SESSION_ID + " RUN user program " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime() + " timeout=" + isTimeoutException);
         if (!isTimeoutException) {
             Map<String, String> mapOut = new HashMap<String, String>();
             mapOut.put("type", "out");
@@ -97,13 +95,25 @@ public class JavaRunner {
             deleteFile(fileName);
         }
 
+        timer.cancel();
         return jsonArray.toString();
+    }
+
+    private void readStream(StringBuilder errStream, BufferedReader stdError) throws IOException {
+        String tmp;
+        while ((!isTimeoutException) && ((tmp = stdError.readLine()) != null)) {
+            errStream.append(tmp);
+            errStream.append(ResponseUtils.addNewLine());
+        }
     }
 
     private void deleteFile(String path) {
         File f = new File(ServerSettings.OUTPUT_DIRECTORY + path);
         if (f.exists()) {
-            f.delete();
+            boolean del = f.delete();
+            if (!del) {
+                LOG.error("userId=" + HttpSession.SESSION_ID + " File " + ServerSettings.OUTPUT_DIRECTORY + path + " isn't deleted.");
+            }
         }
     }
 
@@ -134,7 +144,7 @@ public class JavaRunner {
     }
 
     private String getJsonStringFromErrorMessage(String errorMessage) {
-        return "[{\"text\":\"" + errorMessage + "<br/>\",\"type\":\"err\"}]";
+        return "[{\"text\":\"" + errorMessage + ResponseUtils.addNewLine() + "\",\"type\":\"err\"}]";
     }
 
 }

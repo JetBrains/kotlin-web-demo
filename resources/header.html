@@ -2,18 +2,20 @@
 <html>
 <head>
     <title>Compiler</title>
-    <link rel="stylesheet" type="text/css" href="/styles.css?type=css"/>
-    <link rel="stylesheet" href="/codemirror/lib/codemirror.css?type=jquery_lib">
-    <script src="/codemirror/lib/codemirror-2.16.js?type=jquery_lib"></script>
+    <link rel="stylesheet" type="text/css" href="/styles.css"/>
+    <link rel="stylesheet" href="/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/components/components.css">
+    <script src="/codemirror/lib/codemirror-2.16.js"></script>
 
-    <script src="/codemirror/mode/clike/clike.js?type=jquery_lib"></script>
+    <script src="/codemirror/mode/clike/clike.js"></script>
 
-    <script src="/jquery/jquery.min.js?type=jquery_lib"></script>
-    <script src="/jquery/js/jquery-ui-1.8.16.custom.min.js?type=jquery_lib" type="text/javascript"></script>
-    <script src="/jquery/development-bundle/jquery-1.6.2.js?type=jquery_lib"></script>
+    <script src="/jquery/jquery.min.js"></script>
+    <link type="text/css" href="/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/jquery/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
 
-    <link rel="stylesheet" href="/codemirror/theme/default.css?type=jquery_lib">
-    <link rel="stylesheet" href="/codemirror/css/docs.css?type=jquery_lib">
+    <link rel="stylesheet" href="/codemirror/theme/default.css">
+    <link rel="stylesheet" href="/codemirror/css/docs.css">
 
     <style>.CodeMirror {
         border: 2px inset #dee;
@@ -41,35 +43,90 @@
             border: 1px solid #eee;
         }
 
-        .arguments {
-            border: 1px solid #eee;
-            width: 770px;
-            height: 20px;
-            resize: none;
-        }
     </style>
+
 </head>
-<body spellcheck="false">
-<h2>Editor</h2>
+<body spellcheck="false" onload="setSessionId($SESSIONID$);">
+<div id="all">
+    <div id="maindiv">
+        <div id="left">
+            <div id="leftcontent">
+                <div id="examplesbutton">
+                    <img src="/icons/leftSide.png" id="hideLeft" title="Run file"/>
+                </div>
+                <div id="examplesaccordion">
+                    <div id="accordion">
+                        <h3><a href="#">First header</a></h3>
 
-<div style="margin-top: 10px;">
-    <img src="/icons/execute.png" id="run" title="Run file"/>
-    <img src="/icons/compile.png" id="compile" title="Compile file"/>
-    <!-- <img src="/icons/markAll.png" id="markAll" title="Copy all content to clipboard"/>-->
+                        <div>First content</div>
+                        <h3><a href="#">Second header</a></h3>
+
+                        <div>Second content</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="center">
+            <div id="centralinternal">
+
+                <div id="editordiv">
+                    <div id="editortitle">Type your code here:</div>
+                    <div id="editorinput">
+                        <form><textarea class="CodeMirror" id="code" name="code">$RESPONSEBODY$</textarea>
+                        </form>
+                    </div>
+                </div>
+                <div id="statusbar">
+                    dfgdfgdfgd
+                </div>
+                <div id="argsdiv">
+                    <div id="argstitleinput">
+                        <div id="argstitle">Arguments:</div>
+                        <div id="argsinput">
+                            <form><textarea class="arguments" id="arguments" name="arguments"></textarea></form>
+                        </div>
+                    </div>
+                    <div id="argsbutton">
+                        <img src="/icons/execute.png" id="run" title="Run file"/>
+                    </div>
+                </div>
+
+                <div id="consoleandproblems">
+                    <div id="tabs">
+                        <ul>
+                            <li><a href="#problems">Problems view</a></li>
+                            <li><a href="#console">Console</a></li>
+                        </ul>
+                        <div id="problems">
+
+                        </div>
+                        <div id="console">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div id="right">
+            <div id="rightcontent">
+                <div id="helpcontent">
+                    <div id="compilationResult"></div>
+                    <div id="compilationResult0"></div>
+                    <div id="compilationResult1"></div>
+                    <div id="compilationResult2"></div>
+                </div>
+                <div id="helpbutton">
+                    <img src="/icons/leftSide.png" id="hideRight" title="Run file"/>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<form><textarea class="arguments" id="arguments" name="arguments"></textarea></form>
-<form><textarea class="CodeMirror" id="code" name="code">RESPONSEBODY</textarea></form>
-<div id="statusBar"></div>
-<h2>Console</h2>
-
-<div id="compilationResult"></div>
-<div id="compilationResult0"></div>
-<div id="compilationResult1"></div>
-<div id="compilationResult2"></div>
-
-<!--<form><textarea class="CodeMirror" id="console" name="code"></textarea></form>-->
-
 <script src="/codemirror/lib/complete.js?type=jquery_lib"></script>
+<script src="/components/components.js"></script>
 
 
 </body>

@@ -1,4 +1,20 @@
+var sessionId;
+
+function setSessionId(id) {
+    sessionId = id;
+    var data = "browser: " + navigator.appName + " " + navigator.appVersion;
+    data += " " + "system: " + navigator.platform;
+    $.ajax({
+        url:document.location.href + "?sessionId=" + sessionId + "&userData=true",
+        context:document.body,
+        type:"POST",
+        data:{text:data},
+        timeout:5000
+    });
+}
+
 (function () {
+
 
     var goToSymbolShortcutKeys = [17, 32];
 
@@ -24,6 +40,7 @@
     }
 
     function getHighlighting() {
+        $("#tabs").tabs("select", 0);
         if (!isCompletionInProgress) {
             getErrors();
         }
@@ -81,8 +98,8 @@
             }
 
         },
-        onChange: runTimerForNonPrinting,
-        onCursorActivity: updateStatusBar
+        onChange:runTimerForNonPrinting,
+        onCursorActivity:updateStatusBar
     });
 
     function updateStatusBar() {
@@ -91,40 +108,13 @@
         if (text != null) {
             text = text.substring(text.indexOf("title=\"") + 7);
             text = text.substring(0, text.indexOf("\""));
-            document.getElementById("statusBar").innerHTML = "line " + lineNumber + " - " + text;
+            if (text.length > 90) text = text.substring(0, 90) + "...";
+            document.getElementById("statusbar").innerHTML = "line " + (lineNumber + 1) + " - " + text;
         } else {
-            document.getElementById("statusBar").innerHTML = "";
+            document.getElementById("statusbar").innerHTML = "";
         }
     }
 
-    /*var editorConsole = CodeMirror.fromTextArea(document.getElementById("console"), {
-     lineNumbers: true,
-     onKeyEvent: function(i, event) {
-     // Hook into ctrl-space
-     if (event.ctrlKey) {
-     event.stop();
-     return consoleInput();
-     }
-
-     }
-     });
-
-     function consoleInput() {
-     var i = editorConsole.getValue();
-     $.ajax({
-     url: document.location.href + "?consoleInput=true",
-     context: document.body,
-     success: onCompileSuccess,
-     dataType: "html",
-     type: "POST",
-     data: {text: i},
-     //timeout: 30000,
-     error: function() {
-     document.getElementById("compilationResult").innerHTML = "Your request is aborted. Impossible to get data from server. " + error;
-     }
-     });
-     }
-     */
     function isGotoKeysPressed(event, array) {
         var args = args || {};
 
@@ -151,25 +141,48 @@
 
     $("#arguments").val("");
 
-    function runOrCompile(param, text, error) {
-        compilationInProgress = true;
-        var arguments = $("#arguments").val();
-        var i = editor.getValue();
-        $.ajax({
-            url:document.location.href + "?" + param + "=true",
-            context:document.body,
-            success:onCompileSuccess,
-            dataType:"json",
-            type:"POST",
-            data:{text:i, consoleArgs:arguments},
-            //timeout: 30000,
-            error:function () {
-                document.getElementById("compilationResult").innerHTML = "Your request is aborted. Impossible to get data from server. " + error;
+    function checkIfThereAreErrorsInProblemView() {
+        var childerns = document.getElementById("problems").childNodes;
+        var result = false;
+        if (childerns.length > 0) {
+            for (var i = 0; i < childerns.length; ++i) {
+                if (childerns[i].className == "problemsViewError") {
+                    result = true;
+                    break;
+                }
             }
-        });
+            if (result) {
+                document.getElementById("statusbar").innerHTML = "During program execution errors have occurred.";
+                document.getElementById("console").innerHTML = "There are errors in your code, look tab Problems View";
+            }
+        }
+        return result;
+    }
 
-        document.getElementById("compilationResult").innerHTML = text;
+    function runOrCompile(param, text, error) {
+        $("#tabs").tabs("select", 1);
+        document.getElementById("statusbar").innerHTML = "Running...";
+        if (!checkIfThereAreErrorsInProblemView()) {
+            compilationInProgress = true;
+            var arguments = $("#arguments").val();
+            var i = editor.getValue();
+            $.ajax({
+                url:document.location.href + "?sessionId=" + sessionId + "&" + param + "=true",
+                context:document.body,
+                success:onCompileSuccess,
+                dataType:"json",
+                type:"POST",
+                data:{text:i, consoleArgs:arguments},
+                //timeout: 30000,
+                error:function () {
+                    compilationInProgress = false;
+                    document.getElementById("statusbar").innerHTML = "Running request was aborted.";
+                    document.getElementById("console").innerHTML = "Your request is aborted. Impossible to get data from server. Internal server error. " + error;
+                }
+            });
 
+            document.getElementById("console").innerHTML = text;
+        }
     }
 
     $("#compile").click(function () {
@@ -193,21 +206,21 @@
 
 
     function onCompileSuccess(data) {
+        var isCompiledWithErrors = false;
         if (data != null) {
             var i = 0;
-            document.getElementById("compilationResult").innerHTML = "";
+            document.getElementById("console").innerHTML = "";
             var errors = document.createElement("div");
             while (typeof data[i] != "undefined") {
                 //If there is a compilation error
                 if (typeof data[i].message != "undefined") {
-                    alert("a")
                     var p = document.createElement("p");
                     var image = document.createElement("img");
                     if (data[i].type == "ERROR") {
-                        p.className = "newLineError";
+                        p.className = "problemsViewError";
                         image.src = "icons/error.png";
                     } else if (data[i].type == "WARNING") {
-                        p.className = "newLineWarning";
+                        p.className = "problemsViewWarning";
                         image.src = "icons/warning.png";
                     }
                     p.appendChild(image);
@@ -217,15 +230,21 @@
                     errors.appendChild(p);
                 } else {
                     var p = document.createElement("p");
-                    if (data[i].type == "err") {
-                        p.className = "newLineError";
+                    if ((data[i].type == "err") && (data[i].text != "")) {
+                        p.className = "problemsViewError";
+                        isCompiledWithErrors = true;
                     }
                     p.innerHTML = data[i].text;
                     errors.appendChild(p);
                 }
                 i++;
             }
-            document.getElementById("compilationResult").appendChild(errors);
+            document.getElementById("console").appendChild(errors);
+        }
+        if (!isCompiledWithErrors) {
+            document.getElementById("statusbar").innerHTML = "Compilation compete without errors.";
+        } else {
+            document.getElementById("statusbar").innerHTML = "During program execution errors have occurred";
         }
         compilationInProgress = false;
     }
@@ -257,7 +276,7 @@
             hashCode = editor.getValue().hashCode();
             $.ajax({
                 //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
-                url:document.location.href + "?sendData=true",
+                url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
                 context:document.body,
                 success:onAjaxSuccess,
                 dataType:"json",
@@ -278,27 +297,63 @@
             var i = 0;
             removeStyles();
             document.getElementById("compilationResult1").innerHTML = "remove " + (new Date().getTime() - now);
+
+            var problems = document.createElement("div");
             while (typeof data[i] != "undefined") {
                 array[i] = editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className, "ddd");
                 var title = data[i].titleName;
                 var start = eval('(' + data[i].x + ')');
+                var severity = data[i].severity;
 
-                if ((data[i].severity == 'WARNING') || (data[i].severity == 'TYPO')) {
-                    document.getElementById("compilationResult1").innerHTML = document.getElementById("compilationResult1").innerHTML + editor.lineInfo(start.line).markerText;
-                    //editor.setMarker(start.line, '<img src="/icons/warning.png" title="' + title + '"/>%N%');
-                    editor.setMarker(start.line, '<span class=\"warningGutter\" title="' + title + '">  </span>%N%');
+                if (editor.lineInfo(start.line).markerText == null) {
+                    if ((data[i].severity == 'WARNING') || (data[i].severity == 'TYPO')) {
+                        document.getElementById("compilationResult1").innerHTML = document.getElementById("compilationResult1").innerHTML + editor.lineInfo(start.line).markerText;
+                        //editor.setMarker(start.line, '<img src="/icons/warning.png" title="' + title + '"/>%N%');
+                        editor.setMarker(start.line, '<span class=\"warningGutter\" title="' + title + '">  </span>%N%');
+                    } else {
+                        editor.setMarker(start.line, '<span class=\"errorGutter\" title="' + title + '">  </span>%N%');
+                    }
+                    arrayLinesMarkers[i] = start.line;
                 } else {
-                    editor.setMarker(start.line, '<span class=\"errorGutter\" title="' + title + '">  </span>%N%');
+                    var text = editor.lineInfo(start.line).markerText;
+                    text = text.substring(text.indexOf("title=\"") + 7);
+                    text = text.substring(0, text.indexOf("\""));
+                    if ((severity == 'WARNING')) {
+                        editor.setMarker(start.line, '<span class=\"warningGutter\" title="' + title + " ---next error--- " + text + '">  </span>%N%');
+                    } else {
+                        editor.setMarker(start.line, '<span class=\"errorGutter\" title="' + title + " ---next error--- " + text + '">  </span>%N%');
+                    }
+                    arrayLinesMarkers[i] = start.line;
                 }
-                arrayLinesMarkers[i] = start.line;
-                var el = document.getElementById(start.line + " " + start.ch);
-                if (el != null) {
-                    alert("aaa");
-                    el.setAttribute("title", title);
+
+                setTimeout(function () {
+                    var el = document.getElementById(start.line + " " + start.ch);
+                    if (el != null) {
+                        el.setAttribute("title", title);
+                    }
+                }, 50);
+
+                //add exception at problemsView
+                var p = document.createElement("p");
+                var img = document.createElement("img");
+                if (severity == 'WARNING') {
+                    img.src = "/icons/warning.png";
+                    p.className = "problemsViewWarning";
+                } else {
+                    img.src = "/icons/error.png";
+                    p.className = "problemsViewError";
                 }
+                p.appendChild(img);
+                var titleDiv = document.createElement("span");
+                titleDiv.innerHTML = "(" + start.line + ", " + start.ch + ") : " + title;
+                p.appendChild(titleDiv);
+
+                problems.appendChild(p);
+
 
                 i++;
             }
+            document.getElementById("problems").innerHTML = problems.innerHTML;
             document.getElementById("compilationResult2").innerHTML = "after all " + (new Date().getTime() - now);
         }
         updateStatusBar();
@@ -312,7 +367,7 @@
             var i = editor.getValue();
             $.ajax({
                 //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
-                url:document.location.href + "?complete=true&cursorAt=" + editor.getCursor(true).line + "," + editor.getCursor(true).ch,
+                url:document.location.href + "?sessionId=" + sessionId + "&complete=true&cursorAt=" + editor.getCursor(true).line + "," + editor.getCursor(true).ch,
                 context:document.body,
                 success:startComplete,
                 dataType:"json",
@@ -409,12 +464,12 @@
             icon.src = completions[i].icon;
             pEl.appendChild(icon);
             //opt.appendChild(document.createTextNode(completions[i].name));
-            var spanName = document.createElement("span");
+            var spanName = document.createElement("div");
             spanName.className = "lookupElementName";
             spanName.innerHTML = completions[i].name;
             pEl.appendChild(spanName);
 
-            var spanTail = document.createElement("span");
+            var spanTail = document.createElement("div");
             spanTail.className = "lookupElementTail";
             spanTail.innerHTML = completions[i].tail;
             pEl.appendChild(spanTail);
@@ -501,9 +556,7 @@
 
     function getCompletions(token) {
         var found = [], start = token.string;
-        // alert(start);
         function maybeAdd(lookupElement) {
-            //alert(str);
             if (lookupElement.name.indexOf(start) == 0) found.push(lookupElement);
         }
 
@@ -511,7 +564,6 @@
             found.push(str);
         }
 
-        //alert("!" + start + "!");
         if (typeof keywords == "undefined") return found;
         if ((start.indexOf(' ') == 0) || (start == '.')) {
             forEachInArray(keywords, add);

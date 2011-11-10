@@ -325,7 +325,7 @@ $.widget( "ui.autocomplete", {
 			this._trigger( "close", event );
 		}
 	},
-
+	
 	_change: function( event ) {
 		if ( this.previous !== this.element.val() ) {
 			this._trigger( "change", event, { item: this.selectedItem } );
@@ -465,7 +465,7 @@ $.widget("ui.menu", {
 			});
 		this.refresh();
 	},
-
+	
 	refresh: function() {
 		var self = this;
 
@@ -473,7 +473,7 @@ $.widget("ui.menu", {
 		var items = this.element.children("li:not(.ui-menu-item):has(a)")
 			.addClass("ui-menu-item")
 			.attr("role", "menuitem");
-
+		
 		items.children("a")
 			.addClass("ui-corner-all")
 			.attr("tabindex", -1)

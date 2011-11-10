@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiRecursiveElementVisitor;
+import org.apache.log4j.Logger;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.Diagnostic;
 import org.jetbrains.jet.lang.diagnostics.DiagnosticFactory;
@@ -17,6 +18,7 @@ import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
 import web.view.ukhorskaya.Interval;
+import web.view.ukhorskaya.sessions.HttpSession;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,11 +33,10 @@ import java.util.List;
  */
 
 public class ErrorAnalyzer {
+    private final Logger LOG = Logger.getLogger(ErrorAnalyzer.class);
     private final PsiFile currentPsiFile;
     private final Document currentDocument;
     private final Project currentProject;
-
-    private final long startTime = System.nanoTime();
 
     public ErrorAnalyzer(PsiFile currentPsiFile) {
         this.currentPsiFile = currentPsiFile;
@@ -66,15 +67,16 @@ public class ErrorAnalyzer {
             Interval interval = new Interval(start, end, currentDocument);
             errors.add(new ErrorDescriptor(interval, errorElement.getErrorDescription(), Severity.ERROR, "red_wavy_line"));
         }
-        long startAnalyzeNamespace = System.nanoTime();
 
+        HttpSession.TIME_MANAGER.saveCurrentTime();
         BindingContext bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
                 currentProject,
                 Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
                 Predicates.<PsiFile>equalTo(currentPsiFile),
                 JetControlFlowDataTraceFactory.EMPTY);
+        LOG.info("userId=" + HttpSession.SESSION_ID + " ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
+        
 
-        System.out.print("analyze, " + (System.nanoTime() - startAnalyzeNamespace)/1000000 + ", ");
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 
         for (Diagnostic diagnostic : diagnostics) {
@@ -86,7 +88,8 @@ public class ErrorAnalyzer {
                 if (!(diagnostic instanceof UnresolvedReferenceDiagnostic) && (diagnostic.getSeverity() == Severity.ERROR)) {
                     className = "red_wavy_line";
                 }
-                errors.add(new ErrorDescriptor(new Interval(start, end, currentDocument), diagnostic.getMessage(), diagnostic.getSeverity(), className));
+                errors.add(new ErrorDescriptor(new Interval(start, end, currentDocument),
+                        diagnostic.getMessage(), diagnostic.getSeverity(), className));
             }
         }
 

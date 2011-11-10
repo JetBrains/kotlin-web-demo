@@ -3,6 +3,7 @@ import org.jetbrains.annotations.Nullable;
 import web.view.ukhorskaya.Initializer;
 import web.view.ukhorskaya.server.KotlinHttpServer;
 import web.view.ukhorskaya.ResponseUtils;
+import web.view.ukhorskaya.server.ServerSettings;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -16,7 +17,7 @@ import java.net.URL;
  */
 public class ResponseTest extends TestCase {
 
-    private final String LOCALHOST = "http://localhost/";
+    private final String HOST = "http://" + ServerSettings.HOSTNAME + "/";
     private final String TEST_SRC = "C://Development/git-contrib/jet-contrib/WebView/testData/";
 
     public void testServerStarted() {
@@ -33,7 +34,7 @@ public class ResponseTest extends TestCase {
     }
 
     public void testIncorrectUrlFormat() throws IOException {
-        String expectedResult = "Wrong request: /incorrectUrlFormat";
+        String expectedResult = "Resource not found.";
         String actualResult = getActualResultForRequest("incorrectUrlFormat");
         assertEquals("Wrong result", expectedResult, actualResult);
     }
@@ -51,30 +52,30 @@ public class ResponseTest extends TestCase {
     }
 
     public void test$execution$FooOutErr() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"out\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
     public void test$execution$FooOut() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"out\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
     public void test$execution$FooErr() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
     //Runtime.getRuntime().exec() Exception
     public void test$errors$securityExecutionError() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission <<ALL FILES>> execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat namespace.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission <<ALL FILES>> execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat namespace.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
 
     //Exception when read file from other directory
     public void test$errors$securityFilePermissionError() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br>namespace.class<br>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br/>\\tat java.io.File.exists(File.java:731)<br/>\\tat namespace.main(dummy.jet:3)<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br/>\\tat java.io.File.exists(File.java:731)<br/>\\tat namespace.main(dummy.jet:3)<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
@@ -99,7 +100,7 @@ public class ResponseTest extends TestCase {
     }
 
     public void test$timeout$RunTimeout() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br>demo/namespace.class<br>demo/Main.class<br>\",\"type\":\"out\"},{\"text\":\"Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>demo/namespace.class<br/>demo/Main.class<br/>\",\"type\":\"out\"},{\"text\":\"Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
@@ -149,9 +150,9 @@ public class ResponseTest extends TestCase {
 
     //data - data to send in post request, query - query for url
     private String getActualResultForRequest(String urlWoLocalhost, @Nullable String data, @Nullable String query) throws IOException {
-        String urlPath = LOCALHOST + urlWoLocalhost.replace(" ", "%20");
+        String urlPath = HOST + urlWoLocalhost.replace(" ", "%20");
         if (query != null) {
-            urlPath = urlPath + "?" + query;
+            urlPath = urlPath + "?sessionId=555&" + query;
         }
         URL url = new URL(urlPath);
         HttpURLConnection urlConnection = null;

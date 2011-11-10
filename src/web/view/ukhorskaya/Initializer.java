@@ -57,7 +57,7 @@ public class Initializer {
     public static void setJavaHome(String path) {
         ServerSettings.JAVA_HOME = path;
         setJavaCoreEnvironment();
-        System.out.println("JAVA_HOME = " + ServerSettings.JAVA_HOME);
+        ApplicationErrorsWriter.writeInfoToConsole("JAVA_HOME = " + ServerSettings.JAVA_HOME);
     }
 
     private static File initJdk() {
@@ -81,7 +81,7 @@ public class Initializer {
             }
 
             if (rtJar == null) {
-                System.out.println("JAVA_HOME environment variable needs to be defined");
+                ApplicationErrorsWriter.writeErrorToConsole("JAVA_HOME environment variable needs to be defined");
                 return null;
             }
         } else {
@@ -89,7 +89,7 @@ public class Initializer {
         }
 
         if (rtJar == null || !rtJar.exists()) {
-            System.out.println("No rt.jar found under JAVA_HOME=" + ServerSettings.JAVA_HOME);
+            ApplicationErrorsWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + ServerSettings.JAVA_HOME);
             return null;
         }
         return rtJar;

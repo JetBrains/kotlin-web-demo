@@ -20,6 +20,10 @@ public class Interval {
         int charNumberForElementEnd = end - currentDocument.getLineStartOffset(lineNumberForElementStart);
         if ((start == end) && (lineNumberForElementStart == lineNumberForElementEnd)) {
             charNumberForElementStart--;
+            if (charNumberForElementStart < 0) {
+                charNumberForElementStart++;
+                charNumberForElementEnd++;
+            }
         }
         this.startPoint = new Point(lineNumberForElementStart, charNumberForElementStart);
         this.endPoint = new Point(lineNumberForElementEnd, charNumberForElementEnd);
