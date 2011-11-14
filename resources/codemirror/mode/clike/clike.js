@@ -3,7 +3,6 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
       keywords = parserConfig.keywords || {},
       blockKeywords = parserConfig.blockKeywords || {},
       atoms = parserConfig.atoms || {},
-      atoms = parserConfig.soft || {},
       hooks = parserConfig.hooks || {},
       multiLineStrings = parserConfig.multiLineStrings;
   var isOperatorChar = /[+\-*&%=<>!?|\/]/;
@@ -89,8 +88,13 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
   }
   function popContext(state) {
     var t = state.context.type;
-    if (t == ")" || t == "]" || t == "}")
+    if (t == ")" || t == "]" || t == "}")      {
       state.indented = state.context.indented;
+    }
+    if (t == "}") {
+        state.indented = state.context.prev.indented;
+    }
+
     return state.context = state.context.prev;
   }
 
@@ -136,9 +140,10 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     },
 
     indent: function(state, textAfter) {
-      if (state.tokenize != tokenBase && state.tokenize != null) return 0;
+      if (state.tokenize != tokenBase && state.tokenize != null)  return 0;
       var firstChar = textAfter && textAfter.charAt(0), ctx = state.context, closing = firstChar == ctx.type;
-      if (ctx.type == "statement") return ctx.indented + (firstChar == "{" ? 0 : indentUnit);
+
+      if ((ctx.type == "statement")) { var x = ctx.indented + (firstChar == "{" ? 0 : indentUnit); x = (firstChar == "" ? x-2 : x); return x;}
       else if (ctx.align) return ctx.column + (closing ? 0 : 1);
       else return ctx.indented + (closing ? 0 : indentUnit);
     },

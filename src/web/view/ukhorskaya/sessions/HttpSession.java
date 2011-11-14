@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.Initializer;
@@ -27,7 +28,7 @@ import java.net.URLDecoder;
  */
 
 public class HttpSession {
-    private static final Logger LOG = Logger.getLogger(HttpSession.class);
+    private static Logger LOG;
     public static TimeManager TIME_MANAGER;
     public static int SESSION_ID;
 
@@ -38,6 +39,9 @@ public class HttpSession {
 
     public HttpSession() {
         TIME_MANAGER = new TimeManager();
+        PropertyConfigurator.configure(HttpSession.class.getResource("/log4j.properties"));
+        LOG = Logger.getLogger(HttpSession.class);
+
     }
 
     public void handle(final HttpExchange exchange) {
@@ -132,6 +136,7 @@ public class HttpSession {
                     "  //Thread.sleep(16000)\n" +
                     "  //java.io.FileWriter(\"sdfs.kt\")\n" +
                     "} ";
+
         }
         TIME_MANAGER.saveCurrentTime();
         currentPsiFile = JetPsiFactory.createFile(currentProject, text);
@@ -257,10 +262,10 @@ public class HttpSession {
                 query = query.substring(query.indexOf("&time=") + 6);
                 exchange.getResponseHeaders().add("time", query);
             }
-
-            exchange.sendResponseHeaders(errorCode, finalResponse.length());
+            byte[] bytes = finalResponse.getBytes();
+            exchange.sendResponseHeaders(errorCode, bytes.length);
             os = exchange.getResponseBody();
-            os.write(finalResponse.getBytes());
+            os.write(bytes);
             LOG.info("userId=" + SESSION_ID + " ALL SESSION: " + TIME_MANAGER.getMillisecondsFromStart() + " request=" + exchange.getRequestURI());
         } catch (IOException e) {
             //This is an exception we can't send data to client

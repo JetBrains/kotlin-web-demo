@@ -37,6 +37,7 @@ public class JavaRunner {
     public String getResult() {
         String commandString = generateCommandString();
         Process process;
+
         HttpSession.TIME_MANAGER.saveCurrentTime();
         try {
             process = Runtime.getRuntime().exec(commandString);

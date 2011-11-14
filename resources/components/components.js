@@ -14,18 +14,22 @@
         $("#examplesaccordion").toggle();
         isLeftSideShow = !isLeftSideShow;
         if (isLeftSideShow) {
-            document.getElementById("left").style.width = "19%";
+            document.getElementById("left").style.width = "220px";
             if (isRightSideShow) {
                 document.getElementById("center").style.width = "60%";
+                document.getElementById("right").style.marginLeft = "60%";
             } else {
-                document.getElementById("center").style.width = "75%";
+                document.getElementById("center").style.width = "80%";
+                document.getElementById("right").style.marginLeft = "80%";
             }
         } else {
             document.getElementById("left").style.width = "20px";
             if (isRightSideShow) {
-                document.getElementById("center").style.width = "75%";
+                document.getElementById("center").style.width = "80%";
+                document.getElementById("right").style.marginLeft = "80%";
             } else {
-                document.getElementById("center").style.width = "97%";
+                document.getElementById("center").style.width = "95%";
+                document.getElementById("right").style.marginLeft = "95%";
             }
         }
     });
@@ -34,18 +38,22 @@
             $("#helpcontent").toggle();
             isRightSideShow = !isRightSideShow;
             if (isRightSideShow) {
-                document.getElementById("right").style.width = "19%";
+                document.getElementById("right").style.marginLeft = "60%";
                 if (isLeftSideShow) {
                     document.getElementById("center").style.width = "60%";
+
                 } else {
-                    document.getElementById("center").style.width = "75%";
+                    document.getElementById("center").style.width = "80%";
+                    document.getElementById("right").style.marginLeft = "80%";
                 }
             } else {
-                document.getElementById("right").style.width = "20px";
+//                document.getElementById("right").style.width = "20px";
                 if (isLeftSideShow) {
-                    document.getElementById("center").style.width = "75%";
+                    document.getElementById("center").style.width = "80%";
+                    document.getElementById("right").style.marginLeft = "80%";
                 } else {
-                    document.getElementById("center").style.width = "92%";
+                    document.getElementById("center").style.width = "95%";
+                    document.getElementById("right").style.marginLeft = "95%";
                 }
             }
         });
@@ -53,10 +61,10 @@
 
     $("#tabs").tabs();
 
-    /*$("#editorinput").resizable({
+    $("#editorinput").resizable({
      handles:"s",
      alsoResize: ".CodeMirror-scroll"
-     });*/
+     });
 
     $('.accordion .head').click(
         function () {
@@ -65,5 +73,11 @@
         }).next().hide();
 
     $("#accordion").accordion();
+
+    $("#speedA").selectmenu({
+        dropdown: true
+    });
+
+    $("#speedA").open();
 
 })();

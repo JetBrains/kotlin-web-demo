@@ -1,7 +1,28 @@
-2011-11-10 19:50:13 (HttpSession.java:264) [INFO] userId=1213052237 ALL SESSION: 733 request=/?sessionId=1213052237&complete=true&cursorAt=10,21
-2011-11-10 19:50:13 (ServerHandler.java:108) [INFO] resource request /icons/method.png
-2011-11-10 19:50:18 (HttpSession.java:138) [INFO] userId=1213052237 PARSER 9
-2011-11-10 19:50:18 (ErrorAnalyzer.java:77) [INFO] userId=1213052237 ANALYZE namespaces 106
-2011-11-10 19:50:18 (HttpSession.java:264) [INFO] userId=1213052237 ALL SESSION: 165 request=/?sessionId=1213052237&sendData=true
-2011-11-10 19:50:19 (ServerHandler.java:108) [INFO] resource request /wavyline-red.gif
-2011-11-10 19:50:19 (ServerHandler.java:108) [INFO] resource request /icons/error.png
+2011-11-14 15:12:35 (ServerHandler.java:108) [INFO] resource request /jquery/css/smoothness/images/ui-icons_454545_256x240.png
+2011-11-14 15:12:35 (ServerHandler.java:108) [INFO] resource request /jquery/css/smoothness/images/ui-icons_888888_256x240.png
+2011-11-14 15:12:35 (HttpSession.java:57) [INFO] Number of users since start server: 5
+2011-11-14 15:12:35 (HttpSession.java:139) [INFO] userId=1644058531 PARSER 25
+2011-11-14 15:12:35 (HttpSession.java:265) [INFO] userId=1644058531 ALL SESSION: 29 request=/editor
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /styles.css
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /codemirror/lib/codemirror.css
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /components/components.css
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /codemirror/lib/codemirror-2.16.js
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /codemirror/mode/clike/clike.js
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /jquery/jquery.min.js
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /jquery/css/smoothness/jquery-ui-1.8.16.custom.css
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /codemirror/theme/default.css
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /jquery/development-bundle/ui/jquery.ui.selectmenu.js
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /jquery/js/jquery-1.6.2.min.js
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /jquery/js/jquery-ui-1.8.16.custom.min.js
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /codemirror/lib/complete.js
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /components/components.js
+2011-11-14 15:12:37 (ServerHandler.java:108) [INFO] resource request /codemirror/css/docs.css
+2011-11-14 15:12:40 (ServerHandler.java:108) [INFO] resource request /icons/leftSide.png
+2011-11-14 15:12:40 (ServerHandler.java:108) [INFO] resource request /icons/execute.png
+2011-11-14 15:12:41 (ServerHandler.java:108) [INFO] resource request /jquery/css/smoothness/images/ui-bg_flat_75_ffffff_40x100.png
+2011-11-14 15:12:41 (ServerHandler.java:108) [INFO] resource request /jquery/css/smoothness/images/ui-icons_454545_256x240.png
+2011-11-14 15:12:41 (ServerHandler.java:108) [INFO] resource request /jquery/css/smoothness/images/ui-bg_glass_65_ffffff_1x400.png
+2011-11-14 15:12:41 (ServerHandler.java:108) [INFO] resource request /jquery/css/smoothness/images/ui-icons_888888_256x240.png
+2011-11-14 15:12:41 (ServerHandler.java:64) [INFO] User info: browser: Netscape 5.0 (Windows) system: Win32 /editor?sessionId=1644058531&userData=true
+2011-11-14 15:12:41 (ServerHandler.java:108) [INFO] resource request /editor?sessionId=1644058531&userData=true

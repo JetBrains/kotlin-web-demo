@@ -21,14 +21,14 @@ public class KotlinHttpServer {
         return myServer;
     }
 
-    private ServerHandler myHandler;
+    private static ServerHandler myHandler;
 
     private static boolean isServerRunning = false;
 
     private KotlinHttpServer() {
     }
 
-    public void startServer() {
+    public static void startServer() {
         try {
             if (!isServerRunning) {
                 server = HttpServer.create(new InetSocketAddress(ServerSettings.HOSTNAME, ServerSettings.SERVER_PORT), 10);

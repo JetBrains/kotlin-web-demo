@@ -93,6 +93,8 @@ function setSessionId(id) {
         onKeyEvent:function (i, event) {
             // Hook into ctrl-space
             if (isGotoKeysPressed(event, goToSymbolShortcutKeys)) {
+                if (event.preventDefault) event.preventDefault();
+                else event.returnValue = false;
                 event.stop();
                 return beforeComplete();
             }
@@ -451,11 +453,14 @@ function setSessionId(id) {
 
         // Build the select widget
         var complete = document.createElement("div");
+        complete.id = "complete";
         complete.className = "completions";
-        var sel = complete.appendChild(document.createElement("select"));
 
+        var sel = complete.appendChild(document.createElement("select"));
+        sel.id = "selectId";
         for (i = 0; i < completions.length; ++i) {
             var opt = sel.appendChild(document.createElement("option"));
+//            opt.data-icon = completions[i].icon;
             var pEl = document.createElement("p");
             pEl.className = "lookupElement";
 
@@ -463,6 +468,7 @@ function setSessionId(id) {
             icon.className = "lookupElementIcon";
             icon.src = completions[i].icon;
             pEl.appendChild(icon);
+
             //opt.appendChild(document.createTextNode(completions[i].name));
             var spanName = document.createElement("div");
             spanName.className = "lookupElementName";
@@ -478,17 +484,18 @@ function setSessionId(id) {
             opt.appendChild(pEl);
         }
 
-        /*i = 0;
-         while (typeof data[i] != "undefined") {
-         var opt = sel.appendChild(document.createElement("option"));
-         var image = document.createElement("img");
-         image.src = data[i].icon;
-         opt.appendChild(image);
-         opt.appendChild(document.createTextNode(data[i].name));
-         opt.appendChild(document.createTextNode(data[i].tail));
 
-         i++;
-         }*/
+        /*i = 0;
+        while (typeof data[i] != "undefined") {
+            var opt = sel.appendChild(document.createElement("option"));
+            var image = document.createElement("img");
+            image.src = data[i].icon;
+            opt.appendChild(image);
+            opt.appendChild(document.createTextNode(data[i].name));
+            opt.appendChild(document.createTextNode(data[i].tail));
+
+            i++;
+        }*/
         //alert(completions.length + " " + data.length);
 
         sel.multiple = true;
@@ -505,9 +512,9 @@ function setSessionId(id) {
         var done = false;
 
         function close() {
-            if (done) return;
-            done = true;
-            complete.parentNode.removeChild(complete);
+            /*if (done) return;
+             done = true;
+             complete.parentNode.removeChild(complete);*/
         }
 
         function pick() {
@@ -556,6 +563,7 @@ function setSessionId(id) {
 
     function getCompletions(token) {
         var found = [], start = token.string;
+
         function maybeAdd(lookupElement) {
             if (lookupElement.name.indexOf(start) == 0) found.push(lookupElement);
         }

@@ -14,27 +14,47 @@ body {
 }
 
 #left, #center, #right {
-    border: 1px solid #EEEEEE;
-    display: inline;
-    float: left;
-    margin: 1px;
+    /*display: inline;*/
+    /*float: left;*/
+    margin-top: 1px;
+    margin-bottom: 1px;
     min-height: 790px;
 }
 
+#twolast {
+    display: block;
+}
+
 #left {
-    width: 19%;
+    /*width: 19%;*/
+    margin-left: 1px;
+    border-left: 1px solid #EEEEEE;
+    border-top: 1px solid #EEEEEE;
+    border-bottom: 1px solid #EEEEEE;
+    margin-top: 2px;
+    width: 220px;
+    display: block;
+    float: left;
 }
 
 #center {
     width: 60%;
+    border: 1px solid #EEEEEE;
+
+    float: left;
+    display: block;
 }
 
 #right {
-    width: 19%;
-}
+    /*width: 19%;*/
+    margin-right: 1px;
+    border-bottom: 1px solid #EEEEEE;
+    border-top: 1px solid #EEEEEE;
+    border-right: 1px solid #EEEEEE;
+    margin-top: 2px;
+    display: block;
+    margin-left: 60%;
 
-#clear {
-    clear: both;
 }
 
 #editordiv {
@@ -139,8 +159,8 @@ body {
 
 #rightcontent {
     display: block;
-    float: right;
-    width: 98%;
+    /*float: right;*/
+    /*width: 98%;*/
 }
 
 #helpbutton {

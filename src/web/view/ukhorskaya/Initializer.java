@@ -57,7 +57,6 @@ public class Initializer {
     public static void setJavaHome(String path) {
         ServerSettings.JAVA_HOME = path;
         setJavaCoreEnvironment();
-        ApplicationErrorsWriter.writeInfoToConsole("JAVA_HOME = " + ServerSettings.JAVA_HOME);
     }
 
     private static File initJdk() {
