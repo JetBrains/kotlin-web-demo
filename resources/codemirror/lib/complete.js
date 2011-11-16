@@ -86,7 +86,7 @@ function setSessionId(id) {
         }
     }
 
-    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers:true,
         matchBrackets:true,
         mode:"text/kotlin",
@@ -233,8 +233,11 @@ function setSessionId(id) {
                 } else {
                     var p = document.createElement("p");
                     if ((data[i].type == "err") && (data[i].text != "")) {
-                        p.className = "problemsViewError";
+                        p.className = "consoleViewError";
                         isCompiledWithErrors = true;
+                    }
+                    if (data[i].type == "info") {
+                        p.className = "consoleViewInfo";
                     }
                     p.innerHTML = data[i].text;
                     errors.appendChild(p);
@@ -512,9 +515,9 @@ function setSessionId(id) {
         var done = false;
 
         function close() {
-            /*if (done) return;
+            if (done) return;
              done = true;
-             complete.parentNode.removeChild(complete);*/
+             complete.parentNode.removeChild(complete);
         }
 
         function pick() {

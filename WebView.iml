@@ -106,7 +106,18 @@
           <root url="jar://$MODULE_DIR$/../../../kotlinLibrary/lib/kotlin-compiler.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="file://C:/jet/jet/compiler/cli/src" />
+          <root url="file://C:/jet/jet/compiler/backend/src" />
+          <root url="file://C:/jet/jet/compiler/frontend.java/src" />
+          <root url="file://C:/jet/jet/compiler/frontend/src" />
+          <root url="file://C:/jet/jet/compiler/tests" />
+          <root url="file://C:/jet/jet/confluence/src/main/java" />
+          <root url="file://C:/jet/jet/grammar/src" />
+          <root url="file://C:/jet/jet/idea/src" />
+          <root url="file://C:/jet/jet/idea/tests" />
+          <root url="file://C:/jet/jet/stdlib/src" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">

@@ -2,6 +2,12 @@ package web.view.ukhorskaya;
 
 import com.intellij.core.JavaCoreEnvironment;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.util.Function;
+import org.apache.log4j.Logger;
+import org.jetbrains.jet.JetCoreEnvironment;
+import org.jetbrains.jet.compiler.CompileEnvironment;
+import org.jetbrains.jet.compiler.CompileEnvironmentException;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.plugin.JetFileType;
 import web.view.ukhorskaya.server.ServerSettings;
@@ -17,6 +23,7 @@ import java.net.URLClassLoader;
  * Time: 3:49 PM
  */
 public class Initializer {
+    private static final Logger LOG = Logger.getLogger(Initializer.class);
     private static Initializer initializer = new Initializer();
 
     public static Initializer getInstance() {
@@ -26,78 +33,103 @@ public class Initializer {
     private Initializer() {
     }
 
-    private static JavaCoreEnvironment javaCoreEnvironment;
+    private static JavaCoreEnvironment environment;
 
     public static JavaCoreEnvironment getEnvironment() {
-        return javaCoreEnvironment;
+        if (environment != null) {
+            return environment;
+        }
+        LOG.error("JavaCoreEnvironment is null.");
+        return null;
     }
 
-    public static void setJavaCoreEnvironment() {
-        File rtJar = initJdk();
-        if (rtJar == null) return;
-        javaCoreEnvironment.addToClasspath(rtJar);
-        javaCoreEnvironment.registerFileType(JetFileType.INSTANCE, "kt");
-        javaCoreEnvironment.registerFileType(JetFileType.INSTANCE, "jet");
-        javaCoreEnvironment.registerParserDefinition(new JetParserDefinition());
+    public boolean setJavaCoreEnvironment() {
+        File rtJar = findRtJar();
+        if (rtJar == null) return false;
+        environment.addToClasspath(rtJar);
+        environment.registerFileType(JetFileType.INSTANCE, "kt");
+        environment.registerFileType(JetFileType.INSTANCE, "kts");
+        environment.registerFileType(JetFileType.INSTANCE, "ktm");
+        environment.registerFileType(JetFileType.INSTANCE, "jet");
+        environment.registerParserDefinition(new JetParserDefinition());
+        return true;
     }
 
-    public void initJavaCoreEnvironment() {
-        System.setProperty("java.awt.headless", "true");
+    public boolean initJavaCoreEnvironment() {
+        if (environment == null) {
+            System.setProperty("java.awt.headless", "true");
 
-        Disposable root = new Disposable() {
-            @Override
-            public void dispose() {
-            }
-        };
-        javaCoreEnvironment = new JavaCoreEnvironment(root);
-
-        setJavaCoreEnvironment();
-    }
-
-    public static void setJavaHome(String path) {
-        ServerSettings.JAVA_HOME = path;
-        setJavaCoreEnvironment();
-    }
-
-    private static File initJdk() {
-        File rtJar = null;
-        if (ServerSettings.JAVA_HOME == null) {
-            ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-            if (systemClassLoader instanceof URLClassLoader) {
-                URLClassLoader loader = (URLClassLoader) systemClassLoader;
-                for (URL url : loader.getURLs()) {
-                    if ("file".equals(url.getProtocol())) {
-                        if (url.getFile().endsWith("/lib/rt.jar")) {
-                            rtJar = new File(url.getFile());
-                            break;
-                        }
-                        if (url.getFile().endsWith("/Classes/classes.jar")) {
-                            rtJar = new File(url.getFile()).getAbsoluteFile();
-                            break;
-                        }
-                    }
+            Disposable root = new Disposable() {
+                @Override
+                public void dispose() {
                 }
-            }
+            };
+            environment = new JavaCoreEnvironment(root);
 
+            return setJavaCoreEnvironment();
+        }
+        LOG.error("JavaCoreEnvironment is already initialized.");
+        return false;
+    }
+
+    private File findRtJar() {
+        String java_home = ServerSettings.JAVA_HOME;
+         LOG.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
+        File rtJar;
+        if (java_home != null) {
+            rtJar = findRtJar(java_home);
             if (rtJar == null) {
-                ApplicationErrorsWriter.writeErrorToConsole("JAVA_HOME environment variable needs to be defined");
-                return null;
+                rtJar = findActiveRtJar(true);
             }
         } else {
-            rtJar = findRtJar(ServerSettings.JAVA_HOME);
+            rtJar = findActiveRtJar(true);
         }
 
-        if (rtJar == null || !rtJar.exists()) {
-            ApplicationErrorsWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + ServerSettings.JAVA_HOME);
+        if ((rtJar == null || !rtJar.exists())) {
+            if (java_home == null) {
+                ApplicationErrorsWriter.writeInfoToConsole("You can set java_home variable at config.properties file.");
+            } else {
+                ApplicationErrorsWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + java_home);
+            }
             return null;
         }
         return rtJar;
     }
 
-    private static File findRtJar(String javaHome) {
-        File rtJar = new File(javaHome, "jre/lib/rt.jar");
+    private File findRtJar(String javaHome) {
+        File rtJar = new File(javaHome, "jre" + File.separatorChar + "lib" + File.separatorChar + "rt.jar");
+        LOG.info(rtJar.getAbsolutePath() + " ex " + rtJar.exists());
         if (rtJar.exists()) {
             return rtJar;
+        }
+        return null;
+    }
+
+    private File findActiveRtJar(boolean failOnError) {
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        if (systemClassLoader instanceof URLClassLoader) {
+            URLClassLoader loader = (URLClassLoader) systemClassLoader;
+            for (URL url : loader.getURLs()) {
+                if ("file".equals(url.getProtocol())) {
+                    LOG.info(url.getFile());
+                    if (url.getFile().endsWith("/lib/rt.jar")) {
+                        return new File(url.getFile().replaceAll("%20", " "));
+                    }
+                    if (url.getFile().endsWith("/Classes/classes.jar")) {
+                        return new File(url.getFile().replaceAll("%20", " ")).getAbsoluteFile();
+                    }
+                }
+            }
+            if (failOnError) {
+                ApplicationErrorsWriter.writeErrorToConsole("Could not find rt.jar in system class loader: " + StringUtil.join(loader.getURLs(), new Function<URL, String>() {
+                    @Override
+                    public String fun(URL url) {
+                        return url.toString();
+                    }
+                }, ", "));
+            }
+        } else if (failOnError) {
+            ApplicationErrorsWriter.writeErrorToConsole("System class loader is not an URLClassLoader: " + systemClassLoader);
         }
         return null;
     }

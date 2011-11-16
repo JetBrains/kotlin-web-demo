@@ -12,8 +12,10 @@ import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.Initializer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.TimeManager;
+import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.handlers.ServerHandler;
 import web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor;
+import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForCompletion;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting;
 
@@ -39,7 +41,6 @@ public class HttpSession {
 
     public HttpSession() {
         TIME_MANAGER = new TimeManager();
-        PropertyConfigurator.configure(HttpSession.class.getResource("/log4j.properties"));
         LOG = Logger.getLogger(HttpSession.class);
 
     }
@@ -67,9 +68,24 @@ public class HttpSession {
             sendExecutorResult();
         } else if (param.contains("complete=true")) {
             sendCompletionResult();
+        } else if (param.contains("exampleId=")) {
+            sendExampleContent();
+        } else if (param.contains("allExamples=true")) {
+            sendExamplesList();
         } else {
             sendProjectSourceFile();
         }
+    }
+
+    private void sendExamplesList() {
+        ExamplesLoader loader = new ExamplesLoader();
+        writeResponse(loader.getExamplesList(), HttpStatus.SC_OK, true);
+    }
+
+    private void sendExampleContent() {
+        ExamplesLoader loader = new ExamplesLoader();
+        writeResponse(loader.getResult("aaa.kt"), HttpStatus.SC_OK, true);
+
     }
 
     //FOR TEST ONLY

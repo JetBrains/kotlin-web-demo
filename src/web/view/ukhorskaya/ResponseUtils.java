@@ -1,19 +1,8 @@
 package web.view.ukhorskaya;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.util.Pair;
-import org.apache.commons.httpclient.HttpStatus;
-import org.jetbrains.annotations.Nullable;
-
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,15 +20,6 @@ public class ResponseUtils {
             string = string.replaceAll(">", "&gt;");
         }
         return string;
-    }
-
-    public static Project getProjectByName(String projectName) {
-        for (Project p : ProjectManager.getInstance().getOpenProjects()) {
-            if (p.getName().equals(projectName)) {
-                return p;
-            }
-        }
-        return null;
     }
 
     //Get Color as String
@@ -130,5 +110,36 @@ public class ResponseUtils {
 
         return response.toString();
     }
+
+    public static String readData(Reader reader, boolean addNewLine) throws IOException {
+            StringBuilder response = new StringBuilder();
+            BufferedReader bufferedReader = new BufferedReader(reader);
+
+            String tmp;
+            while ((tmp = bufferedReader.readLine()) != null) {
+                response.append(tmp);
+                if (addNewLine) {
+                    response.append("\n");
+                }
+            }
+
+            return response.toString();
+        }
+    
+    public static String readData(InputStream is, boolean addNewLine) throws IOException {
+           InputStreamReader reader = new InputStreamReader(is);
+           StringBuilder response = new StringBuilder();
+           BufferedReader bufferedReader = new BufferedReader(reader);
+   
+           String tmp;
+           while ((tmp = bufferedReader.readLine()) != null) {
+               response.append(tmp);
+               if (addNewLine) {
+                   response.append("\n");
+               }
+           }
+   
+           return response.toString();
+       }
 
 }

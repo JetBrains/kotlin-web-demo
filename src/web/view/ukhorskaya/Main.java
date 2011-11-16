@@ -1,9 +1,11 @@
 package web.view.ukhorskaya;
 
 import web.view.ukhorskaya.server.KotlinHttpServer;
+import web.view.ukhorskaya.server.ServerSettings;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,17 +18,37 @@ public class Main {
 
 
     public static void main(String[] args) {
-        try {
-            Initializer.getInstance().initJavaCoreEnvironment();
-        } catch (Exception e) {
-            ApplicationErrorsWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
-            System.exit(1);
+        if (args.length == 2) {
+            ServerSettings.HOST = args[0];
+            ApplicationErrorsWriter.writeInfoToConsole("Host is set: " + args[0]);
+            ServerSettings.PORT = args[1];
+            ApplicationErrorsWriter.writeInfoToConsole("Port is set: " + args[1]);
         }
+        new File("logs").mkdir();
+        //new File("out").mkdir();
 
-        KotlinHttpServer.startServer();
+        if (loadProperties()) {
 
-        ApplicationErrorsWriter.writeInfoToConsole("Use -h or --help to look at all options");
+            try {
+                if (Initializer.getInstance().initJavaCoreEnvironment()) {
+                    KotlinHttpServer.startServer();
+                    ApplicationErrorsWriter.writeInfoToConsole("Use \"help\" to look at all options");
+                    startConsoleThread();
+                } else {
+                    ApplicationErrorsWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
+                }
+            } catch (Exception e) {
+                ApplicationErrorsWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
+                System.exit(1);
+            }
 
+        } else {
+            ApplicationErrorsWriter.writeErrorToConsole("Can not find config.properties.");
+        }
+    }
+
+    private static void startConsoleThread() {
+        System.out.print("> ");
         Thread consoleListener = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -36,7 +58,8 @@ public class Main {
                             String tmp = "";
                             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                             tmp = reader.readLine();
-                            ApplicationErrorsWriter.writeInfoToConsole(ApplicationManager.runCommand(tmp));
+                            ApplicationManager.runCommand(tmp);
+                            System.out.print("> ");
                         }
                     } catch (Exception e) {
                         ApplicationErrorsWriter.writeExceptionToConsole(e);
@@ -45,6 +68,35 @@ public class Main {
             }
         });
         consoleListener.start();
+    }
 
+    private static boolean loadProperties() {
+        File file = new File("config.properties");
+        if (!file.exists()) {
+            ApplicationErrorsWriter.writeErrorToConsole(file.getAbsolutePath());
+            return false;
+        }
+
+        try {
+            Properties properties = new Properties();
+            properties.load(new FileReader(file));
+            Set<String> names = properties.stringPropertyNames();
+            for (String name : names) {
+                String value;
+                if ((name.equals("java_home")) || (name.equals("output")) || (name.equals("examples"))) {
+                    value = properties.get(name).toString();
+                    value = value.substring(1, value.length() - 1);
+                } else {
+                    value = properties.get(name).toString();
+                }
+
+                ApplicationManager.setServerSetting(name + " " + value);
+                ApplicationErrorsWriter.writeInfoToConsole("Loaded from config file: " + name + " " + value);
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

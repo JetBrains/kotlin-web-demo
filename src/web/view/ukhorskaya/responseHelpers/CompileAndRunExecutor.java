@@ -68,28 +68,40 @@ public class CompileAndRunExecutor {
             GenerationState generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
             generationState.compileCorrectNamespaces(bindingContext, namespaces);
             LOG.info("userId=" + HttpSession.SESSION_ID + " COMPILE correctNamespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
-            
+
             StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
             stringBuilder.append(ResponseUtils.addNewLine());
             final ClassFileFactory factory = generationState.getFactory();
-            
+
             HttpSession.TIME_MANAGER.saveCurrentTime();
             List<String> files = factory.files();
             for (String file : files) {
-                File target = new File(ServerSettings.OUTPUT_DIRECTORY, file);
-                try {
-                    FileUtil.writeToFile(target, factory.asBytes(file));
-                    stringBuilder.append(file).append(ResponseUtils.addNewLine());
-                } catch (IOException e) {
-                    LOG.error("Cannot save filea on disk.", e);
-                    return "[{\"text\":\"Cannot get a completion\",\"type\":\"err\"}]";
+                File outputDir = new File(ServerSettings.OUTPUT_DIRECTORY);
+                ServerSettings.OUTPUT_DIRECTORY = outputDir.getAbsolutePath();
+                boolean isOutputExists = true;
+                if (!outputDir.exists()) {
+                    isOutputExists = outputDir.mkdirs();
                 }
+                if (isOutputExists) {
+                    File target = new File(ServerSettings.OUTPUT_DIRECTORY, file);
+                    try {
+                        FileUtil.writeToFile(target, factory.asBytes(file));
+                        stringBuilder.append(file).append(ResponseUtils.addNewLine());
+                    } catch (IOException e) {
+                        LOG.error("Cannot save filea on disk.", e);
+                        return "[{\"text\":\"Cannot get a completion\",\"type\":\"err\"}]";
+                    }
+                }    else {
+                    LOG.error("Cannot create output directory for files: " + outputDir.getAbsolutePath());
+                    return "[{\"text\":\"Error on server: cannot run your program\",\"type\":\"err\"}]";
+                }
+
             }
             LOG.info("userId=" + HttpSession.SESSION_ID + " Write files on disk " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
 
             JSONArray jsonArray = new JSONArray();
             Map<String, String> map = new HashMap<String, String>();
-            map.put("type", "out");
+            map.put("type", "info");
             map.put("text", stringBuilder.toString());
             jsonArray.put(map);
 

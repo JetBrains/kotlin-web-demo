@@ -4,15 +4,12 @@ import com.google.common.base.Predicates;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiRecursiveElementVisitor;
 import org.apache.log4j.Logger;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
-import org.jetbrains.jet.lang.diagnostics.Diagnostic;
-import org.jetbrains.jet.lang.diagnostics.DiagnosticFactory;
-import org.jetbrains.jet.lang.diagnostics.Severity;
-import org.jetbrains.jet.lang.diagnostics.UnresolvedReferenceDiagnostic;
+import org.jetbrains.jet.lang.diagnostics.*;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
@@ -47,14 +44,17 @@ public class ErrorAnalyzer {
     public List<ErrorDescriptor> getAllErrors() {
 
         final List<PsiErrorElement> errorElements = new ArrayList<PsiErrorElement>();
-        PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
+        PsiElementVisitor visitor = new PsiElementVisitor() {
             @Override
             public void visitElement(PsiElement element) {
-                if (element instanceof PsiErrorElement) {
-                    errorElements.add((PsiErrorElement) element);
-                }
-                super.visitElement(element);
+                element.acceptChildren(this);
             }
+
+            @Override
+            public void visitErrorElement(PsiErrorElement element) {
+                errorElements.add(element);
+            }
+
         };
 
         visitor.visitFile(currentPsiFile);
@@ -75,7 +75,7 @@ public class ErrorAnalyzer {
                 Predicates.<PsiFile>equalTo(currentPsiFile),
                 JetControlFlowDataTraceFactory.EMPTY);
         LOG.info("userId=" + HttpSession.SESSION_ID + " ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
-        
+
 
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 

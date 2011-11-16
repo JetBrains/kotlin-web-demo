@@ -37,7 +37,6 @@ public class JavaRunner {
     public String getResult() {
         String commandString = generateCommandString();
         Process process;
-
         HttpSession.TIME_MANAGER.saveCurrentTime();
         try {
             process = Runtime.getRuntime().exec(commandString);
@@ -59,7 +58,7 @@ public class JavaRunner {
                 LOG.info("userId=" + HttpSession.SESSION_ID + " Timeout exception.");
                 errStream.append("Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.");
             }
-        }, ServerSettings.TIMEOUT_FOR_EXECUTION);
+        }, Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION));
 
         BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -79,7 +78,9 @@ public class JavaRunner {
             LOG.error("Interrupted exception during java process excution", e);
             return getJsonStringFromErrorMessage("Impossible to run your program: InterruptedException handled.");
         }
-        LOG.info("userId=" + HttpSession.SESSION_ID + " RUN user program " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime() + " timeout=" + isTimeoutException);
+        LOG.info("userId=" + HttpSession.SESSION_ID + " RUN user program " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()
+                + " timeout=" + isTimeoutException
+                + " commandString=" + commandString);
         if (!isTimeoutException) {
             Map<String, String> mapOut = new HashMap<String, String>();
             mapOut.put("type", "out");
@@ -109,11 +110,42 @@ public class JavaRunner {
     }
 
     private void deleteFile(String path) {
-        File f = new File(ServerSettings.OUTPUT_DIRECTORY + path);
-        if (f.exists()) {
-            boolean del = f.delete();
-            if (!del) {
-                LOG.error("userId=" + HttpSession.SESSION_ID + " File " + ServerSettings.OUTPUT_DIRECTORY + path + " isn't deleted.");
+        File f = new File(ServerSettings.OUTPUT_DIRECTORY + File.separatorChar + path);
+        File parent = f.getParentFile();
+        while (!parent.getAbsolutePath().equals(ServerSettings.OUTPUT_DIRECTORY)) {
+            f = parent;
+            parent = parent.getParentFile();
+        }
+        delete(f);
+    }
+
+    private void delete(File file) {
+        if (file.isDirectory() && file.exists()) {
+            if (file.list().length == 0) {
+                if (file.exists()) {
+                    file.delete();
+                    LOG.info("userId=" + HttpSession.SESSION_ID + " Directory is deleted : " + file.getAbsolutePath());
+                }
+            } else {
+                //list all the directory contents
+                String files[] = file.list();
+                for (String temp : files) {
+                    //construct the file structure
+                    File fileDelete = new File(file, temp);
+                    delete(fileDelete);
+                }
+                //check the directory again, if empty then delete it
+                if (file.list().length == 0) {
+                    if (file.exists()) {
+                        file.delete();
+                        LOG.info("userId=" + HttpSession.SESSION_ID + " Directory is deleted : " + file.getAbsolutePath());
+                    }
+                }
+            }
+        } else {
+            if (file.exists()) {
+                file.delete();
+                LOG.info("userId=" + HttpSession.SESSION_ID + " File is deleted : " + file.getAbsolutePath());
             }
         }
     }
@@ -123,8 +155,8 @@ public class JavaRunner {
         builder.append("-classpath ");
         //builder.append(System.getProperty("java.class.path"));
         builder.append(ServerSettings.OUTPUT_DIRECTORY);
-        builder.append(";");
-        builder.append(ServerSettings.PATH_TO_KOTLIN_LIB);
+        builder.append(File.pathSeparator);
+        builder.append("WebView.jar");
         builder.append(" ");
         builder.append("-Djava.security.manager ");
         builder.append(modifyClassNameFromPath(files.get(0)));
@@ -134,12 +166,7 @@ public class JavaRunner {
     }
 
     private String modifyClassNameFromPath(String path) {
-        String name = "";
-        name = ResponseUtils.substringAfter(path, "out\\");
-        if (name.equals("")) {
-            name = path;
-        }
-        name = ResponseUtils.substringBefore(name, ".class");
+        String name = ResponseUtils.substringBefore(path, ".class");
         name = name.replaceAll("/", ".");
         return name;
     }

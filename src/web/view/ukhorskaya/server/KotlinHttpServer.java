@@ -28,10 +28,26 @@ public class KotlinHttpServer {
     private KotlinHttpServer() {
     }
 
+    public static String getHost() {
+        if (server != null) {
+            return server.getAddress().getHostName();
+        } else return null;
+    }
+
+    public static int getPort() {
+        if (server != null) {
+            return server.getAddress().getPort();
+        } else return 0;
+    }
+
     public static void startServer() {
         try {
             if (!isServerRunning) {
-                server = HttpServer.create(new InetSocketAddress(ServerSettings.HOSTNAME, ServerSettings.SERVER_PORT), 10);
+                if (ServerSettings.HOST.equals("localhost")) {
+                    server = HttpServer.create(new InetSocketAddress(Integer.parseInt(ServerSettings.PORT)), 10);
+                } else {
+                    server = HttpServer.create(new InetSocketAddress(ServerSettings.HOST, Integer.parseInt(ServerSettings.PORT)), 10);
+                }
                 if (myHandler == null) {
                     myHandler = new ServerHandler();
                 }
@@ -39,9 +55,10 @@ public class KotlinHttpServer {
                 server.setExecutor(null);
                 server.start();
                 isServerRunning = true;
-                ApplicationErrorsWriter.writeInfoToConsole("Server is started");
+                ApplicationErrorsWriter.writeInfoToConsole("Server is started at " + KotlinHttpServer.getHost() + ":" + KotlinHttpServer.getPort());
             } else {
-                ApplicationErrorsWriter.writeErrorToConsole("Server is already running. Use \"stop\" or \"restart\" commands.");
+                ApplicationErrorsWriter.writeErrorToConsole("Server is already running at " + KotlinHttpServer.getHost() + ":" + KotlinHttpServer.getPort()
+                        + ". Use \"stop\" or \"restart\" commands.");
             }
         } catch (BindException e) {
             ApplicationErrorsWriter.writeExceptionToConsole("Address already in use. Use \"set hostname\" command to change it.", e);
@@ -53,7 +70,7 @@ public class KotlinHttpServer {
     public static void stopServer() {
         if (isServerRunning) {
             KotlinHttpServer.server.stop(0);
-            ApplicationErrorsWriter.writeInfoToConsole("Server is stopped");
+            ApplicationErrorsWriter.writeInfoToConsole("Server is stopped at " + KotlinHttpServer.getHost() + ":" + KotlinHttpServer.getPort());
             isServerRunning = false;
         } else {
             ApplicationErrorsWriter.writeErrorToConsole("Server is not running");

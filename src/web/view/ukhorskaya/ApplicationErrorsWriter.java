@@ -28,8 +28,4 @@ public class ApplicationErrorsWriter {
         System.out.println(message);
     }
 
-    public static void writeErrorToLog(String message) {
-        Logger.getRootLogger().error(message);
-    }
-
 }

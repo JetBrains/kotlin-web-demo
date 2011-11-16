@@ -6,16 +6,60 @@ body {
 }
 
 #maindiv {
-    position: absolute;
+    /*position: absolute;*/
     overflow: auto;
-    margin: 0;
-    width: 100%;
+    /*margin: 0;*/
+    /*width: 100%;*/
+    width: 1246px;
     height: 100%;
+    /*height: 790px;*/
+    margin: auto;
+}
+#left, #center, #right {
+    display: inline-block;
+    overflow-x: auto;
+    float: left;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    min-height: 780px;
 }
 
-#left, #center, #right {
-    /*display: inline;*/
+#left {
+    /*width: 19%;*/
+    width: 220px;
+    margin-left: 1px;
+    border-left: 1px solid #EEEEEE;
+    border-top: 1px solid #EEEEEE;
+    border-bottom: 1px solid #EEEEEE;
+    /*width: 220px;*/
+    /*display: block;*/
     /*float: left;*/
+}
+
+#center {
+    /*width: 60%;*/
+    width: 800px;
+    border: 1px solid #EEEEEE;
+
+    /*float: left;*/
+    /*display: block;*/
+}
+
+#right {
+    /*width: 19%;*/
+    width: 220px;
+    margin-right: 1px;
+    border-bottom: 1px solid #EEEEEE;
+    border-top: 1px solid #EEEEEE;
+    border-right: 1px solid #EEEEEE;
+    /*display: block;*/
+    /*margin-left: 60%;*/
+
+}
+
+/*#left, #center, #right {
+    *//*display: inline;*//*
+    *//*float: left;*//*
     margin-top: 1px;
     margin-bottom: 1px;
     min-height: 790px;
@@ -26,7 +70,7 @@ body {
 }
 
 #left {
-    /*width: 19%;*/
+    *//*width: 19%;*//*
     margin-left: 1px;
     border-left: 1px solid #EEEEEE;
     border-top: 1px solid #EEEEEE;
@@ -46,7 +90,7 @@ body {
 }
 
 #right {
-    /*width: 19%;*/
+    *//*width: 19%;*//*
     margin-right: 1px;
     border-bottom: 1px solid #EEEEEE;
     border-top: 1px solid #EEEEEE;
@@ -55,10 +99,11 @@ body {
     display: block;
     margin-left: 60%;
 
-}
+}*/
 
 #editordiv {
-    height: 450px;
+    height: 460px;
+    *height: 470px;
 }
 
 #editortitle, #argstitle {

@@ -16,3 +16,6 @@ body { font-family: monospace; font-size: 12px; color: #000000; background-color
 #compilationResult { white-space: pre; }
 
 .hidden { visibility: hidden; }
+
+.consoleViewError { color: #ff0000 !important; margin: 0; vertical-align: top; }
+.consoleViewInfo { color: #0000ff !important; margin: 0; vertical-align: top; }
