@@ -1,1 +1,0 @@
-[{"titleName":"Only safe calls (?.) are allowed on a nullable receiver of type PrintStream?","severity":"ERROR","className":"red_wavy_line","y":"{line: 8, ch: 15}","x":"{line: 8, ch: 14}"}]
