@@ -3,6 +3,7 @@ package web.view.ukhorskaya.responseHelpers;
 import com.intellij.psi.PsiFile;
 import org.json.JSONArray;
 import web.view.ukhorskaya.Interval;
+import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer;
 import web.view.ukhorskaya.errorsDescriptors.ErrorDescriptor;
 
@@ -33,7 +34,7 @@ public class JsonResponseForHighlighting {
             resultArray.put(getMapForJsonResponse(errorDescriptor.getInterval(), errorDescriptor.getMessage(),
                     errorDescriptor.getClassName(), errorDescriptor.getSeverity().name()));
         }
-        return resultArray.toString();
+        return ResponseUtils.escapeString(resultArray.toString());
     }
 
     private Map<String, String> getMapForJsonResponse(Interval interval, String titleName, String className, String severity) {

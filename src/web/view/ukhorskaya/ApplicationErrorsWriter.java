@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 
 public class ApplicationErrorsWriter {
 
+    public static final Logger LOG_FOR_EXCEPTIONS = Logger.getLogger("exceptionLogger");
+    
     public static void writeErrorToConsole(String message) {
         System.err.println(message);
     }
@@ -26,6 +28,22 @@ public class ApplicationErrorsWriter {
 
     public static void writeInfoToConsole(String message) {
         System.out.println(message);
+    }
+
+    public static String getExceptionForLog(String typeOfRequest, String message, String textOfFile) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<error>");
+        builder.append("<type>");
+        builder.append(typeOfRequest);
+        builder.append("</type>");
+        builder.append("<message>");
+        builder.append(message);
+        builder.append("</message>");
+        builder.append("<file>");
+        builder.append(textOfFile);
+        builder.append("</file>");
+        builder.append("</error>");
+        return builder.toString();
     }
 
 }

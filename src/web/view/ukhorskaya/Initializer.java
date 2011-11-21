@@ -39,7 +39,7 @@ public class Initializer {
         if (environment != null) {
             return environment;
         }
-        LOG.error("JavaCoreEnvironment is null.");
+        ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog("initialize", "JavaCoreEnvironment is null.", "null"));
         return null;
     }
 
@@ -47,12 +47,51 @@ public class Initializer {
         File rtJar = findRtJar();
         if (rtJar == null) return false;
         environment.addToClasspath(rtJar);
+        if (!initializeKotlinRuntime()) {
+            ApplicationErrorsWriter.writeInfoToConsole("Cannot found Kotlin Runtime library.");
+        }
         environment.registerFileType(JetFileType.INSTANCE, "kt");
         environment.registerFileType(JetFileType.INSTANCE, "kts");
         environment.registerFileType(JetFileType.INSTANCE, "ktm");
         environment.registerFileType(JetFileType.INSTANCE, "jet");
         environment.registerParserDefinition(new JetParserDefinition());
         return true;
+    }
+
+    public boolean initializeKotlinRuntime() {
+        final File unpackedRuntimePath = getUnpackedRuntimePath();
+        if (unpackedRuntimePath != null) {
+            ServerSettings.PATH_TO_KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
+            ApplicationErrorsWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
+            environment.addToClasspath(unpackedRuntimePath);
+        } else {
+            final File runtimeJarPath = getRuntimeJarPath();
+            if (runtimeJarPath != null && runtimeJarPath.exists()) {
+                environment.addToClasspath(runtimeJarPath);
+                ServerSettings.PATH_TO_KOTLIN_LIB = runtimeJarPath.getAbsolutePath();
+                ApplicationErrorsWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static File getUnpackedRuntimePath() {
+        URL url = CompileEnvironment.class.getClassLoader().getResource("jet/JetObject.class");
+        if (url != null && url.getProtocol().equals("file")) {
+            return new File(url.getPath()).getParentFile().getParentFile();
+        }
+        return null;
+    }
+
+    public static File getRuntimeJarPath() {
+        URL url = CompileEnvironment.class.getClassLoader().getResource("jet/JetObject.class");
+        if (url != null && url.getProtocol().equals("jar")) {
+            String path = url.getPath();
+            return new File(path.substring(path.indexOf(":") + 1, path.indexOf("!/")));
+        }
+        return null;
     }
 
     public boolean initJavaCoreEnvironment() {
@@ -74,7 +113,7 @@ public class Initializer {
 
     private File findRtJar() {
         String java_home = ServerSettings.JAVA_HOME;
-         LOG.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
+        LOG.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
         File rtJar;
         if (java_home != null) {
             rtJar = findRtJar(java_home);

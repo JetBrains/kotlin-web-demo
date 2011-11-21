@@ -1,5 +1,6 @@
 package web.view.ukhorskaya;
 
+import web.view.ukhorskaya.examplesLoader.ExamplesList;
 import web.view.ukhorskaya.server.KotlinHttpServer;
 import web.view.ukhorskaya.server.ServerSettings;
 
@@ -25,14 +26,13 @@ public class Main {
             ApplicationErrorsWriter.writeInfoToConsole("Port is set: " + args[1]);
         }
         new File("logs").mkdir();
-        //new File("out").mkdir();
 
         if (loadProperties()) {
-
             try {
                 if (Initializer.getInstance().initJavaCoreEnvironment()) {
                     KotlinHttpServer.startServer();
                     ApplicationErrorsWriter.writeInfoToConsole("Use \"help\" to look at all options");
+                    ExamplesList.getInstance();
                     startConsoleThread();
                 } else {
                     ApplicationErrorsWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
@@ -52,18 +52,15 @@ public class Main {
         Thread consoleListener = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    try {
-                        if (System.in.available() > 0) {
-                            String tmp = "";
-                            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                            tmp = reader.readLine();
-                            ApplicationManager.runCommand(tmp);
-                            System.out.print("> ");
-                        }
-                    } catch (Exception e) {
-                        ApplicationErrorsWriter.writeExceptionToConsole(e);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                String tmp = "";
+                try {
+                    while ((tmp = reader.readLine()) != null) {
+                        ApplicationManager.runCommand(tmp);
+                        System.out.print("> ");
                     }
+                } catch (IOException e) {
+                    ApplicationErrorsWriter.writeExceptionToConsole(e);
                 }
             }
         });

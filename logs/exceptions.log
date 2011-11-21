@@ -1,0 +1,46 @@
+<error><type>execute</type><message>Error while execution of user program</message><stacktrace>null</stacktrace><file>namespace demo
+
+class Main() {
+
+  fun aaa() : Int {return 10}
+}
+
+fun main(args : Array<String>) {
+  var s = "Natalia";
+  //Thread.sleep(16000)
+    System.out?.println("Hello, " + s) 
+    System.out?.println("ERROR"); 
+  //Thread.sleep(16000)
+  java.io.FileWriter("sdfs.kt")
+} </file></error>
+<error><type>execute</type><message>Error while execution of user program</message><stacktrace>null</stacktrace><file>namespace demo
+
+class Main() {
+
+  fun aaa() : Int {return 10}
+}
+
+fun main(args : Array<String>) {
+  var s = "Natalia";
+  //Thread.sleep(16000)
+    System.out?.println("Hello, " + s) 
+    System.out?.println("ERROR"); 
+  //Thread.sleep(16000)
+  java.io.FileWriter("aaa.kt")
+} </file></error>
+[Ljava.lang.StackTraceElement;@1ded4c9
+2011-51-21 06:51:24 <error><type>/?sessionId=1873672998&userData=true</type><message>Unknown error</message><file>null</file></error>
+2011-56-21 06:56:54 <error><type>/?sessionId=547105690&userData=true</type><message>Unknown error</message><file>null</file></error>
+2011-07-21 07:07:04 <error><type>/?sessionId=1741507536&userData=true</type><message>Unknown error</message><file>null</file></error>
+java.lang.NullPointerException: sadasdasdasd
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:36)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)

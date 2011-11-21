@@ -2,6 +2,7 @@ package web.view.ukhorskaya.responseHelpers;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
+import web.view.ukhorskaya.ApplicationErrorsWriter;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.ServerSettings;
 import web.view.ukhorskaya.sessions.HttpSession;
@@ -25,13 +26,15 @@ public class JavaRunner {
     private final List<String> files;
     private final String arguments;
     private final JSONArray jsonArray;
+    private final String textFromfile;
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(List<String> files, String arguments, JSONArray array) {
+    public JavaRunner(List<String> files, String arguments, JSONArray array, String text) {
         this.files = files;
         this.arguments = arguments;
         this.jsonArray = array;
+        this.textFromfile = text;
     }
 
     public String getResult() {
@@ -78,7 +81,7 @@ public class JavaRunner {
             LOG.error("Interrupted exception during java process excution", e);
             return getJsonStringFromErrorMessage("Impossible to run your program: InterruptedException handled.");
         }
-        LOG.info("userId=" + HttpSession.SESSION_ID + " RUN user program " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()
+        LOG.info("userId= " + HttpSession.SESSION_ID + " RUN user program " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()
                 + " timeout=" + isTimeoutException
                 + " commandString=" + commandString);
         if (!isTimeoutException) {
@@ -92,6 +95,12 @@ public class JavaRunner {
         mapErr.put("type", "err");
         mapErr.put("text", errStream.toString());
         jsonArray.put(mapErr);
+        
+        if (errStream.length() > 0) {
+            ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(
+                    ApplicationErrorsWriter.getExceptionForLog("execute", "Error while execution of user program",
+                            textFromfile));
+        }
 
         for (String fileName : files) {
             deleteFile(fileName);
@@ -104,7 +113,7 @@ public class JavaRunner {
     private void readStream(StringBuilder errStream, BufferedReader stdError) throws IOException {
         String tmp;
         while ((!isTimeoutException) && ((tmp = stdError.readLine()) != null)) {
-            errStream.append(tmp);
+            errStream.append(ResponseUtils.escapeString(tmp));
             errStream.append(ResponseUtils.addNewLine());
         }
     }
@@ -157,6 +166,8 @@ public class JavaRunner {
         builder.append(ServerSettings.OUTPUT_DIRECTORY);
         builder.append(File.pathSeparator);
         builder.append("WebView.jar");
+        builder.append(File.pathSeparator);
+        builder.append(ServerSettings.PATH_TO_KOTLIN_LIB);
         builder.append(" ");
         builder.append("-Djava.security.manager ");
         builder.append(modifyClassNameFromPath(files.get(0)));

@@ -26,8 +26,15 @@ public class ExamplesLoader {
     public ExamplesLoader() {
     }
 
-    public String getResult(String fileName) {
-        File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + fileName);
+    public String getResult(int id, String headName) {
+        Map<String, String> fileObj = ExamplesList.getInstance().getMapFromList(id);
+        if (!fileObj.get("type").equals("content")) {
+            LOG.error("Returned head while loading an example: " + id);
+            return "[{\"text\":\"Cannot find this example. Please choose an other example.\"}]";
+        }
+        String fileName = fileObj.get("text");
+        headName  = headName.replaceAll("%20", " ");
+        File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + headName+ File.separator + fileName);
         if (!example.exists()) {
             LOG.error("Cannot find example with file name: " + example.getAbsolutePath());
             return "[{\"text\":\"Cannot find this example. Please choose an other example.\"}]";

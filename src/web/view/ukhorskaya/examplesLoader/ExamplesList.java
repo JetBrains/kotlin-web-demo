@@ -1,10 +1,12 @@
 package web.view.ukhorskaya.examplesLoader;
 
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
+import web.view.ukhorskaya.ApplicationErrorsWriter;
 import web.view.ukhorskaya.server.ServerSettings;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,42 +27,155 @@ public class ExamplesList {
         generateList();
     }
 
-    //
-//    private static JSONArray list;
-  private static List<Map<String, String>> list;
+    private static List<Map<String, String>> list;
 
     public static ExamplesList getInstance() {
         return EXAMPLES_LIST;
     }
 
-    //    
     public List<Map<String, String>> getList() {
         return list;
     }
 
+    public Map<String, String> getMapFromList(int id) {
+        if (id < list.size()) {
+            return list.get(id);
+        }
+
+        LOG.error("There is a request for example with number " + id + " - absent in map");
+        return list.get(1);
+    }
+
     private void generateList() {
         File root = new File(ServerSettings.EXAMPLES_ROOT);
-        File[] directories = root.listFiles();
+        if (root.exists()) {
+            File order = checkIsOrderTxtExists(root);
+            if (order != null) {
+                addInOrder(order, root, true);
+            } else {
+                addWoOrder(root, true);
+            }
+        } else {
+            LOG.error("Examples root doesn't exists");
+        }
+    }
+
+    private void addWoOrder(File dir, boolean isDirectory) {
+        File[] directories = dir.listFiles();
         for (File directory : directories) {
-            if (directory.isDirectory()) {
-                File[] examples = directory.listFiles();
+            if ((dir.isDirectory() && isDirectory)
+                    || (dir.exists() && !isDirectory)) {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("type", "head");
+                if (isDirectory) {
+                    map.put("type", "head");
+                } else {
+                    map.put("type", "content");
+                }
                 map.put("text", directory.getName());
                 list.add(map);
-                for (File example : examples) {
-                    Map<String, String> exMap = new HashMap<String, String>();
-                    exMap.put("type", "content");
-                    exMap.put("text", example.getName());
-                    list.add(exMap);
+
+                if (isDirectory) {
+                    File order = new File(directory.getAbsolutePath() + File.separator + "order.txt");
+                    if (order.exists()) {
+                        addInOrder(order, directory, false);
+                    } else {
+                        addWoOrder(directory, false);
+                    }
                 }
             } else {
-                LOG.error("There is file in root that isn't a directory: " + directory.getAbsolutePath());
+                LOG.error("Incorrect structure for examples (folder - files): " + directory.getAbsolutePath());
             }
         }
     }
 
+    private void addInOrder(File order, File parent, boolean isDirectory) {
+        try {
+            String[] children = parent.list();
+            FileReader fReader = new FileReader(order);
+            BufferedReader reader = new BufferedReader(fReader);
+            String tmp = "";
+            List<String> orderedChildren = new ArrayList<String>();
+            while ((tmp = reader.readLine()) != null) {
+                File child = new File(parent.getAbsolutePath() + File.separator + tmp);
+                if ((child.isDirectory() && isDirectory)
+                        || (child.exists() && !isDirectory)) {
+                    Map<String, String> map = new HashMap<String, String>();
+                    if (isDirectory) {
+                        map.put("type", "head");
+                    } else {
+                        map.put("type", "content");
+                    }
+                    map.put("text", child.getName());
+                    list.add(map);
+                    orderedChildren.add(child.getName());
+
+                    if (isDirectory) {
+                        File orderChildren = checkIsOrderTxtExists(child);
+                        if (orderChildren != null) {
+                            addInOrder(orderChildren, child, false);
+                        } else {
+                            addWoOrder(child, false);
+                        }
+                    }
+                }
+            }
+            //+1 for order.txt
+            if (orderedChildren.size() + 1 < children.length) {
+                for (String childName : children) {
+                    if (!childName.equals("order.txt")) {
+                        boolean isAdded = false;
+                        for (String orderedChild : orderedChildren) {
+                            if (childName.equals(orderedChild)) {
+                                isAdded = true;
+                            }
+                        }
+                        if (!isAdded) {
+                            File child = new File(parent.getAbsolutePath() + File.separator + childName);
+                            if ((child.isDirectory() && isDirectory)
+                                    || (child.exists() && !isDirectory)) {
+                                Map<String, String> map = new HashMap<String, String>();
+                                if (isDirectory) {
+                                    map.put("type", "head");
+                                } else {
+                                    map.put("type", "content");
+                                }
+                                map.put("text", child.getName());
+                                list.add(map);
+                                ApplicationErrorsWriter.writeErrorToConsole("File/Directory " + childName + " is absent in order.txt and was added at end.");
+
+                                if (isDirectory) {
+                                    File orderChildren = checkIsOrderTxtExists(child);
+                                    if (orderChildren != null) {
+                                        addInOrder(orderChildren, child, false);
+                                    } else {
+                                        addWoOrder(child, false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            LOG.error("Cannot find order.txt file: " + order.getAbsolutePath(), e);
+        } catch (IOException e) {
+            LOG.error("Cannot read order.txt file: " + order.getAbsolutePath(), e);
+        }
+    }
+
+    @Nullable
+    private File checkIsOrderTxtExists(File root) {
+        File order = new File(root.getAbsolutePath() + File.separator + "order.txt");
+        if (order.exists()) {
+            return order;
+        }
+        return null;
+    }
+
     public static void updateList() {
+        list = new ArrayList<Map<String, String>>();
         ExamplesList.getInstance().generateList();
+
     }
 }

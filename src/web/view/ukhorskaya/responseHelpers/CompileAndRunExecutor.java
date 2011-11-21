@@ -16,6 +16,7 @@ import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
 import org.json.*;
+import web.view.ukhorskaya.ApplicationErrorsWriter;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer;
 import web.view.ukhorskaya.errorsDescriptors.ErrorDescriptor;
@@ -88,11 +89,11 @@ public class CompileAndRunExecutor {
                         FileUtil.writeToFile(target, factory.asBytes(file));
                         stringBuilder.append(file).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
-                        LOG.error("Cannot save filea on disk.", e);
+                        ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog("execute", "Cannot save file on disk. " + e.getMessage(), currentPsiFile.getText()), e);
                         return "[{\"text\":\"Cannot get a completion\",\"type\":\"err\"}]";
                     }
                 }    else {
-                    LOG.error("Cannot create output directory for files: " + outputDir.getAbsolutePath());
+                    ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog("execute", "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
                     return "[{\"text\":\"Error on server: cannot run your program\",\"type\":\"err\"}]";
                 }
 
@@ -105,7 +106,7 @@ public class CompileAndRunExecutor {
             map.put("text", stringBuilder.toString());
             jsonArray.put(map);
 
-            JavaRunner runner = new JavaRunner(files, arguments, jsonArray);
+            JavaRunner runner = new JavaRunner(files, arguments, jsonArray, currentPsiFile.getText());
 
             return runner.getResult();
 

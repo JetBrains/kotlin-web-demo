@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="content-type"  content="text/html;charset=UTF-8" />
+  <title>jquery.tie.js</title>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js"></script>
+  <script type="text/javascript" src="jquery.tie.min.js"></script>
+  <style type="text/css">
+    body{margin:0;padding:0;}
+    .outer_container{text-align:center;}
+    .inner_container{margin:0 auto;text-align:left;width:960px;}
+    h2{margin-top:2em;}
+  </style>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // Example 1
+      $("#example1 .a").tie("width", "#example1 .b");
+      $("#example1 .animate").click(function(e) {
+        e.preventDefault();
+        $("#example1 .b").animate({ width: 200 });
+      });
+      $("#example1 .reset").click(function(e) {
+        e.preventDefault();
+        $("#example1 .b").css("width", null);
+      });
+      
+      // Example 2
+      // using plain "height" here doesn't work in IE7+jQuery 1.3.2
+      // because it returns "auto" instead of a number
+      $("#example2 .a").tie("width", "#example2 .b", function() { return $(this).height(); });
+      $("#example2 .animate").click(function(e) {
+        e.preventDefault();
+        $("#example2 .b").animate({ height: 200 });
+      });
+      $("#example2 .reset").click(function(e) {
+        e.preventDefault();
+        $("#example2 .b").css("height", null);
+      });
+      $("#example2 .addline").click(function(e) {
+        e.preventDefault();
+        $("#example2 .b").append("new line!<br/>");
+      });
+      $("#example2 .empty").click(function(e) {
+        e.preventDefault();
+        $("#example2 .b").empty();
+      });
+      
+      // Example 3
+      $("#example3 .a").tie("width", "#example3 .b", function() { return $(this).height() * 2; });
+      $("#example3 .animate").click(function(e) {
+        e.preventDefault();
+        $("#example3 .b").animate({ height: 200 });
+      });
+      $("#example3 .reset").click(function(e) {
+        e.preventDefault();
+        $("#example3 .b").css("height", null);
+      });
+      $("#example3 .addline").click(function(e) {
+        e.preventDefault();
+        $("#example3 .b").append("new line!<br/>");
+      });
+      $("#example3 .empty").click(function(e) {
+        e.preventDefault();
+        $("#example3 .b").empty();
+      });
+      
+      // Example 4
+      $("#example4 .a").tie("width", "#example4 .b", "width", { globalListener: true });
+      $("#example4 .animate").click(function(e) {
+        e.preventDefault();
+        $("#example4").animate({ width: 200 });
+      });
+      $("#example4 .reset").click(function(e) {
+        e.preventDefault();
+        $("#example4").css("width", null);
+      });
+      
+      // Example 5
+      $("#example5 .a").tie("width", "#example5 .b", "width", { proxyListener: "#example5" });
+      $("#example5 .animate").click(function(e) {
+        e.preventDefault();
+        $("#example5").animate({ width: 200 });
+      });
+      $("#example5 .reset").click(function(e) {
+        e.preventDefault();
+        $("#example5").css("width", null);
+      });
+      
+      // Example 6
+      $("#example6 .a").tie("left", "#example6 .b", function() {
+          return $(this).width() / 3;
+        }, {
+          proxyListener: "#example6 .b" 
+        });
+      $("#example6 .animate").click(function(e) {
+        e.preventDefault();
+        $("#example6 .b").animate({ width: 200 });
+      });
+      $("#example6 .reset").click(function(e) {
+        e.preventDefault();
+        $("#example6 .b").css("width", null);
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="outer_container">
+  <div class="inner_container">
+    <h1>jQuery-Tie Demo</h1>
+    
+    <h2>Match the width of element A to the width of element B</h2>
+    <div id="example1">
+      <div class="a" style="background:blue;color:white;">Element A</div>
+      <div class="b" style="background:red;color:white;">Element B</div>
+      <a href="#" class="animate">Animate B's width</a>
+      <a href="#" class="reset">Reset B's width</a>
+    </div>
+    
+    <h2>Match the width of element A to the height of element B</h2>
+    <div id="example2">
+      <div class="a" style="background:blue;color:white;">Element A</div>
+      <div class="b" style="background:red;color:white;">Element B<br/></div>
+      <a href="#" class="animate">Animate B's height</a>
+      <a href="#" class="reset">Reset B's height</a>
+      <a href="#" class="addline">Add a line of text to B</a>
+      <a href="#" class="empty">Empty element B</a>
+    </div>
+    
+    <h2>Match the width of element A to twice the height of element B</h2>
+    <div id="example3">
+      <div class="a" style="background:blue;color:white;">Element A</div>
+      <div class="b" style="background:red;color:white;">Element B<br/></div>
+      <a href="#" class="animate">Animate B's height</a>
+      <a href="#" class="reset">Reset B's height</a>
+      <a href="#" class="addline">Add a line of text to B</a>
+      <a href="#" class="empty">Empty element B</a>
+    </div>
+    
+    <h2>Passive resizing with a global listener, tie width of A to B</h2>
+    <div id="example4">
+      <div class="group">
+        <div class="a" style="background:blue;color:white;">Element A</div>
+        <div class="b" style="background:red;color:white;">Element B</div>
+      </div>
+      <a href="#" class="animate">Animate the example container's width</a>
+      <a href="#" class="reset">Reset B's width</a>
+    </div>
+    
+    <h2>Passive resizing with a proxy listener, tie width of A to B</h2>
+    <div id="example5">
+      <div class="group">
+        <div class="a" style="background:blue;color:white;">Element A</div>
+        <div class="b" style="background:red;color:white;">Element B</div>
+      </div>
+      <a href="#" class="animate">Animate the example container's width</a>
+      <a href="#" class="reset">Reset B's width</a>
+    </div>
+    
+    <h2>A is in container B, match A's "left" css attribute to 1/3 B's width</h2>
+    <div id="example6">
+      <div class="group">
+        <div class="b" style="background:blue;color:white;padding:20px;position:relative;">
+          Element B
+          <div class="a" style="background:red;color:white;left:0;position:absolute;top:0;">Element A</div>
+        </div>
+      </div>
+      <a href="#" class="animate">Animate B's width</a>
+      <a href="#" class="reset">Reset B's width</a>
+    </div>
+    
+  </div>
+</div>
+</body>
+</html>

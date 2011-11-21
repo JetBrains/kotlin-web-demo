@@ -1,6 +1,7 @@
 package web.view.ukhorskaya;
 
 import org.apache.log4j.Logger;
+import web.view.ukhorskaya.examplesLoader.ExamplesList;
 import web.view.ukhorskaya.server.KotlinHttpServer;
 import web.view.ukhorskaya.server.ServerSettings;
 
@@ -28,6 +29,9 @@ public class ApplicationManager {
         } else if (command.startsWith("output")) {
             ServerSettings.OUTPUT_DIRECTORY = ResponseUtils.substringAfter(command, "output ");
             ApplicationErrorsWriter.writeInfoToConsole("done: " + ServerSettings.OUTPUT_DIRECTORY);
+        } else if (command.startsWith("update examples")) {
+            ExamplesList.updateList();
+            ApplicationErrorsWriter.writeInfoToConsole("done: examples were updated.");
         } else if (command.startsWith("get port")) {
             ApplicationErrorsWriter.writeInfoToConsole("server port " + KotlinHttpServer.getPort());
         } else if (command.startsWith("get host")) {
@@ -35,23 +39,21 @@ public class ApplicationManager {
         } else if (command.startsWith("timeout")) {
             ServerSettings.TIMEOUT_FOR_EXECUTION = ResponseUtils.substringAfter(command, "timeout ");
             ApplicationErrorsWriter.writeInfoToConsole("done: " + ServerSettings.TIMEOUT_FOR_EXECUTION);
-        } else if (command.startsWith("kotlinLib")) {
-            ServerSettings.PATH_TO_KOTLIN_LIB = ResponseUtils.substringAfter(command, "kotlinLib ");
-            ApplicationErrorsWriter.writeInfoToConsole("done: " + ServerSettings.PATH_TO_KOTLIN_LIB);
         } else if (command.equals("help")) {
             StringBuilder builder = new StringBuilder("List of commands:\n");
             //builder.append("java_home pathToJavaHome - without \"\"\n");
+            builder.append("exit - to stop server and exit application\n");
+            builder.append("start - to start server after stop\n");
+            builder.append("stop - to stop server\n");
+            builder.append("restart - to restart server\n");
+            builder.append("update examples - update examples list after changing\n");
             builder.append("timeout int - set maximum running time for user program\n");
             builder.append("output pathToOutputDir - without \"\", set directory to create a class files until compilation\n");
-            builder.append("kotlinLib pathToKotlinLibDir - without \"\", set path to kotlin library jar files\n");
+            //builder.append("kotlinLib pathToKotlinLibDir - without \"\", set path to kotlin library jar files\n");
             //builder.append("host String - without \"\", set hostname for server\n");
             builder.append("get host - get host for server\n");
             //builder.append("port int - without \"\", set port for server\n");
             builder.append("get port - get port for server\n");
-            builder.append("start - to start server after stop\n");
-            builder.append("stop - to stop server\n");
-            builder.append("exit - to stop server and exit application\n");
-            builder.append("restart - to restart server\n");
             builder.append("help - help\n");
             ApplicationErrorsWriter.writeInfoToConsole(builder.toString());
         } else {
@@ -73,7 +75,7 @@ public class ApplicationManager {
         } else if (setting.startsWith("examples")) {
             ServerSettings.EXAMPLES_ROOT = ResponseUtils.substringAfter(setting, "examples ");
         } else {
-            ApplicationErrorsWriter.writeErrorToConsole("Incorrect setting in config.properties file");
+            ApplicationErrorsWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
         }
 
     }

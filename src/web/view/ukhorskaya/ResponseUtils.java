@@ -1,5 +1,7 @@
 package web.view.ukhorskaya;
 
+import org.apache.commons.httpclient.HttpStatus;
+
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -112,34 +114,65 @@ public class ResponseUtils {
     }
 
     public static String readData(Reader reader, boolean addNewLine) throws IOException {
-            StringBuilder response = new StringBuilder();
-            BufferedReader bufferedReader = new BufferedReader(reader);
+        StringBuilder response = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(reader);
 
-            String tmp;
-            while ((tmp = bufferedReader.readLine()) != null) {
-                response.append(tmp);
-                if (addNewLine) {
-                    response.append("\n");
-                }
+        String tmp;
+        while ((tmp = bufferedReader.readLine()) != null) {
+            response.append(tmp);
+            if (addNewLine) {
+                response.append("\n");
             }
-
-            return response.toString();
         }
-    
+
+        return response.toString();
+    }
+
     public static String readData(InputStream is, boolean addNewLine) throws IOException {
-           InputStreamReader reader = new InputStreamReader(is);
-           StringBuilder response = new StringBuilder();
-           BufferedReader bufferedReader = new BufferedReader(reader);
-   
-           String tmp;
-           while ((tmp = bufferedReader.readLine()) != null) {
-               response.append(tmp);
-               if (addNewLine) {
-                   response.append("\n");
-               }
-           }
-   
-           return response.toString();
-       }
+        InputStreamReader reader = new InputStreamReader(is);
+        StringBuilder response = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(reader);
+
+        String tmp;
+        while ((tmp = bufferedReader.readLine()) != null) {
+           response.append(tmp);
+            if (addNewLine) {
+                response.append("\n");
+            }
+        }
+
+        return response.toString();
+    }
+
+    public static String generateHtmlTag(String tagName, String content) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("<");
+            builder.append(tagName);
+            builder.append(">");
+            builder.append(content);
+            builder.append("</");
+            builder.append(tagName);
+            builder.append(">");
+            return builder.toString();
+
+        }
+
+        public static String generateHtmlTag(String tagName, String content, String attrName, String attrValue) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("<");
+            builder.append(tagName);
+            builder.append(" ");
+            builder.append(attrName);
+            builder.append("=\"");
+            builder.append(attrValue);
+            builder.append("\"");
+            builder.append(">");
+            builder.append(content);
+            builder.append("</");
+            builder.append(tagName);
+            builder.append(">");
+            return builder.toString();
+
+        }
 
 }

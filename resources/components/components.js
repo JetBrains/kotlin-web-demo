@@ -58,47 +58,49 @@
      }
      });*/
 
-    /*$("#hideLeft").click(function () {
-     $("#examplesaccordion").toggle();
-     isLeftSideShow = !isLeftSideShow;
-     if (isLeftSideShow) {
-     document.getElementById("left").style.width = "19%";
-     if (isRightSideShow) {
-     document.getElementById("center").style.width = "60%";
-     } else {
-     document.getElementById("center").style.width = "75%";
-     }
-     } else {
-     document.getElementById("left").style.width = "20px";
-     if (isRightSideShow) {
-     document.getElementById("center").style.width = "75%";
-     } else {
-     document.getElementById("center").style.width = "95%";
-     }
-     }
-     });
-
-     $("#hideRight").click(function () {
-     $("#helpcontent").toggle();
-     isRightSideShow = !isRightSideShow;
-     if (isRightSideShow) {
-     document.getElementById("right").style.width = "19%";
-     if (isLeftSideShow) {
-     document.getElementById("center").style.width = "60%";
-     } else {
-     document.getElementById("center").style.width = "75%";
-     }
-     } else {
-     document.getElementById("right").style.width = "20px";
-     if (isLeftSideShow) {
-     document.getElementById("center").style.width = "75%";
-     } else {
-     document.getElementById("center").style.width = "95%";
-     }
-     }
-     });*/
-
     $("#hideLeft").click(function () {
+        $("#left").toggle();
+        isLeftSideShow = !isLeftSideShow;
+        if (isLeftSideShow) {
+            document.getElementById("hideLeft").src = "/icons/togglel.png";
+            document.getElementById("left").style = "width: 20%; *width: 230px;";
+            if (isRightSideShow) {
+                document.getElementById("center").style.width = "60%";
+            } else {
+                document.getElementById("center").style.width = "79%";
+            }
+        } else {
+            document.getElementById("hideLeft").src = "/icons/toggler.png";
+            if (isRightSideShow) {
+                document.getElementById("center").style.width = "80%";
+            } else {
+                document.getElementById("center").style.width = "99%";
+            }
+        }
+    });
+
+    $("#hideRight").click(function () {
+        $("#right").toggle();
+        isRightSideShow = !isRightSideShow;
+        if (isRightSideShow) {
+            document.getElementById("hideRight").src = "/icons/toggler.png";
+            document.getElementById("right").style.width = "19%";
+            if (isLeftSideShow) {
+                document.getElementById("center").style.width = "60%";
+            } else {
+                document.getElementById("center").style.width = "80%";
+            }
+        } else {
+            document.getElementById("hideRight").src = "/icons/togglel.png";
+            if (isLeftSideShow) {
+                document.getElementById("center").style.width = "79%";
+            } else {
+                document.getElementById("center").style.width = "99%";
+            }
+        }
+    });
+
+    /*$("#hideLeft").click(function () {
         $("#examplesaccordion").toggle();
         isLeftSideShow = !isLeftSideShow;
         if (isLeftSideShow) {
@@ -136,7 +138,7 @@
                 document.getElementById("center").style.width = "1200px";
             }
         }
-    });
+    });*/
 
 
     $("#tabs").tabs();
@@ -152,6 +154,8 @@
             $(this).next().toggle();
             return false;
         }).next().hide();
+
+//    $('#centralcontent').split({orientation: 'horizontal'});
 
 
 })();
@@ -198,22 +202,22 @@ function loadAccordionContent() {
 function onLoadingExamplesSuccess(data) {
     var acc = document.getElementById("accordion");
     var i = 0;
-    var headCounter = 0;
     while (typeof data[i] != "undefined") {
+        var lastHeadName;
         if (data[i].type == "head") {
             var head = document.createElement("h3");
             var headA = document.createElement("a");
             headA.href = "#";
 
             headA.innerHTML = data[i].text;
+            lastHeadName = data[i].text
             head.appendChild(headA);
             acc.appendChild(head);
             var cont = document.createElement("div");
-            headCounter++;
         }
         if (data[i].type == "content") {
             var contA = document.createElement("p");
-            contA.id = i;
+            contA.id = i + "&head=" + lastHeadName;
             contA.style.cursor = "pointer";
             contA.onclick = function (event) {
                 loadExample(this.id);
@@ -224,7 +228,11 @@ function onLoadingExamplesSuccess(data) {
         acc.appendChild(cont);
         i++;
     }
-    $("#accordion").accordion();
+    $("#accordion").accordion({
+        autoHeight: false,
+        navigation: true
+    });
+//    document.getElementById("accordion").style.width = "100%";
 }
 
 function loadExample(id) {

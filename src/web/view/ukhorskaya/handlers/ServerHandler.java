@@ -1,15 +1,16 @@
 package web.view.ukhorskaya.handlers;
 
+import com.intellij.openapi.application.Application;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
+import web.view.ukhorskaya.ApplicationErrorsWriter;
 import web.view.ukhorskaya.ResponseUtils;
-import web.view.ukhorskaya.TimeManager;
+import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
+import web.view.ukhorskaya.log.LogDownloader;
 import web.view.ukhorskaya.sessions.HttpSession;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLDecoder;
 
@@ -29,8 +30,16 @@ public class ServerHandler implements HttpHandler {
     public void handle(final HttpExchange exchange) throws IOException {
         try {
             String param = exchange.getRequestURI().toString();
+
             if (param.contains("userData=true")) {
                 sendUserInformation(exchange);
+                throw new NullPointerException("sadasdasdasd");
+            } else if (param.contains("downloadLogs=true")) {
+                sendListLogs(exchange);
+            } else if (param.contains("log=")) {
+                sendLog(exchange);
+            } else if (param.contains("allExamples=true")) {
+                sendExamplesList(exchange);
             } else if ((param.contains("/editor"))
                     || (param.contains("/path="))
                     || (param.equals("/"))
@@ -42,9 +51,34 @@ public class ServerHandler implements HttpHandler {
             }
         } catch (Throwable e) {
             //Do not stop server
-            LOG.error("Unknown error", e);
+//            LOG.error("Unknown error", e);
+            ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e.getMessage(), "null"), e);
             writeResponse(exchange, "Internal server error".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void sendLog(HttpExchange exchange) {
+        String path = ResponseUtils.substringAfter(exchange.getRequestURI().toString(), "log=");
+        path = path.replaceAll("%5C", "/");
+        exchange.getResponseHeaders().add("Content-type", "application/x-download");
+        writeResponse(exchange, new LogDownloader().download(path).getBytes(), 200);
+    }
+
+    private void sendListLogs(HttpExchange exchange) {
+        InputStream is = ServerHandler.class.getResourceAsStream("/logs.html");
+        try {
+            String response = ResponseUtils.readData(is);
+            String links = new LogDownloader().getFilesLinks();
+            response = response.replace("$LINKSTOLOGFILES$", links);
+            writeResponse(exchange, response.getBytes(), 200);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendExamplesList(HttpExchange exchange) {
+        ExamplesLoader loader = new ExamplesLoader();
+        writeResponse(exchange, loader.getExamplesList().getBytes(), HttpStatus.SC_OK);
     }
 
     private void sendUserInformation(HttpExchange exchange) {

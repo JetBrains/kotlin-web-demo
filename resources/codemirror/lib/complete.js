@@ -15,7 +15,6 @@ function setSessionId(id) {
 
 (function () {
 
-
     var goToSymbolShortcutKeys = [17, 32];
 
     var isCompletionInProgress = false;
@@ -30,6 +29,7 @@ function setSessionId(id) {
      });*/
 
     function runTimerForNonPrinting() {
+        window.onbeforeunload = function() { return "Don't do it."; };
         if (timer) {
             clearTimeout(timer);
             timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
@@ -101,10 +101,12 @@ function setSessionId(id) {
 
         },
         onChange:runTimerForNonPrinting,
-        onCursorActivity:updateStatusBar
+        onCursorActivity:updateStatusBar,
+        minHeight:"430px"
     });
 
     function updateStatusBar() {
+        updateHelp(editor.getTokenAt(editor.getCursor(true)).string);
         var lineNumber = editor.getCursor(true).line;
         var text = editor.lineInfo(lineNumber).markerText;
         if (text != null) {
@@ -114,6 +116,14 @@ function setSessionId(id) {
             document.getElementById("statusbar").innerHTML = "line " + (lineNumber + 1) + " - " + text;
         } else {
             document.getElementById("statusbar").innerHTML = "";
+        }
+    }
+
+    function updateHelp(str) {
+        if (str == "for") {
+            document.getElementById("help1").innerHTML = "for (a in args) { <br/>    System.out?.println(a)<br/>}";
+        } else {
+            document.getElementById("help1").innerHTML = "No help";
         }
     }
 
@@ -276,7 +286,6 @@ function setSessionId(id) {
         if ((!compilationInProgress) && (!isLoadingHighlighting)) {
             isLoadingHighlighting = true;
             now = new Date().getTime();
-            document.getElementById("compilationResult0").innerHTML = "begin " + (new Date().getTime() - now);
             var i = editor.getValue();
             hashCode = editor.getValue().hashCode();
             $.ajax({
@@ -297,11 +306,9 @@ function setSessionId(id) {
 
 
     function onAjaxSuccess(data) {
-        document.getElementById("compilationResult0").innerHTML = "onSuccess " + (new Date().getTime() - now);
         if (data != null) {
             var i = 0;
             removeStyles();
-            document.getElementById("compilationResult1").innerHTML = "remove " + (new Date().getTime() - now);
 
             var problems = document.createElement("div");
             while (typeof data[i] != "undefined") {
@@ -312,7 +319,6 @@ function setSessionId(id) {
 
                 if (editor.lineInfo(start.line).markerText == null) {
                     if ((data[i].severity == 'WARNING') || (data[i].severity == 'TYPO')) {
-                        document.getElementById("compilationResult1").innerHTML = document.getElementById("compilationResult1").innerHTML + editor.lineInfo(start.line).markerText;
                         //editor.setMarker(start.line, '<img src="/icons/warning.png" title="' + title + '"/>%N%');
                         editor.setMarker(start.line, '<span class=\"warningGutter\" title="' + title + '">  </span>%N%');
                     } else {
@@ -359,7 +365,6 @@ function setSessionId(id) {
                 i++;
             }
             document.getElementById("problems").innerHTML = problems.innerHTML;
-            document.getElementById("compilationResult2").innerHTML = "after all " + (new Date().getTime() - now);
         }
         updateStatusBar();
         isLoadingHighlighting = false;
@@ -459,11 +464,20 @@ function setSessionId(id) {
         complete.id = "complete";
         complete.className = "completions";
 
-        var sel = complete.appendChild(document.createElement("select"));
+        var sel = document.createElement("select");
         sel.id = "selectId";
         for (i = 0; i < completions.length; ++i) {
-            var opt = sel.appendChild(document.createElement("option"));
-//            opt.data-icon = completions[i].icon;
+            var opt = document.createElement("option");
+
+//            opt.label = "<div><span style='background:yellow;display:inline-block;*display:inline;height:10px;width:10px;vertical-align:middle;zoom:1;'></span>" + completions[i].name +  " line 1</div><div>line 2</div><div>line 3</div>";
+//            opt.innerHTML = "aaaaaaaaaaaaaaaaa";
+            //            opt.title = "<div><span style=\"background:red;display:inline-block;*display:inline;height:10px;width:10px;vertical-align:middle;zoom:1;\"></span>" + completions[i].name + "</div>";
+            //            opt.label = "<strong>ttt</strong><address>" + completions[i].name + "</address>";
+            //            opt.title = "ssss";
+            //            opt.innerHTML = "askjdsakjdh" + completions[i].name;
+            //opt.backgroundImage = "url(/images/icon-ok.gif)";
+            //            var aa = document.createElement("a");
+            //             aa.innerHTML = "aaa";
             var pEl = document.createElement("p");
             pEl.className = "lookupElement";
 
@@ -482,32 +496,47 @@ function setSessionId(id) {
             spanTail.className = "lookupElementTail";
             spanTail.innerHTML = completions[i].tail;
             pEl.appendChild(spanTail);
-            document.getElementById("compilationResult0").innerHTML = document.getElementById("compilationResult0").innerHTML + completions[i].name;
             //opt.appendChild(document.createTextNode(completions[i].tail));
             opt.appendChild(pEl);
+            //opt.label = opt.innerHTML;
+            if (i == 0) {
+                opt.id = "selected";
+            }
+//            opt.innerHTML = "<a>aaa</a>";
+            sel.appendChild(opt);
+
+            //opt.appendChild(aa);
         }
 
+        complete.appendChild(sel);
 
         /*i = 0;
-        while (typeof data[i] != "undefined") {
-            var opt = sel.appendChild(document.createElement("option"));
-            var image = document.createElement("img");
-            image.src = data[i].icon;
-            opt.appendChild(image);
-            opt.appendChild(document.createTextNode(data[i].name));
-            opt.appendChild(document.createTextNode(data[i].tail));
-
-            i++;
-        }*/
-        //alert(completions.length + " " + data.length);
+         while (typeof data[i] != "undefined") {
+         var opt = sel.appendChild(document.createElement("option"));
+         var image = document.createElement("img");
+         image.src = data[i].icon;
+         opt.appendChild(image);
+         opt.appendChild(document.createTextNode(data[i].name));
+         opt.appendChild(document.createTextNode(data[i].tail));
+         i++;
+         }*/
 
         sel.multiple = true;
         sel.firstChild.selected = true;
         sel.size = Math.min(10, i);
+
         var pos = editor.cursorCoords();
         complete.style.left = pos.x + "px";
         complete.style.top = pos.yBot + "px";
         document.body.appendChild(complete);
+        document.getElementById("complete").focus();
+        /*$("#selectId").sb({
+         optionFormat:function () {
+         alert($(this).attr("title"));
+         return $(this).attr("alt");
+         }
+         });*/
+
         // Hack to hide the scrollbar.
         if (i <= 10)
             complete.style.width = (sel.clientWidth - 1) + "px";
@@ -536,6 +565,7 @@ function setSessionId(id) {
         connect(sel, "blur", close);
         connect(sel, "keydown", function (event) {
             var code = event.keyCode;
+
             // Enter and space
             if (code == 13 || code == 32) {
                 event.stop();
@@ -551,8 +581,27 @@ function setSessionId(id) {
                 close();
                 editor.focus();
                 setTimeout(continueComplete, 50);
+            } else if (code == 38) {
+                //up
+
+
+            } else if (code == 40) {
+                //down
+                event.preventDefault();
+                var selOpt =  $("#selected");
+                alert("a");
+
+//                selOpt.nextSibling.setAttribute("id", "selected");
+                $("#selectId").childNodes[1].setAttribute("id", "selected");
+                alert("a");
+
+                selOpt.removeAttr("id");
+                alert("a");
             }
+
         });
+
+
         connect(sel, "dblclick", pick);
 
         sel.focus();
@@ -561,6 +610,24 @@ function setSessionId(id) {
             if (!done) sel.focus();
         }, 100);
         return true;
+    }
+
+    function createDropDown() {
+        var source = $("#selectId");
+        var selected = source.find("option[selected]");  // get selected <option>
+        var options = $("option", source);  // get all <option> elements
+        // create <dl> and <dt> with selected value inside it
+        $("body").append('<dl id="target" class="dropdown"></dl>')
+        $("#target").append('<dt><a href="#">' + selected.text() +
+            '<span class="value">' + selected.val() +
+            '</span></a></dt>')
+        $("#target").append('<dd><ul></ul></dd>')
+        // iterate through all the <option> elements and create UL
+        options.each(function () {
+            $("#target dd ul").append('<li><a href="#">' +
+                $(this).text() + '<span class="value">' +
+                $(this).val() + '</span></a></li>');
+        });
     }
 
 
@@ -595,5 +662,6 @@ function setSessionId(id) {
         }
         return hash;
     }
+
 
 })();
