@@ -1,7 +1,6 @@
 package web.view.ukhorskaya;
 
 import web.view.ukhorskaya.examplesLoader.ExamplesList;
-import web.view.ukhorskaya.help.HelpLoader;
 import web.view.ukhorskaya.server.KotlinHttpServer;
 import web.view.ukhorskaya.server.ServerSettings;
 
@@ -20,12 +19,11 @@ public class Main {
 
 
     public static void main(String[] args) {
-        System.setProperty("kotlin.running.in.server.mode", "true");
         if (args.length == 2) {
             ServerSettings.HOST = args[0];
-            ErrorsWriter.writeInfoToConsole("Host is set: " + args[0]);
+            ApplicationErrorsWriter.writeInfoToConsole("Host is set: " + args[0]);
             ServerSettings.PORT = args[1];
-            ErrorsWriter.writeInfoToConsole("Port is set: " + args[1]);
+            ApplicationErrorsWriter.writeInfoToConsole("Port is set: " + args[1]);
         }
         new File("logs").mkdir();
 
@@ -33,20 +31,19 @@ public class Main {
             try {
                 if (Initializer.getInstance().initJavaCoreEnvironment()) {
                     KotlinHttpServer.startServer();
-                    ErrorsWriter.writeInfoToConsole("Use \"help\" to look at all options");
+                    ApplicationErrorsWriter.writeInfoToConsole("Use \"help\" to look at all options");
                     ExamplesList.getInstance();
-                    HelpLoader.getInstance();
                     startConsoleThread();
                 } else {
-                    ErrorsWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
+                    ApplicationErrorsWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
                 }
             } catch (Exception e) {
-                ErrorsWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
+                ApplicationErrorsWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
                 System.exit(1);
             }
 
         } else {
-            ErrorsWriter.writeErrorToConsole("Can not find config.properties.");
+            ApplicationErrorsWriter.writeErrorToConsole("Can not find config.properties.");
         }
     }
 
@@ -57,28 +54,14 @@ public class Main {
             public void run() {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 String tmp = "";
-                while (true) {
-                    try {
-                        Thread.sleep(100);
-                        if (System.in.available() > 0) {
-                            tmp = reader.readLine();
-                            CommandRunner.runCommand(tmp);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                /*String tmp = "";
                 try {
                     while ((tmp = reader.readLine()) != null) {
-                        CommandRunner.runCommand(tmp);
+                        ApplicationManager.runCommand(tmp);
                         System.out.print("> ");
                     }
                 } catch (IOException e) {
-                    ErrorsWriter.writeExceptionToConsole(e);
-                }*/
+                    ApplicationErrorsWriter.writeExceptionToConsole(e);
+                }
             }
         });
         consoleListener.start();
@@ -87,7 +70,7 @@ public class Main {
     private static boolean loadProperties() {
         File file = new File("config.properties");
         if (!file.exists()) {
-            ErrorsWriter.writeErrorToConsole(file.getAbsolutePath());
+            ApplicationErrorsWriter.writeErrorToConsole(file.getAbsolutePath());
             return false;
         }
 
@@ -97,16 +80,15 @@ public class Main {
             Set<String> names = properties.stringPropertyNames();
             for (String name : names) {
                 String value;
-                if ((name.equals("java_home")) || (name.equals("output"))
-                        || (name.equals("examples")) || (name.equals("help"))) {
+                if ((name.equals("java_home")) || (name.equals("output")) || (name.equals("examples"))) {
                     value = properties.get(name).toString();
                     value = value.substring(1, value.length() - 1);
                 } else {
                     value = properties.get(name).toString();
                 }
 
-                CommandRunner.setServerSetting(name + " " + value);
-                ErrorsWriter.writeInfoToConsole("Loaded from config file: " + name + " " + value);
+                ApplicationManager.setServerSetting(name + " " + value);
+                ApplicationErrorsWriter.writeInfoToConsole("Loaded from config file: " + name + " " + value);
             }
             return true;
         } catch (IOException e) {

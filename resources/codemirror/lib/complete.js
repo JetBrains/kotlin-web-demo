@@ -29,9 +29,7 @@ function setSessionId(id) {
      });*/
 
     function runTimerForNonPrinting() {
-        window.onbeforeunload = function () {
-            return "Don't do it.";
-        };
+        window.onbeforeunload = function() { return "Don't do it."; };
         if (timer) {
             clearTimeout(timer);
             timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
@@ -43,7 +41,7 @@ function setSessionId(id) {
 
     function getHighlighting() {
         $("#tabs").tabs("select", 0);
-        if ((!isCompletionInProgress) && (!loadingExample)) {
+        if (!isCompletionInProgress) {
             getErrors();
         }
     }
@@ -115,9 +113,17 @@ function setSessionId(id) {
             text = text.substring(text.indexOf("title=\"") + 7);
             text = text.substring(0, text.indexOf("\""));
             if (text.length > 90) text = text.substring(0, 90) + "...";
-            setStatusBarMessage("line " + (lineNumber + 1) + " - " + text);
+            document.getElementById("statusbar").innerHTML = "line " + (lineNumber + 1) + " - " + text;
         } else {
-            setStatusBarMessage("");
+            document.getElementById("statusbar").innerHTML = "";
+        }
+    }
+
+    function updateHelp(str) {
+        if (str == "for") {
+            document.getElementById("help1").innerHTML = "for (a in args) { <br/>    System.out?.println(a)<br/>}";
+        } else {
+            document.getElementById("help1").innerHTML = "No help";
         }
     }
 
@@ -158,7 +164,7 @@ function setSessionId(id) {
                 }
             }
             if (result) {
-                setStatusBarMessage("During program execution errors have occurred.");
+                document.getElementById("statusbar").innerHTML = "During program execution errors have occurred.";
                 document.getElementById("console").innerHTML = "There are errors in your code, look tab Problems View";
             }
         }
@@ -167,7 +173,7 @@ function setSessionId(id) {
 
     function runOrCompile(param, text, error) {
         $("#tabs").tabs("select", 1);
-        setStatusBarMessage("Running...");
+        document.getElementById("statusbar").innerHTML = "Running...";
         if (!checkIfThereAreErrorsInProblemView()) {
             compilationInProgress = true;
             var arguments = $("#arguments").val();
@@ -179,10 +185,10 @@ function setSessionId(id) {
                 dataType:"json",
                 type:"POST",
                 data:{text:i, consoleArgs:arguments},
-                timeout:10000,
+                //timeout: 30000,
                 error:function () {
                     compilationInProgress = false;
-                    setStatusBarMessage("Running request was aborted.");
+                    document.getElementById("statusbar").innerHTML = "Running request was aborted.";
                     document.getElementById("console").innerHTML = "Your request is aborted. Impossible to get data from server. Internal server error. " + error;
                 }
             });
@@ -210,26 +216,12 @@ function setSessionId(id) {
     var array = {};
     var arrayLinesMarkers = {};
 
-    function setStatusBarMessage(message) {
-        document.getElementById("statusbar").innerHTML = message;
-    }
-
-    function setConsoleMessage(message) {
-        document.getElementById("console").innerHTML = message;
-    }
-
 
     function onCompileSuccess(data) {
         var isCompiledWithErrors = false;
         if (data != null) {
-            if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                setStatusBarMessage(data[0].exception);
-                setConsoleMessage(data[0].exception);
-                compilationInProgress = false;
-                return;
-            }
             var i = 0;
-            setConsoleMessage("");
+            document.getElementById("console").innerHTML = "";
             var errors = document.createElement("div");
             while (typeof data[i] != "undefined") {
                 //If there is a compilation error
@@ -265,9 +257,9 @@ function setSessionId(id) {
             document.getElementById("console").appendChild(errors);
         }
         if (!isCompiledWithErrors) {
-            setStatusBarMessage("Compilation compete without errors.");
+            document.getElementById("statusbar").innerHTML = "Compilation compete without errors.";
         } else {
-            setStatusBarMessage("During program execution errors have occurred");
+            document.getElementById("statusbar").innerHTML = "During program execution errors have occurred";
         }
         compilationInProgress = false;
     }
@@ -300,7 +292,7 @@ function setSessionId(id) {
                 //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
                 url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
                 context:document.body,
-                success:onHighlightingSuccess,
+                success:onAjaxSuccess,
                 dataType:"json",
                 type:"POST",
                 data:{text:i},
@@ -313,46 +305,10 @@ function setSessionId(id) {
     }
 
 
-    function createElementForProblemView(severity, start, title) {
-        var p = document.createElement("p");
-        var img = document.createElement("img");
-        if (severity == 'WARNING') {
-            img.src = "/icons/warning.png";
-            p.className = "problemsViewWarning";
-        } else {
-            img.src = "/icons/error.png";
-            p.className = "problemsViewError";
-        }
-        p.appendChild(img);
-        var titleDiv = document.createElement("span");
-        if (start == null) {
-            titleDiv.innerHTML = " " + title;
-        } else {
-
-            titleDiv.innerHTML = "(" + start.line + ", " + start.ch + ") : " + title;
-        }
-        p.appendChild(titleDiv);
-        return p;
-    }
-
-    function exception(message) {
-        setStatusBarMessage(message);
-        setConsoleMessage(message);
-        var problems = document.createElement("div");
-        document.getElementById("problems").innerHTML = "";
-        document.getElementById("problems").appendChild(createElementForProblemView("ERROR", null, message));
-    }
-
-    function onHighlightingSuccess(data) {
+    function onAjaxSuccess(data) {
         if (data != null) {
-            removeStyles();
-            if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                exception(data[0].exception);
-//                updateStatusBar();
-                isLoadingHighlighting = false;
-                return;
-            }
             var i = 0;
+            removeStyles();
 
             var problems = document.createElement("div");
             while (typeof data[i] != "undefined") {
@@ -389,7 +345,20 @@ function setSessionId(id) {
                 }, 50);
 
                 //add exception at problemsView
-                var p = createElementForProblemView(severity, start, title);
+                var p = document.createElement("p");
+                var img = document.createElement("img");
+                if (severity == 'WARNING') {
+                    img.src = "/icons/warning.png";
+                    p.className = "problemsViewWarning";
+                } else {
+                    img.src = "/icons/error.png";
+                    p.className = "problemsViewError";
+                }
+                p.appendChild(img);
+                var titleDiv = document.createElement("span");
+                titleDiv.innerHTML = "(" + start.line + ", " + start.ch + ") : " + title;
+                p.appendChild(titleDiv);
+
                 problems.appendChild(p);
 
 
@@ -413,8 +382,8 @@ function setSessionId(id) {
                 success:startComplete,
                 dataType:"json",
                 type:"POST",
-                data:{text:i},
-                timeout:10000
+                data:{text:i}//,
+                //    timeout: 10000
             });
             //}   else {
             //     isCompletionInProgress = true;
@@ -442,11 +411,6 @@ function setSessionId(id) {
         // Find the token at the cursor
         var cur = editor.getCursor(), token = editor.getTokenAt(cur);
         if (data != null) {
-            if (typeof data[0].exception != "undefined") {
-                setStatusBarMessage(data[0].exception);
-                isCompletionInProgress = false;
-                return;
-            }
             keywords = [];
             var i = 0;
             while (typeof data[i] != "undefined") {
@@ -581,8 +545,8 @@ function setSessionId(id) {
 
         function close() {
             if (done) return;
-            done = true;
-            complete.parentNode.removeChild(complete);
+             done = true;
+             complete.parentNode.removeChild(complete);
         }
 
         function pick() {
@@ -624,7 +588,7 @@ function setSessionId(id) {
             } else if (code == 40) {
                 //down
                 event.preventDefault();
-                var selOpt = $("#selected");
+                var selOpt =  $("#selected");
                 alert("a");
 
 //                selOpt.nextSibling.setAttribute("id", "selected");

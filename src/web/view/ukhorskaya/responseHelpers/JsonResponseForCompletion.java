@@ -19,9 +19,7 @@ import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.resolve.DescriptorRenderer;
 import org.json.JSONArray;
-import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.MyDeclarationDescriptorVisitor;
-import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.sessions.HttpSession;
 
 import java.util.Collection;
@@ -58,17 +56,11 @@ public class JsonResponseForCompletion {
         addExpressionAtCaret();
 
         HttpSession.TIME_MANAGER.saveCurrentTime();
-        BindingContext bindingContext;
-        try {
-            bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
-                    currentProject,
-                    Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                    Predicates.<PsiFile>equalTo(currentPsiFile),
-                    JetControlFlowDataTraceFactory.EMPTY);
-        } catch (Throwable e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("analyze", e.getMessage(), currentPsiFile.getText()), e);
-            return ResponseUtils.getErrorInJson("Error: bug was reported to developers.");
-        }
+        BindingContext bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
+                       currentProject,
+                       Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
+                       Predicates.<PsiFile>equalTo(currentPsiFile),
+                       JetControlFlowDataTraceFactory.EMPTY);
         LOG.info("userId=" + HttpSession.SESSION_ID + " ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
 
         PsiElement element = getExpressionForScope();

@@ -2,7 +2,8 @@ package web.view.ukhorskaya.examplesLoader;
 
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
-import web.view.ukhorskaya.ErrorsWriter;
+import org.json.JSONArray;
+import web.view.ukhorskaya.ApplicationErrorsWriter;
 import web.view.ukhorskaya.server.ServerSettings;
 
 import java.io.*;
@@ -57,7 +58,6 @@ public class ExamplesList {
         } else {
             LOG.error("Examples root doesn't exists");
         }
-        ErrorsWriter.writeInfoToConsole("Examples were loaded.");
     }
 
     private void addWoOrder(File dir, boolean isDirectory) {
@@ -122,7 +122,7 @@ public class ExamplesList {
             //+1 for order.txt
             if (orderedChildren.size() + 1 < children.length) {
                 for (String childName : children) {
-                    if (!childName.equals("order.txt") && !childName.equals("helpExamples.xml")) {
+                    if (!childName.equals("order.txt")) {
                         boolean isAdded = false;
                         for (String orderedChild : orderedChildren) {
                             if (childName.equals(orderedChild)) {
@@ -141,7 +141,7 @@ public class ExamplesList {
                                 }
                                 map.put("text", child.getName());
                                 list.add(map);
-                                ErrorsWriter.writeErrorToConsole("File/Directory " + childName + " is absent in order.txt and was added at end.");
+                                ApplicationErrorsWriter.writeErrorToConsole("File/Directory " + childName + " is absent in order.txt and was added at end.");
 
                                 if (isDirectory) {
                                     File orderChildren = checkIsOrderTxtExists(child);

@@ -68,7 +68,7 @@ public class ResponseTest extends TestCase {
 
     //Runtime.getRuntime().exec() Exception
     public void test$errors$securityExecutionError() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission &lt;&lt;ALL FILES&gt;&gt; execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat namespace.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission <<ALL FILES>> execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat namespace.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
@@ -111,11 +111,6 @@ public class ResponseTest extends TestCase {
         String actualResult = getActualResultForRequest(getUrlFromFileName(getNameByTestName()), data, "complete=true&cursorAt=0,40");
         assertNotNull(actualResult);
         //compareResponseForPostRequest(expectedResult, "complete=true&cursorAt=0,40", data);
-    }
-
-    public void test$errors$fromKotlin() throws IOException, InterruptedException {
-        String expectedResult = "[{\"exception\":\"Error: bug was reported to developers.\",\"type\":\"err\"}]";
-        compareResponseForPostRequest(expectedResult, "sendData=true", null);
     }
 
     private void compareResponseForPostRequest(String expectedResult, String query, @Nullable String data) throws IOException {

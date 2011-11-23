@@ -232,7 +232,6 @@ body {
 
 #helpcontent {
     float: left;
-    width: 100%;
 }
 
 .ui-widget-content p {
@@ -241,7 +240,7 @@ body {
 
 .help {
     border: 1px solid #EEEEEE;
-    /*height: 189px;*/
+    height: 189px;
     margin: 5px;
     padding: 3px;
     word-wrap: break-word;
@@ -276,16 +275,5 @@ body {
     background-color: grey;
 }
 
-#help3 {
-    padding: 10px;
-}
 
-.helpTitle {
-    padding: 5px 10px 0px 10px;
-    margin: 0;
-}
-
-#lefttitle, #righttitle {
-    padding-top: 5px;
-}
 
