@@ -83,7 +83,7 @@ public class ErrorAnalyzer {
                     Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("analyze", e.getMessage(), currentPsiFile.getText()), e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
             return null;
         }
         LOG.info("userId=" + HttpSession.SESSION_ID + " ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
