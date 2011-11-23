@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<help>
+    <example>
+        <name>Simplest version.kt</name>
+        <text>Line 1 is the optional namespace header.
+            <br/>
+            Then we declare a namespace-level function main which returns Unit and takes an Array of strings as a
+            parameter.
+            <br/>
+            Note that semicolons are optional.
+        </text>
+        <args/>
+    </example>
+    <example>
+        <name>Reading a name from the command line.kt</name>
+        <text>Line 6 demonstrates
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Strings#Strings-Templates">string templates</a>
+            and <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+types#Basictypes-Arrays">array access</a>.
+        </text>
+        <args>guest</args>
+    </example>
+    <example>
+        <name>Reading many names from the command line.kt</name>
+        <text>Line 2 demonstrates the
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Forloop">
+                <b>for</b>-loop</a>, that would have been called "enhanced" if there were any other for-loop in Kotlin.
+        </text>
+        <args>guest1 guest2 guest3</args>
+    </example>
+    <example>
+        <name>An object-oriented Hello.kt</name>
+        <text>Here we have a
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Classes+and+Inheritance">class</a>
+            with a
+            <i>primary constructor</i>
+            and a member function.
+            <br/>
+            Note that there's no
+            <b>new</b>
+            keyword used to create an object.
+        </text>
+        <args>guest1</args>
+    </example>
+    <example>
+        <name>A multi-language Hello.kt</name>
+        <text>In this example,
+            <b>val</b>
+            denotes a declaration of a read-only local variable, that is assigned an
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Ifexpression">
+                <b>if-expression</b></a>. Then we use very basic
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">pattern matching</a>
+            expression.
+        </text>
+        <args>FR</args>
+    </example>
+</help>

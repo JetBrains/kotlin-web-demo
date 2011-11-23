@@ -2,7 +2,7 @@ package web.view.ukhorskaya.responseHelpers;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
-import web.view.ukhorskaya.ApplicationErrorsWriter;
+import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.ServerSettings;
 import web.view.ukhorskaya.sessions.HttpSession;
@@ -45,7 +45,7 @@ public class JavaRunner {
             process = Runtime.getRuntime().exec(commandString);
             process.getOutputStream().close();
         } catch (IOException e) {
-            return getJsonStringFromErrorMessage("Impossible to run your program: IOException handled until execution");
+            return ResponseUtils.getErrorInJson("Impossible to run your program: IOException handled until execution");
         }
 
         final StringBuilder errStream = new StringBuilder();
@@ -72,14 +72,14 @@ public class JavaRunner {
 
         } catch (IOException e) {
             e.printStackTrace();
-            return getJsonStringFromErrorMessage("Impossible to run your program: IOException handled until execution");
+            return ResponseUtils.getErrorInJson("Impossible to run your program: IOException handled until execution");
         }
 
         try {
             process.waitFor();
         } catch (InterruptedException e) {
-            LOG.error("Interrupted exception during java process excution", e);
-            return getJsonStringFromErrorMessage("Impossible to run your program: InterruptedException handled.");
+            LOG.error("Interrupted exception during java process execution", e);
+            return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
         LOG.info("userId= " + HttpSession.SESSION_ID + " RUN user program " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()
                 + " timeout=" + isTimeoutException
@@ -95,10 +95,10 @@ public class JavaRunner {
         mapErr.put("type", "err");
         mapErr.put("text", errStream.toString());
         jsonArray.put(mapErr);
-        
+
         if (errStream.length() > 0) {
-            ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(
-                    ApplicationErrorsWriter.getExceptionForLog("execute", "Error while execution of user program",
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(
+                    ErrorsWriter.getExceptionForLog("execute", "Error while execution of user program: " + errStream,
                             textFromfile));
         }
 
@@ -181,9 +181,4 @@ public class JavaRunner {
         name = name.replaceAll("/", ".");
         return name;
     }
-
-    private String getJsonStringFromErrorMessage(String errorMessage) {
-        return "[{\"text\":\"" + errorMessage + ResponseUtils.addNewLine() + "\",\"type\":\"err\"}]";
-    }
-
 }

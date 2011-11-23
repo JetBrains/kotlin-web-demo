@@ -30,6 +30,10 @@ public class JsonResponseForHighlighting {
         ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile);
         List<ErrorDescriptor> errorDescriptors = analyzer.getAllErrors();
         JSONArray resultArray = new JSONArray();
+        if (errorDescriptors == null) {
+            return ResponseUtils.getErrorInJson("Exception in Kotlin CORE: bug was reported to developers.");
+        }
+
         for (ErrorDescriptor errorDescriptor : errorDescriptors) {
             resultArray.put(getMapForJsonResponse(errorDescriptor.getInterval(), errorDescriptor.getMessage(),
                     errorDescriptor.getClassName(), errorDescriptor.getSeverity().name()));

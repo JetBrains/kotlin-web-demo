@@ -1,0 +1,2445 @@
+2011-11-22 12:34:03 (HttpSession.java 80) [ERROR] <error><type>/?sessionId=69429940&exampleId=1&head=Hello,%20world!</type><message>aaa</message><file>null</file></error>
+java.lang.NullPointerException: aaa
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:67)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:04:55 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=994684960&run=true</type><message>Error while writing response. An established connection was aborted by the software in your host machine</message><file>fun main(args : Array<String>) {
+    System.out?.println("Hello, world!")
+}
+</file></error>
+java.io.IOException: An established connection was aborted by the software in your host machine
+	at sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:33)
+	at sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:72)
+	at sun.nio.ch.IOUtil.write(IOUtil.java:43)
+	at sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:334)
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:392)
+	at sun.net.httpserver.FixedLengthOutputStream.write(FixedLengthOutputStream.java:60)
+	at java.io.FilterOutputStream.write(FilterOutputStream.java:80)
+	at sun.net.httpserver.PlaceholderOutputStream.write(ExchangeImpl.java:370)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:285)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:04:55 (HttpSession.java 296) [ERROR] <error><type>/?sessionId=994684960&run=true</type><message>Error while closing outputStream. insufficient bytes written to stream</message><file>fun main(args : Array<String>) {
+    System.out?.println("Hello, world!")
+}
+</file></error>
+java.io.IOException: insufficient bytes written to stream
+	at sun.net.httpserver.FixedLengthOutputStream.close(FixedLengthOutputStream.java:71)
+	at sun.net.httpserver.PlaceholderOutputStream.close(ExchangeImpl.java:385)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:293)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:16:07 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>class Greeter(name : String) {
+  val name = name
+  fun greet() {
+    System.out?.println("Hello, ${name}");
+  }
+}
+
+fun main(args : Array<String>) {
+  Greeter(args[0]).greet()
+}
+</file></error>
+2011-11-22 01:19:26 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>class Greeter(name : String) {
+  val name = name
+  fun greet() {
+    System.out?.println("Hello, ${name}");
+  }
+}
+
+fun main(args : Array<String>) {
+  Greeter(args[0]).greet()
+}
+</file></error>
+2011-11-22 01:19:26 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=1847590843&run=true</type><message>Error while writing response. An established connection was aborted by the software in your host machine</message><file>class Greeter(name : String) {
+  val name = name
+  fun greet() {
+    System.out?.println("Hello, ${name}");
+  }
+}
+
+fun main(args : Array<String>) {
+  Greeter(args[0]).greet()
+}
+</file></error>
+java.io.IOException: An established connection was aborted by the software in your host machine
+	at sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:33)
+	at sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:72)
+	at sun.nio.ch.IOUtil.write(IOUtil.java:43)
+	at sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:334)
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:392)
+	at sun.net.httpserver.FixedLengthOutputStream.write(FixedLengthOutputStream.java:60)
+	at java.io.FilterOutputStream.write(FilterOutputStream.java:80)
+	at sun.net.httpserver.PlaceholderOutputStream.write(ExchangeImpl.java:370)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:285)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:19:26 (HttpSession.java 296) [ERROR] <error><type>/?sessionId=1847590843&run=true</type><message>Error while closing outputStream. insufficient bytes written to stream</message><file>class Greeter(name : String) {
+  val name = name
+  fun greet() {
+    System.out?.println("Hello, ${name}");
+  }
+}
+
+fun main(args : Array<String>) {
+  Greeter(args[0]).greet()
+}
+</file></error>
+java.io.IOException: insufficient bytes written to stream
+	at sun.net.httpserver.FixedLengthOutputStream.close(FixedLengthOutputStream.java:71)
+	at sun.net.httpserver.PlaceholderOutputStream.close(ExchangeImpl.java:385)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:293)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:19:32 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>class Greeter(name : String) {
+  val name = name
+  fun greet() {
+    System.out?.println("Hello, ${name}");
+  }
+}
+
+fun main(args : Array<String>) {
+  Greeter(args[0]).greet()
+}
+</file></error>
+2011-11-22 01:25:56 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=1636691641&sendData=true</type><message>Error while writing response. stream is closed</message><file>fun main(args : Array<String>) {
+  val language = if (args.size == 0) "EN" else args[0]
+  System.out?.println(when (language) {
+    "EN" => "Hello!"
+    "FR" => "Salut!"
+    "IT" => "Ciao!"
+    else => "Sorry, I can't greet you in $language yet"
+  })
+}
+</file></error>
+java.io.IOException: stream is closed
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:381)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:65)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:123)
+	at sun.net.httpserver.ExchangeImpl.sendResponseHeaders(ExchangeImpl.java:192)
+	at sun.net.httpserver.HttpExchangeImpl.sendResponseHeaders(HttpExchangeImpl.java:68)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:283)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:184)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:76)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:25:56 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=1636691641&exampleId=5&head=Hello,%20world!</type><message>null</message><file>null</file></error>
+java.lang.NullPointerException
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:296)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExampleContent(HttpSession.java:88)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:74)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:25:56 (ServerHandler.java 53) [ERROR] <error><type>/?sessionId=1636691641&exampleId=5&head=Hello,%20world!</type><message>null</message><file>null</file></error>
+java.lang.NullPointerException
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:289)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:33:10 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>fun main(args : Array<String>) {
+    System.out?.println(max(Integer.parseInt(args[0]), Integer.parseInt(args[1])))
+}
+
+fun max(a : Int, b : Int) = if (a > b) a else b
+</file></error>
+2011-11-22 01:36:49 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=1513431122&sendData=true</type><message>null</message><file>null</file></error>
+java.lang.NullPointerException
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:179)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:76)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:36:49 (ServerHandler.java 53) [ERROR] <error><type>/?sessionId=1513431122&sendData=true</type><message>null</message><file>null</file></error>
+java.lang.NullPointerException
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:289)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 01:42:38 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>namespace multiplier
+
+// Return null if str does not hold a number
+fun parseInt(str : String) : Int? {
+    try{
+        return  Integer.parseInt(str)
+    } catch (e: NumberFormatException) {
+        System.out?.println("Not int")
+    }
+    return null
+}
+
+fun main(args : Array<String>) {
+    if (args.size < 2) {
+        System.out?.print("No number supplied");
+    }
+    val x = parseInt(args[0])
+    val y = parseInt(args[1])
+
+    // We cannot say 'x * y' now because they may hold nulls
+    if (x != null && y != null) {
+        System.out?.print(x * y) // Now we can
+    }
+}</file></error>
+2011-11-22 01:45:53 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=1156671434&sendData=true</type><message>Error while writing response. stream is closed</message><file>namespace multiplier
+
+// Return null if str does not hold a number
+fun parseInt(str : String) : Int? {
+    try{
+        return  Integer.parseInt(str)
+    } catch (e: NumberFormatException) {
+        System.out?.println("One of argument isn't Int")
+    }
+    return null
+}
+
+fun main(args : Array<String>) {
+    if (args.size < 2) {
+        System.out?.print("No number supplied");
+    } else {
+        val x = parseInt(args[0])
+        val y = parseInt(args[1])
+
+        // We cannot say 'x * y' now because they may hold nulls
+        if (x != null && y != null) {
+            System.out?.print(x * y) // Now we can
+        }
+    }
+}
+</file></error>
+java.io.IOException: stream is closed
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:381)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:65)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:123)
+	at sun.net.httpserver.ExchangeImpl.sendResponseHeaders(ExchangeImpl.java:192)
+	at sun.net.httpserver.HttpExchangeImpl.sendResponseHeaders(HttpExchangeImpl.java:68)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:283)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:184)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:76)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:11:26 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>java.lang.UnsupportedOperationException</message><file>null</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 02:12:10 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>java.lang.UnsupportedOperationException</message><file>null</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 02:15:22 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>java.lang.UnsupportedOperationException</message><file>null</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 02:15:22 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>Error while writing response. An established connection was aborted by the software in your host machine</message><file>namespace demo
+
+import java.math.BigDecimal
+//import std.io.*
+
+fun main(args : Array<String>) {
+    // Easy to make BigDecimals user-friendly
+    System.out?.println(
+    "2.00".bd - "1.00"
+    )
+}
+
+val String.bd : BigDecimal get() = BigDecimal(this)
+
+fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted
+ </file></error>
+java.io.IOException: An established connection was aborted by the software in your host machine
+	at sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:33)
+	at sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:72)
+	at sun.nio.ch.IOUtil.write(IOUtil.java:43)
+	at sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:334)
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:392)
+	at sun.net.httpserver.FixedLengthOutputStream.write(FixedLengthOutputStream.java:60)
+	at java.io.FilterOutputStream.write(FilterOutputStream.java:80)
+	at sun.net.httpserver.PlaceholderOutputStream.write(ExchangeImpl.java:370)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:285)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:15:22 (HttpSession.java 296) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>Error while closing outputStream. insufficient bytes written to stream</message><file>namespace demo
+
+import java.math.BigDecimal
+//import std.io.*
+
+fun main(args : Array<String>) {
+    // Easy to make BigDecimals user-friendly
+    System.out?.println(
+    "2.00".bd - "1.00"
+    )
+}
+
+val String.bd : BigDecimal get() = BigDecimal(this)
+
+fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted
+ </file></error>
+java.io.IOException: insufficient bytes written to stream
+	at sun.net.httpserver.FixedLengthOutputStream.close(FixedLengthOutputStream.java:71)
+	at sun.net.httpserver.PlaceholderOutputStream.close(ExchangeImpl.java:385)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:293)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:17:21 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>java.lang.UnsupportedOperationException</message><file>null</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 02:17:21 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>Error while writing response. An established connection was aborted by the software in your host machine</message><file>namespace demo
+
+import java.math.BigDecimal
+//import std.io.*
+
+fun main(args : Array<String>) {
+    // Easy to make BigDecimals user-friendly
+    System.out?.println(
+    "2.00".bd - "1.00"
+    )
+}
+
+val String.bd : BigDecimal get() = BigDecimal(this)
+
+fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted
+ </file></error>
+java.io.IOException: An established connection was aborted by the software in your host machine
+	at sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:33)
+	at sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:72)
+	at sun.nio.ch.IOUtil.write(IOUtil.java:43)
+	at sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:334)
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:392)
+	at sun.net.httpserver.FixedLengthOutputStream.write(FixedLengthOutputStream.java:60)
+	at java.io.FilterOutputStream.write(FilterOutputStream.java:80)
+	at sun.net.httpserver.PlaceholderOutputStream.write(ExchangeImpl.java:370)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:285)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:17:21 (HttpSession.java 296) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>Error while closing outputStream. insufficient bytes written to stream</message><file>namespace demo
+
+import java.math.BigDecimal
+//import std.io.*
+
+fun main(args : Array<String>) {
+    // Easy to make BigDecimals user-friendly
+    System.out?.println(
+    "2.00".bd - "1.00"
+    )
+}
+
+val String.bd : BigDecimal get() = BigDecimal(this)
+
+fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted
+ </file></error>
+java.io.IOException: insufficient bytes written to stream
+	at sun.net.httpserver.FixedLengthOutputStream.close(FixedLengthOutputStream.java:71)
+	at sun.net.httpserver.PlaceholderOutputStream.close(ExchangeImpl.java:385)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:293)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:17:43 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>java.lang.UnsupportedOperationException</message><file>null</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 02:17:43 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>Error while writing response. An established connection was aborted by the software in your host machine</message><file>namespace demo
+
+import java.math.BigDecimal
+//import std.io.*
+
+fun main(args : Array<String>) {
+    // Easy to make BigDecimals user-friendly
+    System.out?.println(
+    "2.00".bd - "1.00"
+    )
+}
+
+val String.bd : BigDecimal get() = BigDecimal(this)
+
+fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted
+ </file></error>
+java.io.IOException: An established connection was aborted by the software in your host machine
+	at sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:33)
+	at sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:72)
+	at sun.nio.ch.IOUtil.write(IOUtil.java:43)
+	at sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:334)
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:392)
+	at sun.net.httpserver.FixedLengthOutputStream.write(FixedLengthOutputStream.java:60)
+	at java.io.FilterOutputStream.write(FilterOutputStream.java:80)
+	at sun.net.httpserver.PlaceholderOutputStream.write(ExchangeImpl.java:370)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:285)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:17:43 (HttpSession.java 296) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>Error while closing outputStream. insufficient bytes written to stream</message><file>namespace demo
+
+import java.math.BigDecimal
+//import std.io.*
+
+fun main(args : Array<String>) {
+    // Easy to make BigDecimals user-friendly
+    System.out?.println(
+    "2.00".bd - "1.00"
+    )
+}
+
+val String.bd : BigDecimal get() = BigDecimal(this)
+
+fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted
+ </file></error>
+java.io.IOException: insufficient bytes written to stream
+	at sun.net.httpserver.FixedLengthOutputStream.close(FixedLengthOutputStream.java:71)
+	at sun.net.httpserver.PlaceholderOutputStream.close(ExchangeImpl.java:385)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:293)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:20:34 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>java.lang.UnsupportedOperationException</message><file>null</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:237)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 02:20:34 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>Error while writing response. An established connection was aborted by the software in your host machine</message><file>namespace demo
+
+import java.math.BigDecimal
+//import std.io.*
+
+fun main(args : Array<String>) {
+    // Easy to make BigDecimals user-friendly
+    System.out?.println(
+    "2.00".bd - "1.00"
+    )
+}
+
+val String.bd : BigDecimal get() = BigDecimal(this)
+
+fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted
+ </file></error>
+java.io.IOException: An established connection was aborted by the software in your host machine
+	at sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:33)
+	at sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:72)
+	at sun.nio.ch.IOUtil.write(IOUtil.java:43)
+	at sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:334)
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:392)
+	at sun.net.httpserver.FixedLengthOutputStream.write(FixedLengthOutputStream.java:60)
+	at java.io.FilterOutputStream.write(FilterOutputStream.java:80)
+	at sun.net.httpserver.PlaceholderOutputStream.write(ExchangeImpl.java:370)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:285)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:20:34 (HttpSession.java 296) [ERROR] <error><type>/?sessionId=1156671434&run=true</type><message>Error while closing outputStream. insufficient bytes written to stream</message><file>namespace demo
+
+import java.math.BigDecimal
+//import std.io.*
+
+fun main(args : Array<String>) {
+    // Easy to make BigDecimals user-friendly
+    System.out?.println(
+    "2.00".bd - "1.00"
+    )
+}
+
+val String.bd : BigDecimal get() = BigDecimal(this)
+
+fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted
+ </file></error>
+java.io.IOException: insufficient bytes written to stream
+	at sun.net.httpserver.FixedLengthOutputStream.close(FixedLengthOutputStream.java:71)
+	at sun.net.httpserver.PlaceholderOutputStream.close(ExchangeImpl.java:385)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:293)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:241)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:80)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:21:31 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=478845010&sendData=true</type><message>Error while writing response. stream is closed</message><file>namespace demo
+
+class Main() {
+
+  fun aaa() : Int {return 10}
+}
+
+fun main(args : Array<String>) {
+  var s = "Natalia"
+  //Thread.sleep(16000)
+    System.out?.println("Hello, " + s) 
+    System.out?.println("ERROR"); 
+  //Thread.sleep(16000)
+  //java.io.FileWriter("sdfs.kt")
+} </file></error>
+java.io.IOException: stream is closed
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:381)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:65)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:123)
+	at sun.net.httpserver.ExchangeImpl.sendResponseHeaders(ExchangeImpl.java:192)
+	at sun.net.httpserver.HttpExchangeImpl.sendResponseHeaders(HttpExchangeImpl.java:68)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:283)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:184)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:76)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:23:09 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=1019608921&sendData=true</type><message>Error while writing response. stream is closed</message><file>namespace demo
+
+class Main() {
+
+  fun aaa() : Int {return 10}
+}
+
+fun main(args : Array<String>) {
+  var s = "Natalia"
+  //Thread.sleep(16000)
+    System.out?.println("Hello, " + s) 
+    System.out?.println("ERROR"); 
+  //Thread.sleep(16000)
+  //java.io.FileWriter("sdfs.kt")
+} </file></error>
+java.io.IOException: stream is closed
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:381)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:65)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:123)
+	at sun.net.httpserver.ExchangeImpl.sendResponseHeaders(ExchangeImpl.java:192)
+	at sun.net.httpserver.HttpExchangeImpl.sendResponseHeaders(HttpExchangeImpl.java:68)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:283)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:184)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:76)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:24:43 (HttpSession.java 289) [ERROR] <error><type>/?sessionId=1646298357&sendData=true</type><message>Error while writing response. stream is closed</message><file>fun main(args : Array<String>) {
+    System.out?.println("Hello, world!")
+}
+</file></error>
+java.io.IOException: stream is closed
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:381)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:65)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:123)
+	at sun.net.httpserver.ExchangeImpl.sendResponseHeaders(ExchangeImpl.java:192)
+	at sun.net.httpserver.HttpExchangeImpl.sendResponseHeaders(HttpExchangeImpl.java:68)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:283)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:184)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:76)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:35:56 (HttpSession.java 304) [ERROR] <error><type>/?sessionId=2018258271&sendData=true</type><message>Error while writing response. stream is closed</message><file>fun main(args : Array<String>) {
+  System.out?.println(max(Integer.parseInt(args[0]), Integer.parseInt(args[1])))
+}
+
+fun max(a : Int, b : Int) = if (a > b) a else b
+</file></error>
+java.io.IOException: stream is closed
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:381)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:65)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:123)
+	at sun.net.httpserver.ExchangeImpl.sendResponseHeaders(ExchangeImpl.java:192)
+	at sun.net.httpserver.HttpExchangeImpl.sendResponseHeaders(HttpExchangeImpl.java:68)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:298)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:199)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:76)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:36:58 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>fun main(args : Array<String>) {
+  System.out?.println(getStringLength(args[0]))
+}
+
+fun getStringLength(obj : Any) : Int? {
+  if (obj is String)
+    return obj.length // no cast to String is needed
+  return null
+}
+</file></error>
+2011-11-22 02:36:58 (HttpSession.java 304) [ERROR] <error><type>/?sessionId=2018258271&run=true</type><message>Error while writing response. An established connection was aborted by the software in your host machine</message><file>fun main(args : Array<String>) {
+  System.out?.println(getStringLength(args[0]))
+}
+
+fun getStringLength(obj : Any) : Int? {
+  if (obj is String)
+    return obj.length // no cast to String is needed
+  return null
+}
+</file></error>
+java.io.IOException: An established connection was aborted by the software in your host machine
+	at sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:33)
+	at sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:72)
+	at sun.nio.ch.IOUtil.write(IOUtil.java:43)
+	at sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:334)
+	at sun.net.httpserver.Request$WriteStream.write(Request.java:392)
+	at sun.net.httpserver.FixedLengthOutputStream.write(FixedLengthOutputStream.java:60)
+	at java.io.FilterOutputStream.write(FilterOutputStream.java:80)
+	at sun.net.httpserver.PlaceholderOutputStream.write(ExchangeImpl.java:370)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:300)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:252)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:36:58 (HttpSession.java 311) [ERROR] <error><type>/?sessionId=2018258271&run=true</type><message>Error while closing outputStream. insufficient bytes written to stream</message><file>fun main(args : Array<String>) {
+  System.out?.println(getStringLength(args[0]))
+}
+
+fun getStringLength(obj : Any) : Int? {
+  if (obj is String)
+    return obj.length // no cast to String is needed
+  return null
+}
+</file></error>
+java.io.IOException: insufficient bytes written to stream
+	at sun.net.httpserver.FixedLengthOutputStream.close(FixedLengthOutputStream.java:71)
+	at sun.net.httpserver.PlaceholderOutputStream.close(ExchangeImpl.java:385)
+	at web.view.ukhorskaya.sessions.HttpSession.writeResponse(HttpSession.java:308)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:252)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 02:37:43 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>fun main(args : Array<String>) {
+  System.out?.println(getStringLength(args[0]))
+}
+
+fun getStringLength(obj : Any) : Int? {
+  if (obj is String)
+    return obj.length // no cast to String is needed
+  return null
+}
+</file></error>
+2011-11-22 02:37:56 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>fun main(args : Array<String>) {
+  System.out?.println(getStringLength(args[0]))
+}
+
+fun getStringLength(obj : Any) : Int? {
+  if (obj is String)
+    return obj.length // no cast to String is needed
+  return null
+}
+</file></error>
+2011-11-22 02:38:07 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>fun main(args : Array<String>) {
+  System.out?.println(getStringLength("aaa"))
+}
+
+fun getStringLength(obj : Any) : Int? {
+  if (obj is String)
+    return obj.length // no cast to String is needed
+  return null
+}
+</file></error>
+2011-11-22 03:29:16 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>namespace demo
+fun main(args : Array<String>) {
+    val x = Integer.parseInt(args[0])
+    //Check if a number lies within a range:
+    val y = 10
+    if (x in 1..y-1)
+        System.out?.println("OK")
+
+    //Iterate over a range:
+    for (a in 1..5)
+        System.out?.println(x)
+
+    //Check if a number is out of range:
+    val array = java.util.ArrayList<String>();
+    array.add("aaa")
+    array.add("bbb")
+    array.add("ccc")
+
+    if (x !in 0..array.size)
+        System.out?.println("Out")
+
+    //Check if a collection contains an object:
+    if ("aaa" in array) // collection.contains(obj) is called
+        System.out?.println("Yes")
+
+    if ("ddd" in array) // collection.contains(obj) is called
+        System.out?.println("Yes")
+    else 
+        System.out?.println("No")
+}
+
+ </file></error>
+2011-11-22 03:29:43 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>namespace demo
+fun main(args : Array<String>) {
+    val x = Integer.parseInt(args[0])
+    //Check if a number lies within a range:
+    val y = 10
+    if (x in 1..y-1)
+        System.out?.println("OK")
+
+    //Iterate over a range:
+    for (a in 1..5)
+        System.out?.println(a)
+
+    //Check if a number is out of range:
+    val array = java.util.ArrayList<String>();
+    array.add("aaa")
+    array.add("bbb")
+    array.add("ccc")
+
+    if (x !in 0..array.size)
+        System.out?.println("Out")
+
+    //Check if a collection contains an object:
+    if ("aaa" in array) // collection.contains(obj) is called
+        System.out?.println("Yes")
+
+    if ("ddd" in array) // collection.contains(obj) is called
+        System.out?.println("Yes")
+    else 
+        System.out?.println("No")
+}
+
+ </file></error>
+2011-11-22 03:42:05 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=1889060596&run=true</type><message>java.lang.UnsupportedOperationException</message><file>namespace demo
+
+            import java.math.BigDecimal
+
+            fun main(args : Array<String>) {
+                // Easy to make BigDecimals user-friendly
+                System.out?.println(
+                "2.00".bd - "1.00"
+                )
+            }
+
+            val String.bd : BigDecimal get() = BigDecimal(this)
+
+            fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+            fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:252)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 03:43:37 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=207305517&run=true</type><message>java.lang.UnsupportedOperationException</message><file>namespace demo
+
+            import java.math.BigDecimal
+
+            fun main(args : Array<String>) {
+                // Easy to make BigDecimals user-friendly
+                System.out?.println(
+                "2.00".bd - "1.00"
+                )
+            }
+
+            val String.bd : BigDecimal get() = BigDecimal(this)
+
+            fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+            fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:252)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 03:44:49 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=207305517&run=true</type><message>java.lang.UnsupportedOperationException</message><file>namespace demo
+
+            import java.math.BigDecimal
+
+            fun main(args : Array<String>) {
+                // Easy to make BigDecimals user-friendly
+                System.out?.println(
+                "2.00".bd - "1.00"
+                )
+            }
+
+            val String.bd : BigDecimal get() = BigDecimal(this)
+
+            fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+            fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:252)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 03:45:07 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=207305517&run=true</type><message>java.lang.UnsupportedOperationException</message><file>namespace demo
+
+            import java.math.BigDecimal
+
+            fun main(args : Array<String>) {
+                // Easy to make BigDecimals user-friendly
+                System.out?.println(
+                //"2.00".bd - "1.00"
+                )
+            }
+
+            val String.bd : BigDecimal get() = BigDecimal(this)
+
+            fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+            fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:252)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 03:46:21 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=207305517&run=true</type><message>java.lang.UnsupportedOperationException</message><file>namespace demo
+
+            import java.math.BigDecimal
+
+            fun main(args : Array<String>) {
+                // Easy to make BigDecimals user-friendly
+                System.out?.println(
+                //"2.00".bd - "1.00"
+                )
+            }
+
+            val String.bd : BigDecimal get() = BigDecimal(this)
+
+            fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+            //fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:252)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 03:46:25 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=207305517&run=true</type><message>java.lang.UnsupportedOperationException</message><file>namespace demo
+
+            import java.math.BigDecimal
+
+            fun main(args : Array<String>) {
+                // Easy to make BigDecimals user-friendly
+                System.out?.println(
+                //"2.00".bd - "1.00"
+                )
+            }
+
+            val String.bd : BigDecimal get() = BigDecimal(this)
+
+            //fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+            //fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:252)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 03:46:37 (HttpSession.java 79) [ERROR] <error><type>/?sessionId=207305517&run=true</type><message>java.lang.UnsupportedOperationException</message><file>namespace demo
+
+            import java.math.BigDecimal
+
+            fun main(args : Array<String>) {
+                // Easy to make BigDecimals user-friendly
+                System.out?.println(
+                //"2.00".bd - "1.00"
+                )
+            }
+
+            val String.bd : BigDecimal get() = BigDecimal(this)
+
+            //fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+            //fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted</file></error>
+java.lang.IllegalStateException: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.CompilationErrorHandler$1.reportException(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.compileCorrectNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:70)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:252)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:47)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: java.lang.UnsupportedOperationException
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitThisExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetThisExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.pushMethodArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.invokeMethodWithArguments(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateJavaConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.generateConstructorCall(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.visitCallExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetCallExpression.accept(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.genQualified(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.ExpressionCodegen.returnExpression(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generatedMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.FunctionCodegen.generateMethod(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.generateGetter(Unknown Source)
+	at org.jetbrains.jet.codegen.PropertyCodegen.gen(Unknown Source)
+	at org.jetbrains.jet.codegen.NamespaceCodegen.generate(Unknown Source)
+	at org.jetbrains.jet.codegen.GenerationState.generateNamespace(Unknown Source)
+	... 16 more
+2011-11-22 03:51:40 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>fun main(args : Array<String>) {
+  System.out?.println(max(Integer.parseInt(args[0]), Integer.parseInt(args[1])))
+}
+
+fun max(a : Int, b : Int) = if (a > b) a else b
+</file></error>
+2011-11-22 03:52:06 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>fun main(args : Array<String>) {
+  System.out?.println(max(Integer.parseInt(args[0]), Integer.parseInt(args[1])))
+}
+
+fun max(a : Int, b : Int) = if (a > b) a else b
+</file></error>
+2011-11-22 03:55:38 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>class Greeter(name : String) {
+  val name = name
+  fun greet() {
+    System.out?.println("Hello, ${name}");
+  }
+}
+
+fun main(args : Array<String>) {
+  Greeter(args[0]).greet()
+}
+</file></error>
+2011-11-22 03:55:48 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program</message><file>class Greeter(name : String) {
+  val name = name
+  fun greet() {
+    System.out?.println("Hello, ${name}");
+  }
+}
+
+fun main(args : Array<String>) {
+  Greeter(args[0]).greet()
+}
+</file></error>
+2011-11-22 05:04:45 (ErrorAnalyzer.java 86) [ERROR] <error><type>analyze</type><message>null</message><file>class Test() {
+class object {
+fun init2() {
+
+}
+}
+fun run() {
+val a = object : Iterator<Int> {}
+}
+}
+</file></error>
+java.lang.NullPointerException
+	at org.jetbrains.jet.lang.diagnostics.DiagnosticFactoryWithPsiElement2.on(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverridesInAClass(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverrides(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.processObject(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.safeGetType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.util.lazy.LazyValue.get(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.getVariableType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.resolveLocalVariableDescriptor(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitNamedDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedTypeWithWritableScope(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBody(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveBehaviorDeclarationBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.AnalyzingUtils.analyzeNamespaces(Unknown Source)
+	at web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer.getAllErrors(ErrorAnalyzer.java:80)
+	at web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting.getResult(JsonResponseForHighlighting.java:31)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:183)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:74)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:46)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 05:08:59 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: ERROR<br/></message><file>fun main(args : Array<String>) {
+    System.out?.println("Hello")
+    System.err?.println("ERROR");
+}
+</file></error>
+2011-11-22 05:09:00 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: ERROR<br/></message><file>fun main(args : Array<String>) {
+    System.err?.println("ERROR");
+}
+</file></error>
+2011-11-22 05:09:00 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: Exception in thread "main" java.security.AccessControlException: access denied (java.io.FilePermission &lt;&lt;ALL FILES&gt;&gt; execute)<br/>	at java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>	at java.security.AccessController.checkPermission(AccessController.java:546)<br/>	at java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>	at java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>	at java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>	at java.lang.Runtime.exec(Runtime.java:593)<br/>	at java.lang.Runtime.exec(Runtime.java:431)<br/>	at java.lang.Runtime.exec(Runtime.java:328)<br/>	at namespace.main(dummy.jet:2)<br/></message><file>fun main(args : Array<String>) {
+  Runtime.getRuntime()?.exec("java demo");
+}  
+</file></error>
+2011-11-22 05:09:01 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: Exception in thread "main" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br/>	at java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>	at java.security.AccessController.checkPermission(AccessController.java:546)<br/>	at java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>	at java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br/>	at java.io.File.exists(File.java:731)<br/>	at namespace.main(dummy.jet:3)<br/></message><file>fun main(args : Array<String>) {
+    var file = java.io.File("test.kt")
+    if (!file.exists()) {
+        file.createNewFile()
+    }
+}  
+</file></error>
+2011-11-22 05:09:06 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.</message><file>namespace demo
+
+class Main() {
+    fun aaa() : Int {
+        return 10
+    }
+}
+
+fun main(args : Array<String>) {
+    val i = 0;
+    for(i in 1..1000000000) {
+       Main().aaa()
+    }
+}
+</file></error>
+2011-11-22 05:09:06 (ErrorAnalyzer.java 86) [ERROR] <error><type>analyze</type><message>null</message><file>class Test() {
+    class object {
+        fun init2() {}
+    }
+    fun run() {
+        val a = object : Iterator<Int> {}
+    }
+}
+</file></error>
+java.lang.NullPointerException
+	at org.jetbrains.jet.lang.diagnostics.DiagnosticFactoryWithPsiElement2.on(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverridesInAClass(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverrides(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.processObject(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.safeGetType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.util.lazy.LazyValue.get(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.getVariableType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.resolveLocalVariableDescriptor(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitNamedDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedTypeWithWritableScope(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBody(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveBehaviorDeclarationBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.AnalyzingUtils.analyzeNamespaces(Unknown Source)
+	at web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer.getAllErrors(ErrorAnalyzer.java:80)
+	at web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting.getResult(JsonResponseForHighlighting.java:31)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:183)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:74)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:46)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 05:14:59 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: ERROR<br/></message><file>fun main(args : Array<String>) {
+    System.out?.println("Hello")
+    System.err?.println("ERROR");
+}
+</file></error>
+2011-11-22 05:15:00 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: ERROR<br/></message><file>fun main(args : Array<String>) {
+    System.err?.println("ERROR");
+}
+</file></error>
+2011-11-22 05:15:00 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: Exception in thread "main" java.security.AccessControlException: access denied (java.io.FilePermission &lt;&lt;ALL FILES&gt;&gt; execute)<br/>	at java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>	at java.security.AccessController.checkPermission(AccessController.java:546)<br/>	at java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>	at java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>	at java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>	at java.lang.Runtime.exec(Runtime.java:593)<br/>	at java.lang.Runtime.exec(Runtime.java:431)<br/>	at java.lang.Runtime.exec(Runtime.java:328)<br/>	at namespace.main(dummy.jet:2)<br/></message><file>fun main(args : Array<String>) {
+  Runtime.getRuntime()?.exec("java demo");
+}  
+</file></error>
+2011-11-22 05:15:01 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: Exception in thread "main" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br/>	at java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>	at java.security.AccessController.checkPermission(AccessController.java:546)<br/>	at java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>	at java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br/>	at java.io.File.exists(File.java:731)<br/>	at namespace.main(dummy.jet:3)<br/></message><file>fun main(args : Array<String>) {
+    var file = java.io.File("test.kt")
+    if (!file.exists()) {
+        file.createNewFile()
+    }
+}  
+</file></error>
+2011-11-22 05:15:06 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.</message><file>namespace demo
+
+class Main() {
+    fun aaa() : Int {
+        return 10
+    }
+}
+
+fun main(args : Array<String>) {
+    val i = 0;
+    for(i in 1..1000000000) {
+       Main().aaa()
+    }
+}
+</file></error>
+2011-11-22 05:15:06 (ErrorAnalyzer.java 86) [ERROR] <error><type>analyze</type><message>null</message><file>class Test() {
+    class object {
+        fun init2() {}
+    }
+    fun run() {
+        val a = object : Iterator<Int> {}
+    }
+}
+</file></error>
+java.lang.NullPointerException
+	at org.jetbrains.jet.lang.diagnostics.DiagnosticFactoryWithPsiElement2.on(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverridesInAClass(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverrides(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.processObject(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.safeGetType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.util.lazy.LazyValue.get(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.getVariableType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.resolveLocalVariableDescriptor(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitNamedDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedTypeWithWritableScope(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBody(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveBehaviorDeclarationBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.AnalyzingUtils.analyzeNamespaces(Unknown Source)
+	at web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer.getAllErrors(ErrorAnalyzer.java:80)
+	at web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting.getResult(JsonResponseForHighlighting.java:31)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:183)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:74)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:46)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handleEvent(ServerImpl.java:253)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:285)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 05:16:25 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: ERROR<br/></message><file>fun main(args : Array<String>) {
+    System.out?.println("Hello")
+    System.err?.println("ERROR");
+}
+</file></error>
+2011-11-22 05:16:26 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: ERROR<br/></message><file>fun main(args : Array<String>) {
+    System.err?.println("ERROR");
+}
+</file></error>
+2011-11-22 05:16:26 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: Exception in thread "main" java.security.AccessControlException: access denied (java.io.FilePermission &lt;&lt;ALL FILES&gt;&gt; execute)<br/>	at java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>	at java.security.AccessController.checkPermission(AccessController.java:546)<br/>	at java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>	at java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>	at java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>	at java.lang.Runtime.exec(Runtime.java:593)<br/>	at java.lang.Runtime.exec(Runtime.java:431)<br/>	at java.lang.Runtime.exec(Runtime.java:328)<br/>	at namespace.main(dummy.jet:2)<br/></message><file>fun main(args : Array<String>) {
+  Runtime.getRuntime()?.exec("java demo");
+}  
+</file></error>
+2011-11-22 05:16:27 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: Exception in thread "main" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br/>	at java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>	at java.security.AccessController.checkPermission(AccessController.java:546)<br/>	at java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>	at java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br/>	at java.io.File.exists(File.java:731)<br/>	at namespace.main(dummy.jet:3)<br/></message><file>fun main(args : Array<String>) {
+    var file = java.io.File("test.kt")
+    if (!file.exists()) {
+        file.createNewFile()
+    }
+}  
+</file></error>
+2011-11-22 05:16:32 (JavaRunner.java 100) [ERROR] <error><type>execute</type><message>Error while execution of user program: Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.</message><file>namespace demo
+
+class Main() {
+    fun aaa() : Int {
+        return 10
+    }
+}
+
+fun main(args : Array<String>) {
+    val i = 0;
+    for(i in 1..1000000000) {
+       Main().aaa()
+    }
+}
+</file></error>
+2011-11-22 05:16:32 (ErrorAnalyzer.java 86) [ERROR] <error><type>analyze</type><message>null</message><file>class Test() {
+    class object {
+        fun init2() {}
+    }
+    fun run() {
+        val a = object : Iterator<Int> {}
+    }
+}
+</file></error>
+java.lang.NullPointerException
+	at org.jetbrains.jet.lang.diagnostics.DiagnosticFactoryWithPsiElement2.on(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverridesInAClass(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverrides(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.processObject(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.safeGetType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.util.lazy.LazyValue.get(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.getVariableType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.resolveLocalVariableDescriptor(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitNamedDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedTypeWithWritableScope(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBody(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveBehaviorDeclarationBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.AnalyzingUtils.analyzeNamespaces(Unknown Source)
+	at web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer.getAllErrors(ErrorAnalyzer.java:80)
+	at web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting.getResult(JsonResponseForHighlighting.java:31)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:183)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:74)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:46)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 05:16:55 (ErrorAnalyzer.java 86) [ERROR] <error><type>analyze</type><message>null</message><file>class Test() {
+class object {
+fun init2() {
+
+}
+}
+fun run() {
+val a = object : Iterator<Int> {}
+}
+}
+</file></error>
+java.lang.NullPointerException
+	at org.jetbrains.jet.lang.diagnostics.DiagnosticFactoryWithPsiElement2.on(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverridesInAClass(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverrides(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.processObject(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.safeGetType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.util.lazy.LazyValue.get(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.getVariableType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.resolveLocalVariableDescriptor(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitNamedDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedTypeWithWritableScope(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBody(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveBehaviorDeclarationBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.AnalyzingUtils.analyzeNamespaces(Unknown Source)
+	at web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer.getAllErrors(ErrorAnalyzer.java:80)
+	at web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting.getResult(JsonResponseForHighlighting.java:31)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:183)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:74)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:46)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 05:16:59 (ErrorAnalyzer.java 86) [ERROR] <error><type>analyze</type><message>null</message><file>class Test() {
+class object {
+fun init2() {
+
+}
+}
+fun run() {
+val a = object : Iterator<Int> {}
+}
+}
+</file></error>
+java.lang.NullPointerException
+	at org.jetbrains.jet.lang.diagnostics.DiagnosticFactoryWithPsiElement2.on(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverridesInAClass(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverrides(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.processObject(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.safeGetType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.util.lazy.LazyValue.get(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.getVariableType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.resolveLocalVariableDescriptor(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitNamedDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedTypeWithWritableScope(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBody(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveBehaviorDeclarationBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.AnalyzingUtils.analyzeNamespaces(Unknown Source)
+	at web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer.getAllErrors(ErrorAnalyzer.java:80)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:55)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:238)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:68)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:46)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 05:19:01 (ErrorAnalyzer.java 86) [ERROR] <error><type>analyze</type><message>null</message><file>class Test() {
+class object {
+fun init2() {
+
+}
+}
+fun run() {
+val a = object : Iterator<Int> {}
+}
+}
+</file></error>
+java.lang.NullPointerException
+	at org.jetbrains.jet.lang.diagnostics.DiagnosticFactoryWithPsiElement2.on(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverridesInAClass(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverrides(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.processObject(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.safeGetType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.util.lazy.LazyValue.get(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.getVariableType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.resolveLocalVariableDescriptor(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitNamedDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedTypeWithWritableScope(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBody(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveBehaviorDeclarationBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.AnalyzingUtils.analyzeNamespaces(Unknown Source)
+	at web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer.getAllErrors(ErrorAnalyzer.java:80)
+	at web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting.getResult(JsonResponseForHighlighting.java:31)
+	at web.view.ukhorskaya.sessions.HttpSession.sendProjectSourceFile(HttpSession.java:183)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:74)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:46)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 05:19:07 (ErrorAnalyzer.java 86) [ERROR] <error><type>analyze</type><message>null</message><file>class Test() {
+class object {
+fun init2() {
+
+}
+}
+fun run() {
+val a = object : Iterator<Int> {}
+}
+}
+</file></error>
+java.lang.NullPointerException
+	at org.jetbrains.jet.lang.diagnostics.DiagnosticFactoryWithPsiElement2.on(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverridesInAClass(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverrides(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.processObject(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.safeGetType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.util.lazy.LazyValue.get(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.getVariableType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.resolveLocalVariableDescriptor(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitNamedDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedTypeWithWritableScope(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBody(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveBehaviorDeclarationBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.AnalyzingUtils.analyzeNamespaces(Unknown Source)
+	at web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer.getAllErrors(ErrorAnalyzer.java:80)
+	at web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor.getResult(CompileAndRunExecutor.java:55)
+	at web.view.ukhorskaya.sessions.HttpSession.sendExecutorResult(HttpSession.java:238)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:68)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:46)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)
+2011-11-22 05:20:39 (JsonResponseForCompletion.java 69) [ERROR] <error><type>analyze</type><message>null</message><file>class Test() {
+class objIntellijIdeaRulezzz ect {
+fun init2() {
+
+}
+}
+fun run() {
+val a = object : Iterator<Int> {}
+}
+}
+</file></error>
+java.lang.NullPointerException
+	at org.jetbrains.jet.lang.diagnostics.DiagnosticFactoryWithPsiElement2.on(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverridesInAClass(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.checkOverrides(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.OverrideResolver.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.processObject(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ClosureExpressionsTypingVisitor.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitObjectLiteralExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetObjectLiteralExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.safeGetType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver$2.compute(Unknown Source)
+	at org.jetbrains.jet.util.lazy.LazyValue.get(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.getVariableType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.ClassDescriptorResolver.resolveLocalVariableDescriptor(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorForStatements.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitNamedDeclaration(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitProperty(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetProperty.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedTypeWithWritableScope(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.getBlockReturnedType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.BasicExpressionTypingVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.visitJetElement(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetVisitor.visitBlockExpression(Unknown Source)
+	at org.jetbrains.jet.lang.psi.JetBlockExpression.accept(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingVisitorDispatcher.getType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.types.expressions.ExpressionTypingServices.checkFunctionReturnType(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBody(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveFunctionBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.BodyResolver.resolveBehaviorDeclarationBodies(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.doProcess(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.TopDownAnalyzer.process(Unknown Source)
+	at org.jetbrains.jet.lang.resolve.AnalyzingUtils.analyzeNamespaces(Unknown Source)
+	at web.view.ukhorskaya.responseHelpers.JsonResponseForCompletion.getResult(JsonResponseForCompletion.java:63)
+	at web.view.ukhorskaya.sessions.HttpSession.sendCompletionResult(HttpSession.java:173)
+	at web.view.ukhorskaya.sessions.HttpSession.handle(HttpSession.java:70)
+	at web.view.ukhorskaya.handlers.ServerHandler.handle(ServerHandler.java:46)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.AuthFilter.doFilter(AuthFilter.java:65)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:68)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(ServerImpl.java:555)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(Filter.java:65)
+	at sun.net.httpserver.ServerImpl$Exchange.run(ServerImpl.java:527)
+	at sun.net.httpserver.ServerImpl$DefaultExecutor.execute(ServerImpl.java:119)
+	at sun.net.httpserver.ServerImpl$Dispatcher.handle(ServerImpl.java:349)
+	at sun.net.httpserver.ServerImpl$Dispatcher.run(ServerImpl.java:321)
+	at java.lang.Thread.run(Thread.java:662)

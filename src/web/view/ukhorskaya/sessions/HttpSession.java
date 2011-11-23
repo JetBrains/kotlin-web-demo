@@ -6,17 +6,15 @@ import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
-import web.view.ukhorskaya.ApplicationErrorsWriter;
+import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.Initializer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.TimeManager;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.handlers.ServerHandler;
 import web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor;
-import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForCompletion;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting;
 
@@ -50,12 +48,12 @@ public class HttpSession {
         try {
             this.exchange = exchange;
             String param = exchange.getRequestURI().toString();
-
+            LOG.info("request: " + param);
             //FOR TEST ONLY
-            if (param.contains("testConnection")) {
+            /*if (param.contains("testConnection")) {
                 sendTestConnection();
                 return;
-            }
+            }*/
 
             String sId = ResponseUtils.substringBetween(param, "?sessionId=", "&");
             if (sId.equals("") || sId.equals("undefined")) {
@@ -76,8 +74,8 @@ public class HttpSession {
                 sendProjectSourceFile();
             }
         } catch (Throwable e) {
-            ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e.getMessage(), "null"), e);
-            writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e.getMessage(), currentPsiFile.getText()), e);
+            writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
         }
     }
 
@@ -138,21 +136,24 @@ public class HttpSession {
     private void setGlobalVariables(@Nullable String text) {
         currentProject = Initializer.getEnvironment().getProject();
         if (text == null) {
-            text = "namespace demo\n" +
-                    "\n" +
-                    "class Main() {\n" +
-                    "\n" +
-                    "  fun aaa() : Int {return 10}\n" +
-                    "}\n" +
-                    "\n" +
-                    "fun main(args : Array<String>) {\n" +
-                    "  var s = \"Natalia\";\n" +
-                    "  //Thread.sleep(16000)\n" +
-                    "    System.out?.println(\"Hello, \" + s) \n" +
-                    "    System.out?.println(\"ERROR\"); \n" +
-                    "  //Thread.sleep(16000)\n" +
-                    "  //java.io.FileWriter(\"sdfs.kt\")\n" +
-                    "} ";
+            /* namespace demo
+
+            import java.math.BigDecimal
+
+            fun main(args : Array<String>) {
+                // Easy to make BigDecimals user-friendly
+                System.out?.println(
+                "2.00".bd - "1.00"
+                )
+            }
+
+            val String.bd : BigDecimal get() = BigDecimal(this)
+
+            fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+            fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted*/
+            text = "fun main(args : Array<String>) {\n" +
+                    "    System.out?.println(\"Hello, world!\")\n" +
+                    "}";
 
         }
         TIME_MANAGER.saveCurrentTime();
@@ -202,7 +203,7 @@ public class HttpSession {
         try {
             finalResponse = URLDecoder.decode(reqResponse.toString(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e.getMessage(), "null"), e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e.getMessage(), "null"), e);
         }
         if (finalResponse != null) {
             finalResponse = finalResponse.replaceAll("<br>", "\n");
@@ -216,7 +217,7 @@ public class HttpSession {
                 writeResponse("Post request is too short", HttpStatus.SC_BAD_REQUEST);
             }
         } else {
-            ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Cannot read data from post request.", currentPsiFile.getText()));
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Cannot read data from post request.", currentPsiFile.getText()));
             writeResponse("Cannot read data from post request: ", HttpStatus.SC_BAD_REQUEST, true);
         }
 
@@ -252,14 +253,14 @@ public class HttpSession {
             path = "/header.html";
             InputStream is = ServerHandler.class.getResourceAsStream(path);
             if (is == null) {
-                ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Cannot find header.html for request.", currentPsiFile.getText()));
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Cannot find header.html for request.", currentPsiFile.getText()));
                 writeResponse("File not found", HttpStatus.SC_NOT_FOUND);
                 return;
             }
             try {
                 response.append(ResponseUtils.readData(is));
             } catch (IOException e) {
-                ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Cannot read data from file.", currentPsiFile.getText()), e);
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Cannot read data from file.", currentPsiFile.getText()), e);
                 writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
                 return;
             }
@@ -286,14 +287,14 @@ public class HttpSession {
             LOG.info("userId=" + SESSION_ID + " ALL SESSION: " + TIME_MANAGER.getMillisecondsFromStart() + " request=" + exchange.getRequestURI());
         } catch (IOException e) {
             //This is an exception we can't send data to client
-            ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Error while writing response. " + e.getMessage(), currentPsiFile.getText()), e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Error while writing response. " + e.getMessage(), currentPsiFile.getText()), e);
         } finally {
             try {
                 if (os != null) {
                     os.close();
                 }
             } catch (IOException e) {
-                ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Error while closing outputStream. " + e.getMessage(), currentPsiFile.getText()), e);
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Error while closing outputStream. " + e.getMessage(), currentPsiFile.getText()), e);
             }
         }
     }

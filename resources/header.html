@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Compiler</title>
-    <link rel="stylesheet" type="text/css" href="/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="/components/styles.css"/>
     <link rel="stylesheet" href="/codemirror/lib/codemirror.css">
     <link rel="stylesheet" href="/components/components.css">
     <script src="/codemirror/lib/codemirror-2.16.js"></script>
@@ -19,8 +19,6 @@
 
     <link rel="stylesheet" href="/codemirror/theme/default.css">
     <link rel="stylesheet" href="/codemirror/css/docs.css">
-    <link rel="stylesheet" href="/splitter/jquery.splitter.css">
-    <link rel="stylesheet" href="/clickmenu/clickmenu.css">
 
     <style>.CodeMirror {
         border: 2px inset #dee;
@@ -50,15 +48,11 @@
             border: 1px solid #eee;
         }
 
-        #selected {
-            color: red;
-        }
-
     </style>
 
 
 </head>
-<body spellcheck="false" onload="setSessionId($SESSIONID$); loadAccordionContent();">
+<body spellcheck="false" onload="setSessionId($SESSIONID$); loadAccordionContent();loadHelpContentForExamples();">
 <div id="all">
     <div id="maindiv">
         <div id="left">
@@ -108,13 +102,14 @@
                 </div>
                 <div id="editorbottom">
                     <div id="statusbar">
-                        dfgdfgdfgd
+
                     </div>
                     <div id="argsdiv">
                         <div id="argstitleinput">
                             <div id="argstitle">Arguments:</div>
                             <div id="argsinput">
-                                <form><textarea class="arguments" id="arguments" name="arguments"></textarea></form>
+                                <form onsubmit="runOrCompile('run', 'Run project...', 'Run action failed.');"><input
+                                        class="arguments" id="arguments" name="arguments"></form>
                             </div>
                         </div>
                         <div id="argsbutton">
@@ -146,29 +141,30 @@
             <div id="righttitle">
                 Help
             </div>
-            <div id="rightcontent">
-                <div id="helpcontent">
-                    <div class="help" id="help1">
-                        <b>Here we first called</b> the filter() higher-order function to select only those string from
-                        the
-                        args array that have non-zero length. To do this, we passed a function literal that checks the
-                        length of its parameter.
+            <div id="helpcontent">
+                <h4 class="helpTitle"> Example description: </h4>
 
-                    </div>
-                    <div class="help" id="help2">
-
-                        <b>Filter created</b> a collection for us, and we called foreach() on that collection, passing
-                        in a
-                        function literal to be executed for each element. And that function literal just prints a
-                        greeting with the passed string.
-                    </div>
-                    <div class="help" id="help3">
-
-                    </div>
+                <div class="help" id="help1">
+                    You can choose an example on at the right side.
                 </div>
-                <!--<div id="helpbutton">
-                    <img src="/icons/leftSide.png" id="hideRight" title="Run file"/>
-                </div>-->
+                <h4 class="helpTitle"> Help for keywords: </h4>
+
+                <div class="help" id="help2">
+                    To see the help, you can click on a keyword.
+                </div>
+                <h4 class="helpTitle">Links:</h4>
+
+                <div class="help" id="help3">
+
+                    <p><a target="_blank"
+                          href="http://confluence.jetbrains.net/display/Kotlin/Welcome">Documentation</a></p>
+
+                    <p><a target="_blank" href="http://youtrack.jetbrains.net/issues/KT">BugTracker</a></p>
+
+                    <p><a target="_blank" href="http://blog.jetbrains.com/kotlin/">Blog</a></p>
+
+                    <p><a target="_blank" href="https://twitter.com/#!/project_kotlin">Twitter</a></p>
+                </div>
             </div>
         </div>
         <!--</div>-->
@@ -179,16 +175,10 @@
     var editor;
 </script>
 
-<!--<script src="/msdropdown/uncompressed.jquery.dd.js" type="text/javascript"></script>-->
-<!--<script src="/jquery/jquery.keynav.js" type="text/javascript"></script>-->
+<script src="/components/help.js"></script>
 <script src="/components/components.js"></script>
-<!--<script type="text/javascript" src="/selectbox/lib/jquerytie/jquery.tie.js"></script>-->
-<!--<script type="text/javascript" src="/selectbox/lib/jquerytie/jquery.tie.js"></script>-->
-<script type="text/javascript" src="/jquery/jquery.keynav.js"></script>
 <script src="/codemirror/lib/complete.js"></script>
-<script type="text/javascript">
 
-</script>
 
 </body>
 </html>

@@ -1,7 +1,8 @@
-Reading a name from the command line.kt
-An object-oriented Hello.kt
-Simplest version.kt
 Use a conditional expression.kt
-Error1.kt
-Reading many names from the command line.kt
-Define a function.kt
+Null-checks.kt
+is-checks and automatic casts.kt
+Use a conditional expression.kt
+Use a while-loop.kt
+Use a for-loop.kt
+Use ranges and in.kt
+Use pattern-matching.kt

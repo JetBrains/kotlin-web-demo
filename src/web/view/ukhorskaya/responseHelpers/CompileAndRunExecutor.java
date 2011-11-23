@@ -16,7 +16,7 @@ import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
 import org.json.*;
-import web.view.ukhorskaya.ApplicationErrorsWriter;
+import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer;
 import web.view.ukhorskaya.errorsDescriptors.ErrorDescriptor;
@@ -51,8 +51,11 @@ public class CompileAndRunExecutor {
     }
 
     public String getResult() {
-        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile);
+           ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile);
         List<ErrorDescriptor> errors = analyzer.getAllErrors();
+        if (errors == null) {
+            return ResponseUtils.getErrorInJson("Exception in Kotlin CORE: bug was reported to developers.");
+        }
         if (errors.isEmpty() || isOnlyWarnings(errors)) {
             if (isOnlyCompilation) {
                 return "[{\"text\":\"Compilation complete successfully\",\"type\":\"out\"}]";
@@ -89,12 +92,12 @@ public class CompileAndRunExecutor {
                         FileUtil.writeToFile(target, factory.asBytes(file));
                         stringBuilder.append(file).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
-                        ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog("execute", "Cannot save file on disk. " + e.getMessage(), currentPsiFile.getText()), e);
-                        return "[{\"text\":\"Cannot get a completion\",\"type\":\"err\"}]";
+                        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("execute", "Cannot save file on disk. " + e.getMessage(), currentPsiFile.getText()), e);
+                        return ResponseUtils.getErrorInJson("Cannot get a completion.");
                     }
                 }    else {
-                    ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog("execute", "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
-                    return "[{\"text\":\"Error on server: cannot run your program\",\"type\":\"err\"}]";
+                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("execute", "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
+                    return ResponseUtils.getErrorInJson("Error on server: cannot run your program.");
                 }
 
             }

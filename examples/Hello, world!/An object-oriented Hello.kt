@@ -1,16 +1,10 @@
-namespace demo
-import java.util.List
-import java.util.LinkedList
-fun main(args : Array<String>) {
-    System.out?.println(User().main())
+class Greeter(name : String) {
+  val name = name
+  fun greet() {
+    System.out?.println("Hello, ${name}");
+  }
 }
-open class Member() {
 
-}
-open class User() {
-    open fun main() : Unit {
-        var members : List<Member?>? = LinkedList<Member?>()
-        members?.add(Member())
-        System.out?.println(members)
-    }
+fun main(args : Array<String>) {
+  Greeter(args[0]).greet()
 }
