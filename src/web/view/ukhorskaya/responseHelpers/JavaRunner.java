@@ -98,7 +98,7 @@ public class JavaRunner {
 
         if (errStream.length() > 0) {
             ErrorsWriter.LOG_FOR_EXCEPTIONS.error(
-                    ErrorsWriter.getExceptionForLog("execute", "Error while execution of user program: " + errStream,
+                    ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Error while execution of user program: " + errStream,
                             textFromfile));
         }
 

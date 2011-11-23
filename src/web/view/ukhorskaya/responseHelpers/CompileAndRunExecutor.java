@@ -92,11 +92,11 @@ public class CompileAndRunExecutor {
                         FileUtil.writeToFile(target, factory.asBytes(file));
                         stringBuilder.append(file).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
-                        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("execute", "Cannot save file on disk. " + e.getMessage(), currentPsiFile.getText()), e);
+                        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Cannot save file on disk. " + e, currentPsiFile.getText()));
                         return ResponseUtils.getErrorInJson("Cannot get a completion.");
                     }
                 }    else {
-                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("execute", "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
+                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
                     return ResponseUtils.getErrorInJson("Error on server: cannot run your program.");
                 }
 

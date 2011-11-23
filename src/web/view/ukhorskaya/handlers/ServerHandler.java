@@ -32,16 +32,22 @@ public class ServerHandler implements HttpHandler {
             String param = exchange.getRequestURI().toString();
 
             if (param.contains("userData=true")) {
+                LOG.info(TypeOfRequest.SEND_USER_DATA.name());
                 sendUserInformation(exchange);
             } else if (param.contains("downloadLogs=true")) {
+                LOG.info(TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
             } else if (param.contains("log=")) {
+                LOG.info(TypeOfRequest.DOWNLOAD_LOG.name() + exchange.getRequestURI());
                 sendLog(exchange);
             } else if (param.contains("allExamples=true")) {
+                LOG.info(TypeOfRequest.GET_EXAMPLES_LIST.name());
                 sendExamplesList(exchange);
             } else if (param.contains("allHelpExamples=true")) {
+                LOG.info(TypeOfRequest.GET_HELP_FOR_EXAMPLES.name());
                 sendHelpContentForExamples(exchange);
             } else if (param.contains("allHelpWords=true")) {
+                LOG.info(TypeOfRequest.GET_HELP_FOR_WORDS.name());
                 sendHelpContentForWords(exchange);
             } else if ((param.contains("/editor"))
                     || (param.contains("/path="))
@@ -50,6 +56,7 @@ public class ServerHandler implements HttpHandler {
                 HttpSession session = new HttpSession();
                 session.handle(exchange);
             } else {
+                LOG.info(TypeOfRequest.GET_RESOURCE.name());
                 sendResourceFile(exchange);
             }
         } catch (Throwable e) {
@@ -90,7 +97,7 @@ public class ServerHandler implements HttpHandler {
             response = response.replace("$LINKSTOLOGFILES$", links);
             writeResponse(exchange, response.getBytes(), 200);
         } catch (IOException e) {
-            e.printStackTrace();
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TypeOfRequest.GET_LOGS_LIST.name(), e, "null"));
         }
     }
 
@@ -104,16 +111,16 @@ public class ServerHandler implements HttpHandler {
         try {
             reqResponse.append(ResponseUtils.readData(exchange.getRequestBody()));
         } catch (IOException e) {
-            LOG.error("Cannot read data from file", e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
             writeResponse(exchange, "Cannot read data from file".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return;
         }
         try {
             reqResponse = new StringBuilder(URLDecoder.decode(reqResponse.toString(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
-            LOG.error("Impossible to write to file in UTF-8");
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
         }
-        LOG.info("User info: " + ResponseUtils.substringAfter(reqResponse.toString(), "text=") + " " + exchange.getRequestURI());
+        LOG.info("User info: " + ResponseUtils.substringAfter(reqResponse.toString(), "text=") + " " + TypeOfRequest.SEND_USER_DATA.name());
         writeResponse(exchange, "OK".getBytes(), HttpStatus.SC_OK);
     }
 
@@ -122,14 +129,14 @@ public class ServerHandler implements HttpHandler {
         path = ResponseUtils.substringAfterReturnAll(path, "resources");
 
         if (path.equals("")) {
-            LOG.error("Path to the file is incorrect: " + exchange.getRequestURI());
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TypeOfRequest.GET_RESOURCE.name(), "Path to the file is incorrect.", exchange.getRequestURI().toString()));
             writeResponse(exchange, "Path to the file is incorrect.".getBytes(), HttpStatus.SC_NOT_FOUND);
             return;
         }
 
         InputStream is = ServerHandler.class.getResourceAsStream(path);
         if (is == null) {
-            LOG.error("Resource not found: " + exchange.getRequestURI());
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TypeOfRequest.GET_RESOURCE.name(), "Resource not found.", exchange.getRequestURI().toString()));
             writeResponse(exchange, "Resource not found.".getBytes(), HttpStatus.SC_NOT_FOUND);
             return;
         }
@@ -143,7 +150,7 @@ public class ServerHandler implements HttpHandler {
                 out.write(tmp, 0, length);
             }
         } catch (IOException e) {
-            LOG.error("Could not load the resource from the server.", e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TypeOfRequest.GET_RESOURCE.name(), e, exchange.getRequestURI().toString()));
             writeResponse(exchange, "Could not load the resource from the server".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return;
         }
@@ -157,7 +164,6 @@ public class ServerHandler implements HttpHandler {
             exchange.sendResponseHeaders(errorCode, responseBody.length);
             os = exchange.getResponseBody();
             os.write(responseBody);
-            LOG.info("resource request " + exchange.getRequestURI());
         } catch (IOException e) {
             //This is an exception we can't to send data to client
             LOG.error(e.getMessage(), e);
@@ -175,5 +181,20 @@ public class ServerHandler implements HttpHandler {
             LOG.error(e);
         }
     }
+
+    public enum TypeOfRequest {
+        HIGHLIGHT,
+        COMPLETE,
+        RUN,
+        LOAD_EXAMPLE,
+        SEND_USER_DATA,
+        GET_LOGS_LIST,
+        DOWNLOAD_LOG,
+        GET_EXAMPLES_LIST,
+        GET_HELP_FOR_EXAMPLES,
+        GET_HELP_FOR_WORDS,
+        GET_RESOURCE
+    }
+
 }
 

@@ -32,6 +32,7 @@ public class HttpSession {
     private static Logger LOG;
     public static TimeManager TIME_MANAGER;
     public static int SESSION_ID;
+    public static ServerHandler.TypeOfRequest TYPE;
 
     protected Project currentProject;
     protected PsiFile currentPsiFile;
@@ -65,16 +66,20 @@ public class HttpSession {
             }
 
             if (param.contains("compile=true") || param.contains("run=true")) {
+                TYPE = ServerHandler.TypeOfRequest.RUN;
                 sendExecutorResult();
             } else if (param.contains("complete=true")) {
+                TYPE = ServerHandler.TypeOfRequest.COMPLETE;
                 sendCompletionResult();
             } else if (param.contains("exampleId=")) {
+                TYPE = ServerHandler.TypeOfRequest.LOAD_EXAMPLE;
                 sendExampleContent();
             } else {
+                TYPE = ServerHandler.TypeOfRequest.HIGHLIGHT;
                 sendProjectSourceFile();
             }
         } catch (Throwable e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e.getMessage(), currentPsiFile.getText()), e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
             writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
         }
     }
@@ -203,7 +208,7 @@ public class HttpSession {
         try {
             finalResponse = URLDecoder.decode(reqResponse.toString(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e.getMessage(), "null"), e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, "null"));
         }
         if (finalResponse != null) {
             finalResponse = finalResponse.replaceAll("<br>", "\n");
@@ -217,7 +222,7 @@ public class HttpSession {
                 writeResponse("Post request is too short", HttpStatus.SC_BAD_REQUEST);
             }
         } else {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Cannot read data from post request.", currentPsiFile.getText()));
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Cannot read data from post request.", currentPsiFile.getText()));
             writeResponse("Cannot read data from post request: ", HttpStatus.SC_BAD_REQUEST, true);
         }
 
@@ -253,14 +258,14 @@ public class HttpSession {
             path = "/header.html";
             InputStream is = ServerHandler.class.getResourceAsStream(path);
             if (is == null) {
-                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Cannot find header.html for request.", currentPsiFile.getText()));
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Cannot find header.html for request.", currentPsiFile.getText()));
                 writeResponse("File not found", HttpStatus.SC_NOT_FOUND);
                 return;
             }
             try {
                 response.append(ResponseUtils.readData(is));
             } catch (IOException e) {
-                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Cannot read data from file.", currentPsiFile.getText()), e);
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
                 writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
                 return;
             }
@@ -287,14 +292,14 @@ public class HttpSession {
             LOG.info("userId=" + SESSION_ID + " ALL SESSION: " + TIME_MANAGER.getMillisecondsFromStart() + " request=" + exchange.getRequestURI());
         } catch (IOException e) {
             //This is an exception we can't send data to client
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Error while writing response. " + e.getMessage(), currentPsiFile.getText()), e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
         } finally {
             try {
                 if (os != null) {
                     os.close();
                 }
             } catch (IOException e) {
-                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), "Error while closing outputStream. " + e.getMessage(), currentPsiFile.getText()), e);
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
             }
         }
     }
@@ -312,6 +317,5 @@ public class HttpSession {
             this.arguments = arguments;
         }
     }
-
 
 }
