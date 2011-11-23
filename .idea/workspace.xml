@@ -7,72 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/images/wavyline-green.gif" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/images/wavyline-red.gif" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/TestModule/testData/errors/fromKotlin.kt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/help/helpWords.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/components/styles.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/CommandRunner.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/ErrorsWriter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/help/HelpLoader.java" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through2\An object-oriented Hello.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through2\Define a function.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through2\Define a local variable.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through2\Reading a name from the command line.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through2\Reading many names from the command line.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through2\Simplest version.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through2\Use a conditional expression.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through2\order.txt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through\An object-oriented Hello.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through\Define a function.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through\Error1.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through\Reading a name from the command line.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through\Reading many names from the command line.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through\Simplest version.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Hello, world!2\An object-oriented Hello.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Hello, world!2\Reading a name from the command line.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Hello, world!2\Reading many names from the command line.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Hello, world!2\Simplest version.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Hello, world!3\An object-oriented Hello.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Hello, world!3\Reading a name from the command line.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Hello, world!3\Reading many names from the command line.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Hello, world!3\Simplest version.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\hello\aaa1.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\hello\bbb1.kt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\index.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\resources\shemaExamples.xsd" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\resources\styles.css" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\resources\wavyline-green.gif" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\resources\wavyline-red.gif" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\src\web\view\ukhorskaya\ApplicationErrorsWriter.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\src\web\view\ukhorskaya\ApplicationManager.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.properties" afterPath="$PROJECT_DIR$/config.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logs/exceptions.log" afterPath="$PROJECT_DIR$/logs/exceptions.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/codemirror/css/docs.css" afterPath="$PROJECT_DIR$/resources/codemirror/css/docs.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/codemirror/lib/complete.js" afterPath="$PROJECT_DIR$/resources/codemirror/lib/complete.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/codemirror/theme/default.css" afterPath="$PROJECT_DIR$/resources/codemirror/theme/default.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/components/components.css" afterPath="$PROJECT_DIR$/resources/components/components.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/components/components.js" afterPath="$PROJECT_DIR$/resources/components/components.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/components/help.js" afterPath="$PROJECT_DIR$/resources/components/help.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/header.html" afterPath="$PROJECT_DIR$/resources/header.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/log4j.properties" afterPath="$PROJECT_DIR$/resources/log4j.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/logs.html" afterPath="$PROJECT_DIR$/resources/logs.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/Initializer.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/Initializer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/Main.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/ResponseUtils.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/ResponseUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/errorsDescriptors/ErrorAnalyzer.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/errorsDescriptors/ErrorAnalyzer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/examplesLoader/ExamplesList.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/examplesLoader/ExamplesList.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/handlers/ServerHandler.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/handlers/ServerHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/log/LogDownloader.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/log/LogDownloader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/CompileAndRunExecutor.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/CompileAndRunExecutor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JavaRunner.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JavaRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForHighlighting.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForHighlighting.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/server/KotlinHttpServer.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/server/KotlinHttpServer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/server/ServerSettings.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/server/ServerSettings.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/sessions/HttpSession.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/sessions/HttpSession.java" />
     </list>
     <ignored path="WebView.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -902,7 +838,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33170733" sideWeight="0.66558444" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965687" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.21813725" order="1" side_tool="true" content_ui="tabs" />
