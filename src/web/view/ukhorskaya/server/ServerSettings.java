@@ -17,4 +17,7 @@ public class ServerSettings {
     public static String TIMEOUT_FOR_EXECUTION = "5000";
     public static String PORT = "80";
     public static String EXAMPLES_ROOT = "examples";
+    public static String HELP_FOR_EXAMPLES = "helpExamples.xml";
+    public static String HELP_FOR_WORDS = "helpWords.xml";
+    public static String HELP_ROOT = "help";
 }

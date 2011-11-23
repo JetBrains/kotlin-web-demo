@@ -3,6 +3,8 @@ package web.view.ukhorskaya.log;
 import web.view.ukhorskaya.ResponseUtils;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,16 +38,39 @@ public class LogDownloader {
     }
 
     public String getFilesLinks() {
-        StringBuilder response = new StringBuilder();
+        StringBuilder responseExceptionLogs = new StringBuilder();
+        StringBuilder responseOtherLogs = new StringBuilder();
         File logDir = new File("logs");
         if ((logDir.exists()) && (logDir.isDirectory())) {
             File[] files = logDir.listFiles();
+            Arrays.sort(files, new Comparator<File>() {
+                public int compare(File f1, File f2) {
+                    int result = (Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()));
+                    if (result == 0) {
+                        return result;
+                    } else {
+                        return -result;
+                    }
+                }
+            });
+            responseOtherLogs.append(ResponseUtils.generateHtmlTag("h5", "STATISTIC"));
             for (File file : files) {
-                response.append(ResponseUtils.generateHtmlTag("a", file.getName(), "href", "/log=" + file.getAbsolutePath()));
-                response.append(ResponseUtils.addNewLine());
+                if (file.getName().contains("exceptions.log")) {
+                    responseExceptionLogs.append(ResponseUtils.generateHtmlTag("span", file.getName()));
+                    responseExceptionLogs.append(ResponseUtils.generateHtmlTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
+                    responseExceptionLogs.append(ResponseUtils.generateHtmlTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
+                    responseExceptionLogs.append(ResponseUtils.addNewLine());
+                } else {
+                    responseOtherLogs.append(ResponseUtils.generateHtmlTag("span", file.getName()));
+                    responseOtherLogs.append(ResponseUtils.generateHtmlTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
+                    responseOtherLogs.append(ResponseUtils.generateHtmlTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
+                    responseOtherLogs.append(ResponseUtils.addNewLine());
+                }
             }
         }
+        responseOtherLogs.append(ResponseUtils.generateHtmlTag("h5", "EXCEPTIONS"));
+        responseOtherLogs.append(responseExceptionLogs);
 
-        return response.toString();
+        return responseOtherLogs.toString();
     }
 }

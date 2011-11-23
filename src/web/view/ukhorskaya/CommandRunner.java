@@ -2,6 +2,7 @@ package web.view.ukhorskaya;
 
 import org.apache.log4j.Logger;
 import web.view.ukhorskaya.examplesLoader.ExamplesList;
+import web.view.ukhorskaya.help.HelpLoader;
 import web.view.ukhorskaya.server.KotlinHttpServer;
 import web.view.ukhorskaya.server.ServerSettings;
 
@@ -12,8 +13,8 @@ import web.view.ukhorskaya.server.ServerSettings;
  * Time: 11:54 AM
  */
 
-public class ApplicationManager {
-    private static final Logger LOG = Logger.getLogger(ApplicationManager.class);
+public class CommandRunner {
+    private static final Logger LOG = Logger.getLogger(CommandRunner.class);
     
     public static void runCommand(String command) {
         if (command.equals("stop")) {
@@ -28,17 +29,18 @@ public class ApplicationManager {
             KotlinHttpServer.startServer();
         } else if (command.startsWith("output")) {
             ServerSettings.OUTPUT_DIRECTORY = ResponseUtils.substringAfter(command, "output ");
-            ApplicationErrorsWriter.writeInfoToConsole("done: " + ServerSettings.OUTPUT_DIRECTORY);
+            ErrorsWriter.writeInfoToConsole("done: " + ServerSettings.OUTPUT_DIRECTORY);
         } else if (command.startsWith("update examples")) {
             ExamplesList.updateList();
-            ApplicationErrorsWriter.writeInfoToConsole("done: examples were updated.");
+            HelpLoader.updateExamplesHelp();
+//            ErrorsWriter.writeInfoToConsole("done: examples were updated.");
         } else if (command.startsWith("get port")) {
-            ApplicationErrorsWriter.writeInfoToConsole("server port " + KotlinHttpServer.getPort());
+            ErrorsWriter.writeInfoToConsole("server port " + KotlinHttpServer.getPort());
         } else if (command.startsWith("get host")) {
-            ApplicationErrorsWriter.writeInfoToConsole("host: " + KotlinHttpServer.getHost());
+            ErrorsWriter.writeInfoToConsole("host: " + KotlinHttpServer.getHost());
         } else if (command.startsWith("timeout")) {
             ServerSettings.TIMEOUT_FOR_EXECUTION = ResponseUtils.substringAfter(command, "timeout ");
-            ApplicationErrorsWriter.writeInfoToConsole("done: " + ServerSettings.TIMEOUT_FOR_EXECUTION);
+            ErrorsWriter.writeInfoToConsole("done: " + ServerSettings.TIMEOUT_FOR_EXECUTION);
         } else if (command.equals("help")) {
             StringBuilder builder = new StringBuilder("List of commands:\n");
             //builder.append("java_home pathToJavaHome - without \"\"\n");
@@ -55,9 +57,9 @@ public class ApplicationManager {
             //builder.append("port int - without \"\", set port for server\n");
             builder.append("get port - get port for server\n");
             builder.append("help - help\n");
-            ApplicationErrorsWriter.writeInfoToConsole(builder.toString());
+            ErrorsWriter.writeInfoToConsole(builder.toString());
         } else {
-            ApplicationErrorsWriter.writeInfoToConsole("Incorrect command: help to look at all options");
+            ErrorsWriter.writeInfoToConsole("Incorrect command: help to look at all options");
         }
     }
 
@@ -74,8 +76,10 @@ public class ApplicationManager {
             ServerSettings.OUTPUT_DIRECTORY = ResponseUtils.substringAfter(setting, "output ");
         } else if (setting.startsWith("examples")) {
             ServerSettings.EXAMPLES_ROOT = ResponseUtils.substringAfter(setting, "examples ");
+        } else if (setting.startsWith("help")) {
+            ServerSettings.HELP_ROOT = ResponseUtils.substringAfter(setting, "help ");
         } else {
-            ApplicationErrorsWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
+            ErrorsWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
         }
 
     }

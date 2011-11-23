@@ -5,9 +5,7 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.Function;
 import org.apache.log4j.Logger;
-import org.jetbrains.jet.JetCoreEnvironment;
 import org.jetbrains.jet.compiler.CompileEnvironment;
-import org.jetbrains.jet.compiler.CompileEnvironmentException;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.plugin.JetFileType;
 import web.view.ukhorskaya.server.ServerSettings;
@@ -39,7 +37,7 @@ public class Initializer {
         if (environment != null) {
             return environment;
         }
-        ApplicationErrorsWriter.LOG_FOR_EXCEPTIONS.error(ApplicationErrorsWriter.getExceptionForLog("initialize", "JavaCoreEnvironment is null.", "null"));
+        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("initialize", "JavaCoreEnvironment is null.", "null"));
         return null;
     }
 
@@ -48,7 +46,7 @@ public class Initializer {
         if (rtJar == null) return false;
         environment.addToClasspath(rtJar);
         if (!initializeKotlinRuntime()) {
-            ApplicationErrorsWriter.writeInfoToConsole("Cannot found Kotlin Runtime library.");
+            ErrorsWriter.writeInfoToConsole("Cannot found Kotlin Runtime library.");
         }
         environment.registerFileType(JetFileType.INSTANCE, "kt");
         environment.registerFileType(JetFileType.INSTANCE, "kts");
@@ -62,14 +60,14 @@ public class Initializer {
         final File unpackedRuntimePath = getUnpackedRuntimePath();
         if (unpackedRuntimePath != null) {
             ServerSettings.PATH_TO_KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
-            ApplicationErrorsWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
+            ErrorsWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
             environment.addToClasspath(unpackedRuntimePath);
         } else {
             final File runtimeJarPath = getRuntimeJarPath();
             if (runtimeJarPath != null && runtimeJarPath.exists()) {
                 environment.addToClasspath(runtimeJarPath);
                 ServerSettings.PATH_TO_KOTLIN_LIB = runtimeJarPath.getAbsolutePath();
-                ApplicationErrorsWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
+                ErrorsWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
             } else {
                 return false;
             }
@@ -126,9 +124,9 @@ public class Initializer {
 
         if ((rtJar == null || !rtJar.exists())) {
             if (java_home == null) {
-                ApplicationErrorsWriter.writeInfoToConsole("You can set java_home variable at config.properties file.");
+                ErrorsWriter.writeInfoToConsole("You can set java_home variable at config.properties file.");
             } else {
-                ApplicationErrorsWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + java_home);
+                ErrorsWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + java_home);
             }
             return null;
         }
@@ -160,7 +158,7 @@ public class Initializer {
                 }
             }
             if (failOnError) {
-                ApplicationErrorsWriter.writeErrorToConsole("Could not find rt.jar in system class loader: " + StringUtil.join(loader.getURLs(), new Function<URL, String>() {
+                ErrorsWriter.writeErrorToConsole("Could not find rt.jar in system class loader: " + StringUtil.join(loader.getURLs(), new Function<URL, String>() {
                     @Override
                     public String fun(URL url) {
                         return url.toString();
@@ -168,7 +166,7 @@ public class Initializer {
                 }, ", "));
             }
         } else if (failOnError) {
-            ApplicationErrorsWriter.writeErrorToConsole("System class loader is not an URLClassLoader: " + systemClassLoader);
+            ErrorsWriter.writeErrorToConsole("System class loader is not an URLClassLoader: " + systemClassLoader);
         }
         return null;
     }

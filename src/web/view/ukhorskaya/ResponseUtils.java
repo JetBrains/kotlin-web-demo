@@ -135,7 +135,7 @@ public class ResponseUtils {
 
         String tmp;
         while ((tmp = bufferedReader.readLine()) != null) {
-           response.append(tmp);
+            response.append(tmp);
             if (addNewLine) {
                 response.append("\n");
             }
@@ -145,34 +145,38 @@ public class ResponseUtils {
     }
 
     public static String generateHtmlTag(String tagName, String content) {
-            StringBuilder builder = new StringBuilder();
-            builder.append("<");
-            builder.append(tagName);
-            builder.append(">");
-            builder.append(content);
-            builder.append("</");
-            builder.append(tagName);
-            builder.append(">");
-            return builder.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append("<");
+        builder.append(tagName);
+        builder.append(">");
+        builder.append(content);
+        builder.append("</");
+        builder.append(tagName);
+        builder.append(">");
+        return builder.toString();
 
-        }
+    }
 
-        public static String generateHtmlTag(String tagName, String content, String attrName, String attrValue) {
-            StringBuilder builder = new StringBuilder();
-            builder.append("<");
-            builder.append(tagName);
-            builder.append(" ");
-            builder.append(attrName);
-            builder.append("=\"");
-            builder.append(attrValue);
-            builder.append("\"");
-            builder.append(">");
-            builder.append(content);
-            builder.append("</");
-            builder.append(tagName);
-            builder.append(">");
-            return builder.toString();
+    public static String generateHtmlTag(String tagName, String content, String attrName, String attrValue) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<");
+        builder.append(tagName);
+        builder.append(" ");
+        builder.append(attrName);
+        builder.append("=\"");
+        builder.append(attrValue);
+        builder.append("\"");
+        builder.append(">");
+        builder.append(content);
+        builder.append("</");
+        builder.append(tagName);
+        builder.append(">");
+        return builder.toString();
 
-        }
+    }
+    
+    public static String getErrorInJson(String error) {
+        return "[{\"exception\":\""+ error + "\",\"type\":\"err\"}]";
+    }
 
 }

@@ -8,13 +8,18 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
-import org.jetbrains.jet.lang.diagnostics.*;
+import org.jetbrains.jet.lang.diagnostics.Diagnostic;
+import org.jetbrains.jet.lang.diagnostics.DiagnosticFactory;
+import org.jetbrains.jet.lang.diagnostics.Severity;
+import org.jetbrains.jet.lang.diagnostics.UnresolvedReferenceDiagnostic;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetNamespace;
 import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
+import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.Interval;
 import web.view.ukhorskaya.sessions.HttpSession;
 
@@ -42,6 +47,7 @@ public class ErrorAnalyzer {
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
     }
 
+    @Nullable
     public List<ErrorDescriptor> getAllErrors() {
 
         final List<PsiErrorElement> errorElements = new ArrayList<PsiErrorElement>();
@@ -59,7 +65,6 @@ public class ErrorAnalyzer {
         };
 
         visitor.visitFile(currentPsiFile);
-
         final List<ErrorDescriptor> errors = new ArrayList<ErrorDescriptor>();
 
         for (PsiErrorElement errorElement : errorElements) {
@@ -70,13 +75,18 @@ public class ErrorAnalyzer {
         }
 
         HttpSession.TIME_MANAGER.saveCurrentTime();
-        BindingContext bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
-                currentProject,
-                Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                Predicates.<PsiFile>equalTo(currentPsiFile),
-                JetControlFlowDataTraceFactory.EMPTY);
+        BindingContext bindingContext;
+        try {
+            bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
+                    currentProject,
+                    Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
+                    Predicates.<PsiFile>equalTo(currentPsiFile),
+                    JetControlFlowDataTraceFactory.EMPTY);
+        } catch (Throwable e) {
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("analyze", e.getMessage(), currentPsiFile.getText()), e);
+            return null;
+        }
         LOG.info("userId=" + HttpSession.SESSION_ID + " ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
-
 
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 

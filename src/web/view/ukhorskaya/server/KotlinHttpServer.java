@@ -1,7 +1,7 @@
 package web.view.ukhorskaya.server;
 
 import com.sun.net.httpserver.HttpServer;
-import web.view.ukhorskaya.ApplicationErrorsWriter;
+import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.handlers.ServerHandler;
 
 import java.net.BindException;
@@ -55,25 +55,25 @@ public class KotlinHttpServer {
                 server.setExecutor(null);
                 server.start();
                 isServerRunning = true;
-                ApplicationErrorsWriter.writeInfoToConsole("Server is started at " + KotlinHttpServer.getHost() + ":" + KotlinHttpServer.getPort());
+                ErrorsWriter.writeInfoToConsole("Server is started at " + KotlinHttpServer.getHost() + ":" + KotlinHttpServer.getPort());
             } else {
-                ApplicationErrorsWriter.writeErrorToConsole("Server is already running at " + KotlinHttpServer.getHost() + ":" + KotlinHttpServer.getPort()
+                ErrorsWriter.writeErrorToConsole("Server is already running at " + KotlinHttpServer.getHost() + ":" + KotlinHttpServer.getPort()
                         + ". Use \"stop\" or \"restart\" commands.");
             }
         } catch (BindException e) {
-            ApplicationErrorsWriter.writeExceptionToConsole("Address already in use. Use \"set hostname\" command to change it.", e);
+            ErrorsWriter.writeExceptionToConsole("Address already in use. Use \"set hostname\" command to change it.", e);
         } catch (Exception e) {
-            ApplicationErrorsWriter.writeExceptionToConsole("Server didn't start. Use \"start\" to try start server again.", e);
+            ErrorsWriter.writeExceptionToConsole("Server didn't start. Use \"start\" to try start server again.", e);
         }
     }
 
     public static void stopServer() {
         if (isServerRunning) {
             KotlinHttpServer.server.stop(0);
-            ApplicationErrorsWriter.writeInfoToConsole("Server is stopped at " + KotlinHttpServer.getHost() + ":" + KotlinHttpServer.getPort());
+            ErrorsWriter.writeInfoToConsole("Server is stopped at " + KotlinHttpServer.getHost() + ":" + KotlinHttpServer.getPort());
             isServerRunning = false;
         } else {
-            ApplicationErrorsWriter.writeErrorToConsole("Server is not running");
+            ErrorsWriter.writeErrorToConsole("Server is not running");
         }
     }
 

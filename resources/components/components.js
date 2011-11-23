@@ -221,6 +221,7 @@ function onLoadingExamplesSuccess(data) {
             contA.style.cursor = "pointer";
             contA.onclick = function (event) {
                 loadExample(this.id);
+                loadExamplesHelp(this.innerHTML);
             };
             contA.innerHTML = data[i].text;
             cont.appendChild(contA);
@@ -235,10 +236,12 @@ function onLoadingExamplesSuccess(data) {
 //    document.getElementById("accordion").style.width = "100%";
 }
 
+var loadingExample = false;
+
 function loadExample(id) {
 //    var i = editor.getValue();
     document.getElementById("statusbar").innerHTML = "Loading example...";
-    editor.setValue("Loading Example...");
+    loadingExample = true;
     $.ajax({
         url:document.location.href + "?sessionId=" + sessionId + "&exampleId=" + id,
         context:document.body,
@@ -246,7 +249,7 @@ function loadExample(id) {
         dataType:"json",
         type:"GET",
 //        data:{text: i},
-        //timeout: 30000,
+        timeout: 10000,
         error:function () {
             document.getElementById("statusbar").innerHTML = "Loading example failed.";
         }
@@ -254,6 +257,7 @@ function loadExample(id) {
 }
 
 function onLoadingExampleSuccess(data) {
+    loadingExample = false;
     if (typeof data[0] != "undefined") {
         editor.setValue(data[0].text);
         document.getElementById("statusbar").innerHTML = "Example is loaded.";

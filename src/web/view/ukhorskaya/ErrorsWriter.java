@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
  * Time: 2:16 PM
  */
 
-public class ApplicationErrorsWriter {
+public class ErrorsWriter {
 
     public static final Logger LOG_FOR_EXCEPTIONS = Logger.getLogger("exceptionLogger");
     
