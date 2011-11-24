@@ -23,7 +23,8 @@
         <name>Reading many names from the command line.kt</name>
         <text>Line 2 demonstrates the
             <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Forloop">
-                <b>for</b>-loop</a>, that would have been called "enhanced" if there were any other for-loop in Kotlin.
+                <b>for</b>-loop</a>
+            , that would have been called "enhanced" if there were any other for-loop in Kotlin.
         </text>
         <args>guest1 guest2 guest3</args>
     </example>
@@ -47,10 +48,63 @@
             <b>val</b>
             denotes a declaration of a read-only local variable, that is assigned an
             <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Ifexpression">
-                <b>if-expression</b></a>. Then we use very basic
+                <b>if-expression</b>
+            </a>
+            . Then we use very basic
             <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">pattern matching</a>
             expression.
         </text>
         <args>FR</args>
+    </example>
+    <example>
+        <name>Use a conditional expression.kt</name>
+        <text><a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Ifexpression"><b>if</b></a> is an expression, i.e. it returns a value. Therefore there is not ternary operator (condition ? then : else), because ordinary <b>if</b> works fine in this role.
+        </text>
+        <args>10 20</args>
+    </example>
+    <example>
+        <name>Null-checks.kt</name>
+        <text>A reference must be explicitly marked as nullable to be able hold a null.
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Null-safety">Null-safety</a>
+        </text>
+        <args>2 3</args>
+    </example>
+    <example>
+        <name>is-checks and automatic casts.kt</name>
+        <text>The is operator checks if an expression is an instance of a type (and <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">more</a>).
+            If we is-checked an immutable local variable or property, there's no need to cast it explicitly to the is-checked type.
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Classes+and+Inheritance">Classes and Inheritance</a>.
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Type+casts">Type casts</a>.
+        </text>
+        <args/>
+    </example>
+    <example>
+        <name>Use a while-loop.kt</name>
+        <text><b>While</b> and <b>do..while</b> work as usual:
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-While">while-loop</a>.
+        </text>
+        <args>guest1 guest2 guest3 guest4</args>
+    </example>
+    <example>
+        <name>Use a for-loop.kt</name>
+        <text>For loop iterates through anything that provides an iterator.
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-For">for-loop</a>.
+        </text>
+        <args>guest1 guest2 guest3</args>
+    </example>
+    <example>
+        <name>Use ranges and in.kt</name>
+        <text>Check if a number lies within a range.<br/>
+            Check if a number is out of range.<br/>
+            Check if a collection contains an object<br/>
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Ranges">Ranges</a>
+        </text>
+        <args>4</args>
+    </example>
+    <example>
+        <name>Use pattern-matching.kt</name>
+        <text>See <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">Pattern-matching</a>
+        </text>
+        <args/>
     </example>
 </help>

@@ -17,6 +17,7 @@
       <entry name="?*.html" />
       <entry name="?*.css" />
       <entry name="?*.js" />
+      <entry name="?*.ico" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>

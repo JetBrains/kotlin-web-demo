@@ -34,11 +34,11 @@ public class ServerHandler implements HttpHandler {
             if (param.contains("userData=true")) {
                 LOG.info(TypeOfRequest.SEND_USER_DATA.name());
                 sendUserInformation(exchange);
-            } else if (param.contains("downloadLogs=true")) {
+            } else if (param.contains("logs=true")) {
                 LOG.info(TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
             } else if (param.contains("log=")) {
-                LOG.info(TypeOfRequest.DOWNLOAD_LOG.name() + exchange.getRequestURI());
+                LOG.info(TypeOfRequest.DOWNLOAD_LOG.name() + " " + exchange.getRequestURI());
                 sendLog(exchange);
             } else if (param.contains("allExamples=true")) {
                 LOG.info(TypeOfRequest.GET_EXAMPLES_LIST.name());
@@ -56,12 +56,12 @@ public class ServerHandler implements HttpHandler {
                 HttpSession session = new HttpSession();
                 session.handle(exchange);
             } else {
-                LOG.info(TypeOfRequest.GET_RESOURCE.name());
+                LOG.info(TypeOfRequest.GET_RESOURCE.name() + " " + exchange.getRequestURI());
                 sendResourceFile(exchange);
             }
         } catch (Throwable e) {
             //Do not stop server
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e.getMessage(), "null"), e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e, "null"));
             writeResponse(exchange, "Internal server error".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
     }

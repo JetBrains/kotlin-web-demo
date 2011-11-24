@@ -20,6 +20,7 @@ import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer;
 import web.view.ukhorskaya.errorsDescriptors.ErrorDescriptor;
+import web.view.ukhorskaya.exceptions.KotlinCoreException;
 import web.view.ukhorskaya.server.ServerSettings;
 import web.view.ukhorskaya.sessions.HttpSession;
 
@@ -51,11 +52,15 @@ public class CompileAndRunExecutor {
     }
 
     public String getResult() {
-           ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile);
-        List<ErrorDescriptor> errors = analyzer.getAllErrors();
-        if (errors == null) {
-            return ResponseUtils.getErrorInJson("Exception in Kotlin CORE: bug was reported to developers.");
+        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile);
+        List<ErrorDescriptor> errors;
+        try {
+            errors = analyzer.getAllErrors();
+        } catch (KotlinCoreException e) {
+            return ResponseUtils.getErrorInJson("Exception in Kotlin CORE: bug was reported to developers." +
+                    ResponseUtils.addNewLine() + e.getStackTraceString());
         }
+
         if (errors.isEmpty() || isOnlyWarnings(errors)) {
             if (isOnlyCompilation) {
                 return "[{\"text\":\"Compilation complete successfully\",\"type\":\"out\"}]";
@@ -71,7 +76,7 @@ public class CompileAndRunExecutor {
             HttpSession.TIME_MANAGER.saveCurrentTime();
             GenerationState generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
             generationState.compileCorrectNamespaces(bindingContext, namespaces);
-            LOG.info("userId=" + HttpSession.SESSION_ID + " COMPILE correctNamespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
+            LOG.info(HttpSession.TYPE.name() + " userId=" + HttpSession.SESSION_ID + " COMPILE correctNamespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
 
             StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
             stringBuilder.append(ResponseUtils.addNewLine());
@@ -92,16 +97,16 @@ public class CompileAndRunExecutor {
                         FileUtil.writeToFile(target, factory.asBytes(file));
                         stringBuilder.append(file).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
-                        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Cannot save file on disk. " + e, currentPsiFile.getText()));
+                        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
                         return ResponseUtils.getErrorInJson("Cannot get a completion.");
                     }
-                }    else {
+                } else {
                     ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
                     return ResponseUtils.getErrorInJson("Error on server: cannot run your program.");
                 }
 
             }
-            LOG.info("userId=" + HttpSession.SESSION_ID + " Write files on disk " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
+            LOG.info(HttpSession.TYPE.name() + " userId=" + HttpSession.SESSION_ID + " Write files on disk " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
 
             JSONArray jsonArray = new JSONArray();
             Map<String, String> map = new HashMap<String, String>();

@@ -16,6 +16,7 @@ function setSessionId(id) {
 (function () {
 
     var goToSymbolShortcutKeys = [17, 32];
+    var runShortcutKeys = [17, 120];
 
     var isCompletionInProgress = false;
 
@@ -99,6 +100,11 @@ function setSessionId(id) {
                 else event.returnValue = false;
                 event.stop();
                 return beforeComplete();
+            } else if (isGotoKeysPressed(event, runShortcutKeys)) {
+                if (event.preventDefault) event.preventDefault();
+                else event.returnValue = false;
+                event.stop();
+                return runOrCompile("run", "Run project...", "Run action failed.");
             }
 
         },
@@ -148,11 +154,11 @@ function setSessionId(id) {
     $("#arguments").val("");
 
     function checkIfThereAreErrorsInProblemView() {
-        var childerns = document.getElementById("problems").childNodes;
+        var childrens = document.getElementById("problems").childNodes;
         var result = false;
-        if (childerns.length > 0) {
-            for (var i = 0; i < childerns.length; ++i) {
-                if (childerns[i].className == "problemsViewError") {
+        if (childrens.length > 0) {
+            for (var i = 0; i < childrens.length; ++i) {
+                if (childrens[i].className == "problemsViewError") {
                     result = true;
                     break;
                 }
@@ -234,6 +240,8 @@ function setSessionId(id) {
             while (typeof data[i] != "undefined") {
                 //If there is a compilation error
                 if (typeof data[i].message != "undefined") {
+                    getErrors();
+                    isCompiledWithErrors = true;
                     var p = document.createElement("p");
                     var image = document.createElement("img");
                     if (data[i].type == "ERROR") {
@@ -307,6 +315,7 @@ function setSessionId(id) {
                 //timeout: 10000,
                 error:function () {
                     isLoadingHighlighting = false;
+                    alert("ww");
                 }
             });
         }
@@ -319,6 +328,8 @@ function setSessionId(id) {
         if (severity == 'WARNING') {
             img.src = "/icons/warning.png";
             p.className = "problemsViewWarning";
+        } else if (severity == 'STACKTRACE') {
+            p.className = "problemsViewStacktrace";
         } else {
             img.src = "/icons/error.png";
             p.className = "problemsViewError";
@@ -329,25 +340,39 @@ function setSessionId(id) {
             titleDiv.innerHTML = " " + title;
         } else {
 
-            titleDiv.innerHTML = "(" + start.line + ", " + start.ch + ") : " + title;
+            titleDiv.innerHTML = "(" + (start.line + 1) + ", " + (start.ch + 1) + ") : " + title;
         }
         p.appendChild(titleDiv);
         return p;
     }
 
-    function exception(message) {
-        setStatusBarMessage(message);
-        setConsoleMessage(message);
+    function exception(ex) {
+        var statusMes = "";
+        var pos = ex.exception.indexOf("<br/>");
+        if (pos != -1) {
+            statusMes = ex.exception.substr(0, pos);
+        }
+
         var problems = document.createElement("div");
-        document.getElementById("problems").innerHTML = "";
-        document.getElementById("problems").appendChild(createElementForProblemView("ERROR", null, message));
+        if (ex.type == "out") {
+            document.getElementById("problems").appendChild(createElementForProblemView("STACKTRACE", null, ex.exception));
+        } else {
+            document.getElementById("problems").appendChild(createElementForProblemView("ERROR", null, ex.exception));
+        }
     }
 
     function onHighlightingSuccess(data) {
         if (data != null) {
             removeStyles();
             if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                exception(data[0].exception);
+                document.getElementById("problems").innerHTML = "";
+                setStatusBarMessage(data[0].exception);
+                setConsoleMessage(data[0].exception);
+                var i = 0;
+                while (typeof data[i] != "undefined") {
+                    exception(data[i]);
+                    i++;
+                }
 //                updateStatusBar();
                 isLoadingHighlighting = false;
                 return;
@@ -361,7 +386,7 @@ function setSessionId(id) {
                 var start = eval('(' + data[i].x + ')');
                 var severity = data[i].severity;
 
-                if (editor.lineInfo(start.line).markerText == null) {
+                if ((editor.lineInfo(start.line) != null) && (editor.lineInfo(start.line).markerText == null)) {
                     if ((data[i].severity == 'WARNING') || (data[i].severity == 'TYPO')) {
                         //editor.setMarker(start.line, '<img src="/icons/warning.png" title="' + title + '"/>%N%');
                         editor.setMarker(start.line, '<span class=\"warningGutter\" title="' + title + '">  </span>%N%');
@@ -441,8 +466,8 @@ function setSessionId(id) {
         if (editor.somethingSelected()) return;
         // Find the token at the cursor
         var cur = editor.getCursor(), token = editor.getTokenAt(cur);
-        if (data != null) {
-            if (typeof data[0].exception != "undefined") {
+        if ((data != null) && (typeof data != "undefined")) {
+            if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                 setStatusBarMessage(data[0].exception);
                 isCompletionInProgress = false;
                 return;
@@ -483,6 +508,12 @@ function setSessionId(id) {
                             position++;
                         }
                         str = str.substring(0, position + 1);
+                    }
+                }
+                position = str.indexOf(":");
+                if (position != "undefined") {
+                    if (position != -1) {
+                        str = str.substring(0, position - 1);
                     }
                 }
                 if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
@@ -617,23 +648,21 @@ function setSessionId(id) {
                 close();
                 editor.focus();
                 setTimeout(continueComplete, 50);
-            } else if (code == 38) {
-                //up
-
-
-            } else if (code == 40) {
-                //down
-                event.preventDefault();
-                var selOpt = $("#selected");
-                alert("a");
-
-//                selOpt.nextSibling.setAttribute("id", "selected");
-                $("#selectId").childNodes[1].setAttribute("id", "selected");
-                alert("a");
-
-                selOpt.removeAttr("id");
-                alert("a");
             }
+            /*else if (code == 38) {
+             //up
+
+
+             } else if (code == 40) {
+             //down
+             event.preventDefault();
+             var selOpt = $("#selected");
+
+             //                selOpt.nextSibling.setAttribute("id", "selected");
+             $("#selectId").childNodes[1].setAttribute("id", "selected");
+
+             selOpt.removeAttr("id");
+             }*/
 
         });
 

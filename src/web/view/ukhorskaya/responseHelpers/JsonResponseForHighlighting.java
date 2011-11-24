@@ -6,6 +6,8 @@ import web.view.ukhorskaya.Interval;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer;
 import web.view.ukhorskaya.errorsDescriptors.ErrorDescriptor;
+import web.view.ukhorskaya.exceptions.KotlinCoreException;
+import web.view.ukhorskaya.server.ServerSettings;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +30,14 @@ public class JsonResponseForHighlighting {
 
     public String getResult() {
         ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile);
-        List<ErrorDescriptor> errorDescriptors = analyzer.getAllErrors();
-        JSONArray resultArray = new JSONArray();
-        if (errorDescriptors == null) {
-            return ResponseUtils.getErrorInJson("Exception in Kotlin CORE: bug was reported to developers.");
+        List<ErrorDescriptor> errorDescriptors;
+        try {
+            errorDescriptors = analyzer.getAllErrors();
+        } catch (KotlinCoreException e) {
+            return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
+                     , e.getStackTraceString());
         }
+        JSONArray resultArray = new JSONArray();
 
         for (ErrorDescriptor errorDescriptor : errorDescriptors) {
             resultArray.put(getMapForJsonResponse(errorDescriptor.getInterval(), errorDescriptor.getMessage(),

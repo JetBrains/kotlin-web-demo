@@ -33,10 +33,11 @@ h3 {
 
 pre {
     background-color: #eee;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
-    padding: 1em;
+    /*-moz-border-radius: 6px;*/
+    /*-webkit-border-radius: 6px;*/
+    /*border-radius: 6px;*/
+    /*padding: 1em;*/
+    margin: 0px;
 }
 
 pre.code {

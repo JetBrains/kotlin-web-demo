@@ -1,7 +1,6 @@
 Use a conditional expression.kt
 Null-checks.kt
 is-checks and automatic casts.kt
-Use a conditional expression.kt
 Use a while-loop.kt
 Use a for-loop.kt
 Use ranges and in.kt

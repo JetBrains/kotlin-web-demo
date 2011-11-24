@@ -59,7 +59,7 @@ public class JavaRunner {
                 isTimeoutException = true;
                 finalProcess.destroy();
                 LOG.info("userId=" + HttpSession.SESSION_ID + " Timeout exception.");
-                errStream.append("Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.");
+                errStream.append("Programm was terminated after " + Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
             }
         }, Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION));
 
@@ -71,14 +71,14 @@ public class JavaRunner {
             readStream(outStream, stdInput);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, textFromfile));
             return ResponseUtils.getErrorInJson("Impossible to run your program: IOException handled until execution");
         }
 
         try {
             process.waitFor();
         } catch (InterruptedException e) {
-            LOG.error("Interrupted exception during java process execution", e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, textFromfile));
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
         LOG.info("userId= " + HttpSession.SESSION_ID + " RUN user program " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()
@@ -91,16 +91,23 @@ public class JavaRunner {
             jsonArray.put(mapOut);
         }
 
-        Map<String, String> mapErr = new HashMap<String, String>();
-        mapErr.put("type", "err");
-        mapErr.put("text", errStream.toString());
-        jsonArray.put(mapErr);
-
         if (errStream.length() > 0) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(
-                    ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Error while execution of user program: " + errStream,
-                            textFromfile));
+            Map<String, String> mapErr = new HashMap<String, String>();
+            if (isKotlinLibraryException(errStream.toString())) {
+                writeErrStreamToLog(errStream.toString());
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("type", "err");
+                map.put("text", ServerSettings.KOTLIN_ERROR_MESSAGE);
+                jsonArray.put(map);
+                mapErr.put("type", "out");
+            } else {
+                mapErr.put("type", "err");
+            }
+            mapErr.put("text", errStream.toString());
+            jsonArray.put(mapErr);
         }
+
 
         for (String fileName : files) {
             deleteFile(fileName);
@@ -108,6 +115,40 @@ public class JavaRunner {
 
         timer.cancel();
         return jsonArray.toString();
+    }
+
+    private void writeErrStreamToLog(String errStream) {
+        int pos = errStream.indexOf(":");
+        String stackTrace = "";
+        String message = errStream;
+        if (pos != -1) {
+            message = errStream.substring(0, pos);
+            stackTrace = errStream.substring(pos).replaceAll("<br/>", "\n");
+        }
+        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(
+                ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(),
+                        message, stackTrace, textFromfile));
+    }
+
+    private boolean isKotlinLibraryException(String str) {
+        if (str.contains("LinkageError")
+                || str.contains("ClassFormatError")
+                || str.contains("UnsupportedClassVersionError")
+                || str.contains("GenericSignatureFormatError")
+                || str.contains("ExceptionInInitializerError")
+                || str.contains("NoClassDefFoundError")
+                || str.contains("IncompatibleClassChangeError")
+                || str.contains("InstantiationError")
+                || str.contains("AbstractMethodError")
+                || str.contains("NoSuchFieldError")
+                || str.contains("IllegalAccessError")
+                || str.contains("NoSuchMethodError")
+                || str.contains("VerifyError")
+                || str.contains("ClassCircularityError")
+                || str.contains("UnsatisfiedLinkError")) {
+            return true;
+        }
+        return false;
     }
 
     private void readStream(StringBuilder errStream, BufferedReader stdError) throws IOException {

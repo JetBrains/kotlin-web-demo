@@ -10,54 +10,6 @@
     var isLeftSideShow = true;
     var isRightSideShow = true;
 
-    /*$("#hideLeft").click(function () {
-     $("#examplesaccordion").toggle();
-     isLeftSideShow = !isLeftSideShow;
-     if (isLeftSideShow) {
-     document.getElementById("left").style.width = "220px";
-     if (isRightSideShow) {
-     document.getElementById("center").style.width = "60%";
-     document.getElementById("right").style.marginLeft = "60%";
-     } else {
-     document.getElementById("center").style.width = "80%";
-     document.getElementById("right").style.marginLeft = "80%";
-     }
-     } else {
-     document.getElementById("left").style.width = "20px";
-     if (isRightSideShow) {
-     document.getElementById("center").style.width = "80%";
-     document.getElementById("right").style.marginLeft = "80%";
-     } else {
-     document.getElementById("center").style.width = "95%";
-     document.getElementById("right").style.marginLeft = "95%";
-     }
-     }
-     });
-
-     $("#hideRight").click(function () {
-     $("#helpcontent").toggle();
-     isRightSideShow = !isRightSideShow;
-     if (isRightSideShow) {
-     document.getElementById("right").style.marginLeft = "60%";
-     if (isLeftSideShow) {
-     document.getElementById("center").style.width = "60%";
-
-     } else {
-     document.getElementById("center").style.width = "80%";
-     document.getElementById("right").style.marginLeft = "80%";
-     }
-     } else {
-     //                document.getElementById("right").style.width = "20px";
-     if (isLeftSideShow) {
-     document.getElementById("center").style.width = "80%";
-     document.getElementById("right").style.marginLeft = "80%";
-     } else {
-     document.getElementById("center").style.width = "95%";
-     document.getElementById("right").style.marginLeft = "95%";
-     }
-     }
-     });*/
-
     $("#hideLeft").click(function () {
         $("#left").toggle();
         isLeftSideShow = !isLeftSideShow;
@@ -100,53 +52,13 @@
         }
     });
 
-    /*$("#hideLeft").click(function () {
-        $("#examplesaccordion").toggle();
-        isLeftSideShow = !isLeftSideShow;
-        if (isLeftSideShow) {
-            document.getElementById("left").style.width = "220px";
-            if (isRightSideShow) {
-                document.getElementById("center").style.width = "800px";
-            } else {
-                document.getElementById("center").style.width = "1000px";
-            }
-        } else {
-            document.getElementById("left").style.width = "20px";
-            if (isRightSideShow) {
-                document.getElementById("center").style.width = "1000px";
-            } else {
-                document.getElementById("center").style.width = "1200px";
-            }
-        }
-    });
-
-    $("#hideRight").click(function () {
-        $("#helpcontent").toggle();
-        isRightSideShow = !isRightSideShow;
-        if (isRightSideShow) {
-            document.getElementById("right").style.width = "220px";
-            if (isLeftSideShow) {
-                document.getElementById("center").style.width = "800px";
-            } else {
-                document.getElementById("center").style.width = "1000px";
-            }
-        } else {
-            document.getElementById("right").style.width = "20px";
-            if (isLeftSideShow) {
-                document.getElementById("center").style.width = "1000px";
-            } else {
-                document.getElementById("center").style.width = "1200px";
-            }
-        }
-    });*/
-
 
     $("#tabs").tabs();
 
-    $("#editorinput").resizable({
+    /*$("#editorinput").resizable({
         handles:"s",
         alsoResize:".CodeMirror-scroll"
-    });
+    });*/
 
 
     $('.accordion .head').click(
@@ -176,26 +88,26 @@ function loadAccordionContent() {
         }
     });
     /*for (var i = 0; i < 3; ++i) {
-        var head = document.createElement("h3");
-        var headA = document.createElement("a");
-        headA.href = "#";
-        headA.innerHTML = "bbb" + i;
-        head.appendChild(headA);
-        acc.appendChild(head);
-        var cont = document.createElement("div");
+     var head = document.createElement("h3");
+     var headA = document.createElement("a");
+     headA.href = "#";
+     headA.innerHTML = "bbb" + i;
+     head.appendChild(headA);
+     acc.appendChild(head);
+     var cont = document.createElement("div");
 
-        for (var j = 0; j < 6; j++) {
-            var contA = document.createElement("p");
-            contA.id = i + "_" + j;
-            contA.style.cursor = "pointer";
-            contA.onclick = function (event) {
-                loadExample(this.id);
-            };
-            contA.innerHTML = "aaa" + j;
-            cont.appendChild(contA);
-        }
-        acc.appendChild(cont);
-    }*/
+     for (var j = 0; j < 6; j++) {
+     var contA = document.createElement("p");
+     contA.id = i + "_" + j;
+     contA.style.cursor = "pointer";
+     contA.onclick = function (event) {
+     loadExample(this.id);
+     };
+     contA.innerHTML = "aaa" + j;
+     cont.appendChild(contA);
+     }
+     acc.appendChild(cont);
+     }*/
     document.getElementById("examplesaccordion").appendChild(acc);
 }
 
@@ -230,16 +142,25 @@ function onLoadingExamplesSuccess(data) {
         i++;
     }
     $("#accordion").accordion({
-        autoHeight: false,
-        navigation: true
+        autoHeight:false,
+        navigation:true
     });
 //    document.getElementById("accordion").style.width = "100%";
 }
 
 var loadingExample = false;
 
+var lastSelectedExample = 0;
+
 function loadExample(id) {
+
 //    var i = editor.getValue();
+    var el = document.getElementById(lastSelectedExample);
+    if (el != null) {
+        el.className = "";
+    }
+    lastSelectedExample = id;
+    document.getElementById(id).className = "selectedExample";
     document.getElementById("statusbar").innerHTML = "Loading example...";
     loadingExample = true;
     $.ajax({
@@ -249,7 +170,7 @@ function loadExample(id) {
         dataType:"json",
         type:"GET",
 //        data:{text: i},
-        timeout: 10000,
+        timeout:10000,
         error:function () {
             document.getElementById("statusbar").innerHTML = "Loading example failed.";
         }

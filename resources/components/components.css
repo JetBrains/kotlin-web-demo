@@ -198,6 +198,9 @@ body {
     height: 160px;
     overflow-y: auto;
 }
+.problemsViewError span {
+    word-wrap: break-word;
+}
 
 #tabs {
     height: 220px;
@@ -239,6 +242,10 @@ body {
     margin: 5px;
 }
 
+.ui-accordion-content  {
+    padding: 0px 5px 5px 5px !important;
+}
+
 .help {
     border: 1px solid #EEEEEE;
     /*height: 189px;*/
@@ -248,6 +255,9 @@ body {
     text-align: justify;
     text-align-last: justify;
     /*color: #AAAAAA;*/
+}
+.help pre {
+    word-wrap: break-word;
 }
 
 #lefttitle, #centraltitle, #righttitle {
@@ -287,5 +297,13 @@ body {
 
 #lefttitle, #righttitle {
     padding-top: 5px;
+}
+
+.selectedExample {
+    background-color: #F7F7F7;
+    border: 1px solid #EEEEEE;
+    border-radius: 4px;
+    padding: 0 3px;
+    /*font-weight: bold;*/
 }
 

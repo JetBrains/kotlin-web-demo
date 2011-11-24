@@ -158,6 +158,8 @@ public class HttpSession {
             fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted*/
             text = "fun main(args : Array<String>) {\n" +
                     "    System.out?.println(\"Hello, world!\")\n" +
+                    "namespace for while object when this val var" +
+                    " fun is in if vararg inline" +
                     "}";
 
         }

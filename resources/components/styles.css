@@ -6,6 +6,8 @@ body { font-family: monospace; font-size: 12px; color: #000000; background-color
 .problemsViewError span { vertical-align: top; }
 .newLineWarning { color: #C0C0C0 !important; margin: 0; vertical-align: top;}
 .newLineWarning span {  vertical-align: top;}
+.problemsViewStacktrace { margin: 0; vertical-align: top;}
+.problemsViewStacktrace span {  vertical-align: top;}
 .WARNING { background-color: #f6ebbc !important; }
 .lookupElementName  { float: left !important;  }
 .lookupElementTail  { float: right !important; padding-left: 20px; margin-right: 5px; }
@@ -23,4 +25,8 @@ body { font-family: monospace; font-size: 12px; color: #000000; background-color
 .ui-accordion-content p:hover {
     color: blue;
     text-decoration: underline;
+}
+
+.STACKTRACE {
+
 }

@@ -113,7 +113,7 @@ function loadWordsHelp(name) {
     isHelpForWordLoaded = false;
     forEachInWordsArray(helpForWords, name, compareHelpForWords)
     if (!isHelpForWordLoaded) {
-        document.getElementById("help2").innerHTML = "To see the help, you can click on a keyword.";
+        document.getElementById("help2").innerHTML = "Click on the keyword to see help.";
     }
 }
 
