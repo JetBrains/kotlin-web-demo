@@ -14,7 +14,7 @@ import web.view.ukhorskaya.server.ServerSettings;
  */
 
 public class CommandRunner {
-    private static final Logger LOG = Logger.getLogger(CommandRunner.class);
+//    private static final Logger LOG = Logger.getLogger(CommandRunner.class);
     
     public static void runCommand(String command) {
         if (command.equals("stop")) {

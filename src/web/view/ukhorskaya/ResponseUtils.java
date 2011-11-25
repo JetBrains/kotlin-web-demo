@@ -165,7 +165,7 @@ public class ResponseUtils {
         builder.append(attrName);
         builder.append("=\"");
         builder.append(attrValue);
-        builder.append("\"");
+        builder.append("\" title=\"En/Dehydra\" class=\"internal\"");
         builder.append(">");
         builder.append(content);
         builder.append("</");

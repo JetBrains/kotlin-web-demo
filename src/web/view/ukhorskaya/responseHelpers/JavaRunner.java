@@ -1,16 +1,13 @@
 package web.view.ukhorskaya.responseHelpers;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.httpclient.HttpStatus;
 import org.json.JSONArray;
 import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.ServerSettings;
 import web.view.ukhorskaya.sessions.HttpSession;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -21,7 +18,7 @@ import java.util.*;
  */
 
 public class JavaRunner {
-    private final Logger LOG = Logger.getLogger(JavaRunner.class);
+//    private final Logger LOG = Logger.getLogger(JavaRunner.class);
 
     private final List<String> files;
     private final String arguments;
@@ -58,32 +55,67 @@ public class JavaRunner {
             public void run() {
                 isTimeoutException = true;
                 finalProcess.destroy();
-                LOG.info("userId=" + HttpSession.SESSION_ID + " Timeout exception.");
-                errStream.append("Programm was terminated after " + Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
+                ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "Timeout exception."));
+                errStream.append("Program was terminated after " + Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
             }
         }, Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION));
 
-        BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        final BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
+        // Thread that reads std out and feeds the writer given in input
+        new Thread() {
+            @Override
+            public void run() {
+                String line;
+                try {
+                    while ((line = stdOut.readLine()) != null) {
+                        outStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
+                    }
+                } catch (Exception e) {
+                    throw new Error(e);
+                }
+            }
+        }.start(); // Starts now
+
+        // Thread that reads std err and feeds the writer given in input
+        new Thread() {
+            @Override
+            public void run() {
+                String line;
+                try {
+                    while ((line = stdErr.readLine()) != null) {
+                        errStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
+                    }
+                } catch (Exception e) {
+                    throw new Error(e);
+                }
+            }
+        }.start(); // Starts now
+
+        int exitValue;
         try {
-            readStream(errStream, stdError);
-            readStream(outStream, stdInput);
-
-        } catch (IOException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, textFromfile));
-            return ResponseUtils.getErrorInJson("Impossible to run your program: IOException handled until execution");
-        }
-
-        try {
-            process.waitFor();
+            exitValue = process.waitFor();
         } catch (InterruptedException e) {
             ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, textFromfile));
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
-        LOG.info("userId= " + HttpSession.SESSION_ID + " RUN user program " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()
+        ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "RUN user program " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()
                 + " timeout=" + isTimeoutException
-                + " commandString=" + commandString);
+                + " commandString=" + commandString));
+
+        if ((exitValue == 1) && !isTimeoutException) {
+            if (outStream.length() > 0) {
+                if (outStream.indexOf("An error report file with more information is saved as:") != -1) {
+                    outStream.delete(0, outStream.length());
+                    errStream.append(ServerSettings.KOTLIN_ERROR_MESSAGE);
+                    String linkForLog = getLinkForLog(outStream.toString());
+                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Error from log", linkForLog));
+                }
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), outStream.toString().replaceAll("<br/>", "\n"), textFromfile));
+            }
+        }
+
         if (!isTimeoutException) {
             Map<String, String> mapOut = new HashMap<String, String>();
             mapOut.put("type", "out");
@@ -102,6 +134,7 @@ public class JavaRunner {
                 jsonArray.put(map);
                 mapErr.put("type", "out");
             } else {
+                ErrorsWriter.LOG_FOR_INFO.error(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "error while excecution: " + errStream));
                 mapErr.put("type", "err");
             }
             mapErr.put("text", errStream.toString());
@@ -115,6 +148,25 @@ public class JavaRunner {
 
         timer.cancel();
         return jsonArray.toString();
+    }
+
+    private String getLinkForLog(String outStream) {
+        String path = ResponseUtils.substringAfter(outStream, "An error report file with more information is saved as:" + ResponseUtils.addNewLine() + "# ");
+        path = ResponseUtils.substringBefore(path, ResponseUtils.addNewLine() + "#");
+        File log = new File(path);
+        /*if (log.exists()) {
+            String links = ResponseUtils.generateHtmlTag("a", "view", "href", "/log=" + log.getAbsolutePath() + "&view");
+            links += ResponseUtils.generateHtmlTag("a", "download", "href", "/log=" + log.getAbsolutePath() + "&download");
+            return links;
+        }*/
+        try {
+            String response = ResponseUtils.readData(new FileReader(log), true);
+            log.deleteOnExit();
+            return response;
+        } catch (IOException e) {
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, "Impossible to find " + log.getAbsolutePath()));
+        }
+        return "";
     }
 
     private void writeErrStreamToLog(String errStream) {
@@ -153,10 +205,40 @@ public class JavaRunner {
 
     private void readStream(StringBuilder errStream, BufferedReader stdError) throws IOException {
         String tmp;
-        while ((!isTimeoutException) && ((tmp = stdError.readLine()) != null)) {
+        while (!isTimeoutException && ((tmp = stdError.readLine()) != null)) {
             errStream.append(ResponseUtils.escapeString(tmp));
             errStream.append(ResponseUtils.addNewLine());
         }
+    }
+
+    int returnValue = 0;
+
+    private int tryReadStreams(StringBuilder errStream, StringBuilder outStream, InputStream isOut, InputStream isErr) {
+        StringWriter stringWriter = new StringWriter();
+        int lengthOut = 0;
+        int lengthErr = 0;
+        byte[] tmp = new byte[20];
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            if ((lengthOut = isOut.read(tmp)) >= 0) {
+                out.write(tmp, 0, lengthOut);
+                stringWriter.write(new String(tmp));
+                outStream.append(stringWriter.toString());
+            } else if (lengthOut == -1) {
+                returnValue--;
+            }
+            if ((lengthErr = isErr.read(tmp)) >= 0) {
+                out.write(tmp, 0, lengthErr);
+                errStream.append(new String(tmp));
+            } else if (lengthErr == -1) {
+                returnValue--;
+            }
+        } catch (IOException e) {
+//                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TypeOfRequest.GET_RESOURCE.name(), e, exchange.getRequestURI().toString()));
+//                    writeResponse(exchange, "Could not load the resource from the server".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+        }
+        return returnValue;
     }
 
     private void deleteFile(String path) {
@@ -174,7 +256,7 @@ public class JavaRunner {
             if (file.list().length == 0) {
                 if (file.exists()) {
                     file.delete();
-                    LOG.info("userId=" + HttpSession.SESSION_ID + " Directory is deleted : " + file.getAbsolutePath());
+                    ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "Directory is deleted : " + file.getAbsolutePath()));
                 }
             } else {
                 //list all the directory contents
@@ -188,14 +270,14 @@ public class JavaRunner {
                 if (file.list().length == 0) {
                     if (file.exists()) {
                         file.delete();
-                        LOG.info("userId=" + HttpSession.SESSION_ID + " Directory is deleted : " + file.getAbsolutePath());
+                        ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "Directory is deleted : " + file.getAbsolutePath()));
                     }
                 }
             }
         } else {
             if (file.exists()) {
                 file.delete();
-                LOG.info("userId=" + HttpSession.SESSION_ID + " File is deleted : " + file.getAbsolutePath());
+                ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "File is deleted : " + file.getAbsolutePath()));
             }
         }
     }

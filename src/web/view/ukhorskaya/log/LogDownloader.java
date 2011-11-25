@@ -40,6 +40,31 @@ public class LogDownloader {
     public String getFilesLinks() {
         StringBuilder responseExceptionLogs = new StringBuilder();
         StringBuilder responseOtherLogs = new StringBuilder();
+        StringBuilder responseJavaLogs = new StringBuilder();
+        File rootDir = new File("");
+        if ((rootDir.exists()) && (rootDir.isDirectory())) {
+            File[] files = rootDir.listFiles();
+            Arrays.sort(files, new Comparator<File>() {
+                public int compare(File f1, File f2) {
+                    int result = (Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()));
+                    if (result == 0) {
+                        return result;
+                    } else {
+                        return -result;
+                    }
+                }
+            });
+
+            responseJavaLogs.append(ResponseUtils.generateHtmlTag("h5", "JAVA MACHINE"));
+            for (File file : files) {
+                if (file.getName().contains(".log")) {
+                    responseJavaLogs.append(ResponseUtils.generateHtmlTag("span", file.getName()));
+                    responseJavaLogs.append(ResponseUtils.generateHtmlTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
+                    responseJavaLogs.append(ResponseUtils.generateHtmlTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
+                    responseJavaLogs.append(ResponseUtils.addNewLine());
+                }
+            }
+        }
         File logDir = new File("logs");
         if ((logDir.exists()) && (logDir.isDirectory())) {
             File[] files = logDir.listFiles();
@@ -70,6 +95,7 @@ public class LogDownloader {
         }
         responseOtherLogs.append(ResponseUtils.generateHtmlTag("h5", "EXCEPTIONS"));
         responseOtherLogs.append(responseExceptionLogs);
+        responseOtherLogs.append(responseJavaLogs);
 
         return responseOtherLogs.toString();
     }

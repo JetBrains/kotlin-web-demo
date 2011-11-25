@@ -47,8 +47,7 @@
             <pre></pre>
             <pre>do {</pre>
             <pre>  val y = retrieveData()</pre>
-            <pre>} while(y != null)</pre>
-            <pre><i>// y is visible here!</i></pre>
+            <pre>} while(y != null)<i>// y is visible here!</i></pre>
             <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Whileanddo..whileloops">More info</a>
         </text>
     </keyword>
@@ -100,7 +99,7 @@
     <keyword>
         <name>fun</name>
         <text>Define a function:
-            <pre>fun sum(a :Int, b :Int) :Int {</pre>
+            <pre>fun sum(a : Int, b : Int) : Int {</pre>
             <pre>  return a + b</pre>
             <pre>}</pre>
             <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+syntax+walk-through#Basicsyntaxwalk-through-Defineafunction">More info</a>

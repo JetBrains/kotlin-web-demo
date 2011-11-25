@@ -57,7 +57,7 @@ public class ResponseTest extends TestCase {
     }
 
     public void test$execution$FooOut() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
@@ -68,7 +68,7 @@ public class ResponseTest extends TestCase {
 
     //Runtime.getRuntime().exec() Exception
     public void test$errors$securityExecutionError() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission <<ALL FILES>> execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat namespace.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission &lt;&lt;ALL FILES&gt;&gt; execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat namespace.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
@@ -100,7 +100,7 @@ public class ResponseTest extends TestCase {
     }
 
     public void test$timeout$RunTimeout() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>demo/namespace.class<br/>demo/Main.class<br/>\",\"type\":\"info\"},{\"text\":\"Timeout exception: impossible to execute your program because it take a lot of time for compilation and execution.\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>demo/namespace.class<br/>demo/Main.class<br/>\",\"type\":\"info\"},{\"text\":\"Program was terminated after 5s.\",\"type\":\"err\"}]";
         compareResponseForPostRequest(expectedResult, "run=true", null);
     }
 
@@ -129,6 +129,19 @@ public class ResponseTest extends TestCase {
         testName = ResponseUtils.substringAfter(testName, "test$");
         testName = testName.replace("$", "/");
         return testName;
+    }
+
+    public void test$errors$verifyError() throws IOException, InterruptedException {
+        String fileName = getNameByTestName();
+        String data = getDataFromFile(fileName + ".kt");
+
+        String actualResult = getActualResultForRequest("editor", "text=" + data, "sendData=true");
+        String expectedResult = getExpectedResult(fileName);
+        assertEquals("Wrong result", expectedResult, actualResult);
+    }
+
+    private String getExpectedResult(String fileName) throws IOException {
+        return getDataFromFile(fileName + ".txt");
     }
 
     /*public void testErrorInfile() throws IOException, InterruptedException {

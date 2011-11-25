@@ -198,6 +198,7 @@ body {
     height: 160px;
     overflow-y: auto;
 }
+
 .problemsViewError span {
     word-wrap: break-word;
 }
@@ -242,7 +243,7 @@ body {
     margin: 5px;
 }
 
-.ui-accordion-content  {
+.ui-accordion-content {
     padding: 0px 5px 5px 5px !important;
 }
 
@@ -256,6 +257,7 @@ body {
     text-align-last: justify;
     /*color: #AAAAAA;*/
 }
+
 .help pre {
     word-wrap: break-word;
 }
@@ -274,7 +276,7 @@ body {
     padding-left: 0px;
 }
 
-#centraltitle img  {
+#centraltitle img {
     cursor: pointer;
 }
 
@@ -306,4 +308,53 @@ body {
     padding: 0 3px;
     /*font-weight: bold;*/
 }
+
+#footer {
+    text-align: center;
+    color: grey;
+}
+
+#kotlinlogo {
+    width: 63px;
+    /*height: 146px;*/
+}
+
+#header {
+    /*background-color: #5D71B8;*/
+    line-height: 0px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+#headertitle {
+    width: 50%;
+    color: #5D71B8;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    font-family: Arial, Helvetica, FreeSans, sans-serif;
+}
+
+#kotlinVersionTop {
+    color: #5D71B8;
+    font-size: 11px;
+    vertical-align: super;
+    font-family: Arial, Helvetica, FreeSans, sans-serif;
+}
+
+#headerlinks {
+    width: 40%;
+    text-align: right;
+    /*float: right;*/
+    padding-right: 30px;
+}
+
+#headerlinks a, a:hover {
+    /*color: white;*/
+}
+
+#jetbrainslogo {
+    width: 130px;
+}
+
 

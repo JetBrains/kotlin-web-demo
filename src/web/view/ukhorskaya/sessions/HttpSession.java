@@ -17,6 +17,7 @@ import web.view.ukhorskaya.handlers.ServerHandler;
 import web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForCompletion;
 import web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting;
+import web.view.ukhorskaya.server.ServerSettings;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -29,7 +30,7 @@ import java.net.URLDecoder;
  */
 
 public class HttpSession {
-    private static Logger LOG;
+//    private static Logger LOG;
     public static TimeManager TIME_MANAGER;
     public static int SESSION_ID;
     public static ServerHandler.TypeOfRequest TYPE;
@@ -41,7 +42,7 @@ public class HttpSession {
 
     public HttpSession() {
         TIME_MANAGER = new TimeManager();
-        LOG = Logger.getLogger(HttpSession.class);
+//        LOG = Logger.getLogger(HttpSession.class);
 
     }
 
@@ -49,7 +50,7 @@ public class HttpSession {
         try {
             this.exchange = exchange;
             String param = exchange.getRequestURI().toString();
-            LOG.info("request: " + param);
+            ErrorsWriter.LOG_FOR_INFO.info("request: " + param);
             //FOR TEST ONLY
             /*if (param.contains("testConnection")) {
                 sendTestConnection();
@@ -60,7 +61,7 @@ public class HttpSession {
             if (sId.equals("") || sId.equals("undefined")) {
                 SESSION_ID = RandomUtils.nextInt();
                 ServerHandler.numberOfUsers++;
-                LOG.info("Number of users since start server: " + ServerHandler.numberOfUsers);
+                ErrorsWriter.LOG_FOR_INFO.info("Number of users since start server: " + ServerHandler.numberOfUsers);
             } else {
                 SESSION_ID = Integer.parseInt(sId);
             }
@@ -103,7 +104,7 @@ public class HttpSession {
                 writer.write(response);
                 writer.close();
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(e, e);
             }
 
             writeResponse("Response sended", HttpStatus.SC_OK, true);
@@ -115,7 +116,7 @@ public class HttpSession {
             try {
                 response.append(ResponseUtils.readData(is));
             } catch (IOException e) {
-                LOG.error("Cannot read data from file", e);
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error("Cannot read data from file", e);
                 writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
                 return;
             }
@@ -132,7 +133,7 @@ public class HttpSession {
                         os.close();
                     }
                 } catch (IOException e) {
-                    LOG.error(e);
+                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(e);
                 }
             }
         }
@@ -156,16 +157,20 @@ public class HttpSession {
 
             fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
             fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted*/
-            text = "fun main(args : Array<String>) {\n" +
+            /*text = "fun main(args : Array<String>) {\n" +
                     "    System.out?.println(\"Hello, world!\")\n" +
                     "namespace for while object when this val var" +
                     " fun is in if vararg inline" +
+                    "}";*/
+            text = "fun main(args : Array<String>) {\n" +
+                    "    System.out?.println(\"Hello, world!\")\n" +
+                    "    args.set(0, \"\")\n" +
                     "}";
 
         }
         TIME_MANAGER.saveCurrentTime();
         currentPsiFile = JetPsiFactory.createFile(currentProject, text);
-        LOG.info("userId=" + SESSION_ID + " PARSER " + TIME_MANAGER.getMillisecondsFromSavedTime());
+        ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(TYPE.name(), SESSION_ID, "PARSER " + TIME_MANAGER.getMillisecondsFromSavedTime() + " size: = " + currentPsiFile.getTextLength()));
     }
 
 
@@ -201,7 +206,7 @@ public class HttpSession {
         try {
             reqResponse.append(ResponseUtils.readData(exchange.getRequestBody()));
         } catch (IOException e) {
-            LOG.error("Cannot read data from file", e);
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TYPE.name(), e, "getPostDataFromRequest " + exchange.getRequestURI()));
             writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
             return new PostData("", "");
         }
@@ -279,6 +284,7 @@ public class HttpSession {
         finalResponse = finalResponse.replace("$RESPONSEBODY$", responseBody);
         if (!disableHeaders) {
             finalResponse = finalResponse.replace("$SESSIONID$", String.valueOf(SESSION_ID));
+            finalResponse = finalResponse.replace("$KOTLINVERSION$", "'" + ServerSettings.KOTLIN_VERSION + "'");
         }
         try {
             //ONLY FOR TEST
@@ -291,7 +297,7 @@ public class HttpSession {
             exchange.sendResponseHeaders(errorCode, bytes.length);
             os = exchange.getResponseBody();
             os.write(bytes);
-            LOG.info("userId=" + SESSION_ID + " ALL SESSION: " + TIME_MANAGER.getMillisecondsFromStart() + " request=" + exchange.getRequestURI());
+            ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(TYPE.name(), SESSION_ID, "ALL " + TIME_MANAGER.getMillisecondsFromStart() + " request=" + exchange.getRequestURI()));
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));

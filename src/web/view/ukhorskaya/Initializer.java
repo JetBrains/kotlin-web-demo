@@ -21,7 +21,7 @@ import java.net.URLClassLoader;
  * Time: 3:49 PM
  */
 public class Initializer {
-    private static final Logger LOG = Logger.getLogger(Initializer.class);
+//    private static final Logger LOG = Logger.getLogger(Initializer.class);
     private static Initializer initializer = new Initializer();
 
     public static Initializer getInstance() {
@@ -105,13 +105,13 @@ public class Initializer {
 
             return setJavaCoreEnvironment();
         }
-        LOG.error("JavaCoreEnvironment is already initialized.");
+        ErrorsWriter.LOG_FOR_EXCEPTIONS.error("JavaCoreEnvironment is already initialized.");
         return false;
     }
 
     private File findRtJar() {
         String java_home = ServerSettings.JAVA_HOME;
-        LOG.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
+        ErrorsWriter.LOG_FOR_EXCEPTIONS.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
         File rtJar;
         if (java_home != null) {
             rtJar = findRtJar(java_home);
@@ -135,7 +135,7 @@ public class Initializer {
 
     private File findRtJar(String javaHome) {
         File rtJar = new File(javaHome, "jre" + File.separatorChar + "lib" + File.separatorChar + "rt.jar");
-        LOG.info(rtJar.getAbsolutePath() + " ex " + rtJar.exists());
+        ErrorsWriter.LOG_FOR_EXCEPTIONS.info(rtJar.getAbsolutePath() + " ex " + rtJar.exists());
         if (rtJar.exists()) {
             return rtJar;
         }
@@ -148,7 +148,6 @@ public class Initializer {
             URLClassLoader loader = (URLClassLoader) systemClassLoader;
             for (URL url : loader.getURLs()) {
                 if ("file".equals(url.getProtocol())) {
-                    LOG.info(url.getFile());
                     if (url.getFile().endsWith("/lib/rt.jar")) {
                         return new File(url.getFile().replaceAll("%20", " "));
                     }

@@ -13,6 +13,22 @@ function setSessionId(id) {
     });
 }
 
+var arrayClasses = [];
+var arrayLinesMarkers = [];
+
+function removeStyles() {
+    var i = 0;
+    while (typeof arrayClasses[i] != "undefined") {
+        arrayClasses[i].clear();
+        i++;
+    }
+    i = 0;
+    while (typeof arrayLinesMarkers[i] != "undefined") {
+        editor.clearMarker(arrayLinesMarkers[i]);
+        i++;
+    }
+}
+
 (function () {
 
     var goToSymbolShortcutKeys = [17, 32];
@@ -113,6 +129,10 @@ function setSessionId(id) {
         minHeight:"430px"
     });
 
+    editor.focus();
+
+    getErrors();
+
     function updateStatusBar() {
         updateHelp(editor.getTokenAt(editor.getCursor(true)).string);
         var lineNumber = editor.getCursor(true).line;
@@ -174,7 +194,7 @@ function setSessionId(id) {
     function runOrCompile(param, text, error) {
         $("#tabs").tabs("select", 1);
         setStatusBarMessage("Running...");
-        if (!checkIfThereAreErrorsInProblemView()) {
+        if ((!checkIfThereAreErrorsInProblemView()) && !compilationInProgress) {
             compilationInProgress = true;
             var arguments = $("#arguments").val();
             var i = editor.getValue();
@@ -213,9 +233,6 @@ function setSessionId(id) {
         //window.clipboardData.setData("Text", editor.getValue());
     });
 
-    var array = {};
-    var arrayLinesMarkers = {};
-
     function setStatusBarMessage(message) {
         document.getElementById("statusbar").innerHTML = message;
     }
@@ -227,11 +244,20 @@ function setSessionId(id) {
 
     function onCompileSuccess(data) {
         var isCompiledWithErrors = false;
+        compilationInProgress = false;
         if (data != null) {
             if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
+                $("#tabs").tabs("select", 0);
+                document.getElementById("problems").innerHTML = "";
                 setStatusBarMessage(data[0].exception);
                 setConsoleMessage(data[0].exception);
-                compilationInProgress = false;
+                var j = 0;
+                while (typeof data[j] != "undefined") {
+                    exception(data[j]);
+                    j++;
+                }
+                //                updateStatusBar();
+                isLoadingHighlighting = false;
                 return;
             }
             var i = 0;
@@ -277,25 +303,9 @@ function setSessionId(id) {
         } else {
             setStatusBarMessage("During program execution errors have occurred");
         }
-        compilationInProgress = false;
     }
-
-    function removeStyles() {
-        var i = 0;
-        while (typeof array[i] != "undefined") {
-            array[i].clear();
-            i++;
-        }
-        i = 0;
-        while (typeof arrayLinesMarkers[i] != "undefined") {
-            editor.clearMarker(arrayLinesMarkers[i]);
-            i++;
-        }
-    }
-
 
     var now;
-    var hashCode;
     var isLoadingHighlighting = false;
 
     function getErrors() {
@@ -303,7 +313,6 @@ function setSessionId(id) {
             isLoadingHighlighting = true;
             now = new Date().getTime();
             var i = editor.getValue();
-            hashCode = editor.getValue().hashCode();
             $.ajax({
                 //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
                 url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
@@ -312,10 +321,9 @@ function setSessionId(id) {
                 dataType:"json",
                 type:"POST",
                 data:{text:i},
-                //timeout: 10000,
+                timeout:10000,
                 error:function () {
                     isLoadingHighlighting = false;
-                    alert("ww");
                 }
             });
         }
@@ -368,10 +376,10 @@ function setSessionId(id) {
                 document.getElementById("problems").innerHTML = "";
                 setStatusBarMessage(data[0].exception);
                 setConsoleMessage(data[0].exception);
-                var i = 0;
-                while (typeof data[i] != "undefined") {
-                    exception(data[i]);
-                    i++;
+                var j = 0;
+                while (typeof data[j] != "undefined") {
+                    exception(data[j]);
+                    j++;
                 }
 //                updateStatusBar();
                 isLoadingHighlighting = false;
@@ -381,7 +389,7 @@ function setSessionId(id) {
 
             var problems = document.createElement("div");
             while (typeof data[i] != "undefined") {
-                array[i] = editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className, "ddd");
+                arrayClasses.push(editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className, "ddd"));
                 var title = data[i].titleName;
                 var start = eval('(' + data[i].x + ')');
                 var severity = data[i].severity;
@@ -393,7 +401,7 @@ function setSessionId(id) {
                     } else {
                         editor.setMarker(start.line, '<span class=\"errorGutter\" title="' + title + '">  </span>%N%');
                     }
-                    arrayLinesMarkers[i] = start.line;
+                    arrayLinesMarkers.push(start.line);
                 } else {
                     var text = editor.lineInfo(start.line).markerText;
                     text = text.substring(text.indexOf("title=\"") + 7);
@@ -403,8 +411,9 @@ function setSessionId(id) {
                     } else {
                         editor.setMarker(start.line, '<span class=\"errorGutter\" title="' + title + " ---next error--- " + text + '">  </span>%N%');
                     }
-                    arrayLinesMarkers[i] = start.line;
+                    //arrayLinesMarkers.push(start.line);
                 }
+
 
                 setTimeout(function () {
                     var el = document.getElementById(start.line + " " + start.ch);
@@ -490,7 +499,7 @@ function setSessionId(id) {
         if ((completions.length == 0) || (completions == null)) return;
         if (completions.length == 1) {
             insert(completions[0].name);
-            return true;
+            return;
         }
 
 
@@ -521,8 +530,6 @@ function setSessionId(id) {
                 } else {
                     editor.replaceRange(str, {line:cur.line, ch:token.start}, {line:cur.line, ch:token.end});
                 }
-            } else {
-                alert("Exception");
             }
         }
 

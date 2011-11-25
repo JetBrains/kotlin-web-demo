@@ -229,7 +229,7 @@ CodeMirror.defineMode("clike", function (config, parserConfig) {
     CodeMirror.defineMIME("text/kotlin", {
         name:"clike",
         keywords:words("namespace continue return object while break class trait throw super" +
-            " when type this else This try val var fun for is in if do as true false null" +
+            " when type this else This try val var fun for is in if do as true false null get set" +
             " import where by get set abstract enum open annotation override private public internal protected catch out vararg inline finally final ref"),
         soft:words(""),
         blockKeywords:words("catch class do else finally for if switch try while"),

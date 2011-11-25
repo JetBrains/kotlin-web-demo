@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Compiler</title>
+    <title>Kotlin Web Demo</title>
     <link rel="shortcut icon" href="favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="/components/styles.css"/>
     <link rel="stylesheet" href="/codemirror/lib/codemirror.css">
@@ -53,8 +53,30 @@
 
 
 </head>
-<body spellcheck="false" onload="setSessionId($SESSIONID$); loadAccordionContent();loadHelpContentForExamples();">
+<body spellcheck="false" onload="setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples();">
 <div id="all">
+    <div id="header">
+        <table>
+            <tr>
+                <td>
+                    <img src="/images/kotlinlogo2.png" id="kotlinlogo" title="Kotlin"/>
+                </td>
+                <td id="headertitle">
+                    Kotlin Web Demo<span id="kotlinVersionTop"></span>
+                </td>
+                <td id="headerlinks">
+                    <a target="_blank"
+                       href="http://confluence.jetbrains.net/display/Kotlin/Welcome">Documentation</a>
+                    <a target="_blank" href="http://youtrack.jetbrains.net/issues/KT">BugTracker</a>
+                    <a target="_blank" href="http://blog.jetbrains.com/kotlin/">Blog</a>
+                    <a target="_blank" href="https://twitter.com/#!/project_kotlin">Twitter</a>
+                </td>
+                <td id="jetbrainslogo">
+                    <img src="/images/jblogo.png" id="jblogo" title="JetBrains"/>
+                </td>
+            </tr>
+        </table>
+    </div>
     <div id="maindiv">
         <div id="left">
             <div id="lefttitle">
@@ -73,7 +95,6 @@
                     <tr>
                         <td width="5%">
                             <img src="/icons/togglel.png" id="hideLeft" title="Hide left side"/>
-
                         </td>
                         <td>
                             Editor
@@ -109,12 +130,11 @@
                         <div id="argstitleinput">
                             <div id="argstitle">Arguments:</div>
                             <div id="argsinput">
-                                <form onsubmit="runOrCompile('run', 'Run project...', 'Run action failed.');"><input
-                                        class="arguments" id="arguments" name="arguments"></form>
+                                <input class="arguments" id="arguments" name="arguments">
                             </div>
                         </div>
                         <div id="argsbutton">
-                            <img src="/icons/execute.png" id="run" title="Run file"/>
+                            <img src="/icons/execute.png" id="run" title="Run file (Ctrl + F9)"/>
                         </div>
                     </div>
 
@@ -153,23 +173,12 @@
                 <div class="help" id="help2">
                     Click on the keyword to see help.
                 </div>
-                <h4 class="helpTitle">Links:</h4>
 
-                <div class="help" id="help3">
-
-                    <p><a target="_blank"
-                          href="http://confluence.jetbrains.net/display/Kotlin/Welcome">Documentation</a></p>
-
-                    <p><a target="_blank" href="http://youtrack.jetbrains.net/issues/KT">BugTracker</a></p>
-
-                    <p><a target="_blank" href="http://blog.jetbrains.com/kotlin/">Blog</a></p>
-
-                    <p><a target="_blank" href="https://twitter.com/#!/project_kotlin">Twitter</a></p>
-                </div>
             </div>
         </div>
         <!--</div>-->
     </div>
+    <div id="footer">© JetBrains, 2011 Kotlin Web Demo v.<span id="kotlinVersion"></span></div>
 </div>
 
 <script type="text/javascript">

@@ -20,4 +20,5 @@ public class ServerSettings {
     public static String HELP_ROOT = "help";
 
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
+    public static String KOTLIN_VERSION = "0.1.60";
 }

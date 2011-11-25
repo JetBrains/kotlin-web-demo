@@ -21,6 +21,7 @@ import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
 import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.Interval;
+import web.view.ukhorskaya.exceptions.KotlinCoreException;
 import web.view.ukhorskaya.sessions.HttpSession;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import java.util.List;
  */
 
 public class ErrorAnalyzer {
-    private final Logger LOG = Logger.getLogger(ErrorAnalyzer.class);
+//    private final Logger LOG = Logger.getLogger(ErrorAnalyzer.class);
     private final PsiFile currentPsiFile;
     private final Document currentDocument;
     private final Project currentProject;
@@ -47,7 +48,6 @@ public class ErrorAnalyzer {
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
     }
 
-    @Nullable
     public List<ErrorDescriptor> getAllErrors() {
 
         final List<PsiErrorElement> errorElements = new ArrayList<PsiErrorElement>();
@@ -84,9 +84,9 @@ public class ErrorAnalyzer {
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
             ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
-            return null;
+            throw new KotlinCoreException(e);
         }
-        LOG.info("userId=" + HttpSession.SESSION_ID + " ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
+        ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength()));
 
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 

@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.MyDeclarationDescriptorVisitor;
 import web.view.ukhorskaya.ResponseUtils;
+import web.view.ukhorskaya.exceptions.KotlinCoreException;
+import web.view.ukhorskaya.server.ServerSettings;
 import web.view.ukhorskaya.sessions.HttpSession;
 
 import java.util.Collection;
@@ -37,7 +39,7 @@ import java.util.Map;
  */
 
 public class JsonResponseForCompletion {
-    private final Logger LOG = Logger.getLogger(JsonResponseForCompletion.class);
+//    private final Logger LOG = Logger.getLogger(JsonResponseForCompletion.class);
 
     private final Project currentProject;
     private PsiFile currentPsiFile;
@@ -67,9 +69,10 @@ public class JsonResponseForCompletion {
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
             ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
-            return ResponseUtils.getErrorInJson("Error: bug was reported to developers.");
+            return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
+                    + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
-        LOG.info("userId=" + HttpSession.SESSION_ID + " ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
+        ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()  + " size: " + currentPsiFile.getTextLength()));
 
         PsiElement element = getExpressionForScope();
         PsiElement parent = element.getParent();
@@ -100,7 +103,7 @@ public class JsonResponseForCompletion {
                 jsonArray.put(map);
             }
         } else {
-            LOG.error("userId=" + HttpSession.SESSION_ID + " resolutionScope is null: " + currentPsiFile.getText());
+            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Resolution scope is null.", currentPsiFile.getText()));
         }
         return jsonArray.toString();
     }
@@ -124,7 +127,7 @@ public class JsonResponseForCompletion {
             if (element != null) {
                 element = element.getParent();
             } else {
-                LOG.error("userId=" + HttpSession.SESSION_ID + " Cannot find an element for take completion.");
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), " Cannot find an element for take completion.", currentPsiFile.getText()));
                 break;
             }
         }

@@ -39,7 +39,7 @@ import java.util.Map;
  */
 
 public class CompileAndRunExecutor {
-    private final Logger LOG = Logger.getLogger(CompileAndRunExecutor.class);
+//    private final Logger LOG = Logger.getLogger(CompileAndRunExecutor.class);
 
     private final boolean isOnlyCompilation;
     private final PsiFile currentPsiFile;
@@ -57,8 +57,7 @@ public class CompileAndRunExecutor {
         try {
             errors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
-            return ResponseUtils.getErrorInJson("Exception in Kotlin CORE: bug was reported to developers." +
-                    ResponseUtils.addNewLine() + e.getStackTraceString());
+            return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
         }
 
         if (errors.isEmpty() || isOnlyWarnings(errors)) {
@@ -74,9 +73,15 @@ public class CompileAndRunExecutor {
                     JetControlFlowDataTraceFactory.EMPTY);
 
             HttpSession.TIME_MANAGER.saveCurrentTime();
-            GenerationState generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
-            generationState.compileCorrectNamespaces(bindingContext, namespaces);
-            LOG.info(HttpSession.TYPE.name() + " userId=" + HttpSession.SESSION_ID + " COMPILE correctNamespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
+            GenerationState generationState;
+            try {
+                generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
+                generationState.compileCorrectNamespaces(bindingContext, namespaces);
+            } catch (Throwable e) {
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
+                return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
+            }
+            ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "COMPILE correctNamespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()));
 
             StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
             stringBuilder.append(ResponseUtils.addNewLine());
@@ -106,7 +111,7 @@ public class CompileAndRunExecutor {
                 }
 
             }
-            LOG.info(HttpSession.TYPE.name() + " userId=" + HttpSession.SESSION_ID + " Write files on disk " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime());
+            ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "Write files on disk " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()));
 
             JSONArray jsonArray = new JSONArray();
             Map<String, String> map = new HashMap<String, String>();

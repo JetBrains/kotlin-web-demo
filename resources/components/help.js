@@ -129,3 +129,4 @@ function compareHelpForWords(name, elementArray) {
 
 
 
+
