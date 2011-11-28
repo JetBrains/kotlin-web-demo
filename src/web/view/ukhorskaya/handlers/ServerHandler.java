@@ -33,7 +33,7 @@ public class ServerHandler implements HttpHandler {
 
             if (param.contains("userData=true")) {
                 sendUserInformation(exchange);
-            } else if (param.contains("logs=true")) {
+            } else if (param.equals("/logs")) {
                 ErrorsWriter.LOG_FOR_INFO.info(TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
             } else if (param.contains("log=")) {

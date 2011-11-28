@@ -164,7 +164,6 @@ public class HttpSession {
                     "}";*/
             text = "fun main(args : Array<String>) {\n" +
                     "    System.out?.println(\"Hello, world!\")\n" +
-                    "    args.set(0, \"\")\n" +
                     "}";
 
         }
