@@ -1,8 +1,8 @@
 import junit.framework.TestCase;
 import org.jetbrains.annotations.Nullable;
 import web.view.ukhorskaya.Initializer;
-import web.view.ukhorskaya.server.KotlinHttpServer;
 import web.view.ukhorskaya.ResponseUtils;
+import web.view.ukhorskaya.server.KotlinHttpServer;
 import web.view.ukhorskaya.server.ServerSettings;
 
 import java.io.*;
@@ -135,7 +135,7 @@ public class ResponseTest extends TestCase {
         String fileName = getNameByTestName();
         String data = getDataFromFile(fileName + ".kt");
 
-        String actualResult = getActualResultForRequest("editor", "text=" + data, "sendData=true");
+        String actualResult = getActualResultForRequest("", "text=" + data, "sendData=true");
         String expectedResult = getExpectedResult(fileName);
         assertEquals("Wrong result", expectedResult, actualResult);
     }

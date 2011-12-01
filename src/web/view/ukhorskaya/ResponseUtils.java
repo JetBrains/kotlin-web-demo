@@ -1,7 +1,5 @@
 package web.view.ukhorskaya;
 
-import org.apache.commons.httpclient.HttpStatus;
-
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -21,6 +19,9 @@ public class ResponseUtils {
         if (string.contains(">")) {
             string = string.replaceAll(">", "&gt;");
         }
+        /* if (string.contains("\"")) {
+            string = string.replaceAll("\"", "'");
+        }*/
         return string;
     }
 

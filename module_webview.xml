@@ -2,9 +2,9 @@
 <project name="module_webview" default="compile.module.webview">
   <dirname property="module.webview.basedir" file="${ant.file.module_webview}"/>
   
-  <property name="module.jdk.home.webview" value="${jdk.home.idea_10.x}"/>
-  <property name="module.jdk.bin.webview" value="${jdk.bin.idea_10.x}"/>
-  <property name="module.jdk.classpath.webview" value="jdk.classpath.idea_10.x"/>
+  <property name="module.jdk.home.webview" value="${jdk.home.1.6}"/>
+  <property name="module.jdk.bin.webview" value="${jdk.bin.1.6}"/>
+  <property name="module.jdk.classpath.webview" value="jdk.classpath.1.6"/>
   
   <property name="compiler.args.webview" value="${compiler.args}"/>
   
@@ -17,32 +17,80 @@
   
   <path id="webview.module.production.classpath">
     <path refid="${module.jdk.classpath.webview}"/>
-    <path refid="library.kotlin-compiler.classpath"/>
     <path refid="library.json.classpath"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm-commons.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/annotations.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm-util-3.3.1.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/guava-r09.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/picocontainer.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/cli-10.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/intellij-core.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/trove4j.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/kotlin-runtime.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/kotlin-compiler.jar"/>
+    <pathelement location="${basedir}/lib/log4j-1.2.16.jar"/>
+    <pathelement location="${basedir}/lib/commons-httpclient-3.1-patched.jar"/>
+    <pathelement location="${basedir}/lib/commons-lang-2.4.jar"/>
   </path>
   
   <path id="webview.runtime.production.module.classpath">
     <pathelement location="${webview.output.dir}"/>
-    <path refid="library.kotlin-compiler.classpath"/>
     <path refid="library.json.classpath"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm-commons.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/annotations.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm-util-3.3.1.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/guava-r09.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/picocontainer.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/cli-10.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/intellij-core.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/trove4j.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/kotlin-runtime.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/kotlin-compiler.jar"/>
+    <pathelement location="${basedir}/lib/log4j-1.2.16.jar"/>
+    <pathelement location="${basedir}/lib/commons-httpclient-3.1-patched.jar"/>
+    <pathelement location="${basedir}/lib/commons-lang-2.4.jar"/>
   </path>
   
   <path id="webview.module.classpath">
     <path refid="${module.jdk.classpath.webview}"/>
     <pathelement location="${webview.output.dir}"/>
-    <pathelement location="${path.variable.idea_home}/lib/junit.jar"/>
-    <pathelement location="${path.variable.idea_home}/lib/annotations.jar"/>
-    <path refid="library.kotlin-compiler.classpath"/>
     <path refid="library.json.classpath"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm-commons.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/annotations.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm-util-3.3.1.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/guava-r09.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/picocontainer.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/cli-10.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/intellij-core.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/trove4j.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/kotlin-runtime.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/kotlin-compiler.jar"/>
+    <pathelement location="${basedir}/lib/log4j-1.2.16.jar"/>
+    <pathelement location="${basedir}/lib/commons-httpclient-3.1-patched.jar"/>
+    <pathelement location="${basedir}/lib/commons-lang-2.4.jar"/>
   </path>
   
   <path id="webview.runtime.module.classpath">
     <pathelement location="${webview.testoutput.dir}"/>
     <pathelement location="${webview.output.dir}"/>
-    <pathelement location="${path.variable.idea_home}/lib/junit.jar"/>
-    <pathelement location="${path.variable.idea_home}/lib/annotations.jar"/>
-    <path refid="library.kotlin-compiler.classpath"/>
     <path refid="library.json.classpath"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm-commons.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/annotations.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm-util-3.3.1.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/guava-r09.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/picocontainer.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/asm.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/cli-10.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/intellij-core.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/trove4j.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/kotlin-runtime.jar"/>
+    <pathelement location="${basedir}/../../../kotlinLibrary/lib/kotlin-compiler.jar"/>
+    <pathelement location="${basedir}/lib/log4j-1.2.16.jar"/>
+    <pathelement location="${basedir}/lib/commons-httpclient-3.1-patched.jar"/>
+    <pathelement location="${basedir}/lib/commons-lang-2.4.jar"/>
   </path>
   
   
@@ -57,13 +105,6 @@
   <path id="webview.module.sourcepath">
     <dirset dir="${module.webview.basedir}">
       <include name="src"/>
-      <include name="resources"/>
-    </dirset>
-  </path>
-  
-  <path id="webview.module.test.sourcepath">
-    <dirset dir="${module.webview.basedir}">
-      <include name="testSrc"/>
     </dirset>
   </path>
   
@@ -85,30 +126,10 @@
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
-      <fileset dir="${module.webview.basedir}/resources">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
     </copy>
   </target>
   
-  <target name="compile.module.webview.tests" depends="register.custom.compilers,compile.module.webview.production" description="compile module WebView; test classes" unless="skip.tests">
-    <mkdir dir="${webview.testoutput.dir}"/>
-    <javac2 destdir="${webview.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.webview}/javac">
-      <compilerarg line="${compiler.args.webview}"/>
-      <bootclasspath refid="webview.module.bootclasspath"/>
-      <classpath refid="webview.module.classpath"/>
-      <src refid="webview.module.test.sourcepath"/>
-      <patternset refid="excluded.from.compilation.webview"/>
-    </javac2>
-    
-    <copy todir="${webview.testoutput.dir}">
-      <fileset dir="${module.webview.basedir}/testSrc">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
+  <target name="compile.module.webview.tests" depends="register.custom.compilers,compile.module.webview.production" description="compile module WebView; test classes" unless="skip.tests"/>
   
   <target name="clean.module.webview" description="cleanup module">
     <delete dir="${webview.output.dir}"/>

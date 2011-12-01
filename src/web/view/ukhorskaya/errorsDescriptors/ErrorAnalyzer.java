@@ -7,22 +7,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
-import org.apache.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.Diagnostic;
 import org.jetbrains.jet.lang.diagnostics.DiagnosticFactory;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.diagnostics.UnresolvedReferenceDiagnostic;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetNamespace;
 import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
-import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.Interval;
 import web.view.ukhorskaya.exceptions.KotlinCoreException;
-import web.view.ukhorskaya.sessions.HttpSession;
+import web.view.ukhorskaya.session.SessionInfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,12 +33,12 @@ import java.util.List;
  */
 
 public class ErrorAnalyzer {
-//    private final Logger LOG = Logger.getLogger(ErrorAnalyzer.class);
     private final PsiFile currentPsiFile;
     private final Document currentDocument;
     private final Project currentProject;
 
     public ErrorAnalyzer(PsiFile currentPsiFile) {
+//        ErrorsWriter.sendInfoToServer(currentPsiFile.getText());
         this.currentPsiFile = currentPsiFile;
         this.currentProject = currentPsiFile.getProject();
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
@@ -73,8 +69,8 @@ public class ErrorAnalyzer {
             Interval interval = new Interval(start, end, currentDocument);
             errors.add(new ErrorDescriptor(interval, errorElement.getErrorDescription(), Severity.ERROR, "red_wavy_line"));
         }
-
-        HttpSession.TIME_MANAGER.saveCurrentTime();
+//        ErrorsWriter.sendInfoToServer("" + errors.size());
+        SessionInfo.TIME_MANAGER.saveCurrentTime();
         BindingContext bindingContext;
         try {
             bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
@@ -83,10 +79,20 @@ public class ErrorAnalyzer {
                     Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
+//            String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
+            if (SessionInfo.IS_ON_SERVER_SESSION) {
+//                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(exception);
+            } else {
+//                ErrorsWriter.sendErrorToServer(exception);
+            }
             throw new KotlinCoreException(e);
         }
-        ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength()));
+//        String info = ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        if (SessionInfo.IS_ON_SERVER_SESSION) {
+//            ErrorsWriter.LOG_FOR_INFO.info(info);
+        } else {
+//            ErrorsWriter.sendInfoToServer(info);
+        }
 
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 

@@ -1,10 +1,14 @@
 package web.view.ukhorskaya;
 
 import org.apache.log4j.Logger;
-import org.jetbrains.jet.cli.KotlinCompiler;
 import web.view.ukhorskaya.server.ServerSettings;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
@@ -93,7 +97,7 @@ public class ErrorsWriter {
         builder.append("\n</error>");
         return builder.toString();
     }
-    
+
     public static String getInfoForLog(String typeOfRequest, int userId, String message) {
         StringBuilder builder = new StringBuilder();
         builder.append(typeOfRequest);
@@ -103,6 +107,43 @@ public class ErrorsWriter {
         builder.append(" ");
         builder.append(message);
         return builder.toString();
+    }
+
+
+    public static void sendTextToServer(String text, String request) {
+        String urlPath = "";
+        if (request.equals("info")) {
+            urlPath = "http://localhost/?sessionId=555&writeLog=error";
+        } else if (request.equals("error")) {
+            urlPath = "http://localhost/?sessionId=555&writeLog=info";
+        }
+
+        URL url;
+        try {
+            url = new URL(urlPath);
+
+            HttpURLConnection urlConnection = null;
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            if (text != null) {
+                urlConnection.setDoOutput(true);
+                OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
+                wr.write(text);
+                wr.flush();
+                wr.close();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendErrorToServer(String error) {
+        sendTextToServer(error, "error");
+    }
+
+    public static void sendInfoToServer(String info) {
+        sendTextToServer(info, "info");
     }
 
 }

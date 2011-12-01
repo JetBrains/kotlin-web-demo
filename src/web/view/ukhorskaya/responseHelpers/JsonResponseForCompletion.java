@@ -5,7 +5,6 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.apache.log4j.Logger;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.psi.JetExpression;
@@ -24,7 +23,7 @@ import web.view.ukhorskaya.MyDeclarationDescriptorVisitor;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.exceptions.KotlinCoreException;
 import web.view.ukhorskaya.server.ServerSettings;
-import web.view.ukhorskaya.sessions.HttpSession;
+import web.view.ukhorskaya.session.SessionInfo;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -39,7 +38,7 @@ import java.util.Map;
  */
 
 public class JsonResponseForCompletion {
-//    private final Logger LOG = Logger.getLogger(JsonResponseForCompletion.class);
+    private final int NUMBER_OF_CHAR_IN_COMPLETION_NAME = 40;
 
     private final Project currentProject;
     private PsiFile currentPsiFile;
@@ -47,6 +46,7 @@ public class JsonResponseForCompletion {
     private final int lineNumber;
     private final int charNumber;
     private int caretPositionOffset;
+
 
     public JsonResponseForCompletion(int lineNumber, int charNumber, PsiFile currentPsiFile) {
         this.lineNumber = lineNumber;
@@ -59,7 +59,7 @@ public class JsonResponseForCompletion {
     public String getResult() {
         addExpressionAtCaret();
 
-        HttpSession.TIME_MANAGER.saveCurrentTime();
+        SessionInfo.TIME_MANAGER.saveCurrentTime();
         BindingContext bindingContext;
         try {
             bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
@@ -68,12 +68,21 @@ public class JsonResponseForCompletion {
                     Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), e, currentPsiFile.getText()));
+            String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
+            if (SessionInfo.IS_ON_SERVER_SESSION) {
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(exception);
+            } else {
+                ErrorsWriter.sendErrorToServer(exception);
+            }
             return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
                     + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
-        ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(HttpSession.TYPE.name(), HttpSession.SESSION_ID, "ANALYZE namespaces " + HttpSession.TIME_MANAGER.getMillisecondsFromSavedTime()  + " size: " + currentPsiFile.getTextLength()));
-
+        String info = ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        if (SessionInfo.IS_ON_SERVER_SESSION) {
+            ErrorsWriter.LOG_FOR_INFO.info(info);
+        } else {
+            ErrorsWriter.sendInfoToServer(info);
+        }
         PsiElement element = getExpressionForScope();
         PsiElement parent = element.getParent();
 
@@ -103,7 +112,12 @@ public class JsonResponseForCompletion {
                 jsonArray.put(map);
             }
         } else {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), "Resolution scope is null.", currentPsiFile.getText()));
+            String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Resolution scope is null.", currentPsiFile.getText());
+            if (SessionInfo.IS_ON_SERVER_SESSION) {
+                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(exception);
+            } else {
+                ErrorsWriter.sendErrorToServer(exception);
+            }
         }
         return jsonArray.toString();
     }
@@ -127,7 +141,12 @@ public class JsonResponseForCompletion {
             if (element != null) {
                 element = element.getParent();
             } else {
-                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(HttpSession.TYPE.name(), " Cannot find an element for take completion.", currentPsiFile.getText()));
+                String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), " Cannot find an element for take completion.", currentPsiFile.getText());
+                if (SessionInfo.IS_ON_SERVER_SESSION) {
+                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(exception);
+                } else {
+                    ErrorsWriter.sendErrorToServer(exception);
+                }
                 break;
             }
         }
@@ -138,7 +157,7 @@ public class JsonResponseForCompletion {
         MyDeclarationDescriptorVisitor descriptorVisitor = new MyDeclarationDescriptorVisitor();
         StringBuilder builder = new StringBuilder();
         descriptor.accept(descriptorVisitor, builder);
-        return formatName(builder, 40).toString();
+        return formatName(builder, NUMBER_OF_CHAR_IN_COMPLETION_NAME).toString();
     }
 
     private StringBuilder formatName(StringBuilder builder, int symbols) {
