@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="WebView" default="signwebviewapplet">
     <target name="signwebviewapplet">
-        <signjar jar="c:\Development\git-contrib\jet-contrib\WebView\out\artifacts\WebViewServer_jar\WebView.jar"
+        <signjar jar="c:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\WebViewApplet.jar"
                  keypass="pqowie93"
                  storepass="ukhorskaya"
                  alias="mykey">

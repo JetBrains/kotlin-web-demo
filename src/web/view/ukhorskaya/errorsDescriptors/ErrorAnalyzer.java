@@ -85,6 +85,7 @@ public class ErrorAnalyzer {
             } else {
 //                ErrorsWriter.sendErrorToServer(exception);
             }
+            e.printStackTrace();
             throw new KotlinCoreException(e);
         }
 //        String info = ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());

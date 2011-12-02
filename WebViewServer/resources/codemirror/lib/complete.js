@@ -31,9 +31,9 @@ function removeStyles() {
      });*/
 
     function runTimerForNonPrinting() {
-        window.onbeforeunload = function () {
-            return "You have unsaved changes.";
-        };
+        /*window.onbeforeunload = function () {
+         return "You have unsaved changes.";
+         };*/
         if (timer) {
             clearTimeout(timer);
             timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
@@ -45,7 +45,7 @@ function removeStyles() {
 
     function getHighlighting() {
         $("#tabs").tabs("select", 0);
-        if ((!isCompletionInProgress) && (!loadingExample)) {
+        if (!isCompletionInProgress && !loadingExample && !isLoadingHighlighting) {
             getErrors();
         }
     }
@@ -294,51 +294,48 @@ function removeStyles() {
     var isLoadingHighlighting = false;
 
     function getErrors() {
-        if ((!compilationInProgress) && (!isLoadingHighlighting)) {
-            isLoadingHighlighting = true;
-            now = new Date().getTime();
-            var i = editor.getValue();
-            if (isApplet) {
-                try {
-                    var dataFromApplet = $("#myapplet")[0].getHighlighting(i);
-                    document.getElementById("debug").innerHTML = dataFromApplet;
-                    var data = eval(dataFromApplet);
-                    if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                        $("#tabs").tabs("select", 0);
-                        document.getElementById("problems").innerHTML = "";
-                        setStatusBarMessage(data[0].exception);
-                        setConsoleMessage(data[0].exception);
-                        var j = 0;
-                        while (typeof data[j] != "undefined") {
-                            exception(data[j]);
-                            j++;
-                        }
-                        //                updateStatusBar();
-                        isLoadingHighlighting = false;
-                        return;
-                    } else {
-                        onHighlightingSuccess(data);
+        isLoadingHighlighting = true;
+        var i = editor.getValue();
+        if (isApplet) {
+            try {
+                var dataFromApplet = $("#myapplet")[0].getHighlighting(i);
+                document.getElementById("debug").innerHTML = dataFromApplet;
+                var data = eval(dataFromApplet);
+                if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
+                    $("#tabs").tabs("select", 0);
+                    document.getElementById("problems").innerHTML = "";
+                    setStatusBarMessage(data[0].exception);
+                    setConsoleMessage(data[0].exception);
+                    var j = 0;
+                    while (typeof data[j] != "undefined") {
+                        exception(data[j]);
+                        j++;
                     }
-
-                } catch (e) {
-                    alert("my exception " + e + " " + e.description)
+                    //                updateStatusBar();
+                    isLoadingHighlighting = false;
+                    return;
+                } else {
+                    onHighlightingSuccess(data);
                 }
-            } else {
-                $.ajax({
-                    //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
-                    url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
-                    context:document.body,
-                    success:onHighlightingSuccess,
-                    dataType:"json",
-                    type:"POST",
-                    data:{text:i},
-                    timeout:10000,
-                    error:function () {
-                        isLoadingHighlighting = false;
-                        setConsoleMessage("Ajax request for highlighting was aborted.");
-                    }
-                });
+
+            } catch (e) {
+                alert("my exception " + e + " " + e.description)
             }
+        } else {
+            $.ajax({
+                //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
+                url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
+                context:document.body,
+                success:onHighlightingSuccess,
+                dataType:"json",
+                type:"POST",
+                data:{text:i},
+                timeout:10000,
+                error:function () {
+                    isLoadingHighlighting = false;
+                    setConsoleMessage("Ajax request for highlighting was aborted.");
+                }
+            });
         }
     }
 

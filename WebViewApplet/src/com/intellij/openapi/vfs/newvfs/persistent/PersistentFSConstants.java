@@ -28,7 +28,7 @@ public class PersistentFSConstants {
 
   private static int maxIntellisenseFileSize() {
     final int maxLimitBytes = (int)FILE_LENGTH_TO_CACHE_THRESHOLD;
-    final String userLimitKb = "10";
+    final String userLimitKb = "100";
 //    final String userLimitKb = System.getProperty(MAX_INTELLISENSE_SIZE_PROPERTY);
     try {
       return userLimitKb != null ? Math.min(Integer.parseInt(userLimitKb) * 1024, maxLimitBytes) : maxLimitBytes;
