@@ -299,27 +299,27 @@ function removeStyles() {
         if (isApplet) {
             try {
                 var dataFromApplet = $("#myapplet")[0].getHighlighting(i);
-                document.getElementById("debug").innerHTML = dataFromApplet;
                 var data = eval(dataFromApplet);
-                if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                    $("#tabs").tabs("select", 0);
-                    document.getElementById("problems").innerHTML = "";
-                    setStatusBarMessage(data[0].exception);
-                    setConsoleMessage(data[0].exception);
-                    var j = 0;
-                    while (typeof data[j] != "undefined") {
-                        exception(data[j]);
-                        j++;
+                if (typeof data != "undefined") {
+                    if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
+                        $("#tabs").tabs("select", 0);
+                        document.getElementById("problems").innerHTML = "";
+                        setStatusBarMessage(data[0].exception);
+                        setConsoleMessage(data[0].exception);
+                        var j = 0;
+                        while (typeof data[j] != "undefined") {
+                            exception(data[j]);
+                            j++;
+                        }
+                        return;
+                    } else {
+                        onHighlightingSuccess(data);
                     }
-                    //                updateStatusBar();
-                    isLoadingHighlighting = false;
-                    return;
-                } else {
-                    onHighlightingSuccess(data);
                 }
-
+                isLoadingHighlighting = false;
             } catch (e) {
-                alert("my exception " + e + " " + e.description)
+                document.getElementById("problems").innerHTML = e + " " + e.description;
+                isLoadingHighlighting = false;
             }
         } else {
             $.ajax({
@@ -380,7 +380,6 @@ function removeStyles() {
     }
 
     function onHighlightingSuccess(data) {
-
         if (data != null) {
             removeStyles();
             if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
@@ -425,7 +424,6 @@ function removeStyles() {
                     //arrayLinesMarkers.push(start.line);
                 }
 
-
                 setTimeout(function () {
                     var el = document.getElementById(start.line + " " + start.ch);
                     if (el != null) {
@@ -451,22 +449,47 @@ function removeStyles() {
         if (!isCompletionInProgress) {
             isCompletionInProgress = true;
             var i = editor.getValue();
-            $.ajax({
-                //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
-                url:document.location.href + "?sessionId=" + sessionId + "&complete=true&cursorAt=" + editor.getCursor(true).line + "," + editor.getCursor(true).ch,
-                context:document.body,
-                success:startComplete,
-                dataType:"json",
-                type:"POST",
-                data:{text:i},
-                timeout:10000,
-                error:function () {
-                    isLoadingHighlighting = false;
-                    setConsoleMessage("Ajax request for completion was aborted.");
+            if (isApplet) {
+                try {
+                    var dataFromApplet = $("#myapplet")[0].getCompletion(i, editor.getCursor(true).line, editor.getCursor(true).ch);
+                    var data = eval(dataFromApplet);
+                    if ((typeof data != "undefined")  && (typeof data[0] != "undefined")) {
+                        if (typeof data[0].exception != "undefined") {
+                            $("#tabs").tabs("select", 0);
+                            document.getElementById("problems").innerHTML = "";
+                            setStatusBarMessage(data[0].exception);
+                            setConsoleMessage(data[0].exception);
+                            var j = 0;
+                            while (typeof data[j] != "undefined") {
+                                exception(data[j]);
+                                j++;
+                            }
+                            isCompletionInProgress = false;
+                            return;
+                        } else {
+                            startComplete(data);
+                        }
+                    }
+                } catch (e) {
+                    document.getElementById("problems").innerHTML = e + " " + e.description;
+                    isCompletionInProgress = false;
                 }
-            });
-            //}   else {
-            //     isCompletionInProgress = true;
+            } else {
+                $.ajax({
+                    //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
+                    url:document.location.href + "?sessionId=" + sessionId + "&complete=true&cursorAt=" + editor.getCursor(true).line + "," + editor.getCursor(true).ch,
+                    context:document.body,
+                    success:startComplete,
+                    dataType:"json",
+                    type:"POST",
+                    data:{text:i},
+                    timeout:10000,
+                    error:function () {
+                        isCompletionInProgress = false;
+                        setConsoleMessage("Ajax request for completion was aborted.");
+                    }
+                });
+            }
         }
     }
 

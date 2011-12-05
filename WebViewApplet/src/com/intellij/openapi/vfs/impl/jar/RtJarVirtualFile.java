@@ -22,15 +22,17 @@ import java.io.OutputStream;
 public class RtJarVirtualFile extends VirtualFile {
     private byte[] byteArray;
     private final CoreJarFileSystem myFileSystem;
+    private final String name;
 
     public RtJarVirtualFile(CoreJarFileSystem myFileSystem, String pathInJar) {
         this.myFileSystem = myFileSystem;
+        this.name = pathInJar;
     }
 
     @NotNull
     @Override
     public String getName() {
-        return "rt.jar";
+        return name;
     }
 
     @NotNull
@@ -41,7 +43,7 @@ public class RtJarVirtualFile extends VirtualFile {
 
     @Override
     public String getPath() {
-        return "rt.jar";
+        return name;
     }
 
     @Override
@@ -78,15 +80,13 @@ public class RtJarVirtualFile extends VirtualFile {
     @NotNull
     @Override
     public byte[] contentsToByteArray() throws IOException {
-        System.out.println("byte array");
         if (byteArray.length <= 0) {
             int length;
             byte[] tmp = new byte[1024];
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            InputStream rtJar = RtJarVirtualFile.class.getResourceAsStream("/rt.jar");
+            InputStream rtJar = RtJarVirtualFile.class.getResourceAsStream("/" + name);
             try {
                 while ((length = rtJar.read(tmp)) >= 0) {
-                    System.out.println("byte array " + length + " ");
                     out.write(tmp, 0, length);
                 }
             } catch (IOException e) {
@@ -94,7 +94,6 @@ public class RtJarVirtualFile extends VirtualFile {
                 return new byte[0];
             }
             byteArray = out.toByteArray();
-            System.out.println(out.toString());
         }
         return byteArray;
     }
@@ -116,7 +115,6 @@ public class RtJarVirtualFile extends VirtualFile {
 
     @Override
     public InputStream getInputStream() throws IOException {
-
-        return RtJarVirtualFile.class.getResourceAsStream("/rt.jar");
+        return RtJarVirtualFile.class.getResourceAsStream("/" + name);
     }
 }

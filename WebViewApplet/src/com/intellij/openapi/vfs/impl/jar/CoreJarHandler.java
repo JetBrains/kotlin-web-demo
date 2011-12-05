@@ -27,22 +27,16 @@ import java.util.Map;
 public class CoreJarHandler extends JarHandlerBase {
     private final Map<String, VirtualFile> myFileMap = new HashMap<String, VirtualFile>();
     private final CoreJarFileSystem myFileSystem;
-    private final String myPath;
-
-    private VirtualFile currentVirtualFile;
 
     public CoreJarHandler(CoreJarFileSystem fileSystem, String path) {
         super(fileSystem, path);
-        myPath = path;
         myFileSystem = fileSystem;
     }
 
     @Nullable
     public VirtualFile findFileByPath(String pathInJar) {
-        if (!myPath.equals("rt.ja")) {
-            if (getZip() == null) {
-                return null;
-            }
+        if (getZip() == null) {
+            return null;
         }
         VirtualFile file = myFileMap.get(pathInJar);
         if (file == null) {
@@ -52,11 +46,7 @@ public class CoreJarHandler extends JarHandlerBase {
                     return null;
                 }
             }
-            /*if (myPath.equals("rt.jar")) {
-                file = new RtJarVirtualFile(myFileSystem, pathInJar);
-            } else {*/
             file = new CoreJarVirtualFile(myFileSystem, this, pathInJar);
-//            }
             myFileMap.put(pathInJar, file);
         }
         return file;

@@ -38,12 +38,14 @@ public class CoreJavaFileManager implements JavaFileManager {
     private final CoreLocalFileSystem myLocalFileSystem;
     private final CoreJarFileSystem myJarFileSystem;
     private final List<File> myClasspath = new ArrayList<File>();
+    private final List<String> myVirtualClasspath = new ArrayList<String>();
     private final PsiManager myPsiManager;
 
     public CoreJavaFileManager(PsiManager psiManager, CoreLocalFileSystem localFileSystem, CoreJarFileSystem jarFileSystem) {
         myPsiManager = psiManager;
         myLocalFileSystem = localFileSystem;
         myJarFileSystem = jarFileSystem;
+        addToClasspath("rt.jar");
     }
 
     @Override
@@ -52,6 +54,13 @@ public class CoreJavaFileManager implements JavaFileManager {
         for (File file : myClasspath) {
             VirtualFile classDir = findUnderClasspathEntry(file, dirName);
             if (classDir != null) {
+                return new PsiPackageImpl(myPsiManager, packageName);
+            }
+        }
+
+        for (String str : myVirtualClasspath) {
+            VirtualFile file = myJarFileSystem.findFileByPath(str + "!/" + dirName);
+            if (file != null) {
                 return new PsiPackageImpl(myPsiManager, packageName);
             }
         }
@@ -68,7 +77,7 @@ public class CoreJavaFileManager implements JavaFileManager {
     }
 
     @Nullable
-    private PsiClass findInRtJarForInputStream(String classpathEntry, String relativeName) {
+    private PsiClass findInVirtualJar(String classpathEntry, String relativeName) {
         String fileName = relativeName.replace(".", "/") + ".class";
         VirtualFile file = myJarFileSystem.findFileByPath(classpathEntry + "!/" + fileName);
         if (file != null) {
@@ -92,8 +101,13 @@ public class CoreJavaFileManager implements JavaFileManager {
                 return psiClass;
             }
         }
-        return findInRtJarForInputStream("rt.jar", qName);
-//        return null;
+        for (String str : myVirtualClasspath) {
+            final PsiClass psiClass = findInVirtualJar(str, qName);
+            if (psiClass != null) {
+                return psiClass;
+            }
+        }
+        return null;
     }
 
     @Nullable
@@ -123,6 +137,12 @@ public class CoreJavaFileManager implements JavaFileManager {
                 result.add(psiClass);
             }
         }
+        for (String str : myVirtualClasspath) {
+            final PsiClass psiClass = findInVirtualJar(str, qName);
+            if (psiClass != null) {
+                result.add(psiClass);
+            }
+        }
         return result.toArray(new PsiClass[result.size()]);
     }
 
@@ -138,4 +158,9 @@ public class CoreJavaFileManager implements JavaFileManager {
     public void addToClasspath(File path) {
         myClasspath.add(path);
     }
+
+    public void addToClasspath(String path) {
+        myVirtualClasspath.add(path);
+    }
+
 }

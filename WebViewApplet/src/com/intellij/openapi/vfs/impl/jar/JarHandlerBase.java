@@ -39,7 +39,6 @@ import java.util.zip.ZipInputStream;
 public class JarHandlerBase {
     protected final TimedReference<ZipInputStream> myZipFile = new TimedReference<ZipInputStream>(null);
     protected SoftReference<Map<String, EntryInfo>> myRelPathsToEntries = new SoftReference<Map<String, EntryInfo>>(null);
-    protected SoftReference<Map<String, EntryInfo>> myRelPathsToDirEntries = new SoftReference<Map<String, EntryInfo>>(null);
     protected final Object lock = new Object();
     private InputStream inputStream;
 
@@ -96,12 +95,12 @@ public class JarHandlerBase {
                                         byteArray.write(cont, 0, tmp);
                                         entry.setExtra(byteArray.toByteArray());
                                     } else {
-                                        int readed = tmp;
+                                        int readFromIS = tmp;
                                         if (tmp < entry.getSize()) {
                                             byteArray.write(cont, 0, tmp);
-                                            while (((tmp = stream.read(cont)) != -1) && (tmp + readed <= entry.getSize())) {
+                                            while (((tmp = stream.read(cont)) != -1) && (tmp + readFromIS <= entry.getSize())) {
                                                 byteArray.write(cont, 0, tmp);
-                                                readed += tmp;
+                                                readFromIS += tmp;
                                             }
                                             entry.setExtra(byteArray.toByteArray());
                                         }
@@ -154,7 +153,6 @@ public class JarHandlerBase {
             if (".".equals(shortName)) return getOrCreate(parentEntryName, true, map, content);
 
             info = new EntryInfo(shortName, getOrCreate(parentEntryName, true, map, content), isDirectory, content);
-            System.out.println(info.isDirectory + " " + entryName);
             map.put(entryName, info);
         }
 
@@ -202,8 +200,6 @@ public class JarHandlerBase {
     private ZipEntry convertToEntry(VirtualFile file) {
         String path = getRelativePath(file);
         final ZipInputStream zip = getZip();
-//        return myRelPathsToEntries.get().get(path);
-//        return zip != null ? zip.getEntry(path) : null;
         return null;
     }
 
@@ -212,7 +208,6 @@ public class JarHandlerBase {
         String path = getRelativePath(file);
         final ZipInputStream zip = getZip();
         return myRelPathsToEntries.get().get(path);
-        //        return zip != null ? zip.getEntry(path) : null;
     }
 
     public long getLength(@NotNull final VirtualFile file) {
@@ -232,12 +227,10 @@ public class JarHandlerBase {
         synchronized (lock) {
             EntryInfo info = convertToISEntry(file);
             if (info == null) {
-                System.out.println(file);
                 return new byte[0];
             }
             byte[] content = info.content;
             if (content == null) {
-                System.out.println(file + " " + info.shortName + " " + info.isDirectory);
                 return new byte[0];
             }
             return content;
