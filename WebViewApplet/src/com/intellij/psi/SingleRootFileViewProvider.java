@@ -239,7 +239,7 @@ public class SingleRootFileViewProvider extends UserDataHolderBase implements Fi
             FileType fileType = vFile.getFileType();
             PsiFile file = null;
             if (fileType.isBinary() || vFile.isSpecialFile()) {
-                //TODO
+                //TODO check why ClsFileImpl doesn't created automatically with create method
                 file = new ClsFileImpl((PsiManagerImpl) getManager(), this);
                 //file = new PsiBinaryFileImpl((PsiManagerImpl) getManager(), this);
             } else {
@@ -250,7 +250,6 @@ public class SingleRootFileViewProvider extends UserDataHolderBase implements Fi
                     file = new PsiPlainTextFileImpl(this);
                 }
             }
-            System.out.println(file);
             return file;
         } catch (ProcessCanceledException e) {
             e.printStackTrace();

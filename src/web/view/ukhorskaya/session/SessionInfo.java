@@ -1,5 +1,6 @@
 package web.view.ukhorskaya.session;
 
+import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.TimeManager;
 
 /**
@@ -14,19 +15,18 @@ public class SessionInfo {
     public static int SESSION_ID = 0;
     public static TypeOfRequest TYPE = TypeOfRequest.GET_RESOURCE;
 
-    public static boolean IS_ON_SERVER_SESSION = true;
-
     public enum TypeOfRequest {
-            HIGHLIGHT,
-            COMPLETE,
-            RUN,
-            LOAD_EXAMPLE,
-            SEND_USER_DATA,
-            GET_LOGS_LIST,
-            DOWNLOAD_LOG,
-            GET_EXAMPLES_LIST,
-            GET_HELP_FOR_EXAMPLES,
-            GET_HELP_FOR_WORDS,
-            GET_RESOURCE
-        }
+        HIGHLIGHT,
+        COMPLETE,
+        RUN,
+        LOAD_EXAMPLE,
+        SEND_USER_DATA,
+        GET_LOGS_LIST,
+        DOWNLOAD_LOG,
+        GET_EXAMPLES_LIST,
+        GET_HELP_FOR_EXAMPLES,
+        GET_HELP_FOR_WORDS,
+        WRITE_LOG, GET_RESOURCE
+    }
+
 }

@@ -69,20 +69,12 @@ public class JsonResponseForCompletion {
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
             String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
-            if (SessionInfo.IS_ON_SERVER_SESSION) {
-                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(exception);
-            } else {
-                ErrorsWriter.sendErrorToServer(exception);
-            }
+            ErrorsWriter.errorsWriter.writeException(exception);
             return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
                     + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
         String info = ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
-        if (SessionInfo.IS_ON_SERVER_SESSION) {
-            ErrorsWriter.LOG_FOR_INFO.info(info);
-        } else {
-            ErrorsWriter.sendInfoToServer(info);
-        }
+        ErrorsWriter.errorsWriter.writeInfo(info);
         PsiElement element = getExpressionForScope();
         PsiElement parent = element.getParent();
 
@@ -113,11 +105,7 @@ public class JsonResponseForCompletion {
             }
         } else {
             String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Resolution scope is null.", currentPsiFile.getText());
-            if (SessionInfo.IS_ON_SERVER_SESSION) {
-                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(exception);
-            } else {
-                ErrorsWriter.sendErrorToServer(exception);
-            }
+            ErrorsWriter.errorsWriter.writeException(exception);
         }
         return jsonArray.toString();
     }
@@ -142,11 +130,7 @@ public class JsonResponseForCompletion {
                 element = element.getParent();
             } else {
                 String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), " Cannot find an element for take completion.", currentPsiFile.getText());
-                if (SessionInfo.IS_ON_SERVER_SESSION) {
-                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(exception);
-                } else {
-                    ErrorsWriter.sendErrorToServer(exception);
-                }
+                ErrorsWriter.errorsWriter.writeException(exception);
                 break;
             }
         }

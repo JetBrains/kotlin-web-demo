@@ -175,13 +175,15 @@ public class ResponseUtils {
         return builder.toString();
 
     }
-    
+
     public static String getErrorInJson(String error) {
-        return "[{\"exception\":\""+ error + "\",\"type\":\"err\"}]";
+        return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}]";
     }
-    
+
     public static String getErrorWithStackTraceInJson(String error, String stackTrace) {
-            return "[{\"exception\":\""+ error + "\",\"type\":\"err\"}, {\"exception\":\"" + stackTrace + "\",\"type\":\"out\"}]";
-        }
+        return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}, {\"exception\":\"" + stackTrace + "\",\"type\":\"out\"}]";
+    }
+
+
 
 }

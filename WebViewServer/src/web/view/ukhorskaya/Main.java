@@ -21,6 +21,9 @@ public class Main {
 
     public static void main(String[] args) {
         System.setProperty("kotlin.running.in.server.mode", "true");
+
+        ErrorsWriter.errorsWriter = ErrorsWriterOnServer.getInstance();
+
         if (args.length == 2) {
             ServerSettings.HOST = args[0];
             ErrorsWriter.writeInfoToConsole("Host is set: " + args[0]);

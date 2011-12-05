@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import web.view.ukhorskaya.ErrorsWriter;
+import web.view.ukhorskaya.ErrorsWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.help.HelpLoader;
@@ -34,33 +35,34 @@ public class ServerHandler implements HttpHandler {
             if (param.contains("userData=true")) {
                 sendUserInformation(exchange);
             } else if (param.equals("/logs")) {
-                ErrorsWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
+                ErrorsWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
             } else if (param.contains("log=")) {
-                ErrorsWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + exchange.getRequestURI());
+                ErrorsWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + exchange.getRequestURI());
                 sendLog(exchange);
             } else if (param.contains("allExamples=true")) {
-                ErrorsWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
+                ErrorsWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
                 sendExamplesList(exchange);
             } else if (param.contains("allHelpExamples=true")) {
-                ErrorsWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_EXAMPLES.name());
+                ErrorsWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_EXAMPLES.name());
                 sendHelpContentForExamples(exchange);
             } else if (param.contains("allHelpWords=true")) {
-                ErrorsWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
+                ErrorsWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
                 sendHelpContentForWords(exchange);
             } else if ((param.contains("/path="))
                     || (param.equals("/"))
                     || (param.startsWith("/?"))
-                    || param.contains("testConnection")) {
+                    || param.contains("testConnection")
+                    || param.contains("writeLog=")) {
                 HttpSession session = new HttpSession();
                 session.handle(exchange);
             } else {
-                ErrorsWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + exchange.getRequestURI());
+                ErrorsWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + exchange.getRequestURI());
                 sendResourceFile(exchange);
             }
         } catch (Throwable e) {
             //Do not stop server
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e, "null"));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(exchange.getRequestURI().toString(), e, "null"));
             writeResponse(exchange, "Internal server error".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -96,7 +98,7 @@ public class ServerHandler implements HttpHandler {
             response = response.replace("$LINKSTOLOGFILES$", links);
             writeResponse(exchange, response.getBytes(), 200);
         } catch (IOException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "null"));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "null"));
         }
     }
 
@@ -110,16 +112,16 @@ public class ServerHandler implements HttpHandler {
         try {
             reqResponse.append(ResponseUtils.readData(exchange.getRequestBody()));
         } catch (IOException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
             writeResponse(exchange, "Cannot read data from file".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return;
         }
         try {
             reqResponse = new StringBuilder(URLDecoder.decode(reqResponse.toString(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
         }
-        ErrorsWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.SEND_USER_DATA.name() + " " + ResponseUtils.substringAfter(reqResponse.toString(), "text=") + " " + SessionInfo.TypeOfRequest.SEND_USER_DATA.name());
+        ErrorsWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.SEND_USER_DATA.name() + " " + ResponseUtils.substringAfter(reqResponse.toString(), "text=") + " " + SessionInfo.TypeOfRequest.SEND_USER_DATA.name());
         writeResponse(exchange, "OK".getBytes(), HttpStatus.SC_OK);
     }
 
@@ -128,14 +130,14 @@ public class ServerHandler implements HttpHandler {
         path = ResponseUtils.substringAfterReturnAll(path, "resources");
 
         if (path.equals("")) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Path to the file is incorrect.", exchange.getRequestURI().toString()));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Path to the file is incorrect.", exchange.getRequestURI().toString()));
             writeResponse(exchange, "Path to the file is incorrect.".getBytes(), HttpStatus.SC_NOT_FOUND);
             return;
         }
 
         InputStream is = ServerHandler.class.getResourceAsStream(path);
         if (is == null) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Resource not found.", exchange.getRequestURI().toString()));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Resource not found.", exchange.getRequestURI().toString()));
             writeResponse(exchange, ("Resource not found. " + path).getBytes(), HttpStatus.SC_NOT_FOUND);
             return;
         }
@@ -149,7 +151,7 @@ public class ServerHandler implements HttpHandler {
                 out.write(tmp, 0, length);
             }
         } catch (IOException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), e, exchange.getRequestURI().toString()));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), e, exchange.getRequestURI().toString()));
             writeResponse(exchange, "Could not load the resource from the server".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return;
         }
@@ -165,7 +167,7 @@ public class ServerHandler implements HttpHandler {
             os.write(responseBody);
         } catch (IOException e) {
             //This is an exception we can't to send data to client
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("UNKNOWN", e, exchange.getRequestURI().toString()));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("UNKNOWN", e, exchange.getRequestURI().toString()));
         } finally {
             close(os);
         }
@@ -177,7 +179,7 @@ public class ServerHandler implements HttpHandler {
                 closeable.close();
             }
         } catch (IOException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("UNKNOWN", e, " NULL"));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("UNKNOWN", e, " NULL"));
         }
     }
 

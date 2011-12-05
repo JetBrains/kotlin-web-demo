@@ -2,11 +2,9 @@ package web.view.ukhorskaya;
 
 import org.apache.log4j.Logger;
 import web.view.ukhorskaya.server.ServerSettings;
+import web.view.ukhorskaya.session.SessionInfo;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -17,10 +15,9 @@ import java.net.URL;
  * Time: 2:16 PM
  */
 
-public class ErrorsWriter {
+public abstract class ErrorsWriter {
 
-    public static final Logger LOG_FOR_EXCEPTIONS = Logger.getLogger("exceptionLogger");
-    public static final Logger LOG_FOR_INFO = Logger.getLogger("infoLogger");
+    public static ErrorsWriter errorsWriter;
 
     public static void writeErrorToConsole(String message) {
         System.err.println(message);
@@ -109,41 +106,7 @@ public class ErrorsWriter {
         return builder.toString();
     }
 
-
-    public static void sendTextToServer(String text, String request) {
-        String urlPath = "";
-        if (request.equals("info")) {
-            urlPath = "http://localhost/?sessionId=555&writeLog=error";
-        } else if (request.equals("error")) {
-            urlPath = "http://localhost/?sessionId=555&writeLog=info";
-        }
-
-        URL url;
-        try {
-            url = new URL(urlPath);
-
-            HttpURLConnection urlConnection = null;
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            if (text != null) {
-                urlConnection.setDoOutput(true);
-                OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
-                wr.write(text);
-                wr.flush();
-                wr.close();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void sendErrorToServer(String error) {
-        sendTextToServer(error, "error");
-    }
-
-    public static void sendInfoToServer(String info) {
-        sendTextToServer(info, "info");
-    }
+    public abstract void writeException(String message);
+    public abstract void writeInfo(String message);
 
 }

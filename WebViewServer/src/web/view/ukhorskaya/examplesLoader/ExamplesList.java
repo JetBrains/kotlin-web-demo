@@ -2,6 +2,7 @@ package web.view.ukhorskaya.examplesLoader;
 
 import org.jetbrains.annotations.Nullable;
 import web.view.ukhorskaya.ErrorsWriter;
+import web.view.ukhorskaya.ErrorsWriterOnServer;
 import web.view.ukhorskaya.server.ServerSettings;
 
 import java.io.*;
@@ -40,7 +41,7 @@ public class ExamplesList {
             return list.get(id);
         }
 
-        ErrorsWriter.LOG_FOR_EXCEPTIONS.error("There is a request for example with number " + id + " - absent in map");
+        ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error("There is a request for example with number " + id + " - absent in map");
         return list.get(1);
     }
 
@@ -54,7 +55,7 @@ public class ExamplesList {
                 addWoOrder(root, true);
             }
         } else {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error("Examples root doesn't exists");
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error("Examples root doesn't exists");
             ErrorsWriter.writeErrorToConsole("Examples root doesn't exists");
         }
         ErrorsWriter.writeInfoToConsole("Examples were loaded.");
@@ -83,7 +84,7 @@ public class ExamplesList {
                     }
                 }
             } else {
-                ErrorsWriter.LOG_FOR_EXCEPTIONS.error("Incorrect structure for examples (folder - files): " + directory.getAbsolutePath());
+                ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error("Incorrect structure for examples (folder - files): " + directory.getAbsolutePath());
             }
         }
     }
@@ -142,7 +143,7 @@ public class ExamplesList {
                                 map.put("text", child.getName());
                                 list.add(map);
                                 ErrorsWriter.writeErrorToConsole("File/Directory " + childName + " is absent in order.txt and was added at end.");
-                                ErrorsWriter.LOG_FOR_EXCEPTIONS.error("File/Directory " + childName + " is absent in order.txt and was added at end.");
+                                ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error("File/Directory " + childName + " is absent in order.txt and was added at end.");
 
                                 if (isDirectory) {
                                     File orderChildren = checkIsOrderTxtExists(child);
@@ -159,9 +160,9 @@ public class ExamplesList {
             }
 
         } catch (FileNotFoundException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error("Cannot find order.txt file: " + order.getAbsolutePath(), e);
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot find order.txt file: " + order.getAbsolutePath(), e);
         } catch (IOException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error("Cannot read order.txt file: " + order.getAbsolutePath(), e);
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot read order.txt file: " + order.getAbsolutePath(), e);
         }
     }
 

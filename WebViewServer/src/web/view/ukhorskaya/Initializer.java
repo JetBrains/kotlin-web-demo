@@ -37,19 +37,19 @@ public class Initializer {
         if (environment != null) {
             return environment;
         }
-        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("initialize", "JavaCoreEnvironment is null.", "null"));
+        ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("initialize", "JavaCoreEnvironment is null.", "null"));
         return null;
     }
 
     public boolean setJavaCoreEnvironment() {
         File rtJar = findRtJar();
         if (rtJar == null) {
-            ErrorsWriter.writeErrorToConsole("Returned rtJar is null.");
+            ErrorsWriterOnServer.writeErrorToConsole("Returned rtJar is null.");
             return false;
         }
         environment.addToClasspath(rtJar);
         if (!initializeKotlinRuntime()) {
-            ErrorsWriter.writeInfoToConsole("Cannot found Kotlin Runtime library.");
+            ErrorsWriterOnServer.writeInfoToConsole("Cannot found Kotlin Runtime library.");
         }
         environment.registerFileType(JetFileType.INSTANCE, "kt");
         environment.registerFileType(JetFileType.INSTANCE, "kts");
@@ -107,7 +107,7 @@ public class Initializer {
 
             return setJavaCoreEnvironment();
         }
-        ErrorsWriter.LOG_FOR_EXCEPTIONS.error("JavaCoreEnvironment is already initialized.");
+        ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error("JavaCoreEnvironment is already initialized.");
         return false;
     }
 
@@ -118,7 +118,7 @@ public class Initializer {
             rtJar = new File(ServerSettings.RT_JAR);
         } else {
             String java_home = ServerSettings.JAVA_HOME;
-            ErrorsWriter.LOG_FOR_INFO.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
+            ErrorsWriterOnServer.LOG_FOR_INFO.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
             if (java_home != null) {
                 rtJar = findRtJar(java_home);
                 if (rtJar == null) {
@@ -145,7 +145,7 @@ public class Initializer {
     @Nullable
     private File findRtJar(String javaHome) {
         File rtJar = new File(javaHome, "jre" + File.separatorChar + "lib" + File.separatorChar + "rt.jar");
-        ErrorsWriter.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
+        ErrorsWriterOnServer.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
         if (rtJar.exists()) {
             return rtJar;
         }
@@ -156,7 +156,7 @@ public class Initializer {
     @Nullable
     private File findClassesJar(String javaHome) {
         File rtJar = new File(javaHome, "Classes" + File.separatorChar + "classes.jar");
-        ErrorsWriter.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
+        ErrorsWriterOnServer.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
         if (rtJar.exists()) {
             return rtJar;
         }

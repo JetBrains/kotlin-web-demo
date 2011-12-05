@@ -16,6 +16,7 @@ import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
+import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.Interval;
 import web.view.ukhorskaya.exceptions.KotlinCoreException;
 import web.view.ukhorskaya.session.SessionInfo;
@@ -38,7 +39,6 @@ public class ErrorAnalyzer {
     private final Project currentProject;
 
     public ErrorAnalyzer(PsiFile currentPsiFile) {
-//        ErrorsWriter.sendInfoToServer(currentPsiFile.getText());
         this.currentPsiFile = currentPsiFile;
         this.currentProject = currentPsiFile.getProject();
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
@@ -62,14 +62,12 @@ public class ErrorAnalyzer {
 
         visitor.visitFile(currentPsiFile);
         final List<ErrorDescriptor> errors = new ArrayList<ErrorDescriptor>();
-
         for (PsiErrorElement errorElement : errorElements) {
             int start = errorElement.getTextRange().getStartOffset();
             int end = errorElement.getTextRange().getEndOffset();
             Interval interval = new Interval(start, end, currentDocument);
             errors.add(new ErrorDescriptor(interval, errorElement.getErrorDescription(), Severity.ERROR, "red_wavy_line"));
         }
-//        ErrorsWriter.sendInfoToServer("" + errors.size());
         SessionInfo.TIME_MANAGER.saveCurrentTime();
         BindingContext bindingContext;
         try {
@@ -79,22 +77,12 @@ public class ErrorAnalyzer {
                     Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-//            String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
-            if (SessionInfo.IS_ON_SERVER_SESSION) {
-//                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(exception);
-            } else {
-//                ErrorsWriter.sendErrorToServer(exception);
-            }
-            e.printStackTrace();
+            String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
+            ErrorsWriter.errorsWriter.writeException(exception);
             throw new KotlinCoreException(e);
         }
-//        String info = ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
-        if (SessionInfo.IS_ON_SERVER_SESSION) {
-//            ErrorsWriter.LOG_FOR_INFO.info(info);
-        } else {
-//            ErrorsWriter.sendInfoToServer(info);
-        }
-
+        String info = ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        ErrorsWriter.errorsWriter.writeInfo(info);
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 
         for (Diagnostic diagnostic : diagnostics) {

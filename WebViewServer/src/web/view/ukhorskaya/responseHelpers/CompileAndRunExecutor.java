@@ -16,6 +16,7 @@ import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
 import org.json.JSONArray;
 import web.view.ukhorskaya.ErrorsWriter;
+import web.view.ukhorskaya.ErrorsWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer;
 import web.view.ukhorskaya.errorsDescriptors.ErrorDescriptor;
@@ -77,10 +78,10 @@ public class CompileAndRunExecutor {
                 generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
                 generationState.compileCorrectNamespaces(bindingContext, namespaces);
             } catch (Throwable e) {
-                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
+                ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
                 return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
-            ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "COMPILE correctNamespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime()));
+            ErrorsWriterOnServer.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "COMPILE correctNamespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime()));
 
             StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
             stringBuilder.append(ResponseUtils.addNewLine());
@@ -101,16 +102,16 @@ public class CompileAndRunExecutor {
                         FileUtil.writeToFile(target, factory.asBytes(file));
                         stringBuilder.append(file).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
-                        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
+                        ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
                         return ResponseUtils.getErrorInJson("Cannot get a completion.");
                     }
                 } else {
-                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
+                    ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
                     return ResponseUtils.getErrorInJson("Error on server: cannot run your program.");
                 }
 
             }
-            ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Write files on disk " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime()));
+            ErrorsWriterOnServer.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Write files on disk " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime()));
 
             JSONArray jsonArray = new JSONArray();
             Map<String, String> map = new HashMap<String, String>();

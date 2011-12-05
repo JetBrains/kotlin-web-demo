@@ -2,6 +2,7 @@ package web.view.ukhorskaya.responseHelpers;
 
 import org.json.JSONArray;
 import web.view.ukhorskaya.ErrorsWriter;
+import web.view.ukhorskaya.ErrorsWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.ServerSettings;
 import web.view.ukhorskaya.session.SessionInfo;
@@ -54,7 +55,7 @@ public class JavaRunner {
             public void run() {
                 isTimeoutException = true;
                 finalProcess.destroy();
-                ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Timeout exception."));
+                ErrorsWriterOnServer.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Timeout exception."));
                 errStream.append("Program was terminated after " + Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
             }
         }, Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION));
@@ -96,10 +97,10 @@ public class JavaRunner {
         try {
             exitValue = process.waitFor();
         } catch (InterruptedException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, textFromfile));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, textFromfile));
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
-        ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "RUN user program " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime()
+        ErrorsWriterOnServer.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "RUN user program " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime()
                 + " timeout=" + isTimeoutException
                 + " commandString=" + commandString));
 
@@ -109,9 +110,9 @@ public class JavaRunner {
                     outStream.delete(0, outStream.length());
                     errStream.append(ServerSettings.KOTLIN_ERROR_MESSAGE);
                     String linkForLog = getLinkForLog(outStream.toString());
-                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Error from log", linkForLog));
+                    ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Error from log", linkForLog));
                 }
-                ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), outStream.toString().replaceAll("<br/>", "\n"), textFromfile));
+                ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), outStream.toString().replaceAll("<br/>", "\n"), textFromfile));
             }
         }
 
@@ -133,7 +134,7 @@ public class JavaRunner {
                 jsonArray.put(map);
                 mapErr.put("type", "out");
             } else {
-                ErrorsWriter.LOG_FOR_INFO.error(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "error while excecution: " + errStream));
+                ErrorsWriterOnServer.LOG_FOR_INFO.error(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "error while excecution: " + errStream));
                 mapErr.put("type", "err");
             }
             mapErr.put("text", errStream.toString());
@@ -163,7 +164,7 @@ public class JavaRunner {
             log.deleteOnExit();
             return response;
         } catch (IOException e) {
-            ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, "Impossible to find " + log.getAbsolutePath()));
+            ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, "Impossible to find " + log.getAbsolutePath()));
         }
         return "";
     }
@@ -176,7 +177,7 @@ public class JavaRunner {
             message = errStream.substring(0, pos);
             stackTrace = errStream.substring(pos).replaceAll("<br/>", "\n");
         }
-        ErrorsWriter.LOG_FOR_EXCEPTIONS.error(
+        ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(
                 ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(),
                         message, stackTrace, textFromfile));
     }
@@ -255,7 +256,7 @@ public class JavaRunner {
             if (file.list().length == 0) {
                 if (file.exists()) {
                     file.delete();
-                    ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Directory is deleted : " + file.getAbsolutePath()));
+                    ErrorsWriterOnServer.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Directory is deleted : " + file.getAbsolutePath()));
                 }
             } else {
                 //list all the directory contents
@@ -269,14 +270,14 @@ public class JavaRunner {
                 if (file.list().length == 0) {
                     if (file.exists()) {
                         file.delete();
-                        ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Directory is deleted : " + file.getAbsolutePath()));
+                        ErrorsWriterOnServer.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Directory is deleted : " + file.getAbsolutePath()));
                     }
                 }
             }
         } else {
             if (file.exists()) {
                 file.delete();
-                ErrorsWriter.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "File is deleted : " + file.getAbsolutePath()));
+                ErrorsWriterOnServer.LOG_FOR_INFO.info(ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "File is deleted : " + file.getAbsolutePath()));
             }
         }
     }
