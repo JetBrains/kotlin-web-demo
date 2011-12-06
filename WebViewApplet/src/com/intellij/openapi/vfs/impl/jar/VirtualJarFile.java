@@ -3,9 +3,6 @@ package com.intellij.openapi.vfs.impl.jar;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileSystem;
 import org.jetbrains.annotations.NotNull;
-import web.view.ukhorskaya.ErrorsWriter;
-import web.view.ukhorskaya.ResponseUtils;
-import web.view.ukhorskaya.session.SessionInfo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,12 +16,12 @@ import java.io.OutputStream;
  * Time: 5:06 PM
  */
 
-public class RtJarVirtualFile extends VirtualFile {
+public class VirtualJarFile extends VirtualFile {
     private byte[] byteArray;
     private final CoreJarFileSystem myFileSystem;
     private final String name;
 
-    public RtJarVirtualFile(CoreJarFileSystem myFileSystem, String pathInJar) {
+    public VirtualJarFile(CoreJarFileSystem myFileSystem, String pathInJar) {
         this.myFileSystem = myFileSystem;
         this.name = pathInJar;
     }
@@ -84,7 +81,7 @@ public class RtJarVirtualFile extends VirtualFile {
             int length;
             byte[] tmp = new byte[1024];
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            InputStream rtJar = RtJarVirtualFile.class.getResourceAsStream("/" + name);
+            InputStream rtJar = VirtualJarFile.class.getResourceAsStream("/" + name);
             try {
                 while ((length = rtJar.read(tmp)) >= 0) {
                     out.write(tmp, 0, length);
@@ -115,6 +112,6 @@ public class RtJarVirtualFile extends VirtualFile {
 
     @Override
     public InputStream getInputStream() throws IOException {
-        return RtJarVirtualFile.class.getResourceAsStream("/" + name);
+        return VirtualJarFile.class.getResourceAsStream("/" + name);
     }
 }

@@ -2,7 +2,7 @@ package web.view.ukhorskaya.help;
 
 import org.json.JSONArray;
 import org.w3c.dom.*;
-import web.view.ukhorskaya.ErrorsWriter;
+import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.server.ServerSettings;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -125,7 +125,7 @@ public class HelpLoader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ErrorsWriter.writeInfoToConsole("Help for keywords was loaded.");
+        ErrorWriter.writeInfoToConsole("Help for keywords was loaded.");
     }
 
     private void generateHelpForWords() {
@@ -154,6 +154,6 @@ public class HelpLoader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ErrorsWriter.writeInfoToConsole("Help for examples was loaded.");
+        ErrorWriter.writeInfoToConsole("Help for examples was loaded.");
     }
 }

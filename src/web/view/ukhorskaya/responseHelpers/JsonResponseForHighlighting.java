@@ -2,14 +2,12 @@ package web.view.ukhorskaya.responseHelpers;
 
 import com.intellij.psi.PsiFile;
 import org.json.JSONArray;
-import web.view.ukhorskaya.ErrorsWriter;
 import web.view.ukhorskaya.Interval;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer;
 import web.view.ukhorskaya.errorsDescriptors.ErrorDescriptor;
 import web.view.ukhorskaya.exceptions.KotlinCoreException;
 import web.view.ukhorskaya.server.ServerSettings;
-import web.view.ukhorskaya.session.SessionInfo;
 
 import java.util.HashMap;
 import java.util.List;

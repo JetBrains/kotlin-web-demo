@@ -6,16 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-var kotlinVersion;
-
-function setKotlinVersion(version) {
-    kotlinVersion = version;
-    document.getElementById("kotlinVersion").innerHTML = kotlinVersion;
-    document.getElementById("kotlinVersionTop").innerHTML = "(" + kotlinVersion + ")";
-}
-
-
-(function () {
+$(document).ready(function () {
     var isLeftSideShow = true;
     var isRightSideShow = true;
 
@@ -80,13 +71,12 @@ function setKotlinVersion(version) {
         }).next().hide();
 
 
-})();
+});
 
 function loadAccordionContent() {
     var acc = document.createElement("div");
     acc.id = "accordion";
     document.getElementById("examplesaccordion").appendChild(acc);
-
     $.ajax({
         url:document.location.href + "?sessionId=" + sessionId + "&allExamples=true",
         context:document.body,
@@ -103,7 +93,6 @@ function loadAccordionContent() {
 }
 
 function onLoadingExamplesSuccess(data) {
-//    alert(data);
     var acc = document.getElementById("accordion");
     var i = 0;
     while (typeof data[i] != "undefined") {
@@ -120,7 +109,8 @@ function onLoadingExamplesSuccess(data) {
             var cont = document.createElement("div");
         }
         if (data[i].type == "content") {
-            var contA = document.createElement("p");
+            var content = document.createElement("p");
+            var contA = document.createElement("a");
             contA.id = i + "&head=" + lastHeadName;
             contA.style.cursor = "pointer";
             contA.onclick = function (event) {
@@ -128,7 +118,8 @@ function onLoadingExamplesSuccess(data) {
                 loadExamplesHelp(this.innerHTML);
             };
             contA.innerHTML = data[i].text;
-            cont.appendChild(contA);
+            content.appendChild(contA);
+            cont.appendChild(content);
         }
         acc.appendChild(cont);
         i++;
@@ -137,11 +128,9 @@ function onLoadingExamplesSuccess(data) {
         autoHeight:false,
         navigation:true
     });
-//    document.getElementById("accordion").style.width = "100%";
 }
 
 var loadingExample = false;
-
 var lastSelectedExample = 0;
 
 function loadExample(id) {
@@ -178,3 +167,18 @@ function onLoadingExampleSuccess(data) {
         document.getElementById("statusbar").innerHTML = "Example is loaded.";
     }
 }
+
+$(".applet-enable").click(function () {
+    var parent = $(this).parents('.switch');
+    $('.applet-disable', parent).removeClass('selected');
+    $(this).addClass('selected');
+    $("#appletcheckbox").attr('checked', true);
+    isApplet = true;
+});
+$(".applet-disable").click(function () {
+    var parent = $(this).parents('.switch');
+    $('.applet-enable', parent).removeClass('selected');
+    $(this).addClass('selected');
+    $("#appletcheckbox").attr('checked', false);
+    isApplet = false;
+});

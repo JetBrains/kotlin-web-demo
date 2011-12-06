@@ -51,10 +51,20 @@
 
     </style>
 
+    <script type="text/javascript">
+        var editor;
+        //        var isBeforeUnload = false;
+    </script>
 
 </head>
 <body spellcheck="false"
-      onload="setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples();">
+      onload="showContent(); setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples();">
+<div id="loader">
+    <img src="/images/ajax-loader.gif"/>
+    <p>Loading applet</p>
+</div>
+<applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
+        ARCHIVE="WebViewApplet.jar"></applet>
 <div id="all">
     <div id="header">
         <table>
@@ -110,12 +120,15 @@
             <div id="centralcontent">
                 <div id="editordiv">
                     <div id="editortitle">
-                        Type your code here:
-                        <!--<div >
+                        <div id="editortitletext">Type your code here:</div>
+                        <div class="field switch" id="appletonoff">
+                            <label class="applet-enable selected"><span
+                                    title="Use an applet for faster highlighting">Client</span></label>
+                            <label class="applet-disable"><span
+                                    title="Send highlighting request to server (slower)">Server</span></label>
+                            <input type="checkbox" id="appletcheckbox" checked="true" class="appletcheckbox"
+                                   name="appletcheckbox"/>
                         </div>
-                        <div >Type your code here:</div>
-                        <div>
-                        </div>-->
                     </div>
 
                     <div id="editorinput">
@@ -142,7 +155,7 @@
                     <div id="consoleandproblems">
                         <div id="tabs">
                             <ul>
-                                <li><a href="#problems">Problems view</a></li>
+                                <li><a href="#problems">Problems View</a></li>
                                 <li><a href="#console">Console</a></li>
                             </ul>
                             <div id="problems">
@@ -176,29 +189,26 @@
                 </div>
 
                 <div class="help" id="help3">
-                    Use ctrl+space to take a completion <br/>
-                    Use ctrl+F9 to run file
+                    Use Ctrl + Space to take a completion <br/>
+                    Use Ctrl + F9 to run file
                 </div>
 
             </div>
         </div>
         <!--</div>-->
     </div>
-    <applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="50" height="50" ARCHIVE="WebViewApplet.jar"></applet>
+    <!--<applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
+            ARCHIVE="WebViewApplet.jar"></applet>-->
+    <!--<applet id="myapplet"></applet>-->
     <div id="footer">&copy; JetBrains, 2011 Kotlin Web Demo v.<span id="kotlinVersion"></span></div>
     <div id="debug"></div>
 </div>
 
-<script type="text/javascript">
-    var editor;
-    var isBeforeUnload = false;
-</script>
-
 <script src="/components/common.js"></script>
 <script src="/components/help.js"></script>
 <script src="/components/components.js"></script>
-<script src="/codemirror/lib/complete.js"></script>
 
+<script src="/codemirror/lib/complete.js"></script>
 
 </body>
 </html>

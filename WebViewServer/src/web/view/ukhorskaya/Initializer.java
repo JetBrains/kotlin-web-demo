@@ -37,19 +37,19 @@ public class Initializer {
         if (environment != null) {
             return environment;
         }
-        ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog("initialize", "JavaCoreEnvironment is null.", "null"));
+        ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("initialize", "JavaCoreEnvironment is null.", "null"));
         return null;
     }
 
     public boolean setJavaCoreEnvironment() {
         File rtJar = findRtJar();
         if (rtJar == null) {
-            ErrorsWriterOnServer.writeErrorToConsole("Returned rtJar is null.");
+            ErrorWriterOnServer.writeErrorToConsole("Returned rtJar is null.");
             return false;
         }
         environment.addToClasspath(rtJar);
         if (!initializeKotlinRuntime()) {
-            ErrorsWriterOnServer.writeInfoToConsole("Cannot found Kotlin Runtime library.");
+            ErrorWriterOnServer.writeInfoToConsole("Cannot found Kotlin Runtime library.");
         }
         environment.registerFileType(JetFileType.INSTANCE, "kt");
         environment.registerFileType(JetFileType.INSTANCE, "kts");
@@ -63,14 +63,14 @@ public class Initializer {
         final File unpackedRuntimePath = getUnpackedRuntimePath();
         if (unpackedRuntimePath != null) {
             ServerSettings.PATH_TO_KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
-            ErrorsWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
+            ErrorWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
             environment.addToClasspath(unpackedRuntimePath);
         } else {
             final File runtimeJarPath = getRuntimeJarPath();
             if (runtimeJarPath != null && runtimeJarPath.exists()) {
                 environment.addToClasspath(runtimeJarPath);
                 ServerSettings.PATH_TO_KOTLIN_LIB = runtimeJarPath.getAbsolutePath();
-                ErrorsWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
+                ErrorWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
             } else {
                 return false;
             }
@@ -107,7 +107,7 @@ public class Initializer {
 
             return setJavaCoreEnvironment();
         }
-        ErrorsWriterOnServer.LOG_FOR_EXCEPTIONS.error("JavaCoreEnvironment is already initialized.");
+        ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("JavaCoreEnvironment is already initialized.");
         return false;
     }
 
@@ -118,7 +118,7 @@ public class Initializer {
             rtJar = new File(ServerSettings.RT_JAR);
         } else {
             String java_home = ServerSettings.JAVA_HOME;
-            ErrorsWriterOnServer.LOG_FOR_INFO.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
+            ErrorWriterOnServer.LOG_FOR_INFO.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
             if (java_home != null) {
                 rtJar = findRtJar(java_home);
                 if (rtJar == null) {
@@ -133,9 +133,9 @@ public class Initializer {
         }
         if ((rtJar == null || !rtJar.exists())) {
             if (ServerSettings.JAVA_HOME == null) {
-                ErrorsWriter.writeInfoToConsole("You can set java_home variable at config.properties file.");
+                ErrorWriter.writeInfoToConsole("You can set java_home variable at config.properties file.");
             } else {
-                ErrorsWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + ServerSettings.JAVA_HOME + " or path to rt.jar is incorrect " + ServerSettings.RT_JAR);
+                ErrorWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + ServerSettings.JAVA_HOME + " or path to rt.jar is incorrect " + ServerSettings.RT_JAR);
             }
             return null;
         }
@@ -145,28 +145,28 @@ public class Initializer {
     @Nullable
     private File findRtJar(String javaHome) {
         File rtJar = new File(javaHome, "jre" + File.separatorChar + "lib" + File.separatorChar + "rt.jar");
-        ErrorsWriterOnServer.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
+        ErrorWriterOnServer.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
         if (rtJar.exists()) {
             return rtJar;
         }
-        ErrorsWriter.writeErrorToConsole("Couldn't found rt.jar in " + rtJar.getAbsolutePath());
+        ErrorWriter.writeErrorToConsole("Couldn't found rt.jar in " + rtJar.getAbsolutePath());
         return null;
     }
 
     @Nullable
     private File findClassesJar(String javaHome) {
         File rtJar = new File(javaHome, "Classes" + File.separatorChar + "classes.jar");
-        ErrorsWriterOnServer.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
+        ErrorWriterOnServer.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
         if (rtJar.exists()) {
             return rtJar;
         }
-        ErrorsWriter.writeErrorToConsole("Couldn't found classes.jar in " + rtJar.getAbsolutePath());
+        ErrorWriter.writeErrorToConsole("Couldn't found classes.jar in " + rtJar.getAbsolutePath());
         return null;
     }
 
     @Nullable
     private File findActiveRtJar(boolean failOnError) {
-        ErrorsWriter.writeInfoToConsole("Look for active rt.jar");
+        ErrorWriter.writeInfoToConsole("Look for active rt.jar");
         ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
         if (systemClassLoader instanceof URLClassLoader) {
             URLClassLoader loader = (URLClassLoader) systemClassLoader;
@@ -181,7 +181,7 @@ public class Initializer {
                 }
             }
             if (failOnError) {
-                ErrorsWriter.writeErrorToConsole("Could not find rt.jar in system class loader: " + StringUtil.join(loader.getURLs(), new Function<URL, String>() {
+                ErrorWriter.writeErrorToConsole("Could not find rt.jar in system class loader: " + StringUtil.join(loader.getURLs(), new Function<URL, String>() {
                     @Override
                     public String fun(URL url) {
                         return url.toString();
@@ -189,9 +189,9 @@ public class Initializer {
                 }, ", "));
             }
         } else if (failOnError) {
-            ErrorsWriter.writeErrorToConsole("System class loader is not an URLClassLoader: " + systemClassLoader);
+            ErrorWriter.writeErrorToConsole("System class loader is not an URLClassLoader: " + systemClassLoader);
         }
-        ErrorsWriter.writeErrorToConsole("Couldn't found classes.jar or rt.jar in systemClassLoader " + systemClassLoader.toString());
+        ErrorWriter.writeErrorToConsole("Couldn't found classes.jar or rt.jar in systemClassLoader " + systemClassLoader.toString());
         return null;
     }
 }

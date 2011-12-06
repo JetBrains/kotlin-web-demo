@@ -12,35 +12,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../kotlinLibrary/lib/kotlin-compiler.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://C:/jet/jet/compiler/cli/src" />
-          <root url="file://C:/jet/jet/compiler/backend/src" />
-          <root url="file://C:/jet/jet/compiler/frontend.java/src" />
-          <root url="file://C:/jet/jet/compiler/frontend/src" />
-          <root url="file://C:/jet/jet/compiler/tests" />
-          <root url="file://C:/jet/jet/confluence/src/main/java" />
-          <root url="file://C:/jet/jet/grammar/src" />
-          <root url="file://C:/jet/jet/idea/src" />
-          <root url="file://C:/jet/jet/idea/tests" />
-          <root url="file://C:/jet/jet/stdlib/src" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../kotlinLibrary/lib/intellij-core.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../lib/log4j-1.2.16.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -68,22 +39,42 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../kotlinLibrary/lib/annotations.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../../kotlinLibrary/lib/intellij-core.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="json" level="project" />
+    <orderEntry type="library" name="annotations" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../kotlinLibrary/lib/guava-r09.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../../kotlinLibrary/lib/kotlin-compiler.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../../kotlinLibrary/lib/kotlin-runtime.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../../../kotlinLibrary/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../../../../kotlinLibrary/lib" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="json" level="project" />
   </component>
 </module>
 

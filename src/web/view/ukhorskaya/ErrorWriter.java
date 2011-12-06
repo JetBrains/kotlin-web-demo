@@ -1,12 +1,8 @@
 package web.view.ukhorskaya;
 
-import org.apache.log4j.Logger;
 import web.view.ukhorskaya.server.ServerSettings;
-import web.view.ukhorskaya.session.SessionInfo;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,9 +11,9 @@ import java.net.URL;
  * Time: 2:16 PM
  */
 
-public abstract class ErrorsWriter {
+public abstract class ErrorWriter {
 
-    public static ErrorsWriter errorsWriter;
+    public static ErrorWriter ERROR_WRITER;
 
     public static void writeErrorToConsole(String message) {
         System.err.println(message);

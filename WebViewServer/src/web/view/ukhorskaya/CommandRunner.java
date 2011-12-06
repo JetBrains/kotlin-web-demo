@@ -28,18 +28,18 @@ public class CommandRunner {
             KotlinHttpServer.startServer();
         } else if (command.startsWith("output")) {
             ServerSettings.OUTPUT_DIRECTORY = ResponseUtils.substringAfter(command, "output ");
-            ErrorsWriter.writeInfoToConsole("done: " + ServerSettings.OUTPUT_DIRECTORY);
+            ErrorWriter.writeInfoToConsole("done: " + ServerSettings.OUTPUT_DIRECTORY);
         } else if (command.startsWith("update examples")) {
             ExamplesList.updateList();
             HelpLoader.updateExamplesHelp();
 //            ErrorsWriter.writeInfoToConsole("done: examples were updated.");
         } else if (command.startsWith("get port")) {
-            ErrorsWriter.writeInfoToConsole("server port " + KotlinHttpServer.getPort());
+            ErrorWriter.writeInfoToConsole("server port " + KotlinHttpServer.getPort());
         } else if (command.startsWith("get host")) {
-            ErrorsWriter.writeInfoToConsole("host: " + KotlinHttpServer.getHost());
+            ErrorWriter.writeInfoToConsole("host: " + KotlinHttpServer.getHost());
         } else if (command.startsWith("timeout")) {
             ServerSettings.TIMEOUT_FOR_EXECUTION = ResponseUtils.substringAfter(command, "timeout ");
-            ErrorsWriter.writeInfoToConsole("done: " + ServerSettings.TIMEOUT_FOR_EXECUTION);
+            ErrorWriter.writeInfoToConsole("done: " + ServerSettings.TIMEOUT_FOR_EXECUTION);
         } else if (command.equals("help")) {
             StringBuilder builder = new StringBuilder("List of commands:\n");
             //builder.append("java_home pathToJavaHome - without \"\"\n");
@@ -56,9 +56,9 @@ public class CommandRunner {
             //builder.append("port int - without \"\", set port for server\n");
             builder.append("get port - get port for server\n");
             builder.append("help - help\n");
-            ErrorsWriter.writeInfoToConsole(builder.toString());
+            ErrorWriter.writeInfoToConsole(builder.toString());
         } else {
-            ErrorsWriter.writeInfoToConsole("Incorrect command: help to look at all options");
+            ErrorWriter.writeInfoToConsole("Incorrect command: help to look at all options");
         }
     }
 
@@ -84,7 +84,7 @@ public class CommandRunner {
         } else if (setting.startsWith("rt_jar")) {
             ServerSettings.RT_JAR = ResponseUtils.substringAfter(setting, "rt_jar ");
         } else {
-            ErrorsWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
+            ErrorWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
         }
 
     }

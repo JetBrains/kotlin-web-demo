@@ -16,7 +16,7 @@ import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
-import web.view.ukhorskaya.ErrorsWriter;
+import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.Interval;
 import web.view.ukhorskaya.exceptions.KotlinCoreException;
 import web.view.ukhorskaya.session.SessionInfo;
@@ -77,12 +77,12 @@ public class ErrorAnalyzer {
                     Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-            String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
-            ErrorsWriter.errorsWriter.writeException(exception);
+            String exception = ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeException(exception);
             throw new KotlinCoreException(e);
         }
-        String info = ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
-        ErrorsWriter.errorsWriter.writeInfo(info);
+        String info = ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        ErrorWriter.ERROR_WRITER.writeInfo(info);
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 
         for (Diagnostic diagnostic : diagnostics) {

@@ -1,7 +1,6 @@
 package web.view.ukhorskaya;
 
 import org.apache.log4j.Logger;
-import web.view.ukhorskaya.session.SessionInfo;
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,13 +9,13 @@ import web.view.ukhorskaya.session.SessionInfo;
  * Time: 12:30 PM
  */
 
-public class ErrorsWriterOnServer extends ErrorsWriter {
+public class ErrorWriterOnServer extends ErrorWriter {
     public static final Logger LOG_FOR_EXCEPTIONS = Logger.getLogger("exceptionLogger");
     public static final Logger LOG_FOR_INFO = Logger.getLogger("infoLogger");
 
-    private static final ErrorsWriterOnServer writer = new ErrorsWriterOnServer();
+    private static final ErrorWriterOnServer writer = new ErrorWriterOnServer();
 
-    private ErrorsWriterOnServer() {
+    private ErrorWriterOnServer() {
         
     }
 
@@ -31,7 +30,7 @@ public class ErrorsWriterOnServer extends ErrorsWriter {
     }
 
 
-    public static ErrorsWriterOnServer getInstance() {
+    public static ErrorWriterOnServer getInstance() {
         return writer;
     }
 }

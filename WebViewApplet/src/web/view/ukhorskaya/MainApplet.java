@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,7 +30,8 @@ public class MainApplet extends JApplet implements ActionListener {
     public void init() {
         InitializerApplet.getInstance().initJavaCoreEnvironment();
         request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
-        ErrorsWriter.errorsWriter = ErrorsWriterInApplet.getInstance();
+        ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
+        SessionInfo.SESSION_ID = new Random().nextInt();
 
         Container contentPane = this.getContentPane();
         contentPane.setLayout(new FlowLayout());
@@ -51,7 +53,7 @@ public class MainApplet extends JApplet implements ActionListener {
             return result;
 
         } catch (Throwable e) {
-            ErrorsWriter.errorsWriter.writeException(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, data));
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, data));
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson("MainApplet.java " + writer.toString());
@@ -69,7 +71,7 @@ public class MainApplet extends JApplet implements ActionListener {
             return result;
 
         } catch (Throwable e) {
-            ErrorsWriter.errorsWriter.writeException(ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, data));
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, data));
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson("MainApplet.java " + writer.toString());

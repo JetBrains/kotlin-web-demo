@@ -22,13 +22,13 @@ public class Main {
     public static void main(String[] args) {
         System.setProperty("kotlin.running.in.server.mode", "true");
 
-        ErrorsWriter.errorsWriter = ErrorsWriterOnServer.getInstance();
+        ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
 
         if (args.length == 2) {
             ServerSettings.HOST = args[0];
-            ErrorsWriter.writeInfoToConsole("Host is set: " + args[0]);
+            ErrorWriter.writeInfoToConsole("Host is set: " + args[0]);
             ServerSettings.PORT = args[1];
-            ErrorsWriter.writeInfoToConsole("Port is set: " + args[1]);
+            ErrorWriter.writeInfoToConsole("Port is set: " + args[1]);
         }
         new File("logs").mkdir();
 
@@ -36,20 +36,20 @@ public class Main {
             try {
                 if (Initializer.getInstance().initJavaCoreEnvironment()) {
                     KotlinHttpServer.startServer();
-                    ErrorsWriter.writeInfoToConsole("Use \"help\" to look at all options");
+                    ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
                     ExamplesList.getInstance();
                     HelpLoader.getInstance();
                     startConsoleThread();
                 } else {
-                    ErrorsWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
+                    ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
                 }
             } catch (Exception e) {
-                ErrorsWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
+                ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
                 System.exit(1);
             }
 
         } else {
-            ErrorsWriter.writeErrorToConsole("Can not find config.properties.");
+            ErrorWriter.writeErrorToConsole("Can not find config.properties.");
         }
     }
 
@@ -90,7 +90,7 @@ public class Main {
     private static boolean loadProperties() {
         File file = new File("config.properties");
         if (!file.exists()) {
-            ErrorsWriter.writeErrorToConsole(file.getAbsolutePath());
+            ErrorWriter.writeErrorToConsole(file.getAbsolutePath());
             return false;
         }
 
@@ -111,7 +111,7 @@ public class Main {
                 }
 
                 CommandRunner.setServerSetting(name + " " + value);
-                ErrorsWriter.writeInfoToConsole("Loaded from config file: " + name + " " + value);
+                ErrorWriter.writeInfoToConsole("Loaded from config file: " + name + " " + value);
             }
             return true;
         } catch (IOException e) {

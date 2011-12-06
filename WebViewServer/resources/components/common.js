@@ -6,7 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 var sessionId;
-var isApplet = true;
+var isApplet = false;
+var kotlinVersion;
 
 function setMode(mode) {
     if (mode == "APPLET") {
@@ -25,4 +26,15 @@ function setSessionId(id) {
         data:{text:data},
         timeout:5000
     });
+}
+
+function showContent() {
+    $('#loader').hide();
+    $(".applet-enable").click();
+}
+
+function setKotlinVersion(version) {
+    kotlinVersion = version;
+    document.getElementById("kotlinVersion").innerHTML = kotlinVersion;
+    document.getElementById("kotlinVersionTop").innerHTML = "(" + kotlinVersion + ")";
 }

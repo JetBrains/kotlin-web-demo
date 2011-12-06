@@ -13,15 +13,15 @@ import java.net.URL;
  * Time: 2:27 PM
  */
 
-public class ErrorsWriterInApplet extends ErrorsWriter {
+public class ErrorWriterInApplet extends ErrorWriter {
 
-    private static final ErrorsWriterInApplet writer = new ErrorsWriterInApplet();
+    private static final ErrorWriterInApplet writer = new ErrorWriterInApplet();
 
-    public static ErrorsWriterInApplet getInstance() {
+    public static ErrorWriterInApplet getInstance() {
         return writer;
     }
 
-    private ErrorsWriterInApplet() {
+    private ErrorWriterInApplet() {
     }
 
     @Override

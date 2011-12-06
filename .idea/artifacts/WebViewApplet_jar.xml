@@ -4,21 +4,13 @@
     <root id="archive" name="WebViewApplet.jar">
       <element id="module-output" name="WebViewApplet" />
       <element id="module-output" name="WebView" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-1.2.16.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/picocontainer.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/kotlin-runtime.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/annotations.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/intellij-core.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-httpclient-3.1-patched.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/trove4j.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/kotlin-compiler.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/guava-r09.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/asm-util-3.3.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-lang-2.4.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/asm-commons.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../KotlinCompiler/lib/json-20090211.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/asm.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/cli-10.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

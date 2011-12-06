@@ -18,7 +18,7 @@ import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.resolve.DescriptorRenderer;
 import org.json.JSONArray;
-import web.view.ukhorskaya.ErrorsWriter;
+import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.MyDeclarationDescriptorVisitor;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.exceptions.KotlinCoreException;
@@ -68,13 +68,13 @@ public class JsonResponseForCompletion {
                     Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-            String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
-            ErrorsWriter.errorsWriter.writeException(exception);
+            String exception = ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeException(exception);
             return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
                     + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
-        String info = ErrorsWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
-        ErrorsWriter.errorsWriter.writeInfo(info);
+        String info = ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        ErrorWriter.ERROR_WRITER.writeInfo(info);
         PsiElement element = getExpressionForScope();
         PsiElement parent = element.getParent();
 
@@ -104,8 +104,8 @@ public class JsonResponseForCompletion {
                 jsonArray.put(map);
             }
         } else {
-            String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Resolution scope is null.", currentPsiFile.getText());
-            ErrorsWriter.errorsWriter.writeException(exception);
+            String exception = ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Resolution scope is null.", currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeException(exception);
         }
         return jsonArray.toString();
     }
@@ -129,8 +129,8 @@ public class JsonResponseForCompletion {
             if (element != null) {
                 element = element.getParent();
             } else {
-                String exception = ErrorsWriter.getExceptionForLog(SessionInfo.TYPE.name(), " Cannot find an element for take completion.", currentPsiFile.getText());
-                ErrorsWriter.errorsWriter.writeException(exception);
+                String exception = ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), " Cannot find an element for take completion.", currentPsiFile.getText());
+                ErrorWriter.ERROR_WRITER.writeException(exception);
                 break;
             }
         }

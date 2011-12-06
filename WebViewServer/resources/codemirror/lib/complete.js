@@ -14,8 +14,9 @@ function removeStyles() {
     }
 }
 
-(function () {
+$(document).ready(function () {
 
+//    document.getElementById("loader").style.visibility = "hidden";
     var goToSymbolShortcutKeys = [17, 32];
     var runShortcutKeys = [17, 120];
 
@@ -31,9 +32,9 @@ function removeStyles() {
      });*/
 
     function runTimerForNonPrinting() {
-        /*window.onbeforeunload = function () {
-         return "You have unsaved changes.";
-         };*/
+        window.onbeforeunload = function () {
+            return "You have unsaved changes.";
+        };
         if (timer) {
             clearTimeout(timer);
             timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
@@ -100,12 +101,14 @@ function removeStyles() {
                 if (event.preventDefault) event.preventDefault();
                 else event.returnValue = false;
                 event.stop();
-                return beforeComplete();
+                beforeComplete();
+                return true;
             } else if (isGotoKeysPressed(event, runShortcutKeys)) {
                 if (event.preventDefault) event.preventDefault();
                 else event.returnValue = false;
                 event.stop();
-                return runOrCompile("run", "Run project...", "Run action failed.");
+                runOrCompile("run", "Run project...", "Run action failed.");
+                return true;
             }
 
         },
@@ -114,9 +117,7 @@ function removeStyles() {
         minHeight:"430px"
     });
 
-    editor.focus();
-
-    getErrors();
+//    editor.focus();
 
     function updateStatusBar() {
         updateHelp(editor.getTokenAt(editor.getCursor(true)).string);
@@ -170,7 +171,7 @@ function removeStyles() {
             }
             if (result) {
                 setStatusBarMessage("During program execution errors have occurred.");
-                document.getElementById("console").innerHTML = "There are errors in your code, look tab Problems View";
+                document.getElementById("console").innerHTML = "See Problems View tab, there are errors in your code.";
             }
         }
         return result;
@@ -253,19 +254,19 @@ function removeStyles() {
                 if (typeof data[i].message != "undefined") {
                     getErrors();
                     isCompiledWithErrors = true;
-                    var p = document.createElement("p");
+                    var pEr = document.createElement("p");
                     var image = document.createElement("img");
                     if (data[i].type == "ERROR") {
-                        p.className = "problemsViewError";
+                        pEr.className = "problemsViewError";
                         image.src = "icons/error.png";
                     } else if (data[i].type == "WARNING") {
-                        p.className = "problemsViewWarning";
+                        pEr.className = "problemsViewWarning";
                         image.src = "icons/warning.png";
                     }
-                    p.appendChild(image);
+                    pEr.appendChild(image);
                     var text = document.createElement("span");
                     text.innerHTML = data[i].message;
-                    p.appendChild(text);
+                    pEr.appendChild(text);
                     errors.appendChild(p);
                 } else {
                     var p = document.createElement("p");
@@ -298,7 +299,16 @@ function removeStyles() {
         var i = editor.getValue();
         if (isApplet) {
             try {
-                var dataFromApplet = $("#myapplet")[0].getHighlighting(i);
+                var dataFromApplet;
+                try {
+                    dataFromApplet = $("#myapplet")[0].getHighlighting(i);
+                } catch (e) {
+                    document.getElementById("debug").innerHTML = e.description;
+                    $(".applet-disable").click();
+                    getErrors();
+                    isLoadingHighlighting = false;
+                    return;
+                }
                 var data = eval(dataFromApplet);
                 if (typeof data != "undefined") {
                     if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
@@ -318,7 +328,7 @@ function removeStyles() {
                 }
                 isLoadingHighlighting = false;
             } catch (e) {
-                document.getElementById("problems").innerHTML = e + " " + e.description;
+                document.getElementById("debug").innerHTML = e.description;
                 isLoadingHighlighting = false;
             }
         } else {
@@ -453,7 +463,7 @@ function removeStyles() {
                 try {
                     var dataFromApplet = $("#myapplet")[0].getCompletion(i, editor.getCursor(true).line, editor.getCursor(true).ch);
                     var data = eval(dataFromApplet);
-                    if ((typeof data != "undefined")  && (typeof data[0] != "undefined")) {
+                    if ((typeof data != "undefined") && (typeof data[0] != "undefined")) {
                         if (typeof data[0].exception != "undefined") {
                             $("#tabs").tabs("select", 0);
                             document.getElementById("problems").innerHTML = "";
@@ -529,6 +539,7 @@ function removeStyles() {
         } else {
             if (!isContinueComplete) {
                 keywords = [];
+                return;
             }
             isContinueComplete = false;
         }
@@ -694,21 +705,6 @@ function removeStyles() {
                 editor.focus();
                 setTimeout(continueComplete, 50);
             }
-            /*else if (code == 38) {
-             //up
-
-
-             } else if (code == 40) {
-             //down
-             event.preventDefault();
-             var selOpt = $("#selected");
-
-             //                selOpt.nextSibling.setAttribute("id", "selected");
-             $("#selectId").childNodes[1].setAttribute("id", "selected");
-
-             selOpt.removeAttr("id");
-             }*/
-
         });
 
 
@@ -773,5 +769,4 @@ function removeStyles() {
         return hash;
     }
 
-
-})();
+});
