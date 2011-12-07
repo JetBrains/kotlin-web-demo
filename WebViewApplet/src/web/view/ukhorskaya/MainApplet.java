@@ -22,8 +22,8 @@ import java.util.Random;
  */
 
 public class MainApplet extends JApplet implements ActionListener {
-    private JButton b1;
-    private JButton b2;
+    /*private JButton b1;
+    private JButton b2;*/
 
     public static String request;
 
@@ -33,14 +33,14 @@ public class MainApplet extends JApplet implements ActionListener {
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
         SessionInfo.SESSION_ID = new Random().nextInt();
 
-        Container contentPane = this.getContentPane();
+        /*Container contentPane = this.getContentPane();
         contentPane.setLayout(new FlowLayout());
         b1 = new JButton("highlighting");
         b1.addActionListener(this);
         contentPane.add(b1);
         b2 = new JButton("completion");
         b2.addActionListener(this);
-        contentPane.add(b2);
+        contentPane.add(b2);*/
     }
 
     public String getHighlighting(String data) {
@@ -48,15 +48,13 @@ public class MainApplet extends JApplet implements ActionListener {
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile);
-            String result = responseForHighlighting.getResult();
-            System.out.println(result);
-            return result;
+            return responseForHighlighting.getResult();
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, data));
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
-            return ResponseUtils.getErrorInJson("MainApplet.java " + writer.toString());
+            return ResponseUtils.getErrorInJson(writer.toString());
         }
     }
 
@@ -64,28 +62,24 @@ public class MainApplet extends JApplet implements ActionListener {
         SessionInfo.TYPE = SessionInfo.TypeOfRequest.COMPLETE;
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
-            System.out.println(Integer.parseInt(line) + " " + Integer.parseInt(ch) + " " + currentPsiFile.getText());
             JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line), Integer.parseInt(ch), currentPsiFile);
-            String result = responseForCompletion.getResult();
-            System.out.println(result);
-            return result;
+            return responseForCompletion.getResult();
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, data));
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
-            return ResponseUtils.getErrorInJson("MainApplet.java " + writer.toString());
+            return ResponseUtils.getErrorInJson(writer.toString());
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new Object();
-        if (e.getActionCommand().equals("highlighting")) {
+        /*if (e.getActionCommand().equals("highlighting")) {
             getHighlighting("fun main() { val a = java.util.ArrayList<String>(); System.out?.println(\"sss\" + a}");
         } else if (e.getActionCommand().equals("completion")) {
-            getCompletion("fun main() { System.out?.println(\"sss\" + a)}", "0", "20");
-        }
+            getCompletion("import fun main() { System.out?.println(\"sss\" + a)}", "0", "7");
+        }*/
 //        getHighlighting("fun main() { val a = Object()}");
 //        getHighlighting("fun main() { val a = String(\"aaa\") }");
     }

@@ -11,9 +11,8 @@ import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetNamespace;
-import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
+import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
 import org.json.JSONArray;
 import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
@@ -65,7 +64,7 @@ public class CompileAndRunExecutor {
             }
             Project currentProject = currentPsiFile.getProject();
             List<JetNamespace> namespaces = Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace());
-            BindingContext bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
+            BindingContext bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
                     currentProject,
                     namespaces,
                     Predicates.<PsiFile>equalTo(currentPsiFile),

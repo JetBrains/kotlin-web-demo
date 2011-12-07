@@ -1,5 +1,7 @@
 import junit.framework.TestCase;
 import org.jetbrains.annotations.Nullable;
+import web.view.ukhorskaya.ErrorWriter;
+import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.Initializer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.KotlinHttpServer;
@@ -29,12 +31,13 @@ public class ResponseTest extends TestCase {
         super.setUp();
         Initializer.getInstance().initJavaCoreEnvironment();
         if (!KotlinHttpServer.isServerRunning()) {
-            KotlinHttpServer.getInstance().startServer();
+            KotlinHttpServer.startServer();
         }
+        ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
     }
 
     public void testIncorrectUrlFormat() throws IOException {
-        String expectedResult = "Resource not found.";
+        String expectedResult = "Resource not found. /incorrectUrlFormat";
         String actualResult = getActualResultForRequest("incorrectUrlFormat");
         assertEquals("Wrong result", expectedResult, actualResult);
     }

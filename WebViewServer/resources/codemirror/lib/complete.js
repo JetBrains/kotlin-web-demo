@@ -16,80 +16,18 @@ function removeStyles() {
 
 $(document).ready(function () {
 
-//    document.getElementById("loader").style.visibility = "hidden";
     var goToSymbolShortcutKeys = [17, 32];
     var runShortcutKeys = [17, 120];
-
-    var isCompletionInProgress = false;
 
     var timer;
     var timerIntervalForNonPrinting = 300;
 
-    /*$(document).keydown(function(event) {
-     if (event.code != 38 && event.code != 40) {
-     runTimerForNonPrinting();
-     }
-     });*/
+    var isCompletionInProgress = false;
+    var isCompilationInProgress = false;
+    var isLoadingHighlighting = false;
 
-    function runTimerForNonPrinting() {
-        window.onbeforeunload = function () {
-            return "You have unsaved changes.";
-        };
-        if (timer) {
-            clearTimeout(timer);
-            timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
-        }
-        else {
-            timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
-        }
-    }
-
-    function getHighlighting() {
-        $("#tabs").tabs("select", 0);
-        if (!isCompletionInProgress && !loadingExample && !isLoadingHighlighting) {
-            getErrors();
-        }
-    }
-
-    // Minimal event-handling wrapper.
-    function stopEvent() {
-        if (this.preventDefault) {
-            this.preventDefault();
-            this.stopPropagation();
-        }
-        else {
-            this.returnValue = false;
-            this.cancelBubble = true;
-        }
-    }
-
-    function addStop(event) {
-        if (!event.stop) event.stop = stopEvent;
-        return event;
-    }
-
-    function connect(node, type, handler) {
-        function wrapHandler(event) {
-            handler(addStop(event || window.event));
-        }
-
-        if (typeof node.addEventListener == "function")
-            node.addEventListener(type, wrapHandler, false);
-        else
-            node.attachEvent("on" + type, wrapHandler);
-    }
-
-    function forEach(arr, f) {
-        for (var i = 0, e = arr.length; i < e; ++i) f(arr[i]);
-    }
-
-    function forEachInArray(arr, f) {
-        var i = 0;
-        while (arr[i] != undefined) {
-            f(arr[i]);
-            i++;
-        }
-    }
+    var keywords;
+    var isContinueComplete = false;
 
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers:true,
@@ -117,7 +55,145 @@ $(document).ready(function () {
         minHeight:"430px"
     });
 
-//    editor.focus();
+    function runTimerForNonPrinting() {
+        window.onbeforeunload = function () {
+            return BEFORE_EXIT;
+        };
+        if (timer) {
+            clearTimeout(timer);
+            timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
+        }
+        else {
+            timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
+        }
+    }
+
+    function getHighlighting() {
+        $("#tabs").tabs("select", 0);
+        if (!isCompletionInProgress && !loadingExample && !isLoadingHighlighting) {
+            getErrors();
+        }
+    }
+
+    function getErrors() {
+        isLoadingHighlighting = true;
+        var i = editor.getValue();
+        if (isApplet) {
+            try {
+                var dataFromApplet;
+                try {
+                    dataFromApplet = $("#myapplet")[0].getHighlighting(i);
+                } catch (e) {
+                    document.getElementById("debug").innerHTML = e.description;
+                    $(".applet-disable").click();
+                    getErrors();
+                    isLoadingHighlighting = false;
+                    return;
+                }
+                var data = eval(dataFromApplet);
+                if (typeof data != "undefined") {
+                    if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
+                        $("#tabs").tabs("select", 0);
+                        document.getElementById("problems").innerHTML = "";
+                        setStatusBarMessage(data[0].exception);
+                        setConsoleMessage(data[0].exception);
+                        var j = 0;
+                        while (typeof data[j] != "undefined") {
+                            exception(data[j]);
+                            j++;
+                        }
+                        return;
+                    } else {
+                        onHighlightingSuccess(data);
+                    }
+                }
+                isLoadingHighlighting = false;
+            } catch (e) {
+                document.getElementById("debug").innerHTML = e.description;
+                isLoadingHighlighting = false;
+            }
+        } else {
+            $.ajax({
+                //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
+                url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
+                context:document.body,
+                success:onHighlightingSuccess,
+                dataType:"json",
+                type:"POST",
+                data:{text:i},
+                timeout:10000,
+                error:function () {
+                    isLoadingHighlighting = false;
+                    setConsoleMessage("Ajax request for highlighting was aborted.");
+                }
+            });
+        }
+    }
+
+    function onHighlightingSuccess(data) {
+        if (data != null) {
+            removeStyles();
+            if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
+                document.getElementById("problems").innerHTML = "";
+                setStatusBarMessage(data[0].exception);
+                setConsoleMessage(data[0].exception);
+                var j = 0;
+                while (typeof data[j] != "undefined") {
+                    exception(data[j]);
+                    j++;
+                }
+                //                updateStatusBar();
+                isLoadingHighlighting = false;
+                return;
+            }
+            var i = 0;
+
+            var problems = document.createElement("div");
+            while (typeof data[i] != "undefined") {
+                arrayClasses.push(editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className, "ddd"));
+                var title = data[i].titleName;
+                var start = eval('(' + data[i].x + ')');
+                var severity = data[i].severity;
+
+                if ((editor.lineInfo(start.line) != null) && (editor.lineInfo(start.line).markerText == null)) {
+                    if ((data[i].severity == 'WARNING') || (data[i].severity == 'TYPO')) {
+                        //editor.setMarker(start.line, '<img src="/icons/warning.png" title="' + title + '"/>%N%');
+                        editor.setMarker(start.line, '<span class=\"warningGutter\" title="' + title + '">  </span>%N%');
+                    } else {
+                        editor.setMarker(start.line, '<span class=\"errorGutter\" title="' + title + '">  </span>%N%');
+                    }
+                    arrayLinesMarkers.push(start.line);
+                } else {
+                    var text = editor.lineInfo(start.line).markerText;
+                    text = text.substring(text.indexOf("title=\"") + 7);
+                    text = text.substring(0, text.indexOf("\""));
+                    if ((severity == 'WARNING')) {
+                        editor.setMarker(start.line, '<span class=\"warningGutter\" title="' + title + " ---next error--- " + text + '">  </span>%N%');
+                    } else {
+                        editor.setMarker(start.line, '<span class=\"errorGutter\" title="' + title + " ---next error--- " + text + '">  </span>%N%');
+                    }
+                    //arrayLinesMarkers.push(start.line);
+                }
+
+                setTimeout(function () {
+                    var el = document.getElementById(start.line + " " + start.ch);
+                    if (el != null) {
+                        el.setAttribute("title", title);
+                    }
+                }, 50);
+
+                //add exception at problemsView
+                var p = createElementForProblemView(severity, start, title);
+                problems.appendChild(p);
+
+
+                i++;
+            }
+            document.getElementById("problems").innerHTML = problems.innerHTML;
+        }
+        updateStatusBar();
+        isLoadingHighlighting = false;
+    }
 
     function updateStatusBar() {
         updateHelp(editor.getTokenAt(editor.getCursor(true)).string);
@@ -153,10 +229,6 @@ $(document).ready(function () {
         return true;
     }
 
-    //editor.markText({line: 0, ch: 0}, {line: 0, ch: 5}, "newLine");
-
-    var compilationInProgress = false;
-
     $("#arguments").val("");
 
     function checkIfThereAreErrorsInProblemView() {
@@ -177,11 +249,11 @@ $(document).ready(function () {
         return result;
     }
 
-    function runOrCompile(param, text, error) {
+    $("#run").click(function () {
         $("#tabs").tabs("select", 1);
         setStatusBarMessage("Running...");
-        if ((!checkIfThereAreErrorsInProblemView()) && !compilationInProgress) {
-            compilationInProgress = true;
+        if ((!checkIfThereAreErrorsInProblemView()) && !isCompilationInProgress) {
+            isCompilationInProgress = true;
             var arguments = $("#arguments").val();
             var i = editor.getValue();
             $.ajax({
@@ -193,44 +265,17 @@ $(document).ready(function () {
                 data:{text:i, consoleArgs:arguments},
                 timeout:10000,
                 error:function () {
-                    compilationInProgress = false;
+                    isCompilationInProgress = false;
                     setStatusBarMessage("Running request was aborted.");
-                    document.getElementById("console").innerHTML = "Your request is aborted. Impossible to get data from server. Internal server error. " + error;
+                    document.getElementById("console").innerHTML = "Your request is aborted. Impossible to get data from server. Internal server error.";
                 }
             });
-
-            document.getElementById("console").innerHTML = text;
         }
-    }
-
-    $("#compile").click(function () {
-        runOrCompile("compile", "Compilation in progress...", "Compilation failed.");
     });
-
-    $("#run").click(function () {
-        runOrCompile("run", "Run project...", "Run action failed.");
-    });
-
-    $("#markAll").click(function () {
-        var lineCount = editor.lineCount();
-        var lastLine = editor.getLine(lineCount - 1);
-        var end = lastLine.length;
-        editor.setSelection(eval('(' + "{line: 0, ch: 0}" + ')'), eval('(' + "{line:" + lineCount + ", ch: " + end + "}" + ')'));
-        //window.clipboardData.setData("Text", editor.getValue());
-    });
-
-    function setStatusBarMessage(message) {
-        document.getElementById("statusbar").innerHTML = message;
-    }
-
-    function setConsoleMessage(message) {
-        document.getElementById("console").innerHTML = message;
-    }
-
 
     function onCompileSuccess(data) {
         var isCompiledWithErrors = false;
-        compilationInProgress = false;
+        isCompilationInProgress = false;
         if (data != null) {
             if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                 $("#tabs").tabs("select", 0);
@@ -291,64 +336,6 @@ $(document).ready(function () {
         }
     }
 
-    var now;
-    var isLoadingHighlighting = false;
-
-    function getErrors() {
-        isLoadingHighlighting = true;
-        var i = editor.getValue();
-        if (isApplet) {
-            try {
-                var dataFromApplet;
-                try {
-                    dataFromApplet = $("#myapplet")[0].getHighlighting(i);
-                } catch (e) {
-                    document.getElementById("debug").innerHTML = e.description;
-                    $(".applet-disable").click();
-                    getErrors();
-                    isLoadingHighlighting = false;
-                    return;
-                }
-                var data = eval(dataFromApplet);
-                if (typeof data != "undefined") {
-                    if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                        $("#tabs").tabs("select", 0);
-                        document.getElementById("problems").innerHTML = "";
-                        setStatusBarMessage(data[0].exception);
-                        setConsoleMessage(data[0].exception);
-                        var j = 0;
-                        while (typeof data[j] != "undefined") {
-                            exception(data[j]);
-                            j++;
-                        }
-                        return;
-                    } else {
-                        onHighlightingSuccess(data);
-                    }
-                }
-                isLoadingHighlighting = false;
-            } catch (e) {
-                document.getElementById("debug").innerHTML = e.description;
-                isLoadingHighlighting = false;
-            }
-        } else {
-            $.ajax({
-                //url: document.location.href + "?sendData=true&" + new Date().getTime() + "&lineNumber=" + lineNumber,
-                url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
-                context:document.body,
-                success:onHighlightingSuccess,
-                dataType:"json",
-                type:"POST",
-                data:{text:i},
-                timeout:10000,
-                error:function () {
-                    isLoadingHighlighting = false;
-                    setConsoleMessage("Ajax request for highlighting was aborted.");
-                }
-            });
-        }
-    }
-
 
     function createElementForProblemView(severity, start, title) {
         var p = document.createElement("p");
@@ -389,71 +376,6 @@ $(document).ready(function () {
         }
     }
 
-    function onHighlightingSuccess(data) {
-        if (data != null) {
-            removeStyles();
-            if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                document.getElementById("problems").innerHTML = "";
-                setStatusBarMessage(data[0].exception);
-                setConsoleMessage(data[0].exception);
-                var j = 0;
-                while (typeof data[j] != "undefined") {
-                    exception(data[j]);
-                    j++;
-                }
-//                updateStatusBar();
-                isLoadingHighlighting = false;
-                return;
-            }
-            var i = 0;
-
-            var problems = document.createElement("div");
-            while (typeof data[i] != "undefined") {
-                arrayClasses.push(editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className, "ddd"));
-                var title = data[i].titleName;
-                var start = eval('(' + data[i].x + ')');
-                var severity = data[i].severity;
-
-                if ((editor.lineInfo(start.line) != null) && (editor.lineInfo(start.line).markerText == null)) {
-                    if ((data[i].severity == 'WARNING') || (data[i].severity == 'TYPO')) {
-                        //editor.setMarker(start.line, '<img src="/icons/warning.png" title="' + title + '"/>%N%');
-                        editor.setMarker(start.line, '<span class=\"warningGutter\" title="' + title + '">  </span>%N%');
-                    } else {
-                        editor.setMarker(start.line, '<span class=\"errorGutter\" title="' + title + '">  </span>%N%');
-                    }
-                    arrayLinesMarkers.push(start.line);
-                } else {
-                    var text = editor.lineInfo(start.line).markerText;
-                    text = text.substring(text.indexOf("title=\"") + 7);
-                    text = text.substring(0, text.indexOf("\""));
-                    if ((severity == 'WARNING')) {
-                        editor.setMarker(start.line, '<span class=\"warningGutter\" title="' + title + " ---next error--- " + text + '">  </span>%N%');
-                    } else {
-                        editor.setMarker(start.line, '<span class=\"errorGutter\" title="' + title + " ---next error--- " + text + '">  </span>%N%');
-                    }
-                    //arrayLinesMarkers.push(start.line);
-                }
-
-                setTimeout(function () {
-                    var el = document.getElementById(start.line + " " + start.ch);
-                    if (el != null) {
-                        el.setAttribute("title", title);
-                    }
-                }, 50);
-
-                //add exception at problemsView
-                var p = createElementForProblemView(severity, start, title);
-                problems.appendChild(p);
-
-
-                i++;
-            }
-            document.getElementById("problems").innerHTML = problems.innerHTML;
-        }
-        updateStatusBar();
-        isLoadingHighlighting = false;
-    }
-
     function beforeComplete() {
         runTimerForNonPrinting();
         if (!isCompletionInProgress) {
@@ -461,7 +383,17 @@ $(document).ready(function () {
             var i = editor.getValue();
             if (isApplet) {
                 try {
-                    var dataFromApplet = $("#myapplet")[0].getCompletion(i, editor.getCursor(true).line, editor.getCursor(true).ch);
+                    var dataFromApplet;
+                    try {
+                        dataFromApplet = $("#myapplet")[0].getCompletion(i, editor.getCursor(true).line, editor.getCursor(true).ch);
+                    } catch (e) {
+                        document.getElementById("debug").innerHTML = e.description;
+                        $(".applet-disable").click();
+                        setStatusBarMessage("Applet doesn't supported on you computer.");
+                        getErrors();
+                        isCompletionInProgress = false;
+                        return;
+                    }
                     var data = eval(dataFromApplet);
                     if ((typeof data != "undefined") && (typeof data[0] != "undefined")) {
                         if (typeof data[0].exception != "undefined") {
@@ -474,12 +406,11 @@ $(document).ready(function () {
                                 exception(data[j]);
                                 j++;
                             }
-                            isCompletionInProgress = false;
-                            return;
                         } else {
                             startComplete(data);
                         }
                     }
+                    isCompletionInProgress = false;
                 } catch (e) {
                     document.getElementById("problems").innerHTML = e + " " + e.description;
                     isCompletionInProgress = false;
@@ -509,15 +440,13 @@ $(document).ready(function () {
         this.tail = tail;
     }
 
-    var keywords;
-    var isContinueComplete = false;
-
     function continueComplete() {
         startComplete(null);
         isContinueComplete = true;
     }
 
     function startComplete(data) {
+        isCompletionInProgress = false;
         //ideaKeywords = (data[0].content).split(" ");
         // We want a single cursor position.
         if (editor.somethingSelected()) return;
@@ -526,7 +455,6 @@ $(document).ready(function () {
         if ((data != null) && (typeof data != "undefined")) {
             if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                 setStatusBarMessage(data[0].exception);
-                isCompletionInProgress = false;
                 return;
             }
             keywords = [];
@@ -544,7 +472,6 @@ $(document).ready(function () {
             isContinueComplete = false;
         }
         var completions = getCompletions(token);
-        isCompletionInProgress = false;
         if ((completions.length == 0) || (completions == null)) return;
         if (completions.length == 1) {
             insert(completions[0].name);
@@ -768,5 +695,47 @@ $(document).ready(function () {
         }
         return hash;
     }
+
+    // Minimal event-handling wrapper.
+    function stopEvent() {
+        if (this.preventDefault) {
+            this.preventDefault();
+            this.stopPropagation();
+        }
+        else {
+            this.returnValue = false;
+            this.cancelBubble = true;
+        }
+    }
+
+    function addStop(event) {
+        if (!event.stop) event.stop = stopEvent;
+        return event;
+    }
+
+    function connect(node, type, handler) {
+        function wrapHandler(event) {
+            handler(addStop(event || window.event));
+        }
+
+        if (typeof node.addEventListener == "function")
+            node.addEventListener(type, wrapHandler, false);
+        else
+            node.attachEvent("on" + type, wrapHandler);
+    }
+
+    function forEach(arr, f) {
+        for (var i = 0, e = arr.length; i < e; ++i) f(arr[i]);
+    }
+
+    function forEachInArray(arr, f) {
+        var i = 0;
+        while (arr[i] != undefined) {
+            f(arr[i]);
+            i++;
+        }
+    }
+
+    getErrors();
 
 });

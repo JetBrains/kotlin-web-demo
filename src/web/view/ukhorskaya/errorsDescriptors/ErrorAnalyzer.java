@@ -13,9 +13,8 @@ import org.jetbrains.jet.lang.diagnostics.DiagnosticFactory;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.diagnostics.UnresolvedReferenceDiagnostic;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
+import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
 import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.Interval;
 import web.view.ukhorskaya.exceptions.KotlinCoreException;
@@ -71,7 +70,12 @@ public class ErrorAnalyzer {
         SessionInfo.TIME_MANAGER.saveCurrentTime();
         BindingContext bindingContext;
         try {
-            bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
+            /*bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
+                    currentProject,
+                    Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
+                    Predicates.<PsiFile>equalTo(currentPsiFile),
+                    JetControlFlowDataTraceFactory.EMPTY);*/
+            bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
                     currentProject,
                     Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
                     Predicates.<PsiFile>equalTo(currentPsiFile),

@@ -11,9 +11,8 @@ import org.jetbrains.jet.lang.psi.JetExpression;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.jet.lang.psi.JetQualifiedExpression;
-import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.java.JavaDefaultImports;
+import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.resolve.DescriptorRenderer;
@@ -62,11 +61,11 @@ public class JsonResponseForCompletion {
         SessionInfo.TIME_MANAGER.saveCurrentTime();
         BindingContext bindingContext;
         try {
-            bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
-                    currentProject,
-                    Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                    Predicates.<PsiFile>equalTo(currentPsiFile),
-                    JetControlFlowDataTraceFactory.EMPTY);
+            bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
+                                currentProject,
+                                Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
+                                Predicates.<PsiFile>equalTo(currentPsiFile),
+                                JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
             String exception = ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
             ErrorWriter.ERROR_WRITER.writeException(exception);
@@ -76,6 +75,9 @@ public class JsonResponseForCompletion {
         String info = ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
         PsiElement element = getExpressionForScope();
+        if (element == null) {
+            return "[]";
+        }
         PsiElement parent = element.getParent();
 
         JetScope resolutionScope;

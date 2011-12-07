@@ -5,6 +5,10 @@
  * Time: 2:05 PM
  * To change this template use File | Settings | File Templates.
  */
+/*Messages*/
+var requestAborted = "Your request was aborted. Impossible to get data from server.";
+var BEFORE_EXIT = "You have unsaved changes."
+
 var sessionId;
 var isApplet = false;
 var kotlinVersion;
@@ -24,7 +28,10 @@ function setSessionId(id) {
         context:document.body,
         type:"POST",
         data:{text:data},
-        timeout:5000
+        timeout:5000,
+        error:function () {
+
+        }
     });
 }
 
@@ -37,4 +44,12 @@ function setKotlinVersion(version) {
     kotlinVersion = version;
     document.getElementById("kotlinVersion").innerHTML = kotlinVersion;
     document.getElementById("kotlinVersionTop").innerHTML = "(" + kotlinVersion + ")";
+}
+
+function setStatusBarMessage(message) {
+    document.getElementById("statusbar").innerHTML = message;
+}
+
+function setConsoleMessage(message) {
+    document.getElementById("console").innerHTML = message;
 }

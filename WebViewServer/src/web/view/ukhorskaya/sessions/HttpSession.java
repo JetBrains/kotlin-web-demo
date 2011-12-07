@@ -43,10 +43,10 @@ public class HttpSession {
             String param = exchange.getRequestURI().toString();
             ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param);
             //FOR TEST ONLY
-            if (param.contains("testConnection")) {
+            /*if (param.contains("testConnection")) {
                 sendTestConnection();
                 return;
-            }
+            }*/
 
             String sId = ResponseUtils.substringBetween(param, "?sessionId=", "&");
             if (sId.equals("") || sId.equals("undefined")) {

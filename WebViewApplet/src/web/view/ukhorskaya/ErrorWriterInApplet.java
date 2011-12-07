@@ -51,25 +51,31 @@ public class ErrorWriterInApplet extends ErrorWriter {
                 wr.flush();
                 wr.close();
             }
+            urlConnection.connect();
+            /*try {
+                urlConnection.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
             //urlConnection.connect();
 
             BufferedReader in;
 
             try {
                 in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 in = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
             }
 
-            String str;
+            /*String str;
             StringBuilder result = new StringBuilder();
             while ((str = in.readLine()) != null) {
                 result.append(str);
-            }
+            }*/
             in.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, "text"));
         }
     }
 }
