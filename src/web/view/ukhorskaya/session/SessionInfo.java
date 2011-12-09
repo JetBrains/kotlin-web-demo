@@ -10,9 +10,38 @@ import web.view.ukhorskaya.TimeManager;
  */
 
 public class SessionInfo {
-    public static TimeManager TIME_MANAGER = new TimeManager();
-    public static int SESSION_ID = 0;
-    public static TypeOfRequest TYPE = TypeOfRequest.GET_RESOURCE;
+    private final TimeManager timeManager = new TimeManager();
+    private int id = 0;
+    private TypeOfRequest type = TypeOfRequest.GET_RESOURCE;
+
+    public SessionInfo(int sessionId, TypeOfRequest typeOfRequest) {
+        this.id = sessionId;
+        this.type = typeOfRequest;
+    }
+
+    public SessionInfo(int sessionId) {
+        this.id = sessionId;
+    }
+
+    public void setType(TypeOfRequest typeOfRequest) {
+        this.type = typeOfRequest;
+    }
+
+    public TimeManager getTimeManager() {
+        return timeManager;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int sessionId) {
+        this.id = sessionId;
+    }
+
+    public String getType() {
+        return type.name();
+    }
 
     public enum TypeOfRequest {
         HIGHLIGHT,
@@ -25,7 +54,8 @@ public class SessionInfo {
         GET_EXAMPLES_LIST,
         GET_HELP_FOR_EXAMPLES,
         GET_HELP_FOR_WORDS,
-        WRITE_LOG, GET_RESOURCE
+        WRITE_LOG, GET_RESOURCE,
+        ANALYZE_LOG
     }
 
 }

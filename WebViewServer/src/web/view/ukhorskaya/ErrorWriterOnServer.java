@@ -1,6 +1,9 @@
 package web.view.ukhorskaya;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.pattern.LoggingEventPatternConverter;
+import org.apache.log4j.spi.LoggingEvent;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,7 +19,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
     private static final ErrorWriterOnServer writer = new ErrorWriterOnServer();
 
     private ErrorWriterOnServer() {
-        
+
     }
 
     @Override
@@ -26,7 +29,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
 
     @Override
     public void writeInfo(String message) {
-        LOG_FOR_INFO.error(message);
+        LOG_FOR_INFO.info(message);
     }
 
 

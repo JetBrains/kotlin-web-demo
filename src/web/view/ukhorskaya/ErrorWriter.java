@@ -42,15 +42,15 @@ public abstract class ErrorWriter {
         builder.append(typeOfRequest);
         builder.append("</type>");
         builder.append("\n<message>");
-        builder.append(throwable.getMessage());
+        builder.append(ResponseUtils.escapeString(throwable.getMessage()));
         builder.append("</message>");
         builder.append("\n<stack>");
         StringWriter stringWriter = new StringWriter();
         throwable.printStackTrace(new PrintWriter(stringWriter));
-        builder.append(stringWriter.toString());
+        builder.append(ResponseUtils.escapeString(stringWriter.toString()));
         builder.append("\n</stack>");
         builder.append("\n<moreinfo>");
-        builder.append("\n").append(moreinfo);
+        builder.append("\n").append(ResponseUtils.escapeString(moreinfo));
         builder.append("\n</moreinfo>");
         builder.append("\n</error>");
         return builder.toString();
@@ -63,32 +63,20 @@ public abstract class ErrorWriter {
         builder.append(typeOfRequest);
         builder.append("</type>");
         builder.append("\n<message>");
-        builder.append(message);
+        builder.append(ResponseUtils.escapeString(message));
         builder.append("</message>");
         builder.append("\n<stack>");
-        builder.append(stackTrace);
+        builder.append(ResponseUtils.escapeString(stackTrace));
         builder.append("\n</stack>");
         builder.append("\n<moreinfo>");
-        builder.append("\n").append(moreinfo);
+        builder.append("\n").append(ResponseUtils.escapeString(moreinfo));
         builder.append("\n</moreinfo>");
         builder.append("\n</error>");
         return builder.toString();
     }
 
     public static String getExceptionForLog(String typeOfRequest, String message, String moreinfo) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("\n<error>");
-        builder.append("\n<type>");
-        builder.append(typeOfRequest);
-        builder.append("</type>");
-        builder.append("\n<message>");
-        builder.append(message);
-        builder.append("</message>");
-        builder.append("\n<moreinfo>");
-        builder.append("\n").append(moreinfo);
-        builder.append("\n</moreinfo>");
-        builder.append("\n</error>");
-        return builder.toString();
+        return getExceptionForLog(typeOfRequest, message, "null", moreinfo);
     }
 
     public static String getInfoForLog(String typeOfRequest, int userId, String message) {
@@ -103,6 +91,7 @@ public abstract class ErrorWriter {
     }
 
     public abstract void writeException(String message);
+
     public abstract void writeInfo(String message);
 
 }

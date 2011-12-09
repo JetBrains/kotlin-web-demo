@@ -58,12 +58,6 @@ $(document).ready(function () {
 
     $("#tabs").tabs();
 
-    /*$("#editorinput").resizable({
-     handles:"s",
-     alsoResize:".CodeMirror-scroll"
-     });*/
-
-
     $('.accordion .head').click(
         function () {
             $(this).next().toggle();
@@ -86,7 +80,7 @@ function loadAccordionContent() {
         //data:{text:i},
         timeout:10000,
         error:function () {
-            document.getElementById("statusbar").innerHTML = "Loading examples failed.";
+            setStatusBarMessage(REQUEST_ABORTED);
         }
     });
 
@@ -114,8 +108,7 @@ function onLoadingExamplesSuccess(data) {
             contA.id = i + "&head=" + lastHeadName;
             contA.style.cursor = "pointer";
             contA.onclick = function (event) {
-                loadExample(this.id);
-                loadExamplesHelp(this.innerHTML);
+                loadExample(this.id, this.innerHTML);
             };
             contA.innerHTML = data[i].text;
             content.appendChild(contA);
@@ -133,30 +126,33 @@ function onLoadingExamplesSuccess(data) {
 var loadingExample = false;
 var lastSelectedExample = 0;
 
-function loadExample(id) {
-    removeStyles();
-    var el = document.getElementById(lastSelectedExample);
-    if (el != null) {
-        el.className = "";
-    }
-
-    lastSelectedExample = id;
-    document.getElementById(id).className = "selectedExample";
-    document.getElementById("statusbar").innerHTML = "Loading example...";
-    loadingExample = true;
-    $.ajax({
-        url:document.location.href + "?sessionId=" + sessionId + "&exampleId=" + id,
-        context:document.body,
-        success:onLoadingExampleSuccess,
-        dataType:"json",
-        type:"GET",
-//        data:{text: i},
-        timeout:10000,
-        error:function () {
-            loadingExample = false;
-            document.getElementById("statusbar").innerHTML = "Loading example failed.";
+function loadExample(id, innerhtml) {
+    if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged){
+        removeStyles();
+        var el = document.getElementById(lastSelectedExample);
+        if (el != null) {
+            el.className = "";
         }
-    });
+
+        lastSelectedExample = id;
+        document.getElementById(id).className = "selectedExample";
+        document.getElementById("statusbar").innerHTML = "Loading example...";
+        loadingExample = true;
+        $.ajax({
+            url:document.location.href + "?sessionId=" + sessionId + "&exampleId=" + id,
+            context:document.body,
+            success:onLoadingExampleSuccess,
+            dataType:"json",
+            type:"GET",
+//        data:{text: i},
+            timeout:10000,
+            error:function () {
+                loadingExample = false;
+                setStatusBarMessage(REQUEST_ABORTED);
+            }
+        });
+        loadExamplesHelp(innerhtml);
+    }
 }
 
 function onLoadingExampleSuccess(data) {
@@ -164,8 +160,9 @@ function onLoadingExampleSuccess(data) {
     loadingExample = false;
     if (typeof data[0] != "undefined") {
         editor.setValue(data[0].text);
-        document.getElementById("statusbar").innerHTML = "Example is loaded.";
+        setStatusBarMessage(LOADING_EXAMPLE_OK);
     }
+    isContentEditorChanged = false;
 }
 
 $(".applet-enable").click(function () {

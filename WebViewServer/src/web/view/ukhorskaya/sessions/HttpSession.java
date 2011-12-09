@@ -4,7 +4,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.*;
@@ -32,9 +31,11 @@ public class HttpSession {
     protected PsiFile currentPsiFile;
 
     private HttpExchange exchange;
+    
+    private final SessionInfo sessionInfo;
 
-    public HttpSession() {
-        SessionInfo.TIME_MANAGER = new TimeManager();
+    public HttpSession(SessionInfo info) {
+        sessionInfo = info;
     }
 
     public void handle(final HttpExchange exchange) {
@@ -48,20 +49,11 @@ public class HttpSession {
                 return;
             }*/
 
-            String sId = ResponseUtils.substringBetween(param, "?sessionId=", "&");
-            if (sId.equals("") || sId.equals("undefined")) {
-                SessionInfo.SESSION_ID = RandomUtils.nextInt();
-                ServerHandler.numberOfUsers++;
-                ErrorWriterOnServer.LOG_FOR_INFO.info("Number of users since start server: " + ServerHandler.numberOfUsers);
-            } else {
-                SessionInfo.SESSION_ID = Integer.parseInt(sId);
-            }
-
             if (param.contains("compile=true") || param.contains("run=true")) {
-                SessionInfo.TYPE = SessionInfo.TypeOfRequest.RUN;
+                sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
                 sendExecutorResult();
             } else if (param.contains("writeLog=")) {
-                SessionInfo.TYPE = SessionInfo.TypeOfRequest.WRITE_LOG;
+                sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
                 String type = ResponseUtils.substringAfter(param, "writeLog=");
                 if (type.equals("info")) {
                     String tmp = getPostDataFromRequest(true).text;
@@ -72,17 +64,17 @@ public class HttpSession {
                 }
                 writeResponse("Data sended", HttpStatus.SC_OK, true);
             } else if (param.contains("complete=true")) {
-                SessionInfo.TYPE = SessionInfo.TypeOfRequest.COMPLETE;
+                sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
                 sendCompletionResult();
             } else if (param.contains("exampleId=")) {
-                SessionInfo.TYPE = SessionInfo.TypeOfRequest.LOAD_EXAMPLE;
+                sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
                 sendExampleContent();
             } else {
-                SessionInfo.TYPE = SessionInfo.TypeOfRequest.HIGHLIGHT;
+                sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
                 sendProjectSourceFile();
             }
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
             writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
         }
     }
@@ -106,7 +98,8 @@ public class HttpSession {
                 writer.write(response);
                 writer.close();
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e, e);
+//                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e, e);
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e);
             }
 
             writeResponse("Response sended", HttpStatus.SC_OK, true);
@@ -165,13 +158,13 @@ public class HttpSession {
                     " fun is in if vararg inline" +
                     "}";*/
             text = "fun main(args : Array<String>) {\n" +
-                    "    System.out?.println(\"Hello, world!\")\n" +
+                    "  System.out?.println(\"Hello, world!\")\n" +
                     "}";
 
         }
-        SessionInfo.TIME_MANAGER.saveCurrentTime();
+        sessionInfo.getTimeManager().saveCurrentTime();
         currentPsiFile = JetPsiFactory.createFile(currentProject, text);
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "PARSER " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: = " + currentPsiFile.getTextLength()));
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(), "PARSER " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: = " + currentPsiFile.getTextLength()));
     }
 
 
@@ -182,7 +175,7 @@ public class HttpSession {
 
         setGlobalVariables(getPostDataFromRequest().text);
 
-        JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(Integer.parseInt(position[0]), Integer.parseInt(position[1]), currentPsiFile);
+        JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(Integer.parseInt(position[0]), Integer.parseInt(position[1]), currentPsiFile, sessionInfo);
         writeResponse(jsonResponseForCompletion.getResult(), HttpStatus.SC_OK, true);
     }
 
@@ -191,7 +184,7 @@ public class HttpSession {
 
         if ((param != null) && (param.contains("sendData=true"))) {
             setGlobalVariables(getPostDataFromRequest().text);
-            JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile);
+            JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
 
             String response = responseForHighlighting.getResult();
             response = response.replaceAll("\\n", "");
@@ -212,7 +205,7 @@ public class HttpSession {
         try {
             reqResponse.append(ResponseUtils.readData(exchange.getRequestBody(), withNewLines));
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, "getPostDataFromRequest " + exchange.getRequestURI()));
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, "getPostDataFromRequest " + exchange.getRequestURI()));
             writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
             return new PostData("", "");
         }
@@ -221,7 +214,7 @@ public class HttpSession {
         try {
             finalResponse = URLDecoder.decode(reqResponse.toString(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, "null"));
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, "null"));
         }
         if (finalResponse != null) {
             finalResponse = finalResponse.replaceAll("<br>", "\n");
@@ -235,7 +228,7 @@ public class HttpSession {
                 writeResponse("Post request is too short", HttpStatus.SC_BAD_REQUEST);
             }
         } else {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Cannot read data from post request.", currentPsiFile.getText()));
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Cannot read data from post request.", currentPsiFile.getText()));
             writeResponse("Cannot read data from post request: ", HttpStatus.SC_BAD_REQUEST, true);
         }
 
@@ -252,7 +245,7 @@ public class HttpSession {
             isOnlyCompilation = false;
         }
 
-        CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(isOnlyCompilation, currentPsiFile, data.arguments);
+        CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(isOnlyCompilation, currentPsiFile, data.arguments, sessionInfo);
         writeResponse(responseForCompilation.getResult(), HttpStatus.SC_OK, true);
     }
 
@@ -276,14 +269,15 @@ public class HttpSession {
             path = "/header.html";
             InputStream is = ServerHandler.class.getResourceAsStream(path);
             if (is == null) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Cannot find header.html for request.", currentPsiFile.getText()));
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
+                        "Cannot find header.html for request.", currentPsiFile.getText()));
                 writeResponse("File not found", HttpStatus.SC_NOT_FOUND);
                 return;
             }
             try {
                 response.append(ResponseUtils.readData(is));
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
                 writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
                 return;
             }
@@ -294,7 +288,7 @@ public class HttpSession {
         String finalResponse = response.toString();
         finalResponse = finalResponse.replace("$RESPONSEBODY$", responseBody);
         if (!disableHeaders) {
-            finalResponse = finalResponse.replace("$SESSIONID$", String.valueOf(SessionInfo.SESSION_ID));
+            finalResponse = finalResponse.replace("$SESSIONID$", String.valueOf(sessionInfo.getId()));
             finalResponse = finalResponse.replace("$KOTLINVERSION$", "'" + ServerSettings.KOTLIN_VERSION + "'");
         }
         try {
@@ -308,17 +302,18 @@ public class HttpSession {
             exchange.sendResponseHeaders(errorCode, bytes.length);
             os = exchange.getResponseBody();
             os.write(bytes);
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ALL " + SessionInfo.TIME_MANAGER.getMillisecondsFromStart() + " request=" + exchange.getRequestURI()));
+            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+                    sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + exchange.getRequestURI()));
         } catch (IOException e) {
             //This is an exception we can't send data to client
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
         } finally {
             try {
                 if (os != null) {
                     os.close();
                 }
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
             }
         }
     }

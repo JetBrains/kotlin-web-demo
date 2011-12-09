@@ -45,20 +45,22 @@ public class JsonResponseForCompletion {
     private final int lineNumber;
     private final int charNumber;
     private int caretPositionOffset;
+    private SessionInfo sessionInfo;
 
 
-    public JsonResponseForCompletion(int lineNumber, int charNumber, PsiFile currentPsiFile) {
+    public JsonResponseForCompletion(int lineNumber, int charNumber, PsiFile currentPsiFile, SessionInfo sessionInfo) {
         this.lineNumber = lineNumber;
         this.charNumber = charNumber;
         this.currentPsiFile = currentPsiFile;
         this.currentProject = currentPsiFile.getProject();
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
+        this.sessionInfo = sessionInfo;
     }
 
     public String getResult() {
         addExpressionAtCaret();
 
-        SessionInfo.TIME_MANAGER.saveCurrentTime();
+        sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
             bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
@@ -67,12 +69,12 @@ public class JsonResponseForCompletion {
                                 Predicates.<PsiFile>equalTo(currentPsiFile),
                                 JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-            String exception = ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
+            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
             ErrorWriter.ERROR_WRITER.writeException(exception);
             return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
                     + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
-        String info = ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        String info = ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(), "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
         PsiElement element = getExpressionForScope();
         if (element == null) {
@@ -100,13 +102,13 @@ public class JsonResponseForCompletion {
             for (DeclarationDescriptor descriptor : descriptors) {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("icon", getIconFromDescriptor(descriptor));
-                map.put("tail", getTailText(descriptor));
+                map.put("tail", "   " + getTailText(descriptor));
                 map.put("name", getNameFromDescriptor(descriptor));
 
                 jsonArray.put(map);
             }
         } else {
-            String exception = ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Resolution scope is null.", currentPsiFile.getText());
+            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Resolution scope is null.", currentPsiFile.getText());
             ErrorWriter.ERROR_WRITER.writeException(exception);
         }
         return jsonArray.toString();
@@ -131,7 +133,7 @@ public class JsonResponseForCompletion {
             if (element != null) {
                 element = element.getParent();
             } else {
-                String exception = ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), " Cannot find an element for take completion.", currentPsiFile.getText());
+                String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), " Cannot find an element for take completion.", currentPsiFile.getText());
                 ErrorWriter.ERROR_WRITER.writeException(exception);
                 break;
             }

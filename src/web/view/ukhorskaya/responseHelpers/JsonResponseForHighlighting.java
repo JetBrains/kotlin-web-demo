@@ -8,6 +8,7 @@ import web.view.ukhorskaya.errorsDescriptors.ErrorAnalyzer;
 import web.view.ukhorskaya.errorsDescriptors.ErrorDescriptor;
 import web.view.ukhorskaya.exceptions.KotlinCoreException;
 import web.view.ukhorskaya.server.ServerSettings;
+import web.view.ukhorskaya.session.SessionInfo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,13 +24,16 @@ import java.util.Map;
 public class JsonResponseForHighlighting {
 
     private final PsiFile currentPsiFile;
+    
+    private final SessionInfo sessionInfo;
 
-    public JsonResponseForHighlighting(PsiFile currentPsiFile) {
+    public JsonResponseForHighlighting(PsiFile currentPsiFile, SessionInfo info) {
         this.currentPsiFile = currentPsiFile;
+        this.sessionInfo = info;
     }
 
     public String getResult() {
-        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile);
+        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile, sessionInfo);
         List<ErrorDescriptor> errorDescriptors;
         try {
             errorDescriptors = analyzer.getAllErrors();

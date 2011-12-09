@@ -1,7 +1,5 @@
 package web.view.ukhorskaya;
 
-import web.view.ukhorskaya.session.SessionInfo;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -35,7 +33,7 @@ public class ErrorWriterInApplet extends ErrorWriter {
     }
 
     public static void sendTextToServer(String text, String request, String type) {
-        String urlPath = request + "/?sessionId=" + SessionInfo.SESSION_ID + "&writeLog=" + type;
+        String urlPath = request + "/?sessionId=" + MainApplet.SESSION_INFO.getId() + "&writeLog=" + type;
 
         URL url;
         try {
@@ -75,7 +73,7 @@ public class ErrorWriterInApplet extends ErrorWriter {
             in.close();
 
         } catch (Exception e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, "text"));
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(MainApplet.SESSION_INFO.getType(), e, "text"));
         }
     }
 }

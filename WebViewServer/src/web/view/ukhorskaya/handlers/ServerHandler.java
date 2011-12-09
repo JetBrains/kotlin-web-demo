@@ -1,11 +1,16 @@
 package web.view.ukhorskaya.handlers;
 
+import com.intellij.openapi.diagnostic.Logger;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.lang.math.RandomUtils;
+import org.jetbrains.annotations.Nullable;
 import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
+import web.view.ukhorskaya.Statistics;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.help.HelpLoader;
 import web.view.ukhorskaya.log.LogDownloader;
@@ -14,6 +19,9 @@ import web.view.ukhorskaya.sessions.HttpSession;
 
 import java.io.*;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,17 +31,17 @@ import java.net.URLDecoder;
  */
 
 public class ServerHandler implements HttpHandler {
-//    private static final Logger LOG = Logger.getLogger(ServerHandler.class);
 
-    public static int numberOfUsers = 0;
 
     @Override
     public void handle(final HttpExchange exchange) throws IOException {
+        SessionInfo sessionInfo;
         try {
             String param = exchange.getRequestURI().toString();
 
             if (param.contains("userData=true")) {
-                sendUserInformation(exchange);
+                sessionInfo = setSessionInfo(exchange);
+                sendUserInformation(exchange, sessionInfo);
             } else if (param.equals("/logs")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
@@ -54,7 +62,9 @@ public class ServerHandler implements HttpHandler {
                     || (param.startsWith("/?"))
                     || param.contains("testConnection")
                     || param.contains("writeLog=")) {
-                HttpSession session = new HttpSession();
+                sessionInfo = setSessionInfo(exchange);
+                HttpSession session = new HttpSession(sessionInfo);
+
                 session.handle(exchange);
             } else {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + exchange.getRequestURI());
@@ -65,6 +75,40 @@ public class ServerHandler implements HttpHandler {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(exchange.getRequestURI().toString(), e, "null"));
             writeResponse(exchange, "Internal server error".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Nullable
+    private SessionInfo setSessionInfo(HttpExchange exchange) {
+        SessionInfo sessionInfo = null;
+        String sessionIdFromCookie = hasSessionIdInCookies(exchange.getRequestHeaders());
+        if (sessionIdFromCookie == null) {
+            sessionInfo = new SessionInfo(RandomUtils.nextInt());
+            Statistics.NUMBER_OF_USERS++;
+            ErrorWriterOnServer.LOG_FOR_INFO.info("Number of users since start server: " + Statistics.NUMBER_OF_USERS);
+        } else {
+            try {
+                sessionInfo = new SessionInfo(Integer.parseInt(sessionIdFromCookie));
+            } catch (NumberFormatException e) {
+                sessionInfo = new SessionInfo(RandomUtils.nextInt());
+                Statistics.NUMBER_OF_USERS++;
+                ErrorWriterOnServer.LOG_FOR_INFO.info("Number of users since start server: " + Statistics.NUMBER_OF_USERS);
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.toString(), e, sessionIdFromCookie));
+            }
+        }
+        return sessionInfo;
+    }
+
+    @Nullable
+    private String hasSessionIdInCookies(Headers responseHeaders) {
+        for (String key : responseHeaders.keySet()) {
+            if (key.equals("Cookie")) {
+                List<String> cookie = responseHeaders.get(key);
+                if (cookie.size() > 0) {
+                    return ResponseUtils.substringAfterReturnAll(cookie.get(0), "userId=");
+                }
+            }
+        }
+        return null;
     }
 
     private void sendHelpContentForExamples(HttpExchange exchange) {
@@ -96,6 +140,7 @@ public class ServerHandler implements HttpHandler {
             String response = ResponseUtils.readData(is);
             String links = new LogDownloader().getFilesLinks();
             response = response.replace("$LINKSTOLOGFILES$", links);
+            response = new Statistics().writeStatistics(response);
             writeResponse(exchange, response.getBytes(), 200);
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "null"));
@@ -107,7 +152,7 @@ public class ServerHandler implements HttpHandler {
         writeResponse(exchange, loader.getExamplesList().getBytes(), HttpStatus.SC_OK);
     }
 
-    private void sendUserInformation(HttpExchange exchange) {
+    private void sendUserInformation(HttpExchange exchange, SessionInfo info) {
         StringBuilder reqResponse = new StringBuilder();
         try {
             reqResponse.append(ResponseUtils.readData(exchange.getRequestBody()));
@@ -121,7 +166,7 @@ public class ServerHandler implements HttpHandler {
         } catch (UnsupportedEncodingException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
         }
-        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.SEND_USER_DATA.name() + " " + ResponseUtils.substringAfter(reqResponse.toString(), "text=") + " " + SessionInfo.TypeOfRequest.SEND_USER_DATA.name());
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
         writeResponse(exchange, "OK".getBytes(), HttpStatus.SC_OK);
     }
 

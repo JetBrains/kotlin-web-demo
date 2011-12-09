@@ -27,7 +27,7 @@ public class TimeManager {
         savedTime = System.nanoTime();
     }
 
-    public long getMillisecondsFromSavedTime() {
-        return (System.nanoTime() - savedTime) / 1000000;
+    public String getMillisecondsFromSavedTime() {
+        return String.valueOf((System.nanoTime() - savedTime) / 1000000);
     }
 }

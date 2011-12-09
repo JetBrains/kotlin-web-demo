@@ -66,6 +66,7 @@ public class Main {
                         if (System.in.available() > 0) {
                             tmp = reader.readLine();
                             CommandRunner.runCommand(tmp);
+                            System.out.print("> ");
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

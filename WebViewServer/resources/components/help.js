@@ -67,7 +67,7 @@ function loadHelpContentForExamples() {
         //data:{text:i},
         timeout:30000,
         error:function () {
-            document.getElementById("statusbar").innerHTML = "Loading help failed.";
+            setStatusBarMessage(REQUEST_ABORTED);
         }
     });
 }
@@ -93,7 +93,7 @@ function loadHelpContentForWords() {
         //data:{text:i},
         timeout:30000,
         error:function () {
-            document.getElementById("statusbar").innerHTML = "Loading help failed.";
+            setStatusBarMessage(REQUEST_ABORTED);
         }
     });
 }

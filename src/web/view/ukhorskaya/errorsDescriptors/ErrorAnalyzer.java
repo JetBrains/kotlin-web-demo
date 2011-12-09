@@ -37,10 +37,13 @@ public class ErrorAnalyzer {
     private final Document currentDocument;
     private final Project currentProject;
 
-    public ErrorAnalyzer(PsiFile currentPsiFile) {
+    private final SessionInfo sessionInfo;
+
+    public ErrorAnalyzer(PsiFile currentPsiFile, SessionInfo info) {
         this.currentPsiFile = currentPsiFile;
         this.currentProject = currentPsiFile.getProject();
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
+        this.sessionInfo = info;
     }
 
     public List<ErrorDescriptor> getAllErrors() {
@@ -67,7 +70,7 @@ public class ErrorAnalyzer {
             Interval interval = new Interval(start, end, currentDocument);
             errors.add(new ErrorDescriptor(interval, errorElement.getErrorDescription(), Severity.ERROR, "red_wavy_line"));
         }
-        SessionInfo.TIME_MANAGER.saveCurrentTime();
+        sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
             /*bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
@@ -81,11 +84,12 @@ public class ErrorAnalyzer {
                     Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-            String exception = ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText());
+            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
             ErrorWriter.ERROR_WRITER.writeException(exception);
             throw new KotlinCoreException(e);
         }
-        String info = ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "ANALYZE namespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        String info = ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(),
+                "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 

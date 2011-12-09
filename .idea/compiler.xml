@@ -19,6 +19,7 @@
       <entry name="?*.js" />
       <entry name="?*.ico" />
       <entry name="?*.jar" />
+      <entry name="?*.xml" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>

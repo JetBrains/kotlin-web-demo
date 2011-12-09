@@ -7,7 +7,6 @@ import web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting;
 import web.view.ukhorskaya.session.SessionInfo;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
@@ -26,12 +25,15 @@ public class MainApplet extends JApplet implements ActionListener {
     private JButton b2;*/
 
     public static String request;
+    
+    public static SessionInfo SESSION_INFO;
 
     public void init() {
         InitializerApplet.getInstance().initJavaCoreEnvironment();
         request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
-        SessionInfo.SESSION_ID = new Random().nextInt();
+        
+        SESSION_INFO = new SessionInfo(new Random().nextInt());
 
         /*Container contentPane = this.getContentPane();
         contentPane.setLayout(new FlowLayout());
@@ -44,14 +46,14 @@ public class MainApplet extends JApplet implements ActionListener {
     }
 
     public String getHighlighting(String data) {
-        SessionInfo.TYPE = SessionInfo.TypeOfRequest.HIGHLIGHT;
+        SESSION_INFO.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
-            JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile);
+            JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, SESSION_INFO);
             return responseForHighlighting.getResult();
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, data));
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SESSION_INFO.getType(), e, data));
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson(writer.toString());
@@ -59,14 +61,15 @@ public class MainApplet extends JApplet implements ActionListener {
     }
 
     public String getCompletion(String data, String line, String ch) {
-        SessionInfo.TYPE = SessionInfo.TypeOfRequest.COMPLETE;
+        SESSION_INFO.setType(SessionInfo.TypeOfRequest.COMPLETE);
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
-            JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line), Integer.parseInt(ch), currentPsiFile);
+            JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line),
+                    Integer.parseInt(ch), currentPsiFile, SESSION_INFO);
             return responseForCompletion.getResult();
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, data));
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SESSION_INFO.getType(), e, data));
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson(writer.toString());

@@ -238,7 +238,8 @@ CodeMirror.defineMode("clike", function (config, parserConfig) {
                 stream.eatWhile(/[\w\$_]/);
                 return "meta";
             }
-        }
+        } ,
+        multiLineStrings: true
     });
 
     CodeMirror.defineMIME("text/x-csharp", {

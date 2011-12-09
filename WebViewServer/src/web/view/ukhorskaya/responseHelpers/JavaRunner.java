@@ -23,21 +23,24 @@ public class JavaRunner {
     private final List<String> files;
     private final String arguments;
     private final JSONArray jsonArray;
-    private final String textFromfile;
+    private final String textFromFile;
+
+    private final SessionInfo sessionInfo;
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(List<String> files, String arguments, JSONArray array, String text) {
+    public JavaRunner(List<String> files, String arguments, JSONArray array, String text, SessionInfo info) {
         this.files = files;
         this.arguments = arguments;
         this.jsonArray = array;
-        this.textFromfile = text;
+        this.textFromFile = text;
+        this.sessionInfo = info;
     }
 
     public String getResult() {
         String commandString = generateCommandString();
         Process process;
-        SessionInfo.TIME_MANAGER.saveCurrentTime();
+        sessionInfo.getTimeManager().saveCurrentTime();
         try {
             process = Runtime.getRuntime().exec(commandString);
             process.getOutputStream().close();
@@ -55,7 +58,8 @@ public class JavaRunner {
             public void run() {
                 isTimeoutException = true;
                 finalProcess.destroy();
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Timeout exception."));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+                        sessionInfo.getId(), "Timeout exception."));
                 errStream.append("Program was terminated after " + Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
             }
         }, Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION));
@@ -97,10 +101,12 @@ public class JavaRunner {
         try {
             exitValue = process.waitFor();
         } catch (InterruptedException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, textFromfile));
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
+                    e, textFromFile));
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "RUN user program " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime()
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+                sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
                 + " timeout=" + isTimeoutException
                 + " commandString=" + commandString));
 
@@ -110,9 +116,11 @@ public class JavaRunner {
                     outStream.delete(0, outStream.length());
                     errStream.append(ServerSettings.KOTLIN_ERROR_MESSAGE);
                     String linkForLog = getLinkForLog(outStream.toString());
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Error from log", linkForLog));
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
+                            "Error from log", linkForLog));
                 }
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), outStream.toString().replaceAll("<br/>", "\n"), textFromfile));
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
+                        outStream.toString().replaceAll("<br/>", "\n"), textFromFile));
             }
         }
 
@@ -134,7 +142,8 @@ public class JavaRunner {
                 jsonArray.put(map);
                 mapErr.put("type", "out");
             } else {
-                ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "error while excecution: " + errStream));
+                ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+                        sessionInfo.getId(), "error while excecution: " + errStream));
                 mapErr.put("type", "err");
             }
             mapErr.put("text", errStream.toString());
@@ -164,7 +173,8 @@ public class JavaRunner {
             log.deleteOnExit();
             return response;
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, "Impossible to find " + log.getAbsolutePath()));
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
+                    e, "Impossible to find " + log.getAbsolutePath()));
         }
         return "";
     }
@@ -178,8 +188,8 @@ public class JavaRunner {
             stackTrace = errStream.substring(pos).replaceAll("<br/>", "\n");
         }
         ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(
-                ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(),
-                        message, stackTrace, textFromfile));
+                ErrorWriter.getExceptionForLog(sessionInfo.getType(),
+                        message, stackTrace, textFromFile));
     }
 
     private boolean isKotlinLibraryException(String str) {
@@ -256,7 +266,8 @@ public class JavaRunner {
             if (file.list().length == 0) {
                 if (file.exists()) {
                     file.delete();
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Directory is deleted : " + file.getAbsolutePath()));
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+                            sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                 }
             } else {
                 //list all the directory contents
@@ -270,14 +281,16 @@ public class JavaRunner {
                 if (file.list().length == 0) {
                     if (file.exists()) {
                         file.delete();
-                        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Directory is deleted : " + file.getAbsolutePath()));
+                        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+                                sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                     }
                 }
             }
         } else {
             if (file.exists()) {
                 file.delete();
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "File is deleted : " + file.getAbsolutePath()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+                        sessionInfo.getId(), "File is deleted : " + file.getAbsolutePath()));
             }
         }
     }

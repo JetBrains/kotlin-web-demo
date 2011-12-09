@@ -43,14 +43,17 @@ public class CompileAndRunExecutor {
     private final PsiFile currentPsiFile;
     private final String arguments;
 
-    public CompileAndRunExecutor(boolean onlyCompilation, PsiFile currentPsiFile, String arguments) {
+    private final SessionInfo sessionInfo;
+
+    public CompileAndRunExecutor(boolean onlyCompilation, PsiFile currentPsiFile, String arguments, SessionInfo info) {
         this.isOnlyCompilation = onlyCompilation;
         this.currentPsiFile = currentPsiFile;
         this.arguments = arguments;
+        this.sessionInfo = info;
     }
 
     public String getResult() {
-        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile);
+        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile, sessionInfo);
         List<ErrorDescriptor> errors;
         try {
             errors = analyzer.getAllErrors();
@@ -70,22 +73,23 @@ public class CompileAndRunExecutor {
                     Predicates.<PsiFile>equalTo(currentPsiFile),
                     JetControlFlowDataTraceFactory.EMPTY);
 
-            SessionInfo.TIME_MANAGER.saveCurrentTime();
+            sessionInfo.getTimeManager().saveCurrentTime();
             GenerationState generationState;
             try {
                 generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
                 generationState.compileCorrectNamespaces(bindingContext, namespaces);
             } catch (Throwable e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
                 return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "COMPILE correctNamespaces " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime()));
+            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(),
+                    "COMPILE correctNamespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
             StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
             stringBuilder.append(ResponseUtils.addNewLine());
             final ClassFileFactory factory = generationState.getFactory();
 
-            SessionInfo.TIME_MANAGER.saveCurrentTime();
+            sessionInfo.getTimeManager().saveCurrentTime();
             List<String> files = factory.files();
             for (String file : files) {
                 File outputDir = new File(ServerSettings.OUTPUT_DIRECTORY);
@@ -100,16 +104,19 @@ public class CompileAndRunExecutor {
                         FileUtil.writeToFile(target, factory.asBytes(file));
                         stringBuilder.append(file).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
-                        ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), e, currentPsiFile.getText()));
+                        ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e,
+                                currentPsiFile.getText()));
                         return ResponseUtils.getErrorInJson("Cannot get a completion.");
                     }
                 } else {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TYPE.name(), "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
+                            "Cannot create output directory for files: " + outputDir.getAbsolutePath(), currentPsiFile.getText()));
                     return ResponseUtils.getErrorInJson("Error on server: cannot run your program.");
                 }
 
             }
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TYPE.name(), SessionInfo.SESSION_ID, "Write files on disk " + SessionInfo.TIME_MANAGER.getMillisecondsFromSavedTime()));
+            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(),
+                    "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
             JSONArray jsonArray = new JSONArray();
             Map<String, String> map = new HashMap<String, String>();
@@ -117,7 +124,7 @@ public class CompileAndRunExecutor {
             map.put("text", stringBuilder.toString());
             jsonArray.put(map);
 
-            JavaRunner runner = new JavaRunner(files, arguments, jsonArray, currentPsiFile.getText());
+            JavaRunner runner = new JavaRunner(files, arguments, jsonArray, currentPsiFile.getText(), sessionInfo);
 
             return runner.getResult();
 
