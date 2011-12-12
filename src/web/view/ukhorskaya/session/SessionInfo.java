@@ -55,7 +55,8 @@ public class SessionInfo {
         GET_HELP_FOR_EXAMPLES,
         GET_HELP_FOR_WORDS,
         WRITE_LOG, GET_RESOURCE,
-        ANALYZE_LOG
+        ANALYZE_LOG,
+        INC_NUMBER_OF_REQUESTS
     }
 
 }

@@ -11,7 +11,7 @@
 
         </layout>-->
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{yyyy-MM-dd hh:mm:ss} (%F %L) [%p] %m%n"/>
+            <param name="ConversionPattern" value="%d{MM/dd/yy hh:mm:ss} (%F %L) [%p] %m%n"/>
         </layout>
     </appender>
 
@@ -21,7 +21,7 @@
         </layout>-->
         <layout class="org.apache.log4j.PatternLayout">
             <!--<param name="ConversionPattern" value="%m%n"/>-->
-            <param name="ConversionPattern" value="%d{yyyy-MM-dd hh:mm:ss} (%F %L) [%p] %m%n"/>
+            <param name="ConversionPattern" value="%d{MM/dd/yy hh:mm:ss} (%F %L) [%p] %m%n"/>
         </layout>
     </appender>
     <logger name="exceptionLogger">

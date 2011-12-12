@@ -79,14 +79,14 @@ public abstract class ErrorWriter {
         return getExceptionForLog(typeOfRequest, message, "null", moreinfo);
     }
 
-    public static String getInfoForLog(String typeOfRequest, int userId, String message) {
+    public static String getInfoForLog(String typeOfRequest, Integer userId, String message) {
         StringBuilder builder = new StringBuilder();
-        builder.append(typeOfRequest);
+        builder.append("type=").append(typeOfRequest);
         builder.append(" ");
         builder.append("userId=");
         builder.append(String.valueOf(userId));
         builder.append(" ");
-        builder.append(message);
+        builder.append("message=").append(message);
         return builder.toString();
     }
 

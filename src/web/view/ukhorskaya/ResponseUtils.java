@@ -19,6 +19,9 @@ public class ResponseUtils {
         if (string.contains(">")) {
             string = string.replaceAll(">", "&gt;");
         }
+        if (string.contains("&")) {
+            string = string.replaceAll(">", "&amp;");
+        }
         /* if (string.contains("\"")) {
             string = string.replaceAll("\"", "'");
         }*/

@@ -95,8 +95,8 @@ function beforeBack() {
         history.back();
     }
     isContentEditorChanged = false;
-    bajb_backdetect.OnBack = beforeBack();
+//    bajb_backdetect.OnBack = beforeBack();
 }
 
 
-bajb_backdetect.OnBack = beforeBack;
+//bajb_backdetect.OnBack = beforeBack;

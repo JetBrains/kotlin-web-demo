@@ -1,6 +1,7 @@
 package web.view.ukhorskaya.log;
 
 import web.view.ukhorskaya.ResponseUtils;
+import web.view.ukhorskaya.Statistics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -101,5 +102,9 @@ public class LogDownloader {
         responseOtherLogs.append(responseJavaLogs);
 
         return responseOtherLogs.toString();
+    }
+
+    public String getSortedExceptions(String from, String to) {
+        return Statistics.getInstance().getSortedExceptions(from, to);
     }
 }

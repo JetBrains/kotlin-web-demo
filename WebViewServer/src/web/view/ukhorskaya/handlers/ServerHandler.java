@@ -1,6 +1,5 @@
 package web.view.ukhorskaya.handlers;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -19,9 +18,7 @@ import web.view.ukhorskaya.sessions.HttpSession;
 
 import java.io.*;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,6 +42,9 @@ public class ServerHandler implements HttpHandler {
             } else if (param.equals("/logs")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
+            } else if (param.contains("/sortedExceptions=")) {
+                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
+                sendSortedExceptions(exchange);
             } else if (param.contains("log=")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + exchange.getRequestURI());
                 sendLog(exchange);
@@ -62,7 +62,11 @@ public class ServerHandler implements HttpHandler {
                     || (param.startsWith("/?"))
                     || param.contains("testConnection")
                     || param.contains("writeLog=")) {
-                sessionInfo = setSessionInfo(exchange);
+                if (!param.contains("testConnection")&& !param.contains("writeLog=")) {
+                    sessionInfo = setSessionInfo(exchange);
+                }  else {
+                    sessionInfo = new SessionInfo(0);
+                }
                 HttpSession session = new HttpSession(sessionInfo);
 
                 session.handle(exchange);
@@ -77,21 +81,32 @@ public class ServerHandler implements HttpHandler {
         }
     }
 
+    private void sendSortedExceptions(HttpExchange exchange) {
+        String param = exchange.getRequestURI().toString();
+        if (param.contains("download")) {
+            exchange.getResponseHeaders().add("Content-type", "application/x-download");
+        }
+        String from = ResponseUtils.substringBetween(param, "&from=", "&to=");
+        String to = ResponseUtils.substringAfter(param, "&to=");
+
+        writeResponse(exchange, new LogDownloader().getSortedExceptions(from, to).getBytes(), 200);
+    }
+
     @Nullable
     private SessionInfo setSessionInfo(HttpExchange exchange) {
-        SessionInfo sessionInfo = null;
+        SessionInfo sessionInfo;
         String sessionIdFromCookie = hasSessionIdInCookies(exchange.getRequestHeaders());
         if (sessionIdFromCookie == null) {
-            sessionInfo = new SessionInfo(RandomUtils.nextInt());
-            Statistics.NUMBER_OF_USERS++;
-            ErrorWriterOnServer.LOG_FOR_INFO.info("Number of users since start server: " + Statistics.NUMBER_OF_USERS);
+            Statistics.incNumberOfUsers();
+            sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
+            ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
         } else {
             try {
                 sessionInfo = new SessionInfo(Integer.parseInt(sessionIdFromCookie));
             } catch (NumberFormatException e) {
-                sessionInfo = new SessionInfo(RandomUtils.nextInt());
-                Statistics.NUMBER_OF_USERS++;
-                ErrorWriterOnServer.LOG_FOR_INFO.info("Number of users since start server: " + Statistics.NUMBER_OF_USERS);
+                Statistics.incNumberOfUsers();
+                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.toString(), e, sessionIdFromCookie));
             }
         }
@@ -140,7 +155,7 @@ public class ServerHandler implements HttpHandler {
             String response = ResponseUtils.readData(is);
             String links = new LogDownloader().getFilesLinks();
             response = response.replace("$LINKSTOLOGFILES$", links);
-            response = new Statistics().writeStatistics(response);
+            response = Statistics.getInstance().writeStatistics(response);
             writeResponse(exchange, response.getBytes(), 200);
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "null"));
@@ -166,6 +181,7 @@ public class ServerHandler implements HttpHandler {
         } catch (UnsupportedEncodingException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
         }
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
         writeResponse(exchange, "OK".getBytes(), HttpStatus.SC_OK);
     }

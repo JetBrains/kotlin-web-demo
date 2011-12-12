@@ -39,6 +39,7 @@ public class Main {
                     ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
                     ExamplesList.getInstance();
                     HelpLoader.getInstance();
+                    Statistics.getInstance();
                     startConsoleThread();
                 } else {
                     ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");

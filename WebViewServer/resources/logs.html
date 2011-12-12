@@ -8,6 +8,13 @@
             margin-left: 10px;
         }
     </style>
+    <script type="text/javascript">
+        function generateDateRequest(param) {
+            document.location.href = "sortedExceptions=" + param + "&from="
+                    + document.getElementById("dateFrom").value +
+                    "&to=" + document.getElementById("dateTo").value;
+        }
+    </script>
 </head>
 <body>
 <div>
@@ -15,8 +22,18 @@
     $LINKSTOLOGFILES$
 </div>
 <div>
-    <a href="/sortedExceptions=show">Show sorted exceptions</a>
-    <a href="/sortedExceptions=download">Download sorted exceptions (xml)</a>
+    <h5>SORTED LOGS:</h5>
+    Date in format MM/dd/yy (from &lt;= date &lt;= to)
+    <form action="logs.html">
+        <label>
+            from <input name="dateFrom" id="dateFrom"/>
+        </label>
+        <label>
+            to <input name="dateTo" id="dateTo"/>
+        </label>
+    </form>
+    <a href="#" onclick="generateDateRequest('view')">Show sorted exceptions</a>
+    <a href="#" onclick="generateDateRequest('download')">Download sorted exceptions (xml)</a>
 </div>
 <div>
     <h3>STATISTICS:</h3>
@@ -36,6 +53,14 @@
         <tr>
             <td>Среднее количество запросов пользователя на исполнение:</td>
             <td>$NUMBER_OF_RUN_REQUEST_PER_USER$</td>
+        </tr>
+        <tr>
+            <td>Среднее количество запросов пользователя на highlighting:</td>
+            <td>$NUMBER_OF_HIGHLIGHT_REQUEST_PER_USER$</td>
+        </tr>
+        <tr>
+            <td>Среднее количество запросов пользователя на completion:</td>
+            <td>$NUMBER_OF_COMPLETE_REQUEST_PER_USER$</td>
         </tr>
     </table>
 </div>

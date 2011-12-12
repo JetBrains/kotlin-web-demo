@@ -31,7 +31,7 @@ public class HttpSession {
     protected PsiFile currentPsiFile;
 
     private HttpExchange exchange;
-    
+
     private final SessionInfo sessionInfo;
 
     public HttpSession(SessionInfo info) {
@@ -51,6 +51,7 @@ public class HttpSession {
 
             if (param.contains("compile=true") || param.contains("run=true")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExecutorResult();
             } else if (param.contains("writeLog=")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
@@ -62,15 +63,18 @@ public class HttpSession {
                     String tmp = getPostDataFromRequest(true).text;
                     ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(tmp);
                 }
-                writeResponse("Data sended", HttpStatus.SC_OK, true);
+                writeResponse("Data sent", HttpStatus.SC_OK, true);
             } else if (param.contains("complete=true")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendCompletionResult();
             } else if (param.contains("exampleId=")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExampleContent();
             } else {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendProjectSourceFile();
             }
         } catch (Throwable e) {
