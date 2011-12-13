@@ -459,7 +459,7 @@ var config = {
 		for ( var i = 0; i < length; i++ ) {
 			current = params[ i ].split( "=" );
 			current[ 0 ] = decodeURIComponent( current[ 0 ] );
-			// allow just a key to turn on a flag, e.g., test.html?noglobals
+			// allow just a key to turn on a flag, e.g., test.htmlPatern?noglobals
 			current[ 1 ] = current[ 1 ] ? decodeURIComponent( current[ 1 ] ) : true;
 			urlParams[ current[ 0 ] ] = current[ 1 ];
 			if ( current[ 0 ] in config ) {
@@ -532,7 +532,7 @@ extend(QUnit, {
 	/**
 	 * Resets the test setup. Useful for tests that modify the DOM.
 	 *
-	 * If jQuery is available, uses jQuery's html(), otherwise just innerHTML.
+	 * If jQuery is available, uses jQuery's htmlPatern(), otherwise just innerHTML.
 	 */
 	reset: function() {
 		if ( window.jQuery ) {
@@ -650,7 +650,7 @@ extend(QUnit, {
 	},
 
 	// Logging callbacks; all receive a single argument with the listed properties
-	// run test/logs.html for any related changes
+	// run test/logs.htmlPatern for any related changes
 	begin: function() {},
 	// done: { failed, passed, total, runtime }
 	done: function() {},
@@ -1268,7 +1268,7 @@ QUnit.jsDump = (function() {
 			},
 			key:quote, //object calls it internally, the key part of an item in a map
 			functionCode:'[code]', //function calls it internally, it's the content of the function
-			attribute:quote, //node calls it internally, it's an html attribute value
+			attribute:quote, //node calls it internally, it's an htmlPatern attribute value
 			string:quote,
 			date:quote,
 			regexp:literal, //regex

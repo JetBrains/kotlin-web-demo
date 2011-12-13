@@ -13,7 +13,14 @@
             document.location.href = "sortedExceptions=" + param + "&from="
                     + document.getElementById("dateFrom").value +
                     "&to=" + document.getElementById("dateTo").value;
+
         }
+
+        function generateDateRequestWithDate(param, date) {
+            document.location.href = "sortedExceptions=" + param + "&from="
+                    + date + "&to=" + date;
+        }
+
     </script>
 </head>
 <body>
@@ -23,43 +30,82 @@
 </div>
 <div>
     <h5>SORTED LOGS:</h5>
-    Date in format MM/dd/yy (from &lt;= date &lt;= to)
-    <form action="logs.html">
+    Date in format MM/dd/yyyy (from &lt;= date &lt;= to)
+    <form>
         <label>
-            from <input name="dateFrom" id="dateFrom"/>
+            from <input name="dateFrom" id="dateFrom" value="12/01/2011"/>
         </label>
         <label>
-            to <input name="dateTo" id="dateTo"/>
+            to <input name="dateTo" id="dateTo" value="$CURRENTDATE$"/>
         </label>
     </form>
-    <a href="#" onclick="generateDateRequest('view')">Show sorted exceptions</a>
-    <a href="#" onclick="generateDateRequest('download')">Download sorted exceptions (xml)</a>
+    <table>
+        <tr>
+            <td><a href="#" onclick="generateDateRequest('view')">Show sorted exceptions</a></td>
+            <td><a href="#" onclick="generateDateRequest('download')">Download sorted exceptions</a></td>
+        </tr>
+        <tr>
+            <td height="20"></td>
+        </tr>
+        <tr>
+            <td><a href="#" onclick="generateDateRequestWithDate('view', 'today')">Show sorted exceptions for today</a>
+            </td>
+            <td><a href="#" onclick="generateDateRequestWithDate('download', 'today')">Download sorted exceptions for
+                today</a></td>
+        </tr>
+        <tr>
+            <td><a href="#" onclick="generateDateRequestWithDate('view', 'week')">Show sorted exceptions for last
+                week</a></td>
+            <td><a href="#" onclick="generateDateRequestWithDate('download', 'week')">Download sorted exceptions for
+                last week</a></td>
+        </tr>
+    </table>
+
+    <br/>
+
+    <br/>
+
+
 </div>
 <div>
     <h3>STATISTICS:</h3>
-    <table>
+    <span style="margin-right: 20px;">$UPDATETIME$</span>
+    <form action="logs&statistics"><button>Update statistics</button></form>
+    <table id="statistics">
         <tr>
-            <td>Количество уникальных посетителей: всего</td>
+            <td>Period:</td>
+            <td>$LOGSPERIOD$</td>
+        </tr>
+        <tr>
+            <td>Total number of unique visitors:</td>
             <td>$NUMBER_OF_USERS$</td>
         </tr>
         <tr>
-            <td>Количество уникальных посетителей: в день (среднее)</td>
+            <td>Total number of unique visitors (from log):</td>
+            <td>$NUMBER_OF_USERS_FROM_LOG$</td>
+        </tr>
+        <tr>
+            <td>Number of visitors per day:</td>
             <td>$NUMBER_OF_USERS_PER_DAY$</td>
         </tr>
         <tr>
-            <td>Среднее количество запросов пользователя:</td>
+            <td>Number of new visitors per day:</td>
+            <td>$NUMBER_OF_NEW_USERS_PER_DAY$</td>
+        </tr>
+        <tr>
+            <td>Number of user requests (for one user):</td>
             <td>$NUMBER_OF_REQUEST_PER_USER$</td>
         </tr>
         <tr>
-            <td>Среднее количество запросов пользователя на исполнение:</td>
+            <td>Number of user run requests (for one user):</td>
             <td>$NUMBER_OF_RUN_REQUEST_PER_USER$</td>
         </tr>
         <tr>
-            <td>Среднее количество запросов пользователя на highlighting:</td>
+            <td>Number of user highlighting requests (for one user):</td>
             <td>$NUMBER_OF_HIGHLIGHT_REQUEST_PER_USER$</td>
         </tr>
         <tr>
-            <td>Среднее количество запросов пользователя на completion:</td>
+            <td>Number of user completion requests (for one user):</td>
             <td>$NUMBER_OF_COMPLETE_REQUEST_PER_USER$</td>
         </tr>
     </table>

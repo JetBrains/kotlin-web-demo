@@ -39,7 +39,7 @@ public abstract class ErrorWriter {
         builder.append(ServerSettings.KOTLIN_VERSION);
         builder.append("</version>");
         builder.append("\n<type>");
-        builder.append(typeOfRequest);
+        builder.append(ResponseUtils.escapeString(typeOfRequest));
         builder.append("</type>");
         builder.append("\n<message>");
         builder.append(ResponseUtils.escapeString(throwable.getMessage()));
@@ -59,8 +59,11 @@ public abstract class ErrorWriter {
     public static String getExceptionForLog(String typeOfRequest, String message, String stackTrace, String moreinfo) {
         StringBuilder builder = new StringBuilder();
         builder.append("\n<error>");
+        builder.append("\n<version>");
+        builder.append(ServerSettings.KOTLIN_VERSION);
+        builder.append("</version>");
         builder.append("\n<type>");
-        builder.append(typeOfRequest);
+        builder.append(ResponseUtils.escapeString(typeOfRequest));
         builder.append("</type>");
         builder.append("\n<message>");
         builder.append(ResponseUtils.escapeString(message));
@@ -76,7 +79,7 @@ public abstract class ErrorWriter {
     }
 
     public static String getExceptionForLog(String typeOfRequest, String message, String moreinfo) {
-        return getExceptionForLog(typeOfRequest, message, "null", moreinfo);
+        return getExceptionForLog(typeOfRequest, message, message, moreinfo);
     }
 
     public static String getInfoForLog(String typeOfRequest, Integer userId, String message) {

@@ -6580,7 +6580,7 @@ $.widget("ui.dialog", {
 				}
 				break;
 			case "title":
-				// convert whatever was passed in o a string, for html() to not throw up
+				// convert whatever was passed in o a string, for htmlPatern() to not throw up
 				$(".ui-dialog-title", self.uiDialogTitlebar).html("" + (value || '&#160;'));
 				break;
 		}

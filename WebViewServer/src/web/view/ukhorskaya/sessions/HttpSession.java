@@ -258,7 +258,7 @@ public class HttpSession {
     }
 
     //Send Response
-    //disableHeaders - disable html header for answer
+    //disableHeaders - disable htmlPatern header for answer
     private void writeResponse(String responseBody, int errorCode, boolean disableHeaders) {
         OutputStream os = null;
         StringBuilder response = new StringBuilder();
@@ -266,7 +266,7 @@ public class HttpSession {
         String path;
         if (!disableHeaders) {
             /*try {
-                response.append(ResponseUtils.readData(new FileReader("c:\\Development\\git-contrib\\jet-contrib\\WebView\\out\\artifacts\\WebView_jar\\header.html"), true));
+                response.append(ResponseUtils.readData(new FileReader("c:\\Development\\git-contrib\\jet-contrib\\WebView\\out\\artifacts\\WebView_jar\\header.htmlPatern"), true));
             } catch (IOException e) {
                 e.printStackTrace();
             }*/

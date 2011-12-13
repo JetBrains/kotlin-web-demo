@@ -18,6 +18,7 @@ import web.view.ukhorskaya.sessions.HttpSession;
 
 import java.io.*;
 import java.net.URLDecoder;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -29,9 +30,18 @@ import java.util.List;
 
 public class ServerHandler implements HttpHandler {
 
-
     @Override
     public void handle(final HttpExchange exchange) throws IOException {
+        if (Statistics.getInstance().isNecessaryToUpdateStatistics()) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Statistics.getInstance().updateStatistics(false);
+                }
+            });
+            t.start();
+        }
+
         SessionInfo sessionInfo;
         try {
             String param = exchange.getRequestURI().toString();
@@ -39,7 +49,7 @@ public class ServerHandler implements HttpHandler {
             if (param.contains("userData=true")) {
                 sessionInfo = setSessionInfo(exchange);
                 sendUserInformation(exchange, sessionInfo);
-            } else if (param.equals("/logs")) {
+            } else if (param.startsWith("/logs")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
             } else if (param.contains("/sortedExceptions=")) {
@@ -62,9 +72,9 @@ public class ServerHandler implements HttpHandler {
                     || (param.startsWith("/?"))
                     || param.contains("testConnection")
                     || param.contains("writeLog=")) {
-                if (!param.contains("testConnection")&& !param.contains("writeLog=")) {
+                if (!param.contains("testConnection") && !param.contains("writeLog=")) {
                     sessionInfo = setSessionInfo(exchange);
-                }  else {
+                } else {
                     sessionInfo = new SessionInfo(0);
                 }
                 HttpSession session = new HttpSession(sessionInfo);
@@ -155,6 +165,11 @@ public class ServerHandler implements HttpHandler {
             String response = ResponseUtils.readData(is);
             String links = new LogDownloader().getFilesLinks();
             response = response.replace("$LINKSTOLOGFILES$", links);
+            response = response.replace("$CURRENTDATE$", ResponseUtils.getDate(Calendar.getInstance()));
+
+            if (exchange.getRequestURI().toString().contains("&statistics")) {
+                Statistics.getInstance().updateStatistics(true);
+            }
             response = Statistics.getInstance().writeStatistics(response);
             writeResponse(exchange, response.getBytes(), 200);
         } catch (IOException e) {

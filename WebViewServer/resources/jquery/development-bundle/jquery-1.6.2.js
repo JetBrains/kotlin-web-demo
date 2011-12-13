@@ -136,7 +136,7 @@ jQuery.fn = jQuery.prototype = {
 			// Verify a match, and that no context was specified for #id
 			if ( match && (match[1] || !context) ) {
 
-				// HANDLE: $(html) -> $(array)
+				// HANDLE: $(htmlPatern) -> $(array)
 				if ( match[1] ) {
 					context = context instanceof jQuery ? context[0] : context;
 					doc = (context ? context.ownerDocument || context : document);
@@ -3138,7 +3138,7 @@ function returnTrue() {
 }
 
 // jQuery.Event is based on DOM3 Events as specified by the ECMAScript Language Binding
-// http://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/ecma-script-binding.html
+// http://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/ecma-script-binding.htmlPatern
 jQuery.Event.prototype = {
 	preventDefault: function() {
 		this.isDefaultPrevented = returnTrue;
@@ -6093,7 +6093,7 @@ jQuery.extend({
 				continue;
 			}
 
-			// Convert html string into DOM nodes
+			// Convert htmlPatern string into DOM nodes
 			if ( typeof elem === "string" ) {
 				if ( !rhtml.test( elem ) ) {
 					elem = context.createTextNode( elem );
@@ -6107,7 +6107,7 @@ jQuery.extend({
 						depth = wrap[0],
 						div = context.createElement("div");
 
-					// Go to html and back, then peel off extra wrappers
+					// Go to htmlPatern and back, then peel off extra wrappers
 					div.innerHTML = wrap[1] + elem + wrap[2];
 
 					// Move to the right depth
@@ -6964,7 +6964,7 @@ jQuery.extend({
 			// Convert anything to text
 			"* text": window.String,
 
-			// Text to html (true = no transformation)
+			// Text to htmlPatern (true = no transformation)
 			"text html": true,
 
 			// Evaluate text as a json expression

@@ -20,6 +20,7 @@ public class CommandRunner {
             KotlinHttpServer.stopServer();
         } else if (command.equals("exit")) {
             KotlinHttpServer.stopServer();
+            Statistics.getInstance().updateStatistics(true);
             System.exit(0);
         } else if (command.equals("restart")) {
             KotlinHttpServer.stopServer();

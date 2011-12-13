@@ -25,10 +25,10 @@ public class LogDownloader {
             try {
                 FileReader fr = new FileReader(log);
                 String response = ResponseUtils.readData(fr, true);
-//                InputStream is = LogDownloader.class.getResourceAsStream("/clearhtml.html");
-//                String html = ResponseUtils.readData(is, true);
-//                html = html.replace("$RESPONSEBODY$", ResponseUtils.escapeString(response));
-//                html = html.replace("\n", "<br/>");
+//                InputStream is = LogDownloader.class.getResourceAsStream("/clearhtml.htmlPatern");
+//                String htmlPatern = ResponseUtils.readData(is, true);
+//                htmlPatern = htmlPatern.replace("$RESPONSEBODY$", ResponseUtils.escapeString(response));
+//                htmlPatern = htmlPatern.replace("\n", "<br/>");
                 return response;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -59,12 +59,12 @@ public class LogDownloader {
                 }
             });
 
-            responseJavaLogs.append(ResponseUtils.generateHtmlTag("h5", "JAVA MACHINE"));
+            responseJavaLogs.append(ResponseUtils.generateTag("h5", "JAVA MACHINE"));
             for (File file : files) {
                 if (file.getName().contains(".log")) {
-                    responseJavaLogs.append(ResponseUtils.generateHtmlTag("span", file.getName()));
-                    responseJavaLogs.append(ResponseUtils.generateHtmlTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
-                    responseJavaLogs.append(ResponseUtils.generateHtmlTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
+                    responseJavaLogs.append(ResponseUtils.generateTag("span", file.getName()));
+                    responseJavaLogs.append(ResponseUtils.generateTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
+                    responseJavaLogs.append(ResponseUtils.generateTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
                     responseJavaLogs.append(ResponseUtils.addNewLine());
                 }
             }
@@ -82,22 +82,22 @@ public class LogDownloader {
                     }
                 }
             });
-            responseOtherLogs.append(ResponseUtils.generateHtmlTag("h5", "STATISTIC"));
+            responseOtherLogs.append(ResponseUtils.generateTag("h5", "STATISTIC"));
             for (File file : files) {
                 if (file.getName().contains("exceptions.log")) {
-                    responseExceptionLogs.append(ResponseUtils.generateHtmlTag("span", file.getName()));
-                    responseExceptionLogs.append(ResponseUtils.generateHtmlTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
-                    responseExceptionLogs.append(ResponseUtils.generateHtmlTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
+                    responseExceptionLogs.append(ResponseUtils.generateTag("span", file.getName()));
+                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
+                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
                     responseExceptionLogs.append(ResponseUtils.addNewLine());
                 } else {
-                    responseOtherLogs.append(ResponseUtils.generateHtmlTag("span", file.getName()));
-                    responseOtherLogs.append(ResponseUtils.generateHtmlTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
-                    responseOtherLogs.append(ResponseUtils.generateHtmlTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
+                    responseOtherLogs.append(ResponseUtils.generateTag("span", file.getName()));
+                    responseOtherLogs.append(ResponseUtils.generateTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
+                    responseOtherLogs.append(ResponseUtils.generateTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
                     responseOtherLogs.append(ResponseUtils.addNewLine());
                 }
             }
         }
-        responseOtherLogs.append(ResponseUtils.generateHtmlTag("h5", "EXCEPTIONS"));
+        responseOtherLogs.append(ResponseUtils.generateTag("h5", "EXCEPTIONS"));
         responseOtherLogs.append(responseExceptionLogs);
         responseOtherLogs.append(responseJavaLogs);
 

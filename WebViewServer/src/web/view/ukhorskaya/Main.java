@@ -30,7 +30,8 @@ public class Main {
             ServerSettings.PORT = args[1];
             ErrorWriter.writeInfoToConsole("Port is set: " + args[1]);
         }
-        new File("logs").mkdir();
+        new File(ServerSettings.LOGS_ROOT).mkdir();
+        new File(ServerSettings.STATISTICS_ROOT).mkdir();
 
         if (loadProperties()) {
             try {

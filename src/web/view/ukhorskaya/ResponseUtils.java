@@ -1,8 +1,17 @@
 package web.view.ukhorskaya;
 
+import org.jetbrains.annotations.Nullable;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+import web.view.ukhorskaya.session.SessionInfo;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,7 +29,7 @@ public class ResponseUtils {
             string = string.replaceAll(">", "&gt;");
         }
         if (string.contains("&")) {
-            string = string.replaceAll(">", "&amp;");
+            string = string.replaceAll("&", "&amp;");
         }
         /* if (string.contains("\"")) {
             string = string.replaceAll("\"", "'");
@@ -148,7 +157,7 @@ public class ResponseUtils {
         return response.toString();
     }
 
-    public static String generateHtmlTag(String tagName, String content) {
+    public static String generateTag(String tagName, String content) {
         StringBuilder builder = new StringBuilder();
         builder.append("<");
         builder.append(tagName);
@@ -161,7 +170,7 @@ public class ResponseUtils {
 
     }
 
-    public static String generateHtmlTag(String tagName, String content, String attrName, String attrValue) {
+    public static String generateTag(String tagName, String content, String attrName, String attrValue) {
         StringBuilder builder = new StringBuilder();
         builder.append("<");
         builder.append(tagName);
@@ -169,7 +178,8 @@ public class ResponseUtils {
         builder.append(attrName);
         builder.append("=\"");
         builder.append(attrValue);
-        builder.append("\" title=\"En/Dehydra\" class=\"internal\"");
+        builder.append("\" class=\"internal\"");
+//        builder.append("\" title=\"En/Dehydra\" class=\"internal\"");
         builder.append(">");
         builder.append(content);
         builder.append("</");
@@ -187,6 +197,52 @@ public class ResponseUtils {
         return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}, {\"exception\":\"" + stackTrace + "\",\"type\":\"out\"}]";
     }
 
+    public static String getDate(Calendar calendar) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(calendar.get(Calendar.MONTH) + 1);
+        builder.append("/");
+        builder.append(calendar.get(Calendar.DAY_OF_MONTH));
+        builder.append("/");
+        builder.append(calendar.get(Calendar.YEAR));
+        return builder.toString();
+    }
 
+    public static String getTime(Calendar calendar) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(calendar.get(Calendar.HOUR_OF_DAY));
+        builder.append(":");
+        builder.append(calendar.get(Calendar.MINUTE));
+        builder.append(":");
+        builder.append(calendar.get(Calendar.SECOND));
+        return builder.toString();
+    }
+
+    @Nullable
+    public static Document getXmlDocument(File file) {
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder;
+        Document document;
+        try {
+            dBuilder = dbFactory.newDocumentBuilder();
+            document = dBuilder.parse(file);
+        } catch (IOException e) {
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath()
+            ));
+            return null;
+        } catch (ParserConfigurationException e) {
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath()
+            ));
+            return null;
+        } catch (SAXException e) {
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath()
+            ));
+            return null;
+        }
+        document.getDocumentElement().normalize();
+        return document;
+    }
 
 }

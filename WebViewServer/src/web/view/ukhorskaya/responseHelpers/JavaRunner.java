@@ -164,8 +164,8 @@ public class JavaRunner {
         path = ResponseUtils.substringBefore(path, ResponseUtils.addNewLine() + "#");
         File log = new File(path);
         /*if (log.exists()) {
-            String links = ResponseUtils.generateHtmlTag("a", "view", "href", "/log=" + log.getAbsolutePath() + "&view");
-            links += ResponseUtils.generateHtmlTag("a", "download", "href", "/log=" + log.getAbsolutePath() + "&download");
+            String links = ResponseUtils.generateTag("a", "view", "href", "/log=" + log.getAbsolutePath() + "&view");
+            links += ResponseUtils.generateTag("a", "download", "href", "/log=" + log.getAbsolutePath() + "&download");
             return links;
         }*/
         try {

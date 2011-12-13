@@ -24,8 +24,11 @@ import com.intellij.psi.impl.file.impl.JavaFileManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import web.view.ukhorskaya.ErrorWriter;
+import web.view.ukhorskaya.ErrorWriterInApplet;
 
 import java.io.File;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -83,7 +86,11 @@ public class CoreJavaFileManager implements JavaFileManager {
         if (file != null) {
             PsiFile psiFile = myPsiManager.findFile(file);
             if (!(psiFile instanceof PsiJavaFile)) {
-                throw new UnsupportedOperationException("no java file for .class "  + classpathEntry + "!/" + relativeName);
+                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                        "UNKNOWN", new UnsupportedOperationException("no java file for .class"), classpathEntry + "!/" + relativeName
+                ));
+                return null;
+//                throw new UnsupportedOperationException("no java file for .class "  + classpathEntry + "!/" + relativeName);
             }
             final PsiClass[] classes = ((PsiJavaFile) psiFile).getClasses();
             if (classes.length == 1) {

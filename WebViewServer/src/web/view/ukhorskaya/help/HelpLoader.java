@@ -3,6 +3,7 @@ package web.view.ukhorskaya.help;
 import org.json.JSONArray;
 import org.w3c.dom.*;
 import web.view.ukhorskaya.ErrorWriter;
+import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.ServerSettings;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -104,11 +105,10 @@ public class HelpLoader {
         resultWords = new JSONArray();
         try {
             File file = new File(ServerSettings.HELP_ROOT + File.separator + ServerSettings.HELP_FOR_WORDS);
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(file);
-            doc.getDocumentElement().normalize();
-
+            Document doc = ResponseUtils.getXmlDocument(file);
+            if (doc == null) {
+                return;
+            }
             NodeList nodeList = doc.getElementsByTagName("keyword");
 
             for (int temp = 0; temp < nodeList.getLength(); temp++) {
@@ -132,10 +132,10 @@ public class HelpLoader {
         resultExamples = new JSONArray();
         try {
             File file = new File(ServerSettings.EXAMPLES_ROOT + File.separator + ServerSettings.HELP_FOR_EXAMPLES);
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(file);
-            doc.getDocumentElement().normalize();
+            Document doc = ResponseUtils.getXmlDocument(file);
+            if (doc == null) {
+                return;
+            }
 
             NodeList nodeList = doc.getElementsByTagName("example");
 
