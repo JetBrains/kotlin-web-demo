@@ -86,11 +86,11 @@ public class CoreJavaFileManager implements JavaFileManager {
         if (file != null) {
             PsiFile psiFile = myPsiManager.findFile(file);
             if (!(psiFile instanceof PsiJavaFile)) {
-                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                /*ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
                         "UNKNOWN", new UnsupportedOperationException("no java file for .class"), classpathEntry + "!/" + relativeName
                 ));
-                return null;
-//                throw new UnsupportedOperationException("no java file for .class "  + classpathEntry + "!/" + relativeName);
+                return null;*/
+                throw new UnsupportedOperationException("no java file for .class "  + classpathEntry + "!/" + relativeName);
             }
             final PsiClass[] classes = ((PsiJavaFile) psiFile).getClasses();
             if (classes.length == 1) {

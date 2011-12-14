@@ -1,6 +1,7 @@
 .CodeMirror {
     line-height: 1em;
     font-family: monospace;
+    font-size: 13px;
 }
 
 .CodeMirror-scroll {
@@ -22,6 +23,9 @@ is visible outside of the scrolling box. */
     height: 100%;
 }
 
+/*.CodeMirror-gutter-text pre {
+    height: 13px;
+}*/
 .CodeMirror-gutter-text {
     color: #aaa;
     text-align: right;
@@ -29,6 +33,9 @@ is visible outside of the scrolling box. */
     white-space: pre !important;
 }
 
+/*.CodeMirror-lines pre {
+    height: 13px;
+}*/
 .CodeMirror-lines {
     padding: .4em;
 }
@@ -48,6 +55,7 @@ is visible outside of the scrolling box. */
     margin: 0;
     white-space: pre;
     word-wrap: normal;
+    /*height: 14px;*/
 }
 
 .CodeMirror-wrap pre {
@@ -90,6 +98,11 @@ span.CodeMirror-selected {
 
 .cm-s-default span.cm-keyword {
     color: #336699;
+    font-weight: bold;
+}
+
+.cm-s-default span.cm-softKeyword {
+    color: #0000ff;
     font-weight: bold;
 }
 
@@ -200,7 +213,8 @@ span.cm-link {
 }
 
 div.CodeMirror span.CodeMirror-matchingbracket {
-    color: #0000ff;;
+    /*color: #0000ff;*/
+    border: 1px #f00 solid;
 }
 
 div.CodeMirror span.CodeMirror-nonmatchingbracket {

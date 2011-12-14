@@ -1,9 +1,9 @@
 body {
     font-family: monospace;
-    font-size: 12px;
+    /*font-size: 12px;*/
     color: #000000;
     background-color: #FFFFFF;
-    line-height: 12px;
+    /*line-height: 12px;*/
 }
 
 .red_wavy_line {
@@ -408,6 +408,7 @@ body {
 
 #help3 {
     padding: 10px;
+    text-align: left;
 }
 
 .helpTitle {

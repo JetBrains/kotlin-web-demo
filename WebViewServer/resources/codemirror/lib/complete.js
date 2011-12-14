@@ -16,9 +16,6 @@ function removeStyles() {
 
 $(document).ready(function () {
 
-    var goToSymbolShortcutKeys = [17, 32];
-    var runShortcutKeys = [17, 120];
-
     var timer;
     var timerIntervalForNonPrinting = 300;
 
@@ -35,14 +32,14 @@ $(document).ready(function () {
         mode:"text/kotlin",
         extraKeys:{
             "Ctrl-Space":beforeComplete,
-            "Ctrl-F9": function(instance) {
+            "Ctrl-F9":function (instance) {
                 $("#run").click();
             }
         },
         onChange:runTimerForNonPrinting,
         onCursorActivity:updateStatusBar,
         minHeight:"430px",
-        tabSize: 2
+        tabSize:2
     });
 
     function runTimerForNonPrinting() {
@@ -105,43 +102,53 @@ $(document).ready(function () {
 
             var problems = document.createElement("div");
             while (typeof data[i] != "undefined") {
-                arrayClasses.push(editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className, "ddd"));
-                var title = data[i].titleName;
-                var start = eval('(' + data[i].x + ')');
-                var severity = data[i].severity;
-
-                if ((editor.lineInfo(start.line) != null) && (editor.lineInfo(start.line).markerText == null)) {
-                    editor.setMarker(start.line, '<span class=\"' + severity + 'gutter\" title="' + title + '">  </span>%N%');
-                    arrayLinesMarkers.push(start.line);
-                } else {
-                    var text = editor.lineInfo(start.line).markerText;
-                    var resultSpan = "";
-                    if (severity == "WARNING") {
-                        var pos = text.indexOf("title=\"") + 7;
-                        resultSpan = text.substring(0, pos);
-                        resultSpan += title + " ---next error--- " + text.substring(pos);
-                    } else {
-                        text = text.substring(text.indexOf("title=\"") + 7);
-                        text = text.substring(0, text.indexOf("\""));
-                        resultSpan = '<span class=\"' + severity + 'gutter\" title="' + title + " ---next error--- " + text + '">  </span>%N%';
-                    }
-                    editor.setMarker(start.line, resultSpan);
+                while (typeof data[i] != "undefined") {
+//                    setTimeout(function () {
+                    processError(data, problems, i);
+//                    }, 10);
+                    i++;
                 }
-
-                var el = document.getElementById(start.line + " " + start.ch);
-                if (el != null) {
-                    el.setAttribute("title", title);
-                }
-
-                //add exception at problemsView
-                var p = createElementForProblemView(severity, start, title);
-                problems.appendChild(p);
-
                 i++;
             }
             document.getElementById("problems").innerHTML = problems.innerHTML;
         }
         updateStatusBar();
+    }
+
+    function processError(data, problems, i) {
+        arrayClasses.push(editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className, "ddd"));
+
+        var title = data[i].titleName;
+        var start = eval('(' + data[i].x + ')');
+        var severity = data[i].severity;
+
+        if ((editor.lineInfo(start.line) != null) && (editor.lineInfo(start.line).markerText == null)) {
+            editor.setMarker(start.line, '<span class=\"' + severity + 'gutter\" title="' + title + '">  </span>%N%');
+            arrayLinesMarkers.push(start.line);
+        } else {
+            var text = editor.lineInfo(start.line).markerText;
+            var resultSpan = "";
+            if (severity == "WARNING") {
+                var pos = text.indexOf("title=\"") + 7;
+                resultSpan = text.substring(0, pos);
+                resultSpan += title + "\n ---next error--- \n" + text.substring(pos);
+            } else {
+                text = text.substring(text.indexOf("title=\"") + 7);
+                text = text.substring(0, text.indexOf("\""));
+                resultSpan = '<span class=\"' + severity + 'gutter\" title="' + title + "\n ---next error--- \n" + text + '">  </span>%N%';
+            }
+            editor.setMarker(start.line, resultSpan);
+        }
+
+        var el = document.getElementById(start.line + "_" + start.ch);
+        if (el != null) {
+            el.setAttribute("title", title);
+        }
+
+        //add exception at problemsView
+        var p = createElementForProblemView(severity, start, title);
+        problems.appendChild(p);
+
     }
 
     function getDataFromApplet(type) {
@@ -202,26 +209,6 @@ $(document).ready(function () {
         }
     }
 
-    function isGotoKeysPressed(event, array) {
-        var args = args || {};
-
-        for (var i = 0; i < array.length; ++i) {
-            args[i] = array[i];
-            if ((event.ctrlKey) && (args[i] == 17)) {
-                args[i] = true;
-            }
-            if (args[i] == event.keyCode) {
-                args[i] = true;
-            }
-        }
-        for (var k = 0; k < array.length; ++k) {
-            if (args[k] != true) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     $("#arguments").val("");
 
     function checkIfThereAreErrorsInProblemView() {
@@ -244,6 +231,11 @@ $(document).ready(function () {
     }
 
     $("#run").click(function () {
+        /*try {
+         var dataFromApplet = $("#jsapplet")[0].translate(editor.getValue());
+         } catch (e) {
+         document.getElementById("debug").innerHTML = e + e.description;
+         }*/
         $("#tabs").tabs("select", 1);
         setStatusBarMessage("Running...");
         if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
