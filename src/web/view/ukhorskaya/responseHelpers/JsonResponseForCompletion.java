@@ -64,10 +64,10 @@ public class JsonResponseForCompletion {
         BindingContext bindingContext;
         try {
             bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
-                                currentProject,
-                                Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                                Predicates.<PsiFile>equalTo(currentPsiFile),
-                                JetControlFlowDataTraceFactory.EMPTY);
+                    currentProject,
+                    Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
+                    Predicates.<PsiFile>equalTo(currentPsiFile),
+                    JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
             String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
             ErrorWriter.ERROR_WRITER.writeException(exception);
@@ -83,6 +83,52 @@ public class JsonResponseForCompletion {
         PsiElement parent = element.getParent();
 
         JetScope resolutionScope;
+        Collection<DeclarationDescriptor> descriptors = null;
+        try {
+            if (parent instanceof JetQualifiedExpression) {
+                JetQualifiedExpression qualifiedExpression = (JetQualifiedExpression) parent;
+                JetExpression receiverExpression = qualifiedExpression.getReceiverExpression();
+
+                final JetType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE, receiverExpression);
+                resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, receiverExpression);
+
+                if (expressionType != null && resolutionScope != null) {
+//                    descriptors = resolutionScope.getAllDescriptors();
+//                    descriptors.addAll(expressionType.getMemberScope().getAllDescriptors());
+                    descriptors = expressionType.getMemberScope().getAllDescriptors();
+                }
+            } else {
+                resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, (JetExpression) element);
+                if (resolutionScope != null) {
+                    descriptors = resolutionScope.getAllDescriptors();
+                } else {
+                    return "[]";
+                }
+            }
+        } catch (Throwable e) {
+//            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
+//            ErrorWriter.ERROR_WRITER.writeException(exception);
+            e.printStackTrace();
+            return "[]";
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        if (descriptors != null) {
+            for (DeclarationDescriptor descriptor : descriptors) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("icon", getIconFromDescriptor(descriptor));
+                map.put("tail", "   " + getTailText(descriptor));
+                map.put("name", getNameFromDescriptor(descriptor));
+
+                jsonArray.put(map);
+            }
+        } else {
+            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Resolution scope is null.", currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeException(exception);
+            return "[]";
+        }
+
+        /*JetScope resolutionScope;
         if (parent instanceof JetQualifiedExpression) {
             JetQualifiedExpression qualifiedExpression = (JetQualifiedExpression) parent;
             JetExpression receiverExpression = qualifiedExpression.getReceiverExpression();
@@ -110,7 +156,7 @@ public class JsonResponseForCompletion {
         } else {
             String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Resolution scope is null.", currentPsiFile.getText());
             ErrorWriter.ERROR_WRITER.writeException(exception);
-        }
+        } */
         return jsonArray.toString();
     }
 

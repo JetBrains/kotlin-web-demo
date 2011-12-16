@@ -104,6 +104,10 @@ function onLoadingExamplesSuccess(data) {
         }
         if (data[i].type == "content") {
             var content = document.createElement("p");
+            var span = document.createElement("span");
+            span.className = "bullet";
+            span.innerHTML = "&#8226;";
+            content.appendChild(span);
             var contA = document.createElement("a");
             contA.id = i + "&head=" + lastHeadName;
             contA.style.cursor = "pointer";

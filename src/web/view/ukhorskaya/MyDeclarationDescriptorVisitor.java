@@ -176,7 +176,7 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
 
     public void renderClassDescriptor(ClassDescriptor descriptor, StringBuilder builder, String keyword) {
         renderModality(descriptor.getModality(), builder);
-        builder.append(keyword).append(" ");
+//        builder.append(keyword).append(" ");
         renderName(descriptor, builder);
         renderTypeParameters(descriptor.getTypeConstructor().getParameters(), builder);
         if (!descriptor.equals(JetStandardClasses.getNothing())) {

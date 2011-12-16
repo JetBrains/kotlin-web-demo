@@ -18,7 +18,7 @@ import java.util.Map;
  * Time: 6:33 PM
  */
 public class ExamplesList {
-//    private static final Logger LOG = Logger.getLogger(ExamplesList.class);
+    //    private static final Logger LOG = Logger.getLogger(ExamplesList.class);
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
 
     private ExamplesList() {
@@ -61,30 +61,37 @@ public class ExamplesList {
         ErrorWriter.writeInfoToConsole("Examples were loaded.");
     }
 
-    private void addWoOrder(File dir, boolean isDirectory) {
-        File[] directories = dir.listFiles();
-        for (File directory : directories) {
-            if ((dir.isDirectory() && isDirectory)
-                    || (dir.exists() && !isDirectory)) {
+    private void addWoOrder(File parent, boolean isDirectory) {
+        File[] children = parent.listFiles();
+        for (File child : children) {
+            if ((parent.isDirectory() && isDirectory)
+                    || (parent.exists() && !isDirectory)) {
                 Map<String, String> map = new HashMap<String, String>();
                 if (isDirectory) {
                     map.put("type", "head");
+                    map.put("text", child.getName());
                 } else {
                     map.put("type", "content");
+                    if (child.getName().endsWith(".kt")) {
+                        map.put("text", child.getName().substring(0, child.getName().length() - 3));
+                    } else {
+                        map.put("text", child.getName());
+                    }
+
                 }
-                map.put("text", directory.getName());
+
                 list.add(map);
 
                 if (isDirectory) {
-                    File order = new File(directory.getAbsolutePath() + File.separator + "order.txt");
+                    File order = new File(child.getAbsolutePath() + File.separator + "order.txt");
                     if (order.exists()) {
-                        addInOrder(order, directory, false);
+                        addInOrder(order, child, false);
                     } else {
-                        addWoOrder(directory, false);
+                        addWoOrder(child, false);
                     }
                 }
             } else {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Incorrect structure for examples (folder - files): " + directory.getAbsolutePath());
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Incorrect structure for examples (folder - files): " + child.getAbsolutePath());
             }
         }
     }
@@ -103,10 +110,15 @@ public class ExamplesList {
                     Map<String, String> map = new HashMap<String, String>();
                     if (isDirectory) {
                         map.put("type", "head");
+                        map.put("text", child.getName());
                     } else {
                         map.put("type", "content");
+                        if (child.getName().endsWith(".kt")) {
+                            map.put("text", child.getName().substring(0, child.getName().length() - 3));
+                        } else {
+                            map.put("text", child.getName());
+                        }
                     }
-                    map.put("text", child.getName());
                     list.add(map);
                     orderedChildren.add(child.getName());
 

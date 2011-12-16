@@ -69,25 +69,25 @@ public class ResponseUtils {
         }
     }
 
-    public static String substringAfter(String str, String after) {
-        int pos = str.indexOf(after);
+    public static String substringAfter(String str, String before) {
+        int pos = str.indexOf(before);
         if (pos != -1) {
-            return str.substring(pos + after.length());
+            return str.substring(pos + before.length());
         }
         return "";
     }
 
-    //Substring str and return all str if after not found
-    public static String substringAfterReturnAll(String str, String after) {
-        int pos = str.indexOf(after);
+    //Substring str and return all str if before string not found
+    public static String substringAfterReturnAll(String str, String before) {
+        int pos = str.indexOf(before);
         if (pos != -1) {
-            return str.substring(pos + after.length());
+            return str.substring(pos + before.length());
         }
         return str;
     }
 
-    public static String substringBefore(String str, String before) {
-        int pos = str.indexOf(before);
+    public static String substringBefore(String str, String after) {
+        int pos = str.indexOf(after);
         if (pos != -1) {
             return str.substring(0, pos);
         }
@@ -97,16 +97,17 @@ public class ResponseUtils {
 
     public static String substringBetween(String str, String before, String after) {
         int fPos = str.indexOf(before);
+        if (fPos != -1) {
+            str = str.substring(fPos + before.length());
+        } else {
+            substringBefore(str, after);
+        }
         int sPos = str.indexOf(after);
-        if ((fPos != -1) && (sPos != -1) && (fPos + before.length() < sPos)) {
-            return str.substring(fPos + before.length(), sPos);
+        if (sPos != -1) {
+            return str.substring(0, sPos);
+        } else {
+            return str;
         }
-        if (sPos == -1) {
-            return substringAfter(str, before);
-        } else if (fPos == -1) {
-            return substringBefore(str, after);
-        }
-        return "";
     }
 
     public static String addNewLine() {

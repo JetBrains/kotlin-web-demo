@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <help>
     <example>
-        <name>Simplest version.kt</name>
+        <name>Simplest version</name>
         <text>Line 1 is the optional namespace header.
             <br/>
             Then we declare a namespace-level function main which returns Unit and takes an Array of strings as a
@@ -12,7 +12,7 @@
         <args/>
     </example>
     <example>
-        <name>Reading a name from the command line.kt</name>
+        <name>Reading a name from the command line</name>
         <text>Line 6 demonstrates
             <a href="http://confluence.jetbrains.net/display/Kotlin/Strings#Strings-Templates">string templates</a>
             and <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+types#Basictypes-Arrays">array access</a>.
@@ -20,7 +20,7 @@
         <args>guest</args>
     </example>
     <example>
-        <name>Reading many names from the command line.kt</name>
+        <name>Reading many names from the command line</name>
         <text>Line 2 demonstrates the
             <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Forloop">
                 <b>for</b>-loop</a>
@@ -29,7 +29,7 @@
         <args>guest1 guest2 guest3</args>
     </example>
     <example>
-        <name>An object-oriented Hello.kt</name>
+        <name>An object-oriented Hello</name>
         <text>Here we have a
             <a href="http://confluence.jetbrains.net/display/Kotlin/Classes+and+Inheritance">class</a>
             with a
@@ -43,7 +43,7 @@
         <args>guest1</args>
     </example>
     <example>
-        <name>A multi-language Hello.kt</name>
+        <name>A multi-language Hello</name>
         <text>In this example,
             <b>val</b>
             denotes a declaration of a read-only local variable, that is assigned an
@@ -57,20 +57,20 @@
         <args>FR</args>
     </example>
     <example>
-        <name>Use a conditional expression.kt</name>
+        <name>Use a conditional expression</name>
         <text><a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Ifexpression"><b>if</b></a> is an expression, i.e. it returns a value. Therefore there is not ternary operator (condition ? then : else), because ordinary <b>if</b> works fine in this role.
         </text>
         <args>10 20</args>
     </example>
     <example>
-        <name>Null-checks.kt</name>
+        <name>Null-checks</name>
         <text>A reference must be explicitly marked as nullable to be able hold a null.
             See <a href="http://confluence.jetbrains.net/display/Kotlin/Null-safety">Null-safety</a>
         </text>
         <args>2 3</args>
     </example>
     <example>
-        <name>is-checks and automatic casts.kt</name>
+        <name>is-checks and automatic casts</name>
         <text>The is operator checks if an expression is an instance of a type (and <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">more</a>).
             If we is-checked an immutable local variable or property, there's no need to cast it explicitly to the is-checked type.
             See <a href="http://confluence.jetbrains.net/display/Kotlin/Classes+and+Inheritance">Classes and Inheritance</a>.
@@ -79,21 +79,21 @@
         <args/>
     </example>
     <example>
-        <name>Use a while-loop.kt</name>
+        <name>Use a while-loop</name>
         <text><b>While</b> and <b>do..while</b> work as usual:
             See <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-While">while-loop</a>.
         </text>
         <args>guest1 guest2 guest3 guest4</args>
     </example>
     <example>
-        <name>Use a for-loop.kt</name>
+        <name>Use a for-loop</name>
         <text>For loop iterates through anything that provides an iterator.
             See <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-For">for-loop</a>.
         </text>
         <args>guest1 guest2 guest3</args>
     </example>
     <example>
-        <name>Use ranges and in.kt</name>
+        <name>Use ranges and in</name>
         <text>Check if a number lies within a range.<br/>
             Check if a number is out of range.<br/>
             Check if a collection contains an object<br/>
@@ -102,7 +102,7 @@
         <args>4</args>
     </example>
     <example>
-        <name>Use pattern-matching.kt</name>
+        <name>Use pattern-matching</name>
         <text>See <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">Pattern-matching</a>
         </text>
         <args/>

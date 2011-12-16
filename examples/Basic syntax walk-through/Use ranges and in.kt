@@ -1,3 +1,5 @@
+import java.util.*;
+
 fun main(args : Array<String>) {
   val x = Integer.parseInt(args[0])
   //Check if a number lies within a range:
@@ -11,7 +13,7 @@ fun main(args : Array<String>) {
 
   //Check if a number is out of range:
   System.out?.println()
-  val array = java.util.ArrayList<String>();
+  val array = ArrayList<String>();
   array.add("aaa")
   array.add("bbb")
   array.add("ccc")

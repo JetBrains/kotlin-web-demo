@@ -5,7 +5,7 @@
 
     <appender name="infoLoggerAppender" class="org.apache.log4j.RollingFileAppender">
         <param name="file" value="logs/kotlincompiler.log"/>
-        <param name="MaxFileSize" value="1Mb"/>
+        <param name="MaxFileSize" value="2Mb"/>
         <param name="MaxBackupIndex" value="10"/>
         <!--<layout class="org.apache.log4j.xml.XMLLayout">
 

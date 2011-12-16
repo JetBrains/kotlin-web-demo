@@ -77,3 +77,4 @@ public class ErrorWriterInApplet extends ErrorWriter {
         }
     }
 }
+                                             

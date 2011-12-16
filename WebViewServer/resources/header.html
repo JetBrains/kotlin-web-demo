@@ -13,9 +13,9 @@
     <link type="text/css" href="/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
     <script type="text/javascript" src="/jquery/js/jquery-1.6.2.min.js"></script>
     <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="/kotlin_lib.js"></script>
 
     <!--<link rel="stylesheet" href="/codemirror/theme/default.css">-->
-    <link rel="stylesheet" href="/codemirror/css/docs.css">
 
     <style>.CodeMirror {
         border: 2px inset #dee;
@@ -60,10 +60,8 @@
     <img src="/images/ajax-loader.gif"/>
     <p>Loading applet</p>
 </div>
-<applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet.jar"></applet>
-<!--<applet id="jsapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet.jar"></applet>-->
+<applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0" ARCHIVE="WebViewApplet.jar"></applet>
+<applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0" ARCHIVE="WebViewApplet.jar"></applet>
 <div id="all">
     <div id="header">
         <table>
@@ -191,6 +189,7 @@
                     Use Ctrl&nbsp;+&nbsp;Space to take a completion <br/>
                     Use Ctrl&nbsp;+&nbsp;F9 to run file<br/>
                     Use Ctrl&nbsp;+&nbsp;Alt&nbsp;+&nbsp;L to reformat selected fragment
+                    Use Ctrl&nbsp;+&nbsp;Y&nbsp; to delete line content
                 </div>
 
             </div>
@@ -201,7 +200,7 @@
             ARCHIVE="WebViewApplet.jar"></applet>-->
     <!--<applet id="myapplet"></applet>-->
     <div id="footer">&copy; JetBrains, 2011 Kotlin Web Demo v.<span id="kotlinVersion"></span></div>
-    <div id="debug"></div>
+    <pre><div id="debug"></div></pre>
 </div>
 
 <!--<script type="text/javascript" src="/backfix.min.js"></script>-->

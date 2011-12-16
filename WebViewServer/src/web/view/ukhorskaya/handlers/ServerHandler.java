@@ -10,6 +10,7 @@ import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.Statistics;
+import web.view.ukhorskaya.examplesLoader.ExamplesList;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.help.HelpLoader;
 import web.view.ukhorskaya.log.LogDownloader;
@@ -49,6 +50,8 @@ public class ServerHandler implements HttpHandler {
             if (param.contains("userData=true")) {
                 sessionInfo = setSessionInfo(exchange);
                 sendUserInformation(exchange, sessionInfo);
+            } else if (param.startsWith("/updateExamples")) {
+                updateExamples(exchange);
             } else if (param.startsWith("/logs")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
@@ -91,6 +94,13 @@ public class ServerHandler implements HttpHandler {
         }
     }
 
+
+    private void updateExamples(HttpExchange exchange) {
+        ExamplesList.updateList();
+        HelpLoader.updateExamplesHelp();
+        writeResponse(exchange, "Examples and help was reloaded".getBytes(), HttpStatus.SC_OK);
+    }
+
     private void sendSortedExceptions(HttpExchange exchange) {
         String param = exchange.getRequestURI().toString();
         if (param.contains("download")) {
@@ -106,7 +116,7 @@ public class ServerHandler implements HttpHandler {
     private SessionInfo setSessionInfo(HttpExchange exchange) {
         SessionInfo sessionInfo;
         String sessionIdFromCookie = hasSessionIdInCookies(exchange.getRequestHeaders());
-        if (sessionIdFromCookie == null) {
+        if (sessionIdFromCookie == null || sessionIdFromCookie.isEmpty()) {
             Statistics.incNumberOfUsers();
             sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
             ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
@@ -129,7 +139,7 @@ public class ServerHandler implements HttpHandler {
             if (key.equals("Cookie")) {
                 List<String> cookie = responseHeaders.get(key);
                 if (cookie.size() > 0) {
-                    return ResponseUtils.substringAfterReturnAll(cookie.get(0), "userId=");
+                    return ResponseUtils.substringBetween(cookie.get(0), "userId=", ";");
                 }
             }
         }

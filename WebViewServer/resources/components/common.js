@@ -18,6 +18,7 @@ var LOADING_EXAMPLE_OK = "Example is loaded.";
 
 var sessionId;
 var isApplet = false;
+var isJsApplet = true;
 var kotlinVersion;
 
 var isContentEditorChanged = false;
@@ -31,7 +32,7 @@ function setMode(mode) {
 function setSessionId(id) {
     var cookie = document.cookie;
     if (cookie != id) {
-        document.cookie = id;
+        document.cookie = "userId=" + id;
     }
     /*if (cookie == "") {
         document.cookie = id;

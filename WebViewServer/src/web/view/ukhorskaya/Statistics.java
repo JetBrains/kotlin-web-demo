@@ -1,5 +1,6 @@
 package web.view.ukhorskaya;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
@@ -88,13 +89,13 @@ public class Statistics {
     public static void incNumberOfUsers() {
         NUMBER_OF_USERS++;
 //        if (isNecessaryToUpdateCounter()) {
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    writeToCounterFile();
-                }
-            });
-            t.start();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                writeToCounterFile();
+            }
+        });
+        t.start();
 //        }
     }
 
@@ -344,6 +345,7 @@ public class Statistics {
             });
 
             for (File file : files) {
+
                 if ((param.equals("all") || param.equals("statistics")) && file.getName().contains("kotlincompiler.log")) {
                     analyzeInfoLog(file);
                 } else if ((param.equals("all") || param.equals("exceptions")) && dateFrom != null && dateTo != null && file.getName().contains("exceptions.log")) {
@@ -484,7 +486,14 @@ public class Statistics {
     private File generateValidXmlFileForExceptions(File file) {
         File ex;
         try {
-            ex = File.createTempFile("exception", "log");
+            ex = new File(ServerSettings.OUTPUT_DIRECTORY + File.separator + "tmp.log" + RandomUtils.nextInt());
+            ex.createNewFile();
+            if (!ex.exists()) {
+                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "Impossible to create tmp file for file to analyze log", file.getAbsolutePath()
+                ));
+                return null;
+            }
             FileWriter writer = new FileWriter(ex);
             writer.write("<?xml version=\"1.0\"?>");
             writer.write("<errors>");

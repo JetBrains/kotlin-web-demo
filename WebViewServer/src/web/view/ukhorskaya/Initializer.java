@@ -1,10 +1,14 @@
 package web.view.ukhorskaya;
 
 import com.intellij.core.JavaCoreEnvironment;
+import com.intellij.lang.java.JavaParserDefinition;
+import com.intellij.mock.MockProject;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.impl.file.PsiPackageImplementationHelper;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jet.JetCoreEnvironment;
 import org.jetbrains.jet.compiler.CompileEnvironment;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.plugin.JetFileType;
@@ -31,7 +35,7 @@ public class Initializer {
     private Initializer() {
     }
 
-    private static JavaCoreEnvironment environment;
+    private static JetCoreEnvironment environment;
 
     public static JavaCoreEnvironment getEnvironment() {
         if (environment != null) {
@@ -56,6 +60,8 @@ public class Initializer {
         environment.registerFileType(JetFileType.INSTANCE, "ktm");
         environment.registerFileType(JetFileType.INSTANCE, "jet");
         environment.registerParserDefinition(new JetParserDefinition());
+        environment.registerParserDefinition(new JavaParserDefinition());
+
         return true;
     }
 
@@ -103,7 +109,7 @@ public class Initializer {
                 public void dispose() {
                 }
             };
-            environment = new JavaCoreEnvironment(root);
+            environment = new JetCoreEnvironment(root);
 
             return setJavaCoreEnvironment();
         }

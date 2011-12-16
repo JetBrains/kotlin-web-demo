@@ -1,5 +1,168 @@
 body {
-    font-family: monospace;
+    line-height: 1.5;
+    padding: 0 1em;
+}
+
+h1 {
+    letter-spacing: -3px;
+    font-size: 3.23em;
+    font-weight: bold;
+    margin: 0;
+}
+
+h2 {
+    font-size: 1.23em;
+    font-weight: bold;
+    margin: .5em 0;
+    letter-spacing: -1px;
+}
+
+h3 {
+    font-size: 1em;
+    font-weight: bold;
+    margin: .4em 0;
+}
+
+pre {
+    background-color: #eee;
+    /*-moz-border-radius: 6px;*/
+    /*-webkit-border-radius: 6px;*/
+    /*border-radius: 6px;*/
+    /*padding: 1em;*/
+    margin: 0px;
+}
+
+pre.code {
+    margin: 0 1em;
+}
+
+.grey {
+    font-size: 2.2em;
+    padding: .5em 1em;
+    line-height: 1.2em;
+    margin-top: .5em;
+    position: relative;
+}
+
+img.logo {
+    position: absolute;
+    right: -25px;
+    bottom: 4px;
+}
+
+a:link, a:visited, .quasilink {
+    /*color: #df0019;*/
+    cursor: pointer;
+    /*text-decoration: none;*/
+}
+
+a:hover, .quasilink:hover {
+    color: blue;
+    /*color: #800004;*/
+}
+
+h1 a:link, h1 a:visited, h1 a:hover {
+    color: black;
+}
+
+ul {
+    margin: 0;
+    padding-left: 1.2em;
+}
+
+a.download {
+    color: white;
+    background-color: #df0019;
+    width: 100%;
+    display: block;
+    text-align: center;
+    font-size: 1.23em;
+    font-weight: bold;
+    text-decoration: none;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    padding: .5em 0;
+    margin-bottom: 1em;
+}
+
+a.download:hover {
+    background-color: #bb0010;
+}
+
+.rel {
+    margin-bottom: 0;
+}
+
+.rel-note {
+    color: #777;
+    font-size: .9em;
+    margin-top: .1em;
+}
+
+.logo-braces {
+    color: #df0019;
+    position: relative;
+    top: -4px;
+}
+
+.blk {
+    float: left;
+}
+
+.left {
+    width: 37em;
+    padding-right: 6.53em;
+    padding-bottom: 1em;
+}
+
+.left1 {
+    width: 15.24em;
+    padding-right: 6.45em;
+}
+
+.left2 {
+    width: 15.24em;
+}
+
+.right {
+    width: 20.68em;
+}
+
+.leftbig {
+    width: 42.44em;
+    padding-right: 6.53em;
+}
+
+.rightsmall {
+    width: 15.24em;
+}
+
+.clear:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+.clear {
+    display: inline-block;
+}
+
+/* start commented backslash hack \*/
+* html .clear {
+    height: 1%;
+}
+
+.clear {
+    display: block;
+}
+
+body {
+    font-family: Arial, Helvetica, FreeSans, sans-serif;
+    font-size: 12px;
     /*font-size: 12px;*/
     color: #000000;
     background-color: #FFFFFF;
@@ -76,11 +239,14 @@ body {
 }
 
 .ERRORgutter {
-    background: url(/icons/error.png) 100% 100% !important;
+    background: url(/icons/error.png) 95% 95% !important;
+    background-size: 13px;
+    float: left;
 }
 
 .WARNINGgutter {
-    background: url(/icons/warning.png) 100% 100% !important;
+    background: url(/icons/warning.png) 95% 95% !important;
+    float: left;
 }
 
 #compilationResult {
@@ -103,7 +269,7 @@ body {
     vertical-align: top;
 }
 
-.ui-accordion-content p:hover {
+.ui-accordion-content a:hover {
     color: blue;
     text-decoration: underline;
 }
@@ -148,6 +314,8 @@ body {
     border-left: 1px solid #EEEEEE;
     border-top: 1px solid #EEEEEE;
     border-bottom: 1px solid #EEEEEE;
+    font-family: Arial, Helvetica, FreeSans, sans-serif;
+    font-size: 12px;
     /*width: 220px;*/
     /*display: block;*/
     /*float: left;*/
@@ -169,6 +337,8 @@ body {
     border-bottom: 1px solid #EEEEEE;
     border-top: 1px solid #EEEEEE;
     border-right: 1px solid #EEEEEE;
+    font-family: Arial, Helvetica, FreeSans, sans-serif;
+    font-size: 12px;
     /*display: block;*/
     /*margin-left: 60%;*/
 
@@ -300,8 +470,6 @@ body {
 }
 
 #consoleandproblems {
-    font-family: monospace;
-    font-size: 12px;
     color: #000000;
     background-color: #FFFFFF;
     line-height: 12px;
@@ -309,6 +477,9 @@ body {
     margin: 5px;
 }
 
+#console {
+    font-family: monospace;
+}
 #console, #problems {
     height: 160px;
     overflow-y: auto;
@@ -326,6 +497,7 @@ body {
 #leftcontent {
     display: block;
     float: left;
+    width: 100%;
     /*width: 98%;*/
 }
 
@@ -338,6 +510,7 @@ body {
     /*margin-left: 20px;*/
     margin: 5px;
     *width: 220px;
+    /*width: 96%;*/
 }
 
 #rightcontent {
@@ -407,7 +580,7 @@ body {
 }
 
 #help3 {
-    padding: 10px;
+    padding: 3px;
     text-align: left;
 }
 
@@ -470,6 +643,7 @@ body {
 
 #headerlinks a, a:hover {
     /*color: white;*/
+    padding-right: 10px;
 }
 
 #jetbrainslogo {
@@ -554,6 +728,7 @@ body {
 .switch input {
     display: none;
 }
+
 
 
 

@@ -2081,6 +2081,7 @@ var CodeMirror = (function () {
         deleteLine:function (cm) {
             var l = cm.getCursor().line;
             cm.replaceRange("", {line:l, ch:0}, {line:l});
+
         },
         undo:function (cm) {
             cm.undo();
@@ -2187,8 +2188,8 @@ var CodeMirror = (function () {
         "Left":"goCharLeft", "Right":"goCharRight", "Up":"goLineUp", "Down":"goLineDown",
         "PageUp":"goPageUp", "PageDown":"goPageDown",
         "Delete":"delCharRight", "Backspace":"delCharLeft", "Tab":"indentMore", "Shift-Tab":"indentLess",
-        "Enter":"newlineAndIndent", "Insert":"toggleOverwrite", "Ctrl-A":"selectAll", "Ctrl-Y":"deleteLine",
-        "Ctrl-Z":"undo", "Alt-Right":"goWordRight", "Alt-Left":"goWordLeft", "Ctrl-Alt-L":"indentAuto",
+        "Enter":"newlineAndIndent", "Insert":"toggleOverwrite", "Cmd-A":"selectAll", "Ctrl-Y":"deleteLine",
+        "Cmd-Z":"undo", "Alt-Right":"goWordRight", "Alt-Left":"goWordLeft", "Ctrl-Alt-L":"indentAuto",
         "Cmd-Left":"goLineStartSmart", "Cmd-Right":"goLineEnd"
     };
     // Note that the save and find-related commands aren't defined by

@@ -12,7 +12,27 @@ function removeStyles() {
         editor.clearMarker(arrayLinesMarkers[i]);
         i++;
     }
+
+    /*function remove(i, f) {
+     document.getElementById("debug").innerHTML += " i " + i  + " lenght class " + arrayClasses.length + " marker " + arrayLinesMarkers.length + "<br/>";
+     if (typeof arrayClasses[i] == "undefined") {
+     return;
+     }
+     if (typeof arrayLinesMarkers[i] != "undefined") {
+     editor.clearMarker(arrayLinesMarkers[i]);
+     }
+     arrayClasses[i].clear();
+     i++;
+     setTimeout(function (i) {
+     return function () {
+     f(i, remove);
+     }
+     }(i), 10);
+     }
+
+     remove(0, remove);*/
 }
+
 
 $(document).ready(function () {
 
@@ -60,12 +80,16 @@ $(document).ready(function () {
         }
     }
 
+    var time;
+
     function getErrors() {
+        time = new Date().getMilliseconds();
         isLoadingHighlighting = true;
         if (isApplet) {
             getDataFromApplet("highlighting");
             isLoadingHighlighting = false;
         } else {
+//            document.getElementById("debug").innerHTML = " " + (new Date().getMilliseconds() - time);
             var i = editor.getValue();
             $.ajax({
                 url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
@@ -83,72 +107,81 @@ $(document).ready(function () {
         }
     }
 
+
     function onHighlightingSuccess(data) {
         isLoadingHighlighting = false;
-        if (data != null) {
-            removeStyles();
-            if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                document.getElementById("problems").innerHTML = "";
-                setStatusBarMessage(data[0].exception);
-                setConsoleMessage(data[0].exception);
-                var j = 0;
-                while (typeof data[j] != "undefined") {
-                    exception(data[j]);
-                    j++;
-                }
+        if (data == null) {
+            return;
+        }
+        removeStyles();
+        arrayClasses = [];
+        arrayLinesMarkers = [];
+
+        if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
+            document.getElementById("problems").innerHTML = "";
+            setStatusBarMessage(data[0].exception);
+            setConsoleMessage(data[0].exception);
+            var j = 0;
+            while (typeof data[j] != "undefined") {
+                exception(data[j]);
+                j++;
+            }
+            return;
+        }
+
+        var i = 0;
+        var problems = document.createElement("div");
+
+        function processError(i, p, f) {
+            if (typeof data[i] == "undefined") {
+                document.getElementById("problems").innerHTML = problems.innerHTML;
+                updateStatusBar();
                 return;
             }
-            var i = 0;
+            arrayClasses.push(editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className));
 
-            var problems = document.createElement("div");
-            while (typeof data[i] != "undefined") {
-                while (typeof data[i] != "undefined") {
-//                    setTimeout(function () {
-                    processError(data, problems, i);
-//                    }, 10);
-                    i++;
-                }
-                i++;
-            }
-            document.getElementById("problems").innerHTML = problems.innerHTML;
-        }
-        updateStatusBar();
-    }
+            var title = data[i].titleName;
+            var start = eval('(' + data[i].x + ')');
+            var severity = data[i].severity;
 
-    function processError(data, problems, i) {
-        arrayClasses.push(editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className, "ddd"));
-
-        var title = data[i].titleName;
-        var start = eval('(' + data[i].x + ')');
-        var severity = data[i].severity;
-
-        if ((editor.lineInfo(start.line) != null) && (editor.lineInfo(start.line).markerText == null)) {
-            editor.setMarker(start.line, '<span class=\"' + severity + 'gutter\" title="' + title + '">  </span>%N%');
-            arrayLinesMarkers.push(start.line);
-        } else {
-            var text = editor.lineInfo(start.line).markerText;
-            var resultSpan = "";
-            if (severity == "WARNING") {
-                var pos = text.indexOf("title=\"") + 7;
-                resultSpan = text.substring(0, pos);
-                resultSpan += title + "\n ---next error--- \n" + text.substring(pos);
+            if ((editor.lineInfo(start.line) != null) && (editor.lineInfo(start.line).markerText == null)) {
+                editor.setMarker(start.line, '<span class=\"' + severity + 'gutter\" title="' + title + '">  </span>%N%');
+                this.arrayLinesMarkers.push(start.line);
             } else {
-                text = text.substring(text.indexOf("title=\"") + 7);
-                text = text.substring(0, text.indexOf("\""));
-                resultSpan = '<span class=\"' + severity + 'gutter\" title="' + title + "\n ---next error--- \n" + text + '">  </span>%N%';
+                var text = editor.lineInfo(start.line).markerText;
+                var resultSpan = "";
+                if ((severity == "WARNING") && text.indexOf("ERRORgutter") != -1) {
+                    text = text.substring(text.indexOf("title=\"") + 7);
+                    text = text.substring(0, text.indexOf("\""));
+//                    resultSpan += title + "\n ---next error--- \n" + text.substring(pos);
+                    resultSpan = '<span class=\"ERRORgutter\" title="' + text + "\n ---next error--- \n" + title + '">  </span>%N%';
+                } else {
+                    text = text.substring(text.indexOf("title=\"") + 7);
+                    text = text.substring(0, text.indexOf("\""));
+                    resultSpan = '<span class=\"' + severity + 'gutter\" title="' + text + "\n ---next error--- \n" + title + '">  </span>%N%';
+                }
+                this.arrayLinesMarkers.pop();
+                editor.setMarker(start.line, resultSpan);
+                this.arrayLinesMarkers.push(start.line);
             }
-            editor.setMarker(start.line, resultSpan);
+
+            var el = document.getElementById(start.line + "_" + start.ch);
+            if (el != null) {
+                el.setAttribute("title", title);
+            }
+
+            //add exception at problemsView
+            var p = createElementForProblemView(severity, start, title);
+            problems.appendChild(p);
+            i++;
+            setTimeout(function (i, problems) {
+                return function () {
+                    f(i, problems, processError);
+                }
+            }(i, problems), 10);
         }
 
-        var el = document.getElementById(start.line + "_" + start.ch);
-        if (el != null) {
-            el.setAttribute("title", title);
-        }
-
-        //add exception at problemsView
-        var p = createElementForProblemView(severity, start, title);
-        problems.appendChild(p);
-
+        processError(i, problems, processError);
     }
 
     function getDataFromApplet(type) {
@@ -231,31 +264,46 @@ $(document).ready(function () {
     }
 
     $("#run").click(function () {
-        /*try {
-         var dataFromApplet = $("#jsapplet")[0].translate(editor.getValue());
-         } catch (e) {
-         document.getElementById("debug").innerHTML = e + e.description;
-         }*/
+        var arguments = $("#arguments").val();
+        var i = editor.getValue();
         $("#tabs").tabs("select", 1);
+        setConsoleMessage("");
         setStatusBarMessage("Running...");
-        if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
-            isCompilationInProgress = true;
-            var arguments = $("#arguments").val();
-            var i = editor.getValue();
-            $.ajax({
-                url:document.location.href + "?sessionId=" + sessionId + "&run=true",
-                context:document.body,
-                success:onCompileSuccess,
-                dataType:"json",
-                type:"POST",
-                data:{text:i, consoleArgs:arguments},
-                timeout:10000,
-                error:function () {
-                    isCompilationInProgress = false;
-                    setStatusBarMessage(REQUEST_ABORTED);
-                    document.getElementById("console").innerHTML = REQUEST_ABORTED;
+        if (isJsApplet) {
+            try {
+                var dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
+                var data;
+                if (dataFromApplet.indexOf("exception=") == 0) {
+                    data = dataFromApplet.substring(10, dataFromApplet.length);
+                } else {
+                    data = eval(dataFromApplet);
                 }
-            });
+                setConsoleMessage(data);
+                setStatusBarMessage(EXECUTE_OK);
+            } catch (e) {
+                setStatusBarMessage(ERROR_UNTIL_EXECUTE);
+                setConsoleMessage("Translation error: " + e);
+            }
+        } else {
+
+            if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
+                isCompilationInProgress = true;
+
+                $.ajax({
+                    url:document.location.href + "?sessionId=" + sessionId + "&run=true",
+                    context:document.body,
+                    success:onCompileSuccess,
+                    dataType:"json",
+                    type:"POST",
+                    data:{text:i, consoleArgs:arguments},
+                    timeout:10000,
+                    error:function () {
+                        isCompilationInProgress = false;
+                        setStatusBarMessage(REQUEST_ABORTED);
+                        document.getElementById("console").innerHTML = REQUEST_ABORTED;
+                    }
+                });
+            }
         }
     });
 
@@ -531,8 +579,13 @@ $(document).ready(function () {
                 event.stop();
                 close();
                 editor.focus();
-            }
-            else if (code != 38 && code != 40) {
+            } else if (code == 8) {
+                event.stop();
+                close();
+                editor.focus();
+                editor.deleteH(-1, "char");
+                setTimeout(continueComplete, 50);
+            } else if (code != 38 && code != 40) {
                 close();
                 editor.focus();
                 setTimeout(continueComplete, 50);

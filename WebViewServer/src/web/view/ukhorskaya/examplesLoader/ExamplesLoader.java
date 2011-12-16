@@ -33,7 +33,7 @@ public class ExamplesLoader {
         }
         String fileName = fileObj.get("text");
         headName  = headName.replaceAll("%20", " ");
-        File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + headName+ File.separator + fileName);
+        File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + headName+ File.separator + fileName + ".kt");
         if (!example.exists()) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot find example with file name: " + example.getAbsolutePath());
             return "[{\"text\":\"Cannot find this example. Please choose an other example.\"}]";

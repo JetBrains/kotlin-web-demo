@@ -92,6 +92,7 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
         }
         function t(stream, state) {
             var escaped = false, next, end = !tripleQuoted;
+//            stream.eatWhile(/\w,.!?/);
             while ((next = stream.next()) != null) {
                 if (next == quote && !escaped) {
                     if (!tripleQuoted) {

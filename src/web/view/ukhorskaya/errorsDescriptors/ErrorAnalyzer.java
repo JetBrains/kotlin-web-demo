@@ -20,10 +20,7 @@ import web.view.ukhorskaya.Interval;
 import web.view.ukhorskaya.exceptions.KotlinCoreException;
 import web.view.ukhorskaya.session.SessionInfo;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -106,6 +103,26 @@ public class ErrorAnalyzer {
                         diagnostic.getMessage(), diagnostic.getSeverity(), className));
             }
         }
+
+        Collections.sort(errors, new Comparator<ErrorDescriptor>() {
+            @Override
+            public int compare(ErrorDescriptor o1, ErrorDescriptor o2) {
+                if (o1.getInterval().startPoint.line > o2.getInterval().startPoint.line) {
+                    return 1;
+                } else if (o1.getInterval().startPoint.line < o2.getInterval().startPoint.line) {
+                    return -1;
+                } else if (o1.getInterval().startPoint.line == o2.getInterval().startPoint.line) {
+                    if (o1.getInterval().startPoint.charNumber > o2.getInterval().startPoint.charNumber) {
+                        return 1;
+                    } else if (o1.getInterval().startPoint.charNumber < o2.getInterval().startPoint.charNumber) {
+                        return -1;
+                    } else if (o1.getInterval().startPoint.charNumber == o2.getInterval().startPoint.charNumber) {
+                        return 0;
+                    }
+                }
+                return -1;
+            }
+        });
 
         return errors;
     }

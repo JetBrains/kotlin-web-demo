@@ -1,17 +1,9 @@
 package web.view.ukhorskaya;
 
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.Function;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.JetCoreEnvironment;
-import org.jetbrains.jet.compiler.CompileEnvironment;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.plugin.JetFileType;
-
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 /**
  * Created by IntelliJ IDEA.

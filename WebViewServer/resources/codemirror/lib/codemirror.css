@@ -19,7 +19,7 @@ is visible outside of the scrolling box. */
     z-index: 10;
     background-color: #f7f7f7;
     border-right: 1px solid #eee;
-    min-width: 35px;
+    min-width: 40px;
     height: 100%;
 }
 
@@ -87,7 +87,8 @@ span.CodeMirror-selected {
 }
 
 .CodeMirror-focused span.CodeMirror-selected {
-    background: #d2dcf8 !important;
+    background: #516ca3 !important;
+    color: #fff !important;
 }
 
 .CodeMirror-searching {
@@ -97,17 +98,18 @@ span.CodeMirror-selected {
 /* Default theme */
 
 .cm-s-default span.cm-keyword {
-    color: #336699;
+    color: #000080;
     font-weight: bold;
 }
 
 .cm-s-default span.cm-softKeyword {
-    color: #0000ff;
+    color: #336699;
     font-weight: bold;
 }
 
 .cm-s-default span.cm-atom {
     color: #336699;
+    font-weight: bold;
 }
 
 .cm-s-default span.cm-number {
@@ -214,9 +216,15 @@ span.cm-link {
 
 div.CodeMirror span.CodeMirror-matchingbracket {
     /*color: #0000ff;*/
-    border: 1px #f00 solid;
+    /*border: 1px #0000ff solid;*/
+    /*background-color: #FFE87C;*/
+    background-color: #e4e4ff;
 }
 
 div.CodeMirror span.CodeMirror-nonmatchingbracket {
     color: #f22;
+}
+
+span.bullet {
+    padding-right: 5px;
 }
