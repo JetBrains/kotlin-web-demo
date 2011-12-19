@@ -15,7 +15,7 @@ var TRY_RUN_CODE_WITH_ERROR = "See Problems View tab, there are errors in your c
 var EXECUTE_OK = "Compilation competed without errors.";
 var GET_FROM_APPLET_FAILED = "Applet doesn't supported on you computer.";
 var LOADING_EXAMPLE_OK = "Example is loaded.";
-var COMPILE_IN_JS_APPLET_ERROR = "Translation error. Try to compile file using JVM.";
+var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to compile file using JVM.";
 var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 
 var sessionId;
@@ -24,6 +24,12 @@ var isJsApplet = true;
 var kotlinVersion;
 
 var isContentEditorChanged = false;
+
+$(document).keydown(function(e) {
+    if (e.keyCode == 120 && e.ctrlKey) {
+        $("#run").click();
+    }
+});
 
 function setMode(mode) {
     if (mode == "APPLET") {
