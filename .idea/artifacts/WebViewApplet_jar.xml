@@ -12,6 +12,8 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/guava-r09.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../KotlinCompiler/lib/json-20090211.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/picocontainer.jar" path-in-jar="/" />
+      <element id="module-output" name="translator" />
+      <element id="module-output" name="js" />
     </root>
   </artifact>
 </component>

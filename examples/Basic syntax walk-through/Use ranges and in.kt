@@ -9,7 +9,7 @@ fun main(args : Array<String>) {
 
   //Iterate over a range:
   for (a in 1..5)
-    System.out?.print(" ${a}")
+    System.out?.print("${a} ")
 
   //Check if a number is out of range:
   System.out?.println()

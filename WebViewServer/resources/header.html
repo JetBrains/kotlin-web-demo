@@ -58,10 +58,12 @@
       onload="showContent(); setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples();">
 <div id="loader">
     <img src="/images/ajax-loader.gif"/>
+
     <p>Loading applet</p>
 </div>
 <applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0" ARCHIVE="WebViewApplet.jar"></applet>
-<applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0" ARCHIVE="WebViewApplet.jar"></applet>
+<applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
+        ARCHIVE="WebViewApplet.jar"></applet>
 <div id="all">
     <div id="header">
         <table>
@@ -118,6 +120,14 @@
                 <div id="editordiv">
                     <div id="editortitle">
                         <div id="editortitletext">Type your code here:</div>
+                        <div class="field switch" id="jsonoff">
+                            <label class="js-enable selected"><span
+                                    title="">JavaScript</span></label>
+                            <label class="js-disable"><span
+                                    title="">JVM</span></label>
+                            <input type="checkbox" id="jscheckbox" checked="true" class="jscheckbox"
+                                   name="jscheckbox"/>
+                        </div>
                         <div class="field switch" id="appletonoff">
                             <label class="applet-enable selected"><span
                                     title="Use an applet for faster highlighting">Client</span></label>
@@ -191,6 +201,12 @@
                     Use Ctrl&nbsp;+&nbsp;Alt&nbsp;+&nbsp;L to reformat selected fragment
                     Use Ctrl&nbsp;+&nbsp;Y&nbsp; to delete line content
                 </div>
+                <div class="help" id="help4">
+                    <b>Client - Server switch</b>: choose "client" side to use an applet for faster highlighting,
+                    choose "server" side to send highlighting request to server (slower).<br/>
+                    <b>JavaScript - JVM switch</b>: choose "javascript" side to translate code to javascript,
+                    choose "JVM" side to send compilation request to server.
+                </div>
 
             </div>
         </div>
@@ -209,7 +225,6 @@
 <script src="/components/components.js"></script>
 
 <script src="/codemirror/lib/complete.js"></script>
-
 
 
 </body>

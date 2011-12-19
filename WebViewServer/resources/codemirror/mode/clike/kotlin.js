@@ -23,6 +23,10 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
         if (ch == '"' || ch == "'") {
             return startString(ch, stream, state);
         }
+        //for import sth.* (wo ;)
+        if (ch == "." && stream.eat("*")) {
+            return "word";
+        }
         if (/[\[\]{}\(\),;\:\.]/.test(ch)) {
             curPunc = ch;
             return null
@@ -157,8 +161,10 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
     }
 
     function expectExpression(last) {
-        return !last || last == "operator" || last == "->" || /[\.\[\{\(,;:]/.test(last) ||
+        var r = !last || last == "operator" || last == "->" || /[\.\[\{\(,;:]/.test(last) ||
             last == "newstatement" || last == "keyword" || last == "proplabel";
+//        document.getElementById("debug").innerHTML += r + " " + last + " ";
+        return r;
     }
 
     function Context(indented, column, type, align, prev) {
@@ -210,7 +216,6 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
             var style = state.tokenize[state.tokenize.length - 1](stream, state);
             if (style == "comment") return style;
             if (ctx.align == null) ctx.align = true;
-//             document.getElementById("debug").innerHTML = (curPunc + " a " + ctx.type);
             if ((curPunc == ";" || curPunc == ":") && ctx.type == "statement") popContext(state);
             // Handle indentation for {x -> \n ... }
             else if (curPunc == "->" && ctx.type == "statement" && ctx.prev.type == "}") {

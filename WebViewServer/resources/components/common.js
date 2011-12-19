@@ -15,6 +15,8 @@ var TRY_RUN_CODE_WITH_ERROR = "See Problems View tab, there are errors in your c
 var EXECUTE_OK = "Compilation competed without errors.";
 var GET_FROM_APPLET_FAILED = "Applet doesn't supported on you computer.";
 var LOADING_EXAMPLE_OK = "Example is loaded.";
+var COMPILE_IN_JS_APPLET_ERROR = "Translation error. Try to compile file using JVM.";
+var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 
 var sessionId;
 var isApplet = false;
@@ -35,10 +37,10 @@ function setSessionId(id) {
         document.cookie = "userId=" + id;
     }
     /*if (cookie == "") {
-        document.cookie = id;
-    } else {
-        id = cookie;
-    }*/
+     document.cookie = id;
+     } else {
+     id = cookie;
+     }*/
     sessionId = id;
     var data = "browser: " + navigator.appName + " " + navigator.appVersion;
     data += " " + "system: " + navigator.platform;
@@ -101,3 +103,18 @@ function beforeBack() {
 
 
 //bajb_backdetect.OnBack = beforeBack;
+
+function unEscapeString(str) {
+    str = str.replace(new RegExp("&amp;", 'g'), "&");
+    return str;
+
+}
+
+var generatedJSCode = "";
+
+function showJsCode() {
+    document.getElementById("console").removeChild(document.getElementById("console").childNodes[1]);
+    var consoleStr = document.getElementById("console").innerHTML;
+    consoleStr += "<p class='consoleViewInfo'>" + generatedJSCode + "</p>";
+    setConsoleMessage(consoleStr);
+}

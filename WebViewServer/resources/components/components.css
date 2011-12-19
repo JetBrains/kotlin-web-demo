@@ -239,7 +239,7 @@ body {
 }
 
 .ERRORgutter {
-    background: url(/icons/error.png) 95% 95% !important;
+    background: url(/icons/error.png) no-repeat 95% 95% !important;
     background-size: 13px;
     float: left;
 }
@@ -477,6 +477,9 @@ body {
     margin: 5px;
 }
 
+#console a {
+    color: blue;
+}
 #console {
     font-family: monospace;
 }
@@ -727,6 +730,53 @@ body {
 
 .switch input {
     display: none;
+}
+
+#jsonoff {
+    float: right;
+    padding-left: 10px;
+}
+
+/*On/of button*/
+.js-enable, .js-disable, .js-enable span, .js-disable span {
+    background: url(/images/switch.gif) repeat-x;
+    display: block;
+    float: left;
+}
+
+.js-enable span, .js-disable span {
+    line-height: 30px;
+    display: block;
+    background-repeat: no-repeat;
+    font-weight: bold;
+}
+
+.js-enable span {
+    background-position: left -90px;
+    padding: 0 10px;
+}
+
+.js-disable span {
+    background-position: right -180px;
+    padding: 0 10px;
+}
+
+.js-disable.selected {
+    background-position: 0 -30px;
+}
+
+.js-disable.selected span {
+    background-position: right -210px;
+    color: #fff;
+}
+
+.js-enable.selected {
+    background-position: 0 -60px;
+}
+
+.js-enable.selected span {
+    background-position: left -150px;
+    color: #fff;
 }
 
 

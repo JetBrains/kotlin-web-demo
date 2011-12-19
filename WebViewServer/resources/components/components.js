@@ -183,3 +183,18 @@ $(".applet-disable").click(function () {
     $("#appletcheckbox").attr('checked', false);
     isApplet = false;
 });
+
+$(".js-enable").click(function () {
+    var parent = $(this).parents('.switch');
+    $('.js-disable', parent).removeClass('selected');
+    $(this).addClass('selected');
+    $("#jscheckbox").attr('checked', true);
+    isJsApplet = true;
+});
+$(".js-disable").click(function () {
+    var parent = $(this).parents('.switch');
+    $('.js-enable', parent).removeClass('selected');
+    $(this).addClass('selected');
+    $("#jscheckbox").attr('checked', false);
+    isJsApplet = false;
+});

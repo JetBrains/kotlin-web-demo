@@ -119,8 +119,8 @@ $(document).ready(function () {
 
         if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
             document.getElementById("problems").innerHTML = "";
-            setStatusBarMessage(data[0].exception);
-            setConsoleMessage(data[0].exception);
+            setStatusBarMessage(unEscapeString(data[0].exception));
+            setConsoleMessage(unEscapeString(data[0].exception));
             var j = 0;
             while (typeof data[j] != "undefined") {
                 exception(data[j]);
@@ -140,7 +140,7 @@ $(document).ready(function () {
             }
             arrayClasses.push(editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className));
 
-            var title = data[i].titleName;
+            var title = unEscapeString(data[i].titleName);
             var start = eval('(' + data[i].x + ')');
             var severity = data[i].severity;
 
@@ -263,32 +263,48 @@ $(document).ready(function () {
         return result;
     }
 
+    function createRedElement(text) {
+        var div = document.createElement("div");
+        var p = document.createElement("p");
+        p.className = "consoleViewError";
+        p.innerHTML = text;
+        div.appendChild(p);
+        return div.innerHTML;
+    }
+
+
+
     $("#run").click(function () {
         var arguments = $("#arguments").val();
         var i = editor.getValue();
         $("#tabs").tabs("select", 1);
         setConsoleMessage("");
         setStatusBarMessage("Running...");
-        if (isJsApplet) {
-            try {
-                var dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
-                var data;
-                if (dataFromApplet.indexOf("exception=") == 0) {
-                    data = dataFromApplet.substring(10, dataFromApplet.length);
-                } else {
-                    data = eval(dataFromApplet);
+        getErrors();
+        setStatusBarMessage("Running...");
+        if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
+            isCompilationInProgress = true;
+            if (isJsApplet) {
+                try {
+                    var dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
+                    var isCompilationInProgress = false;
+                    var data;
+                    if (dataFromApplet.indexOf("exception=") == 0) {
+                        data = dataFromApplet.substring(10, dataFromApplet.length);
+                        data = createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + data);
+                        setStatusBarMessage(ERROR_UNTIL_EXECUTE);
+                        setConsoleMessage("<p>" + data + "</p>");
+                    } else {
+                        data = eval(dataFromApplet);
+                        setStatusBarMessage(EXECUTE_OK);
+                    generatedJSCode = dataFromApplet;
+                    setConsoleMessage("<p>" + data + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
+                    }
+                } catch (e) {
+                    setStatusBarMessage(ERROR_UNTIL_EXECUTE);
+                    setConsoleMessage(createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + e));
                 }
-                setConsoleMessage(data);
-                setStatusBarMessage(EXECUTE_OK);
-            } catch (e) {
-                setStatusBarMessage(ERROR_UNTIL_EXECUTE);
-                setConsoleMessage("Translation error: " + e);
-            }
-        } else {
-
-            if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
-                isCompilationInProgress = true;
-
+            } else {
                 $.ajax({
                     url:document.location.href + "?sessionId=" + sessionId + "&run=true",
                     context:document.body,
@@ -323,7 +339,6 @@ $(document).ready(function () {
                 return;
             } else {
                 var i = 0;
-                setConsoleMessage("");
                 var errors = document.createElement("div");
                 while (typeof data[i] != "undefined") {
                     //If there is a compilation error
@@ -359,14 +374,14 @@ $(document).ready(function () {
         var statusMes = "";
         var pos = ex.exception.indexOf("<br/>");
         if (pos != -1) {
-            statusMes = ex.exception.substr(0, pos);
+            statusMes = unEscapeString(ex.exception.substr(0, pos));
         }
 
         var problems = document.createElement("div");
         if (ex.type == "out") {
-            document.getElementById("problems").appendChild(createElementForProblemView("STACKTRACE", null, ex.exception));
+            document.getElementById("problems").appendChild(createElementForProblemView("STACKTRACE", null, unEscapeString(ex.exception)));
         } else {
-            document.getElementById("problems").appendChild(createElementForProblemView("ERROR", null, ex.exception));
+            document.getElementById("problems").appendChild(createElementForProblemView("ERROR", null, unEscapeString(ex.exception)));
         }
     }
 
@@ -385,10 +400,10 @@ $(document).ready(function () {
         p.appendChild(img);
         var titleDiv = document.createElement("span");
         if (start == null) {
-            titleDiv.innerHTML = " " + title;
+            titleDiv.innerHTML = " " + unEscapeString(title);
         } else {
 
-            titleDiv.innerHTML = "(" + (start.line + 1) + ", " + (start.ch + 1) + ") : " + title;
+            titleDiv.innerHTML = "(" + (start.line + 1) + ", " + (start.ch + 1) + ") : " + unEscapeString(title);
         }
         p.appendChild(titleDiv);
         return p;
