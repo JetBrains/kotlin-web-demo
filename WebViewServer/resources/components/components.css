@@ -694,7 +694,7 @@ body {
 
 /*On/of button*/
 .applet-enable, .applet-disable, .applet-enable span, .applet-disable span {
-    background: url(/images/switch2.gif) repeat-x;
+    background: url(/images/switch.gif) repeat-x;
     display: block;
     float: left;
 }

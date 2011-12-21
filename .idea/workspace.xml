@@ -7,25 +7,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaConverterRunner.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JsConverter.java" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\src\org\jetbrains\jet\JetCoreEnvironment.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/WebViewApplet_jar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/WebViewApplet_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/WebViewServer_jar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/WebViewServer_jar.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/icons/executeJava.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/icons/executeJavaScript.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/icons/javatokotlin.PNG" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/kotlin_lib.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/intellij/openapi/vfs/impl/jar/CoreJarVirtualFile.java" />
+      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\images\icon-arrow.gif" afterPath="" />
+      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\images\icon-ok.gif" afterPath="" />
+      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\images\msDropDown.gif" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/images/switch.gif" afterPath="$PROJECT_DIR$/WebViewServer/resources/images/switch.gif" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" afterPath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" afterPath="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/components/common.js" afterPath="$PROJECT_DIR$/WebViewServer/resources/components/common.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/components/components.css" afterPath="$PROJECT_DIR$/WebViewServer/resources/components/components.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/components/components.js" afterPath="$PROJECT_DIR$/WebViewServer/resources/components/components.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/header.html" afterPath="$PROJECT_DIR$/WebViewServer/resources/header.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Initializer.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Initializer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaRunner.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/server/ServerSettings.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/server/ServerSettings.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/session/SessionInfo.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/session/SessionInfo.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/js.iml" afterPath="$PROJECT_DIR$/../k2js/js/js.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/k2js.iml" afterPath="$PROJECT_DIR$/../k2js/k2js.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/K2JSTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/K2JSTranslator.java" />
@@ -46,6 +39,16 @@
     <ignored path="statistics/counter.txt" />
     <ignored path="lib/Copy of Copy of Copy of log4j-1.2.16.jar" />
     <ignored path="statistics/statistics.xml" />
+    <ignored path=".idea/libraries/intellij_core.xml" />
+    <ignored path=".idea/libraries/kotlinLibrary.xml" />
+    <ignored path=".idea/libraries/junit_4_7.xml" />
+    <ignored path=".idea/libraries/org_mozilla_rhino_1_7R3.xml" />
+    <ignored path=".idea/libraries/guava_r09_asm.xml" />
+    <ignored path="lib/rhino-1.7R3.jar" />
+    <ignored path="WebViewServer/resources/messages/JavaCoreBundle.properties" />
+    <ignored path="WebViewServer/resources/messages/JavaErrorMessages.properties" />
+    <ignored path="WebViewServer/resources/messages/JavaCoreBundle_en.properties" />
+    <ignored path="WebViewServer/resources/messages/JavaCoreBundle_en_US.properties" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,17 +208,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="JsonResponseForCompletion.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="114" column="0" selection-start="5326" selection-end="5326" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#3108#3117#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="JavaErrorMessages.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://C:/src/idea/java/java-psi-impl/src/com/intellij/codeInsight/daemon/JavaErrorMessages.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -267,10 +259,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServerHandler.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ServerHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="155" column="71" selection-start="7258" selection-end="7258" vertical-scroll-proportion="1.2760869">
+            <state line="155" column="71" selection-start="7258" selection-end="7258" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="header.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/header.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="175" column="56" selection-start="7122" selection-end="7122" vertical-scroll-proportion="-10.461538">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="components.css" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/components.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="696" column="34" selection-start="10403" selection-end="10403" vertical-scroll-proportion="0.8418803">
               <folding />
             </state>
           </provider>
@@ -280,26 +290,6 @@
         <entry file="file://$PROJECT_DIR$/src/web/view/ukhorskaya/ResponseUtils.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="97" column="25" selection-start="2759" selection-end="2759" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExpressionParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/src/idea/java/java-psi-impl/src/com/intellij/lang/java/parser/ExpressionParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="406" column="0" selection-start="15732" selection-end="15732" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#15837#15858#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ClsAnnotationImpl.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/src/idea/java/java-psi-impl/src/com/intellij/psi/impl/compiled/ClsAnnotationImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="142" column="0" selection-start="5082" selection-end="5082" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -329,12 +319,10 @@
         <option value="$PROJECT_DIR$/WebViewServer/src/CoreJarVirtualFile.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/com/intellij/openapi/vfs/impl/jar/CoreJarVirtualFile.java" />
         <option value="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/resources/components/components.css" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Initializer.java" />
         <option value="$PROJECT_DIR$/../../../jet/compiler/backend/src/org/jetbrains/jet/compiler/CompileEnvironment.java" />
         <option value="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/K2JSTranslator.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/resources/header.html" />
         <option value="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JsConverter.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaRunner.java" />
@@ -342,6 +330,8 @@
         <option value="C:/src/idea/java/java-psi-impl/src/com/intellij/codeInsight/daemon/JavaErrorMessages.java" />
         <option value="$PROJECT_DIR$/WebViewServer/resources/messages/JavaCoreBundle.properties" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/resources/header.html" />
+        <option value="$PROJECT_DIR$/WebViewServer/resources/components/components.css" />
       </list>
     </option>
   </component>
@@ -712,6 +702,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1216,7 +1220,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="spelling errors" />
+    <option name="LAST_COMMIT_MESSAGE" value="Generate js code on server if applet doesn't support&#10;Changes in view&#10;" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1237,6 +1241,7 @@
     <MESSAGE value="Work with js applet" />
     <MESSAGE value="Changes in html for js applet" />
     <MESSAGE value="spelling errors" />
+    <MESSAGE value="Generate js code on server if applet doesn't support&#10;Changes in view&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1293,30 +1298,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/src/idea/java/java-psi-impl/src/com/intellij/psi/impl/JavaPsiFacadeImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="350" column="0" selection-start="13416" selection-end="13416" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#13096#13413#0" expanded="true" />
-            <element signature="e#13404#13405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../jet/compiler/frontend.java/src/org/jetbrains/jet/lang/resolve/java/JavaPackageScope.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="96" column="0" selection-start="3910" selection-end="3910" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../jet/compiler/frontend.java/src/org/jetbrains/jet/lang/resolve/java/JavaDescriptorResolver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="246" column="0" selection-start="11671" selection-end="11671" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/src/idea/java/java-psi-impl/src/com/intellij/psi/impl/java/stubs/impl/PsiAnnotationStubImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="57" column="0" selection-start="1958" selection-end="1958" vertical-scroll-proportion="0.0">
@@ -1413,7 +1394,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="155" column="71" selection-start="7258" selection-end="7258" vertical-scroll-proportion="1.2760869">
+        <state line="155" column="71" selection-start="7258" selection-end="7258" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="175" column="56" selection-start="7122" selection-end="7122" vertical-scroll-proportion="-10.461538">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/icons/javatokotlin.PNG">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/components.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="696" column="34" selection-start="10403" selection-end="10403" vertical-scroll-proportion="0.8418803">
           <folding />
         </state>
       </provider>
