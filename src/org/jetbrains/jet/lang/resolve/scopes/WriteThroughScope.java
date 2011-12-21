@@ -139,6 +139,7 @@ public class WriteThroughScope extends WritableScopeWithImports {
     }
 
     @Override
+<<<<<<< HEAD
     public void addPropertyDescriptor(@NotNull PropertyDescriptor propertyDescriptor) {
         checkMayWrite();
 
@@ -146,6 +147,8 @@ public class WriteThroughScope extends WritableScopeWithImports {
     }
 
     @Override
+=======
+>>>>>>> Add stopper for completion (work without Java)
     public void addFunctionDescriptor(@NotNull FunctionDescriptor functionDescriptor) {
         checkMayWrite();
 
@@ -183,7 +186,11 @@ public class WriteThroughScope extends WritableScopeWithImports {
     @Override
     public void addVariableAlias(@NotNull String name, @NotNull VariableDescriptor variableDescriptor) {
         checkMayWrite();
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> Add stopper for completion (work without Java)
         writableWorker.addVariableAlias(name, variableDescriptor);
     }
 
@@ -231,9 +238,15 @@ public class WriteThroughScope extends WritableScopeWithImports {
         if (allDescriptors == null) {
             allDescriptors = Lists.newArrayList();
             allDescriptors.addAll(writableWorker.getAllDescriptors());
+<<<<<<< HEAD
             /*allDescriptors.addAll(getWorkerScope().getAllDescriptors());
 
             for (JetScope imported : getImports()) {
+=======
+//            allDescriptors.addAll(getWorkerScope().getAllDescriptors());
+
+            /*for (JetScope imported : getImports()) {
+>>>>>>> Add stopper for completion (work without Java)
                 allDescriptors.addAll(imported.getAllDescriptors());
             }*/
         }

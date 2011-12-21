@@ -72,13 +72,18 @@ public class WritableScopeImpl extends WritableScopeWithImports {
     }
 
     @Override
+<<<<<<< HEAD
     public void importNamespaceAlias(@NotNull String aliasName, @NotNull NamespaceDescriptor namespaceDescriptor) {
+=======
+    public void importNamespaceAlias(String aliasName, NamespaceDescriptor namespaceDescriptor) {
+>>>>>>> Add stopper for completion (work without Java)
         checkMayWrite();
 
         allDescriptors.add(namespaceDescriptor);
         super.importNamespaceAlias(aliasName, namespaceDescriptor);
     }
 
+<<<<<<< HEAD
     @Override
     public void importFunctionAlias(@NotNull String aliasName, @NotNull FunctionDescriptor functionDescriptor) {
         checkMayWrite();
@@ -96,6 +101,8 @@ public class WritableScopeImpl extends WritableScopeWithImports {
         super.importVariableAlias(aliasName, variableDescriptor);
     }
 
+=======
+>>>>>>> Add stopper for completion (work without Java)
     @NotNull
     @Override
     public Collection<DeclarationDescriptor> getAllDescriptors() {
@@ -169,6 +176,7 @@ public class WritableScopeImpl extends WritableScopeWithImports {
 
     @Override
     public void addVariableDescriptor(@NotNull VariableDescriptor variableDescriptor) {
+<<<<<<< HEAD
         addVariableDescriptor(variableDescriptor, false);
     }
     
@@ -209,10 +217,27 @@ public class WritableScopeImpl extends WritableScopeWithImports {
 
     @Override
     public VariableDescriptor getLocalVariable(@NotNull String name) {
+=======
+        checkMayWrite();
+
+        Map<String, DeclarationDescriptor> variableClassOrNamespaceDescriptors = getVariableClassOrNamespaceDescriptors();
+        DeclarationDescriptor existingDescriptor = variableClassOrNamespaceDescriptors.get(variableDescriptor.getName());
+        if (existingDescriptor != null) {
+            redeclarationHandler.handleRedeclaration(existingDescriptor, variableDescriptor);
+        }
+        // TODO : Should this always happen?
+        variableClassOrNamespaceDescriptors.put(variableDescriptor.getName(), variableDescriptor);
+        allDescriptors.add(variableDescriptor);
+    }
+
+    @Override
+    public VariableDescriptor getVariable(@NotNull String name) {
+>>>>>>> Add stopper for completion (work without Java)
         checkMayRead();
 
         Map<String, DeclarationDescriptor> variableClassOrNamespaceDescriptors = getVariableClassOrNamespaceDescriptors();
         DeclarationDescriptor descriptor = variableClassOrNamespaceDescriptors.get(name);
+<<<<<<< HEAD
         if (descriptor instanceof VariableDescriptor && !getPropertyGroups().get(name).contains(descriptor)) {
             return (VariableDescriptor) descriptor;
         }
@@ -233,6 +258,20 @@ public class WritableScopeImpl extends WritableScopeWithImports {
     }
     
     @NotNull
+=======
+        if (descriptor instanceof VariableDescriptor) {
+            return (VariableDescriptor) descriptor;
+        }
+
+        VariableDescriptor variableDescriptor = getWorkerScope().getVariable(name);
+        if (variableDescriptor != null) {
+            return variableDescriptor;
+        }
+        return super.getVariable(name);
+    }
+
+    @NotNull
+>>>>>>> Add stopper for completion (work without Java)
     private SetMultimap<String, FunctionDescriptor> getFunctionGroups() {
         if (functionGroups == null) {
             functionGroups = CommonSuppliers.newLinkedHashSetHashSetMultimap();
@@ -298,7 +337,11 @@ public class WritableScopeImpl extends WritableScopeWithImports {
     @Override
     public void addFunctionAlias(@NotNull String name, @NotNull FunctionDescriptor functionDescriptor) {
         checkMayWrite();
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> Add stopper for completion (work without Java)
         checkForRedeclaration(name, functionDescriptor);
         getFunctionGroups().put(name, functionDescriptor);
         allDescriptors.add(functionDescriptor);
@@ -307,11 +350,16 @@ public class WritableScopeImpl extends WritableScopeWithImports {
     @Override
     public void addVariableAlias(@NotNull String name, @NotNull VariableDescriptor variableDescriptor) {
         checkMayWrite();
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> Add stopper for completion (work without Java)
         checkForRedeclaration(name, variableDescriptor);
         getVariableClassOrNamespaceDescriptors().put(name, variableDescriptor);
         allDescriptors.add(variableDescriptor);
     }
+<<<<<<< HEAD
     
     private void checkForPropertyRedeclaration(String name, VariableDescriptor variableDescriptor) {
         Set<VariableDescriptor> properties = getPropertyGroups().get(name);
@@ -324,6 +372,8 @@ public class WritableScopeImpl extends WritableScopeWithImports {
             }
         }
     }
+=======
+>>>>>>> Add stopper for completion (work without Java)
 
     private void checkForRedeclaration(String name, DeclarationDescriptor classifierDescriptor) {
         DeclarationDescriptor originalDescriptor = getVariableClassOrNamespaceDescriptors().get(name);
@@ -414,7 +464,11 @@ public class WritableScopeImpl extends WritableScopeWithImports {
         super.getImplicitReceiversHierarchy(result);
     }
 
+<<<<<<< HEAD
 //    @SuppressWarnings({"NullableProblems"})
+=======
+    @SuppressWarnings({"NullableProblems"})
+>>>>>>> Add stopper for completion (work without Java)
     @NotNull
     private Map<String, PropertyDescriptor> getPropertyDescriptorsByFieldNames() {
         if (propertyDescriptorsByFieldNames == null) {
@@ -450,7 +504,11 @@ public class WritableScopeImpl extends WritableScopeWithImports {
     }
 
     public boolean hasDeclaredItems() {
+<<<<<<< HEAD
         return variableClassOrNamespaceDescriptors != null  && !variableClassOrNamespaceDescriptors.isEmpty();
+=======
+        return variableClassOrNamespaceDescriptors != null && !variableClassOrNamespaceDescriptors.isEmpty();
+>>>>>>> Add stopper for completion (work without Java)
     }
 
     @Override
