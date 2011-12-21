@@ -1,14 +1,12 @@
 package web.view.ukhorskaya.handlers;
 
+import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
-import web.view.ukhorskaya.ErrorWriter;
-import web.view.ukhorskaya.ErrorWriterOnServer;
-import web.view.ukhorskaya.ResponseUtils;
-import web.view.ukhorskaya.Statistics;
+import web.view.ukhorskaya.*;
 import web.view.ukhorskaya.examplesLoader.ExamplesList;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.help.HelpLoader;
@@ -32,6 +30,22 @@ public class ServerHandler implements HttpHandler {
 
     @Override
     public void handle(final HttpExchange exchange) throws IOException {
+
+        Authenticator authenticator = new MyAuthenticator("kotlin");
+        Authenticator.Result result = authenticator.authenticate(exchange);
+        if (result instanceof Authenticator.Success) {
+            System.out.println("OK");
+        }   else {
+            exchange.getResponseHeaders().add("WWW-Authenticate",  "Basic realm=Login");
+            writeResponse(exchange,
+                    ResponseUtils.readData(ServerHandler.class.getResourceAsStream("/login.html")).getBytes(),
+                    HttpStatus.SC_OK);
+            HttpSession session = new HttpSession(null);
+            session.handle(exchange);
+            System.out.println(session.getPostDataFromRequest(true));
+            System.out.println("Fail" + result);
+        }
+
         if (Statistics.getInstance().isNecessaryToUpdateStatistics()) {
             Thread t = new Thread(new Runnable() {
                 @Override

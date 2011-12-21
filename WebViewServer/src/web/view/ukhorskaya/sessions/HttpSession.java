@@ -220,7 +220,7 @@ public class HttpSession {
         return getPostDataFromRequest(false);
     }
 
-    private PostData getPostDataFromRequest(boolean withNewLines) {
+    public PostData getPostDataFromRequest(boolean withNewLines) {
         StringBuilder reqResponse = new StringBuilder();
         try {
             reqResponse.append(ResponseUtils.readData(exchange.getRequestBody(), withNewLines));
@@ -319,6 +319,7 @@ public class HttpSession {
                 exchange.getResponseHeaders().add("time", query);
             }
             byte[] bytes = finalResponse.getBytes();
+
             exchange.sendResponseHeaders(errorCode, bytes.length);
             os = exchange.getResponseBody();
             os.write(bytes);
