@@ -38,6 +38,7 @@
     </orderEntry>
     <orderEntry type="library" name="json" level="project" />
     <orderEntry type="library" name="kotlinLibrary" level="project" />
+    <orderEntry type="module" module-name="translator" />
   </component>
 </module>
 

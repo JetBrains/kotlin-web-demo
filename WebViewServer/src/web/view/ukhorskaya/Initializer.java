@@ -2,10 +2,8 @@ package web.view.ukhorskaya;
 
 import com.intellij.core.JavaCoreEnvironment;
 import com.intellij.lang.java.JavaParserDefinition;
-import com.intellij.mock.MockProject;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.impl.file.PsiPackageImplementationHelper;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.JetCoreEnvironment;
@@ -37,7 +35,7 @@ public class Initializer {
 
     private static JetCoreEnvironment environment;
 
-    public static JavaCoreEnvironment getEnvironment() {
+    public static JetCoreEnvironment getEnvironment() {
         if (environment != null) {
             return environment;
         }
@@ -61,6 +59,7 @@ public class Initializer {
         environment.registerFileType(JetFileType.INSTANCE, "jet");
         environment.registerParserDefinition(new JetParserDefinition());
         environment.registerParserDefinition(new JavaParserDefinition());
+//        ((MockProject) environment.getProject()).registerService(JavaPsiImplementationHelper.class, new CoreJavaPsiImplementationHelper());
 
         return true;
     }

@@ -22,6 +22,9 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/guava-r09.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/cli-10.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/lib/annotations.jar" path-in-jar="/" />
+      <element id="module-output" name="translator" />
+      <element id="library" level="project" name="org.mozilla:rhino:1.7R3" />
+      <element id="module-output" name="js" />
     </root>
   </artifact>
 </component>

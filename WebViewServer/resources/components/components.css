@@ -245,7 +245,7 @@ body {
 }
 
 .WARNINGgutter {
-    background: url(/icons/warning.png) 95% 95% !important;
+    background: url(/icons/warning.png) no-repeat 95% 95% !important;
     float: left;
 }
 
@@ -401,7 +401,7 @@ body {
 
 #editortitle {
     /*float: left;*/
-    height: 35px;
+    height: 25px;
 }
 
 #editorinput {
@@ -434,12 +434,15 @@ body {
     resize: none;
 }
 
-#argstitle, #argsbutton {
+#argsbutton {
+  margin-top: -10px;
+}
+#argstitle {
     margin-top: 2px;
 }
 
 #argstitleinput {
-    width: 95%;
+    width: 90%;
     display: block;
     float: left;
 }
@@ -673,9 +676,16 @@ body {
     padding-top: 300px;
 }
 
+.editortitletext {
+
+}
+#editortitleswitchtext {
+    float: right;
+    margin-right: 10px;
+}
 #editortitletext {
     float: left;
-    padding-top: 10px;
+    /*padding-top: 10px;*/
 }
 
 #appletonoff {
@@ -684,43 +694,43 @@ body {
 
 /*On/of button*/
 .applet-enable, .applet-disable, .applet-enable span, .applet-disable span {
-    background: url(/images/switch.gif) repeat-x;
+    background: url(/images/switch2.gif) repeat-x;
     display: block;
     float: left;
 }
 
 .applet-enable span, .applet-disable span {
-    line-height: 30px;
+    line-height: 20px;
     display: block;
     background-repeat: no-repeat;
     font-weight: bold;
 }
 
 .applet-enable span {
-    background-position: left -90px;
+    background-position: left -60px;
     padding: 0 10px;
 }
 
 .applet-disable span {
-    background-position: right -180px;
+    background-position: right -120px;
     padding: 0 10px;
 }
 
 .applet-disable.selected {
-    background-position: 0 -30px;
+    background-position: 0 -20px;
 }
 
 .applet-disable.selected span {
-    background-position: right -210px;
+    background-position: right -140px;
     color: #fff;
 }
 
 .applet-enable.selected {
-    background-position: 0 -60px;
+    background-position: 0 -40px;
 }
 
 .applet-enable.selected span {
-    background-position: left -150px;
+    background-position: left -100px;
     color: #fff;
 }
 
@@ -739,47 +749,43 @@ body {
 
 /*On/of button*/
 .js-enable, .js-disable, .js-enable span, .js-disable span {
-    background: url(/images/switch.gif) repeat-x;
+    background: url(/images/switch1.gif) repeat-x;
     display: block;
     float: left;
 }
 
 .js-enable span, .js-disable span {
-    line-height: 30px;
+    line-height: 20px;
     display: block;
     background-repeat: no-repeat;
     font-weight: bold;
 }
 
 .js-enable span {
-    background-position: left -90px;
+    background-position: left -60px;
     padding: 0 10px;
 }
 
 .js-disable span {
-    background-position: right -180px;
+    background-position: right -120px;
     padding: 0 10px;
 }
 
 .js-disable.selected {
-    background-position: 0 -30px;
+    background-position: 0 -20px;
 }
 
 .js-disable.selected span {
-    background-position: right -210px;
+    background-position: right -140px;
     color: #fff;
 }
 
 .js-enable.selected {
-    background-position: 0 -60px;
+    background-position: 0 -40px;
 }
 
 .js-enable.selected span {
-    background-position: left -150px;
+    background-position: left -100px;
     color: #fff;
 }
-
-
-
-
 

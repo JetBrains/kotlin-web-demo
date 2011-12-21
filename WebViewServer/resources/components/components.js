@@ -184,6 +184,7 @@ $(".applet-disable").click(function () {
     isApplet = false;
 });
 
+/*
 $(".js-enable").click(function () {
     var parent = $(this).parents('.switch');
     $('.js-disable', parent).removeClass('selected');
@@ -197,4 +198,4 @@ $(".js-disable").click(function () {
     $(this).addClass('selected');
     $("#jscheckbox").attr('checked', false);
     isJsApplet = false;
-});
+});*/

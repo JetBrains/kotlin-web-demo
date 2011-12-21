@@ -54,6 +54,9 @@ $(document).ready(function () {
             "Ctrl-Space":beforeComplete,
             "Ctrl-F9":function (instance) {
                 $("#run").click();
+            },
+            "Ctrl-Shift-F9":function (instance) {
+                $("#runJS").click();
             }
         },
         onChange:runTimerForNonPrinting,
@@ -171,8 +174,8 @@ $(document).ready(function () {
             }
 
             //add exception at problemsView
-            var p = createElementForProblemView(severity, start, title);
-            problems.appendChild(p);
+            var problem = createElementForProblemView(severity, start, title);
+            problems.appendChild(problem);
             i++;
             setTimeout(function (i, problems) {
                 return function () {
@@ -273,7 +276,6 @@ $(document).ready(function () {
     }
 
 
-
     $("#run").click(function () {
         var arguments = $("#arguments").val();
         var i = editor.getValue();
@@ -284,9 +286,44 @@ $(document).ready(function () {
         setStatusBarMessage("Running...");
         if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
             isCompilationInProgress = true;
-            if (isJsApplet) {
+
+            $.ajax({
+                url:document.location.href + "?sessionId=" + sessionId + "&run=true",
+                context:document.body,
+                success:onCompileSuccess,
+                dataType:"json",
+                type:"POST",
+                data:{text:i, consoleArgs:arguments},
+                timeout:10000,
+                error:function () {
+                    isCompilationInProgress = false;
+                    setStatusBarMessage(REQUEST_ABORTED);
+                    document.getElementById("console").innerHTML = REQUEST_ABORTED;
+                }
+            });
+
+        }
+    });
+
+    $("#runJS").click(function () {
+        var arguments = $("#arguments").val();
+        var i = editor.getValue();
+        $("#tabs").tabs("select", 1);
+        setConsoleMessage("");
+        setStatusBarMessage("Running...");
+        getErrors();
+        setStatusBarMessage("Running...");
+        if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
+            isCompilationInProgress = true;
+            if (isApplet && isJsApplet) {
                 try {
-                    var dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
+                    var dataFromApplet;
+                    try {
+                        dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
+                    } catch (e) {
+                        loadJsFromServer(i, arguments);
+                        return;
+                    }
                     var isCompilationInProgress = false;
                     var data;
                     if (dataFromApplet.indexOf("exception=") == 0) {
@@ -297,31 +334,54 @@ $(document).ready(function () {
                     } else {
                         data = eval(dataFromApplet);
                         setStatusBarMessage(EXECUTE_OK);
-                    generatedJSCode = dataFromApplet;
-                    setConsoleMessage("<p>" + data + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
+                        generatedJSCode = dataFromApplet;
+                        setConsoleMessage("<p>" + data + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
                     }
                 } catch (e) {
                     setStatusBarMessage(ERROR_UNTIL_EXECUTE);
                     setConsoleMessage(createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + e));
                 }
             } else {
-                $.ajax({
-                    url:document.location.href + "?sessionId=" + sessionId + "&run=true",
-                    context:document.body,
-                    success:onCompileSuccess,
-                    dataType:"json",
-                    type:"POST",
-                    data:{text:i, consoleArgs:arguments},
-                    timeout:10000,
-                    error:function () {
-                        isCompilationInProgress = false;
-                        setStatusBarMessage(REQUEST_ABORTED);
-                        document.getElementById("console").innerHTML = REQUEST_ABORTED;
-                    }
-                });
+                loadJsFromServer(i, arguments);
             }
+
         }
     });
+
+    function loadJsFromServer(i, arguments) {
+        isJsApplet = false;
+        $.ajax({
+            url:document.location.href + "?sessionId=" + sessionId + "&convertToJs=true",
+            context:document.body,
+            success:onConvertToJsSuccess,
+            dataType:"json",
+            type:"POST",
+            data:{text:i, consoleArgs:arguments},
+            timeout:10000,
+            error:function () {
+                isCompilationInProgress = false;
+                setStatusBarMessage(REQUEST_ABORTED);
+                document.getElementById("console").innerHTML = REQUEST_ABORTED;
+            }
+        });
+    }
+
+    function onConvertToJsSuccess(data) {
+        var genData;
+        if (data != null) {
+            if (typeof data[0].exception != "undefined") {
+                genData = createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + data[0].exception);
+                setStatusBarMessage(ERROR_UNTIL_EXECUTE);
+                setConsoleMessage("<p>" + genData + "</p>");
+            } else if (typeof data[0].text != "undefined") {
+                genData = eval(data[0].text);
+                setStatusBarMessage(EXECUTE_OK);
+                generatedJSCode = data[0].text;
+                setConsoleMessage("<p>" + genData + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
+            }
+
+        }
+    }
 
     function onCompileSuccess(data) {
         var isCompiledWithErrors = false;
@@ -531,6 +591,11 @@ $(document).ready(function () {
             var spanName = document.createElement("div");
             spanName.className = "lookupElementName";
             spanName.innerHTML = completions[i].name;
+
+            var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+            if (is_chrome) {
+                spanName.innerHTML += " : ";
+            }
             pEl.appendChild(spanName);
 
             var spanTail = document.createElement("div");

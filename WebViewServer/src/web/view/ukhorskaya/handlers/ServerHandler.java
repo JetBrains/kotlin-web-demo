@@ -4,7 +4,6 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.annotations.Nullable;
 import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
@@ -115,35 +114,60 @@ public class ServerHandler implements HttpHandler {
     @Nullable
     private SessionInfo setSessionInfo(HttpExchange exchange) {
         SessionInfo sessionInfo;
-        String sessionIdFromCookie = hasSessionIdInCookies(exchange.getRequestHeaders());
-        if (sessionIdFromCookie == null || sessionIdFromCookie.isEmpty()) {
-            Statistics.incNumberOfUsers();
-            sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
-            ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
+        String sessionId = getSessionIdFromCookies(exchange.getRequestHeaders());
+        if (sessionId == null || sessionId.isEmpty()) {
+            sessionId = getSessionIdFromRequest(exchange.getRequestURI().toString());
+            if (!sessionId.equals("")) {
+                sessionInfo = new SessionInfo(Integer.parseInt(sessionId));
+                
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
+                        "Impossible to read id from cookies", generateStringFromList(exchange.getRequestHeaders().get("Cookie"))));
+            } else {
+                Statistics.incNumberOfUsers();
+                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
+            }
         } else {
             try {
-                sessionInfo = new SessionInfo(Integer.parseInt(sessionIdFromCookie));
+                sessionInfo = new SessionInfo(Integer.parseInt(sessionId));
             } catch (NumberFormatException e) {
                 Statistics.incNumberOfUsers();
                 sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
                 ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.toString(), e, sessionIdFromCookie));
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.toString(), e, sessionId));
             }
         }
         return sessionInfo;
     }
 
-    @Nullable
-    private String hasSessionIdInCookies(Headers responseHeaders) {
+    private String getSessionIdFromRequest(String request) {
+        if (request.contains("sessionId=")) {
+            return ResponseUtils.substringBetween(request, "sessionId", "&");
+        }
+        return "";
+    }
+
+    private String getSessionIdFromCookies(Headers responseHeaders) {
         for (String key : responseHeaders.keySet()) {
             if (key.equals("Cookie")) {
                 List<String> cookie = responseHeaders.get(key);
                 if (cookie.size() > 0) {
-                    return ResponseUtils.substringBetween(cookie.get(0), "userId=", ";");
+                    String all = generateStringFromList(cookie);
+                    ErrorWriterOnServer.LOG_FOR_INFO.info("cookies:" + all);
+                    return ResponseUtils.substringBetween(all, "userId=", ";");
                 }
             }
         }
-        return null;
+        return "";
+    }
+    
+    private String generateStringFromList(List<String> list) {
+        StringBuilder builder = new StringBuilder();
+        for (String s : list) {
+            builder.append(s);
+            builder.append(";");
+        }
+        return builder.toString();
     }
 
     private void sendHelpContentForExamples(HttpExchange exchange) {

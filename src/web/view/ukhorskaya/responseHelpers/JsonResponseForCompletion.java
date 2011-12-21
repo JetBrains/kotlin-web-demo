@@ -5,12 +5,15 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.lang.Configuration;
+import org.jetbrains.jet.lang.JetSemanticServices;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.psi.JetExpression;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.jet.lang.psi.JetQualifiedExpression;
+import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
@@ -63,6 +66,10 @@ public class JsonResponseForCompletion {
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
+            /*bindingContext = AnalyzingUtils.analyzeNamespaces(currentProject, Configuration.EMPTY,
+                    Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
+                    Predicates.<PsiFile>equalTo(currentPsiFile), JetControlFlowDataTraceFactory.EMPTY,
+                    JetSemanticServices.createSemanticServices(currentProject));*/
             bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
                     currentProject,
                     Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),

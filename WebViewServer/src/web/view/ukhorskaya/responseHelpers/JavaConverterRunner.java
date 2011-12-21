@@ -13,26 +13,20 @@ import java.util.*;
 /**
  * Created by IntelliJ IDEA.
  * User: Natalia.Ukhorskaya
- * Date: 10/28/11
- * Time: 12:38 PM
+ * Date: 12/19/11
+ * Time: 5:46 PM
  */
+public class JavaConverterRunner {
 
-public class JavaRunner {
-//    private final Logger LOG = Logger.getLogger(JavaRunner.class);
-
-    private final List<String> files;
     private final String arguments;
-    private final JSONArray jsonArray;
     private final String textFromFile;
 
     private final SessionInfo sessionInfo;
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(List<String> files, String arguments, JSONArray array, String text, SessionInfo info) {
-        this.files = files;
+    public JavaConverterRunner(String text, String arguments, SessionInfo info) {
         this.arguments = arguments;
-        this.jsonArray = array;
         this.textFromFile = text;
         this.sessionInfo = info;
     }
@@ -124,6 +118,8 @@ public class JavaRunner {
             }
         }
 
+        JSONArray jsonArray = new JSONArray();
+
         if (!isTimeoutException) {
             Map<String, String> mapOut = new HashMap<String, String>();
             mapOut.put("type", "out");
@@ -135,7 +131,6 @@ public class JavaRunner {
             Map<String, String> mapErr = new HashMap<String, String>();
             if (isKotlinLibraryException(errStream.toString())) {
                 writeErrStreamToLog(errStream.toString());
-
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("type", "err");
                 map.put("text", ServerSettings.KOTLIN_ERROR_MESSAGE);
@@ -151,10 +146,6 @@ public class JavaRunner {
         }
 
 
-        for (String fileName : files) {
-            deleteFile(fileName);
-        }
-
         timer.cancel();
         return jsonArray.toString();
     }
@@ -163,11 +154,7 @@ public class JavaRunner {
         String path = ResponseUtils.substringAfter(outStream, "An error report file with more information is saved as:" + ResponseUtils.addNewLine() + "# ");
         path = ResponseUtils.substringBefore(path, ResponseUtils.addNewLine() + "#");
         File log = new File(path);
-        /*if (log.exists()) {
-            String links = ResponseUtils.generateTag("a", "view", "href", "/log=" + log.getAbsolutePath() + "&view");
-            links += ResponseUtils.generateTag("a", "download", "href", "/log=" + log.getAbsolutePath() + "&download");
-            return links;
-        }*/
+
         try {
             String response = ResponseUtils.readData(new FileReader(log), true);
             log.deleteOnExit();
@@ -204,117 +191,22 @@ public class JavaRunner {
                 || str.contains("AbstractMethodError")
                 || str.contains("NoSuchFieldError")
                 || str.contains("IllegalAccessError")
+                || str.contains("NoSuchMethodError")
                 || str.contains("VerifyError")
                 || str.contains("ClassCircularityError")
-                || str.contains("UnsatisfiedLinkError")
-                || (str.contains("NoSuchMethodError") && !str.equals("java.lang.NoSuchMethodError: main<br/>Exception in thread \"main\" <br/>"))) {
+                || str.contains("UnsatisfiedLinkError")) {
             return true;
         }
         return false;
     }
 
-    private void readStream(StringBuilder errStream, BufferedReader stdError) throws IOException {
-        String tmp;
-        while (!isTimeoutException && ((tmp = stdError.readLine()) != null)) {
-            errStream.append(ResponseUtils.escapeString(tmp));
-            errStream.append(ResponseUtils.addNewLine());
-        }
-    }
-
-    int returnValue = 0;
-
-    private int tryReadStreams(StringBuilder errStream, StringBuilder outStream, InputStream isOut, InputStream isErr) {
-        StringWriter stringWriter = new StringWriter();
-        int lengthOut = 0;
-        int lengthErr = 0;
-        byte[] tmp = new byte[20];
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            if ((lengthOut = isOut.read(tmp)) >= 0) {
-                out.write(tmp, 0, lengthOut);
-                stringWriter.write(new String(tmp));
-                outStream.append(stringWriter.toString());
-            } else if (lengthOut == -1) {
-                returnValue--;
-            }
-            if ((lengthErr = isErr.read(tmp)) >= 0) {
-                out.write(tmp, 0, lengthErr);
-                errStream.append(new String(tmp));
-            } else if (lengthErr == -1) {
-                returnValue--;
-            }
-        } catch (IOException e) {
-//                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TypeOfRequest.GET_RESOURCE.name(), e, exchange.getRequestURI().toString()));
-//                    writeResponse(exchange, "Could not load the resource from the server".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
-        }
-        return returnValue;
-    }
-
-    private void deleteFile(String path) {
-        File f = new File(ServerSettings.OUTPUT_DIRECTORY + File.separatorChar + path);
-        File parent = f.getParentFile();
-        while (!parent.getAbsolutePath().equals(ServerSettings.OUTPUT_DIRECTORY)) {
-            f = parent;
-            parent = parent.getParentFile();
-        }
-        delete(f);
-    }
-
-    private void delete(File file) {
-        if (file.isDirectory() && file.exists()) {
-            if (file.list().length == 0) {
-                if (file.exists()) {
-                    file.delete();
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
-                            sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
-                }
-            } else {
-                //list all the directory contents
-                String files[] = file.list();
-                for (String temp : files) {
-                    //construct the file structure
-                    File fileDelete = new File(file, temp);
-                    delete(fileDelete);
-                }
-                //check the directory again, if empty then delete it
-                if (file.list().length == 0) {
-                    if (file.exists()) {
-                        file.delete();
-                        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
-                                sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
-                    }
-                }
-            }
-        } else {
-            if (file.exists()) {
-                file.delete();
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
-                        sessionInfo.getId(), "File is deleted : " + file.getAbsolutePath()));
-            }
-        }
-    }
-
     private String generateCommandString() {
         StringBuilder builder = new StringBuilder("java ");
-        builder.append("-classpath ");
-        //builder.append(System.getProperty("java.class.path"));
-        builder.append(ServerSettings.OUTPUT_DIRECTORY);
-        builder.append(File.pathSeparator);
-        builder.append("WebView.jar");
-        builder.append(File.pathSeparator);
-        builder.append(ServerSettings.PATH_TO_KOTLIN_LIB);
-        builder.append(" ");
-        builder.append("-Djava.security.manager ");
-        builder.append(modifyClassNameFromPath(files.get(0)));
+        builder.append("-jar ");
+        builder.append("aaa.jar");
         builder.append(" ");
         builder.append(arguments);
         return builder.toString();
     }
 
-    private String modifyClassNameFromPath(String path) {
-        String name = ResponseUtils.substringBefore(path, ".class");
-        name = name.replaceAll("/", ".");
-        return name;
-    }
 }

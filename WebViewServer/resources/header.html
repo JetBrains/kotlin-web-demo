@@ -52,6 +52,23 @@
         var editor;
         //        var isBeforeUnload = false;
     </script>
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-940435-28']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' :
+                    'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
 
 </head>
 <body spellcheck="false"
@@ -119,15 +136,15 @@
             <div id="centralcontent">
                 <div id="editordiv">
                     <div id="editortitle">
-                        <div id="editortitletext">Type your code here:</div>
-                        <div class="field switch" id="jsonoff">
+                        <div id="editortitletext" class="editortitletext">Type your code here:</div>
+                        <!--<div class="field switch" id="jsonoff">
                             <label class="js-enable selected"><span
                                     title="">JavaScript</span></label>
                             <label class="js-disable"><span
                                     title="">JVM</span></label>
                             <input type="checkbox" id="jscheckbox" checked="true" class="jscheckbox"
                                    name="jscheckbox"/>
-                        </div>
+                        </div>-->
                         <div class="field switch" id="appletonoff">
                             <label class="applet-enable selected"><span
                                     title="Use an applet for faster highlighting">Client</span></label>
@@ -136,6 +153,7 @@
                             <input type="checkbox" id="appletcheckbox" checked="true" class="appletcheckbox"
                                    name="appletcheckbox"/>
                         </div>
+                        <div id="editortitleswitchtext" class="editortitletext">Run type checker on:</div>
                     </div>
 
                     <div id="editorinput">
@@ -155,7 +173,9 @@
                             </div>
                         </div>
                         <div id="argsbutton">
-                            <img src="/icons/execute.png" id="run" title="Run file (Ctrl + F9)"/>
+                            <img src="/icons/executeJava2.png" id="run" title="Run file (Ctrl + F9) using JVM"/>
+                            <img src="/icons/executeJavaScript.png" id="runJS"
+                                 title="Run file (Ctrl + Shift + F9) using Pre-Alpha JavaScript back-end"/>
                         </div>
                     </div>
 
@@ -187,7 +207,7 @@
                 <h4 class="helpTitle"> Example description: </h4>
 
                 <div class="help" id="help1">
-                    You can choose an example on at the right side.
+                    You can choose an example on the left side.
                 </div>
                 <h4 class="helpTitle"> Help for keywords: </h4>
 
@@ -197,15 +217,10 @@
 
                 <div class="help" id="help3">
                     Use Ctrl&nbsp;+&nbsp;Space to take a completion <br/>
-                    Use Ctrl&nbsp;+&nbsp;F9 to run file<br/>
-                    Use Ctrl&nbsp;+&nbsp;Alt&nbsp;+&nbsp;L to reformat selected fragment
+                    Use Ctrl&nbsp;+&nbsp;F9 to run file with JVM<br/>
+                    Use Ctrl&nbsp;+Shift&nbsp;+&nbsp;F9 to run file with Pre-Alpha JavaScript back-end<br/>
+                    Use Ctrl&nbsp;+&nbsp;Alt&nbsp;+&nbsp;L to reformat selected fragment<br/>
                     Use Ctrl&nbsp;+&nbsp;Y&nbsp; to delete line content
-                </div>
-                <div class="help" id="help4">
-                    <b>Client - Server switch</b>: choose "client" side to use an applet for faster highlighting,
-                    choose "server" side to send highlighting request to server (slower).<br/>
-                    <b>JavaScript - JVM switch</b>: choose "javascript" side to translate code to javascript,
-                    choose "JVM" side to send compilation request to server.
                 </div>
 
             </div>

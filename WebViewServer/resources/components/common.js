@@ -25,8 +25,10 @@ var kotlinVersion;
 
 var isContentEditorChanged = false;
 
-$(document).keydown(function(e) {
-    if (e.keyCode == 120 && e.ctrlKey) {
+$(document).keydown(function (e) {
+    if (e.keyCode == 120 && e.ctrlKey && e.shiftKey) {
+        $("#runJS").click();
+    } else if (e.keyCode == 120 && e.ctrlKey) {
         $("#run").click();
     }
 });

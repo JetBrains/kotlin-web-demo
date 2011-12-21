@@ -56,7 +56,9 @@ public class SessionInfo {
         GET_HELP_FOR_WORDS,
         WRITE_LOG, GET_RESOURCE,
         ANALYZE_LOG,
-        INC_NUMBER_OF_REQUESTS
+        INC_NUMBER_OF_REQUESTS,
+        CONVERT_TO_KOTLIN,
+        CONVERT_TO_JS
     }
 
 }

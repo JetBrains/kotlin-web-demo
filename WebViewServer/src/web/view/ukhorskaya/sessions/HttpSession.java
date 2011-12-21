@@ -9,9 +9,7 @@ import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.*;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.handlers.ServerHandler;
-import web.view.ukhorskaya.responseHelpers.CompileAndRunExecutor;
-import web.view.ukhorskaya.responseHelpers.JsonResponseForCompletion;
-import web.view.ukhorskaya.responseHelpers.JsonResponseForHighlighting;
+import web.view.ukhorskaya.responseHelpers.*;
 import web.view.ukhorskaya.server.ServerSettings;
 import web.view.ukhorskaya.session.SessionInfo;
 
@@ -68,10 +66,18 @@ public class HttpSession {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendCompletionResult();
+            } else if (param.contains("convertToKotlin=true")) {
+                sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                sendConvertToKotlinResult();
             } else if (param.contains("exampleId=")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExampleContent();
+            } else if (param.contains("convertToJs=true")) {
+                sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                sendConvertToJsResult();
             } else {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
@@ -81,6 +87,16 @@ public class HttpSession {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
             writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
         }
+    }
+
+    private void sendConvertToJsResult() {
+        PostData data = getPostDataFromRequest(true);
+        writeResponse(new JsConverter(sessionInfo).getResult(data.text, data.arguments), HttpStatus.SC_OK, true);
+    }
+
+    private void sendConvertToKotlinResult() {
+        PostData data = getPostDataFromRequest(true);
+        writeResponse(new JavaConverterRunner(data.text, data.arguments, sessionInfo).getResult(), HttpStatus.SC_OK, true);
     }
 
     private void sendExampleContent() {
