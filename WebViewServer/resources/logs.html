@@ -9,19 +9,25 @@
         }
     </style>
     <script type="text/javascript">
-        function generateDateRequest(param) {
-            document.location.href = "sortedExceptions=" + param + "&from="
-                    + document.getElementById("dateFrom").value +
-                    "&to=" + document.getElementById("dateTo").value;
+            function generateDateRequest(param) {
+                document.location.href = "sortedExceptions=" + param + "&from="
+                        + document.getElementById("dateFrom").value +
+                        "&to=" + document.getElementById("dateTo").value;
 
-        }
+            }
 
-        function generateDateRequestWithDate(param, date) {
-            document.location.href = "sortedExceptions=" + param + "&from="
-                    + date + "&to=" + date;
-        }
+            function generateDateRequestWithDate(param, date) {
+                document.location.href = "sortedExceptions=" + param + "&from="
+                        + date + "&to=" + date;
+            }
 
-    </script>
+            function addUser() {
+                document.location.href = "addUser=&login="
+                                    + document.getElementById("login").value +
+                                    "&password=" + document.getElementById("password").value;
+            }
+
+        </script>
 </head>
 <body>
 <div>
@@ -74,7 +80,10 @@
 <div>
     <h3>STATISTICS:</h3>
     <span style="margin-right: 20px;">$UPDATETIME$</span>
-    <form action="logs&statistics"><button>Update statistics</button></form>
+
+    <form action="logs&statistics">
+        <button>Update statistics</button>
+    </form>
     <table id="statistics">
         <tr>
             <td>Period:</td>
@@ -113,6 +122,17 @@
             <td>$NUMBER_OF_COMPLETE_REQUEST_PER_USER$</td>
         </tr>
     </table>
+</div>
+<div>
+    <form>
+        <label>
+            login <input name="dateFrom" id="login"/>
+        </label>
+        <label>
+            password <input name="dateTo" id="password"/>
+        </label>
+    </form>
+    <a href="#" onclick="addUser();">Add user</a>
 </div>
 </body>
 </html>

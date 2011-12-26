@@ -31,21 +31,6 @@ public class ServerHandler implements HttpHandler {
     @Override
     public void handle(final HttpExchange exchange) throws IOException {
 
-        Authenticator authenticator = new MyAuthenticator("kotlin");
-        Authenticator.Result result = authenticator.authenticate(exchange);
-        if (result instanceof Authenticator.Success) {
-            System.out.println("OK");
-        }   else {
-            exchange.getResponseHeaders().add("WWW-Authenticate",  "Basic realm=Login");
-            writeResponse(exchange,
-                    ResponseUtils.readData(ServerHandler.class.getResourceAsStream("/login.html")).getBytes(),
-                    HttpStatus.SC_OK);
-            HttpSession session = new HttpSession(null);
-            session.handle(exchange);
-            System.out.println(session.getPostDataFromRequest(true));
-            System.out.println("Fail" + result);
-        }
-
         if (Statistics.getInstance().isNecessaryToUpdateStatistics()) {
             Thread t = new Thread(new Runnable() {
                 @Override
@@ -83,6 +68,8 @@ public class ServerHandler implements HttpHandler {
             } else if (param.contains("allHelpWords=true")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
                 sendHelpContentForWords(exchange);
+            } else if (param.contains("addUser=")) {
+                sendAddUser(exchange);
             } else if ((param.contains("/path="))
                     || (param.equals("/"))
                     || (param.startsWith("/?"))
@@ -104,6 +91,17 @@ public class ServerHandler implements HttpHandler {
             //Do not stop server
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(exchange.getRequestURI().toString(), e, "null"));
             writeResponse(exchange, "Internal server error".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendAddUser(HttpExchange exchange) {
+        String request = exchange.getRequestURI().toString();
+
+        if (MyAuthenticator.addUser(ResponseUtils.substringBetween(request, "&login=", "&"),
+                ResponseUtils.substringAfter(request, "&password="))) {
+            writeResponse(exchange, "User was added".getBytes(), HttpStatus.SC_OK);
+        } else {
+            writeResponse(exchange, "User wasn't added".getBytes(), HttpStatus.SC_OK);
         }
     }
 
@@ -133,7 +131,7 @@ public class ServerHandler implements HttpHandler {
             sessionId = getSessionIdFromRequest(exchange.getRequestURI().toString());
             if (!sessionId.equals("")) {
                 sessionInfo = new SessionInfo(Integer.parseInt(sessionId));
-                
+
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
                         "Impossible to read id from cookies", generateStringFromList(exchange.getRequestHeaders().get("Cookie"))));
             } else {
@@ -174,7 +172,7 @@ public class ServerHandler implements HttpHandler {
         }
         return "";
     }
-    
+
     private String generateStringFromList(List<String> list) {
         StringBuilder builder = new StringBuilder();
         for (String s : list) {
@@ -306,6 +304,7 @@ public class ServerHandler implements HttpHandler {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("UNKNOWN", e, " NULL"));
         }
     }
+
 
 }
 
