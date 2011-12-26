@@ -2,11 +2,33 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Server Manager Output</title>
+    <title>Login</title>
+    <style>
+        .header {
+            background: none repeat scroll 0 0 #f7f7f7;
+            border-bottom: 1px solid #f7f7f7;
+            border-top: 1px solid #f7f7f7;
+            margin-bottom: 6px;
+            padding: 12px;
+        }
+
+        .block {
+            padding: 6px;
+        }
+
+        .label {
+            color: black;
+            float: left;
+            font-weight: bold;
+            margin-right: 4px;
+            text-align: right;
+            width: 15%;
+        }
+    </style>
 </head>
 <body>
 <div>
-    <form action="/" method="post">
+    <!--<form method="post">
         <label>
             <input id="login" type="text" name="login"/>
         </label>
@@ -14,9 +36,72 @@
             <input id="password" type="password" name="password"/>
         </label>
         <input type="submit" value="Submit" id="submit"/>
-        <input type="checkbox">Save</input>
-    </form>
+        <input type="checkbox"/>Save
+    </form>-->
 </div>
 
+<!--<div>
+    <div>Enter your account details below to log in to Confluence.</div>
+    <div>
+        <p>
+
+        <div>Username:</div>
+        <form method="post">
+            <label>
+                <input id="login" type="text" name="login"/>
+            </label>
+        </form>
+        <div>Password:</div>
+        <form method="post">
+            <label>
+                <input id="password" type="password" name="password"/>
+            </label>
+        </form>
+        </p>
+    </div>
+</div>-->
+<div  style="text-align: center;">
+    <div style="text-align: center; width: 500px; display: inline-block;">
+        <div class="header">
+            <p>
+                Enter your account details below to log in to Kotlin Demo.
+            </p>
+        </div>
+
+        <form method="post">
+            <div class="block">
+                <p>
+                </p>
+
+                <div style="width: 150px;" class="label">Username:</div>
+                <input id="login" type="text" name="login" size="30"/> <br>
+
+                <p></p>
+
+                <p>
+                </p>
+
+                <div style="width: 150px;" class="label">Password:</div>
+                <input id="password" type="password" name="password" size="30"/>
+                <br>
+
+                <p></p>
+
+                <p>
+                </p>
+
+                <!--<div style="width: 150px;" class="label"><input type="checkbox" tabindex="3" value="true" id="cookie_id"
+                                                                 name="cookie"></div>
+             <label accesskey="r" for="cookie_id">Remember me</label>-->
+
+                <p></p>
+            </div>
+
+            <div class="button">
+                <input type="submit" value="Log in" id="submit"/>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

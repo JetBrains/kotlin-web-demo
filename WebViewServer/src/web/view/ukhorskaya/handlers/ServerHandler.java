@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import web.view.ukhorskaya.*;
+import web.view.ukhorskaya.authorization.UserAuthenticator;
 import web.view.ukhorskaya.examplesLoader.ExamplesList;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.help.HelpLoader;
@@ -68,7 +69,7 @@ public class ServerHandler implements HttpHandler {
             } else if (param.contains("allHelpWords=true")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
                 sendHelpContentForWords(exchange);
-            } else if (param.contains("addUser=")) {
+            } else if (param.contains("addUser=") || param.contains("addManager=")) {
                 sendAddUser(exchange);
             } else if ((param.contains("/path="))
                     || (param.equals("/"))
@@ -96,13 +97,15 @@ public class ServerHandler implements HttpHandler {
 
     private void sendAddUser(HttpExchange exchange) {
         String request = exchange.getRequestURI().toString();
-
-        if (MyAuthenticator.addUser(ResponseUtils.substringBetween(request, "&login=", "&"),
-                ResponseUtils.substringAfter(request, "&password="))) {
-            writeResponse(exchange, "User was added".getBytes(), HttpStatus.SC_OK);
+        UserAuthenticator authenticator;
+        if (request.contains("addManager=")) {
+            authenticator = new UserAuthenticator("managers");
         } else {
-            writeResponse(exchange, "User wasn't added".getBytes(), HttpStatus.SC_OK);
+            authenticator = new UserAuthenticator("users");
         }
+        String response = authenticator.addUser(ResponseUtils.substringBetween(request, "&login=", "&"),
+                ResponseUtils.substringAfter(request, "&password="));
+        writeResponse(exchange, response.getBytes(), HttpStatus.SC_OK);
     }
 
 
@@ -206,6 +209,22 @@ public class ServerHandler implements HttpHandler {
     }
 
     private void sendListLogs(HttpExchange exchange) {
+        if (!exchange.getRequestURI().toString().contains("&statistics")) {
+            Authenticator authenticator = new UserAuthenticator("managers");
+            Authenticator.Result result = authenticator.authenticate(exchange);
+            if (result instanceof Authenticator.Success) {
+                System.out.println("OK");
+            } else {
+                try {
+                    writeResponse(exchange,
+                            ResponseUtils.readData(ServerHandler.class.getResourceAsStream("/login.html")).getBytes(),
+                            HttpStatus.SC_OK);
+                } catch (IOException e) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("LOGIN", e, "Login failed"));
+                }
+                return;
+            }
+        }
         InputStream is = ServerHandler.class.getResourceAsStream("/logs.html");
         try {
             String response = ResponseUtils.readData(is);

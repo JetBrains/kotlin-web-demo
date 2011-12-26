@@ -36,8 +36,6 @@ function removeStyles() {
 
 $(document).ready(function () {
 
-    $("#myapplet")[0].getHighlighting("fun main(args : Array<String>) { System.out?.println(\"Hello, world!\")}");
-
     var timer;
     var timerIntervalForNonPrinting = 300;
 
@@ -755,5 +753,7 @@ $(document).ready(function () {
             i++;
         }
     }
+
+    $("#myapplet")[0].getHighlighting("fun main(args : Array<String>) { System.out?.println(\"Hello, world!\")}");
 
 });

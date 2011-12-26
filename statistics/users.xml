@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <users>
     <user>
-        <login>root</login>
-        <password>root</password>
+        <login>user</login>
+        <password>ee11cbb19052e40b07aac0ca060c23ee</password>
     </user>
     <user>
-        <login>aaaaaa</login>
-        <password/>
+        <login>user1</login>
+        <password>24c9e15e52afc47c225b757e7bee1f9d</password>
+    </user>
+    <user>
+        <login>user2</login>
+        <password>7e58d63b60197ceb55a1c487989a3720</password>
     </user>
 </users>

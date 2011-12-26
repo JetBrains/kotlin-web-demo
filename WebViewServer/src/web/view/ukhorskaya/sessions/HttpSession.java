@@ -3,12 +3,12 @@ package web.view.ukhorskaya.sessions;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.sun.net.httpserver.Authenticator;
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.*;
+import web.view.ukhorskaya.authorization.UserAuthenticator;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.handlers.ServerHandler;
 import web.view.ukhorskaya.responseHelpers.*;
@@ -95,7 +95,7 @@ public class HttpSession {
     }
 
     private Boolean readAuthDataFromCookie() {
-        Headers responseHeaders = exchange.getRequestHeaders();
+        /*Headers responseHeaders = exchange.getRequestHeaders();
         for (String key : responseHeaders.keySet()) {
             if (key.equals("Cookie")) {
                 List<String> cookie = responseHeaders.get(key);
@@ -106,7 +106,7 @@ public class HttpSession {
                     }
                 }
             }
-        }
+        }*/
         return false;
     }
 
@@ -296,23 +296,22 @@ public class HttpSession {
             } catch (IOException e) {
                 e.printStackTrace();
             }*/
-            if (!readAuthDataFromCookie()) {
-                Authenticator authenticator = new MyAuthenticator("kotlin");
-                Authenticator.Result result = authenticator.authenticate(exchange);
-                if (result instanceof Authenticator.Success) {
-                    System.out.println("OK");
-                } else {
-                    //                    exchange.getResponseHeaders().add("WWW-Authenticate", "Basic realm=Login");
-                    //                    exchange.getResponseHeaders().add("Tyoe", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                    try {
-                        writeResponse(
-                                ResponseUtils.readData(HttpSession.class.getResourceAsStream("/login.html")),
-                                HttpStatus.SC_OK, true);
-                    } catch (IOException e) {
-                        ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
-                    }
-                    return;
+
+            Authenticator authenticator = new UserAuthenticator("users");
+            Authenticator.Result result = authenticator.authenticate(exchange);
+            if (result instanceof Authenticator.Success) {
+                System.out.println("OK");
+            } else {
+                //                    exchange.getResponseHeaders().add("WWW-Authenticate", "Basic realm=Login");
+                //                    exchange.getResponseHeaders().add("Tyoe", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                try {
+                    writeResponse(
+                            ResponseUtils.readData(HttpSession.class.getResourceAsStream("/login.html")),
+                            HttpStatus.SC_OK, true);
+                } catch (IOException e) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
                 }
+                return;
             }
 
             path = "/header.html";
