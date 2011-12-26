@@ -81,8 +81,6 @@ public class ServerHandler implements HttpHandler {
                     sessionInfo = new SessionInfo(0);
                 }
                 HttpSession session = new HttpSession(sessionInfo);
-                String ip = exchange.getRemoteAddress().getHostName() + ":" + exchange.getRemoteAddress().getPort() + " ip " + exchange.getRemoteAddress().getAddress().getHostAddress();
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("IP", ip, ""));
                 session.handle(exchange);
             } else {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + exchange.getRequestURI());
@@ -171,8 +169,9 @@ public class ServerHandler implements HttpHandler {
                 List<String> cookie = responseHeaders.get(key);
                 if (cookie.size() > 0) {
                     String all = generateStringFromList(cookie);
-                    ErrorWriterOnServer.LOG_FOR_INFO.info("cookies:" + all);
-                    return ResponseUtils.substringBetween(all, "userId=", ";");
+                    String response =  ResponseUtils.substringBetween(all, "userId=", ";");
+                    ErrorWriterOnServer.LOG_FOR_INFO.info("cookies:" + all + " userId: " + response);
+                    return response;
                 }
             }
         }
@@ -261,6 +260,8 @@ public class ServerHandler implements HttpHandler {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Path to the file is incorrect.", exchange.getRequestURI().toString()));
             writeResponse(exchange, "Path to the file is incorrect.".getBytes(), HttpStatus.SC_NOT_FOUND);
             return;
+        } else if (path.startsWith("/messages/")) {
+            writeResponse(exchange, "".getBytes(), HttpStatus.SC_OK);
         }
 
         InputStream is = ServerHandler.class.getResourceAsStream(path);

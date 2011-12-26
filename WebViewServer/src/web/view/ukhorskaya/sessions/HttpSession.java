@@ -40,14 +40,8 @@ public class HttpSession {
         try {
             this.exchange = exchange;
             String param = exchange.getRequestURI().toString();
-
-            String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
-            if (ip.equals("127.0.0.1")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + ip);
-            } else {
-                ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param);
-            }
-
+            String ip = exchange.getRemoteAddress().getHostName() + ":" + exchange.getRemoteAddress().getPort() + " ip " + exchange.getRemoteAddress().getAddress().getHostAddress();
+            ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + ip);
             //FOR TEST ONLY
             /*if (param.contains("testConnection")) {
                 sendTestConnection();
