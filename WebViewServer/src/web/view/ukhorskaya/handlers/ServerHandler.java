@@ -81,7 +81,8 @@ public class ServerHandler implements HttpHandler {
                     sessionInfo = new SessionInfo(0);
                 }
                 HttpSession session = new HttpSession(sessionInfo);
-
+                String ip = exchange.getRemoteAddress().getHostName() + ":" + exchange.getRemoteAddress().getPort() + " ip " + exchange.getRemoteAddress().getAddress().getHostAddress();
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("IP", ip, ""));
                 session.handle(exchange);
             } else {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + exchange.getRequestURI());
@@ -136,7 +137,7 @@ public class ServerHandler implements HttpHandler {
             sessionId = getSessionIdFromRequest(exchange.getRequestURI().toString());
             if (!sessionId.equals("")) {
                 sessionInfo = new SessionInfo(Integer.parseInt(sessionId));
-                
+
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
                         "Impossible to read id from cookies", generateStringFromList(exchange.getRequestHeaders().get("Cookie"))));
             } else {
@@ -177,7 +178,7 @@ public class ServerHandler implements HttpHandler {
         }
         return "";
     }
-    
+
     private String generateStringFromList(List<String> list) {
         StringBuilder builder = new StringBuilder();
         for (String s : list) {

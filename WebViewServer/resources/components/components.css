@@ -473,6 +473,7 @@ body {
 #console {
     font-family: monospace;
 }
+
 #console, #problems {
     height: 160px;
     overflow-y: auto;
@@ -666,10 +667,12 @@ body {
 .editortitletext {
 
 }
+
 #editortitleswitchtext {
     float: right;
     margin-right: 10px;
 }
+
 #editortitletext {
     float: left;
     /*padding-top: 10px;*/
@@ -736,7 +739,7 @@ body {
 
 /*On/of button*/
 .js-enable, .js-disable, .js-enable span, .js-disable span {
-    background: url(/images/switch1.gif) repeat-x;
+    background: url(/images/switch.gif) repeat-x;
     display: block;
     float: left;
 }
@@ -774,5 +777,10 @@ body {
 .js-enable.selected span {
     background-position: left -100px;
     color: #fff;
+}
+
+.tooltip {
+    background-color: #F7F7F7;
+    color: red;
 }
 
