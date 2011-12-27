@@ -176,6 +176,7 @@ $(".applet-enable").click(function () {
     $("#appletcheckbox").attr('checked', true);
     isApplet = true;
 });
+
 $(".applet-disable").click(function () {
     var parent = $(this).parents('.switch');
     $('.applet-enable', parent).removeClass('selected');
@@ -184,18 +185,3 @@ $(".applet-disable").click(function () {
     isApplet = false;
 });
 
-/*
-$(".js-enable").click(function () {
-    var parent = $(this).parents('.switch');
-    $('.js-disable', parent).removeClass('selected');
-    $(this).addClass('selected');
-    $("#jscheckbox").attr('checked', true);
-    isJsApplet = true;
-});
-$(".js-disable").click(function () {
-    var parent = $(this).parents('.switch');
-    $('.js-enable', parent).removeClass('selected');
-    $(this).addClass('selected');
-    $("#jscheckbox").attr('checked', false);
-    isJsApplet = false;
-});*/

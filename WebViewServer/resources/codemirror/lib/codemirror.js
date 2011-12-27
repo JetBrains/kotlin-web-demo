@@ -2180,7 +2180,7 @@ var CodeMirror = (function () {
         "Left":"goCharLeft", "Right":"goCharRight", "Up":"goLineUp", "Down":"goLineDown",
         "End":"goLineEnd", "Home":"goLineStartSmart", "PageUp":"goPageUp", "PageDown":"goPageDown",
         "Delete":"delCharRight", "Backspace":"delCharLeft", "Tab":"indentMore", "Shift-Tab":"indentLess",
-        "Enter":"newlineAndIndent", "Insert":"toggleOverwrite", "Ctrl-A":"selectAll", "Ctrl-Y":"deleteLine",
+        "Enter":"newlineAndIndent", "Insert":"toggleOverwrite", "Ctrl-A":"selectAll",
         "Ctrl-Z":"undo", "Ctrl-Right":"goWordRight", "Ctrl-Left":"goWordLeft", "Ctrl-Alt-L":"indentAuto"
     };
 
@@ -2188,7 +2188,7 @@ var CodeMirror = (function () {
         "Left":"goCharLeft", "Right":"goCharRight", "Up":"goLineUp", "Down":"goLineDown",
         "PageUp":"goPageUp", "PageDown":"goPageDown",
         "Delete":"delCharRight", "Backspace":"delCharLeft", "Tab":"indentMore", "Shift-Tab":"indentLess",
-        "Enter":"newlineAndIndent", "Insert":"toggleOverwrite", "Cmd-A":"selectAll", "Ctrl-Y":"deleteLine",
+        "Enter":"newlineAndIndent", "Insert":"toggleOverwrite", "Cmd-A":"selectAll",
         "Cmd-Z":"undo", "Alt-Right":"goWordRight", "Alt-Left":"goWordLeft", "Ctrl-Alt-L":"indentAuto",
         "Cmd-Left":"goLineStartSmart", "Cmd-Right":"goLineEnd"
     };

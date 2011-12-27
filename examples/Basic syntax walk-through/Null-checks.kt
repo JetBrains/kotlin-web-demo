@@ -1,4 +1,4 @@
-namespace multiplier
+package multiplier
 
 // Return null if str does not hold a number
 fun parseInt(str : String) : Int? {

@@ -200,6 +200,40 @@ $(document).ready(function () {
             } catch (e) {
                 $(".applet-disable").click();
                 setStatusBarMessage(GET_FROM_APPLET_FAILED);
+
+                /*$("#editordiv").simpletip({
+                 content: "Applet doesn't support",
+                 fixed: true,
+                 position: 'top'
+                 });
+                 var api = $('#editordiv').eq(0).simpletip();
+                 api.show();
+                 */
+                /*setTimeout(function() {
+                 api.hide();
+                 }, 2000);*/
+                var title = document.getElementById("appletclient").title;
+                if (title.indexOf(GET_FROM_APPLET_FAILED) == -1) {
+                    document.getElementById("appletclient").title += ". " + GET_FROM_APPLET_FAILED;
+                }
+                var color = document.getElementById("statusbar").style.color;
+                document.getElementById("statusbar").style.color = "red";
+                $(".applet-enable").click(function () {
+                    try {
+                        $("#myapplet")[0].getHighlighting("");
+                        var title = document.getElementById("appletclient").title;
+                        var pos = title.indexOf(GET_FROM_APPLET_FAILED)
+                        if (pos != -1) {
+                            title = title.substring(0, pos);
+                            document.getElementById("appletclient").title = title;
+                        }
+                    } catch (e) {
+                        $(".applet-disable").click();
+                    }
+                });
+                setTimeout(function () {
+                    document.getElementById("statusbar").style.color = color;
+                }, 2000);
                 if (type == "highlighting") {
                     isLoadingHighlighting = false;
                     getErrors();
@@ -283,8 +317,8 @@ $(document).ready(function () {
         setConsoleMessage("");
         setStatusBarMessage("Running...");
         getErrors();
-        setStatusBarMessage("Running...");
         if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
+            setStatusBarMessage("Running...");
             isCompilationInProgress = true;
 
             $.ajax({
@@ -415,7 +449,7 @@ $(document).ready(function () {
                         if (data[i].type == "info") {
                             p.className = "consoleViewInfo";
                         }
-                        p.innerHTML = data[i].text;
+                        p.innerHTML = unEscapeString(data[i].text);
                         errors.appendChild(p);
                     }
                     i++;

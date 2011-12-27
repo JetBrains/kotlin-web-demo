@@ -20,6 +20,7 @@ public class Main {
 
 
     public static void main(String[] args) {
+        //branch
         System.setProperty("kotlin.running.in.server.mode", "true");
 
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();

@@ -9,7 +9,7 @@
 //Problems with ajax-request to server
 var REQUEST_ABORTED = "Ajax request aborted.";
 //Message in popup with warning before close tab with editor
-var BEFORE_EXIT = "You have unsaved changes.";
+var BEFORE_EXIT = "The changes you made to the program will be lost when this page is closed. Do you want to close the page?";
 var ERROR_UNTIL_EXECUTE = "During program execution errors have occurred.";
 var TRY_RUN_CODE_WITH_ERROR = "See Problems View tab, there are errors in your code.";
 var EXECUTE_OK = "Compilation competed without errors.";

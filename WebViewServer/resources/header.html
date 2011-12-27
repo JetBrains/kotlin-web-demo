@@ -14,8 +14,7 @@
     <script type="text/javascript" src="/jquery/js/jquery-1.6.2.min.js"></script>
     <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="/kotlin_lib.js"></script>
-
-    <!--<link rel="stylesheet" href="/codemirror/theme/default.css">-->
+    <script type="text/javascript" src="/jquery.simpletip-1.3.1.js"></script>
 
     <style>.CodeMirror {
         border: 2px inset #dee;
@@ -99,7 +98,7 @@
                     <a target="_blank" href="https://twitter.com/#!/project_kotlin">Twitter</a>
                 </td>
                 <td id="jetbrainslogo">
-                    <img src="/images/jblogo.png" id="jblogo" title="JetBrains"/>
+                    <a target="_blank" href="http://jetbrains.com"><img src="/images/jblogo.png" id="jblogo" title="JetBrains"/></a>
                 </td>
             </tr>
         </table>
@@ -137,17 +136,9 @@
                 <div id="editordiv">
                     <div id="editortitle">
                         <div id="editortitletext" class="editortitletext">Type your code here:</div>
-                        <!--<div class="field switch" id="jsonoff">
-                            <label class="js-enable selected"><span
-                                    title="">JavaScript</span></label>
-                            <label class="js-disable"><span
-                                    title="">JVM</span></label>
-                            <input type="checkbox" id="jscheckbox" checked="true" class="jscheckbox"
-                                   name="jscheckbox"/>
-                        </div>-->
                         <div class="field switch" id="appletonoff">
                             <label class="applet-enable selected"><span
-                                    title="Use an applet for faster highlighting">Client</span></label>
+                                    title="Use an applet for faster highlighting" id="appletclient">Client</span></label>
                             <label class="applet-disable"><span
                                     title="Send highlighting request to server (slower)">Server</span></label>
                             <input type="checkbox" id="appletcheckbox" checked="true" class="appletcheckbox"
@@ -165,19 +156,21 @@
                     <div id="statusbar">
 
                     </div>
-                    <div id="argsdiv">
-                        <div id="argstitleinput">
-                            <div id="argstitle">Arguments:</div>
-                            <div id="argsinput">
+                    <table id="argsdiv">
+                        <tr>
+                            <td  id="argstitle">
+                                Arguments:
+                            </td>
+                            <td id="argsinput">
                                 <input class="arguments" id="arguments" name="arguments">
-                            </div>
-                        </div>
-                        <div id="argsbutton">
-                            <img src="/icons/executeJava.png" id="run" title="Run file (Ctrl + F9) using JVM"/>
-                            <img src="/icons/executeJavaScript.png" id="runJS"
-                                 title="Run file (Ctrl + Shift + F9) using Pre-Alpha JavaScript back-end"/>
-                        </div>
-                    </div>
+                            </td>
+                            <td id="argsbutton">
+                                <img src="/icons/executeJava.png" id="run" title="Run file (Ctrl + F9) using JVM"/>
+                                                            <img src="/icons/executeJavaScript.png" id="runJS"
+                                                                 title="Run file (Ctrl + Shift + F9) using Pre-Alpha JavaScript back-end"/>
+                            </td>
+                        </tr>
+                    </table>
 
                     <div id="consoleandproblems">
                         <div id="tabs">
@@ -216,31 +209,26 @@
                 </div>
 
                 <div class="help" id="help3">
-                    Use Ctrl&nbsp;+&nbsp;Space to take a completion <br/>
-                    Use Ctrl&nbsp;+&nbsp;F9 to run file with JVM<br/>
-                    Use Ctrl&nbsp;+Shift&nbsp;+&nbsp;F9 to run file with Pre-Alpha JavaScript back-end<br/>
+                    Use Ctrl&nbsp;+&nbsp;Space for code completion <br/>
+                    Use Ctrl&nbsp;+&nbsp;F9 to run with JVM<br/>
+                    Use Ctrl&nbsp;+Shift&nbsp;+&nbsp;F9 to run with Pre-Alpha JavaScript back-end<br/>
                     Use Ctrl&nbsp;+&nbsp;Alt&nbsp;+&nbsp;L to reformat selected fragment<br/>
-                    Use Ctrl&nbsp;+&nbsp;Y&nbsp; to delete line content
                 </div>
 
             </div>
         </div>
         <!--</div>-->
     </div>
-    <!--<applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
-            ARCHIVE="WebViewApplet.jar"></applet>-->
-    <!--<applet id="myapplet"></applet>-->
+
     <div id="footer">&copy; JetBrains, 2011 Kotlin Web Demo v.<span id="kotlinVersion"></span></div>
     <pre><div id="debug"></div></pre>
 </div>
 
-<!--<script type="text/javascript" src="/backfix.min.js"></script>-->
 <script src="/components/common.js"></script>
 <script src="/components/help.js"></script>
 <script src="/components/components.js"></script>
 
 <script src="/codemirror/lib/complete.js"></script>
-
 
 </body>
 </html>

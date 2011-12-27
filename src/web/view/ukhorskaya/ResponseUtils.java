@@ -100,7 +100,7 @@ public class ResponseUtils {
         if (fPos != -1) {
             str = str.substring(fPos + before.length());
         } else {
-            substringBefore(str, after);
+            return "";
         }
         int sPos = str.indexOf(after);
         if (sPos != -1) {

@@ -325,7 +325,6 @@ body {
     width: 60%;
     /*width: 800px;*/
     border: 1px solid #EEEEEE;
-    /*min-width: 560px;*/
 
     /*float: left;*/
     /*display: block;*/
@@ -420,11 +419,7 @@ body {
 #argsdiv {
     margin-top: 5px;
     height: 30px;
-}
-
-#argsinput {
-    height: 20px;
-    resize: none;
+    width: 100%;
 }
 
 #arguments {
@@ -435,36 +430,25 @@ body {
     resize: none;
 }
 
-#argsbutton {
-    margin-top: -10px;
-}
-
 #argstitle {
     margin-top: 2px;
-}
-
-#argstitleinput {
-    width: 90%;
-    display: block;
-    float: left;
-}
-
-#argstitle {
     width: 75px;
+    float: left;
+    height: 20px;
 }
 
 #argsbutton {
     float: left;
     margin-left: 5px;
+    width: 51px;
+    margin-top: -10px;
 }
 
 #argsinput {
-    margin-left: 80px;
-}
-
-#argstitle {
-    width: 75px;
-    float: left;
+    height: 20px;
+    resize: none;
+    width: 100%;
+    /*margin-left: 80px;*/
 }
 
 #statusbar {
@@ -489,7 +473,6 @@ body {
 #console {
     font-family: monospace;
 }
-
 #console, #problems {
     height: 160px;
     overflow-y: auto;
@@ -579,10 +562,6 @@ body {
 #centraltitle img {
     cursor: pointer;
     padding-top: 3px;
-}
-
-#run, #runJS {
-    cursor: pointer;
 }
 
 #help1 {
@@ -687,12 +666,10 @@ body {
 .editortitletext {
 
 }
-
 #editortitleswitchtext {
     float: right;
     margin-right: 10px;
 }
-
 #editortitletext {
     float: left;
     /*padding-top: 10px;*/

@@ -135,22 +135,46 @@ public class Statistics {
             totalNumberOfHighlightRequestsPerUser += userInfo.numberOfHighlightRequest;
             totalNumberOfCompleteRequestsPerUser += userInfo.numberOfCompleteRequest;
         }
-        totalNumberOfRequestsPerUser /= userInfoMap.size();
-        totalNumberOfRunRequestsPerUser /= userInfoMap.size();
-        totalNumberOfHighlightRequestsPerUser /= userInfoMap.size();
-        totalNumberOfCompleteRequestsPerUser /= userInfoMap.size();
-
 
         TOTAL_USERS.value = String.valueOf(NUMBER_OF_USERS);
         TOTAL_USERS_FROM_LOG.value = String.valueOf(userInfoMap.size());
         NEW_USERS_PER_DAY.value = getNumberOfNewUsersPerDay();
         USERS_PER_DAY.value = getNumberOfUsersPerDay();
-        REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser);
-        RUN_REQUEST_PER_USER.value = String.valueOf(totalNumberOfRunRequestsPerUser);
-        HIGHLIGHT_REQUEST_PER_USER.value = String.valueOf(totalNumberOfHighlightRequestsPerUser);
-        COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser);
+        REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser / userInfoMap.size())
+                + " (" + totalNumberOfRequestsPerUser + " / " + userInfoMap.size() + ")";
+        RUN_REQUEST_PER_USER.value = String.valueOf(totalNumberOfRunRequestsPerUser / userInfoMap.size())
+                + " (" + totalNumberOfRunRequestsPerUser + " / " + userInfoMap.size() + ")";
+        HIGHLIGHT_REQUEST_PER_USER.value = String.valueOf(totalNumberOfHighlightRequestsPerUser / userInfoMap.size())
+                + " (" + totalNumberOfHighlightRequestsPerUser + " / " + userInfoMap.size() + ")";
+        COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMap.size())
+                + " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMap.size() + ")";
         UPDATE_TIME.value = getUpdateTimeForStatistics();
         LOGS_PERIOD.value = getLogsPeriod();
+    }
+
+    public String showMap() {
+        calculateStatistics();
+        StringBuilder builder = new StringBuilder("<table>");
+        builder.append("<tr>");
+        builder.append(ResponseUtils.generateTag("td", "userId"));
+        builder.append(ResponseUtils.generateTag("td", "Total"));
+        builder.append(ResponseUtils.generateTag("td", "Run"));
+        builder.append(ResponseUtils.generateTag("td", "Highlight"));
+        builder.append(ResponseUtils.generateTag("td", "Complete"));
+        builder.append("</tr>");
+        for (String userId : userInfoMap.keySet()) {
+            builder.append("<tr>");
+            UserInfo info = userInfoMap.get(userId);
+            builder.append(ResponseUtils.generateTag("td", userId));
+            builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfRequest)));
+            builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfRunRequest)));
+            builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfHighlightRequest)));
+            builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfCompleteRequest)));
+            builder.append("</tr>");
+        }
+        builder.append("</table>");
+
+        return builder.toString();
     }
 
     private String getLogsPeriod() {
@@ -178,7 +202,7 @@ public class Statistics {
         for (Integer count : usersPerDayList) {
             i += count;
         }
-        return String.valueOf(i / usersPerDayList.size());
+        return String.valueOf(i / usersPerDayList.size()) + " for " + usersPerDayList.size() + " day(s)";
     }
 
     private String getNumberOfUsersPerDay() {
@@ -186,7 +210,7 @@ public class Statistics {
         for (Set<Integer> count : uniqueUsersPerDay) {
             i += count.size();
         }
-        return String.valueOf(i / uniqueUsersPerDay.size());
+        return String.valueOf(i / uniqueUsersPerDay.size()) + " for " + uniqueUsersPerDay.size() + " day(s)";
     }
 
     private void writeStatisticsInFile() {

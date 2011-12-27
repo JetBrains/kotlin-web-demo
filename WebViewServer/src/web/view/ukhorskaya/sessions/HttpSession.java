@@ -2,13 +2,11 @@ package web.view.ukhorskaya.sessions;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.*;
-import web.view.ukhorskaya.authorization.UserAuthenticator;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.handlers.ServerHandler;
 import web.view.ukhorskaya.responseHelpers.*;
@@ -17,7 +15,6 @@ import web.view.ukhorskaya.session.SessionInfo;
 
 import java.io.*;
 import java.net.URLDecoder;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,10 +38,15 @@ public class HttpSession {
 
     public void handle(final HttpExchange exchange) {
         try {
-
             this.exchange = exchange;
             String param = exchange.getRequestURI().toString();
-            ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param);
+
+            String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
+            if (ip.equals("127.0.0.1")) {
+                ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + ip);
+            } else {
+                ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param);
+            }
 
             //FOR TEST ONLY
             /*if (param.contains("testConnection")) {
@@ -92,31 +94,6 @@ public class HttpSession {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
             writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
         }
-    }
-
-    private Boolean readAuthDataFromCookie() {
-        /*Headers responseHeaders = exchange.getRequestHeaders();
-        for (String key : responseHeaders.keySet()) {
-            if (key.equals("Cookie")) {
-                List<String> cookie = responseHeaders.get(key);
-                if (cookie.size() > 0) {
-                    String all = generateStringFromList(cookie);
-                    if (all.contains("auth=true")) {
-                        return true;
-                    }
-                }
-            }
-        }*/
-        return false;
-    }
-
-    private String generateStringFromList(List<String> list) {
-        StringBuilder builder = new StringBuilder();
-        for (String s : list) {
-            builder.append(s);
-            builder.append(";");
-        }
-        return builder.toString();
     }
 
     private void sendConvertToJsResult() {
@@ -187,6 +164,26 @@ public class HttpSession {
     private void setGlobalVariables(@Nullable String text) {
         currentProject = Initializer.getEnvironment().getProject();
         if (text == null) {
+            /* namespace demo
+
+            import java.math.BigDecimal
+
+            fun main(args : Array<String>) {
+                // Easy to make BigDecimals user-friendly
+                System.out?.println(
+                "2.00".bd - "1.00"
+                )
+            }
+
+            val String.bd : BigDecimal get() = BigDecimal(this)
+
+            fun BigDecimal.minus(other : BigDecimal) = this.subtract(other)
+            fun BigDecimal.minus(other : String) = subtract(other.bd) // this can be omitted*/
+            /*text = "fun main(args : Array<String>) {\n" +
+                    "    System.out?.println(\"Hello, world!\")\n" +
+                    "namespace for while object when this val var" +
+                    " fun is in if vararg inline" +
+                    "}";*/
             text = "fun main(args : Array<String>) {\n" +
                     "  System.out?.println(\"Hello, world!\")\n" +
                     "}";
@@ -296,24 +293,6 @@ public class HttpSession {
             } catch (IOException e) {
                 e.printStackTrace();
             }*/
-
-            Authenticator authenticator = new UserAuthenticator("users");
-            Authenticator.Result result = authenticator.authenticate(exchange);
-            if (result instanceof Authenticator.Success) {
-                System.out.println("OK");
-            } else {
-                //                    exchange.getResponseHeaders().add("WWW-Authenticate", "Basic realm=Login");
-                //                    exchange.getResponseHeaders().add("Tyoe", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                try {
-                    writeResponse(
-                            ResponseUtils.readData(HttpSession.class.getResourceAsStream("/login.html")),
-                            HttpStatus.SC_OK, true);
-                } catch (IOException e) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
-                }
-                return;
-            }
-
             path = "/header.html";
             InputStream is = ServerHandler.class.getResourceAsStream(path);
             if (is == null) {
@@ -347,7 +326,6 @@ public class HttpSession {
                 exchange.getResponseHeaders().add("time", query);
             }
             byte[] bytes = finalResponse.getBytes();
-
             exchange.sendResponseHeaders(errorCode, bytes.length);
             os = exchange.getResponseBody();
             os.write(bytes);

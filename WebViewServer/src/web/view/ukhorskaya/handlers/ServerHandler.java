@@ -1,12 +1,14 @@
 package web.view.ukhorskaya.handlers;
 
-import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
-import web.view.ukhorskaya.*;
+import web.view.ukhorskaya.ErrorWriter;
+import web.view.ukhorskaya.ErrorWriterOnServer;
+import web.view.ukhorskaya.ResponseUtils;
+import web.view.ukhorskaya.Statistics;
 import web.view.ukhorskaya.authorization.UserAuthenticator;
 import web.view.ukhorskaya.examplesLoader.ExamplesList;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
@@ -31,7 +33,6 @@ public class ServerHandler implements HttpHandler {
 
     @Override
     public void handle(final HttpExchange exchange) throws IOException {
-
         if (Statistics.getInstance().isNecessaryToUpdateStatistics()) {
             Thread t = new Thread(new Runnable() {
                 @Override
@@ -69,8 +70,6 @@ public class ServerHandler implements HttpHandler {
             } else if (param.contains("allHelpWords=true")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
                 sendHelpContentForWords(exchange);
-            } else if (param.contains("addUser=") || param.contains("addManager=")) {
-                sendAddUser(exchange);
             } else if ((param.contains("/path="))
                     || (param.equals("/"))
                     || (param.startsWith("/?"))
@@ -107,7 +106,10 @@ public class ServerHandler implements HttpHandler {
                 ResponseUtils.substringAfter(request, "&password="));
         writeResponse(exchange, response.getBytes(), HttpStatus.SC_OK);
     }
-
+    
+    private void sendUserInfoForStatistics(HttpExchange exchange) {
+            writeResponse(exchange, Statistics.getInstance().showMap().getBytes(), HttpStatus.SC_OK);
+        }
 
     private void updateExamples(HttpExchange exchange) {
         ExamplesList.updateList();
@@ -134,7 +136,7 @@ public class ServerHandler implements HttpHandler {
             sessionId = getSessionIdFromRequest(exchange.getRequestURI().toString());
             if (!sessionId.equals("")) {
                 sessionInfo = new SessionInfo(Integer.parseInt(sessionId));
-
+                
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
                         "Impossible to read id from cookies", generateStringFromList(exchange.getRequestHeaders().get("Cookie"))));
             } else {
@@ -175,7 +177,7 @@ public class ServerHandler implements HttpHandler {
         }
         return "";
     }
-
+    
     private String generateStringFromList(List<String> list) {
         StringBuilder builder = new StringBuilder();
         for (String s : list) {
@@ -209,22 +211,6 @@ public class ServerHandler implements HttpHandler {
     }
 
     private void sendListLogs(HttpExchange exchange) {
-        if (!exchange.getRequestURI().toString().contains("&statistics")) {
-            Authenticator authenticator = new UserAuthenticator("managers");
-            Authenticator.Result result = authenticator.authenticate(exchange);
-            if (result instanceof Authenticator.Success) {
-                System.out.println("OK");
-            } else {
-                try {
-                    writeResponse(exchange,
-                            ResponseUtils.readData(ServerHandler.class.getResourceAsStream("/login.html")).getBytes(),
-                            HttpStatus.SC_OK);
-                } catch (IOException e) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("LOGIN", e, "Login failed"));
-                }
-                return;
-            }
-        }
         InputStream is = ServerHandler.class.getResourceAsStream("/logs.html");
         try {
             String response = ResponseUtils.readData(is);
@@ -323,7 +309,6 @@ public class ServerHandler implements HttpHandler {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("UNKNOWN", e, " NULL"));
         }
     }
-
 
 }
 

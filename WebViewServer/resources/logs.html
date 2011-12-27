@@ -21,11 +21,15 @@
                     + date + "&to=" + date;
         }
 
-        function addUser(param) {
-            document.location.href = "add" + param + "=&login="
-                    + document.getElementById("login").value +
-                    "&password=" + document.getElementById("password").value;
+        function showUserInfo() {
+            document.location.href = "showUserInfo=true";
         }
+        
+        function addUser(param) {
+                    document.location.href = "add" + param + "=&login="
+                            + document.getElementById("login").value +
+                            "&password=" + document.getElementById("password").value;
+                }
 
     </script>
 </head>
@@ -122,19 +126,6 @@
             <td>$NUMBER_OF_COMPLETE_REQUEST_PER_USER$</td>
         </tr>
     </table>
-</div>
-<div>
-    <h3>USERS:</h3>
-
-    <form>
-        <label>
-            login: <input name="dateFrom" id="login"/>
-        </label>
-        <label>
-            password: <input name="dateTo" id="password"/> <a href="#" onclick="addUser('User');">Add user</a> <a href="#" onclick="addUser('Manager');">Add manager</a>
-        </label>
-    </form>
-
 </div>
 </body>
 </html>
