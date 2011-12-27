@@ -14,7 +14,9 @@ import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.ServerSettings;
 
 import javax.naming.Context;
+import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
 import javax.naming.directory.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -30,6 +32,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -67,11 +70,14 @@ public class UserAuthenticator extends BasicAuthenticator {
 
     @Override
     public boolean checkCredentials(String s, String s1) {
+
         String query = "(objectclass=person)";
         String attribute = "cn";
-        StringBuilder output = new StringBuilder();
+        StringBuffer output = new StringBuffer();
 
         try {
+//            String url = "ldap://msdc.labs.intellij.net";
+//            String url = "ldap://msdc.labs.intellij.net:389/DC=labs,DC=intellij,DC=net";
             String url = "ldap://directory.cornell.edu/o=Cornell%20University,c=US";
             Hashtable env = new Hashtable();
             env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -81,13 +87,15 @@ public class UserAuthenticator extends BasicAuthenticator {
             SearchControls ctrl = new SearchControls();
             ctrl.setSearchScope(SearchControls.SUBTREE_SCOPE);
             NamingEnumeration enumeration = context.search("", query, ctrl);
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 20; i++) {
                 if (enumeration.hasMore()) {
+// while (enumeration.hasMore()) {
                     SearchResult result = (SearchResult) enumeration.next();
                     Attributes attribs = result.getAttributes();
-                    NamingEnumeration values = attribs.get(attribute).getAll();
-                    for (int j = 0; j < 10; j++) {
+                    NamingEnumeration values = ((BasicAttribute) attribs.get(attribute)).getAll();
+                    for (int j = 0; j < 20; j++) {
                         if (values.hasMore()) {
+//                while (values.hasMore()) {
                             if (output.length() > 0) {
                                 output.append("\n");
                             }
@@ -96,10 +104,65 @@ public class UserAuthenticator extends BasicAuthenticator {
                     }
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.print(output.toString());
+
+        /*Hashtable env = new Hashtable();
+        env.put(Context.INITIAL_CONTEXT_FACTORY,
+                "com.sun.jndi.ldap.LdapCtxFactory");
+        env.put(Context.PROVIDER_URL,
+                "ldap://msdc.labs.intellij.net:389/dc=labs,dc=intellij,dc=net ");
+
+        DirContext ctx;
+        try {
+            ctx = new InitialDirContext(env);
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+
+        LinkedList list = new LinkedList();
+        NamingEnumeration results = null;
+        try {
+            SearchControls controls = new SearchControls();
+            controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            results = ctx.search("LABS\\Natalia.Ukhorskaya", "(objectclass=person)", controls);
+
+            while (results.hasMore()) {
+                SearchResult searchResult = (SearchResult) results.next();
+                Attributes attributes = searchResult.getAttributes();
+                Attribute attr = attributes.get("cn");
+                String cn = (String) attr.get();
+                list.add(cn);
+            }
+        } catch (NameNotFoundException e) {
+            // The base context was not found.
+            // Just clean up and exit.
+        } catch (NamingException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (results != null) {
+                try {
+                    results.close();
+                } catch (Exception e) {
+                    // Never mind this.
+                }
+            }
+            if (ctx != null) {
+                try {
+                    ctx.close();
+                } catch (Exception e) {
+                    // Never mind this.
+                }
+            }
+        }
+//              return list;
+        for (Object o : list) {
+            System.out.println(o);
+        }*/
         return false;
         /*Map<String, String> map = readUsersFromFile();
         if (map == null) {
