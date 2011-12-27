@@ -9,7 +9,6 @@ import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.Statistics;
-import web.view.ukhorskaya.authorization.UserAuthenticator;
 import web.view.ukhorskaya.examplesLoader.ExamplesList;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.help.HelpLoader;
@@ -55,6 +54,9 @@ public class ServerHandler implements HttpHandler {
             } else if (param.startsWith("/logs")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
+            } else if (param.equals("/showUserInfo=true")) {
+                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
+                sendUserInfoForStatistics(exchange);
             } else if (param.contains("/sortedExceptions=")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
                 sendSortedExceptions(exchange);
@@ -75,7 +77,8 @@ public class ServerHandler implements HttpHandler {
                     || (param.startsWith("/?"))
                     || param.contains("testConnection")
                     || param.contains("writeLog=")) {
-                if (!param.contains("testConnection") && !param.contains("writeLog=")) {
+                String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
+                if (!param.contains("testConnection") && !param.contains("writeLog=") && !ip.equals("127.0.0.1")) {
                     sessionInfo = setSessionInfo(exchange);
                 } else {
                     sessionInfo = new SessionInfo(0);
@@ -93,22 +96,10 @@ public class ServerHandler implements HttpHandler {
         }
     }
 
-    private void sendAddUser(HttpExchange exchange) {
-        String request = exchange.getRequestURI().toString();
-        UserAuthenticator authenticator;
-        if (request.contains("addManager=")) {
-            authenticator = new UserAuthenticator("managers");
-        } else {
-            authenticator = new UserAuthenticator("users");
-        }
-        String response = authenticator.addUser(ResponseUtils.substringBetween(request, "&login=", "&"),
-                ResponseUtils.substringAfter(request, "&password="));
-        writeResponse(exchange, response.getBytes(), HttpStatus.SC_OK);
-    }
-    
     private void sendUserInfoForStatistics(HttpExchange exchange) {
-            writeResponse(exchange, Statistics.getInstance().showMap().getBytes(), HttpStatus.SC_OK);
-        }
+        writeResponse(exchange, Statistics.getInstance().showMap().getBytes(), HttpStatus.SC_OK);
+    }
+
 
     private void updateExamples(HttpExchange exchange) {
         ExamplesList.updateList();

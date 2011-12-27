@@ -15,8 +15,6 @@
     <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="/kotlin_lib.js"></script>
 
-    <!--<link rel="stylesheet" href="/codemirror/theme/default.css">-->
-
     <style>.CodeMirror {
         border: 2px inset #dee;
     }</style>
@@ -147,7 +145,7 @@
                         </div>-->
                         <div class="field switch" id="appletonoff">
                             <label class="applet-enable selected"><span
-                                    title="Use an applet for faster highlighting">Client</span></label>
+                                    title="Use an applet for faster highlighting" id="appletclient">Client</span></label>
                             <label class="applet-disable"><span
                                     title="Send highlighting request to server (slower)">Server</span></label>
                             <input type="checkbox" id="appletcheckbox" checked="true" class="appletcheckbox"
@@ -165,7 +163,22 @@
                     <div id="statusbar">
 
                     </div>
-                    <div id="argsdiv">
+                    <table id="argsdiv">
+                        <tr>
+                            <td  id="argstitle">
+                                Arguments:
+                            </td>
+                            <td id="argsinput">
+                                <input class="arguments" id="arguments" name="arguments">
+                            </td>
+                            <td id="argsbutton">
+                                <img src="/icons/executeJava.png" id="run" title="Run file (Ctrl + F9) using JVM"/>
+                                                            <img src="/icons/executeJavaScript.png" id="runJS"
+                                                                 title="Run file (Ctrl + Shift + F9) using Pre-Alpha JavaScript back-end"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <!--<div id="argsdiv">
                         <div id="argstitleinput">
                             <div id="argstitle">Arguments:</div>
                             <div id="argsinput">
@@ -177,7 +190,7 @@
                             <img src="/icons/executeJavaScript.png" id="runJS"
                                  title="Run file (Ctrl + Shift + F9) using Pre-Alpha JavaScript back-end"/>
                         </div>
-                    </div>
+                    </div>-->
 
                     <div id="consoleandproblems">
                         <div id="tabs">
@@ -216,11 +229,10 @@
                 </div>
 
                 <div class="help" id="help3">
-                    Use Ctrl&nbsp;+&nbsp;Space to take a completion <br/>
-                    Use Ctrl&nbsp;+&nbsp;F9 to run file with JVM<br/>
-                    Use Ctrl&nbsp;+Shift&nbsp;+&nbsp;F9 to run file with Pre-Alpha JavaScript back-end<br/>
+                    Use Ctrl&nbsp;+&nbsp;Space for code completion <br/>
+                    Use Ctrl&nbsp;+&nbsp;F9 to run with JVM<br/>
+                    Use Ctrl&nbsp;+Shift&nbsp;+&nbsp;F9 to run with Pre-Alpha JavaScript back-end<br/>
                     Use Ctrl&nbsp;+&nbsp;Alt&nbsp;+&nbsp;L to reformat selected fragment<br/>
-                    Use Ctrl&nbsp;+&nbsp;Y&nbsp; to delete line content
                 </div>
 
             </div>
@@ -240,7 +252,7 @@
 <script src="/components/components.js"></script>
 
 <script src="/codemirror/lib/complete.js"></script>
-
+<div id="noApplet" style="visibility: hidden;">Applet doesn't supported in your browser.</div>
 
 </body>
 </html>

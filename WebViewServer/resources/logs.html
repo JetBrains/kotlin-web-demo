@@ -13,7 +13,6 @@
             document.location.href = "sortedExceptions=" + param + "&from="
                     + document.getElementById("dateFrom").value +
                     "&to=" + document.getElementById("dateTo").value;
-
         }
 
         function generateDateRequestWithDate(param, date) {
@@ -24,12 +23,6 @@
         function showUserInfo() {
             document.location.href = "showUserInfo=true";
         }
-        
-        function addUser(param) {
-                    document.location.href = "add" + param + "=&login="
-                            + document.getElementById("login").value +
-                            "&password=" + document.getElementById("password").value;
-                }
 
     </script>
 </head>
@@ -124,6 +117,9 @@
         <tr>
             <td>Number of user completion requests (for one user):</td>
             <td>$NUMBER_OF_COMPLETE_REQUEST_PER_USER$</td>
+        </tr>
+        <tr>
+            <td><a href="#" onclick="showUserInfo()">Show info for each user</a></td>
         </tr>
     </table>
 </div>
