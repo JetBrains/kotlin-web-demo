@@ -13,6 +13,9 @@ import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.ServerSettings;
 
+import javax.naming.Context;
+import javax.naming.NamingEnumeration;
+import javax.naming.directory.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -26,6 +29,7 @@ import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -63,7 +67,41 @@ public class UserAuthenticator extends BasicAuthenticator {
 
     @Override
     public boolean checkCredentials(String s, String s1) {
-        Map<String, String> map = readUsersFromFile();
+        String query = "(objectclass=person)";
+        String attribute = "cn";
+        StringBuilder output = new StringBuilder();
+
+        try {
+            String url = "ldap://directory.cornell.edu/o=Cornell%20University,c=US";
+            Hashtable env = new Hashtable();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+            env.put(Context.PROVIDER_URL, url);
+            DirContext context = new InitialDirContext(env);
+
+            SearchControls ctrl = new SearchControls();
+            ctrl.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            NamingEnumeration enumeration = context.search("", query, ctrl);
+            for (int i = 0; i < 10; i++) {
+                if (enumeration.hasMore()) {
+                    SearchResult result = (SearchResult) enumeration.next();
+                    Attributes attribs = result.getAttributes();
+                    NamingEnumeration values = attribs.get(attribute).getAll();
+                    for (int j = 0; j < 10; j++) {
+                        if (values.hasMore()) {
+                            if (output.length() > 0) {
+                                output.append("\n");
+                            }
+                            output.append(values.next().toString());
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.print(output.toString());
+        return false;
+        /*Map<String, String> map = readUsersFromFile();
         if (map == null) {
             return false;
         }
@@ -77,7 +115,7 @@ public class UserAuthenticator extends BasicAuthenticator {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("LOGIN", e, "login: " + s));
             return false;
         }
-        return password != null && password.equals(s1);
+        return password != null && password.equals(s1);*/
     }
 
     private Pair<String, String> parseData(String data) {
