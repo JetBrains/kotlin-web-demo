@@ -39,7 +39,8 @@ public class Statistics {
     private final StatItem LOGS_PERIOD = new StatItem("logsPeriod", "$LOGSPERIOD$");
 
     //id - userInfo
-    private Map<String, UserInfo> userInfoMap = new HashMap<String, UserInfo>();
+    private Map<String, UserInfo> userInfoMapForId = new HashMap<String, UserInfo>();
+    private Map<String, UserInfo> userInfoMapForIp = new HashMap<String, UserInfo>();
     //stacktrace - description
     private Map<String, ErrorElement> errorElementSet = new HashMap<String, ErrorElement>();
     private List<Integer> usersPerDayList = new ArrayList<Integer>();
@@ -129,25 +130,44 @@ public class Statistics {
         double totalNumberOfRunRequestsPerUser = 0;
         double totalNumberOfHighlightRequestsPerUser = 0;
         double totalNumberOfCompleteRequestsPerUser = 0;
-        for (UserInfo userInfo : userInfoMap.values()) {
+        for (UserInfo userInfo : userInfoMapForId.values()) {
             totalNumberOfRequestsPerUser += userInfo.numberOfRequest;
             totalNumberOfRunRequestsPerUser += userInfo.numberOfRunRequest;
             totalNumberOfHighlightRequestsPerUser += userInfo.numberOfHighlightRequest;
             totalNumberOfCompleteRequestsPerUser += userInfo.numberOfCompleteRequest;
         }
 
+        double totalNumberOfRequestsPerUserByIp = 0;
+        double totalNumberOfRunRequestsPerUserByIp = 0;
+        double totalNumberOfHighlightRequestsPerUserByIp = 0;
+        double totalNumberOfCompleteRequestsPerUserByIp = 0;
+        for (UserInfo userInfoByIp : userInfoMapForIp.values()) {
+            totalNumberOfRequestsPerUserByIp += userInfoByIp.numberOfRequest;
+            totalNumberOfRunRequestsPerUserByIp += userInfoByIp.numberOfRunRequest;
+            totalNumberOfHighlightRequestsPerUserByIp += userInfoByIp.numberOfHighlightRequest;
+            totalNumberOfCompleteRequestsPerUserByIp += userInfoByIp.numberOfCompleteRequest;
+        }
+
         TOTAL_USERS.value = String.valueOf(NUMBER_OF_USERS);
-        TOTAL_USERS_FROM_LOG.value = String.valueOf(userInfoMap.size());
+        TOTAL_USERS_FROM_LOG.value = "for id: " + String.valueOf(userInfoMapForId.size()) + " for ip: " + String.valueOf(userInfoMapForIp.size());
         NEW_USERS_PER_DAY.value = getNumberOfNewUsersPerDay();
         USERS_PER_DAY.value = getNumberOfUsersPerDay();
-        REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser / userInfoMap.size())
-                + " (" + totalNumberOfRequestsPerUser + " / " + userInfoMap.size() + ")";
-        RUN_REQUEST_PER_USER.value = String.valueOf(totalNumberOfRunRequestsPerUser / userInfoMap.size())
-                + " (" + totalNumberOfRunRequestsPerUser + " / " + userInfoMap.size() + ")";
-        HIGHLIGHT_REQUEST_PER_USER.value = String.valueOf(totalNumberOfHighlightRequestsPerUser / userInfoMap.size())
-                + " (" + totalNumberOfHighlightRequestsPerUser + " / " + userInfoMap.size() + ")";
-        COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMap.size())
-                + " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMap.size() + ")";
+        REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser / userInfoMapForId.size())
+                + " (" + totalNumberOfRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
+                String.valueOf(totalNumberOfRequestsPerUserByIp / userInfoMapForIp.size())
+                + " (" + totalNumberOfRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
+        RUN_REQUEST_PER_USER.value = String.valueOf(totalNumberOfRunRequestsPerUser / userInfoMapForId.size())
+                + " (" + totalNumberOfRunRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
+                String.valueOf(totalNumberOfRunRequestsPerUserByIp / userInfoMapForIp.size())
+                                + " (" + totalNumberOfRunRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
+        HIGHLIGHT_REQUEST_PER_USER.value = String.valueOf(totalNumberOfHighlightRequestsPerUser / userInfoMapForId.size())
+                + " (" + totalNumberOfHighlightRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: "  +
+                String.valueOf(totalNumberOfHighlightRequestsPerUserByIp / userInfoMapForIp.size())
+                                + " (" + totalNumberOfHighlightRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
+        COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMapForId.size())
+                + " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
+                String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size())
+                                + " (" + totalNumberOfCompleteRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
         UPDATE_TIME.value = getUpdateTimeForStatistics();
         LOGS_PERIOD.value = getLogsPeriod();
     }
@@ -162,9 +182,9 @@ public class Statistics {
         builder.append(ResponseUtils.generateTag("td", "Highlight"));
         builder.append(ResponseUtils.generateTag("td", "Complete"));
         builder.append("</tr>");
-        for (String userId : userInfoMap.keySet()) {
+        for (String userId : userInfoMapForId.keySet()) {
             builder.append("<tr>");
-            UserInfo info = userInfoMap.get(userId);
+            UserInfo info = userInfoMapForId.get(userId);
             builder.append(ResponseUtils.generateTag("td", userId));
             builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfRequest)));
             builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfRunRequest)));
@@ -350,7 +370,8 @@ public class Statistics {
     }
 
     private void analyzeLogs(String param) {
-        userInfoMap = new HashMap<String, UserInfo>();
+        userInfoMapForId = new HashMap<String, UserInfo>();
+        userInfoMapForIp = new HashMap<String, UserInfo>();
         errorElementSet = new HashMap<String, ErrorElement>();
         usersPerDayList = new ArrayList<Integer>();
         uniqueUsersPerDay = new ArrayList<Set<Integer>>();
@@ -428,7 +449,48 @@ public class Statistics {
                             if (token.contains("userId=")) {
                                 String id = ResponseUtils.substringAfter(token, "userId=");
                                 set.add(Integer.parseInt(id));
-                                UserInfo info = userInfoMap.get(id);
+                                UserInfo info = userInfoMapForId.get(id);
+                                if (info == null) {
+                                    info = new UserInfo();
+                                }
+                                info.numberOfRequest++;
+                                token = tokenizer.nextToken();
+                                UserInfo infoIp = null;
+                                String ip = "unknown";
+                                if (token.contains("ip=")) {
+                                    ip = ResponseUtils.substringAfter(token, "ip=");
+                                    //                                set.add(Integer.parseInt(ip));
+                                    infoIp = userInfoMapForIp.get(ip);
+                                    if (infoIp == null) {
+                                        infoIp = new UserInfo();
+                                    }
+                                    token = tokenizer.nextToken();
+                                }
+                                if (token.equals("message=" + SessionInfo.TypeOfRequest.RUN.name())) {
+                                    info.numberOfRunRequest++;
+                                    if (infoIp != null) {
+                                        infoIp.numberOfRunRequest++;
+                                    }
+                                } else if (token.equals("message=" + SessionInfo.TypeOfRequest.HIGHLIGHT.name())) {
+                                    info.numberOfHighlightRequest++;
+                                    if (infoIp != null) {
+                                        infoIp.numberOfHighlightRequest++;
+                                    }
+                                } else if (token.equals("message=" + SessionInfo.TypeOfRequest.COMPLETE.name())) {
+                                    info.numberOfCompleteRequest++;
+                                    if (infoIp != null) {
+                                        infoIp.numberOfCompleteRequest++;
+                                    }
+                                }
+
+                                userInfoMapForId.put(id, info);
+                                if (infoIp != null) {
+                                    userInfoMapForIp.put(ip, infoIp);
+                                }
+                            } else if (token.contains("ip=")) {
+                                String ip = ResponseUtils.substringAfter(token, "ip=");
+//                                set.add(Integer.parseInt(ip));
+                                UserInfo info = userInfoMapForIp.get(ip);
                                 if (info == null) {
                                     info = new UserInfo();
                                 } else {
@@ -443,8 +505,9 @@ public class Statistics {
                                     info.numberOfCompleteRequest++;
                                 }
 
-                                userInfoMap.put(id, info);
+                                userInfoMapForId.put(ip, info);
                             }
+
                         }
                     }
                 }

@@ -67,6 +67,11 @@ function setSessionId(id) {
 function showContent() {
     $('#loader').hide();
     $(".applet-enable").click();
+    $("#dialog").dialog({
+        modal:"true",
+        width:400,
+        autoOpen:false
+    });
 }
 
 function setKotlinVersion(version) {
@@ -126,3 +131,7 @@ function showJsCode() {
     consoleStr += "<p class='consoleViewInfo'>" + generatedJSCode + "</p>";
     setConsoleMessage(consoleStr);
 }
+
+$("#whatimg").click(function () {
+    $("#dialog").dialog("open");
+});

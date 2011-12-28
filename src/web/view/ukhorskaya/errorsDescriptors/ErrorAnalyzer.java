@@ -85,7 +85,7 @@ public class ErrorAnalyzer {
             ErrorWriter.ERROR_WRITER.writeException(exception);
             throw new KotlinCoreException(e);
         }
-        String info = ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(),
+        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                 "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();

@@ -13,14 +13,17 @@ public class SessionInfo {
     private final TimeManager timeManager = new TimeManager();
     private int id = 0;
     private TypeOfRequest type = TypeOfRequest.GET_RESOURCE;
+    private String ip;
 
-    public SessionInfo(int sessionId, TypeOfRequest typeOfRequest) {
+    public SessionInfo(int sessionId, String ip, TypeOfRequest typeOfRequest) {
         this.id = sessionId;
         this.type = typeOfRequest;
+        this.ip = ip;
     }
 
-    public SessionInfo(int sessionId) {
+    public SessionInfo(int sessionId, String ip) {
         this.id = sessionId;
+        this.ip = ip;
     }
 
     public void setType(TypeOfRequest typeOfRequest) {
@@ -41,6 +44,14 @@ public class SessionInfo {
 
     public String getType() {
         return type.name();
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getIp() {
+        return ip;
     }
 
     public enum TypeOfRequest {

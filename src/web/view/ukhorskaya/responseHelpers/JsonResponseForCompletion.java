@@ -81,7 +81,7 @@ public class JsonResponseForCompletion {
             return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
                     + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
-        String info = ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(), "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
         PsiElement element = getExpressionForScope();
         if (element == null) {

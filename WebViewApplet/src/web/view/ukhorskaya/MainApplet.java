@@ -33,7 +33,7 @@ public class MainApplet extends JApplet implements ActionListener {
         request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
         
-        SESSION_INFO = new SessionInfo(new Random().nextInt());
+        SESSION_INFO = new SessionInfo(new Random().nextInt(), "unknown");
 
         /*Container contentPane = this.getContentPane();
         contentPane.setLayout(new FlowLayout());

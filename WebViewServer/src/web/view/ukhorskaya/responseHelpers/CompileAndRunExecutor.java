@@ -82,7 +82,7 @@ public class CompileAndRunExecutor {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
                 return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(),
+            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                     "COMPILE correctNamespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
             StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
@@ -115,7 +115,7 @@ public class CompileAndRunExecutor {
                 }
 
             }
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(),
+            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                     "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
             JSONArray jsonArray = new JSONArray();

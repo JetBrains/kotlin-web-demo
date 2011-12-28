@@ -32,15 +32,7 @@ public class ServerHandler implements HttpHandler {
 
     @Override
     public void handle(final HttpExchange exchange) throws IOException {
-        if (Statistics.getInstance().isNecessaryToUpdateStatistics()) {
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Statistics.getInstance().updateStatistics(false);
-                }
-            });
-            t.start();
-        }
+        String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
 
         SessionInfo sessionInfo;
         try {
@@ -77,11 +69,10 @@ public class ServerHandler implements HttpHandler {
                     || (param.startsWith("/?"))
                     || param.contains("testConnection")
                     || param.contains("writeLog=")) {
-                String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
                 if (!param.contains("testConnection") && !param.contains("writeLog=") && !ip.equals("127.0.0.1")) {
                     sessionInfo = setSessionInfo(exchange);
                 } else {
-                    sessionInfo = new SessionInfo(0);
+                    sessionInfo = new SessionInfo(0, ip);
                 }
                 HttpSession session = new HttpSession(sessionInfo);
                 session.handle(exchange);
@@ -121,25 +112,26 @@ public class ServerHandler implements HttpHandler {
     @Nullable
     private SessionInfo setSessionInfo(HttpExchange exchange) {
         SessionInfo sessionInfo;
+        String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
         String sessionId = getSessionIdFromCookies(exchange.getRequestHeaders());
         if (sessionId == null || sessionId.isEmpty()) {
             sessionId = getSessionIdFromRequest(exchange.getRequestURI().toString());
             if (!sessionId.equals("")) {
-                sessionInfo = new SessionInfo(Integer.parseInt(sessionId));
+                sessionInfo = new SessionInfo(Integer.parseInt(sessionId), ip);
 
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
                         "Impossible to read id from cookies", generateStringFromList(exchange.getRequestHeaders().get("Cookie"))));
             } else {
                 Statistics.incNumberOfUsers();
-                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
-                ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
+                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()), ip);
+                ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers() + " ip=" + ip);
             }
         } else {
             try {
-                sessionInfo = new SessionInfo(Integer.parseInt(sessionId));
+                sessionInfo = new SessionInfo(Integer.parseInt(sessionId), ip);
             } catch (NumberFormatException e) {
                 Statistics.incNumberOfUsers();
-                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
+                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()), ip);
                 ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.toString(), e, sessionId));
             }
@@ -160,7 +152,7 @@ public class ServerHandler implements HttpHandler {
                 List<String> cookie = responseHeaders.get(key);
                 if (cookie.size() > 0) {
                     String all = generateStringFromList(cookie);
-                    String response =  ResponseUtils.substringBetween(all, "userId=", ";");
+                    String response = ResponseUtils.substringBetween(all, "userId=", ";");
                     ErrorWriterOnServer.LOG_FOR_INFO.info("cookies:" + all + " userId: " + response);
                     return response;
                 }
@@ -238,8 +230,8 @@ public class ServerHandler implements HttpHandler {
         } catch (UnsupportedEncodingException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
         }
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), info.getIp(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
         writeResponse(exchange, "OK".getBytes(), HttpStatus.SC_OK);
     }
 

@@ -41,12 +41,7 @@ public class HttpSession {
             this.exchange = exchange;
             String param = exchange.getRequestURI().toString();
 
-            String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
-            if (ip.equals("127.0.0.1")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + ip);
-            } else {
-                ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param);
-            }
+            ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getIp());
 
             //FOR TEST ONLY
             /*if (param.contains("testConnection")) {
@@ -56,7 +51,7 @@ public class HttpSession {
 
             if (param.contains("compile=true") || param.contains("run=true")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
                 sendExecutorResult();
             } else if (param.contains("writeLog=")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
@@ -71,24 +66,24 @@ public class HttpSession {
                 writeResponse("Data sent", HttpStatus.SC_OK, true);
             } else if (param.contains("complete=true")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
                 sendCompletionResult();
             } else if (param.contains("convertToKotlin=true")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
                 sendConvertToKotlinResult();
             } else if (param.contains("exampleId=")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
                 sendExampleContent();
             } else if (param.contains("convertToJs=true")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
                 sendConvertToJsResult();
             } else {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
-                if (!ip.equals("127.0.0.1")) {
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                if (!sessionInfo.getIp().equals("127.0.0.1")) {
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
                 }
                 sendProjectSourceFile();
             }
@@ -193,7 +188,7 @@ public class HttpSession {
         }
         sessionInfo.getTimeManager().saveCurrentTime();
         currentPsiFile = JetPsiFactory.createFile(currentProject, text);
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(), sessionInfo.getId(), "PARSER " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: = " + currentPsiFile.getTextLength()));
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "PARSER " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: = " + currentPsiFile.getTextLength()));
     }
 
 
@@ -331,7 +326,7 @@ public class HttpSession {
             exchange.sendResponseHeaders(errorCode, bytes.length);
             os = exchange.getResponseBody();
             os.write(bytes);
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                     sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + exchange.getRequestURI()));
         } catch (IOException e) {
             //This is an exception we can't send data to client

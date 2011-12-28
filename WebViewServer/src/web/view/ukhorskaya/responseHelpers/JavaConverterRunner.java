@@ -52,7 +52,7 @@ public class JavaConverterRunner {
             public void run() {
                 isTimeoutException = true;
                 finalProcess.destroy();
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "Timeout exception."));
                 errStream.append("Program was terminated after " + Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
             }
@@ -99,7 +99,7 @@ public class JavaConverterRunner {
                     e, textFromFile));
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                 sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
                 + " timeout=" + isTimeoutException
                 + " commandString=" + commandString));
@@ -137,7 +137,7 @@ public class JavaConverterRunner {
                 jsonArray.put(map);
                 mapErr.put("type", "out");
             } else {
-                ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLog(sessionInfo.getType(),
+                ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "error while excecution: " + errStream));
                 mapErr.put("type", "err");
             }

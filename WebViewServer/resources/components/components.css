@@ -401,7 +401,7 @@ body {
 
 #editortitle {
     /*float: left;*/
-    height: 25px;
+    height: 40px;
 }
 
 #editorinput {
@@ -442,6 +442,7 @@ body {
     margin-left: 5px;
     width: 51px;
     margin-top: -10px;
+    cursor: pointer;
 }
 
 #argsinput {
@@ -665,17 +666,43 @@ body {
 }
 
 .editortitletext {
-
+    padding-top: 10px;
 }
 
 #editortitleswitchtext {
     float: right;
     margin-right: 10px;
+    padding-top: 10px;
 }
 
 #editortitletext {
     float: left;
     /*padding-top: 10px;*/
+}
+
+#switchtable {
+    float: right;
+}
+
+#whatisit span {
+    margin-left: 20px;
+    margin-right: 3px;
+    padding-top: 5px;
+}
+
+#whatisit img {
+    margin-top: 0px;
+}
+
+#whatisit {
+    font-size: 10px;
+    line-height: 0;
+    cursor: pointer;
+}
+
+p.dialogPbordered {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px !important;
 }
 
 #appletonoff {
