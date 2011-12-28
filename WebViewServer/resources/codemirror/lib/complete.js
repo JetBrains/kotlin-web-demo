@@ -52,11 +52,11 @@ $(document).ready(function () {
         mode:"text/kotlin",
         extraKeys:{
             "Ctrl-Space":beforeComplete,
-            "Ctrl-F9":function (instance) {
-                $("#run").click();
-            },
             "Ctrl-Shift-F9":function (instance) {
                 $("#runJS").click();
+            },
+            "Ctrl-F9":function (instance) {
+                $("#run").click();
             }
         },
         onChange:runTimerForNonPrinting,
