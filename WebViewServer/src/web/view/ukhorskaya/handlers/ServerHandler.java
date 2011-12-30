@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
+import sun.misc.IOUtils;
 import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
@@ -31,8 +32,11 @@ import java.util.List;
 public class ServerHandler implements HttpHandler {
     private final byte[] APPLET_FILE;
 
-    public ServerHandler() {
+    public synchronized byte[] getAppletFile() {
+         return  APPLET_FILE;
+    }
 
+    public ServerHandler() {
         InputStream is = ServerHandler.class.getResourceAsStream("/WebViewApplet.jar");
         if (is == null) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Resource not found.", "WebViewApplet.jar"));
@@ -50,11 +54,11 @@ public class ServerHandler implements HttpHandler {
             }
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), e, "WebViewApplet.jar"));
-            APPLET_FILE = new byte[0];
-            return;
+        } finally {
+            close(out);
         }
-
         APPLET_FILE = out.toByteArray();
+
     }
 
     @Override
@@ -168,7 +172,7 @@ public class ServerHandler implements HttpHandler {
 
     private String getSessionIdFromRequest(String request) {
         if (request.contains("sessionId=")) {
-            return ResponseUtils.substringBetween(request, "sessionId", "&");
+            return ResponseUtils.substringBetween(request, "sessionId=", "&");
         }
         return "";
     }
@@ -273,8 +277,8 @@ public class ServerHandler implements HttpHandler {
         } else if (path.startsWith("/messages/")) {
             writeResponse(exchange, "".getBytes(), HttpStatus.SC_OK);
             return;
-        }  else if (path.equals("/WebViewApplet.jar")) {
-            writeResponse(exchange, APPLET_FILE, HttpStatus.SC_OK);
+        } else if (path.equals("/WebViewApplet.jar")) {
+            writeResponse(exchange, getAppletFile(), HttpStatus.SC_OK);
             return;
         }
 
