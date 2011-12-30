@@ -6,10 +6,17 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="Loading applet during start&#10;">
+    <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" afterPath="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/ErrorWriterInApplet.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/ErrorWriterInApplet.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/MainApplet.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/MainApplet.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/header.html" afterPath="$PROJECT_DIR$/WebViewServer/resources/header.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Statistics.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Statistics.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/errorsDescriptors/ErrorAnalyzer.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/errorsDescriptors/ErrorAnalyzer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/session/SessionInfo.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/session/SessionInfo.java" />
     </list>
     <ignored path="WebView.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -57,47 +64,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <line_breakpoints>
-      <breakpoint url="jar://$USER_HOME$/My Documents/Downloads/openjdk-6-b14-sources.jar!/com/sun/jndi/ldap/LdapCtx.java" line="270" class="com.sun.jndi.ldap.LdapCtx" package="com.sun.jndi.ldap">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="jar://$USER_HOME$/My Documents/Downloads/openjdk-6-b14-sources.jar!/com/sun/jndi/ldap/LdapCtx.java" line="321" class="com.sun.jndi.ldap.LdapCtx" package="com.sun.jndi.ldap">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="jar://$USER_HOME$/My Documents/Downloads/openjdk-6-b14-sources.jar!/com/sun/jndi/ldap/LdapCtxFactory.java" line="162" class="com.sun.jndi.ldap.LdapCtxFactory" package="com.sun.jndi.ldap">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-    </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -151,50 +117,88 @@
     </ui_properties>
   </component>
   <component name="FavoritesManager">
-    <favorites_list name="WebView" />
+    <favorites_list name="WebView">
+      <favorite_root url="web.view.ukhorskaya.sessions.HttpSession" module="WebViewServer" type="class" klass="com.intellij.ide.favoritesTreeView.smartPointerPsiNodes.ClassSmartPointerNode" />
+    </favorites_list>
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ServerHandler.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ErrorWriterInApplet.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/ErrorWriterInApplet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="67" column="80" selection-start="2007" selection-end="2007" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainApplet.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/MainApplet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="71" column="46" selection-start="2823" selection-end="2823" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ErrorWriter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/web/view/ukhorskaya/ErrorWriter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="109" column="25" selection-start="4052" selection-end="4052" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ServerHandler.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="279" column="40" selection-start="13353" selection-end="13353" vertical-scroll-proportion="-8.08">
+            <state line="142" column="0" selection-start="6324" selection-end="6324" vertical-scroll-proportion="0.33555555">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JarHandlerBase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/impl/jar/JarHandlerBase.java">
+      <file leaf-file-name="HttpExchange.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/My Documents/Downloads/openjdk-6-b14-sources.jar!/com/sun/net/httpserver/HttpExchange.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="13" selection-start="1254" selection-end="1254" vertical-scroll-proportion="0.0">
+            <state line="263" column="34" selection-start="11832" selection-end="11832" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CoreJarFileSystem.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/src/idea/platform/core-impl/src/com/intellij/openapi/vfs/impl/jar/CoreJarFileSystem.java">
+      <file leaf-file-name="InetSocketAddress.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/net/InetSocketAddress.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="52" selection-start="2097" selection-end="2097" vertical-scroll-proportion="0.0">
+            <state line="196" column="29" selection-start="6402" selection-end="6402" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CoreJarVirtualFile.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/src/idea/platform/core-impl/src/com/intellij/openapi/vfs/impl/jar/CoreJarVirtualFile.java">
+      <file leaf-file-name="InetAddress.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/net/InetAddress.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="93" column="0" selection-start="2427" selection-end="2427" vertical-scroll-proportion="0.0">
+            <state line="590" column="18" selection-start="21379" selection-end="21379" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CompileAndRunExecutor.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/CompileAndRunExecutor.java">
+      <file leaf-file-name="HttpSession.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="44" selection-start="3057" selection-end="3057" vertical-scroll-proportion="0.0">
+            <state line="43" column="7" selection-start="1243" selection-end="1243" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="header.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/header.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="163" column="54" selection-start="6627" selection-end="6627" vertical-scroll-proportion="-76.80769">
               <folding />
             </state>
           </provider>
@@ -203,49 +207,11 @@
       <file leaf-file-name="Statistics.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Statistics.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="194" column="36" selection-start="9386" selection-end="9386" vertical-scroll-proportion="-116.28">
+            <state line="218" column="0" selection-start="10228" selection-end="10228" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#1941#1959#0" expanded="true" />
                 <element signature="e#2149#2171#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="common.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/common.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="39" selection-start="1348" selection-end="1348" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="complete.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="17" selection-start="1305" selection-end="1314" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="codemirror.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/codemirror.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="codemirror.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/codemirror.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3045" column="22" selection-start="126082" selection-end="126089" vertical-scroll-proportion="-2.3844445">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -276,22 +242,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/UserAuthenticator.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/authorization/ManagerAuthenticator.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/resources/logs.html" />
-        <option value="$PROJECT_DIR$/statistics/users.xml" />
-        <option value="$PROJECT_DIR$/statistics/managers.xml" />
         <option value="$PROJECT_DIR$/logs/exceptions.log" />
         <option value="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/DescriptorUtils.java" />
         <option value="$PROJECT_DIR$/WebViewServer/resources/components/components.css" />
-        <option value="$PROJECT_DIR$/WebViewServer/resources/header.html" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/authorization/UserAuthenticator.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java" />
         <option value="$PROJECT_DIR$/WebViewServer/resources/components/common.js" />
         <option value="$PROJECT_DIR$/WebViewServer/resources/login.html" />
+        <option value="$PROJECT_DIR$/src/web/view/ukhorskaya/session/SessionInfo.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" />
+        <option value="$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java" />
+        <option value="$PROJECT_DIR$/src/web/view/ukhorskaya/errorsDescriptors/ErrorAnalyzer.java" />
+        <option value="$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/MainApplet.java" />
+        <option value="$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/ErrorWriterInApplet.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/resources/header.html" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Statistics.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" />
+        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java" />
       </list>
     </option>
   </component>
@@ -517,7 +483,55 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ukhorskaya" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sessions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="messages" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -567,6 +581,46 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewApplet" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ukhorskaya" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewApplet" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="statistics" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -586,6 +640,50 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="ukhorskaya" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ukhorskaya" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="responseHelpers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ukhorskaya" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="errorsDescriptors" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -703,8 +801,8 @@
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Development\git-contrib\jet-contrib\WebView\statistics" />
       <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\messages" />
+      <recent name="C:\Development\git-contrib\jet-contrib\WebView\statistics" />
       <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\codemirror\mode\clike" />
       <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources" />
       <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewApplet\src\jet" />
@@ -855,7 +953,7 @@
       <output_file path="$PROJECT_DIR$/../../../log.csv" is_save="false" />
       <extension name="coverage" enabled="false" merge="false" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="web.view.ukhorskaya.Main" />
-      <option name="VM_PARAMETERS" value="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=80" />
+      <option name="VM_PARAMETERS" value="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=888" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -945,10 +1043,10 @@
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="0.0.0.0" />
-      <option name="PORT" value="8080" />
+      <option name="HOST" value="172.26.240.97" />
+      <option name="PORT" value="888" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="8080" />
+        <option name="DEBUG_PORT" value="888" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="false" />
       </RunnerSettings>
@@ -1041,11 +1139,12 @@
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34359607" sideWeight="0.48376623" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32881773" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14691558" sideWeight="0.6707317" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33743843" sideWeight="0.32271242" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33743843" sideWeight="0.67156863" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29788962" sideWeight="0.21829268" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.22167487" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.6390244" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.0" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32881773" sideWeight="0.49675325" order="10" side_tool="false" content_ui="tabs" />
@@ -1053,11 +1152,10 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.21813725" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39935064" sideWeight="0.67156863" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23529412" sideWeight="0.65640396" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33414635" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23529412" sideWeight="0.6625616" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33374384" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32881773" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Metrics" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32949087" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33766234" sideWeight="0.66463417" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1098,7 +1196,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge branch with changes in view and statistics&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Applet saved in memory&#10;Statistics view changed" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1126,6 +1224,7 @@
     <MESSAGE value="Authorization: xml file with passwords &#10;" />
     <MESSAGE value="Loading applet during start&#10;" />
     <MESSAGE value="Merge branch with changes in view and statistics&#10;" />
+    <MESSAGE value="Applet saved in memory&#10;Statistics view changed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1182,61 +1281,79 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/components.css">
+    <entry file="file://$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForHighlighting.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="810" column="16" selection-start="12357" selection-end="12357" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1325069019031" expanded="true" signature="-1:-1" placeholder="/*...*/" />
-            <marker date="1325069019031" expanded="true" signature="-1:-1" placeholder="/*...*/" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/javax/naming/spi/NamingManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="666" column="0" selection-start="24373" selection-end="24373" vertical-scroll-proportion="0.0">
+        <state line="43" column="50" selection-start="1419" selection-end="1419" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/net/URI.java">
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/messages/JavaErrorMessages.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1005" column="15" selection-start="44686" selection-end="44686" vertical-scroll-proportion="2.3520834">
+        <state line="26" column="40" selection-start="1426" selection-end="1426" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/header.html">
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="196" selection-start="2303" selection-end="2303" vertical-scroll-proportion="-14.384615">
+        <state line="393" column="68" selection-start="14611" selection-end="14611" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java">
+    <entry file="file://$PROJECT_DIR$/../../../jet/compiler/frontend/src/org/jetbrains/jet/lang/diagnostics/DiagnosticUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="288" column="12" selection-start="13453" selection-end="13453" vertical-scroll-proportion="18.84">
+        <state line="90" column="0" selection-start="3488" selection-end="3488" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/web/view/ukhorskaya/ResponseUtils.java">
+    <entry file="file://$PROJECT_DIR$/../../../jet/compiler/backend/src/org/jetbrains/jet/codegen/GenerationState.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="196" column="25" selection-start="5854" selection-end="5854" vertical-scroll-proportion="0.0">
+        <state line="127" column="0" selection-start="4904" selection-end="4904" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/CompileAndRunExecutor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="44" selection-start="3057" selection-end="3057" vertical-scroll-proportion="0.0">
+        <state line="82" column="0" selection-start="3445" selection-end="3445" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/MainApplet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="71" column="46" selection-start="2823" selection-end="2823" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/web/view/ukhorskaya/ErrorWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="109" column="25" selection-start="4052" selection-end="4052" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewApplet/src/web/view/ukhorskaya/ErrorWriterInApplet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="80" selection-start="2007" selection-end="2007" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="163" column="54" selection-start="6627" selection-end="6627" vertical-scroll-proportion="-76.80769">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Statistics.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="194" column="36" selection-start="9386" selection-end="9386" vertical-scroll-proportion="-116.28">
+        <state line="218" column="0" selection-start="10228" selection-end="10228" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#1941#1959#0" expanded="true" />
             <element signature="e#2149#2171#0" expanded="true" />
@@ -1244,60 +1361,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/impl/jar/JarHandlerBase.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/net/InetAddress.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="13" selection-start="1254" selection-end="1254" vertical-scroll-proportion="0.0">
+        <state line="590" column="18" selection-start="21379" selection-end="21379" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/src/idea/platform/core-impl/src/com/intellij/openapi/vfs/impl/jar/CoreJarFileSystem.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/net/InetSocketAddress.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="52" selection-start="2097" selection-end="2097" vertical-scroll-proportion="0.0">
+        <state line="196" column="29" selection-start="6402" selection-end="6402" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/src/idea/platform/core-impl/src/com/intellij/openapi/vfs/impl/jar/CoreJarVirtualFile.java">
+    <entry file="jar://$USER_HOME$/My Documents/Downloads/openjdk-6-b14-sources.jar!/com/sun/net/httpserver/HttpExchange.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="0" selection-start="2427" selection-end="2427" vertical-scroll-proportion="0.0">
+        <state line="263" column="34" selection-start="11832" selection-end="11832" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="7" selection-start="1243" selection-end="1243" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="279" column="40" selection-start="13353" selection-end="13353" vertical-scroll-proportion="-8.08">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/common.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="39" selection-start="1348" selection-end="1348" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="17" selection-start="1305" selection-end="1314" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/codemirror.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/codemirror.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3045" column="22" selection-start="126082" selection-end="126089" vertical-scroll-proportion="-2.3844445">
+        <state line="142" column="0" selection-start="6324" selection-end="6324" vertical-scroll-proportion="0.33555555">
           <folding />
         </state>
       </provider>

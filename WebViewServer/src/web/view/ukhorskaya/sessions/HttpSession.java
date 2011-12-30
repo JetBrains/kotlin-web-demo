@@ -3,6 +3,9 @@ package web.view.ukhorskaya.sessions;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpsConfigurator;
+import com.sun.net.httpserver.HttpsParameters;
+import org.apache.commons.httpclient.HttpConnection;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
@@ -34,6 +37,7 @@ public class HttpSession {
 
     public HttpSession(SessionInfo info) {
         sessionInfo = info;
+
     }
 
     public void handle(final HttpExchange exchange) {
@@ -81,7 +85,11 @@ public class HttpSession {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
                 sendConvertToJsResult();
             } else {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
+                if (param.equals("/")) {
+                    sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_ROOT);
+                }   else {
+                    sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
+                }
                 if (!sessionInfo.getIp().equals("127.0.0.1")) {
                     ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
                 }
@@ -239,6 +247,7 @@ public class HttpSession {
             finalResponse = URLDecoder.decode(reqResponse.toString(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, "null"));
+            return new PostData("", "");
         }
         if (finalResponse != null) {
             finalResponse = finalResponse.replaceAll("<br>", "\n");
@@ -250,13 +259,14 @@ public class HttpSession {
                 }
             } else {
                 writeResponse("Post request is too short", HttpStatus.SC_BAD_REQUEST);
+                return new PostData("", "");
             }
         } else {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Cannot read data from post request.", currentPsiFile.getText()));
             writeResponse("Cannot read data from post request: ", HttpStatus.SC_BAD_REQUEST, true);
         }
 
-        return null;
+        return new PostData("", "");
     }
 
     private void sendExecutorResult() {

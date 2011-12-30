@@ -205,7 +205,7 @@ public class Statistics {
     private String generateTableContent(String type) {
         StringBuilder builder = new StringBuilder();
 
-        Map<String, UserInfo> sortedMap = null;
+        TreeMap<String, UserInfo> sortedMap = null;
         if (type.equals("id")) {
             ValueComparator comparator = new ValueComparator(userInfoMapForId);
             sortedMap = new TreeMap<String, UserInfo>(comparator);
@@ -228,10 +228,11 @@ public class Statistics {
         builder.append(ResponseUtils.generateTag("td", "Highlight"));
         builder.append(ResponseUtils.generateTag("td", "Complete"));
         builder.append("</tr>");
-        for (String userId : sortedMap.keySet()) {
+        Set<Map.Entry<String, UserInfo>> set = sortedMap.entrySet();
+        for (Map.Entry<String, UserInfo> stringUserInfoEntry : set) {
             builder.append("<tr>");
-            UserInfo info = sortedMap.get(userId);
-            builder.append(ResponseUtils.generateTag("td", userId));
+            UserInfo info = stringUserInfoEntry.getValue();
+            builder.append(ResponseUtils.generateTag("td", stringUserInfoEntry.getKey()));
             builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfRequest)));
             builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfRunRequest)));
             builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfHighlightRequest)));
@@ -787,7 +788,11 @@ public class Statistics {
                 if (a1.numberOfRequest < b1.numberOfRequest) {
                     return 1;
                 } else if (a1.numberOfRequest == b1.numberOfRequest) {
-                    return 0;
+                    if (a1.numberOfRunRequest < b1.numberOfRunRequest) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
                 } else if (a1.numberOfRequest > b1.numberOfRequest) {
                     return -1;
                 }

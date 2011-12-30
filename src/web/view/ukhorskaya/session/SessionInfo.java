@@ -55,6 +55,7 @@ public class SessionInfo {
     }
 
     public enum TypeOfRequest {
+        LOAD_ROOT,
         HIGHLIGHT,
         COMPLETE,
         RUN,

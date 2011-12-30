@@ -29,6 +29,33 @@ import java.util.List;
  */
 
 public class ServerHandler implements HttpHandler {
+    private final byte[] APPLET_FILE;
+
+    public ServerHandler() {
+
+        InputStream is = ServerHandler.class.getResourceAsStream("/WebViewApplet.jar");
+        if (is == null) {
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Resource not found.", "WebViewApplet.jar"));
+            APPLET_FILE = new byte[0];
+            return;
+        }
+
+        int length;
+        byte[] tmp = new byte[1024];
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try {
+            while ((length = is.read(tmp)) >= 0) {
+                out.write(tmp, 0, length);
+            }
+        } catch (IOException e) {
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), e, "WebViewApplet.jar"));
+            APPLET_FILE = new byte[0];
+            return;
+        }
+
+        APPLET_FILE = out.toByteArray();
+    }
 
     @Override
     public void handle(final HttpExchange exchange) throws IOException {
@@ -245,6 +272,10 @@ public class ServerHandler implements HttpHandler {
             return;
         } else if (path.startsWith("/messages/")) {
             writeResponse(exchange, "".getBytes(), HttpStatus.SC_OK);
+            return;
+        }  else if (path.equals("/WebViewApplet.jar")) {
+            writeResponse(exchange, APPLET_FILE, HttpStatus.SC_OK);
+            return;
         }
 
         InputStream is = ServerHandler.class.getResourceAsStream(path);

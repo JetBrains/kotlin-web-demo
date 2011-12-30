@@ -25,14 +25,14 @@ public class MainApplet extends JApplet implements ActionListener {
     private JButton b2;*/
 
     public static String request;
-    
+
     public static SessionInfo SESSION_INFO;
 
     public void init() {
         InitializerApplet.getInstance().initJavaCoreEnvironment();
         request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
-        
+
         SESSION_INFO = new SessionInfo(new Random().nextInt(), "unknown");
 
         /*Container contentPane = this.getContentPane();
@@ -64,12 +64,12 @@ public class MainApplet extends JApplet implements ActionListener {
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.COMPLETE);
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
-            JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line),
-                    Integer.parseInt(ch), currentPsiFile, SESSION_INFO);
-            return responseForCompletion.getResult();
+                JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line),
+                        Integer.parseInt(ch), currentPsiFile, SESSION_INFO);
+                return responseForCompletion.getResult();
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SESSION_INFO.getType(), e, data));
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SESSION_INFO.getType(), e, data + " line: " + line + " ch: " + ch));
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson(writer.toString());

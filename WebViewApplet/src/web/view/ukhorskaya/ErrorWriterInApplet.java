@@ -25,11 +25,12 @@ public class ErrorWriterInApplet extends ErrorWriter {
     @Override
     public void writeException(String message) {
         sendTextToServer(message, MainApplet.request, "error");
+//        System.out.println(message);
     }
 
     @Override
     public void writeInfo(String message) {
-        //sendTextToServer(message, MainApplet.request, "info");
+//        sendTextToServer(message, MainApplet.request, "info");
     }
 
     public static void sendTextToServer(String text, String request, String type) {
@@ -50,13 +51,6 @@ public class ErrorWriterInApplet extends ErrorWriter {
                 wr.close();
             }
             urlConnection.connect();
-            /*try {
-                urlConnection.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
-            //urlConnection.connect();
-
             BufferedReader in;
 
             try {
@@ -65,15 +59,11 @@ public class ErrorWriterInApplet extends ErrorWriter {
                 in = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
             }
 
-            /*String str;
-            StringBuilder result = new StringBuilder();
-            while ((str = in.readLine()) != null) {
-                result.append(str);
-            }*/
             in.close();
 
-        } catch (Exception e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(MainApplet.SESSION_INFO.getType(), e, "text"));
+        } catch (Throwable e) {
+            e.printStackTrace();
+//            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(MainApplet.SESSION_INFO.getType(), e, "text"));
         }
     }
 }
