@@ -10,6 +10,8 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import web.view.ukhorskaya.*;
+import web.view.ukhorskaya.authorization.AuthorizationHelper;
+import web.view.ukhorskaya.authorization.AuthorizationTwitterHelper;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.handlers.ServerHandler;
 import web.view.ukhorskaya.responseHelpers.*;
@@ -84,6 +86,8 @@ public class HttpSession {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
                 sendConvertToJsResult();
+            } else if (param.contains("login.html")) {
+                sendLoginPage();
             } else {
                 if (param.equals("/")) {
                     sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_ROOT);
@@ -99,6 +103,56 @@ public class HttpSession {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
             writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
         }
+    }
+
+    private void sendLoginPage() {
+        String requestUri = exchange.getRequestURI().toString();
+        if (requestUri.contains("?")) {
+            String type = ResponseUtils.substringBetween(requestUri, "?", "&");
+            if (!type.isEmpty()) {
+                AuthorizationHelper helper;
+                if (type.equals("twitter"))  {
+                    helper = new AuthorizationTwitterHelper();
+                }   else {
+                    return;
+                }
+                if (exchange.getRequestURI().toString().contains("oauth_verifier=")) {
+                    exchange.getResponseHeaders().add("Content-type", "html");
+                    helper.verify(ResponseUtils.substringAfter(exchange.getRequestURI().toString(), "?"));
+                    sessionInfo.setUserName(helper.getUserName());
+                    sendProjectSourceFile();
+                } else {
+                    exchange.getResponseHeaders().add("Content-type", "html");
+                    writeResponse(helper.authorize(), HttpStatus.SC_OK, true);
+                }
+            }
+        } else {
+            try {
+                writeResponse(
+                        ResponseUtils.readData(HttpSession.class.getResourceAsStream("/login.html")),
+                        HttpStatus.SC_OK, true);
+            } catch (IOException e) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
+            }
+        }
+        /*UserAuthenticator authenticator = new UserAuthenticator("users");
+        Authenticator.Result result = authenticator.authenticate(exchange);
+        sessionInfo.setUserName(authenticator.getUserName());
+        if (exchange.getRequestURI().toString().equals("/login.html")) {
+            
+            if (result instanceof Authenticator.Success) {
+
+            } else {
+                try {
+                    writeResponse(
+                            ResponseUtils.readData(HttpSession.class.getResourceAsStream("/login.html")),
+                            HttpStatus.SC_OK, true);
+                } catch (IOException e) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
+                }
+                return;
+            }
+        }*/
     }
 
     private void sendConvertToJsResult() {
@@ -300,6 +354,7 @@ public class HttpSession {
             } catch (IOException e) {
                 e.printStackTrace();
             }*/
+
             path = "/header.html";
             InputStream is = ServerHandler.class.getResourceAsStream(path);
             if (is == null) {
@@ -323,6 +378,9 @@ public class HttpSession {
         finalResponse = finalResponse.replace("$RESPONSEBODY$", responseBody);
         if (!disableHeaders) {
             finalResponse = finalResponse.replace("$SESSIONID$", String.valueOf(sessionInfo.getId()));
+            if (sessionInfo.getUserName() != null && !sessionInfo.getUserName().isEmpty()) {
+                finalResponse = finalResponse.replace("$USERNAME$", "'" + sessionInfo.getUserName() + "'");
+            }
             finalResponse = finalResponse.replace("$KOTLINVERSION$", "'" + ServerSettings.KOTLIN_VERSION + "'");
         }
         try {

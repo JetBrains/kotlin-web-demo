@@ -14,7 +14,6 @@
     <script type="text/javascript" src="/jquery/js/jquery-1.6.2.min.js"></script>
     <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="/kotlin_lib.js"></script>
-    <script type="text/javascript" src="/jquery.simpletip-1.3.1.js"></script>
 
     <style>.CodeMirror {
         border: 2px inset #dee;
@@ -71,7 +70,7 @@
 
 </head>
 <body spellcheck="false"
-      onload="showContent(); setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples();">
+      onload="showContent(); setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples(); setAuthorization($USERNAME$); checkAuthorization();">
 <div id="loader">
     <img src="/images/ajax-loader.gif"/>
 
@@ -83,6 +82,9 @@
 <div id="all">
     <div id="header">
         <table>
+            <tr>
+                <td id="authorization" colspan="4"><a href="/login.html">Login</a></td>
+            </tr>
             <tr>
                 <td>
                     <img src="/images/kotlinlogo2.png" id="kotlinlogo" title="Kotlin"/>
@@ -96,6 +98,9 @@
                     <a target="_blank" href="http://youtrack.jetbrains.net/issues/KT">BugTracker</a>
                     <a target="_blank" href="http://blog.jetbrains.com/kotlin/">Blog</a>
                     <a target="_blank" href="https://twitter.com/#!/project_kotlin">Twitter</a>
+                    <!--<iframe src="http://www.facebook.com/plugins/like.php?href=YOUR_URL"
+                            scrolling="no" frameborder="0"
+                            style="border:none; width:450px; height:80px"></iframe>-->
                 </td>
                 <td id="jetbrainslogo">
                     <a target="_blank" href="http://jetbrains.com"><img src="/images/jblogo.png" id="jblogo"

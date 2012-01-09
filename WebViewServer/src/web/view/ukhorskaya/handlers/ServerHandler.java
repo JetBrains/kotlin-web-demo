@@ -1,15 +1,17 @@
 package web.view.ukhorskaya.handlers;
 
+import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
-import sun.misc.IOUtils;
 import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.Statistics;
+import web.view.ukhorskaya.authorization.AuthorizationHelper;
+import web.view.ukhorskaya.authorization.UserAuthenticator;
 import web.view.ukhorskaya.examplesLoader.ExamplesList;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.help.HelpLoader;
@@ -30,40 +32,18 @@ import java.util.List;
  */
 
 public class ServerHandler implements HttpHandler {
-    private final byte[] APPLET_FILE;
-
-    public synchronized byte[] getAppletFile() {
-         return  APPLET_FILE;
-    }
-
-    public ServerHandler() {
-        InputStream is = ServerHandler.class.getResourceAsStream("/WebViewApplet.jar");
-        if (is == null) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Resource not found.", "WebViewApplet.jar"));
-            APPLET_FILE = new byte[0];
-            return;
-        }
-
-        int length;
-        byte[] tmp = new byte[1024];
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        try {
-            while ((length = is.read(tmp)) >= 0) {
-                out.write(tmp, 0, length);
-            }
-        } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), e, "WebViewApplet.jar"));
-        } finally {
-            close(out);
-        }
-        APPLET_FILE = out.toByteArray();
-
-    }
 
     @Override
     public void handle(final HttpExchange exchange) throws IOException {
-        String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
+        if (Statistics.getInstance().isNecessaryToUpdateStatistics()) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Statistics.getInstance().updateStatistics(false);
+                }
+            });
+            t.start();
+        }
 
         SessionInfo sessionInfo;
         try {
@@ -77,9 +57,6 @@ public class ServerHandler implements HttpHandler {
             } else if (param.startsWith("/logs")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(exchange);
-            } else if (param.equals("/showUserInfo=true")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                sendUserInfoForStatistics(exchange);
             } else if (param.contains("/sortedExceptions=")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
                 sendSortedExceptions(exchange);
@@ -99,13 +76,15 @@ public class ServerHandler implements HttpHandler {
                     || (param.equals("/"))
                     || (param.startsWith("/?"))
                     || param.contains("testConnection")
-                    || param.contains("writeLog=")) {
-                if (!param.contains("testConnection") && !param.contains("writeLog=") && !ip.equals("127.0.0.1")) {
+                    || param.contains("writeLog=")
+                    || param.contains("login.html")) {
+                if (!param.contains("testConnection") && !param.contains("writeLog=")) {
                     sessionInfo = setSessionInfo(exchange);
                 } else {
-                    sessionInfo = new SessionInfo(0, ip);
+                    sessionInfo = new SessionInfo(0);
                 }
                 HttpSession session = new HttpSession(sessionInfo);
+
                 session.handle(exchange);
             } else {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + exchange.getRequestURI());
@@ -118,10 +97,18 @@ public class ServerHandler implements HttpHandler {
         }
     }
 
-    private void sendUserInfoForStatistics(HttpExchange exchange) {
-        writeResponse(exchange, Statistics.getInstance().showMap().getBytes(), HttpStatus.SC_OK);
+    private void sendAddUser(HttpExchange exchange) {
+        String request = exchange.getRequestURI().toString();
+        UserAuthenticator authenticator;
+        if (request.contains("addManager=")) {
+            authenticator = new UserAuthenticator("managers");
+        } else {
+            authenticator = new UserAuthenticator("users");
+        }
+        String response = authenticator.addUser(ResponseUtils.substringBetween(request, "&login=", "&"),
+                ResponseUtils.substringAfter(request, "&password="));
+        writeResponse(exchange, response.getBytes(), HttpStatus.SC_OK);
     }
-
 
     private void updateExamples(HttpExchange exchange) {
         ExamplesList.updateList();
@@ -143,26 +130,25 @@ public class ServerHandler implements HttpHandler {
     @Nullable
     private SessionInfo setSessionInfo(HttpExchange exchange) {
         SessionInfo sessionInfo;
-        String ip = exchange.getRemoteAddress().getAddress().getHostAddress();
         String sessionId = getSessionIdFromCookies(exchange.getRequestHeaders());
         if (sessionId == null || sessionId.isEmpty()) {
             sessionId = getSessionIdFromRequest(exchange.getRequestURI().toString());
             if (!sessionId.equals("")) {
-                sessionInfo = new SessionInfo(Integer.parseInt(sessionId), ip);
+                sessionInfo = new SessionInfo(Integer.parseInt(sessionId));
 
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
                         "Impossible to read id from cookies", generateStringFromList(exchange.getRequestHeaders().get("Cookie"))));
             } else {
                 Statistics.incNumberOfUsers();
-                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()), ip);
-                ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers() + " ip=" + ip);
+                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
             }
         } else {
             try {
-                sessionInfo = new SessionInfo(Integer.parseInt(sessionId), ip);
+                sessionInfo = new SessionInfo(Integer.parseInt(sessionId));
             } catch (NumberFormatException e) {
                 Statistics.incNumberOfUsers();
-                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()), ip);
+                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()));
                 ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.toString(), e, sessionId));
             }
@@ -172,7 +158,7 @@ public class ServerHandler implements HttpHandler {
 
     private String getSessionIdFromRequest(String request) {
         if (request.contains("sessionId=")) {
-            return ResponseUtils.substringBetween(request, "sessionId=", "&");
+            return ResponseUtils.substringBetween(request, "sessionId", "&");
         }
         return "";
     }
@@ -183,9 +169,8 @@ public class ServerHandler implements HttpHandler {
                 List<String> cookie = responseHeaders.get(key);
                 if (cookie.size() > 0) {
                     String all = generateStringFromList(cookie);
-                    String response = ResponseUtils.substringBetween(all, "userId=", ";");
-                    ErrorWriterOnServer.LOG_FOR_INFO.info("cookies:" + all + " userId: " + response);
-                    return response;
+                    ErrorWriterOnServer.LOG_FOR_INFO.info("cookies:" + all);
+                    return ResponseUtils.substringBetween(all, "userId=", ";");
                 }
             }
         }
@@ -225,6 +210,23 @@ public class ServerHandler implements HttpHandler {
     }
 
     private void sendListLogs(HttpExchange exchange) {
+        if (!exchange.getRequestURI().toString().contains("&statistics")) {
+            Authenticator authenticator = new UserAuthenticator("managers");
+            Authenticator.Result result = authenticator.authenticate(exchange);
+            if (result instanceof Authenticator.Success) {
+                System.out.println("OK");
+            } else {
+                try {
+                    writeResponse(exchange,
+                            ResponseUtils.readData(ServerHandler.class.getResourceAsStream("/login.html")).getBytes(),
+                            HttpStatus.SC_OK);
+                } catch (IOException e) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("LOGIN", e, "Login failed"));
+                }
+                return;
+            }
+        }
+
         InputStream is = ServerHandler.class.getResourceAsStream("/logs.html");
         try {
             String response = ResponseUtils.readData(is);
@@ -261,8 +263,8 @@ public class ServerHandler implements HttpHandler {
         } catch (UnsupportedEncodingException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
         }
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), info.getIp(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
         writeResponse(exchange, "OK".getBytes(), HttpStatus.SC_OK);
     }
 
@@ -273,12 +275,6 @@ public class ServerHandler implements HttpHandler {
         if (path.equals("")) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Path to the file is incorrect.", exchange.getRequestURI().toString()));
             writeResponse(exchange, "Path to the file is incorrect.".getBytes(), HttpStatus.SC_NOT_FOUND);
-            return;
-        } else if (path.startsWith("/messages/")) {
-            writeResponse(exchange, "".getBytes(), HttpStatus.SC_OK);
-            return;
-        } else if (path.equals("/WebViewApplet.jar")) {
-            writeResponse(exchange, getAppletFile(), HttpStatus.SC_OK);
             return;
         }
 

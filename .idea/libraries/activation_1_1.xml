@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="activation-1.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/activation-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/commons-lang-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/facebook-java-api-3.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/facebook-java-api-annotation-processor-3.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/facebook-java-api-schema-3.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/jaxb-api-2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/jaxb-impl-2.1.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/json-20080701.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/runtime-0.4.1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/stax-api-1.0-2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

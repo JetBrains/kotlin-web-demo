@@ -23,6 +23,9 @@ var isApplet = false;
 var isJsApplet = true;
 var kotlinVersion;
 
+var isAuthorized = false;
+var userName;
+
 var isContentEditorChanged = false;
 
 $(document).keydown(function (e) {
@@ -32,6 +35,20 @@ $(document).keydown(function (e) {
         $("#run").click();
     }
 });
+
+function checkAuthorization() {
+    if (isAuthorized) {
+        document.getElementById("authorization").innerHTML = "Hello, " + userName;
+    }
+}
+
+function setAuthorization(param) {
+    if (param != "") {
+//        document.location.href = "/";
+        isAuthorized = true;
+        userName = param;
+    }
+}
 
 function setMode(mode) {
     if (mode == "APPLET") {

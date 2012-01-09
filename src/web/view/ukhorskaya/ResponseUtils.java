@@ -246,4 +246,34 @@ public class ResponseUtils {
         return document;
     }
 
+    @Nullable
+        public static Document getXmlDocument(InputStream is) {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder;
+            Document document;
+            try {
+                dBuilder = dbFactory.newDocumentBuilder();
+
+                document = dBuilder.parse(is);
+            } catch (IOException e) {
+                //TODO write sth to exception log
+                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
+                ));
+                return null;
+            } catch (ParserConfigurationException e) {
+                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
+                ));
+                return null;
+            } catch (SAXException e) {
+                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
+                ));
+                return null;
+            }
+            document.getDocumentElement().normalize();
+            return document;
+        }
+
 }

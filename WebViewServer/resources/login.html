@@ -25,8 +25,23 @@
             width: 15%;
         }
     </style>
+    <script src="/jquery/jquery.min.js"></script>
+    <link type="text/css" href="/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/jquery/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript">
+        function loginWithTwitter() {
+            $.post("/login.html?twitter", function (data) {
+                /*document.getElementById("twitter").href = data;
+                $("#twitter").onclick();*/
+                document.location.href = data;
+            });
+        }
+    </script>
 </head>
 <body>
+<div id="result"></div>
+<a href="#" target="_blank" id="twitter">aaa</a>
 <div>
     <!--<form method="post">
         <label>
@@ -60,7 +75,7 @@
         </p>
     </div>
 </div>-->
-<div  style="text-align: center;">
+<div style="text-align: center;">
     <div style="text-align: center; width: 500px; display: inline-block;">
         <div class="header">
             <p>
@@ -68,7 +83,7 @@
             </p>
         </div>
 
-        <form method="post">
+        <form method="post" action="/">
             <div class="block">
                 <p>
                 </p>
@@ -99,8 +114,10 @@
 
             <div class="button">
                 <input type="submit" value="Log in" id="submit"/>
+                <a href="/">Back to Demo without authorization</a>
             </div>
         </form>
+        <a href="#" onclick="loginWithTwitter();">Twitter</a>
     </div>
 </div>
 </body>
