@@ -1,6 +1,5 @@
 package web.view.ukhorskaya.responseHelpers;
 
-import com.google.common.base.Predicates;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
@@ -10,7 +9,6 @@ import org.jetbrains.jet.codegen.GenerationState;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetNamespace;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
 import org.json.JSONArray;
@@ -66,18 +64,14 @@ public class CompileAndRunExecutor {
                 return "[{\"text\":\"Compilation complete successfully\",\"type\":\"out\"}]";
             }
             Project currentProject = currentPsiFile.getProject();
-            List<JetNamespace> namespaces = Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace());
-            BindingContext bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
-                    currentProject,
-                    namespaces,
-                    Predicates.<PsiFile>equalTo(currentPsiFile),
-                    JetControlFlowDataTraceFactory.EMPTY);
+            BindingContext bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
+                                (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
 
             sessionInfo.getTimeManager().saveCurrentTime();
             GenerationState generationState;
             try {
                 generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
-                generationState.compileCorrectNamespaces(bindingContext, namespaces);
+                generationState.compileCorrectFiles(bindingContext, Collections.singletonList((JetFile) currentPsiFile));
             } catch (Throwable e) {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
                 return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());

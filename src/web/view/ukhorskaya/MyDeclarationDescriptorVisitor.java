@@ -31,7 +31,7 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
 
     @Override
     public Void visitVariableDescriptor(VariableDescriptor descriptor, StringBuilder builder) {
-        String typeString = renderPropertyPrefixAndComputeTypeString(builder, Collections.<TypeParameterDescriptor>emptyList(), ReceiverDescriptor.NO_RECEIVER, descriptor.getOutType(), descriptor.getInType());
+        String typeString = renderPropertyPrefixAndComputeTypeString(builder, Collections.<TypeParameterDescriptor>emptyList(), ReceiverDescriptor.NO_RECEIVER, descriptor.getOutType(), descriptor.getOutType());
         renderName(descriptor, builder);
         builder.append(" : ").append(typeString);
         return super.visitVariableDescriptor(descriptor, builder);

@@ -70,13 +70,13 @@ public class JsonResponseForCompletion {
                     Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
                     Predicates.<PsiFile>equalTo(currentPsiFile), JetControlFlowDataTraceFactory.EMPTY,
                     JetSemanticServices.createSemanticServices(currentProject));*/
-            bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
+            /*bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
                                 currentProject,
                                 Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
                                 Predicates.<PsiFile>equalTo(currentPsiFile),
-                                JetControlFlowDataTraceFactory.EMPTY);
-            /*bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
-                    (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);*/
+                                JetControlFlowDataTraceFactory.EMPTY);*/
+            bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
+                    (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
             String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
             ErrorWriter.ERROR_WRITER.writeException(exception);
