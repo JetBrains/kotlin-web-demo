@@ -112,6 +112,10 @@ public class VirtualJarFile extends VirtualFile {
 
     @Override
     public InputStream getInputStream() throws IOException {
+        /*String manualString = "jar:http://dl.dropbox.com/u/56547825/WebViewApplet.jar/WebViewApplet.jar!/rt.jar";
+                URL manualURL = new URL(manualString);
+                return manualURL.openConnection().getInputStream();*/
+
         return VirtualJarFile.class.getResourceAsStream("/" + name);
     }
 }

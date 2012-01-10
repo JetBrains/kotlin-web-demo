@@ -12,6 +12,7 @@
     <script src="/jquery/jquery.min.js"></script>
     <link type="text/css" href="/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
     <script type="text/javascript" src="/jquery/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="/jquery/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="/kotlin_lib.js"></script>
 
@@ -71,7 +72,7 @@
 
 </head>
 <body spellcheck="false"
-      onload="setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples(); showContent();">
+      onload="setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples(); hideLoader();">
 <div id="loader">
     <img src="/images/ajax-loader.gif"/>
 
@@ -267,9 +268,20 @@
 <script src="/components/components.js"></script>
 
 <script src="/codemirror/lib/complete.js"></script>
+<!--<object id="myapplet" class="web.view.ukhorskaya.MainApplet" width="0" height="0"
+        ARCHIVE="http://st-004:8080/resources/WebViewApplet.jar"></object>-->
 <applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
-        ARCHIVE="http://st-004:8080/resources/WebViewApplet.jar"></applet>
+        ARCHIVE="WebViewApplet.jar"></applet>
 <applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
-        ARCHIVE="http://st-004:8080/resources/WebViewApplet.jar"></applet>
+        ARCHIVE="WebViewApplet.jar"></applet>
+
+<!--
+<applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
+        ARCHIVE="http://dl.dropbox.com/u/56547825/WebViewApplet.jar/WebViewApplet.jar"></applet>
+
+<applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
+        ARCHIVE="http://dl.dropbox.com/u/56547825/WebViewApplet.jar/WebViewApplet.jar, rt.jar"></applet>
+-->
+
 </body>
 </html>

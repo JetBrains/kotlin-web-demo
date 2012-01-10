@@ -15,6 +15,8 @@
  */
 package com.intellij.core;
 
+import com.intellij.openapi.roots.PackageIndex;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.impl.jar.CoreJarFileSystem;
 import com.intellij.openapi.vfs.local.CoreLocalFileSystem;
@@ -22,13 +24,12 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.file.PsiPackageImpl;
 import com.intellij.psi.impl.file.impl.JavaFileManager;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.CollectionQuery;
+import com.intellij.util.Query;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import web.view.ukhorskaya.ErrorWriter;
-import web.view.ukhorskaya.ErrorWriterInApplet;
 
 import java.io.File;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +38,7 @@ import java.util.List;
 /**
  * @author yole
  */
-public class CoreJavaFileManager implements JavaFileManager {
+public class CoreJavaFileManager extends PackageIndex implements JavaFileManager {
     private final CoreLocalFileSystem myLocalFileSystem;
     private final CoreJarFileSystem myJarFileSystem;
     private final List<File> myClasspath = new ArrayList<File>();
@@ -86,11 +87,7 @@ public class CoreJavaFileManager implements JavaFileManager {
         if (file != null) {
             PsiFile psiFile = myPsiManager.findFile(file);
             if (!(psiFile instanceof PsiJavaFile)) {
-                /*ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                        "UNKNOWN", new UnsupportedOperationException("no java file for .class"), classpathEntry + "!/" + relativeName
-                ));
-                return null;*/
-                throw new UnsupportedOperationException("no java file for .class "  + classpathEntry + "!/" + relativeName);
+                throw new UnsupportedOperationException("no java file for .class " + classpathEntry + "!/" + relativeName);
             }
             final PsiClass[] classes = ((PsiJavaFile) psiFile).getClasses();
             if (classes.length == 1) {
@@ -170,4 +167,51 @@ public class CoreJavaFileManager implements JavaFileManager {
         myVirtualClasspath.add(path);
     }
 
+    @Override
+    public VirtualFile[] getDirectoriesByPackageName(@NotNull String packageName, boolean includeLibrarySources) {
+        return getDirsByPackageName(packageName, includeLibrarySources).toArray(VirtualFile.EMPTY_ARRAY);
+    }
+
+    @Override
+    public Query<VirtualFile> getDirsByPackageName(@NotNull String packageName, boolean includeLibrarySources) {
+        return new CollectionQuery<VirtualFile>(findDirectoriesByPackageName(packageName));
+    }
+
+    private List<VirtualFile> findDirectoriesByPackageName(String packageName) {
+        List<VirtualFile> result = new ArrayList<VirtualFile>();
+        String dirName = packageName.replace(".", "/");
+        for (File file : myClasspath) {
+            VirtualFile classDir = findUnderClasspathEntry(file, dirName);
+            if (classDir != null) {
+                result.add(classDir);
+            }
+        }
+
+        for (String str : myVirtualClasspath) {
+            VirtualFile file = myJarFileSystem.findFileByPath(str + "!/" + dirName);
+            if (file != null) {
+                result.add(file);
+            }
+        }
+        return result;
+    }
+
+    @Nullable
+    public PsiPackage getPackage(PsiDirectory dir) {
+        final File ioFile = new File(dir.getVirtualFile().getPath());
+        for (File root : myClasspath) {
+            if (FileUtil.isAncestor(root, ioFile, false)) {
+                final String relativePath = FileUtil.getRelativePath(root.getPath(), ioFile.getPath(), '.');
+                return new PsiPackageImpl(myPsiManager, relativePath);
+            }
+        }
+        /*for (String str : myVirtualClasspath) {
+            VirtualFile file = myJarFileSystem.findFileByPath(str + "!/" + dir.getName());
+            if (file != null) {
+
+                return new PsiPackageImpl(myPsiManager, dir.getName());
+            }
+        }*/
+        return null;
+    }
 }

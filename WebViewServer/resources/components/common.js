@@ -85,7 +85,7 @@ function setSessionId(id) {
     });
 }
 
-function showContent() {
+function hideLoader() {
     $('#loader').hide();
     $(".applet-enable").click();
     $("#dialog").dialog({
@@ -93,6 +93,10 @@ function showContent() {
         width:400,
         autoOpen:false
     });
+}
+
+function showLoader() {
+    $('#loader').show();
 }
 
 function setKotlinVersion(version) {

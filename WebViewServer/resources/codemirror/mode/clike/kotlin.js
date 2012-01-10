@@ -112,6 +112,11 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
                     state.tokenize.push(tokenBaseUntilBrace());
                     return "string";
                 }
+
+                /*if (next == "$" && !escaped) {
+                    state.tokenize.push(tokenBaseUntilSpace());
+                    return "string";
+                }*/
                 /*if (quote == '"' && next == "$" && !escaped && stream.eat("{")) {
                  state.tokenize.push(tokenBaseUntilBrace());
                  return "string";
@@ -142,6 +147,45 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
                 depth++;
             }
             return tokenBase(stream, state);
+        }
+
+        t.isBase = true;
+        return t;
+    }
+
+    function tokenBaseUntilSpace() {
+
+        /*var depth = 1;
+
+         function t(stream, state) {
+         if (stream.peek() == " ") {
+         alert(depth) ;
+         depth--;
+         if (depth == 0) {
+         state.tokenize.pop();
+         return state.tokenize[state.tokenize.length - 1](stream, state);
+         }
+         } */
+        /*else if (stream.peek() == "$") {
+         depth++;
+         }*/
+        /*
+         return tokenBase(stream, state);
+         }
+
+         t.isBase = true;
+         return t;*/
+        var depth = 1;
+
+        function t(stream, state) {
+            stream.eatWhile(/[\w]/);
+            //if (stream.peek() == " ") {
+           //
+                return tokenBase(stream, state);
+           // }
+//            state.tokenize.pop();
+//            return state.tokenize[state.tokenize.length - 1](stream, state);
+
         }
 
         t.isBase = true;

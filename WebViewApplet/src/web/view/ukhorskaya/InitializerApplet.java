@@ -12,7 +12,6 @@ import org.jetbrains.jet.plugin.JetFileType;
  * Time: 3:49 PM
  */
 public class InitializerApplet {
-    //    private static final Logger LOG = Logger.getLogger(Initializer.class);
     private static InitializerApplet initializer = new InitializerApplet();
 
     public static InitializerApplet getInstance() {

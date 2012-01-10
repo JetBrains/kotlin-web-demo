@@ -145,6 +145,7 @@ $(document).ready(function () {
         function processError(i, p, f) {
             if (typeof data[i] == "undefined") {
                 if (i > 0) {
+                    $("#tabs").tabs("select", 0);
                     addRemoveAllImage();
                 }
                 document.getElementById("problemsTd").innerHTML = problems.innerHTML;
@@ -202,12 +203,15 @@ $(document).ready(function () {
         try {
             var dataFromApplet;
             try {
+                showLoader();
                 if (type == "complete") {
                     dataFromApplet = $("#myapplet")[0].getCompletion(i, editor.getCursor(true).line, editor.getCursor(true).ch);
                 } else {
                     dataFromApplet = $("#myapplet")[0].getHighlighting(i);
                 }
+                hideLoader();
             } catch (e) {
+                hideLoader();
                 $(".applet-disable").click();
                 setStatusBarMessage(GET_FROM_APPLET_FAILED);
 
@@ -322,7 +326,6 @@ $(document).ready(function () {
 
     $("#run").click(function () {
         var i = editor.getValue();
-        $("#tabs").tabs("select", 1);
         setConsoleMessage("");
         setStatusBarMessage("Running...");
         /*var isChecked = false;
@@ -435,9 +438,9 @@ $(document).ready(function () {
                         var dataJs;
                         if (dataFromApplet.indexOf("exception=") == 0) {
                             dataJs = dataFromApplet.substring(10, dataFromApplet.length);
-                            dataJs = createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + data);
+                            dataJs = createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + dataJs);
                             setStatusBarMessage(ERROR_UNTIL_EXECUTE);
-                            setConsoleMessage("<p>" + data + "</p>");
+                            setConsoleMessage("<p>" + dataJs + "</p>");
                         } else {
                             dataJs = eval(dataFromApplet);
                             setStatusBarMessage(EXECUTE_OK);
@@ -515,6 +518,7 @@ $(document).ready(function () {
                 }
                 return;
             } else {
+                $("#tabs").tabs("select", 1);
                 var i = 0;
                 var errors = document.createElement("div");
                 while (typeof data[i] != "undefined") {

@@ -35,7 +35,9 @@ public class MainApplet extends JApplet implements ActionListener {
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
 
         SESSION_INFO = new SessionInfo(new Random().nextInt(), "unknown");
-
+        getHighlighting("fun main(args : Array<String>) {\n" +
+                "  System.out?.println(\"Hello, world!\"\n" +
+                "}");
         /*Container contentPane = this.getContentPane();
         contentPane.setLayout(new FlowLayout());
         b1 = new JButton("highlighting");
@@ -67,6 +69,7 @@ public class MainApplet extends JApplet implements ActionListener {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
                 JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line),
                         Integer.parseInt(ch), currentPsiFile, SESSION_INFO);
+            System.out.println(line + " " + ch);
                 return responseForCompletion.getResult();
 
         } catch (Throwable e) {
