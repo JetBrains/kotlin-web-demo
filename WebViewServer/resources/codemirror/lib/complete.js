@@ -46,18 +46,20 @@ $(document).ready(function () {
     var keywords;
     var isContinueComplete = false;
 
+    var isGetErrorsAfterRunInNoHighlightingMode = false;
+
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers:true,
         matchBrackets:true,
         mode:"text/kotlin",
         extraKeys:{
-            "Ctrl-Space":beforeComplete,
-            "Ctrl-Shift-F9":function (instance) {
-                $("#runJS").click();
-            },
-            "Ctrl-F9":function (instance) {
-                $("#run").click();
-            }
+            "Ctrl-Space":beforeComplete/*,
+             "Ctrl-Shift-F9":function (instance) {
+             $("#runJS").click();
+             },
+             "Ctrl-F9":function (instance) {
+             $("#run").click();
+             }*/
         },
         onChange:runTimerForNonPrinting,
         onCursorActivity:updateStatusBar,
@@ -77,7 +79,6 @@ $(document).ready(function () {
     }
 
     function getHighlighting() {
-        $("#tabs").tabs("select", 0);
         if (!isCompletionInProgress && !loadingExample && !isLoadingHighlighting) {
             getErrors();
         }
@@ -86,7 +87,9 @@ $(document).ready(function () {
     var time;
 
     function getErrors() {
-        time = new Date().getMilliseconds();
+        if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
+            return;
+        }
         isLoadingHighlighting = true;
         if (isApplet) {
             getDataFromApplet("highlighting");
@@ -103,13 +106,14 @@ $(document).ready(function () {
                 data:{text:i},
                 timeout:10000,
                 error:function () {
+                    document.getElementById("problemsTd").innerHTML = "";
+                    document.getElementById("removeallgutters").innerHTML = "";
                     isLoadingHighlighting = false;
-                    setConsoleMessage(REQUEST_ABORTED);
+                    setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
                 }
             });
         }
     }
-
 
     function onHighlightingSuccess(data) {
         isLoadingHighlighting = false;
@@ -119,9 +123,11 @@ $(document).ready(function () {
         removeStyles();
         arrayClasses = [];
         arrayLinesMarkers = [];
+        document.getElementById("removeallgutters").innerHTML = "";
 
         if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-            document.getElementById("problems").innerHTML = "";
+            $("#tabs").tabs("select", 0);
+            document.getElementById("problemsTd").innerHTML = "";
             setStatusBarMessage(unEscapeString(data[0].exception));
             setConsoleMessage(unEscapeString(data[0].exception));
             var j = 0;
@@ -129,6 +135,7 @@ $(document).ready(function () {
                 exception(data[j]);
                 j++;
             }
+            addRemoveAllImage();
             return;
         }
 
@@ -137,7 +144,10 @@ $(document).ready(function () {
 
         function processError(i, p, f) {
             if (typeof data[i] == "undefined") {
-                document.getElementById("problems").innerHTML = problems.innerHTML;
+                if (i > 0) {
+                    addRemoveAllImage();
+                }
+                document.getElementById("problemsTd").innerHTML = problems.innerHTML;
                 updateStatusBar();
                 return;
             }
@@ -201,17 +211,6 @@ $(document).ready(function () {
                 $(".applet-disable").click();
                 setStatusBarMessage(GET_FROM_APPLET_FAILED);
 
-                /*$("#editordiv").simpletip({
-                 content: "Applet doesn't support",
-                 fixed: true,
-                 position: 'top'
-                 });
-                 var api = $('#editordiv').eq(0).simpletip();
-                 api.show();
-                 */
-                /*setTimeout(function() {
-                 api.hide();
-                 }, 2000);*/
                 var title = document.getElementById("appletclient").title;
                 if (title.indexOf(GET_FROM_APPLET_FAILED) == -1) {
                     document.getElementById("appletclient").title += ". " + GET_FROM_APPLET_FAILED;
@@ -244,13 +243,15 @@ $(document).ready(function () {
             if (typeof data != "undefined") {
                 if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                     $("#tabs").tabs("select", 0);
-                    document.getElementById("problems").innerHTML = "";
+                    document.getElementById("problemsTd").innerHTML = "";
+                    document.getElementById("removeallgutters").innerHTML = "";
                     setStatusBarMessage(data[0].exception);
                     var j = 0;
                     while (typeof data[j] != "undefined") {
                         exception(data[j]);
                         j++;
                     }
+                    addRemoveAllImage();
                 } else {
                     if (type == "complete") {
                         startComplete(data);
@@ -282,9 +283,9 @@ $(document).ready(function () {
     $("#arguments").val("");
 
     function checkIfThereAreErrorsInProblemView() {
-        getErrors();
-        var children = document.getElementById("problems").childNodes;
+        var children = document.getElementById("problemsTd").childNodes;
         var result = false;
+        // alert(children.length + document.getElementById("problems"));
         if (children.length > 0) {
             for (var i = 0; i < children.length; ++i) {
                 if (children[i].className == "problemsViewError") {
@@ -309,78 +310,155 @@ $(document).ready(function () {
         return div.innerHTML;
     }
 
+    $("#removeallgutters").click(function () {
+        document.getElementById("problemsTd").innerHTML = "";
+        document.getElementById("removeallgutters").innerHTML = "";
+        removeStyles();
+        for (var i = 0; i < editor.lineCount(); i++) {
+            editor.clearMarker(i);
+        }
+    });
+
 
     $("#run").click(function () {
-        var arguments = $("#arguments").val();
         var i = editor.getValue();
         $("#tabs").tabs("select", 1);
         setConsoleMessage("");
         setStatusBarMessage("Running...");
-        getErrors();
-        if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
-            setStatusBarMessage("Running...");
-            isCompilationInProgress = true;
+        /*var isChecked = false;
+         if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
+         $("#nohighlightingcheckbox").attr('checked', false);
+         isChecked = true;
+         }*/
 
+        if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
+            isLoadingHighlighting = true;
             $.ajax({
-                url:document.location.href + "?sessionId=" + sessionId + "&run=true",
+                url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
                 context:document.body,
-                success:onCompileSuccess,
+                success:onHighlightingSuccessWait,
                 dataType:"json",
                 type:"POST",
-                data:{text:i, consoleArgs:arguments},
+                data:{text:i},
                 timeout:10000,
                 error:function () {
-                    isCompilationInProgress = false;
-                    setStatusBarMessage(REQUEST_ABORTED);
-                    document.getElementById("console").innerHTML = REQUEST_ABORTED;
+                    document.getElementById("problemsTd").innerHTML = "";
+                    document.getElementById("removeallgutters").innerHTML = "";
+                    isLoadingHighlighting = false;
+                    setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
                 }
             });
-
+        } else {
+            getErrors();
+            onHighlightingSuccessWait(null);
         }
+
+
+        /*if (isChecked) {
+         $("#nohighlightingcheckbox").attr('checked', true);
+         }*/
+        //alert(checkIfThereAreErrorsInremomView());
+
     });
+
+    function onHighlightingSuccessWait(data) {
+        isLoadingHighlighting = false;
+        if (data == null || (data[0] == null)) {
+            if (!isCompilationInProgress) {
+//            if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
+                setStatusBarMessage("Running...");
+                isCompilationInProgress = true;
+                var i = editor.getValue();
+                var arguments = $("#arguments").val();
+                $.ajax({
+                    url:document.location.href + "?sessionId=" + sessionId + "&run=true",
+                    context:document.body,
+                    success:onCompileSuccess,
+                    dataType:"json",
+                    type:"POST",
+                    data:{text:i, consoleArgs:arguments},
+                    timeout:10000,
+                    error:function () {
+                        isCompilationInProgress = false;
+                        setStatusBarMessage(RUN_REQUEST_ABORTED);
+                        document.getElementById("console").innerHTML = RUN_REQUEST_ABORTED;
+                    }
+                });
+
+            }
+        }
+        onHighlightingSuccess(data);
+    }
 
     $("#runJS").click(function () {
+        var i = editor.getValue();
+        isLoadingHighlighting = true;
+        $.ajax({
+            url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
+            context:document.body,
+            success:onHighlightingSuccessWaitAfterConvertToJs,
+            dataType:"json",
+            type:"POST",
+            data:{text:i},
+            timeout:10000,
+            error:function () {
+                document.getElementById("problemsTd").innerHTML = "";
+                document.getElementById("removeallgutters").innerHTML = "";
+                isLoadingHighlighting = false;
+                setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
+            }
+        });
+
+    });
+
+
+    function onHighlightingSuccessWaitAfterConvertToJs(data) {
         var arguments = $("#arguments").val();
         var i = editor.getValue();
-        $("#tabs").tabs("select", 1);
         setConsoleMessage("");
-        setStatusBarMessage("Running...");
-        getErrors();
-        setStatusBarMessage("Running...");
-        if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
-            isCompilationInProgress = true;
-            if (isApplet && isJsApplet) {
-                try {
-                    var dataFromApplet;
+        isLoadingHighlighting = false;
+        if (data == null || (data[0] == null)) {
+            $("#tabs").tabs("select", 1);
+            setStatusBarMessage("Running...");
+            if (!isCompilationInProgress) {
+                isCompilationInProgress = true;
+                if (isApplet && isJsApplet) {
                     try {
-                        dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
+                        var dataFromApplet;
+                        try {
+                            dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
+                        } catch (e) {
+                            loadJsFromServer(i, arguments);
+                            return;
+                        }
+                        var isCompilationInProgress = false;
+                        var dataJs;
+                        if (dataFromApplet.indexOf("exception=") == 0) {
+                            dataJs = dataFromApplet.substring(10, dataFromApplet.length);
+                            dataJs = createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + data);
+                            setStatusBarMessage(ERROR_UNTIL_EXECUTE);
+                            setConsoleMessage("<p>" + data + "</p>");
+                        } else {
+                            dataJs = eval(dataFromApplet);
+                            setStatusBarMessage(EXECUTE_OK);
+                            generatedJSCode = dataFromApplet;
+                            setConsoleMessage("<p>" + dataJs + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
+                        }
                     } catch (e) {
-                        loadJsFromServer(i, arguments);
-                        return;
-                    }
-                    var isCompilationInProgress = false;
-                    var data;
-                    if (dataFromApplet.indexOf("exception=") == 0) {
-                        data = dataFromApplet.substring(10, dataFromApplet.length);
-                        data = createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + data);
                         setStatusBarMessage(ERROR_UNTIL_EXECUTE);
-                        setConsoleMessage("<p>" + data + "</p>");
-                    } else {
-                        data = eval(dataFromApplet);
-                        setStatusBarMessage(EXECUTE_OK);
-                        generatedJSCode = dataFromApplet;
-                        setConsoleMessage("<p>" + data + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
+                        setConsoleMessage(createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + e));
                     }
-                } catch (e) {
-                    setStatusBarMessage(ERROR_UNTIL_EXECUTE);
-                    setConsoleMessage(createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + e));
+                } else {
+                    loadJsFromServer(i, arguments);
                 }
-            } else {
-                loadJsFromServer(i, arguments);
-            }
 
+            }
+        } else {
+            $("#tabs").tabs("select", 0);
+            setStatusBarMessage(TRY_RUN_CODE_WITH_ERROR);
         }
-    });
+        onHighlightingSuccess(data);
+    }
 
     function loadJsFromServer(i, arguments) {
         isJsApplet = false;
@@ -394,8 +472,8 @@ $(document).ready(function () {
             timeout:10000,
             error:function () {
                 isCompilationInProgress = false;
-                setStatusBarMessage(REQUEST_ABORTED);
-                document.getElementById("console").innerHTML = REQUEST_ABORTED;
+                setStatusBarMessage(RUN_REQUEST_ABORTED);
+                document.getElementById("console").innerHTML = RUN_REQUEST_ABORTED;
             }
         });
     }
@@ -417,13 +495,18 @@ $(document).ready(function () {
         }
     }
 
+    function addRemoveAllImage() {
+        document.getElementById("removeallgutters").innerHTML = "<img id='removeallguttersimg' src='/icons/removeAllGutters.png' title='Remove all gutters'/>";
+    }
+
     function onCompileSuccess(data) {
         var isCompiledWithErrors = false;
         isCompilationInProgress = false;
         if (data != null) {
             if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                 $("#tabs").tabs("select", 0);
-                document.getElementById("problems").innerHTML = "";
+                document.getElementById("problemsTd").innerHTML = "";
+                document.getElementById("removeallgutters").innerHTML = "";
                 setStatusBarMessage(data[0].exception);
                 var j = 0;
                 while (typeof data[j] != "undefined") {
@@ -439,7 +522,8 @@ $(document).ready(function () {
                     if (typeof data[i].message != "undefined") {
                         getErrors();
                         isCompiledWithErrors = true;
-                        errors.appendChild(createElementForProblemView(data[i].type, null, data[i].message));
+                        $("#tabs").tabs("select", 0);
+                        //errors.appendChild(createElementForProblemView(data[i].type, null, data[i].message));
                     } else {
                         var p = document.createElement("p");
                         if ((data[i].type == "err") && (data[i].text != "")) {
@@ -473,9 +557,9 @@ $(document).ready(function () {
 
         var problems = document.createElement("div");
         if (ex.type == "out") {
-            document.getElementById("problems").appendChild(createElementForProblemView("STACKTRACE", null, unEscapeString(ex.exception)));
+            document.getElementById("problemsTd").appendChild(createElementForProblemView("STACKTRACE", null, unEscapeString(ex.exception)));
         } else {
-            document.getElementById("problems").appendChild(createElementForProblemView("ERROR", null, unEscapeString(ex.exception)));
+            document.getElementById("problemsTd").appendChild(createElementForProblemView("ERROR", null, unEscapeString(ex.exception)));
         }
     }
 
@@ -505,6 +589,7 @@ $(document).ready(function () {
 
     function beforeComplete() {
         runTimerForNonPrinting();
+//        $("#tabs").tabs("select", 0);
         if (!isCompletionInProgress) {
             isCompletionInProgress = true;
             var i = editor.getValue();
@@ -523,7 +608,7 @@ $(document).ready(function () {
                     timeout:10000,
                     error:function () {
                         isCompletionInProgress = false;
-                        setStatusBarMessage(REQUEST_ABORTED);
+                        setStatusBarMessage(COMPLETE_REQUEST_ABORTED);
                     }
                 });
             }

@@ -1,6 +1,7 @@
 package web.view.ukhorskaya.examplesLoader;
 
 import org.json.JSONArray;
+import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.server.ServerSettings;
@@ -32,19 +33,29 @@ public class ExamplesLoader {
             return "[{\"text\":\"Cannot find this example. Please choose an other example.\"}]";
         }
         String fileName = fileObj.get("text");
-        headName  = headName.replaceAll("%20", " ");
-        File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + headName+ File.separator + fileName + ".kt");
+        headName = headName.replaceAll("%20", " ");
+        File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + headName + File.separator + fileName + ".kt");
         if (!example.exists()) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot find example with file name: " + example.getAbsolutePath());
             return "[{\"text\":\"Cannot find this example. Please choose an other example.\"}]";
         }
 
         String fileContent;
+        FileReader reader = null;
         try {
-            fileContent = ResponseUtils.readData(new FileReader(example), true);
+            reader = new FileReader(example);
+            fileContent = ResponseUtils.readData(reader, true);
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot read content for example with file name: " + example.getAbsolutePath());
             return "[{\"text\":\"Cannot load this example. Please choose an other example.\"}]";
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Load examples", e, id + " " + headName));
+            }
         }
         JSONArray response = new JSONArray();
         Map<String, String> map = new HashMap<String, String>();

@@ -8,14 +8,18 @@
 /*Messages*/
 //Problems with ajax-request to server
 var REQUEST_ABORTED = "Ajax request aborted.";
+var HIGHLIGHT_REQUEST_ABORTED = "Can't get errors/warnings from server.";
+var RUN_REQUEST_ABORTED = "Can't get program output from server.";
+var COMPLETE_REQUEST_ABORTED = "Can't get completion proposal list from server.";
+var EXAMPLES_REQUEST_ABORTED = "Can't get the example code from server.";
 //Message in popup with warning before close tab with editor
 var BEFORE_EXIT = "The changes you made to the program will be lost when this page is closed. Do you want to close the page?";
-var ERROR_UNTIL_EXECUTE = "During program execution errors have occurred.";
-var TRY_RUN_CODE_WITH_ERROR = "See Problems View tab, there are errors in your code.";
-var EXECUTE_OK = "Compilation competed without errors.";
-var GET_FROM_APPLET_FAILED = "Applet doesn't supported on you computer.";
+var ERROR_UNTIL_EXECUTE = "Your program has terminated with an exception.";
+var TRY_RUN_CODE_WITH_ERROR = "Can't run a program with errors. See the Problems View tab.";
+var EXECUTE_OK = "Compilation competed successfully.";
+var GET_FROM_APPLET_FAILED = "Your system can't run Java Applets.";
 var LOADING_EXAMPLE_OK = "Example is loaded.";
-var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to compile file using JVM.";
+var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
 var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 
 var sessionId;
@@ -104,6 +108,7 @@ function setStatusBarMessage(message) {
 function setConsoleMessage(message) {
     document.getElementById("console").innerHTML = message;
 }
+
 
 /*var hashLoc = location.hash;
  window.addEventListener("unload", beforeUnload, true);

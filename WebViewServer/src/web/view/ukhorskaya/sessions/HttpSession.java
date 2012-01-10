@@ -91,7 +91,7 @@ public class HttpSession {
             } else {
                 if (param.equals("/")) {
                     sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_ROOT);
-                }   else {
+                } else {
                     sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
                 }
                 if (!sessionInfo.getIp().equals("127.0.0.1")) {
@@ -200,6 +200,8 @@ public class HttpSession {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot read data from file", e);
                 writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
                 return;
+            } finally {
+                close(is);
             }
 
             try {
@@ -209,13 +211,7 @@ public class HttpSession {
             } catch (IOException e) {
                 //This is an exception we can't send data to client
             } finally {
-                try {
-                    if (os != null) {
-                        os.close();
-                    }
-                } catch (IOException e) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e);
-                }
+                close(os);
             }
         }
     }
@@ -288,12 +284,16 @@ public class HttpSession {
 
     private PostData getPostDataFromRequest(boolean withNewLines) {
         StringBuilder reqResponse = new StringBuilder();
+        InputStream is = null;
         try {
-            reqResponse.append(ResponseUtils.readData(exchange.getRequestBody(), withNewLines));
+            is = exchange.getRequestBody();
+            reqResponse.append(ResponseUtils.readData(is, withNewLines));
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, "getPostDataFromRequest " + exchange.getRequestURI()));
             writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
             return new PostData("", "");
+        } finally {
+            close(is);
         }
 
         String finalResponse = null;
@@ -369,6 +369,8 @@ public class HttpSession {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
                 writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
                 return;
+            } finally {
+                close(is);
             }
         } else {
             response.append("$RESPONSEBODY$");
@@ -407,6 +409,7 @@ public class HttpSession {
             } catch (IOException e) {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
             }
+            exchange.close();
         }
     }
 
@@ -421,6 +424,16 @@ public class HttpSession {
         private PostData(String text, String arguments) {
             this.text = text;
             this.arguments = arguments;
+        }
+    }
+
+    private void close(Closeable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (IOException e) {
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("UNKNOWN", e, " NULL"));
         }
     }
 

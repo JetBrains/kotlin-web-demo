@@ -24,6 +24,7 @@
     <orderEntry type="library" name="activation-1.1" level="project" />
     <orderEntry type="library" name="scribe-1.3.0" level="project" />
     <orderEntry type="library" name="commons-lang-2.4" level="project" />
+    <orderEntry type="library" name="commons-httpclient-3.1-patched" level="project" />
   </component>
 </module>
 

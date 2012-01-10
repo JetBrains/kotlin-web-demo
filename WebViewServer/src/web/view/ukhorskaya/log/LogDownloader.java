@@ -1,5 +1,7 @@
 package web.view.ukhorskaya.log;
 
+import web.view.ukhorskaya.ErrorWriter;
+import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.Statistics;
 
@@ -22,19 +24,27 @@ public class LogDownloader {
         File log = new File(path);
 
         if (log.exists()) {
+            FileReader reader = null;
             try {
-                FileReader fr = new FileReader(log);
-                String response = ResponseUtils.readData(fr, true);
-//                InputStream is = LogDownloader.class.getResourceAsStream("/clearhtml.htmlPatern");
+                reader = new FileReader(log);
+                //                InputStream is = LogDownloader.class.getResourceAsStream("/clearhtml.htmlPatern");
 //                String htmlPatern = ResponseUtils.readData(is, true);
 //                htmlPatern = htmlPatern.replace("$RESPONSEBODY$", ResponseUtils.escapeString(response));
 //                htmlPatern = htmlPatern.replace("\n", "<br/>");
-                return response;
+                return ResponseUtils.readData(reader, true);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 System.err.println("Error");
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Load log", e, path));
+                }
             }
 
         }

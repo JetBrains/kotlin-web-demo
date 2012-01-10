@@ -80,7 +80,7 @@ function loadAccordionContent() {
         //data:{text:i},
         timeout:10000,
         error:function () {
-            setStatusBarMessage(REQUEST_ABORTED);
+            setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
         }
     });
 
@@ -131,7 +131,7 @@ var loadingExample = false;
 var lastSelectedExample = 0;
 
 function loadExample(id, innerhtml) {
-    if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged){
+    if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged) {
         removeStyles();
         var el = document.getElementById(lastSelectedExample);
         if (el != null) {
@@ -152,7 +152,7 @@ function loadExample(id, innerhtml) {
             timeout:10000,
             error:function () {
                 loadingExample = false;
-                setStatusBarMessage(REQUEST_ABORTED);
+                setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
             }
         });
         loadExamplesHelp(innerhtml);
@@ -172,15 +172,33 @@ function onLoadingExampleSuccess(data) {
 $(".applet-enable").click(function () {
     var parent = $(this).parents('.switch');
     $('.applet-disable', parent).removeClass('selected');
+    $('.applet-disable', parent).removeClass('leftServer');
+    $('.applet-disable', parent).addClass('rightServer');
+    $('.applet-nohighlighting', parent).removeClass('selected');
     $(this).addClass('selected');
     $("#appletcheckbox").attr('checked', true);
+    $("#nohighlightingcheckbox").attr('checked', false);
     isApplet = true;
 });
 
 $(".applet-disable").click(function () {
     var parent = $(this).parents('.switch');
     $('.applet-enable', parent).removeClass('selected');
+    $('.applet-nohighlighting', parent).removeClass('selected');
     $(this).addClass('selected');
+    $("#appletcheckbox").attr('checked', false);
+    $("#nohighlightingcheckbox").attr('checked', false);
+    isApplet = false;
+});
+
+$(".applet-nohighlighting").click(function () {
+    var parent = $(this).parents('.switch');
+    $('.applet-disable', parent).removeClass('selected');
+    $('.applet-disable', parent).removeClass('rightServer');
+    $('.applet-disable', parent).addClass('leftServer');
+    $('.applet-enable', parent).removeClass('selected');
+    $(this).addClass('selected');
+    $("#nohighlightingcheckbox").attr('checked', true);
     $("#appletcheckbox").attr('checked', false);
     isApplet = false;
 });

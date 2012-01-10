@@ -168,13 +168,23 @@ public class JavaRunner {
             links += ResponseUtils.generateTag("a", "download", "href", "/log=" + log.getAbsolutePath() + "&download");
             return links;
         }*/
+        FileReader reader = null;
         try {
-            String response = ResponseUtils.readData(new FileReader(log), true);
+            reader = new FileReader(log);
+            String response = ResponseUtils.readData(reader, true);
             log.deleteOnExit();
             return response;
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
                     e, "Impossible to find " + log.getAbsolutePath()));
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Load examples", e, outStream + " " + textFromFile));
+            }
         }
         return "";
     }

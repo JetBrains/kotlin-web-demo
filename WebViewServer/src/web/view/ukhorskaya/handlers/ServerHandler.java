@@ -1,17 +1,15 @@
 package web.view.ukhorskaya.handlers;
 
-import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
+import sun.misc.IOUtils;
 import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
 import web.view.ukhorskaya.ResponseUtils;
 import web.view.ukhorskaya.Statistics;
-import web.view.ukhorskaya.authorization.AuthorizationHelper;
-import web.view.ukhorskaya.authorization.UserAuthenticator;
 import web.view.ukhorskaya.examplesLoader.ExamplesList;
 import web.view.ukhorskaya.examplesLoader.ExamplesLoader;
 import web.view.ukhorskaya.help.HelpLoader;
@@ -210,23 +208,6 @@ public class ServerHandler implements HttpHandler {
     }
 
     private void sendListLogs(HttpExchange exchange) {
-        if (!exchange.getRequestURI().toString().contains("&statistics")) {
-            Authenticator authenticator = new UserAuthenticator("managers");
-            Authenticator.Result result = authenticator.authenticate(exchange);
-            if (result instanceof Authenticator.Success) {
-                System.out.println("OK");
-            } else {
-                try {
-                    writeResponse(exchange,
-                            ResponseUtils.readData(ServerHandler.class.getResourceAsStream("/login.html")).getBytes(),
-                            HttpStatus.SC_OK);
-                } catch (IOException e) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("LOGIN", e, "Login failed"));
-                }
-                return;
-            }
-        }
-
         InputStream is = ServerHandler.class.getResourceAsStream("/logs.html");
         try {
             String response = ResponseUtils.readData(is);
@@ -263,8 +244,8 @@ public class ServerHandler implements HttpHandler {
         } catch (UnsupportedEncodingException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
         }
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), info.getIp(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
+        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
         writeResponse(exchange, "OK".getBytes(), HttpStatus.SC_OK);
     }
 
@@ -275,6 +256,12 @@ public class ServerHandler implements HttpHandler {
         if (path.equals("")) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Path to the file is incorrect.", exchange.getRequestURI().toString()));
             writeResponse(exchange, "Path to the file is incorrect.".getBytes(), HttpStatus.SC_NOT_FOUND);
+            return;
+        } else if (path.startsWith("/messages/")) {
+            writeResponse(exchange, "".getBytes(), HttpStatus.SC_OK);
+            return;
+        } else if (path.equals("/WebViewApplet.jar")) {
+            writeResponse(exchange, getAppletFile(), HttpStatus.SC_OK);
             return;
         }
 

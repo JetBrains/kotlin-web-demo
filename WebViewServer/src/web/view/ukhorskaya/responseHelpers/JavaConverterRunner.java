@@ -154,14 +154,23 @@ public class JavaConverterRunner {
         String path = ResponseUtils.substringAfter(outStream, "An error report file with more information is saved as:" + ResponseUtils.addNewLine() + "# ");
         path = ResponseUtils.substringBefore(path, ResponseUtils.addNewLine() + "#");
         File log = new File(path);
-
+        FileReader reader = null;
         try {
-            String response = ResponseUtils.readData(new FileReader(log), true);
+            reader = new FileReader(log);
+            String response = ResponseUtils.readData(reader, true);
             log.deleteOnExit();
             return response;
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
                     e, "Impossible to find " + log.getAbsolutePath()));
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Convert to java", e, outStream));
+            }
         }
         return "";
     }

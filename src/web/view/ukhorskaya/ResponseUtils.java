@@ -124,6 +124,7 @@ public class ResponseUtils {
             response.append(tmp);
         }
 
+        reader.close();
         return response.toString();
     }
 
@@ -138,7 +139,7 @@ public class ResponseUtils {
                 response.append("\n");
             }
         }
-
+        bufferedReader.close();
         return response.toString();
     }
 
@@ -154,7 +155,7 @@ public class ResponseUtils {
                 response.append("\n");
             }
         }
-
+        reader.close();
         return response.toString();
     }
 

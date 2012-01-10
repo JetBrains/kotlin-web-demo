@@ -24,6 +24,7 @@ public class MainApplet extends JApplet implements ActionListener {
     /*private JButton b1;
     private JButton b2;*/
 
+
     public static String request;
 
     public static SessionInfo SESSION_INFO;

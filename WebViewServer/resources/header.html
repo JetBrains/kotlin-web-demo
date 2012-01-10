@@ -48,7 +48,8 @@
     <script type="text/javascript">
 
         var editor;
-        //        var isBeforeUnload = false;
+
+
     </script>
     <script type="text/javascript">
 
@@ -70,21 +71,16 @@
 
 </head>
 <body spellcheck="false"
-      onload="showContent(); setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples(); setAuthorization($USERNAME$); checkAuthorization();">
+      onload="setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples(); showContent();">
 <div id="loader">
     <img src="/images/ajax-loader.gif"/>
 
     <p>Loading</p>
 </div>
-<applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0" ARCHIVE="WebViewApplet.jar"></applet>
-<applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet.jar"></applet>
+
 <div id="all">
     <div id="header">
         <table>
-            <tr>
-                <td id="authorization" colspan="4"><a href="/login.html">Login</a></td>
-            </tr>
             <tr>
                 <td>
                     <img src="/images/kotlinlogo2.png" id="kotlinlogo" title="Kotlin"/>
@@ -98,9 +94,6 @@
                     <a target="_blank" href="http://youtrack.jetbrains.net/issues/KT">BugTracker</a>
                     <a target="_blank" href="http://blog.jetbrains.com/kotlin/">Blog</a>
                     <a target="_blank" href="https://twitter.com/#!/project_kotlin">Twitter</a>
-                    <!--<iframe src="http://www.facebook.com/plugins/like.php?href=YOUR_URL"
-                            scrolling="no" frameborder="0"
-                            style="border:none; width:450px; height:80px"></iframe>-->
                 </td>
                 <td id="jetbrainslogo">
                     <a target="_blank" href="http://jetbrains.com"><img src="/images/jblogo.png" id="jblogo"
@@ -149,10 +142,14 @@
                                         <label class="applet-enable selected"><span
                                                 title="Use an applet for faster highlighting"
                                                 id="appletclient">Client</span></label>
-                                        <label class="applet-disable"><span
+                                        <label class="applet-disable rightServer"><span
                                                 title="Send highlighting request to server (slower)">Server</span></label>
+                                        <label class="applet-nohighlighting"><span
+                                                title="Highlight errors only when a program is run (for slow connection)">No highlighting</span></label>
                                         <input type="checkbox" id="appletcheckbox" checked="true" class="appletcheckbox"
                                                name="appletcheckbox"/>
+                                        <input type="checkbox" id="nohighlightingcheckbox" checked="false" class="nohighlightingcheckbox"
+                                               name="nohighlightingcheckbox"/>
                                     </div>
                                 </td>
                             </tr>
@@ -198,9 +195,13 @@
                                 <li><a href="#console">Console</a></li>
                             </ul>
                             <div id="problems">
-                                <script>
-
-                                </script>
+                                <table>
+                                    <tr>
+                                        <td id="removeallguttersTd"><div id="removeallgutters"></div></td>
+                                        <td id="problemsTd">
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                             <div id="console">
 
@@ -244,15 +245,21 @@
 </div>
 
 <div id="dialog" title="Help">
-    <p class="dialogPbordered">Web Demo runs Kotlin type checker to report errors/warnings in the editor. The type checker can run either on
+    <p class="dialogPbordered">Web Demo runs Kotlin type checker to report errors/warnings in the editor. The type
+        checker can run either on
         your machine (using a Java&#x2122; Applet) or on our server (this is slower).</p>
     <img src="/images/clientActive.png"/>
 
-    <p class="dialogPbordered"><b>Client mode</b> (recommended): type checker, code completion and other services are running on your machine (in a
+    <p class="dialogPbordered"><b>Client mode</b> (recommended): type checker, code completion and other services are
+        running on your machine (in a
         Java&#x2122; Applet). The server only generates byte code and runs your programs on the JVM.</p>
     <img src="/images/serverActive.png"/>
 
     <p><b>Server mode</b>: all the services except for basic keyword highlighting are running on our server.</p>
+
+    <img src="/images/nohighlightingActive.png"/>
+
+        <p><b>No highlighting mode</b> (for slow connection): type checker is running on our server only when you run your program.</p>
 </div>
 
 <script src="/components/common.js"></script>
@@ -260,6 +267,9 @@
 <script src="/components/components.js"></script>
 
 <script src="/codemirror/lib/complete.js"></script>
-
+<applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
+        ARCHIVE="http://st-004:8080/resources/WebViewApplet.jar"></applet>
+<applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
+        ARCHIVE="http://st-004:8080/resources/WebViewApplet.jar"></applet>
 </body>
 </html>

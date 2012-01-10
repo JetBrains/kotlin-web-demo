@@ -33,7 +33,7 @@ public class KotlinCoreException extends RuntimeException {
         StringWriter stringWriter = new StringWriter();
         e.printStackTrace(new PrintWriter(stringWriter));
         String stackTrace = stringWriter.toString().replaceAll("\t", "");
-        stackTrace = stackTrace.replaceAll("\r\n", ResponseUtils.addNewLine());
+        stackTrace = stackTrace.replaceAll(System.getProperty("line.separator"), ResponseUtils.addNewLine());
         return stackTrace;
     }
 }

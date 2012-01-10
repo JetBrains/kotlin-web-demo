@@ -401,7 +401,7 @@ body {
 
 #editortitle {
     /*float: left;*/
-    height: 25px;
+    height: 40px;
 }
 
 #editorinput {
@@ -442,6 +442,7 @@ body {
     margin-left: 5px;
     width: 51px;
     margin-top: -10px;
+    cursor: pointer;
 }
 
 #argsinput {
@@ -473,6 +474,7 @@ body {
 #console {
     font-family: monospace;
 }
+
 #console, #problems {
     height: 160px;
     overflow-y: auto;
@@ -664,15 +666,43 @@ body {
 }
 
 .editortitletext {
-
+    padding-top: 10px;
 }
+
 #editortitleswitchtext {
     float: right;
     margin-right: 10px;
+    padding-top: 10px;
 }
+
 #editortitletext {
     float: left;
     /*padding-top: 10px;*/
+}
+
+#switchtable {
+    float: right;
+}
+
+#whatisit span {
+    margin-left: 70px;
+    margin-right: 3px;
+    padding-top: 5px;
+}
+
+#whatisit img {
+    margin-top: 0px;
+}
+
+#whatisit {
+    font-size: 10px;
+    line-height: 0;
+    cursor: pointer;
+}
+
+p.dialogPbordered {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px !important;
 }
 
 #appletonoff {
@@ -680,13 +710,14 @@ body {
 }
 
 /*On/of button*/
-.applet-enable, .applet-disable, .applet-enable span, .applet-disable span {
-    background: url(/images/switch.gif) repeat-x;
+.applet-enable, .applet-disable, .applet-nohighlighting,
+.applet-enable span, .applet-disable span, .applet-nohighlighting span {
+    background: url(/images/switch2.gif) repeat-x;
     display: block;
     float: left;
 }
 
-.applet-enable span, .applet-disable span {
+.applet-enable span, .applet-disable span, .applet-nohighlighting span {
     line-height: 20px;
     display: block;
     background-repeat: no-repeat;
@@ -698,7 +729,17 @@ body {
     padding: 0 10px;
 }
 
-.applet-disable span {
+.applet-disable.rightServer span {
+    background-position: right -180px;
+    padding: 0 10px;
+}
+
+.applet-disable.leftServer span {
+    background-position: left -200px;
+    padding: 0 10px;
+}
+
+.applet-nohighlighting span {
     background-position: right -120px;
     padding: 0 10px;
 }
@@ -708,6 +749,15 @@ body {
 }
 
 .applet-disable.selected span {
+    background-position: right -20px;
+    color: #fff;
+}
+
+.applet-nohighlighting.selected {
+    background-position: 0 -20px;
+}
+
+.applet-nohighlighting.selected span {
     background-position: right -140px;
     color: #fff;
 }
@@ -736,7 +786,7 @@ body {
 
 /*On/of button*/
 .js-enable, .js-disable, .js-enable span, .js-disable span {
-    background: url(/images/switch1.gif) repeat-x;
+    background: url(/images/switch.gif) repeat-x;
     display: block;
     float: left;
 }
@@ -776,9 +826,20 @@ body {
     color: #fff;
 }
 
-#authorization {
-    height: 12px;
-   text-align: right;
-    width: 100%;
+.tooltip {
+    background-color: #F7F7F7;
+    color: red;
+}
+
+#removeallgutters {
+    width: 20px;
+    cursor: pointer;
+    height: 16px;
+}
+
+td#removeallguttersTd {
+    width: 20px !important;
+    padding-top: 5px;
+    vertical-align: top;
 }
 
