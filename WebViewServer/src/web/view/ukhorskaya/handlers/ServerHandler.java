@@ -68,6 +68,19 @@ public class ServerHandler implements HttpHandler {
             if (param.contains("userData=true")) {
                 sessionInfo = setSessionInfo(exchange);
                 sendUserInformation(exchange, sessionInfo);
+            } else if (param.contains("getSessionId")) {
+                sessionInfo = setSessionInfo(exchange);
+                String id = String.valueOf(sessionInfo.getId());
+                exchange.sendResponseHeaders(HttpStatus.SC_OK, id.length());
+                OutputStream out = null;
+                try {
+                    out = exchange.getResponseBody();
+                    out.write(id.getBytes());
+                } catch (Throwable e) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(exchange.getRequestURI().toString(), e, "null"));
+                } finally {
+                    close(out);
+                }
             } else if (param.startsWith("/updateExamples")) {
                 updateExamples(exchange);
             } else if (param.startsWith("/logs")) {
@@ -91,9 +104,7 @@ public class ServerHandler implements HttpHandler {
             } else if (param.contains("allHelpWords=true")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
                 sendHelpContentForWords(exchange);
-            } else if ((param.contains("/path="))
-                    || (param.equals("/"))
-                    || (param.startsWith("/?"))
+            } else if ((param.startsWith("/?"))
                     || param.contains("testConnection")
                     || param.contains("writeLog=")) {
                 if (!param.contains("testConnection") && !param.contains("writeLog=") && !ip.equals("127.0.0.1")) {
@@ -279,6 +290,8 @@ public class ServerHandler implements HttpHandler {
         } else if (path.startsWith("/messages/")) {
             writeResponse(exchange, "".getBytes(), HttpStatus.SC_OK);
             return;
+        } else if (path.equals("/")) {
+            path = "/header.html";
         } else if (path.equals("/WebViewApplet.jar")) {
             OutputStream responseBodyBytes = null;
             InputStream is = null;
@@ -299,12 +312,12 @@ public class ServerHandler implements HttpHandler {
                 byte[] buffer = new byte[4096];
                 byte[] lastBuffer;
                 while ((read = is.read(buffer)) >= 0) {
-                    if (read == size) {
-                        lastBuffer = Arrays.copyOf(buffer, size);
-                        responseBodyBytes.write(lastBuffer);
-                    } else {
-                        responseBodyBytes.write(buffer);
-                    }
+                    /* if (read == size) {
+                      lastBuffer = Arrays.copyOf(buffer, size);
+                      responseBodyBytes.write(lastBuffer);
+                  } else {*/
+                    responseBodyBytes.write(buffer, 0, read);
+//                    }
                     totalRead += read;
                 }
                 if (totalRead != APPLET_FILE.length) {

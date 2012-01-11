@@ -302,7 +302,7 @@ body {
     float: left;
     margin-top: 1px;
     margin-bottom: 1px;
-    min-height: 800px;
+    min-height: 300px;
     height: 100%;
 }
 
@@ -423,10 +423,11 @@ body {
 }
 
 #arguments {
-    height: 20px;
-    *heigth: 18px;
+    /*height: 20px;*/
+    /**heigth: 18px;*/
     border: 1px solid #eee;
-    width: 100%;
+    width: 90%;
+    margin-left: 5px;
     resize: none;
 }
 
@@ -441,12 +442,26 @@ body {
     float: left;
     margin-left: 5px;
     width: 51px;
-    margin-top: -10px;
+    /*margin-top: 5px;*/
     cursor: pointer;
 }
 
+#rundiv {
+    background-color: #f7f7f7;
+    padding-left: 15px;
+    font-weight: bold;
+    line-height: 12px;
+    height: 33px;
+}
+
+#runTitle {
+    float: left;
+    width: 30px;
+    margin-top: 15px;
+}
+
 #argsinput {
-    height: 20px;
+    /*height: 20px;*/
     resize: none;
     width: 100%;
     /*margin-left: 80px;*/
@@ -479,14 +494,12 @@ body {
     height: 160px;
     overflow-y: auto;
     white-space: pre;
+    padding: 5px !important;
 }
+
 
 .problemsViewError span {
     word-wrap: break-word;
-}
-
-#tabs {
-    height: 220px;
 }
 
 #leftcontent {
@@ -519,7 +532,7 @@ body {
 }
 
 #helpcontent {
-    float: left;
+    /*float: left;*/
     width: 100%;
 }
 
@@ -546,7 +559,7 @@ body {
     word-wrap: break-word;
 }
 
-#lefttitle, #centraltitle, #righttitle {
+#lefttitle, #centraltitle {
     /*border: 1px solid #EEEEEE;*/
     /*border-radius: 4px;*/
     background-color: #f7f7f7;
@@ -554,6 +567,15 @@ body {
     font-weight: bold;
     line-height: 12px;
     height: 21px;
+}
+
+.titleHeader {
+    background-color: #f7f7f7;
+    padding-left: 15px;
+    font-weight: bold;
+    line-height: 12px;
+    height: 21px;
+    padding-top: 5px;
 }
 
 #centraltitle {
@@ -566,8 +588,9 @@ body {
     padding-top: 3px;
 }
 
-#help1 {
+#help1, #help2 {
     text-align: left !important;
+    margin: 5px 5px 10px 5px;
 }
 
 .services li.selected {
@@ -575,7 +598,7 @@ body {
 }
 
 #help3 {
-    padding: 3px;
+    margin: 5px 5px 10px 5px;
     text-align: left;
 }
 
@@ -681,17 +704,20 @@ body {
 }
 
 #switchtable {
-    float: right;
+    /*float: right;*/
+    /*width: 60%;*/
+    margin: auto;
 }
 
 #whatisit span {
-    margin-left: 70px;
+    margin-left: 50px;
     margin-right: 3px;
     padding-top: 5px;
 }
 
 #whatisit img {
     margin-top: 0px;
+    float: left;
 }
 
 #whatisit {
@@ -700,13 +726,17 @@ body {
     cursor: pointer;
 }
 
+#dialog {
+    display: none;
+}
+
 p.dialogPbordered {
     border-bottom: 1px solid #eee;
     margin-bottom: 10px !important;
 }
 
 #appletonoff {
-    float: right;
+    /*float: right;*/
 }
 
 /*On/of button*/
@@ -724,9 +754,18 @@ p.dialogPbordered {
     font-weight: bold;
 }
 
-.applet-enable span {
+.applet-nohighlighting span {
     background-position: left -60px;
     padding: 0 10px;
+}
+
+.applet-nohighlighting.selected {
+    background-position: 0 -40px;
+}
+
+.applet-nohighlighting.selected span {
+    background-position: left -100px;
+    color: #fff;
 }
 
 .applet-disable.rightServer span {
@@ -739,11 +778,6 @@ p.dialogPbordered {
     padding: 0 10px;
 }
 
-.applet-nohighlighting span {
-    background-position: right -120px;
-    padding: 0 10px;
-}
-
 .applet-disable.selected {
     background-position: 0 -20px;
 }
@@ -753,21 +787,17 @@ p.dialogPbordered {
     color: #fff;
 }
 
-.applet-nohighlighting.selected {
-    background-position: 0 -20px;
-}
-
-.applet-nohighlighting.selected span {
-    background-position: right -140px;
-    color: #fff;
+.applet-enable span {
+    background-position: right -120px;
+    padding: 0 10px;
 }
 
 .applet-enable.selected {
-    background-position: 0 -40px;
+    background-position: 0 -20px;
 }
 
 .applet-enable.selected span {
-    background-position: left -100px;
+    background-position: right -140px;
     color: #fff;
 }
 
@@ -782,48 +812,6 @@ p.dialogPbordered {
 #jsonoff {
     float: right;
     padding-left: 10px;
-}
-
-/*On/of button*/
-.js-enable, .js-disable, .js-enable span, .js-disable span {
-    background: url(/images/switch.gif) repeat-x;
-    display: block;
-    float: left;
-}
-
-.js-enable span, .js-disable span {
-    line-height: 20px;
-    display: block;
-    background-repeat: no-repeat;
-    font-weight: bold;
-}
-
-.js-enable span {
-    background-position: left -60px;
-    padding: 0 10px;
-}
-
-.js-disable span {
-    background-position: right -120px;
-    padding: 0 10px;
-}
-
-.js-disable.selected {
-    background-position: 0 -20px;
-}
-
-.js-disable.selected span {
-    background-position: right -140px;
-    color: #fff;
-}
-
-.js-enable.selected {
-    background-position: 0 -40px;
-}
-
-.js-enable.selected span {
-    background-position: left -100px;
-    color: #fff;
 }
 
 .tooltip {
@@ -843,3 +831,44 @@ td#removeallguttersTd {
     vertical-align: top;
 }
 
+.scrollSize {
+    height: 500px;
+}
+
+#tabs {
+    position: relative;
+    height: 210px;
+    /*padding-bottom: 3em;*/
+}
+
+#tabs .ui-tabs-nav {
+    position: absolute;
+    left: 0.25em;
+    right: 0.25em;
+    bottom: 0.25em;
+    padding: 0em 0.2em 0.2em;
+}
+
+#tabs .ui-tabs-nav li {
+    border-top: none;
+    border-bottom-width: 1px !important;
+    border-radius: 0px 0px 4px 4px;
+    -moz-border-radius: 0px 0px 4px 4px;
+    -webkit-border-radius: 0px 0px 4px 4px;
+}
+
+#tabs .ui-tabs-nav li.ui-tabs-selected {
+    top: -1px;
+}
+
+.ui-tabs .ui-tabs-panel {
+    padding: 5px;
+}
+
+#shortcuts {
+    padding-top: 8px;
+    padding-left: 5px;
+    cursor: pointer;
+    /*float: left;*/
+
+}

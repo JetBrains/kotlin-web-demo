@@ -22,13 +22,12 @@ var LOADING_EXAMPLE_OK = "Example is loaded.";
 var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
 var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 
-var sessionId;
+var sessionId = -1;
 var isApplet = false;
 var isJsApplet = true;
 var kotlinVersion;
 
-var isAuthorized = false;
-var userName;
+var isAppletLoaded = false;
 
 var isContentEditorChanged = false;
 
@@ -40,19 +39,6 @@ $(document).keydown(function (e) {
     }
 });
 
-function checkAuthorization() {
-    if (isAuthorized) {
-        document.getElementById("authorization").innerHTML = "Hello, " + userName;
-    }
-}
-
-function setAuthorization(param) {
-    if (param != "") {
-//        document.location.href = "/";
-        isAuthorized = true;
-        userName = param;
-    }
-}
 
 function setMode(mode) {
     if (mode == "APPLET") {
@@ -60,7 +46,48 @@ function setMode(mode) {
     }
 }
 
-function setSessionId(id) {
+var isShortcutsShow = true;
+$(".toggleShortcuts").click(function () {
+    $("#help3").toggle();
+    if (isShortcutsShow) {
+        isShortcutsShow = false;
+        document.getElementById("toggleShortcutsButton").src = "/images/toogleShortcuts.png";
+    } else {
+        isShortcutsShow = true;
+        document.getElementById("toggleShortcutsButton").src = "/images/toogleShortcutsOpen.png";
+
+    }
+
+});
+
+function setSessionId() {
+    $("#help3").toggle(false);
+
+    var id;
+    $.ajax({
+        url:document.location.href + "getSessionId",
+        context:document.body,
+        type:"GET",
+        dataType:"html",
+        timeout:5000,
+        success:getSessionIdSuccess
+    });
+
+}
+
+function resizeCentral() {
+    var wheight = (window.innerHeight) ? window.innerHeight :
+        ((document.all) ? document.body.offsetHeight : null);
+//            alert(wheight);
+    document.getElementById("scroll").style.height = (wheight - 262 - 72 - 20 - 10) + "px";
+    document.getElementById("left").style.minHeight = (wheight - 72 - 20 - 10) + "px";
+    document.getElementById("right").style.minHeight = (wheight - 72 - 20 - 10) + "px";
+    document.getElementById("center").style.minHeight = (wheight - 72 - 20 - 10) + "px";
+    editor.refresh();
+}
+
+function getSessionIdSuccess(data) {
+    var id = eval(data);
     var cookie = document.cookie;
     if (cookie != id) {
         document.cookie = "userId=" + id;
@@ -71,13 +98,13 @@ function setSessionId(id) {
      id = cookie;
      }*/
     sessionId = id;
-    var data = "browser: " + navigator.appName + " " + navigator.appVersion;
-    data += " " + "system: " + navigator.platform;
+    var info = "browser: " + navigator.appName + " " + navigator.appVersion;
+    info += " " + "system: " + navigator.platform;
     $.ajax({
         url:document.location.href + "?sessionId=" + id + "&userData=true",
         context:document.body,
         type:"POST",
-        data:{text:data},
+        data:{text:info},
         timeout:5000,
         error:function () {
             setStatusBarMessage(REQUEST_ABORTED);
@@ -87,19 +114,22 @@ function setSessionId(id) {
 
 function hideLoader() {
     $('#loader').hide();
-    $(".applet-enable").click();
+
+}
+
+function showLoader() {
+//    document.getElementById("loader").style.display = 'block';
+    $('#loader').show();
+}
+
+function setKotlinVersion(version) {
+    $(".applet-disable").click();
+    $(".applet-nohighlighting").click();
     $("#dialog").dialog({
         modal:"true",
         width:400,
         autoOpen:false
     });
-}
-
-function showLoader() {
-    $('#loader').show();
-}
-
-function setKotlinVersion(version) {
     kotlinVersion = version;
     document.getElementById("kotlinVersionTop").innerHTML = "(" + kotlinVersion + ")";
     document.getElementById("kotlinVersion").innerHTML = kotlinVersion;

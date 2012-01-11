@@ -9,9 +9,9 @@
 
     <script src="/codemirror/mode/clike/kotlin.js"></script>
 
-    <script src="/jquery/jquery.min.js"></script>
+    <!--<script src="/jquery/jquery.min.js"></script>-->
     <link type="text/css" href="/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
-    <script type="text/javascript" src="/jquery/js/jquery-1.6.2.min.js"></script>
+    <!--<script type="text/javascript" src="/jquery/js/jquery-1.6.2.min.js"></script>-->
     <script type="text/javascript" src="/jquery/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="/kotlin_lib.js"></script>
@@ -71,8 +71,8 @@
     </script>
 
 </head>
-<body spellcheck="false"
-      onload="setSessionId($SESSIONID$); setKotlinVersion($KOTLINVERSION$); loadAccordionContent(); loadHelpContentForExamples(); hideLoader();">
+<body spellcheck="false" onResize="resizeCentral();"
+      onload="setSessionId(); resizeCentral(); setKotlinVersion('0.1.202'); loadAccordionContent(); loadHelpContentForExamples(); hideLoader();">
 <div id="loader">
     <img src="/images/ajax-loader.gif"/>
 
@@ -116,7 +116,7 @@
         </div>
         <!--<div id="twolast">-->
         <div id="center">
-            <div id="centraltitle">
+            <!--<div id="centraltitle">
                 <table width="100%">
                     <tr>
                         <td width="5%">
@@ -131,41 +131,15 @@
                         </td>
                     </tr>
                 </table>
-            </div>
+            </div>-->
             <div id="centralcontent">
                 <div id="editordiv">
-                    <div id="editortitle">
-                        <div id="editortitletext" class="editortitletext">Type your code here:</div>
-                        <table id="switchtable">
-                            <tr>
-                                <td>
-                                    <div class="field switch" id="appletonoff">
-                                        <label class="applet-enable selected"><span
-                                                title="Use an applet for faster highlighting"
-                                                id="appletclient">Client</span></label>
-                                        <label class="applet-disable rightServer"><span
-                                                title="Send highlighting request to server (slower)">Server</span></label>
-                                        <label class="applet-nohighlighting"><span
-                                                title="Highlight errors only when a program is run (for slow connection)">No highlighting</span></label>
-                                        <input type="checkbox" id="appletcheckbox" checked="true" class="appletcheckbox"
-                                               name="appletcheckbox"/>
-                                        <input type="checkbox" id="nohighlightingcheckbox" checked="false" class="nohighlightingcheckbox"
-                                               name="nohighlightingcheckbox"/>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td id="whatisit">
-                                    <a id="whatimg"><span>What is this</span><img src="/icons/help.png"/></a>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <div id="editortitleswitchtext" class="editortitletext">Run type checker on:</div>
-                    </div>
-
                     <div id="editorinput" tabindex="0">
-                        <form><textarea class="CodeMirror" id="code" name="code">$RESPONSEBODY$</textarea>
+                        <form><textarea class="CodeMirror" id="code" name="code">
+                            fun main(args : Array&lt;String&gt;) {
+                            System.out?.println("Hello, world!")
+                            }
+                        </textarea>
                         </form>
                     </div>
                 </div>
@@ -173,22 +147,6 @@
                     <div id="statusbar">
 
                     </div>
-                    <table id="argsdiv">
-                        <tr>
-                            <td id="argstitle">
-                                Arguments:
-                            </td>
-                            <td id="argsinput">
-                                <input class="arguments" id="arguments" name="arguments">
-                            </td>
-                            <td id="argsbutton">
-                                <img src="/icons/executeJava.png" id="run" title="Run file (Ctrl + F9) using JVM"/>
-                                <img src="/icons/executeJavaScript.png" id="runJS"
-                                     title="Run file (Ctrl + Shift + F9) using Pre-Alpha JavaScript back-end"/>
-                            </td>
-                        </tr>
-                    </table>
-
                     <div id="consoleandproblems">
                         <div id="tabs">
                             <ul>
@@ -198,7 +156,9 @@
                             <div id="problems">
                                 <table>
                                     <tr>
-                                        <td id="removeallguttersTd"><div id="removeallgutters"></div></td>
+                                        <td id="removeallguttersTd">
+                                            <div id="removeallgutters"></div>
+                                        </td>
                                         <td id="problemsTd">
                                         </td>
                                     </tr>
@@ -214,53 +174,114 @@
         </div>
 
         <div id="right">
-            <div id="righttitle">
-                Help
+            <div class="titleHeader">
+                Type checking
             </div>
-            <div id="helpcontent">
-                <h4 class="helpTitle"> Example description: </h4>
+            <div id="settingsContent">
+                <div id="editortitle">
+                    <table id="switchtable">
+                        <tr>
+                            <td>
+                                <div class="field switch" id="appletonoff">
+                                    <label class="applet-nohighlighting selected"><span
+                                            title="Highlight errors only when a program is run (Default)">On run</span></label>
+                                    <label class="applet-disable rightServer"><span
+                                            title="Send each highlighting request to server (Experimental)">Server</span></label>
+                                    <label class="applet-enable"><span title="Use an applet (Experimental)"
+                                                                       id="appletclient">Client</span></label>
+                                    <input type="checkbox" id="appletcheckbox" checked="false"
+                                           class="appletcheckbox"
+                                           name="appletcheckbox"/>
+                                    <input type="checkbox" id="nohighlightingcheckbox" checked="true"
+                                           class="nohighlightingcheckbox"
+                                           name="nohighlightingcheckbox"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="whatisit">
+                                <a id="whatimg"><span>What is this</span><img src="/icons/help.png"/></a>
+                            </td>
+                        </tr>
+                    </table>
 
-                <div class="help" id="help1">
+                    <!--<div id="editortitleswitchtext" class="editortitletext">Type checking:</div>-->
+                </div>
+
+            </div>
+            <div id="rundiv">
+                <div id="runTitle">Run</div>
+                <div id="argsbutton">
+                    <img src="/icons/executeJavaB.png" id="run" title="Run file (Ctrl + F9) using JVM"/>
+                    <img src="/icons/executeJavaScriptB.png" id="runJS"
+                         title="Run file (Ctrl + Shift + F9) using Pre-Alpha JavaScript back-end"/>
+                </div>
+            </div>
+            <div class="helpcontent">
+                <h4 class="helpTitle">Command line arguments</h4>
+
+                <div id="argsinput">
+                    <textarea rows="3" class="arguments" id="arguments" name="arguments"></textarea>
+                </div>
+            </div>
+            <div id="righttitle" class="titleHeader">
+                Example description
+            </div>
+            <div id="helpcontent" class="helpcontent">
+                <div id="help1">
                     You can choose an example on the left side.
                 </div>
-                <h4 class="helpTitle"> Help for keywords: </h4>
-
-                <div class="help" id="help2">
+            </div>
+            <!-- <div id="helpcontent" class="helpcontent">
+                <div id="help1">
+                    You can choose an example on the left side.
+                </div>
+            </div>-->
+            <div class="titleHeader">
+                Help for keywords
+            </div>
+            <div class="helpcontent">
+                <div id="help2">
                     Click on the keyword to see help.
                 </div>
-
-                <div class="help" id="help3">
+            </div>
+            <div class="titleHeader toggleShortcuts" id="shortcuts">
+                <img src="/images/toogleShortcuts.png" id="toggleShortcutsButton"/>
+                Shortcuts
+            </div>
+            <div class="helpcontent">
+                <div id="help3">
                     Use Ctrl&nbsp;+&nbsp;Space for code completion <br/>
                     Use Ctrl&nbsp;+&nbsp;F9 to run with JVM<br/>
                     Use Ctrl&nbsp;+Shift&nbsp;+&nbsp;F9 to run with Pre-Alpha JavaScript back-end<br/>
                     Use Ctrl&nbsp;+&nbsp;Alt&nbsp;+&nbsp;L to reformat selected fragment<br/>
                 </div>
-
             </div>
         </div>
         <!--</div>-->
     </div>
 
-    <div id="footer">&copy; JetBrains, 2011 Kotlin Web Demo v.<span id="kotlinVersion"></span></div>
+    <div id="footer">&copy; JetBrains, 2011-2012 Kotlin Web Demo v.<span id="kotlinVersion"></span></div>
     <pre><div id="debug"></div></pre>
 </div>
 
 <div id="dialog" title="Help">
-    <p class="dialogPbordered">Web Demo runs Kotlin type checker to report errors/warnings in the editor. The type
-        checker can run either on
-        your machine (using a Java&#x2122; Applet) or on our server (this is slower).</p>
+    <p class="dialogPbordered">Web Demo runs Kotlin type checker to report errors/warnings in the editor.
+        The type checker can run either on our server or
+        your machine (using a Java&#x2122; Applet, <b>experimental</b>).</p>
+    <img src="/images/nohighlightingActive.png"/>
+
+    <p><b>On run mode</b> (default): type checker is running on our server only when you run your program.</p>
     <img src="/images/clientActive.png"/>
 
-    <p class="dialogPbordered"><b>Client mode</b> (recommended): type checker, code completion and other services are
+    <p class="dialogPbordered"><b>Client mode</b> (experimental): type checker, code completion and other services are
         running on your machine (in a
         Java&#x2122; Applet). The server only generates byte code and runs your programs on the JVM.</p>
     <img src="/images/serverActive.png"/>
 
-    <p><b>Server mode</b>: all the services except for basic keyword highlighting are running on our server.</p>
+    <p><b>Server mode</b> (experimental): all the services except for basic keyword highlighting are running on our
+        server.</p>
 
-    <img src="/images/nohighlightingActive.png"/>
-
-        <p><b>No highlighting mode</b> (for slow connection): type checker is running on our server only when you run your program.</p>
 </div>
 
 <script src="/components/common.js"></script>
@@ -271,9 +292,9 @@
 <!--<object id="myapplet" class="web.view.ukhorskaya.MainApplet" width="0" height="0"
         ARCHIVE="http://st-004:8080/resources/WebViewApplet.jar"></object>-->
 <applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet.jar"></applet>
+        ARCHIVE="WebViewApplet1.jar" style="display: none;"></applet>
 <applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet.jar"></applet>
+        ARCHIVE="WebViewApplet1.jar" style="display: none;"></applet>
 
 <!--
 <applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"

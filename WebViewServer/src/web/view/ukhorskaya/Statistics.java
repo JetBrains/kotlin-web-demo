@@ -121,11 +121,6 @@ public class Statistics {
         return (System.currentTimeMillis() - file.lastModified()) > DateUtils.MILLIS_PER_HOUR;
     }
 
-    private static boolean isNecessaryToUpdateCounter() {
-        File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + "counter.txt");
-        return (System.currentTimeMillis() - file.lastModified()) > DateUtils.MILLIS_PER_MINUTE * 15;
-    }
-
     private void calculateStatistics() {
         analyzeLogs("statistics");
 
@@ -222,22 +217,26 @@ public class Statistics {
 
         builder.append("<table border='2' bordercolor='#eee' cellspacing='0' cellpadding='5' style='float: left; margin-right: 20px;'>");
         builder.append("<tr>");
-        builder.append(ResponseUtils.generateTag("td", "userIp"));
+        builder.append(ResponseUtils.generateTag("td", "№"));
+        builder.append(ResponseUtils.generateTag("td", "user " + type));
         builder.append(ResponseUtils.generateTag("td", "Total"));
         builder.append(ResponseUtils.generateTag("td", "Run"));
         builder.append(ResponseUtils.generateTag("td", "Highlight"));
         builder.append(ResponseUtils.generateTag("td", "Complete"));
         builder.append("</tr>");
         Set<Map.Entry<String, UserInfo>> set = sortedMap.entrySet();
+        int number = 1;
         for (Map.Entry<String, UserInfo> stringUserInfoEntry : set) {
             builder.append("<tr>");
             UserInfo info = stringUserInfoEntry.getValue();
+            builder.append(ResponseUtils.generateTag("td", String.valueOf(number)));
             builder.append(ResponseUtils.generateTag("td", stringUserInfoEntry.getKey()));
             builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfRequest)));
             builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfRunRequest)));
             builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfHighlightRequest)));
             builder.append(ResponseUtils.generateTag("td", String.valueOf(info.numberOfCompleteRequest)));
             builder.append("</tr>");
+            number++;
         }
         builder.append("</table>");
         return builder.toString();

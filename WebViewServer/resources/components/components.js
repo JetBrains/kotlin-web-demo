@@ -172,13 +172,31 @@ function onLoadingExampleSuccess(data) {
 $(".applet-enable").click(function () {
     var parent = $(this).parents('.switch');
     $('.applet-disable', parent).removeClass('selected');
-    $('.applet-disable', parent).removeClass('leftServer');
-    $('.applet-disable', parent).addClass('rightServer');
+    $('.applet-disable', parent).removeClass('rightServer');
+    $('.applet-disable', parent).addClass('leftServer');
     $('.applet-nohighlighting', parent).removeClass('selected');
     $(this).addClass('selected');
     $("#appletcheckbox").attr('checked', true);
     $("#nohighlightingcheckbox").attr('checked', false);
     isApplet = true;
+    if (!isAppletLoaded) {
+        showLoader();
+        try {
+            document.getElementById("myapplet").style.display = "block";
+            isAppletLoaded = true;
+            var title = document.getElementById("appletclient").title;
+            var pos = title.indexOf(GET_FROM_APPLET_FAILED)
+            if (pos != -1) {
+                title = title.substring(0, pos);
+                document.getElementById("appletclient").title = title;
+            }
+            hideLoader();
+        } catch (e) {
+            alert("A");
+            hideLoader();
+            $(".applet-disable").click();
+        }
+    }
 });
 
 $(".applet-disable").click(function () {
@@ -194,12 +212,12 @@ $(".applet-disable").click(function () {
 $(".applet-nohighlighting").click(function () {
     var parent = $(this).parents('.switch');
     $('.applet-disable', parent).removeClass('selected');
-    $('.applet-disable', parent).removeClass('rightServer');
-    $('.applet-disable', parent).addClass('leftServer');
+    $('.applet-disable', parent).removeClass('leftServer');
+    $('.applet-disable', parent).addClass('rightServer');
     $('.applet-enable', parent).removeClass('selected');
     $(this).addClass('selected');
     $("#nohighlightingcheckbox").attr('checked', true);
-    $("#appletcheckbox").attr('checked', false);
-    isApplet = false;
+//    $("#appletcheckbox").attr('checked', false);
+//    isApplet = false;
 });
 

@@ -22,10 +22,10 @@ public class ServerSettings {
     public static String STATISTICS_ROOT = "statistics";
 
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
-    public static String KOTLIN_VERSION = "0.1.198";
+    public static String KOTLIN_VERSION = "0.1.202";
 
     public static String TEST_CONNECTION_OUTPUT = "C:/Development/testData/";
-    public static String MAX_THREAD_COUNT = "2";
+    public static String MAX_THREAD_COUNT = "50";
     public static String RT_JAR = "";
 
     // Applet or server

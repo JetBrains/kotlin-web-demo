@@ -5,14 +5,12 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.compiler.TipsManager;
 import org.jetbrains.jet.lang.Configuration;
 import org.jetbrains.jet.lang.JetSemanticServices;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.descriptors.*;
-import org.jetbrains.jet.lang.psi.JetExpression;
-import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetPsiFactory;
-import org.jetbrains.jet.lang.psi.JetQualifiedExpression;
+import org.jetbrains.jet.lang.psi.*;
 import org.jetbrains.jet.lang.resolve.AnalyzingUtils;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
@@ -89,35 +87,40 @@ public class JsonResponseForCompletion {
         if (element == null) {
             return "[]";
         }
-        PsiElement parent = element.getParent();
 
-        JetScope resolutionScope;
         Collection<DeclarationDescriptor> descriptors = null;
         try {
-            if (parent instanceof JetQualifiedExpression) {
-                JetQualifiedExpression qualifiedExpression = (JetQualifiedExpression) parent;
-                JetExpression receiverExpression = qualifiedExpression.getReceiverExpression();
-
-                final JetType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE, receiverExpression);
-                resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, receiverExpression);
-
-                if (expressionType != null && resolutionScope != null) {
-//                    descriptors = resolutionScope.getAllDescriptors();
-//                    descriptors.addAll(expressionType.getMemberScope().getAllDescriptors());
-                    descriptors = expressionType.getMemberScope().getAllDescriptors();
-                }
+            if (element.getParent() instanceof JetSimpleNameExpression) {
+                descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext);
             } else {
-                resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, (JetExpression) element);
-                if (resolutionScope != null) {
-                    descriptors = resolutionScope.getAllDescriptors();
+                JetScope resolutionScope;
+                PsiElement parent = element.getParent();
+                if (parent instanceof JetQualifiedExpression) {
+                    JetQualifiedExpression qualifiedExpression = (JetQualifiedExpression) parent;
+                    JetExpression receiverExpression = qualifiedExpression.getReceiverExpression();
+
+                    final JetType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE, receiverExpression);
+                    resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, receiverExpression);
+
+                    if (expressionType != null && resolutionScope != null) {
+                        //                    descriptors = resolutionScope.getAllDescriptors();
+                        //                    descriptors.addAll(expressionType.getMemberScope().getAllDescriptors());
+                        descriptors = expressionType.getMemberScope().getAllDescriptors();
+                    }
                 } else {
-                    return "[]";
+                    resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, (JetExpression) element);
+                    if (resolutionScope != null) {
+                        descriptors = resolutionScope.getAllDescriptors();
+                    } else {
+                        return "[]";
+                    }
                 }
             }
+
         } catch (Throwable e) {
-//            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
-//            ErrorWriter.ERROR_WRITER.writeException(exception);
-            e.printStackTrace();
+            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeException(exception);
+//            e.printStackTrace();
             return "[]";
         }
 

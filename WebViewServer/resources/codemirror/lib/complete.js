@@ -67,6 +67,7 @@ $(document).ready(function () {
         tabSize:2
     });
 
+
     function runTimerForNonPrinting() {
         isContentEditorChanged = true;
         if (timer) {
@@ -289,7 +290,6 @@ $(document).ready(function () {
     function checkIfThereAreErrorsInProblemView() {
         var children = document.getElementById("problemsTd").childNodes;
         var result = false;
-        // alert(children.length + document.getElementById("problems"));
         if (children.length > 0) {
             for (var i = 0; i < children.length; ++i) {
                 if (children[i].className == "problemsViewError") {
@@ -303,6 +303,18 @@ $(document).ready(function () {
             }
         }
         return result;
+    }
+
+    function checkIfThereAreErrorsInData(data) {
+        var i = 0;
+        while (typeof data[i] != "undefined") {
+            var severity = data[i].severity;
+            if (severity == "ERROR") {
+                return true;
+            }
+            i++;
+        }
+        return false;
     }
 
     function createRedElement(text) {
@@ -328,45 +340,20 @@ $(document).ready(function () {
         var i = editor.getValue();
         setConsoleMessage("");
         setStatusBarMessage("Running...");
-        /*var isChecked = false;
-         if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
-         $("#nohighlightingcheckbox").attr('checked', false);
-         isChecked = true;
-         }*/
-
         if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
             isLoadingHighlighting = true;
-            $.ajax({
-                url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
-                context:document.body,
-                success:onHighlightingSuccessWait,
-                dataType:"json",
-                type:"POST",
-                data:{text:i},
-                timeout:10000,
-                error:function () {
-                    document.getElementById("problemsTd").innerHTML = "";
-                    document.getElementById("removeallgutters").innerHTML = "";
-                    isLoadingHighlighting = false;
-                    setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
-                }
-            });
+            sendHighlightingRequest(onHighlightingSuccessWait)
         } else {
             getErrors();
             onHighlightingSuccessWait(null);
         }
 
-
-        /*if (isChecked) {
-         $("#nohighlightingcheckbox").attr('checked', true);
-         }*/
-        //alert(checkIfThereAreErrorsInremomView());
-
     });
 
     function onHighlightingSuccessWait(data) {
         isLoadingHighlighting = false;
-        if (data == null || (data[0] == null)) {
+        onHighlightingSuccess(data);
+        if (data == null || !checkIfThereAreErrorsInData(data)) {
             if (!isCompilationInProgress) {
 //            if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
                 setStatusBarMessage("Running...");
@@ -390,16 +377,56 @@ $(document).ready(function () {
 
             }
         }
-        onHighlightingSuccess(data);
     }
 
     $("#runJS").click(function () {
+            var i = editor.getValue();
+            isLoadingHighlighting = true;
+            if (isApplet) {
+                var dataFromApplet;
+                var data;
+                try {
+                    showLoader();
+                    dataFromApplet = $("#myapplet")[0].getHighlighting(i);
+                    hideLoader();
+                    isLoadingHighlighting = false;
+                } catch (e) {
+                    isLoadingHighlighting = false;
+                    sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
+                    return;
+                }
+                data = eval(dataFromApplet);
+                if (data != null || data[0] != null) {
+                    onHighlightingSuccessWaitAfterConvertToJs(data);
+                }
+            }
+            else {
+                sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
+                /*$.ajax({
+                 url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
+                 context:document.body,
+                 success:onHighlightingSuccessWaitAfterConvertToJs,
+                 dataType:"json",
+                 type:"POST",
+                 data:{text:i},
+                 timeout:10000,
+                 error:function () {
+                 document.getElementById("problemsTd").innerHTML = "";
+                 document.getElementById("removeallgutters").innerHTML = "";
+                 isLoadingHighlighting = false;
+                 setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
+                 }
+                 });*/
+            }
+        }
+    );
+
+    function sendHighlightingRequest(onLoad) {
         var i = editor.getValue();
-        isLoadingHighlighting = true;
         $.ajax({
             url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
             context:document.body,
-            success:onHighlightingSuccessWaitAfterConvertToJs,
+            success:onLoad,
             dataType:"json",
             type:"POST",
             data:{text:i},
@@ -411,8 +438,7 @@ $(document).ready(function () {
                 setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
             }
         });
-
-    });
+    }
 
 
     function onHighlightingSuccessWaitAfterConvertToJs(data) {
@@ -420,7 +446,8 @@ $(document).ready(function () {
         var i = editor.getValue();
         setConsoleMessage("");
         isLoadingHighlighting = false;
-        if (data == null || (data[0] == null)) {
+        onHighlightingSuccess(data);
+        if (data == null || !checkIfThereAreErrorsInData(data)) {
             $("#tabs").tabs("select", 1);
             setStatusBarMessage("Running...");
             if (!isCompilationInProgress) {
@@ -460,7 +487,6 @@ $(document).ready(function () {
             $("#tabs").tabs("select", 0);
             setStatusBarMessage(TRY_RUN_CODE_WITH_ERROR);
         }
-        onHighlightingSuccess(data);
     }
 
     function loadJsFromServer(i, arguments) {
@@ -877,6 +903,6 @@ $(document).ready(function () {
         }
     }
 
-    $("#myapplet")[0].getHighlighting("fun main(args : Array<String>) { System.out?.println(\"Hello, world!\")}");
+    //$("#myapplet")[0].getHighlighting("fun main(args : Array<String>) { System.out?.println(\"Hello, world!\")}");
 
 });
