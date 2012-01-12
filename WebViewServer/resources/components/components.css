@@ -460,6 +460,20 @@ body {
     margin-top: 15px;
 }
 
+#refreshTitle {
+    float: left;
+    width: 90px;
+    margin-top: 2px;
+}
+
+#refreshImg {
+    float: left;
+    margin-left: 5px;
+    width: 51px;
+    /*margin-top: 5px;*/
+    cursor: pointer;
+}
+
 #argsinput {
     /*height: 20px;*/
     resize: none;

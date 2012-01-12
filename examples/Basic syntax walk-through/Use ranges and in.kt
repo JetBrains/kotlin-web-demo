@@ -18,7 +18,7 @@ fun main(args : Array<String>) {
   array.add("bbb")
   array.add("ccc")
 
-  if (x !in 0..array.size())
+  if (x !in 0..array.size()-1)
     System.out?.println("Out: array has only ${array.size()} elements. x = ${x}")
 
   //Check if a collection contains an object:

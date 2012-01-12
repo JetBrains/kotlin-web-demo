@@ -1,5 +1,4 @@
-class Greeter(name : String) {
-  val name = name
+class Greeter(val name : String) {
   fun greet() {
     System.out?.println("Hello, ${name}");
   }

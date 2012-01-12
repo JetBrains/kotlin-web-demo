@@ -108,19 +108,29 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
                     }
                 }
 
-                if (next == "$" && !escaped && stream.eat("{")) {
+                /*if (next == "$" && !escaped && stream.eat("{")) {
+                 state.tokenize.push(tokenBaseUntilBrace());
+                 return "string";
+                 }*/
+
+                /*if (next == "$" && !escaped) {
+                 state.tokenize.push(stream.eatWhile(/[\w]/));
+                 return "string";
+                 }*/
+
+                /*if (next == "$" && !escaped) {
+                 state.tokenize.push(tokenBaseUntilSpace());
+                 return "string";
+                 }*/
+                if (quote == '"' && next == "$" && !escaped && stream.eat("{")) {
                     state.tokenize.push(tokenBaseUntilBrace());
                     return "string";
                 }
 
-                /*if (next == "$" && !escaped) {
+                if (next == "$" && !escaped) {
                     state.tokenize.push(tokenBaseUntilSpace());
                     return "string";
-                }*/
-                /*if (quote == '"' && next == "$" && !escaped && stream.eat("{")) {
-                 state.tokenize.push(tokenBaseUntilBrace());
-                 return "string";
-                 }*/
+                }
                 escaped = !escaped && next == "\\";
             }
             if (multiLineStrings)
@@ -154,38 +164,18 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
     }
 
     function tokenBaseUntilSpace() {
-
-        /*var depth = 1;
-
-         function t(stream, state) {
-         if (stream.peek() == " ") {
-         alert(depth) ;
-         depth--;
-         if (depth == 0) {
-         state.tokenize.pop();
-         return state.tokenize[state.tokenize.length - 1](stream, state);
-         }
-         } */
-        /*else if (stream.peek() == "$") {
-         depth++;
-         }*/
-        /*
-         return tokenBase(stream, state);
-         }
-
-         t.isBase = true;
-         return t;*/
         var depth = 1;
 
         function t(stream, state) {
-            stream.eatWhile(/[\w]/);
-            //if (stream.peek() == " ") {
-           //
-                return tokenBase(stream, state);
-           // }
-//            state.tokenize.pop();
-//            return state.tokenize[state.tokenize.length - 1](stream, state);
-
+            if (stream.eat(/[\w]/)) {
+                var isWord = stream.eatWhile(/[\w]/);
+                if (isWord) {
+                    state.tokenize.pop();
+                    return "word";
+                }
+            }
+            state.tokenize.pop();
+            return "string";
         }
 
         t.isBase = true;

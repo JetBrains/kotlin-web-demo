@@ -131,9 +131,9 @@ public class ServerHandler implements HttpHandler {
 
 
     private void updateExamples(HttpExchange exchange) {
-        ExamplesList.updateList();
-        HelpLoader.updateExamplesHelp();
-        writeResponse(exchange, "Examples and help was reloaded".getBytes(), HttpStatus.SC_OK);
+        String response = ExamplesList.updateList();
+        response += HelpLoader.updateExamplesHelp();
+        writeResponse(exchange, response.getBytes(), HttpStatus.SC_OK);
     }
 
     private void sendSortedExceptions(HttpExchange exchange) {

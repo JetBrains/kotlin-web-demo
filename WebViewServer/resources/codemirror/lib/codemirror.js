@@ -24,10 +24,10 @@ var CodeMirror = (function () {
             '<div style="overflow: hidden; position: relative; width: 1px; height: 0px;">' + // Wraps and hides input textarea
                 '<textarea style="position: absolute; padding: 0; width: 1px;" wrap="off" ' +
                 'autocorrect="off" autocapitalize="off"></textarea></div>' +
-                '<div class="CodeMirror-scroll cm-s-' + options.theme + '">' +
+                '<div id="scroll" class="CodeMirror-scroll cm-s-' + options.theme + '">' +
                 '<div style="position: relative">' + // Set to the height of the text, causes scrolling
                 '<div style="position: relative">' + // Moved around its parent to cover visible view
-                '<div class="CodeMirror-gutter"><div class="CodeMirror-gutter-text"></div></div>' +
+                '<div id="gutter" class="CodeMirror-gutter"><div class="CodeMirror-gutter-text"></div></div>' +
                 // Provides positioning relative to (visible) text origin
                 '<div class="CodeMirror-lines"><div style="position: relative">' +
                 '<div style="position: absolute; width: 100%; height: 0; overflow: hidden; visibility: hidden"></div>' +

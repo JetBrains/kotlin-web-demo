@@ -93,6 +93,9 @@ public class ErrorAnalyzer {
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 
         for (Diagnostic diagnostic : diagnostics) {
+            if (diagnostic.getMessage().contains("This cast can never succeed")) {
+                continue;
+            }
             if (diagnostic.getSeverity() != Severity.INFO) {
                 DiagnosticFactory factory = diagnostic.getFactory();
                 int start = factory.getTextRange(diagnostic).getStartOffset();

@@ -9,9 +9,7 @@
 
     <script src="/codemirror/mode/clike/kotlin.js"></script>
 
-    <!--<script src="/jquery/jquery.min.js"></script>-->
     <link type="text/css" href="/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
-    <!--<script type="text/javascript" src="/jquery/js/jquery-1.6.2.min.js"></script>-->
     <script type="text/javascript" src="/jquery/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="/kotlin_lib.js"></script>
@@ -72,7 +70,7 @@
 
 </head>
 <body spellcheck="false" onResize="resizeCentral();"
-      onload="setSessionId(); resizeCentral(); setKotlinVersion('0.1.202'); loadAccordionContent(); loadHelpContentForExamples(); hideLoader();">
+      onload="setSessionId(); resizeCentral(); setKotlinVersion('0.1.216'); loadAccordionContent(); loadHelpContentForExamples(); hideLoader();">
 <div id="loader">
     <img src="/images/ajax-loader.gif"/>
 
@@ -136,9 +134,9 @@
                 <div id="editordiv">
                     <div id="editorinput" tabindex="0">
                         <form><textarea class="CodeMirror" id="code" name="code">
-                            fun main(args : Array&lt;String&gt;) {
-                            System.out?.println("Hello, world!")
-                            }
+fun main(args : Array&lt;String&gt;) {
+  System.out?.println("Hello, world!")
+}
                         </textarea>
                         </form>
                     </div>
@@ -154,15 +152,7 @@
                                 <li><a href="#console">Console</a></li>
                             </ul>
                             <div id="problems">
-                                <table>
-                                    <tr>
-                                        <td id="removeallguttersTd">
-                                            <div id="removeallgutters"></div>
-                                        </td>
-                                        <td id="problemsTd">
-                                        </td>
-                                    </tr>
-                                </table>
+
                             </div>
                             <div id="console">
 
@@ -175,7 +165,11 @@
 
         <div id="right">
             <div class="titleHeader">
-                Type checking
+                <div id="refreshTitle">Type checking</div>
+                <div id="refreshImg">
+                    <img src="/icons/refresh.png" id="refreshGutters" title="Recheck"/>
+                </div>
+
             </div>
             <div id="settingsContent">
                 <div id="editortitle">
@@ -251,10 +245,10 @@
             </div>
             <div class="helpcontent">
                 <div id="help3">
-                    Use Ctrl&nbsp;+&nbsp;Space for code completion <br/>
-                    Use Ctrl&nbsp;+&nbsp;F9 to run with JVM<br/>
-                    Use Ctrl&nbsp;+Shift&nbsp;+&nbsp;F9 to run with Pre-Alpha JavaScript back-end<br/>
-                    Use Ctrl&nbsp;+&nbsp;Alt&nbsp;+&nbsp;L to reformat selected fragment<br/>
+                    Use <b>Ctrl+Space</b> for code completion <br/>
+                    Use <b>Ctrl+F9</b> to run with JVM<br/>
+                    Use <b>Ctrl+Shift+F9</b> to run with Pre-Alpha JavaScript back-end<br/>
+                    Use <b>Ctrl+Alt+L</b> to reformat selected fragment<br/>
                 </div>
             </div>
         </div>
@@ -282,6 +276,10 @@
     <p><b>Server mode</b> (experimental): all the services except for basic keyword highlighting are running on our
         server.</p>
 
+    <img src="/images/refreshButtonHelp.png"/>
+
+    <p><b>Recheck button</b>: Re-run the type checker on your code.</p>
+
 </div>
 
 <script src="/components/common.js"></script>
@@ -292,9 +290,9 @@
 <!--<object id="myapplet" class="web.view.ukhorskaya.MainApplet" width="0" height="0"
         ARCHIVE="http://st-004:8080/resources/WebViewApplet.jar"></object>-->
 <applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet1.jar" style="display: none;"></applet>
+        ARCHIVE="WebViewApplet2.jar" style="display: none;"></applet>
 <applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet1.jar" style="display: none;"></applet>
+        ARCHIVE="WebViewApplet2.jar" style="display: none;"></applet>
 
 <!--
 <applet id="myapplet" code="web.view.ukhorskaya.MainApplet" width="0" height="0"

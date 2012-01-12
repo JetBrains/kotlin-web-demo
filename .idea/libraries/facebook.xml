@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="activation-1.1">
+  <library name="facebook">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/activation-1.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../../plugins/facebook-java-api-3.0.2/lib/commons-lang-2.2.jar!/" />

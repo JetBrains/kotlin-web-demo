@@ -132,6 +132,8 @@ var lastSelectedExample = 0;
 
 function loadExample(id, innerhtml) {
     if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged) {
+        document.getElementById("problems").innerHTML = "";
+        setConsoleMessage("");
         removeStyles();
         var el = document.getElementById(lastSelectedExample);
         if (el != null) {
@@ -219,5 +221,19 @@ $(".applet-nohighlighting").click(function () {
     $("#nohighlightingcheckbox").attr('checked', true);
 //    $("#appletcheckbox").attr('checked', false);
 //    isApplet = false;
+});
+
+var isShortcutsShow = true;
+$(".toggleShortcuts").click(function () {
+    $("#help3").toggle();
+    if (isShortcutsShow) {
+        isShortcutsShow = false;
+        document.getElementById("toggleShortcutsButton").src = "/images/toogleShortcutsOpen.png";
+    } else {
+        isShortcutsShow = true;
+        document.getElementById("toggleShortcutsButton").src = "/images/toogleShortcuts.png";
+
+    }
+
 });
 

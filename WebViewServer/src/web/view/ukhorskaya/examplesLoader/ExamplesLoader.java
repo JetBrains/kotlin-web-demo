@@ -30,14 +30,14 @@ public class ExamplesLoader {
         Map<String, String> fileObj = ExamplesList.getInstance().getMapFromList(id);
         if (!fileObj.get("type").equals("content")) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Returned head while loading an example: " + id);
-            return "[{\"text\":\"Cannot find this example. Please choose an other example.\"}]";
+            return "[{\"text\":\"Cannot find this example. Please choose another example.\"}]";
         }
         String fileName = fileObj.get("text");
         headName = headName.replaceAll("%20", " ");
         File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + headName + File.separator + fileName + ".kt");
         if (!example.exists()) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot find example with file name: " + example.getAbsolutePath());
-            return "[{\"text\":\"Cannot find this example. Please choose an other example.\"}]";
+            return "[{\"text\":\"Cannot find this example. Please choose another example.\"}]";
         }
 
         String fileContent;
@@ -47,7 +47,7 @@ public class ExamplesLoader {
             fileContent = ResponseUtils.readData(reader, true);
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot read content for example with file name: " + example.getAbsolutePath());
-            return "[{\"text\":\"Cannot load this example. Please choose an other example.\"}]";
+            return "[{\"text\":\"Cannot load this example. Please choose another example.\"}]";
         } finally {
             try {
                 if (reader != null) {

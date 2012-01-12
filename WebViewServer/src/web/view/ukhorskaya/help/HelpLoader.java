@@ -21,8 +21,11 @@ import java.util.Map;
 
 public class HelpLoader {
     private static HelpLoader helpLoader = new HelpLoader();
+    
+    private static StringBuilder response;
 
     private HelpLoader() {
+        response = new StringBuilder();
         generateHelpForExamples();
         generateHelpForWords();
     }
@@ -96,9 +99,11 @@ public class HelpLoader {
         }
     }
 
-    public static void updateExamplesHelp() {
+    public static String updateExamplesHelp() {
+        response = new StringBuilder();
         HelpLoader.getInstance().generateHelpForExamples();
         HelpLoader.getInstance().generateHelpForWords();
+        return response.toString();
     }
 
     private void generateHelpForExamples() {
@@ -126,6 +131,7 @@ public class HelpLoader {
             e.printStackTrace();
         }
         ErrorWriter.writeInfoToConsole("Help for keywords was loaded.");
+        response.append("\nHelp for keywords was loaded.");
     }
 
     private void generateHelpForWords() {
@@ -155,5 +161,6 @@ public class HelpLoader {
             e.printStackTrace();
         }
         ErrorWriter.writeInfoToConsole("Help for examples was loaded.");
+        response.append("\nHelp for examples was loaded.");
     }
 }

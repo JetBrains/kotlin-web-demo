@@ -1,5 +1,6 @@
 package web.view.ukhorskaya.responseHelpers;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import web.view.ukhorskaya.ErrorWriter;
 import web.view.ukhorskaya.ErrorWriterOnServer;
@@ -37,8 +38,8 @@ public class JavaRunner {
         this.sessionInfo = info;
     }
 
-    public String getResult() {
-        String commandString = generateCommandString();
+    public String getResult(String pathToRootOut) {
+        String commandString = generateCommandString(pathToRootOut);
         Process process;
         sessionInfo.getTimeManager().saveCurrentTime();
         try {
@@ -150,9 +151,8 @@ public class JavaRunner {
             jsonArray.put(mapErr);
         }
 
-
         for (String fileName : files) {
-            deleteFile(fileName);
+            deleteFile(fileName, pathToRootOut);
         }
 
         timer.cancel();
@@ -172,7 +172,7 @@ public class JavaRunner {
         try {
             reader = new FileReader(log);
             String response = ResponseUtils.readData(reader, true);
-            log.deleteOnExit();
+            log.delete();
             return response;
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
@@ -261,14 +261,15 @@ public class JavaRunner {
         return returnValue;
     }
 
-    private void deleteFile(String path) {
-        File f = new File(ServerSettings.OUTPUT_DIRECTORY + File.separatorChar + path);
+    private void deleteFile(String path, String pathToRootOut) {
+        File f = new File(pathToRootOut + File.separatorChar + path);
         File parent = f.getParentFile();
-        while (!parent.getAbsolutePath().equals(ServerSettings.OUTPUT_DIRECTORY)) {
+        while (!parent.getAbsolutePath().equals(pathToRootOut)) {
             f = parent;
             parent = parent.getParentFile();
         }
         delete(f);
+        delete(new File(pathToRootOut));
     }
 
     private void delete(File file) {
@@ -305,11 +306,11 @@ public class JavaRunner {
         }
     }
 
-    private String generateCommandString() {
+    private String generateCommandString(String pathToRootOut) {
         StringBuilder builder = new StringBuilder("java ");
         builder.append("-classpath ");
         //builder.append(System.getProperty("java.class.path"));
-        builder.append(ServerSettings.OUTPUT_DIRECTORY);
+        builder.append(pathToRootOut);
         builder.append(File.pathSeparator);
         builder.append("WebView.jar");
         builder.append(File.pathSeparator);
@@ -319,7 +320,12 @@ public class JavaRunner {
         builder.append(modifyClassNameFromPath(files.get(0)));
         builder.append(" ");
         builder.append(arguments);
+//        builder.append(modifyArguments(arguments));
         return builder.toString();
+    }
+    
+    private String modifyArguments(String arguments) {
+        return StringEscapeUtils.unescapeJavaScript(arguments);
     }
 
     private String modifyClassNameFromPath(String path) {

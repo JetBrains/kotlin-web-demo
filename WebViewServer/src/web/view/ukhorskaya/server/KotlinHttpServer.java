@@ -47,7 +47,7 @@ public class KotlinHttpServer {
                 if (ServerSettings.HOST.equals("localhost")) {
                     server = HttpServer.create(new InetSocketAddress(Integer.parseInt(ServerSettings.PORT)), 20);
                 } else {
-                    server = HttpServer.create(new InetSocketAddress(ServerSettings.HOST, Integer.parseInt(ServerSettings.PORT)), 10);
+                    server = HttpServer.create(new InetSocketAddress(ServerSettings.HOST, Integer.parseInt(ServerSettings.PORT)), 20);
                 }
                 if (myHandler == null) {
                     myHandler = new ServerHandler();

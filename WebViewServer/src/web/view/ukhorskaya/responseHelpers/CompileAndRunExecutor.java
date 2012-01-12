@@ -3,6 +3,7 @@ package web.view.ukhorskaya.responseHelpers;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
+import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.jet.codegen.ClassBuilderFactory;
 import org.jetbrains.jet.codegen.ClassFileFactory;
 import org.jetbrains.jet.codegen.GenerationState;
@@ -23,10 +24,7 @@ import web.view.ukhorskaya.session.SessionInfo;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -64,14 +62,15 @@ public class CompileAndRunExecutor {
                 return "[{\"text\":\"Compilation complete successfully\",\"type\":\"out\"}]";
             }
             Project currentProject = currentPsiFile.getProject();
-            BindingContext bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
-                                (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+//            BindingContext bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
+//                                (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
 
             sessionInfo.getTimeManager().saveCurrentTime();
             GenerationState generationState;
             try {
                 generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
-                generationState.compileCorrectFiles(bindingContext, Collections.singletonList((JetFile) currentPsiFile));
+                generationState.compile((JetFile) currentPsiFile);
+//                generationState.compileCorrectFiles(bindingContext, Collections.singletonList((JetFile) currentPsiFile));
             } catch (Throwable e) {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
                 return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
@@ -85,15 +84,16 @@ public class CompileAndRunExecutor {
 
             sessionInfo.getTimeManager().saveCurrentTime();
             List<String> files = factory.files();
+            File outputDir = new File(ServerSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + RandomUtils.nextInt());
+            boolean isOutputExists = true;
+            if (!outputDir.exists()) {
+                isOutputExists = outputDir.mkdirs();
+            }
             for (String file : files) {
-                File outputDir = new File(ServerSettings.OUTPUT_DIRECTORY);
-                ServerSettings.OUTPUT_DIRECTORY = outputDir.getAbsolutePath();
-                boolean isOutputExists = true;
-                if (!outputDir.exists()) {
-                    isOutputExists = outputDir.mkdirs();
-                }
+//                File outputDir = new File(ServerSettings.OUTPUT_DIRECTORY);
+//                ServerSettings.OUTPUT_DIRECTORY = outputDir.getAbsolutePath();
                 if (isOutputExists) {
-                    File target = new File(ServerSettings.OUTPUT_DIRECTORY, file);
+                    File target = new File(outputDir, file);
                     try {
                         FileUtil.writeToFile(target, factory.asBytes(file));
                         stringBuilder.append(file).append(ResponseUtils.addNewLine());
@@ -120,7 +120,7 @@ public class CompileAndRunExecutor {
 
             JavaRunner runner = new JavaRunner(files, arguments, jsonArray, currentPsiFile.getText(), sessionInfo);
 
-            return runner.getResult();
+            return runner.getResult(outputDir.getAbsolutePath());
 
         } else {
             return generateResponseWithErrors(errors);

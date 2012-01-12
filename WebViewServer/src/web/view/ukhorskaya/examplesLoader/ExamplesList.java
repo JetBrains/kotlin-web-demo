@@ -20,8 +20,11 @@ import java.util.Map;
 public class ExamplesList {
     //    private static final Logger LOG = Logger.getLogger(ExamplesList.class);
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
+    
+    private static StringBuilder response;
 
     private ExamplesList() {
+        response = new StringBuilder();
         list = new ArrayList<Map<String, String>>();
         generateList();
     }
@@ -57,8 +60,10 @@ public class ExamplesList {
         } else {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Examples root doesn't exists");
             ErrorWriter.writeErrorToConsole("Examples root doesn't exists");
+            response.append("\nExamples root doesn't exists");
         }
         ErrorWriter.writeInfoToConsole("Examples were loaded.");
+        response.append("\nExamples were loaded.");
     }
 
     private void addWoOrder(File parent, boolean isDirectory) {
@@ -156,6 +161,7 @@ public class ExamplesList {
                                 list.add(map);
                                 ErrorWriter.writeErrorToConsole("File/Directory " + childName + " is absent in order.txt and was added at end.");
                                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("File/Directory " + childName + " is absent in order.txt and was added at end.");
+                                response.append("\nFile/Directory " + childName + " is absent in order.txt and was added at end.");
 
                                 if (isDirectory) {
                                     File orderChildren = checkIsOrderTxtExists(child);
@@ -187,9 +193,10 @@ public class ExamplesList {
         return null;
     }
 
-    public static void updateList() {
+    public static String updateList() {
+        response = new StringBuilder();
         list = new ArrayList<Map<String, String>>();
         ExamplesList.getInstance().generateList();
-
+        return response.toString();
     }
 }

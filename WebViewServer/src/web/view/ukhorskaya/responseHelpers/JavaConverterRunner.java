@@ -158,7 +158,7 @@ public class JavaConverterRunner {
         try {
             reader = new FileReader(log);
             String response = ResponseUtils.readData(reader, true);
-            log.deleteOnExit();
+            log.delete();
             return response;
         } catch (IOException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),

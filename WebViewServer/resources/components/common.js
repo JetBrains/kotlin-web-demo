@@ -46,20 +46,6 @@ function setMode(mode) {
     }
 }
 
-var isShortcutsShow = true;
-$(".toggleShortcuts").click(function () {
-    $("#help3").toggle();
-    if (isShortcutsShow) {
-        isShortcutsShow = false;
-        document.getElementById("toggleShortcutsButton").src = "/images/toogleShortcuts.png";
-    } else {
-        isShortcutsShow = true;
-        document.getElementById("toggleShortcutsButton").src = "/images/toogleShortcutsOpen.png";
-
-    }
-
-});
-
 function setSessionId() {
     $("#help3").toggle(false);
 
@@ -130,6 +116,7 @@ function setKotlinVersion(version) {
         width:400,
         autoOpen:false
     });
+
     kotlinVersion = version;
     document.getElementById("kotlinVersionTop").innerHTML = "(" + kotlinVersion + ")";
     document.getElementById("kotlinVersion").innerHTML = kotlinVersion;

@@ -107,8 +107,7 @@ $(document).ready(function () {
                 data:{text:i},
                 timeout:10000,
                 error:function () {
-                    document.getElementById("problemsTd").innerHTML = "";
-                    document.getElementById("removeallgutters").innerHTML = "";
+                    document.getElementById("problems").innerHTML = "";
                     isLoadingHighlighting = false;
                     setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
                 }
@@ -124,11 +123,10 @@ $(document).ready(function () {
         removeStyles();
         arrayClasses = [];
         arrayLinesMarkers = [];
-        document.getElementById("removeallgutters").innerHTML = "";
 
         if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
             $("#tabs").tabs("select", 0);
-            document.getElementById("problemsTd").innerHTML = "";
+            document.getElementById("problems").innerHTML = "";
             setStatusBarMessage(unEscapeString(data[0].exception));
             setConsoleMessage(unEscapeString(data[0].exception));
             var j = 0;
@@ -136,7 +134,6 @@ $(document).ready(function () {
                 exception(data[j]);
                 j++;
             }
-            addRemoveAllImage();
             return;
         }
 
@@ -147,9 +144,8 @@ $(document).ready(function () {
             if (typeof data[i] == "undefined") {
                 if (i > 0) {
                     $("#tabs").tabs("select", 0);
-                    addRemoveAllImage();
                 }
-                document.getElementById("problemsTd").innerHTML = problems.innerHTML;
+                document.getElementById("problems").innerHTML = problems.innerHTML;
                 updateStatusBar();
                 return;
             }
@@ -204,15 +200,12 @@ $(document).ready(function () {
         try {
             var dataFromApplet;
             try {
-                showLoader();
                 if (type == "complete") {
                     dataFromApplet = $("#myapplet")[0].getCompletion(i, editor.getCursor(true).line, editor.getCursor(true).ch);
                 } else {
                     dataFromApplet = $("#myapplet")[0].getHighlighting(i);
                 }
-                hideLoader();
             } catch (e) {
-                hideLoader();
                 $(".applet-disable").click();
                 setStatusBarMessage(GET_FROM_APPLET_FAILED);
 
@@ -248,15 +241,13 @@ $(document).ready(function () {
             if (typeof data != "undefined") {
                 if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                     $("#tabs").tabs("select", 0);
-                    document.getElementById("problemsTd").innerHTML = "";
-                    document.getElementById("removeallgutters").innerHTML = "";
+                    document.getElementById("problems").innerHTML = "";
                     setStatusBarMessage(data[0].exception);
                     var j = 0;
                     while (typeof data[j] != "undefined") {
                         exception(data[j]);
                         j++;
                     }
-                    addRemoveAllImage();
                 } else {
                     if (type == "complete") {
                         startComplete(data);
@@ -288,7 +279,7 @@ $(document).ready(function () {
     $("#arguments").val("");
 
     function checkIfThereAreErrorsInProblemView() {
-        var children = document.getElementById("problemsTd").childNodes;
+        var children = document.getElementById("problems").childNodes;
         var result = false;
         if (children.length > 0) {
             for (var i = 0; i < children.length; ++i) {
@@ -326,13 +317,20 @@ $(document).ready(function () {
         return div.innerHTML;
     }
 
-    $("#removeallgutters").click(function () {
-        document.getElementById("problemsTd").innerHTML = "";
-        document.getElementById("removeallgutters").innerHTML = "";
+    $("#refreshGutters").click(function () {
+        setStatusBarMessage("Loading...");
+        document.getElementById("problems").innerHTML = "";
         removeStyles();
         for (var i = 0; i < editor.lineCount(); i++) {
-            editor.clearMarker(i);
+            try {
+                editor.clearMarker(i);
+            } catch (e) {
+               //Absent marker for line
+            }
         }
+        $("#nohighlightingcheckbox").attr('checked', false);
+        getErrors();
+        $("#nohighlightingcheckbox").attr('checked', true);
     });
 
 
@@ -411,8 +409,7 @@ $(document).ready(function () {
                  data:{text:i},
                  timeout:10000,
                  error:function () {
-                 document.getElementById("problemsTd").innerHTML = "";
-                 document.getElementById("removeallgutters").innerHTML = "";
+                 document.getElementById("problems").innerHTML = "";
                  isLoadingHighlighting = false;
                  setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
                  }
@@ -432,8 +429,7 @@ $(document).ready(function () {
             data:{text:i},
             timeout:10000,
             error:function () {
-                document.getElementById("problemsTd").innerHTML = "";
-                document.getElementById("removeallgutters").innerHTML = "";
+                document.getElementById("problems").innerHTML = "";
                 isLoadingHighlighting = false;
                 setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
             }
@@ -524,18 +520,13 @@ $(document).ready(function () {
         }
     }
 
-    function addRemoveAllImage() {
-        document.getElementById("removeallgutters").innerHTML = "<img id='removeallguttersimg' src='/icons/removeAllGutters.png' title='Remove all gutters'/>";
-    }
-
     function onCompileSuccess(data) {
         var isCompiledWithErrors = false;
         isCompilationInProgress = false;
         if (data != null) {
             if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                 $("#tabs").tabs("select", 0);
-                document.getElementById("problemsTd").innerHTML = "";
-                document.getElementById("removeallgutters").innerHTML = "";
+                document.getElementById("problems").innerHTML = "";
                 setStatusBarMessage(data[0].exception);
                 var j = 0;
                 while (typeof data[j] != "undefined") {
@@ -587,9 +578,9 @@ $(document).ready(function () {
 
         var problems = document.createElement("div");
         if (ex.type == "out") {
-            document.getElementById("problemsTd").appendChild(createElementForProblemView("STACKTRACE", null, unEscapeString(ex.exception)));
+            document.getElementById("problems").appendChild(createElementForProblemView("STACKTRACE", null, unEscapeString(ex.exception)));
         } else {
-            document.getElementById("problemsTd").appendChild(createElementForProblemView("ERROR", null, unEscapeString(ex.exception)));
+            document.getElementById("problems").appendChild(createElementForProblemView("ERROR", null, unEscapeString(ex.exception)));
         }
     }
 

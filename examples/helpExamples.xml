@@ -102,7 +102,7 @@
         <args>4</args>
     </example>
     <example>
-        <name>Use pattern-matching</name>
+        <name>Use when</name>
         <text>See <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">Pattern-matching</a>
         </text>
         <args/>
@@ -117,6 +117,39 @@
             <p>
                 Additionally, you can pass the desired initial number of bottles to use (rather than 99) 
                 as a command-line argument.
+            </p>
+        </text>
+        <args/>
+    </example>
+    <example>
+        <name>Maze</name>
+        <text>
+            <p>
+                Find your way through a maze to get a prize :)
+            </p>
+        </text>
+        <args/>
+    </example>
+    <example>
+        <name>Life</name>
+        <text>
+            <p>
+               This is a straightforward implementation of The Game of Life
+               See <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia</a>
+            </p>
+        </text>
+        <args/>
+    </example>
+    <example>
+        <name>HTML Builder</name>
+        <text>
+            <p>
+This is an example of a <b>Type-Safe Groovy-style Builder</b><br/>
+
+Builders are good for declaratively describing data in your code.
+In this example we show how to describe an HTML page in Kotlin.
+
+See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-style+builders">this page</a> for details.
             </p>
         </text>
         <args/>

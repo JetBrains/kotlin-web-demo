@@ -4,4 +4,4 @@ is-checks and automatic casts.kt
 Use a while-loop.kt
 Use a for-loop.kt
 Use ranges and in.kt
-Use pattern-matching.kt
+Use when.kt
