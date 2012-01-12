@@ -7,49 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/icons/executeJavaB.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/icons/executeJavaScriptB.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/icons/refresh.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/images/toogleShortcuts.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/images/toogleShortcutsOpen.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/WebViewApplet_jar.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/resources/jquery/jquery-1.7.1.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/Longer examples/99 Bottles of Beer.kt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/Problems/Index of Maximum.kt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/Problems/Sum.kt" />
-      <change type="DELETED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\examples\Basic syntax walk-through\Use pattern-matching.kt" afterPath="" />
-      <change type="MOVED" beforePath="C:\Development\git-contrib\jet-contrib\WebView\.idea\libraries\activation_1_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/facebook.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/annotations.xml" afterPath="$PROJECT_DIR$/.idea/libraries/annotations.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/json.xml" afterPath="$PROJECT_DIR$/.idea/libraries/json.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" afterPath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/codemirror.js" afterPath="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/codemirror.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" afterPath="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/codemirror/mode/clike/kotlin.js" afterPath="$PROJECT_DIR$/WebViewServer/resources/codemirror/mode/clike/kotlin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/components/common.js" afterPath="$PROJECT_DIR$/WebViewServer/resources/components/common.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/components/components.css" afterPath="$PROJECT_DIR$/WebViewServer/resources/components/components.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/components/components.js" afterPath="$PROJECT_DIR$/WebViewServer/resources/components/components.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/header.html" afterPath="$PROJECT_DIR$/WebViewServer/resources/header.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/resources/jquery/development-bundle/themes/base/jquery.ui.tabs.css" afterPath="$PROJECT_DIR$/WebViewServer/resources/jquery/development-bundle/themes/base/jquery.ui.tabs.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/log4j.xml" afterPath="$PROJECT_DIR$/WebViewServer/src/log4j.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/examplesLoader/ExamplesList.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/examplesLoader/ExamplesList.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/examplesLoader/ExamplesLoader.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/examplesLoader/ExamplesLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/help/HelpLoader.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/help/HelpLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/CompileAndRunExecutor.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/CompileAndRunExecutor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaConverterRunner.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaConverterRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaRunner.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/server/KotlinHttpServer.java" afterPath="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/server/KotlinHttpServer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Basic syntax walk-through/Null-checks.kt" afterPath="$PROJECT_DIR$/examples/Basic syntax walk-through/Null-checks.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Basic syntax walk-through/Use ranges and in.kt" afterPath="$PROJECT_DIR$/examples/Basic syntax walk-through/Use ranges and in.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Basic syntax walk-through/order.txt" afterPath="$PROJECT_DIR$/examples/Basic syntax walk-through/order.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Hello, world!/An object-oriented Hello.kt" afterPath="$PROJECT_DIR$/examples/Hello, world!/An object-oriented Hello.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/helpExamples.xml" afterPath="$PROJECT_DIR$/examples/helpExamples.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/errorsDescriptors/ErrorAnalyzer.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/errorsDescriptors/ErrorAnalyzer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/web/view/ukhorskaya/server/ServerSettings.java" afterPath="$PROJECT_DIR$/src/web/view/ukhorskaya/server/ServerSettings.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/js.iml" afterPath="$PROJECT_DIR$/../k2js/js/js.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/k2js.iml" afterPath="$PROJECT_DIR$/../k2js/k2js.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/DescriptorUtils.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/DescriptorUtils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/translator.iml" afterPath="$PROJECT_DIR$/../k2js/translator/translator.iml" />
     </list>
     <ignored path="WebView.iws" />
@@ -76,6 +36,7 @@
     <ignored path="WebViewServer/resources/messages/JavaErrorMessages.properties" />
     <ignored path="WebViewServer/resources/messages/JavaCoreBundle_en.properties" />
     <ignored path="WebViewServer/resources/messages/JavaCoreBundle_en_US.properties" />
+    <ignored path="WebViewServer/resources/WebViewApplet2.jar" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,15 +127,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExamplesLoader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/examplesLoader/ExamplesLoader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="48" selection-start="1624" selection-end="1624" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="JavaRunner.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaRunner.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -222,28 +174,37 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GenerationState.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../jet/compiler/backend/src/org/jetbrains/jet/codegen/GenerationState.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="43" selection-start="1734" selection-end="1734" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ServerSettings.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/web/view/ukhorskaya/server/ServerSettings.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="50" selection-start="945" selection-end="945" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="complete.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="complete.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="342" column="42" selection-start="12231" selection-end="12231" vertical-scroll-proportion="0.54761904">
+            <state line="346" column="50" selection-start="12348" selection-end="12348" vertical-scroll-proportion="-12.84">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="translator.iml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../k2js/translator/translator.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="18" column="0" selection-start="860" selection-end="860" vertical-scroll-proportion="0.612">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="js.iml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../k2js/js/js.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="0" selection-start="510" selection-end="510" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="k2js.iml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../k2js/k2js.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="16" column="0" selection-start="777" selection-end="777" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -275,9 +236,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/WebViewServer/resources/components/components.css" />
-        <option value="$PROJECT_DIR$/WebViewServer/resources/components/common.js" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/log4j.xml" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaConverterRunner.java" />
         <option value="$PROJECT_DIR$/src/web/view/ukhorskaya/errorsDescriptors/ErrorAnalyzer.java" />
         <option value="$PROJECT_DIR$/WebViewServer/resources/components/components.js" />
@@ -291,6 +249,9 @@
         <option value="$PROJECT_DIR$/WebViewServer/resources/header.html" />
         <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JavaRunner.java" />
         <option value="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" />
+        <option value="$PROJECT_DIR$/../k2js/js/js.iml" />
+        <option value="$PROJECT_DIR$/../k2js/k2js.iml" />
+        <option value="$PROJECT_DIR$/../k2js/translator/translator.iml" />
       </list>
     </option>
   </component>
@@ -543,6 +504,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="translator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="k2js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -941,10 +916,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="964" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32881773" sideWeight="0.0" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32881773" sideWeight="0.0" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32881773" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14624183" sideWeight="0.6625616" order="2" side_tool="false" content_ui="tabs" />
@@ -1003,7 +978,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Redesign" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add examples" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1037,6 +1012,8 @@
     <MESSAGE value="Update k2js and version of kotlin library" />
     <MESSAGE value="Completion in applet&#10;Load big file&#10;KT-952 Ajax request aborted" />
     <MESSAGE value="Redesign" />
+    <MESSAGE value="Compile files in tmp folder&#10;" />
+    <MESSAGE value="Add examples" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1093,27 +1070,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/CommandRunner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="27" selection-start="1305" selection-end="1305" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/examplesLoader/ExamplesList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="39" selection-start="746" selection-end="746" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/help/HelpLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="163" column="27" selection-start="5704" selection-end="5704" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/codemirror.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="2357" column="8" selection-start="99011" selection-end="99011" vertical-scroll-proportion="0.0">
@@ -1204,7 +1160,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="342" column="42" selection-start="12231" selection-end="12231" vertical-scroll-proportion="0.54761904">
+        <state line="346" column="50" selection-start="12348" selection-end="12348" vertical-scroll-proportion="-12.84">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../k2js/js/js.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="510" selection-end="510" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../k2js/k2js.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="0" selection-start="777" selection-end="777" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../k2js/translator/translator.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="0" selection-start="860" selection-end="860" vertical-scroll-proportion="0.612">
           <folding />
         </state>
       </provider>
@@ -1216,8 +1193,8 @@
         <settings>
           <artifact-editor>
             <show-content>
-              <type id="javaee-facet-resources" />
               <type id="jpa-descriptors" />
+              <type id="javaee-facet-resources" />
               <type id="artifact" />
               <type id="library" />
             </show-content>
