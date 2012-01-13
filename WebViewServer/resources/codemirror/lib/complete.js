@@ -601,6 +601,7 @@ $(document).ready(function () {
     function beforeComplete() {
         runTimerForNonPrinting();
         if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
+            startComplete(COMPLETION_ISNOT_AVAILABLE);
             setStatusBarMessage(COMPLETION_ISNOT_AVAILABLE);
             return;
         }
@@ -654,11 +655,15 @@ $(document).ready(function () {
             if (!isContinueComplete) {
                 keywords = [];
             }
-            var i = 0;
-            while (typeof data[i] != "undefined") {
-                var lookupElement = new LookupElement(data[i].name, data[i].tail, data[i].icon)
-                keywords.push(lookupElement);
-                i++;
+            if (data == COMPLETION_ISNOT_AVAILABLE) {
+                keywords.push(new LookupElement(COMPLETION_ISNOT_AVAILABLE, "", "/icons/warning.png"));
+            } else {
+                var i = 0;
+                while (typeof data[i] != "undefined") {
+                    var lookupElement = new LookupElement(data[i].name, data[i].tail, data[i].icon)
+                    keywords.push(lookupElement);
+                    i++;
+                }
             }
         } else {
             if (!isContinueComplete) {
@@ -667,10 +672,14 @@ $(document).ready(function () {
             }
             isContinueComplete = false;
         }
-        var completions = getCompletions(token);
-        document.getElementById("debug").innerHTML = completions.length + " " + isContinueComplete + " " + token + " " + keywords;
+        var completions;
+        if (data == COMPLETION_ISNOT_AVAILABLE) {
+            completions = getCompletions(COMPLETION_ISNOT_AVAILABLE);
+        } else {
+            completions = getCompletions(token);
+        }
         if ((completions.length == 0) || (completions == null)) return;
-        if (completions.length == 1 && !isContinueComplete) {
+        if (completions.length == 1 && !isContinueComplete && data != COMPLETION_ISNOT_AVAILABLE) {
             insert(completions[0].name);
             return;
         }
@@ -727,7 +736,7 @@ $(document).ready(function () {
             spanName.innerHTML = completions[i].name;
 
             var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-            if (is_chrome) {
+            if (is_chrome && data != COMPLETION_ISNOT_AVAILABLE) {
                 spanName.innerHTML += " : ";
             }
             pEl.appendChild(spanName);
@@ -756,8 +765,10 @@ $(document).ready(function () {
         document.getElementById("complete").focus();
 
         // Hack to hide the scrollbar.
-        if (i <= 10)
+        if (i <= 10) {
             complete.style.width = (sel.clientWidth - 1) + "px";
+            complete.style.height = (sel.size * 18) + "px";
+        }
 
         var done = false;
 
@@ -819,7 +830,13 @@ $(document).ready(function () {
     }
 
     function getCompletions(token) {
-        var found = [], start = token.string;
+        var start;
+        if (token == COMPLETION_ISNOT_AVAILABLE) {
+            start = token;
+        } else {
+            start = token.string;
+        }
+        var found = [];
 
         function maybeAdd(lookupElement) {
             if (lookupElement.name.indexOf(start) == 0) found.push(lookupElement);
@@ -840,15 +857,15 @@ $(document).ready(function () {
     }
 
     /*String.prototype.hashCode = function () {
-        var hash = 0;
-        if (this.length == 0) return hash;
-        for (i = 0; i < this.length; i++) {
-            char = this.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; // Convert to 32bit integer
-        }
-        return hash;
-    }*/
+     var hash = 0;
+     if (this.length == 0) return hash;
+     for (i = 0; i < this.length; i++) {
+     char = this.charCodeAt(i);
+     hash = ((hash << 5) - hash) + char;
+     hash = hash & hash; // Convert to 32bit integer
+     }
+     return hash;
+     }*/
 
     // Minimal event-handling wrapper.
     function stopEvent() {

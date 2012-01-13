@@ -22,33 +22,60 @@ var LOADING_EXAMPLE_OK = "Example is loaded.";
 var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
 var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 var COMPLETION_ISNOT_AVAILABLE = "Completion isn't available at on run mode.";
+var IE_SUPPORT = "Sorry, Internet Explorer is currently unsupported.";
 
 var sessionId = -1;
 var isApplet = false;
 var isJsApplet = true;
 var kotlinVersion;
 
+var isMac = false;
+
 var isAppletLoaded = false;
 
 var isContentEditorChanged = false;
 
 $(document).keydown(function (e) {
-    if (e.keyCode == 120 && e.ctrlKey && e.shiftKey) {
-        $("#runJS").click();
-    } else if (e.keyCode == 120 && e.ctrlKey) {
-        $("#run").click();
+    if (isMac) {
+        if (e.keyCode == 82 && e.ctrlKey && e.shiftKey) {
+            $("#runJS").click();
+        } else if (e.keyCode == 82 && e.ctrlKey) {
+            $("#run").click();
+        }
+    } else {
+        if (e.keyCode == 120 && e.ctrlKey && e.shiftKey) {
+            $("#runJS").click();
+        } else if (e.keyCode == 120 && e.ctrlKey) {
+            $("#run").click();
+        }
     }
 });
 
 
-function setMode(mode) {
-    if (mode == "APPLET") {
-        isApplet = true;
+function onBodyLoad() {
+    if (navigator.appVersion.indexOf("MSIE") != -1) {
+        document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
+    } else {
+        if (navigator.appVersion.indexOf("Mac") != -1) {
+            isMac = true;
+            var text = document.getElementById("help3").innerHTML;
+            text = text.replace("F9", "R");
+            document.getElementById("help3").innerHTML = text.replace("F9", "R");
+            document.getElementById("run").title = document.getElementById("run").title.replace("F9", "R");
+            document.getElementById("runJS").title = document.getElementById("runJS").title.replace("F9", "R");
+        }
+
+        $("#help3").toggle(true);
+        setSessionId();
+        resizeCentral();
+        setKotlinVersion('0.1.216');
+        loadAccordionContent();
+        loadHelpContentForExamples();
+        hideLoader();
     }
 }
 
 function setSessionId() {
-    $("#help3").toggle(false);
 
     var id;
     $.ajax({
@@ -65,7 +92,6 @@ function setSessionId() {
 function resizeCentral() {
     var wheight = (window.innerHeight) ? window.innerHeight :
         ((document.all) ? document.body.offsetHeight : null);
-//            alert(wheight);
     document.getElementById("scroll").style.height = (wheight - 262 - 72 - 20 - 10) + "px";
     document.getElementById("left").style.minHeight = (wheight - 72 - 20 - 10) + "px";
     document.getElementById("right").style.minHeight = (wheight - 72 - 20 - 10) + "px";

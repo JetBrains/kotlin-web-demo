@@ -182,8 +182,7 @@ $(".applet-enable").click(function () {
     $("#nohighlightingcheckbox").attr('checked', false);
     isApplet = true;
     if (!isAppletLoaded) {
-        showLoader();
-
+        waitLoadingApplet();
         try {
             document.getElementById("myapplet").style.display = "block";
             isAppletLoaded = true;
@@ -193,13 +192,40 @@ $(".applet-enable").click(function () {
                 title = title.substring(0, pos);
                 document.getElementById("appletclient").title = title;
             }
-            hideLoader();
         } catch (e) {
+            document.getElementById("debug").innerHTML = e;
+            alert("1");
             hideLoader();
             $(".applet-disable").click();
         }
     }
 });
+
+function waitLoadingApplet() {
+    var applet = $("#myapplet")[0];
+    showLoader();
+    function performAppletCode(count) {
+//        alert(count);
+        document.getElementById("debug").innerHTML += count + " " + applet.getHighlighting;
+        if (!applet.getHighlighting && count > 0) {
+            setTimeout(function () {
+                performAppletCode(count - 1);
+            }, 2000);
+        }
+        else if (applet.getHighlighting) {
+            hideLoader();
+        }
+        else {
+            hideLoader();
+        }
+    }
+
+    performAppletCode(10);
+}
+
+function appletIsLoaded() {
+    hideLoader();
+}
 
 $(".applet-disable").click(function () {
     var parent = $(this).parents('.switch');
