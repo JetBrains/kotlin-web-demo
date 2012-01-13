@@ -183,6 +183,7 @@ $(".applet-enable").click(function () {
     isApplet = true;
     if (!isAppletLoaded) {
         showLoader();
+
         try {
             document.getElementById("myapplet").style.display = "block";
             isAppletLoaded = true;
@@ -194,7 +195,6 @@ $(".applet-enable").click(function () {
             }
             hideLoader();
         } catch (e) {
-            alert("A");
             hideLoader();
             $(".applet-disable").click();
         }

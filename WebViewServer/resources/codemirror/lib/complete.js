@@ -600,7 +600,10 @@ $(document).ready(function () {
 
     function beforeComplete() {
         runTimerForNonPrinting();
-//        $("#tabs").tabs("select", 0);
+        if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
+            setStatusBarMessage(COMPLETION_ISNOT_AVAILABLE);
+            return;
+        }
         if (!isCompletionInProgress) {
             isCompletionInProgress = true;
             var i = editor.getValue();
@@ -633,8 +636,8 @@ $(document).ready(function () {
     }
 
     function continueComplete() {
-        startComplete(null);
         isContinueComplete = true;
+        startComplete(null);
     }
 
     function startComplete(data) {
@@ -665,8 +668,9 @@ $(document).ready(function () {
             isContinueComplete = false;
         }
         var completions = getCompletions(token);
+        document.getElementById("debug").innerHTML = completions.length + " " + isContinueComplete + " " + token + " " + keywords;
         if ((completions.length == 0) || (completions == null)) return;
-        if (completions.length == 1) {
+        if (completions.length == 1 && !isContinueComplete) {
             insert(completions[0].name);
             return;
         }
