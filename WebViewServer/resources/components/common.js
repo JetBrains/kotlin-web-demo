@@ -21,6 +21,7 @@ var GET_FROM_APPLET_FAILED = "Your system can't run Java Applets.";
 var LOADING_EXAMPLE_OK = "Example is loaded.";
 var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
 var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
+var IE_SUPPORT = "Sorry, but now your browser doesn't supported. We recommended to use Mozilla Firefox or Google Chrome.";
 
 var sessionId = -1;
 var isApplet = false;
@@ -40,14 +41,21 @@ $(document).keydown(function (e) {
 });
 
 
-function setMode(mode) {
-    if (mode == "APPLET") {
-        isApplet = true;
+function onBodyLoad() {
+    if (navigator.appVersion.indexOf("MSIE") != -1) {
+        document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
+    } else {
+        $("#help3").toggle(false);
+        setSessionId();
+        resizeCentral();
+        setKotlinVersion('0.1.216');
+        loadAccordionContent();
+        loadHelpContentForExamples();
+        hideLoader();
     }
 }
 
 function setSessionId() {
-    $("#help3").toggle(false);
 
     var id;
     $.ajax({
@@ -64,7 +72,6 @@ function setSessionId() {
 function resizeCentral() {
     var wheight = (window.innerHeight) ? window.innerHeight :
         ((document.all) ? document.body.offsetHeight : null);
-//            alert(wheight);
     document.getElementById("scroll").style.height = (wheight - 262 - 72 - 20 - 10) + "px";
     document.getElementById("left").style.minHeight = (wheight - 72 - 20 - 10) + "px";
     document.getElementById("right").style.minHeight = (wheight - 72 - 20 - 10) + "px";

@@ -2180,17 +2180,19 @@ var CodeMirror = (function () {
         "Left":"goCharLeft", "Right":"goCharRight", "Up":"goLineUp", "Down":"goLineDown",
         "End":"goLineEnd", "Home":"goLineStartSmart", "PageUp":"goPageUp", "PageDown":"goPageDown",
         "Delete":"delCharRight", "Backspace":"delCharLeft", "Tab":"indentMore", "Shift-Tab":"indentLess",
-        "Enter":"newlineAndIndent", "Insert":"toggleOverwrite", "Ctrl-A":"selectAll",
-        "Ctrl-Z":"undo", "Ctrl-Right":"goWordRight", "Ctrl-Left":"goWordLeft", "Ctrl-Alt-L":"indentAuto"
+        "Enter":"newlineAndIndent", "Ctrl-A":"selectAll",
+        "Ctrl-Z":"undo", "Ctrl-Right":"goWordRight", "Ctrl-Left":"goWordLeft", "Ctrl-Alt-L":"indentAuto",
+        "Ctrl-Home":"goDocStart", "Ctrl-End":"goDocEnd"
     };
 
     keyMap.macBasic = {
         "Left":"goCharLeft", "Right":"goCharRight", "Up":"goLineUp", "Down":"goLineDown",
         "PageUp":"goPageUp", "PageDown":"goPageDown",
         "Delete":"delCharRight", "Backspace":"delCharLeft", "Tab":"indentMore", "Shift-Tab":"indentLess",
-        "Enter":"newlineAndIndent", "Insert":"toggleOverwrite", "Cmd-A":"selectAll",
+        "Enter":"newlineAndIndent", "Cmd-A":"selectAll",
         "Cmd-Z":"undo", "Alt-Right":"goWordRight", "Alt-Left":"goWordLeft", "Ctrl-Alt-L":"indentAuto",
-        "Cmd-Left":"goLineStartSmart", "Cmd-Right":"goLineEnd"
+        "Cmd-Left":"goLineStartSmart", "Cmd-Right":"goLineEnd",
+        "Ctrl-Home":"goDocStart", "Ctrl-End":"goDocEnd"
     };
     // Note that the save and find-related commands aren't defined by
     // default. Unknown commands are simply ignored.

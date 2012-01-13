@@ -325,12 +325,18 @@ $(document).ready(function () {
             try {
                 editor.clearMarker(i);
             } catch (e) {
-               //Absent marker for line
+                //Absent marker for line
             }
         }
-        $("#nohighlightingcheckbox").attr('checked', false);
+        var isChecked = false;
+        if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
+            $("#nohighlightingcheckbox").attr('checked', false);
+            isChecked = true;
+        }
         getErrors();
-        $("#nohighlightingcheckbox").attr('checked', true);
+        if (isChecked) {
+            $("#nohighlightingcheckbox").attr('checked', true);
+        }
     });
 
 
@@ -384,9 +390,7 @@ $(document).ready(function () {
                 var dataFromApplet;
                 var data;
                 try {
-                    showLoader();
                     dataFromApplet = $("#myapplet")[0].getHighlighting(i);
-                    hideLoader();
                     isLoadingHighlighting = false;
                 } catch (e) {
                     isLoadingHighlighting = false;
@@ -400,20 +404,6 @@ $(document).ready(function () {
             }
             else {
                 sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
-                /*$.ajax({
-                 url:document.location.href + "?sessionId=" + sessionId + "&sendData=true",
-                 context:document.body,
-                 success:onHighlightingSuccessWaitAfterConvertToJs,
-                 dataType:"json",
-                 type:"POST",
-                 data:{text:i},
-                 timeout:10000,
-                 error:function () {
-                 document.getElementById("problems").innerHTML = "";
-                 isLoadingHighlighting = false;
-                 setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
-                 }
-                 });*/
             }
         }
     );
@@ -791,11 +781,13 @@ $(document).ready(function () {
 
             // Enter and space
             if (code == 13 || code == 32) {
+                isContinueComplete = false;
                 event.stop();
                 pick();
             }
             // Escape
             else if (code == 27) {
+                isContinueComplete = false;
                 event.stop();
                 close();
                 editor.focus();
@@ -843,7 +835,7 @@ $(document).ready(function () {
         return found;
     }
 
-    String.prototype.hashCode = function () {
+    /*String.prototype.hashCode = function () {
         var hash = 0;
         if (this.length == 0) return hash;
         for (i = 0; i < this.length; i++) {
@@ -852,7 +844,7 @@ $(document).ready(function () {
             hash = hash & hash; // Convert to 32bit integer
         }
         return hash;
-    }
+    }*/
 
     // Minimal event-handling wrapper.
     function stopEvent() {
