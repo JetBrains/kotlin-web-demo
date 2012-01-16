@@ -1,11 +1,11 @@
 import junit.framework.TestCase;
 import org.jetbrains.annotations.Nullable;
-import web.view.ukhorskaya.ErrorWriter;
-import web.view.ukhorskaya.ErrorWriterOnServer;
-import web.view.ukhorskaya.Initializer;
-import web.view.ukhorskaya.ResponseUtils;
-import web.view.ukhorskaya.server.KotlinHttpServer;
-import web.view.ukhorskaya.server.ServerSettings;
+import org.jetbrains.demo.ukhorskaya.ErrorWriter;
+import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
+import org.jetbrains.demo.ukhorskaya.Initializer;
+import org.jetbrains.demo.ukhorskaya.ResponseUtils;
+import org.jetbrains.demo.ukhorskaya.server.KotlinHttpServer;
+import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
 
 import java.io.*;
 import java.net.HttpURLConnection;
