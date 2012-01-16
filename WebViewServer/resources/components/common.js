@@ -21,7 +21,7 @@ var GET_FROM_APPLET_FAILED = "Your system can't run Java Applets.";
 var LOADING_EXAMPLE_OK = "Example is loaded.";
 var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
 var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
-var COMPLETION_ISNOT_AVAILABLE = "Completion isn't available at on run mode.";
+var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
 var IE_SUPPORT = "Sorry, Internet Explorer is currently unsupported.";
 
 var sessionId = -1;
