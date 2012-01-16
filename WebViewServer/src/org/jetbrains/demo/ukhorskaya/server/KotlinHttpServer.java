@@ -30,6 +30,7 @@ public class KotlinHttpServer {
     }
 
     public static String getHost() {
+        System.out.println("aaa");
         if (server != null) {
             return server.getAddress().getHostName();
         } else return null;
