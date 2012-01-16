@@ -755,7 +755,10 @@ $(document).ready(function () {
         complete.appendChild(sel);
 
         sel.multiple = true;
-        sel.firstChild.selected = true;
+
+        if (data == COMPLETION_ISNOT_AVAILABLE) {
+            sel.firstChild.selected = false;
+        }
         sel.size = Math.min(10, i);
 
         var pos = editor.cursorCoords();
@@ -782,6 +785,11 @@ $(document).ready(function () {
             var text = sel.options[sel.selectedIndex].childNodes[0].childNodes[1].textContent;
             if (typeof text == "undefined") {
                 text = sel.options[sel.selectedIndex].childNodes[0].childNodes[1].innerHTML;
+            }
+            if (text == COMPLETION_ISNOT_AVAILABLE) {
+                close();
+                editor.focus();
+                return;
             }
             insert(text);
             close();

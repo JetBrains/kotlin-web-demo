@@ -193,7 +193,7 @@ $(".applet-enable").click(function () {
                 document.getElementById("appletclient").title = title;
             }
         } catch (e) {
-            document.getElementById("debug").innerHTML = e;
+//            document.getElementById("debug").innerHTML = e;
             alert("1");
             hideLoader();
             $(".applet-disable").click();
@@ -206,7 +206,7 @@ function waitLoadingApplet() {
     showLoader();
     function performAppletCode(count) {
 //        alert(count);
-        document.getElementById("debug").innerHTML += count + " " + applet.getHighlighting;
+//        document.getElementById("debug").innerHTML += count + " " + applet.getHighlighting;
         if (!applet.getHighlighting && count > 0) {
             setTimeout(function () {
                 performAppletCode(count - 1);

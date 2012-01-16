@@ -108,26 +108,13 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
                     }
                 }
 
-                /*if (next == "$" && !escaped && stream.eat("{")) {
-                 state.tokenize.push(tokenBaseUntilBrace());
-                 return "string";
-                 }*/
 
-                /*if (next == "$" && !escaped) {
-                 state.tokenize.push(stream.eatWhile(/[\w]/));
-                 return "string";
-                 }*/
-
-                /*if (next == "$" && !escaped) {
-                 state.tokenize.push(tokenBaseUntilSpace());
-                 return "string";
-                 }*/
                 if (quote == '"' && next == "$" && !escaped && stream.eat("{")) {
                     state.tokenize.push(tokenBaseUntilBrace());
                     return "string";
                 }
 
-                if (next == "$" && !escaped) {
+                if (next == "$" && !escaped && !stream.eat(" ")) {
                     state.tokenize.push(tokenBaseUntilSpace());
                     return "string";
                 }
