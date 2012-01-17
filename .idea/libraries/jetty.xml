@@ -1,0 +1,60 @@
+<component name="libraryTable">
+  <library name="jetty">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../plugins/jetty/jetty-6.1.3/lib/jetty-6.1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/jetty/jetty-6.1.3/lib/jetty-util-6.1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../plugins/jetty/jetty-6.1.3/lib/servlet-api-2.5-6.1.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/grizzly/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/gwt/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/wadi/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/cometd/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/cometd/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/setuid/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/jboss/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/spring/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/sessioncache/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/xbean/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/xbean/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/threadpool/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/tests/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/ajp/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/ajp/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/servlet-tester/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/servlet-tester/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/win32service/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/ant/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/ant/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/extras/sslengine/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/naming/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/naming/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/plus/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/plus/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/jspc-maven-plugin/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/servlet-api-2.5/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/jsp-2.1/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/jetty/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/jetty/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/maven-plugin/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/start/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/html/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/html/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/jsp-api-2.0/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/annotations/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/annotations/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/management/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/management/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/util/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/modules/util/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/examples/cometd-demo/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/examples/spring-ebj3-demo/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/examples/test-jndi-webapp/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/examples/embedded/src/test/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/examples/embedded/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/examples/test-webapp/src/main/java" />
+      <root url="jar://$USER_HOME$/Downloads/jetty-6.1.3-src.zip!/jetty-6.1.3/examples/test-annotations/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

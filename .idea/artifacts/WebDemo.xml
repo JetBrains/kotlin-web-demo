@@ -1,0 +1,30 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="WebDemo">
+    <output-path>$PROJECT_DIR$/out/artifacts/WebDemo</output-path>
+    <root id="archive" name="WebDemo.war">
+      <element id="javaee-facet-resources" facet="WebViewServer/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="WebViewServer" />
+          <element id="module-output" name="WebView" />
+          <element id="module-output" name="translator" />
+          <element id="module-output" name="js" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/lib/log4j-1.2.16.jar" />
+          <element id="library" level="project" name="json" />
+          <element id="library" level="project" name="kotlinLibrary" />
+          <element id="library" level="project" name="commons-lang-2.4" />
+          <element id="library" level="project" name="commons-httpclient-3.1-patched" />
+          <element id="library" level="project" name="junit-4.7" />
+          <element id="library" level="project" name="org.mozilla:rhino:1.7R3" />
+          <element id="library" level="project" name="annotations" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-compiler.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-runtime.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/guava-r09.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/intellij-core.jar" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -4,6 +4,10 @@ import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesList;
 import org.jetbrains.demo.ukhorskaya.help.HelpLoader;
 import org.jetbrains.demo.ukhorskaya.server.KotlinHttpServer;
 import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
+import org.jetbrains.demo.ukhorskaya.servlet.KotlinHttpServlet;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.servlet.Context;
+import org.mortbay.jetty.servlet.ServletHolder;
 
 import java.io.*;
 import java.util.Properties;
@@ -20,48 +24,52 @@ public class Main {
 
 
     public static void main(String[] args) {
-        //branch
+
         try {
-            System.setProperty("kotlin.running.in.server.mode", "true");
-
-            ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
-
-            if (args.length == 2) {
-                ServerSettings.HOST = args[0];
-                ErrorWriter.writeInfoToConsole("Host is set: " + args[0]);
-                ServerSettings.PORT = args[1];
-                ErrorWriter.writeInfoToConsole("Port is set: " + args[1]);
-            }
-            new File(ServerSettings.LOGS_ROOT).mkdir();
-            new File(ServerSettings.STATISTICS_ROOT).mkdir();
-
-            if (loadProperties()) {
-                try {
-                    if (Initializer.getInstance().initJavaCoreEnvironment()) {
-                        KotlinHttpServer.startServer();
-                        ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-                        ExamplesList.getInstance();
-                        HelpLoader.getInstance();
-                        Statistics.getInstance();
-                        startConsoleThread();
-                    } else {
-                        ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
-                    }
-                } catch (Exception e) {
-                    ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
-                    System.exit(1);
-                }
-
-            } else {
-                ErrorWriter.writeErrorToConsole("Can not find config.properties.");
-            }
-            System.err.println("Last line");
-            Thread.sleep(1000000000000000000L);
-        } catch (Throwable e) {
+            Server server = new Server(8088);
+            Context root = new Context(server, "/", Context.SESSIONS);
+            root.addServlet(new ServletHolder(new KotlinHttpServlet()), "/*");
+            server.start();
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
 
+
+        //branch
+       /* System.setProperty("kotlin.running.in.server.mode", "true");
+
+        ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
+
+        if (args.length == 2) {
+            ServerSettings.HOST = args[0];
+            ErrorWriter.writeInfoToConsole("Host is set: " + args[0]);
+            ServerSettings.PORT = args[1];
+            ErrorWriter.writeInfoToConsole("Port is set: " + args[1]);
+        }
+        new File(ServerSettings.LOGS_ROOT).mkdir();
+        new File(ServerSettings.STATISTICS_ROOT).mkdir();
+
+        if (loadProperties()) {
+            try {
+                if (Initializer.getInstance().initJavaCoreEnvironment()) {
+                    //KotlinHttpServer.startServer();
+                    ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
+                    ExamplesList.getInstance();
+                    HelpLoader.getInstance();
+                    Statistics.getInstance();
+                    startConsoleThread();
+                } else {
+                    ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
+                }
+            } catch (Exception e) {
+                ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
+                System.exit(1);
+            }
+
+        } else {
+            ErrorWriter.writeErrorToConsole("Can not find config.properties.");
+        }*/
     }
 
     private static void startConsoleThread() {

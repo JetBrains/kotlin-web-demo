@@ -11,7 +11,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/annotations.jar!/" />
+          <root url="jar://$IDEA_HOME$/lib/annotations.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
