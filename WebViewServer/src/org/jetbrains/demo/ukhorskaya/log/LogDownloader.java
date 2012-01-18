@@ -1,13 +1,16 @@
 package org.jetbrains.demo.ukhorskaya.log;
 
+import com.google.common.io.Files;
 import org.jetbrains.demo.ukhorskaya.*;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
+import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -23,29 +26,12 @@ public class LogDownloader {
         File log = new File(path);
 
         if (log.exists()) {
-            FileReader reader = null;
             try {
-                reader = new FileReader(log);
-                //                InputStream is = LogDownloader.class.getResourceAsStream("/clearhtml.htmlPatern");
-//                String htmlPatern = ResponseUtils.readData(is, true);
-//                htmlPatern = htmlPatern.replace("$RESPONSEBODY$", ResponseUtils.escapeString(response));
-//                htmlPatern = htmlPatern.replace("\n", "<br/>");
-                return ResponseUtils.readData(reader, true);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                return Files.toString(log, Charset.forName("utf-8"));
             } catch (IOException e) {
-                System.err.println("Error");
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                } catch (IOException e) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Load log", e, path));
-                }
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), e, log.getAbsolutePath()));
             }
-
         }
         return "";
     }
@@ -72,8 +58,8 @@ public class LogDownloader {
             for (File file : files) {
                 if (file.getName().contains(".log")) {
                     responseJavaLogs.append(ResponseUtils.generateTag("span", file.getName()));
-                    responseJavaLogs.append(ResponseUtils.generateTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
-                    responseJavaLogs.append(ResponseUtils.generateTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
+                    responseJavaLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&view")));
+                    responseJavaLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&download")));
                     responseJavaLogs.append(ResponseUtils.addNewLine());
                 }
             }
@@ -95,14 +81,16 @@ public class LogDownloader {
             for (File file : files) {
                 if (file.getName().contains("exceptions.log")) {
                     responseExceptionLogs.append(ResponseUtils.generateTag("span", file.getName()));
-                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
-                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
+                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&view")));
+                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&download")));
                     responseExceptionLogs.append(ResponseUtils.addNewLine());
                 } else {
                     responseOtherLogs.append(ResponseUtils.generateTag("span", file.getName()));
-                    responseOtherLogs.append(ResponseUtils.generateTag("a", "view", "href", "/log=" + file.getAbsolutePath() + "&view"));
-                    responseOtherLogs.append(ResponseUtils.generateTag("a", "download", "href", "/log=" + file.getAbsolutePath() + "&download"));
+                    responseOtherLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&view")));
+                    responseOtherLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&download")));
                     responseOtherLogs.append(ResponseUtils.addNewLine());
+                    //log=C:\Development\contrib\jet-contrib\WebView\logs\kotlincompiler.log&view
+                    //http://localhost:8080/kotlinServer?sessionId=0&type=downloadLog&args=C:\Development\contrib\jet-contrib\WebView\logs\kotlincompiler.log&view
                 }
             }
         }

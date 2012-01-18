@@ -76,6 +76,8 @@ public class CommandRunner {
             ServerSettings.OUTPUT_DIRECTORY = ResponseUtils.substringAfter(setting, "output ");
         } else if (setting.startsWith("examples")) {
             ServerSettings.EXAMPLES_ROOT = ResponseUtils.substringAfter(setting, "examples ");
+        } else if (setting.startsWith("resources")) {
+            ServerSettings.RESOURCES_ROOT = ResponseUtils.substringAfter(setting, "resources ");
         } else if (setting.startsWith("help")) {
             ServerSettings.HELP_ROOT = ResponseUtils.substringAfter(setting, "help ");
         } else if (setting.startsWith("testconnectionoutput")) {

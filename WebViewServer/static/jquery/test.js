@@ -16,7 +16,7 @@ $(document).ready(function () {
         var url = document.location.href;
         url = url.replace("testConnection", "path=testUrl?sessionId=555&sendData=true");
         $.ajax({
-            url:url + "?sendData=true",
+            url:url + generateAjaxUrl("highlight", "null"),
             type:"POST",
             data:{text:i},
             complete:onLoadHighlighting
@@ -32,7 +32,7 @@ $(document).ready(function () {
     function getApplet() {
 //        var url = document.location.href;
 //        url = url.replace("testConnection", "WebViewApplet.jar");
-        var url = "http://st-004:8080/resources/WebViewApplet.jar";
+        var url = document.location.href + "/WebViewApplet.jar";
         $.ajax({
             url:url,
             type:"GET",
@@ -48,7 +48,7 @@ $(document).ready(function () {
 
     function getCompletion() {
         var url = document.location.href;
-        url = url.replace("testConnection", "path=testUrl?sessionId=555&complete=true&cursorAt=27,15");
+        url = url.replace("testConnection", generateAjaxUrl("complete", "27,15"));
         $.ajax({
             url:url,
             type:"POST",

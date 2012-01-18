@@ -1,5 +1,6 @@
 package org.jetbrains.demo.ukhorskaya.examplesLoader;
 
+import com.intellij.openapi.util.Pair;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
@@ -24,6 +25,14 @@ public class ExamplesLoader {
 //    private static final Logger LOG = Logger.getLogger(ExamplesLoader.class);
 
     public ExamplesLoader() {
+    }
+    
+    public String getResultByExampleName(String name) {
+        Pair<Integer, String> pair = ExamplesList.getInstance().findExampleByName(name);
+        if (pair != null) {
+            return getResult(pair.first, pair.second);
+        }
+        return "[{\"text\":\"Cannot find this example. Please choose another example.\"}]";
     }
 
     public String getResult(int id, String headName) {

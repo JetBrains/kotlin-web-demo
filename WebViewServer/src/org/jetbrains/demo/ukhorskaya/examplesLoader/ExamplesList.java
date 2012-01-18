@@ -1,5 +1,6 @@
 package org.jetbrains.demo.ukhorskaya.examplesLoader;
 
+import com.intellij.openapi.util.Pair;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class ExamplesList {
     //    private static final Logger LOG = Logger.getLogger(ExamplesList.class);
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
-    
+
     private static StringBuilder response;
 
     private ExamplesList() {
@@ -37,6 +38,24 @@ public class ExamplesList {
 
     public List<Map<String, String>> getList() {
         return list;
+    }
+
+    @Nullable
+    public Pair<Integer, String> findExampleByName(String name) {
+        int i = 0;
+        String lastHead = "";
+        name = name.replaceAll("%20", " ");
+        for (Map<String, String> map : list) {
+            if (map.get("type").equals("head")) {
+                lastHead = map.get("text");
+            } else if (map.get("type").equals("content")) {
+                if (map.get("text").equals(name)) {
+                    return new Pair<Integer, String>(i, lastHead);
+                }
+            }
+            i++;
+        }
+        return null;
     }
 
     public Map<String, String> getMapFromList(int id) {

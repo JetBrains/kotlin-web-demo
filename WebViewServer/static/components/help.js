@@ -59,7 +59,7 @@ function compareHelpForExamples(name, elementArray) {
 function loadHelpContentForExamples() {
     loadHelpContentForWords();
     $.ajax({
-        url:document.location.href + "?sessionId=" + sessionId + "&allHelpExamples=true",
+        url:document.location.href + generateAjaxUrl("loadHelpForExamples", "null"),
         context:document.body,
         success:onLoadingHelpForExamplesSuccess,
         dataType:"json",
@@ -85,7 +85,7 @@ function onLoadingHelpForExamplesSuccess(data) {
 
 function loadHelpContentForWords() {
     $.ajax({
-        url:document.location.href + "?sessionId=" + sessionId + "&allHelpWords=true",
+        url:document.location.href + generateAjaxUrl("loadHelpForWords", "null"),
         context:document.body,
         success:onLoadingHelpForWordsSuccess,
         dataType:"json",

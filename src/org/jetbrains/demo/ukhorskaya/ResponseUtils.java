@@ -1,9 +1,10 @@
 package org.jetbrains.demo.ukhorskaya;
 
+import com.intellij.openapi.util.Pair;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,6 +36,14 @@ public class ResponseUtils {
             string = string.replaceAll("\"", "'");
         }*/
         return string;
+    }
+
+    public static String generateRequestString(String type, String args) {
+        return "/kotlinServer?sessionId=-1&type=" + type + "&args=" + args;
+    }
+
+    public static String generateRequestStringWoQuery(String type, String args) {
+        return "/kotlinServer&sessionId=-1&type=" + type + "&args=" + args;
     }
 
     //Get Color as String

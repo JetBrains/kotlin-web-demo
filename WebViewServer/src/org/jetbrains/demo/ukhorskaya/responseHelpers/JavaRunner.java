@@ -311,8 +311,8 @@ public class JavaRunner {
         builder.append("-classpath ");
         //builder.append(System.getProperty("java.class.path"));
         builder.append(pathToRootOut);
-        builder.append(File.pathSeparator);
-        builder.append("WebView.jar");
+//        builder.append(File.pathSeparator);
+//        builder.append("WebView.jar");
         builder.append(File.pathSeparator);
         builder.append(ServerSettings.PATH_TO_KOTLIN_LIB);
         builder.append(" ");

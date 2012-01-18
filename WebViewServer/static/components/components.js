@@ -72,7 +72,7 @@ function loadAccordionContent() {
     acc.id = "accordion";
     document.getElementById("examplesaccordion").appendChild(acc);
     $.ajax({
-        url:document.location.href + "?sessionId=" + sessionId + "&allExamples=true",
+        url:document.location.href + generateAjaxUrl("loadExample", "all"),
         context:document.body,
         success:onLoadingExamplesSuccess,
         dataType:"json",
@@ -109,7 +109,8 @@ function onLoadingExamplesSuccess(data) {
             span.innerHTML = "&#8226;";
             content.appendChild(span);
             var contA = document.createElement("a");
-            contA.id = i + "&head=" + lastHeadName;
+            contA.id = data[i].text;
+//            contA.id = i + "&head=" + lastHeadName;
             contA.style.cursor = "pointer";
             contA.onclick = function (event) {
                 loadExample(this.id, this.innerHTML);
@@ -125,12 +126,23 @@ function onLoadingExamplesSuccess(data) {
         autoHeight:false,
         navigation:true
     });
+
+    var url = document.location.href;
+    url = url.substring(url.lastIndexOf("/?"));
+    if (url.indexOf("http://") != 0) {
+        //http://localhost/?example=Simplest_version
+        url = url.substring(2);
+        if (url.indexOf("example=") == 0) {
+            url = url.replace(new RegExp("_", 'g'), " ");
+            loadExample(url.substring(8));
+        }
+    }
 }
 
 var loadingExample = false;
 var lastSelectedExample = 0;
 
-function loadExample(id, innerhtml) {
+function loadExample(innerhtml) {
     if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged) {
         document.getElementById("problems").innerHTML = "";
         setConsoleMessage("");
@@ -140,12 +152,12 @@ function loadExample(id, innerhtml) {
             el.className = "";
         }
 
-        lastSelectedExample = id;
-        document.getElementById(id).className = "selectedExample";
+        lastSelectedExample = innerhtml;
+        document.getElementById(innerhtml).className = "selectedExample";
         document.getElementById("statusbar").innerHTML = "Loading example...";
         loadingExample = true;
         $.ajax({
-            url:document.location.href + "?sessionId=" + sessionId + "&exampleId=" + id,
+            url:document.location.href + generateAjaxUrl("loadExample", innerhtml),
             context:document.body,
             success:onLoadingExampleSuccess,
             dataType:"json",

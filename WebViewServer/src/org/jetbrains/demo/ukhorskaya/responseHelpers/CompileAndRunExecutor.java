@@ -34,14 +34,12 @@ import java.util.Map;
 
 public class CompileAndRunExecutor {
 
-    private final boolean isOnlyCompilation;
     private final PsiFile currentPsiFile;
     private final String arguments;
 
     private final SessionInfo sessionInfo;
 
-    public CompileAndRunExecutor(boolean onlyCompilation, PsiFile currentPsiFile, String arguments, SessionInfo info) {
-        this.isOnlyCompilation = onlyCompilation;
+    public CompileAndRunExecutor(PsiFile currentPsiFile, String arguments, SessionInfo info) {
         this.currentPsiFile = currentPsiFile;
         this.arguments = arguments;
         this.sessionInfo = info;
@@ -57,9 +55,6 @@ public class CompileAndRunExecutor {
         }
 
         if (errors.isEmpty() || isOnlyWarnings(errors)) {
-            if (isOnlyCompilation) {
-                return "[{\"text\":\"Compilation complete successfully\",\"type\":\"out\"}]";
-            }
             Project currentProject = currentPsiFile.getProject();
 //            BindingContext bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
 //                                (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);

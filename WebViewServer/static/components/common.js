@@ -7,7 +7,6 @@
  */
 /*Messages*/
 //Problems with ajax-request to server
-var REQUEST_ABORTED = "Ajax request aborted.";
 var HIGHLIGHT_REQUEST_ABORTED = "Can't get errors/warnings from server.";
 var RUN_REQUEST_ABORTED = "Can't get program output from server.";
 var COMPLETE_REQUEST_ABORTED = "Can't get completion proposal list from server.";
@@ -79,7 +78,7 @@ function setSessionId() {
 
     var id;
     $.ajax({
-        url:document.location.href + "getSessionId",
+        url:document.location.href + generateAjaxUrl("getSessionId", "null"),
         context:document.body,
         type:"GET",
         dataType:"html",
@@ -114,14 +113,11 @@ function getSessionIdSuccess(data) {
     var info = "browser: " + navigator.appName + " " + navigator.appVersion;
     info += " " + "system: " + navigator.platform;
     $.ajax({
-        url:document.location.href + "?sessionId=" + id + "&userData=true",
+        url:document.location.href + generateAjaxUrl("sendUserData", "null"),
         context:document.body,
         type:"POST",
         data:{text:info},
-        timeout:5000,
-        error:function () {
-            setStatusBarMessage(REQUEST_ABORTED);
-        }
+        timeout:5000
     });
 }
 
@@ -204,3 +200,7 @@ function showJsCode() {
 $("#whatimg").click(function () {
     $("#dialog").dialog("open");
 });
+
+function generateAjaxUrl(type, args) {
+    return "kotlinServer?sessionId=" + sessionId + "&type=" + type + "&args=" + args;
+}

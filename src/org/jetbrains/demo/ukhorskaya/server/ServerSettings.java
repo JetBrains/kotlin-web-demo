@@ -30,4 +30,5 @@ public class ServerSettings {
 
     // Applet or server
     public static String MODE = "SERVER";
+    public static String RESOURCES_ROOT = "";
 }

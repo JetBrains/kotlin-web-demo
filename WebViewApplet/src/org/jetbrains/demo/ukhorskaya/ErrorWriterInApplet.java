@@ -34,7 +34,7 @@ public class ErrorWriterInApplet extends ErrorWriter {
     }
 
     public static void sendTextToServer(String text, String request, String type) {
-        String urlPath = request + "/?sessionId=" + MainApplet.SESSION_INFO.getId() + "&writeLog=" + type;
+        String urlPath = request + ResponseUtils.generateRequestString("writeLog", type);
 
         URL url;
         try {

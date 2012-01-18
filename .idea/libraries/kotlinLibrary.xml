@@ -1,11 +1,6 @@
 <component name="libraryTable">
   <library name="kotlinLibrary">
-    <ANNOTATIONS>
-      <root url="file://$PROJECT_DIR$/../../../jet" />
-    </ANNOTATIONS>
     <CLASSES>
-      <root url="file://C:/src/idea" />
-      <root url="file://$PROJECT_DIR$/../../../jet" />
       <root url="jar://$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/annotations.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/asm-commons.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/asm-util-3.3.1.jar!/" />

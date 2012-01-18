@@ -1,3 +1,11 @@
 Manifest-Version: 1.0
+Class-Path: kotlinLibs/kotlin-compiler.jar kotlinLibs/annotations.jar 
+ kotlinLibs/asm-commons.jar kotlinLibs/asm-util-3.3.1.jar kotlinLibs/a
+ sm.jar kotlinLibs/cli-10.jar kotlinLibs/guava-r09.jar kotlinLibs/inte
+ llij-core.jar kotlinLibs/kotlin-compiler.jar kotlinLibs/kotlin-runtim
+ e.jar kotlinLibs/picocontainer.jar kotlinLibs/trove4j.jar kotlinLibs/
+ rhino-1.7R3.jar kotlinLibs/junit-4.7.jar kotlinLibs/json-20090211.jar
+  kotlinLibs/commons-lang-2.4.jar kotlinLibs/commons-httpclient-3.1-pa
+ tched.jar kotlinLibs/log4j-1.2.16.jar
 Main-Class: org.jetbrains.demo.ukhorskaya.Main
 
