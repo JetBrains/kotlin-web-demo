@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Server manager</title>
+    <style type="text/css">
+        a {
+            margin-left: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        function generateDateRequest(param) {
+            document.location.href = generateAjaxUrl("sortExceptions", "from=" + document.getElementById("dateFrom").value +
+                    "&to=" + document.getElementById("dateTo").value);
+        }
+
+        function generateDateRequestWithDate(param, date) {
+            document.location.href = generateAjaxUrl("sortExceptions", "from=" + date + "&to=" + date);
+        }
+
+        function showUserInfo() {
+            document.location.href = generateAjaxUrl("showUserInfo", "null");
+        }
+
+        function generateAjaxUrl(type, args) {
+            return "kotlinServer?sessionId=-1&type=" + type + "&args=" + args;
+        }
+
+    </script>
+</head>
+<body>
+<div>
+    <h3>EXAMPLES AND HELP:</h3>
+    <a href="kotlinServer?sessionId=-1&type=updateExamples&args=null">Update examples and help</a>
+</div>
+<div>
+    <h3>LOGS:</h3>
+    $LINKSTOLOGFILES$
+</div>
+<div>
+    <h5>SORTED LOGS:</h5>
+    Date in format MM/dd/yyyy (from &lt;= date &lt;= to)
+    <form>
+        <label>
+            from <input name="dateFrom" id="dateFrom" value="12/01/2011"/>
+        </label>
+        <label>
+            to <input name="dateTo" id="dateTo" value="$CURRENTDATE$"/>
+        </label>
+    </form>
+    <table>
+        <tr>
+            <td><a href="#" onclick="generateDateRequest('view')">Show sorted exceptions</a></td>
+            <td><a href="#" onclick="generateDateRequest('download')">Download sorted exceptions</a></td>
+        </tr>
+        <tr>
+            <td height="20"></td>
+        </tr>
+        <tr>
+            <td><a href="#" onclick="generateDateRequestWithDate('view', 'today')">Show sorted exceptions for today</a>
+            </td>
+            <td><a href="#" onclick="generateDateRequestWithDate('download', 'today')">Download sorted exceptions for
+                today</a></td>
+        </tr>
+        <tr>
+            <td><a href="#" onclick="generateDateRequestWithDate('view', 'week')">Show sorted exceptions for last
+                week</a></td>
+            <td><a href="#" onclick="generateDateRequestWithDate('download', 'week')">Download sorted exceptions for
+                last week</a></td>
+        </tr>
+    </table>
+
+    <br/>
+
+    <br/>
+
+
+</div>
+<div>
+    <h3>STATISTICS:</h3>
+    <span style="margin-right: 20px;">$UPDATETIME$</span>
+
+    <form action="/kotlinServer&sessionId=-1&type=updateStatistics&args=null">
+        <button>Update statistics</button>
+    </form>
+    <table id="statistics">
+        <tr>
+            <td>Period:</td>
+            <td>$LOGSPERIOD$</td>
+        </tr>
+        <tr>
+            <td>Total number of unique visitors:</td>
+            <td>$NUMBER_OF_USERS$</td>
+        </tr>
+        <tr>
+            <td>Total number of unique visitors (from log):</td>
+            <td>$NUMBER_OF_USERS_FROM_LOG$</td>
+        </tr>
+        <tr>
+            <td>Number of visitors per day:</td>
+            <td>$NUMBER_OF_USERS_PER_DAY$</td>
+        </tr>
+        <tr>
+            <td>Number of new visitors per day:</td>
+            <td>$NUMBER_OF_NEW_USERS_PER_DAY$</td>
+        </tr>
+        <tr>
+            <td>Number of user requests (for one user):</td>
+            <td>$NUMBER_OF_REQUEST_PER_USER$</td>
+        </tr>
+        <tr>
+            <td>Number of user run requests (for one user):</td>
+            <td>$NUMBER_OF_RUN_REQUEST_PER_USER$</td>
+        </tr>
+        <tr>
+            <td>Number of user highlighting requests (for one user):</td>
+            <td>$NUMBER_OF_HIGHLIGHT_REQUEST_PER_USER$</td>
+        </tr>
+        <tr>
+            <td>Number of user completion requests (for one user):</td>
+            <td>$NUMBER_OF_COMPLETE_REQUEST_PER_USER$</td>
+        </tr>
+        <tr>
+            <td><a href="#" onclick="showUserInfo()">Show info for each user</a></td>
+        </tr>
+    </table>
+</div>
+<div>
+    <p>example format: http://HOST/?example=An_object-oriented_Hello or http://HOST/?example=Maze
+        <br/>-replace space for _
+        <br/>-add after host /?example=
+        <br/>-attention: name of file is case sensitive
+    </p>
+</div>
+</body>
+</html>

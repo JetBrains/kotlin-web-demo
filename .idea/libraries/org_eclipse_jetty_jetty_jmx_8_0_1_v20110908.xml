@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="org.eclipse.jetty:jetty-jmx:8.0.1.v20110908" type="repository">
+    <properties maven-id="org.eclipse.jetty:jetty-jmx:8.0.1.v20110908" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jetty-jmx-8.0.1.v20110908.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jetty-util-8.0.1.v20110908.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/jetty-jmx-8.0.1.v20110908-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jetty-util-8.0.1.v20110908-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/jetty-jmx-8.0.1.v20110908-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jetty-util-8.0.1.v20110908-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
