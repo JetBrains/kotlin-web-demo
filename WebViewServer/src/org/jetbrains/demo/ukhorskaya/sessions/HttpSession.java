@@ -135,8 +135,10 @@ public class HttpSession {
             writeResponse("Response sended", HttpStatus.SC_OK);
         } else {
             StringBuilder response = new StringBuilder();
+            InputStream is = null;
             try {
-                response.append(Files.toString(new File(ServerSettings.RESOURCES_ROOT + File.separator + "testConnection.html"), Charset.forName("UTF-8")));
+                is = HttpSession.class.getResourceAsStream("/testConnection.html");
+                response.append(ResponseUtils.readData(is, true));
             } catch (FileNotFoundException e) {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "logs.html not found"));
                 writeResponse("Cannot open this page", HttpStatus.SC_BAD_GATEWAY);

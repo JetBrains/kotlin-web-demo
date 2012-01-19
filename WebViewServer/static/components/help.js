@@ -59,7 +59,7 @@ function compareHelpForExamples(name, elementArray) {
 function loadHelpContentForExamples() {
     loadHelpContentForWords();
     $.ajax({
-        url:document.location.href + generateAjaxUrl("loadHelpForExamples", "null"),
+        url: generateAjaxUrl("loadHelpForExamples", "null"),
         context:document.body,
         success:onLoadingHelpForExamplesSuccess,
         dataType:"json",
@@ -67,7 +67,7 @@ function loadHelpContentForExamples() {
         //data:{text:i},
         timeout:30000,
         error:function () {
-            setStatusBarMessage(REQUEST_ABORTED);
+            setStatusBarMessage(HELP_REQUEST_ABORTED);
         }
     });
 }
@@ -85,7 +85,7 @@ function onLoadingHelpForExamplesSuccess(data) {
 
 function loadHelpContentForWords() {
     $.ajax({
-        url:document.location.href + generateAjaxUrl("loadHelpForWords", "null"),
+        url:generateAjaxUrl("loadHelpForWords", "null"),
         context:document.body,
         success:onLoadingHelpForWordsSuccess,
         dataType:"json",
@@ -93,7 +93,7 @@ function loadHelpContentForWords() {
         //data:{text:i},
         timeout:30000,
         error:function () {
-            setStatusBarMessage(REQUEST_ABORTED);
+            setStatusBarMessage(HELP_REQUEST_ABORTED);
         }
     });
 }

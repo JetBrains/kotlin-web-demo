@@ -11,6 +11,7 @@ var HIGHLIGHT_REQUEST_ABORTED = "Can't get errors/warnings from server.";
 var RUN_REQUEST_ABORTED = "Can't get program output from server.";
 var COMPLETE_REQUEST_ABORTED = "Can't get completion proposal list from server.";
 var EXAMPLES_REQUEST_ABORTED = "Can't get the example code from server.";
+var HELP_REQUEST_ABORTED = "Can't get help from server.";
 //Message in popup with warning before close tab with editor
 var BEFORE_EXIT = "The changes you made to the program will be lost when this page is closed. Do you want to close the page?";
 var ERROR_UNTIL_EXECUTE = "Your program has terminated with an exception.";
@@ -78,7 +79,7 @@ function setSessionId() {
 
     var id;
     $.ajax({
-        url:document.location.href + generateAjaxUrl("getSessionId", "null"),
+        url: generateAjaxUrl("getSessionId", "null"),
         context:document.body,
         type:"GET",
         dataType:"html",
@@ -113,7 +114,7 @@ function getSessionIdSuccess(data) {
     var info = "browser: " + navigator.appName + " " + navigator.appVersion;
     info += " " + "system: " + navigator.platform;
     $.ajax({
-        url:document.location.href + generateAjaxUrl("sendUserData", "null"),
+        url: generateAjaxUrl("sendUserData", "null"),
         context:document.body,
         type:"POST",
         data:{text:info},
@@ -202,5 +203,6 @@ $("#whatimg").click(function () {
 });
 
 function generateAjaxUrl(type, args) {
-    return "kotlinServer?sessionId=" + sessionId + "&type=" + type + "&args=" + args;
+    var url = [location.protocol, '//', location.host, "/"].join('');
+    return url + "kotlinServer?sessionId=" + sessionId + "&type=" + type + "&args=" + args;
 }

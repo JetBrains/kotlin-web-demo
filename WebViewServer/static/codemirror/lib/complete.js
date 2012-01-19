@@ -99,7 +99,7 @@ $(document).ready(function () {
 //            document.getElementById("debug").innerHTML = " " + (new Date().getMilliseconds() - time);
             var i = editor.getValue();
             $.ajax({
-                url:document.location.href + generateAjaxUrl("highlight", "null"),
+                url: generateAjaxUrl("highlight", "null"),
                 context:document.body,
                 success:onHighlightingSuccess,
                 dataType:"json",
@@ -365,7 +365,7 @@ $(document).ready(function () {
                 var i = editor.getValue();
                 var arguments = $("#arguments").val();
                 $.ajax({
-                    url:document.location.href + generateAjaxUrl("run", "null"),
+                    url: generateAjaxUrl("run", "null"),
                     context:document.body,
                     success:onCompileSuccess,
                     dataType:"json",
@@ -411,7 +411,7 @@ $(document).ready(function () {
     function sendHighlightingRequest(onLoad) {
         var i = editor.getValue();
         $.ajax({
-            url:document.location.href + generateAjaxUrl("highlight", "null"),
+            url: generateAjaxUrl("highlight", "null"),
             context:document.body,
             success:onLoad,
             dataType:"json",
@@ -478,7 +478,7 @@ $(document).ready(function () {
     function loadJsFromServer(i, arguments) {
         isJsApplet = false;
         $.ajax({
-            url:document.location.href + generateAjaxUrl("convertToJs", "null"),
+            url: generateAjaxUrl("convertToJs", "null"),
             context:document.body,
             success:onConvertToJsSuccess,
             dataType:"json",
@@ -613,7 +613,7 @@ $(document).ready(function () {
                 isCompletionInProgress = false;
             } else {
                 $.ajax({
-                    url:document.location.href + generateAjaxUrl("complete", editor.getCursor(true).line + "," + editor.getCursor(true).ch),
+                    url: generateAjaxUrl("complete", editor.getCursor(true).line + "," + editor.getCursor(true).ch),
                     context:document.body,
                     success:startComplete,
                     dataType:"json",

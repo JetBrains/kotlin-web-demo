@@ -13,10 +13,8 @@ $(document).ready(function () {
      }*/
 
     function getHighlighting() {
-        var url = document.location.href;
-        url = url.replace("testConnection", "path=testUrl?sessionId=555&sendData=true");
         $.ajax({
-            url:url + generateAjaxUrl("highlight", "null"),
+            url: generateAjaxUrl("highlight", "null"),
             type:"POST",
             data:{text:i},
             complete:onLoadHighlighting
@@ -32,7 +30,7 @@ $(document).ready(function () {
     function getApplet() {
 //        var url = document.location.href;
 //        url = url.replace("testConnection", "WebViewApplet.jar");
-        var url = document.location.href + "/WebViewApplet.jar";
+        var url = [location.protocol, '//', location.host, location.pathname].join('') + "/WebViewApplet.jar";
         $.ajax({
             url:url,
             type:"GET",
@@ -47,10 +45,8 @@ $(document).ready(function () {
     }
 
     function getCompletion() {
-        var url = document.location.href;
-        url = url.replace("testConnection", generateAjaxUrl("complete", "27,15"));
         $.ajax({
-            url:url,
+            url: generateAjaxUrl("complete", "27,15"),
             type:"POST",
             data:{text:i},
             complete:onLoadCompletion

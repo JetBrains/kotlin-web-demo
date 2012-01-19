@@ -72,7 +72,7 @@ function loadAccordionContent() {
     acc.id = "accordion";
     document.getElementById("examplesaccordion").appendChild(acc);
     $.ajax({
-        url:document.location.href + generateAjaxUrl("loadExample", "all"),
+        url:generateAjaxUrl("loadExample", "all"),
         context:document.body,
         success:onLoadingExamplesSuccess,
         dataType:"json",
@@ -127,16 +127,19 @@ function onLoadingExamplesSuccess(data) {
         navigation:true
     });
 
+    var urlAct = [location.protocol, '//', location.host, "/"].join('');
     var url = document.location.href;
-    url = url.substring(url.lastIndexOf("/?"));
-    if (url.indexOf("http://") != 0) {
-        //http://localhost/?example=Simplest_version
-        url = url.substring(2);
-        if (url.indexOf("example=") == 0) {
+    if (url.indexOf(urlAct) != -1) {
+        url = url.substring(url.indexOf(urlAct) + urlAct.length);
+        var exampleStr = "?example=";
+        if (url.indexOf(exampleStr) == 0) {
             url = url.replace(new RegExp("_", 'g'), " ");
-            loadExample(url.substring(8));
+            loadExample(url.substring(exampleStr.length));
         }
     }
+
+
+
 }
 
 var loadingExample = false;
@@ -157,7 +160,7 @@ function loadExample(innerhtml) {
         document.getElementById("statusbar").innerHTML = "Loading example...";
         loadingExample = true;
         $.ajax({
-            url:document.location.href + generateAjaxUrl("loadExample", innerhtml),
+            url:generateAjaxUrl("loadExample", innerhtml),
             context:document.body,
             success:onLoadingExampleSuccess,
             dataType:"json",

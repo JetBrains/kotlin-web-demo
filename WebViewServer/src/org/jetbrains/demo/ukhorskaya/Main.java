@@ -115,7 +115,6 @@ public class Main {
                 if ((name.equals("java_home")) || (name.equals("output"))
                         || (name.equals("examples")) || (name.equals("help"))
                         || (name.equals("testconnectionoutput"))
-                        || (name.equals("resources"))
                         || (name.equals("rt_jar"))) {
                     value = properties.get(name).toString();
                     value = value.substring(1, value.length() - 1);

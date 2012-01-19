@@ -223,8 +223,10 @@ public class ServerHandler implements HttpHandler {
 
     private void sendListLogs(HttpExchange exchange, boolean updateStatistics) {
         String response = null;
+        InputStream is = null;
         try {
-            response = Files.toString(new File(ServerSettings.RESOURCES_ROOT + File.separator + "logs.html"), Charset.forName("UTF-8"));
+            is = ServerHandler.class.getResourceAsStream("/logs.html");
+            response = ResponseUtils.readData(is, true);
         } catch (FileNotFoundException e) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "logs.html not found"));
             writeResponse(exchange, "Cannot open this page".getBytes(), HttpStatus.SC_BAD_GATEWAY);
@@ -233,6 +235,8 @@ public class ServerHandler implements HttpHandler {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "Exception until downloading logs.html"));
             writeResponse(exchange, "Cannot open this page".getBytes(), HttpStatus.SC_BAD_GATEWAY);
             return;
+        } finally {
+            close(is);
         }
 
         String links = new LogDownloader().getFilesLinks();
@@ -278,7 +282,7 @@ public class ServerHandler implements HttpHandler {
     private void sendResourceFile(HttpExchange exchange) {
         String path = exchange.getRequestURI().getPath();
         path = ResponseUtils.substringAfterReturnAll(path, "resources");
-
+        ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), -1, "Resource doesn't downloaded from nginx: " + path));
         if (path.equals("")) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Path to the file is incorrect.", exchange.getRequestURI().toString()));
             writeResponse(exchange, "Path to the file is incorrect.".getBytes(), HttpStatus.SC_NOT_FOUND);
@@ -289,8 +293,10 @@ public class ServerHandler implements HttpHandler {
         } else if (path.equals("/") || path.equals("/index.html")) {
             path = "/index.html";
             StringBuilder response = new StringBuilder();
+            InputStream is = null;
             try {
-                response.append(Files.toString(new File(ServerSettings.RESOURCES_ROOT + File.separator + path), Charset.forName("UTF-8")));
+                is = ServerHandler.class.getResourceAsStream(path);
+                response.append(ResponseUtils.readData(is, true));
             } catch (FileNotFoundException e) {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "index.html not found"));
                 writeResponse(exchange, "Cannot open this page".getBytes(), HttpStatus.SC_BAD_GATEWAY);
@@ -299,6 +305,8 @@ public class ServerHandler implements HttpHandler {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "Exception until downloading index.html"));
                 writeResponse(exchange, "Cannot open this page".getBytes(), HttpStatus.SC_BAD_GATEWAY);
                 return;
+            }   finally {
+                close(is);
             }
 
             OutputStream os = null;
