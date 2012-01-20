@@ -19,6 +19,16 @@
     </orderEntry>
     <orderEntry type="module" module-name="WebViewServer" />
     <orderEntry type="library" name="junit-4.7" level="project" />
+    <orderEntry type="library" name="selenium" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../../kotlinLibrary/kotlinc/lib/guava-r09.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 

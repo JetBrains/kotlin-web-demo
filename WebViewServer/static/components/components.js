@@ -95,6 +95,7 @@ function onLoadingExamplesSuccess(data) {
             var head = document.createElement("h3");
             var headA = document.createElement("a");
             headA.href = "#";
+            headA.id = data[i].text;
 
             headA.innerHTML = data[i].text;
             lastHeadName = data[i].text
