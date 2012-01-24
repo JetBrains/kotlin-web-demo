@@ -508,55 +508,7 @@ public class Statistics {
                                     info = new UserInfo();
                                 }
                                 info.numberOfRequest++;
-                                token = tokenizer.nextToken();
-                                UserInfo infoIp = null;
-                                String ip = "unknown";
-                                /*if (token.contains("ip=")) {
-                                    ip = ResponseUtils.substringAfter(token, "ip=");
-                                    //                                set.add(Integer.parseInt(ip));
-                                    infoIp = userInfoMapForIp.get(ip);
-                                    if (infoIp == null) {
-                                        infoIp = new UserInfo();
-                                    }
-                                    infoIp.numberOfRequest++;
-                                    Set<Integer> ids = ipToIdMap.get(ip);
-                                    if (ids == null) {
-                                        ids = new HashSet<Integer>();
-                                    }
-                                    ids.add(Integer.parseInt(id));
-                                    ipToIdMap.put(ip, ids);
-                                    token = tokenizer.nextToken();
-                                }*/
-                                if (token.equals("message=" + SessionInfo.TypeOfRequest.RUN.name())) {
-                                    info.numberOfRunRequest++;
-                                    /*if (infoIp != null) {
-                                        infoIp.numberOfRunRequest++;
-                                    }*/
-                                } else if (token.equals("message=" + SessionInfo.TypeOfRequest.HIGHLIGHT.name())) {
-                                    info.numberOfHighlightRequest++;
-                                    /*if (infoIp != null) {
-                                        infoIp.numberOfHighlightRequest++;
-                                    }*/
-                                } else if (token.equals("message=" + SessionInfo.TypeOfRequest.COMPLETE.name())) {
-                                    info.numberOfCompleteRequest++;
-                                   /* if (infoIp != null) {
-                                        infoIp.numberOfCompleteRequest++;
-                                    }*/
-                                }
-
-                                userInfoMapForId.put(id, info);
-                                /*if (infoIp != null) {
-                                    userInfoMapForIp.put(ip, infoIp);
-                                }*/
-                            } else if (token.contains("ip=")) {
-                                String ip = ResponseUtils.substringAfter(token, "ip=");
-//                                set.add(Integer.parseInt(ip));
-                                UserInfo info = userInfoMapForId.get(ip);
-                                if (info == null) {
-                                    info = new UserInfo();
-                                } else {
-                                }
-                                info.numberOfRequest++;
+                                tokenizer.nextToken();
                                 token = tokenizer.nextToken();
                                 if (token.equals("message=" + SessionInfo.TypeOfRequest.RUN.name())) {
                                     info.numberOfRunRequest++;
@@ -568,7 +520,6 @@ public class Statistics {
 
                                 userInfoMapForId.put(ip, info);
                             }
-
                         }
                     }
                 }

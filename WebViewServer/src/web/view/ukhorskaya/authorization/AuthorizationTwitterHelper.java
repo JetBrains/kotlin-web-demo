@@ -1,13 +1,13 @@
 package web.view.ukhorskaya.authorization;
 
+import org.jetbrains.demo.ukhorskaya.ResponseUtils;
+import org.jetbrains.demo.ukhorskaya.server.KotlinHttpServer;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import web.view.ukhorskaya.ResponseUtils;
-import web.view.ukhorskaya.server.KotlinHttpServer;
 
 /**
  * Created by IntelliJ IDEA.

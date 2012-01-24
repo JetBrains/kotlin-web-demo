@@ -13,6 +13,7 @@ function removeStyles() {
         i++;
     }
 
+
     /*function remove(i, f) {
      document.getElementById("debug").innerHTML += " i " + i  + " lenght class " + arrayClasses.length + " marker " + arrayLinesMarkers.length + "<br/>";
      if (typeof arrayClasses[i] == "undefined") {
@@ -66,7 +67,6 @@ $(document).ready(function () {
         minHeight:"430px",
         tabSize:2
     });
-
 
     function runTimerForNonPrinting() {
         isContentEditorChanged = true;
@@ -434,9 +434,10 @@ $(document).ready(function () {
         isLoadingHighlighting = false;
         onHighlightingSuccess(data);
         if (data == null || !checkIfThereAreErrorsInData(data)) {
-            $("#tabs").tabs("select", 1);
+
             setStatusBarMessage("Running...");
             if (!isCompilationInProgress) {
+                $("#tabs").tabs("select", 1);
                 isCompilationInProgress = true;
                 if (isApplet && isJsApplet) {
                     try {
@@ -495,6 +496,7 @@ $(document).ready(function () {
 
     function onConvertToJsSuccess(data) {
         var genData;
+        $("#tabs").tabs("select", 1);
         if (data != null) {
             if (typeof data[0].exception != "undefined") {
                 genData = createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + data[0].exception);
@@ -513,6 +515,7 @@ $(document).ready(function () {
     function onCompileSuccess(data) {
         var isCompiledWithErrors = false;
         isCompilationInProgress = false;
+        setStatusBarMessage("Loading output...")
         if (data != null) {
             if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                 $("#tabs").tabs("select", 0);
@@ -655,7 +658,7 @@ $(document).ready(function () {
                 keywords = [];
             }
             if (data == COMPLETION_ISNOT_AVAILABLE) {
-                keywords.push(new LookupElement(COMPLETION_ISNOT_AVAILABLE, "", "/icons/warning.png"));
+                keywords.push(new LookupElement(COMPLETION_ISNOT_AVAILABLE, "", ""));
             } else {
                 var i = 0;
                 while (typeof data[i] != "undefined") {
