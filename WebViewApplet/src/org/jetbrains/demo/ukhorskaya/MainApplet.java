@@ -34,7 +34,7 @@ public class MainApplet extends JApplet implements ActionListener {
         request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
 
-        SESSION_INFO = new SessionInfo(new Random().nextInt(), "unknown");
+        SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
         getHighlighting("fun main(args : Array<String>) {\n" +
                 "  System.out?.println(\"Hello, world!\"\n" +
                 "}");

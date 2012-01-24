@@ -8,11 +8,14 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.*;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesLoader;
+import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
 import org.jetbrains.demo.ukhorskaya.responseHelpers.*;
 import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -29,7 +32,8 @@ public class HttpSession {
     protected Project currentProject;
     protected PsiFile currentPsiFile;
 
-    private HttpExchange exchange;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
 
     private final SessionInfo sessionInfo;
     private final RequestParameters parameters;
@@ -39,22 +43,23 @@ public class HttpSession {
         this.parameters = parameters;
     }
 
-    public void handle(final HttpExchange exchange) {
+    public void handle(final HttpServletRequest request, final HttpServletResponse response) {
         try {
-            this.exchange = exchange;
-            //String param = exchange.getRequestURI().toString();
+            this.request = request;
+            this.response = response;
+            String param = request.getRequestURI() + "?" + request.getQueryString();
 
-            ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + exchange.getRequestURI().toString() + " ip: " + sessionInfo.getIp());
+            ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
             //FOR TEST ONLY
-            if (parameters.compareType("testConnection")) {
+            /*if (parameters.compareType("testConnection")) {
                 sendTestConnection();
                 return;
-            }
+            }*/
 
             if (parameters.compareType("run")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExecutorResult();
             } else if (parameters.compareType("writeLog")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
@@ -69,28 +74,25 @@ public class HttpSession {
                 writeResponse("Data sent", HttpStatus.SC_OK);
             } else if (parameters.compareType("complete")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendCompletionResult();
             } else if (parameters.compareType("convertToKotlin")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendConvertToKotlinResult();
             } else if (parameters.compareType("loadExample")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExampleContent();
             } else if (parameters.compareType("convertToJs")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendConvertToJsResult();
-            }else if (parameters.compareType("highlight")) {
+            } else if (parameters.compareType("highlight")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
-                if (!sessionInfo.getIp().equals("127.0.0.1")) {
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getIp(), sessionInfo.getType()));
-                }
                 sendHighlightingResult();
             } else {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Incorrect request", exchange.getRequestURI().toString()));
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Incorrect request", param));
                 writeResponse("Incorrect request", HttpStatus.SC_BAD_REQUEST);
             }
         } catch (Throwable e) {
@@ -111,9 +113,7 @@ public class HttpSession {
 
     private void sendExampleContent() {
         ExamplesLoader loader = new ExamplesLoader();
-        /*String idStr = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
-        String headName = ResponseUtils.substringAfter(parameters.getArgs(), "&head=");*/
-        writeResponse(loader.getResultByExampleName(parameters.getArgs()), HttpStatus.SC_OK);
+        writeResponse(loader.getResultByNameAndHead(parameters.getArgs()), HttpStatus.SC_OK);
 
     }
 
@@ -128,68 +128,36 @@ public class HttpSession {
                 writer.write(response);
                 writer.close();
             } catch (IOException e) {
-//                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e, e);
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e);
             }
 
             writeResponse("Response sended", HttpStatus.SC_OK);
         } else {
-            StringBuilder response = new StringBuilder();
-            InputStream is = null;
+            StringBuilder responseStr = new StringBuilder();
+            PrintWriter writer = null;
+            String path = "/testConnection.html";
+            InputStream is = ServerHandler.class.getResourceAsStream(path);
             try {
-                is = HttpSession.class.getResourceAsStream("/testConnection.html");
-                response.append(ResponseUtils.readData(is, true));
-            } catch (FileNotFoundException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "logs.html not found"));
-                writeResponse("Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
-                return;
+                responseStr.append(ResponseUtils.readData(is));
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "Exception until downloading logs.html"));
-                writeResponse("Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot read data from file", e);
+                writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR);
                 return;
+            } finally {
+                close(is);
             }
 
-            OutputStream os = null;
             try {
-                exchange.sendResponseHeaders(HttpStatus.SC_OK, response.toString().length());
-                os = exchange.getResponseBody();
-                os.write(response.toString().getBytes());
+                response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
+                writer = response.getWriter();
+                writer.write(responseStr.toString());
             } catch (IOException e) {
                 //This is an exception we can't send data to client
             } finally {
-                close(os);
-                exchange.close();
+                close(writer);
             }
         }
     }
-    /*if (exchange.getRequestURI().toString().contains("stopTest=true")) {
-            try {
-                String response = getPostDataFromRequest().text;
-                File file = new File(ServerSettings.TEST_CONNECTION_OUTPUT + File.separator + "testConnection" + System.nanoTime() + ".csv");
-                file.createNewFile();
-                FileWriter writer = new FileWriter(file);
-                writer.write(response);
-                writer.close();
-            } catch (IOException e) {
-//                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e, e);
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e);
-            }
-
-            writeResponse("Response sended", HttpStatus.SC_OK);
-        } else {
-            try {
-                exchange.sendResponseHeaders(400, 0);
-                ByteStreams.copy(new FileInputStream(ServerSettings.RESOURCES_ROOT + File.separator + "testConnection.html"), exchange.getResponseBody());
-            } catch (FileNotFoundException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "logs.html not found"));
-                writeResponse("Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
-            } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "Exception until downloading logs.html"));
-                writeResponse("Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
-            } finally {
-                exchange.close();
-            }
-        }*/
 
     private void setGlobalVariables(@Nullable String text) {
         currentProject = Initializer.getEnvironment().getProject();
@@ -206,10 +174,7 @@ public class HttpSession {
 
 
     private void sendCompletionResult() {
-
-        String param = exchange.getRequestURI().getQuery();
         String[] position = parameters.getArgs().split(",");
-
         setGlobalVariables(getPostDataFromRequest().text);
 
         JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(Integer.parseInt(position[0]), Integer.parseInt(position[1]), currentPsiFile, sessionInfo);
@@ -217,12 +182,12 @@ public class HttpSession {
     }
 
     private void sendHighlightingResult() {
-            setGlobalVariables(getPostDataFromRequest().text);
-            JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
+        setGlobalVariables(getPostDataFromRequest().text);
+        JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
 
-            String response = responseForHighlighting.getResult();
-            response = response.replaceAll("\\n", "");
-            writeResponse(response, HttpStatus.SC_OK);
+        String response = responseForHighlighting.getResult();
+        response = response.replaceAll("\\n", "");
+        writeResponse(response, HttpStatus.SC_OK);
     }
 
 
@@ -234,17 +199,17 @@ public class HttpSession {
         StringBuilder reqResponse = new StringBuilder();
         InputStream is = null;
         try {
-            is = exchange.getRequestBody();
+            is = request.getInputStream();
             reqResponse.append(ResponseUtils.readData(is, withNewLines));
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, "getPostDataFromRequest " + exchange.getRequestURI()));
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, "getPostDataFromRequest " + request.getQueryString()));
             writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return new PostData("", "");
         } finally {
             close(is);
         }
 
-        String finalResponse = null;
+        String finalResponse;
         try {
             finalResponse = URLDecoder.decode(reqResponse.toString(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -280,30 +245,21 @@ public class HttpSession {
     }
 
     //Send Response
-    //disableHeaders - disable htmlPatern header for answer
     private void writeResponse(String responseBody, int errorCode) {
-        OutputStream os = null;
+        PrintWriter writer = null;
 
         try {
 
-            byte[] bytes = responseBody.getBytes();
-            exchange.sendResponseHeaders(errorCode, bytes.length);
-            os = exchange.getResponseBody();
-            os.write(bytes);
+            response.setStatus(errorCode);
+            writer = response.getWriter();
+            writer.write(responseBody);
             ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                    sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + exchange.getRequestURI()));
+                    sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString()));
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
         } finally {
-            try {
-                if (os != null) {
-                    os.close();
-                }
-            } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
-            }
-            exchange.close();
+            close(writer);
         }
     }
 

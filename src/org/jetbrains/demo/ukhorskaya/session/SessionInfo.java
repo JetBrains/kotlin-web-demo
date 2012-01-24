@@ -11,18 +11,15 @@ import org.jetbrains.demo.ukhorskaya.TimeManager;
 
 public class SessionInfo {
     private final TimeManager timeManager = new TimeManager();
-    private int id = 0;
+    private String id;
     private TypeOfRequest type = TypeOfRequest.GET_RESOURCE;
 
-
-    private String userName = "";
-
-    public SessionInfo(int sessionId, TypeOfRequest typeOfRequest) {
+    public SessionInfo(String sessionId, TypeOfRequest typeOfRequest) {
         this.id = sessionId;
         this.type = typeOfRequest;
     }
 
-    public SessionInfo(int sessionId) {
+    public SessionInfo(String sessionId) {
         this.id = sessionId;
     }
 
@@ -34,11 +31,11 @@ public class SessionInfo {
         return timeManager;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int sessionId) {
+    public void setId(String sessionId) {
         this.id = sessionId;
     }
 
@@ -46,15 +43,9 @@ public class SessionInfo {
         return type.name();
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public enum TypeOfRequest {
+        LOAD_ROOT,
         HIGHLIGHT,
         COMPLETE,
         RUN,

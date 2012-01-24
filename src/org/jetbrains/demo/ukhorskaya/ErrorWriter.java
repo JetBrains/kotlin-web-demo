@@ -83,21 +83,18 @@ public abstract class ErrorWriter {
         return getExceptionForLog(typeOfRequest, message, message, moreinfo);
     }
 
-    public static String getInfoForLog(String typeOfRequest, Integer userId, String ip, String message) {
+    public static String getInfoForLog(String typeOfRequest, String userId, String message) {
         StringBuilder builder = new StringBuilder();
         builder.append("type=").append(typeOfRequest);
         builder.append(" ");
         builder.append("userId=");
         builder.append(String.valueOf(userId));
-        builder.append(" ");
-        builder.append("ip=");
-        builder.append(ip);
-        builder.append(" ");
+        builder.append(" ip=0 ");
         builder.append("message=").append(message);
         return builder.toString();
     }
 
-    public static String getInfoForLogWoIp(String typeOfRequest, Integer userId, String message) {
+    public static String getInfoForLogWoIp(String typeOfRequest, String userId, String message) {
         StringBuilder builder = new StringBuilder();
         builder.append("type=").append(typeOfRequest);
         builder.append(" ");

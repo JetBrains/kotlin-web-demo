@@ -76,7 +76,6 @@ function onBodyLoad() {
 }
 
 function setSessionId() {
-
     var id;
     $.ajax({
         url: generateAjaxUrl("getSessionId", "null"),
@@ -100,17 +99,7 @@ function resizeCentral() {
 }
 
 function getSessionIdSuccess(data) {
-    var id = eval(data);
-    var cookie = document.cookie;
-    if (cookie != id) {
-        document.cookie = "userId=" + id;
-    }
-    /*if (cookie == "") {
-     document.cookie = id;
-     } else {
-     id = cookie;
-     }*/
-    sessionId = id;
+    sessionId = data;
     var info = "browser: " + navigator.appName + " " + navigator.appVersion;
     info += " " + "system: " + navigator.platform;
     $.ajax({
