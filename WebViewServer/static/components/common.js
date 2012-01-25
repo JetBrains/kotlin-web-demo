@@ -25,6 +25,7 @@ var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to ena
 var IE_SUPPORT = "Sorry, Internet Explorer is currently unsupported.";
 
 var sessionId = -1;
+var userName = "";
 var isApplet = false;
 var isJsApplet = true;
 var kotlinVersion;
@@ -34,6 +35,11 @@ var isMac = false;
 var isAppletLoaded = false;
 
 var isContentEditorChanged = false;
+
+var isLogin = false;
+
+var loginImages = "";
+//var loginImages = "<a href=\"#\" onclick=\"login('twitter');\"><img src=\"/images/social/twitter.png\"></a><a href=\"#\" onclick=\"login('facebook');\"><img src=\"/images/social/facebook.png\"></a><a href=\"#\" onclick=\"login('google');\"><img src=\"/images/social/google.png\"></a>";
 
 $(document).keydown(function (e) {
     if (isMac) {
@@ -78,14 +84,58 @@ function onBodyLoad() {
 function setSessionId() {
     var id;
     $.ajax({
-        url: generateAjaxUrl("getSessionId", "null"),
+        url:generateAjaxUrl("getSessionId", "null"),
         context:document.body,
         type:"GET",
-        dataType:"html",
+        dataType:"json",
         timeout:5000,
         success:getSessionIdSuccess
     });
 
+}
+
+function logout() {
+    $.ajax({
+        url:generateAjaxUrl("authorization", "logout"),
+        type:"GET",
+        dataType:"json",
+        timeout:5000,
+        success:function () {
+            document.getElementById("examplesaccordion").innerHTML = "";
+            loadAccordionContent();
+            isLogin = false;
+            document.getElementById("userName").innerHTML = loginImages;
+        }
+    });
+
+}
+
+function getSessionIdSuccess(data) {
+    data = eval(data);
+    if (data[0] != null && data[0] != '') {
+        sessionId = data[0];
+    }
+    if (data[1] != null && data[1] != '') {
+        userName = data[1];
+        if (loginImages == "") {
+            loginImages = document.getElementById("userName").innerHTML;
+        }
+        if (userName != "") {
+            isLogin = true;
+            userName = decodeURI(userName);
+            userName = userName.replace(new RegExp('\\+', 'g'), ' ');
+            document.getElementById("userName").innerHTML = "<b>" + userName + "</b> <a href=\"#\" id=\"logout\" onclick=\"logout();\">Logout</a>";
+        }
+    }
+    var info = "browser: " + navigator.appName + " " + navigator.appVersion;
+    info += " " + "system: " + navigator.platform;
+    $.ajax({
+        url:generateAjaxUrl("sendUserData", "null"),
+        context:document.body,
+        type:"POST",
+        data:{text:info},
+        timeout:5000
+    });
 }
 
 function resizeCentral() {
@@ -96,19 +146,6 @@ function resizeCentral() {
     document.getElementById("right").style.minHeight = (wheight - 72 - 20 - 10) + "px";
     document.getElementById("center").style.minHeight = (wheight - 72 - 20 - 10) + "px";
     editor.refresh();
-}
-
-function getSessionIdSuccess(data) {
-    sessionId = data;
-    var info = "browser: " + navigator.appName + " " + navigator.appVersion;
-    info += " " + "system: " + navigator.platform;
-    $.ajax({
-        url: generateAjaxUrl("sendUserData", "null"),
-        context:document.body,
-        type:"POST",
-        data:{text:info},
-        timeout:5000
-    });
 }
 
 function hideLoader() {
@@ -194,4 +231,29 @@ $("#whatimg").click(function () {
 function generateAjaxUrl(type, args) {
     var url = [location.protocol, '//', location.host, "/"].join('');
     return url + "kotlinServer?sessionId=" + sessionId + "&type=" + type + "&args=" + args;
+}
+
+function login(param) {
+    $.ajax({
+        url:generateAjaxUrl("authorization", param),
+        context:document.body,
+        success:onLoginSuccess,
+        dataType:"text",
+        type:"GET",
+        //data:{text:i},
+        timeout:10000,
+        error:function () {
+
+        }
+    });
+}
+
+function onLoginSuccess(data) {
+    <!-- Codes by Quackit.com -->
+    // Popup window code
+//        window.open(
+//            data,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes');
+
+//    window.open(data);
+    document.location.href = data;
 }

@@ -13,6 +13,7 @@ public class SessionInfo {
     private final TimeManager timeManager = new TimeManager();
     private String id;
     private TypeOfRequest type = TypeOfRequest.GET_RESOURCE;
+    private UserInfo userInfo = new UserInfo();
 
     public SessionInfo(String sessionId, TypeOfRequest typeOfRequest) {
         this.id = sessionId;
@@ -43,6 +44,13 @@ public class SessionInfo {
         return type.name();
     }
 
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
 
     public enum TypeOfRequest {
         LOAD_ROOT,
@@ -60,7 +68,12 @@ public class SessionInfo {
         ANALYZE_LOG,
         INC_NUMBER_OF_REQUESTS,
         CONVERT_TO_KOTLIN,
-        CONVERT_TO_JS
+        CONVERT_TO_JS,
+        SAVE_PROGRAM
     }
 
+
+
 }
+
+

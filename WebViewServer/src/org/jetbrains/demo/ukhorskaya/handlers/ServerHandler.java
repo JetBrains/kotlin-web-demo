@@ -4,17 +4,22 @@ import com.google.common.io.ByteStreams;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.*;
+import org.jetbrains.demo.ukhorskaya.authorization.*;
+import org.jetbrains.demo.ukhorskaya.session.UserInfo;
+import org.jetbrains.demo.ukhorskaya.database.MongoDBConnector;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesList;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesLoader;
 import org.jetbrains.demo.ukhorskaya.help.HelpLoader;
 import org.jetbrains.demo.ukhorskaya.log.LogDownloader;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.jetbrains.demo.ukhorskaya.sessions.HttpSession;
+import org.json.JSONArray;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,20 +36,32 @@ public class ServerHandler {
 
     }
 
+    public static String HOST;
+
     public void handle(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        String ip = request.getRemoteAddr();
+        HOST = request.getServerName();
+
+        if (request.getQueryString() != null && request.getQueryString().equals("test")) {
+            PrintWriter out = null;
+            try {
+                out = response.getWriter();
+                out.write("ok");
+            } catch (Throwable e) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("test", e, "null"));
+            } finally {
+                close(out);
+            }
+            return;
+        }
 
         SessionInfo sessionInfo;
-
-        javax.servlet.http.HttpSession session1 = request.getSession();
-        System.out.println(session1.getId());
-        System.out.println(session1.isNew());
 
         String param = request.getRequestURI() + "?" + request.getQueryString();
         try {
             RequestParameters parameters = RequestParameters.parseRequest(param);
             if (parameters.compareType("sendUserData")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
+                MongoDBConnector.getInstance().findUser(sessionInfo.getUserInfo());
                 sendUserInformation(request, response, sessionInfo);
             } else if (parameters.compareType("getSessionId")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
@@ -52,12 +69,20 @@ public class ServerHandler {
                 PrintWriter out = null;
                 try {
                     out = response.getWriter();
-                    out.write(id);
+                    JSONArray array = new JSONArray();
+                    array.put(id);
+                    if (sessionInfo.getUserInfo().isLogin()) {
+                        array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
+                    }
+                    out.write(array.toString());
                 } catch (Throwable e) {
                     ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(param, e, "null"));
                 } finally {
                     close(out);
                 }
+            } else if (parameters.compareType("authorization")) {
+                sessionInfo = setSessionInfo(request, parameters.getSessionId());
+                sendAuthorizationResult(request, response, parameters, sessionInfo);
             } else if (parameters.compareType("updateExamples")) {
                 updateExamples(response);
             } else if (param.startsWith("/logs") || parameters.compareType("updateStatistics")) {
@@ -90,8 +115,10 @@ public class ServerHandler {
                     || parameters.compareType("run")
                     || parameters.compareType("convertToJs")
                     || parameters.compareType("loadExample")
+                    || parameters.compareType("saveProgram")
+                    || parameters.compareType("loadProgram")
                     || parameters.compareType("writeLog")) {
-                if (!parameters.compareType("writeLog") && !ip.equals("127.0.0.1")) {
+                if (!parameters.compareType("writeLog")) {
                     sessionInfo = setSessionInfo(request, parameters.getSessionId());
                 } else {
                     sessionInfo = new SessionInfo(request.getSession().getId());
@@ -107,8 +134,46 @@ public class ServerHandler {
             }
         } catch (Throwable e) {
             //Do not stop server
+            e.printStackTrace();
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(param, e, "null"));
             writeResponse(response, "Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendAuthorizationResult(HttpServletRequest request, HttpServletResponse response, RequestParameters parameters, SessionInfo sessionInfo) {
+        if (parameters.getArgs().equals("logout")) {
+            sessionInfo.getUserInfo().logout();
+            request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
+        } else {
+            AuthorizationHelper helper;
+            if (parameters.getArgs().contains("twitter")) {
+                helper = new AuthorizationTwitterHelper();
+            } else if (parameters.getArgs().contains("google")) {
+                helper = new AuthorizationGoogleHelper();
+            } else {
+                helper = new AuthorizationFacebookHelper();
+            }
+            if (parameters.getArgs().contains("oauth_verifier") || parameters.getArgs().contains("code=")) {
+                sessionInfo.setUserInfo(helper.verify(parameters.getArgs()));
+                MongoDBConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
+                request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
+                try {
+                    response.sendRedirect("http://" + HOST);
+                } catch (IOException e) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot redirect", e, "null"));
+                }
+            } else {
+                String verifyKey = helper.authorize();
+                PrintWriter out = null;
+                try {
+                    out = response.getWriter();
+                    out.write(verifyKey);
+                } catch (Throwable e) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot verify", e, "null"));
+                } finally {
+                    close(out);
+                }
+            }
         }
     }
 
@@ -142,7 +207,15 @@ public class ServerHandler {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
                     "Different id form request string and from servlet", sessionId + " " + request.getSession().getId()));
         }
-        return new SessionInfo(request.getSession().getId());
+        SessionInfo sessionInfo = new SessionInfo(request.getSession().getId());
+        UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+
+        if (userInfo == null) {
+            userInfo = new UserInfo();
+            request.getSession().setAttribute("userInfo", userInfo);
+        }
+        sessionInfo.setUserInfo(userInfo);
+        return sessionInfo;
         /*String sessionIdFromCookies = getSessionIdFromCookies(request.getHeader("Cookie"));
         if (sessionIdFromCookies == null || sessionIdFromCookies.isEmpty()) {
             sessionIdFromCookies = sessionId;

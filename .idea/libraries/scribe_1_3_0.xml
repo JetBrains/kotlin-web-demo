@@ -4,6 +4,9 @@
       <root url="jar://$PROJECT_DIR$/../../../plugins/scribe-1.3.0.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../plugins/scribe-java/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../../plugins/scribe-java/src/test/java" />
+    </SOURCES>
   </library>
 </component>

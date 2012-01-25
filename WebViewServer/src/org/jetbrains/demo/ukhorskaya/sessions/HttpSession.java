@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.*;
+import org.jetbrains.demo.ukhorskaya.database.MongoDBConnector;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesLoader;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
 import org.jetbrains.demo.ukhorskaya.responseHelpers.*;
@@ -72,6 +73,10 @@ public class HttpSession {
                     ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(tmp);
                 }
                 writeResponse("Data sent", HttpStatus.SC_OK);
+            } else if (parameters.compareType("saveProgram")) {
+                sendSaveProgramResult(sessionInfo);
+            } else if (parameters.compareType("loadProgram")) {
+                sendLoadProgramResult();
             } else if (parameters.compareType("complete")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
@@ -99,6 +104,21 @@ public class HttpSession {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
             writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void sendLoadProgramResult() {
+        String result;
+        if (parameters.getArgs().equals("all")) {
+            result = MongoDBConnector.getInstance().getListOfProgramsForUser(sessionInfo.getUserInfo());
+        }   else {
+            result = MongoDBConnector.getInstance().getProgramText(parameters.getArgs());
+        }
+        writeResponse(result, HttpStatus.SC_OK);
+    }
+
+    private void sendSaveProgramResult(SessionInfo sessionInfo) {
+        String result = MongoDBConnector.getInstance().addProgramInfo(sessionInfo.getUserInfo(), getPostDataFromRequest().text);
+        writeResponse(result, HttpStatus.SC_OK);
     }
 
     private void sendConvertToJsResult() {

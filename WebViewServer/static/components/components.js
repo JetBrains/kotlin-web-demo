@@ -64,6 +64,26 @@ $(document).ready(function () {
             return false;
         }).next().hide();
 
+    $("#saveProgram").click(function () {
+        var i = editor.getValue();
+        $.ajax({
+            url:generateAjaxUrl("saveProgram", "null"),
+            success:onSaveProgramSuccess,
+            dataType:"html",
+            type:"POST",
+            data:{text:i},
+            timeout:10000,
+            error:function () {
+                setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
+            }
+        });
+    });
+
+    function onSaveProgramSuccess(data) {
+        document.getElementById("examplesaccordion").innerHTML = "";
+        loadAccordionContent();
+    }
+
 
 });
 
@@ -123,6 +143,21 @@ function onLoadingExamplesSuccess(data) {
         acc.appendChild(cont);
         i++;
     }
+
+    if (isLogin) {
+        var myProg = document.createElement("h3");
+        var myProgA = document.createElement("a");
+        myProgA.href = "#";
+        myProgA.id = "My_Programs";
+
+        myProgA.innerHTML = "My Programs";
+        myProg.appendChild(myProgA);
+        acc.appendChild(myProg);
+        var myProgCont = document.createElement("div");
+        myProgCont.id = "myprogramscontent";
+        acc.appendChild(myProgCont);
+        loadListOfPrograms();
+    }
     $("#accordion").accordion({
         autoHeight:false,
         navigation:true
@@ -140,7 +175,85 @@ function onLoadingExamplesSuccess(data) {
     }
 
 
+}
 
+function loadListOfPrograms() {
+    $.ajax({
+        url:generateAjaxUrl("loadProgram", "all"),
+        context:document.body,
+        success:onLoadingProgramsSuccess,
+        dataType:"json",
+        type:"GET",
+        //data:{text:i},
+        timeout:10000,
+        error:function () {
+            setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
+        }
+    });
+}
+
+function onLoadingProgramsSuccess(data) {
+    var i = 0;
+    var cont = document.getElementById("myprogramscontent");
+    while (typeof data[i] != "undefined") {
+        var content = document.createElement("p");
+        var span = document.createElement("span");
+        span.className = "bullet";
+        span.innerHTML = "&#8226;";
+        content.appendChild(span);
+        var contA = document.createElement("a");
+        contA.id = data[i].id.replace(new RegExp(" ", 'g'), "_");
+        contA.style.cursor = "pointer";
+        contA.onclick = function (event) {
+            loadProgram(this.id);
+        };
+        contA.innerHTML = data[i].name;
+        content.appendChild(contA);
+        cont.appendChild(content);
+        i++;
+    }
+}
+
+function loadProgram(name) {
+    if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged) {
+        document.getElementById("problems").innerHTML = "";
+        setConsoleMessage("");
+        removeStyles();
+        var el = document.getElementById(lastSelectedExample);
+        if (el != null) {
+            el.className = "";
+        }
+
+        lastSelectedExample = name;
+        document.getElementById(name).className = "selectedExample";
+        document.getElementById("statusbar").innerHTML = "Loading program...";
+        loadingExample = true;
+        name = name.replace(new RegExp("_", 'g'), " ");
+        $.ajax({
+            url:generateAjaxUrl("loadProgram", name),
+            context:document.body,
+            success:onLoadingProgramSuccess,
+            dataType:"html",
+            type:"GET",
+            //data:{text:i},
+            timeout:10000,
+            error:function () {
+                setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
+            }
+        });
+    }
+
+}
+
+function onLoadingProgramSuccess(data) {
+    editor.focus();
+    loadingExample = false;
+
+    if (typeof data != "undefined") {
+        editor.setValue(data);
+        setStatusBarMessage(LOADING_EXAMPLE_OK);
+    }
+    isContentEditorChanged = false;
 }
 
 var loadingExample = false;

@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="openid4java-0.9.6">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/openid4java-0.9.6.662/openid4java-0.9.6.662/openid4java-0.9.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openid4java-0.9.6.662/openid4java-0.9.6.662/lib/commons-codec-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openid4java-0.9.6.662/openid4java-0.9.6.662/lib/commons-logging-1.03.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openid4java-0.9.6.662/openid4java-0.9.6.662/lib/guice-2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openid4java-0.9.6.662/openid4java-0.9.6.662/lib/httpclient-4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openid4java-0.9.6.662/openid4java-0.9.6.662/lib/httpcore-4.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openid4java-0.9.6.662/openid4java-0.9.6.662/lib/nekohtml-1.9.14.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openid4java-0.9.6.662/openid4java-0.9.6.662/lib/xercesImpl-2.8.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

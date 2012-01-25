@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+
     <title>Kotlin Web Demo</title>
     <link rel="shortcut icon" href="../static/favicon.ico"/>
     <link rel="stylesheet" href="/codemirror/lib/codemirror.css">
@@ -106,6 +107,9 @@
 
                 </div>
             </div>
+            <div>
+                <img src="images/social/facebook.png" id="saveProgram"/>
+            </div>
         </div>
         <!--<div id="twolast">-->
         <div id="center">
@@ -157,6 +161,16 @@
         </div>
 
         <div id="right">
+            <!--<div class="titleHeader">
+                <div>Login</div>
+            </div>-->
+            <div class="helpcontent">
+                <div id="userName" height="20">
+                    <a href="#" onclick="login('twitter');"><img src="/images/social/twitter.png"/></a>
+                    <a href="#" onclick="login('facebook');"><img src="/images/social/facebook.png"/></a>
+                    <a href="#" onclick="login('google');"><img src="/images/social/google.png"/></a>
+                </div>
+            </div>
             <div class="titleHeader">
                 <div id="refreshTitle">Type checking</div>
                 <div id="refreshImg">
@@ -283,10 +297,10 @@
 <!--<object id="myapplet" class="org.jetbrains.demo.ukhorskaya.MainApplet" width="0" height="0"
         ARCHIVE="http://st-004:8080/resources/WebViewApplet.jar"></object>-->
 <applet id="myapplet" code="org.jetbrains.demo.ukhorskaya.MainApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet01162012.jar" style="display: none;">
-        </applet>
+        ARCHIVE="WebViewApplet01232012.jar" style="display: none;">
+</applet>
 <applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet01162012.jar" style="display: none;"></applet>
+        ARCHIVE="WebViewApplet01232012.jar" style="display: none;"></applet>
 
 <!--
 <applet id="myapplet" code="org.jetbrains.demo.ukhorskaya.MainApplet" width="0" height="0"

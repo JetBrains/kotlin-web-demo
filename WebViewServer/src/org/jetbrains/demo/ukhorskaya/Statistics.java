@@ -508,8 +508,10 @@ public class Statistics {
                                     info = new UserInfo();
                                 }
                                 info.numberOfRequest++;
-                                tokenizer.nextToken();
                                 token = tokenizer.nextToken();
+                                if (!token.startsWith("message=")) {
+                                    token = tokenizer.nextToken();
+                                }
                                 if (token.equals("message=" + SessionInfo.TypeOfRequest.RUN.name())) {
                                     info.numberOfRunRequest++;
                                 } else if (token.equals("message=" + SessionInfo.TypeOfRequest.HIGHLIGHT.name())) {

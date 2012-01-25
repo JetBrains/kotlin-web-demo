@@ -3,6 +3,10 @@ body {
     padding: 0 1em;
 }
 
+img {
+    border: 0;
+}
+
 h1 {
     letter-spacing: -3px;
     font-size: 3.23em;
@@ -189,10 +193,6 @@ body {
     vertical-align: top;
 }
 
-.problemsViewError span {
-    vertical-align: top;
-}
-
 .newLineWarning {
     color: #C0C0C0 !important;
     margin: 0;
@@ -208,7 +208,8 @@ body {
     vertical-align: top;
 }
 
-.problemsViewStacktrace span {
+.problemsViewWarning {
+    margin: 0;
     vertical-align: top;
 }
 
@@ -302,7 +303,7 @@ body {
     float: left;
     margin-top: 1px;
     margin-bottom: 1px;
-    min-height: 300px;
+    min-height: 800px;
     height: 100%;
 }
 
@@ -510,7 +511,6 @@ body {
     white-space: pre;
     padding: 5px !important;
 }
-
 
 .problemsViewError span {
     word-wrap: break-word;
@@ -885,4 +885,17 @@ td#removeallguttersTd {
     cursor: pointer;
     /*float: left;*/
 
+}
+
+#userName {
+    padding: 5px;
+    height: 20px;
+}
+
+#userName a {
+    padding: 0;
+}
+
+#logout {
+    float: right;
 }

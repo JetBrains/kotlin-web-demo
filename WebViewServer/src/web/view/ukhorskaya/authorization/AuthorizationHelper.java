@@ -1,5 +1,8 @@
 package web.view.ukhorskaya.authorization;
 
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.demo.ukhorskaya.session.UserInfo;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Natalia.Ukhorskaya
@@ -7,11 +10,10 @@ package web.view.ukhorskaya.authorization;
  * Time: 1:49 PM
  */
 public abstract class AuthorizationHelper {
-    protected String userName;
+    protected String type;
 
     public abstract String authorize();
 
-    public abstract void verify(String key) ;
-    
-    public abstract String getUserName();
+    @Nullable
+    public abstract UserInfo verify(String url);
 }

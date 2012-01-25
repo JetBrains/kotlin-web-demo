@@ -43,7 +43,8 @@ public class SeleniumTest extends TestCase {
     public void setUp() throws Exception {
         super.setUp();
         driver = new FirefoxDriver();
-        driver.get("http://localhost");
+        driver.get("http://kotlin-demo.jetbrains.com");
+//        driver.get("http://localhost");
         statusBar = driver.findElement(By.id("statusbar"));
         console = driver.findElement(By.id("console"));
         run = driver.findElement(By.id("run"));

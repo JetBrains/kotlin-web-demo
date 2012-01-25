@@ -1,12 +1,15 @@
 package web.view.ukhorskaya.authorization;
 
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
-import org.jetbrains.demo.ukhorskaya.server.KotlinHttpServer;
+import org.jetbrains.demo.ukhorskaya.session.UserInfo;
+import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -17,9 +20,11 @@ import org.w3c.dom.NodeList;
  */
 
 public class AuthorizationTwitterHelper extends AuthorizationHelper {
+    private final String TYPE = "twitter";
 
     private static OAuthService twitterService;
     private static Token requestToken;
+    private static final String PROTECTED_RESOURCE_URL = "http://api.twitter.com/1/account/verify_credentials.xml";
 
     public String authorize() {
         try {
@@ -27,46 +32,57 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
                     .provider(TwitterApi.class)
                     .apiKey("g0dAeSZpnxTHxRKV2UZFGg")
                     .apiSecret("NSfUf8o3BhyT96U6hcCarWIUEwz6Le4FY6Em7WBPtuw")
-                    .callback("http://" + KotlinHttpServer.getHost() + "/login.html?twitter")
+                    .callback("http://" + ServerHandler.HOST + ResponseUtils.generateRequestString("authorization", "twitter"))
                     .build();
             requestToken = twitterService.getRequestToken();
-            String authUrl = twitterService.getAuthorizationUrl(requestToken);
-            System.out.println(authUrl);
-            return authUrl;
+            return twitterService.getAuthorizationUrl(requestToken);
         } catch (Throwable e) {
             e.printStackTrace();
         }
         return "";
     }
 
-    public void verify(String url) {
+    @Override
+    @Nullable
+    public UserInfo verify(String url) {
+        UserInfo userInfo = null;
         try {
             String authUrl = ResponseUtils.substringAfter(url, "oauth_verifier=");
-            String authToken = ResponseUtils.substringBetween(url, "oauth_token=", "oauth_verifier=");
             Verifier verifier = new Verifier(authUrl);
-            Token accessToken = twitterService.getAccessToken(requestToken, verifier); // the requestToken you had from step 2
-            OAuthRequest request = new OAuthRequest(Verb.GET, "http://api.twitter.com/1/account/verify_credentials.xml");
+            Token accessToken = twitterService.getAccessToken(requestToken, verifier);
+            OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
             twitterService.signRequest(accessToken, request); // the access token from step 4
             Response response = request.send();
-            System.out.println(response.getBody());
+            //System.out.println(response.getBody());
 
             Document document = ResponseUtils.getXmlDocument(response.getStream());
             if (document == null) {
-                return;
+                return userInfo;
             }
+
+            userInfo = new UserInfo();
+            String name = null;
+            String id = null;
             NodeList nodeList = document.getElementsByTagName("user");
             for (int i = 0; i < nodeList.getLength(); i++) {
-                if (nodeList.item(i).getNodeName().equals("name")) {
-                    userName = nodeList.item(i).getTextContent();
+                NodeList children = nodeList.item(i).getChildNodes();
+                for (int j = 0; j < children.getLength(); j++) {
+                    Node node = children.item(j);
+                    if (node.getNodeName().equals("name")) {
+                        name = node.getTextContent();
+                    } else if (node.getNodeName().equals("id")) {
+                        id = node.getTextContent();
+                    }
                 }
             }
+            if (name != null && id != null) {
+                userInfo.login(name, id, TYPE);
+            }
+
+
         } catch (Throwable e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public String getUserName() {
-        return userName;
+        return userInfo;
     }
 }

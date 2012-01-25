@@ -124,10 +124,8 @@ public class UserAuthenticator extends BasicAuthenticator {
                 env.put(Context.SECURITY_CREDENTIALS, password);
                 env.put(Context.PROVIDER_URL, "ldap://msdc.labs.intellij.net:389");
                 context = new InitialLdapContext(env, null);
-                System.out.println("Connection Successful.");
 
             } catch (NamingException nex) {
-                System.out.println("LDAP Connection: FAILED");
                 //nex.printStackTrace();
                 return false;
             }
@@ -152,7 +150,6 @@ public class UserAuthenticator extends BasicAuthenticator {
                 if (values.hasMore()) {
                     userName = values.next().toString();
                 }
-                System.out.print("Hello, " + userName);
                 return true;
             }
 
@@ -315,7 +312,6 @@ public class UserAuthenticator extends BasicAuthenticator {
             if (nodeList == null) {
                 return null;
             }
-            System.out.println(nodeList.getLength());
             for (int i = 0; i < nodeList.getLength(); i++) {
                 NodeList children = nodeList.item(i).getChildNodes();
                 users.put(children.item(1).getTextContent(), children.item(3).getTextContent());
