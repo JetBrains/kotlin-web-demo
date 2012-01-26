@@ -6,93 +6,15 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/static/icons/delete.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/static/icons/link.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/static/icons/save.png" />
-      <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\resources\images\loading2.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\translator\src\org\jetbrains\k2js\translate\expression\QualifiedExpressionTranslator.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\translator\test\org\jetbrains\k2js\test\WebDemoExamples2Test.java" afterPath="" />
+    <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="Loading applet during start&#10;">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/Analyzer.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/cases/jquery.kt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/libImplementations/jQuery.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js" afterPath="$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/common.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/common.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/components.css" afterPath="$PROJECT_DIR$/WebViewServer/static/components/components.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/components.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/components.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/index.html" afterPath="$PROJECT_DIR$/WebViewServer/static/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/ui/jquery.ui.accordion.js" afterPath="$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/ui/jquery.ui.accordion.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/.idea/modules.xml" afterPath="$PROJECT_DIR$/../k2js/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../k2js/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/js.iml" afterPath="$PROJECT_DIR$/../k2js/js/js.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/backend/js/ast/JsExpression.java" afterPath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/backend/js/ast/JsExpression.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/backend/js/ast/JsProgram.java" afterPath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/backend/js/ast/JsProgram.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/backend/js/ast/JsProgramFragment.java" afterPath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/backend/js/ast/JsProgramFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/backend/js/ast/JsScope.java" afterPath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/backend/js/ast/JsScope.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/common/HasSourceInfo.java" afterPath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/common/HasSourceInfo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/common/NameFactory.java" afterPath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/common/NameFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/common/SourceInfo.java" afterPath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/common/SourceInfo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/util/AstUtil.java" afterPath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/util/AstUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/util/DefaultTextOutput.java" afterPath="$PROJECT_DIR$/../k2js/js/src/com/google/dart/compiler/util/DefaultTextOutput.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/k2js.iml" afterPath="$PROJECT_DIR$/../k2js/k2js.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/K2JSTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/K2JSTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/Aliaser.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/Aliaser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/DeclarationVisitor.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/DeclarationVisitor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/DynamicContext.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/DynamicContext.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/Namer.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/Namer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/NamingScope.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/NamingScope.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/out/production/frontend/jet/Library.jet" afterPath="$PROJECT_DIR$/../k2js/out/production/frontend/jet/Library.jet" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/StandardClasses.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/StandardClasses.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/StaticContext.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/StaticContext.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/TranslationContext.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/context/TranslationContext.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/declaration/ClassDeclarationTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/declaration/ClassDeclarationTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/declaration/NamespaceTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/declaration/NamespaceTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/ExpressionVisitor.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/ExpressionVisitor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/ForTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/ForTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/FunctionTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/FunctionTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/PatternTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/PatternTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/TryTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/TryTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/WhenTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/expression/WhenTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/general/AbstractTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/general/AbstractTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/general/TranslatorVisitor.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/general/TranslatorVisitor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/initializer/AbstractInitializerTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/initializer/AbstractInitializerTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/initializer/ClassInitializerTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/initializer/ClassInitializerTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/initializer/InitializerVisitor.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/initializer/InitializerVisitor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/intrinsic/Intrinsics.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/intrinsic/Intrinsics.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/intrinsic/array/IntrinsicArrayUtils.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/intrinsic/array/IntrinsicArrayUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/operation/IncrementTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/operation/IncrementTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/operation/OverloadedIncrementTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/operation/OverloadedIncrementTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/AccessTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/AccessTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/ArrayAccessTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/ArrayAccessTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/CallTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/CallTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/PropertyAccessTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/PropertyAccessTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/ReferenceAccessTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/ReferenceAccessTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/ReferenceTranslator.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/reference/ReferenceTranslator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/BindingUtils.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/BindingUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/DescriptorUtils.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/DescriptorUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/PsiUtils.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/PsiUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/TranslationUtils.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/TranslationUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/utils/ErrorSender.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/utils/ErrorSender.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/basicproperty.jet" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/basicproperty.jet" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/traitproperty.jet" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/traitproperty.jet" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/function/cases/KT-921.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/function/cases/KT-921.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/misc/cases/intRange.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/misc/cases/intRange.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/kotlin_lib.js" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/kotlin_lib.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenNotValue.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenNotValue.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenValue.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenValue.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/explicitRange.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/explicitRange.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/intInRange.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/intInRange.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/rangeSugarSyntax.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/rangeSugarSyntax.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/ExtensionFunctionTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/ExtensionFunctionTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/FunctionTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/FunctionTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/JavaClassesTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/JavaClassesTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/KotlinLibTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/KotlinLibTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/MiscTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/MiscTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/OperationTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/OperationTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/RhinoSystemOutputChecker.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/RhinoSystemOutputChecker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/TranslationTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/TranslationTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/translator.iml" afterPath="$PROJECT_DIR$/../k2js/translator/translator.iml" />
     </list>
     <list id="345eea6b-37f8-43b6-87a5-21036f5f7634" name="Failed commit: Default" comment="Merge branch with changes in view and statistics&#10;" />
     <ignored path="WebView.iws" />
@@ -141,6 +63,47 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <line_breakpoints>
+      <breakpoint url="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/examplesLoader/ExamplesList.java" line="74" class="web.view.ukhorskaya.examplesLoader.ExamplesList" package="web.view.ukhorskaya.examplesLoader">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/web/view/ukhorskaya/responseHelpers/JsonResponseForCompletion.java" line="109" class="web.view.ukhorskaya.responseHelpers.JsonResponseForCompletion" package="web.view.ukhorskaya.responseHelpers">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/K2JSTranslator.java" line="111" class="org.jetbrains.k2js.K2JSTranslator" package="org.jetbrains.k2js">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -154,8 +117,8 @@
         <option name="CONDITION_ENABLED" value="false" />
         <option name="CLASS_FILTERS_ENABLED" value="false" />
         <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="&#13;&#13;JAVA" />
-        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
       </breakpoint>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -169,8 +132,8 @@
         <option name="CONDITION_ENABLED" value="false" />
         <option name="CLASS_FILTERS_ENABLED" value="false" />
         <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="&#13;&#13;JAVA" />
-        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
     <breakpoint_rules />
@@ -198,37 +161,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="HttpSession.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java">
+      <file leaf-file-name="UserAuthenticator.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/authorization/UserAuthenticator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="132" column="0" selection-start="6526" selection-end="6526" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/static/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="72" column="16" selection-start="2253" selection-end="2260" vertical-scroll-proportion="-11.576923">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jquery.ui.selectmenu.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="14" selection-start="55" selection-end="65" vertical-scroll-proportion="0.0">
+            <state line="84" column="24" selection-start="3019" selection-end="3019" vertical-scroll-proportion="0.49162862">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="common.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/common.js">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/common.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="158" column="9" selection-start="5931" selection-end="5931" vertical-scroll-proportion="-8.16">
+            <state line="54" column="103" selection-start="1799" selection-end="1799" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -236,63 +181,74 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="components.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/components.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="help.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/help.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="docs.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/css/docs.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="codemirror.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/codemirror.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="foldcode.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/util/foldcode.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Initializer.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Initializer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="116" column="71" selection-start="4465" selection-end="4465" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="components.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.css">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/components.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="984" column="16" selection-start="14902" selection-end="14902" vertical-scroll-proportion="-22.28">
+            <state line="343" column="78" selection-start="5324" selection-end="5324" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="components.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.js">
+      <file leaf-file-name="login.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/resources/login.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="438" column="64" selection-start="14242" selection-end="14242" vertical-scroll-proportion="0.28169015">
+            <state line="70" column="52" selection-start="1823" selection-end="1823" vertical-scroll-proportion="0.0">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="complete.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="372" column="58" selection-start="12993" selection-end="13330" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MongoDBConnector.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="127" column="30" selection-start="4623" selection-end="4623" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#5938#5954#0" expanded="true" />
-                <element signature="e#9355#9371#0" expanded="true" />
-                <element signature="e#10609#10625#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ResponseUtils.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="25" selection-start="1123" selection-end="1123" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ServerHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="120" column="41" selection-start="5879" selection-end="5879" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -323,22 +279,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationFacebookHelper.java" />
-        <option value="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/UserInfo.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationGoogleHelper.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationTwitterHelper.java" />
-        <option value="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/SessionInfo.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/ui/jquery.ui.accordion.js" />
-        <option value="$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js" />
-        <option value="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java" />
-        <option value="$PROJECT_DIR$/../k2js/translator/testFiles/kotlinLib/cases/isSameType.js" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/static/components/common.js" />
-        <option value="$PROJECT_DIR$/WebViewServer/static/index.html" />
-        <option value="$PROJECT_DIR$/WebViewServer/static/components/components.css" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/static/components/components.js" />
+        <option value="$PROJECT_DIR$/statistics/passwords.xml" />
+        <option value="$PROJECT_DIR$/statistics/statistics.xml" />
+        <option value="$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/complete.js" />
+        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/MyAuthenticator.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/UserAuthenticator.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/authorization/ManagerAuthenticator.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/resources/logs.html" />
+        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/resources/login.html" />
+        <option value="$PROJECT_DIR$/statistics/users.xml" />
+        <option value="$PROJECT_DIR$/statistics/managers.xml" />
+        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java" />
+        <option value="$PROJECT_DIR$/logs/exceptions.log" />
+        <option value="$PROJECT_DIR$/WebViewServer/resources/components/components.css" />
+        <option value="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/DescriptorUtils.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/authorization/UserAuthenticator.java" />
       </list>
     </option>
   </component>
@@ -387,8 +343,6 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <OptionsSetting value="true" id="Undo Check Out" />
-    <OptionsSetting value="true" id="Get Latest Version" />
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
@@ -423,37 +377,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="WebView" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Non-Project Files" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="WebView">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="WebView">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="All">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="WebView">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -504,136 +427,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebViewServer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jquery" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebViewServer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jquery" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="development-bundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebViewServer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jquery" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="development-bundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="smoothness" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebViewServer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jquery" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="development-bundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebViewServer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -657,32 +450,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="ukhorskaya" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebViewServer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ukhorskaya" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="database" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -722,11 +489,61 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="WebViewServer" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ukhorskaya" />
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewApplet" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="statistics" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -747,8 +564,18 @@
               <option name="myItemId" value="ukhorskaya" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="session" />
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -758,22 +585,43 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="k2js" />
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Non-Project Files" />
+        <subPane subId="Project Files">
           <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WebView" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="k2js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="WebView">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="WebView">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="All">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="WebView">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -782,10 +630,10 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="true" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="118" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="130" />
-    <property name="project.structure.proportion" value="0.20588236" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="options.splitter.main.proportions" value="0.23333333" />
     <property name="Repository.Attach.JavaDocs" value="false" />
@@ -838,11 +686,11 @@
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Development\contrib\jet-contrib\WebView\WebViewServer\static\icons" />
-      <recent name="C:\Development\contrib\jet-contrib\WebView\WebViewServer\static" />
-      <recent name="C:\Development\contrib\jet-contrib\k2js" />
       <recent name="C:\Development\git-contrib\jet-contrib\WebView\statistics" />
       <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\messages" />
+      <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\codemirror\mode\clike" />
+      <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources" />
+      <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewApplet\src\jet" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Main">
@@ -989,7 +837,7 @@
       <log_file path="$PROJECT_DIR$/logs/kotlinCompiler.log" checked="true" skipped="true" show_all="false" alias="a" />
       <output_file path="$PROJECT_DIR$/../../../log.csv" is_save="false" />
       <extension name="coverage" enabled="false" merge="false" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="org.jetbrains.demo.ukhorskaya.Main" />
+      <option name="MAIN_CLASS_NAME" value="web.view.ukhorskaya.Main" />
       <option name="VM_PARAMETERS" value="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=80" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -1012,25 +860,19 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="ResponseTest" type="JUnit" factoryName="JUnit">
+    <configuration default="false" name="MainWithJar" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" runner="idea" />
-      <module name="TestModule" />
+      <option name="MAIN_CLASS_NAME" value="web.view.ukhorskaya.Main" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="ResponseTest" />
-      <option name="METHOD_NAME" value="test$execution$Foo" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
+      <module name="WebViewApplet" />
       <envs />
-      <patterns />
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="" />
         <option name="TRANSPORT" value="0" />
@@ -1039,16 +881,18 @@
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
-      <method />
+      <method>
+        <option name="BuildArtifacts" enabled="true" />
+      </method>
     </configuration>
-    <configuration default="false" name="SeleniumTest" type="JUnit" factoryName="JUnit">
+    <configuration default="false" name="ResponseTest" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" runner="idea" />
       <module name="TestModule" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="SeleniumTest" />
-      <option name="METHOD_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="ResponseTest" />
+      <option name="METHOD_NAME" value="test$execution$Foo" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PARAMETERS" value="" />
@@ -1098,8 +942,8 @@
       <item index="0" class="java.lang.String" itemvalue="Applet.k2js" />
       <item index="1" class="java.lang.String" itemvalue="Applet.AppletDebug" />
       <item index="2" class="java.lang.String" itemvalue="Application.Main" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.ResponseTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.SeleniumTest" />
+      <item index="3" class="java.lang.String" itemvalue="Application.MainWithJar" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.ResponseTest" />
       <item index="5" class="java.lang.String" itemvalue="JavaScript Debug.Unnamed" />
       <item index="6" class="java.lang.String" itemvalue="Remote.ServerDebug" />
     </list>
@@ -1179,28 +1023,27 @@
     <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25343812" sideWeight="0.48376623" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3429395" sideWeight="0.48376623" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3280943" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14691558" sideWeight="0.6707317" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33693516" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33743843" sideWeight="0.0" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.49756494" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29788962" sideWeight="0.21829268" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.6390244" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.0" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26031435" sideWeight="0.49675325" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Metrics" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286385" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.21813725" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39935064" sideWeight="0.67156863" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19497864" sideWeight="0.7465619" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33760685" sideWeight="0.66306484" order="3" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33398822" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23516835" sideWeight="0.6570605" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33414635" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Metrics" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32949087" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32881773" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32881773" sideWeight="0.49675325" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33766234" sideWeight="0.66463417" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1239,7 +1082,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Authorization with scribe&#10;Add mongodb" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge branch with changes in view and statistics&#10;" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1267,7 +1110,6 @@
     <MESSAGE value="Authorization: xml file with passwords &#10;" />
     <MESSAGE value="Loading applet during start&#10;" />
     <MESSAGE value="Merge branch with changes in view and statistics&#10;" />
-    <MESSAGE value="Authorization with scribe&#10;Add mongodb" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1324,125 +1166,100 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$PROJECT_DIR$/lib/mongo-2.7.2.jar!/com/mongodb/BasicDBObject.class">
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/logs.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="11" selection-start="475" selection-end="475" vertical-scroll-proportion="-8.16">
+        <state line="133" column="142" selection-start="4217" selection-end="4217" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/responseHelpers/JsConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="18" selection-start="827" selection-end="827" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/DescriptorUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="85" column="69" selection-start="3510" selection-end="3510" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/ui/jquery.ui.accordion.js">
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/handlers/ServerHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="351" column="23" selection-start="12865" selection-end="12865" vertical-scroll-proportion="0.0">
+        <state line="99" column="25" selection-start="4455" selection-end="4455" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/web/view/ukhorskaya/ResponseUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="221" column="27" selection-start="6850" selection-end="6850" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/sessions/HttpSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="302" column="45" selection-start="14179" selection-end="14179" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/Initializer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="116" column="71" selection-start="4465" selection-end="4465" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="70" column="52" selection-start="1823" selection-end="1823" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/components.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="343" column="78" selection-start="5324" selection-end="5324" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/components.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/help.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/css/docs.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/codemirror.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/codemirror/lib/util/foldcode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/resources/components/common.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="103" selection-start="1799" selection-end="1799" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Main.java">
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/web/view/ukhorskaya/authorization/UserAuthenticator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="13" selection-start="530" selection-end="530" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/help.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="57" selection-start="1086" selection-end="1135" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/mongo-2.7.2.jar!/com/mongodb/DBCollection.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="38" selection-start="916" selection-end="919" vertical-scroll-proportion="-0.84">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../k2js/translator/testFiles/kotlinLib/cases/isSameType.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="4" selection-start="28" selection-end="28" vertical-scroll-proportion="0.026153846">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="132" column="0" selection-start="6526" selection-end="6526" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="14" selection-start="55" selection-end="65" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/common.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="158" column="9" selection-start="5931" selection-end="5931" vertical-scroll-proportion="-8.16">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="120" column="41" selection-start="5879" selection-end="5879" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="25" selection-start="1123" selection-end="1123" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="984" column="16" selection-start="14902" selection-end="14902" vertical-scroll-proportion="-22.28">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="16" selection-start="2253" selection-end="2260" vertical-scroll-proportion="-11.576923">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="372" column="58" selection-start="12993" selection-end="13330" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="30" selection-start="4623" selection-end="4623" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#5938#5954#0" expanded="true" />
-            <element signature="e#9355#9371#0" expanded="true" />
-            <element signature="e#10609#10625#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="438" column="64" selection-start="14242" selection-end="14242" vertical-scroll-proportion="0.28169015">
+        <state line="84" column="24" selection-start="3019" selection-end="3019" vertical-scroll-proportion="0.49162862">
           <folding />
         </state>
       </provider>
@@ -1454,9 +1271,9 @@
         <settings>
           <artifact-editor>
             <show-content>
+              <type id="library" />
               <type id="javaee-facet-resources" />
               <type id="artifact" />
-              <type id="library" />
               <type id="jpa-descriptors" />
             </show-content>
           </artifact-editor>
@@ -1473,7 +1290,7 @@
       </state>
       <state key="FacetStructureConfigurable.UI">
         <settings>
-          <last-edited>Web</last-edited>
+          <last-edited>No facets are configured</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1509,7 +1326,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>WebViewServer</last-edited>
+          <last-edited>js</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1533,7 +1350,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>scribe-1.3.0</last-edited>
+          <last-edited>kotlinLibrary</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
