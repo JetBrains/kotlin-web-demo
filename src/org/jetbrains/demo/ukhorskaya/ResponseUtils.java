@@ -208,6 +208,14 @@ public class ResponseUtils {
         return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}, {\"exception\":\"" + stackTrace + "\",\"type\":\"out\"}]";
     }
 
+    public static String getJsonString(String type, String text) {
+        return "[{\"type\":\"" + type + "\",\"text\":\""+ text + "\"}]";
+    }
+    
+    public static String getJsonString(String type, String text, String args) {
+        return "[{\"type\":\"" + type + "\",\"text\":\""+ text + "\",\"args\":\""+ args + "\"}]";
+    }
+
     public static String getDate(Calendar calendar) {
         StringBuilder builder = new StringBuilder();
         builder.append(calendar.get(Calendar.MONTH) + 1);

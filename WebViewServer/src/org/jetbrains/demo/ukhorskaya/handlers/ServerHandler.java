@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Calendar;
@@ -39,7 +40,7 @@ public class ServerHandler {
     public static String HOST;
 
     public void handle(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        HOST = request.getServerName();
+        HOST = InetAddress.getLocalHost().getHostName();
 
         if (request.getQueryString() != null && request.getQueryString().equals("test")) {
             PrintWriter out = null;
@@ -116,6 +117,8 @@ public class ServerHandler {
                     || parameters.compareType("convertToJs")
                     || parameters.compareType("loadExample")
                     || parameters.compareType("saveProgram")
+                    || parameters.compareType("deleteProgram")
+                    || parameters.compareType("generatePublicLink")
                     || parameters.compareType("loadProgram")
                     || parameters.compareType("writeLog")) {
                 if (!parameters.compareType("writeLog")) {

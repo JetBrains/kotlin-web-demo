@@ -11,14 +11,19 @@ var HIGHLIGHT_REQUEST_ABORTED = "Can't get errors/warnings from server.";
 var RUN_REQUEST_ABORTED = "Can't get program output from server.";
 var COMPLETE_REQUEST_ABORTED = "Can't get completion proposal list from server.";
 var EXAMPLES_REQUEST_ABORTED = "Can't get the example code from server.";
+var SAVE_PROGRAM_REQUEST_ABORTED = "Can't save the program on server.";
+var DELETE_PROGRAM_REQUEST_ABORTED = "Can't delete the program from server.";
 var HELP_REQUEST_ABORTED = "Can't get help from server.";
 //Message in popup with warning before close tab with editor
-var BEFORE_EXIT = "The changes you made to the program will be lost when this page is closed. Do you want to close the page?";
+//var BEFORE_EXIT = "The changes you made to the program will be lost when this page is closed. Do you want to close the page?";
+var BEFORE_EXIT = "The changes you made to the program will be lost when you change an example. Do you want to leave the page?";
+var BEFORE_DELETE_PROGRAM = "Do you really want to delete a program?";
 var ERROR_UNTIL_EXECUTE = "Your program has terminated with an exception.";
 var TRY_RUN_CODE_WITH_ERROR = "Can't run a program with errors. See the Problems View tab.";
 var EXECUTE_OK = "Compilation competed successfully.";
 var GET_FROM_APPLET_FAILED = "Your system can't run Java Applets.";
 var LOADING_EXAMPLE_OK = "Example is loaded.";
+var LOADING_PROGRAM_OK = "Program is loaded.";
 var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
 var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
@@ -104,7 +109,8 @@ function logout() {
             document.getElementById("examplesaccordion").innerHTML = "";
             loadAccordionContent();
             isLogin = false;
-            document.getElementById("userName").innerHTML = loginImages;
+            document.getElementById("login").style.display = "block";
+            document.getElementById("userName").innerHTML = "";
         }
     });
 
@@ -117,14 +123,26 @@ function getSessionIdSuccess(data) {
     }
     if (data[1] != null && data[1] != '') {
         userName = data[1];
-        if (loginImages == "") {
+        /*if (loginImages == "") {
             loginImages = document.getElementById("userName").innerHTML;
-        }
+        }*/
         if (userName != "") {
+            document.getElementById("login").style.display = "none";
             isLogin = true;
             userName = decodeURI(userName);
             userName = userName.replace(new RegExp('\\+', 'g'), ' ');
-            document.getElementById("userName").innerHTML = "<b>" + userName + "</b> <a href=\"#\" id=\"logout\" onclick=\"logout();\">Logout</a>";
+
+//            document.getElementById("userName").innerHTML = "<b>" + userName + "</b>";
+            document.getElementById("userName").innerHTML = "<select id=\"userNameSelect\" ><option value='"+ userName + "'>" + userName + "</option><option value='Logout'>Logout</option></select>";
+            $("#userNameSelect").selectmenu({
+                width: 245,
+                style:'popup',
+                select: function() {
+                    if (this.value == "Logout") {
+                        logout();
+                    }
+                }
+            });
         }
     }
     var info = "browser: " + navigator.appName + " " + navigator.appVersion;
@@ -173,6 +191,9 @@ function setKotlinVersion(version) {
 
 function setStatusBarMessage(message) {
     document.getElementById("statusbar").innerHTML = message;
+}
+function setStatusBarError(message) {
+    document.getElementById("statusbar").innerHTML = "<font color=\"red\">" + message + "</font>";
 }
 
 function setConsoleMessage(message) {
@@ -257,3 +278,8 @@ function onLoginSuccess(data) {
 //    window.open(data);
     document.location.href = data;
 }
+
+
+
+
+

@@ -740,7 +740,7 @@ body {
     cursor: pointer;
 }
 
-#dialog {
+#dialog, #saveDialog {
     display: none;
 }
 
@@ -887,15 +887,103 @@ td#removeallguttersTd {
 
 }
 
-#userName {
+#login {
     padding: 5px;
     height: 20px;
 }
 
-#userName a {
+#login a {
     padding: 0;
+    float: right;
+    padding-right: 10px;
 }
 
 #logout {
     float: right;
 }
+
+#userName a {
+    padding-right: 0;
+}
+
+#userName {
+    margin-bottom: 10px;
+}
+
+#userName {
+    height: 22px;
+    cursor: pointer;
+    padding-right: 10px;
+    padding-bottom: 10px;
+
+    color: #212121;
+    font-weight: normal;
+}
+
+#My_Programs {
+    /*float: left;*/
+    display: inline-block;
+    /*height: 28px;*/
+}
+
+#saveProgram, #saveAsProgram {
+    display: inline-block;
+    float: right;
+    padding-right: 6px;
+    padding-top: 3px;
+}
+
+#tools {
+    /*position: absolute;*/
+    right: 1px;
+    top: 8px;
+}
+
+#tools img {
+    width: auto;
+    display: inline;
+}
+
+#saveDialogError {
+    color: red;
+}
+
+#programName {
+    width: 220px;
+}
+
+#myprogramscontent p img {
+    float: right;
+    padding-left: 9px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+div#toolbox {
+    background: #eee bottom left repeat-x;
+    height: 30px;
+    /*position: fixed;*/
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    /*border-top: 10px solid #e5e5e5;*/
+}
+
+
+div.fixedpage span.close {
+
+}
+div.fixedpage {
+    width: 925px;
+    text-align: left;
+    padding-top: 5px;
+}
+
+#publicLinkHref {
+    /*float: left;*/
+    margin-right: 50px;
+}
+
+
+

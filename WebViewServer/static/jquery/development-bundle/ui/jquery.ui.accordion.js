@@ -349,6 +349,7 @@
             if (this.running || ( !options.collapsible && clickedIsActive )) {
                 return;
             }
+            alert("a");
 
             // find elements to show and hide
             var active = this.active,

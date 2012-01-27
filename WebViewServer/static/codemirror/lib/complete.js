@@ -756,6 +756,7 @@ $(document).ready(function () {
 
         complete.appendChild(sel);
 
+
         sel.multiple = true;
 
         if (data == COMPLETION_ISNOT_AVAILABLE) {
@@ -768,6 +769,8 @@ $(document).ready(function () {
         complete.style.top = pos.yBot + "px";
         document.body.appendChild(complete);
         document.getElementById("complete").focus();
+//        $("select").selectmenu();
+
 
         // Hack to hide the scrollbar.
         if (i <= 10) {

@@ -7,38 +7,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/openid4java_0_9_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationFacebookHelper.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationGoogleHelper.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationOpenIdHelper.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/static/login.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/UserInfo.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/static/icons/delete.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/static/icons/link.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/static/icons/save.png" />
+      <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\resources\images\loading2.png" afterPath="" />
       <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\translator\src\org\jetbrains\k2js\translate\expression\QualifiedExpressionTranslator.java" afterPath="" />
       <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\translator\test\org\jetbrains\k2js\test\WebDemoExamples2Test.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/basicproperty.jet" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/basicproperty.jet" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/traitproperty.jet" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/traitproperty.jet" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/function/cases/KT-921.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/function/cases/KT-921.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenNotValue.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenNotValue.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenValue.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenValue.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/explicitRange.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/explicitRange.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/rangeSugarSyntax.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/rangeSugarSyntax.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/scribe_1_3_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/scribe_1_3_0.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestModule/src/SeleniumTest.java" afterPath="$PROJECT_DIR$/TestModule/src/SeleniumTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" afterPath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Statistics.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Statistics.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationHelper.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationTwitterHelper.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationTwitterHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/UserAuthenticator.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/UserAuthenticator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/servlet/KotlinHttpServlet.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/servlet/KotlinHttpServlet.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js" afterPath="$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/common.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/common.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/components.css" afterPath="$PROJECT_DIR$/WebViewServer/static/components/components.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/components.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/components.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/index.html" afterPath="$PROJECT_DIR$/WebViewServer/static/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/SessionInfo.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/SessionInfo.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/ui/jquery.ui.accordion.js" afterPath="$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/ui/jquery.ui.accordion.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/.idea/modules.xml" afterPath="$PROJECT_DIR$/../k2js/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../k2js/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/js.iml" afterPath="$PROJECT_DIR$/../k2js/js/js.iml" />
@@ -89,9 +74,16 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/PsiUtils.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/PsiUtils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/TranslationUtils.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/utils/TranslationUtils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/utils/ErrorSender.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/utils/ErrorSender.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/basicproperty.jet" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/basicproperty.jet" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/traitproperty.jet" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/examples/sortedTests/unsupported/traitproperty.jet" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/function/cases/KT-921.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/function/cases/KT-921.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/misc/cases/intRange.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/expression/misc/cases/intRange.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/kotlin_lib.js" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/kotlin_lib.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenNotValue.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenNotValue.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenValue.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/patternMatching/cases/whenValue.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/explicitRange.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/explicitRange.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/intInRange.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/intInRange.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/rangeSugarSyntax.kt" afterPath="$PROJECT_DIR$/../k2js/translator/testFiles/range/cases/rangeSugarSyntax.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/ExtensionFunctionTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/ExtensionFunctionTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/FunctionTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/FunctionTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/JavaClassesTest.java" afterPath="$PROJECT_DIR$/../k2js/translator/test/org/jetbrains/k2js/test/JavaClassesTest.java" />
@@ -162,8 +154,8 @@
         <option name="CONDITION_ENABLED" value="false" />
         <option name="CLASS_FILTERS_ENABLED" value="false" />
         <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
+        <option name="CONDITION" value="&#13;&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
       </breakpoint>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -177,8 +169,8 @@
         <option name="CONDITION_ENABLED" value="false" />
         <option name="CLASS_FILTERS_ENABLED" value="false" />
         <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
+        <option name="CONDITION" value="&#13;&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
       </breakpoint>
     </breakpoint_any>
     <breakpoint_rules />
@@ -206,30 +198,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ServerHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="134" column="0" selection-start="6617" selection-end="6617" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RequestParameters.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/RequestParameters.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="19" selection-start="1515" selection-end="1515" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="HttpSession.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="103" column="0" selection-start="5135" selection-end="5135" vertical-scroll-proportion="0.0">
+            <state line="132" column="0" selection-start="6526" selection-end="6526" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -238,25 +210,25 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/static/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="110" column="69" selection-start="3763" selection-end="3774" vertical-scroll-proportion="-11.115385">
+            <state line="72" column="16" selection-start="2253" selection-end="2260" vertical-scroll-proportion="-11.576923">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="components.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.js">
+      <file leaf-file-name="jquery.ui.selectmenu.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="83" column="31" selection-start="2869" selection-end="2961" vertical-scroll-proportion="-9.68">
+            <state line="2" column="14" selection-start="55" selection-end="65" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="common.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="common.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/common.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="104" column="35" selection-start="3874" selection-end="3874" vertical-scroll-proportion="0.74099725">
+            <state line="158" column="9" selection-start="5931" selection-end="5931" vertical-scroll-proportion="-8.16">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -264,19 +236,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SessionInfo.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/SessionInfo.java">
+      <file leaf-file-name="components.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="73" column="0" selection-start="1615" selection-end="1615" vertical-scroll-proportion="0.0">
+            <state line="984" column="16" selection-start="14902" selection-end="14902" vertical-scroll-proportion="-22.28">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AuthorizationHelper.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationHelper.java">
+      <file leaf-file-name="components.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="0" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0">
+            <state line="438" column="64" selection-start="14242" selection-end="14242" vertical-scroll-proportion="0.28169015">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="complete.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="372" column="58" selection-start="12993" selection-end="13330" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -285,20 +266,33 @@
       <file leaf-file-name="MongoDBConnector.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="115" column="0" selection-start="4042" selection-end="4042" vertical-scroll-proportion="0.0">
+            <state line="127" column="30" selection-start="4623" selection-end="4623" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4194#4210#0" expanded="true" />
+                <element signature="e#5938#5954#0" expanded="true" />
+                <element signature="e#9355#9371#0" expanded="true" />
+                <element signature="e#10609#10625#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DBCollection.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/lib/mongo-2.7.2.jar!/com/mongodb/DBCollection.class">
+      <file leaf-file-name="ResponseUtils.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="102" column="38" selection-start="6720" selection-end="6720" vertical-scroll-proportion="-8.2">
+            <state line="40" column="25" selection-start="1123" selection-end="1123" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ServerHandler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="120" column="41" selection-start="5879" selection-end="5879" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -329,22 +323,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/WebViewServer/static/components/components.css" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationOpenIdHelper.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/user/UserInfo.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/UserAuthenticator.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationHelper.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationFacebookHelper.java" />
         <option value="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/UserInfo.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationGoogleHelper.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationTwitterHelper.java" />
         <option value="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/SessionInfo.java" />
-        <option value="$PROJECT_DIR$/WebViewServer/static/index.html" />
-        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/ui/jquery.ui.accordion.js" />
+        <option value="$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js" />
+        <option value="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java" />
+        <option value="$PROJECT_DIR$/../k2js/translator/testFiles/kotlinLib/cases/isSameType.js" />
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/static/components/common.js" />
+        <option value="$PROJECT_DIR$/WebViewServer/static/index.html" />
+        <option value="$PROJECT_DIR$/WebViewServer/static/components/components.css" />
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java" />
         <option value="$PROJECT_DIR$/WebViewServer/static/components/components.js" />
-        <option value="$PROJECT_DIR$/WebViewServer/static/components/common.js" />
       </list>
     </option>
   </component>
@@ -511,6 +505,118 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jquery" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jquery" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="development-bundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jquery" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="development-bundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="themes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smoothness" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jquery" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="development-bundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="themes" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -732,11 +838,11 @@
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Development\contrib\jet-contrib\WebView\WebViewServer\static\icons" />
       <recent name="C:\Development\contrib\jet-contrib\WebView\WebViewServer\static" />
       <recent name="C:\Development\contrib\jet-contrib\k2js" />
       <recent name="C:\Development\git-contrib\jet-contrib\WebView\statistics" />
       <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\messages" />
-      <recent name="C:\Development\git-contrib\jet-contrib\WebView\WebViewServer\resources\codemirror\mode\clike" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Main">
@@ -1133,7 +1239,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge branch with changes in view and statistics&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Authorization with scribe&#10;Add mongodb" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1161,6 +1267,7 @@
     <MESSAGE value="Authorization: xml file with passwords &#10;" />
     <MESSAGE value="Loading applet during start&#10;" />
     <MESSAGE value="Merge branch with changes in view and statistics&#10;" />
+    <MESSAGE value="Authorization with scribe&#10;Add mongodb" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1217,122 +1324,126 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ErrorWriter.java">
+    <entry file="jar://$PROJECT_DIR$/lib/mongo-2.7.2.jar!/com/mongodb/BasicDBObject.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="0" selection-start="1304" selection-end="1304" vertical-scroll-proportion="0.0">
+        <state line="13" column="11" selection-start="475" selection-end="475" vertical-scroll-proportion="-8.16">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/UserAuthenticator.java">
+    <entry file="file://$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/ui/jquery.ui.accordion.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="312" column="12" selection-start="11956" selection-end="11956" vertical-scroll-proportion="0.4582701">
+        <state line="351" column="23" selection-start="12865" selection-end="12865" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="13" selection-start="530" selection-end="530" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/UserInfo.java">
+    <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/help.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="736" selection-end="736" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationGoogleHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="93" selection-start="2379" selection-end="2456" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationFacebookHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="4" selection-start="620" selection-end="659" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationTwitterHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="28" selection-start="2475" selection-end="2475" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/session/SessionInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="73" column="0" selection-start="1615" selection-end="1615" vertical-scroll-proportion="0.0">
+        <state line="46" column="57" selection-start="1086" selection-end="1135" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/lib/mongo-2.7.2.jar!/com/mongodb/DBCollection.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="38" selection-start="6720" selection-end="6720" vertical-scroll-proportion="-8.2">
+        <state line="20" column="38" selection-start="916" selection-end="919" vertical-scroll-proportion="-0.84">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/index.html">
+    <entry file="file://$PROJECT_DIR$/../k2js/translator/testFiles/kotlinLib/cases/isSameType.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="110" column="69" selection-start="3763" selection-end="3774" vertical-scroll-proportion="-11.115385">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/RequestParameters.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="19" selection-start="1515" selection-end="1515" vertical-scroll-proportion="0.0">
+        <state line="1" column="4" selection-start="28" selection-end="28" vertical-scroll-proportion="0.026153846">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="103" column="0" selection-start="5135" selection-end="5135" vertical-scroll-proportion="0.0">
+        <state line="132" column="0" selection-start="6526" selection-end="6526" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java">
+    <entry file="file://$PROJECT_DIR$/WebViewServer/static/jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="134" column="0" selection-start="6617" selection-end="6617" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="0" selection-start="4042" selection-end="4042" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4194#4210#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="31" selection-start="2869" selection-end="2961" vertical-scroll-proportion="-9.68">
+        <state line="2" column="14" selection-start="55" selection-end="65" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/common.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="35" selection-start="3874" selection-end="3874" vertical-scroll-proportion="0.74099725">
+        <state line="158" column="9" selection-start="5931" selection-end="5931" vertical-scroll-proportion="-8.16">
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="41" selection-start="5879" selection-end="5879" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/ResponseUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="25" selection-start="1123" selection-end="1123" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="984" column="16" selection-start="14902" selection-end="14902" vertical-scroll-proportion="-22.28">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/static/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="72" column="16" selection-start="2253" selection-end="2260" vertical-scroll-proportion="-11.576923">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/static/codemirror/lib/complete.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="372" column="58" selection-start="12993" selection-end="13330" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MongoDBConnector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="127" column="30" selection-start="4623" selection-end="4623" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#5938#5954#0" expanded="true" />
+            <element signature="e#9355#9371#0" expanded="true" />
+            <element signature="e#10609#10625#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="438" column="64" selection-start="14242" selection-end="14242" vertical-scroll-proportion="0.28169015">
+          <folding />
         </state>
       </provider>
     </entry>

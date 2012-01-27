@@ -77,6 +77,10 @@ public class HttpSession {
                 sendSaveProgramResult(sessionInfo);
             } else if (parameters.compareType("loadProgram")) {
                 sendLoadProgramResult();
+            } else if (parameters.compareType("deleteProgram")) {
+                sendDeleteProgramResult();
+            } else if (parameters.compareType("generatePublicLink")) {
+                sendGeneratePublicLinkResult();
             } else if (parameters.compareType("complete")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
@@ -106,18 +110,47 @@ public class HttpSession {
         }
     }
 
+    private void sendGeneratePublicLinkResult() {
+        String result;
+        String programId = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
+        result = MongoDBConnector.getInstance().getPublicLink(programId.replaceAll("%20", " "));
+        writeResponse(result, HttpStatus.SC_OK);
+    }
+
+    private void sendDeleteProgramResult() {
+        String result;
+        String programId = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
+        result = MongoDBConnector.getInstance().deleteProgram(sessionInfo.getUserInfo(), programId.replaceAll("%20", " "));
+        writeResponse(result, HttpStatus.SC_OK);
+    }
+
     private void sendLoadProgramResult() {
         String result;
         if (parameters.getArgs().equals("all")) {
             result = MongoDBConnector.getInstance().getListOfProgramsForUser(sessionInfo.getUserInfo());
-        }   else {
-            result = MongoDBConnector.getInstance().getProgramText(parameters.getArgs());
+        } else {
+            String id;
+            if (parameters.getArgs().contains("publicLink")) {
+                id = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
+                result = MongoDBConnector.getInstance().getProgramTextByPublicLink(id);
+            } else {
+                id = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
+                result = MongoDBConnector.getInstance().getProgramText(id);
+            }
         }
         writeResponse(result, HttpStatus.SC_OK);
     }
 
     private void sendSaveProgramResult(SessionInfo sessionInfo) {
-        String result = MongoDBConnector.getInstance().addProgramInfo(sessionInfo.getUserInfo(), getPostDataFromRequest().text);
+        String result;
+        if (parameters.getArgs().startsWith("id=")) {
+            String id = ResponseUtils.substringBetween(parameters.getArgs(), "id=", "&head=");
+            PostData data = getPostDataFromRequest();
+            result = MongoDBConnector.getInstance().resaveProgram(id.replaceAll("%20", " "), data.text, data.arguments);
+        } else {
+            PostData data = getPostDataFromRequest();
+            result = MongoDBConnector.getInstance().addProgramInfo(sessionInfo.getUserInfo(), parameters.getArgs().replaceAll("%20", " "), data.text, data.arguments);
+        }
         writeResponse(result, HttpStatus.SC_OK);
     }
 
