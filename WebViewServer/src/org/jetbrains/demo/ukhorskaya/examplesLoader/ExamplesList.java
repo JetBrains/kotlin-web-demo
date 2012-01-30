@@ -58,6 +58,28 @@ public class ExamplesList {
         return null;
     }
 
+
+    @Nullable
+    public Pair<Integer, String> findExampleByNameAndHead(String name, String head) {
+        int i = 0;
+        String lastHead = "";
+        name = name.replaceAll("%20", " ");
+        head = head.replaceAll("%20", " ");
+        for (Map<String, String> map : list) {
+            if (map.get("type").equals("head")) {
+                lastHead = map.get("text");
+            } else if (map.get("type").equals("content")) {
+                if (map.get("text").equals(name)) {
+                    if (lastHead.equals(head)) {
+                        return new Pair<Integer, String>(i, lastHead);
+                    }
+                }
+            }
+            i++;
+        }
+        return null;
+    }
+
     public Map<String, String> getMapFromList(int id) {
         if (id < list.size()) {
             return list.get(id);

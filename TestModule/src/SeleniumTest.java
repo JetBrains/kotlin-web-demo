@@ -4,9 +4,9 @@ import com.google.common.io.Files;
 import junit.framework.TestCase;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Wait;
@@ -34,9 +34,11 @@ public class SeleniumTest extends TestCase {
     private WebElement statusBar;
     private WebElement console;
     private WebElement run;
+    private WebElement refresh;
     private WebElement runJs;
     private WebElement accordion;
     private Wait<WebDriver> wait;
+    private WebElement editor;
 
     private boolean isRunTested = true;
 
@@ -48,11 +50,12 @@ public class SeleniumTest extends TestCase {
         statusBar = driver.findElement(By.id("statusbar"));
         console = driver.findElement(By.id("console"));
         run = driver.findElement(By.id("run"));
+        refresh = driver.findElement(By.id("refreshGutters"));
         runJs = driver.findElement(By.id("runJS"));
         accordion = driver.findElement(By.id("accordion"));
 
         WebElement arguments = driver.findElement(By.id("arguments"));
-        WebElement editor = driver.findElement(By.id("code"));
+        editor = driver.findElement(By.id("code"));
         WebElement problems = driver.findElement(By.id("code"));
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -61,16 +64,9 @@ public class SeleniumTest extends TestCase {
 
     public void testAllSimplesExamples() throws IOException, InterruptedException {
         isRunTested = true;
-        testExampleRun("Simplest version", "Hello, world!");
-        testExampleRun("Reading a name from the command line", "Hello, guest!");
-        testExampleRun("Reading many names from the command line", "Hello, guest1!\n" +
-                "Hello, guest2!\n" +
-                "Hello, guest3!");
-        testExampleRun("A multi-language Hello", "Salut!");
-        testExampleRun("An object-oriented Hello", "Hello, guest1");
 
-        driver.findElement(By.id("Basic syntax walk-through")).click();
-        final WebElement el = driver.findElement(By.id("Use a conditional expression"));
+        driver.findElement(By.id("Hello,_world!")).click();
+        final WebElement el = driver.findElement(By.id("Simplest_version&head=Hello,_world!"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -78,29 +74,48 @@ public class SeleniumTest extends TestCase {
             }
         });
 
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
-        testExampleRun("Use a conditional expression", "20");
-        testExampleRun("Null-checks", "6");
-        testExampleRun("is-checks and automatic casts", "3\n" +
+        testExampleRun("Simplest version", "Hello,_world!", "Hello, world!");
+        testExampleRun("Reading a name from the command line", "Hello,_world!", "Hello, guest!");
+        testExampleRun("Reading many names from the command line", "Hello,_world!", "Hello, guest1!\n" +
+                "Hello, guest2!\n" +
+                "Hello, guest3!");
+        testExampleRun("A multi-language Hello", "Hello,_world!", "Salut!");
+        testExampleRun("An object-oriented Hello", "Hello,_world!", "Hello, guest1");
+
+        driver.findElement(By.id("Basic_syntax_walk-through")).click();
+        final WebElement el2 = driver.findElement(By.id("Use_a_conditional_expression&head=Basic_syntax_walk-through"));
+
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return el2.isDisplayed();
+            }
+        });
+
+        Thread.sleep(500);
+
+        testExampleRun("Use a conditional expression", "Basic_syntax_walk-through", "20");
+        testExampleRun("Null-checks", "Basic_syntax_walk-through", "6");
+        testExampleRun("is-checks and automatic casts", "Basic_syntax_walk-through", "3\n" +
                 "null");
-        testExampleRun("Use a while-loop", "guest1\n" +
+        testExampleRun("Use a while-loop", "Basic_syntax_walk-through", "guest1\n" +
                 "guest2\n" +
                 "guest3\n" +
                 "guest4");
-        testExampleRun("Use a for-loop", "guest1\n" +
+        testExampleRun("Use a for-loop", "Basic_syntax_walk-through", "guest1\n" +
                 "guest2\n" +
                 "guest3\n" +
                 "\n" +
                 "guest1\n" +
                 "guest2\n" +
                 "guest3");
-        testExampleRun("Use ranges and in", "OK\n" +
+        testExampleRun("Use ranges and in", "Basic_syntax_walk-through", "OK\n" +
                 "1 2 3 4 5 \n" +
                 "Out: array has only 3 elements. x = 4\n" +
                 "Yes: array contains aaa\n" +
                 "No: array doesn't contains ddd");
-        testExampleRun("Use when", "Greeting\n" +
+        testExampleRun("Use when", "Basic_syntax_walk-through", "Greeting\n" +
                 "One\n" +
                 "Long\n" +
                 "Not a string\n" +
@@ -109,16 +124,16 @@ public class SeleniumTest extends TestCase {
 
     public void testAllDifficultExamples() throws IOException, InterruptedException {
         isRunTested = true;
-        driver.findElement(By.id("Longer examples")).click();
-        final WebElement el = driver.findElement(By.id("Life"));
+        driver.findElement(By.id("Longer_examples")).click();
+        final WebElement el3 = driver.findElement(By.id("Life&head=Longer_examples"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
-                return el.isDisplayed();
+                return el3.isDisplayed();
             }
         });
 
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
         testDifficultExampleRun("99 Bottles of Beer");
         testDifficultExampleRun("HTML Builder");
@@ -128,16 +143,9 @@ public class SeleniumTest extends TestCase {
 
     public void testAllExamplesRunJs() throws IOException, InterruptedException {
         isRunTested = false;
-        testExampleRun("Simplest version", "Hello, world!");
-        testExampleRun("Reading a name from the command line", "Hello, guest!");
-        testExampleRun("Reading many names from the command line", "Hello, guest1!\n" +
-                "Hello, guest2!\n" +
-                "Hello, guest3!");
-        testExampleRun("A multi-language Hello", "Salut!");
-        testExampleRun("An object-oriented Hello", "Hello, guest1");
 
-        driver.findElement(By.id("Basic syntax walk-through")).click();
-        final WebElement el = driver.findElement(By.id("Use a conditional expression"));
+        driver.findElement(By.id("Hello,_world!")).click();
+        final WebElement el = driver.findElement(By.id("Simplest_version&head=Hello,_world!"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -145,34 +153,21 @@ public class SeleniumTest extends TestCase {
             }
         });
 
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
-        testExampleRun("Use a conditional expression", "20");
-        testExampleRun("Null-checks", "6");
-        testExampleRun("is-checks and automatic casts", "3\n" +
-                "null");
-        testExampleRun("Use a while-loop", "guest1\n" +
-                "guest2\n" +
-                "guest3\n" +
-                "guest4");
-        testExampleRun("Use a for-loop", "guest1\n" +
-                "guest2\n" +
-                "guest3\n" +
-                "\n" +
-                "guest1\n" +
-                "guest2\n" +
-                "guest3");
-        testExampleRun("Use ranges and in", "OK\n" +
-                "1 2 3 4 5 \n" +
-                "Out: array has only 3 elements. x = 4\n" +
-                "Yes: array contains aaa\n" +
-                "No: array doesn't contains ddd");
-        testExampleRun("Use when", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+        testExampleRun("Simplest version", "Hello,_world!", "Hello, world!");
+        testExampleRun("Reading a name from the command line", "Hello,_world!", "Hello, guest!");
+        testExampleRun("Reading many names from the command line", "Hello,_world!", "Hello, guest1!\n" +
+                "Hello, guest2!\n" +
+                "Hello, guest3!");
+//        testExampleRun("A multi-language Hello", "Hello,_world!", "Salut!");
+        testExampleRun("A multi-language Hello", "Hello,_world!", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
                 "Try to run it using JVM.\n" +
-                "Undefined descriptor: .java.lang.System.currentTimeMillis");
+                "Unsupported when condition class org.jetbrains.jet.lang.psi.JetWhenConditionWithExpression");
+        testExampleRun("An object-oriented Hello", "Hello,_world!", "Hello, guest1");
 
-        driver.findElement(By.id("Longer examples")).click();
-        final WebElement el2 = driver.findElement(By.id("Life"));
+        driver.findElement(By.id("Basic_syntax_walk-through")).click();
+        final WebElement el2 = driver.findElement(By.id("Use_a_conditional_expression&head=Basic_syntax_walk-through"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -180,20 +175,350 @@ public class SeleniumTest extends TestCase {
             }
         });
 
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
-        testExampleRun("99 Bottles of Beer", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+        testExampleRun("Use a conditional expression", "Basic_syntax_walk-through", "20");
+        testExampleRun("Null-checks", "Basic_syntax_walk-through", "6");
+        testExampleRun("is-checks and automatic casts", "Basic_syntax_walk-through", "3\n" +
+                "null");
+        testExampleRun("Use a while-loop", "Basic_syntax_walk-through", "guest1\n" +
+                "guest2\n" +
+                "guest3\n" +
+                "guest4");
+        testExampleRun("Use a for-loop", "Basic_syntax_walk-through", "guest1\n" +
+                "guest2\n" +
+                "guest3\n" +
+                "\n" +
+                "guest1\n" +
+                "guest2\n" +
+                "guest3");
+        testExampleRun("Use ranges and in", "Basic_syntax_walk-through", "OK\n" +
+                "1 2 3 4 5 \n" +
+                "Out: array has only 3 elements. x = 4\n" +
+                "Yes: array contains aaa\n" +
+                "No: array doesn't contains ddd");
+        testExampleRun("Use when", "Basic_syntax_walk-through", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+                "Try to run it using JVM.\n" +
+                "Undefined descriptor: .java.lang.System.currentTimeMillis");
+
+        driver.findElement(By.id("Longer_examples")).click();
+        final WebElement el3 = driver.findElement(By.id("Life&head=Longer_examples"));
+
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return el3.isDisplayed();
+            }
+        });
+
+        Thread.sleep(500);
+
+        testExampleRun("99 Bottles of Beer", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
                 "Try to run it using JVM.\n" +
                 "@NotNull method org/jetbrains/k2js/translate/reference/PropertyAccessTranslator.getGetterDescriptor must not return null");
-        testExampleRun("HTML Builder", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+        testExampleRun("HTML Builder", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
                 "Try to run it using JVM.\n" +
                 "Argument 0 for @NotNull parameter of org/jetbrains/k2js/translate/general/Translation.translateExpression must not be null");
-        testExampleRun("Life", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+        testExampleRun("Life", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
                 "Try to run it using JVM.\n" +
                 "com.google.dart.compiler.backend.js.ast.JsIf cannot be cast to com.google.dart.compiler.backend.js.ast.JsExprStmt");
-        testExampleRun("Maze", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+        testExampleRun("Maze", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
                 "Try to run it using JVM.\n" +
                 "Undefined descriptor: .java.util.HashMap.");
+    }
+
+    public void testAllSimplestExamplesRunWhenServerOn() throws IOException, InterruptedException {
+        WebElement el = driver.findElement(By.className("applet-disable"));
+        el.click();
+
+        Thread.sleep(500);
+
+        testAllSimplesExamples();
+        testAllExamplesRunJs();
+    }
+
+    public void testAllDifficultExamplesRunWhenServerOn() throws IOException, InterruptedException {
+        WebElement el = driver.findElement(By.className("applet-disable"));
+        el.click();
+
+        Thread.sleep(500);
+
+        testAllDifficultExamples();
+    }
+
+    public void testAllSimplestExamplesRunWhenAppletOn() throws IOException, InterruptedException {
+        WebElement el = driver.findElement(By.className("applet-enable"));
+        el.click();
+
+        Thread.sleep(500);
+
+        testAllSimplesExamples();
+        testAllExamplesRunJs();
+    }
+
+    public void testAllDifficultExamplesRunWhenAppletOn() throws IOException, InterruptedException {
+        WebElement el = driver.findElement(By.className("applet-enable"));
+        el.click();
+
+        Thread.sleep(500);
+
+        testAllDifficultExamples();
+    }
+
+    public void testErrorsAndWarningsWithResfreshButton() throws InterruptedException {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        //One error
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                "}" +
+                "\");");
+
+        refresh.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 1);
+
+        //Two error in one line
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\"\\n" +
+                "}" +
+                "\");");
+
+        refresh.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 2);
+
+        //One warning
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out?.println(\\\"Hello, world!\\\")\\n" +
+                " val a = 10\\n" +
+                "}" +
+                "\");");
+
+        refresh.click();
+        Thread.sleep(500);
+        checkWarningElemements(1, 1);
+
+        //One warning and one error
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                " val a = 10\\n" +
+                "}" +
+                "\");");
+
+        refresh.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 1);
+        checkWarningElemements(1, 1);
+
+        //One warning and one error at one line
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\"); val a = 10\\n" +
+                " val b = 10\\n" +
+                "}" +
+                "\");");
+
+        refresh.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 1);
+        checkWarningElemements(1, 2);
+    }
+
+    public void testErrorsAndWarningsWithRunButton() throws InterruptedException {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        //One error
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                "}" +
+                "\");");
+
+        run.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 1);
+
+        //Two error in one line
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\"\\n" +
+                "}" +
+                "\");");
+
+        run.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 2);
+
+        //One warning
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out?.println(\\\"Hello, world!\\\")\\n" +
+                " val a = 10\\n" +
+                "}" +
+                "\");");
+
+        Thread.sleep(500);
+        run.click();
+        Thread.sleep(500);
+        testOutputString("Hello, world!");
+        checkWarningElemements(1, 1);
+
+        //One warning and one error
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                " val a = 10\\n" +
+                "}" +
+                "\");");
+
+        run.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 1);
+        checkWarningElemements(1, 1);
+
+        //One warning and one error at one line
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\"); val a = 10\\n" +
+                " val b = 10\\n" +
+                "}" +
+                "\");");
+
+        run.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 1);
+        checkWarningElemements(1, 2);
+    }
+
+    public void testErrorsAndWarningsWithRunJsButton() throws InterruptedException {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        //One error
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                "}" +
+                "\");");
+
+        runJs.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 1);
+
+        //Two error in one line
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\"\\n" +
+                "}" +
+                "\");");
+
+        runJs.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 2);
+
+        //One warning
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out?.println(\\\"Hello, world!\\\")\\n" +
+                " val a = 10\\n" +
+                "}" +
+                "\");");
+
+        Thread.sleep(500);
+        runJs.click();
+        Thread.sleep(500);
+        checkWarningElemements(1, 1);
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return (statusBar.getText().equals("Compilation competed successfully.") || statusBar.getText().equals("Your program has terminated with an exception."));
+            }
+        });
+        testOutputString("Hello, world!");
+
+        //One warning and one error
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                " val a = 10\\n" +
+                "}" +
+                "\");");
+
+        runJs.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 1);
+        checkWarningElemements(1, 1);
+
+        //One warning and one error at one line
+        js.executeScript("editor.setValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                " System.out.println(\\\"Hello, world!\\\"); val a = 10\\n" +
+                " val b = 10\\n" +
+                "}" +
+                "\");");
+
+        runJs.click();
+        Thread.sleep(500);
+        checkErrorsElemements(1, 1);
+        checkWarningElemements(1, 2);
+    }
+
+    public void testErrorsAndWarningsWhenServerOn() throws IOException, InterruptedException {
+        WebElement el = driver.findElement(By.className("applet-disable"));
+        el.click();
+
+        Thread.sleep(500);
+
+        testErrorsAndWarningsWithResfreshButton();
+        testErrorsAndWarningsWithRunButton();
+        testErrorsAndWarningsWithRunJsButton();
+    }
+
+    public void testErrorsAndWarningsWhenAppletOn() throws IOException, InterruptedException {
+        WebElement el = driver.findElement(By.className("applet-enable"));
+        el.click();
+
+        Thread.sleep(500);
+
+        testErrorsAndWarningsWithResfreshButton();
+        testErrorsAndWarningsWithRunButton();
+        testErrorsAndWarningsWithRunJsButton();
+    }
+
+    public int getNumberOfErrorGutters() {
+        WebElement problems = driver.findElement(By.id("gutter"));
+        List<WebElement> errors = problems.findElements(By.className("ERRORgutter"));
+        return errors.size();
+    }
+
+    public int getNumberOfErrorsInProblemView() {
+        WebElement problems = driver.findElement(By.id("problems"));
+        List<WebElement> errors = problems.findElements(By.className("problemsViewError"));
+        return errors.size();
+    }
+
+    public void checkErrorsElemements(int errorGutter, int problemView) {
+        assertEquals(problemView, getNumberOfErrorsInProblemView());
+        assertEquals(errorGutter, getNumberOfErrorGutters());
+    }
+
+    public int getNumberOfWarningGutters() {
+        WebElement problems = driver.findElement(By.id("gutter"));
+        List<WebElement> errors = problems.findElements(By.className("WARNINGgutter"));
+        return errors.size();
+    }
+
+    public int getNumberOfWarningInProblemView() {
+        WebElement problems = driver.findElement(By.id("problems"));
+        List<WebElement> errors = problems.findElements(By.className("problemsViewWarning"));
+        return errors.size();
+    }
+
+    public void checkWarningElemements(int errorGutter, int problemView) {
+        assertEquals(problemView, getNumberOfWarningInProblemView());
+        assertEquals(errorGutter, getNumberOfWarningGutters());
     }
 
 
@@ -202,12 +527,12 @@ public class SeleniumTest extends TestCase {
     }
 
 
-    private void testDifficultExampleRun(String name) throws IOException {
+    private void testDifficultExampleRun(String name) throws IOException, InterruptedException {
         testDifficultExampleRun(name, false);
     }
 
-    private void testDifficultExampleRun(String name, boolean isSpaceReplaced) throws IOException {
-        testExampleRun(name, readResultFromFile("examples" + File.separator + name + ".txt"), isSpaceReplaced);
+    private void testDifficultExampleRun(String name, boolean isSpaceReplaced) throws IOException, InterruptedException {
+        testExampleRun(name, "Longer_examples", readResultFromFile("examples" + File.separator + name + ".txt"), isSpaceReplaced);
     }
 
     private String getExampleNameByTestName() {
@@ -219,25 +544,28 @@ public class SeleniumTest extends TestCase {
     }
 
 
-    private void testExampleRun(final String exampleName, final String result) {
-        testExampleRun(exampleName, result, false);
+    private void testExampleRun(final String exampleName, final String headName, final String result) throws InterruptedException {
+        testExampleRun(exampleName, headName, result, false);
     }
 
-    private void testExampleRun(final String exampleName, final String result, boolean isSpaceReplaced) {
-        final WebElement example = accordion.findElement(By.id(exampleName));
+    private void testExampleRun(final String exampleName, final String headName, final String result, boolean isSpaceReplaced) throws InterruptedException {
+        final WebElement example = accordion.findElement(By.id(exampleName.replaceAll("([ ])", "_") + "&head=" + headName));
         example.click();
 
-        wait.until(new ExpectedCondition<Boolean>() {
+        Thread.sleep(500);
+        /*wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
                 return (statusBar.getText().equals("Example is loaded.") || statusBar.getText().equals("Can't get example from server."));
             }
-        });
+        });*/
 
         if (isRunTested) {
             run.click();
         } else {
             runJs.click();
         }
+
+        Thread.sleep(500);
 
         /*wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -251,7 +579,7 @@ public class SeleniumTest extends TestCase {
             }
         });
 
-        if (getName().endsWith("DifficultExamples")) {
+        if (getName().contains("DifficultExamples")) {
             if (isSpaceReplaced) {
                 testOneFileExampleWithReplaceSpacesAndLineSeparator(result);
             } else {
@@ -260,7 +588,7 @@ public class SeleniumTest extends TestCase {
         } else {
             if (statusBar.getText().equals("Your program has terminated with an exception.")) {
                 testErrorString(result);
-            }   else {
+            } else {
                 testOutputString(result);
             }
         }

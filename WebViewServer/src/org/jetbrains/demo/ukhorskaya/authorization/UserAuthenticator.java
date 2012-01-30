@@ -1,4 +1,4 @@
-package web.view.ukhorskaya.authorization;
+package org.jetbrains.demo.ukhorskaya.authorization;
 
 import com.intellij.openapi.util.Pair;
 import com.sun.net.httpserver.BasicAuthenticator;
@@ -30,8 +30,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

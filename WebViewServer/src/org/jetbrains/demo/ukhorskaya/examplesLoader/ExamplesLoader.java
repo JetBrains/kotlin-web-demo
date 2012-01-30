@@ -35,6 +35,16 @@ public class ExamplesLoader {
         return "[{\"text\":\"Cannot find this example. Please choose another example.\"}]";
     }
 
+    public String getResultByNameAndHead(String param) {
+        String name = ResponseUtils.substringBefore(param, "&head=");
+        String head = ResponseUtils.substringAfter(param, "&head=");
+        Pair<Integer, String> pair = ExamplesList.getInstance().findExampleByNameAndHead(name, head);
+        if (pair != null) {
+            return getResult(pair.first, pair.second);
+        }
+        return "[{\"text\":\"Cannot find this example. Please choose another example.\"}]";
+    }
+
     public String getResult(int id, String headName) {
         Map<String, String> fileObj = ExamplesList.getInstance().getMapFromList(id);
         if (!fileObj.get("type").equals("content")) {

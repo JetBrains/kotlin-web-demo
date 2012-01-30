@@ -27,11 +27,14 @@
         }
 
     </script>
+    <script type="text/javascript" src="/jquery/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/components/updateExamples.js"></script>
 </head>
 <body>
 <div>
     <h3>EXAMPLES AND HELP:</h3>
     <a href="kotlinServer?sessionId=-1&type=updateExamples&args=null">Update examples and help</a>
+    <!--<a href="#" onclick="update();">Update examples and help n (js)</a>-->
 </div>
 <div>
     <h3>LOGS:</h3>
@@ -126,9 +129,10 @@
     </table>
 </div>
 <div>
-    <p>example format: http://HOST/?example=An_object-oriented_Hello or http://HOST/?example=Maze
+    <p>example format: http://HOST/?example=Life&head=Longer_examples
         <br/>-replace space for _
         <br/>-add after host /?example=
+        <br/>-add parent of example after &head=
         <br/>-attention: name of file is case sensitive
     </p>
 </div>

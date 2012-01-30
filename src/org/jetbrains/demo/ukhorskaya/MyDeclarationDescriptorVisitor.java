@@ -105,8 +105,9 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
 
         ReceiverDescriptor receiver = descriptor.getReceiverParameter();
         if (receiver.exists()) {
-            builder.append(receiver.getType()).append(".");
+            //builder.append(receiver.getType()).append(".");
         }
+
 
         renderName(descriptor, builder);
         renderValueParameters(descriptor, builder);
@@ -139,7 +140,7 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
     }
 
     private void renderTypeParameters(List<TypeParameterDescriptor> typeParameters, StringBuilder builder) {
-        if (!typeParameters.isEmpty()) {
+        /*if (!typeParameters.isEmpty()) {
             builder.append("<");
             for (Iterator<TypeParameterDescriptor> iterator = typeParameters.iterator(); iterator.hasNext(); ) {
                 TypeParameterDescriptor typeParameterDescriptor = iterator.next();
@@ -149,7 +150,7 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
                 }
             }
             builder.append("> ");
-        }
+        }*/
     }
 
     @Override

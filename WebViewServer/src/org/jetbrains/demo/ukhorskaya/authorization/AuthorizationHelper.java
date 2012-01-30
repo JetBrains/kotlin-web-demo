@@ -1,4 +1,4 @@
-package web.view.ukhorskaya.authorization;
+package org.jetbrains.demo.ukhorskaya.authorization;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;

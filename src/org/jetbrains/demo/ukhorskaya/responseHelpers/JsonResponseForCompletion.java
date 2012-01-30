@@ -85,8 +85,10 @@ public class JsonResponseForCompletion {
 
         Collection<DeclarationDescriptor> descriptors = null;
         try {
-            if (element.getParent() instanceof JetSimpleNameExpression) {
-                descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext);
+            if (element instanceof JetSimpleNameExpression) {
+                 descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element, bindingContext);
+            } else if (element.getParent() instanceof JetSimpleNameExpression) {
+                 descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext);
             } else {
                 JetScope resolutionScope;
                 PsiElement parent = element.getParent();

@@ -30,7 +30,6 @@ public class KotlinHttpServer {
     }
 
     public static String getHost() {
-        System.out.println("aaa");
         if (server != null) {
             return server.getAddress().getHostName();
         } else return null;
@@ -53,8 +52,7 @@ public class KotlinHttpServer {
                 if (myHandler == null) {
                     myHandler = new ServerHandler();
                 }
-                server.createContext("/", myHandler);
-
+//                server.createContext("/", myHandler);
                 /*corePoolSize - the number of threads to keep in the pool, even if they are idle.
                 maximumPoolSize - the maximum number of threads to allow in the pool.
                 keepAliveTime - when the number of threads is greater than the core, this is the maximum time that excess idle threads will wait for new tasks before terminating.

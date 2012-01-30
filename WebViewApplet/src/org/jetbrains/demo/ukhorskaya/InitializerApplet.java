@@ -1,7 +1,7 @@
 package org.jetbrains.demo.ukhorskaya;
 
 import com.intellij.openapi.Disposable;
-import org.jetbrains.jet.JetCoreEnvironment;
+import org.jetbrains.jet.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.plugin.JetFileType;
 

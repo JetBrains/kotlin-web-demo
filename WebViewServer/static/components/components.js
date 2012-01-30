@@ -222,7 +222,7 @@ function onLoadingExamplesSuccess(data) {
             var head = document.createElement("h3");
             var headA = document.createElement("a");
             headA.href = "#";
-            headA.id = data[i].text;
+            headA.id = data[i].text.replace(new RegExp(" ", 'g'), "_");
 
             headA.innerHTML = data[i].text;
             lastHeadName = data[i].text
@@ -237,11 +237,11 @@ function onLoadingExamplesSuccess(data) {
             span.innerHTML = "&#8226;";
             content.appendChild(span);
             var contA = document.createElement("a");
-            contA.id = data[i].text;
+            contA.id = data[i].text.replace(new RegExp(" ", 'g'), "_") + "&head=" + lastHeadName.replace(new RegExp(" ", 'g'), "_");
 //            contA.id = i + "&head=" + lastHeadName;
             contA.style.cursor = "pointer";
             contA.onclick = function (event) {
-                loadExample(this.id, this.innerHTML);
+                loadExample(this.id);
             };
             contA.innerHTML = data[i].text;
             content.appendChild(contA);
@@ -305,7 +305,8 @@ function onLoadingExamplesSuccess(data) {
         url = url.substring(url.indexOf(urlAct) + urlAct.length);
         var exampleStr = "?example=";
         if (url.indexOf(exampleStr) == 0) {
-            url = url.replace(new RegExp("_", 'g'), " ");
+//            url = url.replace(new RegExp("_", 'g'), " ");
+            $("#" + url.substring(url.indexOf("&head=") + 6)).click();
             loadExample(url.substring(exampleStr.length));
         }
         var publicLink = "?publicLink=";
@@ -435,7 +436,7 @@ function onGeneratePublicLinkSuccess(data) {
                 setStatusBarError(data[0].text);
             } else {
 //                window.prompt ("Copy to clipboard: Ctrl+C, Enter", data[0].text);
-                setStatusBarMessage("Generated public link: " + data[0].text);
+                setStatusBarMessage("Public link for this program is : " + data[0].text);
                 $("#publicLinkHref").html(data[0].text);
 
                 $('div#toolbox').slideDown('slow');
@@ -518,7 +519,7 @@ function onLoadingProgramSuccess(data) {
 var loadingExample = false;
 var lastSelectedExample = 0;
 
-function loadExample(innerhtml) {
+function loadExample(name) {
     if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged) {
         if (lastSelectedExample == name) {
             return;
@@ -531,12 +532,13 @@ function loadExample(innerhtml) {
             el.className = "";
         }
 
-        lastSelectedExample = innerhtml;
-        document.getElementById(innerhtml).className = "selectedExample";
+        lastSelectedExample = name;
+        document.getElementById(name).className = "selectedExample";
         document.getElementById("statusbar").innerHTML = "Loading example...";
         loadingExample = true;
+        name = name.replace(new RegExp("_", 'g'), " ");
         $.ajax({
-            url:generateAjaxUrl("loadExample", innerhtml),
+            url:generateAjaxUrl("loadExample", name),
             context:document.body,
             success:onLoadingExampleSuccess,
             dataType:"json",
@@ -548,7 +550,7 @@ function loadExample(innerhtml) {
                 setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
             }
         });
-        loadExamplesHelp(innerhtml);
+        loadExamplesHelp(name.substring(0, name.indexOf("&head=")));
     }
 }
 
@@ -624,6 +626,7 @@ $(".applet-disable").click(function () {
     $("#appletcheckbox").attr('checked', false);
     $("#nohighlightingcheckbox").attr('checked', false);
     isApplet = false;
+    setStatusBarMessage("");
 });
 
 $(".applet-nohighlighting").click(function () {
@@ -636,6 +639,7 @@ $(".applet-nohighlighting").click(function () {
     $("#nohighlightingcheckbox").attr('checked', true);
 //    $("#appletcheckbox").attr('checked', false);
 //    isApplet = false;
+    setStatusBarMessage("");
 });
 
 var isShortcutsShow = true;
@@ -649,6 +653,6 @@ $(".toggleShortcuts").click(function () {
         document.getElementById("toggleShortcutsButton").src = "/images/toogleShortcuts.png";
 
     }
-
+    setStatusBarMessage("");
 });
 

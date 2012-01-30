@@ -6,8 +6,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
-import org.jetbrains.jet.JetCoreEnvironment;
 import org.jetbrains.jet.compiler.CompileEnvironment;
+import org.jetbrains.jet.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.plugin.JetFileType;
 

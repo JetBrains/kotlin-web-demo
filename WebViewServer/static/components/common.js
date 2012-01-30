@@ -79,7 +79,7 @@ function onBodyLoad() {
         $("#help3").toggle(true);
         setSessionId();
         resizeCentral();
-        setKotlinVersion('0.1.226');
+        setKotlinVersion('0.1.296');
         loadAccordionContent();
         loadHelpContentForExamples();
         hideLoader();

@@ -520,7 +520,7 @@ public class Statistics {
                                     info.numberOfCompleteRequest++;
                                 }
 
-                                userInfoMapForId.put(ip, info);
+                                userInfoMapForId.put(id, info);
                             }
                         }
                     }
