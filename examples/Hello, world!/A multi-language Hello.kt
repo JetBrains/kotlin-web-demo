@@ -1,6 +1,6 @@
 fun main(args : Array<String>) {
   val language = if (args.size == 0) "EN" else args[0]
-  System.out?.println(when (language) {
+  println(when (language) {
     "EN" -> "Hello!"
     "FR" -> "Salut!"
     "IT" -> "Ciao!"

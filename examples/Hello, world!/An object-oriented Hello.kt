@@ -1,6 +1,6 @@
 class Greeter(val name : String) {
   fun greet() {
-    System.out?.println("Hello, ${name}");
+    println("Hello, ${name}");
   }
 }
 

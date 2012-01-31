@@ -1,6 +1,7 @@
 <component name="libraryTable">
   <library name="selenium">
     <CLASSES>
+      <root url="jar://$PROJECT_DIR$/TestModule/libs/selenium-2.17.0/selenium-java-2.17.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/TestModule/libs/selenium-2.17.0/libs/apache-mime4j-0.6.jar!/" />
       <root url="jar://$PROJECT_DIR$/TestModule/libs/selenium-2.17.0/libs/bsh-1.3.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/TestModule/libs/selenium-2.17.0/libs/cglib-nodep-2.1_3.jar!/" />
@@ -34,7 +35,6 @@
       <root url="jar://$PROJECT_DIR$/TestModule/libs/selenium-2.17.0/libs/xalan-2.7.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/TestModule/libs/selenium-2.17.0/libs/xercesImpl-2.9.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/TestModule/libs/selenium-2.17.0/libs/xml-apis-1.3.04.jar!/" />
-      <root url="jar://$PROJECT_DIR$/TestModule/libs/selenium-2.17.0/selenium-java-2.17.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -134,26 +134,27 @@ fun main(args : Array<String>) {
 // UTILITIES
 
 fun printMaze(str : String) {
-    val maze = makeMaze(str)
+  val maze = makeMaze(str)
 
-    println("Maze:")
-    val path = findPath(maze)
-    for (i in 0..maze.height - 1) {
-        for (j in 0..maze.width - 1) {
-            val cell = #(i, j)
-            print(
-                if (maze.walls[i][j]) "O"
-                else if (cell == maze.start) "I"
-                else if (cell == maze.end) "$"
-                else if (path != null && path.contains(cell)) "~"
-                else " "
-            )
-        }
-        println("")
-    }
-    println("Result: " + if (path == null) "No path" else "Path found")
-    println("")
+  println("Maze:")
+  val path = findPath(maze)
+  for (i in 0..maze.height - 1) {
+    for (j in 0..maze.width - 1) {
+      val cell = #(i, j)
+        print(
+          if (maze.walls[i][j]) "O"
+          else if (cell == maze.start) "I"
+          else if (cell == maze.end) "$"
+          else if (path != null && path.contains(cell)) "~"
+          else " "
+        )
+      }
+      println("")
+   }
+  println("Result: " + if (path == null) "No path" else "Path found")
+  println("")
 }
+
 
 /**
  * A maze is encoded in the string s: the big 'O' letters are walls.
@@ -207,32 +208,19 @@ fun makeMaze(s : String) : Maze {
   return Maze(w.size, lines.size, data, start.sure(), end.sure())
 }
 
+
 // An excerpt from the Standard Library
 val String?.indices : IntRange get() = IntRange(0, this.sure().size)
-
-val String.size : Int
-  get() = length
 
 fun <K, V> Map<K, V>.set(k : K, v : V) { put(k, v) }
 
 fun comparator<T> (f : (T, T) -> Int) : Comparator<T> = object : Comparator<T> {
-    override fun compare(o1 : T, o2 : T) : Int = f(o1, o2)
-}
-
-fun String.split(s : String)  = (this as java.lang.String).split(s)
-
-fun println(message : Any?) {
-    System.out?.println(message)
-}
-
-fun print(message : Any?) {
-    System.out?.print(message)
+  override fun compare(o1 : T, o2 : T) : Int = f(o1, o2)
+  override fun equals(p : Any?) : Boolean = false
 }
 
 fun <T, C: Collection<T>> Array<T>.to(result: C) : C {
   for (elem in this)
-    result.add(elem)
+  result.add(elem)
   return result
 }
-
-fun <T> Array<T>.toList() : List<T> = this.to(ArrayList<T>())

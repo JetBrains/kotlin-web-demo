@@ -53,7 +53,7 @@ function update() {
 //            contA.id = i + "&head=" + lastHeadName;
                 contA.style.cursor = "pointer";
                 contA.onclick = function (event) {
-                    loadExample(this.id, this.innerHTML);
+                    beforeLoadExample(this.id, this.innerHTML);
                 };
                 contA.innerHTML = data[i].text;
                 content.appendChild(contA);

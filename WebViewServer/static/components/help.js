@@ -26,6 +26,14 @@ function forEachInWordsArray(arr, data, f) {
     }
 }
 
+function forEach(arr, f) {
+    var i = 0;
+    while (arr[i] != undefined) {
+        f(arr[i]);
+        i++;
+    }
+}
+
 function updateHelp(str) {
     loadWordsHelp(str);
 }

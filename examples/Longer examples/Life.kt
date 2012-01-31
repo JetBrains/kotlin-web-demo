@@ -146,34 +146,22 @@ fun makeField(s : String) : Field {
   return Field(w.size, lines.size) {i, j -> data[i][j]}
 }
 
+
+
 // An excerpt from the Standard Library
 val String?.indices : IntRange get() = IntRange(0, this.sure().size)
 
 fun <K, V> Map<K, V>.set(k : K, v : V) { put(k, v) }
 
 fun comparator<T> (f : (T, T) -> Int) : Comparator<T> = object : Comparator<T> {
-    override fun compare(o1 : T, o2 : T) : Int = f(o1, o2)
-}
-
-fun println(message : Any?) {
-    System.out?.println(message)
-}
-
-fun print(message : Any?) {
-    System.out?.print(message)
+  override fun compare(o1 : T, o2 : T) : Int = f(o1, o2)
+  override fun equals(p : Any?) : Boolean = false
 }
 
 val <T> Array<T>.isEmpty : Boolean get() = size == 0
 
-fun String.split(s : String)  = (this as java.lang.String).split(s)
-
-val String.size : Int
-  get() = length
-
 fun <T, C: Collection<T>> Array<T>.to(result: C) : C {
   for (elem in this)
-    result.add(elem)
+  result.add(elem)
   return result
 }
-
-fun <T> Array<T>.toList() : List<T> = this.to(ArrayList<T>())

@@ -13,6 +13,7 @@ var COMPLETE_REQUEST_ABORTED = "Can't get completion proposal list from server."
 var EXAMPLES_REQUEST_ABORTED = "Can't get the example code from server.";
 var SAVE_PROGRAM_REQUEST_ABORTED = "Can't save the program on server.";
 var DELETE_PROGRAM_REQUEST_ABORTED = "Can't delete the program from server.";
+var PUBLIC_LINK_REQUEST_ABORTED = "Can't geerate the public link for program.";
 var HELP_REQUEST_ABORTED = "Can't get help from server.";
 //Message in popup with warning before close tab with editor
 //var BEFORE_EXIT = "The changes you made to the program will be lost when this page is closed. Do you want to close the page?";
@@ -52,12 +53,16 @@ $(document).keydown(function (e) {
             $("#runJS").click();
         } else if (e.keyCode == 82 && e.ctrlKey) {
             $("#run").click();
+        } else if (e.keyCode == 83 && e.shiftKey) {
+            save();
         }
     } else {
         if (e.keyCode == 120 && e.ctrlKey && e.shiftKey) {
             $("#runJS").click();
         } else if (e.keyCode == 120 && e.ctrlKey) {
             $("#run").click();
+        } else if (e.keyCode == 83 && e.shiftKey) {
+            save();
         }
     }
 });
@@ -79,10 +84,7 @@ function onBodyLoad() {
         $("#help3").toggle(true);
         setSessionId();
         resizeCentral();
-        setKotlinVersion('0.1.296');
-        loadAccordionContent();
-        loadHelpContentForExamples();
-        hideLoader();
+        setKotlinVersion('0.1.386');
     }
 }
 
@@ -111,6 +113,7 @@ function logout() {
             isLogin = false;
             document.getElementById("login").style.display = "block";
             document.getElementById("userName").innerHTML = "";
+            document.getElementById("userName").style.display = "none";
         }
     });
 
@@ -124,29 +127,42 @@ function getSessionIdSuccess(data) {
     if (data[1] != null && data[1] != '') {
         userName = data[1];
         /*if (loginImages == "") {
-            loginImages = document.getElementById("userName").innerHTML;
-        }*/
+         loginImages = document.getElementById("userName").innerHTML;
+         }*/
         if (userName != "") {
             document.getElementById("login").style.display = "none";
+            document.getElementById("userName").style.display = "block";
             isLogin = true;
             userName = decodeURI(userName);
             userName = userName.replace(new RegExp('\\+', 'g'), ' ');
 
-//            document.getElementById("userName").innerHTML = "<b>" + userName + "</b>";
-            document.getElementById("userName").innerHTML = "<select id=\"userNameSelect\" ><option value='"+ userName + "'>" + userName + "</option><option value='Logout'>Logout</option></select>";
-            $("#userNameSelect").selectmenu({
-                width: 245,
-                style:'popup',
-                select: function() {
-                    if (this.value == "Logout") {
-                        logout();
-                    }
-                }
-            });
+            document.getElementById("userName").innerHTML = "<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>";
+//            document.getElementById("userName").innerHTML = "<span>" + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/>";
+            document.getElementById("userNameTitle").onclick = function (e) {
+                userNameClick(e);
+            };
+
+            /* document.getElementById("userName").innerHTML = "<select id=\"userNameSelect\" ><option value='"+ userName + "'>" + userName + "</option><option value='Logout'>Logout</option></select>";
+             $("#userNameSelect").selectmenu({
+             width: 245,
+             style:'popup',
+             select: function() {
+             if (this.value == "Logout") {
+             logout();
+             }
+             }
+             });*/
         }
+
     }
+
+    loadAccordionContent();
+    loadHelpContentForExamples();
+    hideLoader();
+
     var info = "browser: " + navigator.appName + " " + navigator.appVersion;
     info += " " + "system: " + navigator.platform;
+
     $.ajax({
         url:generateAjaxUrl("sendUserData", "null"),
         context:document.body,
@@ -200,8 +216,8 @@ function setConsoleMessage(message) {
     document.getElementById("console").innerHTML = message;
 }
 
-
-/*var hashLoc = location.hash;
+/*
+ *//*var hashLoc = location.hash;
  window.addEventListener("unload", beforeUnload, true);
 
 
@@ -211,21 +227,21 @@ function setConsoleMessage(message) {
  history.back();
  }
  }
- }*/
+ }*//*
 
-/*document.unload = function () {
+ *//*document.unload = function () {
  if (confirm(BEFORE_EXIT)) {
  history.back();
  }
- };*/
+ };*//*
 
-function beforeBack() {
-    if (isContentEditorChanged && confirm(BEFORE_EXIT)) {
-        history.back();
-    }
-    isContentEditorChanged = false;
-//    bajb_backdetect.OnBack = beforeBack();
-}
+ function beforeBack() {
+ if (isContentEditorChanged && confirm(BEFORE_EXIT)) {
+ history.back();
+ }
+ isContentEditorChanged = false;
+ //    bajb_backdetect.OnBack = beforeBack();
+ }*/
 
 
 //bajb_backdetect.OnBack = beforeBack;
@@ -270,14 +286,50 @@ function login(param) {
 }
 
 function onLoginSuccess(data) {
-    <!-- Codes by Quackit.com -->
-    // Popup window code
-//        window.open(
-//            data,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes');
-
-//    window.open(data);
     document.location.href = data;
 }
+
+function showConfirmDialog(fun) {
+
+    $("#confirmDialog").dialog({
+        buttons:[
+            { text:"Save changes",
+                click:function () {
+                    save();
+                    closeConfirmDialog();
+                }
+            },
+            { text:"Discard changes",
+                click:function () {
+                    closeConfirmDialog();
+                    fun();
+                }
+            },
+            { text:"Cancel",
+                click:function () {
+                    closeConfirmDialog();
+                }
+            }
+        ]
+    });
+
+    $("#confirmDialog").dialog("open");
+    if (!isLogin) {
+        $(":button:contains('Save changes')").attr("disabled","disabled").addClass("ui-state-disabled");
+    }
+}
+
+
+function closeConfirmDialog() {
+    $("#confirmDialog").dialog("close");
+}
+
+function confirmAction(fun) {
+    showConfirmDialog(fun);
+}
+
+
+
 
 
 

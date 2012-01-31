@@ -7,6 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="selenium" level="project" />
     <orderEntry type="module" module-name="WebView" />
     <orderEntry type="module-library">
       <library>
@@ -19,7 +20,6 @@
     </orderEntry>
     <orderEntry type="module" module-name="WebViewServer" />
     <orderEntry type="library" name="junit-4.7" level="project" />
-    <orderEntry type="library" name="selenium" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -29,6 +29,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-httpclient-3.1-patched" level="project" />
+    <orderEntry type="library" name="commons-lang-2.4" level="project" />
   </component>
 </module>
 

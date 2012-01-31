@@ -630,6 +630,7 @@ body {
     border: 1px solid #EEEEEE;
     border-radius: 4px;
     padding: 0 3px;
+    margin-left: 1px;
     /*font-weight: bold;*/
 }
 
@@ -751,6 +752,7 @@ p.dialogPbordered {
 
 #appletonoff {
     /*float: right;*/
+    width: 170px;
 }
 
 /*On/of button*/
@@ -887,15 +889,19 @@ td#removeallguttersTd {
 
 }
 
+/*
 #login {
     padding: 5px;
     height: 20px;
 }
+*/
 
+#login b {
+  /*padding-right: 10px;*/
+}
 #login a {
-    padding: 0;
+    padding: 0 0px 0 10px;
     float: right;
-    padding-right: 10px;
 }
 
 #logout {
@@ -912,10 +918,21 @@ td#removeallguttersTd {
 
 #userName {
     height: 22px;
-    cursor: pointer;
+    /*cursor: pointer;*/
     padding-right: 10px;
     padding-bottom: 10px;
 
+    color: #212121;
+    font-weight: normal;
+    display: none;
+}
+
+#login {
+    height: 22px;
+    /*cursor: pointer;*/
+    padding-right: 10px;
+    padding-bottom: 10px;
+    line-height: 1.4;
     color: #212121;
     font-weight: normal;
 }
@@ -926,6 +943,12 @@ td#removeallguttersTd {
     /*height: 28px;*/
 }
 
+#showInfoAboutLogin {
+    display: inline-block;
+    float: right;
+    padding-right: 9px;
+    padding-top: 6px;
+}
 #saveProgram, #saveAsProgram {
     display: inline-block;
     float: right;
@@ -937,6 +960,7 @@ td#removeallguttersTd {
     /*position: absolute;*/
     right: 1px;
     top: 8px;
+    min-width: 200px;
 }
 
 #tools img {
@@ -949,7 +973,7 @@ td#removeallguttersTd {
 }
 
 #programName {
-    width: 220px;
+    width: 75%;
 }
 
 #myprogramscontent p img {
@@ -960,9 +984,26 @@ td#removeallguttersTd {
     cursor: pointer;
 }
 
-div#toolbox {
+.ui-widget-content p img {
+    float: right;
+    padding-left: 9px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+#problems p img {
+    float: none !important;
+    padding-top: 5px;
+    /*padding-left: 9px;*/
+    width: 16px;
+    height: 16px;
+    /*cursor: pointer;*/
+}
+
+div#toolbox, div.toolbox {
     background: #eee bottom left repeat-x;
-    height: 30px;
+    /*height: 30px;*/
     /*position: fixed;*/
     bottom: 0px;
     left: 0px;
@@ -970,20 +1011,110 @@ div#toolbox {
     /*border-top: 10px solid #e5e5e5;*/
 }
 
-
-div.fixedpage span.close {
+div.fixedpage img#closePopup, div.fixedpage img.closePopup {
+    float: right;
+    padding-right: 3px;
+    padding-top: 3px;
 
 }
+
 div.fixedpage {
-    width: 925px;
-    text-align: left;
-    padding-top: 5px;
+    /*width: 925px;*/
+    /*text-align: center;*/
+    /*padding-top: 5px;*/
+    /*height: 22px;*/
+    /*padding-top: 5px;*/
+    text-align: center;
+    display: inline-block;
+    width: 100%;
 }
 
-#publicLinkHref {
+#publicLinkHref, .publicLinkHref {
     /*float: left;*/
-    margin-right: 50px;
+    /*margin-right: 50px;*/
+
+    float: left;
+    padding-left: 3px;
+    padding-top: 5px;
+    word-wrap: break-word;
+    width: 90%;
 }
+
+#logoutSelect option, #logoutSelect {
+    width: 75px;
+}
+
+#logout {
+    /*border-radius: 4px;*/
+    cursor: pointer;
+    background-color: #F7F7F7;
+    border: 1px solid #EEEEEE;
+    color: #212121;
+    font-weight: normal;
+    width: 50px;
+    height: 20px;
+    padding-left: 10px;
+}
+#logout:hover {
+    /*border-radius: 4px;*/
+    cursor: pointer;
+    background-color: #DADADA;
+    border: 1px solid #999999;
+    color: #212121;
+    font-weight: normal;
+    width: 50px;
+    height: 20px;
+    padding-left: 10px;
+    text-decoration: underline;
+}
+
+#userNameTitle:hover {
+    /*background-color: #F7F7F7;*/
+    text-decoration: underline;
+}
+#userNameTitle {
+    /*border-radius: 4px;*/
+    cursor: pointer;
+    /*border: 1px solid #EEEEEE;*/
+    color: #212121;
+    font-weight: normal;
+    padding-left: 10px;
+    width: 240px;
+    height: 18px;
+    float: right;
+    padding-top: 7px;
+    padding-right: 10px;
+}
+
+#userNameTitle span {
+    padding-right: 10px;
+}
+
+#userNameTitle {
+}
+
+#saveDialog {
+    margin: 10px;
+    height: 30px !important;
+}
+
+
+#accordion div p a, #accordion div p a:hover {
+    display: inline-block;
+    width: 75% !important;
+    word-wrap: break-word;
+    margin: 0px;
+    padding: 0px;
+}
+
+div#myprogramscontent p a, div#myprogramscontent p a:hover {
+    width: 55% !important;
+}
+
+span.bullet {
+    vertical-align: top;
+}
+
 
 
 

@@ -77,6 +77,38 @@ $(document).ready(function () {
         ]
     });
 
+    $("#showInfoAboutLoginDialog").dialog({
+        modal:"true",
+        width:300,
+//        height:120,
+        autoOpen:false
+    });
+
+    $("#confirmDialog").dialog({
+        modal:"true",
+        width:500,
+        height:120,
+        autoOpen:false,
+        buttons:[
+            { text:"Save changes",
+                click:function () {
+                    save();
+                    closeConfirmDialog();
+                }
+            },
+            { text:"Discard changes",
+                click:function () {
+                    closeConfirmDialog();
+                }
+            },
+            { text:"Cancel",
+                click:function () {
+                    closeConfirmDialog();
+                }
+            }
+        ]
+    });
+
 
 });
 
@@ -98,9 +130,10 @@ function saveAs() {
             setStatusBarMessage(SAVE_PROGRAM_REQUEST_ABORTED);
         }
     });
+    return false;
 }
 
-function sendSaveProgramRequest() {
+function save() {
     if (lastSelectedExample == 0) {
         $("#saveAsProgram").click();
         return;
@@ -151,13 +184,26 @@ function onSaveProgramSuccess(data) {
 
                     document.getElementById("myprogramscontent").appendChild(createProgramListElement(id.replace(new RegExp(" ", 'g'), "_") + "&head=My_Programs", name));
                     $("#My_Programs").click();
-                    document.getElementById(id + "&head=My_Programs").click();
+                    document.getElementById("problems").innerHTML = "";
+                    setConsoleMessage("");
+                    removeStyles();
+                    var el = document.getElementById(lastSelectedExample);
+                    if (el != null) {
+                        el.className = "";
+                    }
+
+                    lastSelectedExample = id + "&head=My_Programs";
+                    el = document.getElementById(id + "&head=My_Programs");
+                    if (el != null) {
+                        el.className = "selectedExample";
+                    }
 
                 }
 
             }
             i++;
         }
+        editor.focus();
     }
 }
 
@@ -170,21 +216,21 @@ function createProgramListElement(id, name) {
     var contA = document.createElement("a");
     contA.id = id;
     contA.style.cursor = "pointer";
-    contA.onclick = function (event) {
-        loadProgram(this.id);
+    contA.onclick = function () {
+        beforeLoadProgram(this.id);
     };
     contA.innerHTML = name;
     var delImg = document.createElement("img");
     delImg.src = "/icons/delete.png";
     delImg.title = "Delete";
-    delImg.onclick = function (event) {
+    delImg.onclick = function () {
         deleteProgram(this.parentNode.childNodes[1].id);
     };
     var linkImg = document.createElement("img");
     linkImg.src = "/icons/link1.png";
     linkImg.title = "Public link for this program";
-    linkImg.onclick = function (event) {
-        generatePublicLink(this.parentNode.childNodes[1].id);
+    linkImg.onclick = function () {
+        generatePublicLinkForProgram(this.parentNode.childNodes[1].id);
     };
     content.appendChild(contA);
     content.appendChild(delImg);
@@ -218,17 +264,22 @@ function onLoadingExamplesSuccess(data) {
     var i = 0;
     while (typeof data[i] != "undefined") {
         var lastHeadName;
+        var ids = [];
         if (data[i].type == "head") {
             var head = document.createElement("h3");
             var headA = document.createElement("a");
             headA.href = "#";
-            headA.id = data[i].text.replace(new RegExp(" ", 'g'), "_");
+            var id = data[i].text.replace(new RegExp(" ", 'g'), "_");
+            headA.id = id;
 
             headA.innerHTML = data[i].text;
             lastHeadName = data[i].text
             head.appendChild(headA);
             acc.appendChild(head);
             var cont = document.createElement("div");
+            var idWoSymbols = id.replace(new RegExp(",", 'g'), "_").replace(new RegExp("!", 'g'), "_");
+            cont.innerHTML = "<div class=\"toolbox\" id=\"pld" + idWoSymbols + "\" style=\"display:none\"><div align=\"center\"><div class=\"fixedpage\"><div class=\"publicLinkHref\" id=\"pl" + idWoSymbols + "\"></div><img class=\"closePopup\" id=\"cp" + idWoSymbols + "\" src=\"/icons/close.png\" title=\"Close popup\"></span></div></div></div>";
+            ids.push(idWoSymbols);
         }
         if (data[i].type == "content") {
             var content = document.createElement("p");
@@ -241,13 +292,28 @@ function onLoadingExamplesSuccess(data) {
 //            contA.id = i + "&head=" + lastHeadName;
             contA.style.cursor = "pointer";
             contA.onclick = function (event) {
-                loadExample(this.id);
+                beforeLoadExample(this.id);
             };
             contA.innerHTML = data[i].text;
+            var linkImg = document.createElement("img");
+            linkImg.src = "/icons/link1.png";
+            linkImg.title = "Public link for this example";
+            linkImg.onclick = function (event) {
+                generatePublicLinkForExample(this.parentNode.childNodes[1].id);
+            };
+
             content.appendChild(contA);
+            content.appendChild(linkImg);
             cont.appendChild(content);
         }
         acc.appendChild(cont);
+
+        forEach(ids, function (id) {
+            $("#cp" + id).click(function () {
+                $("div#pld" + id).slideUp('slow');
+            });
+        });
+
         i++;
     }
 
@@ -256,17 +322,17 @@ function onLoadingExamplesSuccess(data) {
      event.preventDefault();
      });*/
 
+    var myProg = document.createElement("h3");
+    var innerDiv = document.createElement("div");
+    innerDiv.id = "tools";
+    var myProgA = document.createElement("a");
+    myProgA.href = "#";
+    myProgA.id = "My_Programs";
+
+    myProgA.innerHTML = "My Programs";
+    innerDiv.appendChild(myProgA);
+
     if (isLogin) {
-        var myProg = document.createElement("h3");
-        var innerDiv = document.createElement("div");
-        innerDiv.id = "tools";
-        var myProgA = document.createElement("a");
-        myProgA.href = "#";
-        myProgA.id = "My_Programs";
-
-        myProgA.innerHTML = "My Programs";
-        innerDiv.appendChild(myProgA);
-
         var saveImg = document.createElement("img");
         saveImg.src = "/icons/save1.png";
         saveImg.id = "saveProgram";
@@ -277,14 +343,28 @@ function onLoadingExamplesSuccess(data) {
         saveAsImg.title = "Save current program as ...";
         innerDiv.appendChild(saveAsImg);
         innerDiv.appendChild(saveImg);
-        myProg.appendChild(innerDiv);
-        acc.appendChild(myProg);
-
-        var myProgCont = document.createElement("div");
-        myProgCont.id = "myprogramscontent";
-        acc.appendChild(myProgCont);
-        loadListOfPrograms();
+    } else {
+        var infoImg = document.createElement("img");
+        infoImg.src = "/images/whatisthis.png";
+//        infoImg.src = "/icons/information.png";
+        infoImg.id = "showInfoAboutLogin";
+        infoImg.title = "Help";
+        innerDiv.appendChild(infoImg);
     }
+    myProg.appendChild(innerDiv);
+//        myProg.appendChild(myProgA);
+    acc.appendChild(myProg);
+
+    var myProgCont = document.createElement("div");
+    myProgCont.id = "myprogramscontent";
+    myProgCont.innerHTML = "<div id=\"toolbox\" style=\"display:none\"><div align=\"center\"><div class=\"fixedpage\"><div id=\"publicLinkHref\"></div><img id=\"closePopup\" src=\"/icons/close.png\" title=\"Close popup\">    </span></div></div></div>";
+    acc.appendChild(myProgCont);
+
+    $("#closePopup").click(function () {
+        $('div#toolbox').slideUp('slow');
+    });
+
+    loadListOfPrograms();
 
 
     $("#accordion").accordion({
@@ -293,9 +373,12 @@ function onLoadingExamplesSuccess(data) {
     }).find('#tools img').click(function (ev) {
             ev.preventDefault();
             if (this.id == "saveProgram") {
-                sendSaveProgramRequest();
-            } else {
+                save();
+            } else if (this.id == "saveAsProgram") {
                 $("#saveDialog").dialog("open");
+                $("#programName").focus();
+            } else if (this.id == "showInfoAboutLogin") {
+                $("#showInfoAboutLoginDialog").dialog("open");
             }
         });
 
@@ -307,13 +390,13 @@ function onLoadingExamplesSuccess(data) {
         if (url.indexOf(exampleStr) == 0) {
 //            url = url.replace(new RegExp("_", 'g'), " ");
             $("#" + url.substring(url.indexOf("&head=") + 6)).click();
-            loadExample(url.substring(exampleStr.length));
+            beforeLoadExample(url.substring(exampleStr.length));
         }
         var publicLink = "?publicLink=";
         if (url.indexOf(publicLink) == 0) {
 //            url = url.replace(new RegExp("_", 'g'), " ");
             //$("#" + url.substring(url.indexOf("&head=") + 6)).click();
-            loadProgram(url.substring(publicLink.length) + "&head=My_Programs", true);
+            beforeLoadProgram(url.substring(publicLink.length) + "&head=My_Programs", true);
         }
     }
 
@@ -344,47 +427,57 @@ function onLoadingProgramsSuccess(data) {
     }
 }
 
-function loadProgram(name, isPublicLink) {
-    if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged) {
-        if (lastSelectedExample == name) {
-            return;
-        }
-        document.getElementById("problems").innerHTML = "";
-        setConsoleMessage("");
-        removeStyles();
-        var el = document.getElementById(lastSelectedExample);
-        if (el != null) {
-            el.className = "";
-        }
-
-        lastSelectedExample = name;
-        el = document.getElementById(name);
-        if (el != null) {
-            el.className = "selectedExample";
-        }
-        el = document.getElementById("My_Programs");
-        if (el != null) {
-            el.click();
-        }
-        document.getElementById("statusbar").innerHTML = "Loading program...";
-        loadingExample = true;
-        name = name.replace(new RegExp("_", 'g'), " ");
-        if (isPublicLink) {
-            name += "publicLink";
-        }
-        $.ajax({
-            url:generateAjaxUrl("loadProgram", name),
-            context:document.body,
-            success:onLoadingProgramSuccess,
-            dataType:"json",
-            type:"GET",
-            //data:{text:i},
-            timeout:10000,
-            error:function () {
-                setStatusBarMessage(SAVE_PROGRAM_REQUEST_ABORTED);
+function beforeLoadProgram(name, isPublicLink) {
+    if (isContentEditorChanged) {
+        confirmAction(function (name, isPublicLink) {
+            return function () {
+                loadProgram(name, isPublicLink);
             }
-        });
+        }(name, isPublicLink));
+    } else {
+        loadProgram(name, isPublicLink);
     }
+}
+
+function loadProgram(name, isPublicLink) {
+    if (lastSelectedExample == name) {
+        return;
+    }
+    document.getElementById("problems").innerHTML = "";
+    setConsoleMessage("");
+    removeStyles();
+    var el = document.getElementById(lastSelectedExample);
+    if (el != null) {
+        el.className = "";
+    }
+
+    lastSelectedExample = name;
+    el = document.getElementById(name);
+    if (el != null) {
+        el.className = "selectedExample";
+    }
+    var el1 = $("#My_Programs");
+    if (el1 != null) {
+        el1.click();
+    }
+    document.getElementById("statusbar").innerHTML = "Loading program...";
+    loadingExample = true;
+    name = name.replace(new RegExp("_", 'g'), " ");
+    if (isPublicLink) {
+        name += "publicLink";
+    }
+    $.ajax({
+        url:generateAjaxUrl("loadProgram", name),
+        context:document.body,
+        success:onLoadingProgramSuccess,
+        dataType:"json",
+        type:"GET",
+        //data:{text:i},
+        timeout:10000,
+        error:function () {
+            setStatusBarMessage(SAVE_PROGRAM_REQUEST_ABORTED);
+        }
+    });
 
 }
 
@@ -412,7 +505,7 @@ function deleteProgram(name) {
 
 }
 
-function generatePublicLink(name) {
+function generatePublicLinkForProgram(name) {
     name = name.replace(new RegExp("_", 'g'), " ");
     $.ajax({
         url:generateAjaxUrl("generatePublicLink", name),
@@ -423,11 +516,22 @@ function generatePublicLink(name) {
         //data:{text:i},
         timeout:10000,
         error:function () {
-            setStatusBarMessage(DELETE_PROGRAM_REQUEST_ABORTED);
+            setStatusBarMessage(PUBLIC_LINK_REQUEST_ABORTED);
         }
     });
 }
-var timerForPopup;
+
+function generatePublicLinkForExample(name) {
+    var head = name.substring(name.indexOf("&head=") + 6).replace(new RegExp(",", 'g'), "_").replace(new RegExp("!", 'g'), "_");
+    var href = "http://kotlin-demo.jetbrains.com/?example=" + name;
+    setStatusBarMessage("Public link was generated.");
+    $("#pl" + head).html(href);
+    $("div#pld" + head).slideDown('slow');
+    //toolboxHello,_world!
+//    selectTextById("pl" + head);
+    setStatusBarMessage(href);
+}
+//var timerForPopup;
 
 function onGeneratePublicLinkSuccess(data) {
     if (data != null && typeof data != "undefined") {
@@ -436,37 +540,53 @@ function onGeneratePublicLinkSuccess(data) {
                 setStatusBarError(data[0].text);
             } else {
 //                window.prompt ("Copy to clipboard: Ctrl+C, Enter", data[0].text);
-                setStatusBarMessage("Public link for this program is : " + data[0].text);
+                setStatusBarMessage("Public link was generated.");
                 $("#publicLinkHref").html(data[0].text);
-
+//                $("#toolbox").height($("#publicLinkHref").height);
                 $('div#toolbox').slideDown('slow');
-                selectText("publicLinkHref");
-                if (timerForPopup != null) {
-                    clearTimeout(timerForPopup);
-                }
-                timerForPopup = setTimeout(function () {
-                    $('div#toolbox').slideUp('slow');
-                }, 5000);
+//                selectTextById("publicLinkHref");
+                /*if (timerForPopup != null) {
+                 clearTimeout(timerForPopup);
+                 }
+                 timerForPopup = setTimeout(function () {
+                 $('div#toolbox').slideUp('slow');
+                 }, 5000);*/
 
             }
         }
     }
 }
 
-$("#toolbox").mouseover(function() {
-    clearTimeout(timerForPopup);
-     timerForPopup = null;
-});
+/*$("#toolbox").mouseover(function () {
+ clearTimeout(timerForPopup);
+ timerForPopup = null;
+ });
 
-$("#toolbox").mouseleave(function() {
-     timerForPopup = setTimeout(function () {
-         $('div#toolbox').slideUp('slow');
-     }, 5000);
-});
+ $("#toolbox").mouseleave(function () {
+ timerForPopup = setTimeout(function () {
+ $('div#toolbox').slideUp('slow');
+ }, 5000);
+ });*/
 
-function selectText(element) {
+function selectTextById(element) {
     var doc = document;
     var text = doc.getElementById(element);
+    if (doc.body.createTextRange) {
+        var range = document.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+    } else if (window.getSelection) {
+        var selection = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+}
+
+function selectTextByElement(element) {
+    var doc = document;
+    var text = element;
     if (doc.body.createTextRange) {
         var range = document.body.createTextRange();
         range.moveToElementText(text);
@@ -519,39 +639,52 @@ function onLoadingProgramSuccess(data) {
 var loadingExample = false;
 var lastSelectedExample = 0;
 
-function loadExample(name) {
-    if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged) {
-        if (lastSelectedExample == name) {
-            return;
-        }
-        document.getElementById("problems").innerHTML = "";
-        setConsoleMessage("");
-        removeStyles();
-        var el = document.getElementById(lastSelectedExample);
-        if (el != null) {
-            el.className = "";
-        }
-
-        lastSelectedExample = name;
-        document.getElementById(name).className = "selectedExample";
-        document.getElementById("statusbar").innerHTML = "Loading example...";
-        loadingExample = true;
-        name = name.replace(new RegExp("_", 'g'), " ");
-        $.ajax({
-            url:generateAjaxUrl("loadExample", name),
-            context:document.body,
-            success:onLoadingExampleSuccess,
-            dataType:"json",
-            type:"GET",
-//        data:{text: i},
-            timeout:10000,
-            error:function () {
-                loadingExample = false;
-                setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
+function beforeLoadExample(name) {
+    document.getElementById("debug").innerHTML = name;
+    if (isContentEditorChanged) {
+        confirmAction(function (name) {
+            return function () {
+                loadExample(name);
             }
-        });
-        loadExamplesHelp(name.substring(0, name.indexOf("&head=")));
+        }(name));
+    } else {
+        loadExample(name);
     }
+}
+
+function loadExample(name) {
+//    if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged) {
+    if (lastSelectedExample == name) {
+        return;
+    }
+    document.getElementById("problems").innerHTML = "";
+    setConsoleMessage("");
+    removeStyles();
+    var el = document.getElementById(lastSelectedExample);
+    if (el != null) {
+        el.className = "";
+    }
+
+    lastSelectedExample = name;
+    document.getElementById(name).className = "selectedExample";
+    document.getElementById("statusbar").innerHTML = "Loading example...";
+    loadingExample = true;
+    name = name.replace(new RegExp("_", 'g'), " ");
+    $.ajax({
+        url:generateAjaxUrl("loadExample", name),
+        context:document.body,
+        success:onLoadingExampleSuccess,
+        dataType:"json",
+        type:"GET",
+//        data:{text: i},
+        timeout:10000,
+        error:function () {
+            loadingExample = false;
+            setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
+        }
+    });
+    loadExamplesHelp(name.substring(0, name.indexOf("&head=")));
+//    }
 }
 
 function onLoadingExampleSuccess(data) {
@@ -655,4 +788,90 @@ $(".toggleShortcuts").click(function () {
     }
     setStatusBarMessage("");
 });
+
+/*$("#userName").click(function (e) {
+ var div = document.createElement("div");
+ div.id = "logout";
+ div.innerHTML = "Logout";
+ div.style.position = "absolute";
+ div.style.left = e.clientX + 10 + "px";
+ div.style.top = e.clientY + 10 + "px";
+ div.onclick = function () {
+ close();
+ logout();
+ };
+ document.body.appendChild(div);
+
+ function close() {
+ div.parentNode.removeChild(div);
+ }
+
+ });*/
+
+$("#logout").click(function (e) {
+    logout();
+});
+
+var isLogoutShown = false;
+
+
+function userNameClick(e) {
+    if (!isLogoutShown) {
+        $("#headerlinks").bind("mouseleave", function () {
+            var timeout = setTimeout(function () {
+                close();
+            }, 100);
+            $("#logout").bind("mouseover", function () {
+
+                clearTimeout(timeout);
+                $("#logout").bind("mouseleave", function () {
+                    timeout = setTimeout(function () {
+                        close();
+                    }, 500);
+                });
+            });
+
+        });
+
+        isLogoutShown = true;
+        var div = document.createElement("div");
+        div.id = "logout";
+        div.innerHTML = "Logout";
+        div.style.position = "absolute";
+
+        var element = document.getElementById("userNameTitle");
+        var left = element.offsetLeft;
+        var top = element.offsetTop;
+        for (var parent = element.offsetParent; parent; parent = parent.offsetParent) {
+            left += parent.offsetLeft - parent.scrollLeft;
+            top += parent.offsetTop - parent.scrollTop
+        }
+
+
+//        alert(left + " " + top);
+//        alert (left + document.getElementById("userNameTitle").width + " " + top + document.getElementById("userNameTitle").height);
+        div.style.left = left + 240 - 42 + "px";
+        div.style.top = top + 27 - 3 + "px";
+        div.onclick = function () {
+            close();
+            logout();
+        };
+        document.body.appendChild(div);
+    } else {
+        close();
+    }
+
+
+    function close() {
+        isLogoutShown = false;
+        var el = document.getElementById("logout");
+        if (el != null) {
+            el.parentNode.removeChild(document.getElementById("logout"));
+        }
+    }
+
+}
+
+
+
 

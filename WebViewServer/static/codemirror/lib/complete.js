@@ -207,14 +207,12 @@ $(document).ready(function () {
                 }
             } catch (e) {
                 $(".applet-disable").click();
-                setStatusBarMessage(GET_FROM_APPLET_FAILED);
+                setStatusBarError(GET_FROM_APPLET_FAILED);
 
                 var title = document.getElementById("appletclient").title;
                 if (title.indexOf(GET_FROM_APPLET_FAILED) == -1) {
                     document.getElementById("appletclient").title += ". " + GET_FROM_APPLET_FAILED;
                 }
-                var color = document.getElementById("statusbar").style.color;
-                document.getElementById("statusbar").style.color = "red";
                 $(".applet-enable").click(function () {
                     try {
                         $("#myapplet")[0].getHighlighting("");
@@ -228,9 +226,7 @@ $(document).ready(function () {
                         $(".applet-disable").click();
                     }
                 });
-                setTimeout(function () {
-                    document.getElementById("statusbar").style.color = color;
-                }, 2000);
+
                 if (type == "highlighting") {
                     isLoadingHighlighting = false;
                     getErrors();

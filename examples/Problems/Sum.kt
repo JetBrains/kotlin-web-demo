@@ -8,7 +8,7 @@ import java.util.*
 
 fun sum(a : IntArray) : Int {
   // Write your solution here
-  return 0;//"?"
+  return "?"
 }
 
 fun main(args : Array<String>) {

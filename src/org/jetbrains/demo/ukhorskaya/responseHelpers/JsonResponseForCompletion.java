@@ -84,12 +84,14 @@ public class JsonResponseForCompletion {
         }
 
         Collection<DeclarationDescriptor> descriptors = null;
+        boolean isTipsManagerCompletion = true;
         try {
             if (element instanceof JetSimpleNameExpression) {
-                 descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element, bindingContext);
+                descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element, bindingContext);
             } else if (element.getParent() instanceof JetSimpleNameExpression) {
-                 descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext);
+                descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext);
             } else {
+                isTipsManagerCompletion = false;
                 JetScope resolutionScope;
                 PsiElement parent = element.getParent();
                 if (parent instanceof JetQualifiedExpression) {
@@ -123,13 +125,26 @@ public class JsonResponseForCompletion {
 
         JSONArray jsonArray = new JSONArray();
         if (descriptors != null) {
+            String prefix;
+            if (isTipsManagerCompletion) {
+                prefix = element.getText();
+            } else {
+                prefix = element.getParent().getText();
+            }
+            prefix = ResponseUtils.substringBefore(prefix, "IntellijIdeaRulezzz");
+            if (prefix.endsWith(".")) {
+                prefix = "";
+            }
             for (DeclarationDescriptor descriptor : descriptors) {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("icon", getIconFromDescriptor(descriptor));
-                map.put("tail", "   " + getTailText(descriptor));
-                map.put("name", getNameFromDescriptor(descriptor));
+                String name = getNameFromDescriptor(descriptor);
+                if (prefix.isEmpty() || name.startsWith(prefix)) {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("icon", getIconFromDescriptor(descriptor));
+                    map.put("tail", "   " + getTailText(descriptor));
+                    map.put("name", name);
 
-                jsonArray.put(map);
+                    jsonArray.put(map);
+                }
             }
         } else {
             String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Resolution scope is null.", currentPsiFile.getText());

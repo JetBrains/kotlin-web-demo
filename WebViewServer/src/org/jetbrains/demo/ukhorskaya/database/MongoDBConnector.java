@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
+import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;
 import org.json.JSONArray;
@@ -75,16 +76,12 @@ public class MongoDBConnector {
     public String addProgramInfo(UserInfo userInfo, String programName, String programText, String args) {
         try {
             if (findUser(userInfo)) {
-                /*String programId = userInfo.getId() + programText.hashCode();
-                if (findProgram(userInfo, programId)) {
-                    programId += RandomUtils.nextInt(3);
-                }*/
 
                 if (!checkCountOfPrograms(userInfo)) {
                     return ResponseUtils.getJsonString("exception", "You can save only 100 programs");
                 }
                 if (findProgramByName(userInfo, programName)) {
-                    return ResponseUtils.getJsonString("exception", "Program with same name already exists");
+                    return ResponseUtils.getJsonString("exception", "Program with same name already exists. Please choose the another one.");
                 }
 
 
@@ -109,12 +106,14 @@ public class MongoDBConnector {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
-                return ResponseUtils.getJsonString("exception", "Unknown user");
+                return ResponseUtils.getJsonString("exception", "Please, login.");
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+            return ResponseUtils.getJsonString("exception", "Unknown error until saving your program");
         }
-        return "";
     }
 
     public boolean checkCountOfPrograms(UserInfo userInfo) {
@@ -125,7 +124,7 @@ public class MongoDBConnector {
         DBCollection userIdProgramId = database.getCollection("userIdProgramId");
         DBCursor cursor = userIdProgramId.find(user);
 
-        return cursor.count() < 5;
+        return cursor.count() < 100;
     }
 
     public String getPublicLink(String programId) {
@@ -135,7 +134,7 @@ public class MongoDBConnector {
 
         String publicLink = (String) program.get("link");
         if (publicLink == null || publicLink.isEmpty()) {
-            publicLink = "http://kotlin-demo.jetbrains.com/?publicLink=" + programId;
+            publicLink = "http://" + ServerHandler.HOST + "/?publicLink=" + programId;
             program.put("link", publicLink);
             programIdProgramInfo.findAndModify(new BasicDBObject("_id", programIdObject), program);
         }
@@ -145,11 +144,16 @@ public class MongoDBConnector {
 
     public String getProgramTextByPublicLink(String programId) {
         try {
-
             DBCollection programIdProgramInfo = database.getCollection("programIdProgramInfo");
             BasicDBObject program = new BasicDBObject();
             program.put("_id", new ObjectId(programId));
             DBObject result = programIdProgramInfo.findOne(program);
+            if (result == null) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program by id in programIdProgramInfo",
+                        programId));
+                return ResponseUtils.getJsonString("exception", "Cannot find program by this link");
+            }
             String link = (String) result.get("link");
             if (link != null && !link.isEmpty()) {
                 JSONArray array = new JSONArray();
@@ -164,12 +168,14 @@ public class MongoDBConnector {
                 return array.toString();
 
             } else {
-                return ResponseUtils.getJsonString("exception", "Your link is incorrect.");
+                return ResponseUtils.getJsonString("exception", "Link for this program is not public");
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                    programId));
+            return ResponseUtils.getJsonString("exception", "Unknown error until loading program by link");
         }
-        return ResponseUtils.getJsonString("exception", "Your link is incorrect.");
     }
 
     public String resaveProgram(String programId, String programText, String args) {
@@ -177,14 +183,22 @@ public class MongoDBConnector {
             ObjectId programIdObject = new ObjectId(programId);
             DBCollection programIdProgramInfo = database.getCollection("programIdProgramInfo");
             DBObject object = programIdProgramInfo.findOne(new BasicDBObject("_id", programIdObject));
+            if (object == null) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program by id in programIdProgramInfo",
+                        programId));
+                return ResponseUtils.getJsonString("exception", "Unknown error until saving your program");
+            }
             object.put("text", programText);
             object.put("args", args);
             programIdProgramInfo.findAndModify(new BasicDBObject("_id", programIdObject), object);
             return ResponseUtils.getJsonString("programId", programId);
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                    programId));
+            return ResponseUtils.getJsonString("exception", "Unknown error until saving your program");
         }
-        return "";
     }
 
     public boolean findProgram(UserInfo info, String programId) {
@@ -202,10 +216,10 @@ public class MongoDBConnector {
         return false;
     }
 
-    public boolean findProgramByName(UserInfo info, String programName) {
+    public boolean findProgramByName(UserInfo userInfo, String programName) {
         BasicDBObject user = new BasicDBObject();
-        user.put("id", info.getId());
-        user.put("type", info.getType());
+        user.put("id", userInfo.getId());
+        user.put("type", userInfo.getType());
 
         DBCollection userIdProgramId = database.getCollection("userIdProgramId");
         DBCursor cursor = userIdProgramId.find(user);
@@ -213,6 +227,12 @@ public class MongoDBConnector {
         DBCollection programIdProgramInfo = database.getCollection("programIdProgramInfo");
         while (cursor.hasNext()) {
             DBObject object = cursor.next();
+            if (object == null) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user by userId in programIdProgramInfo",
+                        userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+                return false;
+            }
             DBObject program = programIdProgramInfo.findOne(new BasicDBObject("_id", object.get("programId")));
             if (program.get("name").equals(programName)) {
                 return true;
@@ -229,11 +249,20 @@ public class MongoDBConnector {
             try {
                 programIdObject = new ObjectId(programId);
             } catch (IllegalArgumentException e) {
-                  return ResponseUtils.getJsonString("exception", "Impossible to find a program.");
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                        programId));
+                return ResponseUtils.getJsonString("exception", "Impossible to find a program.");
             }
             program.put("_id", programIdObject);
 
             DBObject result = programIdProgramInfo.findOne(program);
+            if (result == null) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program by id in programIdProgramInfo",
+                        programId));
+                return ResponseUtils.getJsonString("exception", "Unknown error until loading your program");
+            }
             JSONArray array = new JSONArray();
             Map<String, String> map = new HashMap<String, String>();
             map.put("type", "text");
@@ -246,24 +275,31 @@ public class MongoDBConnector {
             array.put(map);
             return array.toString();
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                    programId));
+            return ResponseUtils.getJsonString("exception", "Unknown error until loading your program");
         }
-        return "";
     }
 
-    public String getListOfProgramsForUser(UserInfo info) {
+    public String getListOfProgramsForUser(UserInfo userInfo) {
         try {
             BasicDBObject user = new BasicDBObject();
-            user.put("id", info.getId());
-            user.put("type", info.getType());
+            user.put("id", userInfo.getId());
+            user.put("type", userInfo.getType());
 
             DBCollection userIdProgramId = database.getCollection("userIdProgramId");
             DBCursor cursor = userIdProgramId.find(user);
-            System.out.println(cursor.count());
             JSONArray result = new JSONArray();
             DBCollection programIdProgramInfo = database.getCollection("programIdProgramInfo");
             while (cursor.hasNext()) {
                 DBObject object = cursor.next();
+                if (object == null) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                            SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "cannot find programs for user",
+                            userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+                    return ResponseUtils.getJsonString("exception", "Unknown error until loading list of your programs");
+                }
                 DBObject program = programIdProgramInfo.findOne(new BasicDBObject("_id", object.get("programId")));
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("id", program.get("_id").toString());
@@ -272,9 +308,11 @@ public class MongoDBConnector {
             }
             return result.toString();
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+            return ResponseUtils.getJsonString("exception", "Unknown error until loading list of your programs");
         }
-        return "";
     }
 
     public boolean addUserInfo(UserInfo info, String fieldName, String fieldValue) {
@@ -307,22 +345,30 @@ public class MongoDBConnector {
                 BasicDBObject field = new BasicDBObject();
                 field.put("programId", programIdObject);
                 DBObject userAndProgram = userIdProgramId.findOne(field);
+                if (userAndProgram == null) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                            SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user for program",
+                            userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programId));
+                    return ResponseUtils.getJsonString("exception", "Unknown error until deleting your program");
+                }
                 if (userAndProgram.get("id").equals(userInfo.getId()) && userAndProgram.get("type").equals(userInfo.getType())) {
                     programIdProgramInfo.remove(programIdProgramInfo.findOne(programIdObject));
                     userIdProgramId.remove(userAndProgram);
                     return ResponseUtils.getJsonString("text", "Program was successfully deleted.", programId);
                 } else {
-                    return ResponseUtils.getJsonString("exception", "Impossible to delete program.");
+                    return ResponseUtils.getJsonString("exception", "Unknown error until deleting your program");
                 }
             } else {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
-                return ResponseUtils.getJsonString("exception", "Unknown user");
+                return ResponseUtils.getJsonString("exception", "Unknown error until deleting your program");
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user for program",
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programId));
+            return ResponseUtils.getJsonString("exception", "Unknown error until saving your program");
         }
-        return "";
     }
 }

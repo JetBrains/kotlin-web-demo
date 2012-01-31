@@ -74,11 +74,19 @@ abstract class Tag(val name : String) : Element {
   }
 
   override fun render(builder : StringBuilder, indent : String) {
-    builder.append("$indent<$name>\n")
+    builder.append("$indent<$name${renderAttributes()}>\n")
     for (c in children) {
       c.render(builder, indent + "  ")
     }
     builder.append("$indent</$name>\n")
+  }
+
+  private fun renderAttributes() : String? {
+    val builder = StringBuilder()
+    for (a in attributes.keySet()) {
+      builder.append(" $a=\"${attributes[a]}\"")
+    }
+    return builder.toString()
   }
 }
 
@@ -136,11 +144,3 @@ fun html(init : HTML.() -> Unit) : HTML {
 
 // An excerpt from the Standard Library
 fun <K, V> Map<K, V>.set(key : K, value : V) = this.put(key, value)
-
-fun println(message : Any?) {
-  System.out?.println(message)
-}
-
-fun print(message : Any?) {
-  System.out?.print(message)
-}

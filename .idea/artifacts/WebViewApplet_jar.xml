@@ -13,7 +13,6 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/intellij-core.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/asm.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-compiler.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-runtime.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/annotations.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/asm-commons.jar" path-in-jar="/" />
     </root>
