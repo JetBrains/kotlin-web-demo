@@ -157,9 +157,19 @@ public class ServerHandler {
                 helper = new AuthorizationFacebookHelper();
             }
             if (parameters.getArgs().contains("oauth_verifier") || parameters.getArgs().contains("code=")) {
-                sessionInfo.setUserInfo(helper.verify(parameters.getArgs()));
-                MongoDBConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
-                request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
+                UserInfo info = helper.verify(parameters.getArgs());
+                if (info != null) {
+
+                    sessionInfo.setUserInfo(info);
+                    MongoDBConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
+                    request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
+                }
+                try {
+                    response.sendRedirect("http://" + HOST);
+                } catch (IOException e) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot redirect", e, "null"));
+                }
+            } else if (parameters.getArgs().contains("denied=")) {
                 try {
                     response.sendRedirect("http://" + HOST);
                 } catch (IOException e) {

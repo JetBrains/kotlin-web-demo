@@ -523,7 +523,8 @@ function generatePublicLinkForProgram(name) {
 
 function generatePublicLinkForExample(name) {
     var head = name.substring(name.indexOf("&head=") + 6).replace(new RegExp(",", 'g'), "_").replace(new RegExp("!", 'g'), "_");
-    var href = "http://kotlin-demo.jetbrains.com/?example=" + name;
+    var url = [location.protocol, '//', location.host, "/"].join('');
+    var href = url + "?example=" + name;
     setStatusBarMessage("Public link was generated.");
     $("#pl" + head).html(href);
     $("div#pld" + head).slideDown('slow');
@@ -640,7 +641,6 @@ var loadingExample = false;
 var lastSelectedExample = 0;
 
 function beforeLoadExample(name) {
-    document.getElementById("debug").innerHTML = name;
     if (isContentEditorChanged) {
         confirmAction(function (name) {
             return function () {

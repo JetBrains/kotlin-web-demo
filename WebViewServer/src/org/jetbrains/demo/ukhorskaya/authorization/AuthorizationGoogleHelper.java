@@ -1,6 +1,8 @@
 package org.jetbrains.demo.ukhorskaya.authorization;
 
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.demo.ukhorskaya.ErrorWriter;
+import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
@@ -30,7 +32,6 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
 
     public String authorize() {
         try {
-            
             googleService = new ServiceBuilder()
                     .provider(GoogleApi.class)
                     .apiKey("anonymous")
@@ -42,7 +43,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             requestToken = googleService.getRequestToken();
             return googleService.getAuthorizationUrl(requestToken);
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot authorize authorization request", e, "null"));
         }
         return "";
     }
@@ -63,7 +64,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             userInfo.login((String) object.get("name"), (String) object.get("id"), TYPE);
 
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot verify authorization request", e, url));
         }
         return userInfo;
     }

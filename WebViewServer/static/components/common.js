@@ -270,6 +270,18 @@ function generateAjaxUrl(type, args) {
     return url + "kotlinServer?sessionId=" + sessionId + "&type=" + type + "&args=" + args;
 }
 
+function beforeLogin(param) {
+    if (isContentEditorChanged) {
+        confirmAction(function (param) {
+            return function () {
+                login(param);
+            }
+        }(param));
+    } else {
+        login(param);
+    }
+}
+
 function login(param) {
     $.ajax({
         url:generateAjaxUrl("authorization", param),

@@ -7,6 +7,8 @@ Class-Path: kotlinLibs/kotlin-compiler.jar kotlinLibs/annotations.jar
  rhino-1.7R3.jar kotlinLibs/junit-4.7.jar kotlinLibs/json-20090211.jar
   kotlinLibs/commons-lang-2.4.jar kotlinLibs/commons-httpclient-3.1-pa
  tched.jar kotlinLibs/log4j-1.2.16.jar kotlinLibs/jetty-6.1.3.jar kotl
- inLibs/jetty-util-6.1.3.jar kotlinLibs/javax.servlet.jar
+ inLibs/jetty-util-6.1.3.jar kotlinLibs/javax.servlet.jar kotlinLibs/m
+ ongo-2.7.2.jar kotlinLibs/scribe-1.3.0.jar kotlinLibs/commons-codec-1
+ .6.jar
 Main-Class: org.jetbrains.demo.ukhorskaya.Main
 

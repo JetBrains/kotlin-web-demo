@@ -24,7 +24,7 @@ import java.util.Random;
  */
 
 public class MongoDBConnector {
-    private final DB database;
+    private DB database;
 
     private static final MongoDBConnector connector = new MongoDBConnector();
 
@@ -32,13 +32,12 @@ public class MongoDBConnector {
         Mongo m = null;
         try {
             m = new Mongo("localhost", 27017);
+            database = m.getDB("kotlinDatabase");
         } catch (UnknownHostException e) {
-            e.printStackTrace();
-            database = null;
-            return;
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot connect to mongodb", e, "27017"));
+        } catch (Throwable e) {
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot connect to mongodb", e, "null"));
         }
-
-        database = m.getDB("kotlinDatabase");
     }
 
     public static MongoDBConnector getInstance() {
@@ -46,29 +45,40 @@ public class MongoDBConnector {
     }
 
 
-    public boolean addNewUser(UserInfo info) {
-        if (!findUser(info)) {
-            DBCollection userIdUserInfo = database.getCollection("userIdUserInfo");
-            BasicDBObject user = new BasicDBObject();
-            user.put("id", info.getId());
-            user.put("type", info.getType());
-            user.put("name", info.getName());
-            userIdUserInfo.insert(user);
-            return true;
+    public boolean addNewUser(UserInfo userInfo) {
+        if (!findUser(userInfo)) {
+            try {
+                DBCollection userIdUserInfo = database.getCollection("userIdUserInfo");
+                BasicDBObject user = new BasicDBObject();
+                user.put("id", userInfo.getId());
+                user.put("type", userInfo.getType());
+                user.put("name", userInfo.getName());
+                userIdUserInfo.insert(user);
+                return true;
+            } catch (Throwable e) {
+                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                        userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+            }
         }
         return false;
     }
 
-    public boolean findUser(UserInfo info) {
-        DBCollection coll = database.getCollection("userIdUserInfo");
-        DBCursor cur = coll.find();
-        while (cur.hasNext()) {
-            DBObject object = cur.next();
-            if (object.get("id").equals(info.getId()) && object.get("type").equals(info.getType())) {
-                return true;
+    public boolean findUser(UserInfo userInfo) {
+        try {
+            DBCollection coll = database.getCollection("userIdUserInfo");
+            DBCursor cur = coll.find();
+            while (cur.hasNext()) {
+                DBObject object = cur.next();
+                if (object.get("id").equals(userInfo.getId()) && object.get("type").equals(userInfo.getType())) {
+                    return true;
+                }
             }
+        } catch (Throwable e) {
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
         }
-
         return false;
 
     }
@@ -117,29 +127,43 @@ public class MongoDBConnector {
     }
 
     public boolean checkCountOfPrograms(UserInfo userInfo) {
-        BasicDBObject user = new BasicDBObject();
-        user.put("id", userInfo.getId());
-        user.put("type", userInfo.getType());
+        try {
+            BasicDBObject user = new BasicDBObject();
+            user.put("id", userInfo.getId());
+            user.put("type", userInfo.getType());
 
-        DBCollection userIdProgramId = database.getCollection("userIdProgramId");
-        DBCursor cursor = userIdProgramId.find(user);
+            DBCollection userIdProgramId = database.getCollection("userIdProgramId");
+            DBCursor cursor = userIdProgramId.find(user);
 
-        return cursor.count() < 100;
+            return cursor.count() < 100;
+        } catch (Throwable e) {
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+            return false;
+        }
     }
 
     public String getPublicLink(String programId) {
-        ObjectId programIdObject = new ObjectId(programId);
-        DBCollection programIdProgramInfo = database.getCollection("programIdProgramInfo");
-        DBObject program = programIdProgramInfo.findOne(new BasicDBObject("_id", programIdObject));
+        try {
+            ObjectId programIdObject = new ObjectId(programId);
+            DBCollection programIdProgramInfo = database.getCollection("programIdProgramInfo");
+            DBObject program = programIdProgramInfo.findOne(new BasicDBObject("_id", programIdObject));
 
-        String publicLink = (String) program.get("link");
-        if (publicLink == null || publicLink.isEmpty()) {
-            publicLink = "http://" + ServerHandler.HOST + "/?publicLink=" + programId;
-            program.put("link", publicLink);
-            programIdProgramInfo.findAndModify(new BasicDBObject("_id", programIdObject), program);
+            String publicLink = (String) program.get("link");
+            if (publicLink == null || publicLink.isEmpty()) {
+                publicLink = "http://" + ServerHandler.HOST + "/?publicLink=" + programId;
+                program.put("link", publicLink);
+                programIdProgramInfo.findAndModify(new BasicDBObject("_id", programIdObject), program);
+            }
+
+            return ResponseUtils.getJsonString("text", publicLink);
+        } catch (Throwable e) {
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                    programId));
+            return ResponseUtils.getJsonString("exception", "Cannot generate public link");
         }
-
-        return ResponseUtils.getJsonString("text", publicLink);
     }
 
     public String getProgramTextByPublicLink(String programId) {
@@ -201,42 +225,33 @@ public class MongoDBConnector {
         }
     }
 
-    public boolean findProgram(UserInfo info, String programId) {
-        DBCollection userIdProgramId = database.getCollection("userIdProgramId");
-        BasicDBObject programWithId = new BasicDBObject();
-        programWithId.put("programId", programId);
-
-        DBCursor cursor = userIdProgramId.find(programWithId);
-        while (cursor.hasNext()) {
-            DBObject object = cursor.next();
-            if (object.get("id").equals(info.getId()) && object.get("type").equals(info.getType())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean findProgramByName(UserInfo userInfo, String programName) {
-        BasicDBObject user = new BasicDBObject();
-        user.put("id", userInfo.getId());
-        user.put("type", userInfo.getType());
+        try {
+            BasicDBObject user = new BasicDBObject();
+            user.put("id", userInfo.getId());
+            user.put("type", userInfo.getType());
 
-        DBCollection userIdProgramId = database.getCollection("userIdProgramId");
-        DBCursor cursor = userIdProgramId.find(user);
+            DBCollection userIdProgramId = database.getCollection("userIdProgramId");
+            DBCursor cursor = userIdProgramId.find(user);
 
-        DBCollection programIdProgramInfo = database.getCollection("programIdProgramInfo");
-        while (cursor.hasNext()) {
-            DBObject object = cursor.next();
-            if (object == null) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user by userId in programIdProgramInfo",
-                        userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
-                return false;
+            DBCollection programIdProgramInfo = database.getCollection("programIdProgramInfo");
+            while (cursor.hasNext()) {
+                DBObject object = cursor.next();
+                if (object == null) {
+                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                            SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user by userId in programIdProgramInfo",
+                            userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+                    return false;
+                }
+                DBObject program = programIdProgramInfo.findOne(new BasicDBObject("_id", object.get("programId")));
+                if (program.get("name").equals(programName)) {
+                    return true;
+                }
             }
-            DBObject program = programIdProgramInfo.findOne(new BasicDBObject("_id", object.get("programId")));
-            if (program.get("name").equals(programName)) {
-                return true;
-            }
+        } catch (Throwable e) {
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programName));
         }
         return false;
     }
@@ -313,24 +328,6 @@ public class MongoDBConnector {
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
             return ResponseUtils.getJsonString("exception", "Unknown error until loading list of your programs");
         }
-    }
-
-    public boolean addUserInfo(UserInfo info, String fieldName, String fieldValue) {
-        if (findUser(info)) {
-            DBCollection actions = database.getCollection("actions");
-            BasicDBObject user = new BasicDBObject();
-            user.put("id", info.getId());
-            user.put("type", info.getType());
-            DBCursor cur = actions.find(user);
-
-            if (cur.hasNext()) {
-                user.put(fieldName, fieldValue);
-                actions.remove(user);
-                actions.insert(user);
-            }
-        }
-
-        return false;
     }
 
     public String deleteProgram(UserInfo userInfo, String programId) {

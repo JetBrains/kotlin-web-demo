@@ -545,6 +545,10 @@ body {
     float: right;
 }
 
+#helpcontent a:hover {
+    padding: 0;
+}
+
 #helpcontent {
     /*float: left;*/
     width: 100%;
@@ -897,8 +901,9 @@ td#removeallguttersTd {
 */
 
 #login b {
-  /*padding-right: 10px;*/
+    /*padding-right: 10px;*/
 }
+
 #login a {
     padding: 0 0px 0 10px;
     float: right;
@@ -949,6 +954,7 @@ td#removeallguttersTd {
     padding-right: 9px;
     padding-top: 6px;
 }
+
 #saveProgram, #saveAsProgram {
     display: inline-block;
     float: right;
@@ -960,7 +966,7 @@ td#removeallguttersTd {
     /*position: absolute;*/
     right: 1px;
     top: 8px;
-    min-width: 200px;
+    min-width: 150px;
 }
 
 #tools img {
@@ -1055,6 +1061,7 @@ div.fixedpage {
     height: 20px;
     padding-left: 10px;
 }
+
 #logout:hover {
     /*border-radius: 4px;*/
     cursor: pointer;
@@ -1072,6 +1079,7 @@ div.fixedpage {
     /*background-color: #F7F7F7;*/
     text-decoration: underline;
 }
+
 #userNameTitle {
     /*border-radius: 4px;*/
     cursor: pointer;
@@ -1097,7 +1105,6 @@ div.fixedpage {
     margin: 10px;
     height: 30px !important;
 }
-
 
 #accordion div p a, #accordion div p a:hover {
     display: inline-block;

@@ -1,6 +1,8 @@
 package org.jetbrains.demo.ukhorskaya.authorization;
 
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.demo.ukhorskaya.ErrorWriter;
+import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
@@ -37,7 +39,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
             requestToken = twitterService.getRequestToken();
             return twitterService.getAuthorizationUrl(requestToken);
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot authorize authorization request", e, "null"));
         }
         return "";
     }
@@ -81,7 +83,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
 
 
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot verify authorization request", e, url));
         }
         return userInfo;
     }

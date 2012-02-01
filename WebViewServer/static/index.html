@@ -48,7 +48,7 @@
     <script type="text/javascript">
         var editor;
     </script>
-    <!-- <script type="text/javascript">
+     <script type="text/javascript">
 
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-940435-28']);
@@ -64,7 +64,7 @@
             s.parentNode.insertBefore(ga, s);
         })();
 
-    </script>-->
+    </script>
 
 </head>
 <body spellcheck="false" onResize="resizeCentral();"
@@ -97,9 +97,9 @@
                     <div id="userName"></div>
                     <div id="login" height="20">
                         <b>Login:</b>
-                        <a href="#" onclick="login('twitter');"><img src="/images/social/twitter.png"/></a>
-                        <a href="#" onclick="login('facebook');"><img src="/images/social/facebook.png"/></a>
-                        <a href="#" onclick="login('google');"><img src="/images/social/google.png"/></a>
+                        <a href="#" onclick="beforeLogin('twitter');"><img src="/images/social/twitter.png"/></a>
+                        <a href="#" onclick="beforeLogin('facebook');"><img src="/images/social/facebook.png"/></a>
+                        <a href="#" onclick="beforeLogin('google');"><img src="/images/social/google.png"/></a>
                     </div>
                     <a target="_blank"
                        href="http://confluence.jetbrains.net/display/Kotlin/Welcome">Documentation</a>
@@ -310,7 +310,7 @@
 </div>
 
 <div id="confirmDialog" title="Save your program">
-    The changes you made to the program will be lost when you change an example.
+    Do you want to save your changes?
 </div>
 
 <link type="text/css" href="/jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css" rel="stylesheet"/>
