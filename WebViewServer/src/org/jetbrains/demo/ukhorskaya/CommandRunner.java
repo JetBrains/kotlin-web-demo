@@ -84,6 +84,16 @@ public class CommandRunner {
             ServerSettings.MAX_THREAD_COUNT = ResponseUtils.substringAfter(setting, "max_thread_count ");
         } else if (setting.startsWith("rt_jar")) {
             ServerSettings.RT_JAR = ResponseUtils.substringAfter(setting, "rt_jar ");
+        }  else if (setting.startsWith("mysql_host")) {
+            ServerSettings.MYSQL_HOST = ResponseUtils.substringAfter(setting, "mysql_host ");
+        }  else if (setting.startsWith("mysql_port")) {
+            ServerSettings.MYSQL_PORT = ResponseUtils.substringAfter(setting, "mysql_port ");
+        } else if (setting.startsWith("mysql_database_name")) {
+            ServerSettings.MYSQL_DATABASE_NAME = ResponseUtils.substringAfter(setting, "mysql_database_name ");
+        } else if (setting.startsWith("mysql_username")) {
+            ServerSettings.MYSQL_USERNAME = ResponseUtils.substringAfter(setting, "mysql_username ");
+        } else if (setting.startsWith("mysql_password")) {
+            ServerSettings.MYSQL_PASSWORD = ResponseUtils.substringAfter(setting, "mysql_password ");
         } else {
             ErrorWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
         }

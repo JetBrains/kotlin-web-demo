@@ -1,7 +1,6 @@
 package org.jetbrains.demo.ukhorskaya.database;
 
 import com.mongodb.*;
-import org.apache.commons.lang.math.RandomUtils;
 import org.bson.types.ObjectId;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
@@ -14,7 +13,6 @@ import org.json.JSONArray;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA.

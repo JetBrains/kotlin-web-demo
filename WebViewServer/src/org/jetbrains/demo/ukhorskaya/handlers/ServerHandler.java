@@ -5,8 +5,8 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.*;
 import org.jetbrains.demo.ukhorskaya.authorization.*;
+import org.jetbrains.demo.ukhorskaya.database.MySqlConnector;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;
-import org.jetbrains.demo.ukhorskaya.database.MongoDBConnector;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesList;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesLoader;
 import org.jetbrains.demo.ukhorskaya.help.HelpLoader;
@@ -62,7 +62,7 @@ public class ServerHandler {
             RequestParameters parameters = RequestParameters.parseRequest(param);
             if (parameters.compareType("sendUserData")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
-                MongoDBConnector.getInstance().findUser(sessionInfo.getUserInfo());
+                MySqlConnector.getInstance().findUser(sessionInfo.getUserInfo());
                 sendUserInformation(request, response, sessionInfo);
             } else if (parameters.compareType("getSessionId")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
@@ -161,7 +161,7 @@ public class ServerHandler {
                 if (info != null) {
 
                     sessionInfo.setUserInfo(info);
-                    MongoDBConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
+                    MySqlConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
                     request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
                 }
                 try {

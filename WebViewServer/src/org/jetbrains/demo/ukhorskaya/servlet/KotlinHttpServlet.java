@@ -4,6 +4,7 @@ import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.Initializer;
 import org.jetbrains.demo.ukhorskaya.Statistics;
+import org.jetbrains.demo.ukhorskaya.database.MySqlConnector;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesList;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
 import org.jetbrains.demo.ukhorskaya.help.HelpLoader;
@@ -44,6 +45,7 @@ public class KotlinHttpServlet extends HttpServlet {
                 ExamplesList.getInstance();
                 HelpLoader.getInstance();
                 Statistics.getInstance();
+                MySqlConnector.getInstance();
             } else {
                 ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
             }

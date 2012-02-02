@@ -81,6 +81,9 @@ public class ResponseUtils {
     public static String substringAfter(String str, String before) {
         int pos = str.indexOf(before);
         if (pos != -1) {
+            if (pos == str.length()) {
+                return "";
+            }
             return str.substring(pos + before.length());
         }
         return "";

@@ -30,4 +30,9 @@ public class ServerSettings {
 
     // Applet or server
     public static String MODE = "SERVER";
+    public static String MYSQL_HOST = "localhost";
+    public static String MYSQL_DATABASE_NAME = "kotlindatabase";
+    public static String MYSQL_USERNAME = "root";
+    public static String MYSQL_PASSWORD = "root";
+    public static String MYSQL_PORT = "";
 }

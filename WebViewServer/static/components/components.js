@@ -364,7 +364,9 @@ function onLoadingExamplesSuccess(data) {
         $('div#toolbox').slideUp('slow');
     });
 
-    loadListOfPrograms();
+    if (isLogin) {
+        loadListOfPrograms();
+    }
 
 
     $("#accordion").accordion({

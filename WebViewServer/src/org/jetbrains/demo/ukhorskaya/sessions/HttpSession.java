@@ -1,13 +1,11 @@
 package org.jetbrains.demo.ukhorskaya.sessions;
 
-import com.google.common.io.Files;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.*;
-import org.jetbrains.demo.ukhorskaya.database.MongoDBConnector;
+import org.jetbrains.demo.ukhorskaya.database.MySqlConnector;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesLoader;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
 import org.jetbrains.demo.ukhorskaya.responseHelpers.*;
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 
 /**
  * Created by IntelliJ IDEA.
@@ -113,29 +110,29 @@ public class HttpSession {
     private void sendGeneratePublicLinkResult() {
         String result;
         String programId = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
-        result = MongoDBConnector.getInstance().getPublicLink(programId.replaceAll("%20", " "));
+        result = MySqlConnector.getInstance().generatePublicLink(programId.replaceAll("%20", " "));
         writeResponse(result, HttpStatus.SC_OK);
     }
 
     private void sendDeleteProgramResult() {
         String result;
         String programId = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
-        result = MongoDBConnector.getInstance().deleteProgram(sessionInfo.getUserInfo(), programId.replaceAll("%20", " "));
+        result = MySqlConnector.getInstance().deleteProgram(sessionInfo.getUserInfo(), programId.replaceAll("%20", " "));
         writeResponse(result, HttpStatus.SC_OK);
     }
 
     private void sendLoadProgramResult() {
         String result;
         if (parameters.getArgs().equals("all")) {
-            result = MongoDBConnector.getInstance().getListOfProgramsForUser(sessionInfo.getUserInfo());
+            result = MySqlConnector.getInstance().getListOfProgramsForUser(sessionInfo.getUserInfo());
         } else {
             String id;
             if (parameters.getArgs().contains("publicLink")) {
                 id = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
-                result = MongoDBConnector.getInstance().getProgramTextByPublicLink(id);
+                result = MySqlConnector.getInstance().getProgramTextByPublicLink(id);
             } else {
                 id = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
-                result = MongoDBConnector.getInstance().getProgramText(id);
+                result = MySqlConnector.getInstance().getProgramText(id);
             }
         }
         writeResponse(result, HttpStatus.SC_OK);
@@ -146,10 +143,10 @@ public class HttpSession {
         if (parameters.getArgs().startsWith("id=")) {
             String id = ResponseUtils.substringBetween(parameters.getArgs(), "id=", "&head=");
             PostData data = getPostDataFromRequest();
-            result = MongoDBConnector.getInstance().resaveProgram(id.replaceAll("%20", " "), data.text, data.arguments);
+            result = MySqlConnector.getInstance().updateProgram(id.replaceAll("%20", " "), data.text, data.arguments);
         } else {
             PostData data = getPostDataFromRequest();
-            result = MongoDBConnector.getInstance().addProgramInfo(sessionInfo.getUserInfo(), parameters.getArgs().replaceAll("%20", " "), data.text, data.arguments);
+            result = MySqlConnector.getInstance().saveProgram(sessionInfo.getUserInfo(), parameters.getArgs().replaceAll("%20", " "), data.text, data.arguments);
         }
         writeResponse(result, HttpStatus.SC_OK);
     }
