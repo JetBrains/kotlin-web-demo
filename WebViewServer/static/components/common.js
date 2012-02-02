@@ -18,7 +18,7 @@ var HELP_REQUEST_ABORTED = "Can't get help from server.";
 //Message in popup with warning before close tab with editor
 //var BEFORE_EXIT = "The changes you made to the program will be lost when this page is closed. Do you want to close the page?";
 var BEFORE_EXIT = "The changes you made to the program will be lost when you change an example. Do you want to leave the page?";
-var BEFORE_DELETE_PROGRAM = "Do you really want to delete a program?";
+var BEFORE_DELETE_PROGRAM = "Do you really want to delete the program?";
 var ERROR_UNTIL_EXECUTE = "Your program has terminated with an exception.";
 var TRY_RUN_CODE_WITH_ERROR = "Can't run a program with errors. See the Problems View tab.";
 var EXECUTE_OK = "Compilation competed successfully.";
@@ -53,7 +53,8 @@ $(document).keydown(function (e) {
             $("#runJS").click();
         } else if (e.keyCode == 82 && e.ctrlKey) {
             $("#run").click();
-        } else if (e.keyCode == 83 && e.shiftKey) {
+        } else if (e.keyCode == 83 && e.metaKey) {
+            stopKeydown(e);
             save();
         }
     } else {
@@ -61,11 +62,21 @@ $(document).keydown(function (e) {
             $("#runJS").click();
         } else if (e.keyCode == 120 && e.ctrlKey) {
             $("#run").click();
-        } else if (e.keyCode == 83 && e.shiftKey) {
+        } else if (e.keyCode == 83 && e.ctrlKey) {
+            stopKeydown(e);
             save();
         }
     }
 });
+
+function stopKeydown(e) {
+    e_preventDefault(e);
+}
+
+function e_preventDefault(e) {
+    if (e.preventDefault) e.preventDefault();
+    else e.returnValue = false;
+}
 
 
 function onBodyLoad() {
@@ -79,6 +90,7 @@ function onBodyLoad() {
             document.getElementById("help3").innerHTML = text.replace("F9", "R");
             document.getElementById("run").title = document.getElementById("run").title.replace("F9", "R");
             document.getElementById("runJS").title = document.getElementById("runJS").title.replace("F9", "R");
+            document.getElementById("saveProgram").title = document.getElementById("saveProgram").title.replace("Ctrl", "Cmd");
         }
 
         $("#help3").toggle(true);
@@ -327,7 +339,7 @@ function showConfirmDialog(fun) {
 
     $("#confirmDialog").dialog("open");
     if (!isLogin) {
-        $(":button:contains('Save changes')").attr("disabled","disabled").addClass("ui-state-disabled");
+        $(":button:contains('Save changes')").attr("disabled", "disabled").addClass("ui-state-disabled");
     }
 }
 
@@ -338,6 +350,38 @@ function closeConfirmDialog() {
 
 function confirmAction(fun) {
     showConfirmDialog(fun);
+}
+
+function getNameByUrl(url) {
+    /*var pos = url.indexOf("&folder=");
+     if (pos != -1) {
+     return url.substring(0, pos);
+     }
+     return "";*/
+    var pos = url.indexOf("&name=");
+    if (pos != -1) {
+        return url.substring(pos + 6);
+
+    }
+    return "";
+}
+
+function getFolderNameByUrl(url) {
+    /* var pos = url.indexOf("&folder=");
+     if (pos != -1) {
+     return url.substring(pos + 8);
+     }
+     return "";*/
+    var pos = url.indexOf("&name=");
+    if (pos != -1) {
+        return url.substring(0, pos);
+    }
+    return "";
+}
+
+function createExampleUrl(name, folder) {
+    return folder.replace(new RegExp(" ", 'g'), "_") + "&name=" + name.replace(new RegExp(" ", 'g'), "_");
+    //return name.replace(new RegExp(" ", 'g'), "_") + "&folder=" + folder.replace(new RegExp(" ", 'g'), "_");
 }
 
 

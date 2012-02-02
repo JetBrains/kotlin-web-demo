@@ -48,7 +48,7 @@
     <script type="text/javascript">
         var editor;
     </script>
-     <script type="text/javascript">
+    <script type="text/javascript">
 
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-940435-28']);
@@ -96,7 +96,7 @@
                 <td id="headerlinks">
                     <div id="userName"></div>
                     <div id="login" height="20">
-                        <b>Login:</b>
+                        <b>Log in:</b>
                         <a href="#" onclick="beforeLogin('twitter');"><img src="/images/social/twitter.png"/></a>
                         <a href="#" onclick="beforeLogin('facebook');"><img src="/images/social/facebook.png"/></a>
                         <a href="#" onclick="beforeLogin('google');"><img src="/images/social/google.png"/></a>
@@ -147,9 +147,7 @@
             <div id="centralcontent">
                 <div id="editordiv">
                     <div id="editorinput" tabindex="0">
-                        <form><textarea class="CodeMirror" id="code" name="code">fun main(args : Array&lt;String&gt;) {
-  System.out?.println("Hello, world!")
-}</textarea>
+                        <form><textarea class="CodeMirror" id="code" name="code"></textarea>
                         </form>
                     </div>
                 </div>
@@ -305,8 +303,20 @@
 </div>
 
 <div id="showInfoAboutLoginDialog" title="Help">
-    <p>Login using the buttons on the top of the page for save your programs.</p>
-    <img src="/images/login.png"/>
+    <p>You can save and share your programs.</p>
+    <!--<img src="/images/login.png"/>-->
+    <div id="loginInPopup" height="20" style="display: block;">
+        <b>Log in to enable "My Programs": </b>
+        <a onclick="beforeLogin('google');" href="#">
+            <img src="/images/social/google.png"/>
+        </a>
+        <a onclick="beforeLogin('facebook');" href="#">
+            <img src="/images/social/facebook.png"/>
+        </a>
+        <a onclick="beforeLogin('twitter');" href="#">
+            <img src="/images/social/twitter.png"/>
+        </a>
+    </div>
 </div>
 
 <div id="confirmDialog" title="Save your program">
@@ -320,6 +330,7 @@
 <script src="/components/common.js"></script>
 <script src="/components/help.js"></script>
 <script src="/components/components.js"></script>
+<script src="/components/accordion.js"></script>
 
 <script src="/codemirror/lib/complete.js"></script>
 <applet id="myapplet" code="org.jetbrains.demo.ukhorskaya.MainApplet" width="0" height="0"

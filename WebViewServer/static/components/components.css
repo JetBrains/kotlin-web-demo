@@ -904,6 +904,22 @@ td#removeallguttersTd {
     /*padding-right: 10px;*/
 }
 
+#loginInPopup b {
+    display: block;
+
+}
+#loginInPopup a img {
+    padding-top: 5px;
+}
+
+#loginInPopup {
+    margin: 5px;
+}
+#loginInPopup a {
+    padding: 0 10px 0 0px;
+    display: inline-block;
+}
+
 #login a {
     padding: 0 0px 0 10px;
     float: right;

@@ -34,5 +34,5 @@ public class ServerSettings {
     public static String MYSQL_DATABASE_NAME = "kotlindatabase";
     public static String MYSQL_USERNAME = "root";
     public static String MYSQL_PASSWORD = "root";
-    public static String MYSQL_PORT = "";
+    public static String MYSQL_PORT = "3306";
 }

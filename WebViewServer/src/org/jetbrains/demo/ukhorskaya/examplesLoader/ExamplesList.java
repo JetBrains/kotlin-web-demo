@@ -44,9 +44,9 @@ public class ExamplesList {
     public Pair<Integer, String> findExampleByName(String name) {
         int i = 0;
         String lastHead = "";
-        name = name.replaceAll("%20", " ");
+        name = name.replaceAll("_", " ");
         for (Map<String, String> map : list) {
-            if (map.get("type").equals("head")) {
+            if (map.get("type").equals("folder")) {
                 lastHead = map.get("text");
             } else if (map.get("type").equals("content")) {
                 if (map.get("text").equals(name)) {
@@ -63,10 +63,10 @@ public class ExamplesList {
     public Pair<Integer, String> findExampleByNameAndHead(String name, String head) {
         int i = 0;
         String lastHead = "";
-        name = name.replaceAll("%20", " ");
-        head = head.replaceAll("%20", " ");
+        name = name.replaceAll("_", " ");
+        head = head.replaceAll("_", " ");
         for (Map<String, String> map : list) {
-            if (map.get("type").equals("head")) {
+            if (map.get("type").equals("folder")) {
                 lastHead = map.get("text");
             } else if (map.get("type").equals("content")) {
                 if (map.get("text").equals(name)) {
@@ -114,7 +114,7 @@ public class ExamplesList {
                     || (parent.exists() && !isDirectory)) {
                 Map<String, String> map = new HashMap<String, String>();
                 if (isDirectory) {
-                    map.put("type", "head");
+                    map.put("type", "folder");
                     map.put("text", child.getName());
                 } else {
                     map.put("type", "content");
@@ -155,7 +155,7 @@ public class ExamplesList {
                         || (child.exists() && !isDirectory)) {
                     Map<String, String> map = new HashMap<String, String>();
                     if (isDirectory) {
-                        map.put("type", "head");
+                        map.put("type", "folder");
                         map.put("text", child.getName());
                     } else {
                         map.put("type", "content");
@@ -194,7 +194,7 @@ public class ExamplesList {
                                     || (child.exists() && !isDirectory)) {
                                 Map<String, String> map = new HashMap<String, String>();
                                 if (isDirectory) {
-                                    map.put("type", "head");
+                                    map.put("type", "folder");
                                 } else {
                                     map.put("type", "content");
                                 }

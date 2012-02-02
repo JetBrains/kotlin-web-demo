@@ -109,15 +109,15 @@ public class HttpSession {
 
     private void sendGeneratePublicLinkResult() {
         String result;
-        String programId = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
-        result = MySqlConnector.getInstance().generatePublicLink(programId.replaceAll("%20", " "));
+        String programId = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
+        result = MySqlConnector.getInstance().generatePublicLink(programId);
         writeResponse(result, HttpStatus.SC_OK);
     }
 
     private void sendDeleteProgramResult() {
         String result;
-        String programId = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
-        result = MySqlConnector.getInstance().deleteProgram(sessionInfo.getUserInfo(), programId.replaceAll("%20", " "));
+        String programId = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
+        result = MySqlConnector.getInstance().deleteProgram(sessionInfo.getUserInfo(), programId);
         writeResponse(result, HttpStatus.SC_OK);
     }
 
@@ -128,10 +128,10 @@ public class HttpSession {
         } else {
             String id;
             if (parameters.getArgs().contains("publicLink")) {
-                id = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
+                id = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
                 result = MySqlConnector.getInstance().getProgramTextByPublicLink(id);
             } else {
-                id = ResponseUtils.substringBefore(parameters.getArgs(), "&head=");
+                id = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
                 result = MySqlConnector.getInstance().getProgramText(id);
             }
         }
@@ -141,12 +141,12 @@ public class HttpSession {
     private void sendSaveProgramResult(SessionInfo sessionInfo) {
         String result;
         if (parameters.getArgs().startsWith("id=")) {
-            String id = ResponseUtils.substringBetween(parameters.getArgs(), "id=", "&head=");
+            String id = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
             PostData data = getPostDataFromRequest();
-            result = MySqlConnector.getInstance().updateProgram(id.replaceAll("%20", " "), data.text, data.arguments);
+            result = MySqlConnector.getInstance().updateProgram(id, data.text, data.arguments);
         } else {
             PostData data = getPostDataFromRequest();
-            result = MySqlConnector.getInstance().saveProgram(sessionInfo.getUserInfo(), parameters.getArgs().replaceAll("%20", " "), data.text, data.arguments);
+            result = MySqlConnector.getInstance().saveProgram(sessionInfo.getUserInfo(), parameters.getArgs(), data.text, data.arguments);
         }
         writeResponse(result, HttpStatus.SC_OK);
     }

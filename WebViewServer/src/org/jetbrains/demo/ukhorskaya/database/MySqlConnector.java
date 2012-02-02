@@ -35,19 +35,16 @@ public class MySqlConnector {
     }
 
     private boolean connect() {
+        String url = "";
         try {
-            String url;
-            if (ServerSettings.MYSQL_PORT.isEmpty()) {
-                url = "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + "";
-            } else {
-                url = "jdbc:mysql://" + ServerSettings.MYSQL_HOST + ":" + ServerSettings.PORT + "/" + ServerSettings.MYSQL_DATABASE_NAME + "";
-            }
+            url = "jdbc:mysql://" + ServerSettings.MYSQL_HOST + ":" + ServerSettings.MYSQL_PORT + "/" + ServerSettings.MYSQL_DATABASE_NAME + "";
             connection = DriverManager.getConnection(url, ServerSettings.MYSQL_USERNAME, ServerSettings.MYSQL_PASSWORD);
+            ErrorWriter.writeInfoToConsole("Connected to database: " + url);
+            ErrorWriter.getInfoForLog("CONNECT_TO_DATABASE", "-1", "Connected to database: " + url);
             return true;
         } catch (Throwable e) {
-            ErrorWriter.writeErrorToConsole("Cannot connect to database: " + "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + "");
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot connect to database", e,
-                    "jdbc:mysql://" + ServerSettings.MYSQL_HOST + ":" + ServerSettings.MYSQL_PORT + "/" + ServerSettings.MYSQL_DATABASE_NAME + ""));
+            ErrorWriter.writeErrorToConsole("Cannot connect to database: " + url);
+            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot connect to database", e, url));
             return false;
         }
     }

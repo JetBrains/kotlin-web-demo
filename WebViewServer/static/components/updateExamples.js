@@ -31,7 +31,7 @@ function update() {
         var i = 0;
         while (typeof data[i] != "undefined") {
             var lastHeadName;
-            if (data[i].type == "head") {
+            if (data[i].type == "folder") {
                 var head = document.createElement("h3");
                 var headA = document.createElement("a");
                 headA.href = "#";
@@ -50,7 +50,7 @@ function update() {
                 content.appendChild(span);
                 var contA = document.createElement("a");
                 contA.id = data[i].text;
-//            contA.id = i + "&head=" + lastHeadName;
+//            contA.id = i + "&folder=" + lastHeadName;
                 contA.style.cursor = "pointer";
                 contA.onclick = function (event) {
                     beforeLoadExample(this.id, this.innerHTML);

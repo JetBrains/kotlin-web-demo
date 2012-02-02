@@ -82,7 +82,7 @@ public class SeleniumTest extends TestCase {
         isRunTested = true;
 
         driver.findElement(By.id("Hello,_world!")).click();
-        final WebElement el = driver.findElement(By.id("Simplest_version&head=Hello,_world!"));
+        final WebElement el = driver.findElement(By.id("Simplest_version&folder=Hello,_world!"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -101,7 +101,7 @@ public class SeleniumTest extends TestCase {
         testExampleRun("An object-oriented Hello", "Hello,_world!", "Hello, guest1");
 
         driver.findElement(By.id("Basic_syntax_walk-through")).click();
-        final WebElement el2 = driver.findElement(By.id("Use_a_conditional_expression&head=Basic_syntax_walk-through"));
+        final WebElement el2 = driver.findElement(By.id("Use_a_conditional_expression&folder=Basic_syntax_walk-through"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -141,7 +141,7 @@ public class SeleniumTest extends TestCase {
     public void testAllDifficultExamples() throws IOException, InterruptedException {
         isRunTested = true;
         driver.findElement(By.id("Longer_examples")).click();
-        final WebElement el3 = driver.findElement(By.id("Life&head=Longer_examples"));
+        final WebElement el3 = driver.findElement(By.id("Life&folder=Longer_examples"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -161,7 +161,7 @@ public class SeleniumTest extends TestCase {
         isRunTested = false;
 
         driver.findElement(By.id("Hello,_world!")).click();
-        final WebElement el = driver.findElement(By.id("Simplest_version&head=Hello,_world!"));
+        final WebElement el = driver.findElement(By.id("Simplest_version&folder=Hello,_world!"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -183,7 +183,7 @@ public class SeleniumTest extends TestCase {
         testExampleRun("An object-oriented Hello", "Hello,_world!", "Hello, guest1");
 
         driver.findElement(By.id("Basic_syntax_walk-through")).click();
-        final WebElement el2 = driver.findElement(By.id("Use_a_conditional_expression&head=Basic_syntax_walk-through"));
+        final WebElement el2 = driver.findElement(By.id("Use_a_conditional_expression&folder=Basic_syntax_walk-through"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -218,7 +218,7 @@ public class SeleniumTest extends TestCase {
                 "Undefined descriptor: .java.lang.System.currentTimeMillis");
 
         driver.findElement(By.id("Longer_examples")).click();
-        final WebElement el3 = driver.findElement(By.id("Life&head=Longer_examples"));
+        final WebElement el3 = driver.findElement(By.id("Life&folder=Longer_examples"));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -565,7 +565,7 @@ public class SeleniumTest extends TestCase {
     }
 
     private void testExampleRun(final String exampleName, final String headName, final String result, boolean isSpaceReplaced) throws InterruptedException {
-        final WebElement example = accordion.findElement(By.id(exampleName.replaceAll("([ ])", "_") + "&head=" + headName));
+        final WebElement example = accordion.findElement(By.id(exampleName.replaceAll("([ ])", "_") + "&folder=" + headName));
         example.click();
 
         Thread.sleep(500);

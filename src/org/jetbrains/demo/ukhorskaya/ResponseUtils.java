@@ -212,11 +212,11 @@ public class ResponseUtils {
     }
 
     public static String getJsonString(String type, String text) {
-        return "[{\"type\":\"" + type + "\",\"text\":\""+ text + "\"}]";
+        return "[{\"type\":\"" + type + "\",\"text\":\"" + text + "\"}]";
     }
-    
+
     public static String getJsonString(String type, String text, String args) {
-        return "[{\"type\":\"" + type + "\",\"text\":\""+ text + "\",\"args\":\""+ args + "\"}]";
+        return "[{\"type\":\"" + type + "\",\"text\":\"" + text + "\",\"args\":\"" + args + "\"}]";
     }
 
     public static String getDate(Calendar calendar) {
@@ -268,33 +268,41 @@ public class ResponseUtils {
     }
 
     @Nullable
-        public static Document getXmlDocument(InputStream is) {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder;
-            Document document;
-            try {
-                dBuilder = dbFactory.newDocumentBuilder();
+    public static Document getXmlDocument(InputStream is) {
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder;
+        Document document;
+        try {
+            dBuilder = dbFactory.newDocumentBuilder();
 
-                document = dBuilder.parse(is);
-            } catch (IOException e) {
-                //TODO write sth to exception log
-                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
-                ));
-                return null;
-            } catch (ParserConfigurationException e) {
-                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
-                ));
-                return null;
-            } catch (SAXException e) {
-                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
-                ));
-                return null;
-            }
-            document.getDocumentElement().normalize();
-            return document;
+            document = dBuilder.parse(is);
+        } catch (IOException e) {
+            //TODO write sth to exception log
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
+            ));
+            return null;
+        } catch (ParserConfigurationException e) {
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
+            ));
+            return null;
+        } catch (SAXException e) {
+            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
+            ));
+            return null;
         }
+        document.getDocumentElement().normalize();
+        return document;
+    }
+    
+    public static String getExampleOrProgramNameByUrl(String url) {
+         return ResponseUtils.substringAfter(url, "&name=").replaceAll("%20", " ");
+    }
+
+    public static String getExampleOrProgramFolderByUrl(String url) {
+        return ResponseUtils.substringBefore(url, "&name=").replaceAll("%20", " ");
+    }
 
 }
