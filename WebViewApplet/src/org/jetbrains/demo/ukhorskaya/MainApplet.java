@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Random;
 
 /**
@@ -38,6 +40,15 @@ public class MainApplet extends JApplet implements ActionListener {
         getHighlighting("fun main(args : Array<String>) {\n" +
                 "  System.out?.println(\"Hello, world!\"\n" +
                 "}");
+        /*URL javaScript = null;
+
+        try {
+            javaScript = new URL("javascript:onAppletIsReady()");
+        } catch (MalformedURLException exception) {
+            exception.printStackTrace();
+        }
+        getAppletContext().showDocument(javaScript, "_self");*/
+
         /*Container contentPane = this.getContentPane();
         contentPane.setLayout(new FlowLayout());
         b1 = new JButton("highlighting");
@@ -56,24 +67,30 @@ public class MainApplet extends JApplet implements ActionListener {
             return responseForHighlighting.getResult();
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SESSION_INFO.getType(), e, data));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SESSION_INFO.getType(), data);
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson(writer.toString());
         }
     }
 
+    public void checkApplet() {
+
+    }
+
     public String getCompletion(String data, String line, String ch) {
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.COMPLETE);
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
-                JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line),
-                        Integer.parseInt(ch), currentPsiFile, SESSION_INFO);
+            JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line),
+                    Integer.parseInt(ch), currentPsiFile, SESSION_INFO);
             System.out.println(line + " " + ch);
-                return responseForCompletion.getResult();
+            return responseForCompletion.getResult();
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(SESSION_INFO.getType(), e, data + " line: " + line + " ch: " + ch));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SESSION_INFO.getType(), data + " line: " + line + " ch: " + ch);
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson(writer.toString());

@@ -44,7 +44,7 @@ public class MySqlConnector {
             return true;
         } catch (Throwable e) {
             ErrorWriter.writeErrorToConsole("Cannot connect to database: " + url);
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot connect to database", e, url));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
             return false;
         }
     }
@@ -53,8 +53,9 @@ public class MySqlConnector {
         try {
             return connection.isValid(1000) || connect();
         } catch (SQLException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot check connection to database", e,
-                    "jdbc:mysql://" + ServerSettings.MYSQL_HOST + ":" + ServerSettings.MYSQL_PORT + "/" + ServerSettings.MYSQL_DATABASE_NAME + ""));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + "");
             return false;
         }
     }
@@ -96,7 +97,9 @@ public class MySqlConnector {
             return true;
         } catch (Throwable e) {
             ErrorWriter.writeErrorToConsole("Cannot create tables in database: " + "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + "");
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot create tables in database", e, "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + ""));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + "");
             return false;
         }
     }
@@ -117,9 +120,9 @@ public class MySqlConnector {
                 st.executeUpdate("INSERT INTO users VALUES ('" + userInfo.getId() + "', '" + userInfo.getType() + "', '" + userInfo.getName() + "')");
                 return true;
             } catch (Throwable e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                        userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             } finally {
                 closeStatement(st);
             }
@@ -133,7 +136,7 @@ public class MySqlConnector {
                 st.close();
             }
         } catch (SQLException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("UNKNOWN", e, " NULL"));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "null");
         }
     }
 
@@ -150,9 +153,9 @@ public class MySqlConnector {
                 }
             }
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
         } finally {
             closeStatementAndResultSet(st, rs);
         }
@@ -182,6 +185,7 @@ public class MySqlConnector {
                 st.executeUpdate("INSERT INTO userProgramId VALUES ('" + userInfo.getId() + "', '" + userInfo.getType() + "', '" + programId + "')");
                 return ResponseUtils.getJsonString("programName", programName + "&id=" + programId);
             } else {
+//                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
@@ -191,9 +195,9 @@ public class MySqlConnector {
             if (e.getMessage().contains("Data too long")) {
                 return ResponseUtils.getJsonString("exception", "Data is too long. You can save only 1000 characters.");
             }
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             return ResponseUtils.getJsonString("exception", "Unknown error until saving your program");
         } finally {
             closeStatement(st);
@@ -213,9 +217,9 @@ public class MySqlConnector {
             int count = Integer.parseInt(rs.getString("count(*)"));
             return count < 100;
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             return false;
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -244,9 +248,7 @@ public class MySqlConnector {
 
             return ResponseUtils.getJsonString("text", publicLink);
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    programId));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
             return ResponseUtils.getJsonString("exception", "Cannot generate public link");
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -264,6 +266,7 @@ public class MySqlConnector {
             st = connection.createStatement();
             rs = st.executeQuery(query);
             if (!rs.next()) {
+//                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program by id in programIdProgramInfo",
                         programId));
@@ -287,9 +290,7 @@ public class MySqlConnector {
             return array.toString();
 
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    programId));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
             return ResponseUtils.getJsonString("exception", "Unknown error until loading program by link");
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -307,9 +308,7 @@ public class MySqlConnector {
             st.executeUpdate("UPDATE programs SET PROGRAM_ARGS='" + args + "' WHERE PROGRAM_ID='" + programId + "'");
             return ResponseUtils.getJsonString("programId", programId);
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    programId));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
             return ResponseUtils.getJsonString("exception", "Unknown error until saving your program");
         } finally {
             closeStatement(st);
@@ -343,9 +342,9 @@ public class MySqlConnector {
             }
             return false;
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programName));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             return false;
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -377,9 +376,7 @@ public class MySqlConnector {
             array.put(map);
             return array.toString();
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    programId));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
             return ResponseUtils.getJsonString("exception", "Unknown error until loading your program");
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -421,9 +418,9 @@ public class MySqlConnector {
 
             return result.toString();
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             return ResponseUtils.getJsonString("exception", "Unknown error until loading list of your programs");
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -439,7 +436,7 @@ public class MySqlConnector {
                 rs.close();
             }
         } catch (SQLException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("UNKNOWN", e, " NULL"));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "null");
         }
     }
 
@@ -455,15 +452,14 @@ public class MySqlConnector {
                 st.executeUpdate("DELETE FROM userProgramId WHERE USER_ID='" + userInfo.getId() + "' AND USER_TYPE='" + userInfo.getType() + "' AND PROGRAM_ID='" + programId + "'");
                 return ResponseUtils.getJsonString("text", "Program was successfully deleted.", programId);
             } else {
+//                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
                 return ResponseUtils.getJsonString("exception", "Unknown error until deleting your program");
             }
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), e,
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programId));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programId);
             return ResponseUtils.getJsonString("exception", "Unknown error until saving your program");
         } finally {
             closeStatement(st);

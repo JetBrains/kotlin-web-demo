@@ -162,6 +162,7 @@ $(".applet-enable").click(function () {
     $(this).addClass('selected');
     $("#appletcheckbox").attr('checked', true);
     $("#nohighlightingcheckbox").attr('checked', false);
+    saveModeToCookies("applet");
     isApplet = true;
     if (!isAppletLoaded) {
         waitLoadingApplet();
@@ -186,13 +187,12 @@ function waitLoadingApplet() {
     var applet = $("#myapplet")[0];
     showLoader();
     function performAppletCode(count) {
-//        document.getElementById("debug").innerHTML += count + " " + applet.getHighlighting;
-        if (!applet.getHighlighting && count > 0) {
+        if (!applet.checkApplet && count > 0) {
             setTimeout(function () {
                 performAppletCode(count - 1);
-            }, 2000);
+            }, 1000);
         }
-        else if (applet.getHighlighting) {
+        else if (applet.checkApplet) {
             hideLoader();
         }
         else {
@@ -203,10 +203,6 @@ function waitLoadingApplet() {
     performAppletCode(10);
 }
 
-function appletIsLoaded() {
-    hideLoader();
-}
-
 $(".applet-disable").click(function () {
     var parent = $(this).parents('.switch');
     $('.applet-enable', parent).removeClass('selected');
@@ -214,6 +210,7 @@ $(".applet-disable").click(function () {
     $(this).addClass('selected');
     $("#appletcheckbox").attr('checked', false);
     $("#nohighlightingcheckbox").attr('checked', false);
+    saveModeToCookies("server");
     isApplet = false;
     setStatusBarMessage("");
 });
@@ -226,10 +223,23 @@ $(".applet-nohighlighting").click(function () {
     $('.applet-enable', parent).removeClass('selected');
     $(this).addClass('selected');
     $("#nohighlightingcheckbox").attr('checked', true);
+    saveModeToCookies("nohighlighting");
 //    $("#appletcheckbox").attr('checked', false);
 //    isApplet = false;
     setStatusBarMessage("");
 });
+
+function saveModeToCookies(mode) {
+//    if (getModeFromCookies() == null) {
+//        alert("a");
+        setCookie("typeCheckerMode", mode);
+//        setCookie("typeCheckerMode", mode, "Mon, 01-Jan-2001 00:00:00 GMT", "/");
+//    }
+}
+
+function getModeFromCookies() {
+    return getCookie("typeCheckerMode");
+}
 
 var isShortcutsShow = true;
 $(".toggleShortcuts").click(function () {

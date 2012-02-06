@@ -29,8 +29,8 @@ public class LogDownloader {
             try {
                 return Files.toString(log, Charset.forName("utf-8"));
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), e, log.getAbsolutePath()));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), log.getAbsolutePath());
             }
         }
         return "";

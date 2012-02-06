@@ -1,5 +1,7 @@
 package org.jetbrains.demo.ukhorskaya;
 
+import org.jetbrains.demo.ukhorskaya.exceptions.KotlinCoreException;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -26,6 +28,16 @@ public class ErrorWriterInApplet extends ErrorWriter {
     public void writeException(String message) {
         sendTextToServer(message, MainApplet.request, "error");
 //        System.out.println(message);
+    }
+
+    @Override
+    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String description) {
+        sendTextToServer(ErrorWriter.getExceptionForLog(type, e, description), MainApplet.request, "errorInKotlin");
+    }
+
+    @Override
+    public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String description) {
+        sendTextToServer(ErrorWriter.getExceptionForLog(type, message, stackTrace, description), MainApplet.request, "errorInKotlin");
     }
 
     @Override
@@ -63,8 +75,9 @@ public class ErrorWriterInApplet extends ErrorWriter {
 
         } catch (Throwable e) {
             e.printStackTrace();
-//            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(MainApplet.SESSION_INFO.getType(), e, "text"));
         }
     }
+
+
 }
                                              

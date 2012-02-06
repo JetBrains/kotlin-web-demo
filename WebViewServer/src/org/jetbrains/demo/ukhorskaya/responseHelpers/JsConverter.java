@@ -31,8 +31,8 @@ public class JsConverter {
         try {
             map.put("text", translator.translateStringWithCallToMain(code, arguments));
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(info.getType(),
-                    e, code + "\n" + arguments));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code + "\n" + arguments);
             map.put("exception", e.getMessage());
         }
         result.put(map);

@@ -2,11 +2,9 @@
 
 import com.google.common.io.Files;
 import junit.framework.TestCase;
+import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -78,11 +76,15 @@ public class SeleniumTest extends TestCase {
         wait = new WebDriverWait(driver, 500, 500);
     }
 
+    private String generateIdFormNameAndFolder(String name, String folder) {
+          return folder.replaceAll("([ ])", "_") + "&name=" + name.replaceAll("([ ])", "_");
+    }
+
     public void testAllSimplesExamples() throws IOException, InterruptedException {
         isRunTested = true;
 
         driver.findElement(By.id("Hello,_world!")).click();
-        final WebElement el = driver.findElement(By.id("Simplest_version&folder=Hello,_world!"));
+        final WebElement el = driver.findElement(By.id(generateIdFormNameAndFolder("Simplest version", "Hello, world!")));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -101,7 +103,7 @@ public class SeleniumTest extends TestCase {
         testExampleRun("An object-oriented Hello", "Hello,_world!", "Hello, guest1");
 
         driver.findElement(By.id("Basic_syntax_walk-through")).click();
-        final WebElement el2 = driver.findElement(By.id("Use_a_conditional_expression&folder=Basic_syntax_walk-through"));
+        final WebElement el2 = driver.findElement(By.id(generateIdFormNameAndFolder("Use a conditional expression", "Basic_syntax_walk-through")));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -113,7 +115,7 @@ public class SeleniumTest extends TestCase {
 
         testExampleRun("Use a conditional expression", "Basic_syntax_walk-through", "20");
         testExampleRun("Null-checks", "Basic_syntax_walk-through", "6");
-        testExampleRun("is-checks and automatic casts", "Basic_syntax_walk-through", "3\n" +
+        testExampleRun("is-checks_and_smart_casts", "Basic_syntax_walk-through", "3\n" +
                 "null");
         testExampleRun("Use a while-loop", "Basic_syntax_walk-through", "guest1\n" +
                 "guest2\n" +
@@ -141,7 +143,7 @@ public class SeleniumTest extends TestCase {
     public void testAllDifficultExamples() throws IOException, InterruptedException {
         isRunTested = true;
         driver.findElement(By.id("Longer_examples")).click();
-        final WebElement el3 = driver.findElement(By.id("Life&folder=Longer_examples"));
+        final WebElement el3 = driver.findElement(By.id(generateIdFormNameAndFolder("Life", "Longer_examples")));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -161,7 +163,7 @@ public class SeleniumTest extends TestCase {
         isRunTested = false;
 
         driver.findElement(By.id("Hello,_world!")).click();
-        final WebElement el = driver.findElement(By.id("Simplest_version&folder=Hello,_world!"));
+        final WebElement el = driver.findElement(By.id(generateIdFormNameAndFolder("Simplest version", "Hello, world!")));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -183,7 +185,7 @@ public class SeleniumTest extends TestCase {
         testExampleRun("An object-oriented Hello", "Hello,_world!", "Hello, guest1");
 
         driver.findElement(By.id("Basic_syntax_walk-through")).click();
-        final WebElement el2 = driver.findElement(By.id("Use_a_conditional_expression&folder=Basic_syntax_walk-through"));
+        final WebElement el2 = driver.findElement(By.id(generateIdFormNameAndFolder("Use a conditional expression", "Basic_syntax_walk-through")));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -218,7 +220,7 @@ public class SeleniumTest extends TestCase {
                 "Undefined descriptor: .java.lang.System.currentTimeMillis");
 
         driver.findElement(By.id("Longer_examples")).click();
-        final WebElement el3 = driver.findElement(By.id("Life&folder=Longer_examples"));
+        final WebElement el3 = driver.findElement(By.id(generateIdFormNameAndFolder("Life", "Longer_examples")));
 
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
@@ -565,7 +567,8 @@ public class SeleniumTest extends TestCase {
     }
 
     private void testExampleRun(final String exampleName, final String headName, final String result, boolean isSpaceReplaced) throws InterruptedException {
-        final WebElement example = accordion.findElement(By.id(exampleName.replaceAll("([ ])", "_") + "&folder=" + headName));
+//        final WebElement example = accordion.findElement(By.id(exampleName.replaceAll("([ ])", "_") + "&folder=" + headName));
+        final WebElement example = accordion.findElement(By.id(headName + "&name=" + exampleName.replaceAll("([ ])", "_")));
         example.click();
 
         Thread.sleep(500);
@@ -666,11 +669,41 @@ public class SeleniumTest extends TestCase {
         return str.replaceAll("([\n])", System.getProperty("line.separator"));
     }
 
+    public void testSaveProgram() throws InterruptedException {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        js.executeScript("setLogin();");
+
+        Thread.sleep(1000);
+
+        WebElement el = driver.findElement(By.id("saveProgram"));
+        el.click();
+
+        Thread.sleep(500);
+        String programName = "test" + RandomUtils.nextInt();
+        js.executeScript("$('#programName').val('" + programName + "');");
+        Thread.sleep(500);
+        WebElement saveInDialog = driver.findElement(By.className("ui-button-text-only"));
+        saveInDialog.click();
+        Thread.sleep(500);
+        assertEquals("Saved as: " + programName + ".", statusBar.getText());
+        el.click();
+        Thread.sleep(500);
+        assertEquals("Your program was successfully saved.", statusBar.getText());
+
+        WebElement publicLink = driver.findElement(By.id("myprogramscontent")).findElements(By.tagName("img")).get(1);
+        publicLink.click();
+        Thread.sleep(500);
+        assertEquals("Public link was generated.", statusBar.getText());
+
+    }
+
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
         driver.quit();
+
     }
 
 

@@ -59,20 +59,10 @@ public class JsonResponseForCompletion {
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
-            /*bindingContext = AnalyzingUtils.analyzeNamespaces(currentProject, Configuration.EMPTY,
-                    Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                    Predicates.<PsiFile>equalTo(currentPsiFile), JetControlFlowDataTraceFactory.EMPTY,
-                    JetSemanticServices.createSemanticServices(currentProject));*/
-            /*bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
-                                currentProject,
-                                Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                                Predicates.<PsiFile>equalTo(currentPsiFile),
-                                JetControlFlowDataTraceFactory.EMPTY);*/
             bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
                     (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
-            ErrorWriter.ERROR_WRITER.writeException(exception);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
             return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
                     + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
@@ -117,9 +107,8 @@ public class JsonResponseForCompletion {
             }
 
         } catch (Throwable e) {
-            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
-            ErrorWriter.ERROR_WRITER.writeException(exception);
-//            e.printStackTrace();
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    sessionInfo.getType(), currentPsiFile.getText());
             return "[]";
         }
 
@@ -146,41 +135,7 @@ public class JsonResponseForCompletion {
                     jsonArray.put(map);
                 }
             }
-        } else {
-            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Resolution scope is null.", currentPsiFile.getText());
-            ErrorWriter.ERROR_WRITER.writeException(exception);
-            return "[]";
         }
-
-        /*JetScope resolutionScope;
-        if (parent instanceof JetQualifiedExpression) {
-            JetQualifiedExpression qualifiedExpression = (JetQualifiedExpression) parent;
-            JetExpression receiverExpression = qualifiedExpression.getReceiverExpression();
-            final JetType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE, receiverExpression);
-            if (expressionType != null) {
-                resolutionScope = expressionType.getMemberScope();
-            } else {
-                resolutionScope = null;
-            }
-        } else {
-            resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, (JetExpression) element);
-        }
-
-        JSONArray jsonArray = new JSONArray();
-        if (resolutionScope != null) {
-            Collection<DeclarationDescriptor> descriptors = resolutionScope.getAllDescriptors();
-            for (DeclarationDescriptor descriptor : descriptors) {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("icon", getIconFromDescriptor(descriptor));
-                map.put("tail", "   " + getTailText(descriptor));
-                map.put("name", getNameFromDescriptor(descriptor));
-
-                jsonArray.put(map);
-            }
-        } else {
-            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Resolution scope is null.", currentPsiFile.getText());
-            ErrorWriter.ERROR_WRITER.writeException(exception);
-        } */
         return jsonArray.toString();
     }
 
@@ -203,8 +158,9 @@ public class JsonResponseForCompletion {
             if (element != null) {
                 element = element.getParent();
             } else {
-                String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), " Cannot find an element for take completion.", currentPsiFile.getText());
-                ErrorWriter.ERROR_WRITER.writeException(exception);
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot find an element to take a completion"),
+                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), currentPsiFile.getText()
+                );
                 break;
             }
         }

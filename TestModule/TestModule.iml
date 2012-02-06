@@ -19,7 +19,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="WebViewServer" />
-    <orderEntry type="library" name="junit-4.7" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -31,6 +30,7 @@
     </orderEntry>
     <orderEntry type="library" name="commons-httpclient-3.1-patched" level="project" />
     <orderEntry type="library" name="commons-lang-2.4" level="project" />
+    <orderEntry type="library" name="junit:junit:3.7" level="project" />
   </component>
 </module>
 

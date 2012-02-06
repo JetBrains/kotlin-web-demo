@@ -2,11 +2,13 @@ package org.jetbrains.demo.ukhorskaya.sessions;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.IncorrectOperationException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.*;
 import org.jetbrains.demo.ukhorskaya.database.MySqlConnector;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesLoader;
+import org.jetbrains.demo.ukhorskaya.exceptions.KotlinDemoException;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
 import org.jetbrains.demo.ukhorskaya.responseHelpers.*;
 import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -65,9 +68,14 @@ public class HttpSession {
                 if (type.equals("info")) {
                     String tmp = getPostDataFromRequest(true).text;
                     ErrorWriterOnServer.LOG_FOR_INFO.info(tmp);
+                } else if (type.equals("errorInKotlin")) {
+                    String tmp = getPostDataFromRequest(true).text;
+                    List<String> list = ErrorWriter.parseException(tmp);
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
                 } else {
                     String tmp = getPostDataFromRequest(true).text;
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(tmp);
+                    List<String> list = ErrorWriter.parseException(tmp);
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
                 }
                 writeResponse("Data sent", HttpStatus.SC_OK);
             } else if (parameters.compareType("saveProgram")) {
@@ -98,11 +106,11 @@ public class HttpSession {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
                 sendHighlightingResult();
             } else {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Incorrect request", param));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), param);
                 writeResponse("Incorrect request", HttpStatus.SC_BAD_REQUEST);
             }
         } catch (Throwable e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
             writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -178,6 +186,7 @@ public class HttpSession {
                 writer.write(response);
                 writer.close();
             } catch (IOException e) {
+
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e);
             }
 
@@ -252,7 +261,7 @@ public class HttpSession {
             is = request.getInputStream();
             reqResponse.append(ResponseUtils.readData(is, withNewLines));
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, "getPostDataFromRequest " + request.getQueryString()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), request.getQueryString());
             writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return new PostData("", "");
         } finally {
@@ -263,7 +272,7 @@ public class HttpSession {
         try {
             finalResponse = URLDecoder.decode(reqResponse.toString(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, "null"));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), "null");
             return new PostData("", "");
         }
         if (finalResponse != null) {
@@ -279,7 +288,9 @@ public class HttpSession {
                 return new PostData("", "");
             }
         } else {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), "Cannot read data from post request.", currentPsiFile.getText()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                    new UnsupportedOperationException("Cannot read data from post request"),
+                    sessionInfo.getType(), currentPsiFile.getText());
             writeResponse("Cannot read data from post request: ", HttpStatus.SC_BAD_REQUEST);
         }
 
@@ -299,7 +310,6 @@ public class HttpSession {
         PrintWriter writer = null;
 
         try {
-
             response.setStatus(errorCode);
             writer = response.getWriter();
             writer.write(responseBody);
@@ -307,7 +317,7 @@ public class HttpSession {
                     sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString()));
         } catch (IOException e) {
             //This is an exception we can't send data to client
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
         } finally {
             close(writer);
         }
@@ -333,7 +343,7 @@ public class HttpSession {
                 closeable.close();
             }
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("UNKNOWN", e, " NULL"));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
         }
     }
 

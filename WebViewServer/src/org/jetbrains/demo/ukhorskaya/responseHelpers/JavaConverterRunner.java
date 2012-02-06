@@ -98,8 +98,8 @@ public class JavaConverterRunner {
         try {
             exitValue = process.waitFor();
         } catch (InterruptedException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                    e, textFromFile));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    sessionInfo.getType(), textFromFile);
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
@@ -113,11 +113,9 @@ public class JavaConverterRunner {
                     outStream.delete(0, outStream.length());
                     errStream.append(ServerSettings.KOTLIN_ERROR_MESSAGE);
                     String linkForLog = getLinkForLog(outStream.toString());
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                            "Error from log", linkForLog));
                 }
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                        outStream.toString().replaceAll("<br/>", "\n"), textFromFile));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("EMPTY", outStream.toString().replaceAll("<br/>", "\n"),
+                        sessionInfo.getType(), textFromFile);
             }
         }
 
@@ -164,15 +162,16 @@ public class JavaConverterRunner {
             log.delete();
             return response;
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                    e, "Impossible to find " + log.getAbsolutePath()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    sessionInfo.getType(), log.getAbsolutePath());
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
                 }
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Convert to java", e, outStream));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        sessionInfo.getType(), outStream);
             }
         }
         return "";
@@ -186,9 +185,8 @@ public class JavaConverterRunner {
             message = errStream.substring(0, pos);
             stackTrace = errStream.substring(pos).replaceAll("<br/>", "\n");
         }
-        ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(
-                ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                        message, stackTrace, textFromFile));
+        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(message, stackTrace,
+                sessionInfo.getType(), textFromFile);
     }
 
     private boolean isKotlinLibraryException(String str) {

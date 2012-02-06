@@ -67,9 +67,10 @@ public class Statistics {
                 writer.write(URLDecoder.decode("0", "UTF-8"));
                 writer.close();
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), file.getAbsolutePath());
+                /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-                );
+                );*/
             }
         }
         try {
@@ -79,9 +80,10 @@ public class Statistics {
         } catch (FileNotFoundException e) {
             //Impossible
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), file.getAbsolutePath());
+            /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                     SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-            );
+            );*/
         }
 
     }
@@ -158,22 +160,22 @@ public class Statistics {
                 + " (" + totalNumberOfHighlightRequestsPerUser + " / " + userInfoMapForId.size() + ")";
         COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMapForId.size())
                 + " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMapForId.size() + ")";
-       /* REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser / userInfoMapForId.size())
-                + " (" + totalNumberOfRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
-                String.valueOf(totalNumberOfRequestsPerUserByIp / userInfoMapForIp.size())
-                + " (" + totalNumberOfRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
-        RUN_REQUEST_PER_USER.value = String.valueOf(totalNumberOfRunRequestsPerUser / userInfoMapForId.size())
-                + " (" + totalNumberOfRunRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
-                String.valueOf(totalNumberOfRunRequestsPerUserByIp / userInfoMapForIp.size())
-                + " (" + totalNumberOfRunRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
-        HIGHLIGHT_REQUEST_PER_USER.value = String.valueOf(totalNumberOfHighlightRequestsPerUser / userInfoMapForId.size())
-                + " (" + totalNumberOfHighlightRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
-                String.valueOf(totalNumberOfHighlightRequestsPerUserByIp / userInfoMapForIp.size())
-                + " (" + totalNumberOfHighlightRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
-        COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMapForId.size())
-                + " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
-                String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size())
-                + " (" + totalNumberOfCompleteRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";*/
+        /* REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser / userInfoMapForId.size())
++ " (" + totalNumberOfRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
+String.valueOf(totalNumberOfRequestsPerUserByIp / userInfoMapForIp.size())
++ " (" + totalNumberOfRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
+RUN_REQUEST_PER_USER.value = String.valueOf(totalNumberOfRunRequestsPerUser / userInfoMapForId.size())
++ " (" + totalNumberOfRunRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
+String.valueOf(totalNumberOfRunRequestsPerUserByIp / userInfoMapForIp.size())
++ " (" + totalNumberOfRunRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
+HIGHLIGHT_REQUEST_PER_USER.value = String.valueOf(totalNumberOfHighlightRequestsPerUser / userInfoMapForId.size())
++ " (" + totalNumberOfHighlightRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
+String.valueOf(totalNumberOfHighlightRequestsPerUserByIp / userInfoMapForIp.size())
++ " (" + totalNumberOfHighlightRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
+COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMapForId.size())
++ " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
+String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size())
++ " (" + totalNumberOfCompleteRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";*/
         UPDATE_TIME.value = getUpdateTimeForStatistics();
         LOGS_PERIOD.value = getLogsPeriod();
     }
@@ -292,9 +294,10 @@ public class Statistics {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+                /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-                );
+                );*/
             }
         }
 
@@ -325,9 +328,10 @@ public class Statistics {
             writer.write("</statistics>");
             writer.close();
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+            /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                     SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-            );
+            );*/
         }
     }
 
@@ -375,9 +379,10 @@ public class Statistics {
             writer.write(URLDecoder.decode(String.valueOf(NUMBER_OF_USERS), "UTF-8"));
             writer.close();
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+            /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                     SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-            );
+            );*/
         }
     }
 
@@ -455,7 +460,6 @@ public class Statistics {
     }
 
     private void analyzeInfoLog(File file) {
-
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(file));
@@ -494,8 +498,9 @@ public class Statistics {
                                 }
 
                             } catch (ParseException e) {
-                                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(),
-                                        e, tmp));
+                                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), tmp);
+                                /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(),
+                                        e, tmp));*/
                             }
                         }
                         if (token.equals("type=INC_NUMBER_OF_REQUESTS")) {
@@ -529,8 +534,48 @@ public class Statistics {
             usersPerDayList.add(numberOfUsersTmp);
             uniqueUsersPerDay.add(set);
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(),
-                    e, file.getAbsolutePath()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), file.getAbsolutePath());
+            /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(),
+                    e, file.getAbsolutePath()));*/
+        }
+    }
+
+    public void sendErrorsToErrorsAnalyzer() {
+        File dir = new File("logs");
+        if (dir.exists()) {
+            File[] files = dir.listFiles();
+            Arrays.sort(files, new Comparator<File>() {
+                public int compare(File f1, File f2) {
+                    int result = (Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()));
+                    if (result == 0) {
+                        return result;
+                    } else {
+                        return -result;
+                    }
+                }
+            });
+
+            try {
+                dateFrom = DateFormat.getInstance().parse("12/01/2011 0:0 AM, PDT");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            dateTo = new Date();
+
+            for (File file : files) {
+                if (file.getName().equals("exceptions.log")) {
+                    try {
+                        analyzeExceptionLog(file);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            for (String error : errorElementSet.keySet()) {
+                ErrorElement el = errorElementSet.get(error);
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(el.message, error, el.type, el.moreinfo);
+            }
         }
     }
 
@@ -547,12 +592,13 @@ public class Statistics {
         for (int i = 0; i < nodeList.getLength(); ++i) {
             NodeList childNodes = nodeList.item(i).getChildNodes();
             String more = "";
+            String type = "";
             String date = "";
             String message = "";
             String stack = "";
             for (int j = 0; j < childNodes.getLength(); j++) {
                 if (childNodes.item(j).getNodeName().equals("type")) {
-                    more += childNodes.item(j).getTextContent();
+                    type = childNodes.item(j).getTextContent();
                 } else if (childNodes.item(j).getNodeName().equals("message")) {
                     message = childNodes.item(j).getTextContent();
                 } else if (childNodes.item(j).getNodeName().equals("date")) {
@@ -568,7 +614,7 @@ public class Statistics {
             }
             ErrorElement errorElement = errorElementSet.get(stack);
             if (errorElement == null) {
-                errorElement = new ErrorElement(message, more, date);
+                errorElement = new ErrorElement(message, more, date, type);
             } else {
                 if (!errorElement.moreinfo.contains(more)) {
                     if (more.contains(errorElement.moreinfo)) {
@@ -590,15 +636,15 @@ public class Statistics {
             ex = new File(ServerSettings.OUTPUT_DIRECTORY + File.separator + "tmp.log" + RandomUtils.nextInt());
             ex.createNewFile();
             if (!ex.exists()) {
-                ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "Impossible to create tmp file for file to analyze log", file.getAbsolutePath()
-                ));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new FileNotFoundException("Cannot create tmp file"),
+                        "STATISTICS", file.getAbsolutePath()
+                );
                 return null;
             }
             FileWriter writer = new FileWriter(ex);
             writer.write("<?xml version=\"1.0\"?>");
             writer.write("<errors>");
-            Pattern logStr = Pattern.compile("[0-9]*/[0-9]*/[0-9]* [0-9]*:[0-9]*:[0-9]* [(][\\w]*.java [0-9]*[)] [\\[][\\w]*[\\]] ");
+            Pattern logStr = Pattern.compile("[0-9]*\\/[0-9]*\\/[0-9]* [0-9]*:[0-9]*:[0-9]* [(][\\w]*.java [0-9]*[)] [\\[][\\w]*[\\]]");
 
             Matcher matcher;
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -644,9 +690,9 @@ public class Statistics {
             writer.write("</errors>");
             writer.close();
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath()
-            ));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath()
+            );
             return null;
         }
         return ex;
@@ -713,12 +759,14 @@ public class Statistics {
     class ErrorElement {
         public final String message;
         public final String date;
+        public final String type;
         public String moreinfo;
 
-        ErrorElement(String message, String moreinfo, String date) {
+        ErrorElement(String message, String moreinfo, String date, String type) {
             this.message = message;
             this.moreinfo = moreinfo;
             this.date = date;
+            this.type = type;
         }
     }
 

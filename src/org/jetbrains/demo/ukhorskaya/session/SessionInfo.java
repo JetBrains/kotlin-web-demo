@@ -69,7 +69,9 @@ public class SessionInfo {
         INC_NUMBER_OF_REQUESTS,
         CONVERT_TO_KOTLIN,
         CONVERT_TO_JS,
-        SAVE_PROGRAM
+        SAVE_PROGRAM,
+        AUTHORIZATION,
+        WORK_WITH_DATABASE
     }
 
 

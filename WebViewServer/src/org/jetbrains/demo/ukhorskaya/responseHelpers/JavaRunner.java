@@ -102,8 +102,8 @@ public class JavaRunner {
         try {
             exitValue = process.waitFor();
         } catch (InterruptedException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                    e, textFromFile));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    sessionInfo.getType(), textFromFile);
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
@@ -117,11 +117,9 @@ public class JavaRunner {
                     outStream.delete(0, outStream.length());
                     errStream.append(ServerSettings.KOTLIN_ERROR_MESSAGE);
                     String linkForLog = getLinkForLog(outStream.toString());
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                            "Error from log", linkForLog));
                 }
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                        outStream.toString().replaceAll("<br/>", "\n"), textFromFile));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("EMPTY MESSAGE", outStream.toString().replace("<br/>", "\n"),
+                        sessionInfo.getType(), textFromFile);
             }
         }
 
@@ -175,15 +173,16 @@ public class JavaRunner {
             log.delete();
             return response;
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                    e, "Impossible to find " + log.getAbsolutePath()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    sessionInfo.getType(), log.getAbsolutePath());
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
                 }
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Load examples", e, outStream + " " + textFromFile));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        sessionInfo.getType(), textFromFile);
             }
         }
         return "";
@@ -197,9 +196,8 @@ public class JavaRunner {
             message = errStream.substring(0, pos);
             stackTrace = errStream.substring(pos).replaceAll("<br/>", "\n");
         }
-        ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(
-                ErrorWriter.getExceptionForLog(sessionInfo.getType(),
-                        message, stackTrace, textFromFile));
+        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(message, stackTrace,
+                sessionInfo.getType(), textFromFile);
     }
 
     private boolean isKotlinLibraryException(String str) {
@@ -254,9 +252,8 @@ public class JavaRunner {
                 returnValue--;
             }
         } catch (IOException e) {
-//                    ErrorsWriter.LOG_FOR_EXCEPTIONS.error(ErrorsWriter.getExceptionForLog(TypeOfRequest.GET_RESOURCE.name(), e, exchange.getRequestURI().toString()));
-//                    writeResponse(exchange, "Could not load the resource from the server".getBytes(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    sessionInfo.getType(), textFromFile);
         }
         return returnValue;
     }
@@ -323,7 +320,7 @@ public class JavaRunner {
 //        builder.append(modifyArguments(arguments));
         return builder.toString();
     }
-    
+
     private String modifyArguments(String arguments) {
         return StringEscapeUtils.unescapeJavaScript(arguments);
     }

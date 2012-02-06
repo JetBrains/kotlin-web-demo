@@ -5,6 +5,7 @@ import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
 import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
+import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.json.JSONArray;
 
 import java.io.File;
@@ -45,17 +46,21 @@ public class ExamplesLoader {
         return "[{\"text\":\"Cannot find this example. Please choose another example.\"}]";
     }
 
-    public String getResult(int id, String headName) {
+    public String getResult(int id, String folderName) {
         Map<String, String> fileObj = ExamplesList.getInstance().getMapFromList(id);
         if (!fileObj.get("type").equals("content")) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Returned head while loading an example: " + id);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                    new UnsupportedOperationException("Incorrect path to example"),
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), String.valueOf(id) + " " + folderName);
             return "[{\"text\":\"Cannot find this example. Please choose another example.\"}]";
         }
         String fileName = fileObj.get("text");
-        headName = headName.replaceAll("_", " ");
-        File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + headName + File.separator + fileName + ".kt");
+        folderName = folderName.replaceAll("_", " ");
+        File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + folderName + File.separator + fileName + ".kt");
         if (!example.exists()) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot find example with file name: " + example.getAbsolutePath());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                    new UnsupportedOperationException("Cannot find an example"),
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), example.getAbsolutePath());
             return "[{\"text\":\"Cannot find this example. Please choose another example.\"}]";
         }
 
@@ -65,7 +70,8 @@ public class ExamplesLoader {
             reader = new FileReader(example);
             fileContent = ResponseUtils.readData(reader, true);
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot read content for example with file name: " + example.getAbsolutePath());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), example.getAbsolutePath());
             return "[{\"text\":\"Cannot load this example. Please choose another example.\"}]";
         } finally {
             try {
@@ -73,7 +79,8 @@ public class ExamplesLoader {
                     reader.close();
                 }
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Load examples", e, id + " " + headName));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), id + " " + folderName);
             }
         }
         JSONArray response = new JSONArray();

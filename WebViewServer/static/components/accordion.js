@@ -80,30 +80,34 @@ var Accordion = (function () {
     };
 
     Accordion.generatePublicLinkForExample = function (name) {
-        var url = [location.protocol, '//', location.host, "/"].join('');
-        var href = url + "?example=" + name;
-        setStatusBarMessage("Public link was generated.");
-        $("a[id='" + name + "']").parent("p").after("<div class=\"toolbox\" id=\"pld" + name + "\" style=\"display:block;\"><div align=\"center\"><div class=\"fixedpage\"><div class=\"publicLinkHref\" id=\"pl" + name + "\"></div><img class=\"closePopup\" id=\"cp" + name + "\" src=\"/icons/close.png\" title=\"Close popup\"></span></div></div></div>");
-        $("div[id='pl" + name + "']").html(href);
-        $("img[id='cp" + name + "']").click(function () {
-            $("div[id='pld" + name + "']").remove("div");
-        });
-        setStatusBarMessage(href);
+        if ($("div[id='pld" + name + "']").length <= 0) {
+            var url = [location.protocol, '//', location.host, "/"].join('');
+            var href = url + "?folder=" + name;
+            setStatusBarMessage("Public link was generated.");
+            $("a[id='" + name + "']").parent("p").after("<div class=\"toolbox\" id=\"pld" + name + "\" style=\"display:block;\"><div align=\"center\"><div class=\"fixedpage\"><div class=\"publicLinkHref\" id=\"pl" + name + "\"></div><img class=\"closePopup\" id=\"cp" + name + "\" src=\"/icons/close.png\" title=\"Close popup\"></span></div></div></div>");
+            $("div[id='pl" + name + "']").html(href);
+            $("img[id='cp" + name + "']").click(function () {
+                $("div[id='pld" + name + "']").remove("div");
+            });
+            setStatusBarMessage(href);
+        }
     };
 
     Accordion.generatePublicLinkForProgram = function (name) {
-        $.ajax({
-            url:generateAjaxUrl("generatePublicLink", name),
-            context:document.body,
-            success:onGeneratePublicLinkSuccess,
-            dataType:"json",
-            type:"GET",
-            //data:{text:i},
-            timeout:10000,
-            error:function () {
-                setStatusBarMessage(PUBLIC_LINK_REQUEST_ABORTED);
-            }
-        });
+        if ($("div[id='pld" + name + "']").length <= 0) {
+            $.ajax({
+                url:generateAjaxUrl("generatePublicLink", name),
+                context:document.body,
+                success:onGeneratePublicLinkSuccess,
+                dataType:"json",
+                type:"GET",
+                //data:{text:i},
+                timeout:10000,
+                error:function () {
+                    setStatusBarMessage(PUBLIC_LINK_REQUEST_ABORTED);
+                }
+            });
+        }
     };
 
     Accordion.deleteProgram = function (name) {
@@ -267,11 +271,14 @@ var Accordion = (function () {
 
                     var programId = data[0].text.substring(data[0].text.indexOf("publicLink=") + 11);
                     var name = createExampleUrl(programId, "My Programs");
-                    $("a[id='" + name + "']").parent("p").after("<div class=\"toolbox\" id=\"pld" + name + "\" style=\"display:block;\"><div align=\"center\"><div class=\"fixedpage\"><div class=\"publicLinkHref\" id=\"pl" + name + "\"></div><img class=\"closePopup\" id=\"cp" + name + "\" src=\"/icons/close.png\" title=\"Close popup\"></span></div></div></div>");
+                    var displayedName = $("a[id='" + name + "']").html();
+                    var tweetHref = escape("#Solved " + displayedName + " " + data[0].text + " #Kotlin");
+                    $("a[id='" + name + "']").parent("p").after("<div class=\"toolbox\" id=\"pld" + name + "\" style=\"display:block;\"><div align=\"center\"><div class=\"fixedpage\"><div class=\"publicLinkHref\" id=\"pl" + name + "\"></div><a target=\"_blank\" href=\"http://twitter.com/home?status=" + tweetHref + "\"><img class=\"tweetImg\" src=\"/images/social/twitter.png\"/></a><img class=\"closePopup\" id=\"cp" + name + "\" src=\"/icons/close.png\" title=\"Close popup\"></span></div></div></div>");
                     $("div[id='pl" + name + "']").html(data[0].text);
                     $("img[id='cp" + name + "']").click(function () {
                         $("div[id='pld" + name + "']").remove("div");
                     });
+
                 }
             }
         }
@@ -448,7 +455,11 @@ var Accordion = (function () {
             var saveImg = document.createElement("img");
             saveImg.src = "/icons/save1.png";
             saveImg.id = "saveProgram";
-            saveImg.title = "Save current program (Ctrl + S)";
+            if (!isMac) {
+                saveImg.title = "Save current program (Ctrl + S)";
+            } else {
+                saveImg.title = "Save current program (Cmd + S)";
+            }
             var saveAsImg = document.createElement("img");
             saveAsImg.src = "/icons/saveAs1.png";
             saveAsImg.id = "saveAsProgram";
@@ -493,7 +504,7 @@ var Accordion = (function () {
         var url = document.location.href;
         if (url.indexOf(urlAct) != -1) {
             url = url.substring(url.indexOf(urlAct) + urlAct.length);
-            var exampleStr = "?example=";
+            var exampleStr = "?folder=";
             var publicLink = "?publicLink=";
             if (url.indexOf(exampleStr) == 0) {
 //            url = url;

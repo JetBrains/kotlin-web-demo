@@ -1,6 +1,7 @@
 package org.jetbrains.demo.ukhorskaya.responseHelpers;
 
 import com.intellij.psi.PsiFile;
+import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.Interval;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
 import org.jetbrains.demo.ukhorskaya.errorsDescriptors.ErrorAnalyzer;

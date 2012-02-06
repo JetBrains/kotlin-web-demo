@@ -248,19 +248,16 @@ public class ResponseUtils {
             dBuilder = dbFactory.newDocumentBuilder();
             document = dBuilder.parse(file);
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath()
-            ));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
             return null;
         } catch (ParserConfigurationException e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath()
-            ));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
             return null;
         } catch (SAXException e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath()
-            ));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
             return null;
         }
         document.getDocumentElement().normalize();
@@ -277,28 +274,24 @@ public class ResponseUtils {
 
             document = dBuilder.parse(is);
         } catch (IOException e) {
-            //TODO write sth to exception log
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
-            ));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "");
             return null;
         } catch (ParserConfigurationException e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
-            ));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "");
             return null;
         } catch (SAXException e) {
-            ErrorWriter.ERROR_WRITER.writeException(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, ""
-            ));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "");
             return null;
         }
         document.getDocumentElement().normalize();
         return document;
     }
-    
+
     public static String getExampleOrProgramNameByUrl(String url) {
-         return ResponseUtils.substringAfter(url, "&name=").replaceAll("%20", " ");
+        return ResponseUtils.substringAfter(url, "&name=").replaceAll("%20", " ");
     }
 
     public static String getExampleOrProgramFolderByUrl(String url) {

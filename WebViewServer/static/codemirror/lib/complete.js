@@ -195,6 +195,8 @@ $(document).ready(function () {
         processError(i, problems, processError);
     }
 
+    var isFirstTryToLoadApplet = true;
+
     function getDataFromApplet(type) {
         var i = editor.getValue();
         try {
@@ -206,14 +208,22 @@ $(document).ready(function () {
                     dataFromApplet = $("#myapplet")[0].getHighlighting(i);
                 }
             } catch (e) {
-                $(".applet-disable").click();
+                var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+                if (is_chrome && isFirstTryToLoadApplet) {
+                    isFirstTryToLoadApplet = false;
+                    setTimeout(function () {
+                        getDataFromApplet(type);
+                    }, 3000);
+                    return;
+                }
+                $(".applet-nohighlighting").click();
                 setStatusBarError(GET_FROM_APPLET_FAILED);
 
                 var title = document.getElementById("appletclient").title;
                 if (title.indexOf(GET_FROM_APPLET_FAILED) == -1) {
                     document.getElementById("appletclient").title += ". " + GET_FROM_APPLET_FAILED;
                 }
-                $(".applet-enable").click(function () {
+                /*$(".applet-enable").click(function () {
                     try {
                         $("#myapplet")[0].getHighlighting("");
                         var title = document.getElementById("appletclient").title;
@@ -229,8 +239,8 @@ $(document).ready(function () {
 
                 if (type == "highlighting") {
                     isLoadingHighlighting = false;
-                    getErrors();
-                }
+                    //getErrors();
+                }*/
                 return;
             }
             var data = eval(dataFromApplet);

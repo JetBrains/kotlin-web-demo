@@ -22,7 +22,7 @@ var BEFORE_DELETE_PROGRAM = "Do you really want to delete the program?";
 var ERROR_UNTIL_EXECUTE = "Your program has terminated with an exception.";
 var TRY_RUN_CODE_WITH_ERROR = "Can't run a program with errors. See the Problems View tab.";
 var EXECUTE_OK = "Compilation competed successfully.";
-var GET_FROM_APPLET_FAILED = "Your system can't run Java Applets.";
+var GET_FROM_APPLET_FAILED = "Your browser can't run Java Applets.";
 var LOADING_EXAMPLE_OK = "Example is loaded.";
 var LOADING_PROGRAM_OK = "Program is loaded.";
 var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
@@ -90,13 +90,12 @@ function onBodyLoad() {
             document.getElementById("help3").innerHTML = text.replace("F9", "R");
             document.getElementById("run").title = document.getElementById("run").title.replace("F9", "R");
             document.getElementById("runJS").title = document.getElementById("runJS").title.replace("F9", "R");
-            document.getElementById("saveProgram").title = document.getElementById("saveProgram").title.replace("Ctrl", "Cmd");
         }
 
         $("#help3").toggle(true);
         setSessionId();
         resizeCentral();
-        setKotlinVersion('0.1.386');
+        setKotlinVersion('0.1.413');
     }
 }
 
@@ -120,12 +119,12 @@ function logout() {
         dataType:"json",
         timeout:5000,
         success:function () {
-            document.getElementById("examplesaccordion").innerHTML = "";
+            $("#examplesaccordion").html("");
             loadAccordionContent();
             isLogin = false;
-            document.getElementById("login").style.display = "block";
-            document.getElementById("userName").innerHTML = "";
-            document.getElementById("userName").style.display = "none";
+            $("#login").css("display", "block");
+            $("#userName").html("");
+            $("#userName").css("display", "none");
         }
     });
 
@@ -142,13 +141,16 @@ function getSessionIdSuccess(data) {
          loginImages = document.getElementById("userName").innerHTML;
          }*/
         if (userName != "") {
-            document.getElementById("login").style.display = "none";
-            document.getElementById("userName").style.display = "block";
+            $("#login").css("display", "none");
+//            document.getElementById("login").style.display = "none";
+            $("#userName").css("display", "block");
+//            document.getElementById("userName").style.display = "block";
             isLogin = true;
             userName = decodeURI(userName);
             userName = userName.replace(new RegExp('\\+', 'g'), ' ');
 
-            document.getElementById("userName").innerHTML = "<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>";
+//            document.getElementById("userName").innerHTML = "<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>";
+            $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
 //            document.getElementById("userName").innerHTML = "<span>" + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/>";
             document.getElementById("userNameTitle").onclick = function (e) {
                 userNameClick(e);
@@ -174,6 +176,15 @@ function getSessionIdSuccess(data) {
 
     var info = "browser: " + navigator.appName + " " + navigator.appVersion;
     info += " " + "system: " + navigator.platform;
+
+    var mode = getModeFromCookies();
+    if (mode == "applet") {
+        $(".applet-enable").click();
+    } else if (mode == "server") {
+        $(".applet-disable").click();
+    } else {
+        $(".applet-nohighlighting").click();
+    }
 
     $.ajax({
         url:generateAjaxUrl("sendUserData", "null"),
@@ -204,8 +215,6 @@ function showLoader() {
 }
 
 function setKotlinVersion(version) {
-    $(".applet-disable").click();
-    $(".applet-nohighlighting").click();
     $("#dialog").dialog({
         modal:"true",
         width:400,
@@ -228,40 +237,9 @@ function setConsoleMessage(message) {
     document.getElementById("console").innerHTML = message;
 }
 
-/*
- *//*var hashLoc = location.hash;
- window.addEventListener("unload", beforeUnload, true);
-
-
- function beforeUnload(e) {
- if (location.hash != hashLoc) {
- if (confirm(BEFORE_EXIT)) {
- history.back();
- }
- }
- }*//*
-
- *//*document.unload = function () {
- if (confirm(BEFORE_EXIT)) {
- history.back();
- }
- };*//*
-
- function beforeBack() {
- if (isContentEditorChanged && confirm(BEFORE_EXIT)) {
- history.back();
- }
- isContentEditorChanged = false;
- //    bajb_backdetect.OnBack = beforeBack();
- }*/
-
-
-//bajb_backdetect.OnBack = beforeBack;
-
 function unEscapeString(str) {
     str = str.replace(new RegExp("&amp;", 'g'), "&");
     return str;
-
 }
 
 var generatedJSCode = "";
@@ -353,25 +331,15 @@ function confirmAction(fun) {
 }
 
 function getNameByUrl(url) {
-    /*var pos = url.indexOf("&folder=");
-     if (pos != -1) {
-     return url.substring(0, pos);
-     }
-     return "";*/
     var pos = url.indexOf("&name=");
     if (pos != -1) {
-        return url.substring(pos + 6);
+        return url.substring(pos + 6).replace(new RegExp("_", 'g'), " ");
 
     }
     return "";
 }
 
 function getFolderNameByUrl(url) {
-    /* var pos = url.indexOf("&folder=");
-     if (pos != -1) {
-     return url.substring(pos + 8);
-     }
-     return "";*/
     var pos = url.indexOf("&name=");
     if (pos != -1) {
         return url.substring(0, pos);
@@ -383,6 +351,57 @@ function createExampleUrl(name, folder) {
     return folder.replace(new RegExp(" ", 'g'), "_") + "&name=" + name.replace(new RegExp(" ", 'g'), "_");
     //return name.replace(new RegExp(" ", 'g'), "_") + "&folder=" + folder.replace(new RegExp(" ", 'g'), "_");
 }
+
+function setCookie(name, value, expires, path, domain, secure) {
+    document.cookie = name + "=" + escape(value) +
+        ((expires) ? "; expires=" + expires : "") +
+        ((path) ? "; path=" + path : "") +
+        ((domain) ? "; domain=" + domain : "") +
+        ((secure) ? "; secure" : "");
+}
+
+function getCookie(name) {
+    var cookie = " " + document.cookie;
+    var search = " " + name + "=";
+    var setStr = null;
+    var offset = 0;
+    var end = 0;
+    if (cookie.length > 0) {
+        offset = cookie.indexOf(search);
+        if (offset != -1) {
+            offset += search.length;
+            end = cookie.indexOf(";", offset)
+            if (end == -1) {
+                end = cookie.length;
+            }
+            setStr = unescape(cookie.substring(offset, end));
+        }
+    }
+    return(setStr);
+}
+
+//FOR TESTS
+
+function setLogin() {
+    isContentEditorChanged = false;
+    userName = "Natalia.Ukhorskaya";
+    $("#login").css("display", "none");
+    $("#userName").css("display", "block");
+    isLogin = true;
+    userName = decodeURI(userName);
+    userName = userName.replace(new RegExp('\\+', 'g'), ' ');
+
+    $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
+    document.getElementById("userNameTitle").onclick = function (e) {
+        userNameClick(e);
+    };
+
+    $("#examplesaccordion").html("");
+
+    loadAccordionContent();
+    loadHelpContentForExamples();
+}
+
 
 
 

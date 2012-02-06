@@ -82,8 +82,7 @@ public class ErrorAnalyzer {
             bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
                                 (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
         } catch (Throwable e) {
-            String exception = ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText());
-            ErrorWriter.ERROR_WRITER.writeException(exception);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
             throw new KotlinCoreException(e);
         }
         String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
@@ -97,8 +96,9 @@ public class ErrorAnalyzer {
             }
             if (diagnostic.getSeverity() != Severity.INFO) {
                 DiagnosticFactory factory = diagnostic.getFactory();
-                int start = factory.getTextRange(diagnostic).getStartOffset();
-                int end = factory.getTextRange(diagnostic).getEndOffset();
+                //TODO
+                int start = factory.getTextRanges(diagnostic).get(0).getStartOffset();
+                int end = factory.getTextRanges(diagnostic).get(0).getEndOffset();
                 String className = diagnostic.getSeverity().name();
                 if (!(diagnostic instanceof UnresolvedReferenceDiagnostic) && (diagnostic.getSeverity() == Severity.ERROR)) {
                     className = "red_wavy_line";

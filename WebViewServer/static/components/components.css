@@ -678,7 +678,7 @@ body {
     padding-right: 30px;
 }
 
-#headerlinks a, a:hover {
+#headerlinks a {
     /*color: white;*/
     padding-right: 10px;
 }
@@ -908,6 +908,7 @@ td#removeallguttersTd {
     display: block;
 
 }
+
 #loginInPopup a img {
     padding-top: 5px;
 }
@@ -915,6 +916,7 @@ td#removeallguttersTd {
 #loginInPopup {
     margin: 5px;
 }
+
 #loginInPopup a {
     padding: 0 10px 0 0px;
     display: inline-block;
@@ -1034,10 +1036,14 @@ div#toolbox, div.toolbox {
 }
 
 div.fixedpage img#closePopup, div.fixedpage img.closePopup {
-    float: right;
-    padding-right: 3px;
+    /*float: right;*/
+    padding-right: 5px;
     padding-top: 3px;
 
+}
+
+div.fixedpage div {
+    text-align: center;
 }
 
 div.fixedpage {
@@ -1046,7 +1052,7 @@ div.fixedpage {
     /*padding-top: 5px;*/
     /*height: 22px;*/
     /*padding-top: 5px;*/
-    text-align: center;
+    text-align: right;
     display: inline-block;
     width: 100%;
 }
@@ -1059,7 +1065,11 @@ div.fixedpage {
     padding-left: 3px;
     padding-top: 5px;
     word-wrap: break-word;
-    width: 90%;
+    width: 87%;
+}
+
+#myprogramscontent .publicLinkHref {
+    width: 80%;
 }
 
 #logoutSelect option, #logoutSelect {
@@ -1136,6 +1146,30 @@ div#myprogramscontent p a, div#myprogramscontent p a:hover {
 
 span.bullet {
     vertical-align: top;
+}
+
+.tweetImg:hover {
+    padding-right: 3px !important;
+    /*padding-left: 9px !important;*/
+}
+.tweetImg {
+    padding-right: 3px;
+    padding-top: 3px;
+    /*padding-left: 9px;*/
+
+    /*width: 100%;*/
+    font-size: 1.4em;
+    font-weight: bold;
+    text-align: right;
+}
+
+.closePopup {
+    /*width: 100%;*/
+    padding-left: 7px;
+
+    font-size: 1.4em;
+    font-weight: bold;
+    text-align: right;
 }
 
 

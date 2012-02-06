@@ -27,28 +27,57 @@ import java.util.Map;
 public class CoreJarHandler extends JarHandlerBase {
     private final Map<String, VirtualFile> myFileMap = new HashMap<String, VirtualFile>();
     private final CoreJarFileSystem myFileSystem;
+    private final VirtualFile myRoot;
 
     public CoreJarHandler(CoreJarFileSystem fileSystem, String path) {
         super(fileSystem, path);
         myFileSystem = fileSystem;
+
+        Map<EntryInfo, CoreJarVirtualFile> entries = new HashMap<EntryInfo, CoreJarVirtualFile>();
+
+        for (EntryInfo info : getEntriesMap().values()) {
+            getOrCreateFile(info, entries);
+        }
+        myRoot = getOrCreateFile(getEntryInfo(""), entries);
+    }
+
+    private CoreJarVirtualFile getOrCreateFile(EntryInfo info, Map<EntryInfo, CoreJarVirtualFile> entries) {
+        CoreJarVirtualFile answer = entries.get(info);
+        if (answer == null) {
+            EntryInfo parentEntry = info.parent;
+            answer = new CoreJarVirtualFile(this, info, parentEntry != null ? getOrCreateFile(parentEntry, entries) : null);
+            entries.put(info, answer);
+        }
+
+        return answer;
     }
 
     @Nullable
+     public VirtualFile findFileByPath(String pathInJar) {
+        return myRoot != null ? myRoot.findFileByRelativePath(pathInJar) : null;
+    }
+
+    /*@Nullable
     public VirtualFile findFileByPath(String pathInJar) {
         if (getZip() == null) {
             return null;
         }
         VirtualFile file = myFileMap.get(pathInJar);
         if (file == null) {
+            EntryInfo entryInfo = null;
             if (pathInJar.length() > 0) {
-                EntryInfo entryInfo = getEntryInfo(pathInJar);
+                entryInfo = getEntryInfo(pathInJar);
                 if (entryInfo == null) {
                     return null;
                 }
             }
-            file = new CoreJarVirtualFile(myFileSystem, this, pathInJar);
+            file = new CoreJarVirtualFile(this, entryInfo, pathInJar);
             myFileMap.put(pathInJar, file);
         }
         return file;
+    }*/
+
+    public CoreJarFileSystem getFileSystem() {
+        return myFileSystem;
     }
 }

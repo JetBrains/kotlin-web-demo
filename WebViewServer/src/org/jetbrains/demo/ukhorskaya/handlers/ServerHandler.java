@@ -48,7 +48,8 @@ public class ServerHandler {
                 out = response.getWriter();
                 out.write("ok");
             } catch (Throwable e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("test", e, "null"));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        "TEST", "null");
             } finally {
                 close(out);
             }
@@ -77,10 +78,13 @@ public class ServerHandler {
                     }
                     out.write(array.toString());
                 } catch (Throwable e) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(param, e, "null"));
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                            "UNKNOWN", param);
                 } finally {
                     close(out);
                 }
+            } else if (parameters.compareType("sendExceptionsToEA")) {
+                Statistics.getInstance().sendErrorsToErrorsAnalyzer();
             } else if (parameters.compareType("authorization")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
                 sendAuthorizationResult(request, response, parameters, sessionInfo);
@@ -137,8 +141,8 @@ public class ServerHandler {
             }
         } catch (Throwable e) {
             //Do not stop server
-            e.printStackTrace();
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(param, e, "null"));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    "UNKNOWN", param);
             writeResponse(response, "Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -167,13 +171,15 @@ public class ServerHandler {
                 try {
                     response.sendRedirect("http://" + HOST);
                 } catch (IOException e) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot redirect", e, "null"));
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                            "UNKNOWN", "cannot redirect to http://" + HOST);
                 }
             } else if (parameters.getArgs().contains("denied=")) {
                 try {
                     response.sendRedirect("http://" + HOST);
                 } catch (IOException e) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot redirect", e, "null"));
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                            "UNKNOWN", "cannot redirect to http://" + HOST);
                 }
             } else {
                 String verifyKey = helper.authorize();
@@ -182,7 +188,8 @@ public class ServerHandler {
                     out = response.getWriter();
                     out.write(verifyKey);
                 } catch (Throwable e) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot verify", e, "null"));
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                            "UNKNOWN", request.getRequestURI() + "/" + request.getQueryString());
                 } finally {
                     close(out);
                 }
@@ -216,10 +223,10 @@ public class ServerHandler {
         if (request.getSession().isNew()) {
             Statistics.incNumberOfUsers();
         }
-        if (!sessionId.equals(request.getSession().getId()) && !sessionId.equals("-1")) {
+        /*if (!sessionId.equals(request.getSession().getId()) && !sessionId.equals("-1")) {
             ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
                     "Different id form request string and from servlet", sessionId + " " + request.getSession().getId()));
-        }
+        }*/
         SessionInfo sessionInfo = new SessionInfo(request.getSession().getId());
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
 
@@ -229,61 +236,6 @@ public class ServerHandler {
         }
         sessionInfo.setUserInfo(userInfo);
         return sessionInfo;
-        /*String sessionIdFromCookies = getSessionIdFromCookies(request.getHeader("Cookie"));
-        if (sessionIdFromCookies == null || sessionIdFromCookies.isEmpty()) {
-            sessionIdFromCookies = sessionId;
-            if (!sessionIdFromCookies.equals("")) {
-                sessionInfo = new SessionInfo(Integer.parseInt(sessionIdFromCookies), ip);
-                if (request.getHeader("Cookie") == null) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
-                            "Impossible to read id from cookies", sessionIdFromCookies));
-                } else {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
-                            "Impossible to read id from cookies", request.getHeader("Cookie")));
-                }
-            } else {
-                Statistics.incNumberOfUsers();
-                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()), ip);
-                ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers() + " ip=" + ip);
-            }
-        } else {
-            try {
-                sessionInfo = new SessionInfo(Integer.parseInt(sessionIdFromCookies), ip);
-            } catch (NumberFormatException e) {
-                Statistics.incNumberOfUsers();
-                sessionInfo = new SessionInfo(Integer.parseInt(Statistics.getNumberOfUsers()), ip);
-                ErrorWriterOnServer.LOG_FOR_INFO.info("Number_of_users_since_start_server : " + Statistics.getNumberOfUsers());
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.toString(), e, sessionIdFromCookies));
-            }
-        }
-        return sessionInfo;*/
-    }
-
-    /* private String getSessionIdFromRequest(String request) {
-        if (request.contains("sessionId=")) {
-            return ResponseUtils.substringBetween(request, "sessionId=", "&");
-        }
-        return "";
-    }*/
-
-    @Nullable
-    private String getSessionIdFromCookies(@Nullable String cookie) {
-        if (cookie != null) {
-            String response = ResponseUtils.substringBetween(cookie, "userId=", ";");
-            ErrorWriterOnServer.LOG_FOR_INFO.info("cookies:" + cookie + " userId=" + response);
-            return response;
-        } else {
-            return null;
-        }
-    }
-
-    private String generateStringFromList(List<String> list) {
-        StringBuilder builder = new StringBuilder();
-        for (String s : list) {
-            builder.append(s);
-            builder.append(";");
-        }
-        return builder.toString();
     }
 
     private void sendHelpContentForExamples(final HttpServletResponse response) {
@@ -316,7 +268,8 @@ public class ServerHandler {
             responseStr = ResponseUtils.readData(is, true);
 
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "Exception until downloading logs.html"));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), "Exception until downloading logs.html");
             writeResponse(response, "Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
             return;
         } finally {
@@ -346,7 +299,8 @@ public class ServerHandler {
             is = request.getInputStream();
             reqResponse.append(ResponseUtils.readData(is));
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId());
             writeResponse(response, "Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return;
         } finally {
@@ -355,7 +309,8 @@ public class ServerHandler {
         try {
             reqResponse = new StringBuilder(URLDecoder.decode(reqResponse.toString(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), e, "null"));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId());
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
@@ -367,7 +322,9 @@ public class ServerHandler {
         path = ResponseUtils.substringAfterReturnAll(path, "resources");
         ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "-1", "Resource doesn't downloaded from nginx: " + path));
         if (path.equals("")) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Path to the file is incorrect.", path));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                    new UnsupportedOperationException("Empty path to resource"),
+                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), path);
             writeResponse(response, "Path to the file is incorrect.", HttpStatus.SC_NOT_FOUND);
             return;
         } else if (path.startsWith("/messages/")) {
@@ -381,11 +338,13 @@ public class ServerHandler {
                 is = ServerHandler.class.getResourceAsStream(path);
                 responseStr.append(ResponseUtils.readData(is, true));
             } catch (FileNotFoundException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "index.html not found"));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "index.html not found");
                 writeResponse(response, "Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
                 return;
             } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), e, "Exception until downloading index.html"));
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "index.html not found");
                 writeResponse(response, "Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
                 return;
             } finally {
@@ -406,7 +365,9 @@ public class ServerHandler {
 
         InputStream is = ServerHandler.class.getResourceAsStream(path);
         if (is == null) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "Resource not found.", request.getRequestURI() + "?" + request.getQueryString()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                    new UnsupportedOperationException("Broken path to resource"),
+                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getRequestURI() + "?" + request.getQueryString());
             writeResponse(response, ("Resource not found. " + path), HttpStatus.SC_NOT_FOUND);
             return;
         }
@@ -414,7 +375,8 @@ public class ServerHandler {
         try {
             ByteStreams.copy(is, response.getOutputStream());
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), e, request.getRequestURI() + "?" + request.getQueryString()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getRequestURI() + "?" + request.getQueryString());
             writeResponse(response, "Could not load the resource from the server", HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -427,9 +389,8 @@ public class ServerHandler {
             writer = response.getWriter();
             writer.write(responseBody);
         } catch (IOException e) {
-            //This is an exception we can't to send data to client
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("UNKNOWN", e, ""));
-//            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("UNKNOWN", e, response.getRequestURI().toString()));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    "UNKNOWN","null");
         } finally {
             close(writer);
         }
@@ -442,7 +403,8 @@ public class ServerHandler {
                 closeable.close();
             }
         } catch (IOException e) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("UNKNOWN", e, " NULL"));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    "UNKNOWN", "null");
         }
     }
 

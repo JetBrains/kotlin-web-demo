@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="junit:junit:3.7" type="repository">
+    <properties maven-id="junit:junit:3.7" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../git-contrib/jet-contrib/WebView/lib/junit-3.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

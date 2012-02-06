@@ -49,7 +49,7 @@ function HelpElement(name, text, args) {
 
 function loadExamplesHelp(name) {
     isHelpForExampleLoaded = false;
-    forEachInExamplesArray(helpForExamples, name, compareHelpForExamples)
+    forEachInExamplesArray(helpForExamples, name, compareHelpForExamples);
     if (!isHelpForExampleLoaded) {
         document.getElementById("help1").innerHTML = "Description not available.";
         document.getElementById("arguments").value = "";

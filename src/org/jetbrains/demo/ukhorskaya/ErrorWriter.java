@@ -1,9 +1,12 @@
 package org.jetbrains.demo.ukhorskaya;
 
+import com.sun.xml.internal.xsom.impl.ListSimpleTypeImpl;
 import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,6 +59,27 @@ public abstract class ErrorWriter {
         builder.append("\n</error>");
         return builder.toString();
     }
+    
+    public static List<String> parseException(String text) {
+        ArrayList<String> list = new ArrayList<String>();
+        //0
+        String str = ResponseUtils.substringBetween(text, "<version>", "</version>");
+        list.add(str);
+        //1
+        str = ResponseUtils.substringBetween(text, "<type>", "</type>");
+        list.add(str);
+        //2
+        str = ResponseUtils.substringBetween(text, "<message>", "</message>");
+        list.add(str);
+        //3
+        str = ResponseUtils.substringBetween(text, "<stack>", "</stack>");
+        list.add(str);
+         //4
+        str = ResponseUtils.substringBetween(text, "<moreinfo>", "</moreinfo>");
+        list.add(str);
+
+        return list;
+    }
 
     public static String getExceptionForLog(String typeOfRequest, String message, String stackTrace, String moreinfo) {
         StringBuilder builder = new StringBuilder();
@@ -106,6 +130,10 @@ public abstract class ErrorWriter {
     }
 
     public abstract void writeException(String message);
+
+    public abstract void writeExceptionToExceptionAnalyzer(Throwable e, String type, String description);
+    
+    public abstract void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String description);
 
     public abstract void writeInfo(String message);
 
