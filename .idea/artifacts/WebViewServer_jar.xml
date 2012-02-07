@@ -10,6 +10,7 @@
       <element id="module-output" name="translator" />
       <element id="module-output" name="js" />
       <element id="module-output" name="k2js" />
+      <element id="dir-copy" path="$PROJECT_DIR$/../k2js/jslib" />
     </root>
   </artifact>
 </component>

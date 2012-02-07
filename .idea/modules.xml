@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/WebViewApplet/WebViewApplet.iml" filepath="$PROJECT_DIR$/WebViewApplet/WebViewApplet.iml" />
       <module fileurl="file://$PROJECT_DIR$/WebViewServer/WebViewServer.iml" filepath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/../k2js/js/js.iml" filepath="$PROJECT_DIR$/../k2js/js/js.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../k2js/jslib/jslib.iml" filepath="$PROJECT_DIR$/../k2js/jslib/jslib.iml" />
       <module fileurl="file://$PROJECT_DIR$/../k2js/k2js.iml" filepath="$PROJECT_DIR$/../k2js/k2js.iml" />
       <module fileurl="file://$PROJECT_DIR$/../k2js/translator/translator.iml" filepath="$PROJECT_DIR$/../k2js/translator/translator.iml" />
     </modules>
