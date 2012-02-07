@@ -1,0 +1,4 @@
+Sum.kt
+Index of Maximum.kt
+Palindrome.kt
+Pairless.kt
