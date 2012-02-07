@@ -243,8 +243,12 @@ public class HttpSession {
     private void sendHighlightingResult() {
         setGlobalVariables(getPostDataFromRequest().text);
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
-
-        String response = responseForHighlighting.getResult();
+        String response;
+        if (parameters.getArgs().equals("k2js")) {
+            response = responseForHighlighting.getResultFormK2Js();
+        } else {
+            response = responseForHighlighting.getResult();
+        }
         response = response.replaceAll("\\n", "");
         writeResponse(response, HttpStatus.SC_OK);
     }

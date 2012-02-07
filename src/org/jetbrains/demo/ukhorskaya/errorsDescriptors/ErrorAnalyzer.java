@@ -9,15 +9,13 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.Interval;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
-import org.jetbrains.jet.lang.diagnostics.Diagnostic;
-import org.jetbrains.jet.lang.diagnostics.DiagnosticFactory;
-import org.jetbrains.jet.lang.diagnostics.Severity;
-import org.jetbrains.jet.lang.diagnostics.UnresolvedReferenceDiagnostic;
+import org.jetbrains.jet.lang.diagnostics.*;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
 import org.jetbrains.demo.ukhorskaya.exceptions.KotlinCoreException;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
+import org.jetbrains.k2js.facade.K2JSTranslatorApplet;
 
 import java.util.*;
 
@@ -42,45 +40,13 @@ public class ErrorAnalyzer {
         this.sessionInfo = info;
     }
 
-    public List<ErrorDescriptor> getAllErrors() {
-
-        final List<PsiErrorElement> errorElements = new ArrayList<PsiErrorElement>();
-        PsiElementVisitor visitor = new PsiElementVisitor() {
-            @Override
-            public void visitElement(PsiElement element) {
-                element.acceptChildren(this);
-            }
-
-            @Override
-            public void visitErrorElement(PsiErrorElement element) {
-                errorElements.add(element);
-            }
-
-        };
-
-        visitor.visitFile(currentPsiFile);
-        final List<ErrorDescriptor> errors = new ArrayList<ErrorDescriptor>();
-        for (PsiErrorElement errorElement : errorElements) {
-            int start = errorElement.getTextRange().getStartOffset();
-            int end = errorElement.getTextRange().getEndOffset();
-            Interval interval = new Interval(start, end, currentDocument);
-            errors.add(new ErrorDescriptor(interval, errorElement.getErrorDescription(), Severity.ERROR, "red_wavy_line"));
-        }
+    public List<ErrorDescriptor> getAllErrorsFromK2Js() {
+        final List<ErrorDescriptor> errors = getErrorsByVisitor();
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
-            /*bindingContext = AnalyzingUtils.getInstance(JavaDefaultImports.JAVA_DEFAULT_IMPORTS).analyzeNamespaces(
-                    currentProject,
-                    Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                    Predicates.<PsiFile>equalTo(currentPsiFile),
-                    JetControlFlowDataTraceFactory.EMPTY);*/
-            /*bindingContext = AnalyzerFacade.analyzeNamespacesWithJavaIntegration(
-                                            currentProject,
-                                            Collections.singletonList(((JetFile) currentPsiFile).getRootNamespace()),
-                                            Predicates.<PsiFile>equalTo(currentPsiFile),
-                                            JetControlFlowDataTraceFactory.EMPTY);*/
-            bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
-                                (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+            System.out.println(currentPsiFile.getText());
+            bindingContext = new K2JSTranslatorApplet().getBindingContext(currentPsiFile.getText());
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
             throw new KotlinCoreException(e);
@@ -88,9 +54,20 @@ public class ErrorAnalyzer {
         String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                 "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
+        if (bindingContext != null) {
+            gerErrorsFromBindingContext(bindingContext, errors);
+        }
+
+        return errors;
+    }
+
+    private void gerErrorsFromBindingContext(BindingContext bindingContext, List<ErrorDescriptor> errors) {
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 
         for (Diagnostic diagnostic : diagnostics) {
+            if (((DiagnosticWithPsiElementImpl) diagnostic).getPsiFile().getName().contains("core")) {
+                continue;
+            }
             if (diagnostic.getMessage().contains("This cast can never succeed")) {
                 continue;
             }
@@ -127,7 +104,50 @@ public class ErrorAnalyzer {
                 return -1;
             }
         });
+    }
 
+    public List<ErrorDescriptor> getAllErrors() {
+
+        final List<ErrorDescriptor> errors = getErrorsByVisitor();
+        sessionInfo.getTimeManager().saveCurrentTime();
+        BindingContext bindingContext;
+        try {
+            bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
+                    (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
+            throw new KotlinCoreException(e);
+        }
+        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
+                "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        ErrorWriter.ERROR_WRITER.writeInfo(info);
+        gerErrorsFromBindingContext(bindingContext, errors);
+        return errors;
+    }
+
+    private List<ErrorDescriptor> getErrorsByVisitor() {
+        final List<PsiErrorElement> errorElements = new ArrayList<PsiErrorElement>();
+        PsiElementVisitor visitor = new PsiElementVisitor() {
+            @Override
+            public void visitElement(PsiElement element) {
+                element.acceptChildren(this);
+            }
+
+            @Override
+            public void visitErrorElement(PsiErrorElement element) {
+                errorElements.add(element);
+            }
+
+        };
+
+        visitor.visitFile(currentPsiFile);
+        final List<ErrorDescriptor> errors = new ArrayList<ErrorDescriptor>();
+        for (PsiErrorElement errorElement : errorElements) {
+            int start = errorElement.getTextRange().getStartOffset();
+            int end = errorElement.getTextRange().getEndOffset();
+            Interval interval = new Interval(start, end, currentDocument);
+            errors.add(new ErrorDescriptor(interval, errorElement.getErrorDescription(), Severity.ERROR, "red_wavy_line"));
+        }
         return errors;
     }
 }

@@ -65,6 +65,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="mysql-connector-java-5.1.18-bin" level="project" />
+    <orderEntry type="module" module-name="jslib" />
   </component>
 </module>
 

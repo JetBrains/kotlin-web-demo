@@ -33,6 +33,24 @@ public class JsonResponseForHighlighting {
         this.sessionInfo = info;
     }
 
+    public String getResultFormK2Js() {
+        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile, sessionInfo);
+        List<ErrorDescriptor> errorDescriptors;
+        try {
+            errorDescriptors = analyzer.getAllErrorsFromK2Js();
+        } catch (KotlinCoreException e) {
+            return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
+                    , e.getStackTraceString());
+        }
+        JSONArray resultArray = new JSONArray();
+
+        for (ErrorDescriptor errorDescriptor : errorDescriptors) {
+            resultArray.put(getMapForJsonResponse(errorDescriptor.getInterval(), errorDescriptor.getMessage(),
+                    errorDescriptor.getClassName(), errorDescriptor.getSeverity().name()));
+        }
+        return ResponseUtils.escapeString(resultArray.toString());
+    }
+
     public String getResult() {
         ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile, sessionInfo);
         List<ErrorDescriptor> errorDescriptors;

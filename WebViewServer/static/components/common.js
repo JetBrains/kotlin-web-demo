@@ -42,6 +42,8 @@ var isMac = false;
 
 var isAppletLoaded = false;
 
+var isK2JsMode = false;
+
 var isContentEditorChanged = false;
 
 var isLogin = false;

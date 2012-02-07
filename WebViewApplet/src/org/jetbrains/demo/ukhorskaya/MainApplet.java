@@ -60,11 +60,19 @@ public class MainApplet extends JApplet implements ActionListener {
     }
 
     public String getHighlighting(String data) {
+        return getHighlighting(data, false);
+    }
+
+    public String getHighlighting(String data, boolean isK2Js) {
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, SESSION_INFO);
-            return responseForHighlighting.getResult();
+            if (isK2Js) {
+                return responseForHighlighting.getResultFormK2Js();
+            } else {
+                return responseForHighlighting.getResult();
+            }
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,

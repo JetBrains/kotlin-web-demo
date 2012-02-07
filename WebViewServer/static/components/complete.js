@@ -407,11 +407,13 @@ $(document).ready(function () {
                 var dataFromApplet;
                 var data;
                 try {
-                    dataFromApplet = $("#myapplet")[0].getHighlighting(i);
+                    dataFromApplet = $("#myapplet")[0].getHighlighting(i, true);
                     isLoadingHighlighting = false;
                 } catch (e) {
                     isLoadingHighlighting = false;
+                    isK2JsMode = true;
                     sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
+                    isK2JsMode = false;
                     return;
                 }
                 data = eval(dataFromApplet);
@@ -420,15 +422,21 @@ $(document).ready(function () {
                 }
             }
             else {
+                isK2JsMode = true;
                 sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
+                isK2JsMode = false;
             }
         }
     );
 
     function sendHighlightingRequest(onLoad) {
         var i = editor.getValue();
+        var isK2Js = "null";
+        if (isK2JsMode) {
+            isK2Js = "k2js";
+        }
         $.ajax({
-            url:generateAjaxUrl("highlight", "null"),
+            url:generateAjaxUrl("highlight", isK2Js),
             context:document.body,
             success:onLoad,
             dataType:"json",
