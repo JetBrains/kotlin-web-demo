@@ -36,4 +36,5 @@ public class ServerSettings {
     public static String MYSQL_PASSWORD = "root";
     public static String MYSQL_PORT = "3306";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
+    public static String IS_TEST_VERSION = "false";
 }

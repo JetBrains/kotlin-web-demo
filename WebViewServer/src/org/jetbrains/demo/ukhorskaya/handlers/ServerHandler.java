@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.*;
 import org.jetbrains.demo.ukhorskaya.authorization.*;
 import org.jetbrains.demo.ukhorskaya.database.MySqlConnector;
+import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesList;
 import org.jetbrains.demo.ukhorskaya.examplesLoader.ExamplesLoader;
@@ -37,10 +38,8 @@ public class ServerHandler {
 
     }
 
-    public static String HOST;
 
     public void handle(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        HOST = InetAddress.getLocalHost().getHostName();
 
         if (request.getQueryString() != null && request.getQueryString().equals("test")) {
             PrintWriter out = null;
@@ -83,9 +82,9 @@ public class ServerHandler {
                 } finally {
                     close(out);
                 }
-            } else if (parameters.compareType("sendExceptionsToEA")) {
+            } /*else if (parameters.compareType("sendExceptionsToEA")) {
                 Statistics.getInstance().sendErrorsToErrorsAnalyzer();
-            } else if (parameters.compareType("authorization")) {
+            } */else if (parameters.compareType("authorization")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
                 sendAuthorizationResult(request, response, parameters, sessionInfo);
             } else if (parameters.compareType("updateExamples")) {
@@ -169,17 +168,17 @@ public class ServerHandler {
                     request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
                 }
                 try {
-                    response.sendRedirect("http://" + HOST);
+                    response.sendRedirect("http://" + ServerSettings.AUTH_REDIRECT);
                 } catch (IOException e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", "cannot redirect to http://" + HOST);
+                            "UNKNOWN", "cannot redirect to http://" + ServerSettings.AUTH_REDIRECT);
                 }
             } else if (parameters.getArgs().contains("denied=")) {
                 try {
-                    response.sendRedirect("http://" + HOST);
+                    response.sendRedirect("http://" + ServerSettings.AUTH_REDIRECT);
                 } catch (IOException e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", "cannot redirect to http://" + HOST);
+                            "UNKNOWN", "cannot redirect to http://" + ServerSettings.AUTH_REDIRECT);
                 }
             } else {
                 String verifyKey = helper.authorize();

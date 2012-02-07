@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
+import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
@@ -38,7 +39,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
                     .apiKey("anonymous")
                     .apiSecret("anonymous")
                     .scope(SCOPE)
-                    .callback("http://" + ServerHandler.HOST + ResponseUtils.generateRequestString("authorization", "google"))
+                    .callback("http://" + ServerSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "google"))
                     .build();
 
             requestToken = googleService.getRequestToken();

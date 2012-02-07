@@ -12,6 +12,7 @@ var RUN_REQUEST_ABORTED = "Can't get program output from server.";
 var COMPLETE_REQUEST_ABORTED = "Can't get completion proposal list from server.";
 var EXAMPLES_REQUEST_ABORTED = "Can't get the example code from server.";
 var SAVE_PROGRAM_REQUEST_ABORTED = "Can't save the program on server.";
+var LOAD_PROGRAM_REQUEST_ABORTED = "Can't load the program from server.";
 var DELETE_PROGRAM_REQUEST_ABORTED = "Can't delete the program from server.";
 var PUBLIC_LINK_REQUEST_ABORTED = "Can't geerate the public link for program.";
 var HELP_REQUEST_ABORTED = "Can't get help from server.";
@@ -29,6 +30,7 @@ var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not ge
 var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
 var IE_SUPPORT = "Sorry, Internet Explorer is currently unsupported.";
+
 
 var sessionId = -1;
 var userName = "";
@@ -273,6 +275,22 @@ function beforeLogin(param) {
 }
 
 function login(param) {
+    //var  popup = window.open(generateAjaxUrl("authorization", param), 'my_popup', '');
+    /* popup.onload(function() {
+     alert("a");
+     });*/
+    /*popup.addEventListener("load", function () {
+        popup.document.location.href = popup.document.getElementsByTagName("pre")[0].innerHTML;
+    });*/
+    /*setTimeout(function() {
+     popup.document.location.href = popup.document.getElementsByTagName("pre")[0].innerHTML;
+     alert(popup.document.location.href);
+     //        popup.close();
+     }, 5000);*/
+//    popup.close();
+    /*window.open(generateAjaxUrl("authorization", param));
+     window.close();
+     document.location.href = w;*/
     $.ajax({
         url:generateAjaxUrl("authorization", param),
         context:document.body,

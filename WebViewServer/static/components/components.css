@@ -213,6 +213,12 @@ body {
     vertical-align: top;
 }
 
+.problemsViewWarningNeverUsed {
+    margin: 0;
+    vertical-align: top;
+    color: #808080 !important;
+}
+
 .WARNING {
     background-color: #f6ebbc !important;
 }

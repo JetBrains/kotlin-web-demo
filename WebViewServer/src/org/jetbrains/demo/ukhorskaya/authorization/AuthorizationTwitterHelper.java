@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
+import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
@@ -35,7 +36,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
                     .provider(TwitterApi.class)
                     .apiKey("g0dAeSZpnxTHxRKV2UZFGg")
                     .apiSecret("NSfUf8o3BhyT96U6hcCarWIUEwz6Le4FY6Em7WBPtuw")
-                    .callback("http://" + ServerHandler.HOST + ResponseUtils.generateRequestString("authorization", "twitter"))
+                    .callback("http://" + ServerSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "twitter"))
                     .build();
             requestToken = twitterService.getRequestToken();
             return twitterService.getAuthorizationUrl(requestToken);

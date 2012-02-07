@@ -541,7 +541,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
     }
 
     public void sendErrorsToErrorsAnalyzer() {
-        File dir = new File("logs");
+        File dir = new File("C:\\Development\\contrib\\logsForSend");
         if (dir.exists()) {
             File[] files = dir.listFiles();
             Arrays.sort(files, new Comparator<File>() {
@@ -563,7 +563,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
             dateTo = new Date();
 
             for (File file : files) {
-                if (file.getName().equals("exceptions.log")) {
+                if (file.getName().contains("exceptions.log")) {
                     try {
                         analyzeExceptionLog(file);
                     } catch (Throwable e) {
@@ -572,9 +572,13 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
                 }
             }
 
+            int i = 0;
+            System.out.println("size: " + errorElementSet.size());
             for (String error : errorElementSet.keySet()) {
                 ErrorElement el = errorElementSet.get(error);
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(el.message, error, el.type, el.moreinfo);
+                if (i < 10) {
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(el.message, error, el.type, el.moreinfo);
+                }
             }
         }
     }

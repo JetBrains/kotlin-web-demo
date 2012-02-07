@@ -6,6 +6,7 @@ import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
+import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;
 import org.json.JSONArray;
@@ -150,7 +151,7 @@ public class MongoDBConnector {
 
             String publicLink = (String) program.get("link");
             if (publicLink == null || publicLink.isEmpty()) {
-                publicLink = "http://" + ServerHandler.HOST + "/?publicLink=" + programId;
+                publicLink = "http://" + ServerSettings.AUTH_REDIRECT + "/?publicLink=" + programId;
                 program.put("link", publicLink);
                 programIdProgramInfo.findAndModify(new BasicDBObject("_id", programIdObject), program);
             }

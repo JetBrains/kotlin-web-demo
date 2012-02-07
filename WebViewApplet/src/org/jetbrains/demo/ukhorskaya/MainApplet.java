@@ -89,6 +89,7 @@ public class MainApplet extends JApplet implements ActionListener {
             return responseForCompletion.getResult();
 
         } catch (Throwable e) {
+            e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SESSION_INFO.getType(), data + " line: " + line + " ch: " + ch);
             StringWriter writer = new StringWriter();

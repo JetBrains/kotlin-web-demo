@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
+import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.jetbrains.demo.ukhorskaya.session.UserInfo;
 import org.jetbrains.demo.ukhorskaya.handlers.ServerHandler;
@@ -33,7 +34,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
                     .provider(FacebookApi.class)
                     .apiKey("281097941954775")
                     .apiSecret("c834e3f743a0ea79d8d289b252b9bdb3")
-                    .callback("http://" + ServerHandler.HOST + ResponseUtils.generateRequestString("authorization", "facebook"))
+                    .callback("http://" + ServerSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "facebook"))
                     .build();
             return facebookService.getAuthorizationUrl(EMPTY_TOKEN);
         } catch (Throwable e) {

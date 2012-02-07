@@ -132,50 +132,57 @@ var Accordion = (function () {
     };
 
     Accordion.saveAsProgram = function () {
-        $("#saveDialog").dialog("close");
-        var i = editor.getValue();
-        var programName = $("#programName").val();
-        $("#programName").val("");
-        var arguments = $("#arguments").val();
+        if (isLogin) {
+            $("#saveDialog").dialog("close");
+            var i = editor.getValue();
+            var programName = $("#programName").val();
+            $("#programName").val("");
+            var arguments = $("#arguments").val();
 
-        $.ajax({
-            url:generateAjaxUrl("saveProgram", programName),
-            success:onSaveProgramSuccess,
-            dataType:"json",
-            type:"POST",
-            data:{text:i, consoleArgs:arguments},
-            timeout:10000,
-            error:function () {
-                setStatusBarMessage(SAVE_PROGRAM_REQUEST_ABORTED);
-            }
-        });
-        return false;
+            $.ajax({
+                url:generateAjaxUrl("saveProgram", programName),
+                success:onSaveProgramSuccess,
+                dataType:"json",
+                type:"POST",
+                data:{text:i, consoleArgs:arguments},
+                timeout:10000,
+                error:function () {
+                    setStatusBarMessage(SAVE_PROGRAM_REQUEST_ABORTED);
+                }
+            });
+        } else {
+            $("#showInfoAboutLogin").click();
+        }
     };
 
     Accordion.saveProgram = function () {
-        if (lastSelectedExample == 0) {
-            $("#saveAsProgram").click();
-            return;
-        }
-        var folder = getFolderNameByUrl(lastSelectedExample);
-        if (folder != "My_Programs") {
-            $("#saveAsProgram").click();
-            return;
-        }
-
-        var i = editor.getValue();
-        var arguments = $("#arguments").val();
-        $.ajax({
-            url:generateAjaxUrl("saveProgram", "id=" + lastSelectedExample),
-            success:onSaveProgramSuccess,
-            dataType:"json",
-            type:"POST",
-            data:{text:i, consoleArgs:arguments},
-            timeout:10000,
-            error:function () {
-                setStatusBarMessage(SAVE_PROGRAM_REQUEST_ABORTED);
+        if (isLogin) {
+            if (lastSelectedExample == 0) {
+                $("#saveAsProgram").click();
+                return;
             }
-        });
+            var folder = getFolderNameByUrl(lastSelectedExample);
+            if (folder != "My_Programs") {
+                $("#saveAsProgram").click();
+                return;
+            }
+
+            var i = editor.getValue();
+            var arguments = $("#arguments").val();
+            $.ajax({
+                url:generateAjaxUrl("saveProgram", "id=" + lastSelectedExample),
+                success:onSaveProgramSuccess,
+                dataType:"json",
+                type:"POST",
+                data:{text:i, consoleArgs:arguments},
+                timeout:10000,
+                error:function () {
+                    setStatusBarMessage(SAVE_PROGRAM_REQUEST_ABORTED);
+                }
+            });
+        } else {
+            $("#showInfoAboutLogin").click();
+        }
     };
 
     function onSaveProgramSuccess(data) {
@@ -320,7 +327,7 @@ var Accordion = (function () {
             //data:{text:i},
             timeout:10000,
             error:function () {
-                setStatusBarMessage(SAVE_PROGRAM_REQUEST_ABORTED);
+                setStatusBarMessage(LOAD_PROGRAM_REQUEST_ABORTED);
             }
         });
 

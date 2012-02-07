@@ -242,7 +242,7 @@ public class MySqlConnector {
 
             String publicLink = rs.getString("PROGRAM_LINK");
             if (publicLink == null || publicLink.isEmpty()) {
-                publicLink = "http://" + ServerHandler.HOST + "/?publicLink=" + programId;
+                publicLink = "http://" + ServerSettings.AUTH_REDIRECT + "/?publicLink=" + programId;
                 st.executeUpdate("UPDATE programs SET PROGRAM_LINK='" + publicLink + "' WHERE PROGRAM_ID='" + programId + "'");
             }
 

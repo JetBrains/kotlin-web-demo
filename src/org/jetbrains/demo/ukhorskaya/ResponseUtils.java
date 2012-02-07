@@ -23,18 +23,20 @@ import java.util.Calendar;
 
 public class ResponseUtils {
     public static String escapeString(String string) {
-        if (string.contains("<")) {
-            string = string.replaceAll("<", "&lt;");
+        if (string != null && !string.isEmpty()) {
+            if (string.contains("<")) {
+                string = string.replaceAll("<", "&lt;");
+            }
+            if (string.contains(">")) {
+                string = string.replaceAll(">", "&gt;");
+            }
+            if (string.contains("&")) {
+                string = string.replaceAll("&", "&amp;");
+            }
+            /* if (string.contains("\"")) {
+                string = string.replaceAll("\"", "'");
+            }*/
         }
-        if (string.contains(">")) {
-            string = string.replaceAll(">", "&gt;");
-        }
-        if (string.contains("&")) {
-            string = string.replaceAll("&", "&amp;");
-        }
-        /* if (string.contains("\"")) {
-            string = string.replaceAll("\"", "'");
-        }*/
         return string;
     }
 

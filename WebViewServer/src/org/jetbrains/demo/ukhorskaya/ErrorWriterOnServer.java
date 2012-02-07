@@ -39,10 +39,11 @@ public class ErrorWriterOnServer extends ErrorWriter {
         ErrorBean bean = new ErrorBean(e, type);
         bean.addProgramText(description);
         bean.setPluginName("Kotlin Web Demo");
-
-        sendViaITNProxy(bean);
-
-
+        if (ServerSettings.IS_TEST_VERSION.equals("false")) {
+            sendViaITNProxy(bean);
+        } else {
+            LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, description));
+        }
     }
 
     private void sendViaITNProxy(ErrorBean error) {
@@ -59,6 +60,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
         } catch (IOException e1) {
             LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EXCEPTION_ANALYZER", e1, login));
         }
+
     }
 
     public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String description) {
@@ -66,7 +68,11 @@ public class ErrorWriterOnServer extends ErrorWriter {
         bean.addProgramText(description);
         bean.setPluginName("Kotlin Web Demo");
 
-        sendViaITNProxy(bean);
+        if (ServerSettings.IS_TEST_VERSION.equals("false")) {
+            sendViaITNProxy(bean);
+        } else {
+            LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, message, stackTrace, description));
+        }
     }
 
 
