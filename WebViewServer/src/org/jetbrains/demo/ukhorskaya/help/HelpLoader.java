@@ -152,6 +152,7 @@ public class HelpLoader {
                     map.put("name", getTagValue("name", element));
                     map.put("text", getTagValueWithInnerTags("text", element));
                     map.put("args", getTagValue("args", element));
+                    map.put("mode", getTagValue("mode", element));
                     resultExamples.put(map);
                 }
             }

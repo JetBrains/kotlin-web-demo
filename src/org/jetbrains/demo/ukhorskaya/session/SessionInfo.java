@@ -13,6 +13,7 @@ public class SessionInfo {
     private final TimeManager timeManager = new TimeManager();
     private String id;
     private TypeOfRequest type = TypeOfRequest.GET_RESOURCE;
+    private RunConfiguration runConfiguration = RunConfiguration.JAVA;
     private UserInfo userInfo = new UserInfo();
 
     public SessionInfo(String sessionId, TypeOfRequest typeOfRequest) {
@@ -52,6 +53,26 @@ public class SessionInfo {
         this.userInfo = userInfo;
     }
 
+    public RunConfiguration getRunConfiguration() {
+        return runConfiguration;
+    }
+
+    public void setRunConfiguration(RunConfiguration runConfiguration) {
+        this.runConfiguration = runConfiguration;
+    }
+
+    public void setRunConfiguration(String runConfiguration) {
+        if ("java".equals(runConfiguration)) {
+            this.runConfiguration = RunConfiguration.JAVA;
+        } else if ("js".equals(runConfiguration)) {
+            this.runConfiguration = RunConfiguration.JS;
+        } else if ("canvas".equals(runConfiguration)) {
+            this.runConfiguration = RunConfiguration.CANVAS;
+        } else {
+            this.runConfiguration = RunConfiguration.JAVA;
+        }
+    }
+
     public enum TypeOfRequest {
         LOAD_ROOT,
         HIGHLIGHT,
@@ -74,6 +95,11 @@ public class SessionInfo {
         WORK_WITH_DATABASE
     }
 
+    public enum RunConfiguration {
+        JAVA,
+        JS,
+        CANVAS
+    }
 
 
 }

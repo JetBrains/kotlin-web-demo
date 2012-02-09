@@ -458,14 +458,27 @@ body {
     padding-left: 15px;
     font-weight: bold;
     line-height: 12px;
-    height: 33px;
+    height: 37px;
+}
+
+#rundiv table td {
+   padding-right: 10px;
 }
 
 #runTitle {
-    float: left;
-    width: 30px;
-    margin-top: 15px;
+    /*float: left;*/
+    /*width: 30px;*/
+    margin-top: 10px;
 }
+
+#run {
+
+}
+
+#runConfigurationMode-button {
+    background-color: white;
+}
+
 
 #refreshTitle {
     float: left;
@@ -734,6 +747,23 @@ body {
     margin: auto;
 }
 
+#whatisitRunConf span {
+    margin-left: 50px;
+    margin-right: 3px;
+    padding-top: 5px;
+}
+
+#whatisitRunConf img {
+    margin-top: 0px;
+    float: left;
+}
+
+#whatisitRunConf {
+    font-size: 10px;
+    line-height: 0;
+    cursor: pointer;
+}
+
 #whatisit span {
     margin-left: 50px;
     margin-right: 3px;
@@ -750,6 +780,8 @@ body {
     line-height: 0;
     cursor: pointer;
 }
+
+
 
 #dialog, #saveDialog {
     display: none;
@@ -1150,8 +1182,12 @@ div#myprogramscontent p a, div#myprogramscontent p a:hover {
     width: 55% !important;
 }
 
-span.bullet {
+div.bullet {
     vertical-align: top;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 3px;
 }
 
 .tweetImg:hover {
@@ -1178,6 +1214,29 @@ span.bullet {
     text-align: right;
 }
 
+#mycanvas {
+    /*height: 100%;*/
+    width: 100%;
+    /*height: 120px;*/
+    /*width: 600px;*/
+}
+
+#dialogAboutRunConfiguration img {
+    width: 248px;
+    height: 124px;
+}
+
+#runConfigurationMode-button {
+    min-width: 160px;
+}
+
+#out {
+    vertical-align: top;
+    padding-left: 10px;
+}
+.ui-selectmenu {
+    height: 26px !important;
+}
 
 
 

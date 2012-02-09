@@ -59,9 +59,8 @@ public class HttpSession {
             }*/
 
             if (parameters.compareType("run")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExecutorResult();
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
             } else if (parameters.compareType("writeLog")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
                 String type = parameters.getArgs();
@@ -98,12 +97,9 @@ public class HttpSession {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExampleContent();
-            } else if (parameters.compareType("convertToJs")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
-                sendConvertToJsResult();
             } else if (parameters.compareType("highlight")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
+                sessionInfo.setRunConfiguration(parameters.getArgs());
                 sendHighlightingResult();
             } else {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), param);
@@ -149,19 +145,32 @@ public class HttpSession {
     private void sendSaveProgramResult(SessionInfo sessionInfo) {
         String result;
         if (parameters.getArgs().startsWith("id=")) {
-            String id = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
+            String url = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf="); 
+            String id = ResponseUtils.getExampleOrProgramNameByUrl(url);
             PostData data = getPostDataFromRequest();
-            result = MySqlConnector.getInstance().updateProgram(id, data.text, data.arguments);
+            result = MySqlConnector.getInstance().updateProgram(id, data.text, data.arguments, ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
         } else {
             PostData data = getPostDataFromRequest();
-            result = MySqlConnector.getInstance().saveProgram(sessionInfo.getUserInfo(), parameters.getArgs(), data.text, data.arguments);
+            String id = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");
+            result = MySqlConnector.getInstance().saveProgram(sessionInfo.getUserInfo(), id, data.text, data.arguments, ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
         }
         writeResponse(result, HttpStatus.SC_OK);
     }
 
-    private void sendConvertToJsResult() {
-        PostData data = getPostDataFromRequest(true);
-        writeResponse(new JsConverter(sessionInfo).getResult(data.text, data.arguments), HttpStatus.SC_OK);
+    private void sendExecutorResult() {
+        PostData data = getPostDataFromRequest();
+
+        sessionInfo.setRunConfiguration(parameters.getArgs());
+        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
+            sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+            setGlobalVariables(data.text);
+
+            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(currentPsiFile, data.arguments, sessionInfo);
+            writeResponse(responseForCompilation.getResult(), HttpStatus.SC_OK);
+        } else {
+            sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
+            writeResponse(new JsConverter(sessionInfo).getResult(data.text, data.arguments), HttpStatus.SC_OK);
+        }
     }
 
     private void sendConvertToKotlinResult() {
@@ -233,7 +242,9 @@ public class HttpSession {
 
 
     private void sendCompletionResult() {
-        String[] position = parameters.getArgs().split(",");
+        String positionString = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");
+        sessionInfo.setRunConfiguration(ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
+        String[] position = positionString.split(",");
         setGlobalVariables(getPostDataFromRequest().text);
 
         JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(Integer.parseInt(position[0]), Integer.parseInt(position[1]), currentPsiFile, sessionInfo);
@@ -243,12 +254,7 @@ public class HttpSession {
     private void sendHighlightingResult() {
         setGlobalVariables(getPostDataFromRequest().text);
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
-        String response;
-        if (parameters.getArgs().equals("k2js")) {
-            response = responseForHighlighting.getResultFormK2Js();
-        } else {
-            response = responseForHighlighting.getResult();
-        }
+        String response = responseForHighlighting.getResult();
         response = response.replaceAll("\\n", "");
         writeResponse(response, HttpStatus.SC_OK);
     }
@@ -301,13 +307,6 @@ public class HttpSession {
         return new PostData("", "");
     }
 
-    private void sendExecutorResult() {
-        PostData data = getPostDataFromRequest();
-        setGlobalVariables(data.text);
-
-        CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(currentPsiFile, data.arguments, sessionInfo);
-        writeResponse(responseForCompilation.getResult(), HttpStatus.SC_OK);
-    }
 
     //Send Response
     private void writeResponse(String responseBody, int errorCode) {

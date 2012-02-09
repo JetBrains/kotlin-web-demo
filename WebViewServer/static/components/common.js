@@ -38,23 +38,38 @@ var isApplet = false;
 var isJsApplet = true;
 var kotlinVersion;
 
+var runConfiguration = new RunConfiguration();
+
 var isMac = false;
 
 var isAppletLoaded = false;
 
-var isK2JsMode = false;
-
-var isContentEditorChanged = false;
+//var isContentEditorChanged = false;
 
 var isLogin = false;
 
-var loginImages = "";
-//var loginImages = "<a href=\"#\" onclick=\"login('twitter');\"><img src=\"/images/social/twitter.png\"></a><a href=\"#\" onclick=\"login('facebook');\"><img src=\"/images/social/facebook.png\"></a><a href=\"#\" onclick=\"login('google');\"><img src=\"/images/social/google.png\"></a>";
+var editorState = new EditorState(false);
+
+function EditorState(isChanged) {
+    this.isContentChanged = isChanged;
+}
+
+function setEditorState(state) {
+    editorState = new EditorState(state);
+}
+
+function getEditorState() {
+    return editorState.isContentChanged;
+}
+
+
 
 $(document).keydown(function (e) {
     if (isMac) {
         if (e.keyCode == 82 && e.ctrlKey && e.shiftKey) {
-            $("#runJS").click();
+            runConfiguration.mode = "js";
+            $("#runConfigurationMode").selectmenu("value", "js");
+            $("#run").click();
         } else if (e.keyCode == 82 && e.ctrlKey) {
             $("#run").click();
         } else if (e.keyCode == 83 && e.metaKey) {
@@ -63,7 +78,9 @@ $(document).keydown(function (e) {
         }
     } else {
         if (e.keyCode == 120 && e.ctrlKey && e.shiftKey) {
-            $("#runJS").click();
+            runConfiguration.mode = "js";
+            $("#runConfigurationMode").selectmenu("value", "js");
+            $("#run").click();
         } else if (e.keyCode == 120 && e.ctrlKey) {
             $("#run").click();
         } else if (e.keyCode == 83 && e.ctrlKey) {
@@ -72,6 +89,11 @@ $(document).keydown(function (e) {
         }
     }
 });
+
+function RunConfiguration() {
+    this.mode = "";
+
+}
 
 function stopKeydown(e) {
     e_preventDefault(e);
@@ -87,19 +109,25 @@ function onBodyLoad() {
     if (navigator.appVersion.indexOf("MSIE") != -1) {
         document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
     } else {
-        if (navigator.appVersion.indexOf("Mac") != -1) {
-            isMac = true;
-            var text = document.getElementById("help3").innerHTML;
-            text = text.replace("F9", "R");
-            document.getElementById("help3").innerHTML = text.replace("F9", "R");
-            document.getElementById("run").title = document.getElementById("run").title.replace("F9", "R");
-            document.getElementById("runJS").title = document.getElementById("runJS").title.replace("F9", "R");
-        }
-
         $("#help3").toggle(true);
-        setSessionId();
         resizeCentral();
-        setKotlinVersion('0.1.413');
+        setKotlinVersion('0.1.425');
+        setTimeout(function() {
+            if (navigator.appVersion.indexOf("Mac") != -1) {
+                isMac = true;
+                var text = $("#help3").html();
+                text = text.replace("F9", "R");
+                $("#help3").html(text.replace("F9", "R"));
+                var title = $("#run").attr("title").replace("F9", "R");
+                $("#run").attr("title", title);
+//            document.getElementById("run").title = document.getElementById("run").title.replace("F9", "R");
+//            document.getElementById("runJS").title = document.getElementById("runJS").title.replace("F9", "R");
+            }
+        }, 10);
+
+        hideLoader();
+        setTimeout(setSessionId, 10);
+//        setSessionId();
     }
 }
 
@@ -141,21 +169,14 @@ function getSessionIdSuccess(data) {
     }
     if (data[1] != null && data[1] != '') {
         userName = data[1];
-        /*if (loginImages == "") {
-         loginImages = document.getElementById("userName").innerHTML;
-         }*/
         if (userName != "") {
             $("#login").css("display", "none");
-//            document.getElementById("login").style.display = "none";
             $("#userName").css("display", "block");
-//            document.getElementById("userName").style.display = "block";
             isLogin = true;
             userName = decodeURI(userName);
-            userName = userName.replace(new RegExp('\\+', 'g'), ' ');
+            userName = replaceAll(userName, "\\+", " ");
 
-//            document.getElementById("userName").innerHTML = "<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>";
             $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
-//            document.getElementById("userName").innerHTML = "<span>" + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/>";
             document.getElementById("userNameTitle").onclick = function (e) {
                 userNameClick(e);
             };
@@ -174,9 +195,8 @@ function getSessionIdSuccess(data) {
 
     }
 
-    loadAccordionContent();
     loadHelpContentForExamples();
-    hideLoader();
+    loadAccordionContent();
 
     var info = "browser: " + navigator.appName + " " + navigator.appVersion;
     info += " " + "system: " + navigator.platform;
@@ -202,10 +222,10 @@ function getSessionIdSuccess(data) {
 function resizeCentral() {
     var wheight = (window.innerHeight) ? window.innerHeight :
         ((document.all) ? document.body.offsetHeight : null);
-    document.getElementById("scroll").style.height = (wheight - 262 - 72 - 20 - 10) + "px";
-    document.getElementById("left").style.minHeight = (wheight - 72 - 20 - 10) + "px";
-    document.getElementById("right").style.minHeight = (wheight - 72 - 20 - 10) + "px";
-    document.getElementById("center").style.minHeight = (wheight - 72 - 20 - 10) + "px";
+    $("#scroll").css("height", (wheight - 262 - 72 - 20 - 10) + "px");
+    $("#left").css("minHeight", (wheight - 72 - 20 - 10) + "px");
+    $("#right").css("minHeight", (wheight - 72 - 20 - 10) + "px");
+    $("#center").css("minHeight", (wheight - 72 - 20 - 10) + "px");
     editor.refresh();
 }
 
@@ -226,23 +246,31 @@ function setKotlinVersion(version) {
     });
 
     kotlinVersion = version;
-    document.getElementById("kotlinVersionTop").innerHTML = "(" + kotlinVersion + ")";
-    document.getElementById("kotlinVersion").innerHTML = kotlinVersion;
+    $("#kotlinVersionTop").html("(" + kotlinVersion + ")");
+    $("#kotlinVersion").html(kotlinVersion);
 }
 
 function setStatusBarMessage(message) {
-    document.getElementById("statusbar").innerHTML = message;
+    $("#statusbar").html(message);
+//    document.getElementById("statusbar").innerHTML = message;
 }
 function setStatusBarError(message) {
-    document.getElementById("statusbar").innerHTML = "<font color=\"red\">" + message + "</font>";
+    $("#statusbar").html("<font color=\"red\">" + message + "</font>");
+//    document.getElementById("statusbar").innerHTML = "<font color=\"red\">" + message + "</font>";
 }
 
 function setConsoleMessage(message) {
-    document.getElementById("console").innerHTML = message;
+    $("#console").html(message);
+//    document.getElementById("console").innerHTML = message;
+}
+
+function clearProblemView() {
+    $("#problems").html("");
+//    document.getElementById("console").innerHTML = message;
 }
 
 function unEscapeString(str) {
-    str = str.replace(new RegExp("&amp;", 'g'), "&");
+    str = replaceAll(str, "&amp;", "&");
     return str;
 }
 
@@ -250,13 +278,18 @@ var generatedJSCode = "";
 
 function showJsCode() {
     document.getElementById("console").removeChild(document.getElementById("console").childNodes[1]);
-    var consoleStr = document.getElementById("console").innerHTML;
-    consoleStr += "<p class='consoleViewInfo'>" + generatedJSCode + "</p>";
-    setConsoleMessage(consoleStr);
+    $("#console :first-child").after("<p class='consoleViewInfo'>" + generatedJSCode + "</p>");
+//    var consoleStr = document.getElementById("console").innerHTML;
+//    consoleStr += "<p class='consoleViewInfo'>" + generatedJSCode + "</p>";
+//    setConsoleMessage(consoleStr);
 }
 
 $("#whatimg").click(function () {
     $("#dialog").dialog("open");
+});
+
+$("#whatimgRunConf").click(function () {
+    $("#dialogAboutRunConfiguration").dialog("open");
 });
 
 function generateAjaxUrl(type, args) {
@@ -265,7 +298,7 @@ function generateAjaxUrl(type, args) {
 }
 
 function beforeLogin(param) {
-    if (isContentEditorChanged) {
+    if (getEditorState()) {
         confirmAction(function (param) {
             return function () {
                 login(param);
@@ -282,8 +315,8 @@ function login(param) {
      alert("a");
      });*/
     /*popup.addEventListener("load", function () {
-        popup.document.location.href = popup.document.getElementsByTagName("pre")[0].innerHTML;
-    });*/
+     popup.document.location.href = popup.document.getElementsByTagName("pre")[0].innerHTML;
+     });*/
     /*setTimeout(function() {
      popup.document.location.href = popup.document.getElementsByTagName("pre")[0].innerHTML;
      alert(popup.document.location.href);
@@ -353,7 +386,7 @@ function confirmAction(fun) {
 function getNameByUrl(url) {
     var pos = url.indexOf("&name=");
     if (pos != -1) {
-        return url.substring(pos + 6).replace(new RegExp("_", 'g'), " ");
+        return replaceAll(url.substring(pos + 6), "_", " ");
 
     }
     return "";
@@ -368,8 +401,7 @@ function getFolderNameByUrl(url) {
 }
 
 function createExampleUrl(name, folder) {
-    return folder.replace(new RegExp(" ", 'g'), "_") + "&name=" + name.replace(new RegExp(" ", 'g'), "_");
-    //return name.replace(new RegExp(" ", 'g'), "_") + "&folder=" + folder.replace(new RegExp(" ", 'g'), "_");
+    return replaceAll(folder, " ", "_") + "&name=" + replaceAll(name, " ", "_");
 }
 
 function setCookie(name, value, expires, path, domain, secure) {
@@ -400,16 +432,35 @@ function getCookie(name) {
     return(setStr);
 }
 
+
+var tagsToReplace = {
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;'
+};
+
+function replaceTag(tag) {
+    return tagsToReplace[tag] || tag;
+}
+
+function safe_tags_replace(str) {
+    return str.replace(/[&<>]/g, replaceTag);
+}
+
+function replaceAll(str, replaced, replacement) {
+    return str.replace(new RegExp(replaced, 'g'), replacement)
+}
+
 //FOR TESTS
 
 function setLogin() {
-    isContentEditorChanged = false;
+    setEditorState(false);
     userName = "Natalia.Ukhorskaya";
     $("#login").css("display", "none");
     $("#userName").css("display", "block");
     isLogin = true;
     userName = decodeURI(userName);
-    userName = userName.replace(new RegExp('\\+', 'g'), ' ');
+    userName = replaceAll(userName, "\\+", " ");
 
     $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
     document.getElementById("userNameTitle").onclick = function (e) {
@@ -418,8 +469,8 @@ function setLogin() {
 
     $("#examplesaccordion").html("");
 
-    loadAccordionContent();
     loadHelpContentForExamples();
+    loadAccordionContent();
 }
 
 

@@ -22,7 +22,7 @@ public class ServerSettings {
     public static String STATISTICS_ROOT = "statistics";
 
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
-    public static String KOTLIN_VERSION = "0.1.413";
+    public static String KOTLIN_VERSION = "0.1.425";
 
     public static String TEST_CONNECTION_OUTPUT = "C:/Development/testData/";
     public static String MAX_THREAD_COUNT = "50";
@@ -37,4 +37,5 @@ public class ServerSettings {
     public static String MYSQL_PORT = "3306";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
     public static String IS_TEST_VERSION = "false";
+    public static final String DATABASE_VERSION = "1.0";
 }

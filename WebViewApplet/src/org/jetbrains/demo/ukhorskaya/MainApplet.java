@@ -60,19 +60,20 @@ public class MainApplet extends JApplet implements ActionListener {
     }
 
     public String getHighlighting(String data) {
-        return getHighlighting(data, false);
+        return getHighlighting(data, "java");
     }
 
-    public String getHighlighting(String data, boolean isK2Js) {
+    public String getHighlighting(String data, String runConfiguration) {
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
+            SESSION_INFO.setRunConfiguration(runConfiguration);
+           /* if (runConfiguration.equals("canvas")) {
+                SESSION_INFO.setRunConfiguration(SessionInfo.RunConfiguration.CANVAS);
+            }*/
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, SESSION_INFO);
-            if (isK2Js) {
-                return responseForHighlighting.getResultFormK2Js();
-            } else {
-                return responseForHighlighting.getResult();
-            }
+            return responseForHighlighting.getResult();
+//            return responseForHighlighting.getResult(InitializerApplet.getEnvironment());
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -87,10 +88,11 @@ public class MainApplet extends JApplet implements ActionListener {
 
     }
 
-    public String getCompletion(String data, String line, String ch) {
+    public String getCompletion(String data, String line, String ch, String runConfiguration) {
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.COMPLETE);
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
+            SESSION_INFO.setRunConfiguration(runConfiguration);
             JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line),
                     Integer.parseInt(ch), currentPsiFile, SESSION_INFO);
             System.out.println(line + " " + ch);

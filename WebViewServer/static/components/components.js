@@ -89,6 +89,27 @@ $(document).ready(function () {
         autoOpen:false
     });
 
+    $("#popupForCanvas").dialog({
+//        modal:"false",
+        width:600,
+        height:350,
+        autoOpen:false,
+        close:function () {
+            $("#popupForCanvas").html("");
+            /*var canvas = document.getElementById("mycanvas");
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+//          $(this).dialog("close");*/
+        }
+    });
+
+    $("#dialogAboutRunConfiguration").dialog({
+        modal:"true",
+        width:300,
+//        height:120,
+        autoOpen:false
+    });
+
     $("#confirmDialog").dialog({
         modal:"true",
         width:500,
@@ -113,6 +134,14 @@ $(document).ready(function () {
             }
         ]
     });
+
+    $("#runConfigurationMode").selectmenu({
+            change:function () {
+                runConfiguration.mode = $("#runConfigurationMode").val();
+                getErrors();
+            }
+        }
+    );
 
 
 });
@@ -141,8 +170,6 @@ function generatePublicLinkForExample(name) {
     Accordion.generatePublicLinkForExample(name);
 }
 
-
-var loadingExample = false;
 
 function beforeLoadExample(name) {
     Accordion.loadExample(name);
@@ -230,15 +257,11 @@ $(".applet-nohighlighting").click(function () {
 });
 
 function saveModeToCookies(mode) {
-//    if (getModeFromCookies() == null) {
-//        alert("a");
-        setCookie("typeCheckerMode", mode);
-//        setCookie("typeCheckerMode", mode, "Mon, 01-Jan-2001 00:00:00 GMT", "/");
-//    }
+    $.cookie("typeCheckerMode", mode);
 }
 
 function getModeFromCookies() {
-    return getCookie("typeCheckerMode");
+    return $.cookie("typeCheckerMode");
 }
 
 var isShortcutsShow = true;

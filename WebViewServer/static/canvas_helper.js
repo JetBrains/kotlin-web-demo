@@ -1,4 +1,7 @@
 function getContext() {
-    return document.getElementsByTagName('canvas')[0].getContext('2d');
+    return getCanvas().getContext('2d');
 }
 
+function getCanvas() {
+    return document.getElementsByTagName('canvas')[0];
+}

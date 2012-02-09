@@ -65,7 +65,6 @@ public class SeleniumTest extends TestCase {
         console = driver.findElement(By.id("console"));
         run = driver.findElement(By.id("run"));
         refresh = driver.findElement(By.id("refreshGutters"));
-        runJs = driver.findElement(By.id("runJS"));
         accordion = driver.findElement(By.id("accordion"));
 
         WebElement arguments = driver.findElement(By.id("arguments"));

@@ -8,6 +8,7 @@ import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.Interval;
+import org.jetbrains.jet.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.*;
 import org.jetbrains.jet.lang.psi.JetFile;
@@ -40,32 +41,11 @@ public class ErrorAnalyzer {
         this.sessionInfo = info;
     }
 
-    public List<ErrorDescriptor> getAllErrorsFromK2Js() {
-        final List<ErrorDescriptor> errors = getErrorsByVisitor();
-        sessionInfo.getTimeManager().saveCurrentTime();
-        BindingContext bindingContext;
-        try {
-            System.out.println(currentPsiFile.getText());
-            bindingContext = new K2JSTranslatorApplet().getBindingContext(currentPsiFile.getText());
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
-            throw new KotlinCoreException(e);
-        }
-        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
-                "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
-        ErrorWriter.ERROR_WRITER.writeInfo(info);
-        if (bindingContext != null) {
-            gerErrorsFromBindingContext(bindingContext, errors);
-        }
-
-        return errors;
-    }
-
     private void gerErrorsFromBindingContext(BindingContext bindingContext, List<ErrorDescriptor> errors) {
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
 
         for (Diagnostic diagnostic : diagnostics) {
-            if (((DiagnosticWithPsiElementImpl) diagnostic).getPsiFile().getName().contains("core")) {
+            if (diagnostic instanceof DiagnosticWithPsiElementImpl && ((DiagnosticWithPsiElementImpl) diagnostic).getPsiFile().getName().contains("core")) {
                 continue;
             }
             if (diagnostic.getMessage().contains("This cast can never succeed")) {
@@ -112,8 +92,13 @@ public class ErrorAnalyzer {
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
-            bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
-                    (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
+                bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
+                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+            } else {
+                bindingContext = new K2JSTranslatorApplet().getBindingContext(currentPsiFile.getText());
+            }
+
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
             throw new KotlinCoreException(e);
@@ -121,7 +106,9 @@ public class ErrorAnalyzer {
         String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                 "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
-        gerErrorsFromBindingContext(bindingContext, errors);
+        if (bindingContext != null){
+            gerErrorsFromBindingContext(bindingContext, errors);
+        }
         return errors;
     }
 

@@ -38,25 +38,29 @@ var Accordion = (function () {
     var lastSelectedExample = 0;
 
     Accordion.loadAllContent = function () {
-        var acc = document.createElement("div");
-        acc.id = "accordion";
-        $("#examplesaccordion").append(acc);
-        $.ajax({
-            url:generateAjaxUrl("loadExample", "all"),
-            context:document.body,
-            success:onLoadingExamplesSuccess,
-            dataType:"json",
-            type:"GET",
-            //data:{text:i},
-            timeout:10000,
-            error:function () {
-                setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
-            }
-        });
+        try {
+            var acc = document.createElement("div");
+            acc.id = "accordion";
+            $("#examplesaccordion").append(acc);
+            $.ajax({
+                url:generateAjaxUrl("loadExample", "all"),
+                context:document.body,
+                success:onLoadingExamplesSuccess,
+                dataType:"json",
+                type:"GET",
+                //data:{text:i},
+                timeout:10000,
+                error:function () {
+                    setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
+                }
+            });
+        } catch (e) {
+
+        }
     };
 
     Accordion.loadExample = function (name) {
-        if (isContentEditorChanged) {
+        if (getEditorState()) {
             confirmAction(function (name) {
                 return function () {
                     loadExample(name);
@@ -68,7 +72,7 @@ var Accordion = (function () {
     };
 
     Accordion.loadProgram = function (name, isPublicLink) {
-        if (isContentEditorChanged) {
+        if (getEditorState()) {
             confirmAction(function (name, isPublicLink) {
                 return function () {
                     loadProgram(name, isPublicLink);
@@ -140,7 +144,7 @@ var Accordion = (function () {
             var arguments = $("#arguments").val();
 
             $.ajax({
-                url:generateAjaxUrl("saveProgram", programName),
+                url:generateAjaxUrl("saveProgram", programName + "&runConf=" + runConfiguration.mode),
                 success:onSaveProgramSuccess,
                 dataType:"json",
                 type:"POST",
@@ -153,6 +157,10 @@ var Accordion = (function () {
         } else {
             $("#showInfoAboutLogin").click();
         }
+    };
+
+    Accordion.checkIfLoading = function () {
+        return loadingExample;
     };
 
     Accordion.saveProgram = function () {
@@ -170,7 +178,7 @@ var Accordion = (function () {
             var i = editor.getValue();
             var arguments = $("#arguments").val();
             $.ajax({
-                url:generateAjaxUrl("saveProgram", "id=" + lastSelectedExample),
+                url:generateAjaxUrl("saveProgram", "id=" + lastSelectedExample + "&runConf=" + runConfiguration.mode),
                 success:onSaveProgramSuccess,
                 dataType:"json",
                 type:"POST",
@@ -195,13 +203,13 @@ var Accordion = (function () {
                         $("#My_Programs").click();
                     }, 500);
                 } else if (data[i].type == "programId") {
-                    isContentEditorChanged = false;
+                    setEditorState(false);
                     setStatusBarMessage("Your program was successfully saved.");
                 } else {
-                    isContentEditorChanged = false;
+                    setEditorState(false);
                     var pos = data[i].text.indexOf("&id=");
                     if (pos > 0) {
-                        var name = data[i].text.substring(0, pos);
+                        var name = replaceAll(data[i].text.substring(0, pos), "%20", " ");
                         var id = data[i].text.substring(pos + 4);
 
                         setStatusBarMessage("Saved as: " + name + ".");
@@ -221,11 +229,16 @@ var Accordion = (function () {
         }
     }
 
-    function createProgramListElement(id, name) {
+    function createProgramListElement(id, name, runConf) {
         var content = document.createElement("p");
-        var span = document.createElement("span");
+        var span = document.createElement("div");
         span.className = "bullet";
-        span.innerHTML = "&#8226;";
+//        span.innerHTML = "&#8226;";
+        if (typeof runConf == "undefined") {
+            span.style.background = "url(/icons/text.png) no-repeat";
+        } else {
+            span.style.background = "url(/icons/" + runConf + ".png) no-repeat";
+        }
         content.appendChild(span);
         var contA = document.createElement("a");
         contA.id = id;
@@ -291,29 +304,24 @@ var Accordion = (function () {
         }
     }
 
+    var loadingExample = false;
 
     function loadProgram(name, isPublicLink) {
         if (lastSelectedExample == name) {
             return;
         }
-        document.getElementById("problems").innerHTML = "";
+
+        clearProblemView();
         setConsoleMessage("");
         removeStyles();
-        var el = document.getElementById(lastSelectedExample);
-        if (el != null) {
-            el.className = "";
-        }
 
+        $("a[id='" + lastSelectedExample + "']").attr("class", "");
         lastSelectedExample = name;
-        el = document.getElementById(name);
-        if (el != null) {
-            el.className = "selectedExample";
-        }
-        var el1 = $("#My_Programs");
-        if (el1 != null) {
-            el1.click();
-        }
-        document.getElementById("statusbar").innerHTML = "Loading program...";
+        $("a[id='" + name + "']").attr("class", "selectedExample");
+
+        $("#My_Programs").click();
+
+        setStatusBarMessage("Loading program...");
         loadingExample = true;
         if (isPublicLink) {
             name += "publicLink";
@@ -343,37 +351,40 @@ var Accordion = (function () {
                     setStatusBarError(data[0].text);
                 } else {
                     editor.setValue(data[0].text);
-                    document.getElementById("arguments").value = data[0].args;
-                    setStatusBarMessage(LOADING_PROGRAM_OK);
-                    var el = document.getElementById(lastSelectedExample);
-                    if (el != null) {
-                        el.className = "selectedExample";
+                    $("#arguments").val(data[0].args);
+                    if (data[0].runConf == "") {
+                        $("#runConfigurationMode").selectmenu("value", "java");
+                    } else {
+                        $("#runConfigurationMode").selectmenu("value", data[0].runConf);
                     }
+                    setStatusBarMessage(LOADING_PROGRAM_OK);
+
+                    $("a[id='" + lastSelectedExample + "']").attr("class", "selectedExample");
                 }
             }
         }
-        isContentEditorChanged = false;
+        setEditorState(false);
     }
 
 
     function loadExample(name) {
-
-//    if ((isContentEditorChanged && confirm(BEFORE_EXIT)) || !isContentEditorChanged) {
         if (lastSelectedExample == name) {
             return;
         }
-        document.getElementById("problems").innerHTML = "";
+
+        loadExampleHelp(getNameByUrl(name));
+
+        clearProblemView();
         setConsoleMessage("");
         removeStyles();
-        var el = document.getElementById(lastSelectedExample);
-        if (el != null) {
-            el.className = "";
-        }
 
+        $("a[id='" + lastSelectedExample + "']").attr("class", "");
         lastSelectedExample = name;
-        document.getElementById(name).className = "selectedExample";
-        document.getElementById("statusbar").innerHTML = "Loading example...";
+        $("a[id='" + name + "']").attr("class", "selectedExample");
+
+        setStatusBarMessage("Loading program...");
         loadingExample = true;
+
         $.ajax({
             url:generateAjaxUrl("loadExample", name),
             context:document.body,
@@ -386,20 +397,32 @@ var Accordion = (function () {
                 setStatusBarMessage(EXAMPLES_REQUEST_ABORTED);
             }
         });
-        loadExamplesHelp(getNameByUrl(name));
+
     }
 
+    var counter = 0;
+
     function onLoadingExampleSuccess(data) {
-        editor.focus();
-        loadingExample = false;
-        if (typeof data[0] != "undefined") {
-            editor.setValue(data[0].text);
-            setStatusBarMessage(LOADING_EXAMPLE_OK);
+        if (runConfiguration.mode == "" && counter < 10) {
+            setTimeout(function () {
+                counter++;
+                onLoadingExampleSuccess(data);
+            }, 200);
+        } else {
+            counter = 0;
+//        editor.focus();
+            loadingExample = false;
+            if (typeof data[0] != "undefined") {
+                editor.setValue(data[0].text);
+                setStatusBarMessage(LOADING_EXAMPLE_OK);
+            }
+            setEditorState(false);
         }
-        isContentEditorChanged = false;
+
     }
 
     function onLoadingExamplesSuccess(data) {
+
         var acc = document.getElementById("accordion");
         var i = 0;
         while (typeof data[i] != "undefined") {
@@ -409,8 +432,7 @@ var Accordion = (function () {
                 var folder = document.createElement("h3");
                 var folderA = document.createElement("a");
                 folderA.href = "#";
-                var id = data[i].text.replace(new RegExp(" ", 'g'), "_");
-                folderA.id = id;
+                folderA.id = replaceAll(data[i].text, " ", "_");
 
                 folderA.innerHTML = data[i].text;
                 lastFolderName = data[i].text;
@@ -420,22 +442,24 @@ var Accordion = (function () {
             }
             if (data[i].type == "content") {
                 var content = document.createElement("p");
-                var span = document.createElement("span");
+                var span = document.createElement("div");
                 span.className = "bullet";
-                span.innerHTML = "&#8226;";
+                span.style.background = "url(/icons/java.png) no-repeat";
+                //background: url(/icons/java.png) repeat-x;
+                span.id = "bullet" + replaceAll(data[i].text, " ", "_");
+//                span.innerHTML = "&#8226;";
                 content.appendChild(span);
                 var contA = document.createElement("a");
                 contA.id = createExampleUrl(data[i].text, lastFolderName);
-                //data[i].text.replace(new RegExp(" ", 'g'), "_") + "&folder=" + lastFolderName.replace(new RegExp(" ", 'g'), "_");
                 contA.style.cursor = "pointer";
-                contA.onclick = function (event) {
+                contA.onclick = function () {
                     beforeLoadExample(this.id);
                 };
                 contA.innerHTML = data[i].text;
                 var linkImg = document.createElement("img");
                 linkImg.src = "/icons/link1.png";
                 linkImg.title = "Public link for this example";
-                linkImg.onclick = function (event) {
+                linkImg.onclick = function () {
                     generatePublicLinkForExample(this.parentNode.childNodes[1].id);
                 };
 
@@ -491,6 +515,7 @@ var Accordion = (function () {
             loadListOfPrograms();
         }
 
+        setRunConfForAllExamples();
 
         $("#accordion").accordion({
             autoHeight:false,
@@ -540,7 +565,7 @@ var Accordion = (function () {
             //data:{text:i},
             timeout:10000,
             error:function () {
-                setStatusBarMessage(SAVE_PROGRAM_REQUEST_ABORTED);
+                setStatusBarMessage(LOAD_PROGRAM_REQUEST_ABORTED);
             }
         });
     }
@@ -549,8 +574,7 @@ var Accordion = (function () {
         var i = 0;
         var cont = document.getElementById("myprogramscontent");
         while (typeof data[i] != "undefined") {
-            cont.appendChild(createProgramListElement(createExampleUrl(data[i].id, "My Programs"), data[i].name));
-            //data[i].id.replace(new RegExp(" ", 'g'), "_") + "&folder=My_Programs", data[i].name));
+            $("#myprogramscontent").append(createProgramListElement(createExampleUrl(data[i].id, "My Programs"), replaceAll(data[i].name, "%20", " ")));
             i++;
         }
     }

@@ -19,6 +19,7 @@ import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.resolve.DescriptorRenderer;
+import org.jetbrains.k2js.facade.K2JSTranslatorApplet;
 import org.json.JSONArray;
 
 import java.util.Collection;
@@ -59,8 +60,12 @@ public class JsonResponseForCompletion {
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
-            bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
-                    (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
+                bindingContext = new K2JSTranslatorApplet().getBindingContext(currentPsiFile.getText());
+            } else {
+                bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
+                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+            }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
             return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
@@ -68,6 +73,11 @@ public class JsonResponseForCompletion {
         }
         String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
+
+        if (bindingContext == null){
+            return "[]";
+        }
+
         PsiElement element = getExpressionForScope();
         if (element == null) {
             return "[]";

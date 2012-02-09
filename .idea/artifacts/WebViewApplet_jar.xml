@@ -16,6 +16,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/annotations.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/asm-commons.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-runtime.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/../k2js/jslib" />
     </root>
   </artifact>
 </component>

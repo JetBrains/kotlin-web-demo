@@ -12,6 +12,8 @@
     <link type="text/css" href="/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
     <script type="text/javascript" src="/jquery/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <!--<script type="text/javascript" src="/jquery/development-bundle/ui/jquery.ui.selectmenu.js"></script>-->
+    <script type="text/javascript" src="/jquery/development-bundle/external/jquery.cookie.js"></script>
     <script type="text/javascript" src="/kotlin_lib.js"></script>
     <script type="text/javascript" src="/canvas_helper.js"></script>
 
@@ -218,12 +220,22 @@
 
             </div>
             <div id="rundiv">
-                <div id="runTitle">Run</div>
-                <div id="argsbutton">
-                    <img src="/icons/executeJavaB.png" id="run" title="Run file (Ctrl + F9) using JVM"/>
-                    <img src="/icons/executeJavaScriptB.png" id="runJS"
-                         title="Run file (Ctrl + Shift + F9) using Pre-Alpha JavaScript back-end"/>
-                </div>
+                <table>
+                    <tr>
+                        <td id="runTitle">Run</td>
+                        <td><select id="runConfigurationMode">
+                            <option value="java">Java</option>
+                            <option value="js">JavaScript (Standard)</option>
+                            <option value="canvas">JavaScript (Canvas)</option>
+                        </select></td>
+                        <td><img src="/icons/execute.png" id="run"
+                                 title="Run file (Ctrl + F9) using Run configuration"/></td>
+                        <td id="whatisitRunConf">
+                            <a id="whatimgRunConf"><img title="Help" src="/icons/help.png"/></a>
+                        </td>
+                    </tr>
+                </table>
+
             </div>
             <div class="helpcontent">
                 <h4 class="helpTitle">Command line arguments</h4>
@@ -302,6 +314,10 @@
     </form>
 </div>
 
+<div id="popupForCanvas" title="Canvas example">
+    <canvas id="mycanvas"></canvas>
+</div>
+
 <div id="showInfoAboutLoginDialog" title="Help">
     <p>You can save and share your programs.</p>
     <!--<img src="/images/login.png"/>-->
@@ -319,6 +335,23 @@
     </div>
 </div>
 
+<div id="dialogAboutRunConfiguration" title="Help">
+    <p>
+        <!--dialogPbordered-->
+        You can choose one of proposed run configuration:
+    <img style="margin-top: 10px; margin-bottom: 10px;" src="/images/help/runConf.png"/>
+    <p class="dialogPbordered">
+    <b>Java (Standard)</b>: program will run using JVM
+    </p>
+    <p class="dialogPbordered">
+        <b>JavaScript (Standard)</b>: program will run using Pre-Alfa JavaScript backend
+    </p>
+    <p>
+        <b>JavaScript (Canvas)</b>: program will run using Pre-Alfa JavaScript backend
+    </p>
+
+</div>
+
 <div id="confirmDialog" title="Save your program">
     Do you want to save your changes?
 </div>
@@ -331,13 +364,15 @@
 <script src="/components/help.js"></script>
 <script src="/components/components.js"></script>
 <script src="/components/accordion.js"></script>
-
+<script src="/components/highlighting.js"></script>
 <script src="/components/complete.js"></script>
+<script src="/components/runner.js"></script>
+
 <applet id="myapplet" code="org.jetbrains.demo.ukhorskaya.MainApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet.jar" style="display: none;">
+        ARCHIVE="WebViewApplet02092012.jar" style="display: none;">
 </applet>
-<applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
-        ARCHIVE="WebViewApplet.jar" style="display: none;"></applet>
+<applet id="jsapplet" code="org.jetbrains.k2js.facade.K2JSTranslatorApplet" width="0" height="0"
+        ARCHIVE="WebViewApplet02092012.jar" style="display: none;"></applet>
 <!--<applet id="myapplet" code="org.jetbrains.demo.ukhorskaya.MainApplet" width="0" height="0"
         ARCHIVE="WebViewApplet.jar" style="display: none;">
 </applet>
