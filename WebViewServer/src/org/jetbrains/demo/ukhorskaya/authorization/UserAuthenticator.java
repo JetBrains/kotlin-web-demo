@@ -56,8 +56,6 @@ public class UserAuthenticator extends BasicAuthenticator {
             data = getPostDataFromRequest(exchange);
         } catch (IllegalArgumentException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "ldap: " + exchange.getRequestURI().toString());
-//            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-//                    "LOGIN", e, exchange.getRequestURI().toString()));
             return super.authenticate(exchange);
         }
         Pair<String, String> pair = parseData(data);
@@ -155,6 +153,7 @@ public class UserAuthenticator extends BasicAuthenticator {
 
         } catch (Throwable e) {
             // incorrect login or password
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), login + " " + password);
         }
         return false;
     }
@@ -211,7 +210,6 @@ public class UserAuthenticator extends BasicAuthenticator {
             reqResponse.append(ResponseUtils.readData(exchange.getRequestBody()));
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "ldap: " + exchange.getRequestURI());
-//            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Read data from post request", e, "getPostDataFromRequest " + exchange.getRequestURI()));
             throw new IllegalArgumentException("Cannot read data from file");
         }
 
@@ -220,7 +218,6 @@ public class UserAuthenticator extends BasicAuthenticator {
             finalResponse = URLDecoder.decode(reqResponse.toString(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "ldap");
-//            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("LOGIN", e, "null"));
             throw new IllegalArgumentException("Cannot read data from file");
         }
         return finalResponse;
@@ -254,11 +251,9 @@ public class UserAuthenticator extends BasicAuthenticator {
                 password = generateMD5(password);
             } catch (NoSuchAlgorithmException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "ldap: " + login);
-//                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("LOGIN", e, "login: " + login));
                 return "Impossible to generate MD5";
             } catch (UnsupportedEncodingException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "ldap: " + login);
-//                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("LOGIN", e, "login: " + login));
                 return "Impossible to read password in UTF-8";
             }
             newNode.appendChild(document.createTextNode(password));
@@ -279,7 +274,7 @@ public class UserAuthenticator extends BasicAuthenticator {
             writer.close();
             return "User was added";
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "");
             return "Unknown error: User wasn't added";
         }
     }
@@ -322,7 +317,7 @@ public class UserAuthenticator extends BasicAuthenticator {
             }
             return users;
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "");
         }
         return null;
     }

@@ -71,8 +71,8 @@ function loadExampleHelp(name) {
         isHelpForExampleLoaded = false;
         forEachInExamplesArray(helpForExamples, name, compareHelpForExamples);
         if (!isHelpForExampleLoaded) {
-            document.getElementById("help1").innerHTML = "Description not available.";
-            document.getElementById("arguments").value = "";
+            $("#help1").html("Description not available.");
+            $("#arguments").val("");
             $("#runConfigurationMode").selectmenu("value", "java");
         }
     }
@@ -82,11 +82,9 @@ function loadExampleHelp(name) {
 function compareHelpForExamples(name, elementArray) {
     if (name == elementArray.name) {
         runConfiguration.mode = elementArray.mode;
-        document.getElementById("help1").innerHTML = elementArray.text;
-        document.getElementById("arguments").value = elementArray.args;
+        $("#help1").html(elementArray.text);
+        $("#arguments").val(elementArray.args);
         $("#runConfigurationMode").selectmenu("value", elementArray.mode);
-
-//        alert("help" + runConfiguration.mode);
         isHelpForExampleLoaded = true;
     }
 }
@@ -144,7 +142,11 @@ function onLoadingHelpForExamplesSuccess(data) {
     if (data != null) {
         var i = 0;
         while (typeof data[i] != "undefined") {
-            var helpEl = new HelpElement(data[i].name, data[i].text, data[i].args, data[i].mode);
+            var mode =  data[i].mode;
+            if (mode == "") {
+                mode = "java";
+            }
+            var helpEl = new HelpElement(data[i].name, data[i].text, data[i].args, mode);
             helpForExamples.push(helpEl);
             i++;
         }
@@ -181,14 +183,14 @@ function loadWordsHelp(name) {
     isHelpForWordLoaded = false;
     forEachInWordsArray(helpForWords, name, compareHelpForWords)
     if (!isHelpForWordLoaded) {
-        document.getElementById("help2").innerHTML = "Click on the keyword to see help.";
+        $("#help2").html("Click on the keyword to see help.");
     }
 }
 
 function compareHelpForWords(name, elementArray) {
 //    alert(name + elementArray.name);
     if (name == elementArray.name) {
-        document.getElementById("help2").innerHTML = elementArray.text;
+        $("#help2").html(elementArray.text);
         isHelpForWordLoaded = true;
     }
 }

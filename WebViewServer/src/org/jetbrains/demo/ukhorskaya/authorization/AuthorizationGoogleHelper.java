@@ -46,7 +46,6 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             return googleService.getAuthorizationUrl(requestToken);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "google");
-//            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot authorize authorization request", e, "null"));
         }
         return "";
     }
@@ -68,7 +67,6 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "google: " + url);
-//            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot verify authorization request", e, url));
         }
         return userInfo;
     }

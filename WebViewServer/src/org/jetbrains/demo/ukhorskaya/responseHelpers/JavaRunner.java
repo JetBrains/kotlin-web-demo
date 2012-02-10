@@ -46,6 +46,8 @@ public class JavaRunner {
             process = Runtime.getRuntime().exec(commandString);
             process.getOutputStream().close();
         } catch (IOException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    sessionInfo.getType(), commandString);
             return ResponseUtils.getErrorInJson("Impossible to run your program: IOException handled until execution");
         }
 
@@ -77,8 +79,9 @@ public class JavaRunner {
                     while ((line = stdOut.readLine()) != null) {
                         outStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
                     }
-                } catch (Exception e) {
-                    throw new Error(e);
+                } catch (Throwable e) {
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                            sessionInfo.getType(), textFromFile);
                 }
             }
         }.start(); // Starts now
@@ -92,8 +95,9 @@ public class JavaRunner {
                     while ((line = stdErr.readLine()) != null) {
                         errStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
                     }
-                } catch (Exception e) {
-                    throw new Error(e);
+                } catch (Throwable e) {
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                            sessionInfo.getType(), textFromFile);
                 }
             }
         }.start(); // Starts now
@@ -304,12 +308,15 @@ public class JavaRunner {
     }
 
     private String generateCommandString(String pathToRootOut) {
-        StringBuilder builder = new StringBuilder("java ");
+        StringBuilder builder = new StringBuilder(ServerSettings.JAVA_EXECUTE);
+        builder.append(" ");
+        /*StringBuilder builder = new StringBuilder(ServerSettings.JAVA_HOME);
+        builder.append(File.separator);
+        builder.append("bin");
+        builder.append(File.separator);
+        builder.append("java.exe ");*/
         builder.append("-classpath ");
-        //builder.append(System.getProperty("java.class.path"));
         builder.append(pathToRootOut);
-//        builder.append(File.pathSeparator);
-//        builder.append("WebView.jar");
         builder.append(File.pathSeparator);
         builder.append(ServerSettings.PATH_TO_KOTLIN_LIB);
         builder.append(" ");

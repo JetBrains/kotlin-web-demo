@@ -40,6 +40,17 @@ var kotlinVersion;
 
 var runConfiguration = new RunConfiguration();
 
+function setRunConfigurationMode() {
+    var mode = $("#runConfigurationMode").val();
+    if (mode == "" && counterSetConfMode < 10) {
+        counterSetConfMode++;
+        setTimeout(setRunConfigurationMode, 100);
+    } else {
+        counterSetConfMode = 0;
+        runConfiguration.mode = mode;
+    }
+}
+
 var isMac = false;
 
 var isAppletLoaded = false;

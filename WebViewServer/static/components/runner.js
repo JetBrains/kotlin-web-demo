@@ -15,7 +15,8 @@ var Runner = (function () {
         return instance;
     }
 
-    var lastSelectedExample = 0;
+//    var lastSelectedExample = 0;
+    var isCompile = false;
 
     Runner.run = function () {
         setRunConfigurationMode();
@@ -28,17 +29,6 @@ var Runner = (function () {
     };
 
     var counterSetConfMode = 0;
-
-    function setRunConfigurationMode() {
-        var mode = $("#runConfigurationMode").val();
-        if (mode == "" && counterSetConfMode < 10) {
-            counterSetConfMode++;
-            setTimeout(setRunConfigurationMode, 100);
-        } else {
-            counterSetConfMode = 0;
-            runConfiguration.mode = mode;
-        }
-    }
 
     function runJava() {
         var i = editor.getValue();
@@ -80,10 +70,10 @@ var Runner = (function () {
         Highlighting.setLoadingErrors(false);
         Highlighting.onHighlightingSuccess(data);
         if (data == null || !checkIfThereAreErrorsInData(data)) {
-            if (!isCompilationInProgress) {
+            if (!isCompile) {
 //            if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
                 setStatusBarMessage("Running...");
-                isCompilationInProgress = true;
+                isCompile = true;
                 var i = editor.getValue();
                 var arguments = $("#arguments").val();
                 $.ajax({
@@ -95,9 +85,9 @@ var Runner = (function () {
                     data:{text:i, consoleArgs:arguments},
                     timeout:10000,
                     error:function () {
-                        isCompilationInProgress = false;
+                        isCompile = false;
                         setStatusBarMessage(RUN_REQUEST_ABORTED);
-                        document.getElementById("console").innerHTML = RUN_REQUEST_ABORTED;
+                        setConsoleMessage(RUN_REQUEST_ABORTED);
                     }
                 });
 
@@ -113,21 +103,19 @@ var Runner = (function () {
         Highlighting.onHighlightingSuccess(data);
         if (data == null || !checkIfThereAreErrorsInData(data)) {
             setStatusBarMessage("Running...");
-            if (!isCompilationInProgress) {
+            if (!isCompile) {
                 $("#tabs").tabs("select", 1);
-                isCompilationInProgress = true;
+                isCompile = true;
                 if (isApplet && isJsApplet) {
                     try {
                         var dataFromApplet;
                         try {
                             dataFromApplet = $("#myapplet")[0].translateToJS(i, arguments);
-//                            dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
-
                         } catch (e) {
                             loadJsFromServer(i, arguments);
                             return;
                         }
-                        isCompilationInProgress = false;
+                        isCompile = false;
                         var dataJs;
                         if (dataFromApplet.indexOf("exception=") == 0) {
                             dataJs = dataFromApplet.substring(10, dataFromApplet.length);
@@ -146,6 +134,7 @@ var Runner = (function () {
                             setConsoleMessage("<p>" + safe_tags_replace(dataJs) + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
                         }
                     } catch (e) {
+                        isCompile = false;
                         setStatusBarMessage(ERROR_UNTIL_EXECUTE);
                         setConsoleMessage(createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + e));
                     }
@@ -171,14 +160,15 @@ var Runner = (function () {
             data:{text:i, consoleArgs:arguments},
             timeout:10000,
             error:function () {
-                isCompilationInProgress = false;
+                isCompile = false;
                 setStatusBarMessage(RUN_REQUEST_ABORTED);
-                document.getElementById("console").innerHTML = RUN_REQUEST_ABORTED;
+                setConsoleMessage(RUN_REQUEST_ABORTED);
             }
         });
     }
 
     function onConvertToJsSuccess(data) {
+        isCompile = false;
         try {
             var genData;
             $("#tabs").tabs("select", 1);
@@ -189,19 +179,71 @@ var Runner = (function () {
                     setConsoleMessage("<p>" + genData + "</p>");
                 } else if (typeof data[0].text != "undefined") {
                     $("#popupForCanvas").html("");
-                    $("#popupForCanvas").append("<canvas width=\"600\" height=\"300\" id=\"mycanvas\"></canvas>");
+                    $("#popupForCanvas").append("<canvas width=\"" + $("#popupForCanvas").dialog("option", "width")
+                        + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 50) + "\" id=\"mycanvas\"></canvas>");
                     if (runConfiguration.mode == "canvas") {
                         $("#popupForCanvas").dialog("open");
                     }
                     genData = eval(data[0].text);
                     setStatusBarMessage(EXECUTE_OK);
                     generatedJSCode = data[0].text;
-                    setConsoleMessage("<p>" + safe_tags_replace(genData) + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
+                    setConsoleMessage("<p>" + safe_tags_replace(genData) +
+                        "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>"
+                        + SHOW_JAVASCRIPT_CODE + "</a></p>");
                 }
 
             }
         } catch (e) {
-            alert(e);
+            setStatusBarMessage(ERROR_UNTIL_EXECUTE);
+        }
+    }
+
+    function onCompileSuccess(data) {
+        isCompile = false;
+        var isCompiledWithErrors = false;
+        setStatusBarMessage("Loading output...");
+        if (data != null) {
+            if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
+                $("#tabs").tabs("select", 0);
+                clearProblemView();
+                setStatusBarMessage(data[0].exception);
+                var j = 0;
+                while (typeof data[j] != "undefined") {
+                    exception(data[j]);
+                    j++;
+                }
+                return;
+            } else {
+                $("#tabs").tabs("select", 1);
+                var i = 0;
+                var errors = document.createElement("div");
+                while (typeof data[i] != "undefined") {
+                    //If there is a compilation error
+                    if (typeof data[i].message != "undefined") {
+                        getErrors();
+                        isCompiledWithErrors = true;
+                        $("#tabs").tabs("select", 0);
+                        //errors.appendChild(createElementForProblemView(data[i].type, null, data[i].message));
+                    } else {
+                        var p = document.createElement("p");
+                        if ((data[i].type == "err") && (data[i].text != "")) {
+                            p.className = "consoleViewError";
+                            isCompiledWithErrors = true;
+                        }
+                        if (data[i].type == "info") {
+                            p.className = "consoleViewInfo";
+                        }
+                        p.innerHTML = unEscapeString(data[i].text);
+                        errors.appendChild(p);
+                    }
+                    i++;
+                }
+                document.getElementById("console").appendChild(errors);
+            }
+        }
+        if (!isCompiledWithErrors) {
+            setStatusBarMessage(EXECUTE_OK);
+        } else {
             setStatusBarMessage(ERROR_UNTIL_EXECUTE);
         }
     }

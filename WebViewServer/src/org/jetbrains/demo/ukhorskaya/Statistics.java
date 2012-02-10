@@ -68,9 +68,6 @@ public class Statistics {
                 writer.close();
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), file.getAbsolutePath());
-                /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-                );*/
             }
         }
         try {
@@ -81,9 +78,6 @@ public class Statistics {
             //Impossible
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), file.getAbsolutePath());
-            /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-            );*/
         }
 
     }
@@ -254,10 +248,11 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
 
     private String getLogsPeriod() {
         Calendar c = Calendar.getInstance();
-        long curMillis;
+        long curMillis = 0;
         try {
             curMillis = DateFormat.getInstance().parse(ResponseUtils.getDate(c) + " 23:59 AM, PDT").getTime();
         } catch (ParseException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), ResponseUtils.getDate(c) + " 23:59 AM, PDT");
             curMillis = System.currentTimeMillis();
         }
         c.setTimeInMillis(curMillis - (DateUtils.MILLIS_PER_DAY * uniqueUsersPerDay.size() - DateUtils.MILLIS_PER_MINUTE));
@@ -295,9 +290,6 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
                 file.createNewFile();
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
-                /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-                );*/
             }
         }
 
@@ -329,9 +321,6 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
             writer.close();
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
-            /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-            );*/
         }
     }
 
@@ -380,9 +369,6 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
             writer.close();
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
-            /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), e, file.getAbsolutePath())
-            );*/
         }
     }
 
@@ -464,6 +450,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
         try {
             reader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
             //impossible
             return;
         }
@@ -499,8 +486,6 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
 
                             } catch (ParseException e) {
                                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), tmp);
-                                /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(),
-                                        e, tmp));*/
                             }
                         }
                         if (token.equals("type=INC_NUMBER_OF_REQUESTS")) {
@@ -535,8 +520,6 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
             uniqueUsersPerDay.add(set);
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), file.getAbsolutePath());
-            /*ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(),
-                    e, file.getAbsolutePath()));*/
         }
     }
 
@@ -558,7 +541,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
             try {
                 dateFrom = DateFormat.getInstance().parse("12/01/2011 0:0 AM, PDT");
             } catch (ParseException e) {
-                e.printStackTrace();
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "12/01/2011 0:0 AM, PDT");
             }
             dateTo = new Date();
 
@@ -567,7 +550,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
                     try {
                         analyzeExceptionLog(file);
                     } catch (Throwable e) {
-                        e.printStackTrace();
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
                     }
                 }
             }
@@ -713,7 +696,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
                 return 1;
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), dateStr);
         }
         return -2;
     }
@@ -742,6 +725,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
                 }
             }
         } catch (ParseException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "Incorrect date format: " + from + " " + to);
             return "Incorrect date format: " + from + " " + to;
         }
         analyzeLogs("exceptions");

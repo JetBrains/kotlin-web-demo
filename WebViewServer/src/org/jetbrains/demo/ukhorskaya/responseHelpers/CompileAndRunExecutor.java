@@ -51,6 +51,7 @@ public class CompileAndRunExecutor {
         try {
             errors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
             return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
         }
 

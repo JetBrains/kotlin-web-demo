@@ -1,77 +1,64 @@
-package testhtml;
+/*
+This example is based on example from html5 canvas2D docs:
+    http://www.w3.org/TR/2dcontext/
+Note that only a subset of the api is supported for now.
+*/
+
+package fancylines
 
 import js.*;
 import html5.*;
 import jquery.*;
 
 fun main() {
-  jq {
-    Test().run();
-    HelloKotlin().run();
-  }
+    //jq is a name for JQuery function
+    jq {
+        FancyLines().run();
+    }
 }
 
+class FancyLines() {
+    // we use two 'magic' functions here getContext() and getCanvas()
+    val context = getContext();
+    val height = getCanvas().height;
+    val width = getCanvas().width;
+    var x = width * Math.random();
+    var y = height * Math.random();
+    var hue = 0;
 
-class Test() {
-  val context = getContext();
-  val height = getCanvas().height;
-  val width = getCanvas().width;
-  var x = width * Math.random();
-  var y = height * Math.random();
-  var hue = 0;
+    fun line() {
+        context.save();
 
-  fun line() {
-    context.save();
-    context.beginPath();
-    context.lineWidth = 20.0 * Math.random();
-    context.moveTo(x, y);
+        context.beginPath();
 
-    x = width * Math.random();
-    y = height * Math.random();
+        context.lineWidth = 20.0 * Math.random();
+        context.moveTo(x, y);
 
-    context.bezierCurveTo(width * Math.random(), height * Math.random(),
-        width * Math.random(), height * Math.random(), x, y);
+        x = width * Math.random();
+        y = height * Math.random();
 
-    hue += Math.random() * 10;
-    context.strokeStyle = "hsl($hue, 50%, 50%)";
+        context.bezierCurveTo(width * Math.random(), height * Math.random(),
+            width * Math.random(), height * Math.random(), x, y);
 
-    context.shadowColor = "white";
-    context.shadowBlur = 10.0;
+        hue += Math.random() * 10;
 
-    context.stroke();
-    context.restore();
-  }
+        context.strokeStyle = "hsl($hue, 50%, 50%)";
 
-  fun blank() {
-    context.fillStyle = "rgba(255,255,1,0.1)";
-    context.fillRect(0.0, 0.0, width, height);
-  }
+        context.shadowColor = "white";
+        context.shadowBlur = 10.0;
 
-  fun run() {
-    setInterval({line()}, 40);
-    setInterval({blank()}, 100);
-  }
-}
+        context.stroke();
 
-class HelloKotlin() {
-  val context = getContext();
-  val height = getCanvas().height;
-  val width = getCanvas().width;
+        context.restore();
+    }
 
-  fun run() {
-    setInterval({
-      greet();
-    }, 2000);
-  }
+    fun blank() {
+        context.fillStyle = "rgba(255,255,1,0.1)";
+        context.fillRect(0.0, 0.0, width, height);
+    }
 
-  fun greet() {
-    context.save();
-    val message = "Hello Kotlin";
-    context.font = "bold 20px Georgia, serif";
-    context.scale(5.0, 5.0);
-    context.strokeStyle = "rgba(0,0,0, 0.8)";
-    context.strokeText(message, /*(width / 3) + */ (width / 7) * Math.random(),
-                                /*(height / 3) + */ (height / 7) * Math.random());
-    context.restore();
-  }
+    fun run() {
+        setInterval({line()}, 40);
+        setInterval({blank()}, 100);
+    }
 }

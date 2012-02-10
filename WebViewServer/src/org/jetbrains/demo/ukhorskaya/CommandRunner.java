@@ -66,7 +66,9 @@ public class CommandRunner {
     public static void setServerSetting(String setting) {
         if (setting.startsWith("java_home")) {
             ServerSettings.JAVA_HOME = ResponseUtils.substringAfter(setting, "java_home ");
-        } else if (setting.startsWith("host")) {
+        } else if (setting.startsWith("java_execute")) {
+            ServerSettings.JAVA_EXECUTE = ResponseUtils.substringAfter(setting, "java_execute ");
+        }  else if (setting.startsWith("host")) {
             ServerSettings.HOST = ResponseUtils.substringAfter(setting, "host ");
         } else if (setting.startsWith("port")) {
             ServerSettings.PORT = ResponseUtils.substringAfter(setting, "port ");

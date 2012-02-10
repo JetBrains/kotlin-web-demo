@@ -22,7 +22,7 @@ var Highlighting = (function () {
     Highlighting.getErrors = function (f) {
         if (!isLoadingHighlighting) {
             if (runConfiguration.mode == "") {
-                setTimeout(function() {
+                setTimeout(function () {
                     getErrors(f);
                 }, 500);
             } else {
@@ -31,7 +31,7 @@ var Highlighting = (function () {
         }
     };
 
-    Highlighting.sendHighlightingRequest = function(onLoad) {
+    Highlighting.sendHighlightingRequest = function (onLoad) {
         isLoadingHighlighting = true;
         var i = editor.getValue();
         $.ajax({
@@ -43,14 +43,14 @@ var Highlighting = (function () {
             data:{text:i},
             timeout:10000,
             error:function () {
-                document.getElementById("problems").innerHTML = "";
+                clearProblemView();
                 isLoadingHighlighting = false;
                 setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
             }
         });
     };
 
-    Highlighting.onHighlightingSuccess = function(data) {
+    Highlighting.onHighlightingSuccess = function (data) {
         isLoadingHighlighting = false;
         if (data == null) {
             return;
@@ -61,7 +61,7 @@ var Highlighting = (function () {
 
         if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
             $("#tabs").tabs("select", 0);
-            document.getElementById("problems").innerHTML = "";
+            clearProblemView();
             setStatusBarMessage(unEscapeString(data[0].exception));
             setConsoleMessage(unEscapeString(data[0].exception));
             var j = 0;
@@ -80,7 +80,7 @@ var Highlighting = (function () {
                 if (i > 0) {
                     $("#tabs").tabs("select", 0);
                 }
-                document.getElementById("problems").innerHTML = problems.innerHTML;
+                $("#problems").html(problems.innerHTML);
                 updateStatusBar();
                 return;
             }
@@ -132,7 +132,7 @@ var Highlighting = (function () {
     }
 
 
-    Highlighting.getDataFromApplet = function(type) {
+    Highlighting.getDataFromApplet = function (type) {
         var i = editor.getValue();
         try {
             var dataFromApplet;
@@ -156,28 +156,10 @@ var Highlighting = (function () {
                     $(".applet-nohighlighting").click();
                     setStatusBarError(GET_FROM_APPLET_FAILED);
 
-                    var title = document.getElementById("appletclient").title;
+                    var title = $("#appletclient").attr("title");
                     if (title.indexOf(GET_FROM_APPLET_FAILED) == -1) {
-                        document.getElementById("appletclient").title += ". " + GET_FROM_APPLET_FAILED;
+                        $("#appletclient").attr("title", title + ". " + GET_FROM_APPLET_FAILED);
                     }
-                    /*$(".applet-enable").click(function () {
-                     try {
-                     $("#myapplet")[0].getHighlighting("");
-                     var title = document.getElementById("appletclient").title;
-                     var pos = title.indexOf(GET_FROM_APPLET_FAILED)
-                     if (pos != -1) {
-                     title = title.substring(0, pos);
-                     document.getElementById("appletclient").title = title;
-                     }
-                     } catch (e) {
-                     $(".applet-disable").click();
-                     }
-                     });
-
-                     if (type == "highlighting") {
-                     isLoadingHighlighting = false;
-                     //getErrors();
-                     }*/
                 } else {
                     if (type == "complete") {
                         setStatusBarError(COMPLETE_REQUEST_ABORTED);
@@ -193,7 +175,7 @@ var Highlighting = (function () {
             if (typeof data != "undefined") {
                 if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                     $("#tabs").tabs("select", 0);
-                    document.getElementById("problems").innerHTML = "";
+                    clearProblemView();
                     setStatusBarMessage(data[0].exception);
                     var j = 0;
                     while (typeof data[j] != "undefined") {
@@ -214,12 +196,12 @@ var Highlighting = (function () {
         }
     };
 
-    Highlighting.isLoadingErrors = function() {
+    Highlighting.isLoadingErrors = function () {
         return isLoadingHighlighting;
     };
 
-    Highlighting.setLoadingErrors = function(state) {
-       isLoadingHighlighting = state;
+    Highlighting.setLoadingErrors = function (state) {
+        isLoadingHighlighting = state;
     };
 
     function getErrorsWithMode(f) {
@@ -236,13 +218,13 @@ var Highlighting = (function () {
             $.ajax({
                 url:generateAjaxUrl("highlight", runConfiguration.mode),
                 context:document.body,
-                success: f,
+                success:f,
                 dataType:"json",
                 type:"POST",
                 data:{text:i},
                 timeout:10000,
                 error:function () {
-                    document.getElementById("problems").innerHTML = "";
+                    clearProblemView();
                     isLoadingHighlighting = false;
                     setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
                 }
@@ -251,17 +233,6 @@ var Highlighting = (function () {
     }
 
     var counterSetConfMode = 0;
-    function setRunConfigurationMode() {
-        var mode = $("#runConfigurationMode").val();
-        if (mode == "" && counterSetConfMode < 10) {
-            counterSetConfMode++;
-            setTimeout(setRunConfigurationMode, 100);
-        } else {
-            counterSetConfMode = 0;
-            runConfiguration.mode = mode;
-        }
-    }
-
 
 
     return Highlighting;

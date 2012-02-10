@@ -91,7 +91,7 @@ $(document).ready(function () {
 
     $("#popupForCanvas").dialog({
 //        modal:"false",
-        width:600,
+        width:630,
         height:350,
         autoOpen:false,
         close:function () {
@@ -196,11 +196,11 @@ $(".applet-enable").click(function () {
         try {
             document.getElementById("myapplet").style.display = "block";
             isAppletLoaded = true;
-            var title = document.getElementById("appletclient").title;
-            var pos = title.indexOf(GET_FROM_APPLET_FAILED)
+            var title = $("#appletclient").attr("title");
+            var pos = title.indexOf(GET_FROM_APPLET_FAILED);
             if (pos != -1) {
                 title = title.substring(0, pos);
-                document.getElementById("appletclient").title = title;
+                $("#appletclient").attr("title", title);
             }
         } catch (e) {
 //            document.getElementById("debug").innerHTML = e;
@@ -329,6 +329,10 @@ function userNameClick(e) {
         div.style.position = "absolute";
 
         var element = document.getElementById("userNameTitle");
+        if (element == null) {
+            return;
+        }
+
         var left = element.offsetLeft;
         var top = element.offsetTop;
         for (var parent = element.offsetParent; parent; parent = parent.offsetParent) {
@@ -336,9 +340,6 @@ function userNameClick(e) {
             top += parent.offsetTop - parent.scrollTop
         }
 
-
-//        alert(left + " " + top);
-//        alert (left + document.getElementById("userNameTitle").width + " " + top + document.getElementById("userNameTitle").height);
         div.style.left = left + 240 - 42 + "px";
         div.style.top = top + 27 - 3 + "px";
         div.onclick = function () {

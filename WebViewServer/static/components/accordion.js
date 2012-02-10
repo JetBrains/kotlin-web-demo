@@ -59,6 +59,10 @@ var Accordion = (function () {
         }
     };
 
+    Accordion.getSelectedExample = function() {
+        return lastSelectedExample;
+    };
+
     Accordion.loadExample = function (name) {
         if (getEditorState()) {
             confirmAction(function (name) {
@@ -403,11 +407,11 @@ var Accordion = (function () {
     var counter = 0;
 
     function onLoadingExampleSuccess(data) {
-        if (runConfiguration.mode == "" && counter < 10) {
+        if (runConfiguration.mode == "" && counter < 5) {
             setTimeout(function () {
                 counter++;
                 onLoadingExampleSuccess(data);
-            }, 200);
+            }, 50);
         } else {
             counter = 0;
 //        editor.focus();
@@ -418,7 +422,6 @@ var Accordion = (function () {
             }
             setEditorState(false);
         }
-
     }
 
     function onLoadingExamplesSuccess(data) {

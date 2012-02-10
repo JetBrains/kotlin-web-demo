@@ -39,7 +39,6 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
             return facebookService.getAuthorizationUrl(EMPTY_TOKEN);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "facebook");
-//            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot authorize authorization request", e, "null"));
         }
         return "";
     }
@@ -61,7 +60,6 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
             userInfo.login((String) object.get("name"), (String) object.get("id"), TYPE);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "facebook: " + url);
-//            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("Cannot verify authorization request", e, url));
         }
         return userInfo;
     }

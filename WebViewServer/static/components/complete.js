@@ -39,7 +39,6 @@ var timer;
 var timerIntervalForNonPrinting = 300;
 
 var isCompletionInProgress = false;
-var isCompilationInProgress = false;
 
 var keywords;
 var isContinueComplete = false;
@@ -123,7 +122,7 @@ function checkIfThereAreErrorsInProblemView() {
         }
         if (result) {
             setStatusBarMessage(ERROR_UNTIL_EXECUTE);
-            document.getElementById("console").innerHTML = TRY_RUN_CODE_WITH_ERROR;
+            setConsoleMessage(TRY_RUN_CODE_WITH_ERROR);
         }
     }
     return result;
@@ -151,8 +150,9 @@ function createRedElement(text) {
 }
 
 $("#refreshGutters").click(function () {
+    setRunConfigurationMode();
     setStatusBarMessage("Loading...");
-    document.getElementById("problems").innerHTML = "";
+    clearProblemView();
     removeStyles();
     for (var i = 0; i < editor.lineCount(); i++) {
         try {
@@ -175,71 +175,8 @@ $("#refreshGutters").click(function () {
 
 $("#run").click(function () {
     Runner.run();
-    /*var i = editor.getValue();
-     setConsoleMessage("");
-     setStatusBarMessage("Running...");
-     if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
-     isLoadingHighlighting = true;
-     sendHighlightingRequest(onHighlightingSuccessWait)
-     } else {
-     getErrors();
-     onHighlightingSuccessWait(null);
-     }*/
-
 });
 
-
-
-
-function onCompileSuccess(data) {
-    var isCompiledWithErrors = false;
-    isCompilationInProgress = false;
-    setStatusBarMessage("Loading output...")
-    if (data != null) {
-        if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-            $("#tabs").tabs("select", 0);
-            document.getElementById("problems").innerHTML = "";
-            setStatusBarMessage(data[0].exception);
-            var j = 0;
-            while (typeof data[j] != "undefined") {
-                exception(data[j]);
-                j++;
-            }
-            return;
-        } else {
-            $("#tabs").tabs("select", 1);
-            var i = 0;
-            var errors = document.createElement("div");
-            while (typeof data[i] != "undefined") {
-                //If there is a compilation error
-                if (typeof data[i].message != "undefined") {
-                    getErrors();
-                    isCompiledWithErrors = true;
-                    $("#tabs").tabs("select", 0);
-                    //errors.appendChild(createElementForProblemView(data[i].type, null, data[i].message));
-                } else {
-                    var p = document.createElement("p");
-                    if ((data[i].type == "err") && (data[i].text != "")) {
-                        p.className = "consoleViewError";
-                        isCompiledWithErrors = true;
-                    }
-                    if (data[i].type == "info") {
-                        p.className = "consoleViewInfo";
-                    }
-                    p.innerHTML = unEscapeString(data[i].text);
-                    errors.appendChild(p);
-                }
-                i++;
-            }
-            document.getElementById("console").appendChild(errors);
-        }
-    }
-    if (!isCompiledWithErrors) {
-        setStatusBarMessage(EXECUTE_OK);
-    } else {
-        setStatusBarMessage(ERROR_UNTIL_EXECUTE);
-    }
-}
 
 function exception(ex) {
     var statusMes = "";

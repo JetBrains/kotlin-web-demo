@@ -1,6 +1,9 @@
 // We specify the package of our tests
 
 import com.google.common.io.Files;
+import com.thoughtworks.selenium.CommandProcessor;
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.Selenium;
 import junit.framework.TestCase;
 import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
@@ -11,6 +14,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Wait;
@@ -18,6 +22,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -39,10 +44,12 @@ public class SeleniumTest extends TestCase {
     private WebElement console;
     private WebElement run;
     private WebElement refresh;
-    private WebElement runJs;
+    private WebElement selectmenu;
     private WebElement accordion;
     private Wait<WebDriver> wait;
     private WebElement editor;
+
+    private CommandProcessor executor;
 
     private boolean isRunTested = true;
 
@@ -64,6 +71,7 @@ public class SeleniumTest extends TestCase {
         statusBar = driver.findElement(By.id("statusbar"));
         console = driver.findElement(By.id("console"));
         run = driver.findElement(By.id("run"));
+        selectmenu = driver.findElement(By.id("runConfigurationMode"));
         refresh = driver.findElement(By.id("refreshGutters"));
         accordion = driver.findElement(By.id("accordion"));
 
@@ -76,7 +84,7 @@ public class SeleniumTest extends TestCase {
     }
 
     private String generateIdFormNameAndFolder(String name, String folder) {
-          return folder.replaceAll("([ ])", "_") + "&name=" + name.replaceAll("([ ])", "_");
+        return folder.replaceAll("([ ])", "_") + "&name=" + name.replaceAll("([ ])", "_");
     }
 
     public void testAllSimplesExamples() throws IOException, InterruptedException {
@@ -421,7 +429,8 @@ public class SeleniumTest extends TestCase {
                 "}" +
                 "\");");
 
-        runJs.click();
+        js.executeScript("$(\"#runConfigurationMode\").selectmenu(\"value\", \"js\");");
+        run.click();
         Thread.sleep(500);
         checkErrorsElemements(1, 1);
 
@@ -432,7 +441,7 @@ public class SeleniumTest extends TestCase {
                 "}" +
                 "\");");
 
-        runJs.click();
+        run.click();
         Thread.sleep(500);
         checkErrorsElemements(1, 2);
 
@@ -445,7 +454,7 @@ public class SeleniumTest extends TestCase {
                 "\");");
 
         Thread.sleep(500);
-        runJs.click();
+        run.click();
         Thread.sleep(500);
         checkWarningElemements(1, 1);
         wait.until(new ExpectedCondition<Boolean>() {
@@ -463,7 +472,7 @@ public class SeleniumTest extends TestCase {
                 "}" +
                 "\");");
 
-        runJs.click();
+        run.click();
         Thread.sleep(500);
         checkErrorsElemements(1, 1);
         checkWarningElemements(1, 1);
@@ -476,7 +485,7 @@ public class SeleniumTest extends TestCase {
                 "}" +
                 "\");");
 
-        runJs.click();
+        run.click();
         Thread.sleep(500);
         checkErrorsElemements(1, 1);
         checkWarningElemements(1, 2);
@@ -577,11 +586,11 @@ public class SeleniumTest extends TestCase {
             }
         });*/
 
-        if (isRunTested) {
-            run.click();
-        } else {
-            runJs.click();
+        if (!isRunTested) {
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("$(\"#runConfigurationMode\").selectmenu(\"value\", \"js\");");
         }
+        run.click();
 
         Thread.sleep(500);
 

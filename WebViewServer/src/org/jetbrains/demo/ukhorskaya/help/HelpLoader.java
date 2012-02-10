@@ -3,6 +3,7 @@ package org.jetbrains.demo.ukhorskaya.help;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.ResponseUtils;
 import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
+import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.json.JSONArray;
 import org.w3c.dom.*;
 
@@ -126,7 +127,7 @@ public class HelpLoader {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "");
         }
         ErrorWriter.writeInfoToConsole("Help for keywords was loaded.");
         response.append("\nHelp for keywords was loaded.");
@@ -157,7 +158,7 @@ public class HelpLoader {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "");
         }
         ErrorWriter.writeInfoToConsole("Help for examples was loaded.");
         response.append("\nHelp for examples was loaded.");
