@@ -120,12 +120,14 @@ var Runner = (function () {
                     try {
                         var dataFromApplet;
                         try {
-                            dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
+                            dataFromApplet = $("#myapplet")[0].translateToJS(i, arguments);
+//                            dataFromApplet = $("#jsapplet")[0].translateToJS(i, arguments);
+
                         } catch (e) {
                             loadJsFromServer(i, arguments);
                             return;
                         }
-                        var isCompilationInProgress = false;
+                        isCompilationInProgress = false;
                         var dataJs;
                         if (dataFromApplet.indexOf("exception=") == 0) {
                             dataJs = dataFromApplet.substring(10, dataFromApplet.length);
@@ -133,13 +135,15 @@ var Runner = (function () {
                             setStatusBarMessage(ERROR_UNTIL_EXECUTE);
                             setConsoleMessage("<p>" + dataJs + "</p>");
                         } else {
-                            if (runConfiguration.mode == 'canvas') {
-                                setConsoleMessage("<p><canvas id=\"mycanvas\"></canvas></p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
+                            $("#popupForCanvas").html("");
+                            $("#popupForCanvas").append("<canvas width=\"600\" height=\"300\" id=\"mycanvas\"></canvas>");
+                            if (runConfiguration.mode == "canvas") {
+                                $("#popupForCanvas").dialog("open");
                             }
                             dataJs = eval(dataFromApplet);
-
                             setStatusBarMessage(EXECUTE_OK);
                             generatedJSCode = dataFromApplet;
+                            setConsoleMessage("<p>" + safe_tags_replace(dataJs) + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
                         }
                     } catch (e) {
                         setStatusBarMessage(ERROR_UNTIL_EXECUTE);
@@ -185,7 +189,7 @@ var Runner = (function () {
                     setConsoleMessage("<p>" + genData + "</p>");
                 } else if (typeof data[0].text != "undefined") {
                     $("#popupForCanvas").html("");
-                    $("#popupForCanvas").append("<canvas id=\"mycanvas\"></canvas>");
+                    $("#popupForCanvas").append("<canvas width=\"600\" height=\"300\" id=\"mycanvas\"></canvas>");
                     if (runConfiguration.mode == "canvas") {
                         $("#popupForCanvas").dialog("open");
                     }

@@ -8,15 +8,14 @@ import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.Interval;
-import org.jetbrains.jet.compiler.JetCoreEnvironment;
+import org.jetbrains.demo.ukhorskaya.exceptions.KotlinCoreException;
+import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.*;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
-import org.jetbrains.demo.ukhorskaya.exceptions.KotlinCoreException;
-import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
-import org.jetbrains.k2js.facade.K2JSTranslatorApplet;
+import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
 
 import java.util.*;
 
@@ -96,7 +95,7 @@ public class ErrorAnalyzer {
                 bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
             } else {
-                bindingContext = new K2JSTranslatorApplet().getBindingContext(currentPsiFile.getText());
+                bindingContext = new K2JSTranslatorUtils().getBindingContext(currentPsiFile.getText());
             }
 
         } catch (Throwable e) {

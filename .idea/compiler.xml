@@ -20,6 +20,7 @@
       <entry name="?*.ico" />
       <entry name="?*.jar" />
       <entry name="?*.xml" />
+      <entry name="?*.kt" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>

@@ -19,7 +19,7 @@ import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.resolve.DescriptorRenderer;
-import org.jetbrains.k2js.facade.K2JSTranslatorApplet;
+import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
 import org.json.JSONArray;
 
 import java.util.Collection;
@@ -61,7 +61,7 @@ public class JsonResponseForCompletion {
         BindingContext bindingContext;
         try {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
-                bindingContext = new K2JSTranslatorApplet().getBindingContext(currentPsiFile.getText());
+                bindingContext = new K2JSTranslatorUtils().getBindingContext(currentPsiFile.getText());
             } else {
                 bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);

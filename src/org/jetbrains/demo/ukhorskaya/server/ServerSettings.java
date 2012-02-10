@@ -37,5 +37,5 @@ public class ServerSettings {
     public static String MYSQL_PORT = "3306";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
     public static String IS_TEST_VERSION = "false";
-    public static final String DATABASE_VERSION = "1.0";
+    public static final String DATABASE_VERSION = "1.1";
 }

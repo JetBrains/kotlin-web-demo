@@ -1,13 +1,9 @@
 package org.jetbrains.demo.ukhorskaya.responseHelpers;
 
-import org.jetbrains.demo.ukhorskaya.Initializer;
-import org.jetbrains.k2js.config.TestConfig;
-import org.jetbrains.k2js.facade.K2JSTranslator;
-import org.jetbrains.k2js.facade.K2JSTranslatorApplet;
-import org.json.JSONArray;
 import org.jetbrains.demo.ukhorskaya.ErrorWriter;
-import org.jetbrains.demo.ukhorskaya.ErrorWriterOnServer;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
+import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
+import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +24,7 @@ public class JsConverter {
     public String getResult(String code, String arguments) {
         JSONArray result = new JSONArray();
         Map<String, String> map = new HashMap<String, String>();
-        K2JSTranslatorApplet translator = new K2JSTranslatorApplet();
+        K2JSTranslatorUtils translator = new K2JSTranslatorUtils();
         //TODO environment
 //        translator.setEnvironment(Initializer.getEnvironment());
         try {

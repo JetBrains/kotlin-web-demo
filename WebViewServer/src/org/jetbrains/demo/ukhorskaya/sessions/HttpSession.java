@@ -106,7 +106,11 @@ public class HttpSession {
                 writeResponse("Incorrect request", HttpStatus.SC_BAD_REQUEST);
             }
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
+            if (sessionInfo != null && sessionInfo.getType() != null && currentPsiFile != null && currentPsiFile.getText() != null) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
+            } else {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "null");
+            }
             writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -145,7 +149,7 @@ public class HttpSession {
     private void sendSaveProgramResult(SessionInfo sessionInfo) {
         String result;
         if (parameters.getArgs().startsWith("id=")) {
-            String url = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf="); 
+            String url = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");
             String id = ResponseUtils.getExampleOrProgramNameByUrl(url);
             PostData data = getPostDataFromRequest();
             result = MySqlConnector.getInstance().updateProgram(id, data.text, data.arguments, ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));

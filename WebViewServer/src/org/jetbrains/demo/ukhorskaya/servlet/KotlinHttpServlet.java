@@ -33,6 +33,7 @@ public class KotlinHttpServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.setProperty("kotlin.running.in.server.mode", "true");
+        System.setProperty("java.awt.headless", "true");
 
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
 

@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="WebViewApplet:jar">
     <output-path>$PROJECT_DIR$/WebViewServer/static</output-path>
-    <root id="archive" name="WebViewApplet.jar">
+    <root id="archive" name="WebViewApplet02102012.jar">
       <element id="module-output" name="WebViewApplet" />
       <element id="module-output" name="WebView" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../KotlinCompiler/lib/json-20090211.jar" path-in-jar="/" />
@@ -16,7 +16,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/annotations.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/asm-commons.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-runtime.jar" path-in-jar="/" />
-      <element id="dir-copy" path="$PROJECT_DIR$/../k2js/jslib" />
+      <element id="module-output" name="jslib" />
     </root>
   </artifact>
 </component>

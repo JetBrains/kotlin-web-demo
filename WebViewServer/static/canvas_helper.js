@@ -5,3 +5,7 @@ function getContext() {
 function getCanvas() {
     return document.getElementsByTagName('canvas')[0];
 }
+
+function getKotlinLogo() {
+    return document.getElementById('kotlinlogofork2js');
+}

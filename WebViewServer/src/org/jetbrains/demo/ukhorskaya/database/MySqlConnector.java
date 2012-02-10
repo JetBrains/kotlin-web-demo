@@ -67,23 +67,22 @@ public class MySqlConnector {
             if (!checkConnection()) {
                 return false;
             }
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("SHOW TABLES");
+            PreparedStatement st = connection.prepareStatement("SHOW TABLES");
+            ResultSet rs = st.executeQuery();
             if (!rs.next()) {
-                st = connection.createStatement();
-                st.executeUpdate("CREATE TABLE databaseinfo (" +
+                st = connection.prepareStatement("CREATE TABLE databaseinfo (" +
                         "  VERSION VARCHAR(45)" +
                         ")" +
                         "ENGINE = InnoDB;");
-                st = connection.createStatement();
-                st.executeUpdate("CREATE TABLE users (" +
+                st.execute();
+                st = connection.prepareStatement("CREATE TABLE users (" +
                         "  USER_ID VARCHAR(45) NOT NULL DEFAULT ''," +
                         "  USER_TYPE VARCHAR(45) NOT NULL DEFAULT ''," +
                         "  USER_NAME VARCHAR(45) NOT NULL DEFAULT ''" +
                         ")" +
                         "ENGINE = InnoDB;");
-                st = connection.createStatement();
-                st.executeUpdate("CREATE TABLE programs (" +
+                st.execute();
+                st = connection.prepareStatement("CREATE TABLE programs (" +
                         "  PROGRAM_ID VARCHAR(45) NOT NULL DEFAULT ''," +
                         "  PROGRAM_NAME VARCHAR(45) NOT NULL DEFAULT ''," +
                         "  PROGRAM_TEXT LONGTEXT," +
@@ -93,16 +92,18 @@ public class MySqlConnector {
                         "  PRIMARY KEY(PROGRAM_ID)" +
                         ")" +
                         "ENGINE = InnoDB;");
+                st.execute();
 
-                st = connection.createStatement();
-                st.executeUpdate("CREATE TABLE userprogramid (" +
+                st = connection.prepareStatement("CREATE TABLE userprogramid (" +
                         "  USER_ID VARCHAR(45) NOT NULL DEFAULT ''," +
                         "  USER_TYPE VARCHAR(45) NOT NULL DEFAULT ''," +
                         "  PROGRAM_ID VARCHAR(45) NOT NULL DEFAULT ''" +
                         ")" +
                         "ENGINE = InnoDB;");
-                st = connection.createStatement();
-                st.executeUpdate("INSERT INTO databaseinfo VALUES ('" + ServerSettings.DATABASE_VERSION + "')");
+                st.execute();
+                st = connection.prepareStatement("INSERT INTO databaseinfo (VERSION) VALUES (?)");
+                st.setString(1, ServerSettings.DATABASE_VERSION);
+                st.executeUpdate();
             }
             closeStatementAndResultSet(st, rs);
             return true;
@@ -117,27 +118,27 @@ public class MySqlConnector {
     }
 
     private boolean compareVersion() {
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            st = connection.createStatement();
-            rs = st.executeQuery("SHOW TABLES");
+            st = connection.prepareStatement("SHOW TABLES");
+            rs = st.executeQuery();
             if (!checkIfDatabaseInfoExists(rs)) {
-                st = connection.createStatement();
-                st.executeUpdate("CREATE TABLE databaseinfo (" +
+                st = connection.prepareStatement("CREATE TABLE databaseinfo (" +
                         "  VERSION VARCHAR(45)" +
                         ") " +
                         "ENGINE = InnoDB;");
-                st = connection.createStatement();
+                st.execute();
                 System.out.println("Create table databaseInfo");
-                st.executeUpdate("INSERT databaseinfo SET VERSION='" + ServerSettings.DATABASE_VERSION + "'");
+                st = connection.prepareStatement("INSERT databaseinfo (VERSION) SET VERSION=?");
+                st.setString(1, ServerSettings.DATABASE_VERSION);
+                st.executeUpdate();
                 System.out.println("add database version");
                 return false;
             }
             if (rs.next()) {
-                String query = "SELECT * FROM databaseinfo";
-                st = connection.createStatement();
-                rs = st.executeQuery(query);
+                st = connection.prepareStatement("SELECT * FROM databaseinfo");
+                rs = st.executeQuery();
                 if (rs.next()) {
                     String version = rs.getString("VERSION");
                     return version.equals(ServerSettings.DATABASE_VERSION);
@@ -171,16 +172,15 @@ public class MySqlConnector {
 
     private void checkDatabaseVersion() {
         if (!compareVersion()) {
-            Statement st = null;
+            PreparedStatement st = null;
             try {
-                System.out.println("different");
-                st = connection.createStatement();
+                st = connection.prepareStatement("UPDATE databaseinfo SET VERSION=?");
+                st.setString(1, ServerSettings.DATABASE_VERSION);
+                st.executeUpdate();
 
-                st.executeUpdate("UPDATE databaseinfo SET VERSION='" + ServerSettings.DATABASE_VERSION + "'");
-                st = connection.createStatement();
-
-                st.executeUpdate("ALTER TABLE programs ADD COLUMN RUN_CONF VARCHAR(45) NOT NULL DEFAULT '' AFTER PROGRAM_LINK");
-                System.out.println("add column run_conf");
+                //st = connection.prepareStatement("ALTER TABLE programs ADD COLUMN RUN_CONF VARCHAR(45) NOT NULL DEFAULT '' AFTER PROGRAM_LINK");
+                //st.execute();
+                //System.out.println("add column run_conf");
             } catch (SQLException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
@@ -201,10 +201,13 @@ public class MySqlConnector {
             return false;
         }
         if (!findUser(userInfo)) {
-            Statement st = null;
+            PreparedStatement st = null;
             try {
-                st = connection.createStatement();
-                st.executeUpdate("INSERT INTO users VALUES ('" + userInfo.getId() + "', '" + userInfo.getType() + "', '" + userInfo.getName() + "')");
+                st = connection.prepareStatement("INSERT INTO users (USER_ID, USER_TYPE, USER_NAME) VALUES (?, ?, ?)");
+                st.setString(1, userInfo.getId());
+                st.setString(2, userInfo.getType());
+                st.setString(3, userInfo.getName());
+                st.executeUpdate();
                 return true;
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -217,7 +220,7 @@ public class MySqlConnector {
         return false;
     }
 
-    private void closeStatement(Statement st) {
+    private void closeStatement(PreparedStatement st) {
         try {
             if (st != null) {
                 st.close();
@@ -228,12 +231,12 @@ public class MySqlConnector {
     }
 
     public boolean findUser(UserInfo userInfo) {
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            String query = "SELECT * FROM users WHERE USER_ID='" + userInfo.getId() + "'";
-            st = connection.createStatement();
-            rs = st.executeQuery(query);
+            st = connection.prepareStatement("SELECT * FROM users WHERE USER_ID=?");
+            st.setString(1, userInfo.getId());
+            rs = st.executeQuery();
             while (rs.next()) {
                 if (rs.getString("USER_TYPE").equals(userInfo.getType())) {
                     return true;
@@ -254,8 +257,7 @@ public class MySqlConnector {
         if (!checkConnection()) {
             return ResponseUtils.getJsonString("exception", "Cannot connect to database for save your program.");
         }
-        Statement st = null;
-        PreparedStatement pst = null;
+        PreparedStatement st = null;
         try {
             if (findUser(userInfo)) {
 
@@ -266,18 +268,25 @@ public class MySqlConnector {
                     return ResponseUtils.getJsonString("exception", "Program with same name already exists. Please choose the another one.");
                 }
 
-                st = connection.createStatement();
-
                 String programId = userInfo.getId() + RandomUtils.nextInt();
-                pst = connection.prepareStatement(
-                        "INSERT INTO programs (PROGRAM_ID, PROGRAM_NAME, PROGRAM_TEXT, PROGRAM_ARGS, PROGRAM_LINK, RUN_CONF) VALUES ('"
-                                + programId + "', ?, ?, ?, '', '" + runConfiguration + "')");
-                pst.setString(1, programName);
-                pst.setString(2, programText);
-                pst.setString(3, args);
-                pst.executeUpdate();
+                st = connection.prepareStatement(
+                        "INSERT INTO programs (PROGRAM_ID, PROGRAM_NAME, PROGRAM_TEXT, PROGRAM_ARGS, PROGRAM_LINK, RUN_CONF) VALUES " +
+                                "(?, ?, ?, ?, ?, ?)");
+                st.setString(1, programId);
+                st.setString(2, programName);
+                st.setString(3, programText);
+                st.setString(4, args);
+                st.setString(5, "");
+                st.setString(6, runConfiguration);
+                st.executeUpdate();
 
-                st.executeUpdate("INSERT INTO userprogramid VALUES ('" + userInfo.getId() + "', '" + userInfo.getType() + "', '" + programId + "')");
+                st = connection.prepareStatement("INSERT INTO userprogramid (USER_ID, USER_TYPE, PROGRAM_ID) VALUES " +
+                        "(?, ?, ?)");
+                st.setString(1, userInfo.getId());
+                st.setString(2, userInfo.getType());
+                st.setString(3, programId);
+                st.executeUpdate();
+
                 return ResponseUtils.getJsonString("programName", programName + "&id=" + programId);
             } else {
 //                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
@@ -304,12 +313,12 @@ public class MySqlConnector {
     }
 
     public boolean checkCountOfPrograms(UserInfo userInfo) {
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            String query = "SELECT count(*) FROM users WHERE USER_ID='" + userInfo.getId() + "'";
-            st = connection.createStatement();
-            rs = st.executeQuery(query);
+            st = connection.prepareStatement("SELECT count(*) FROM users WHERE USER_ID=?");
+            st.setString(1, userInfo.getId());
+            rs = st.executeQuery();
             if (!rs.next()) {
                 return false;
             }
@@ -329,12 +338,12 @@ public class MySqlConnector {
         if (!checkConnection()) {
             return ResponseUtils.getJsonString("exception", "Cannot connect to database for generate public link.");
         }
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            String query = "SELECT * FROM programs WHERE PROGRAM_ID='" + programId + "'";
-            st = connection.createStatement();
-            rs = st.executeQuery(query);
+            st = connection.prepareStatement("SELECT * FROM programs WHERE PROGRAM_ID=?");
+            st.setString(1, programId);
+            rs = st.executeQuery();
             if (!rs.next()) {
                 return ResponseUtils.getJsonString("exception", "Cannot find the program.");
             }
@@ -342,7 +351,10 @@ public class MySqlConnector {
             String publicLink = rs.getString("PROGRAM_LINK");
             if (publicLink == null || publicLink.isEmpty()) {
                 publicLink = "http://" + ServerSettings.AUTH_REDIRECT + "/?publicLink=" + programId;
-                st.executeUpdate("UPDATE programs SET PROGRAM_LINK='" + publicLink + "' WHERE PROGRAM_ID='" + programId + "'");
+                st = connection.prepareStatement("UPDATE programs  SET PROGRAM_LINK=? WHERE PROGRAM_ID=?");
+                st.setString(1, publicLink);
+                st.setString(2, programId);
+                st.executeUpdate();
             }
 
             return ResponseUtils.getJsonString("text", publicLink);
@@ -358,12 +370,12 @@ public class MySqlConnector {
         if (!checkConnection()) {
             return ResponseUtils.getJsonString("exception", "Cannot connect to database for load program by link.");
         }
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            String query = "SELECT * FROM programs WHERE PROGRAM_ID='" + programId + "'";
-            st = connection.createStatement();
-            rs = st.executeQuery(query);
+            st = connection.prepareStatement("SELECT * FROM programs WHERE PROGRAM_ID=?");
+            st.setString(1, programId);
+            rs = st.executeQuery();
             if (!rs.next()) {
 //                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
@@ -401,12 +413,23 @@ public class MySqlConnector {
         if (!checkConnection()) {
             return ResponseUtils.getJsonString("exception", "Cannot connect to database for save your program.");
         }
-        Statement st = null;
+        PreparedStatement st = null;
         try {
-            st = connection.createStatement();
-            st.executeUpdate("UPDATE programs SET PROGRAM_TEXT='" + programText + "' WHERE PROGRAM_ID='" + programId + "'");
-            st.executeUpdate("UPDATE programs SET PROGRAM_ARGS='" + args + "' WHERE PROGRAM_ID='" + programId + "'");
-            st.executeUpdate("UPDATE programs SET RUN_CONF='" + runConfiguration + "' WHERE PROGRAM_ID='" + programId + "'");
+            st = connection.prepareStatement("UPDATE programs SET PROGRAM_TEXT=? WHERE PROGRAM_ID=?");
+            st.setString(1, programText);
+            st.setString(2, programId);
+            st.executeUpdate();
+
+            st = connection.prepareStatement("UPDATE programs SET PROGRAM_ARGS=? WHERE PROGRAM_ID=?");
+            st.setString(1, args);
+            st.setString(2, programId);
+            st.executeUpdate();
+
+            st = connection.prepareStatement("UPDATE programs SET RUN_CONF=? WHERE PROGRAM_ID=?");
+            st.setString(1, runConfiguration);
+            st.setString(2, programId);
+            st.executeUpdate();
+
             return ResponseUtils.getJsonString("programId", programId);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
@@ -417,12 +440,12 @@ public class MySqlConnector {
     }
 
     public boolean findProgramByName(UserInfo userInfo, String programName) {
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            String query = "SELECT * FROM programs WHERE PROGRAM_NAME='" + programName + "'";
-            st = connection.createStatement();
-            rs = st.executeQuery(query);
+            st = connection.prepareStatement("SELECT * FROM programs WHERE PROGRAM_NAME=?");
+            st.setString(1, programName);
+            rs = st.executeQuery();
 
             ArrayList<String> programIds = new ArrayList<String>();
             while (rs.next()) {
@@ -431,8 +454,9 @@ public class MySqlConnector {
 
 
             for (String programId : programIds) {
-                query = "SELECT * FROM userprogramid WHERE PROGRAM_ID='" + programId + "'";
-                rs = st.executeQuery(query);
+                st = connection.prepareStatement("SELECT * FROM userprogramid WHERE PROGRAM_ID=?");
+                st.setString(1, programId);
+                rs = st.executeQuery();
                 if (!rs.next()) {
                     return false;
                 }
@@ -456,12 +480,12 @@ public class MySqlConnector {
         if (!checkConnection()) {
             return ResponseUtils.getJsonString("exception", "Cannot connect to database for load your program.");
         }
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            String query = "SELECT * FROM programs WHERE PROGRAM_ID='" + programId + "'";
-            st = connection.createStatement();
-            rs = st.executeQuery(query);
+            st = connection.prepareStatement("SELECT * FROM programs WHERE PROGRAM_ID=?");
+            st.setString(1, programId);
+            rs = st.executeQuery();
             if (!rs.next()) {
                 return ResponseUtils.getJsonString("exception", "Cannot find the program.");
             }
@@ -489,12 +513,12 @@ public class MySqlConnector {
         if (!checkConnection()) {
             return ResponseUtils.getJsonString("exception", "Cannot connect to database to load list of your programs.");
         }
-        Statement st = null;
+        PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            String query = "SELECT * FROM userprogramid WHERE USER_ID='" + userInfo.getId() + "'";
-            st = connection.createStatement();
-            rs = st.executeQuery(query);
+            st = connection.prepareStatement("SELECT * FROM userprogramid WHERE USER_ID=?");
+            st.setString(1, userInfo.getId());
+            rs = st.executeQuery();
             JSONArray result = new JSONArray();
             ArrayList<String> programIds = new ArrayList<String>();
             while (rs.next()) {
@@ -503,9 +527,10 @@ public class MySqlConnector {
                 }
             }
 
-            String query2 = "SELECT * FROM programs WHERE PROGRAM_ID=";
+            st = connection.prepareStatement("SELECT * FROM programs WHERE PROGRAM_ID=?");
             for (String id : programIds) {
-                rs = st.executeQuery(query2 + "'" + id + "'");
+                st.setString(1, id);
+                rs = st.executeQuery();
                 if (!rs.next()) {
                     ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                             SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program with in programs table",
@@ -529,7 +554,7 @@ public class MySqlConnector {
         }
     }
 
-    private void closeStatementAndResultSet(Statement st, ResultSet rs) {
+    private void closeStatementAndResultSet(PreparedStatement st, ResultSet rs) {
         try {
             if (st != null) {
                 st.close();
@@ -546,12 +571,17 @@ public class MySqlConnector {
         if (!checkConnection()) {
             return ResponseUtils.getJsonString("exception", "Cannot connect to database to delete your program.");
         }
-        Statement st = null;
+        PreparedStatement st = null;
         try {
             if (findUser(userInfo)) {
-                st = connection.createStatement();
-                st.executeUpdate("DELETE FROM programs WHERE PROGRAM_ID='" + programId + "'");
-                st.executeUpdate("DELETE FROM userprogramid WHERE USER_ID='" + userInfo.getId() + "' AND USER_TYPE='" + userInfo.getType() + "' AND PROGRAM_ID='" + programId + "'");
+                st = connection.prepareStatement("DELETE FROM programs WHERE PROGRAM_ID=?");
+                st.setString(1, programId);
+                st.executeUpdate();
+                st = connection.prepareStatement("DELETE FROM userprogramid WHERE USER_ID=? AND USER_TYPE=? AND PROGRAM_ID=?");
+                st.setString(1, userInfo.getId());
+                st.setString(2, userInfo.getType());
+                st.setString(3, programId);
+                st.executeUpdate();
                 return ResponseUtils.getJsonString("text", "Program was successfully deleted.", programId);
             } else {
 //                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);

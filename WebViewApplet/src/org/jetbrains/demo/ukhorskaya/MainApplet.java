@@ -1,10 +1,14 @@
 package org.jetbrains.demo.ukhorskaya;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.demo.ukhorskaya.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
+import org.jetbrains.jet.lang.resolve.BindingContext;
+import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -26,6 +30,7 @@ public class MainApplet extends JApplet implements ActionListener {
     /*private JButton b1;
     private JButton b2;*/
 
+    private static String EXCEPTION = "exception=";
 
     public static String request;
 
@@ -87,6 +92,24 @@ public class MainApplet extends JApplet implements ActionListener {
     public void checkApplet() {
 
     }
+
+    @Nullable
+    public String translateToJS(@NotNull String code, @NotNull String arguments) {
+        try {
+            return new K2JSTranslatorUtils().translateToJS(code, arguments);
+        } catch (AssertionError e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
+            return EXCEPTION + "Translation error.";
+        } catch (UnsupportedOperationException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
+            return EXCEPTION + "Unsupported feature.";
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
+            return EXCEPTION + "Unexpected exception.";
+        }
+    }
+
+
 
     public String getCompletion(String data, String line, String ch, String runConfiguration) {
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.COMPLETE);
