@@ -38,5 +38,5 @@ public class ServerSettings {
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
     public static String IS_TEST_VERSION = "false";
     public static final String DATABASE_VERSION = "1.0";
-    public static String JAVA_EXECUTE = ServerSettings.JAVA_HOME;
+    public static String JAVA_EXECUTE = "";
 }

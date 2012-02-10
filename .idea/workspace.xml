@@ -8,29 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="Loading applet during start&#10;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestModule/src/SeleniumTest.java" afterPath="$PROJECT_DIR$/TestModule/src/SeleniumTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestModule/testData/examples/HTML Builder.txt" afterPath="$PROJECT_DIR$/TestModule/testData/examples/HTML Builder.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/CommandRunner.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/CommandRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Main.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Statistics.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Statistics.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationFacebookHelper.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationFacebookHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationGoogleHelper.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationGoogleHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationTwitterHelper.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/AuthorizationTwitterHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/UserAuthenticator.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/authorization/UserAuthenticator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/help/HelpLoader.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/help/HelpLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/CompileAndRunExecutor.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/CompileAndRunExecutor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/JavaRunner.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/JavaRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/accordion.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/accordion.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/common.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/common.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/complete.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/complete.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/components.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/components.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/help.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/help.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/highlighting.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/highlighting.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/runner.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/runner.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.properties" afterPath="$PROJECT_DIR$/config.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Canvas/Hello, Kotlin.kt" afterPath="$PROJECT_DIR$/examples/Canvas/Hello, Kotlin.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Canvas/Interactive example.kt" afterPath="$PROJECT_DIR$/examples/Canvas/Interactive example.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Canvas/Second example.kt" afterPath="$PROJECT_DIR$/examples/Canvas/Second example.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/components.css" afterPath="$PROJECT_DIR$/WebViewServer/static/components/components.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/server/ServerSettings.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/server/ServerSettings.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/js/js.iml" afterPath="$PROJECT_DIR$/../k2js/js/js.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/k2js.iml" afterPath="$PROJECT_DIR$/../k2js/k2js.iml" />
@@ -201,28 +179,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="CompileAndRunExecutor.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/CompileAndRunExecutor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="95" column="40" selection-start="4696" selection-end="4696" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="JavaRunner.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/JavaRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="319" column="68" selection-start="13588" selection-end="13588" vertical-scroll-proportion="0.0">
+            <state line="310" column="70" selection-start="13199" selection-end="13199" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config.properties" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="config.properties" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="65" selection-start="731" selection-end="782" vertical-scroll-proportion="0.2992">
+            <state line="11" column="66" selection-start="783" selection-end="783" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="helpExamples.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/helpExamples.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="21" column="20" selection-start="838" selection-end="838" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -231,7 +209,7 @@
       <file leaf-file-name="CommandRunner.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/CommandRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="20" selection-start="405" selection-end="405" vertical-scroll-proportion="0.0">
+            <state line="67" column="22" selection-start="3554" selection-end="3554" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -240,7 +218,16 @@
       <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="53" selection-start="1965" selection-end="1965" vertical-scroll-proportion="0.0">
+            <state line="56" column="53" selection-start="1953" selection-end="1965" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KotlinHttpServlet.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/servlet/KotlinHttpServlet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="27" column="13" selection-start="930" selection-end="930" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -249,7 +236,16 @@
       <file leaf-file-name="ServerSettings.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/server/ServerSettings.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="64" selection-start="1697" selection-end="1697" vertical-scroll-proportion="0.0">
+            <state line="27" column="83" selection-start="1086" selection-end="1086" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="components.css" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="450" column="106" selection-start="6875" selection-end="6875" vertical-scroll-proportion="0.20645161">
               <folding />
             </state>
           </provider>
@@ -268,24 +264,6 @@
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/ErrorWriterOnServer.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="37" column="16" selection-start="939" selection-end="939" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JsConverter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/JsConverter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="26" selection-start="979" selection-end="979" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HttpSession.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/sessions/HttpSession.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="119" column="66" selection-start="6155" selection-end="6155" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -317,7 +295,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/WebViewServer/static/components/complete.js" />
         <option value="$PROJECT_DIR$/examples/Canvas/Hello, Kotlin.kt" />
         <option value="$PROJECT_DIR$/examples/Canvas/Second example.kt" />
         <option value="$PROJECT_DIR$/examples/Canvas/Interactive example.kt" />
@@ -329,10 +306,11 @@
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/help/HelpLoader.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/CompileAndRunExecutor.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/CommandRunner.java" />
-        <option value="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/server/ServerSettings.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Main.java" />
         <option value="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/JavaRunner.java" />
         <option value="$PROJECT_DIR$/config.properties" />
+        <option value="$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/server/ServerSettings.java" />
+        <option value="$PROJECT_DIR$/WebViewServer/static/components/components.css" />
       </list>
     </option>
   </component>
@@ -1493,7 +1471,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="10-2-2012 Path to k2js&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Resize canvas" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1506,7 +1484,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Some fix: &#10;JavaRunner: work with steams&#10;Design modifications" />
     <MESSAGE value="Some fix: &#10;View&#10;Code on first page" />
     <MESSAGE value="Selection in editor&#10;Different highlighting for soft keywords&#10;Mac shortcuts" />
     <MESSAGE value="Work with js applet" />
@@ -1531,6 +1508,7 @@
     <MESSAGE value="Applet from k2js moved to Main applet" />
     <MESSAGE value="Changes in config" />
     <MESSAGE value="10-2-2012 Path to k2js&#10;" />
+    <MESSAGE value="Resize canvas" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1601,27 +1579,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/database/MySqlConnector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="109" column="26" selection-start="4675" selection-end="4675" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/examplesLoader/ExamplesList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="228" column="28" selection-start="9463" selection-end="9463" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/examplesLoader/ExamplesLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="28" selection-start="3038" selection-end="3038" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/handlers/ServerHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="309" column="45" selection-start="14931" selection-end="14931" vertical-scroll-proportion="0.0">
@@ -1678,37 +1635,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/server/ServerSettings.java">
+    <entry file="file://$PROJECT_DIR$/examples/helpExamples.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="64" selection-start="1697" selection-end="1697" vertical-scroll-proportion="0.0">
+        <state line="21" column="20" selection-start="838" selection-end="838" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/CommandRunner.java">
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/servlet/KotlinHttpServlet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="20" selection-start="405" selection-end="405" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="53" selection-start="1965" selection-end="1965" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/JavaRunner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="319" column="68" selection-start="13588" selection-end="13588" vertical-scroll-proportion="0.0">
+        <state line="27" column="13" selection-start="930" selection-end="930" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="65" selection-start="731" selection-end="782" vertical-scroll-proportion="0.2992">
+        <state line="11" column="66" selection-start="783" selection-end="783" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/responseHelpers/JavaRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="310" column="70" selection-start="13199" selection-end="13199" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="56" column="53" selection-start="1953" selection-end="1965" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/demo/ukhorskaya/CommandRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="22" selection-start="3554" selection-end="3554" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/demo/ukhorskaya/server/ServerSettings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="83" selection-start="1086" selection-end="1086" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewServer/static/components/components.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="450" column="106" selection-start="6875" selection-end="6875" vertical-scroll-proportion="0.20645161">
           <folding />
         </state>
       </provider>

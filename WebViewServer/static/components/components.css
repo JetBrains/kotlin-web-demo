@@ -462,7 +462,7 @@ body {
 }
 
 #rundiv table td {
-   padding-right: 10px;
+    padding-right: 10px;
 }
 
 #runTitle {
@@ -472,13 +472,12 @@ body {
 }
 
 #run {
-
+    cursor: pointer;
 }
 
 #runConfigurationMode-button {
     background-color: white;
 }
-
 
 #refreshTitle {
     float: left;
@@ -780,8 +779,6 @@ body {
     line-height: 0;
     cursor: pointer;
 }
-
-
 
 #dialog, #saveDialog {
     display: none;
@@ -1194,6 +1191,7 @@ div.bullet {
     padding-right: 3px !important;
     /*padding-left: 9px !important;*/
 }
+
 .tweetImg {
     padding-right: 3px;
     padding-top: 3px;
@@ -1234,6 +1232,7 @@ div.bullet {
     vertical-align: top;
     padding-left: 10px;
 }
+
 .ui-selectmenu {
     height: 26px !important;
 }
