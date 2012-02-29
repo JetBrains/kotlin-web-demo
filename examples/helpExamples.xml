@@ -174,17 +174,30 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <name>Hello, Kotlin</name>
         <text>
             <p>
-                Hello, Kotlin using canvas element
+                This example is just simple text floating around. If u are using chrome, there is a bug that spoil the visuals.
             </p>
         </text>
         <args/>
         <mode>canvas</mode>
     </example>
     <example>
-        <name>Second example</name>
+        <name>Fancy lines</name>
         <text>
             <p>
-                Hello, Kotlin using canvas element
+                This example is based on example from html5 canvas2D docs:
+                http://www.w3.org/TR/2dcontext/
+                Note that only a subset of the api is supported for now.
+            </p>
+        </text>
+        <args/>
+        <mode>canvas</mode>
+    </example>
+    <example>
+        <name>Creatures</name>
+        <text>
+            <p>
+                In this example strange creatures are watching the kotlin logo. You can drag'n'drop them as well as the logo.
+                Doubleclick to add more creatures but be careful. They may be watching you!
             </p>
         </text>
         <args/>

@@ -33,7 +33,7 @@ var Highlighting = (function () {
 
     Highlighting.sendHighlightingRequest = function (onLoad) {
         isLoadingHighlighting = true;
-        var i = editor.getValue();
+        var i = replaceAll(editor.getValue(), "%", "@percent@");
         $.ajax({
             url:generateAjaxUrl("highlight", runConfiguration.mode),
             context:document.body,

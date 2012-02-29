@@ -314,13 +314,15 @@ body {
 }
 
 #left {
-    width: 20%;
-    *width: 230px;
+    /*width: 20%;*/
+    /**width: 230px;*/
+    width: 280px;
+    margin-left: 5px;
     /*width: 220px;*/
-    margin-left: 1px;
-    border-left: 1px solid #EEEEEE;
-    border-top: 1px solid #EEEEEE;
-    border-bottom: 1px solid #EEEEEE;
+    /*margin-left: 1px;*/
+    border: 1px solid #EEEEEE;
+    /*border-top: 1px solid #EEEEEE;*/
+    /*border-bottom: 1px solid #EEEEEE;*/
     font-family: Arial, Helvetica, FreeSans, sans-serif;
     font-size: 12px;
     /*width: 220px;*/
@@ -329,21 +331,24 @@ body {
 }
 
 #center {
-    width: 60%;
+    /*width: 60%;*/
     /*width: 800px;*/
-    border: 1px solid #EEEEEE;
+    border-top: 1px solid #EEEEEE;
+    border-bottom: 1px solid #EEEEEE;
 
     /*float: left;*/
     /*display: block;*/
 }
 
 #right {
-    width: 19%;
+    /*width: 19%;*/
+    width: 280px;
     /*width: 220px;*/
-    margin-right: 1px;
-    border-bottom: 1px solid #EEEEEE;
-    border-top: 1px solid #EEEEEE;
-    border-right: 1px solid #EEEEEE;
+    margin-right: 5px;
+
+    border: 1px solid #EEEEEE;
+    /*border-top: 1px solid #EEEEEE;*/
+    /*border-right: 1px solid #EEEEEE;*/
     font-family: Arial, Helvetica, FreeSans, sans-serif;
     font-size: 12px;
     /*display: block;*/

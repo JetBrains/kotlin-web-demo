@@ -15,6 +15,7 @@
  */
 package com.intellij.errorreport.bean;
 
+import com.intellij.diagnostic.errordialog.Attachment;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.ByteArrayOutputStream;
@@ -37,6 +38,8 @@ public class ErrorBean {
     private String message;
     private String stackTrace;
     private String description;
+
+    private List<Attachment> attachments = Collections.emptyList();
 
     public ErrorBean(Throwable throwable, String lastAction) {
         if (throwable != null) {
@@ -119,5 +122,13 @@ public class ErrorBean {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
+
+    public List<Attachment> getAttachments() {
+        return attachments;
     }
 }

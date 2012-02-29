@@ -2,6 +2,7 @@ package org.jetbrains.demo.ukhorskaya.errorsDescriptors;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
@@ -10,11 +11,13 @@ import org.jetbrains.demo.ukhorskaya.ErrorWriter;
 import org.jetbrains.demo.ukhorskaya.Interval;
 import org.jetbrains.demo.ukhorskaya.exceptions.KotlinCoreException;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
+import org.jetbrains.jet.checkers.CheckerTestUtil;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.*;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
+import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
 
 import java.util.*;
@@ -42,26 +45,28 @@ public class ErrorAnalyzer {
 
     private void gerErrorsFromBindingContext(BindingContext bindingContext, List<ErrorDescriptor> errors) {
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
-
-        for (Diagnostic diagnostic : diagnostics) {
-            if (diagnostic instanceof DiagnosticWithPsiElementImpl && ((DiagnosticWithPsiElementImpl) diagnostic).getPsiFile().getName().contains("core")) {
-                continue;
-            }
-            if (diagnostic.getMessage().contains("This cast can never succeed")) {
-                continue;
-            }
-            if (diagnostic.getSeverity() != Severity.INFO) {
-                DiagnosticFactory factory = diagnostic.getFactory();
-                //TODO
-                int start = factory.getTextRanges(diagnostic).get(0).getStartOffset();
-                int end = factory.getTextRanges(diagnostic).get(0).getEndOffset();
-                String className = diagnostic.getSeverity().name();
-                if (!(diagnostic instanceof UnresolvedReferenceDiagnostic) && (diagnostic.getSeverity() == Severity.ERROR)) {
-                    className = "red_wavy_line";
+        try {
+            for (Diagnostic diagnostic : diagnostics) {
+                if (diagnostic instanceof DiagnosticWithPsiElement && diagnostic.getPsiFile().getName().contains("core")) {
+                    continue;
                 }
-                errors.add(new ErrorDescriptor(new Interval(start, end, currentDocument),
-                        diagnostic.getMessage(), diagnostic.getSeverity(), className));
+                if (diagnostic.getMessage().contains("This cast can never succeed")) {
+                    continue;
+                }
+                if (diagnostic.getSeverity() != Severity.INFO) {
+                    //TODO
+                    TextRange firstRange = (TextRange) diagnostic.getTextRanges().iterator().next();
+                    String className = diagnostic.getSeverity().name();
+                    if (!(diagnostic instanceof UnresolvedReferenceDiagnostic) && (diagnostic.getSeverity() == Severity.ERROR)) {
+                        className = "red_wavy_line";
+                    }
+                    System.out.println(DiagnosticUtils.formatPosition(diagnostic));
+                    errors.add(new ErrorDescriptor(new Interval(firstRange.getStartOffset(), firstRange.getEndOffset(), currentDocument),
+                            diagnostic.getMessage(), diagnostic.getSeverity(), className));
+                }
             }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
 
         Collections.sort(errors, new Comparator<ErrorDescriptor>() {
@@ -105,7 +110,7 @@ public class ErrorAnalyzer {
         String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                 "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
-        if (bindingContext != null){
+        if (bindingContext != null) {
             gerErrorsFromBindingContext(bindingContext, errors);
         }
         return errors;
@@ -121,6 +126,7 @@ public class ErrorAnalyzer {
 
             @Override
             public void visitErrorElement(PsiErrorElement element) {
+                System.out.println(element.getErrorDescription() + " " + element.getText());
                 errorElements.add(element);
             }
 

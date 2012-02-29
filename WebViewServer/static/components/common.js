@@ -31,12 +31,12 @@ var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
 var IE_SUPPORT = "Sorry, Internet Explorer is currently unsupported.";
 
+var KOTLIN_VERSION = "0.1.448";
 
 var sessionId = -1;
 var userName = "";
 var isApplet = false;
 var isJsApplet = true;
-var kotlinVersion;
 
 var runConfiguration = new RunConfiguration();
 
@@ -122,7 +122,7 @@ function onBodyLoad() {
     } else {
         $("#help3").toggle(true);
         resizeCentral();
-        setKotlinVersion('0.1.425');
+        setKotlinVersion();
         setTimeout(function() {
             if (navigator.appVersion.indexOf("Mac") != -1) {
                 isMac = true;
@@ -233,10 +233,15 @@ function getSessionIdSuccess(data) {
 function resizeCentral() {
     var wheight = (window.innerHeight) ? window.innerHeight :
         ((document.all) ? document.body.offsetHeight : null);
+    var wwidth = (window.innerWidth) ? window.innerWidth :
+        ((document.all) ? document.body.offsetWidth : null);
     $("#scroll").css("height", (wheight - 262 - 72 - 20 - 10) + "px");
     $("#left").css("minHeight", (wheight - 72 - 20 - 10) + "px");
     $("#right").css("minHeight", (wheight - 72 - 20 - 10) + "px");
     $("#center").css("minHeight", (wheight - 72 - 20 - 10) + "px");
+    $("#center").css("width", (wwidth - 282 - 282 - 2 - 20 -5) + "px");
+//    $("#left").css("width", "280px");
+//    $("#right").css("width", "280px");
     editor.refresh();
 }
 
@@ -249,16 +254,15 @@ function showLoader() {
     $('#loader').show();
 }
 
-function setKotlinVersion(version) {
+function setKotlinVersion() {
     $("#dialog").dialog({
         modal:"true",
         width:400,
         autoOpen:false
     });
 
-    kotlinVersion = version;
-    $("#kotlinVersionTop").html("(" + kotlinVersion + ")");
-    $("#kotlinVersion").html(kotlinVersion);
+    $("#kotlinVersionTop").html("(" + KOTLIN_VERSION + ")");
+    $("#kotlinVersion").html(KOTLIN_VERSION);
 }
 
 function setStatusBarMessage(message) {

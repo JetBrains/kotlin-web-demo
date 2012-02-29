@@ -56,7 +56,11 @@ public class JsonResponseForCompletion {
 
     public String getResult() {
         addExpressionAtCaret();
+       /* int i = 0;
 
+        if (i == 0) {
+            throw new NullPointerException("Test Attachments");
+        }*/
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
@@ -146,6 +150,7 @@ public class JsonResponseForCompletion {
                 }
             }
         }
+
         return jsonArray.toString();
     }
 
@@ -218,7 +223,7 @@ public class JsonResponseForCompletion {
             JetType returnType = functionDescriptor.getReturnType();
             tailText = DescriptorRenderer.TEXT.renderType(returnType);
         } else if (descriptor instanceof VariableDescriptor) {
-            JetType outType = ((VariableDescriptor) descriptor).getOutType();
+            JetType outType = ((VariableDescriptor) descriptor).getType();
             tailText = DescriptorRenderer.TEXT.renderType(outType);
         }
         return tailText;

@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -284,9 +285,15 @@ public class HttpSession {
 
         String finalResponse;
         try {
-            finalResponse = URLDecoder.decode(reqResponse.toString(), "UTF-8");
+            System.out.println("1 " + reqResponse.toString());
+
+            finalResponse = TextUtils.decodeUrl(reqResponse.toString());
+            System.out.println("2 " + finalResponse);
         } catch (UnsupportedEncodingException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), "null");
+            return new PostData("", "");
+        }catch (IllegalArgumentException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), reqResponse.toString());
             return new PostData("", "");
         }
         if (finalResponse != null) {
@@ -310,6 +317,8 @@ public class HttpSession {
 
         return new PostData("", "");
     }
+
+
 
 
     //Send Response

@@ -31,39 +31,51 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
 
     @Override
     public Void visitVariableDescriptor(VariableDescriptor descriptor, StringBuilder builder) {
-        String typeString = renderPropertyPrefixAndComputeTypeString(builder, Collections.<TypeParameterDescriptor>emptyList(), ReceiverDescriptor.NO_RECEIVER, descriptor.getOutType(), descriptor.getOutType());
+        String typeString = renderPropertyPrefixAndComputeTypeString(builder, Collections.<TypeParameterDescriptor>emptyList(), ReceiverDescriptor.NO_RECEIVER, descriptor.getType());
         renderName(descriptor, builder);
         builder.append(" : ").append(typeString);
         return super.visitVariableDescriptor(descriptor, builder);
+    }
+
+    private String lt() {
+        return escape("<");
+    }
+
+    protected String escape(String s) {
+        return s;
+    }
+
+    protected String renderKeyword(String keyword) {
+        return keyword;
+    }
+
+    public String renderType(JetType type) {
+        if (type == null) {
+            return escape("[NULL]");
+        } else {
+            return escape(type.toString());
+        }
     }
 
     private String renderPropertyPrefixAndComputeTypeString(
             @NotNull StringBuilder builder,
             @NotNull List<TypeParameterDescriptor> typeParameters,
             @NotNull ReceiverDescriptor receiver,
-            @Nullable JetType outType,
-            @Nullable JetType inType) {
-        String typeString = "";
-        //String typeString = "<no type>";
-        if (inType != null && outType != null) {
-           // builder.append("var").append(" ");
-            if (inType.equals(outType)) {
-                typeString = outType.toString();
-            } else {
-            //    typeString = "<" + "in" + ": " + inType + " " + "out" + ": " + outType + ">";
-            }
-        } else if (outType != null) {
-           // builder.append("val").append(" ");
-            typeString = outType.toString();
-        } else if (inType != null) {
-          //  builder.append("<").append("write-only> ");
-            typeString = inType.toString();
+            @Nullable JetType outType) {
+        String typeString = lt() + "no type>";
+        if (outType != null) {
+           // builder.append(renderKeyword("var")).append(" ");
+            typeString = renderType(outType);
+        }
+        else if (outType != null) {
+           // builder.append(renderKeyword("val")).append(" ");
+            typeString = renderType(outType);
         }
 
         renderTypeParameters(typeParameters, builder);
 
         if (receiver.exists()) {
-            builder.append(receiver.getType()).append(".");
+            builder.append(escape(renderType(receiver.getType()))).append(".");
         }
 
         return typeString;

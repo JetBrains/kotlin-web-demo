@@ -43,8 +43,6 @@ var isCompletionInProgress = false;
 var keywords;
 var isContinueComplete = false;
 
-var isGetErrorsAfterRunInNoHighlightingMode = false;
-
 editor = CodeMirror.fromTextArea(document.getElementById("code"), {
     lineNumbers:true,
     matchBrackets:true,
@@ -87,8 +85,6 @@ function getErrors() {
     Highlighting.getErrors(Highlighting.onHighlightingSuccess);
 }
 
-
-var isFirstTryToLoadApplet = true;
 
 function getDataFromApplet(type) {
     Highlighting.getDataFromApplet(type);
@@ -179,12 +175,6 @@ $("#run").click(function () {
 
 
 function exception(ex) {
-    var statusMes = "";
-    var pos = ex.exception.indexOf("<br/>");
-    if (pos != -1) {
-        statusMes = unEscapeString(ex.exception.substr(0, pos));
-    }
-
     var problems = document.createElement("div");
     if (ex.type == "out") {
         document.getElementById("problems").appendChild(createElementForProblemView("STACKTRACE", null, unEscapeString(ex.exception)));

@@ -22,14 +22,12 @@ public class ServerSettings {
     public static String STATISTICS_ROOT = "statistics";
 
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
-    public static String KOTLIN_VERSION = "0.1.425";
+    public static String KOTLIN_VERSION = "0.1.448";
 
     public static String TEST_CONNECTION_OUTPUT = "C:/Development/testData/";
     public static String MAX_THREAD_COUNT = "50";
     public static String RT_JAR = "";
 
-    // Applet or server
-    public static String MODE = "SERVER";
     public static String MYSQL_HOST = "localhost";
     public static String MYSQL_DATABASE_NAME = "kotlindatabase";
     public static String MYSQL_USERNAME = "root";

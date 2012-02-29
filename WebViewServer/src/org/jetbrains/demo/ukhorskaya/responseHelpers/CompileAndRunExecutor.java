@@ -12,6 +12,7 @@ import org.jetbrains.demo.ukhorskaya.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.demo.ukhorskaya.exceptions.KotlinCoreException;
 import org.jetbrains.demo.ukhorskaya.server.ServerSettings;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
+import org.jetbrains.jet.codegen.ClassBuilderFactories;
 import org.jetbrains.jet.codegen.ClassBuilderFactory;
 import org.jetbrains.jet.codegen.ClassFileFactory;
 import org.jetbrains.jet.codegen.GenerationState;
@@ -63,7 +64,7 @@ public class CompileAndRunExecutor {
             sessionInfo.getTimeManager().saveCurrentTime();
             GenerationState generationState;
             try {
-                generationState = new GenerationState(currentProject, ClassBuilderFactory.BINARIES);
+                generationState = new GenerationState(currentProject, ClassBuilderFactories.binaries(false));
                 generationState.compile((JetFile) currentPsiFile);
 //                generationState.compileCorrectFiles(bindingContext, Collections.singletonList((JetFile) currentPsiFile));
             } catch (Throwable e) {
@@ -138,6 +139,7 @@ public class CompileAndRunExecutor {
         for (ErrorDescriptor error : errors) {
             StringBuilder message = new StringBuilder();
             message.append("(").append(error.getInterval().startPoint.line + 1).append(", ").append(error.getInterval().startPoint.charNumber + 1).append(")");
+//            message.append(error.getInterval());
             message.append(" - ");
             message.append(error.getMessage());
             Map<String, String> map = new HashMap<String, String>();

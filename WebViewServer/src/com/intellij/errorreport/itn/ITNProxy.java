@@ -15,6 +15,7 @@
  */
 package com.intellij.errorreport.itn;
 
+import com.intellij.diagnostic.errordialog.Attachment;
 import com.intellij.errorreport.bean.ErrorBean;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
@@ -106,7 +107,7 @@ public class ITNProxy {
         params.add(Pair.create("user.login", login));
         params.add(Pair.create("user.password", password));
 
-        params.add(Pair.create("os.name", SystemProperties.getOsName()));
+        params.add(Pair.create("os.name", " "));
 
         params.add(Pair.create("java.version", SystemProperties.getJavaVersion()));
         params.add(Pair.create("java.vm.vendor", SystemProperties.getJavaVmVendor()));
@@ -115,8 +116,6 @@ public class ITNProxy {
 
         params.add(Pair.create("user.login", login));
         params.add(Pair.create("user.password", password));
-
-        params.add(Pair.create("os.name", SystemProperties.getOsName()));
 
         params.add(Pair.create("java.version", SystemProperties.getJavaVersion()));
         params.add(Pair.create("java.vm.vendor", SystemProperties.getJavaVmVendor()));
@@ -145,10 +144,10 @@ public class ITNProxy {
 
         params.add(Pair.create("error.description", error.getDescription()));
 
-//        for (Attachment attachment : error.getAttachments()) {
-//            params.add(Pair.create("attachment.name", attachment.getName()));
-//            params.add(Pair.create("attachment.value", attachment.getEncodedBytes()));
-//        }
+        for (Attachment attachment : error.getAttachments()) {
+            params.add(Pair.create("attachment.name", attachment.getName()));
+            params.add(Pair.create("attachment.value", attachment.getEncodedBytes()));
+        }
 
         return params;
     }

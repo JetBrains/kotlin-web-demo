@@ -5,12 +5,14 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.demo.ukhorskaya.session.SessionInfo;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import sun.net.util.URLUtil;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.*;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 
