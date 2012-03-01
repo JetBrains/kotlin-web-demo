@@ -1,3 +1,19 @@
+/*
+ * Copyright 2000-2012 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * Created by IntelliJ IDEA.
  * User: Natalia.Ukhorskaya
@@ -31,7 +47,7 @@ var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
 var IE_SUPPORT = "Sorry, Internet Explorer is currently unsupported.";
 
-var KOTLIN_VERSION = "0.1.448";
+var KOTLIN_VERSION = "0.1.449";
 
 var sessionId = -1;
 var userName = "";
@@ -267,21 +283,17 @@ function setKotlinVersion() {
 
 function setStatusBarMessage(message) {
     $("#statusbar").html(message);
-//    document.getElementById("statusbar").innerHTML = message;
 }
 function setStatusBarError(message) {
     $("#statusbar").html("<font color=\"red\">" + message + "</font>");
-//    document.getElementById("statusbar").innerHTML = "<font color=\"red\">" + message + "</font>";
 }
 
 function setConsoleMessage(message) {
     $("#console").html(message);
-//    document.getElementById("console").innerHTML = message;
 }
 
 function clearProblemView() {
     $("#problems").html("");
-//    document.getElementById("console").innerHTML = message;
 }
 
 function unEscapeString(str) {
@@ -294,9 +306,6 @@ var generatedJSCode = "";
 function showJsCode() {
     document.getElementById("console").removeChild(document.getElementById("console").childNodes[1]);
     $("#console :first-child").after("<p class='consoleViewInfo'>" + generatedJSCode + "</p>");
-//    var consoleStr = document.getElementById("console").innerHTML;
-//    consoleStr += "<p class='consoleViewInfo'>" + generatedJSCode + "</p>";
-//    setConsoleMessage(consoleStr);
 }
 
 $("#whatimg").click(function () {
@@ -325,22 +334,6 @@ function beforeLogin(param) {
 }
 
 function login(param) {
-    //var  popup = window.open(generateAjaxUrl("authorization", param), 'my_popup', '');
-    /* popup.onload(function() {
-     alert("a");
-     });*/
-    /*popup.addEventListener("load", function () {
-     popup.document.location.href = popup.document.getElementsByTagName("pre")[0].innerHTML;
-     });*/
-    /*setTimeout(function() {
-     popup.document.location.href = popup.document.getElementsByTagName("pre")[0].innerHTML;
-     alert(popup.document.location.href);
-     //        popup.close();
-     }, 5000);*/
-//    popup.close();
-    /*window.open(generateAjaxUrl("authorization", param));
-     window.close();
-     document.location.href = w;*/
     $.ajax({
         url:generateAjaxUrl("authorization", param),
         context:document.body,
@@ -470,7 +463,7 @@ function replaceAll(str, replaced, replacement) {
 
 function setLogin() {
     setEditorState(false);
-    userName = "Natalia.Ukhorskaya";
+    userName = "Natalia Ukhorskaya";
     $("#login").css("display", "none");
     $("#userName").css("display", "block");
     isLogin = true;

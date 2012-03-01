@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -204,8 +204,12 @@ public class JarHandlerBase {
     @Nullable
     private EntryInfo convertToISEntry(VirtualFile file) {
         String path = getRelativePath(file);
-        final ZipInputStream zip = getZip();
-        return myRelPathsToEntries.get().get(path);
+
+        Map<String, EntryInfo> entryInfoMap = myRelPathsToEntries.get();
+        if (entryInfoMap == null) {
+            return null;
+        }
+        return entryInfoMap.get(path);
     }
 
     public long getLength(@NotNull final VirtualFile file) {

@@ -1,28 +1,34 @@
+/*
+ * Copyright 2000-2012 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // We specify the package of our tests
 
 import com.google.common.io.Files;
 import com.thoughtworks.selenium.CommandProcessor;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.Selenium;
 import junit.framework.TestCase;
 import org.apache.commons.lang.math.RandomUtils;
-import org.jetbrains.demo.ukhorskaya.ResponseUtils;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.HttpCommandExecutor;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -185,10 +191,10 @@ public class SeleniumTest extends TestCase {
         testExampleRun("Reading many names from the command line", "Hello,_world!", "Hello, guest1!\n" +
                 "Hello, guest2!\n" +
                 "Hello, guest3!");
-//        testExampleRun("A multi-language Hello", "Hello,_world!", "Salut!");
-        testExampleRun("A multi-language Hello", "Hello,_world!", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
-                "Try to run it using JVM.\n" +
-                "Unsupported when condition class org.jetbrains.jet.lang.psi.JetWhenConditionWithExpression");
+        testExampleRun("A multi-language Hello", "Hello,_world!", "Salut!");
+//        testExampleRun("A multi-language Hello", "Hello,_world!", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+//                "Try to run it using JVM.\n" +
+//                "Unsupported when condition class org.jetbrains.jet.lang.psi.JetWhenConditionWithExpression");
         testExampleRun("An object-oriented Hello", "Hello,_world!", "Hello, guest1");
 
         driver.findElement(By.id("Basic_syntax_walk-through")).click();
@@ -202,9 +208,9 @@ public class SeleniumTest extends TestCase {
 
         Thread.sleep(500);
 
-        testExampleRun("Use a conditional expression", "Basic_syntax_walk-through", "20");
-        testExampleRun("Null-checks", "Basic_syntax_walk-through", "6");
-        testExampleRun("is-checks and automatic casts", "Basic_syntax_walk-through", "3\n" +
+//        testExampleRun("Use a conditional expression", "Basic_syntax_walk-through", "20");
+//        testExampleRun("Null-checks", "Basic_syntax_walk-through", "6");
+        testExampleRun("is-checks and smart casts", "Basic_syntax_walk-through", "3\n" +
                 "null");
         testExampleRun("Use a while-loop", "Basic_syntax_walk-through", "guest1\n" +
                 "guest2\n" +
@@ -217,14 +223,19 @@ public class SeleniumTest extends TestCase {
                 "guest1\n" +
                 "guest2\n" +
                 "guest3");
-        testExampleRun("Use ranges and in", "Basic_syntax_walk-through", "OK\n" +
+        /*testExampleRun("Use ranges and in", "Basic_syntax_walk-through", "OK\n" +
                 "1 2 3 4 5 \n" +
                 "Out: array has only 3 elements. x = 4\n" +
                 "Yes: array contains aaa\n" +
                 "No: array doesn't contains ddd");
-        testExampleRun("Use when", "Basic_syntax_walk-through", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
-                "Try to run it using JVM.\n" +
-                "Undefined descriptor: .java.lang.System.currentTimeMillis");
+        testExampleRun("Use when", "Basic_syntax_walk-through", "Greeting\n" +
+                "One\n" +
+                "Long\n" +
+                "Not a string\n" +
+                "Unknown");*/
+//        testExampleRun("Use when", "Basic_syntax_walk-through", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+//                "Try to run it using JVM.\n" +
+//                "Undefined descriptor: .java.lang.System.currentTimeMillis");
 
         driver.findElement(By.id("Longer_examples")).click();
         final WebElement el3 = driver.findElement(By.id(generateIdFormNameAndFolder("Life", "Longer_examples")));
@@ -237,18 +248,19 @@ public class SeleniumTest extends TestCase {
 
         Thread.sleep(500);
 
-        testExampleRun("99 Bottles of Beer", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+        /*testExampleRun("99 Bottles of Beer", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
                 "Try to run it using JVM.\n" +
-                "@NotNull method org/jetbrains/k2js/translate/reference/PropertyAccessTranslator.getGetterDescriptor must not return null");
-        testExampleRun("HTML Builder", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+                "@NotNull method org/jetbrains/k2js/translate/reference/PropertyAccessTranslator.getGetterDescriptor must not return null");*/
+        testDifficultExampleRun("HTML Builder");
+        /*testExampleRun("HTML Builder", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
                 "Try to run it using JVM.\n" +
-                "Argument 0 for @NotNull parameter of org/jetbrains/k2js/translate/general/Translation.translateExpression must not be null");
-        testExampleRun("Life", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
+                "Argument 0 for @NotNull parameter of org/jetbrains/k2js/translate/general/Translation.translateExpression must not be null");*/
+       /* testExampleRun("Life", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
                 "Try to run it using JVM.\n" +
                 "com.google.dart.compiler.backend.js.ast.JsIf cannot be cast to com.google.dart.compiler.backend.js.ast.JsExprStmt");
         testExampleRun("Maze", "Longer_examples", "The Pre-Alpha JavaScript back-end could not generate code for this program.\n" +
                 "Try to run it using JVM.\n" +
-                "Undefined descriptor: .java.util.HashMap.");
+                "Undefined descriptor: .java.util.HashMap.");*/
     }
 
     public void testAllSimplestExamplesRunWhenServerOn() throws IOException, InterruptedException {

@@ -11,7 +11,7 @@
 
     <servlet>
         <servlet-name>KotlinHttpServlet</servlet-name>
-        <servlet-class>org.jetbrains.demo.ukhorskaya.servlet.KotlinHttpServlet</servlet-class>
+        <servlet-class>org.jetbrains.webdemo.servlet.KotlinHttpServlet</servlet-class>
         <init-param>
             <param-name>java</param-name>
             <param-value>aaa</param-value>
