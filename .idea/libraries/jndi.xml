@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jndi">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jndi.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

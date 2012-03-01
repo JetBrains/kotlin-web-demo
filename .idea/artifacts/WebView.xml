@@ -33,6 +33,7 @@
         </element>
       </element>
       <element id="javaee-facet-resources" facet="WebViewServer/web/Web" />
+      <element id="dir-copy" path="$PROJECT_DIR$/WebViewServer/static" />
     </root>
   </artifact>
 </component>

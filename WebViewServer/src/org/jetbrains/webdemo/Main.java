@@ -21,10 +21,15 @@ import org.jetbrains.webdemo.servlet.KotlinHttpServlet;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
+import sun.jdbc.odbc.ee.DataSource;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Set;
 
@@ -87,4 +92,22 @@ public class Main {
             return false;
         }
     }
+
+    /*private static boolean loadProperties() {
+
+        InitialContext initCtx = null;
+        try {
+            initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+               int i = 0;
+            *//*DataSource ds = (DataSource)
+                    envCtx.lookup("jdbc/EmployeeDB");
+
+            Connection conn = ds.getConnection();
+            conn.close();*//*
+        } catch (NamingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return true;
+    }*/
 }

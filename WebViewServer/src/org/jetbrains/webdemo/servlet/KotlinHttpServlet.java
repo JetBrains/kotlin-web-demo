@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.servlet;
 
+import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.Initializer;
@@ -25,6 +26,7 @@ import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.server.ServerSettings;
 
+import javax.naming.InitialContext;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -50,6 +52,8 @@ public class KotlinHttpServlet extends HttpServlet {
         System.setProperty("kotlin.running.in.server.mode", "true");
         System.setProperty("java.awt.headless", "true");
 
+        //loadTomcatParameters();
+
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
 
         new File(ServerSettings.LOGS_ROOT).mkdir();
@@ -69,6 +73,25 @@ public class KotlinHttpServlet extends HttpServlet {
             ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
             System.exit(1);
         }
+    }
+
+    private void loadTomcatParameters() {
+        InitialContext initCtx = null;
+        try {
+            initCtx = new InitialContext();
+            NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
+            int i = 0;
+            String str = (String) envCtx.lookup("java_home");
+            System.out.println(str);
+            /*DataSource ds = (DataSource)
+                    envCtx.lookup("jdbc/EmployeeDB");
+
+            Connection conn = ds.getConnection();
+            conn.close();*/
+        } catch (Throwable e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
     }
 
 

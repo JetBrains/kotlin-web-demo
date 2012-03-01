@@ -59,7 +59,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
         bean.setPluginName("Kotlin Web Demo");
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
         if (ServerSettings.IS_TEST_VERSION.equals("false")) {
-            sendViaITNProxy(bean);
+            //sendViaITNProxy(bean);
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, description));
         } else {
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, description));
@@ -74,7 +74,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
         bean.setPluginName("Kotlin Web Demo");
 
         if (ServerSettings.IS_TEST_VERSION.equals("false")) {
-            sendViaITNProxy(bean);
+            //sendViaITNProxy(bean);
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, message, stackTrace, description));
         } else {
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, message, stackTrace, description));
