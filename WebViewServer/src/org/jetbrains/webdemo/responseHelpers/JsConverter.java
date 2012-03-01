@@ -16,9 +16,9 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
 import org.json.JSONArray;
 
 import java.util.HashMap;

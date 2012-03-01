@@ -7,19 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="update to kotlin 448">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/commons-dbcp-1.4.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/WebView.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/apache.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/commons_dbcp_1_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/authorization/AuthorizationHelper.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/server/ServerSettings.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WebViewServer/web/META-INF/MANIFEST.MF" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/TextUtils.java" />
-      <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\WebView\.idea\artifacts\War_file.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\authorization\AuthorizationHelper.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\database\MongoDBConnector.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\static\messages\JavaErrorMessages.properties" afterPath="" />
-      <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\TextUtils.java" afterPath="" />
       <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\examplesForWebDemo\src\html5\creatures\kotlinlogo.png" afterPath="" />
       <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\examplesForWebDemo\src\html5\creatures\main.kt" afterPath="" />
       <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\examplesForWebDemo\src\html5\fancyLines\test.kt" afterPath="" />
@@ -28,80 +15,12 @@
       <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\examplesForWebDemo\src\html5\interactive2\main.kt" afterPath="" />
       <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\examplesForWebDemo\src\html5\interactive\jbLogo.png" afterPath="" />
       <change type="DELETED" beforePath="C:\Development\contrib\jet-contrib\k2js\examplesForWebDemo\src\html5\interactive\main.kt" afterPath="" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewApplet\src\org\jetbrains\demo\ukhorskaya\AppletUtils.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/org/jetbrains/webdemo/AppletUtils.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewApplet\src\org\jetbrains\demo\ukhorskaya\ErrorWriterInApplet.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/org/jetbrains/webdemo/ErrorWriterInApplet.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewApplet\src\org\jetbrains\demo\ukhorskaya\InitializerApplet.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/org/jetbrains/webdemo/InitializerApplet.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewApplet\src\org\jetbrains\demo\ukhorskaya\MainApplet.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/org/jetbrains/webdemo/MainApplet.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\CommandRunner.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/CommandRunner.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\ErrorWriterOnServer.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/ErrorWriterOnServer.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\Initializer.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/Initializer.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\Main.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/Main.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\RequestParameters.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/RequestParameters.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\Statistics.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/Statistics.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\authorization\AuthorizationFacebookHelper.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/authorization/AuthorizationFacebookHelper.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\authorization\AuthorizationGoogleHelper.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/authorization/AuthorizationGoogleHelper.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\authorization\AuthorizationTwitterHelper.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/authorization/AuthorizationTwitterHelper.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\authorization\UserAuthenticator.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/authorization/UserAuthenticator.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\database\MySqlConnector.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/database/MySqlConnector.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\examplesLoader\ExamplesList.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/examplesLoader/ExamplesList.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\examplesLoader\ExamplesLoader.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/examplesLoader/ExamplesLoader.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\handlers\ServerHandler.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/handlers/ServerHandler.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\help\HelpLoader.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/help/HelpLoader.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\log\LogDownloader.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/log/LogDownloader.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\responseHelpers\CompileAndRunExecutor.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/CompileAndRunExecutor.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\responseHelpers\JavaConverterRunner.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/JavaConverterRunner.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\responseHelpers\JavaRunner.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/JavaRunner.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\responseHelpers\JsConverter.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/JsConverter.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\server\KotlinHttpServer.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/server/KotlinHttpServer.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\servlet\KotlinHttpServlet.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\demo\ukhorskaya\sessions\HttpSession.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/sessions/HttpSession.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\ErrorWriter.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/ErrorWriter.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\Interval.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/Interval.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\MyDeclarationDescriptorVisitor.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/MyDeclarationDescriptorVisitor.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\ResponseUtils.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/ResponseUtils.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\TimeManager.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/TimeManager.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\errorsDescriptors\ErrorAnalyzer.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\errorsDescriptors\ErrorDescriptor.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/errorsDescriptors/ErrorDescriptor.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\exceptions\KotlinCoreException.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/exceptions/KotlinCoreException.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\exceptions\KotlinDemoException.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/exceptions/KotlinDemoException.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\responseHelpers\JsonResponseForCompletion.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\responseHelpers\JsonResponseForHighlighting.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForHighlighting.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\server\ServerSettings.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/server/ServerSettings.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\session\SessionInfo.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/session/SessionInfo.java" />
-      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\src\org\jetbrains\demo\ukhorskaya\session\UserInfo.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/session/UserInfo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/WebViewApplet_jar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/WebViewApplet_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
+      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\webdemo\responseHelpers\JsonResponseForCompletion.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java" />
+      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\webdemo\responseHelpers\JsonResponseForHighlighting.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForHighlighting.java" />
+      <change type="MOVED" beforePath="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\webdemo\server\ServerSettings.java" afterPath="$PROJECT_DIR$/src/org/jetbrains/webdemo/server/ServerSettings.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestModule/src/ResponseTest.java" afterPath="$PROJECT_DIR$/TestModule/src/ResponseTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestModule/src/SeleniumTest.java" afterPath="$PROJECT_DIR$/TestModule/src/SeleniumTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/core/CoreJavaFileManager.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/core/CoreJavaFileManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/lang/impl/PsiBuilderImpl.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/lang/impl/PsiBuilderImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/editor/impl/CharArray.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/editor/impl/CharArray.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/fileEditor/impl/LoadTextUtil.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/fileEditor/impl/LoadTextUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/util/IconLoader.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/util/IconLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/util/UserDataHolderBase.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/util/UserDataHolderBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/impl/jar/CoreJarHandler.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/impl/jar/CoreJarHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/impl/jar/JarHandlerBase.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/impl/jar/JarHandlerBase.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/impl/jar/VirtualJarFile.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/impl/jar/VirtualJarFile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/newvfs/persistent/PersistentFSConstants.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/openapi/vfs/newvfs/persistent/PersistentFSConstants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/psi/SingleRootFileViewProvider.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/psi/SingleRootFileViewProvider.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/psi/text/BlockSupport.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/psi/text/BlockSupport.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/util/ReflectionUtil.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/com/intellij/util/ReflectionUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewApplet/src/org/jetbrains/jet/plugin/compiler/PathUtil.java" afterPath="$PROJECT_DIR$/WebViewApplet/src/org/jetbrains/jet/plugin/compiler/PathUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" afterPath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/accordion.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/accordion.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/common.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/common.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/complete.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/complete.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/components.css" afterPath="$PROJECT_DIR$/WebViewServer/static/components/components.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/components.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/components.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/creator.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/creator.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/help.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/help.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/highlighting.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/highlighting.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/runner.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/runner.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/components/updateExamples.js" afterPath="$PROJECT_DIR$/WebViewServer/static/components/updateExamples.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/index.html" afterPath="$PROJECT_DIR$/WebViewServer/static/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/static/login.html" afterPath="$PROJECT_DIR$/WebViewServer/static/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/web/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/WebViewServer/web/WEB-INF/web.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/CompileAndRunExecutor.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/CompileAndRunExecutor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/JsConverter.java" afterPath="$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/responseHelpers/JsConverter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/examplesForWebDemo/src/html5/creatures/creatures.js" afterPath="$PROJECT_DIR$/../k2js/examplesForWebDemo/src/html5/creatures/creatures.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/examplesForWebDemo/src/html5/creatures/template.html" afterPath="$PROJECT_DIR$/../k2js/examplesForWebDemo/src/html5/creatures/template.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/examplesForWebDemo/src/html5/fancyLines/fancylines.js" afterPath="$PROJECT_DIR$/../k2js/examplesForWebDemo/src/html5/fancyLines/fancylines.js" />
@@ -130,9 +49,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translatorTests/test/org/jetbrains/k2js/test/RhinoPropertyTypesChecker.java" afterPath="$PROJECT_DIR$/../k2js/translatorTests/test/org/jetbrains/k2js/test/RhinoPropertyTypesChecker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translatorTests/test/org/jetbrains/k2js/test/RhinoSystemOutputChecker.java" afterPath="$PROJECT_DIR$/../k2js/translatorTests/test/org/jetbrains/k2js/test/RhinoSystemOutputChecker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translatorTests/test/org/jetbrains/k2js/test/RhinoUtils.java" afterPath="$PROJECT_DIR$/../k2js/translatorTests/test/org/jetbrains/k2js/test/RhinoUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/config/Config.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/config/Config.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/general/Translation.java" afterPath="$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/translate/general/Translation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../k2js/translator/translator.iml" afterPath="$PROJECT_DIR$/../k2js/translator/translator.iml" />
     </list>
     <list id="345eea6b-37f8-43b6-87a5-21036f5f7634" name="Failed commit: Default" comment="Merge branch with changes in view and statistics&#10;" />
     <ignored path="WebView.iws" />
@@ -237,37 +153,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Config.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/config/Config.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="106" selection-start="1330" selection-end="1330" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ServerSettings.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/server/ServerSettings.java">
+        <entry file="file://$PROJECT_DIR$/src/org/jetbrains/webdemo/server/ServerSettings.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="52" column="36" selection-start="2088" selection-end="2088" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CommandRunner.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/CommandRunner.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="117" column="99" selection-start="6775" selection-end="6790" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.properties" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="56" selection-start="1374" selection-end="1374" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -284,10 +173,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServerHandler.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ServerHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/handlers/ServerHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="40" selection-start="1701" selection-end="1701" vertical-scroll-proportion="0.3860465">
+            <state line="64" column="67" selection-start="2202" selection-end="2202" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ErrorWriter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jetbrains/webdemo/ErrorWriter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="18" column="47" selection-start="681" selection-end="681" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainApplet.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/WebViewApplet/src/org/jetbrains/webdemo/MainApplet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="21" column="53" selection-start="844" selection-end="844" vertical-scroll-proportion="0.18449612">
               <folding />
             </state>
           </provider>
@@ -600,6 +507,58 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webdemo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="responseHelpers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webdemo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="handlers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -615,6 +574,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="WebViewApplet" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebViewApplet" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jetbrains" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webdemo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -735,6 +720,50 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="webdemo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webdemo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webdemo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="responseHelpers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -917,11 +946,11 @@
       <recent name="web.view.ukhorskaya.sessions" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Development\contrib\jet-contrib\WebView\WebViewServer\src\org\jetbrains\webdemo" />
       <recent name="C:\Development\contrib\jet-contrib\WebView\lib" />
       <recent name="C:\Development\contrib\jet-contrib\k2js\examplesForWebDemo\src" />
       <recent name="C:\Development\contrib\jet-contrib\k2js\jslib" />
       <recent name="C:\Development\contrib\jet-contrib\k2js\jslib\src" />
-      <recent name="C:\Development\contrib\jet-contrib\k2js\jslib\src\html5" />
     </key>
   </component>
   <component name="RunManager" selected="JUnit.SeleniumTest.testSaveProgram">
@@ -1368,7 +1397,11 @@
       <created>1330529137142</created>
       <updated>1330529137142</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Add copyright&#10;Rename package">
+      <created>1330604010022</created>
+      <updated>1330604010022</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1393,11 +1426,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="ExceptionAnalyzer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.62007874" sideWeight="0.9988519" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34055117" sideWeight="0.48376623" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34055117" sideWeight="0.48376623" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277559" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14690171" sideWeight="0.6190945" order="2" side_tool="false" content_ui="tabs" />
@@ -1461,7 +1494,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="update to kotlin 448" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add copyright&#10;Rename package" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1474,7 +1507,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Work with js applet" />
     <MESSAGE value="Changes in html for js applet" />
     <MESSAGE value="spelling errors" />
     <MESSAGE value="Generate js code on server if applet doesn't support&#10;Changes in view&#10;" />
@@ -1499,6 +1531,7 @@
     <MESSAGE value="Resize canvas" />
     <MESSAGE value="Pointer for run button&#10;" />
     <MESSAGE value="update to kotlin 448" />
+    <MESSAGE value="Add copyright&#10;Rename package" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1569,30 +1602,9 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="18" selection-start="2377" selection-end="2377" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/webdemo/ErrorWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="8" selection-start="1474" selection-end="1474" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="143" column="16" selection-start="6381" selection-end="6381" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewApplet/src/org/jetbrains/webdemo/MainApplet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="136" column="12" selection-start="5522" selection-end="5522" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1614,13 +1626,6 @@
     <entry file="file://$PROJECT_DIR$/../k2js/translator/src/org/jetbrains/k2js/config/Config.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="46" column="106" selection-start="1330" selection-end="1330" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/server/ServerSettings.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="36" selection-start="2088" selection-end="2088" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1678,7 +1683,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WebViewServer/src/org/jetbrains/webdemo/handlers/ServerHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="40" selection-start="1701" selection-end="1701" vertical-scroll-proportion="0.3860465">
+        <state line="64" column="67" selection-start="2202" selection-end="2202" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/webdemo/server/ServerSettings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="36" selection-start="2088" selection-end="2088" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jetbrains/webdemo/ErrorWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="47" selection-start="681" selection-end="681" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WebViewApplet/src/org/jetbrains/webdemo/MainApplet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="53" selection-start="844" selection-end="844" vertical-scroll-proportion="0.18449612">
           <folding />
         </state>
       </provider>
