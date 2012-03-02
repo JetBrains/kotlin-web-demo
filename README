@@ -1,2 +1,3 @@
-Kotlin Web Demo is a web-based application capable of editing/running Kotlin code in the browser.
+Kotlin Web Demo is a [web-based application](http://kotlin-demo.jetbrains.com) capable of editing/running Kotlin code in the browser.
+
 To build it, open the project in IntelliJ IDEA and build the WAR artifact for Tomact.
