@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM
+        "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="infoLoggerAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="logs/kotlincompiler.log"/>
+        <param name="MaxFileSize" value="2Mb"/>
+        <param name="MaxBackupIndex" value="20"/>
+        <!--<layout class="org.apache.log4j.xml.XMLLayout">
+
+        </layout>-->
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{MM/dd/yyyy hh:mm:ss} (%F %L) [%p] %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="exceptionLoggerAppender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="logs/exceptions.log"/>
+        <!--<layout class="org.apache.log4j.xml.XMLLayout">
+        </layout>-->
+        <layout class="org.apache.log4j.PatternLayout">
+            <!--<param name="ConversionPattern" value="%m%n"/>-->
+            <param name="ConversionPattern" value="%d{MM/dd/yyyy hh:mm:ss} (%F %L) [%p] %m%n"/>
+        </layout>
+    </appender>
+    <logger name="exceptionLogger">
+        <level value="INFO"/>
+        <appender-ref ref="exceptionLoggerAppender"/>
+    </logger>
+    <logger name="infoLogger">
+        <level value="INFO"/>
+        <appender-ref ref="infoLoggerAppender"/>
+    </logger>
+</log4j:configuration>

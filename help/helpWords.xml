@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<help>
+    <keyword>
+        <name>for</name>
+        <text>
+            For loop iterates through anything that provides an iterator. The syntax is as follows:
+            <pre>for (item in collection)</pre>
+            <pre>  print(item)</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Forloop">More
+                info
+            </a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>namespace</name>
+        <text>
+            A source file may start with a header namespace declaration (see <a
+                href="http://confluence.jetbrains.net/display/Kotlin/Grammar#Grammar-namespaceHeader">the grammar</a>):
+            <pre>namespace foo.bar</pre>
+            <pre>// ...</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Namespaces">More info</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>object</name>
+        <text>
+            Sometimes we need to create an object of a slight modification of some class, without explicitly declaring a
+            new subclass for it. Java handles this case with <b>anonymous inner</b> classes. Kotlin slightly generalizes this
+            concept with
+            <b>object</b>
+            expressions and
+            <b>object</b>
+            declarations.
+            <br/><a href="http://confluence.jetbrains.net/display/Kotlin/Object+expressions+and+Declarations">More info</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>while</name>
+        <text>
+            <b>While</b>
+            and
+            <b>do..while</b>
+            work as usual:
+            <pre>while(x > 0) {</pre>
+            <pre>  x--</pre>
+            <pre>}</pre>
+            <pre></pre>
+            <pre>do {</pre>
+            <pre>  val y = retrieveData()</pre>
+            <pre>} while(y != null)<i>// y is visible here!</i></pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Whileanddo..whileloops">More info</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>when</name>
+        <text><b>When</b> replaces the <b>switch</b> operator of C-like languages. In the simplest form it looks like this:
+            <pre>when (x) {</pre>
+            <pre>  1 => print("x == 1")</pre>
+            <pre>  2 => print("x == 2")</pre>
+            <pre>  else => { <i>// Note the block</i></pre>
+            <pre>    print("x != (1 || 2)")</pre>
+            <pre>  }</pre>
+            <pre>}</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Whenexpression">More info</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>this</name>
+        <text>To access this from an outer scope one writes this@label where @label is a label on the scope this is meant to be from:
+            <pre>class A {</pre>
+            <pre>  fun Int.foo()</pre>
+            <pre>    val a = this@A</pre>
+            <pre>...</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/This+expressions#Thisexpressions-Qualified">More info</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>val</name>
+        <text>Assign-once (read-only) local variable:
+            <pre>val a : Int = 1</pre>
+            <pre>val b = 1 // Type is inferred</pre>
+            <pre><i>// Type required when</i></pre>
+            <pre><i>// no initializer provided</i></pre>
+            <pre>val c : Int </pre>
+            <pre>c = 1 // definite assignment</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+syntax+walk-through#Basicsyntaxwalk-through-Definealocalvariable">More info</a>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Properties+And+Fields">See also</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>var</name>
+        <text>Mutable variable:
+        <pre>var x = 5 // Type inferred</pre>
+        <pre>x += 1</pre>
+        <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+syntax+walk-through#Basicsyntaxwalk-through-Definealocalvariable">More info</a>
+        <a href="http://confluence.jetbrains.net/display/Kotlin/Properties+And+Fields">See also</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>fun</name>
+        <text>Define a function:
+            <pre>fun sum(a : Int, b : Int) : Int {</pre>
+            <pre>  return a + b</pre>
+            <pre>}</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+syntax+walk-through#Basicsyntaxwalk-through-Defineafunction">More info</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>is</name>
+        <text>Pattern matching is performed by <b>is</b> operator that returns true if the pattern matched successfully and false otherwise. It has a negated form <b>!is</b>.
+            <pre>if (obj is String) {</pre>
+            <pre>  print(obj.length)</pre>
+            <pre>}</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">More info</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>in</name>
+        <text>
+            For loop iterates through anything that provides an iterator. The syntax is as follows:
+            <pre>for (item in collection)</pre>
+            <pre>  print(item)</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Forloop">More
+                info
+            </a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>if</name>
+        <text>In Kotlin, <b>if</b> is an expression, 
+            i.e. it returns a value. Therefore there is not ternary operator (condition ? then : else), because ordinary <b>if</b> works fine in this role.
+            <pre>var max : Int</pre>
+            <pre>if (a > b)</pre>
+            <pre>  max = a</pre>
+            <pre>else </pre>
+            <pre>  max = b</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures">More info</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>vararg</name>
+        <text>The last argument of a function may be marked with <b>vararg</b> annotation.
+            By default, <b>vararg</b> creates an array, but this behavior can be customized by providing arguments to the annotation.
+            <pre>fun asList&lt;T&gt;(vararg ts : T) : List&lt;T&gt; {</pre>
+            <pre>...</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Functions#Functions-Varargs">More info</a>
+        </text>
+    </keyword>
+    <keyword>
+        <name>inline</name>
+        <text>You can add an inline annotation for a function:
+            <pre>inline fun lock&lt;T&gt;(lock : Lock, body : fun() : T) : T {</pre>
+            <pre>...</pre>
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Functions#Functions-Inlinefunctions">More info</a>
+        </text>
+    </keyword>
+</help>
+
+        <!--keywords: words( "namespace continue return object while break class trait throw super" +
+     "when type this else This try val var fun for is in if do as true false null"),
+blockKeywords: words(""),
+soft: words("import where by get set abstract enum open annotation
+override private public internal protected catch out vararg inline finally final ref"),-->
