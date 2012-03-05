@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="idea-full">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../jet/ideaSDK/lib/idea.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
