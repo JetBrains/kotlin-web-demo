@@ -18,7 +18,7 @@
     <property name="build.zip" value="kotlin.zip"/>
     <property name="plugin.build.zip" value="kotlin-plugin.zip"/>
 
-    <target name="update">
+    <target name="update_kotlin">
         <execute_update/>
     </target>
 

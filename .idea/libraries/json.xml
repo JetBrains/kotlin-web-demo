@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="json">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/json-20090211.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/json.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

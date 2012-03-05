@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/kotlinc/lib/asm-commons.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/kotlinc/lib/asm.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kotlinc/lib/asm-util-3.3.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

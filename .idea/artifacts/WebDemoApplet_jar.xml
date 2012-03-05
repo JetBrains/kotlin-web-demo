@@ -13,11 +13,12 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlinc/lib/kotlin-runtime.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlinc/lib/picocontainer.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlinc/lib/trove4j.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-20090211.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../kotlin/js/js.translator/lib/dartc.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlinc/lib/guava-11.0.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlinc/lib/asm.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlinc/lib/asm-commons.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/json.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlinc/lib/asm-util-3.3.jar" path-in-jar="/" />
       <element id="file-copy" path="$PROJECT_DIR$/lib/kotlinc/lib/alt/kotlin-jdk-headers.jar" />
       <element id="file-copy" path="$PROJECT_DIR$/lib/kotlinc/lib/kotlin-runtime.jar" />
     </root>
