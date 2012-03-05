@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="WebDemoApplet:jar">
+    <output-path>$PROJECT_DIR$/kotlin.web.demo.server/static</output-path>
+    <root id="archive" name="WebDemoApplet01032012.jar">
+      <element id="module-output" name="idea.patch.applet" />
+      <element id="module-output" name="js.translator" />
+      <element id="module-output" name="kotlin.web.demo.applet" />
+      <element id="module-output" name="js.libraries" />
+      <element id="module-output" name="kotlin.web.demo.core" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../KotlinCompiler/lib/json-20090211.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/trove4j.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/picocontainer.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/guava-r09.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/intellij-core.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/asm.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/annotations.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/asm-commons.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-runtime.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-compiler.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlin/js/js.translator/lib/dartc.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/alt/kotlin-jdk-headers.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-runtime.jar" />
+    </root>
+  </artifact>
+</component>

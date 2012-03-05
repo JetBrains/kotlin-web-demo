@@ -3,12 +3,12 @@
     <output-path>$PROJECT_DIR$/out/artifacts/WebViewServer_jar</output-path>
     <root id="archive" name="WebView.jar">
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/WebViewServer/src/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.server/src/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="kotlin.web.demo.server" />
-      <element id="module-output" name="kotlin.web.demo.core" />
       <element id="module-output" name="js.libraries" />
       <element id="module-output" name="js.translator" />
+      <element id="module-output" name="kotlin.web.demo.core" />
     </root>
   </artifact>
 </component>

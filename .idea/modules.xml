@@ -6,10 +6,11 @@
       <module fileurl="file://$PROJECT_DIR$/idea.patch.applet/idea.patch.applet.iml" filepath="$PROJECT_DIR$/idea.patch.applet/idea.patch.applet.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../../kotlin/js/js.libraries/js.libraries.iml" filepath="$PROJECT_DIR$/../../../kotlin/js/js.libraries/js.libraries.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../../kotlin/js/js.translator/js.translator.iml" filepath="$PROJECT_DIR$/../../../kotlin/js/js.translator/js.translator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/WebViewApplet/kotlin.web.demo.applet.iml" filepath="$PROJECT_DIR$/WebViewApplet/kotlin.web.demo.applet.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.core.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/WebViewServer/kotlin.web.demo.server.iml" filepath="$PROJECT_DIR$/WebViewServer/kotlin.web.demo.server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TestModule/kotlin.web.demo.test.iml" filepath="$PROJECT_DIR$/TestModule/kotlin.web.demo.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.applet/kotlin.web.demo.applet.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.applet/kotlin.web.demo.applet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.core/kotlin.web.demo.core.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.core/kotlin.web.demo.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" />
     </modules>
   </component>
 </project>

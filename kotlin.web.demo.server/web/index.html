@@ -1,0 +1,393 @@
+<!doctype html>
+<html>
+<head>
+    <title>Kotlin Web Demo</title>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="stylesheet" href="/static/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/static/components/components.css">
+    <script src="/static/codemirror/lib/codemirror.js"></script>
+
+    <script src="/static/codemirror/mode/clike/kotlin.js"></script>
+
+    <link type="text/css" href="/static/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/static/jquery/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/static/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <!--<script type="text/javascript" src="/jquery/development-bundle/ui/jquery.ui.selectmenu.js"></script>-->
+    <script type="text/javascript" src="/static/jquery/development-bundle/external/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/static/kotlin_lib.js"></script>
+    <script type="text/javascript" src="/static/canvas_helper.js"></script>
+
+    <style>.CodeMirror {
+        border: 2px inset #dee;
+    }</style>
+    <style type="text/css">
+        .completions {
+            background-color: #eee;
+            /*border: 1px solid #EEEEEE;*/
+            position: absolute;
+            z-index: 10;
+            overflow: hidden;
+            -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+            -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+            box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+        }
+
+        .completions select {
+            background: #fafafa;
+            outline: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            font-family: monospace;
+        }
+
+        .CodeMirror {
+            border: 1px solid #eee;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        var editor;
+    </script>
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-940435-28']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' :
+                    'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+
+</head>
+<body spellcheck="false" onResize="resizeCentral();"
+      onload="onBodyLoad();">
+
+<!--<div id="toolbox" style="display:none">
+    <div align="center">
+        <div class="fixedpage">
+            This is a public link to your program: <span id="publicLinkHref"></span>
+            &lt;!&ndash;<img src="icons/closePopup.png">&ndash;&gt;
+            &lt;!&ndash;<span class="ui-icon-circle-close close ui-icon" title="Close popup">    </span>&ndash;&gt;
+        </div>
+    </div>
+</div>-->
+<div id="loader">
+    <img src="/static/images/loading2.png"/>
+</div>
+
+<div id="all">
+    <div id="header">
+        <table>
+            <tr>
+                <td>
+                    <img src="/static/images/kotlinlogo2.png" id="kotlinlogo" title="Kotlin"/>
+                    <img src="/static/images/kotlinlogowobackground.png" id="kotlinlogofork2js" title="Kotlin" style="display: none;"/>
+                </td>
+                <td id="headertitle">
+                    Kotlin Web Demo<span id="kotlinVersionTop"></span>
+                </td>
+                <td id="headerlinks">
+                    <div id="userName"></div>
+                    <div id="login" height="20">
+                        <b>Log in:</b>
+                        <a href="#" onclick="beforeLogin('twitter');"><img src="/static/images/social/twitter.png"/></a>
+                        <a href="#" onclick="beforeLogin('facebook');"><img src="/static/images/social/facebook.png"/></a>
+                        <a href="#" onclick="beforeLogin('google');"><img src="/static/images/social/google.png"/></a>
+                    </div>
+                    <a target="_blank"
+                       href="http://confluence.jetbrains.net/display/Kotlin/Welcome">Documentation</a>
+                    <a target="_blank" href="http://youtrack.jetbrains.net/issues/KT">BugTracker</a>
+                    <a target="_blank" href="http://blog.jetbrains.com/kotlin/">Blog</a>
+                    <a target="_blank" href="https://twitter.com/#!/project_kotlin">Twitter</a>
+
+                </td>
+                <td id="jetbrainslogo">
+                    <a target="_blank" href="http://jetbrains.com"><img src="/static/images/jblogo.png" id="jblogo"
+                                                                        title="JetBrains"/></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="maindiv">
+        <div id="left">
+            <div id="lefttitle">
+                Examples
+            </div>
+            <div id="leftcontent">
+                <div id="examplesaccordion">
+
+                </div>
+            </div>
+        </div>
+        <!--<div id="twolast">-->
+        <div id="center">
+            <!--<div id="centraltitle">
+                <table width="100%">
+                    <tr>
+                        <td width="5%">
+                            <img src="/icons/togglel.png" id="hideLeft" title="Hide left side"/>
+                        </td>
+                        <td>
+                            Editor
+                        </td>
+                        <td width="5%">
+                            <img src="/icons/toggler.png" id="hideRight" style="float: right;"
+                                 title="Hide right side"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>-->
+            <div id="centralcontent">
+                <div id="editordiv">
+                    <div id="editorinput" tabindex="0">
+                        <form><textarea class="CodeMirror" id="code" name="code"></textarea>
+                        </form>
+                    </div>
+                </div>
+                <div id="editorbottom">
+                    <div id="statusbar">
+
+                    </div>
+                    <div id="consoleandproblems">
+                        <div id="tabs">
+                            <ul>
+                                <li><a href="#problems">Problems View</a></li>
+                                <li><a href="#console">Console</a></li>
+                            </ul>
+                            <div id="problems">
+
+                            </div>
+                            <div id="console">
+                                <canvas height="450" width="800"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="right">
+            <!--<div class="titleHeader">
+                <div>Login</div>
+            </div>-->
+
+            <div class="titleHeader">
+                <div id="refreshTitle">Type checking</div>
+                <div id="refreshImg">
+                    <img src="/static/icons/refresh.png" id="refreshGutters" title="Recheck"/>
+                </div>
+
+            </div>
+            <div id="settingsContent">
+                <div id="editortitle">
+                    <table id="switchtable">
+                        <tr>
+                            <td>
+                                <div class="field switch" id="appletonoff">
+                                    <label class="applet-nohighlighting selected"><span
+                                            title="Highlight errors only when a program is run (Default)">On run</span></label>
+                                    <label class="applet-disable rightServer"><span
+                                            title="Send each highlighting request to server (Experimental)">Server</span></label>
+                                    <label class="applet-enable"><span title="Use an applet (Experimental)"
+                                                                       id="appletclient">Client</span></label>
+                                    <input type="checkbox" id="appletcheckbox" checked="false"
+                                           class="appletcheckbox"
+                                           name="appletcheckbox"/>
+                                    <input type="checkbox" id="nohighlightingcheckbox" checked="true"
+                                           class="nohighlightingcheckbox"
+                                           name="nohighlightingcheckbox"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="whatisit">
+                                <a id="whatimg"><span>What is this</span><img src="/static/icons/help.png"/></a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!--<div id="editortitleswitchtext" class="editortitletext">Type checking:</div>-->
+                </div>
+
+            </div>
+            <div id="rundiv">
+                <table>
+                    <tr>
+                        <td id="runTitle">Run</td>
+                        <td><select id="runConfigurationMode">
+                            <option value="java">Java</option>
+                            <option value="js">JavaScript (Standard)</option>
+                            <option value="canvas">JavaScript (Canvas)</option>
+                        </select></td>
+                        <td><img src="/static/icons/execute.png" id="run"
+                                 title="Run file (Ctrl + F9) using Run configuration"/></td>
+                        <td id="whatisitRunConf">
+                            <a id="whatimgRunConf"><img title="Help" src="/static/icons/help.png"/></a>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="helpcontent">
+                <h4 class="helpTitle">Command line arguments</h4>
+
+                <div id="argsinput">
+                    <textarea rows="3" class="arguments" id="arguments" name="arguments"></textarea>
+                </div>
+            </div>
+            <div id="righttitle" class="titleHeader">
+                Example description
+            </div>
+            <div id="helpcontent" class="helpcontent">
+                <div id="help1">
+                    You can choose an example on the left side.
+                </div>
+            </div>
+            <!-- <div id="helpcontent" class="helpcontent">
+                <div id="help1">
+                    You can choose an example on the left side.
+                </div>
+            </div>-->
+            <div class="titleHeader">
+                Help for keywords
+            </div>
+            <div class="helpcontent">
+                <div id="help2">
+                    Click on the keyword to see help.
+                </div>
+            </div>
+            <div class="titleHeader toggleShortcuts" id="shortcuts">
+                <img src="/static/images/toogleShortcuts.png" id="toggleShortcutsButton"/>
+                Shortcuts
+            </div>
+            <div class="helpcontent">
+                <div id="help3">
+                    Use <b>Ctrl+Space</b> for code completion <br/>
+                    Use <b>Ctrl+F9</b> to run with JVM<br/>
+                    Use <b>Ctrl+Shift+F9</b> to run with Pre-Alpha JavaScript back-end<br/>
+                    Use <b>Ctrl+Alt+L</b> to reformat selected fragment<br/>
+                </div>
+            </div>
+        </div>
+        <!--</div>-->
+    </div>
+
+    <div id="footer">&copy; JetBrains, 2011-2012 Kotlin Web Demo v.<span id="kotlinVersion"></span></div>
+    <pre><div id="debug"></div></pre>
+</div>
+
+<div id="dialog" title="Help">
+    <p class="dialogPbordered">Web Demo runs Kotlin type checker to report errors/warnings in the editor.
+        The type checker can run either on our server or
+        your machine (using a Java&#x2122; Applet, <b>experimental</b>).</p>
+    <img src="/static/images/nohighlightingActive.png"/>
+
+    <p><b>On run mode</b> (default): type checker is running on our server only when you run your program.</p>
+    <img src="/static/images/clientActive.png"/>
+
+    <p class="dialogPbordered"><b>Client mode</b> (experimental): type checker, code completion and other services are
+        running on your machine (in a
+        Java&#x2122; Applet). The server only generates byte code and runs your programs on the JVM.</p>
+    <img src="/static/images/serverActive.png"/>
+
+    <p><b>Server mode</b> (experimental): all the services except for basic keyword highlighting are running on our
+        server.</p>
+
+    <img src="/static/images/refreshButtonHelp.png"/>
+
+    <p><b>Recheck button</b>: Re-run the type checker on your code.</p>
+
+</div>
+
+<div id="saveDialog" title="Save your program">
+    <form action="javascript:void(0);" onsubmit="saveAs();">
+        Save as: <input id="programName"/>
+    </form>
+</div>
+
+<div id="popupForCanvas" title="Canvas example">
+    <canvas id="mycanvas"></canvas>
+</div>
+
+<div id="showInfoAboutLoginDialog" title="Help">
+    <p>You can save and share your programs.</p>
+    <!--<img src="/images/login.png"/>-->
+    <div id="loginInPopup" height="20" style="display: block;">
+        <b>Log in to enable "My Programs": </b>
+        <a onclick="beforeLogin('google');" href="#">
+            <img src="/static/images/social/google.png"/>
+        </a>
+        <a onclick="beforeLogin('facebook');" href="#">
+            <img src="/static/images/social/facebook.png"/>
+        </a>
+        <a onclick="beforeLogin('twitter');" href="#">
+            <img src="/static/images/social/twitter.png"/>
+        </a>
+    </div>
+</div>
+
+<div id="dialogAboutRunConfiguration" title="Help">
+    <p>
+        <!--dialogPbordered-->
+        You can choose one of the proposed run configurations:
+    <img style="margin-top: 10px; margin-bottom: 10px;" src="/static/images/help/runConf.png"/>
+    <p class="dialogPbordered">
+    <b>Java (Standard)</b>: program will run using JVM.
+    </p>
+    <p class="dialogPbordered">
+        <b>JavaScript (Standard)</b>: program will run using Pre-Alfa JavaScript backend.
+    </p>
+    <p>
+        <b>JavaScript (Canvas)</b>: program will run using Pre-Alfa JavaScript backend. HTML5 Canvas is available for drawing.
+    </p>
+
+</div>
+
+<div id="confirmDialog" title="Save your program">
+    Do you want to save your changes?
+</div>
+
+<link type="text/css" href="/static/jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css" rel="stylesheet"/>
+
+<script type="text/javascript" src="/static/jquery/development-bundle/ui/jquery.ui.selectmenu.js"></script>
+
+<script src="/static/components/common.js"></script>
+<script src="/static/components/help.js"></script>
+<script src="/static/components/components.js"></script>
+<script src="/static/components/accordion.js"></script>
+<script src="/static/components/highlighting.js"></script>
+<script src="/static/components/complete.js"></script>
+<script src="/static/components/runner.js"></script>
+
+<applet id="myapplet" code="org.jetbrains.webdemo.MainApplet" width="0" height="0"
+        ARCHIVE="/static/WebDemoApplet01032012.jar" style="display: none;">
+</applet>
+<!--<applet id="jsapplet" code="org.jetbrains.k2js.facade.K2JSTranslatorApplet" width="0" height="0"
+        ARCHIVE="WebViewApplet02102012.jar" style="display: none;"></applet>-->
+<!--<applet id="myapplet" code="org.jetbrains.demo.ukhorskaya.MainApplet" width="0" height="0"
+        ARCHIVE="WebViewApplet.jar" style="display: none;">
+</applet>
+<applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
+        ARCHIVE="WebViewApplet.jar" style="display: none;"></applet>-->
+
+<!--
+<applet id="myapplet" code="org.jetbrains.demo.ukhorskaya.MainApplet" width="0" height="0"
+        ARCHIVE="http://dl.dropbox.com/u/56547825/WebViewApplet.jar/WebViewApplet.jar"></applet>
+
+<applet id="jsapplet" code="org.jetbrains.k2js.K2JSTranslatorApplet" width="0" height="0"
+        ARCHIVE="http://dl.dropbox.com/u/56547825/WebViewApplet.jar/WebViewApplet.jar, rt.jar"></applet>
+-->
+
+
+</body>
+</html>

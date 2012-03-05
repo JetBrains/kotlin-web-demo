@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="js">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../k2js/translator/lib/js.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
