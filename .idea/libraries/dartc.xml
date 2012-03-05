@@ -1,11 +1,9 @@
 <component name="libraryTable">
   <library name="dartc">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../kotlin/js/js.translator/lib/dartc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../kotlin/js/js.translator/lib/dartc.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/../../../kotlin/js/js.translator/lib/dartc.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

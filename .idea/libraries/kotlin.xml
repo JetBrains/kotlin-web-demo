@@ -1,31 +1,10 @@
 <component name="libraryTable">
   <library name="kotlin">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-compiler.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-runtime.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kotlinc/lib/kotlin-compiler.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kotlinc/lib/kotlin-runtime.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/../../../kotlin/runtests/test" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/stdlib/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/build-tools/ant/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/build-tools/core/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/compiler/backend/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/compiler/cli/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/compiler/frontend/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/compiler/frontend.java/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/compiler/jet.as.java.psi/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/compiler/tests" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/compiler/util/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/confluence/src/main/java" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/docs/exPuzzlers/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/examples/src/benchmarks/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/grammar/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/idea/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/idea/tests" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/j2k/src" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/j2k/tests/test" />
-      <root url="file://$PROJECT_DIR$/../../../kotlin/templatelib/test" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

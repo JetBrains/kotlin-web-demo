@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="annotations">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/annotations.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kotlinc/lib/annotations.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="guava-r09">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/guava-r09.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kotlinc/lib/guava-r09.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

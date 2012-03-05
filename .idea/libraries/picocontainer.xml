@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="picocontainer">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/picocontainer.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kotlinc/lib/picocontainer.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
