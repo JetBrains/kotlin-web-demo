@@ -23,7 +23,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.k2js.facade.WebDemoTranslatorFacade;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.Interval;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -32,7 +34,7 @@ import org.jetbrains.jet.lang.diagnostics.*;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
-import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
+
 
 import java.util.*;
 
@@ -113,7 +115,7 @@ public class ErrorAnalyzer {
                 bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
             } else {
-                bindingContext = new K2JSTranslatorUtils().getBindingContext(currentPsiFile.getText());
+                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(Initializer.INITIALIZER.getEnvironment().getProject(), (JetFile) currentPsiFile);
             }
 
         } catch (Throwable e) {

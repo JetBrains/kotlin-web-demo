@@ -27,7 +27,7 @@ import org.jetbrains.jet.plugin.JetFileType;
  * Date: 10/14/11
  * Time: 3:49 PM
  */
-public class InitializerApplet {
+public class InitializerApplet extends Initializer {
     private static InitializerApplet initializer = new InitializerApplet();
 
     public static InitializerApplet getInstance() {
@@ -39,7 +39,7 @@ public class InitializerApplet {
 
     private static JetCoreEnvironment environment;
 
-    public static JetCoreEnvironment getEnvironment() {
+    public JetCoreEnvironment getEnvironment() {
         if (environment != null) {
             return environment;
         }

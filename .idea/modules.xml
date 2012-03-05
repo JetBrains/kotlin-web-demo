@@ -2,16 +2,14 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TestModule/TestModule.iml" filepath="$PROJECT_DIR$/TestModule/TestModule.iml" />
-      <module fileurl="file://$PROJECT_DIR$/WebView.iml" filepath="$PROJECT_DIR$/WebView.iml" />
-      <module fileurl="file://$PROJECT_DIR$/WebViewApplet/WebViewApplet.iml" filepath="$PROJECT_DIR$/WebViewApplet/WebViewApplet.iml" />
-      <module fileurl="file://$PROJECT_DIR$/WebViewServer/WebViewServer.iml" filepath="$PROJECT_DIR$/WebViewServer/WebViewServer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../k2js/js/js.iml" filepath="$PROJECT_DIR$/../k2js/js/js.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idea.pacth.server/idea.pacth.server.iml" filepath="$PROJECT_DIR$/idea.pacth.server/idea.pacth.server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idea.patch.applet/idea.patch.applet.iml" filepath="$PROJECT_DIR$/idea.patch.applet/idea.patch.applet.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../../kotlin/js/js.libraries/js.libraries.iml" filepath="$PROJECT_DIR$/../../../kotlin/js/js.libraries/js.libraries.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../../kotlin/js/js.translator/js.translator.iml" filepath="$PROJECT_DIR$/../../../kotlin/js/js.translator/js.translator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../k2js/jslib/jslib.iml" filepath="$PROJECT_DIR$/../k2js/jslib/jslib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../k2js/k2js.iml" filepath="$PROJECT_DIR$/../k2js/k2js.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../k2js/translator/translator.iml" filepath="$PROJECT_DIR$/../k2js/translator/translator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WebViewApplet/kotlin.web.demo.applet.iml" filepath="$PROJECT_DIR$/WebViewApplet/kotlin.web.demo.applet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.core.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WebViewServer/kotlin.web.demo.server.iml" filepath="$PROJECT_DIR$/WebViewServer/kotlin.web.demo.server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TestModule/kotlin.web.demo.test.iml" filepath="$PROJECT_DIR$/TestModule/kotlin.web.demo.test.iml" />
     </modules>
   </component>
 </project>

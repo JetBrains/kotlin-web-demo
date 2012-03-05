@@ -20,7 +20,9 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.k2js.facade.WebDemoTranslatorFacade;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.MyDeclarationDescriptorVisitor;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
@@ -78,13 +80,18 @@ public class JsonResponseForCompletion {
         }*/
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
+        BindingContext bindingContext1;
         try {
-           // if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
-//                bindingContext = new K2JSTranslatorUtils().getBindingContext(currentPsiFile.getText());
-//            } else {
+           if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
+                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(Initializer.INITIALIZER.getEnvironment().getProject(), (JetFile) currentPsiFile);
+               bindingContext1 = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
+                       (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+            } else {
                 bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
-//            }
+               bindingContext1 = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
+                       (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+            }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
             return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
@@ -94,6 +101,9 @@ public class JsonResponseForCompletion {
         ErrorWriter.ERROR_WRITER.writeInfo(info);
 
         if (bindingContext == null){
+            return "[]";
+        }
+        if (bindingContext1 == null){
             return "[]";
         }
 

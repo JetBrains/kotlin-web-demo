@@ -245,7 +245,7 @@ public class HttpSession {
     }
 
     private void setGlobalVariables(@Nullable String text) {
-        currentProject = Initializer.getEnvironment().getProject();
+        currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
         if (text == null) {
             text = "fun main(args : Array<String>) {\n" +
                     "  System.out?.println(\"Hello, world!\")\n" +

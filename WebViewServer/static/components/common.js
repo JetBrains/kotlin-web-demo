@@ -203,7 +203,7 @@ function getSessionIdSuccess(data) {
             userName = decodeURI(userName);
             userName = replaceAll(userName, "\\+", " ");
 
-            $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
+            $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/static/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
             document.getElementById("userNameTitle").onclick = function (e) {
                 userNameClick(e);
             };
@@ -255,7 +255,7 @@ function resizeCentral() {
     $("#left").css("minHeight", (wheight - 72 - 20 - 10) + "px");
     $("#right").css("minHeight", (wheight - 72 - 20 - 10) + "px");
     $("#center").css("minHeight", (wheight - 72 - 20 - 10) + "px");
-    $("#center").css("width", (wwidth - 282 - 282 - 2 - 20 -5) + "px");
+    $("#center").css("width", (wwidth - 292 - 292 - 2 - 20 -5) + "px");
 //    $("#left").css("width", "280px");
 //    $("#right").css("width", "280px");
     editor.refresh();
@@ -470,7 +470,7 @@ function setLogin() {
     userName = decodeURI(userName);
     userName = replaceAll(userName, "\\+", " ");
 
-    $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
+    $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/static/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
     document.getElementById("userNameTitle").onclick = function (e) {
         userNameClick(e);
     };

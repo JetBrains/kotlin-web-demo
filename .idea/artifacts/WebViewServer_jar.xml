@@ -5,12 +5,10 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/WebViewServer/src/META-INF/MANIFEST.MF" />
       </element>
-      <element id="module-output" name="WebViewServer" />
-      <element id="module-output" name="WebView" />
-      <element id="module-output" name="translator" />
-      <element id="module-output" name="js" />
-      <element id="module-output" name="k2js" />
-      <element id="module-output" name="jslib" />
+      <element id="module-output" name="kotlin.web.demo.server" />
+      <element id="module-output" name="kotlin.web.demo.core" />
+      <element id="module-output" name="js.libraries" />
+      <element id="module-output" name="js.translator" />
     </root>
   </artifact>
 </component>

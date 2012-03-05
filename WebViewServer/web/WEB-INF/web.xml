@@ -12,14 +12,17 @@
     <servlet>
         <servlet-name>KotlinHttpServlet</servlet-name>
         <servlet-class>org.jetbrains.webdemo.servlet.KotlinHttpServlet</servlet-class>
-        <init-param>
-            <param-name>java</param-name>
-            <param-value>aaa</param-value>
-        </init-param>
+
     </servlet>
 
     <servlet-mapping>
         <servlet-name>KotlinHttpServlet</servlet-name>
+        <url-pattern>/kotlinServer</url-pattern>
+        <url-pattern>/logs</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 

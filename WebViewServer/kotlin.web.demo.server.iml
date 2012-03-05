@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="web" name="Web">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/web" relative="/" />
+          <root url="file://$MODULE_DIR$/static" relative="/static" />
+        </webroots>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/resources" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="intellij-core" level="project" />
+    <orderEntry type="module" module-name="kotlin.web.demo.core" />
+    <orderEntry type="module" module-name="js.libraries" />
+    <orderEntry type="module" module-name="js.translator" />
+    <orderEntry type="library" name="json" level="project" />
+    <orderEntry type="library" name="commons-lang-httpclient-codec" level="project" />
+    <orderEntry type="library" name="scribe-1.3.0" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-5.1.18-bin" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="catalina" level="project" />
+    <orderEntry type="library" name="log4j-1.2.16" level="project" />
+    <orderEntry type="library" name="guava-r09" level="project" />
+    <orderEntry type="library" name="javax.servlet" level="project" />
+    <orderEntry type="library" name="annotations" level="project" />
+    <orderEntry type="library" name="kotlin" level="project" />
+    <orderEntry type="library" name="picocontainer" level="project" />
+    <orderEntry type="library" name="trove4j" level="project" />
+    <orderEntry type="library" name="asm-all-3.3.1" level="project" />
+    <orderEntry type="module" module-name="idea.pacth.server" />
+  </component>
+</module>
+

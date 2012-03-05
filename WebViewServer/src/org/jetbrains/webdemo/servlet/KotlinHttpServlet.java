@@ -17,10 +17,8 @@
 package org.jetbrains.webdemo.servlet;
 
 import org.apache.naming.NamingContext;
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ErrorWriterOnServer;
-import org.jetbrains.webdemo.Initializer;
-import org.jetbrains.webdemo.Statistics;
+import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
@@ -52,20 +50,24 @@ public class KotlinHttpServlet extends HttpServlet {
         System.setProperty("kotlin.running.in.server.mode", "true");
         System.setProperty("java.awt.headless", "true");
 
-        //loadTomcatParameters();
+        if (!loadTomcatParameters()) {
+            ErrorWriter.writeErrorToConsole("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
+            System.exit(1);
+        }
 
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
+        Initializer.INITIALIZER = ServerInitializer.getInstance();
 
         new File(ServerSettings.LOGS_ROOT).mkdir();
         new File(ServerSettings.STATISTICS_ROOT).mkdir();
 
         try {
-            if (Initializer.getInstance().initJavaCoreEnvironment()) {
+            if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
                 ExamplesList.getInstance();
                 HelpLoader.getInstance();
                 Statistics.getInstance();
-                //MySqlConnector.getInstance();
+                MySqlConnector.getInstance();
             } else {
                 ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
             }
@@ -75,21 +77,22 @@ public class KotlinHttpServlet extends HttpServlet {
         }
     }
 
-    private void loadTomcatParameters() {
+    private boolean loadTomcatParameters() {
         InitialContext initCtx = null;
         try {
             initCtx = new InitialContext();
             NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
-            int i = 0;
-            String str = (String) envCtx.lookup("java_home");
-            System.out.println(str);
-            /*DataSource ds = (DataSource)
-                    envCtx.lookup("jdbc/EmployeeDB");
-
-            Connection conn = ds.getConnection();
-            conn.close();*/
+            CommandRunner.setServerSettingFromTomcatConfig("java_home", (String) envCtx.lookup("java_home"));
+            CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
+            CommandRunner.setServerSettingFromTomcatConfig("host", (String) envCtx.lookup("host"));
+            CommandRunner.setServerSettingFromTomcatConfig("port", (String) envCtx.lookup("port"));
+            CommandRunner.setServerSettingFromTomcatConfig("examples", (String) envCtx.lookup("examples"));
+            CommandRunner.setServerSettingFromTomcatConfig("auth_redirect", (String) envCtx.lookup("auth_redirect"));
+            CommandRunner.setServerSettingFromTomcatConfig("is_test_version", (String) envCtx.lookup("is_test_version"));
+            return true;
         } catch (Throwable e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return false;
         }
 
     }

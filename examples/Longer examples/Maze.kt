@@ -29,34 +29,34 @@ import java.util.*
  * straightly up, down, left or right, no diagonal moves allowed.
  */
 fun findPath(maze : Maze) : List<#(Int, Int)>? {
-    val previous = HashMap<#(Int, Int), #(Int, Int)>
+  val previous = HashMap<#(Int, Int), #(Int, Int)>
 
-    val queue = LinkedList<#(Int, Int)>
-    val visited = HashSet<#(Int, Int)>
+  val queue = LinkedList<#(Int, Int)>
+  val visited = HashSet<#(Int, Int)>
 
-    queue.offer(maze.start)
-    visited.add(maze.start)
-    while (!queue.isEmpty()) {
-      val cell = queue.poll()
-      if (cell == maze.end) break
+  queue.offer(maze.start)
+  visited.add(maze.start)
+  while (!queue.isEmpty()) {
+    val cell = queue.poll()
+    if (cell == maze.end) break
 
-      for (newCell in maze.neighbors(cell._1, cell._2)) {
-        if (newCell in visited) continue
-        previous[newCell] = cell
-        queue.offer(newCell)
-        visited.add(cell)
-      }
+    for (newCell in maze.neighbors(cell.sure()._1, cell.sure()._2)) {
+    if (newCell in visited) continue
+    previous[newCell] = cell.sure()
+    queue.offer(newCell)
+    visited.add(cell.sure())
     }
+  }
 
-    if (previous[maze.end] == null) return null
+  if (previous[maze.end] == null) return null
 
-    val path = ArrayList<#(Int, Int)>()
-    var current = previous[maze.end]
-    while (current != maze.start) {
-        path.add(0, current)
-        current = previous[current]
-    }
-    return path
+  val path = ArrayList<#(Int, Int)>()
+  var current = previous[maze.end]
+  while (current != maze.start) {
+    path.add(0, current.sure())
+    current = previous[current]
+  }
+  return path
 }
 
 /**
@@ -83,16 +83,16 @@ fun Maze.addIfFree(i : Int, j : Int, result : List<#(Int, Int)>) {
  * A data class that represents a maze
  */
 class Maze(
-    // Number or columns
-    val width : Int,
-    // Number of rows
-    val height : Int,
-    // true for a wall, false for free space
-    val walls : Array<out Array<out Boolean>>,
-    // The starting point (must not be a wall)
-    val start : #(Int, Int),
-    // The target point (must not be a wall)
-    val end : #(Int, Int)
+  // Number or columns
+  val width : Int,
+  // Number of rows
+  val height : Int,
+  // true for a wall, false for free space
+  val walls : Array<out Array<out Boolean>>,
+  // The starting point (must not be a wall)
+  val start : #(Int, Int),
+  // The target point (must not be a wall)
+  val end : #(Int, Int)
 ) {
 }
 
@@ -139,17 +139,17 @@ fun printMaze(str : String) {
   println("Maze:")
   val path = findPath(maze)
   for (i in 0..maze.height - 1) {
-    for (j in 0..maze.width - 1) {
-      val cell = #(i, j)
-        print(
-          if (maze.walls[i][j]) "O"
-          else if (cell == maze.start) "I"
-          else if (cell == maze.end) "$"
-          else if (path != null && path.contains(cell)) "~"
-          else " "
-        )
-      }
-      println("")
+  for (j in 0..maze.width - 1) {
+    val cell = #(i, j)
+    print(
+      if (maze.walls[i][j]) "O"
+      else if (cell == maze.start) "I"
+      else if (cell == maze.end) "$"
+      else if (path != null && path.contains(cell)) "~"
+      else " "
+    )
+    }
+    println("")
    }
   println("Result: " + if (path == null) "No path" else "Path found")
   println("")
@@ -176,9 +176,9 @@ fun printMaze(str : String) {
 fun makeMaze(s : String) : Maze {
   val lines = s.split("\n").sure()
   val w = max<String?>(lines.toList(), comparator<String?> {o1, o2 ->
-          val l1 : Int = o1?.size ?: 0
-          val l2 = o2?.size ?: 0
-          l1 - l2
+    val l1 : Int = o1?.size ?: 0
+    val l2 = o2?.size ?: 0
+    l1 - l2
   }).sure()
   val data = Array<Array<Boolean>>(lines.size) {Array<Boolean>(w.size) {false}}
 
@@ -186,23 +186,23 @@ fun makeMaze(s : String) : Maze {
   var end : #(Int, Int)? = null
 
   for (line in lines.indices) {
-    for (x in lines[line].indices) {
-      val c = lines[line].sure()[x]
-      data[line][x] = c == 'O'
-      when (c) {
-        'I' -> start = #(line, x)
-        '$' -> end = #(line, x)
-        else -> {}
-      }
+  for (x in lines[line].indices) {
+    val c = lines[line].sure()[x]
+    data[line][x] = c == 'O'
+    when (c) {
+    'I' -> start = #(line, x)
+    '$' -> end = #(line, x)
+    else -> {}
     }
+  }
   }
 
   if (start == null) {
-      throw IllegalArgumentException("No starting point in the maze (should be indicated with 'I')")
+    throw IllegalArgumentException("No starting point in the maze (should be indicated with 'I')")
   }
 
   if (end == null) {
-      throw IllegalArgumentException("No goal point in the maze (should be indicated with a '$' sign)")
+    throw IllegalArgumentException("No goal point in the maze (should be indicated with a '$' sign)")
   }
 
   return Maze(w.size, lines.size, data, start.sure(), end.sure())

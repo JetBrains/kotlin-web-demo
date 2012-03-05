@@ -30,7 +30,7 @@ import org.jetbrains.webdemo.server.ServerSettings;
 
 public class CommandRunner {
 //    private static final Logger LOG = Logger.getLogger(CommandRunner.class);
-    
+
     public static void runCommand(String command) {
         if (command.equals("stop")) {
             KotlinHttpServer.stopServer();
@@ -84,7 +84,7 @@ public class CommandRunner {
             ServerSettings.JAVA_HOME = ResponseUtils.substringAfter(setting, "java_home ");
         } else if (setting.startsWith("java_execute")) {
             ServerSettings.JAVA_EXECUTE = ResponseUtils.substringAfter(setting, "java_execute ");
-        }  else if (setting.startsWith("host")) {
+        } else if (setting.startsWith("host")) {
             ServerSettings.HOST = ResponseUtils.substringAfter(setting, "host ");
         } else if (setting.startsWith("port")) {
             ServerSettings.PORT = ResponseUtils.substringAfter(setting, "port ");
@@ -102,9 +102,9 @@ public class CommandRunner {
             ServerSettings.MAX_THREAD_COUNT = ResponseUtils.substringAfter(setting, "max_thread_count ");
         } else if (setting.startsWith("rt_jar")) {
             ServerSettings.RT_JAR = ResponseUtils.substringAfter(setting, "rt_jar ");
-        }  else if (setting.startsWith("mysql_host")) {
+        } else if (setting.startsWith("mysql_host")) {
             ServerSettings.MYSQL_HOST = ResponseUtils.substringAfter(setting, "mysql_host ");
-        }  else if (setting.startsWith("mysql_port")) {
+        } else if (setting.startsWith("mysql_port")) {
             ServerSettings.MYSQL_PORT = ResponseUtils.substringAfter(setting, "mysql_port ");
         } else if (setting.startsWith("mysql_database_name")) {
             ServerSettings.MYSQL_DATABASE_NAME = ResponseUtils.substringAfter(setting, "mysql_database_name ");
@@ -114,8 +114,54 @@ public class CommandRunner {
             ServerSettings.MYSQL_PASSWORD = ResponseUtils.substringAfter(setting, "mysql_password ");
         } else if (setting.startsWith("auth_redirect")) {
             ServerSettings.AUTH_REDIRECT = ResponseUtils.substringAfter(setting, "auth_redirect ");
-        }  else if (setting.startsWith("is_test_version")) {
+        } else if (setting.startsWith("is_test_version")) {
             ServerSettings.IS_TEST_VERSION = ResponseUtils.substringAfter(setting, "is_test_version ");
+        } else {
+            ErrorWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
+        }
+
+    }
+
+    public static void setServerSettingFromTomcatConfig(String setting, String value) {
+        ErrorWriter.writeInfoToConsole("Loaded from config file: " + setting + " " + value);
+        if (value.isEmpty()) {
+
+        } else if (setting.equals("java_home")) {
+            ServerSettings.JAVA_HOME = value;
+        } else if (setting.equals("java_execute")) {
+            ServerSettings.JAVA_EXECUTE = value;
+        } else if (setting.equals("host")) {
+            ServerSettings.HOST = value;
+        } else if (setting.equals("port")) {
+            ServerSettings.PORT = value;
+        } else if (setting.equals("timeout")) {
+            ServerSettings.TIMEOUT_FOR_EXECUTION = value;
+        } else if (setting.equals("output")) {
+            ServerSettings.OUTPUT_DIRECTORY = value;
+        } else if (setting.equals("examples")) {
+            ServerSettings.EXAMPLES_ROOT = value;
+        } else if (setting.equals("help")) {
+            ServerSettings.HELP_ROOT = value;
+        } else if (setting.equals("testconnectionoutput")) {
+            ServerSettings.TEST_CONNECTION_OUTPUT = value;
+        } else if (setting.equals("max_thread_count")) {
+            ServerSettings.MAX_THREAD_COUNT = value;
+        } else if (setting.equals("rt_jar")) {
+            ServerSettings.RT_JAR = value;
+        } else if (setting.equals("mysql_host")) {
+            ServerSettings.MYSQL_HOST = value;
+        } else if (setting.equals("mysql_port")) {
+            ServerSettings.MYSQL_PORT = value;
+        } else if (setting.equals("mysql_database_name")) {
+            ServerSettings.MYSQL_DATABASE_NAME = value;
+        } else if (setting.equals("mysql_username")) {
+            ServerSettings.MYSQL_USERNAME = value;
+        } else if (setting.equals("mysql_password")) {
+            ServerSettings.MYSQL_PASSWORD = value;
+        } else if (setting.equals("auth_redirect")) {
+            ServerSettings.AUTH_REDIRECT = value;
+        } else if (setting.equals("is_test_version")) {
+            ServerSettings.IS_TEST_VERSION = value;
         } else {
             ErrorWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
         }

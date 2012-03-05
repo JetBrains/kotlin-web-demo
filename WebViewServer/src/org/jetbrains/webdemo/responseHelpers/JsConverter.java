@@ -16,8 +16,10 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
+import org.jetbrains.k2js.facade.WebDemoTranslatorFacade;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Initializer;
+import org.jetbrains.webdemo.ServerInitializer;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 
@@ -40,11 +42,10 @@ public class JsConverter {
     public String getResult(String code, String arguments) {
         JSONArray result = new JSONArray();
         Map<String, String> map = new HashMap<String, String>();
-        K2JSTranslatorUtils translator = new K2JSTranslatorUtils();
         //TODO environment
 //        translator.setEnvironment(Initializer.getEnvironment());
         try {
-            map.put("text", translator.translateToJS(code, arguments));
+            map.put("text", WebDemoTranslatorFacade.translateStringWithCallToMain(Initializer.INITIALIZER.getEnvironment().getProject(), code, arguments));
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code + "\n" + arguments);

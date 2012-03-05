@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.database;
 
 import org.apache.commons.lang.math.RandomUtils;
+import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -25,6 +26,8 @@ import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.json.JSONArray;
 
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,8 +54,13 @@ public class MySqlConnector {
     private boolean connect() {
         String url = "";
         try {
-            url = "jdbc:mysql://" + ServerSettings.MYSQL_HOST + ":" + ServerSettings.MYSQL_PORT + "/" + ServerSettings.MYSQL_DATABASE_NAME + "";
-            connection = DriverManager.getConnection(url, ServerSettings.MYSQL_USERNAME, ServerSettings.MYSQL_PASSWORD);
+            InitialContext initCtx = new InitialContext();
+            NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/kotlin");
+            connection = ds.getConnection();
+            url = connection.toString();
+//            url = "jdbc:mysql://" + ServerSettings.MYSQL_HOST + ":" + ServerSettings.MYSQL_PORT + "/" + ServerSettings.MYSQL_DATABASE_NAME + "";
+//            connection = DriverManager.getConnection(url, ServerSettings.MYSQL_USERNAME, ServerSettings.MYSQL_PASSWORD);
             ErrorWriter.writeInfoToConsole("Connected to database: " + url);
             ErrorWriter.getInfoForLog("CONNECT_TO_DATABASE", "-1", "Connected to database: " + url);
             checkDatabaseVersion();
@@ -68,7 +76,7 @@ public class MySqlConnector {
     private boolean checkConnection() {
         try {
             return connection.isValid(1000) || connect();
-        } catch (SQLException e) {
+        } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
                     "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + "");
@@ -321,7 +329,7 @@ public class MySqlConnector {
             closeStatement(st);
         }
     }
-    
+
     private String escape(String str) {
         return str.replaceAll("'", "\'");
     }

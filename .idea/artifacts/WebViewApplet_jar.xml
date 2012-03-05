@@ -2,11 +2,9 @@
   <artifact type="jar" name="WebViewApplet:jar">
     <output-path>$PROJECT_DIR$/WebViewServer/static</output-path>
     <root id="archive" name="WebViewApplet01032012.jar">
-      <element id="module-output" name="WebViewApplet" />
-      <element id="module-output" name="WebView" />
+      <element id="module-output" name="kotlin.web.demo.applet" />
+      <element id="module-output" name="kotlin.web.demo.core" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../KotlinCompiler/lib/json-20090211.jar" path-in-jar="/" />
-      <element id="module-output" name="translator" />
-      <element id="module-output" name="js" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/trove4j.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/picocontainer.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/guava-r09.jar" path-in-jar="/" />
@@ -16,7 +14,11 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/annotations.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/asm-commons.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-runtime.jar" path-in-jar="/" />
-      <element id="module-output" name="jslib" />
+      <element id="module-output" name="js.translator" />
+      <element id="module-output" name="js.libraries" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../kotlin/js/js.translator/lib/dartc.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/alt/kotlin-jdk-headers.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../kotlinLibrary/kotlinc/lib/kotlin-runtime.jar" />
     </root>
   </artifact>
 </component>

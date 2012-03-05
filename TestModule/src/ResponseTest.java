@@ -16,10 +16,7 @@
 
 import junit.framework.TestCase;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ErrorWriterOnServer;
-import org.jetbrains.webdemo.Initializer;
-import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.server.KotlinHttpServer;
 import org.jetbrains.webdemo.server.ServerSettings;
 
@@ -45,7 +42,7 @@ public class ResponseTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        Initializer.getInstance().initJavaCoreEnvironment();
+        ServerInitializer.getInstance().initJavaCoreEnvironment();
         if (!KotlinHttpServer.isServerRunning()) {
             KotlinHttpServer.startServer();
         }

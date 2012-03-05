@@ -18,12 +18,12 @@ package org.jetbrains.webdemo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.k2js.facade.WebDemoTranslatorFacade;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
-import org.jetbrains.k2js.facade.K2JSTranslatorUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -53,6 +53,7 @@ public class MainApplet extends JApplet implements ActionListener {
         InitializerApplet.getInstance().initJavaCoreEnvironment();
         request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
+        Initializer.INITIALIZER = InitializerApplet.getInstance();
 
         SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
         getHighlighting("fun main(args : Array<String>) {\n" +
@@ -84,7 +85,7 @@ public class MainApplet extends JApplet implements ActionListener {
     public String getHighlighting(String data, String runConfiguration) {
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
-            JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
+            JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), data);
             SESSION_INFO.setRunConfiguration(runConfiguration);
            /* if (runConfiguration.equals("canvas")) {
                 SESSION_INFO.setRunConfiguration(SessionInfo.RunConfiguration.CANVAS);
@@ -109,7 +110,7 @@ public class MainApplet extends JApplet implements ActionListener {
     @Nullable
     public String translateToJS(@NotNull String code, @NotNull String arguments) {
         try {
-            return new K2JSTranslatorUtils().translateToJS(code, arguments);
+            return WebDemoTranslatorFacade.translateStringWithCallToMain(Initializer.INITIALIZER.getEnvironment().getProject(), code, arguments);
         } catch (AssertionError e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
             return EXCEPTION + "Translation error.";
@@ -127,10 +128,17 @@ public class MainApplet extends JApplet implements ActionListener {
     public String getCompletion(String data, String line, String ch, String runConfiguration) {
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.COMPLETE);
         try {
-            JetFile currentPsiFile = JetPsiFactory.createFile(InitializerApplet.getEnvironment().getProject(), data);
+            JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), data);
             SESSION_INFO.setRunConfiguration(runConfiguration);
-            JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line),
-                    Integer.parseInt(ch), currentPsiFile, SESSION_INFO);
+
+            JsonResponseForCompletion responseForCompletion;
+            try {
+                responseForCompletion = new JsonResponseForCompletion(Integer.parseInt(line),
+                        Integer.parseInt(ch), currentPsiFile, SESSION_INFO);
+            } catch (NumberFormatException e) {
+                responseForCompletion = new JsonResponseForCompletion((int) Double.parseDouble(line),
+                        (int) Double.parseDouble(ch), currentPsiFile, SESSION_INFO);
+            }
             System.out.println(line + " " + ch);
             return responseForCompletion.getResult();
 
