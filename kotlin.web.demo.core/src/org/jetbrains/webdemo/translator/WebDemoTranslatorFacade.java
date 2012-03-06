@@ -76,7 +76,6 @@ public final class WebDemoTranslatorFacade {
         JetFile file = JetFileUtils.createPsiFile("test", programText, project);
 
         String programCode = translator.generateProgramCode(file) + "\n";
-//        String programCode = "sss" + "\n";
         String flushOutput = "Kotlin.System.flush();\n";
         String callToMain = org.jetbrains.k2js.facade.K2JSTranslator.generateCallToMain(file, argumentsString);
         String programOutput = "Kotlin.System.output();\n";

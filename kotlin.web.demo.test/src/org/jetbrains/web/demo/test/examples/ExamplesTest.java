@@ -26,9 +26,12 @@ import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ServerSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.junit.Assert;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Natalia.Ukhorskaya
@@ -75,6 +78,7 @@ public class ExamplesTest extends TestCase {
         }
         File[] folders = rootDir.listFiles();
         assert folders != null;
+        StringBuilder builder = new StringBuilder();
         for (File folder : folders) {
             if (folder.isDirectory()) {
                 File[] files = folder.listFiles();
@@ -83,28 +87,41 @@ public class ExamplesTest extends TestCase {
                     if (file.getName().equals("order.txt")) {
                         continue;
                     }
-                    if (folder.getName().equals("Problems")) {
-                        continue;
-                    } else if (folder.getName().equals("Canvas")) {
-                        compareResponseAndExpectedResult(file, "[]", "canvas");
-                    } else {
-                        compareResponseAndExpectedResult(file, "[]", "java");
+                    if (!folder.getName().equals("Problems")) {
+                        builder.append(file.getName()).append("\n");
+                        if (folder.getName().equals("Canvas")) {
+                            compareResponseAndExpectedResult(file, "[]", "canvas");
+                        } else {
+                            compareResponseAndExpectedResult(file, "[]", "java");
+                        }
                     }
                 }
             }
         }
 
-    }
+        StringBuilder expectedList = new StringBuilder();
+        expectedList.append("is-checks and smart casts.kt").append("\n");
+        expectedList.append("Null-checks.kt").append("\n");
+        expectedList.append("Use a conditional expression.kt").append("\n");
+        expectedList.append("Use a for-loop.kt").append("\n");
+        expectedList.append("Use a while-loop.kt").append("\n");
+        expectedList.append("Use ranges and in.kt").append("\n");
+        expectedList.append("Use when.kt").append("\n");
+        expectedList.append("Creatures.kt").append("\n");
+        expectedList.append("Fancy lines.kt").append("\n");
+        expectedList.append("Hello, Kotlin.kt").append("\n");
+        expectedList.append("A multi-language Hello.kt").append("\n");
+        expectedList.append("An object-oriented Hello.kt").append("\n");
+        expectedList.append("Reading a name from the command line.kt").append("\n");
+        expectedList.append("Reading many names from the command line.kt").append("\n");
+        expectedList.append("Simplest version.kt").append("\n");
+        expectedList.append("99 Bottles of Beer.kt").append("\n");
+        expectedList.append("HTML Builder.kt").append("\n");
+        expectedList.append("Life.kt").append("\n");
+        expectedList.append("Maze.kt").append("\n");
+        
+        assertEquals("Files to compare", expectedList.toString(), builder.toString());
 
-    private String modifyExampleName(String name) {
-        if (name.contains("hello")) {
-            name.replace("hello", "Hello, world!");
-        } else if (name.contains("basic")) {
-            name.replace("basic", "Basic syntax walk-through");
-        } else if (name.contains("longer")) {
-            name.replace("longer", "Longer examples");
-        }
-        return name;
     }
 
     private void compareResponseAndExpectedResult(File file, String expectedResult, String runConfiguration) throws IOException {
