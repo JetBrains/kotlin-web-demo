@@ -227,7 +227,7 @@
       <file leaf-file-name="Kotlin.web.demo.core.iml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="17" column="68" selection-start="762" selection-end="762" vertical-scroll-proportion="0.448062">
               <folding />
             </state>
           </provider>
@@ -1178,7 +1178,11 @@
       <created>1331044104396</created>
       <updated>1331044104396</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Rename demo.core module">
+      <created>1331044572956</created>
+      <updated>1331044572956</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1203,11 +1207,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="ExceptionAnalyzer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.62007874" sideWeight="0.9988519" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34055117" sideWeight="0.4818376" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34055117" sideWeight="0.4818376" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277559" sideWeight="0.4957265" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14690171" sideWeight="0.6732283" order="2" side_tool="false" content_ui="tabs" />
@@ -1476,7 +1480,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="17" column="68" selection-start="762" selection-end="762" vertical-scroll-proportion="0.448062">
           <folding />
         </state>
       </provider>
