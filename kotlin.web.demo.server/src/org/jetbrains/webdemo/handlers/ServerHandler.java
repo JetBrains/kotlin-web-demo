@@ -17,7 +17,6 @@
 package org.jetbrains.webdemo.handlers;
 
 import com.google.common.io.ByteStreams;
-import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.authorization.*;
@@ -156,7 +155,7 @@ public class ServerHandler {
             //Do not stop server
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", param);
-            writeResponse(response, "Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            writeResponse(response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -211,14 +210,14 @@ public class ServerHandler {
     }
 
     private void sendUserInfoForStatistics(final HttpServletResponse response) {
-        writeResponse(response, Statistics.getInstance().showMap(), HttpStatus.SC_OK);
+        writeResponse(response, Statistics.getInstance().showMap(), HttpServletResponse.SC_OK);
     }
 
 
     private void updateExamples(final HttpServletResponse response) {
         String responseStr = ExamplesList.updateList();
         responseStr += HelpLoader.updateExamplesHelp();
-        writeResponse(response, responseStr, HttpStatus.SC_OK);
+        writeResponse(response, responseStr, HttpServletResponse.SC_OK);
     }
 
     private void sendSortedExceptions(final HttpServletRequest request, final HttpServletResponse response, RequestParameters parameters) {
@@ -283,7 +282,7 @@ public class ServerHandler {
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), "Exception until downloading logs.html");
-            writeResponse(response, "Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
+            writeResponse(response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
             return;
         } finally {
             close(is);
@@ -302,7 +301,7 @@ public class ServerHandler {
 
     private void sendExamplesList(final HttpServletResponse response) {
         ExamplesLoader loader = new ExamplesLoader();
-        writeResponse(response, loader.getExamplesList(), HttpStatus.SC_OK);
+        writeResponse(response, loader.getExamplesList(), HttpServletResponse.SC_OK);
     }
 
     private void sendUserInformation(final HttpServletRequest request, final HttpServletResponse response, SessionInfo info) {
@@ -314,7 +313,7 @@ public class ServerHandler {
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId());
-            writeResponse(response, "Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            writeResponse(response, "Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         } finally {
             close(is);
@@ -327,7 +326,7 @@ public class ServerHandler {
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
-        writeResponse(response, "OK", HttpStatus.SC_OK);
+        writeResponse(response, "OK", HttpServletResponse.SC_OK);
     }
 
     private void sendResourceFile(HttpServletRequest request, HttpServletResponse response) {
@@ -338,10 +337,10 @@ public class ServerHandler {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Empty path to resource"),
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), path);
-            writeResponse(response, "Path to the file is incorrect.", HttpStatus.SC_NOT_FOUND);
+            writeResponse(response, "Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
             return;
         } else if (path.startsWith("/messages/")) {
-            writeResponse(response, "", HttpStatus.SC_OK);
+            writeResponse(response, "", HttpServletResponse.SC_OK);
             return;
         } else if (path.equals("/") || path.equals("/index.html")) {
             path = "/index.html";
@@ -353,12 +352,12 @@ public class ServerHandler {
             } catch (FileNotFoundException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "index.html not found");
-                writeResponse(response, "Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
+                writeResponse(response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
                 return;
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "index.html not found");
-                writeResponse(response, "Cannot open this page", HttpStatus.SC_BAD_GATEWAY);
+                writeResponse(response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
                 return;
             } finally {
                 close(is);
@@ -381,7 +380,7 @@ public class ServerHandler {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Broken path to resource"),
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getRequestURI() + "?" + request.getQueryString());
-            writeResponse(response, ("Resource not found. " + path), HttpStatus.SC_NOT_FOUND);
+            writeResponse(response, ("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
@@ -390,7 +389,7 @@ public class ServerHandler {
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getRequestURI() + "?" + request.getQueryString());
-            writeResponse(response, "Could not load the resource from the server", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            writeResponse(response, "Could not load the resource from the server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

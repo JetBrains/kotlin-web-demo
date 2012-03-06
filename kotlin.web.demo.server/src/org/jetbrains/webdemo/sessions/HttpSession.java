@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.sessions;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import org.apache.commons.httpclient.HttpStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
@@ -89,7 +88,7 @@ public class HttpSession {
                     List<String> list = ErrorWriter.parseException(tmp);
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
                 }
-                writeResponse("Data sent", HttpStatus.SC_OK);
+                writeResponse("Data sent", HttpServletResponse.SC_OK);
             } else if (parameters.compareType("saveProgram")) {
                 sendSaveProgramResult(sessionInfo);
             } else if (parameters.compareType("loadProgram")) {
@@ -116,7 +115,7 @@ public class HttpSession {
                 sendHighlightingResult();
             } else {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), param);
-                writeResponse("Incorrect request", HttpStatus.SC_BAD_REQUEST);
+                writeResponse("Incorrect request", HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Throwable e) {
             if (sessionInfo != null && sessionInfo.getType() != null && currentPsiFile != null && currentPsiFile.getText() != null) {
@@ -124,7 +123,7 @@ public class HttpSession {
             } else {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "null");
             }
-            writeResponse("Internal server error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            writeResponse("Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -132,14 +131,14 @@ public class HttpSession {
         String result;
         String programId = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
         result = MySqlConnector.getInstance().generatePublicLink(programId);
-        writeResponse(result, HttpStatus.SC_OK);
+        writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendDeleteProgramResult() {
         String result;
         String programId = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
         result = MySqlConnector.getInstance().deleteProgram(sessionInfo.getUserInfo(), programId);
-        writeResponse(result, HttpStatus.SC_OK);
+        writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendLoadProgramResult() {
@@ -156,7 +155,7 @@ public class HttpSession {
                 result = MySqlConnector.getInstance().getProgramText(id);
             }
         }
-        writeResponse(result, HttpStatus.SC_OK);
+        writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendSaveProgramResult(SessionInfo sessionInfo) {
@@ -171,7 +170,7 @@ public class HttpSession {
             String id = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");
             result = MySqlConnector.getInstance().saveProgram(sessionInfo.getUserInfo(), id, data.text, data.arguments, ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
         }
-        writeResponse(result, HttpStatus.SC_OK);
+        writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendExecutorResult() {
@@ -183,21 +182,21 @@ public class HttpSession {
             setGlobalVariables(data.text);
 
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(currentPsiFile, data.arguments, sessionInfo);
-            writeResponse(responseForCompilation.getResult(), HttpStatus.SC_OK);
+            writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
         } else {
             sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
-            writeResponse(new JsConverter(sessionInfo).getResult(data.text, data.arguments), HttpStatus.SC_OK);
+            writeResponse(new JsConverter(sessionInfo).getResult(data.text, data.arguments), HttpServletResponse.SC_OK);
         }
     }
 
     private void sendConvertToKotlinResult() {
         PostData data = getPostDataFromRequest(true);
-        writeResponse(new JavaConverterRunner(data.text, data.arguments, sessionInfo).getResult(), HttpStatus.SC_OK);
+        writeResponse(new JavaConverterRunner(data.text, data.arguments, sessionInfo).getResult(), HttpServletResponse.SC_OK);
     }
 
     private void sendExampleContent() {
         ExamplesLoader loader = new ExamplesLoader();
-        writeResponse(loader.getResultByNameAndHead(parameters.getArgs()), HttpStatus.SC_OK);
+        writeResponse(loader.getResultByNameAndHead(parameters.getArgs()), HttpServletResponse.SC_OK);
 
     }
 
@@ -216,7 +215,7 @@ public class HttpSession {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e);
             }
 
-            writeResponse("Response sended", HttpStatus.SC_OK);
+            writeResponse("Response sended", HttpServletResponse.SC_OK);
         } else {
             StringBuilder responseStr = new StringBuilder();
             PrintWriter writer = null;
@@ -226,7 +225,7 @@ public class HttpSession {
                 responseStr.append(ResponseUtils.readData(is));
             } catch (IOException e) {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot read data from file", e);
-                writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                writeResponse("Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             } finally {
                 close(is);
@@ -265,7 +264,7 @@ public class HttpSession {
         setGlobalVariables(getPostDataFromRequest().text);
 
         JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(Integer.parseInt(position[0]), Integer.parseInt(position[1]), currentPsiFile, sessionInfo);
-        writeResponse(jsonResponseForCompletion.getResult(), HttpStatus.SC_OK);
+        writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);
     }
 
     private void sendHighlightingResult() {
@@ -273,7 +272,7 @@ public class HttpSession {
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
         String response = responseForHighlighting.getResult();
         response = response.replaceAll("\\n", "");
-        writeResponse(response, HttpStatus.SC_OK);
+        writeResponse(response, HttpServletResponse.SC_OK);
     }
 
 
@@ -289,7 +288,7 @@ public class HttpSession {
             reqResponse.append(ResponseUtils.readData(is, withNewLines));
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), request.getQueryString());
-            writeResponse("Cannot read data from file", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            writeResponse("Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new PostData("", "");
         } finally {
             close(is);
@@ -314,14 +313,14 @@ public class HttpSession {
                     return new PostData(ResponseUtils.substringAfter(finalResponse, "text="));
                 }
             } else {
-                writeResponse("Post request is too short", HttpStatus.SC_BAD_REQUEST);
+                writeResponse("Post request is too short", HttpServletResponse.SC_BAD_REQUEST);
                 return new PostData("", "");
             }
         } else {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Cannot read data from post request"),
                     sessionInfo.getType(), currentPsiFile.getText());
-            writeResponse("Cannot read data from post request: ", HttpStatus.SC_BAD_REQUEST);
+            writeResponse("Cannot read data from post request: ", HttpServletResponse.SC_BAD_REQUEST);
         }
 
         return new PostData("", "");

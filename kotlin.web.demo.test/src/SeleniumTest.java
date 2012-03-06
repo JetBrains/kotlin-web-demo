@@ -19,7 +19,6 @@
 import com.google.common.io.Files;
 import com.thoughtworks.selenium.CommandProcessor;
 import junit.framework.TestCase;
-import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -31,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 // This is the driver's import. You'll use this for instantiating a
@@ -704,7 +704,7 @@ public class SeleniumTest extends TestCase {
         el.click();
 
         Thread.sleep(500);
-        String programName = "test" + RandomUtils.nextInt();
+        String programName = "test" + new Random().nextInt();
         js.executeScript("$('#programName').val('" + programName + "');");
         Thread.sleep(500);
         WebElement saveInDialog = driver.findElement(By.className("ui-button-text-only"));

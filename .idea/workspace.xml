@@ -7,16 +7,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Development\kotlin-web-demo\lib\json-20090211.jar" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/WebDemoApplet_jar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/WebDemoApplet_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/asm_all_3_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/asm_all_3_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/json.xml" afterPath="$PROJECT_DIR$/.idea/libraries/json.xml" />
+      <change type="DELETED" beforePath="C:\Development\kotlin-web-demo\kotlin.web.demo.server\static\codemirror\lib\codemirror-2.16.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\Development\kotlin-web-demo\lib\commons-codec-1.6.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\Development\kotlin-web-demo\lib\commons-httpclient-3.1-patched.jar" afterPath="" />
+      <change type="MOVED" beforePath="C:\Development\kotlin-web-demo\.idea\libraries\commons_lang_httpclient_codec.xml" afterPath="$PROJECT_DIR$/.idea/libraries/commons_lang.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/WebDemoWar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/WebDemoWar.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/kotlin.xml" afterPath="$PROJECT_DIR$/.idea/libraries/kotlin.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_5_1_18_bin.xml" afterPath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_5_1_18_bin.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/update_dependencies.xml" afterPath="$PROJECT_DIR$/update_dependencies.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/Statistics.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/Statistics.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/database/MySqlConnector.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/database/MySqlConnector.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/handlers/ServerHandler.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/handlers/ServerHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/responseHelpers/CompileAndRunExecutor.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/responseHelpers/CompileAndRunExecutor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/sessions/HttpSession.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/sessions/HttpSession.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.test/src/SeleniumTest.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/src/SeleniumTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/license/log4j_license.txt" afterPath="$PROJECT_DIR$/license/log4j_license.txt" />
     </list>
     <ignored path="WebView.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -137,10 +143,68 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="KotlinHttpServlet.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java">
+      <file leaf-file-name="LICENSE" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/lib/log4j-1.2.16.jar!/META-INF/LICENSE">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="102" column="22" selection-start="4184" selection-end="4184" vertical-scroll-proportion="0.0">
+            <state line="23" column="50" selection-start="0" selection-end="11366" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="codemirror_license.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/license/codemirror_license.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="docs.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/static/codemirror/css/docs.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="codemirror.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/static/codemirror/lib/codemirror.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/web/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="64" selection-start="187" selection-end="187" vertical-scroll-proportion="-3.2692308">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WebDemoTranslatorFacade.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/facade/WebDemoTranslatorFacade.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="37" column="73" selection-start="1252" selection-end="1252" vertical-scroll-proportion="0.6062015">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1074#1112#0" expanded="true" />
+                <element signature="e#1163#1199#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AnalyzerFacadeForJS.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/analyze/AnalyzerFacadeForJS.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="55" column="33" selection-start="1969" selection-end="1969" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -148,46 +212,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServerHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/handlers/ServerHandler.java">
+      <file leaf-file-name="WebDemoConfig.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/config/WebDemoConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="81" column="0" selection-start="2867" selection-end="2867" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GenerationState.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../kotlin/compiler/backend/src/org/jetbrains/jet/codegen/GenerationState.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="112" column="46" selection-start="4071" selection-end="4071" vertical-scroll-proportion="0.29905063">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="update_dependencies.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/update_dependencies.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="31" selection-start="823" selection-end="823" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JsonResponseForCompletion.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="63" selection-start="1607" selection-end="1607" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ErrorAnalyzer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="114" column="53" selection-start="4933" selection-end="4933" vertical-scroll-proportion="0.0">
+            <state line="56" column="64" selection-start="1939" selection-end="1939" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -195,28 +223,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServerSettings.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java">
+      <file leaf-file-name="JetFileUtils.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/utils/JetFileUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="49" selection-start="1548" selection-end="1548" vertical-scroll-proportion="0.0">
+            <state line="38" column="19" selection-start="1284" selection-end="1284" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config.properties" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config.properties">
+      <file leaf-file-name="AnalyzerFacadeForJVM.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../kotlin/compiler/frontend.java/src/org/jetbrains/jet/lang/resolve/java/AnalyzerFacadeForJVM.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="53" selection-start="846" selection-end="846" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="common.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/static/components/common.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="27" selection-start="2643" selection-end="2643" vertical-scroll-proportion="0.0">
+            <state line="46" column="13" selection-start="1784" selection-end="1784" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -247,22 +266,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/kotlin.web.demo.server/web/META-INF/MANIFEST.MF" />
-        <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java" />
-        <option value="$PROJECT_DIR$/idea.patch.applet/src/com/intellij/openapi/util/UserDataHolderBase.java" />
-        <option value="$PROJECT_DIR$/kotlin.web.demo.applet/src/org/jetbrains/webdemo/MainApplet.java" />
-        <option value="$PROJECT_DIR$/kotlin.web.demo.server/resources/logs.html" />
-        <option value="$PROJECT_DIR$/idea.patch.applet/src/org/jetbrains/compiler/PathUtil.java" />
-        <option value="$PROJECT_DIR$/idea.patch.applet/src/org/jetbrains/jet/plugin/compiler/PathUtil.java" />
-        <option value="C:/Program Files/Java/jdk1.6.0_30/src.zip!/java/net/PlainSocketImpl.java" />
-        <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java" />
-        <option value="$PROJECT_DIR$/config.properties" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.server/static/components/common.js" />
         <option value="$PROJECT_DIR$/update_dependencies.xml" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java" />
         <option value="$PROJECT_DIR$/../kotlin/compiler/backend/src/org/jetbrains/jet/codegen/GenerationState.java" />
+        <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/sessions/HttpSession.java" />
+        <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/Statistics.java" />
+        <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/database/MySqlConnector.java" />
+        <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/responseHelpers/CompileAndRunExecutor.java" />
+        <option value="$PROJECT_DIR$/kotlin.web.demo.test/src/SeleniumTest.java" />
+        <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/handlers/ServerHandler.java" />
+        <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/responseHelpers/JavaRunner.java" />
+        <option value="$PROJECT_DIR$/license/log4j_license.txt" />
+        <option value="$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/config/WebDemoConfig.java" />
+        <option value="$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/facade/WebDemoTranslatorFacade.java" />
       </list>
     </option>
   </component>
@@ -414,6 +433,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="license" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -480,8 +513,68 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="asm-commons.jar" />
+              <option name="myItemId" value="kotlin-compiler.jar" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Kotlin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-plugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Kotlin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dartc.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -503,6 +596,152 @@
               <option name="myItemId" value="WebView" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin.web.demo.server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin.web.demo.server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin.web.demo.server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin.web.demo.server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="icons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin.web.demo.server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="codemirror" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin.web.demo.server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="codemirror" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin.web.demo.server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="codemirror" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -510,7 +749,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="true" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="118" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
@@ -912,7 +1151,11 @@
       <created>1330963293338</created>
       <updated>1330963293338</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Add downloading kotlin-plugin.zip.">
+      <created>1330964646190</created>
+      <updated>1330964646190</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1005,7 +1248,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update kotlin library using ant script" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add downloading kotlin-plugin.zip." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1018,7 +1261,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="libs in k2js&#10;" />
     <MESSAGE value="Authorization: xml file with passwords &#10;" />
     <MESSAGE value="Loading applet during start&#10;" />
     <MESSAGE value="Merge branch with changes in view and statistics&#10;" />
@@ -1043,6 +1285,7 @@
     <MESSAGE value="01-03-2012" />
     <MESSAGE value="Update libraries paths" />
     <MESSAGE value="Update kotlin library using ant script" />
+    <MESSAGE value="Add downloading kotlin-plugin.zip." />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1095,87 +1338,9 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/sessions/HttpSession.java">
+    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.test/src/SeleniumTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="74" selection-start="1441" selection-end="1441" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.applet/src/org/jetbrains/webdemo/MainApplet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="8" selection-start="2963" selection-end="2963" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/resources/logs.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="43" selection-start="3597" selection-end="3597" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.applet/src/org/jetbrains/webdemo/InitializerApplet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="13" selection-start="946" selection-end="946" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module_webview.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="25" selection-start="1126" selection-end="1126" vertical-scroll-proportion="0.6111111">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/Statistics.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="648" column="133" selection-start="31125" selection-end="31212" vertical-scroll-proportion="-7.08">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="53" selection-start="846" selection-end="846" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="49" selection-start="1548" selection-end="1548" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/static/components/common.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="27" selection-start="2643" selection-end="2643" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/update_dependencies.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="31" selection-start="823" selection-end="823" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="63" selection-start="1607" selection-end="1607" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="53" selection-start="4933" selection-end="4933" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="22" selection-start="4184" selection-end="4184" vertical-scroll-proportion="0.0">
+        <state line="706" column="51" selection-start="27593" selection-end="27593" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1184,22 +1349,115 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/handlers/ServerHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="0" selection-start="2867" selection-end="2867" vertical-scroll-proportion="0.0">
+        <state line="391" column="102" selection-start="19386" selection-end="19386" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#20313#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/responseHelpers/JavaRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="111" selection-start="1567" selection-end="1567" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/license/log4j_license.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="202" column="0" selection-start="11366" selection-end="11366" vertical-scroll-proportion="5.218845">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/kotlinc/lib/kotlin-compiler.jar!/org/jetbrains/jet/codegen/GenerationState.class">
+    <entry file="jar://$PROJECT_DIR$/lib/log4j-1.2.16.jar!/META-INF/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="105" selection-start="1319" selection-end="1319" vertical-scroll-proportion="0.0">
+        <state line="23" column="50" selection-start="0" selection-end="11366" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../kotlin/compiler/backend/src/org/jetbrains/jet/codegen/GenerationState.java">
+    <entry file="file://$PROJECT_DIR$/license/codemirror_license.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="112" column="46" selection-start="4071" selection-end="4071" vertical-scroll-proportion="0.29905063">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/static/codemirror/css/docs.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/static/codemirror/lib/codemirror.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/static/icons/saveAs1.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/static/icons/save1.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/web/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="64" selection-start="187" selection-end="187" vertical-scroll-proportion="-3.2692308">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../kotlin/compiler/frontend.java/src/org/jetbrains/jet/lang/resolve/java/AnalyzerFacadeForJVM.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="13" selection-start="1784" selection-end="1784" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/utils/JetFileUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="19" selection-start="1284" selection-end="1284" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/config/WebDemoConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="56" column="64" selection-start="1939" selection-end="1939" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/analyze/AnalyzerFacadeForJS.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="33" selection-start="1969" selection-end="1969" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../kotlin/js/js.translator/src/org/jetbrains/k2js/facade/WebDemoTranslatorFacade.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="73" selection-start="1252" selection-end="1252" vertical-scroll-proportion="0.6062015">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1074#1112#0" expanded="true" />
+            <element signature="e#1163#1199#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1272,7 +1530,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>kotlin.web.demo.core</last-edited>
+          <last-edited>kotlin.web.demo.test</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1284,7 +1542,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>asm-all-3.3.1</last-edited>
+          <last-edited>kotlin</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

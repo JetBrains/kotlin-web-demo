@@ -19,7 +19,6 @@ package org.jetbrains.webdemo.responseHelpers;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
-import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.jet.codegen.ClassBuilderFactories;
 import org.jetbrains.jet.codegen.ClassFileFactory;
 import org.jetbrains.jet.codegen.GenerationState;
@@ -40,6 +39,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA.
@@ -96,7 +96,7 @@ public class CompileAndRunExecutor {
 
             sessionInfo.getTimeManager().saveCurrentTime();
             List<String> files = factory.files();
-            File outputDir = new File(ServerSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + RandomUtils.nextInt());
+            File outputDir = new File(ServerSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + new Random().nextInt());
             boolean isOutputExists = true;
             if (!outputDir.exists()) {
                 isOutputExists = outputDir.mkdirs();

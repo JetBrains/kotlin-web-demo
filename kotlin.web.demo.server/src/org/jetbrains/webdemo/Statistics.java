@@ -16,8 +16,6 @@
 
 package org.jetbrains.webdemo;
 
-import org.apache.commons.lang.math.RandomUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -42,6 +40,10 @@ import java.util.regex.Pattern;
 
 public class Statistics {
     private static int NUMBER_OF_USERS = 0;
+
+    private final long MILLIS_PER_DAY = 86400000;
+    private static final long MILLIS_PER_HOUR = 360000;
+    private static final long MILLIS_PER_MINUTE = 60000;
 
     private final StatItem TOTAL_USERS = new StatItem("numberOfUsers", "$NUMBER_OF_USERS$");
     private final StatItem TOTAL_USERS_FROM_LOG = new StatItem("numberOfUsersFromLog", "$NUMBER_OF_USERS_FROM_LOG$");
@@ -130,7 +132,7 @@ public class Statistics {
 
     public boolean isNecessaryToUpdateStatistics() {
         File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + "statistics.xml");
-        return (System.currentTimeMillis() - file.lastModified()) > DateUtils.MILLIS_PER_HOUR;
+        return (System.currentTimeMillis() - file.lastModified()) > MILLIS_PER_HOUR;
     }
 
     private void calculateStatistics() {
@@ -271,7 +273,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), ResponseUtils.getDate(c) + " 23:59 AM, PDT");
             curMillis = System.currentTimeMillis();
         }
-        c.setTimeInMillis(curMillis - (DateUtils.MILLIS_PER_DAY * uniqueUsersPerDay.size() - DateUtils.MILLIS_PER_MINUTE));
+        c.setTimeInMillis(curMillis - (MILLIS_PER_DAY * uniqueUsersPerDay.size() - MILLIS_PER_MINUTE));
         return ResponseUtils.getDate(c) + " - " + ResponseUtils.getDate(Calendar.getInstance());
     }
 
@@ -635,7 +637,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
     private File generateValidXmlFileForExceptions(File file) {
         File ex;
         try {
-            ex = new File(ServerSettings.OUTPUT_DIRECTORY + File.separator + "tmp.log" + RandomUtils.nextInt());
+            ex = new File(ServerSettings.OUTPUT_DIRECTORY + File.separator + "tmp.log" + new Random().nextInt());
             ex.createNewFile();
             if (!ex.exists()) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new FileNotFoundException("Cannot create tmp file"),
@@ -731,7 +733,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
                     dateTo = new Date();
                 } else if (from.equals("week")) {
                     Calendar c = Calendar.getInstance();
-                    c.setTimeInMillis(c.getTimeInMillis() - (DateUtils.MILLIS_PER_DAY * 7));
+                    c.setTimeInMillis(c.getTimeInMillis() - (MILLIS_PER_DAY * 7));
                     dateFrom = DateFormat.getInstance().parse(ResponseUtils.getDate(c) + " 0:0 AM, PDT");
                     dateTo = new Date();
                 } else {

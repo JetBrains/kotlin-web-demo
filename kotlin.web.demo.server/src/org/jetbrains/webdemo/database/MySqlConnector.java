@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.database;
 
-import org.apache.commons.lang.math.RandomUtils;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
@@ -32,6 +31,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA.
@@ -290,7 +290,7 @@ public class MySqlConnector {
                     return ResponseUtils.getJsonString("exception", "Program with same name already exists. Please choose the another one.");
                 }
 
-                String programId = userInfo.getId() + RandomUtils.nextInt();
+                String programId = userInfo.getId() + new Random().nextInt();
                 st = connection.prepareStatement(
                         "INSERT INTO programs (PROGRAM_ID, PROGRAM_NAME, PROGRAM_TEXT, PROGRAM_ARGS, PROGRAM_LINK, RUN_CONF) VALUES " +
                                 "(?, ?, ?, ?, ?, ?)");
