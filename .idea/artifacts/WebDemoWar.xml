@@ -7,7 +7,6 @@
           <element id="module-output" name="kotlin.web.demo.server" />
           <element id="module-output" name="idea.pacth.server" />
           <element id="module-output" name="kotlin.web.demo.core" />
-          <element id="module-output" name="kotlin.web.demo" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="guava-r09" />
