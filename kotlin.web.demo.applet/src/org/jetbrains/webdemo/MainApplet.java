@@ -18,12 +18,12 @@ package org.jetbrains.webdemo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.k2js.facade.WebDemoTranslatorFacade;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
+import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

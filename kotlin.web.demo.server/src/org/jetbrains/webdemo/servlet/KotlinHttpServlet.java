@@ -58,12 +58,12 @@ public class KotlinHttpServlet extends HttpServlet {
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
         Initializer.INITIALIZER = ServerInitializer.getInstance();
 
-        new File(ServerSettings.LOGS_ROOT).mkdir();
-        new File(ServerSettings.STATISTICS_ROOT).mkdir();
 
         try {
             if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
+                new File(ServerSettings.LOGS_ROOT).mkdir();
+                new File(ServerSettings.STATISTICS_ROOT).mkdir();
                 ExamplesList.getInstance();
                 HelpLoader.getInstance();
                 Statistics.getInstance();
@@ -84,10 +84,10 @@ public class KotlinHttpServlet extends HttpServlet {
             NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
             CommandRunner.setServerSettingFromTomcatConfig("java_home", (String) envCtx.lookup("java_home"));
             CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
-            CommandRunner.setServerSettingFromTomcatConfig("examples", (String) envCtx.lookup("examples"));
-            CommandRunner.setServerSettingFromTomcatConfig("help", (String) envCtx.lookup("help"));
+            CommandRunner.setServerSettingFromTomcatConfig("app_home", (String) envCtx.lookup("app_home"));
             CommandRunner.setServerSettingFromTomcatConfig("auth_redirect", (String) envCtx.lookup("auth_redirect"));
             CommandRunner.setServerSettingFromTomcatConfig("is_test_version", (String) envCtx.lookup("is_test_version"));
+            CommandRunner.setServerSettingFromTomcatConfig("timeout", (String) envCtx.lookup("timeout"));
             return true;
         } catch (Throwable e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

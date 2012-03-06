@@ -21,6 +21,8 @@ import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.server.KotlinHttpServer;
 import org.jetbrains.webdemo.server.ServerSettings;
 
+import java.io.File;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Natalia.Ukhorskaya
@@ -132,28 +134,12 @@ public class CommandRunner {
             ServerSettings.JAVA_EXECUTE = value;
         } else if (setting.equals("timeout")) {
             ServerSettings.TIMEOUT_FOR_EXECUTION = value;
-        } else if (setting.equals("output")) {
-            ServerSettings.OUTPUT_DIRECTORY = value;
-        } else if (setting.equals("examples")) {
-            ServerSettings.EXAMPLES_ROOT = value;
-        } else if (setting.equals("help")) {
-            ServerSettings.HELP_ROOT = value;
-        } else if (setting.equals("testconnectionoutput")) {
-            ServerSettings.TEST_CONNECTION_OUTPUT = value;
-        } else if (setting.equals("max_thread_count")) {
-            ServerSettings.MAX_THREAD_COUNT = value;
-        } else if (setting.equals("rt_jar")) {
-            ServerSettings.RT_JAR = value;
-        } else if (setting.equals("mysql_host")) {
-            ServerSettings.MYSQL_HOST = value;
-        } else if (setting.equals("mysql_port")) {
-            ServerSettings.MYSQL_PORT = value;
-        } else if (setting.equals("mysql_database_name")) {
-            ServerSettings.MYSQL_DATABASE_NAME = value;
-        } else if (setting.equals("mysql_username")) {
-            ServerSettings.MYSQL_USERNAME = value;
-        } else if (setting.equals("mysql_password")) {
-            ServerSettings.MYSQL_PASSWORD = value;
+        } else if (setting.equals("app_home")) {
+            ServerSettings.OUTPUT_DIRECTORY = value + File.separator + "out";
+            ServerSettings.STATISTICS_ROOT = value + File.separator + "statistics";
+            ServerSettings.LOGS_ROOT = value + File.separator + "logs";
+            ServerSettings.EXAMPLES_ROOT = value + File.separator + "examples";
+            ServerSettings.HELP_ROOT = value + File.separator + "help";
         } else if (setting.equals("auth_redirect")) {
             ServerSettings.AUTH_REDIRECT = value;
         } else if (setting.equals("is_test_version")) {

@@ -43,6 +43,8 @@ import java.util.Random;
 public class MySqlConnector {
     private Connection connection;
 
+    private String databaseUrl;
+
     private static final MySqlConnector connector = new MySqlConnector();
 
     private MySqlConnector() {
@@ -52,22 +54,21 @@ public class MySqlConnector {
     }
 
     private boolean connect() {
-        String url = "";
         try {
             InitialContext initCtx = new InitialContext();
             NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
             DataSource ds = (DataSource) envCtx.lookup("jdbc/kotlin");
             connection = ds.getConnection();
-            url = connection.toString();
+            databaseUrl = connection.toString();
 //            url = "jdbc:mysql://" + ServerSettings.MYSQL_HOST + ":" + ServerSettings.MYSQL_PORT + "/" + ServerSettings.MYSQL_DATABASE_NAME + "";
 //            connection = DriverManager.getConnection(url, ServerSettings.MYSQL_USERNAME, ServerSettings.MYSQL_PASSWORD);
-            ErrorWriter.writeInfoToConsole("Connected to database: " + url);
-            ErrorWriter.getInfoForLog("CONNECT_TO_DATABASE", "-1", "Connected to database: " + url);
+            ErrorWriter.writeInfoToConsole("Connected to database: " + databaseUrl);
+            ErrorWriter.getInfoForLog("CONNECT_TO_DATABASE", "-1", "Connected to database: " + databaseUrl);
             checkDatabaseVersion();
             return true;
         } catch (Throwable e) {
-            ErrorWriter.writeErrorToConsole("Cannot connect to database: " + url);
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
+            ErrorWriter.writeErrorToConsole("Cannot connect to database: " + databaseUrl);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), databaseUrl);
             e.printStackTrace();
             return false;
         }
@@ -79,7 +80,7 @@ public class MySqlConnector {
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
-                    "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + "");
+                    databaseUrl);
             return false;
         }
     }
@@ -130,10 +131,10 @@ public class MySqlConnector {
             closeStatementAndResultSet(st, rs);
             return true;
         } catch (Throwable e) {
-            ErrorWriter.writeErrorToConsole("Cannot create tables in database: " + "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + "");
+            ErrorWriter.writeErrorToConsole("Cannot create tables in database: " + databaseUrl);
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
-                    "jdbc:mysql://" + ServerSettings.MYSQL_HOST + "/" + ServerSettings.MYSQL_DATABASE_NAME + "");
+                    databaseUrl);
             e.printStackTrace();
             return false;
         }

@@ -59,17 +59,7 @@ public class ResponseTest extends TestCase {
         assertEquals("Wrong result", expectedResult, actualResult);
     }
 
-    //One error
-    public void test$errors$oneError() throws IOException, InterruptedException {
-        String expectedResult = "[{\"titleName\":\"Only safe calls (?.) are allowed on a nullable receiver of type PrintStream?\",\"severity\":\"ERROR\",\"className\":\"red_wavy_line\",\"y\":\"{line: 1, ch: 15}\",\"x\":\"{line: 1, ch: 14}\"}]";
-        compareResponseForPostRequest(expectedResult, "sendData=true", null);
-    }
 
-    //One warning
-    public void test$warnings$oneWarning() throws IOException, InterruptedException {
-        String expectedResult = "[{\"titleName\":\"Unnecessary safe call on a non-null receiver of type Int\",\"severity\":\"WARNING\",\"className\":\"WARNING\",\"y\":\"{line: 2, ch: 7}\",\"x\":\"{line: 2, ch: 5}\"}]";
-        compareResponseForPostRequest(expectedResult, "sendData=true", null);
-    }
 
     public void test$execution$FooOutErr() throws IOException, InterruptedException {
         String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";

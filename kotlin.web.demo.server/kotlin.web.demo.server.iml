@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
-  <component name="FacetManager">
-    <facet type="web" name="Web">
-      <configuration>
-        <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web/WEB-INF/web.xml" />
-        </descriptors>
-        <webroots>
-          <root url="file://$MODULE_DIR$/web" relative="/" />
-          <root url="file://$MODULE_DIR$/static" relative="/static" />
-        </webroots>
-        <sourceRoots />
-      </configuration>
-    </facet>
-  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -23,8 +9,6 @@
     <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="intellij-core" level="project" />
-    <orderEntry type="module" module-name="js.libraries" />
-    <orderEntry type="module" module-name="js.translator" />
     <orderEntry type="module" module-name="idea.pacth.server" />
     <orderEntry type="module" module-name="kotlin.web.demo.core" />
     <orderEntry type="library" name="json" level="project" />

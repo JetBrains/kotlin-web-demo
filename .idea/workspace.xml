@@ -7,30 +7,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/kotlin_plugin.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/Longer examples/order.txt" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/translator/WebDemoConfig.java" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/translator/WebDemoTranslatorFacade.java" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/src/org/jetbrains/web/demo/test/TestUtils.java" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/src/org/jetbrains/web/demo/test/examples/ExamplesTest.java" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/src/org/jetbrains/web/demo/test/highlighting/HighlightingTest.java" />
-      <change type="MOVED" beforePath="C:\Development\kotlin-web-demo\kotlin.web.demo.core\Kotlin.web.demo.core.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/kotlin.web.demo.core.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/WebDemoApplet_jar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/WebDemoApplet_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/WebDemoWar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/WebDemoWar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/annotations.xml" afterPath="$PROJECT_DIR$/.idea/libraries/annotations.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/asm_all_3_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/asm_all_3_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/guava_r09.xml" afterPath="$PROJECT_DIR$/.idea/libraries/guava_r09.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/kotlin.xml" afterPath="$PROJECT_DIR$/.idea/libraries/kotlin.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/picocontainer.xml" afterPath="$PROJECT_DIR$/.idea/libraries/picocontainer.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/trove4j.xml" afterPath="$PROJECT_DIR$/.idea/libraries/trove4j.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README" afterPath="$PROJECT_DIR$/README" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.applet/kotlin.web.demo.applet.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.applet/kotlin.web.demo.applet.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.applet/src/org/jetbrains/webdemo/MainApplet.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.applet/src/org/jetbrains/webdemo/MainApplet.java" />
+      <change type="MODIFICATION" beforePath="C:\Development\kotlin-web-demo\kotlin.web.demo.core\Kotlin.web.demo.core.iml" afterPath="C:\Development\kotlin-web-demo\kotlin.web.demo.core\Kotlin.web.demo.core.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/database/MySqlConnector.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/database/MySqlConnector.java" />
@@ -41,7 +30,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.test/src/ResponseTest.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/src/ResponseTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.test/testData/errors/oneError.kt" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/testData/errors/oneError.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/update_dependencies.xml" afterPath="$PROJECT_DIR$/update_dependencies.xml" />
     </list>
     <ignored path="WebView.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -72,6 +60,7 @@
     <ignored mask="[WebDemo]*.jar" />
     <ignored path="kotlin.web.demo.server/static/WebDemoApplet01032012.jar" />
     <ignored path="lib/kotlin-plugin/" />
+    <ignored path="kotlin.web.demo.core/resources/" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,15 +244,6 @@
         <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="25" column="13" selection-start="754" selection-end="754" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="KotlinHttpServlet.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="86" column="52" selection-start="3422" selection-end="3422" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -1080,7 +1060,11 @@
       <created>1331018377492</created>
       <updated>1331018377492</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Add test for server. Add WebDemoTranslatorFacade for js.">
+      <created>1331040066177</created>
+      <updated>1331040066177</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1173,7 +1157,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove redundant libraries" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes in update dependencies.xml. Change API" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1186,8 +1170,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Loading applet during start&#10;" />
-    <MESSAGE value="Merge branch with changes in view and statistics&#10;" />
     <MESSAGE value="Save mode in cache&#10;Tweet public link&#10;Save program correctly" />
     <MESSAGE value="Add resources" />
     <MESSAGE value="Load jslib by class.getResourceAsStream" />
@@ -1211,6 +1193,8 @@
     <MESSAGE value="Update kotlin library using ant script" />
     <MESSAGE value="Add downloading kotlin-plugin.zip." />
     <MESSAGE value="Remove redundant libraries" />
+    <MESSAGE value="Add test for server. Add WebDemoTranslatorFacade for js." />
+    <MESSAGE value="Changes in update dependencies.xml. Change API" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />

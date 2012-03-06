@@ -19,6 +19,7 @@ package org.jetbrains.webdemo.log;
 import com.google.common.io.Files;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.server.ServerSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.Statistics;
 
@@ -57,6 +58,10 @@ public class LogDownloader {
         File rootDir = new File("");
         if ((rootDir.exists()) && (rootDir.isDirectory())) {
             File[] files = rootDir.listFiles();
+            if (files == null) {
+                return "";
+            }
+
             Arrays.sort(files, new Comparator<File>() {
                 public int compare(File f1, File f2) {
                     int result = (Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()));
@@ -78,7 +83,7 @@ public class LogDownloader {
                 }
             }
         }
-        File logDir = new File("logs");
+        File logDir = new File(ServerSettings.LOGS_ROOT);
         if ((logDir.exists()) && (logDir.isDirectory())) {
             File[] files = logDir.listFiles();
             Arrays.sort(files, new Comparator<File>() {

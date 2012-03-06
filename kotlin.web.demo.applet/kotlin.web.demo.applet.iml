@@ -8,7 +8,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="js.translator" />
     <orderEntry type="module" module-name="idea.patch.applet" />
     <orderEntry type="module" module-name="kotlin.web.demo.core" />
     <orderEntry type="library" name="trove4j" level="project" />
