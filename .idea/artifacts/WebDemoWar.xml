@@ -9,6 +9,7 @@
           <element id="module-output" name="js.libraries" />
           <element id="module-output" name="idea.pacth.server" />
           <element id="module-output" name="kotlin.web.demo.core" />
+          <element id="module-output" name="kotlin.web.demo" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="guava-r09" />
@@ -24,9 +25,10 @@
           <element id="library" level="project" name="commons-lang" />
           <element id="library" level="project" name="trove4j" />
           <element id="library" level="project" name="asm-all-3.3.1" />
+          <element id="library" level="project" name="kotlin-plugin" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="kotlin.web.demo.server/web/Web" />
+      <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />
     </root>
   </artifact>
 </component>

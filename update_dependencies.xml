@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<project name="Update Dependencies" default="update">
+<project name="Update Dependencies" default="update_kotlin">
     <property name="build.zip" value="kotlin.zip"/>
     <property name="plugin.build.zip" value="kotlin-plugin.zip"/>
 
@@ -22,20 +22,46 @@
         <execute_update/>
     </target>
 
-    <!--<target name="jb_update">
-        <execute_update teamcity="http://buildserver.labs.intellij.net" teamcity.build="bt662"/>
-    </target>-->
-
     <macrodef name="execute_update">
         <attribute name="teamcity" default="http://teamcity.jetbrains.com"/>
-        <attribute name="teamcity.build" default="bt344"/>
         <attribute name="teamcity.plugin.build" default="bt345"/>
         <sequential>
-            <property name="tc.main" value="@{teamcity}/guestAuth/repository/download/@{teamcity.build}/.lastSuccessful"/>
             <property name="tc.plugin" value="@{teamcity}/guestAuth/repository/download/@{teamcity.plugin.build}/.lastSuccessful"/>
+            <property name="path.to.kotlin.plugin" value="lib/kotlin-plugin"/>
+
+            <delete dir="${path.to.kotlin.plugin}" failonerror="false"/>
+
+            <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${plugin.build.zip}" />
+
+            <unzip src="${plugin.build.zip}" dest="${path.to.kotlin.plugin}"/>
+            <delete file="${plugin.build.zip}"/>
+
+            <get src="@{teamcity}/guestAuth/app/rest/buildTypes/id:@{teamcity.plugin.build}/builds/status:SUCCESS/number" dest="${path.to.kotlin.plugin}/build.txt"/>
+
+            <loadfile srcfile="${path.to.kotlin.plugin}/build.txt" property="version"/>
+
+            <replaceregexp file="kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java"
+                           match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
+                           replace="KOTLIN_VERSION = &#34;${version}&#34;"
+                           byline="true"/>
+            <replaceregexp file="kotlin.web.demo.server/static/components/common.js"
+                           match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
+                           replace="KOTLIN_VERSION = &#34;${version}&#34;"
+                           byline="true"/>
+
+
+            <!--<delete dir="${path.to.kotlin.plugin}/Kotlin/kotlinc"/>-->
+            <unzip src="${path.to.kotlin.plugin}/Kotlin/lib/kotlin-js-libraries.zip" dest="kotlin.web.demo.core/resources"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="execute_update_dist">
+        <attribute name="teamcity" default="http://teamcity.jetbrains.com"/>
+        <attribute name="teamcity.build" default="bt344"/>
+        <sequential>
+            <property name="tc.main" value="@{teamcity}/guestAuth/repository/download/@{teamcity.build}/.lastSuccessful"/>
 
             <property name="path.to.kotlin" value="lib/kotlinc"/>
-            <property name="path.to.kotlin.plugin" value="lib/kotlin-plugin"/>
 
             <delete dir="${path.to.kotlin}" failonerror="false"/>
 
@@ -56,11 +82,6 @@
                            replace="KOTLIN_VERSION = &#34;${version}&#34;"
                            byline="true"/>
 
-            <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${plugin.build.zip}" />
-
-            <unzip src="${plugin.build.zip}" dest="${path.to.kotlin.plugin}"/>
-            <delete file="${plugin.build.zip}"/>
-            <delete dir="${path.to.kotlin.plugin}/Kotlin/kotlinc"/>
         </sequential>
     </macrodef>
 </project>
