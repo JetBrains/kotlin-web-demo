@@ -7,8 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/WebDemoWar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/WebDemoWar.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/static/components/common.js" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/static/components/common.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/update_dependencies.xml" afterPath="$PROJECT_DIR$/update_dependencies.xml" />
     </list>
     <ignored path="WebView.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -167,10 +169,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="update_dependencies.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="update_dependencies.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/update_dependencies.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="17" selection-start="1774" selection-end="1774" vertical-scroll-proportion="0.0">
+            <state line="39" column="20" selection-start="1465" selection-end="1465" vertical-scroll-proportion="0.48217055">
               <folding />
             </state>
           </provider>
@@ -201,25 +203,16 @@
       <file leaf-file-name="modules.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="160" selection-start="1207" selection-end="1207" vertical-scroll-proportion="0.0">
+            <state line="15" column="57" selection-start="1254" selection-end="1254" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="kotlinc" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/bin/kotlinc">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="44" selection-start="593" selection-end="593" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CommandRunner.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="CommandRunner.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="131" column="68" selection-start="7256" selection-end="7256" vertical-scroll-proportion="0.8248062">
+            <state line="131" column="68" selection-start="7256" selection-end="7256" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -243,9 +236,6 @@
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
-  </component>
-  <component name="Git.Push.Settings">
-    <option name="myUpdateMethod" />
   </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
@@ -271,13 +261,13 @@
         <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/log/LogDownloader.java" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/translator/WebDemoConfig.java" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.server/static/components/common.js" />
-        <option value="$PROJECT_DIR$/update_dependencies.xml" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.test/src/org/jetbrains/web/demo/test/examples/ExamplesTest.java" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/translator/WebDemoTranslatorFacade.java" />
         <option value="$PROJECT_DIR$/.idea/modules.xml" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/kotlin.web.demo.core.iml" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml" />
+        <option value="$PROJECT_DIR$/update_dependencies.xml" />
       </list>
     </option>
   </component>
@@ -430,6 +420,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WebView" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-web-demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kotlin-plugin" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1187,7 +1195,11 @@
       <created>1331044813007</created>
       <updated>1331044813007</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Remove js-modules from war artifact">
+      <created>1331045460222</created>
+      <updated>1331045460222</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1216,7 +1228,7 @@
     <layout>
       <window_info id="ExceptionAnalyzer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.62007874" sideWeight="0.9988519" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34055117" sideWeight="0.4818376" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34055117" sideWeight="0.4818376" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277559" sideWeight="0.4957265" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14690171" sideWeight="0.6732283" order="2" side_tool="false" content_ui="tabs" />
@@ -1280,7 +1292,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rename demo.core module" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove js-modules from war artifact" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1293,7 +1305,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Load jslib by class.getResourceAsStream" />
     <MESSAGE value="Update k2js module" />
     <MESSAGE value="Patch for k2js 7-2-2012&#10;" />
     <MESSAGE value="K2js 7-02-2012&#10;" />
@@ -1318,6 +1329,7 @@
     <MESSAGE value="Changes in update dependencies.xml. Change API" />
     <MESSAGE value="Delete redundant artifact. Rename demo.core module" />
     <MESSAGE value="Rename demo.core module" />
+    <MESSAGE value="Remove js-modules from war artifact" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1411,20 +1423,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/kotlin-plugin.jar!/org/jetbrains/k2js/facade/K2JSTranslator.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="61" selection-start="1794" selection-end="1794" vertical-scroll-proportion="-16.32">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/bin/kotlinc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="44" selection-start="593" selection-end="593" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/kotlin.web.demo.test/src/org/jetbrains/web/demo/test/examples/ExamplesTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="118" column="41" selection-start="5096" selection-end="5096" vertical-scroll-proportion="-13.3">
@@ -1432,13 +1430,6 @@
             <element signature="e#0#5994#0" expanded="true" />
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/update_dependencies.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="17" selection-start="1774" selection-end="1774" vertical-scroll-proportion="0.0">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1469,16 +1460,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="160" selection-start="1207" selection-end="1207" vertical-scroll-proportion="0.0">
+        <state line="131" column="68" selection-start="7256" selection-end="7256" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java">
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="68" selection-start="7256" selection-end="7256" vertical-scroll-proportion="0.8248062">
+        <state line="15" column="57" selection-start="1254" selection-end="1254" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/update_dependencies.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="20" selection-start="1465" selection-end="1465" vertical-scroll-proportion="0.48217055">
           <folding />
         </state>
       </provider>
