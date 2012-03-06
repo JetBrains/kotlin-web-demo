@@ -7,6 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
+      <change type="MOVED" beforePath="C:\Development\kotlin-web-demo\kotlin.web.demo.server\kotlin.web.demo.server1.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WebView.iws" />
@@ -215,19 +216,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommandRunner.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="CommandRunner.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="126" column="23" selection-start="6971" selection-end="6971" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Kotlin.web.demo.core.iml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="68" selection-start="762" selection-end="762" vertical-scroll-proportion="0.448062">
+            <state line="126" column="23" selection-start="6971" selection-end="6971" vertical-scroll-proportion="0.69302326">
               <folding />
             </state>
           </provider>
@@ -486,6 +478,10 @@
               <option name="myItemId" value="kotlin.web.demo.core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -500,10 +496,6 @@
               <option name="myItemId" value="kotlin.web.demo.core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -511,7 +503,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="true" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="278" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
@@ -1182,7 +1174,15 @@
       <created>1331044572956</created>
       <updated>1331044572956</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Rename demo.core module">
+      <created>1331044617175</created>
+      <updated>1331044617175</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Rename demo.core module">
+      <created>1331044794165</created>
+      <updated>1331044794165</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1207,7 +1207,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="ExceptionAnalyzer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.62007874" sideWeight="0.9988519" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1228,7 +1228,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18429486" sideWeight="0.23326771" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39935064" sideWeight="0.67156863" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1832265" sideWeight="0.6594488" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1832265" sideWeight="0.6594488" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33760685" sideWeight="0.59744096" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3336614" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="CodeWindow" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1455,7 +1455,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="126" column="23" selection-start="6971" selection-end="6971" vertical-scroll-proportion="0.0">
+        <state line="126" column="23" selection-start="6971" selection-end="6971" vertical-scroll-proportion="0.69302326">
           <folding />
         </state>
       </provider>
@@ -1474,13 +1474,6 @@
     <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="160" selection-start="1207" selection-end="1207" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="68" selection-start="762" selection-end="762" vertical-scroll-proportion="0.448062">
           <folding />
         </state>
       </provider>
@@ -1554,7 +1547,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>kotlin.web.demo.test</last-edited>
+          <last-edited>kotlin.web.demo.core</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1566,7 +1559,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>trove4j</last-edited>
+          <last-edited>kotlin-plugin</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
