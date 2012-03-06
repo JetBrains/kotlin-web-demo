@@ -7,29 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45c0e56c-dbc0-48d1-8bb0-43688b820465" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/Longer examples/order.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/translator/WebDemoConfig.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/translator/WebDemoTranslatorFacade.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/src/org/jetbrains/web/demo/test/TestUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/src/org/jetbrains/web/demo/test/examples/ExamplesTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/src/org/jetbrains/web/demo/test/highlighting/HighlightingTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.applet/kotlin.web.demo.applet.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.applet/kotlin.web.demo.applet.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.applet/src/org/jetbrains/webdemo/MainApplet.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.applet/src/org/jetbrains/webdemo/MainApplet.java" />
-      <change type="MODIFICATION" beforePath="C:\Development\kotlin-web-demo\kotlin.web.demo.core\Kotlin.web.demo.core.iml" afterPath="C:\Development\kotlin-web-demo\kotlin.web.demo.core\Kotlin.web.demo.core.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/errorsDescriptors/ErrorAnalyzer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/responseHelpers/JsonResponseForCompletion.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/database/MySqlConnector.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/database/MySqlConnector.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/log/LogDownloader.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/log/LogDownloader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/responseHelpers/JsConverter.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/responseHelpers/JsConverter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.server/static/components/common.js" afterPath="$PROJECT_DIR$/kotlin.web.demo.server/static/components/common.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.test/src/ResponseTest.java" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/src/ResponseTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.test/testData/errors/oneError.kt" afterPath="$PROJECT_DIR$/kotlin.web.demo.test/testData/errors/oneError.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml" afterPath="$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml" />
     </list>
     <ignored path="WebView.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -249,10 +228,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommandRunner.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="CommandRunner.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="126" column="23" selection-start="6971" selection-end="6971" vertical-scroll-proportion="0.69302326">
+            <state line="126" column="23" selection-start="6971" selection-end="6971" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Kotlin.web.demo.core.iml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="0" selection-start="762" selection-end="762" vertical-scroll-proportion="0.448062">
               <folding />
             </state>
           </provider>
@@ -292,8 +280,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/kotlin.web.demo.test/src/org/jetbrains/web/demo/test/examples/ExamplesTest.java" />
-        <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/servlet/KotlinHttpServlet.java" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/WebDemoTranslatorFacade.java" />
@@ -308,6 +294,8 @@
         <option value="$PROJECT_DIR$/kotlin.web.demo.server/static/components/common.js" />
         <option value="$PROJECT_DIR$/update_dependencies.xml" />
         <option value="$PROJECT_DIR$/kotlin.web.demo.core/src/org/jetbrains/webdemo/translator/WebDemoTranslatorFacade.java" />
+        <option value="$PROJECT_DIR$/kotlin.web.demo.core/kotlin.web.demo.core.iml" />
+        <option value="$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml" />
       </list>
     </option>
   </component>
@@ -515,7 +503,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="true" />
-    <property name="project.structure.last.edited" value="Facets" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="118" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
@@ -1064,7 +1052,11 @@
       <created>1331040066177</created>
       <updated>1331040066177</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Changes in update dependencies.xml. Change API">
+      <created>1331040494575</created>
+      <updated>1331040494575</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1089,11 +1081,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="ExceptionAnalyzer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.62007874" sideWeight="0.9988519" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34055117" sideWeight="0.4818376" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34055117" sideWeight="0.4818376" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277559" sideWeight="0.4957265" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14690171" sideWeight="0.6732283" order="2" side_tool="false" content_ui="tabs" />
@@ -1157,7 +1149,7 @@
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes in update dependencies.xml. Change API" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rename demo.core module" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1170,7 +1162,6 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
-    <MESSAGE value="Save mode in cache&#10;Tweet public link&#10;Save program correctly" />
     <MESSAGE value="Add resources" />
     <MESSAGE value="Load jslib by class.getResourceAsStream" />
     <MESSAGE value="Update k2js module" />
@@ -1195,6 +1186,7 @@
     <MESSAGE value="Remove redundant libraries" />
     <MESSAGE value="Add test for server. Add WebDemoTranslatorFacade for js." />
     <MESSAGE value="Changes in update dependencies.xml. Change API" />
+    <MESSAGE value="Rename demo.core module" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1363,7 +1355,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/CommandRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="126" column="23" selection-start="6971" selection-end="6971" vertical-scroll-proportion="0.69302326">
+        <state line="126" column="23" selection-start="6971" selection-end="6971" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kotlin.web.demo.core/Kotlin.web.demo.core.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="0" selection-start="762" selection-end="762" vertical-scroll-proportion="0.448062">
           <folding />
         </state>
       </provider>
@@ -1442,7 +1441,6 @@
             <option name="proportions">
               <list>
                 <option value="0.20174673" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
