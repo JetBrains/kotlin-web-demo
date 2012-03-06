@@ -16,20 +16,22 @@
 
 <project name="Update Dependencies" default="download_and_update">
     <property name="build.zip" value="kotlin.zip"/>
-    <property name="plugin.build.zip" value="lib/kotlin-plugin.zip"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="plugin.build.zip.pattern" value="kotlin-plugin*.zip"/>
 
     <property name="teamcity" value="http://teamcity.jetbrains.com"/>
     <property name="teamcity.plugin.build" value="bt345"/>
 
     <property name="tc.plugin"
               value="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/.lastSuccessful"/>
-    <property name="path.to.kotlin.plugin" value="lib/kotlin-plugin"/>
+    <property name="kotlin.plugin.dir" value="kotlin-plugin"/>
+    <property name="path.to.kotlin.plugin" value="${lib.dir}/${kotlin.plugin.dir}"/>
 
     <target name="download_and_update">
         <execute_update/>
         <unzip_kotlin/>
         <set_kotlin_version/>
-        <delete file="${plugin.build.zip}" failonerror="false"/>
+        <delete file="${lib.dir}/${plugin.build.zip.pattern}" failonerror="false"/>
     </target>
 
     <target name="update">
@@ -39,7 +41,9 @@
 
     <macrodef name="unzip_kotlin">
         <sequential>
-            <unzip src="${plugin.build.zip}" dest="${path.to.kotlin.plugin}"/>
+            <unzip dest="${path.to.kotlin.plugin}">
+                <fileset dir="${lib.dir}" includes="${plugin.build.zip.pattern}"/>
+            </unzip>
             <unzip src="${path.to.kotlin.plugin}/Kotlin/lib/kotlin-js-libraries.zip"
                    dest="kotlin.web.demo.core/resources"/>
         </sequential>
@@ -66,7 +70,7 @@
     <macrodef name="execute_update">
         <sequential>
             <delete dir="${path.to.kotlin.plugin}" failonerror="false"/>
-            <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${plugin.build.zip}"/>
+            <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${lib.dir}"/>
         </sequential>
     </macrodef>
 
