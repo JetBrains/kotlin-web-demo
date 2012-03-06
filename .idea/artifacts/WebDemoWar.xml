@@ -5,8 +5,6 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="kotlin.web.demo.server" />
-          <element id="module-output" name="js.translator" />
-          <element id="module-output" name="js.libraries" />
           <element id="module-output" name="idea.pacth.server" />
           <element id="module-output" name="kotlin.web.demo.core" />
           <element id="module-output" name="kotlin.web.demo" />
