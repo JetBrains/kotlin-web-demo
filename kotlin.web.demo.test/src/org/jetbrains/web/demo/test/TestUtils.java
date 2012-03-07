@@ -33,7 +33,7 @@ import java.nio.charset.Charset;
 
 public class TestUtils {
     public static final String HOST = "http://" + ServerSettings.HOST + "/";
-    public static final String TEST_SRC = "C://Development/kotlin-web-demo/kotlin.web.demo.test/testData/";
+    public static final String TEST_SRC = "kotlin.web.demo.test/testData/";
 
     public static String getDataFromFile(String rootDirectory, String fileName) throws IOException {
         String filePath = rootDirectory + fileName;

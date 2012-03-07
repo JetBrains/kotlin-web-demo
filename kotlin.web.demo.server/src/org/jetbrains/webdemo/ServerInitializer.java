@@ -127,7 +127,6 @@ public class ServerInitializer extends Initializer {
 
             return setJavaCoreEnvironment();
         }
-        ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("JavaCoreEnvironment is already initialized.");
         ErrorWriterOnServer.writeInfoToConsole("JavaCoreEnvironment is already initialized.");
         return true;
     }
@@ -138,7 +137,8 @@ public class ServerInitializer extends Initializer {
         if (!ServerSettings.RT_JAR.equals("")) {
             rtJar = new File(ServerSettings.RT_JAR);
         } else {
-            String java_home = ServerSettings.JAVA_HOME;
+            rtJar = CompileEnvironment.findRtJar();
+            /*String java_home = ServerSettings.JAVA_HOME;
             ErrorWriterOnServer.LOG_FOR_INFO.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
             if (java_home != null) {
                 rtJar = findRtJar(java_home);
@@ -150,7 +150,7 @@ public class ServerInitializer extends Initializer {
                 }
             } else {
                 rtJar = findActiveRtJar(true);
-            }
+            }*/
         }
         if ((rtJar == null || !rtJar.exists())) {
             if (ServerSettings.JAVA_HOME == null) {

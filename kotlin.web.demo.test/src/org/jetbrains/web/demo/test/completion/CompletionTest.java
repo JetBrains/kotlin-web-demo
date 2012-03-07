@@ -22,7 +22,6 @@ import org.jetbrains.web.demo.test.BaseTest;
 import org.jetbrains.web.demo.test.TestUtils;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
-import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 import org.json.JSONException;

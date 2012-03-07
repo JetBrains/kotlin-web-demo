@@ -23,7 +23,6 @@ import org.jetbrains.web.demo.test.TestUtils;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.responseHelpers.JsConverter;
-import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.IOException;

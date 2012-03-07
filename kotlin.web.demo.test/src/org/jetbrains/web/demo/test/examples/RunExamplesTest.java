@@ -16,7 +16,6 @@
 
 package org.jetbrains.web.demo.test.examples;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.web.demo.test.BaseTest;
