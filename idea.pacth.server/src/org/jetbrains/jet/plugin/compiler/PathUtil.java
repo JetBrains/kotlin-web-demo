@@ -34,7 +34,9 @@ public class PathUtil {
     private PathUtil() {}
 
     public static File getDefaultCompilerPath() {
+        System.out.println("getDefaultCompilerPath");
         File plugin_jar_path = new File(getJarPathForClass(JetCoreEnvironment.class));
+        System.out.println("getDefaultCompilerPath: " + plugin_jar_path.getAbsolutePath());
         if (!plugin_jar_path.exists()) return null;
 
         if (plugin_jar_path.getName().equals("kotlin-plugin.jar")) {
@@ -42,13 +44,14 @@ public class PathUtil {
             File pluginHome = lib.getParentFile();
 
             File answer = new File(pluginHome, "kotlinc");
-
+            System.out.println("getDefaultCompilerPath: " + answer.getAbsolutePath());
             return answer.exists() ? answer : null;
         }
 
         if (plugin_jar_path.getName().equals("kotlin-compiler.jar")) {
             File lib = plugin_jar_path.getParentFile();
             File answer = lib.getParentFile();
+            System.out.println("getDefaultCompilerPath: " + answer.getAbsolutePath());
             return answer.exists() ? answer : null;
         }
 
@@ -84,6 +87,7 @@ public class PathUtil {
     @NotNull
     public static String getJarPathForClass(@NotNull Class aClass) {
         String resourceRoot = PathManager.getResourceRoot(aClass, "/" + aClass.getName().replace('.', '/') + ".class");
+        System.out.println("resourceRoot - " + resourceRoot);
         return new File(resourceRoot).getAbsoluteFile().getAbsolutePath();
     }
 
