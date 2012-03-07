@@ -11,8 +11,8 @@
     <orderEntry type="library" name="annotations" level="project" />
     <orderEntry type="library" name="intellij-core" level="project" />
     <orderEntry type="library" name="json" level="project" />
-    <orderEntry type="library" name="kotlin-plugin" level="project" />
     <orderEntry type="library" name="kotlin" level="project" />
+    <orderEntry type="library" name="kotlin-plugin" level="project" />
   </component>
 </module>
 
