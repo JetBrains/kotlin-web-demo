@@ -42,7 +42,7 @@ public class BaseTest extends TestCase {
         Initializer.INITIALIZER = ServerInitializer.getInstance();
 
 //        ServerSettings.JAVA_HOME = "c:\\Program Files\\Java\\jdk1.6.0_30\\";
-        ServerSettings.JAVA_EXECUTE = "c:\\Program Files\\Java\\jdk1.6.0_30\\bin\\java.exe";
+        ServerSettings.JAVA_EXECUTE = "java";
 
         ServerSettings.EXAMPLES_ROOT = "examples/";
         boolean initEnvironment = ServerInitializer.getInstance().initJavaCoreEnvironment();
