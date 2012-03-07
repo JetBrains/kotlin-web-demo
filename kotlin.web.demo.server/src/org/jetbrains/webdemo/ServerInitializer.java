@@ -128,7 +128,8 @@ public class ServerInitializer extends Initializer {
             return setJavaCoreEnvironment();
         }
         ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("JavaCoreEnvironment is already initialized.");
-        return false;
+        ErrorWriterOnServer.writeInfoToConsole("JavaCoreEnvironment is already initialized.");
+        return true;
     }
 
     @Nullable

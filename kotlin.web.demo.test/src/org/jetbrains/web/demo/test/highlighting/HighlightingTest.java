@@ -16,58 +16,21 @@
 
 package org.jetbrains.web.demo.test.highlighting;
 
-import junit.framework.TestCase;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
+import org.jetbrains.web.demo.test.BaseTest;
 import org.jetbrains.web.demo.test.TestUtils;
-import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
-import org.jetbrains.webdemo.help.HelpLoader;
+import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
-import org.jetbrains.webdemo.server.ServerSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
  * @author Natalia.Ukhorskaya
  */
 
-public class HighlightingTest extends TestCase {
-
-    private SessionInfo sessionInfo = new SessionInfo("test", SessionInfo.TypeOfRequest.HIGHLIGHT);
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        System.setProperty("kotlin.running.in.server.mode", "true");
-        System.setProperty("java.awt.headless", "true");
-
-        ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
-        Initializer.INITIALIZER = ServerInitializer.getInstance();
-
-        ServerSettings.JAVA_HOME = "c:\\\\Program Files\\\\Java\\\\jdk1.6.0_30\\";
-
-        new File(ServerSettings.LOGS_ROOT).mkdir();
-        new File(ServerSettings.STATISTICS_ROOT).mkdir();
-
-        try {
-            if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
-                ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-                ExamplesList.getInstance();
-                HelpLoader.getInstance();
-                Statistics.getInstance();
-            } else {
-                ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
-            }
-        } catch (Exception e) {
-            ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
-            System.exit(1);
-        }
-    }
+public class HighlightingTest extends BaseTest {
 
     public void test$errors$oneError() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
@@ -111,6 +74,7 @@ public class HighlightingTest extends TestCase {
     }
 
     private void compareResponseAndExpectedResult(String fileName, String expectedResult, String runConfiguration) throws IOException {
+        sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         sessionInfo.setRunConfiguration(runConfiguration);
         JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
 

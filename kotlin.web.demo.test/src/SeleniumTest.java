@@ -574,7 +574,7 @@ public class SeleniumTest extends TestCase {
     }
 
     private void testDifficultExampleRun(String name, boolean isSpaceReplaced) throws IOException, InterruptedException {
-        testExampleRun(name, "Longer_examples", readResultFromFile("examples" + File.separator + name + ".txt"), isSpaceReplaced);
+        testExampleRun(name, "Longer_examples", readResultFromFile("execution" + File.separator + "javaExamples" + File.separator + name + ".txt"), isSpaceReplaced);
     }
 
     private String getExampleNameByTestName() {
