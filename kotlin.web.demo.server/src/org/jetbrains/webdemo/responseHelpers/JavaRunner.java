@@ -64,7 +64,9 @@ public class JavaRunner {
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     sessionInfo.getType(), commandString);
-            return ResponseUtils.getErrorInJson("Impossible to run your program: IOException handled until execution");
+            StringWriter stackTrace = new StringWriter();
+            e.printStackTrace(new PrintWriter(stackTrace));
+            return ResponseUtils.getErrorWithStackTraceInJson("Impossible to run your program: IOException handled until execution", stackTrace.toString());
         }
 
         final StringBuilder errStream = new StringBuilder();

@@ -18,8 +18,8 @@ package org.jetbrains.webdemo.responseHelpers;
 
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
-import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 import org.json.JSONArray;
 
 import java.util.HashMap;

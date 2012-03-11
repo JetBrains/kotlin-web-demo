@@ -44,13 +44,11 @@ public class ServerSettings {
     public static String MAX_THREAD_COUNT = "50";
     public static String RT_JAR = "";
 
-    public static String MYSQL_HOST = "localhost";
-    public static String MYSQL_DATABASE_NAME = "kotlindatabase";
-    public static String MYSQL_USERNAME = "root";
-    public static String MYSQL_PASSWORD = "root";
-    public static String MYSQL_PORT = "3306";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
     public static String IS_TEST_VERSION = "false";
     public static final String DATABASE_VERSION = "1.0";
     public static String JAVA_EXECUTE = "";
+
+    public static String WEBAPP_ROOT_DIR = "";
+
 }

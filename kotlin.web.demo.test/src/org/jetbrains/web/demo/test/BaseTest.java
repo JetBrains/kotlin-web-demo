@@ -44,6 +44,8 @@ public class BaseTest extends TestCase {
 //        ServerSettings.JAVA_HOME = "c:\\Program Files\\Java\\jdk1.6.0_30\\";
         ServerSettings.JAVA_EXECUTE = "java";
 
+        ServerSettings.WEBAPP_ROOT_DIR = "kotlin.web.demo.core/resources";
+
         ServerSettings.EXAMPLES_ROOT = "examples/";
         boolean initEnvironment = ServerInitializer.getInstance().initJavaCoreEnvironment();
         assertEquals("Initialisation of java core environment failed, server didn't start.",

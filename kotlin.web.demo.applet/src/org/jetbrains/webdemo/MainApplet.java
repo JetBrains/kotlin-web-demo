@@ -23,7 +23,6 @@ import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
-import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

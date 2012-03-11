@@ -405,8 +405,7 @@ var classes = function(){
       var tmp$1;
       var tmp$2;
       {
-        tmp$0 = this.get_colorStops();
-        tmp$1 = tmp$0.length;
+        tmp$0 = this.get_colorStops() , tmp$1 = tmp$0.length;
         for (var tmp$2 = 0; tmp$2 != tmp$1; ++tmp$2) {
           var colorStop = tmp$0[tmp$2];
           {

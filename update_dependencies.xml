@@ -44,7 +44,7 @@
                 <fileset dir="${dependencies.dir}" includes="${zipped.kotlin.plugin.pattern}"/>
             </unzip>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/lib/kotlin-js-libraries.zip"
-                   dest="kotlin.web.demo.core/resources"/>
+                   dest="kotlin.web.demo.core/resources/js"/>
         </sequential>
     </macrodef>
 

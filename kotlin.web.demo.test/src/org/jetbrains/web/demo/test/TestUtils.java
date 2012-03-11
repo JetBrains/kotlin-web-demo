@@ -35,21 +35,24 @@ public class TestUtils {
     public static final String HOST = "http://" + ServerSettings.HOST + "/";
     public static final String TEST_SRC = "kotlin.web.demo.test/testData/";
 
-    public static String getDataFromFile(String rootDirectory, String fileName) throws IOException {
-        String filePath = rootDirectory + fileName;
-        File file = new File(filePath);
+    public static String getDataFromFile(String rootDirectory, String fileName) {
         StringBuilder resultData = new StringBuilder();
-        if (file.exists()) {
-            FileReader fileReader = new FileReader(file);
-            BufferedReader reader = new BufferedReader(fileReader);
-            String tmp = "";
-            while ((tmp = reader.readLine()) != null) {
-                resultData.append(tmp);
-                resultData.append("\n");
-                /*if (!fileName.endsWith(".txt")) {
-                    resultData.append("<br>");
-                }*/
+        String filePath = rootDirectory + fileName;
+
+        File file = new File(filePath);
+        try {
+            if (file.exists()) {
+                FileReader fileReader = new FileReader(file);
+                BufferedReader reader = new BufferedReader(fileReader);
+                String tmp = "";
+                while ((tmp = reader.readLine()) != null) {
+                    resultData.append(tmp);
+                    resultData.append("\n");
+                }
             }
+        } catch (Throwable e) {
+            System.err.println(file.getAbsolutePath());
+            e.printStackTrace();
         }
         return resultData.toString();
     }
@@ -67,6 +70,8 @@ public class TestUtils {
                     resultData.append("<br>");
                 }*/
             }
+        }  else {
+            System.err.println(file.getAbsolutePath());
         }
         return resultData.toString();
     }

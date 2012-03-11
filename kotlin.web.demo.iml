@@ -9,6 +9,7 @@
         <webroots>
           <root url="file://$MODULE_DIR$/kotlin.web.demo.server/web" relative="/" />
           <root url="file://$MODULE_DIR$/kotlin.web.demo.server/static" relative="/static" />
+          <root url="file://$MODULE_DIR$/kotlin.web.demo.core/resources" relative="/js" />
         </webroots>
       </configuration>
     </facet>
