@@ -45,8 +45,8 @@ public class RunExamplesTest extends BaseTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        expectedResults.put("Use a conditional expression.kt", new Example("Use a conditional expression.kt", "10 20", "20<br/>"));
         expectedResults.put("Null-checks.kt", new Example("Null-checks.kt", "2 3", "6<br/>"));
+        expectedResults.put("Use a conditional expression.kt", new Example("Use a conditional expression.kt", "10 20", "20<br/>"));
         expectedResults.put("is-checks and smart casts.kt", new Example("is-checks and smart casts.kt", "", "3<br/>null<br/>"));
         expectedResults.put("Use a while-loop.kt", new Example("Use a while-loop.kt", "guest1 guest2 guest3 guest4", "guest1<br/>guest2<br/>guest3<br/>guest4<br/>"));
         expectedResults.put("Use a for-loop.kt", new Example("Use a for-loop.kt", "guest1 guest2 guest3", "guest1<br/>guest2<br/>guest3<br/><br/>guest1<br/>guest2<br/>guest3<br/>"));
