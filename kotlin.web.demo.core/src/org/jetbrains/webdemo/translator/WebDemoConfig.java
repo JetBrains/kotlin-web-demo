@@ -23,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.utils.JetFileUtils;
+import org.jetbrains.webdemo.server.ServerSettings;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,20 +43,27 @@ public final class WebDemoConfig extends Config {
     }
 
     @NotNull
-    private static List<JetFile> initLibFiles(@NotNull Project project) {
+    private List<JetFile> initLibFiles(@NotNull Project project) {
         List<JetFile> libFiles = new ArrayList<JetFile>();
         for (String libFileName : LIB_FILE_NAMES) {
             JetFile file = null;
             @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
-            InputStream stream = WebDemoConfig.class.getResourceAsStream(libFileName);
+            File libFile = new File(ServerSettings.WEBAPP_ROOT_DIR + File.separator + "js" + File.separator + libFileName);
+//            InputStream stream = WebDemoConfig.class.getResourceAsStream(libFileName);
             try {
-                String text = FileUtil.loadTextAndClose(stream);
+                String text = FileUtil.loadFile(libFile);
                 file = JetFileUtils.createPsiFile(libFileName, text, project);
+                libFiles.add(file);
+            } catch (FileNotFoundException e) {
+                System.err.println(libFileName);
+                e.printStackTrace();
             } catch (IOException e) {
-                System.out.println(libFileName);
+                System.err.println(libFileName);
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                System.err.println(libFileName);
                 e.printStackTrace();
             }
-            libFiles.add(file);
         }
         return libFiles;
     }
