@@ -17,8 +17,14 @@
 package org.jetbrains.webdemo.test;
 
 import junit.framework.TestCase;
+import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
+import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
+import sun.applet.AppletSecurity;
 
 import java.io.IOException;
+import java.util.Random;
 
 //import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 
@@ -31,15 +37,20 @@ public class TestApplet extends TestCase {
     /* Get highlighting under security manager
      * TODO Check that problem is only in guice library
      */
-    public void test() throws IOException, InterruptedException {
-       /* InitializerApplet.getInstance().initJavaCoreEnvironment();
+
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        InitializerApplet.getInstance().initJavaCoreEnvironment();
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
         Initializer.INITIALIZER = InitializerApplet.getInstance();
         WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
-
         MainApplet.SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
         System.setSecurityManager(new AppletSecurity());
-        assertEquals("[]", new MainApplet().getHighlighting("fun main(args : Array<String>) { }"));*/
+    }
+
+    public void test() throws IOException, InterruptedException {
+        assertEquals("[]", new MainApplet().getHighlighting("fun main(args : Array<String>) { }", "java"));
     }
 
 }
