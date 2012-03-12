@@ -1,11 +1,12 @@
 <component name="libraryTable">
   <library name="guice">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/guice-3.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/guice-aopalliance.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/guice-javax.inject.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/guice-3.0-no_aop.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/guice-3.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
