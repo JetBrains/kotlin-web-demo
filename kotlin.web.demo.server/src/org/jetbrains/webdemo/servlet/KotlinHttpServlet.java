@@ -27,6 +27,8 @@ import org.jetbrains.webdemo.translator.WebDemoConfigServer;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -91,7 +93,11 @@ public class KotlinHttpServlet extends HttpServlet {
             CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
             CommandRunner.setServerSettingFromTomcatConfig("app_home", (String) envCtx.lookup("app_home"));
             CommandRunner.setServerSettingFromTomcatConfig("auth_redirect", (String) envCtx.lookup("auth_redirect"));
-            CommandRunner.setServerSettingFromTomcatConfig("is_test_version", (String) envCtx.lookup("is_test_version"));
+            try {
+                CommandRunner.setServerSettingFromTomcatConfig("is_test_version", (String) envCtx.lookup("is_test_version"));
+            } catch (NameNotFoundException e) {
+                CommandRunner.setServerSettingFromTomcatConfig("is_test_version", "false");
+            }
             CommandRunner.setServerSettingFromTomcatConfig("timeout", (String) envCtx.lookup("timeout"));
 
             return true;
