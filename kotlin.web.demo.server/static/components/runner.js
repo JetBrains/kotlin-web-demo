@@ -51,7 +51,7 @@ var Runner = (function () {
         setConsoleMessage("");
         setStatusBarMessage("Running...");
         if ($("#nohighlightingcheckbox").attr('checked') == 'checked') {
-            sendHighlightingRequest(onHighlightingSuccessWait)
+            Highlighting.sendHighlightingRequest(onHighlightingSuccessWait);
         } else {
             getErrors();
             onHighlightingSuccessWait(null);
@@ -69,7 +69,7 @@ var Runner = (function () {
                 Highlighting.setLoadingErrors(false);
             } catch (e) {
                 Highlighting.setLoadingErrors(false);
-                sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
+                Highlighting.sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
                 return;
             }
             data = eval(dataFromApplet);
@@ -78,7 +78,7 @@ var Runner = (function () {
             }
         }
         else {
-            sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
+            Highlighting.sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
         }
     }
 
@@ -86,9 +86,9 @@ var Runner = (function () {
         Highlighting.setLoadingErrors(false);
         Highlighting.onHighlightingSuccess(data);
         if (data == null || !checkIfThereAreErrorsInData(data)) {
+            setStatusBarMessage("Running...");
             if (!isCompile) {
 //            if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
-                setStatusBarMessage("Running...");
                 isCompile = true;
                 var i = editor.getValue();
                 var arguments = $("#arguments").val();
@@ -102,7 +102,7 @@ var Runner = (function () {
                     timeout:10000,
                     error:function () {
                         isCompile = false;
-                        setStatusBarMessage(RUN_REQUEST_ABORTED);
+                        setStatusBarError(RUN_REQUEST_ABORTED);
                         setConsoleMessage(RUN_REQUEST_ABORTED);
                     }
                 });
@@ -227,9 +227,9 @@ var Runner = (function () {
     }
 
     function onCompileSuccess(data) {
+        setStatusBarMessage("Loading output...");
         isCompile = false;
         var isCompiledWithErrors = false;
-        setStatusBarMessage("Loading output...");
         if (data != null) {
             if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                 $("#tabs").tabs("select", 0);
@@ -272,7 +272,7 @@ var Runner = (function () {
         if (!isCompiledWithErrors) {
             setStatusBarMessage(EXECUTE_OK);
         } else {
-            setStatusBarMessage(ERROR_UNTIL_EXECUTE);
+            setStatusBarError(ERROR_UNTIL_EXECUTE);
         }
     }
 

@@ -550,9 +550,5 @@ function forEachInArray(arr, f) {
 //$("#myapplet")[0].getHighlighting("fun main(args : Array<String>) { System.out?.println(\"Hello, world!\")}");
 
 
-function sendHighlightingRequest(onLoad) {
-    Highlighting.sendHighlightingRequest(onLoad);
-}
-
 
 

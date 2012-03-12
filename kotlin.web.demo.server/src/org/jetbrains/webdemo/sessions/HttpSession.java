@@ -183,7 +183,7 @@ public class HttpSession {
 
     private void sendConvertToKotlinResult() {
         PostData data = getPostDataFromRequest(true);
-        writeResponse(new JavaConverterRunner(data.text, data.arguments, sessionInfo).getResult(), HttpServletResponse.SC_OK);
+        //writeResponse(new JavaConverterRunner(data.text, data.arguments, sessionInfo).getResult(), HttpServletResponse.SC_OK);
     }
 
     private void sendExampleContent() {

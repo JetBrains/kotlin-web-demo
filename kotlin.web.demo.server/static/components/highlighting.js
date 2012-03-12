@@ -48,6 +48,7 @@ var Highlighting = (function () {
     };
 
     Highlighting.sendHighlightingRequest = function (onLoad) {
+        setStatusBarMessage("Loading highlighting...");
         isLoadingHighlighting = true;
         var i = replaceAll(editor.getValue(), "%", "@percent@");
         $.ajax({
@@ -62,11 +63,13 @@ var Highlighting = (function () {
                 clearProblemView();
                 isLoadingHighlighting = false;
                 setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
+                setStatusBarError(HIGHLIGHT_REQUEST_ABORTED);
             }
         });
     };
 
     Highlighting.onHighlightingSuccess = function (data) {
+        setStatusBarMessage("Processing errors...");
         isLoadingHighlighting = false;
         if (data == null) {
             return;
@@ -145,7 +148,7 @@ var Highlighting = (function () {
         }
 
         processError(i, problems, processError);
-    }
+    };
 
 
     Highlighting.getDataFromApplet = function (type) {
