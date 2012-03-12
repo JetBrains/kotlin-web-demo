@@ -16,15 +16,15 @@
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.jetbrains.web.demo.test.completion.CompletionTest;
-import org.jetbrains.web.demo.test.examples.HighlightExamplesTest;
-import org.jetbrains.web.demo.test.examples.RunExamplesTest;
-import org.jetbrains.web.demo.test.highlighting.HighlightingTest;
-import org.jetbrains.web.demo.test.run.RunTest;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.test.completion.CompletionTest;
+import org.jetbrains.webdemo.test.examples.HighlightExamplesTest;
+import org.jetbrains.webdemo.test.examples.RunExamplesTest;
+import org.jetbrains.webdemo.test.highlighting.HighlightingTest;
+import org.jetbrains.webdemo.test.run.RunTest;
 
 /**
  * @author Natalia.Ukhorskaya
@@ -37,7 +37,6 @@ public class TestAll extends TestCase {
                 HighlightingTest.class,
                 HighlightExamplesTest.class,
                 CompletionTest.class,
-                HighlightExamplesTest.class,
                 RunExamplesTest.class,
                 RunTest.class
         );
