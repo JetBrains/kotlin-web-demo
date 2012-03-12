@@ -90,9 +90,7 @@ public class PathUtil {
         List<VirtualFile> roots = new ArrayList<VirtualFile>();
 
         File alts = getAltHeadersPath();
-        System.out.println(alts.getAbsolutePath());
         VirtualFile jarRoot = VirtualFileManager.getInstance().findFileByUrl("jar://" + alts.getPath() + "/kotlin-jdk-headers.jar" + "!/");
-        System.out.println(jarRoot.getPath());
         roots.add(jarRoot);
         /*if (alts != null) {
             for (File root : alts.listFiles()) {
