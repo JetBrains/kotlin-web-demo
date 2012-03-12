@@ -15,7 +15,7 @@
   -->
 
 <project name="Update Dependencies" default="download_and_update">
-    <property name="kotlin.build.number" value="snapshot"/>
+    <!--<property name="kotlin.build.number" value="0.1.33"/>-->
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
     <property name="zipped.kotlin.plugin.pattern" value="kotlin-plugin*.zip"/>
@@ -50,7 +50,10 @@
 
     <macrodef name="set_kotlin_version">
         <sequential>
-            <replaceregexp file="kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ServerSettings.java"
+            <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
+                 dest="${dependencies.dir}/build.txt"/>
+            <loadfile srcfile="${dependencies.dir}/build.txt" property="kotlin.build.number"/>
+            <replaceregexp file="kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ApplicationSettings.java"
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
                            replace="KOTLIN_VERSION = &#34;${kotlin.build.number}&#34;"
                            byline="true"/>
