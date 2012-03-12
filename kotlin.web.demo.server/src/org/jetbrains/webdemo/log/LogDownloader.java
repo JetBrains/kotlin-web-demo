@@ -37,8 +37,8 @@ import java.util.Comparator;
  */
 
 public class LogDownloader {
-    public String download(String path) {
-        File log = new File(path);
+    public String download(String name) {
+        File log = new File(ApplicationSettings.LOGS_DIRECTORY + File.separator + name);
 
         if (log.exists()) {
             try {
@@ -77,8 +77,8 @@ public class LogDownloader {
             for (File file : files) {
                 if (file.getName().contains(".log")) {
                     responseJavaLogs.append(ResponseUtils.generateTag("span", file.getName()));
-                    responseJavaLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&view")));
-                    responseJavaLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&download")));
+                    responseJavaLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestString("downloadLog", file.getName() + "&view")));
+                    responseJavaLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestString("downloadLog", file.getName() + "&download")));
                     responseJavaLogs.append(ResponseUtils.addNewLine());
                 }
             }
@@ -100,13 +100,13 @@ public class LogDownloader {
             for (File file : files) {
                 if (file.getName().contains("exceptions.log")) {
                     responseExceptionLogs.append(ResponseUtils.generateTag("span", file.getName()));
-                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&view")));
-                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&download")));
+                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestString("downloadLog", file.getName() + "&view")));
+                    responseExceptionLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestString("downloadLog", file.getName() + "&download")));
                     responseExceptionLogs.append(ResponseUtils.addNewLine());
                 } else {
                     responseOtherLogs.append(ResponseUtils.generateTag("span", file.getName()));
-                    responseOtherLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&view")));
-                    responseOtherLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestStringWoQuery("downloadLog", file.getAbsolutePath() + "&download")));
+                    responseOtherLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestString("downloadLog", file.getName() + "&view")));
+                    responseOtherLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestString("downloadLog", file.getName() + "&download")));
                     responseOtherLogs.append(ResponseUtils.addNewLine());
                     //log=C:\Development\contrib\jet-contrib\WebView\logs\kotlincompiler.log&view
                     //http://localhost:8080/kotlinServer?sessionId=0&type=downloadLog&args=C:\Development\contrib\jet-contrib\WebView\logs\kotlincompiler.log&view

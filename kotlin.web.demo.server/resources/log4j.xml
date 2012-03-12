@@ -4,7 +4,7 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
     <appender name="infoLoggerAppender" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="logs/kotlincompiler.log"/>
+        <param name="file" value="${kotlin.web.demo.log4j}/logs/kotlincompiler.log"/>
         <param name="MaxFileSize" value="2Mb"/>
         <param name="MaxBackupIndex" value="20"/>
         <!--<layout class="org.apache.log4j.xml.XMLLayout">
@@ -16,7 +16,7 @@
     </appender>
 
     <appender name="exceptionLoggerAppender" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="file" value="logs/exceptions.log"/>
+        <param name="file" value="${kotlin.web.demo.log4j}/logs/exceptions.log"/>
         <!--<layout class="org.apache.log4j.xml.XMLLayout">
         </layout>-->
         <layout class="org.apache.log4j.PatternLayout">

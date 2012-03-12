@@ -45,6 +45,7 @@ public class CommandRunner {
             ApplicationSettings.LOGS_DIRECTORY = value + File.separator + "logs";
             ApplicationSettings.EXAMPLES_DIRECTORY = value + File.separator + "examples";
             ApplicationSettings.HELP_DIRECTORY = value + File.separator + "help";
+            System.setProperty("kotlin.web.demo.log4j", value);
         } else if (setting.equals("auth_redirect")) {
             ApplicationSettings.AUTH_REDIRECT = value;
         } else if (setting.equals("is_test_version")) {

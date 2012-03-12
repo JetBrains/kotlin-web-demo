@@ -67,9 +67,9 @@ public class KotlinHttpServlet extends HttpServlet {
         try {
             if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-                new File(ApplicationSettings.LOGS_DIRECTORY).mkdir();
                 WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(Initializer.INITIALIZER.getEnvironment().getProject());
-                new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdir();
+                new File(ApplicationSettings.LOGS_DIRECTORY).mkdirs();
+                new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdirs();
                 ExamplesList.getInstance();
                 HelpLoader.getInstance();
                 Statistics.getInstance();
