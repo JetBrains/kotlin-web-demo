@@ -23,6 +23,7 @@ import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
+import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import javax.swing.*;
@@ -55,31 +56,16 @@ public class MainApplet extends JApplet implements ActionListener {
             request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
             ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
             Initializer.INITIALIZER = InitializerApplet.getInstance();
+            WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
 
             SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
             getHighlighting("fun main(args : Array<String>) {\n" +
                     "  System.out?.println(\"Hello, world!\"\n" +
                     "}");
-            /*URL javaScript = null;
 
-           try {
-               javaScript = new URL("javascript:onAppletIsReady()");
-           } catch (MalformedURLException exception) {
-               exception.printStackTrace();
-           }
-           getAppletContext().showDocument(javaScript, "_self");*/
-
-            /*Container contentPane = this.getContentPane();
-            contentPane.setLayout(new FlowLayout());
-            b1 = new JButton("highlighting");
-            b1.addActionListener(this);
-            contentPane.add(b1);
-            b2 = new JButton("completion");
-            b2.addActionListener(this);
-            contentPane.add(b2);*/
         } catch (Throwable e) {
             e.printStackTrace();
-            System.out.println("Cannot start applet");
+            System.err.println("Cannot start applet");
         }
     }
 
@@ -92,12 +78,9 @@ public class MainApplet extends JApplet implements ActionListener {
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), data);
             SESSION_INFO.setRunConfiguration(runConfiguration);
-            /* if (runConfiguration.equals("canvas")) {
-                SESSION_INFO.setRunConfiguration(SessionInfo.RunConfiguration.CANVAS);
-            }*/
+
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, SESSION_INFO);
             return responseForHighlighting.getResult();
-//            return responseForHighlighting.getResult(InitializerApplet.getEnvironment());
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -115,7 +98,7 @@ public class MainApplet extends JApplet implements ActionListener {
     @Nullable
     public String translateToJS(@NotNull String code, @NotNull String arguments) {
         try {
-            return WebDemoTranslatorFacade.translateStringWithCallToMain(Initializer.INITIALIZER.getEnvironment().getProject(), code, arguments);
+            return WebDemoTranslatorFacade.translateStringWithCallToMain(code, arguments);
         } catch (AssertionError e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
             return EXCEPTION + "Translation error.";

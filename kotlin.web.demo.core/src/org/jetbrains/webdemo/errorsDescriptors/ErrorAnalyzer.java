@@ -115,7 +115,7 @@ public class ErrorAnalyzer {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
             } else {
-                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(Initializer.INITIALIZER.getEnvironment().getProject(), (JetFile) currentPsiFile);
+                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
             }
 
         } catch (Throwable e) {

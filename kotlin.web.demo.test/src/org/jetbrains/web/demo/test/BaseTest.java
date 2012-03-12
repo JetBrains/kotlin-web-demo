@@ -15,14 +15,13 @@ package org.jetbrains.web.demo.test;/*
  */
 
 import junit.framework.TestCase;
-import org.jetbrains.jet.compiler.CompileEnvironment;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.server.ServerSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
-
-import java.io.File;
+import org.jetbrains.webdemo.translator.WebDemoConfigServer;
+import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 /**
  * @author Natalia.Ukhorskaya
@@ -50,6 +49,7 @@ public class BaseTest extends TestCase {
         boolean initEnvironment = ServerInitializer.getInstance().initJavaCoreEnvironment();
         assertEquals("Initialisation of java core environment failed, server didn't start.",
                 true, initEnvironment);
+        WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(Initializer.INITIALIZER.getEnvironment().getProject());
         ExamplesList.getInstance();
         HelpLoader.getInstance();
         Statistics.getInstance();

@@ -33,12 +33,12 @@ import java.util.List;
  * @author Pavel Talanov
  */
 //TODO: dup with TestConfig
-public final class WebDemoConfig extends Config {
+public final class WebDemoConfigApplet extends Config {
 
     @Nullable
     private /*var*/ List<JetFile> jsLibFiles = null;
 
-    public WebDemoConfig(@NotNull Project project) {
+    public WebDemoConfigApplet(@NotNull Project project) {
         super(project);
     }
 
@@ -48,7 +48,7 @@ public final class WebDemoConfig extends Config {
         for (String libFileName : LIB_FILE_NAMES) {
             JetFile file = null;
             @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
-            InputStream stream = WebDemoConfig.class.getResourceAsStream(libFileName);
+            InputStream stream = WebDemoConfigApplet.class.getResourceAsStream(libFileName);
             try {
                 String text = FileUtil.loadTextAndClose(stream);
                 file = JetFileUtils.createPsiFile(libFileName, text, project);

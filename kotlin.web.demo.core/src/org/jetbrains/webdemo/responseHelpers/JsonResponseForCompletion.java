@@ -80,7 +80,7 @@ public class JsonResponseForCompletion {
         BindingContext bindingContext1;
         try {
            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
-                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(Initializer.INITIALIZER.getEnvironment().getProject(), (JetFile) currentPsiFile);
+                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
                bindingContext1 = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
             } else {

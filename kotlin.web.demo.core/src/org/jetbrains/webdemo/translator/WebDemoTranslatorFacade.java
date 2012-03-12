@@ -22,8 +22,12 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.k2js.analyze.AnalyzerFacadeForJS;
+import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.k2js.utils.JetFileUtils;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Initializer;
+import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.util.Arrays;
 
@@ -33,6 +37,8 @@ import java.util.Arrays;
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
 
+    public static Config LOAD_JS_LIBRARY_CONFIG;
+
     @SuppressWarnings("FieldCanBeLocal")
     private static String EXCEPTION = "exception=";
 
@@ -41,48 +47,55 @@ public final class WebDemoTranslatorFacade {
 
     @SuppressWarnings("UnusedDeclaration")
     @Nullable
-    public static BindingContext analyzeProgramCode(@NotNull Project project, @NotNull JetFile file) {
+    public static BindingContext analyzeProgramCode(@NotNull JetFile file) {
         try {
-            return AnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), new WebDemoConfig(project));
+//            LOAD_JS_LIBRARY_CONFIG.setProject(Initializer.INITIALIZER.getEnvironment().getProject());
+            return AnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), LOAD_JS_LIBRARY_CONFIG);
         } catch (Throwable e) {
-            reportException(e);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), file.getText());
             return null;
         }
     }
 
     @SuppressWarnings("UnusedDeclaration")
     @NotNull
-    public static String translateStringWithCallToMain(@NotNull Project project,
-                                                       @NotNull String programText, @NotNull String argumentsString) {
+    public static String translateStringWithCallToMain(@NotNull String programText, @NotNull String argumentsString) {
         try {
-            return doTranslate(project, programText, argumentsString);
+            return doTranslate(programText, argumentsString);
 
         } catch (AssertionError e) {
-            reportException(e);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
             return EXCEPTION + "Translation error.";
         } catch (UnsupportedOperationException e) {
-            reportException(e);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
             return EXCEPTION + "Unsupported feature.";
         } catch (Throwable e) {
-            reportException(e);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
             return EXCEPTION + "Unexpected exception.";
         }
     }
 
     @NotNull
-    private static String doTranslate(@NotNull Project project, @NotNull String programText,
+    private static String doTranslate(@NotNull String programText,
                                       @NotNull String argumentsString) {
-        K2JSTranslator translator = new org.jetbrains.k2js.facade.K2JSTranslator(new WebDemoConfig(project));
-        JetFile file = JetFileUtils.createPsiFile("test", programText, project);
+        try {
+            K2JSTranslator translator = new K2JSTranslator(LOAD_JS_LIBRARY_CONFIG);
+            JetFile file = JetFileUtils.createPsiFile("test", programText, Initializer.INITIALIZER.getEnvironment().getProject());
 
-        String programCode = translator.generateProgramCode(file) + "\n";
-        String flushOutput = "Kotlin.System.flush();\n";
-        String callToMain = org.jetbrains.k2js.facade.K2JSTranslator.generateCallToMain(file, argumentsString);
-        String programOutput = "Kotlin.System.output();\n";
-        return programCode + flushOutput + callToMain + programOutput;
+            String programCode = translator.generateProgramCode(file) + "\n";
+            String flushOutput = "Kotlin.System.flush();\n";
+            String callToMain = K2JSTranslator.generateCallToMain(file, argumentsString);
+            String programOutput = "Kotlin.System.output();\n";
+            return programCode + flushOutput + callToMain + programOutput;
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
+            return "";
+        }
     }
 
-    private static void reportException(@NotNull Throwable e) {
-        e.printStackTrace();
-    }
 }

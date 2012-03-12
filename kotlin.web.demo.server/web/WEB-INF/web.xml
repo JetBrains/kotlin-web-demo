@@ -12,13 +12,13 @@
     <servlet>
         <servlet-name>KotlinHttpServlet</servlet-name>
         <servlet-class>org.jetbrains.webdemo.servlet.KotlinHttpServlet</servlet-class>
-
     </servlet>
 
     <servlet-mapping>
         <servlet-name>KotlinHttpServlet</servlet-name>
         <url-pattern>/kotlinServer</url-pattern>
         <url-pattern>/logs</url-pattern>
+
     </servlet-mapping>
 
     <servlet-mapping>

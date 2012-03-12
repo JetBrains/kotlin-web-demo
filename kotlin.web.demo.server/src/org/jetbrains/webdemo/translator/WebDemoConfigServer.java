@@ -25,7 +25,9 @@ import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.utils.JetFileUtils;
 import org.jetbrains.webdemo.server.ServerSettings;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +35,17 @@ import java.util.List;
  * @author Pavel Talanov
  */
 //TODO: dup with TestConfig
-public final class WebDemoConfig extends Config {
+public final class WebDemoConfigServer extends Config {
 
     @Nullable
     private /*var*/ List<JetFile> jsLibFiles = null;
 
-    public WebDemoConfig(@NotNull Project project) {
+    public WebDemoConfigServer(@NotNull Project project) {
         super(project);
+    }
+
+    public void setProject(Project project) {
+//        this.project = project;
     }
 
     @NotNull
@@ -49,7 +55,7 @@ public final class WebDemoConfig extends Config {
             JetFile file = null;
             @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
             File libFile = new File(ServerSettings.WEBAPP_ROOT_DIR + File.separator + "js" + File.separator + libFileName);
-//            InputStream stream = WebDemoConfig.class.getResourceAsStream(libFileName);
+//            InputStream stream = WebDemoConfigServer.class.getResourceAsStream(libFileName);
             try {
                 String text = FileUtil.loadFile(libFile);
                 file = JetFileUtils.createPsiFile(libFileName, text, project);
