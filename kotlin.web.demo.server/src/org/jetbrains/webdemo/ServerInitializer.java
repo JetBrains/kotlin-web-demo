@@ -107,7 +107,7 @@ public class ServerInitializer extends Initializer {
     }
 
     public static File getRuntimeJarPath() {
-        URL url = CompileEnvironment.class.getClassLoader().getResource("jet/JetObject.class");
+        URL url = CompileEnvironment.class.getClassLoader().getResource("kotlin/namespace.class");
         if (url != null && url.getProtocol().equals("jar")) {
             String path = url.getPath();
             return new File(path.substring(path.indexOf(":") + 1, path.indexOf("!/")));
