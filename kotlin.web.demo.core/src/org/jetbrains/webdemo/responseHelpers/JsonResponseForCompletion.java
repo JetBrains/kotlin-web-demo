@@ -23,7 +23,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.jet.compiler.TipsManager;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
@@ -91,7 +91,7 @@ public class JsonResponseForCompletion {
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
-            return ResponseUtils.getErrorInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
+            return ResponseUtils.getErrorInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE
                     + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
         String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());

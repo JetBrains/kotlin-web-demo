@@ -18,7 +18,7 @@ package org.jetbrains.webdemo.help;
 
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 import org.w3c.dom.*;
@@ -124,7 +124,7 @@ public class HelpLoader {
     private void generateHelpForExamples() {
         resultWords = new JSONArray();
         try {
-            File file = new File(ServerSettings.HELP_ROOT + File.separator + ServerSettings.HELP_FOR_WORDS);
+            File file = new File(ApplicationSettings.HELP_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_WORDS);
             Document doc = ResponseUtils.getXmlDocument(file);
             if (doc == null) {
                 return;
@@ -152,7 +152,7 @@ public class HelpLoader {
     private void generateHelpForWords() {
         resultExamples = new JSONArray();
         try {
-            File file = new File(ServerSettings.EXAMPLES_ROOT + File.separator + ServerSettings.HELP_FOR_EXAMPLES);
+            File file = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_EXAMPLES);
             Document doc = ResponseUtils.getXmlDocument(file);
             if (doc == null) {
                 return;

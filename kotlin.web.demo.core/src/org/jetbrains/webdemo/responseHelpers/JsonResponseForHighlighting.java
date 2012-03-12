@@ -23,7 +23,7 @@ import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 
@@ -56,7 +56,7 @@ public class JsonResponseForHighlighting {
         try {
             errorDescriptors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
-            return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE
+            return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE
                      , e.getStackTraceString());
         }
         JSONArray resultArray = new JSONArray();

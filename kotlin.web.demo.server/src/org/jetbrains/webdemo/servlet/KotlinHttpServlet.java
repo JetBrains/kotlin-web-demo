@@ -22,13 +22,12 @@ import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.translator.WebDemoConfigServer;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
-import javax.naming.NamingException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -54,7 +53,7 @@ public class KotlinHttpServlet extends HttpServlet {
         System.setProperty("kotlin.running.in.server.mode", "true");
         System.setProperty("java.awt.headless", "true");
 
-        ServerSettings.WEBAPP_ROOT_DIR = getServletContext().getRealPath("/");
+        ApplicationSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
 
         if (!loadTomcatParameters()) {
             ErrorWriter.writeErrorToConsole("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
@@ -68,9 +67,9 @@ public class KotlinHttpServlet extends HttpServlet {
         try {
             if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-                new File(ServerSettings.LOGS_ROOT).mkdir();
+                new File(ApplicationSettings.LOGS_DIRECTORY).mkdir();
                 WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(Initializer.INITIALIZER.getEnvironment().getProject());
-                new File(ServerSettings.STATISTICS_ROOT).mkdir();
+                new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdir();
                 ExamplesList.getInstance();
                 HelpLoader.getInstance();
                 Statistics.getInstance();
@@ -96,9 +95,14 @@ public class KotlinHttpServlet extends HttpServlet {
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("is_test_version", (String) envCtx.lookup("is_test_version"));
             } catch (NameNotFoundException e) {
+                //Absent is_test_version variable in context.xml
                 CommandRunner.setServerSettingFromTomcatConfig("is_test_version", "false");
             }
-            CommandRunner.setServerSettingFromTomcatConfig("timeout", (String) envCtx.lookup("timeout"));
+            try {
+                CommandRunner.setServerSettingFromTomcatConfig("timeout", (String) envCtx.lookup("timeout"));
+            } catch (NameNotFoundException e) {
+                //Absent timeout variable in context.xml
+            }
 
             return true;
         } catch (Throwable e) {

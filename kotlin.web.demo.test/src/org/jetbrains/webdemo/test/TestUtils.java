@@ -19,7 +19,6 @@ package org.jetbrains.webdemo.test;
 import junit.framework.TestCase;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -30,7 +29,6 @@ import java.net.URL;
  */
 
 public class TestUtils {
-    public static final String HOST = "http://" + ServerSettings.HOST + "/";
     public static final String TEST_SRC = "kotlin.web.demo.test/testData/";
 
     public static String getDataFromFile(String rootDirectory, String fileName) {
@@ -88,7 +86,7 @@ public class TestUtils {
     }
 
     public static String getActualResultForRequest(String urlWoLocalhost, @Nullable String data, @Nullable String query) throws IOException {
-        String urlPath = HOST + urlWoLocalhost.replace(" ", "%20");
+        String urlPath = /*HOST +*/ urlWoLocalhost.replace(" ", "%20");
         if (query != null) {
             urlPath = urlPath + "?sessionId=555&" + query;
         }

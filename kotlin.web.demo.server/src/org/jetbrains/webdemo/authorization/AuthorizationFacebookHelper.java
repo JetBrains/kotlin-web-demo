@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.authorization;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.json.JSONObject;
@@ -48,7 +48,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
                     .provider(FacebookApi.class)
                     .apiKey("281097941954775")
                     .apiSecret("c834e3f743a0ea79d8d289b252b9bdb3")
-                    .callback("http://" + ServerSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "facebook"))
+                    .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "facebook"))
                     .build();
             return facebookService.getAuthorizationUrl(EMPTY_TOKEN);
         } catch (Throwable e) {

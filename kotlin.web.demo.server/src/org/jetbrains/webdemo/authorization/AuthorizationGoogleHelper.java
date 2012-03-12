@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.authorization;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.json.JSONObject;
@@ -53,7 +53,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
                     .apiKey("anonymous")
                     .apiSecret("anonymous")
                     .scope(SCOPE)
-                    .callback("http://" + ServerSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "google"))
+                    .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "google"))
                     .build();
 
             requestToken = googleService.getRequestToken();

@@ -23,7 +23,7 @@ import com.sun.net.httpserver.HttpPrincipal;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -240,7 +240,7 @@ public class UserAuthenticator extends BasicAuthenticator {
 
     public String addUser(String login, String password) {
         try {
-            File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + type + ".xml");
+            File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + type + ".xml");
             if (!file.exists()) {
                 return "File doesn't exists: " + file.getAbsolutePath();
             }
@@ -313,7 +313,7 @@ public class UserAuthenticator extends BasicAuthenticator {
             //TODO add exceptions
             Map<String, String> users = new HashMap<String, String>();
 
-            File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + type + ".xml");
+            File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + type + ".xml");
             if (!file.exists()) {
                 return null;
             }

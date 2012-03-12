@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.log;
 import com.google.common.io.Files;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.Statistics;
 
@@ -83,7 +83,7 @@ public class LogDownloader {
                 }
             }
         }
-        File logDir = new File(ServerSettings.LOGS_ROOT);
+        File logDir = new File(ApplicationSettings.LOGS_DIRECTORY);
         if ((logDir.exists()) && (logDir.isDirectory())) {
             File[] files = logDir.listFiles();
             Arrays.sort(files, new Comparator<File>() {

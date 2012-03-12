@@ -20,7 +20,7 @@ import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.json.JSONArray;
@@ -60,8 +60,8 @@ public class MySqlConnector {
             DataSource ds = (DataSource) envCtx.lookup("jdbc/kotlin");
             connection = ds.getConnection();
             databaseUrl = connection.toString();
-//            url = "jdbc:mysql://" + ServerSettings.MYSQL_HOST + ":" + ServerSettings.MYSQL_PORT + "/" + ServerSettings.MYSQL_DATABASE_NAME + "";
-//            connection = DriverManager.getConnection(url, ServerSettings.MYSQL_USERNAME, ServerSettings.MYSQL_PASSWORD);
+//            url = "jdbc:mysql://" + ApplicationSettings.MYSQL_HOST + ":" + ApplicationSettings.MYSQL_PORT + "/" + ApplicationSettings.MYSQL_DATABASE_NAME + "";
+//            connection = DriverManager.getConnection(url, ApplicationSettings.MYSQL_USERNAME, ApplicationSettings.MYSQL_PASSWORD);
             ErrorWriter.writeInfoToConsole("Connected to database: " + databaseUrl);
             ErrorWriter.getInfoForLog("CONNECT_TO_DATABASE", "-1", "Connected to database: " + databaseUrl);
             checkDatabaseVersion();
@@ -125,7 +125,7 @@ public class MySqlConnector {
                         "ENGINE = InnoDB;");
                 st.execute();
                 st = connection.prepareStatement("INSERT INTO databaseinfo (VERSION) VALUES (?)");
-                st.setString(1, ServerSettings.DATABASE_VERSION);
+                st.setString(1, ApplicationSettings.DATABASE_VERSION);
                 st.executeUpdate();
             }
             closeStatementAndResultSet(st, rs);
@@ -154,7 +154,7 @@ public class MySqlConnector {
                 st.execute();
                 System.out.println("Create table databaseInfo");
                 st = connection.prepareStatement("INSERT databaseinfo (VERSION) SET VERSION=?");
-                st.setString(1, ServerSettings.DATABASE_VERSION);
+                st.setString(1, ApplicationSettings.DATABASE_VERSION);
                 st.executeUpdate();
                 System.out.println("add database version");
                 return false;
@@ -164,7 +164,7 @@ public class MySqlConnector {
                 rs = st.executeQuery();
                 if (rs.next()) {
                     String version = rs.getString("VERSION");
-                    return version.equals(ServerSettings.DATABASE_VERSION);
+                    return version.equals(ApplicationSettings.DATABASE_VERSION);
                 }
             }
         } catch (SQLException e) {
@@ -198,7 +198,7 @@ public class MySqlConnector {
             PreparedStatement st = null;
             try {
                 st = connection.prepareStatement("UPDATE databaseinfo SET VERSION=?");
-                st.setString(1, ServerSettings.DATABASE_VERSION);
+                st.setString(1, ApplicationSettings.DATABASE_VERSION);
                 st.executeUpdate();
 
                 //st = connection.prepareStatement("ALTER TABLE programs ADD COLUMN RUN_CONF VARCHAR(45) NOT NULL DEFAULT '' AFTER PROGRAM_LINK");
@@ -373,7 +373,7 @@ public class MySqlConnector {
 
             String publicLink = rs.getString("PROGRAM_LINK");
             if (publicLink == null || publicLink.isEmpty()) {
-                publicLink = "http://" + ServerSettings.AUTH_REDIRECT + "/?publicLink=" + programId;
+                publicLink = "http://" + ApplicationSettings.AUTH_REDIRECT + "/?publicLink=" + programId;
                 st = connection.prepareStatement("UPDATE programs  SET PROGRAM_LINK=? WHERE PROGRAM_ID=?");
                 st.setString(1, publicLink);
                 st.setString(2, programId);

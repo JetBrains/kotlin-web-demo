@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.*;
@@ -76,7 +76,7 @@ public class Statistics {
     private static Statistics instance = new Statistics();
 
     private Statistics() {
-        File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + "counter.txt");
+        File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + "counter.txt");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -131,7 +131,7 @@ public class Statistics {
     }
 
     public boolean isNecessaryToUpdateStatistics() {
-        File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + "statistics.xml");
+        File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + "statistics.xml");
         return (System.currentTimeMillis() - file.lastModified()) > MILLIS_PER_HOUR;
     }
 
@@ -278,7 +278,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
     }
 
     private String getUpdateTimeForStatistics() {
-        File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + "statistics.xml");
+        File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + "statistics.xml");
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(file.lastModified());
         return ResponseUtils.getDate(c) + " "
@@ -302,7 +302,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
     }
 
     private void writeStatisticsInFile() {
-        File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + "statistics.xml");
+        File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + "statistics.xml");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -343,7 +343,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
     }
 
     private void readStatisticsFromFile() {
-        File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + "statistics.xml");
+        File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + "statistics.xml");
         if (!file.exists()) {
             writeStatisticsInFile();
         }
@@ -380,7 +380,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
     }
 
     private static void writeToCounterFile() {
-        File file = new File(ServerSettings.STATISTICS_ROOT + File.separator + "counter.txt");
+        File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + "counter.txt");
         try {
             FileWriter writer = new FileWriter(file);
             writer.write(URLDecoder.decode(String.valueOf(NUMBER_OF_USERS), "UTF-8"));
@@ -637,7 +637,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
     private File generateValidXmlFileForExceptions(File file) {
         File ex;
         try {
-            ex = new File(ServerSettings.OUTPUT_DIRECTORY + File.separator + "tmp.log" + new Random().nextInt());
+            ex = new File(ApplicationSettings.OUTPUT_DIRECTORY + File.separator + "tmp.log" + new Random().nextInt());
             ex.createNewFile();
             if (!ex.exists()) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new FileNotFoundException("Cannot create tmp file"),

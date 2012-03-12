@@ -22,9 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesLoader;
-import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.responseHelpers.*;
-import org.jetbrains.webdemo.server.ServerSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 
@@ -63,12 +61,6 @@ public class HttpSession {
             String param = request.getRequestURI() + "?" + request.getQueryString();
 
             ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
-
-            //FOR TEST ONLY
-            /*if (parameters.compareType("testConnection")) {
-                sendTestConnection();
-                return;
-            }*/
 
             if (parameters.compareType("run")) {
                 sendExecutorResult();
@@ -198,49 +190,6 @@ public class HttpSession {
         ExamplesLoader loader = new ExamplesLoader();
         writeResponse(loader.getResultByNameAndHead(parameters.getArgs()), HttpServletResponse.SC_OK);
 
-    }
-
-    //FOR TEST ONLY
-    private void sendTestConnection() {
-        if (parameters.getArgs().contains("stopTest=true")) {
-            try {
-                String response = getPostDataFromRequest().text;
-                File file = new File(ServerSettings.TEST_CONNECTION_OUTPUT + File.separator + "testConnection" + System.nanoTime() + ".csv");
-                file.createNewFile();
-                FileWriter writer = new FileWriter(file);
-                writer.write(response);
-                writer.close();
-            } catch (IOException e) {
-
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(e);
-            }
-
-            writeResponse("Response sended", HttpServletResponse.SC_OK);
-        } else {
-            StringBuilder responseStr = new StringBuilder();
-            PrintWriter writer = null;
-            String path = "/testConnection.html";
-            InputStream is = ServerHandler.class.getResourceAsStream(path);
-            try {
-                responseStr.append(ResponseUtils.readData(is));
-            } catch (IOException e) {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error("Cannot read data from file", e);
-                writeResponse("Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                return;
-            } finally {
-                close(is);
-            }
-
-            try {
-                response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
-                writer = response.getWriter();
-                writer.write(responseStr.toString());
-            } catch (IOException e) {
-                //This is an exception we can't send data to client
-            } finally {
-                close(writer);
-            }
-        }
     }
 
     private void setGlobalVariables(@Nullable String text) {

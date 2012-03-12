@@ -21,7 +21,7 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.jet.compiler.CompileEnvironment;
 import org.jetbrains.jet.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
@@ -82,15 +82,15 @@ public class ServerInitializer extends Initializer {
     public boolean initializeKotlinRuntime() {
         final File unpackedRuntimePath = getUnpackedRuntimePath();
         if (unpackedRuntimePath != null) {
-            ServerSettings.PATH_TO_KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
-            ErrorWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
+            ApplicationSettings.KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
+            ErrorWriter.writeInfoToConsole("Kotlin Runtime library found at " + ApplicationSettings.KOTLIN_LIB);
             environment.addToClasspath(unpackedRuntimePath);
         } else {
             final File runtimeJarPath = getRuntimeJarPath();
             if (runtimeJarPath != null && runtimeJarPath.exists()) {
                 environment.addToClasspath(runtimeJarPath);
-                ServerSettings.PATH_TO_KOTLIN_LIB = runtimeJarPath.getAbsolutePath();
-                ErrorWriter.writeInfoToConsole("Kotlin Runtime library found at " + ServerSettings.PATH_TO_KOTLIN_LIB);
+                ApplicationSettings.KOTLIN_LIB = runtimeJarPath.getAbsolutePath();
+                ErrorWriter.writeInfoToConsole("Kotlin Runtime library found at " + ApplicationSettings.KOTLIN_LIB);
             } else {
                 return false;
             }
@@ -134,12 +134,12 @@ public class ServerInitializer extends Initializer {
     @Nullable
     private File findRtJar() {
         File rtJar;
-        if (!ServerSettings.RT_JAR.equals("")) {
-            rtJar = new File(ServerSettings.RT_JAR);
+        if (!ApplicationSettings.RT_JAR.equals("")) {
+            rtJar = new File(ApplicationSettings.RT_JAR);
         } else {
             rtJar = CompileEnvironment.findRtJar();
-            /*String java_home = ServerSettings.JAVA_HOME;
-            ErrorWriterOnServer.LOG_FOR_INFO.info("java_home " + ServerSettings.JAVA_HOME + " " + java_home);
+            /*String java_home = ApplicationSettings.JAVA_HOME;
+            ErrorWriterOnServer.LOG_FOR_INFO.info("java_home " + ApplicationSettings.JAVA_HOME + " " + java_home);
             if (java_home != null) {
                 rtJar = findRtJar(java_home);
                 if (rtJar == null) {
@@ -153,10 +153,10 @@ public class ServerInitializer extends Initializer {
             }*/
         }
         if ((rtJar == null || !rtJar.exists())) {
-            if (ServerSettings.JAVA_HOME == null) {
+            if (ApplicationSettings.JAVA_HOME == null) {
                 ErrorWriter.writeInfoToConsole("You can set java_home variable at config.properties file.");
             } else {
-                ErrorWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + ServerSettings.JAVA_HOME + " or path to rt.jar is incorrect " + ServerSettings.RT_JAR);
+                ErrorWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + ApplicationSettings.JAVA_HOME + " or path to rt.jar is incorrect " + ApplicationSettings.RT_JAR);
             }
             return null;
         }

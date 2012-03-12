@@ -20,7 +20,7 @@ import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
 
@@ -34,7 +34,7 @@ import java.io.IOException;
 public class HighlightExamplesTest extends BaseTest {
 
     public void testExamples() throws IOException {
-        File rootDir = new File(ServerSettings.EXAMPLES_ROOT);
+        File rootDir = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
         if (!rootDir.exists() || !rootDir.isDirectory()) {
             return;
         }

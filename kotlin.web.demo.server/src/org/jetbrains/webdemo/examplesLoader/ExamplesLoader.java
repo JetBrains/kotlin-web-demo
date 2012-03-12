@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.examplesLoader;
 import com.intellij.openapi.util.Pair;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 
@@ -71,7 +71,7 @@ public class ExamplesLoader {
         }
         String fileName = fileObj.get("text");
         folderName = folderName.replaceAll("_", " ");
-        File example = new File(ServerSettings.EXAMPLES_ROOT + File.separator + folderName + File.separator + fileName + ".kt");
+        File example = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName + File.separator + fileName + ".kt");
         if (!example.exists()) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Cannot find an example"),

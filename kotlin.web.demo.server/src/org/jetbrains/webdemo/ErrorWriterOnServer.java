@@ -20,7 +20,7 @@ import com.intellij.diagnostic.errordialog.Attachment;
 import com.intellij.errorreport.bean.ErrorBean;
 import com.intellij.errorreport.itn.ITNProxy;
 import org.apache.log4j.Logger;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -58,7 +58,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
 //        bean.addProgramText(description);
         bean.setPluginName("Kotlin Web Demo");
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
-        if (ServerSettings.IS_TEST_VERSION.equals("false")) {
+        if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
             //sendViaITNProxy(bean);
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, description));
         } else {
@@ -73,7 +73,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
         bean.setPluginName("Kotlin Web Demo");
 
-        if (ServerSettings.IS_TEST_VERSION.equals("false")) {
+        if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
             //sendViaITNProxy(bean);
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, message, stackTrace, description));
         } else {
@@ -87,7 +87,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
         String login = "idea_anonymous";
         String password = "guest";
         try {
-            String result = ITNProxy.postNewThread(login, password, error, String.valueOf(System.currentTimeMillis()), ServerSettings.KOTLIN_VERSION);
+            String result = ITNProxy.postNewThread(login, password, error, String.valueOf(System.currentTimeMillis()), ApplicationSettings.KOTLIN_VERSION);
             System.out.println(result);
             if ("unauthorized".equals(result) || result.startsWith("update ") || result.startsWith("message ")) {
                 LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EA", result, ""));

@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.examplesLoader;
 import com.intellij.openapi.util.Pair;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.*;
@@ -107,7 +107,7 @@ public class ExamplesList {
     }
 
     private void generateList() {
-        File root = new File(ServerSettings.EXAMPLES_ROOT);
+        File root = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
         if (root.exists()) {
             File order = checkIsOrderTxtExists(root);
             if (order != null) {

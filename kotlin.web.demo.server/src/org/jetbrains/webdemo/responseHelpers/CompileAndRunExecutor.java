@@ -30,7 +30,7 @@ import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 
@@ -68,7 +68,7 @@ public class CompileAndRunExecutor {
             errors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
-            return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
+            return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
         }
 
         if (errors.isEmpty() || isOnlyWarnings(errors)) {
@@ -85,7 +85,7 @@ public class CompileAndRunExecutor {
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
 //                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
-                return ResponseUtils.getErrorWithStackTraceInJson(ServerSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
+                return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
             ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                     "COMPILE correctNamespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
@@ -96,14 +96,14 @@ public class CompileAndRunExecutor {
 
             sessionInfo.getTimeManager().saveCurrentTime();
             List<String> files = factory.files();
-            File outputDir = new File(ServerSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + new Random().nextInt());
+            File outputDir = new File(ApplicationSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + new Random().nextInt());
             boolean isOutputExists = true;
             if (!outputDir.exists()) {
                 isOutputExists = outputDir.mkdirs();
             }
             for (String file : files) {
-//                File outputDir = new File(ServerSettings.OUTPUT_DIRECTORY);
-//                ServerSettings.OUTPUT_DIRECTORY = outputDir.getAbsolutePath();
+//                File outputDir = new File(ApplicationSettings.OUTPUT_DIRECTORY);
+//                ApplicationSettings.OUTPUT_DIRECTORY = outputDir.getAbsolutePath();
                 if (isOutputExists) {
                     File target = new File(outputDir, file);
                     try {

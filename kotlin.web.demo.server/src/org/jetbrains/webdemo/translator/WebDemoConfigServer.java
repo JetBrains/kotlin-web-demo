@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.utils.JetFileUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -54,7 +54,7 @@ public final class WebDemoConfigServer extends Config {
         for (String libFileName : LIB_FILE_NAMES) {
             JetFile file = null;
             @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
-            File libFile = new File(ServerSettings.WEBAPP_ROOT_DIR + File.separator + "js" + File.separator + libFileName);
+            File libFile = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "js" + File.separator + libFileName);
 //            InputStream stream = WebDemoConfigServer.class.getResourceAsStream(libFileName);
             try {
                 String text = FileUtil.loadFile(libFile);

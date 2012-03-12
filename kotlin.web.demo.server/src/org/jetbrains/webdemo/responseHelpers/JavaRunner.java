@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 
@@ -81,9 +81,9 @@ public class JavaRunner {
                 finalProcess.destroy();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "Timeout exception."));
-                errStream.append("Program was terminated after " + Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
+                errStream.append("Program was terminated after " + Integer.parseInt(ApplicationSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
             }
-        }, Integer.parseInt(ServerSettings.TIMEOUT_FOR_EXECUTION));
+        }, Integer.parseInt(ApplicationSettings.TIMEOUT_FOR_EXECUTION));
 
         final BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
         final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
@@ -137,7 +137,7 @@ public class JavaRunner {
             if (outStream.length() > 0) {
                 if (outStream.indexOf("An error report file with more information is saved as:") != -1) {
                     outStream.delete(0, outStream.length());
-                    errStream.append(ServerSettings.KOTLIN_ERROR_MESSAGE);
+                    errStream.append(ApplicationSettings.KOTLIN_ERROR_MESSAGE);
                     String linkForLog = getLinkForLog(outStream.toString());
                 }
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("EMPTY MESSAGE", outStream.toString().replace("<br/>", "\n"),
@@ -159,7 +159,7 @@ public class JavaRunner {
 
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("type", "err");
-                map.put("text", ServerSettings.KOTLIN_ERROR_MESSAGE);
+                map.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
                 jsonArray.put(map);
                 mapErr.put("type", "out");
             } else {
@@ -326,9 +326,9 @@ public class JavaRunner {
     }
 
     private String generateCommandString(String pathToRootOut) {
-        StringBuilder builder = new StringBuilder(ServerSettings.JAVA_EXECUTE);
+        StringBuilder builder = new StringBuilder(ApplicationSettings.JAVA_EXECUTE);
         builder.append(" ");
-        /*StringBuilder builder = new StringBuilder(ServerSettings.JAVA_HOME);
+        /*StringBuilder builder = new StringBuilder(ApplicationSettings.JAVA_HOME);
         builder.append(File.separator);
         builder.append("bin");
         builder.append(File.separator);
@@ -336,7 +336,7 @@ public class JavaRunner {
         builder.append("-classpath ");
         builder.append(pathToRootOut);
         builder.append(File.pathSeparator);
-        builder.append(ServerSettings.PATH_TO_KOTLIN_LIB);
+        builder.append(ApplicationSettings.KOTLIN_LIB);
         builder.append(" ");
         builder.append("-Djava.security.manager ");
         builder.append(modifyClassNameFromPath(files.get(0)));

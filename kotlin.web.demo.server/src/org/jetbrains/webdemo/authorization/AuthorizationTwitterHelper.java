@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.authorization;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.scribe.builder.ServiceBuilder;
@@ -50,7 +50,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
                     .provider(TwitterApi.class)
                     .apiKey("g0dAeSZpnxTHxRKV2UZFGg")
                     .apiSecret("NSfUf8o3BhyT96U6hcCarWIUEwz6Le4FY6Em7WBPtuw")
-                    .callback("http://" + ServerSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "twitter"))
+                    .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "twitter"))
                     .build();
             requestToken = twitterService.getRequestToken();
             return twitterService.getAuthorizationUrl(requestToken);

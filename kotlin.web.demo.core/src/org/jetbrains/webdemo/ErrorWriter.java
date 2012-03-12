@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo;
 
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -55,7 +55,7 @@ public abstract class ErrorWriter {
         StringBuilder builder = new StringBuilder();
         builder.append("\n<error>");
         builder.append("\n<version>");
-        builder.append(ServerSettings.KOTLIN_VERSION);
+        builder.append(ApplicationSettings.KOTLIN_VERSION);
         builder.append("</version>");
         builder.append("\n<type>");
         builder.append(ResponseUtils.escapeString(typeOfRequest));
@@ -100,7 +100,7 @@ public abstract class ErrorWriter {
         StringBuilder builder = new StringBuilder();
         builder.append("\n<error>");
         builder.append("\n<version>");
-        builder.append(ServerSettings.KOTLIN_VERSION);
+        builder.append(ApplicationSettings.KOTLIN_VERSION);
         builder.append("</version>");
         builder.append("\n<type>");
         builder.append(ResponseUtils.escapeString(typeOfRequest));

@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoConfigServer;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
@@ -41,12 +41,12 @@ public class BaseTest extends TestCase {
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
         Initializer.INITIALIZER = ServerInitializer.getInstance();
 
-//        ServerSettings.JAVA_HOME = "c:\\Program Files\\Java\\jdk1.6.0_30\\";
-        ServerSettings.JAVA_EXECUTE = "java";
+//        ApplicationSettings.JAVA_HOME = "c:\\Program Files\\Java\\jdk1.6.0_30\\";
+        ApplicationSettings.JAVA_EXECUTE = "java";
 
-        ServerSettings.WEBAPP_ROOT_DIR = "kotlin.web.demo.core/resources";
+        ApplicationSettings.WEBAPP_ROOT_DIRECTORY = "kotlin.web.demo.core/resources";
 
-        ServerSettings.EXAMPLES_ROOT = "examples/";
+        ApplicationSettings.EXAMPLES_DIRECTORY = "examples/";
         boolean initEnvironment = ServerInitializer.getInstance().initJavaCoreEnvironment();
         assertEquals("Initialisation of java core environment failed, server didn't start.",
                 true, initEnvironment);

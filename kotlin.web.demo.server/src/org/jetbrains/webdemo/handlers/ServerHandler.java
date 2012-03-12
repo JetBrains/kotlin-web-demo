@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.authorization.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.server.ServerSettings;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.examplesLoader.ExamplesLoader;
@@ -181,17 +181,17 @@ public class ServerHandler {
                     request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
                 }
                 try {
-                    response.sendRedirect("http://" + ServerSettings.AUTH_REDIRECT);
+                    response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
                 } catch (IOException e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", "cannot redirect to http://" + ServerSettings.AUTH_REDIRECT);
+                            "UNKNOWN", "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
                 }
             } else if (parameters.getArgs().contains("denied=")) {
                 try {
-                    response.sendRedirect("http://" + ServerSettings.AUTH_REDIRECT);
+                    response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
                 } catch (IOException e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", "cannot redirect to http://" + ServerSettings.AUTH_REDIRECT);
+                            "UNKNOWN", "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
                 }
             } else {
                 String verifyKey = helper.authorize();
