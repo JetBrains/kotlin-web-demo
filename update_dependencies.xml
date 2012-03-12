@@ -61,11 +61,11 @@
             <!--<loadfile srcfile="${dependencies.dir}/build.txt" property="kotlin.build.number"/>-->
             <replaceregexp file="kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ApplicationSettings.java"
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
-                           replace="KOTLIN_VERSION = &#34;${kotlin.build.number}&#34;"
+                           replace="KOTLIN_VERSION = &#34;${kotlin.version}&#34;"
                            byline="true"/>
             <replaceregexp file="kotlin.web.demo.server/static/components/common.js"
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
-                           replace="KOTLIN_VERSION = &#34;${kotlin.build.number}&#34;"
+                           replace="KOTLIN_VERSION = &#34;${kotlin.version}&#34;"
                            byline="true"/>
         </sequential>
     </macrodef>
@@ -75,10 +75,10 @@
             <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
             dest="${dependencies.dir}/build.txt"/>
             <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
-            <!--<replaceregexp file="kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ApplicationSettings.java"
+            <replaceregexp file="kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ApplicationSettings.java"
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
-                           replace="KOTLIN_VERSION = &#34;${kotlin.build.number}&#34;"
-                           byline="true"/>-->
+                           replace="KOTLIN_VERSION = &#34;${version}&#34;"
+                           byline="true"/>
             <replaceregexp file="kotlin.web.demo.server/static/components/common.js"
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
                            replace="KOTLIN_VERSION = &#34;${version}&#34;"
