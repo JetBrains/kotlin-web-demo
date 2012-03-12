@@ -21,6 +21,10 @@ import org.jetbrains.web.demo.test.examples.HighlightExamplesTest;
 import org.jetbrains.web.demo.test.examples.RunExamplesTest;
 import org.jetbrains.web.demo.test.highlighting.HighlightingTest;
 import org.jetbrains.web.demo.test.run.RunTest;
+import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.examplesLoader.ExamplesList;
+import org.jetbrains.webdemo.help.HelpLoader;
+import org.jetbrains.webdemo.server.ServerSettings;
 
 /**
  * @author Natalia.Ukhorskaya

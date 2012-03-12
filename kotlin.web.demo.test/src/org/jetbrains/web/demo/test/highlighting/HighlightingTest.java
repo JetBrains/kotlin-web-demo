@@ -40,7 +40,17 @@ public class HighlightingTest extends BaseTest {
                 "\"y\":\"{line: 1, ch: 13}\"," +
                 "\"x\":\"{line: 1, ch: 12}\"}]";
         compareResponseAndExpectedResult(fileName, expectedResult, "java");
-        expectedResult = "[{\"titleName\":\"Unresolved reference: System\"," +
+        /*expectedResult = "[{\"titleName\":\"Unresolved reference: System\"," +
+                "\"className\":\"ERROR\"," +
+                "\"severity\":\"ERROR\"," +
+                "\"y\":\"{line: 1, ch: 8}\"," +
+                "\"x\":\"{line: 1, ch: 2}\"}]";
+        compareResponseAndExpectedResult(fileName, expectedResult, "js");*/
+    }
+
+    public void test$errors$oneError$js() throws IOException, InterruptedException {
+        String fileName = TestUtils.getNameByTestName(this).substring(0, TestUtils.getNameByTestName(this).length() - 3) + ".kt";
+        String expectedResult = "[{\"titleName\":\"Unresolved reference: System\"," +
                 "\"className\":\"ERROR\"," +
                 "\"severity\":\"ERROR\"," +
                 "\"y\":\"{line: 1, ch: 8}\"," +
@@ -77,7 +87,6 @@ public class HighlightingTest extends BaseTest {
         sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         sessionInfo.setRunConfiguration(runConfiguration);
         JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
-
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
         String actualResult = responseForHighlighting.getResult();
 
