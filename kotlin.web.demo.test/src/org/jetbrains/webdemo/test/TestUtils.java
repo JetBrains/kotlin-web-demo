@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.jetbrains.web.demo.test;
+package org.jetbrains.webdemo.test;
 
-import com.google.common.io.Files;
 import junit.framework.TestCase;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -25,7 +24,6 @@ import org.jetbrains.webdemo.server.ServerSettings;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
 
 /**
  * @author Natalia.Ukhorskaya

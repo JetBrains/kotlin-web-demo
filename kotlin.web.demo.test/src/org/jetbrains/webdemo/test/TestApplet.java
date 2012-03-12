@@ -14,28 +14,13 @@
  * limitations under the License.
  */
 
-package org.jetbrains.web.demo.test;
+package org.jetbrains.webdemo.test;
 
-import com.sun.javaws.security.JavaWebStartSecurity;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import org.jetbrains.web.demo.test.completion.CompletionTest;
-import org.jetbrains.web.demo.test.examples.HighlightExamplesTest;
-import org.jetbrains.web.demo.test.examples.RunExamplesTest;
-import org.jetbrains.web.demo.test.highlighting.HighlightingTest;
-import org.jetbrains.web.demo.test.run.RunTest;
-import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
-import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.server.ServerSettings;
-import org.jetbrains.webdemo.session.SessionInfo;
-//import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
-import org.jetbrains.webdemo.translator.WebDemoConfigServer;
-import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
-import sun.applet.AppletSecurity;
 
 import java.io.IOException;
-import java.util.Random;
+
+//import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 
 /**
  * @author Natalia.Ukhorskaya

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.jetbrains.web.demo.test.run;
+package org.jetbrains.webdemo.test.run;
 
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
-import org.jetbrains.web.demo.test.BaseTest;
-import org.jetbrains.web.demo.test.TestUtils;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.responseHelpers.JsConverter;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.test.BaseTest;
+import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.IOException;
 
