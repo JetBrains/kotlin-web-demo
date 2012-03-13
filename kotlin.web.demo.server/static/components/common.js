@@ -48,7 +48,7 @@ var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
 var IE_SUPPORT = "Sorry, Internet Explorer is currently unsupported.";
 
-var KOTLIN_VERSION = "0.1.1769";
+var KOTLIN_VERSION = "0.1.1778";
 
 var sessionId = -1;
 var userName = "";
