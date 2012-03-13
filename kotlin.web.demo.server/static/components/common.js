@@ -48,7 +48,8 @@ var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
 var IE_SUPPORT = "Sorry, Internet Explorer is currently unsupported.";
 
-var KOTLIN_VERSION = "0.1.1778";
+var KOTLIN_VERSION = "0.1.1788";
+var WEB_DEMO_VERSION = "0.1.1788";
 
 var sessionId = -1;
 var userName = "";
@@ -279,7 +280,7 @@ function setKotlinVersion() {
     });
 
     $("#kotlinVersionTop").html("(" + KOTLIN_VERSION + ")");
-    $("#kotlinVersion").html(KOTLIN_VERSION);
+    $("#kotlinVersion").html(WEB_DEMO_VERSION);
 }
 
 function setStatusBarMessage(message) {
