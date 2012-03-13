@@ -39,7 +39,6 @@ import java.util.List;
  */
 
 public class HttpSession {
-    //    private static Logger LOG;
     protected Project currentProject;
     protected PsiFile currentPsiFile;
 
@@ -63,26 +62,13 @@ public class HttpSession {
             ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
             if (parameters.compareType("run")) {
-                sendExecutorResult();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                sendExecutorResult();
             } else if (parameters.compareType("writeLog")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
-                String type = parameters.getArgs();
-                if (type.equals("info")) {
-                    String tmp = getPostDataFromRequest(true).text;
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(tmp);
-                } else if (type.equals("errorInKotlin")) {
-                    String tmp = getPostDataFromRequest(true).text;
-                    List<String> list = ErrorWriter.parseException(tmp);
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
-                } else {
-                    String tmp = getPostDataFromRequest(true).text;
-                    List<String> list = ErrorWriter.parseException(tmp);
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
-                }
-                writeResponse("Data sent", HttpServletResponse.SC_OK);
+                sendWriteLogResult();
             } else if (parameters.compareType("saveProgram")) {
-                sendSaveProgramResult(sessionInfo);
+                sendSaveProgramResult();
             } else if (parameters.compareType("loadProgram")) {
                 sendLoadProgramResult();
             } else if (parameters.compareType("deleteProgram")) {
@@ -93,10 +79,6 @@ public class HttpSession {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendCompletionResult();
-            } else if (parameters.compareType("convertToKotlin")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
-                sendConvertToKotlinResult();
             } else if (parameters.compareType("loadExample")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
@@ -117,6 +99,23 @@ public class HttpSession {
             }
             writeResponse("Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void sendWriteLogResult() {
+        String type = parameters.getArgs();
+        if (type.equals("info")) {
+            String tmp = getPostDataFromRequest(true).text;
+            ErrorWriterOnServer.LOG_FOR_INFO.info(tmp);
+        } else if (type.equals("errorInKotlin")) {
+            String tmp = getPostDataFromRequest(true).text;
+            List<String> list = ErrorWriter.parseException(tmp);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
+        } else {
+            String tmp = getPostDataFromRequest(true).text;
+            List<String> list = ErrorWriter.parseException(tmp);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
+        }
+        writeResponse("Data sent", HttpServletResponse.SC_OK);
     }
 
     private void sendGeneratePublicLinkResult() {
@@ -150,7 +149,7 @@ public class HttpSession {
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
-    private void sendSaveProgramResult(SessionInfo sessionInfo) {
+    private void sendSaveProgramResult() {
         String result;
         if (parameters.getArgs().startsWith("id=")) {
             String url = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");
@@ -181,11 +180,6 @@ public class HttpSession {
         }
     }
 
-    private void sendConvertToKotlinResult() {
-        PostData data = getPostDataFromRequest(true);
-        //writeResponse(new JavaConverterRunner(data.text, data.arguments, sessionInfo).getResult(), HttpServletResponse.SC_OK);
-    }
-
     private void sendExampleContent() {
         ExamplesLoader loader = new ExamplesLoader();
         writeResponse(loader.getResultByNameAndHead(parameters.getArgs()), HttpServletResponse.SC_OK);
@@ -196,7 +190,7 @@ public class HttpSession {
         currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
         if (text == null) {
             text = "fun main(args : Array<String>) {\n" +
-                    "  System.out?.println(\"Hello, world!\")\n" +
+                    "  println(\"Hello, world!\")\n" +
                     "}";
 
         }

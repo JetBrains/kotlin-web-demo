@@ -48,15 +48,38 @@ import java.util.*;
 public class ErrorAnalyzer {
     private final PsiFile currentPsiFile;
     private final Document currentDocument;
-    private final Project currentProject;
 
     private final SessionInfo sessionInfo;
 
     public ErrorAnalyzer(PsiFile currentPsiFile, SessionInfo info) {
         this.currentPsiFile = currentPsiFile;
-        this.currentProject = currentPsiFile.getProject();
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
         this.sessionInfo = info;
+    }
+
+    public List<ErrorDescriptor> getAllErrors() {
+        final List<ErrorDescriptor> errors = getErrorsByVisitor();
+        sessionInfo.getTimeManager().saveCurrentTime();
+        BindingContext bindingContext;
+        try {
+            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
+                bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
+                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+            } else {
+                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
+            }
+
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
+            throw new KotlinCoreException(e);
+        }
+        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
+                "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+        ErrorWriter.ERROR_WRITER.writeInfo(info);
+        if (bindingContext != null) {
+            gerErrorsFromBindingContext(bindingContext, errors);
+        }
+        return errors;
     }
 
     private void gerErrorsFromBindingContext(BindingContext bindingContext, List<ErrorDescriptor> errors) {
@@ -81,7 +104,8 @@ public class ErrorAnalyzer {
                 }
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
         }
 
         Collections.sort(errors, new Comparator<ErrorDescriptor>() {
@@ -103,32 +127,6 @@ public class ErrorAnalyzer {
                 return -1;
             }
         });
-    }
-
-    public List<ErrorDescriptor> getAllErrors() {
-
-        final List<ErrorDescriptor> errors = getErrorsByVisitor();
-        sessionInfo.getTimeManager().saveCurrentTime();
-        BindingContext bindingContext;
-        try {
-            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
-                bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
-            } else {
-                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
-            }
-
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
-            throw new KotlinCoreException(e);
-        }
-        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
-                "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
-        ErrorWriter.ERROR_WRITER.writeInfo(info);
-        if (bindingContext != null) {
-            gerErrorsFromBindingContext(bindingContext, errors);
-        }
-        return errors;
     }
 
     private List<ErrorDescriptor> getErrorsByVisitor() {

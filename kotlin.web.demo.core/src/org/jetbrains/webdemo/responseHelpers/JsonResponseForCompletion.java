@@ -69,25 +69,26 @@ public class JsonResponseForCompletion {
     }
 
     public String getResult() {
-        addExpressionAtCaret();
-       /* int i = 0;
+        try {
+            addExpressionAtCaret();
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.COMPLETE.name(), currentPsiFile.getText() + "  " + lineNumber + " " + charNumber);
+            return "[]";
+        }
+        /* int i = 0;
 
         if (i == 0) {
             throw new NullPointerException("Test Attachments");
         }*/
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
-        BindingContext bindingContext1;
         try {
-           if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
+            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
-               bindingContext1 = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                       (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
             } else {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
-               bindingContext1 = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                       (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
@@ -97,13 +98,9 @@ public class JsonResponseForCompletion {
         String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
 
-        if (bindingContext == null){
+        if (bindingContext == null) {
             return "[]";
         }
-        if (bindingContext1 == null){
-            return "[]";
-        }
-
         PsiElement element = getExpressionForScope();
         if (element == null) {
             return "[]";
@@ -128,8 +125,6 @@ public class JsonResponseForCompletion {
                     resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, receiverExpression);
 
                     if (expressionType != null && resolutionScope != null) {
-                        //                    descriptors = resolutionScope.getAllDescriptors();
-                        //                    descriptors.addAll(expressionType.getMemberScope().getAllDescriptors());
                         descriptors = expressionType.getMemberScope().getAllDescriptors();
                     }
                 } else {

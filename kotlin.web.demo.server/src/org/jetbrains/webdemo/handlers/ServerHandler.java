@@ -47,10 +47,6 @@ import java.util.Calendar;
 
 public class ServerHandler {
 
-    public ServerHandler() {
-
-    }
-
 
     public void handle(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
@@ -79,25 +75,8 @@ public class ServerHandler {
                 sendUserInformation(request, response, sessionInfo);
             } else if (parameters.compareType("getSessionId")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
-                String id = sessionInfo.getId();
-                PrintWriter out = null;
-                try {
-                    out = response.getWriter();
-                    JSONArray array = new JSONArray();
-                    array.put(id);
-                    if (sessionInfo.getUserInfo().isLogin()) {
-                        array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
-                    }
-                    out.write(array.toString());
-                } catch (Throwable e) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", param);
-                } finally {
-                    close(out);
-                }
-            } /*else if (parameters.compareType("sendExceptionsToEA")) {
-                Statistics.getInstance().sendErrorsToErrorsAnalyzer();
-            } */else if (parameters.compareType("authorization")) {
+                sendSessionId(response, sessionInfo, param);
+            } else if (parameters.compareType("authorization")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
                 sendAuthorizationResult(request, response, parameters, sessionInfo);
             } else if (parameters.compareType("updateExamples")) {
@@ -156,6 +135,25 @@ public class ServerHandler {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", param);
             writeResponse(response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendSessionId(HttpServletResponse response, SessionInfo sessionInfo, String param) {
+        String id = sessionInfo.getId();
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            JSONArray array = new JSONArray();
+            array.put(id);
+            if (sessionInfo.getUserInfo().isLogin()) {
+                array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
+            }
+            out.write(array.toString());
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    "UNKNOWN", param);
+        } finally {
+            close(out);
         }
     }
 
@@ -402,7 +400,7 @@ public class ServerHandler {
             writer.write(responseBody);
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    "UNKNOWN","null");
+                    "UNKNOWN", "null");
         } finally {
             close(writer);
         }
