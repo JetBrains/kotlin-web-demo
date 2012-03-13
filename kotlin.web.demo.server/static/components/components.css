@@ -224,6 +224,12 @@ body {
     vertical-align: top;
 }
 
+.problemsViewWarning img, .problemsViewWarningNeverUsed img, .problemsViewError img {
+    margin-top: 0px;
+    margin-bottom: -3px;
+    padding-right: 5px;
+}
+
 .problemsViewWarning {
     margin: 0;
     vertical-align: top;
@@ -262,13 +268,13 @@ body {
 }
 
 .ERRORgutter {
-    background: url(/static/icons/error.png) no-repeat 95% 95% !important;
+    background: url(/static/icons/errorGutter.png) no-repeat 95% 95% !important;
     background-size: 13px;
     float: left;
 }
 
 .WARNINGgutter {
-    background: url(/static/icons/warning.png) no-repeat 95% 95% !important;
+    background: url(/static/icons/warningGutter.png) no-repeat 95% 95% !important;
     float: left;
 }
 
