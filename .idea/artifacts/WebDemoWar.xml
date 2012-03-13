@@ -9,18 +9,18 @@
           <element id="module-output" name="kotlin.web.demo.core" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="guava-r09" />
+          <element id="library" level="project" name="guava" />
           <element id="library" level="project" name="annotations" />
           <element id="library" level="project" name="intellij-core" />
           <element id="library" level="project" name="kotlin" />
           <element id="library" level="project" name="dartc" />
           <element id="library" level="project" name="json" />
           <element id="library" level="project" name="picocontainer" />
-          <element id="library" level="project" name="log4j-1.2.16" />
-          <element id="library" level="project" name="scribe-1.3.0" />
+          <element id="library" level="project" name="log4j" />
+          <element id="library" level="project" name="scribe" />
           <element id="library" level="project" name="commons-lang" />
           <element id="library" level="project" name="trove4j" />
-          <element id="library" level="project" name="asm-all-3.3.1" />
+          <element id="library" level="project" name="asm-all" />
           <element id="library" level="project" name="kotlin-plugin" />
           <element id="directory" name="alt">
             <element id="library" level="project" name="kotlin-jdk-headers" />
