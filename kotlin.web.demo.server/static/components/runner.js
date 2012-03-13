@@ -216,15 +216,15 @@ var Runner = (function () {
                     if (runConfiguration.mode == "canvas") {
                         $("#popupForCanvas").dialog("open");
                         /*$("#popupForCanvas").dialog({
-                            resize: function() {
-                                $("#popupForCanvas").html("");
-                                $("#popupForCanvas").append("<canvas width=\"" + $("#popupForCanvas").dialog("option", "width")
-                                    + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 50) + "\" id=\"mycanvas\"></canvas>");
-//                                $("#mycanvas")[0].width = $("#popupForCanvas").dialog("option", "width") - 100;
-//                                $("#mycanvas")[0].height = $("#popupForCanvas").dialog("option", "height") - 100;
-                                eval(data[0].text);
-                            }
-                        });*/
+                         resize: function() {
+                         $("#popupForCanvas").html("");
+                         $("#popupForCanvas").append("<canvas width=\"" + $("#popupForCanvas").dialog("option", "width")
+                         + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 50) + "\" id=\"mycanvas\"></canvas>");
+                         //                                $("#mycanvas")[0].width = $("#popupForCanvas").dialog("option", "width") - 100;
+                         //                                $("#mycanvas")[0].height = $("#popupForCanvas").dialog("option", "height") - 100;
+                         eval(data[0].text);
+                         }
+                         });*/
 
                     }
                     genData = eval(data[0].text);

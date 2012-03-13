@@ -166,7 +166,7 @@ function setSessionId() {
         context:document.body,
         type:"GET",
         dataType:"json",
-        timeout:5000,
+        timeout:10000,
         success:getSessionIdSuccess
     });
 

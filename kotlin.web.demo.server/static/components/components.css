@@ -225,7 +225,7 @@ body {
 }
 
 .problemsViewWarning img, .problemsViewWarningNeverUsed img, .problemsViewError img {
-    margin-top: 0px;
+    margin-top: 0;
     margin-bottom: -3px;
     padding-right: 5px;
 }
@@ -604,7 +604,7 @@ body {
 }
 
 .ui-accordion-content {
-    padding: 0px 5px 5px 5px !important;
+    padding: 0 5px 5px 5px !important;
 }
 
 .help {
@@ -642,7 +642,7 @@ body {
 }
 
 #centraltitle {
-    padding-left: 0px;
+    padding-left: 0;
     height: 26px;
 }
 
@@ -666,7 +666,7 @@ body {
 }
 
 .helpTitle {
-    padding: 5px 10px 0px 10px;
+    padding: 5px 10px 0 10px;
     margin: 0;
 }
 
@@ -733,8 +733,8 @@ body {
 }
 
 #myapplet {
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
 }
 
 #loader {
@@ -742,7 +742,7 @@ body {
     height: 100%;
     /*vertical-align: middle;*/
     text-align: center;
-    bottom: 0px;
+    bottom: 0;
     position: absolute;
     z-index: 1000;
     /*background: url(/images/ajax-loader.gif) top center no-repeat;*/
@@ -780,7 +780,7 @@ body {
 }
 
 #whatisitRunConf img {
-    margin-top: 0px;
+    margin-top: 0;
     float: left;
 }
 
@@ -797,7 +797,7 @@ body {
 }
 
 #whatisit img {
-    margin-top: 0px;
+    margin-top: 0;
     float: left;
 }
 
@@ -928,15 +928,15 @@ td#removeallguttersTd {
     left: 0.25em;
     right: 0.25em;
     bottom: 0.25em;
-    padding: 0em 0.2em 0.2em;
+    padding: 0 0.2em 0.2em;
 }
 
 #tabs .ui-tabs-nav li {
     border-top: none;
     border-bottom-width: 1px !important;
-    border-radius: 0px 0px 4px 4px;
-    -moz-border-radius: 0px 0px 4px 4px;
-    -webkit-border-radius: 0px 0px 4px 4px;
+    border-radius: 0 0 4px 4px;
+    -moz-border-radius: 0 0 4px 4px;
+    -webkit-border-radius: 0 0 4px 4px;
 }
 
 #tabs .ui-tabs-nav li.ui-tabs-selected {
@@ -980,12 +980,12 @@ td#removeallguttersTd {
 }
 
 #loginInPopup a {
-    padding: 0 10px 0 0px;
+    padding: 0 10px 0 0;
     display: inline-block;
 }
 
 #login a {
-    padding: 0 0px 0 10px;
+    padding: 0 0 0 10px;
     float: right;
 }
 
@@ -1091,8 +1091,8 @@ div#toolbox, div.toolbox {
     background: #eee bottom left repeat-x;
     /*height: 30px;*/
     /*position: fixed;*/
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
     width: 100%;
     /*border-top: 10px solid #e5e5e5;*/
 }
@@ -1198,8 +1198,8 @@ div.fixedpage {
     display: inline-block;
     width: 75% !important;
     word-wrap: break-word;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 div#myprogramscontent p a, div#myprogramscontent p a:hover {

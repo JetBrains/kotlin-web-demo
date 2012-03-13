@@ -1453,9 +1453,42 @@ var CodeMirror = (function () {
         }
 
         function indentSelected(mode) {
-            if (posEq(sel.from, sel.to)) return indentLine(sel.from.line, mode);
+            if (posEq(sel.from, sel.to)) {
+                if (!checkIfSimpleTabPressed()) {
+                     return addTabInText();
+                } else {
+                    return indentLine(sel.from.line, mode);
+                }
+            }
             var e = sel.to.line - (sel.to.ch ? 0 : 1);
             for (var i = sel.from.line; i <= e; ++i) indentLine(i, mode);
+        }
+
+        function addTabInText() {
+            var n = sel.from.line;
+            var line = getLine(n).text;
+            var cursor = sel.from.ch;
+            var tab = "";
+            for (var i = 0; i < options.tabSize; i++) {
+               tab += " ";
+            }
+            var resultLine = line.substr(0, cursor) + tab + line.substr(cursor);
+            replaceRange(resultLine, {line:n, ch:0}, {line:n, ch:line.length});
+            setCursor(n, cursor + options.tabSize, true);
+
+        }
+
+        function checkIfSimpleTabPressed() {
+            var line = getLine(sel.from.line).text;
+            var cursor = sel.from.ch;
+            var i = 0;
+            while (i < cursor) {
+                if (line.charAt(i) != ' ') {
+                    return false;
+                }
+                i++;
+            }
+            return true;
         }
 
         function indentLine(n, how) {
