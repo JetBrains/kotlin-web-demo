@@ -48,7 +48,7 @@ public class JavaRunner {
 
     public JavaRunner(List<String> files, String arguments, JSONArray array, String text, SessionInfo info) {
         this.files = files;
-        this.arguments = arguments;
+        this.arguments = arguments.replaceAll("[\\\"]", "\"");
         this.jsonArray = array;
         this.textFromFile = text;
         this.sessionInfo = info;
@@ -64,7 +64,7 @@ public class JavaRunner {
             process.getOutputStream().close();
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), commandString.toString());
+                    sessionInfo.getType(), Arrays.toString(commandString));
             StringWriter stackTrace = new StringWriter();
             e.printStackTrace(new PrintWriter(stackTrace));
             return ResponseUtils.getErrorWithStackTraceInJson("Impossible to run your program: IOException handled until execution", stackTrace.toString());
@@ -132,7 +132,7 @@ public class JavaRunner {
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                 sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
                 + " timeout=" + isTimeoutException
-                + " commandString=" + commandString));
+                + " commandString=" + Arrays.toString(commandString)));
 
         if ((exitValue == 1) && !isTimeoutException) {
             if (outStream.length() > 0) {
@@ -338,6 +338,8 @@ public class JavaRunner {
         System.arraycopy(argArr, 0, builder, 5, argArr.length);
         return builder;
     }
+
+
 
     private String modifyArguments(String arguments) {
         return StringEscapeUtils.unescapeJavaScript(arguments);
