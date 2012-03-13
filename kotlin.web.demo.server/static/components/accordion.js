@@ -235,7 +235,7 @@ var Accordion = (function () {
                         setStatusBarMessage("Saved as: " + name + ".");
                         $("div#myprogramscontent").append(createProgramListElement(createExampleUrl(id, "My Programs"), name));
                         $("a#My_Programs").click();
-                        $("problems").html("");
+                        $("#problems").html("");
                         setConsoleMessage("");
                         removeStyles();
                         $("a[id='" + lastSelectedExample + "']").attr("class", "");

@@ -140,26 +140,7 @@ function checkIfThereAreErrorsInProblemView() {
     return result;
 }
 
-function checkIfThereAreErrorsInData(data) {
-    var i = 0;
-    while (typeof data[i] != "undefined") {
-        var severity = data[i].severity;
-        if (severity == "ERROR") {
-            return true;
-        }
-        i++;
-    }
-    return false;
-}
 
-function createRedElement(text) {
-    var div = document.createElement("div");
-    var p = document.createElement("p");
-    p.className = "consoleViewError";
-    p.innerHTML = text;
-    div.appendChild(p);
-    return div.innerHTML;
-}
 
 $("#refreshGutters").click(function () {
     setRunConfigurationMode();
@@ -190,7 +171,7 @@ $("#run").click(function () {
 });
 
 
-function exception(ex) {
+function createException(ex) {
     var problems = document.createElement("div");
     if (ex.type == "out") {
         document.getElementById("problems").appendChild(createElementForProblemView("STACKTRACE", null, unEscapeString(ex.exception)));
@@ -278,7 +259,7 @@ function startComplete(data) {
 
     if ((data != null) && (typeof data != "undefined")) {
         if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-            exception(data[0]);
+            createException(data[0]);
             return;
         }
         if (!isContinueComplete) {

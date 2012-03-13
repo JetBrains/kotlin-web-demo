@@ -85,7 +85,7 @@ var Highlighting = (function () {
             setConsoleMessage(unEscapeString(data[0].exception));
             var j = 0;
             while (typeof data[j] != "undefined") {
-                exception(data[j]);
+                createException(data[j]);
                 j++;
             }
             return;
@@ -198,7 +198,7 @@ var Highlighting = (function () {
                     setStatusBarMessage(data[0].exception);
                     var j = 0;
                     while (typeof data[j] != "undefined") {
-                        exception(data[j]);
+                        createException(data[j]);
                         j++;
                     }
                 } else {

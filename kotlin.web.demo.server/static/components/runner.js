@@ -36,6 +36,7 @@ var Runner = (function () {
 
     Runner.run = function () {
         setRunConfigurationMode();
+        $("#run").css({opacity:0.5});
         if (runConfiguration.mode == "java") {
             runJava();
         } else {
@@ -88,7 +89,6 @@ var Runner = (function () {
         if (data == null || !checkIfThereAreErrorsInData(data)) {
             setStatusBarMessage("Running...");
             if (!isCompile) {
-//            if (!isCompilationInProgress && !checkIfThereAreErrorsInProblemView()) {
                 isCompile = true;
                 var i = editor.getValue();
                 var arguments = $("#arguments").val();
@@ -101,6 +101,7 @@ var Runner = (function () {
                     data:{text:i, consoleArgs:arguments},
                     timeout:10000,
                     error:function () {
+                        $("#run").css({opacity:1});
                         isCompile = false;
                         setStatusBarError(RUN_REQUEST_ABORTED);
                         setConsoleMessage(RUN_REQUEST_ABORTED);
@@ -109,6 +110,18 @@ var Runner = (function () {
 
             }
         }
+    }
+
+    function checkIfThereAreErrorsInData(data) {
+        var i = 0;
+        while (typeof data[i] != "undefined") {
+            var severity = data[i].severity;
+            if (severity == "ERROR") {
+                return true;
+            }
+            i++;
+        }
+        return false;
     }
 
     function onHighlightingSuccessWaitAfterConvertToJs(data) {
@@ -177,6 +190,7 @@ var Runner = (function () {
             data:{text:i, consoleArgs:arguments},
             timeout:10000,
             error:function () {
+                $("#run").css({opacity:1});
                 isCompile = false;
                 setStatusBarMessage(RUN_REQUEST_ABORTED);
                 setConsoleMessage(RUN_REQUEST_ABORTED);
@@ -185,6 +199,7 @@ var Runner = (function () {
     }
 
     function onConvertToJsSuccess(data) {
+        $("#run").css({opacity:1});
         isCompile = false;
         try {
             var genData;
@@ -227,6 +242,7 @@ var Runner = (function () {
     }
 
     function onCompileSuccess(data) {
+        $("#run").css({opacity:1});
         setStatusBarMessage("Loading output...");
         isCompile = false;
         var isCompiledWithErrors = false;
@@ -237,7 +253,7 @@ var Runner = (function () {
                 setStatusBarMessage(data[0].exception);
                 var j = 0;
                 while (typeof data[j] != "undefined") {
-                    exception(data[j]);
+                    createException(data[j]);
                     j++;
                 }
                 return;
@@ -274,6 +290,15 @@ var Runner = (function () {
         } else {
             setStatusBarError(ERROR_UNTIL_EXECUTE);
         }
+    }
+
+    function createRedElement(text) {
+        var div = document.createElement("div");
+        var p = document.createElement("p");
+        p.className = "consoleViewError";
+        p.innerHTML = text;
+        div.appendChild(p);
+        return div.innerHTML;
     }
 
 
