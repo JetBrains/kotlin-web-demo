@@ -18,6 +18,7 @@ package org.jetbrains.webdemo.test;
 
 import junit.framework.TestCase;
 import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
@@ -45,6 +46,7 @@ public class TestApplet extends TestCase {
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
         Initializer.INITIALIZER = InitializerApplet.getInstance();
         WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
+        ApplicationSettings.IS_TEST_VERSION = "true";
         MainApplet.SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
         System.setSecurityManager(new AppletSecurity());
     }
