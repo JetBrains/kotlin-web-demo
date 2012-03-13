@@ -39,6 +39,16 @@ public class RunTest extends BaseTest {
         compareResult(fileName, "", expectedResult, "java");
     }
 
+    public void test$execution$ManyArgs() throws IOException, InterruptedException {
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"a<br/>b<br/>c<br/>\",\"type\":\"out\"}]";
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        compareResult(fileName, "a b c", expectedResult, "java");
+
+        compareResult(fileName, "\"a\" b c", expectedResult, "java");
+        expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"a b<br/>c<br/>\",\"type\":\"out\"}]";
+        compareResult(fileName, "\"a b\" c", expectedResult, "java");
+    }
+
     public void test$execution$FooOut() throws IOException, InterruptedException {
         String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
@@ -79,6 +89,7 @@ public class RunTest extends BaseTest {
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(currentPsiFile, args, sessionInfo);
             String actualResult = responseForCompilation.getResult();
             if (fileName.endsWith("securityExecutionError.kt") || fileName.endsWith("securityFilePermissionError.kt")) {
+                System.out.println(actualResult);
                 assertTrue("Wrong result", actualResult.contains(expectedResult));
             } else {
                 assertEquals("Wrong result", expectedResult, actualResult);

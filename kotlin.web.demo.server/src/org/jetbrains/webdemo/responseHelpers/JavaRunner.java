@@ -55,7 +55,8 @@ public class JavaRunner {
     }
 
     public String getResult(String pathToRootOut) {
-        String commandString = generateCommandString(pathToRootOut);
+//        String commandString = generateCommandString(pathToRootOut);
+        String[] commandString = generateCommandString(pathToRootOut);
         Process process;
         sessionInfo.getTimeManager().saveCurrentTime();
         try {
@@ -63,7 +64,7 @@ public class JavaRunner {
             process.getOutputStream().close();
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), commandString);
+                    sessionInfo.getType(), commandString.toString());
             StringWriter stackTrace = new StringWriter();
             e.printStackTrace(new PrintWriter(stackTrace));
             return ResponseUtils.getErrorWithStackTraceInJson("Impossible to run your program: IOException handled until execution", stackTrace.toString());
@@ -325,25 +326,17 @@ public class JavaRunner {
         }
     }
 
-    private String generateCommandString(String pathToRootOut) {
-        StringBuilder builder = new StringBuilder(ApplicationSettings.JAVA_EXECUTE);
-        builder.append(" ");
-        /*StringBuilder builder = new StringBuilder(ApplicationSettings.JAVA_HOME);
-        builder.append(File.separator);
-        builder.append("bin");
-        builder.append(File.separator);
-        builder.append("java.exe ");*/
-        builder.append("-classpath ");
-        builder.append(pathToRootOut);
-        builder.append(File.pathSeparator);
-        builder.append(ApplicationSettings.KOTLIN_LIB);
-        builder.append(" ");
-        builder.append("-Djava.security.manager ");
-        builder.append(modifyClassNameFromPath(files.get(0)));
-        builder.append(" ");
-        builder.append(arguments);
-//        builder.append(modifyArguments(arguments));
-        return builder.toString();
+    private String[] generateCommandString(String pathToRootOut) {
+        String[] argArr = arguments.split(" ");
+        String[] builder = new String[argArr.length + 5];
+        builder[0] = ApplicationSettings.JAVA_EXECUTE;
+        builder[1] = "-classpath";
+        builder[2] = pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB;
+        builder[3] = "-Djava.security.manager";
+        builder[4] = modifyClassNameFromPath(files.get(0));
+
+        System.arraycopy(argArr, 0, builder, 5, argArr.length);
+        return builder;
     }
 
     private String modifyArguments(String arguments) {
