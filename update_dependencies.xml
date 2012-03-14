@@ -121,7 +121,7 @@
              dest="${dependencies.dir}/build.txt"/>
         <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
         <condition property="isLastVersion">
-            <equals arg1="${version}" arg2="0.1.1804" />
+            <equals arg1="${version}" arg2="0.1.1807" />
         </condition>
     </target>
 

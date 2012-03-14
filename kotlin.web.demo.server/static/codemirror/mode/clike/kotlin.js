@@ -52,10 +52,11 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
                 return startString(ch, stream, state);
             }
         }
-        /*if (ch == "-" && stream.eat(">")) {
-         curPunc = "->";
-         return null;
-         }*/
+        //Commented
+        if (ch == "-" && stream.eat(">")) {
+            curPunc = "->";
+            return null;
+        }
         if (/[+\-*&%=<>!?|\/~]/.test(ch)) {
             stream.eatWhile(/[+\-*&%=<>|~]/);
             return "operator";

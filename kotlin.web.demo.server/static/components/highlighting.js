@@ -126,7 +126,7 @@ var Highlighting = (function () {
                     text = text.substring(0, text.indexOf("\""));
                     resultSpan = '<span class=\"' + severity + 'gutter\" title="' + text + "\n ---next error--- \n" + title + '">  </span>%N%';
                 }
-                this.arrayLinesMarkers.pop();
+                //this.arrayLinesMarkers.pop();
                 editor.setMarker(start.line, resultSpan);
                 this.arrayLinesMarkers.push(start.line);
             }
