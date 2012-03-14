@@ -40,6 +40,7 @@
     </target>
 
     <target name="update">
+        <execute_update/>
         <unzip_kotlin/>
         <set_kotlin_version/>
     </target>
@@ -61,14 +62,18 @@
 
     <macrodef name="set_kotlin_version">
         <sequential>
+            <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
+                 dest="${dependencies.dir}/build.txt"/>
+            <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
+            <echo message="${version}"/>
             <!-- kotlin.version and web.demo.version - from teamcity -->
             <replaceregexp file="kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ApplicationSettings.java"
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
-                           replace="KOTLIN_VERSION = &#34;${kotlin.version}&#34;"
+                           replace="KOTLIN_VERSION = &#34;${version}&#34;"
                            byline="true"/>
             <replaceregexp file="kotlin.web.demo.server/static/components/common.js"
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
-                           replace="KOTLIN_VERSION = &#34;${kotlin.version}&#34;"
+                           replace="KOTLIN_VERSION = &#34;${version}&#34;"
                            byline="true"/>
             <replaceregexp file="kotlin.web.demo.server/static/components/common.js"
                            match="WEB_DEMO_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
