@@ -77,8 +77,7 @@ var Runner = (function () {
             if (data != null || data[0] != null) {
                 onHighlightingSuccessWaitAfterConvertToJs(data);
             }
-        }
-        else {
+        } else {
             Highlighting.sendHighlightingRequest(onHighlightingSuccessWaitAfterConvertToJs);
         }
     }
@@ -109,6 +108,8 @@ var Runner = (function () {
                 });
 
             }
+        } else {
+            $("#run").css({opacity:1});
         }
     }
 
@@ -146,6 +147,7 @@ var Runner = (function () {
                         }
                         isCompile = false;
                         var dataJs;
+                        $("#run").css({opacity:1});
                         if (dataFromApplet.indexOf("exception=") == 0) {
                             dataJs = dataFromApplet.substring(10, dataFromApplet.length);
                             dataJs = createRedElement(COMPILE_IN_JS_APPLET_ERROR + "<br/>" + dataJs);
@@ -176,6 +178,7 @@ var Runner = (function () {
         } else {
             $("#tabs").tabs("select", 0);
             setStatusBarMessage(TRY_RUN_CODE_WITH_ERROR);
+            $("#run").css({opacity:1});
         }
     }
 
