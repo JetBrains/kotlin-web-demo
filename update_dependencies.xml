@@ -51,6 +51,8 @@
             </unzip>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/lib/kotlin-js-libraries.zip"
                    dest="kotlin.web.demo.core/resources/js"/>
+            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-runtime.jar" todir="kotlin.web.demo.test.applet/resources"/>
+            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/alt/kotlin-jdk-headers.jar" todir="kotlin.web.demo.test.applet/resources"/>
         </sequential>
     </macrodef>
 

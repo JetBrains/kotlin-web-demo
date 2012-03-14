@@ -24,7 +24,6 @@ import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 import sun.applet.AppletSecurity;
 
-import java.io.IOException;
 import java.util.Random;
 
 //import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
@@ -35,9 +34,6 @@ import java.util.Random;
 
 public class TestApplet extends TestCase {
 
-    /* Get highlighting under security manager
-     * TODO Check that problem is only in guice library
-     */
 
     @Override
     public void setUp() throws Exception {
@@ -48,11 +44,16 @@ public class TestApplet extends TestCase {
         WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
         ApplicationSettings.IS_TEST_VERSION = "true";
         MainApplet.SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
-        System.setSecurityManager(new AppletSecurity());
     }
 
-    public void test() throws IOException, InterruptedException {
+
+    /* Get highlighting under security manager
+     */
+    public void testSecurityManager() {
         assertEquals("[]", new MainApplet().getHighlighting("fun main(args : Array<String>) { }", "java"));
+        System.setSecurityManager(new AppletSecurity());
+        String result = new MainApplet().getHighlighting("fun main(args : Array<String>) { }", "java");
+        assertEquals("[]", result);
     }
 
 }
