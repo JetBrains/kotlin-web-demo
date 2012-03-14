@@ -106,18 +106,18 @@ var classes = function(){
 }
 ();
 var hello = Kotlin.Namespace.create({initialize:function(){
-  $context = getContext();
-  $height = getCanvas().height;
-  $width = getCanvas().width;
+  this.$context = getContext();
+  this.$height = getCanvas().height;
+  this.$width = getCanvas().width;
 }
 , get_context:function(){
-  return $context;
+  return this.$context;
 }
 , get_height:function(){
-  return $height;
+  return this.$height;
 }
 , get_width:function(){
-  return $width;
+  return this.$width;
 }
 , renderBackground:function(){
   {

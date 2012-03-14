@@ -540,14 +540,14 @@ var classes = function(){
 }
 ();
 var creatures = Kotlin.Namespace.create({initialize:function(){
-  $Kotlin = new creatures.Logo(creatures.v(300, 100));
-  $gradientGenerator = new creatures.RadialGradientGenerator(getContext());
+  this.$Kotlin = new creatures.Logo(creatures.v(300, 100));
+  this.$gradientGenerator = new creatures.RadialGradientGenerator(getContext());
 }
 , get_Kotlin:function(){
-  return $Kotlin;
+  return this.$Kotlin;
 }
 , get_gradientGenerator:function(){
-  return $gradientGenerator;
+  return this.$gradientGenerator;
 }
 , v:function(x, y){
   {
