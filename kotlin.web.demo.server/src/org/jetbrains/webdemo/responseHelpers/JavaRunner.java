@@ -332,17 +332,23 @@ public class JavaRunner {
                     sessionInfo.getId(), "ARGUMENTS: " + arguments));
         }
         String[] argArr = arguments.split(" ");
-        String[] builder = new String[argArr.length + 5];
+        String[] builder;
+        if (arguments.isEmpty()) {
+            builder = new String[argArr.length + 4];
+        } else {
+            builder = new String[argArr.length + 5];
+        }
         builder[0] = ApplicationSettings.JAVA_EXECUTE;
         builder[1] = "-classpath";
         builder[2] = pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB;
         builder[3] = "-Djava.security.manager";
         builder[4] = modifyClassNameFromPath(files.get(0));
 
-        System.arraycopy(argArr, 0, builder, 5, argArr.length);
+        if (!arguments.isEmpty()) {
+            System.arraycopy(argArr, 0, builder, 5, argArr.length);
+        }
         return builder;
     }
-
 
 
     private String modifyArguments(String arguments) {
