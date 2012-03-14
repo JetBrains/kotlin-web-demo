@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SeleniumTest extends TestCase {
 
-    private final String TEST_SRC = "C://Development/contrib/jet-contrib/WebView/TestModule/testData/";
+    private final String TEST_SRC = "kotlin.web.demo.test/testData/";
 
     // We create our Selenium test case
     private WebDriver driver;
@@ -77,6 +77,7 @@ public class SeleniumTest extends TestCase {
                 DesiredCapabilities.chrome());*/
         driver = new FirefoxDriver();
 //        driver.get("http://kotlin-demo.jetbrains.com");
+//        driver.get("http://kotlinsrv.labs.intellij.net");
         driver.get("http://localhost");
         statusBar = driver.findElement(By.id("statusbar"));
         console = driver.findElement(By.id("console"));
@@ -554,7 +555,8 @@ public class SeleniumTest extends TestCase {
 
     public int getNumberOfWarningInProblemView() {
         WebElement problems = driver.findElement(By.id("problems"));
-        List<WebElement> errors = problems.findElements(By.className("problemsViewWarning"));
+        List<WebElement> errors = problems.findElements(By.className("problemsViewWarningNeverUsed"));
+//        List<WebElement> errors = problems.findElements(By.className("problemsViewWarning"));
         return errors.size();
     }
 
@@ -574,7 +576,7 @@ public class SeleniumTest extends TestCase {
     }
 
     private void testDifficultExampleRun(String name, boolean isSpaceReplaced) throws IOException, InterruptedException {
-        testExampleRun(name, "Longer_examples", readResultFromFile("execution" + File.separator + "javaExamples" + File.separator + name + ".txt"), isSpaceReplaced);
+        testExampleRun(name, "Longer_examples", readResultFromFile("execution" + File.separator + "txtExamples" + File.separator + name + ".txt"), isSpaceReplaced);
     }
 
     private String getExampleNameByTestName() {

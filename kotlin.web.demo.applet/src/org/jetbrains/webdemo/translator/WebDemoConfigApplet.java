@@ -48,7 +48,7 @@ public final class WebDemoConfigApplet extends Config {
         for (String libFileName : LIB_FILE_NAMES) {
             JetFile file = null;
             @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
-            InputStream stream = WebDemoConfigApplet.class.getResourceAsStream(libFileName);
+            InputStream stream = WebDemoConfigApplet.class.getResourceAsStream("/js/" + libFileName);
             try {
                 String text = FileUtil.loadTextAndClose(stream);
                 file = JetFileUtils.createPsiFile(libFileName, text, project);
