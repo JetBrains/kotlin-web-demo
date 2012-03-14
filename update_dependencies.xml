@@ -15,6 +15,7 @@
   -->
 
 <project name="Update Dependencies" default="download_and_update">
+
     <!--<property name="kotlin.build.number" value="0.1.33"/>-->
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
@@ -35,6 +36,7 @@
     <target name="download_and_update_internal">
         <execute_update/>
         <unzip_kotlin/>
+        <set_kotlin_version_internal/>
     </target>
 
     <target name="update">
@@ -50,8 +52,10 @@
             </unzip>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/lib/kotlin-js-libraries.zip"
                    dest="kotlin.web.demo.core/resources/js"/>
-            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-runtime.jar" todir="kotlin.web.demo.test.applet/resources"/>
-            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/alt/kotlin-jdk-headers.jar" todir="kotlin.web.demo.test.applet/resources"/>
+            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-runtime.jar"
+                  todir="kotlin.web.demo.test.applet/resources"/>
+            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/alt/kotlin-jdk-headers.jar"
+                  todir="kotlin.web.demo.test.applet/resources"/>
         </sequential>
     </macrodef>
 
@@ -80,5 +84,40 @@
             <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
         </sequential>
     </macrodef>
+
+    <macrodef name="set_kotlin_version_internal">
+        <sequential>
+            <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
+                 dest="${dependencies.dir}/build.txt"/>
+            <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
+            <echo message="${version}"/>
+            <replaceregexp file="update_dependencies.xml"
+                           match=" arg2=&#34;LAST_DOWNLOADED_VERSION&#34;"
+                           replace=" arg2=&#34;${version}&#34;"
+                           byline="true"/>
+        </sequential>
+    </macrodef>
+
+    <target name="check_version" depends="check_version_true, check_version_false" if="isLastVersion"/>
+
+
+    <target name="check_version_true" depends="compare_version" if="isLastVersion">
+          <set_kotlin_version_internal/>
+    </target>
+
+    <target name="check_version_false" depends="compare_version" unless="isLastVersion">
+        <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
+        <echo message="FALSE - ${version}"/>
+        <antcall target="download_and_update_internal"/>
+    </target>
+
+    <target name="compare_version">
+        <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
+             dest="${dependencies.dir}/build.txt"/>
+        <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
+        <condition property="isLastVersion">
+            <equals arg1="${version}" arg2="0.1.1801" />
+        </condition>
+    </target>
 
 </project>
