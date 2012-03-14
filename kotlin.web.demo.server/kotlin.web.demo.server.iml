@@ -23,7 +23,6 @@
     <orderEntry type="library" name="picocontainer" level="project" />
     <orderEntry type="library" name="trove4j" level="project" />
     <orderEntry type="library" name="asm-all" level="project" />
-    <orderEntry type="library" name="guice" level="project" />
     <orderEntry type="library" name="kotlin-plugin" level="project" />
     <orderEntry type="library" name="commons-codec" level="project" />
   </component>

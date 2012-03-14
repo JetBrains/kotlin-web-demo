@@ -238,7 +238,7 @@ public class JavaRunner {
                 || str.contains("VerifyError")
                 || str.contains("ClassCircularityError")
                 || str.contains("UnsatisfiedLinkError")
-                || (str.contains("NoSuchMethodError") && !str.equals("java.lang.NoSuchMethodError: main<br/>Exception in thread \"main\" <br/>"))) {
+                || (str.contains("NoSuchMethodError") && !str.equals("Exception in thread \"main\" java.lang.NoSuchMethodError"))) {
             return true;
         }
         return false;

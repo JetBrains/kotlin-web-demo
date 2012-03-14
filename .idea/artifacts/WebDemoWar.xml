@@ -25,7 +25,6 @@
           <element id="directory" name="alt">
             <element id="library" level="project" name="kotlin-jdk-headers" />
           </element>
-          <element id="library" level="project" name="guice" />
           <element id="library" level="project" name="commons-codec" />
         </element>
       </element>

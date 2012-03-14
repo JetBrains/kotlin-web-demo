@@ -128,7 +128,7 @@ public class JarHandlerBase {
         ZipInputStream zip = myZipFile.get();
         if (zip == null) {
             if (inputStream == null) {
-                throw new IllegalArgumentException("Input Stream is null");
+                throw new IllegalArgumentException("Input Stream is null: " + myBasePath);
             } else {
                 zip = new ZipInputStream(inputStream);
             }

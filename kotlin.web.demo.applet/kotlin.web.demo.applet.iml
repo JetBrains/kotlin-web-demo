@@ -15,7 +15,6 @@
     <orderEntry type="library" name="kotlin" level="project" />
     <orderEntry type="library" name="intellij-core" level="project" />
     <orderEntry type="library" name="kotlin-plugin" level="project" />
-    <orderEntry type="library" name="guice" level="project" />
   </component>
 </module>
 

@@ -9,13 +9,13 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="idea.patch.applet" />
-    <orderEntry type="module" module-name="kotlin.web.demo.applet" />
     <orderEntry type="module" module-name="kotlin.web.demo.core" />
+    <orderEntry type="module" module-name="kotlin.web.demo.applet" />
     <orderEntry type="library" name="asm-all" level="project" />
+    <orderEntry type="library" name="intellij-core" level="project" />
     <orderEntry type="library" name="kotlin" level="project" />
     <orderEntry type="library" name="kotlin-plugin" level="project" />
     <orderEntry type="library" name="picocontainer" level="project" />
-    <orderEntry type="library" name="intellij-core" level="project" />
     <orderEntry type="library" name="junit-4.10" level="project" />
   </component>
 </module>
