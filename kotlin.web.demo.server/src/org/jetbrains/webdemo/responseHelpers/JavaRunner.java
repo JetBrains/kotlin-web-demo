@@ -38,7 +38,7 @@ public class JavaRunner {
 //    private final Logger LOG = Logger.getLogger(JavaRunner.class);
 
     private final List<String> files;
-    private final String arguments;
+    private String arguments;
     private final JSONArray jsonArray;
     private final String textFromFile;
 
@@ -48,7 +48,7 @@ public class JavaRunner {
 
     public JavaRunner(List<String> files, String arguments, JSONArray array, String text, SessionInfo info) {
         this.files = files;
-        this.arguments = arguments.replaceAll("[\\\"]", "\"");
+        this.arguments = arguments;
         this.jsonArray = array;
         this.textFromFile = text;
         this.sessionInfo = info;
@@ -327,6 +327,10 @@ public class JavaRunner {
     }
 
     private String[] generateCommandString(String pathToRootOut) {
+        if (arguments.contains("\"")) {
+            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+                    sessionInfo.getId(), "ARGUMENTS: " + arguments));
+        }
         String[] argArr = arguments.split(" ");
         String[] builder = new String[argArr.length + 5];
         builder[0] = ApplicationSettings.JAVA_EXECUTE;
