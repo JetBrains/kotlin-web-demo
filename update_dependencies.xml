@@ -97,7 +97,7 @@
             <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
             <echo message="${version}"/>
             <replaceregexp file="update_dependencies.xml"
-                           match=" arg2=&#34;LAST_DOWNLOADED_VERSION&#34;"
+                           match=" arg2=&#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
                            replace=" arg2=&#34;${version}&#34;"
                            byline="true"/>
         </sequential>
@@ -121,7 +121,7 @@
              dest="${dependencies.dir}/build.txt"/>
         <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
         <condition property="isLastVersion">
-            <equals arg1="${version}" arg2="0.1.1801" />
+            <equals arg1="${version}" arg2="0.1.1804" />
         </condition>
     </target>
 

@@ -20,6 +20,8 @@ fun main(args : Array<String>) {
     // We cannot say 'x * y' now because they may hold nulls
     if (x != null && y != null) {
       print(x * y) // Now we can
+    } else {
+      println("One of arguments is null")
     }
   }
 }
