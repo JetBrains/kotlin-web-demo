@@ -338,7 +338,7 @@ function startComplete(data) {
 
         var icon = document.createElement("img");
         icon.className = "lookupElementIcon";
-        icon.src = completions[i].icon;
+        icon.src = "/static/icons/" + completions[i].icon + ".png";
         pEl.appendChild(icon);
 
         var spanName = document.createElement("div");
@@ -378,6 +378,8 @@ function startComplete(data) {
     document.body.appendChild(complete);
     document.getElementById("complete").focus();
 //        $("select").selectmenu();
+
+    //$('#selectId').customStyle();
 
 
     // Hack to hide the scrollbar.

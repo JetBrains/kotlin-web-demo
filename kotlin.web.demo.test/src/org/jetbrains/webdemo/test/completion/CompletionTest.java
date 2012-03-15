@@ -36,23 +36,47 @@ import java.io.IOException;
 public class CompletionTest extends BaseTest {
 
     public void test$java$system() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"/static/icons/class.png\",\"name\":\"System : Any\",\"tail\":\"   \"}]";
+        String expectedResult = "[{\"icon\":\"class\",\"name\":\"System : Any\",\"tail\":\"\"}]";
         compareResult(1, 6, expectedResult, "java");
     }
 
     public void test$java$out() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"/static/icons/property.png\",\"name\":\"out\",\"tail\":\"   java.io.PrintStream?\"}]";
+        String expectedResult = "[{\"icon\":\"property\",\"name\":\"out\",\"tail\":\"java.io.PrintStream?\"}]";
         compareResult(1, 10, expectedResult, "java");
     }
 
+    public void test$all$variable() throws IOException, JSONException {
+        String expectedResult = "[{\"icon\":\"property\",\"name\":\"name\",\"tail\":\"jet.String\"}]";
+        compareResult(14, 23, expectedResult, "java");
+        compareResult(14, 23, expectedResult, "js");
+    }
+
+    public void test$all$class() throws IOException, JSONException {
+        String expectedResult = "[{\"icon\":\"class\",\"name\":\"Greeter : Any\",\"tail\":\"\"}]";
+        compareResult(4, 3, expectedResult, "java");
+        compareResult(4, 3, expectedResult, "js");
+    }
+
+    public void test$all$type$in$constructor() throws IOException, JSONException {
+        String expectedResult = "[{\"icon\":\"class\",\"name\":\"StrictMath : Any\",\"tail\":\"\"},{\"icon\":\"class\",\"name\":\"String : Comparable<String>, CharSequenc...\",\"tail\":\"\"},{\"icon\":\"class\",\"name\":\"String : Serializable, Comparable<String...\",\"tail\":\"\"},{\"icon\":\"method\",\"name\":\"String(bytes : ByteArray)\",\"tail\":\"jet.String\"},{\"icon\":\"method\",\"name\":\"String(bytes : ByteArray, charset : Char...\",\"tail\":\"jet.String\"},{\"icon\":\"method\",\"name\":\"String(bytes : ByteArray, charsetName : ...\",\"tail\":\"jet.String\"},{\"icon\":\"method\",\"name\":\"String(bytes : ByteArray, i : Int, i1 : ...\",\"tail\":\"jet.String\"},{\"icon\":\"method\",\"name\":\"String(bytes : ByteArray, offset : Int, ...\",\"tail\":\"jet.String\"},{\"icon\":\"method\",\"name\":\"String(bytes : ByteArray, offset : Int, ...\",\"tail\":\"jet.String\"},{\"icon\":\"method\",\"name\":\"String(chars : CharArray)\",\"tail\":\"jet.String\"},{\"icon\":\"method\",\"name\":\"String(stringBuffer : StringBuffer)\",\"tail\":\"jet.String\"},{\"icon\":\"method\",\"name\":\"String(stringBuilder : StringBuilder)\",\"tail\":\"jet.String\"},{\"icon\":\"class\",\"name\":\"StringBuffer : AbstractStringBuilder, Se...\",\"tail\":\"\"},{\"icon\":\"class\",\"name\":\"StringBuilder : AbstractStringBuilder, S...\",\"tail\":\"\"},{\"icon\":\"class\",\"name\":\"StringIndexOutOfBoundsException : IndexO...\",\"tail\":\"\"}]";
+        compareResult(12, 28, expectedResult, "java");
+        compareResult(12, 28, expectedResult, "js");
+    }
+
     public void test$java$println() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"/static/icons/method.png\",\"name\":\"print(p0 : Boolean)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"print(p0 : Float)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"print(p0 : Int)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println(p0 : Long)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"print(p0 : Double)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println(p0 : Char)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"printf(p0 : Locale?, p1 : String?, p2 : ...\",\"tail\":\"   java.io.PrintStream?\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"print(p0 : Any?)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println(p0 : Double)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println(p0 : String?)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"print(p0 : CharArray?)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println(p0 : Boolean)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"printf(p0 : String?, p1 : Array<Any?>?)\",\"tail\":\"   java.io.PrintStream?\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println(p0 : Float)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println(p0 : CharArray?)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"print(p0 : Char)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println()\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println(p0 : Any?)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"print(p0 : Long)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"print(p0 : String?)\",\"tail\":\"   Unit\"},{\"icon\":\"/static/icons/method.png\",\"name\":\"println(p0 : Int)\",\"tail\":\"   Unit\"}]";
+        String expectedResult = "[{\"icon\":\"method\",\"name\":\"print(p0 : Any?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(p0 : Boolean)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(p0 : Char)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(p0 : CharArray?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(p0 : Double)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(p0 : Float)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(p0 : Int)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(p0 : Long)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(p0 : String?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"printf(p0 : Locale?, p1 : String?, p2 : ...\",\"tail\":\"java.io.PrintStream?\"},{\"icon\":\"method\",\"name\":\"printf(p0 : String?, p1 : Array<Any?>?)\",\"tail\":\"java.io.PrintStream?\"},{\"icon\":\"method\",\"name\":\"println()\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(p0 : Any?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(p0 : Boolean)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(p0 : Char)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(p0 : CharArray?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(p0 : Double)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(p0 : Float)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(p0 : Int)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(p0 : Long)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(p0 : String?)\",\"tail\":\"Unit\"}]";
 
         compareResult(1, 15, expectedResult, "java");
     }
 
+    public void test$js$a() throws IOException, JSONException {
+        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args : Array<String>\",\"tail\":\"jet.Array<jet.String>\"},{\"icon\":\"method\",\"name\":\"array(t : Array<T>)\",\"tail\":\"jet.Array<T>\"},{\"icon\":\"class\",\"name\":\"atomic : Any\",\"tail\":\"\"}]";
+
+        compareResult(2, 3, expectedResult, "js");
+    }
+
     public void test$kt$a() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"/static/icons/genericValue.png\",\"name\":\"args : Array<String>\",\"tail\":\"   jet.Array<jet.String>\"},{\"icon\":\"/static/icons/class.png\",\"name\":\"atomic : Any\",\"tail\":\"   \"},{\"icon\":\"/static/icons/method.png\",\"name\":\"array(t : Array<T>)\",\"tail\":\"   jet.Array<T>\"}]";
+        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args : Array<String>\",\"tail\":\"jet.Array<jet.String>\"},{\"icon\":\"method\",\"name\":\"array(t : Array<T>)\",\"tail\":\"jet.Array<T>\"},{\"icon\":\"class\",\"name\":\"atomic : Any\",\"tail\":\"\"}]";
         compareResult(2, 3, expectedResult, "java");
     }
 
@@ -63,7 +87,7 @@ public class CompletionTest extends BaseTest {
 
         JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(start, end, currentPsiFile, sessionInfo);
         String actualResult = responseForCompletion.getResult();
-        JSONArray expectedArray = new JSONArray(expectedResult);
+        /*JSONArray expectedArray = new JSONArray(expectedResult);
         JSONArray actualArray = new JSONArray(actualResult);
 
 //        assertEquals(expectedResult, actualResult);
@@ -84,9 +108,9 @@ public class CompletionTest extends BaseTest {
                     }
                 }
             }
-            //assertEquals("Wrong result", expectedArray.get(i).toString(), actualArray.get(i).toString());
-        }
+        }*/
 
+        assertEquals("Wrong result: " + start + ", " + end, expectedResult, actualResult);
     }
 
 }

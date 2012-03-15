@@ -161,7 +161,7 @@ public class JsonResponseForCompletion {
             Collections.sort((ArrayList<DeclarationDescriptor>) descriptors, new Comparator<DeclarationDescriptor>() {
                 @Override
                 public int compare(DeclarationDescriptor d1, DeclarationDescriptor d2) {
-                    return d1.getName().compareToIgnoreCase(d2.getName());
+                    return getNameFromDescriptor(d1).compareToIgnoreCase(getNameFromDescriptor(d2));
                 }
             });
 
@@ -170,7 +170,7 @@ public class JsonResponseForCompletion {
                 if (prefix.isEmpty() || name.startsWith(prefix)) {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("icon", getIconFromDescriptor(descriptor));
-                    map.put("tail", "   " + getTailText(descriptor));
+                    map.put("tail", getTailText(descriptor));
                     map.put("name", name);
 
                     jsonArray.put(map);
@@ -183,15 +183,19 @@ public class JsonResponseForCompletion {
 
     private String getIconFromDescriptor(DeclarationDescriptor descriptor) {
         if (descriptor instanceof FunctionDescriptor) {
-            return "/static/icons/method.png";
+            return "method";
         } else if ((descriptor instanceof PropertyDescriptor) || (descriptor instanceof LocalVariableDescriptor)) {
-            return "/static/icons/property.png";
+            return "property";
         } else if (descriptor instanceof ClassDescriptor) {
-            return "/static/icons/class.png";
+            return "class";
         } else if (descriptor instanceof ValueParameterDescriptor) {
-            return "/static/icons/genericValue.png";
+            return "genericValue";
+        } else {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                    "Impossible to find icon for " + descriptor.toString(),
+                    "null", sessionInfo.getType(), descriptor.toString());
+            return "";
         }
-        return "";
     }
 
     private PsiElement getExpressionForScope() {
