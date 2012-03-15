@@ -356,6 +356,10 @@ public class JavaRunner {
         char ch;
         for (i = 0; i < arguments.length(); i++) {
             ch = arguments.charAt(i);
+            if (ch == '\\' && arguments.charAt(i + 1) == '\"') {
+                i++;
+                continue;
+            }
             if (ch == '\"') {
                 inQuotes = !inQuotes;
             }
@@ -375,6 +379,9 @@ public class JavaRunner {
 
         int j = 0;
         for (String element : arrayList) {
+            element = element.replaceAll("\\\\\"", "QUOTE");
+            element = element.replaceAll("\"", "");
+            element = element.replaceAll("QUOTE", "\\\\\"");
             result[j] = element;
             j++;
         }
