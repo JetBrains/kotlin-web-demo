@@ -36,9 +36,7 @@ import org.jetbrains.jet.resolve.DescriptorRenderer;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 import org.json.JSONArray;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -155,6 +153,18 @@ public class JsonResponseForCompletion {
             if (prefix.endsWith(".")) {
                 prefix = "";
             }
+
+            if (!(descriptors instanceof ArrayList)) {
+                descriptors = new ArrayList<DeclarationDescriptor>(descriptors);
+            }
+
+            Collections.sort((ArrayList<DeclarationDescriptor>) descriptors, new Comparator<DeclarationDescriptor>() {
+                @Override
+                public int compare(DeclarationDescriptor d1, DeclarationDescriptor d2) {
+                    return d1.getName().compareToIgnoreCase(d2.getName());
+                }
+            });
+
             for (DeclarationDescriptor descriptor : descriptors) {
                 String name = getNameFromDescriptor(descriptor);
                 if (prefix.isEmpty() || name.startsWith(prefix)) {
