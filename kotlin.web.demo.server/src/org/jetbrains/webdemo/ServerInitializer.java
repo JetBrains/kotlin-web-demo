@@ -138,19 +138,6 @@ public class ServerInitializer extends Initializer {
             rtJar = new File(ApplicationSettings.RT_JAR);
         } else {
             rtJar = CompileEnvironment.findRtJar();
-            /*String java_home = ApplicationSettings.JAVA_HOME;
-            ErrorWriterOnServer.LOG_FOR_INFO.info("java_home " + ApplicationSettings.JAVA_HOME + " " + java_home);
-            if (java_home != null) {
-                rtJar = findRtJar(java_home);
-                if (rtJar == null) {
-                    rtJar = findActiveRtJar(true);
-                    if (rtJar == null || !rtJar.exists()) {
-                        rtJar = findClassesJar(java_home);
-                    }
-                }
-            } else {
-                rtJar = findActiveRtJar(true);
-            }*/
         }
         if ((rtJar == null || !rtJar.exists())) {
             if (ApplicationSettings.JAVA_HOME == null) {
@@ -160,6 +147,7 @@ public class ServerInitializer extends Initializer {
             }
             return null;
         }
+        ApplicationSettings.JAVA_HOME = rtJar.getParentFile().getParentFile().getParentFile().getAbsolutePath();
         return rtJar;
     }
 

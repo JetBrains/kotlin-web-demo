@@ -26,6 +26,8 @@ import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * @author Natalia.Ukhorskaya
@@ -45,6 +47,12 @@ public class HighlightExamplesTest extends BaseTest {
             if (folder.isDirectory()) {
                 File[] files = folder.listFiles();
                 assert files != null;
+                Arrays.sort(files, new Comparator<File>() {
+                    public int compare(File f1, File f2) {
+                        return f1.getName().compareToIgnoreCase(f2.getName());
+//                        return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+                    }
+                });
                 for (File file : files) {
                     if (file.getName().equals("order.txt")) {
                         continue;

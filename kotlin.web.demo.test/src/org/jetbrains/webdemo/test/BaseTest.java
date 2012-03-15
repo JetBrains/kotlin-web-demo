@@ -24,6 +24,8 @@ import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoConfigServer;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
+import java.io.File;
+
 /**
  * @author Natalia.Ukhorskaya
  */
@@ -42,7 +44,6 @@ public class BaseTest extends TestCase {
         Initializer.INITIALIZER = ServerInitializer.getInstance();
 
 //        ApplicationSettings.JAVA_HOME = "c:\\Program Files\\Java\\jdk1.6.0_30\\";
-        ApplicationSettings.JAVA_EXECUTE = "java";
 
         ApplicationSettings.WEBAPP_ROOT_DIRECTORY = "kotlin.web.demo.core/resources";
 
@@ -50,6 +51,10 @@ public class BaseTest extends TestCase {
         boolean initEnvironment = ServerInitializer.getInstance().initJavaCoreEnvironment();
         assertEquals("Initialisation of java core environment failed, server didn't start.",
                 true, initEnvironment);
+
+        ApplicationSettings.JAVA_EXECUTE = ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
+        System.out.println("setUp: JAVA_HOME=" + ApplicationSettings.JAVA_EXECUTE);
+
         WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(Initializer.INITIALIZER.getEnvironment().getProject());
         ExamplesList.getInstance();
         HelpLoader.getInstance();

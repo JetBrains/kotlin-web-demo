@@ -31,6 +31,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,6 +82,11 @@ public class RunExamplesTest extends BaseTest {
             if (folder.isDirectory()) {
                 File[] files = folder.listFiles();
                 assert files != null;
+                Arrays.sort(files, new Comparator<File>() {
+                    public int compare(File f1, File f2) {
+                        return f1.getName().compareToIgnoreCase(f2.getName());
+                    }
+                });
                 for (File file : files) {
                     if (file.getName().equals("order.txt")) {
                         continue;
