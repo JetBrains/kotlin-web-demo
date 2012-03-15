@@ -327,16 +327,13 @@ public class JavaRunner {
     }
 
     private String[] generateCommandString(String pathToRootOut) {
-        if (arguments.contains("\"")) {
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                    sessionInfo.getId(), "ARGUMENTS: " + arguments));
-        }
-        String[] argArr = arguments.split(" ");
+        String[] argsArray = splitArguments();
+
         String[] builder;
         if (arguments.isEmpty()) {
-            builder = new String[argArr.length + 4];
+            builder = new String[5];
         } else {
-            builder = new String[argArr.length + 5];
+            builder = new String[argsArray.length + 5];
         }
         builder[0] = ApplicationSettings.JAVA_EXECUTE;
         builder[1] = "-classpath";
@@ -345,11 +342,44 @@ public class JavaRunner {
         builder[4] = modifyClassNameFromPath(files.get(0));
 
         if (!arguments.isEmpty()) {
-            System.arraycopy(argArr, 0, builder, 5, argArr.length);
+            System.arraycopy(argsArray, 0, builder, 5, argsArray.length);
         }
         return builder;
+
     }
 
+    public String[] splitArguments() {
+        boolean inQuotes = false;
+        ArrayList<String> arrayList = new ArrayList<String>();
+        int firstChar = 0;
+        int i;
+        char ch;
+        for (i = 0; i < arguments.length(); i++) {
+            ch = arguments.charAt(i);
+            if (ch == '\"') {
+                inQuotes = !inQuotes;
+            }
+            if (ch == ' ') {
+                if (!inQuotes) {
+                    arrayList.add(arguments.substring(firstChar, i));
+                    firstChar = i + 1;
+                }
+            }
+        }
+
+        if (firstChar != arguments.length()) {
+            arrayList.add(arguments.substring(firstChar, arguments.length()));
+        }
+
+        String[] result = new String[arrayList.size()];
+
+        int j = 0;
+        for (String element : arrayList) {
+            result[j] = element;
+            j++;
+        }
+        return result;
+    }
 
     private String modifyArguments(String arguments) {
         return StringEscapeUtils.unescapeJavaScript(arguments);
