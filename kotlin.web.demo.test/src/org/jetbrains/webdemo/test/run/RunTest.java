@@ -92,9 +92,9 @@ public class RunTest extends BaseTest {
             String actualResult = responseForCompilation.getResult();
             if (fileName.endsWith("securityExecutionError.kt") || fileName.endsWith("securityFilePermissionError.kt")) {
                 System.out.println(actualResult);
-                assertTrue("Wrong result", actualResult.contains(expectedResult));
+                assertTrue("Wrong result: " + fileName, actualResult.contains(expectedResult));
             } else {
-                assertEquals("Wrong result", expectedResult, actualResult);
+                assertEquals("Wrong result: " + fileName, expectedResult, actualResult);
             }
         } else {
             sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);

@@ -77,6 +77,11 @@ public class RunExamplesTest extends BaseTest {
         }
         File[] folders = rootDir.listFiles();
         assert folders != null;
+        Arrays.sort(folders, new Comparator<File>() {
+            public int compare(File f1, File f2) {
+                return f1.getName().compareToIgnoreCase(f2.getName());
+            }
+        });
         StringBuilder builder = new StringBuilder();
         for (File folder : folders) {
             if (folder.isDirectory()) {
