@@ -169,6 +169,7 @@ a.download:hover {
 
 .clear {
     display: inline-block;
+    /**display:inline;*/
 }
 
 /* start commented backslash hack \*/
@@ -521,10 +522,9 @@ body {
 }
 
 #argsinput {
-    /*height: 20px;*/
     resize: none;
     width: 100%;
-    /*margin-left: 80px;*/
+    margin-bottom: 5px;
 }
 
 #statusbar {
@@ -576,7 +576,7 @@ body {
 #examplesaccordion {
     /*margin-left: 20px;*/
     margin: 5px;
-    *width: 220px;
+    *width: 280px;
     /*width: 96%;*/
 }
 
@@ -982,6 +982,7 @@ td#removeallguttersTd {
 #loginInPopup a {
     padding: 0 10px 0 0;
     display: inline-block;
+    /**display:inline;*/
 }
 
 #login a {
@@ -1025,11 +1026,13 @@ td#removeallguttersTd {
 #My_Programs {
     /*float: left;*/
     display: inline-block;
+    /**display:inline;*/
     /*height: 28px;*/
 }
 
 #showInfoAboutLogin {
     display: inline-block;
+    /**display:inline;*/
     float: right;
     padding-right: 9px;
     padding-top: 6px;
@@ -1037,6 +1040,7 @@ td#removeallguttersTd {
 
 #saveProgram, #saveAsProgram {
     display: inline-block;
+    /**display:inline;*/
     float: right;
     padding-right: 6px;
     padding-top: 3px;
@@ -1062,7 +1066,7 @@ td#removeallguttersTd {
     width: 75%;
 }
 
-#myprogramscontent p img {
+#myprogramscontent table img {
     float: right;
     padding-left: 9px;
     width: 16px;
@@ -1070,7 +1074,10 @@ td#removeallguttersTd {
     cursor: pointer;
 }
 
-.ui-widget-content p img {
+.ui-widget-content table {
+   width: 100%;
+}
+.ui-widget-content table img {
     float: right;
     padding-left: 9px;
     width: 16px;
@@ -1116,6 +1123,7 @@ div.fixedpage {
     /*padding-top: 5px;*/
     text-align: right;
     display: inline-block;
+    /**display:inline;*/
     width: 100%;
 }
 
@@ -1194,8 +1202,9 @@ div.fixedpage {
     height: 30px !important;
 }
 
-#accordion div p a, #accordion div p a:hover {
+#accordion div table a, #accordion div table a:hover {
     display: inline-block;
+    /**display:inline;*/
     width: 75% !important;
     word-wrap: break-word;
     margin: 0;
@@ -1211,6 +1220,8 @@ div.bullet {
     width: 16px;
     height: 16px;
     display: inline-block;
+    /*zoom: 1;*/
+    /**display: inline;*/
     margin-right: 3px;
 }
 
@@ -1262,6 +1273,24 @@ div.bullet {
 
 .ui-selectmenu {
     height: 26px !important;
+}
+
+div#convertToKotlin {
+    left: 75%;
+    position: absolute;
+    top: 15%;
+}
+
+#javaToKotlinDiv {
+    cursor: pointer;
+    color: blue;
+    margin-left: 15px;
+    margin-top: 5px;
+    text-decoration: underline;
+}
+
+#whatimgjavatokotlin {
+    margin-left: 10px;
 }
 
 

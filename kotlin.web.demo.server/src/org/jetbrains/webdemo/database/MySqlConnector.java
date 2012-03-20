@@ -563,6 +563,7 @@ public class MySqlConnector {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("id", rs.getString("PROGRAM_ID"));
                 map.put("name", rs.getString("PROGRAM_NAME"));
+                map.put("runConf", rs.getString("RUN_CONF"));
                 result.put(map);
             }
 

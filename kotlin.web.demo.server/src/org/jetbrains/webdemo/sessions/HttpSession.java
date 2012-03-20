@@ -64,9 +64,20 @@ public class HttpSession {
             if (parameters.compareType("run")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExecutorResult();
+            } else if (parameters.compareType("loadExample")) {
+                sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
+                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                sendExampleContent();
+            } else if (parameters.compareType("highlight")) {
+                sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
+                sessionInfo.setRunConfiguration(parameters.getArgs());
+                sendHighlightingResult();
             } else if (parameters.compareType("writeLog")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
                 sendWriteLogResult();
+            } else if (parameters.compareType("convertToKotlin")) {
+                sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
+                sendConversationResult();
             } else if (parameters.compareType("saveProgram")) {
                 sendSaveProgramResult();
             } else if (parameters.compareType("loadProgram")) {
@@ -79,14 +90,6 @@ public class HttpSession {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendCompletionResult();
-            } else if (parameters.compareType("loadExample")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
-                sendExampleContent();
-            } else if (parameters.compareType("highlight")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
-                sessionInfo.setRunConfiguration(parameters.getArgs());
-                sendHighlightingResult();
             } else {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), param);
                 writeResponse("Incorrect request", HttpServletResponse.SC_BAD_REQUEST);
@@ -99,6 +102,11 @@ public class HttpSession {
             }
             writeResponse("Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void sendConversationResult() {
+        PostData data = getPostDataFromRequest();
+        writeResponse(new KotlinConverter(sessionInfo).getResult(data.text), HttpServletResponse.SC_OK);
     }
 
     private void sendWriteLogResult() {
@@ -243,7 +251,7 @@ public class HttpSession {
         } catch (UnsupportedEncodingException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), "null");
             return new PostData("", "");
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), reqResponse.toString());
             return new PostData("", "");
         }
@@ -268,8 +276,6 @@ public class HttpSession {
 
         return new PostData("", "");
     }
-
-
 
 
     //Send Response

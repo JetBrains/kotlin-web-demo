@@ -26,7 +26,6 @@ var Accordion = (function () {
     function Accordion() {
         var instance = {
             loadContent1:function () {
-                alert("a");
                 var acc = document.createElement("div");
                 acc.id = "accordion";
                 document.getElementById("examplesaccordion").appendChild(acc);
@@ -75,7 +74,7 @@ var Accordion = (function () {
         }
     };
 
-    Accordion.getSelectedExample = function() {
+    Accordion.getSelectedExample = function () {
         return lastSelectedExample;
     };
 
@@ -108,7 +107,7 @@ var Accordion = (function () {
             var url = [location.protocol, '//', location.host, "/"].join('');
             var href = url + "?folder=" + name;
             setStatusBarMessage("Public link was generated.");
-            $("a[id='" + name + "']").parent("p").after("<div class=\"toolbox\" id=\"pld" + name + "\" style=\"display:block;\"><div align=\"center\"><div class=\"fixedpage\"><div class=\"publicLinkHref\" id=\"pl" + name + "\"></div><img class=\"closePopup\" id=\"cp" + name + "\" src=\"/static/icons/close.png\" title=\"Close popup\"></span></div></div></div>");
+            $("a[id='" + name + "']").parent("td").parent("tr").parent("table").after("<div class=\"toolbox\" id=\"pld" + name + "\" style=\"display:block;\"><div align=\"center\"><div class=\"fixedpage\"><div class=\"publicLinkHref\" id=\"pl" + name + "\"></div><img class=\"closePopup\" id=\"cp" + name + "\" src=\"/static/icons/close.png\" title=\"Close popup\"></span></div></div></div>");
             $("div[id='pl" + name + "']").html(href);
             $("img[id='cp" + name + "']").click(function () {
                 $("div[id='pld" + name + "']").remove("div");
@@ -233,7 +232,7 @@ var Accordion = (function () {
                         var id = data[i].text.substring(pos + 4);
 
                         setStatusBarMessage("Saved as: " + name + ".");
-                        $("div#myprogramscontent").append(createProgramListElement(createExampleUrl(id, "My Programs"), name));
+                        $("div#myprogramscontent").append(createProgramListElement(createExampleUrl(id, "My Programs"), name, runConfiguration.mode));
                         $("a#My_Programs").click();
                         $("#problems").html("");
                         setConsoleMessage("");
@@ -250,40 +249,58 @@ var Accordion = (function () {
     }
 
     function createProgramListElement(id, name, runConf) {
-        var content = document.createElement("p");
+
+        var table = document.createElement("table");
+        var tr = document.createElement("tr");
+        var tdIcon = document.createElement("td");
+        tdIcon.style.width = "16px";
         var span = document.createElement("div");
         span.className = "bullet";
-//        span.innerHTML = "&#8226;";
         if (typeof runConf == "undefined") {
             span.style.background = "url(/static/icons/text.png) no-repeat";
         } else {
             span.style.background = "url(/static/icons/" + runConf + ".png) no-repeat";
         }
-        content.appendChild(span);
+        //background: url(/static/icons/java.png) repeat-x;
+
+        tdIcon.appendChild(span);
+        var tdContent = document.createElement("td");
         var contA = document.createElement("a");
         contA.id = id;
         contA.style.cursor = "pointer";
         contA.onclick = function () {
-            beforeLoadProgram(this.id);
+            Accordion.loadProgram(this.id, false);
         };
         contA.innerHTML = name;
-        var delImg = document.createElement("img");
-        delImg.src = "/static/icons/delete.png";
-        delImg.title = "Delete";
-        delImg.onclick = function () {
-            deleteProgram(this.parentNode.childNodes[1].id);
+        tdContent.appendChild(contA);
+        var tdDelete = document.createElement("td");
+        tdDelete.style.width = "16px";
+        var deleteImg = document.createElement("img");
+        deleteImg.src = "/static/icons/delete.png";
+        deleteImg.title = "Delete this program";
+        deleteImg.onclick = function () {
+            //in table get td with a element - id of a
+            Accordion.deleteProgram(this.parentNode.parentNode.childNodes[1].childNodes[0].id);
         };
+        tdDelete.appendChild(deleteImg);
+        var tdLink = document.createElement("td");
+        tdLink.style.width = "16px";
         var linkImg = document.createElement("img");
         linkImg.src = "/static/icons/link1.png";
         linkImg.title = "Public link for this program";
         linkImg.onclick = function () {
-            generatePublicLinkForProgram(this.parentNode.childNodes[1].id);
+            //in table get td with a element - id of a
+            // structure table-tr-td-a
+            Accordion.generatePublicLinkForExample(this.parentNode.parentNode.childNodes[1].childNodes[0].id);
         };
-        content.appendChild(contA);
-        content.appendChild(delImg);
-        content.appendChild(linkImg);
+        tdLink.appendChild(linkImg);
 
-        return content;
+        tr.appendChild(tdIcon);
+        tr.appendChild(tdContent);
+        tr.appendChild(tdLink);
+        tr.appendChild(tdDelete);
+        table.appendChild(tr);
+        return table;
     }
 
 
@@ -294,7 +311,7 @@ var Accordion = (function () {
                     setStatusBarError(data[0].text);
                 } else {
                     setStatusBarMessage(data[0].text);
-                    document.getElementById(createExampleUrl(data[0].args, "My Programs")).parentNode.innerHTML = "";
+                    document.getElementById(createExampleUrl(data[0].args, "My Programs")).parentNode.parentNode.parentNode.innerHTML = "";
 
                 }
             }
@@ -313,7 +330,7 @@ var Accordion = (function () {
                     var name = createExampleUrl(programId, "My Programs");
                     var displayedName = $("a[id='" + name + "']").html();
                     var tweetHref = escape("#Solved " + displayedName + " " + data[0].text + " #Kotlin");
-                    $("a[id='" + name + "']").parent("p").after("<div class=\"toolbox\" id=\"pld" + name + "\" style=\"display:block;\"><div align=\"center\"><div class=\"fixedpage\"><div class=\"publicLinkHref\" id=\"pl" + name + "\"></div><a target=\"_blank\" href=\"http://twitter.com/home?status=" + tweetHref + "\"><img class=\"tweetImg\" src=\"/static/images/social/twitter.png\"/></a><img class=\"closePopup\" id=\"cp" + name + "\" src=\"/static/icons/close.png\" title=\"Close popup\"></span></div></div></div>");
+                    $("a[id='" + name + "']").parent("td").parent("tr").parent("table").after("<div class=\"toolbox\" id=\"pld" + name + "\" style=\"display:block;\"><div align=\"center\"><div class=\"fixedpage\"><div class=\"publicLinkHref\" id=\"pl" + name + "\"></div><a target=\"_blank\" href=\"http://twitter.com/home?status=" + tweetHref + "\"><img class=\"tweetImg\" src=\"/static/images/social/twitter.png\"/></a><img class=\"closePopup\" id=\"cp" + name + "\" src=\"/static/icons/close.png\" title=\"Close popup\"></span></div></div></div>");
                     $("div[id='pl" + name + "']").html(data[0].text);
                     $("img[id='cp" + name + "']").click(function () {
                         $("div[id='pld" + name + "']").remove("div");
@@ -377,6 +394,7 @@ var Accordion = (function () {
                     } else {
                         $("#runConfigurationMode").selectmenu("value", data[0].runConf);
                     }
+                    setRunConfigurationMode();
                     setStatusBarMessage(LOADING_PROGRAM_OK);
 
                     $("a[id='" + lastSelectedExample + "']").attr("class", "selectedExample");
@@ -433,6 +451,7 @@ var Accordion = (function () {
 //        editor.focus();
             loadingExample = false;
             if (typeof data[0] != "undefined") {
+                setRunConfigurationMode();
                 editor.setValue(data[0].text);
                 setStatusBarMessage(LOADING_EXAMPLE_OK);
             }
@@ -460,14 +479,18 @@ var Accordion = (function () {
                 var cont = document.createElement("div");
             }
             if (data[i].type == "content") {
-                var content = document.createElement("p");
+                var table = document.createElement("table");
+                var tr = document.createElement("tr");
+                var tdIcon = document.createElement("td");
+                tdIcon.style.width = "16px";
                 var span = document.createElement("div");
                 span.className = "bullet";
                 span.style.background = "url(/static/icons/java.png) no-repeat";
                 //background: url(/static/icons/java.png) repeat-x;
                 span.id = "bullet" + replaceAll(data[i].text, " ", "_");
 //                span.innerHTML = "&#8226;";
-                content.appendChild(span);
+                tdIcon.appendChild(span);
+                var tdContent = document.createElement("td");
                 var contA = document.createElement("a");
                 contA.id = createExampleUrl(data[i].text, lastFolderName);
                 contA.style.cursor = "pointer";
@@ -475,16 +498,23 @@ var Accordion = (function () {
                     beforeLoadExample(this.id);
                 };
                 contA.innerHTML = data[i].text;
+                tdContent.appendChild(contA);
+                var tdLink = document.createElement("td");
                 var linkImg = document.createElement("img");
                 linkImg.src = "/static/icons/link1.png";
                 linkImg.title = "Public link for this example";
                 linkImg.onclick = function () {
-                    generatePublicLinkForExample(this.parentNode.childNodes[1].id);
+                    //in table get td with a element - id of a
+                    Accordion.generatePublicLinkForExample(this.parentNode.parentNode.childNodes[1].childNodes[0].id);
                 };
+                tdLink.appendChild(linkImg);
 
-                content.appendChild(contA);
-                content.appendChild(linkImg);
-                cont.appendChild(content);
+                tr.appendChild(tdIcon);
+                tr.appendChild(tdContent);
+                tr.appendChild(tdLink);
+                table.appendChild(tr);
+
+                cont.appendChild(table);
             }
             acc.appendChild(cont);
 
@@ -500,6 +530,7 @@ var Accordion = (function () {
 
         myProgA.innerHTML = "My Programs";
         innerDiv.appendChild(myProgA);
+
 
         if (isLogin) {
             var saveImg = document.createElement("img");
@@ -542,7 +573,7 @@ var Accordion = (function () {
         }).find('#tools img').click(function (ev) {
                 ev.preventDefault();
                 if (this.id == "saveProgram") {
-                    save();
+                    Accordion.saveProgram();
                 } else if (this.id == "saveAsProgram") {
                     $("#saveDialog").dialog("open");
                 } else if (this.id == "showInfoAboutLogin") {
@@ -561,14 +592,14 @@ var Accordion = (function () {
 //            url = url;
                 url = url.substring(exampleStr.length);
                 $("#" + getFolderNameByUrl(url)).click();
-                beforeLoadExample(url);
+                Accordion.loadExample(url);
             } else if (url.indexOf(publicLink) == 0) {
 //            url = url;
                 //$("#" + url.substring(url.indexOf("&folder=") + 6)).click();
-                beforeLoadProgram(createExampleUrl(url.substring(publicLink.length), "My Programs"));
+                Accordion.loadProgram(createExampleUrl(url.substring(publicLink.length), "My Programs"));
                 //url.substring(publicLink.length) + "&folder=My_Programs", true);
             } else {
-                beforeLoadExample("Hello,_world!&name=Simplest_version");
+                Accordion.loadExample("Hello,_world!&name=Simplest_version");
             }
         }
     }
@@ -593,7 +624,7 @@ var Accordion = (function () {
         var i = 0;
         var cont = document.getElementById("myprogramscontent");
         while (typeof data[i] != "undefined") {
-            $("#myprogramscontent").append(createProgramListElement(createExampleUrl(data[i].id, "My Programs"), replaceAll(data[i].name, "%20", " ")));
+            $("#myprogramscontent").append(createProgramListElement(createExampleUrl(data[i].id, "My Programs"), replaceAll(data[i].name, "%20", " "), data[i].runConf));
             i++;
         }
     }

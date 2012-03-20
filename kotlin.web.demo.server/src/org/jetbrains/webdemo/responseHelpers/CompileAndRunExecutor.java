@@ -112,7 +112,7 @@ public class CompileAndRunExecutor {
                     } catch (IOException e) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                                 sessionInfo.getType(), currentPsiFile.getText());
-                        return ResponseUtils.getErrorInJson("Cannot get a completion.");
+                        return ResponseUtils.getErrorInJson("Cannot get a result.");
                     }
                 } else {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot create output directory for files"),

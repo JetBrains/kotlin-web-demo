@@ -18,7 +18,12 @@ package org.jetbrains.webdemo;
 
 import com.intellij.lang.java.JavaParserDefinition;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.fileTypes.FileTypeRegistry;
+import com.intellij.openapi.util.Getter;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.encoding.EncodingRegistry;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -40,6 +45,9 @@ import java.net.URLClassLoader;
 public class ServerInitializer extends Initializer {
     //    private static final Logger LOG = Logger.getLogger(Initializer.class);
     private static ServerInitializer initializer = new ServerInitializer();
+
+    private static Getter<FileTypeRegistry> registry;
+    private static Disposable  root;
 
     public static ServerInitializer getInstance() {
         return initializer;
@@ -74,6 +82,8 @@ public class ServerInitializer extends Initializer {
         environment.registerFileType(JetFileType.INSTANCE, "jet");
         environment.registerParserDefinition(new JetParserDefinition());
         environment.registerParserDefinition(new JavaParserDefinition());
+
+        registry = FileTypeRegistry.ourInstanceGetter;
 //        ((MockProject) environment.getProject()).registerService(JavaPsiImplementationHelper.class, new CoreJavaPsiImplementationHelper());
 
         return true;
@@ -118,7 +128,7 @@ public class ServerInitializer extends Initializer {
     public boolean initJavaCoreEnvironment() {
         if (environment == null) {
 
-            Disposable root = new Disposable() {
+            root = new Disposable() {
                 @Override
                 public void dispose() {
                 }
@@ -129,6 +139,14 @@ public class ServerInitializer extends Initializer {
         }
         ErrorWriterOnServer.writeInfoToConsole("JavaCoreEnvironment is already initialized.");
         return true;
+    }
+
+    public static void reinitializeJavaEnvironment() {
+        ApplicationManager.setApplication(environment.getApplication(), registry, EncodingRegistry.ourInstanceGetter, root);
+//        environment.registerFileType(JetFileType.INSTANCE, "kt");
+//        environment.registerFileType(JetFileType.INSTANCE, "kts");
+//        environment.registerFileType(JetFileType.INSTANCE, "ktm");
+//        environment.registerFileType(JetFileType.INSTANCE, "jet");
     }
 
     @Nullable

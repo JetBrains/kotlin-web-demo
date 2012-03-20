@@ -105,6 +105,13 @@ $(document).ready(function () {
         autoOpen:false
     });
 
+    $("#dialogAboutJavaToKotlinConverter").dialog({
+        modal:"true",
+        width:300,
+//        height:120,
+        autoOpen:false
+    });
+
     $("#popupForCanvas").dialog({
 //        modal:"false",
         width:630,

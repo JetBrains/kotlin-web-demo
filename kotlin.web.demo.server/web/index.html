@@ -8,6 +8,7 @@
     <script src="/static/codemirror/lib/codemirror.js"></script>
 
     <script src="/static/codemirror/mode/clike/kotlin.js"></script>
+    <script src="/static/codemirror/mode/clike/clike.js"></script>
 
     <link type="text/css" href="/static/jquery/css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
     <script type="text/javascript" src="/static/jquery/jquery-1.7.1.min.js"></script>
@@ -49,6 +50,7 @@
 
     <script type="text/javascript">
         var editor;
+        var editorForJava;
     </script>
     <script type="text/javascript">
 
@@ -84,6 +86,10 @@
 <div id="loader">
     <img src="/static/images/loading2.png"/>
 </div>
+<!--
+<div id="convertToKotlin">
+    <img src="/static/icons/javatokotlin.PNG" id="javaToKotlin">
+</div>-->
 
 <div id="all">
     <div id="header">
@@ -91,7 +97,8 @@
             <tr>
                 <td>
                     <img src="/static/images/kotlinlogo2.png" id="kotlinlogo" title="Kotlin"/>
-                    <img src="/static/images/kotlinlogowobackground.png" id="kotlinlogofork2js" title="Kotlin" style="display: none;"/>
+                    <img src="/static/images/kotlinlogowobackground.png" id="kotlinlogofork2js" title="Kotlin"
+                         style="display: none;"/>
                 </td>
                 <td id="headertitle">
                     Kotlin Web Demo<span id="kotlinVersionTop"></span>
@@ -101,7 +108,8 @@
                     <div id="login" height="20">
                         <b>Log in:</b>
                         <a href="#" onclick="beforeLogin('twitter');"><img src="/static/images/social/twitter.png"/></a>
-                        <a href="#" onclick="beforeLogin('facebook');"><img src="/static/images/social/facebook.png"/></a>
+                        <a href="#" onclick="beforeLogin('facebook');"><img
+                                src="/static/images/social/facebook.png"/></a>
                         <a href="#" onclick="beforeLogin('google');"><img src="/static/images/social/google.png"/></a>
                     </div>
                     <a target="_blank"
@@ -124,6 +132,10 @@
                 Examples
             </div>
             <div id="leftcontent">
+                <div id="javaToKotlinDiv">
+                    <a id="javaToKotlin">Try to convert your JAVA-file to kotlin</a>
+                    <a id="whatimgjavatokotlin"><img src="/static/icons/help.png"/></a>
+                </div>
                 <div id="examplesaccordion">
 
                 </div>
@@ -340,15 +352,27 @@
     <p>
         <!--dialogPbordered-->
         You can choose one of the proposed run configurations:
-    <img style="margin-top: 10px; margin-bottom: 10px;" src="/static/images/help/runConf.png"/>
+        <img style="margin-top: 10px; margin-bottom: 10px;" src="/static/images/help/runConf.png"/>
+
     <p class="dialogPbordered">
-    <b>Java (Standard)</b>: program will run using JVM.
+        <b>Java (Standard)</b>: program will run using JVM.
     </p>
+
     <p class="dialogPbordered">
         <b>JavaScript (Standard)</b>: program will run using Pre-Alfa JavaScript backend.
     </p>
+
     <p>
-        <b>JavaScript (Canvas)</b>: program will run using Pre-Alfa JavaScript backend. HTML5 Canvas is available for drawing.
+        <b>JavaScript (Canvas)</b>: program will run using Pre-Alfa JavaScript backend. HTML5 Canvas is available for
+        drawing.
+    </p>
+
+</div>
+
+<div id="dialogAboutJavaToKotlinConverter" title="Help">
+    <p>
+        Write the code on java in the opened popup dialog and then translate it to kotlin.
+        Note that this function is only for illustrate kotlin syntax and it can generate redundant code.
     </p>
 
 </div>
@@ -357,7 +381,13 @@
     Do you want to save your changes?
 </div>
 
-<link type="text/css" href="/static/jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css" rel="stylesheet"/>
+<div id="convertToKotlinDialog" title="Enter Java code">
+    <textarea class="CodeMirror" id="codeOnJava" name="codeOnJava"></textarea>
+
+</div>
+
+<link type="text/css" href="/static/jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css"
+      rel="stylesheet"/>
 
 <script type="text/javascript" src="/static/jquery/development-bundle/ui/jquery.ui.selectmenu.js"></script>
 
@@ -368,10 +398,11 @@
 <script src="/static/components/highlighting.js"></script>
 <script src="/static/components/complete.js"></script>
 <script src="/static/components/runner.js"></script>
+<script src="/static/components/converter.js"></script>
 
-<applet id="myapplet" code="org.jetbrains.webdemo.MainApplet" width="0" height="0"
+<!--<applet id="myapplet" code="org.jetbrains.webdemo.MainApplet" width="0" height="0"
         ARCHIVE="/static/WebDemoApplet14032012.jar" style="display: none;">
-</applet>
+</applet>-->
 <!--<applet id="jsapplet" code="org.jetbrains.k2js.facade.K2JSTranslatorApplet" width="0" height="0"
         ARCHIVE="WebViewApplet02102012.jar" style="display: none;"></applet>-->
 <!--<applet id="myapplet" code="org.jetbrains.demo.ukhorskaya.MainApplet" width="0" height="0"

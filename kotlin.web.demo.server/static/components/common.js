@@ -25,6 +25,7 @@
 //Problems with ajax-request to server
 var HIGHLIGHT_REQUEST_ABORTED = "Can't get errors/warnings.";
 var RUN_REQUEST_ABORTED = "Can't get program output from server.";
+var CONVERT_REQUEST_ABORTED = "Can't get conversation result from server.";
 var COMPLETE_REQUEST_ABORTED = "Can't get completion proposal list from server.";
 var EXAMPLES_REQUEST_ABORTED = "Can't get the example code from server.";
 var SAVE_PROGRAM_REQUEST_ABORTED = "Can't save the program on server.";
@@ -41,6 +42,7 @@ var TRY_RUN_CODE_WITH_ERROR = "Can't run a program with errors. See the Problems
 var EXECUTE_OK = "Compilation competed successfully.";
 var GET_FROM_APPLET_FAILED = "Your browser can't run Java Applets.";
 var LOADING_HIGHLIGHTING_OK = "Errors were loaded.";
+var LOADING_CONVERSATION_TO_KOTLIN_OK = "Look conversation result in editor.";
 var LOADING_EXAMPLE_OK = "Example is loaded.";
 var LOADING_PROGRAM_OK = "Program is loaded.";
 var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
@@ -70,6 +72,7 @@ function setRunConfigurationMode() {
 }
 
 var isMac = false;
+var isIE = false;
 
 var isAppletLoaded = false;
 
@@ -90,7 +93,6 @@ function setEditorState(state) {
 function getEditorState() {
     return editorState.isContentChanged;
 }
-
 
 
 $(document).keydown(function (e) {
@@ -136,28 +138,46 @@ function e_preventDefault(e) {
 
 function onBodyLoad() {
     if (navigator.appVersion.indexOf("MSIE") != -1) {
-        document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
-    } else {
-        $("#help3").toggle(true);
-        resizeCentral();
-        setKotlinVersion();
-        setTimeout(function() {
-            if (navigator.appVersion.indexOf("Mac") != -1) {
-                isMac = true;
-                var text = $("#help3").html();
-                text = text.replace("F9", "R");
-                $("#help3").html(text.replace("F9", "R"));
-                var title = $("#run").attr("title").replace("F9", "R");
-                $("#run").attr("title", title);
+        isIE = true;
+        // document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
+        function getIEVersionNumber() {
+            var ua = navigator.userAgent;
+            var MSIEOffset = ua.indexOf("MSIE ");
+            alert(ua);
+            if (MSIEOffset == -1) {
+                return 0;
+            } else {
+                return parseFloat(ua.substring(MSIEOffset + 5, ua.indexOf(";", MSIEOffset)));
+            }
+        }
+
+//        alert(getIEVersionNumber());
+//        if (getIEVersionNumber() < 8) {
+//            document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
+//        }
+    }
+
+//    } else {*/
+    $("#help3").toggle(true);
+    resizeCentral();
+    setKotlinVersion();
+    setTimeout(function () {
+        if (navigator.appVersion.indexOf("Mac") != -1) {
+            isMac = true;
+            var text = $("#help3").html();
+            text = text.replace("F9", "R");
+            $("#help3").html(text.replace("F9", "R"));
+            var title = $("#run").attr("title").replace("F9", "R");
+            $("#run").attr("title", title);
 //            document.getElementById("run").title = document.getElementById("run").title.replace("F9", "R");
 //            document.getElementById("runJS").title = document.getElementById("runJS").title.replace("F9", "R");
-            }
-        }, 10);
+        }
+    }, 10);
 
-        hideLoader();
-        setTimeout(setSessionId, 10);
+    hideLoader();
+    setTimeout(setSessionId, 10);
 //        setSessionId();
-    }
+//    }
 }
 
 function setSessionId() {
@@ -248,20 +268,33 @@ function getSessionIdSuccess(data) {
     });
 }
 
+var currheight;
+
 function resizeCentral() {
-    var wheight = (window.innerHeight) ? window.innerHeight :
-        ((document.all) ? document.body.offsetHeight : null);
-    var wwidth = (window.innerWidth) ? window.innerWidth :
-        ((document.all) ? document.body.offsetWidth : null);
+    if (!isIE) {
+        var wheight = (window.innerHeight) ? window.innerHeight :
+            ((document.all) ? document.body.offsetHeight : null);
+        var wwidth = (window.innerWidth) ? window.innerWidth :
+            ((document.all) ? document.body.offsetWidth : null);
+        reassignSize(wwidth, wheight);
+    } else {
+        //for avoid looping on resize in IE
+        if (typeof document != 'undefined' && typeof document.documentElement != 'undefined' && currheight != document.documentElement.clientHeight) {
+            reassignSize(document.documentElement.clientWidth, document.documentElement.clientHeight);
+            currheight = document.documentElement.clientHeight;
+        }
+    }
+}
+
+function reassignSize(wwidth, wheight) {
     $("#scroll").css("height", (wheight - 262 - 72 - 20 - 10) + "px");
     $("#left").css("minHeight", (wheight - 72 - 20 - 10) + "px");
     $("#right").css("minHeight", (wheight - 72 - 20 - 10) + "px");
     $("#center").css("minHeight", (wheight - 72 - 20 - 10) + "px");
-    $("#center").css("width", (wwidth - 292 - 292 - 2 - 20 -5) + "px");
-//    $("#left").css("width", "280px");
-//    $("#right").css("width", "280px");
+    $("#center").css("width", (wwidth - 292 - 292 - 2 - 20 - 5) + "px");
     editor.refresh();
 }
+
 
 function hideLoader() {
     $('#loader').hide();
@@ -279,6 +312,30 @@ function setKotlinVersion() {
         autoOpen:false
     });
 
+    $("#convertToKotlinDialog").dialog({
+        modal:"true",
+        width:640,
+        height:480,
+        autoOpen:false,
+        resize: function () {
+            var height = $("#convertToKotlinDialog").dialog("option", "height") - 120;
+            $("div#convertToKotlinDialog div #scroll").css("height", height + "px");
+        },
+        buttons:[
+            { text:"Convert to Kotlin",
+                click:function () {
+
+                    Converter.convert();
+                }
+            },
+            { text:"Cancel",
+                click:function () {
+                    $("#convertToKotlinDialog").dialog("close");
+                }
+            }
+        ]
+    });
+
     $("#kotlinVersionTop").html("(" + KOTLIN_VERSION + ")");
     $("#kotlinVersion").html(WEB_DEMO_VERSION);
 }
@@ -286,6 +343,7 @@ function setKotlinVersion() {
 function setStatusBarMessage(message) {
     $("#statusbar").html(message);
 }
+
 function setStatusBarError(message) {
     $("#statusbar").html("<font color=\"red\">" + message + "</font>");
 }
@@ -482,6 +540,29 @@ function setLogin() {
     loadHelpContentForExamples();
     loadAccordionContent();
 }
+
+$("#javaToKotlin").click(function () {
+    var height = $("#convertToKotlinDialog").dialog("option", "height") - 120;
+    $("div#convertToKotlinDialog div #scroll").css("height", height + "px");
+    $("#convertToKotlinDialog").dialog("open");
+    editorForJava.refresh();
+});
+
+$("#run").click(function () {
+    Runner.run();
+});
+
+$("#whatimgjavatokotlin").click(function () {
+    $("#dialogAboutJavaToKotlinConverter").dialog("open");
+});
+
+editorForJava = CodeMirror.fromTextArea(document.getElementById("codeOnJava"), {
+    lineNumbers:true,
+    matchBrackets:true,
+    mode:"text/x-java",
+    minHeight:"430px"
+});
+
 
 
 

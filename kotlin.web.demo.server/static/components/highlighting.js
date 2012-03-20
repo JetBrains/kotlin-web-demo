@@ -60,6 +60,7 @@ var Highlighting = (function () {
             data:{text:i},
             timeout:10000,
             error:function () {
+                $("#run").css({opacity:1});
                 clearProblemView();
                 isLoadingHighlighting = false;
                 setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
@@ -183,6 +184,7 @@ var Highlighting = (function () {
                     if (type == "complete") {
                         setStatusBarError(COMPLETE_REQUEST_ABORTED);
                     } else {
+                        $("#run").css({opacity:1});
                         setStatusBarError(HIGHLIGHT_REQUEST_ABORTED);
                     }
 
@@ -243,6 +245,7 @@ var Highlighting = (function () {
                 data:{text:i},
                 timeout:10000,
                 error:function () {
+                    $("#run").css({opacity:1});
                     clearProblemView();
                     isLoadingHighlighting = false;
                     setConsoleMessage(HIGHLIGHT_REQUEST_ABORTED);
