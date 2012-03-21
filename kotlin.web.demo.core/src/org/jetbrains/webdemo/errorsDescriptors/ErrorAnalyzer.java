@@ -94,7 +94,7 @@ public class ErrorAnalyzer {
                 }
                 if (diagnostic.getSeverity() != Severity.INFO) {
                     //TODO
-                    TextRange firstRange = (TextRange) diagnostic.getTextRanges().iterator().next();
+                    TextRange firstRange = diagnostic.getTextRanges().iterator().next();
                     String className = diagnostic.getSeverity().name();
                     if (!(diagnostic instanceof UnresolvedReferenceDiagnostic) && (diagnostic.getSeverity() == Severity.ERROR)) {
                         className = "red_wavy_line";

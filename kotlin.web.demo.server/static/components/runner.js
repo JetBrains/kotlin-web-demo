@@ -218,16 +218,17 @@ var Runner = (function () {
                         + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 50) + "\" id=\"mycanvas\"></canvas>");
                     if (runConfiguration.mode == "canvas") {
                         $("#popupForCanvas").dialog("open");
-                        /*$("#popupForCanvas").dialog({
-                         resize: function() {
-                         $("#popupForCanvas").html("");
-                         $("#popupForCanvas").append("<canvas width=\"" + $("#popupForCanvas").dialog("option", "width")
-                         + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 50) + "\" id=\"mycanvas\"></canvas>");
-                         //                                $("#mycanvas")[0].width = $("#popupForCanvas").dialog("option", "width") - 100;
-                         //                                $("#mycanvas")[0].height = $("#popupForCanvas").dialog("option", "height") - 100;
-                         eval(data[0].text);
-                         }
-                         });*/
+                        $("#popupForCanvas").dialog({
+                            resizeStop:function (event, ui) {
+                                $("#popupForCanvas").html("");
+                                 $("#popupForCanvas").append("<canvas width=\"" + $("#popupForCanvas").dialog("option", "width")
+                                 + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 50) + "\" id=\"mycanvas\"></canvas>");
+//                                $("#mycanvas")[0].width = $("#popupForCanvas").dialog("option", "width");
+//                                $("#mycanvas")[0].height = $("#popupForCanvas").dialog("option", "height") - 50;
+                                creatures.setState();
+//                                eval(data[0].text);
+                            }
+                        });
 
                     }
                     genData = eval(data[0].text);

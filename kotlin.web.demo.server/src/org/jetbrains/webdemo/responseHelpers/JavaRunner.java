@@ -140,9 +140,9 @@ public class JavaRunner {
                     outStream.delete(0, outStream.length());
                     errStream.append(ApplicationSettings.KOTLIN_ERROR_MESSAGE);
                     String linkForLog = getLinkForLog(outStream.toString());
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
+                            sessionInfo.getType(), textFromFile);
                 }
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("EMPTY MESSAGE", outStream.toString().replace("<br/>", "\n"),
-                        sessionInfo.getType(), textFromFile);
             }
         }
 

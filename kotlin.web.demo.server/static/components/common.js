@@ -48,7 +48,7 @@ var LOADING_PROGRAM_OK = "Program is loaded.";
 var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
 var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
 var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
-var IE_SUPPORT = "Sorry, Internet Explorer is currently unsupported.";
+var IE_SUPPORT = "Sorry, Internet Explorer under 8 version is currently unsupported.";
 
 var KOTLIN_VERSION = "0.0.0";
 var WEB_DEMO_VERSION = "0.0.0";
@@ -143,7 +143,6 @@ function onBodyLoad() {
         function getIEVersionNumber() {
             var ua = navigator.userAgent;
             var MSIEOffset = ua.indexOf("MSIE ");
-            alert(ua);
             if (MSIEOffset == -1) {
                 return 0;
             } else {
@@ -152,9 +151,10 @@ function onBodyLoad() {
         }
 
 //        alert(getIEVersionNumber());
-//        if (getIEVersionNumber() < 8) {
-//            document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
-//        }
+        if (getIEVersionNumber() < 8) {
+            document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
+            return;
+        }
     }
 
 //    } else {*/
@@ -317,9 +317,10 @@ function setKotlinVersion() {
         width:640,
         height:480,
         autoOpen:false,
-        resize: function () {
+        resizeStop: function (event, ui) {
             var height = $("#convertToKotlinDialog").dialog("option", "height") - 120;
             $("div#convertToKotlinDialog div #scroll").css("height", height + "px");
+            editorForJava.refresh();
         },
         buttons:[
             { text:"Convert to Kotlin",

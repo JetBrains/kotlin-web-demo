@@ -1205,7 +1205,7 @@ div.fixedpage {
 #accordion div table a, #accordion div table a:hover {
     display: inline-block;
     /**display:inline;*/
-    width: 75% !important;
+    /*width: 75% !important;*/
     word-wrap: break-word;
     margin: 0;
     padding: 0;

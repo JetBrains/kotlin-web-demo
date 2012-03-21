@@ -106,7 +106,7 @@ public class HttpSession {
 
     private void sendConversationResult() {
         PostData data = getPostDataFromRequest();
-        writeResponse(new KotlinConverter(sessionInfo).getResult(data.text), HttpServletResponse.SC_OK);
+        writeResponse(new JavaToKotlinConverter(sessionInfo).getResult(data.text), HttpServletResponse.SC_OK);
     }
 
     private void sendWriteLogResult() {

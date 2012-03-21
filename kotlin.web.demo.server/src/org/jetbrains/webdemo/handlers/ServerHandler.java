@@ -143,6 +143,7 @@ public class ServerHandler {
         String id = sessionInfo.getId();
         PrintWriter out = null;
         try {
+            response.addHeader("Cache-Control", "no-cache");
             out = response.getWriter();
             JSONArray array = new JSONArray();
             array.put(id);
@@ -396,6 +397,7 @@ public class ServerHandler {
         PrintWriter writer = null;
         try {
 //            exchange.sendResponseHeaders(errorCode, responseBody.length);
+            response.addHeader("Cache-Control", "no-cache");
             response.setStatus(errorCode);
             writer = response.getWriter();
             writer.write(responseBody);

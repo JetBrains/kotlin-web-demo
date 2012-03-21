@@ -18,14 +18,11 @@ package org.jetbrains.webdemo.responseHelpers;
 
 import org.jetbrains.jet.j2k.JavaToKotlinTranslator;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.ServerInitializer;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 import org.json.JSONArray;
 
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,10 +32,10 @@ import java.util.Map;
  * Date: 12/20/11
  * Time: 5:19 PM
  */
-public class KotlinConverter {
+public class JavaToKotlinConverter {
     private final SessionInfo info;
 
-    public KotlinConverter(SessionInfo info) {
+    public JavaToKotlinConverter(SessionInfo info) {
         this.info = info;
     }
 
@@ -49,6 +46,7 @@ public class KotlinConverter {
             String resultFormConverter = "";
             try {
                 resultFormConverter = JavaToKotlinTranslator.translateToKotlin(code);
+
             } catch (Exception e) {
                 return ResponseUtils.getErrorInJson("EXCEPTION: " + e.getMessage());
             }
@@ -56,8 +54,10 @@ public class KotlinConverter {
                 return ResponseUtils.getErrorInJson("EXCEPTION: generated code is empty.");
             }
 
-            map.put("text", resultFormConverter);
             ServerInitializer.reinitializeJavaEnvironment();
+//            JetFile file = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), resultFormConverter);
+//            CodeStyleManager.getInstance(Initializer.INITIALIZER.getEnvironment().getProject()).reformat(file);
+            map.put("text", resultFormConverter);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
@@ -66,4 +66,5 @@ public class KotlinConverter {
         result.put(map);
         return result.toString();
     }
+
 }
