@@ -283,6 +283,7 @@ public class HttpSession {
         PrintWriter writer = null;
 
         try {
+            response.addHeader("Cache-Control", "no-cache");
             response.setStatus(errorCode);
             writer = response.getWriter();
             writer.write(responseBody);
