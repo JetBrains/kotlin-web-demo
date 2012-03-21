@@ -39,7 +39,7 @@ public class RunTest extends BaseTest {
         compareResult(fileName, "", expectedResult, "java");
     }
 
-    /*public void test$execution$ManyArgs() throws IOException, InterruptedException {
+    public void test$execution$ManyArgs() throws IOException, InterruptedException {
         String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"a<br/>b<br/>c<br/>\",\"type\":\"out\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "a b c", expectedResult, "java");
@@ -49,7 +49,10 @@ public class RunTest extends BaseTest {
         compareResult(fileName, "\"a b\" c", expectedResult, "java");
         expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"}]";
         compareResult(fileName, "", expectedResult, "java");
-    }*/
+
+        expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"a \\\"Hello\\\" b<br/>c<br/>\",\"type\":\"out\"}]";
+        compareResult(fileName, "\"a \\\"Hello\\\" b\" c", expectedResult, "java");
+    }
 
     public void test$execution$FooOut() throws IOException, InterruptedException {
         String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"}]";
