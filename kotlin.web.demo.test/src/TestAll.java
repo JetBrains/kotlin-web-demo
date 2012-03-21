@@ -20,6 +20,7 @@ import org.jetbrains.webdemo.test.completion.CompletionTest;
 import org.jetbrains.webdemo.test.examples.HighlightExamplesTest;
 import org.jetbrains.webdemo.test.examples.RunExamplesTest;
 import org.jetbrains.webdemo.test.highlighting.HighlightingTest;
+import org.jetbrains.webdemo.test.j2kconverter.J2KConverterTest;
 import org.jetbrains.webdemo.test.run.RunTest;
 
 /**
@@ -34,7 +35,8 @@ public class TestAll extends TestCase {
                 HighlightExamplesTest.class,
                 CompletionTest.class,
                 RunExamplesTest.class,
-                RunTest.class
+                RunTest.class,
+                J2KConverterTest.class
         );
 //        suite.addTest(testDslExample.namespace.getSuite());
         return suite;
