@@ -57,6 +57,7 @@ public class RunExamplesTest extends BaseTest {
         expectedResults.put("Creatures.kt", new Example("Creatures.kt", "", "from js file"));
         expectedResults.put("Fancy lines.kt", new Example("Fancy lines.kt", "", "from js file"));
         expectedResults.put("Hello, Kotlin.kt", new Example("Hello, Kotlin.kt", "", "from js file"));
+        expectedResults.put("Traffic light.kt", new Example("Traffic light.kt", "", "from js file"));
         expectedResults.put("A multi-language Hello.kt", new Example("A multi-language Hello.kt", "FR", "Salut!<br/>"));
         expectedResults.put("An object-oriented Hello.kt", new Example("An object-oriented Hello.kt", "guest1", "Hello, guest1<br/>"));
         expectedResults.put("Reading a name from the command line.kt", new Example("Reading a name from the command line.kt", "guest1", "Hello, guest1!<br/>"));
@@ -119,6 +120,7 @@ public class RunExamplesTest extends BaseTest {
         expectedList.append("Creatures.kt").append("\n");
         expectedList.append("Fancy lines.kt").append("\n");
         expectedList.append("Hello, Kotlin.kt").append("\n");
+        expectedList.append("Traffic light.kt").append("\n");
         expectedList.append("A multi-language Hello.kt").append("\n");
         expectedList.append("An object-oriented Hello.kt").append("\n");
         expectedList.append("Reading a name from the command line.kt").append("\n");

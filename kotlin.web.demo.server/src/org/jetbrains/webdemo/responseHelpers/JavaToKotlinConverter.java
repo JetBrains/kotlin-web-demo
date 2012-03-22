@@ -55,6 +55,7 @@ public class JavaToKotlinConverter {
             }
 
             ServerInitializer.reinitializeJavaEnvironment();
+            //TODO indentation
 //            JetFile file = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), resultFormConverter);
 //            CodeStyleManager.getInstance(Initializer.INITIALIZER.getEnvironment().getProject()).reformat(file);
             map.put("text", resultFormConverter);

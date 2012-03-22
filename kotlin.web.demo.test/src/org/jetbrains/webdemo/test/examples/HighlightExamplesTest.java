@@ -86,6 +86,7 @@ public class HighlightExamplesTest extends BaseTest {
         expectedList.append("Creatures.kt").append("\n");
         expectedList.append("Fancy lines.kt").append("\n");
         expectedList.append("Hello, Kotlin.kt").append("\n");
+        expectedList.append("Traffic light.kt").append("\n");
         expectedList.append("A multi-language Hello.kt").append("\n");
         expectedList.append("An object-oriented Hello.kt").append("\n");
         expectedList.append("Reading a name from the command line.kt").append("\n");
