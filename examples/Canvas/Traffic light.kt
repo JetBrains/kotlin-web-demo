@@ -4,17 +4,101 @@ import java.util.ArrayList
 import js.setInterval
 import js.DomElement
 import js.setTimeout
+import js.*;
+
+val PATH_TO_IMAGES = "/static/images/canvas/"
+
+val state = CanvasState(getCanvas())
+val colors = Colors()
+
+var trafficLightUp = TrafficLight(v(180.0, 181.0), "up", "red")
+var trafficLightDown = TrafficLight(v(100.0, 77.0), "down", "red")
+var trafficLightLeft = TrafficLight(v(228.0, 109.0), "left", "green")
+var trafficLightRight = TrafficLight(v(55.0, 145.0), "right", "green")
+
 
 fun main(args : Array<String>) {
-  val state = CanvasState(getCanvas())
-  //Add buttons
-  state.addShape(Button("change", "Click here to change light", Vector(120.0, 50.0), Vector(210.0, 50.0)))
-  state.addShape(Button("green", "Only GREEN", Vector(340.0, 50.0), Vector(120.0, 50.0)))
-  state.addShape(Button("red", "Only RED", Vector(470.0, 50.0), Vector(100.0, 50.0)))
-  //Add Kotlin logo as a car
-  state.addShape(Car(Vector(500.0, 100.0)))
-  //Add Traffic light
-  state.addShape(getTrafficLight())
+  state.addShape(Map(v(10.0, 10.0)))
+
+  state.addShape(trafficLightLeft)
+  state.addShape(trafficLightUp)
+  state.addShape(trafficLightDown)
+  state.addShape(trafficLightRight)
+  state.addShape(Car(v(178.0, 205.0), "up", "red"))
+  state.addShape(Car(v(95.0, 4.0), "down", "white"))
+  state.addShape(Car(v(278.0, 108.0), "left", "blue"))
+  state.addShape(Car(v(0.0, 142.0), "right", "black"))
+  state.addShape(Border())
+  state.addShape(Image(PATH_TO_IMAGES + "controls.png", v(380.0, 10.0), v(190.0, 56.0)))
+  state.addShape(Button(PATH_TO_IMAGES + "lr.png", v(420.0, 70.0), v(120.0, 50.0)))
+  state.addShape(Button(PATH_TO_IMAGES + "ud.png", v(460.0, 120.0), v(50.0, 120.0)))
+}
+
+fun v(x : Double, y : Double) = Vector(x, y)
+
+class Image(val src : String, override var pos : Vector, var imageSize : Vector) : Shape() {
+  override fun draw() {
+    state.context.drawImage(getImage(src), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, imageSize.x, imageSize.y)
+  }
+
+  fun contains(mousePos : Vector) : Boolean = mousePos.isInRect(pos, imageSize)
+}
+
+class Button(val src : String, override var pos : Vector, var imageSize : Vector) : Shape() {
+  var isClicked = false
+  
+  override fun draw() {
+    if (isClicked) {
+    state.context.shadowed(v(-3.0, 3.0), 0.8) {
+         state.context.drawImage(getImage(src), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, imageSize.x, imageSize.y)
+    }
+    } else {
+    state.context.drawImage(getImage(src), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, imageSize.x, imageSize.y)
+    }
+  }
+  
+  fun click() {
+  isClicked = true
+  setTimeout({
+    isClicked = false
+  }, 1000)
+  }
+
+  fun contains(mousePos : Vector) : Boolean = mousePos.isInRect(pos, imageSize)
+}
+
+class Border() : Shape() {
+  override var pos = Vector(4.0, 4.0);
+
+  override fun draw() {
+    state.context.fillStyle = colors.white
+    state.context.fillRect(2.0, 4.0, 10.0, 292.0)
+    state.context.fillRect(330.0, 4.0, 370.0, 292.0)
+    state.context.fillRect(2.0, 2.0, 330.0, 10.0)
+    state.context.fillRect(4.0, 265.0, 340.0, 380.0)
+    state.context.strokeStyle = colors.black
+    state.context.lineWidth = 4.0
+    state.context.strokeRect(0.0, 0.0, state.width, state.height)
+  }
+
+}
+
+class Timer(override var pos : Vector) : Shape() {
+  var timeLeftForChangeColor : Char = 'c'
+  var timeStartLastChangeColor = Date().getTime();
+  var timerLength = 13
+
+  override fun draw() {
+    timeLeftForChangeColor = (timerLength - (Date().getTime() - timeStartLastChangeColor) / 1000).toString().get(0)
+    state.context.font = "bold 9px Arial, serif"
+    state.context.fillStyle = colors.black
+    state.context.fillText("" + timeLeftForChangeColor, pos.x, pos.y)
+  }
+
+  fun resetTimer() {
+    timeStartLastChangeColor = Date().getTime()
+    timerLength = 10
+  }
 }
 
 //Colors constants
@@ -27,197 +111,180 @@ class Colors() {
   val green = "#0E9648"
 }
 
-val colors = Colors()
-
-fun getColors() : Colors {
-  return colors
-}
-
-class Button(val name : String, val text : String, override var pos : Vector, val size : Vector) : Shape() {
-  override fun draw(val state : CanvasState) {
-    val context = state.context
-    context.fillStyle = getColors().grey
-    context.fillPath {
-      rect(pos.x, pos.y, size.x, size.y)
-    }
-    context.fillStyle = getColors().black
-    context.font = "bold 15px Georgia, serif"
-    context.fillText(text, pos.x + 10, pos.y + 30);
-  }
-
-  fun contains(mousePos : Vector) : Boolean = mousePos.isInRect(pos, size)
-}
-
-class TrafficLight() : Shape() {
+class TrafficLight(override var pos : Vector, val direction : String, val startColor : String) : Shape() {
   val list = ArrayList<TrafficLightItem>()
-  override var pos = Vector(70.0, 100.0)
-  var isRedColor = true
-  var canChangeColor = true
-  var size = Vector(70.0, 170.0);
+  var size = Vector(27.0, 34.0);
+  var timer = Timer(Vector(pos.x + 6, pos.y + 12))
+  var currentColor = startColor;
+  var isForceColorChange = false
+  var changeColorForward = (startColor == "red")
 
   {
-    list.add(TrafficLightItem(Vector(pos.x, pos.y), getColors().red, true))
-    list.add(TrafficLightItem(Vector(pos.x, pos.y + 50), getColors().yellow, false))
-    list.add(TrafficLightItem(Vector(pos.x, pos.y + 100), getColors().green, false))
+    list.add(TrafficLightItem(v(pos.x, pos.y), PATH_TO_IMAGES + "red_color.png"))
+    list.add(TrafficLightItem(v(pos.x, pos.y), PATH_TO_IMAGES + "yellow_color.png"))
+    list.add(TrafficLightItem(v(pos.x, pos.y), PATH_TO_IMAGES + "green_color.png"))
+    list.add(TrafficLightItem(v(pos.x, pos.y), PATH_TO_IMAGES + "green_color_flash.png"))
   }
 
-
-  override fun draw(state : CanvasState) {
-    var context = state.context
-    context.shadowed(Vector(- 2.0, 2.0), 0.7) {
-      context.fillStyle = getColors().black
-      context.fillRect(pos.x - 35, pos.y - 35, size.x, size.y)
-      context.fillStyle = getColors().white
-      context.fillRect(pos.x - 35 + 1, pos.y - 35 + 1, size.x - 2, size.y - 2)
-    }
-    for (item in list) {
-      item.draw(state)
-    }
-  }
-
-  fun setOnlyRed(context : Context) {
-    if (!isRedColor) {
-      canChangeColor = true
-      changeColor(context)
-    }
-    canChangeColor = false
-  }
-
-  fun setOnlyGreen(context : Context) {
-    if (isRedColor) {
-      canChangeColor = true
-      changeColor(context)
-    }
-    canChangeColor = false
-  }
-
-  fun changeColor(context : Context) {
-    if (canChangeColor) {
-      if (isRedColor) {
-        changeColorForward(context)
-      } else {
-        changeColorBackward(context)
+  override fun draw() {
+    when (currentColor) {
+      "red" -> list.get(0).draw()
+      "yellow" -> list.get(1).draw()
+      "green" -> list.get(2).draw()
+      "green_flash" -> list.get(3).draw()
+      else -> {
       }
     }
+    timer.draw()
   }
 
-  fun changeColorForce(context : Context) {
-    canChangeColor = true;
-    changeColor(context)
+  fun setRed() {
+    if (currentColor != "red" && currentColor != "yellow" && timer.timeLeftForChangeColor > 4) {
+      isForceColorChange = true
+      changeColor()
+    }
   }
 
-  fun changeColorForward(context : Context) {
-    isRedColor = !isRedColor;
-    list.get(1).changeColor(context)
+  fun setGreen() {
+    if (currentColor != "green" && currentColor != "green_flash" && currentColor != "yellow" && timer.timeLeftForChangeColor > 4) {
+      isForceColorChange = true
+      changeColor()
+    }
+  }
+
+  fun changeColor() {
+    if (changeColorForward) changeColorForward() else changeColorBackward()
+  }
+
+  fun changeColorForward() {
+    changeColorForward = false
+    currentColor = "yellow"
     setTimeout({
-      list.get(0).changeColor(context)
-      list.get(1).changeColor(context)
-      list.get(2).changeColor(context)
-    }, 500)
+      if (!isForceColorChange) timer.resetTimer() else isForceColorChange = false
+      currentColor = "green"
+    }, 3000)
   }
 
-  fun changeColorBackward(context : Context) {
-    isRedColor = !isRedColor;
-    list.get(1).changeColor(context)
-    list.get(2).changeColor(context)
+
+  fun changeColorBackward() {
+    changeColorForward = true
+    currentColor = "green_flash"
     setTimeout({
-      list.get(0).changeColor(context)
-      list.get(1).changeColor(context)
-    }, 500)
+      currentColor = "yellow"
+      setTimeout({
+        if (!isForceColorChange) timer.resetTimer() else isForceColorChange = false
+        currentColor = "red"
+      }, 1000)
+    }, 2000)
   }
 
   fun canMove() : Boolean {
-    return !isRedColor
+    return (currentColor != "red" && currentColor != "yellow")
   }
 }
 
 
 //One element from Traffic light
-class TrafficLightItem(override var pos : Vector, val mainColor : String, val isOn : Boolean) : Shape() {
-  var isColored = !isOn
-  val radius = 25.0
-
-  val firstColor : String get() = if (isOn) mainColor else getColors().white
-  var currentColor = firstColor
-  val shadowOffset = v(- 5.0, 5.0)
-
-  override fun draw(state : CanvasState) {
-    val context = state.context
-    context.shadowed(shadowOffset, 0.7) {
-      context.fillStyle = getColors().black
-      context.fillPath {
-        drawCircle(pos, radius)
-      }
-      if (isColored) {
-        currentColor = getColors().white
-      } else {
-        currentColor = mainColor
-      }
-      context.fillStyle = currentColor
-      context.fillPath {
-        drawCircle(pos, radius - 0.5)
-      }
-    }
-  }
-
-  fun changeColor(context : Context) {
-    if (isColored) {
-      isColored = false;
-      currentColor = getColors().white
-      context.fillStyle = currentColor
-    } else {
-      isColored = true;
-      currentColor = mainColor
-      context.fillStyle = currentColor
-    }
-  }
-}
-
-class Car(override var pos: Vector) : Shape() {
-  val relSize : Double = 0.20
-  val imageSize = v(377.0, 393.0)
+class TrafficLightItem(override var pos : Vector, val imageSrc : String) : Shape() {
+  val relSize : Double = 0.5
+  val imageSize = v(33.0, 33.0)
   var size : Vector = imageSize * relSize
 
-  override fun draw(state : CanvasState) {
-    size = imageSize * (state.size.x / imageSize.x) * relSize
-    state.context.drawImage(getKotlinLogo(), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, size.x, size.y)
-    if (getTrafficLight().canMove()) {
-      move(state)
-    }
-  }
+  var isFlashing = (imageSrc == PATH_TO_IMAGES + "green_color_flash.png")
+  var isFlashNow = false
+  var countOfFlash = 0
 
-  var isMoveForward = false;
-  var isMoveUp = true;
-  
-  fun move(state : CanvasState) {
-    if ((pos.x > (state.width - 150)) && (isMoveForward)) {
-      isMoveForward = false
-    } else if ((pos.x < 100) && (!isMoveForward)) {
-      isMoveForward = true
+  override fun draw() {
+    size = imageSize * relSize
+    if (isFlashing) {
+      if (isFlashNow) {
+        if (countOfFlash > 6) {
+          isFlashNow = false
+          countOfFlash = 0
+        } else {
+          countOfFlash++
+        }
+      } else {
+        state.context.drawImage(getImage(PATH_TO_IMAGES + "green_color.png"), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, size.x, size.y)
+        if (countOfFlash > 6) {
+          isFlashNow = true
+          countOfFlash = 0
+        } else {
+          countOfFlash++
+        }
+      }
+    } else {
+      state.context.drawImage(getImage(imageSrc), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, size.x, size.y)
     }
-
-    if ((pos.y > 150) && (!isMoveUp)) {
-      isMoveUp = true
-    } else if ((pos.y < 80) && (isMoveUp)) {
-      isMoveUp = false
-    }
-    var x : Double
-    var y : Double
-    if (isMoveForward) x = pos.x + 2 else x = pos.x - 2
-    if (isMoveUp) y = pos.y - 2 else y = pos.y + 2
-
-    pos = Vector(x, y) ;
   }
 }
 
-var trafficLight = TrafficLight()
 
-fun getTrafficLight() : TrafficLight {
-  return trafficLight
+class Car(override var pos : Vector, val direction : String, val color : String) : Shape() {
+  val imageSize = v(25.0, 59.0)
+  var speed = getRandomArbitary(2, 10);
+
+  override fun draw() {
+    if (direction == "up" || direction == "down") {
+      state.context.drawImage(getImage(PATH_TO_IMAGES + color + "_car.png"), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, imageSize.x, imageSize.y)
+      if ((!isNearStopLine()) || (trafficLightUp.canMove() && isNearStopLine()) ) {
+        move()
+      } else {
+        speed = getRandomArbitary(2, 10)
+      }
+    } else {
+      state.context.drawImage(getImage(PATH_TO_IMAGES + color + "_car.png"), 0.0, 0.0, imageSize.y, imageSize.x, pos.x, pos.y, imageSize.y, imageSize.x)
+      if ((!isNearStopLine()) || (trafficLightLeft.canMove() && isNearStopLine()) ) {
+        move()
+      } else {
+        speed = getRandomArbitary(2, 10)
+      }
+
+    }
+
+  }
+
+  fun isNearStopLine() : Boolean {
+    when (direction) {
+      "up" ->  return (pos.y > 198 && pos.y < 208)
+      "down" -> return (pos.y > 10 && pos.y < 20)
+      "right" -> return (pos.x > -8 && pos.x < 2)
+      "left" -> return (pos.x > 243 && pos.x < 253)
+      else -> return false
+    }
+
+  }
+
+  fun move() {
+    var x = pos.x
+    var y = pos.y
+
+    when (direction) {
+      "up" -> if (pos.y < - 50) y = 250.0 else y = pos.y - speed
+      "down" -> if (pos.y > 300) y = 0.0 else y = pos.y + speed
+      "right" -> if (pos.x > 300) x = -10.0 else x = pos.x + speed
+      "left" -> if (pos.x < - 50) x = 340.0 else x = pos.x - speed
+      else -> {
+      }
+    }
+
+    pos = v(x, y)
+  }
 }
+
+class Map(override var pos : Vector) : Shape() {
+  val relSize : Double = 0.8
+  val imageSize = v(420.0, 323.0)
+  var size : Vector = imageSize * relSize
+
+  override fun draw() {
+    size = imageSize * relSize
+    state.context.drawImage(getImage(PATH_TO_IMAGES + "crossroads.jpg"), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, size.x, size.y)
+  }
+}
+
 
 class CanvasState(val canvas : Canvas) {
-  val trLight : TrafficLight get() = getTrafficLight();
   val context = getContext()
   var shapes = ArrayList<Shape>()
 
@@ -236,11 +303,24 @@ class CanvasState(val canvas : Canvas) {
       val mousePos = mousePos(it)
       for (shape in shapes) {
         if (shape is Button && mousePos in shape) {
-          val name = shape.name
+          val name = shape.src
+          shape.click()
           when (name) {
-            "change" -> trLight.changeColorForce(context)
-            "red" -> trLight.setOnlyRed(context)
-            "green" -> trLight.setOnlyGreen(context)
+            PATH_TO_IMAGES + "lr.png" -> {
+              
+              trafficLightUp.setRed()
+              trafficLightDown.setRed()
+              trafficLightLeft.setGreen()
+              trafficLightRight.setGreen()
+            }
+            PATH_TO_IMAGES + "ud.png" -> {
+              
+              trafficLightLeft.setRed()
+              trafficLightRight.setRed()
+              trafficLightUp.setGreen()
+              trafficLightDown.setGreen()
+
+            }
             else -> continue
           }
 
@@ -253,8 +333,13 @@ class CanvasState(val canvas : Canvas) {
     }, 1000 / 30)
 
     setInterval({
-      trLight.changeColor(context)
-    }, 5000)
+      trafficLightUp.changeColor()
+      trafficLightLeft.changeColor()
+      trafficLightRight.changeColor()
+      trafficLightDown.changeColor()
+    }, 10000)
+
+
   }
 
   fun mousePos(e : MouseEvent) : Vector {
@@ -265,28 +350,25 @@ class CanvasState(val canvas : Canvas) {
       offset += Vector(el.offsetLeft, el.offsetTop)
       element = el.offsetParent
     }
-    return Vector(e.pageX, e.pageY) - offset
+    return v(e.pageX, e.pageY) - offset
   }
 
   fun draw() {
     clear()
     for (shape in shapes) {
-      shape.draw(this)
+      shape.draw()
     }
   }
 
   fun clear() {
-    context.fillStyle = "#FFFFFF"
+    context.fillStyle = colors.white
     context.fillRect(0.0, 0.0, width, height)
-    context.strokeStyle = "#000000"
-    context.lineWidth = 4.0
-    context.strokeRect(0.0, 0.0, width, height)
   }
 }
 
 abstract class Shape() {
   abstract var pos : Vector
-  abstract fun draw(state : CanvasState)
+  abstract fun draw()
 
   // a couple of helper extension methods we'll be using in the derived classes
   fun Context.shadowed(shadowOffset : Vector, alpha : Double, render : Context.() -> Unit) {
@@ -306,18 +388,7 @@ abstract class Shape() {
     fill()
   }
 
-  fun Context.drawCircle(position : Vector, rad : Double) {
-    arc(position.x, position.y, rad, 0.0, 2 * Math.PI, false)
-  }
-
-  fun Context.fillCircle(position : Vector, rad : Double) {
-    fillPath {
-      drawCircle(position, rad)
-    }
-  }
 }
-
-fun v(x : Double, y : Double) = Vector(x, y)
 
 class Vector(val x : Double = 0.0, val y : Double = 0.0) {
   fun plus(v : Vector) = v(x + v.x, y + v.y)
@@ -339,3 +410,8 @@ class Vector(val x : Double = 0.0, val y : Double = 0.0) {
   val normalized : Vector
   get() = this * (1.0 / Math.sqrt(sqr))
 }
+
+fun getRandomArbitary(val min : Int, val max : Int) : Double {
+  return Math.random() * (max - min) + min;
+}
+

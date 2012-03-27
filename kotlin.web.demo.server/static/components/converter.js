@@ -55,6 +55,7 @@ var Converter = (function () {
     function onConvertSuccess(data) {
         $("#convertToKotlinDialog").dialog("close");
         editor.focus();
+        editor.setOption("mode", "kotlin");
         if (data != null && typeof data != "undefined") {
             if (data[0] != null && typeof data[0] != "undefined") {
                 if (typeof data[0].exception != "undefined") {
@@ -63,8 +64,11 @@ var Converter = (function () {
                     setConsoleMessage(data[0].exception);
                 } else {
                     editor.setValue(data[0].text);
+                    editor.setSelection({line:0, ch:0}, {line:editor.lineCount() - 1});
+                    editor.indentSelection("smart");
+                    //editor.selectAll(editor);
+                    //editor.indentAuto(editor);
                     setStatusBarMessage(LOADING_CONVERSATION_TO_KOTLIN_OK);
-
                 }
             }
         }
