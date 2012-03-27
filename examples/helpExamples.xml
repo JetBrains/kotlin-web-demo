@@ -203,4 +203,14 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <args/>
         <mode>canvas</mode>
     </example>
+    <example>
+        <name>Traffic light</name>
+        <text>
+            <p>
+                In this example you can see a crossroads. Traffic light change color by timer, but you can change it manually using controls at the right part of screen.
+            </p>
+        </text>
+        <args/>
+        <mode>canvas</mode>
+    </example>
 </help>

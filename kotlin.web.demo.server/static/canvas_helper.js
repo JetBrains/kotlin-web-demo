@@ -9,3 +9,9 @@ function getCanvas() {
 function getKotlinLogo() {
     return document.getElementById('kotlinlogofork2js');
 }
+
+function getImage(src) {
+    var image = document.createElement("img");
+    image.src = src;
+    return image;
+}

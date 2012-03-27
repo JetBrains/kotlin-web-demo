@@ -160,7 +160,11 @@ var Runner = (function () {
                             if (runConfiguration.mode == "canvas") {
                                 $("#popupForCanvas").dialog("open");
                             }
+                            try{
                             dataJs = eval(dataFromApplet);
+                            } catch(e) {
+                                setConsoleMessage(e);
+                            }
                             setStatusBarMessage(EXECUTE_OK);
                             generatedJSCode = dataFromApplet;
                             setConsoleMessage("<p>" + safe_tags_replace(dataJs) + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='showJsCode();'>" + SHOW_JAVASCRIPT_CODE + "</a></p>");
@@ -225,13 +229,18 @@ var Runner = (function () {
                                  + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 50) + "\" id=\"mycanvas\"></canvas>");
 //                                $("#mycanvas")[0].width = $("#popupForCanvas").dialog("option", "width");
 //                                $("#mycanvas")[0].height = $("#popupForCanvas").dialog("option", "height") - 50;
-                                creatures.setState();
+
 //                                eval(data[0].text);
                             }
                         });
 
                     }
-                    genData = eval(data[0].text);
+                    try{
+                        genData = eval(data[0].text);
+                    } catch(e) {
+                        setConsoleMessage(e);
+                    }
+                    //genData = eval(data[0].text);
                     setStatusBarMessage(EXECUTE_OK);
                     generatedJSCode = data[0].text;
                     setConsoleMessage("<p>" + safe_tags_replace(genData) +

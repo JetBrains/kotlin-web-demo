@@ -139,7 +139,6 @@ function e_preventDefault(e) {
 function onBodyLoad() {
     if (navigator.appVersion.indexOf("MSIE") != -1) {
         isIE = true;
-        // document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
         function getIEVersionNumber() {
             var ua = navigator.userAgent;
             var MSIEOffset = ua.indexOf("MSIE ");
@@ -150,14 +149,12 @@ function onBodyLoad() {
             }
         }
 
-//        alert(getIEVersionNumber());
         if (getIEVersionNumber() < 8) {
             document.getElementsByTagName("body")[0].innerHTML = IE_SUPPORT;
             return;
         }
     }
 
-//    } else {*/
     $("#help3").toggle(true);
     resizeCentral();
     setKotlinVersion();
@@ -169,15 +166,11 @@ function onBodyLoad() {
             $("#help3").html(text.replace("F9", "R"));
             var title = $("#run").attr("title").replace("F9", "R");
             $("#run").attr("title", title);
-//            document.getElementById("run").title = document.getElementById("run").title.replace("F9", "R");
-//            document.getElementById("runJS").title = document.getElementById("runJS").title.replace("F9", "R");
         }
     }, 10);
 
     hideLoader();
     setTimeout(setSessionId, 10);
-//        setSessionId();
-//    }
 }
 
 function setSessionId() {
@@ -563,6 +556,8 @@ editorForJava = CodeMirror.fromTextArea(document.getElementById("codeOnJava"), {
     mode:"text/x-java",
     minHeight:"430px"
 });
+
+editorForJava.setOption("mode", "text/x-java");
 
 
 
