@@ -31,7 +31,7 @@ fun main(args : Array<String>) {
   state.addShape(Border())
   state.addShape(Image(PATH_TO_IMAGES + "controls.png", v(380.0, 10.0), v(190.0, 56.0)))
   state.addShape(Button(PATH_TO_IMAGES + "lr.png", v(420.0, 70.0), v(120.0, 50.0)))
-  state.addShape(Button(PATH_TO_IMAGES + "ud.png", v(460.0, 120.0), v(50.0, 120.0)))
+  state.addShape(Button(PATH_TO_IMAGES + "ud.png", v(455.0, 120.0), v(50.0, 120.0)))
 }
 
 fun v(x : Double, y : Double) = Vector(x, y)
@@ -45,24 +45,37 @@ class Image(val src : String, override var pos : Vector, var imageSize : Vector)
 }
 
 class Button(val src : String, override var pos : Vector, var imageSize : Vector) : Shape() {
-  var isClicked = false
-  
+  var isMouseOver = false
+  var isMouseDown = false
+
   override fun draw() {
-    if (isClicked) {
-    state.context.shadowed(v(-3.0, 3.0), 0.8) {
-         state.context.drawImage(getImage(src), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, imageSize.x, imageSize.y)
-    }
+    if (isMouseOver) {
+      state.context.shadowed(v(- 3.0, 3.0), 1.2) {
+        state.context.drawImage(getImage(src), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, imageSize.x, imageSize.y)
+      }
+    } else if (isMouseDown) {
+      state.context.shadowed(v(- 3.0, 3.0), 0.8) {
+        state.context.drawImage(getImage(src), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, imageSize.x, imageSize.y)
+      }
     } else {
-    state.context.drawImage(getImage(src), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, imageSize.x, imageSize.y)
+      state.context.drawImage(getImage(src), 0.0, 0.0, imageSize.x, imageSize.y, pos.x, pos.y, imageSize.x, imageSize.y)
     }
   }
-  
-  fun click() {
-  isClicked = true
-  setTimeout({
-    isClicked = false
-  }, 1000)
+
+  fun mouseClick() {
+    isMouseDown = true
+    setTimeout({
+      isMouseDown = false
+    }, 1000)
   }
+
+  fun mouseOver() {
+    isMouseOver = true
+    setTimeout({
+      isMouseOver = false
+    }, 1000)
+  }
+
 
   fun contains(mousePos : Vector) : Boolean = mousePos.isInRect(pos, imageSize)
 }
@@ -248,7 +261,7 @@ class Car(override var pos : Vector, val direction : String, val color : String)
     when (direction) {
       "up" ->  return (pos.y > 198 && pos.y < 208)
       "down" -> return (pos.y > 10 && pos.y < 20)
-      "right" -> return (pos.x > -8 && pos.x < 2)
+      "right" -> return (pos.x > - 8 && pos.x < 2)
       "left" -> return (pos.x > 243 && pos.x < 253)
       else -> return false
     }
@@ -262,7 +275,7 @@ class Car(override var pos : Vector, val direction : String, val color : String)
     when (direction) {
       "up" -> if (pos.y < - 50) y = 250.0 else y = pos.y - speed
       "down" -> if (pos.y > 300) y = 0.0 else y = pos.y + speed
-      "right" -> if (pos.x > 300) x = -10.0 else x = pos.x + speed
+      "right" -> if (pos.x > 300) x = - 10.0 else x = pos.x + speed
       "left" -> if (pos.x < - 50) x = 340.0 else x = pos.x - speed
       else -> {
       }
@@ -304,17 +317,17 @@ class CanvasState(val canvas : Canvas) {
       for (shape in shapes) {
         if (shape is Button && mousePos in shape) {
           val name = shape.src
-          shape.click()
+          shape.mouseClick()
           when (name) {
             PATH_TO_IMAGES + "lr.png" -> {
-              
+
               trafficLightUp.setRed()
               trafficLightDown.setRed()
               trafficLightLeft.setGreen()
               trafficLightRight.setGreen()
             }
             PATH_TO_IMAGES + "ud.png" -> {
-              
+
               trafficLightLeft.setRed()
               trafficLightRight.setRed()
               trafficLightUp.setGreen()
@@ -324,6 +337,16 @@ class CanvasState(val canvas : Canvas) {
             else -> continue
           }
 
+        }
+      }
+    }
+
+    jq(canvas).mousemove {
+      val mousePos = mousePos(it)
+      for (shape in shapes) {
+        if (shape is Button && mousePos in shape) {
+          val name = shape.src
+          shape.mouseOver()
         }
       }
     }
