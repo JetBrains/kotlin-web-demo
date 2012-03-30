@@ -153,8 +153,8 @@ val String?.indices : IntRange get() = IntRange(0, this.sure().size)
 
 fun <K, V> Map<K, V>.set(k : K, v : V) { put(k, v) }
 
-fun comparator<T> (f : (T, T) -> Int) : Comparator<T> = object : Comparator<T> {
-  override fun compare(o1 : T, o2 : T) : Int = f(o1, o2)
+fun comparator<T> (f : (T?, T?) -> Int) : Comparator<T> = object : Comparator<T> {
+  override fun compare(o1 : T?, o2 : T?) : Int = f(o1, o2)
   override fun equals(p : Any?) : Boolean = false
 }
 

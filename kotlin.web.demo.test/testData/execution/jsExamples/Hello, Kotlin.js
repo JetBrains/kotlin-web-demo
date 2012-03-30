@@ -83,12 +83,14 @@ var classes = function(){
   }
   , randomVelocity:function(){
     var tmp$0;
+    tmp$0 = 0.03 * Math.random();
+    var tmp$1;
     if (Math.random() < 0.5)
-      tmp$0 = 1;
+      tmp$1 = 1;
     else 
-      tmp$0 = -1;
+      tmp$1 = -1;
     {
-      return 0.03 * Math.random() * tmp$0;
+      return tmp$0 * tmp$1;
     }
   }
   , get_abs:function(receiver){

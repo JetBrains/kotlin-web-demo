@@ -133,7 +133,7 @@ public class ServerInitializer extends Initializer {
                 public void dispose() {
                 }
             };
-            environment = new JetCoreEnvironment(root);
+            environment = new JetCoreEnvironment(root, false);
 
             return setJavaCoreEnvironment();
         }

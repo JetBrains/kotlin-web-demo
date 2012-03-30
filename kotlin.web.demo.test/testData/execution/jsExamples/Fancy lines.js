@@ -92,7 +92,16 @@ var fancylines = Kotlin.Namespace.create({initialize:function(){
   }
 }
 }, {FancyLines:classes.FancyLines});
+var kotlin = Kotlin.Namespace.create({initialize:function(){
+}
+, set:function(receiver, key, value){
+  {
+    return receiver.put(key, value);
+  }
+}
+}, {});
 fancylines.initialize();
+kotlin.initialize();
 
 Kotlin.System.flush();
 var args = [];

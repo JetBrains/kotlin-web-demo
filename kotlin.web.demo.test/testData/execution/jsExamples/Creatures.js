@@ -539,6 +539,14 @@ var classes = function(){
   return {Logo:tmp$5, RadialGradientGenerator:tmp$1, CanvasState:tmp$2, Shape:tmp$3, Creature:tmp$4, Vector:tmp$0};
 }
 ();
+var kotlin = Kotlin.Namespace.create({initialize:function(){
+}
+, set:function(receiver, key, value){
+  {
+    return receiver.put(key, value);
+  }
+}
+}, {});
 var creatures = Kotlin.Namespace.create({initialize:function(){
   this.$Kotlin = new creatures.Logo(creatures.v(300, 100));
   this.$gradientGenerator = new creatures.RadialGradientGenerator(getContext());
@@ -579,6 +587,7 @@ var creatures = Kotlin.Namespace.create({initialize:function(){
   }
 }
 }, {Shape:classes.Shape, Logo:classes.Logo, Creature:classes.Creature, CanvasState:classes.CanvasState, RadialGradientGenerator:classes.RadialGradientGenerator, Vector:classes.Vector});
+kotlin.initialize();
 creatures.initialize();
 
 Kotlin.System.flush();

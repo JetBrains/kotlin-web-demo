@@ -76,7 +76,7 @@ abstract class Tag(val name : String) : Element {
   override fun render(builder : StringBuilder, indent : String) {
   builder.append("$indent<$name${renderAttributes()}>\n")
   for (c in children) {
-    c.render(builder, indent + "  ")
+    c?.render(builder, indent + "  ")
   }
   builder.append("$indent</$name>\n")
   }
@@ -141,6 +141,3 @@ fun html(init : HTML.() -> Unit) : HTML {
   html.init()
   return html
 }
-
-// An excerpt from the Standard Library
-fun <K, V> Map<K, V>.set(key : K, value : V) = this.put(key, value)
