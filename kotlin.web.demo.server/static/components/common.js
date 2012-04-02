@@ -547,8 +547,8 @@ $("#javaToKotlin").click(function () {
     $("div#convertToKotlinDialog div #scroll").css("height", height + "px");
     $("#convertToKotlinDialog").dialog("open");
 
+    editorForJava.setOption("mode", "text/x-java");
     editorForJava.refresh();
-    editorForJava.setOption("mode", "java");
 });
 
 $("#run").click(function () {
@@ -565,6 +565,9 @@ editorForJava = CodeMirror.fromTextArea(document.getElementById("codeOnJava"), {
     mode:"text/x-java",
     minHeight:"430px"
 });
+
+editorForJava.setOption("mode", "text/x-java");
+editor.setOption("mode", "text/kotlin");
 
 
 

@@ -64,8 +64,9 @@ var Converter = (function () {
                     setConsoleMessage(data[0].exception);
                 } else {
                     editor.setValue(data[0].text);
+                    editor.setSelection({line:0, ch:0}, {line:editor.lineCount() - 1});
+                    editor.indentSelection("smart");
                     setStatusBarMessage(LOADING_CONVERSATION_TO_KOTLIN_OK);
-
                 }
             }
         }
