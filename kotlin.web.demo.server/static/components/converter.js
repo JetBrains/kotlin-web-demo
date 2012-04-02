@@ -55,6 +55,7 @@ var Converter = (function () {
     function onConvertSuccess(data) {
         $("#convertToKotlinDialog").dialog("close");
         editor.focus();
+        editor.setOption("mode", "kotlin");
         if (data != null && typeof data != "undefined") {
             if (data[0] != null && typeof data[0] != "undefined") {
                 if (typeof data[0].exception != "undefined") {

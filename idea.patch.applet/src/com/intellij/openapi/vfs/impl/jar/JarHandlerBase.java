@@ -109,7 +109,7 @@ public class JarHandlerBase {
 
                             entry = zip.getNextEntry();
                         }
-                    } catch (IOException e) {
+                    } catch (Throwable e) {
                         e.printStackTrace();
                     }
                     myRelPathsToEntries = new SoftReference<Map<String, EntryInfo>>(map);

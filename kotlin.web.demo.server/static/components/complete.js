@@ -104,7 +104,7 @@ function getErrors() {
 
 function getDataFromApplet(type) {
     if (document.getElementById("myapplet") == null) {
-        $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet14032012.jar\" style=\"display: none;\"></applet>");
+        $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet02042012.jar\" style=\"display: none;\"></applet>");
     }
     Highlighting.getDataFromApplet(type);
 }

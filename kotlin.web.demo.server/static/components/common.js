@@ -546,7 +546,9 @@ $("#javaToKotlin").click(function () {
     var height = $("#convertToKotlinDialog").dialog("option", "height") - 120;
     $("div#convertToKotlinDialog div #scroll").css("height", height + "px");
     $("#convertToKotlinDialog").dialog("open");
+
     editorForJava.refresh();
+    editorForJava.setOption("mode", "java");
 });
 
 $("#run").click(function () {
