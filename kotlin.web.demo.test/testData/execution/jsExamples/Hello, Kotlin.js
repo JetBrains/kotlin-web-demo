@@ -107,6 +107,14 @@ var classes = function(){
   return {HelloKotlin:tmp$0};
 }
 ();
+var kotlin = Kotlin.Namespace.create({initialize:function(){
+}
+, set:function(receiver, key, value){
+  {
+    return receiver.put(key, value);
+  }
+}
+}, {});
 var hello = Kotlin.Namespace.create({initialize:function(){
   this.$context = getContext();
   this.$height = getCanvas().height;
@@ -164,6 +172,7 @@ var hello = Kotlin.Namespace.create({initialize:function(){
   }
 }
 }, {HelloKotlin:classes.HelloKotlin});
+kotlin.initialize();
 hello.initialize();
 
 Kotlin.System.flush();

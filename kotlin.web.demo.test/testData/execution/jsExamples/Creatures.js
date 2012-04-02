@@ -505,7 +505,7 @@ var classes = function(){
   , drawLogo:function(state){
     {
       this.set_size(this.get_imageSize().times(state.get_size().get_x() / this.get_imageSize().get_x()).times(this.get_relSize()));
-      state.get_context().drawImage(getKotlinLogo(), 0, 0, this.get_imageSize().get_x(), this.get_imageSize().get_y(), this.get_position().get_x(), this.get_position().get_y(), this.get_size().get_x(), this.get_size().get_y());
+      state.get_context().drawImage(getKotlinLogo(), 0, 0, Math.floor(this.get_imageSize().get_x()), Math.floor(this.get_imageSize().get_y()), Math.floor(this.get_position().get_x()), Math.floor(this.get_position().get_y()), Math.floor(this.get_size().get_x()), Math.floor(this.get_size().get_y()));
     }
   }
   , draw:function(state){
@@ -539,14 +539,6 @@ var classes = function(){
   return {Logo:tmp$5, RadialGradientGenerator:tmp$1, CanvasState:tmp$2, Shape:tmp$3, Creature:tmp$4, Vector:tmp$0};
 }
 ();
-var kotlin = Kotlin.Namespace.create({initialize:function(){
-}
-, set:function(receiver, key, value){
-  {
-    return receiver.put(key, value);
-  }
-}
-}, {});
 var creatures = Kotlin.Namespace.create({initialize:function(){
   this.$Kotlin = new creatures.Logo(creatures.v(300, 100));
   this.$gradientGenerator = new creatures.RadialGradientGenerator(getContext());
@@ -587,8 +579,16 @@ var creatures = Kotlin.Namespace.create({initialize:function(){
   }
 }
 }, {Shape:classes.Shape, Logo:classes.Logo, Creature:classes.Creature, CanvasState:classes.CanvasState, RadialGradientGenerator:classes.RadialGradientGenerator, Vector:classes.Vector});
-kotlin.initialize();
+var kotlin = Kotlin.Namespace.create({initialize:function(){
+}
+, set:function(receiver, key, value){
+  {
+    return receiver.put(key, value);
+  }
+}
+}, {});
 creatures.initialize();
+kotlin.initialize();
 
 Kotlin.System.flush();
 var args = [];

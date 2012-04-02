@@ -79,6 +79,14 @@ var classes = function(){
   return {FancyLines:tmp$0};
 }
 ();
+var kotlin = Kotlin.Namespace.create({initialize:function(){
+}
+, set:function(receiver, key, value){
+  {
+    return receiver.put(key, value);
+  }
+}
+}, {});
 var fancylines = Kotlin.Namespace.create({initialize:function(){
 }
 , main:function(args){
@@ -92,16 +100,8 @@ var fancylines = Kotlin.Namespace.create({initialize:function(){
   }
 }
 }, {FancyLines:classes.FancyLines});
-var kotlin = Kotlin.Namespace.create({initialize:function(){
-}
-, set:function(receiver, key, value){
-  {
-    return receiver.put(key, value);
-  }
-}
-}, {});
-fancylines.initialize();
 kotlin.initialize();
+fancylines.initialize();
 
 Kotlin.System.flush();
 var args = [];
