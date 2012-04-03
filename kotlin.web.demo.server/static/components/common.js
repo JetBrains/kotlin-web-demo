@@ -567,7 +567,6 @@ editorForJava = CodeMirror.fromTextArea(document.getElementById("codeOnJava"), {
 });
 
 editorForJava.setOption("mode", "text/x-java");
-editor.setOption("mode", "text/kotlin");
 
 
 

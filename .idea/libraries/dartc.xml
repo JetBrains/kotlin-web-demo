@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="dartc">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/dartc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/js/dart-r3300.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/js/dart-r3300-src.jar!/" />
+    </SOURCES>
   </library>
 </component>
