@@ -257,7 +257,7 @@ public class HttpSession {
         }
         if (finalResponse != null) {
             finalResponse = finalResponse.replaceAll("<br>", "\n");
-            if (finalResponse.length() > 5) {
+            if (finalResponse.length() >= 5) {
                 if (finalResponse.contains("&consoleArgs=")) {
                     return new PostData(ResponseUtils.substringBetween(finalResponse, "text=", "&consoleArgs="), ResponseUtils.substringAfter(finalResponse, "&consoleArgs="));
                 } else {
