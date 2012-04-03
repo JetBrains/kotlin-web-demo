@@ -32,7 +32,7 @@ class FancyLines() {
     context.beginPath();
 
     context.lineWidth = 20.0 * Math.random();
-    context.moveTo(x, y);
+    context.moveTo(x.toInt(), y.toInt());
 
     x = width * Math.random();
     y = height * Math.random();
@@ -54,7 +54,7 @@ class FancyLines() {
 
   fun blank() {
     context.fillStyle = "rgba(255,255,1,0.1)";
-    context.fillRect(0.0, 0.0, width.toDouble(), height.toDouble());
+    context.fillRect(0, 0, width, height);
   }
 
   fun run() {
