@@ -16,8 +16,11 @@
 
 package org.jetbrains.webdemo.help;
 
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.examplesLoader.ExampleObject;
+import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
@@ -36,13 +39,13 @@ import java.util.Map;
 
 public class HelpLoader {
     private static HelpLoader helpLoader = new HelpLoader();
-    
+
     private static StringBuilder response;
 
     private HelpLoader() {
         response = new StringBuilder();
-        generateHelpForExamples();
         generateHelpForWords();
+        generateHelpForExamples();
     }
 
     private JSONArray resultExamples;
@@ -116,12 +119,12 @@ public class HelpLoader {
 
     public static String updateExamplesHelp() {
         response = new StringBuilder();
-        HelpLoader.getInstance().generateHelpForExamples();
         HelpLoader.getInstance().generateHelpForWords();
+        HelpLoader.getInstance().generateHelpForExamples();
         return response.toString();
     }
 
-    private void generateHelpForExamples() {
+    private void generateHelpForWords() {
         resultWords = new JSONArray();
         try {
             File file = new File(ApplicationSettings.HELP_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_WORDS);
@@ -149,7 +152,7 @@ public class HelpLoader {
         response.append("\nHelp for keywords was loaded.");
     }
 
-    private void generateHelpForWords() {
+    private void generateHelpForExamples() {
         resultExamples = new JSONArray();
         try {
             File file = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_EXAMPLES);
@@ -168,8 +171,22 @@ public class HelpLoader {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("name", getTagValue("name", element));
                     map.put("text", getTagValueWithInnerTags("text", element));
-                    map.put("args", getTagValue("args", element));
-                    map.put("mode", getTagValue("mode", element));
+//                    map.put("args", getTagValue("args", element));
+//                    map.put("mode", getTagValue("mode", element));
+
+                    ExampleObject example = ExamplesHolder.getExample(map.get("name"));
+                    if (example != null) {
+                        @Nullable String mode = getTagValue("mode", element);
+                        @Nullable String args = getTagValue("args", element);
+                        if (mode != null) {
+                            example.runner = mode;
+                            example.dependencies = mode;
+                        }
+                        if (args != null) {
+                            example.args = args;
+                        }
+                    }
+
                     resultExamples.put(map);
                 }
             }

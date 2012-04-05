@@ -35,7 +35,6 @@ import java.util.Map;
  * Time: 6:33 PM
  */
 public class ExamplesList {
-    //    private static final Logger LOG = Logger.getLogger(ExamplesList.class);
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
 
     private static StringBuilder response;
@@ -56,7 +55,7 @@ public class ExamplesList {
         return list;
     }
 
-    @Nullable
+    /*@Nullable
     public Pair<Integer, String> findExampleByName(String name) {
         int i = 0;
         String lastHead = "";
@@ -72,10 +71,10 @@ public class ExamplesList {
             i++;
         }
         return null;
-    }
+    }*/
 
 
-    @Nullable
+   /* @Nullable
     public Pair<Integer, String> findExampleByNameAndHead(String name, String head) {
         int i = 0;
         String lastHead = "";
@@ -105,7 +104,7 @@ public class ExamplesList {
                 SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "There is a request for example with number " + id + " - absent in map");
         return list.get(1);
     }
-
+*/
     private void generateList() {
         File root = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
         if (root.exists()) {
@@ -128,6 +127,12 @@ public class ExamplesList {
 
     private void addWoOrder(File parent, boolean isDirectory) {
         File[] children = parent.listFiles();
+        if (children == null) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                    new UnsupportedOperationException("Incorrect structure for examples (folder - files): empty child list"),
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), parent.getAbsolutePath());
+            return;
+        }
         for (File child : children) {
             if ((parent.isDirectory() && isDirectory)
                     || (parent.exists() && !isDirectory)) {
@@ -143,6 +148,12 @@ public class ExamplesList {
                         map.put("text", child.getName());
                     }
 
+                    ExampleObject example = new ExampleObject();
+                    example.fileName = map.get("text");
+                    example.name = map.get("text");
+                    example.parent = parent.getName();
+
+                    ExamplesHolder.addExample(map.get("text"), example);
                 }
 
                 list.add(map);
@@ -185,8 +196,16 @@ public class ExamplesList {
                         } else {
                             map.put("text", child.getName());
                         }
+
+                        ExampleObject example = new ExampleObject();
+                        example.fileName = map.get("text");
+                        example.name = map.get("text");
+                        example.parent = parent.getName();
+
+                        ExamplesHolder.addExample(map.get("text"), example);
                     }
                     list.add(map);
+
                     orderedChildren.add(child.getName());
 
                     if (isDirectory) {
@@ -214,15 +233,23 @@ public class ExamplesList {
                             if ((child.isDirectory() && isDirectory)
                                     || (child.exists() && !isDirectory)) {
                                 Map<String, String> map = new HashMap<String, String>();
+                                map.put("text", child.getName());
                                 if (isDirectory) {
                                     map.put("type", "folder");
                                 } else {
                                     map.put("type", "content");
+
+                                    ExampleObject example = new ExampleObject();
+                                    example.fileName = map.get("text");
+                                    example.name = map.get("text");
+                                    example.parent = parent.getName();
+
+                                    ExamplesHolder.addExample(map.get("text"), example);
                                 }
-                                map.put("text", child.getName());
                                 list.add(map);
+
                                 ErrorWriter.writeErrorToConsole("File/Directory " + childName + " is absent in order.txt and was added at end.");
-                                response.append("\nFile/Directory " + childName + " is absent in order.txt and was added at end.");
+                                response.append("\nFile/Directory ").append(childName).append(" is absent in order.txt and was added at end.");
 
                                 if (isDirectory) {
                                     File orderChildren = checkIsOrderTxtExists(child);
