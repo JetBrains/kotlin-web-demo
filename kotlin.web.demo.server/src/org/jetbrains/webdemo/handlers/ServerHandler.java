@@ -76,6 +76,9 @@ public class ServerHandler {
             } else if (parameters.compareType("getSessionId")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
                 sendSessionId(response, sessionInfo, param);
+            }else if (parameters.compareType("getUserName")) {
+                sessionInfo = setSessionInfo(request, parameters.getSessionId());
+                sendUserName(response, sessionInfo, param);
             } else if (parameters.compareType("authorization")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
                 sendAuthorizationResult(request, response, parameters, sessionInfo);
@@ -149,6 +152,26 @@ public class ServerHandler {
             array.put(id);
             if (sessionInfo.getUserInfo().isLogin()) {
                 array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
+            }
+            out.write(array.toString());
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    "UNKNOWN", param);
+        } finally {
+            close(out);
+        }
+    }
+
+    private void sendUserName(HttpServletResponse response, SessionInfo sessionInfo, String param) {
+        PrintWriter out = null;
+        try {
+            response.addHeader("Cache-Control", "no-cache");
+            out = response.getWriter();
+            JSONArray array = new JSONArray();
+            if (sessionInfo.getUserInfo().isLogin()) {
+                array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
+            } else {
+                array.put("null");
             }
             out.write(array.toString());
         } catch (Throwable e) {
