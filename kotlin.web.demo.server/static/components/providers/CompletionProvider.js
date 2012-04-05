@@ -88,7 +88,7 @@ var CompletionProvider = (function () {
 
     function getCompletionFromApplet(dependencies, file, cursorLine, cursorCh) {
         if (document.getElementById("myapplet") == null) {
-            $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet14032012.jar\" style=\"display: none;\"></applet>");
+            $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet05042012.jar\" style=\"display: none;\"></applet>");
         }
         try {
             var dataFromApplet;

@@ -41,6 +41,7 @@ var StatusBarView = (function () {
         run_java_ok:"Compilation competed successfully.",
         run_java_fail:"Can't get program output from server.",
         run_js_ok:"Translation competed successfully.",
+        run_js_fail:"Can't get translation result from server.",
         login_ok:"Log in successful.",
         login_fail:"Log in fail.",
         logout_ok:"Log out successful.",
@@ -148,12 +149,12 @@ var StatusBarView = (function () {
                 }
             },
             loadHighlighting:function (param) {
-                if (param[1] != Configuration.mode.ONRUN) {
+                if (param[1] == Configuration.mode.SERVER) {
                     setMessage(Messages.loading_highlighting);
                 }
             },
             loadCompletion:function (param) {
-                if (param[1] != Configuration.mode.ONRUN) {
+                if (param[1] == Configuration.mode.SERVER) {
                     setMessage(Messages.loading_completion);
                 }
             }
