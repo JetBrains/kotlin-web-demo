@@ -48,22 +48,25 @@ public class JavaToKotlinConverter {
                 resultFormConverter = JavaToKotlinTranslator.translateToKotlin(code);
 
             } catch (Exception e) {
+                ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: " + e.getMessage());
             }
             if (resultFormConverter.isEmpty()) {
+                ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: generated code is empty.");
             }
-
             ServerInitializer.reinitializeJavaEnvironment();
             //TODO indentation
 //            JetFile file = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), resultFormConverter);
 //            CodeStyleManager.getInstance(Initializer.INITIALIZER.getEnvironment().getProject()).reformat(file);
             map.put("text", resultFormConverter);
         } catch (Throwable e) {
+            ServerInitializer.reinitializeJavaEnvironment();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
             map.put("exception", e.getMessage());
         }
+
         result.put(map);
         return result.toString();
     }

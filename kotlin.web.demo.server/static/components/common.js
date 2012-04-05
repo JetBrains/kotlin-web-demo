@@ -25,7 +25,7 @@
 //Problems with ajax-request to server
 var HIGHLIGHT_REQUEST_ABORTED = "Can't get errors/warnings.";
 var RUN_REQUEST_ABORTED = "Can't get program output from server.";
-var CONVERT_REQUEST_ABORTED = "Can't get conversation result from server.";
+var CONVERT_REQUEST_ABORTED = "Can't get convertation result from server.";
 var COMPLETE_REQUEST_ABORTED = "Can't get completion proposal list from server.";
 var EXAMPLES_REQUEST_ABORTED = "Can't get the example code from server.";
 var SAVE_PROGRAM_REQUEST_ABORTED = "Can't save the program on server.";
@@ -42,7 +42,7 @@ var TRY_RUN_CODE_WITH_ERROR = "Can't run a program with errors. See the Problems
 var EXECUTE_OK = "Compilation competed successfully.";
 var GET_FROM_APPLET_FAILED = "Your browser can't run Java Applets.";
 var LOADING_HIGHLIGHTING_OK = "Errors were loaded.";
-var LOADING_CONVERSATION_TO_KOTLIN_OK = "Look conversation result in editor.";
+var LOADING_CONVERTATION_TO_KOTLIN_OK = "Look convertation result in editor.";
 var LOADING_EXAMPLE_OK = "Example is loaded.";
 var LOADING_PROGRAM_OK = "Program is loaded.";
 var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
@@ -539,6 +539,8 @@ $("#javaToKotlin").click(function () {
     var height = $("#convertToKotlinDialog").dialog("option", "height") - 120;
     $("div#convertToKotlinDialog div #scroll").css("height", height + "px");
     $("#convertToKotlinDialog").dialog("open");
+
+    editorForJava.setOption("mode", "text/x-java");
     editorForJava.refresh();
 });
 

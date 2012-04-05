@@ -505,7 +505,7 @@ var classes = function(){
   , drawLogo:function(state){
     {
       this.set_size(this.get_imageSize().times(state.get_size().get_x() / this.get_imageSize().get_x()).times(this.get_relSize()));
-      state.get_context().drawImage(getKotlinLogo(), 0, 0, this.get_imageSize().get_x(), this.get_imageSize().get_y(), this.get_position().get_x(), this.get_position().get_y(), this.get_size().get_x(), this.get_size().get_y());
+      state.get_context().drawImage(getKotlinLogo(), 0, 0, Math.floor(this.get_imageSize().get_x()), Math.floor(this.get_imageSize().get_y()), Math.floor(this.get_position().get_x()), Math.floor(this.get_position().get_y()), Math.floor(this.get_size().get_x()), Math.floor(this.get_size().get_y()));
     }
   }
   , draw:function(state){
@@ -579,7 +579,16 @@ var creatures = Kotlin.Namespace.create({initialize:function(){
   }
 }
 }, {Shape:classes.Shape, Logo:classes.Logo, Creature:classes.Creature, CanvasState:classes.CanvasState, RadialGradientGenerator:classes.RadialGradientGenerator, Vector:classes.Vector});
+var kotlin = Kotlin.Namespace.create({initialize:function(){
+}
+, set:function(receiver, key, value){
+  {
+    return receiver.put(key, value);
+  }
+}
+}, {});
 creatures.initialize();
+kotlin.initialize();
 
 Kotlin.System.flush();
 var args = [];

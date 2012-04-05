@@ -54,7 +54,7 @@ public class InitializerApplet extends Initializer {
                 public void dispose() {
                 }
             };
-            environment = new JetCoreEnvironment(root);
+            environment = new JetCoreEnvironment(root, false);
 
 //            environment.addToClasspath(new File(InitializerApplet.class.getResource("rt.jar")));
 //            environment.addToClasspath(new File("kotlin-runtime.jar"));

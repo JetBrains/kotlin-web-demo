@@ -21,9 +21,14 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.codegen.ClassBuilderFactories;
 import org.jetbrains.jet.codegen.ClassFileFactory;
+import org.jetbrains.jet.codegen.CompilationErrorHandler;
 import org.jetbrains.jet.codegen.GenerationState;
+import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.jet.lang.resolve.BindingContext;
+import org.jetbrains.jet.lang.resolve.java.AnalyzeExhaust;
+import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -36,10 +41,7 @@ import org.json.JSONArray;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -79,8 +81,16 @@ public class CompileAndRunExecutor {
             sessionInfo.getTimeManager().saveCurrentTime();
             GenerationState generationState;
             try {
-                generationState = new GenerationState(currentProject, ClassBuilderFactories.binaries(false));
-                generationState.compile((JetFile) currentPsiFile);
+                AnalyzeExhaust analyzeExhaust = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
+                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
+                generationState = new GenerationState(currentProject,ClassBuilderFactories.binaries(false), analyzeExhaust, Collections.singletonList((JetFile) currentPsiFile));
+//                generationState = new GenerationState(currentProject, ClassBuilderFactories.binaries(false));
+                generationState.compileCorrectFiles(new CompilationErrorHandler() {
+                    @Override
+                    public void reportException(Throwable throwable, String s) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), s + " " + currentPsiFile.getText());
+                    }
+                });
 //                generationState.compileCorrectFiles(bindingContext, Collections.singletonList((JetFile) currentPsiFile));
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());

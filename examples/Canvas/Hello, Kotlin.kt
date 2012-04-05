@@ -41,7 +41,7 @@ class HelloKotlin() {
     context.shadowOffsetX = -4.0
     context.shadowOffsetY = 4.0
     context.fillStyle = "rgb(242,160,110)"
-    context.fillText(message, absX, absY)
+    context.fillText(message, absX.toInt(), absY.toInt())
     context.restore()
   }
 
@@ -68,7 +68,7 @@ class HelloKotlin() {
 fun renderBackground() {
   context.save()
   context.fillStyle = "#5C7EED"
-  context.fillRect(0.0, 0.0, width.toDouble(), height.toDouble())
+  context.fillRect(0, 0, width, height)
   context.restore()
 }
 

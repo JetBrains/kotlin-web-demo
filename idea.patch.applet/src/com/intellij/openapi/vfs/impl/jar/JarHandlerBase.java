@@ -44,7 +44,7 @@ public class JarHandlerBase {
 
     protected static class EntryInfo {
         public EntryInfo(final String shortName, final EntryInfo parent, final boolean directory, byte[] content) {
-            this.shortName = new String(shortName);
+            this.shortName = shortName;
             this.parent = parent;
             isDirectory = directory;
             this.content = content;
@@ -96,10 +96,11 @@ public class JarHandlerBase {
                                         int readFromIS = tmp;
                                         if (tmp < entry.getSize()) {
                                             byteArray.write(cont, 0, tmp);
-                                            while (((tmp = stream.read(cont)) != -1) && (tmp + readFromIS <= entry.getSize())) {
+                                            while (((tmp = stream.read(cont)) != -1) && (tmp + readFromIS <= entry.getSize()) && (tmp + readFromIS < 0xFFFF)) {
                                                 byteArray.write(cont, 0, tmp);
                                                 readFromIS += tmp;
                                             }
+                                            System.out.println(name + " " + readFromIS);
                                             entry.setExtra(byteArray.toByteArray());
                                         }
                                     }
@@ -109,7 +110,7 @@ public class JarHandlerBase {
 
                             entry = zip.getNextEntry();
                         }
-                    } catch (IOException e) {
+                    } catch (Throwable e) {
                         e.printStackTrace();
                     }
                     myRelPathsToEntries = new SoftReference<Map<String, EntryInfo>>(map);
@@ -235,6 +236,7 @@ public class JarHandlerBase {
             if (content == null) {
                 return new byte[0];
             }
+
             return content;
 
         }

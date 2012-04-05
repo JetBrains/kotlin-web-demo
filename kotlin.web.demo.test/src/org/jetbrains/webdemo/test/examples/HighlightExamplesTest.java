@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.test.examples;
 
+import com.sun.xml.internal.xsom.impl.scd.Iterators;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.Initializer;
@@ -26,6 +27,7 @@ import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -35,7 +37,22 @@ import java.util.Comparator;
 
 public class HighlightExamplesTest extends BaseTest {
 
+
     public void testExamples() throws IOException {
+        ArrayList<String> jsExamples = new ArrayList<String>();
+        jsExamples.add("is-checks and smart casts.kt");
+        jsExamples.add("Use a while-loop.kt");
+        jsExamples.add("Use a for-loop.kt");
+        jsExamples.add("Simplest version.kt");
+        jsExamples.add("Reading a name from the command line.kt");
+        jsExamples.add("Reading many names from the command line.kt");
+
+        jsExamples.add("A multi-language Hello.kt");
+        jsExamples.add("An object-oriented Hello.kt");
+        // TODO add test for js with warning
+        // jsExamples.add("HTML Builder.kt");
+
+
         File rootDir = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
         if (!rootDir.exists() || !rootDir.isDirectory()) {
             return;
@@ -68,6 +85,9 @@ public class HighlightExamplesTest extends BaseTest {
                         if (folder.getName().equals("Canvas")) {
                             compareResponseAndExpectedResult(file, "[]", "canvas");
                         } else {
+                            if (jsExamples.contains(file.getName())) {
+                                compareResponseAndExpectedResult(file, "[]", "js");
+                            }
                             compareResponseAndExpectedResult(file, "[]", "java");
                         }
                     }
@@ -96,7 +116,7 @@ public class HighlightExamplesTest extends BaseTest {
         expectedList.append("HTML Builder.kt").append("\n");
         expectedList.append("Life.kt").append("\n");
         expectedList.append("Maze.kt").append("\n");
-        
+
         assertEquals("Files to compare", expectedList.toString(), builder.toString());
 
     }

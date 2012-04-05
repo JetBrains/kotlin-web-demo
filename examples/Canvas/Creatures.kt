@@ -61,7 +61,7 @@ class Logo(override var pos : Vector) : Shape()
     fun drawLogo(state : CanvasState) {
         size = imageSize * (state.size.x / imageSize.x) * relSize
         // getKotlinLogo() is a 'magic' function here defined only for purposes of demonstration but in fact it just find an element containing the logo
-        state.context.drawImage(getKotlinLogo(), 0.0, 0.0, imageSize.x, imageSize.y, position.x, position.y, size.x, size.y)
+        state.context.drawImage(getKotlinLogo(), 0, 0, imageSize.x.toInt(), imageSize.y.toInt(), position.x.toInt(), position.y.toInt(), size.x.toInt(), size.y.toInt())
     }
 
     override fun draw(state : CanvasState) {
@@ -147,10 +147,10 @@ class Creature(override var pos : Vector, val state : CanvasState) : Shape() {
         val p1 = tailPos + tailDirection.rotatedBy(angle) * tailSize
         val p2 = tailPos + tailDirection.rotatedBy(-angle) * tailSize
         val middlePoint = position + tailDirection * radius * 1.0
-        context.moveTo(tailPos.x, tailPos.y)
-        context.lineTo(p1.x, p1.y)
+        context.moveTo(tailPos.x.toInt(), tailPos.y.toInt())
+        context.lineTo(p1.x.toInt(), p1.y.toInt())
         context.quadraticCurveTo(middlePoint.x, middlePoint.y, p2.x, p2.y)
-        context.lineTo(tailPos.x, tailPos.y)
+        context.lineTo(tailPos.x.toInt(), tailPos.y.toInt())
     }
 
     fun drawEye(context : Context) {
@@ -246,10 +246,10 @@ class CanvasState(val canvas : Canvas) {
 
     fun clear() {
         context.fillStyle = "#FFFFFF"
-        context.fillRect(0.0, 0.0, width, height)
+        context.fillRect(0, 0, width.toInt(), height.toInt())
         context.strokeStyle = "#000000"
         context.lineWidth = 4.0
-        context.strokeRect(0.0, 0.0, width, height)
+        context.strokeRect(0, 0, width.toInt(), height.toInt())
     }
 
     fun draw() {

@@ -31,10 +31,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Natalia.Ukhorskaya
@@ -43,6 +40,7 @@ import java.util.Map;
 public class RunExamplesTest extends BaseTest {
 
     private Map<String, Example> expectedResults = new HashMap<String, Example>();
+    private ArrayList<String> jsExamples = new ArrayList<String>();
 
     @Override
     public void setUp() throws Exception {
@@ -68,6 +66,17 @@ public class RunExamplesTest extends BaseTest {
         expectedResults.put("Maze.kt", new Example("Maze.kt", "", "from txt file"));
         expectedResults.put("Life.kt", new Example("Life.kt", "", "from txt file"));
         expectedResults.put("", new Example("", "", ""));
+
+        jsExamples.add("is-checks and smart casts.kt");
+        jsExamples.add("Use a while-loop.kt");
+        jsExamples.add("Use a for-loop.kt");
+        jsExamples.add("Simplest version.kt");
+        jsExamples.add("Reading a name from the command line.kt");
+        jsExamples.add("Reading many names from the command line.kt");
+
+        jsExamples.add("A multi-language Hello.kt");
+        jsExamples.add("An object-oriented Hello.kt");
+        //jsExamples.add("HTML Builder.kt");
 
     }
 
@@ -100,7 +109,8 @@ public class RunExamplesTest extends BaseTest {
                     if (!folder.getName().equals("Problems")) {
                         builder.append(file.getName()).append("\n");
                         if (folder.getName().equals("Canvas")) {
-                            compareResponseAndExpectedResult(file, "canvas");
+                            //TODO add execution for js (without order of function in generated js
+                            // compareResponseAndExpectedResult(file, "canvas");
                         } else {
                             compareResponseAndExpectedResult(file, "java");
                         }
