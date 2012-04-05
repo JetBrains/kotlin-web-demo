@@ -82,8 +82,6 @@ public class ErrorWriterOnServer extends ErrorWriter {
     }
 
     private void sendViaITNProxy(ErrorBean error) {
-//        String login = "Natalia.Ukhorskaya";
-//        String password = "pqow02";
         String login = "idea_anonymous";
         String password = "guest";
         try {
