@@ -27,6 +27,7 @@ import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.k2js.utils.JetFileUtils;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.util.Arrays;
@@ -67,15 +68,15 @@ public final class WebDemoTranslatorFacade {
         } catch (AssertionError e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
-            return EXCEPTION + "Translation error.";
+            return ResponseUtils.getErrorInJson("Translation error.");
         } catch (UnsupportedOperationException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
-            return EXCEPTION + "Unsupported feature.";
+            return ResponseUtils.getErrorInJson("Unsupported feature.");
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
-            return EXCEPTION + "Unexpected exception.";
+            return ResponseUtils.getErrorInJson("Unexpected exception.");
         }
     }
 

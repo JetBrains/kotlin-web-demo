@@ -145,7 +145,7 @@ public class CompileAndRunExecutor {
             return runner.getResult(outputDir.getAbsolutePath());
 
         } else {
-            return generateResponseWithErrors(errors);
+            return ResponseUtils.getErrorInJson("There are errors in your code.");
         }
     }
 

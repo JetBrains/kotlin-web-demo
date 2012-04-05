@@ -18,6 +18,7 @@ package org.jetbrains.webdemo.responseHelpers;
 
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 import org.json.JSONArray;
@@ -46,7 +47,7 @@ public class JsConverter {
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code + "\n" + arguments);
-            map.put("exception", e.getMessage());
+            return ResponseUtils.getErrorInJson(e.getMessage());
         }
         result.put(map);
         return result.toString();

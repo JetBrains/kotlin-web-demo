@@ -55,11 +55,10 @@ public class ErrorWriterOnServer extends ErrorWriter {
 
     public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String description) {
         ErrorBean bean = new ErrorBean(e, type);
-//        bean.addProgramText(description);
         bean.setPluginName("Kotlin Web Demo");
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
         if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
-            //sendViaITNProxy(bean);
+            sendViaITNProxy(bean);
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, description));
         } else {
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, description));
@@ -69,12 +68,11 @@ public class ErrorWriterOnServer extends ErrorWriter {
 
     public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String description) {
         ErrorBean bean = new ErrorBean(message, stackTrace, type);
-//        bean.addProgramText(description);
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
         bean.setPluginName("Kotlin Web Demo");
 
         if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
-            //sendViaITNProxy(bean);
+            sendViaITNProxy(bean);
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, message, stackTrace, description));
         } else {
             LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, message, stackTrace, description));
@@ -86,7 +84,6 @@ public class ErrorWriterOnServer extends ErrorWriter {
         String password = "guest";
         try {
             String result = ITNProxy.postNewThread(login, password, error, String.valueOf(System.currentTimeMillis()), ApplicationSettings.KOTLIN_VERSION);
-            System.out.println(result);
             if ("unauthorized".equals(result) || result.startsWith("update ") || result.startsWith("message ")) {
                 LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EA", result, ""));
                 LOG_FOR_EXCEPTIONS.error(getExceptionForLog(error.getLastAction(), error.getMessage(), error.getDescription()));

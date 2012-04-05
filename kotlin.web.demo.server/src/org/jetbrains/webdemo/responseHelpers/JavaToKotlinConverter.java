@@ -64,7 +64,7 @@ public class JavaToKotlinConverter {
             ServerInitializer.reinitializeJavaEnvironment();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
-            map.put("exception", e.getMessage());
+            return ResponseUtils.getErrorInJson(e.getMessage());
         }
 
         result.put(map);

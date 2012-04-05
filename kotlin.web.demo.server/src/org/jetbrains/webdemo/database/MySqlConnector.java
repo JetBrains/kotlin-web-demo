@@ -278,17 +278,17 @@ public class MySqlConnector {
 
     public String saveProgram(UserInfo userInfo, String programName, String programText, String args, String runConfiguration) {
         if (!checkConnection()) {
-            return ResponseUtils.getJsonString("exception", "Cannot connect to database for save your program.");
+            return ResponseUtils.getErrorInJson("Cannot connect to database for save your program.");
         }
         PreparedStatement st = null;
         try {
             if (findUser(userInfo)) {
 
                 if (!checkCountOfPrograms(userInfo)) {
-                    return ResponseUtils.getJsonString("exception", "You can save only 100 programs");
+                    return ResponseUtils.getErrorInJson("You can save only 100 programs");
                 }
                 if (findProgramByName(userInfo, programName)) {
-                    return ResponseUtils.getJsonString("exception", "Program with same name already exists. Please choose the another one.");
+                    return ResponseUtils.getErrorInJson("Program with same name already exists. Please choose the another one.");
                 }
 
                 String programId = userInfo.getId() + new Random().nextInt();
@@ -316,16 +316,16 @@ public class MySqlConnector {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userprogramid table",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
-                return ResponseUtils.getJsonString("exception", "Please, login.");
+                return ResponseUtils.getErrorInJson("Please, login.");
             }
         } catch (Throwable e) {
             if (e.getMessage().contains("Data too long")) {
-                return ResponseUtils.getJsonString("exception", "Data is too long.");
+                return ResponseUtils.getErrorInJson("Data is too long.");
             }
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
-            return ResponseUtils.getJsonString("exception", "Unknown error while saving your program");
+            return ResponseUtils.getErrorInJson("Unknown error while saving your program");
         } finally {
             closeStatement(st);
         }
@@ -359,7 +359,7 @@ public class MySqlConnector {
 
     public String generatePublicLink(String programId) {
         if (!checkConnection()) {
-            return ResponseUtils.getJsonString("exception", "Cannot connect to database for generate public link.");
+            return ResponseUtils.getErrorInJson("Cannot connect to database for generate public link.");
         }
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -368,7 +368,7 @@ public class MySqlConnector {
             st.setString(1, programId);
             rs = st.executeQuery();
             if (!rs.next()) {
-                return ResponseUtils.getJsonString("exception", "Cannot find the program.");
+                return ResponseUtils.getErrorInJson("Cannot find the program.");
             }
 
             String publicLink = rs.getString("PROGRAM_LINK");
@@ -383,7 +383,7 @@ public class MySqlConnector {
             return ResponseUtils.getJsonString("text", publicLink);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
-            return ResponseUtils.getJsonString("exception", "Cannot generate public link");
+            return ResponseUtils.getErrorInJson("Cannot generate public link");
         } finally {
             closeStatementAndResultSet(st, rs);
         }
@@ -391,7 +391,7 @@ public class MySqlConnector {
 
     public String getProgramTextByPublicLink(String programId) {
         if (!checkConnection()) {
-            return ResponseUtils.getJsonString("exception", "Cannot connect to database for load program by link.");
+            return ResponseUtils.getErrorInJson("Cannot connect to database for load program by link.");
         }
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -404,11 +404,11 @@ public class MySqlConnector {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program by id in programIdProgramInfo",
                         programId));
-                return ResponseUtils.getJsonString("exception", "Cannot find program by this link");
+                return ResponseUtils.getErrorInJson("Cannot find program by this link");
             }
             String link = rs.getString("PROGRAM_LINK");
             if (link == null || link.isEmpty()) {
-                return ResponseUtils.getJsonString("exception", "Link for this program is not public");
+                return ResponseUtils.getErrorInJson("Link for this program is not public");
             }
 
             JSONArray array = new JSONArray();
@@ -420,13 +420,14 @@ public class MySqlConnector {
                 args = "";
             }
             map.put("args", args);
-            map.put("runCong", rs.getString("RUN_CONF"));
+            map.put("dependencies", rs.getString("RUN_CONF"));
+            map.put("runner", rs.getString("RUN_CONF"));
             array.put(map);
             return array.toString();
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
-            return ResponseUtils.getJsonString("exception", "Unknown error while loading program by link");
+            return ResponseUtils.getErrorInJson("Unknown error while loading program by link");
         } finally {
             closeStatementAndResultSet(st, rs);
         }
@@ -434,7 +435,7 @@ public class MySqlConnector {
 
     public String updateProgram(String programId, String programText, String args, String runConfiguration) {
         if (!checkConnection()) {
-            return ResponseUtils.getJsonString("exception", "Cannot connect to database for save your program.");
+            return ResponseUtils.getErrorInJson("Cannot connect to database for save your program.");
         }
         PreparedStatement st = null;
         try {
@@ -456,7 +457,7 @@ public class MySqlConnector {
             return ResponseUtils.getJsonString("programId", programId);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
-            return ResponseUtils.getJsonString("exception", "Unknown error while saving your program");
+            return ResponseUtils.getErrorInJson("Unknown error while saving your program");
         } finally {
             closeStatement(st);
         }
@@ -501,7 +502,7 @@ public class MySqlConnector {
 
     public String getProgramText(String programId) {
         if (!checkConnection()) {
-            return ResponseUtils.getJsonString("exception", "Cannot connect to database for load your program.");
+            return ResponseUtils.getErrorInJson("Cannot connect to database for load your program.");
         }
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -510,7 +511,7 @@ public class MySqlConnector {
             st.setString(1, programId);
             rs = st.executeQuery();
             if (!rs.next()) {
-                return ResponseUtils.getJsonString("exception", "Cannot find the program.");
+                return ResponseUtils.getErrorInJson("Cannot find the program.");
             }
             JSONArray array = new JSONArray();
             Map<String, String> map = new HashMap<String, String>();
@@ -521,12 +522,13 @@ public class MySqlConnector {
                 args = "";
             }
             map.put("args", args);
-            map.put("runConf", rs.getString("RUN_CONF"));
+            map.put("runner", rs.getString("RUN_CONF"));
+            map.put("dependencies", rs.getString("RUN_CONF"));
             array.put(map);
             return array.toString();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
-            return ResponseUtils.getJsonString("exception", "Unknown error while loading your program");
+            return ResponseUtils.getErrorInJson("Unknown error while loading your program");
         } finally {
             closeStatementAndResultSet(st, rs);
         }
@@ -534,7 +536,7 @@ public class MySqlConnector {
 
     public String getListOfProgramsForUser(UserInfo userInfo) {
         if (!checkConnection()) {
-            return ResponseUtils.getJsonString("exception", "Cannot connect to database to load list of your programs.");
+            return ResponseUtils.getErrorInJson("Cannot connect to database to load list of your programs.");
         }
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -572,7 +574,7 @@ public class MySqlConnector {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
-            return ResponseUtils.getJsonString("exception", "Unknown error while loading list of your programs");
+            return ResponseUtils.getErrorInJson("Unknown error while loading list of your programs");
         } finally {
             closeStatementAndResultSet(st, rs);
         }
@@ -593,7 +595,7 @@ public class MySqlConnector {
 
     public String deleteProgram(UserInfo userInfo, String programId) {
         if (!checkConnection()) {
-            return ResponseUtils.getJsonString("exception", "Cannot connect to database to delete your program.");
+            return ResponseUtils.getErrorInJson("Cannot connect to database to delete your program.");
         }
         PreparedStatement st = null;
         try {
@@ -612,11 +614,11 @@ public class MySqlConnector {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
-                return ResponseUtils.getJsonString("exception", "Unknown error while deleting your program");
+                return ResponseUtils.getErrorInJson("Unknown error while deleting your program");
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programId);
-            return ResponseUtils.getJsonString("exception", "Unknown error while deleting your program");
+            return ResponseUtils.getErrorInJson("Unknown error while deleting your program");
         } finally {
             closeStatement(st);
         }

@@ -21,6 +21,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
+import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
 import org.jetbrains.webdemo.examplesLoader.ExamplesLoader;
 import org.jetbrains.webdemo.responseHelpers.*;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -92,7 +93,7 @@ public class HttpSession {
                 sendCompletionResult();
             } else {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), param);
-                writeResponse("Incorrect request", HttpServletResponse.SC_BAD_REQUEST);
+                writeResponse(ResponseUtils.getErrorInJson("Incorrect request"), HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Throwable e) {
             if (sessionInfo != null && sessionInfo.getType() != null && currentPsiFile != null && currentPsiFile.getText() != null) {
@@ -100,7 +101,7 @@ public class HttpSession {
             } else {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "null");
             }
-            writeResponse("Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -190,7 +191,7 @@ public class HttpSession {
 
     private void sendExampleContent() {
         ExamplesLoader loader = new ExamplesLoader();
-        writeResponse(loader.getResultByNameAndHead(parameters.getArgs()), HttpServletResponse.SC_OK);
+        writeResponse(ExamplesHolder.loadExample(parameters.getArgs()), HttpServletResponse.SC_OK);
 
     }
 

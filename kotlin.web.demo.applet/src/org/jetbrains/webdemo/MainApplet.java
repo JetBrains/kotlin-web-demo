@@ -126,10 +126,10 @@ public class MainApplet extends JApplet implements ActionListener {
                 responseForCompletion = new JsonResponseForCompletion((int) Double.parseDouble(line),
                         (int) Double.parseDouble(ch), currentPsiFile, SESSION_INFO);
             }
-            System.out.println(line + " " + ch);
             return responseForCompletion.getResult();
 
         } catch (Throwable e) {
+            System.out.println(line + " " + ch);
             e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SESSION_INFO.getType(), data + " line: " + line + " ch: " + ch);
