@@ -29,7 +29,7 @@ function update() {
     $.get("kotlinServer?sessionId=-1&type=updateExamples&args=null");
 
     $.ajax({
-        url:generateAjaxUrl("loadExample", "all"),
+        url:RequestGenerator.generateAjaxUrl("loadExample", "all"),
         context:document.body,
         success:onLoadingExamplesSuccess,
         dataType:"json",
