@@ -98,6 +98,10 @@ var ProgramsView = (function () {
             }
         });
 
+        $("#saveDialog form").submit(function() {
+            saveAsProgram();
+        });
+
         $("#showInfoAboutLoginDialog").dialog({
             modal:"true",
             width:300,

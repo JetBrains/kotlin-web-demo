@@ -133,7 +133,7 @@ var RunModel = (function () {
                         return;
                     }
                     isCompiling = false;
-                    eventHandler.fire("run_js", true, dataFromApplet);
+                    eventHandler.fire("run_js", true, eval(dataFromApplet));
                 } catch (e) {
                     isCompiling = false;
                     eventHandler.fire("run_js", false, e);

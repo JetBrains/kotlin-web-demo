@@ -63,16 +63,17 @@ var ConsoleView = (function () {
     }
 
     function writeException(data) {
-        $("#console").html("");
         if (typeof data != "undefined" && typeof data[0] != "undefined" && typeof data[0].exception != "undefined") {
+            $("#console").html("");
+            $("#tabs").tabs("select", 1);
             var i = 0;
             while (typeof data[i] != "undefined") {
                 createException(data[i]);
                 i++;
             }
-            $("#tabs").tabs("select", 1);
         } else if (typeof data != "undefined" || data == null) {
         } else {
+            $("#console").html("");
             $("#tabs").tabs("select", 1);
             $("#console").html("ERROR: " + data);
         }

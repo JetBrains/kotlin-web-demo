@@ -265,7 +265,6 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
             var firstChar = textAfter && textAfter.charAt(0), ctx = state.context;
             if (ctx.type == "statement" && !expectExpression(state.lastToken)) ctx = ctx.prev;
             var closing = firstChar == ctx.type;
-//            alert("last " + ctx.type + " first " + firstChar + " after " + textAfter);
             if (ctx.type == "statement") {
                 return ctx.indented + (firstChar == "{" ? 0 : config.indentUnit);
             }

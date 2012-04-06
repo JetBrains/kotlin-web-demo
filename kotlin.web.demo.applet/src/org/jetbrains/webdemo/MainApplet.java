@@ -18,11 +18,11 @@ package org.jetbrains.webdemo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
@@ -74,6 +74,7 @@ public class MainApplet extends JApplet implements ActionListener {
     }
 
     public String getHighlighting(String data, String runConfiguration) {
+        System.out.println("get_highlighting");
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), data);
@@ -83,6 +84,7 @@ public class MainApplet extends JApplet implements ActionListener {
             return responseForHighlighting.getResult();
 
         } catch (Throwable e) {
+            e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SESSION_INFO.getType(), data);
             StringWriter writer = new StringWriter();
@@ -97,22 +99,19 @@ public class MainApplet extends JApplet implements ActionListener {
 
     @Nullable
     public String translateToJS(@NotNull String code, @NotNull String arguments) {
+        System.out.println("translate");
         try {
             return WebDemoTranslatorFacade.translateStringWithCallToMain(code, arguments);
-        } catch (AssertionError e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
-            return EXCEPTION + "Translation error.";
-        } catch (UnsupportedOperationException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
-            return EXCEPTION + "Unsupported feature.";
         } catch (Throwable e) {
+            e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
-            return EXCEPTION + "Unexpected exception.";
+            return ResponseUtils.getErrorInJson("Unexpected exception.");
         }
     }
 
 
     public String getCompletion(String data, String line, String ch, String runConfiguration) {
+        System.out.println("get_completion");
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.COMPLETE);
         try {
             JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), data);
@@ -129,7 +128,6 @@ public class MainApplet extends JApplet implements ActionListener {
             return responseForCompletion.getResult();
 
         } catch (Throwable e) {
-            System.out.println(line + " " + ch);
             e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SESSION_INFO.getType(), data + " line: " + line + " ch: " + ch);

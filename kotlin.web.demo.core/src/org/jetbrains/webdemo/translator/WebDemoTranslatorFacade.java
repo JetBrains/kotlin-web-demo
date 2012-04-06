@@ -29,8 +29,11 @@ import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.json.JSONArray;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Pavel Talanov
@@ -63,7 +66,17 @@ public final class WebDemoTranslatorFacade {
     @NotNull
     public static String translateStringWithCallToMain(@NotNull String programText, @NotNull String argumentsString) {
         try {
-            return doTranslate(programText, argumentsString);
+            JSONArray result = new JSONArray();
+            Map<String, String> map = new HashMap<String, String>();
+            try {
+                map.put("text", doTranslate(programText, argumentsString));
+            } catch (Throwable e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText + "\n" + argumentsString);
+                return ResponseUtils.getErrorInJson(e.getMessage());
+            }
+            result.put(map);
+            return result.toString();
 
         } catch (AssertionError e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,

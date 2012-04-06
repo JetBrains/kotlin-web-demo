@@ -90,8 +90,8 @@ editor.addListener("move_cursor", helpView.processCursorActivity);
 editor.addListener("move_cursor", statusBarView.processCursorActivity);
 
 highlighting.addListener("get_highlighting", editor.processHighlighting);
-highlighting.addListener("get_highlighting", runModel.processHighlighting);
 highlighting.addListener("get_highlighting", problemsView.processHighlighting);
+highlighting.addListener("get_highlighting", runModel.processHighlighting);
 highlighting.addListener("get_highlighting", statusBarView.processHighlighting);
 
 completion.addListener("get_completion", editor.processCompletion);

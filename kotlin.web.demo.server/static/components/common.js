@@ -66,7 +66,6 @@ function replaceAll(str, replaced, replacement) {
     try {
         return str.replace(new RegExp(replaced, 'g'), replacement)
     } catch (e) {
-        //todo alert(str);
         return str;
     }
 }

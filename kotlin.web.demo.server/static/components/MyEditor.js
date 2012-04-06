@@ -65,8 +65,7 @@ var Editor = (function () {
 
             if ((data != null) && (typeof data != "undefined")) {
                 if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                    //TODO
-                    events_handler.fire("update_console", data[0]);
+                    eventHandler.fire("write_exception", data);
                     return;
                 }
                 if (!isContinueComplete) {

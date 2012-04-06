@@ -40,16 +40,6 @@ public class JsConverter {
     }
 
     public String getResult(String code, String arguments) {
-        JSONArray result = new JSONArray();
-        Map<String, String> map = new HashMap<String, String>();
-        try {
-            map.put("text", WebDemoTranslatorFacade.translateStringWithCallToMain(code, arguments));
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code + "\n" + arguments);
-            return ResponseUtils.getErrorInJson(e.getMessage());
-        }
-        result.put(map);
-        return result.toString();
+        return WebDemoTranslatorFacade.translateStringWithCallToMain(code, arguments);
     }
 }
