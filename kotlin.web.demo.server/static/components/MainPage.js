@@ -239,7 +239,7 @@ function checkDataForNull(data) {
 }
 
 function checkDataForException(data) {
-    if (data[0] != null && data[0] == undefined && data[0].exception != undefined) {
+    if (data[0] != null && data[0] != undefined && data[0].exception != undefined) {
         consoleView.writeException(data);
         return false;
     }

@@ -46,7 +46,7 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$all$variable() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"property\",\"name\":\"name\",\"tail\":\"jet.String\"},{\"icon\":\"\",\"name\":\"namespace jet\",\"tail\":\"\"}]";
+        String expectedResult = "[{\"icon\":\"property\",\"name\":\"name\",\"tail\":\"jet.String\"},{\"icon\":\"package\",\"name\":\"namespace jet\",\"tail\":\"\"}]";
         compareResult(14, 23, expectedResult, "java");
         compareResult(14, 23, expectedResult, "js");
     }
