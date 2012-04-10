@@ -197,8 +197,8 @@ public class JsonResponseForCompletion {
             return "genericValue";
         } else {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                    "Impossible to find icon for " + descriptor.toString(),
-                    "null", sessionInfo.getType(), descriptor.toString());
+                    "Impossible to find icon",
+                    descriptor.getName(), sessionInfo.getType(), "");
             return "";
         }
     }
