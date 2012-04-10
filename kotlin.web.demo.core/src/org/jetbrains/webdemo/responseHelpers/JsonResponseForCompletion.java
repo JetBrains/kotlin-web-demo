@@ -21,6 +21,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
+import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
+import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -86,7 +88,8 @@ public class JsonResponseForCompletion {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
             } else {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY).getBindingContext();
+                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY,
+                        CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR)).getBindingContext();
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());

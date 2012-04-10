@@ -37,20 +37,21 @@ public class PathUtil {
     }
 
     public static File getDefaultRuntimePath() {
-        File compilerPath = getDefaultCompilerPath();
-        if (compilerPath == null) return null;
+//        File compilerPath = getDefaultCompilerPath();
+//        if (compilerPath == null) return null;
+//
+//        File answer = new File(compilerPath, "lib/kotlin-runtime.jar");
 
-        File answer = new File(compilerPath, "lib/kotlin-runtime.jar");
-
-        return answer.exists() ? answer : null;
+//        return answer.exists() ? answer : null;
+        return new File("kotlin-runtime.jar");
     }
 
     public static File getAltHeadersPath() {
-        File compilerPath = getDefaultCompilerPath();
-        if (compilerPath == null) return null;
+        //        File compilerPath = new File("kotlin-jdk-headers.jar");
+        //if (compilerPath == null) return null;
 
-        File answer = new File(compilerPath, "lib/alt");
-        return answer.exists() ? answer : null;
+        //File answer = new File(compilerPath, "lib/alt");
+        return new File("kotlin-jdk-headers.jar");
     }
 
     @NotNull
@@ -79,5 +80,13 @@ public class PathUtil {
             }
         }*/
         return roots;
+    }
+
+    @NotNull
+    public static VirtualFile jarFileToVirtualFile(@NotNull File file) {
+        /*if (!file.exists() || !file.isFile()) {
+            throw new IllegalStateException("file must exist and be regular to be converted to virtual file: " + file);
+        }*/
+        return VirtualFileManager.getInstance().findFileByUrl("jar://" + file.getPath() + "!/");
     }
 }

@@ -79,7 +79,7 @@ public class KotlinHttpServlet extends HttpServlet {
             } else {
                 ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
             System.exit(1);
         }

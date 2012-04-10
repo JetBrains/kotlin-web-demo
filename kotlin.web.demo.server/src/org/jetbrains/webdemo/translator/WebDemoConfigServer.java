@@ -25,9 +25,7 @@ import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.utils.JetFileUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,16 +38,16 @@ public final class WebDemoConfigServer extends Config {
     @Nullable
     private /*var*/ List<JetFile> jsLibFiles = null;
 
+   // private Project project;
+
     public WebDemoConfigServer(@NotNull Project project) {
         super(project);
+     //   this.project = project;
     }
 
-    public void setProject(Project project) {
-//        this.project = project;
-    }
 
     @NotNull
-    private List<JetFile> initLibFiles(@NotNull Project project) {
+    protected List<JetFile> initLibFiles() {
         List<JetFile> libFiles = new ArrayList<JetFile>();
         for (String libFileName : LIB_FILE_NAMES) {
             JetFile file = null;
@@ -58,7 +56,7 @@ public final class WebDemoConfigServer extends Config {
 //            InputStream stream = WebDemoConfigServer.class.getResourceAsStream(libFileName);
             try {
                 String text = FileUtil.loadFile(libFile);
-                file = JetFileUtils.createPsiFile(libFileName, text, project);
+                file = JetFileUtils.createPsiFile(libFileName, text, getProject());
                 libFiles.add(file);
             } catch (FileNotFoundException e) {
                 System.err.println(libFileName);
@@ -75,11 +73,11 @@ public final class WebDemoConfigServer extends Config {
     }
 
     @NotNull
-    public List<JetFile> getLibFiles() {
+    public List<JetFile> generateLibFiles() {
         if (jsLibFiles == null) {
-            jsLibFiles = initLibFiles(getProject());
+            jsLibFiles = initLibFiles();
         }
         return jsLibFiles;
-
     }
+
 }

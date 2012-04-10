@@ -356,7 +356,6 @@ var Editor = (function () {
 
             function processError(i, f) {
                 if (typeof data[i] == "undefined") {
-                    eventHandler.fire("write_exception", data);
                     return;
                 }
                 arrayClasses.push(my_editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className));

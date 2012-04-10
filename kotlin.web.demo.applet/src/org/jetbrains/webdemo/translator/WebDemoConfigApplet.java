@@ -43,7 +43,7 @@ public final class WebDemoConfigApplet extends Config {
     }
 
     @NotNull
-    private static List<JetFile> initLibFiles(@NotNull Project project) {
+    protected List<JetFile> generateLibFiles() {
         List<JetFile> libFiles = new ArrayList<JetFile>();
         for (String libFileName : LIB_FILE_NAMES) {
             JetFile file = null;
@@ -51,7 +51,7 @@ public final class WebDemoConfigApplet extends Config {
             InputStream stream = WebDemoConfigApplet.class.getResourceAsStream("/js" + libFileName);
             try {
                 String text = FileUtil.loadTextAndClose(stream);
-                file = JetFileUtils.createPsiFile(libFileName, text, project);
+                file = JetFileUtils.createPsiFile(libFileName, text, getProject());
                 libFiles.add(file);
             } catch (IOException e) {
                 System.err.println(libFileName);
@@ -64,12 +64,4 @@ public final class WebDemoConfigApplet extends Config {
         return libFiles;
     }
 
-    @NotNull
-    public List<JetFile> getLibFiles() {
-        if (jsLibFiles == null) {
-            jsLibFiles = initLibFiles(getProject());
-        }
-        return jsLibFiles;
-
-    }
 }

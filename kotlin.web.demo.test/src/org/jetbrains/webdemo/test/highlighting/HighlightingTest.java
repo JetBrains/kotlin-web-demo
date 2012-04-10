@@ -34,7 +34,7 @@ public class HighlightingTest extends BaseTest {
 
     public void test$errors$oneError() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Only safe calls (?.) are allowed on a nullable receiver of type PrintStream?\"," +
+        String expectedResult = "[{\"titleName\":\"Only safe calls (?.) are allowed on a nullable receiver of type java.io.PrintStream?\"," +
                 "\"className\":\"red_wavy_line\"," +
                 "\"severity\":\"ERROR\"," +
                 "\"y\":\"{line: 1, ch: 13}\"," +
@@ -60,7 +60,7 @@ public class HighlightingTest extends BaseTest {
 
     public void test$warnings$oneWarning() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Unnecessary safe call on a non-null receiver of type Int\"," +
+        String expectedResult = "[{\"titleName\":\"Unnecessary safe call on a non-null receiver of type jet.Int\"," +
                 "\"className\":\"WARNING\"," +
                 "\"severity\":\"WARNING\"," +
                 "\"y\":\"{line: 2, ch: 7}\"," +
@@ -70,7 +70,7 @@ public class HighlightingTest extends BaseTest {
 
     public void test$errors$twoErrorsInOneLine() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Only safe calls (?.) are allowed on a nullable receiver of type PrintStream?\"," +
+        String expectedResult = "[{\"titleName\":\"Only safe calls (?.) are allowed on a nullable receiver of type java.io.PrintStream?\"," +
                 "\"className\":\"red_wavy_line\"," +
                 "\"severity\":\"ERROR\"," +
                 "\"y\":\"{line: 1, ch: 15}\"," +

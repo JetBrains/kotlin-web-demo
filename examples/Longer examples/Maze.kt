@@ -42,7 +42,7 @@ fun findPath(maze : Maze) : List<#(Int, Int)>? {
 
     for (newCell in maze.neighbors(cell.sure()._1, cell.sure()._2)) {
     if (newCell in visited) continue
-    previous.put(newCell, cell)
+    previous.put(newCell, cell.sure())
     queue.offer(newCell)
     visited.add(cell.sure())
     }

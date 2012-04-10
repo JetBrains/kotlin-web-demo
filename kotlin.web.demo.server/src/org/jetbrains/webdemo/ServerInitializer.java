@@ -26,6 +26,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.encoding.EncodingRegistry;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
+import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.jet.compiler.CompileEnvironment;
 import org.jetbrains.jet.compiler.JetCoreEnvironment;
@@ -47,7 +49,7 @@ public class ServerInitializer extends Initializer {
     private static ServerInitializer initializer = new ServerInitializer();
 
     private static Getter<FileTypeRegistry> registry;
-    private static Disposable  root;
+    private static Disposable root;
 
     public static ServerInitializer getInstance() {
         return initializer;
@@ -133,7 +135,7 @@ public class ServerInitializer extends Initializer {
                 public void dispose() {
                 }
             };
-            environment = new JetCoreEnvironment(root, false);
+            environment = new JetCoreEnvironment(root, CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR));
 
             return setJavaCoreEnvironment();
         }

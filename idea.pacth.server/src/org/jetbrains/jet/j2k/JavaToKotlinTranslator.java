@@ -93,7 +93,7 @@ public class JavaToKotlinTranslator {
 
     @Nullable
     private static File findRtJar() {
-        String javaHome = System.getenv("JAVA_HOME");
+        String javaHome = System.getenv("JAVA_HOME").replaceAll("%20", " ");
         File rtJar;
         if (javaHome == null) {
             rtJar = CompileEnvironment.findRtJar();

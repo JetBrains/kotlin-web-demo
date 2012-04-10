@@ -19,6 +19,8 @@ package org.jetbrains.webdemo;
 import com.intellij.openapi.Disposable;
 import org.jetbrains.jet.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
+import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
+import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.jet.plugin.JetFileType;
 
 /**
@@ -54,7 +56,7 @@ public class InitializerApplet extends Initializer {
                 public void dispose() {
                 }
             };
-            environment = new JetCoreEnvironment(root, false);
+            environment = new JetCoreEnvironment(root, CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR));
 
 //            environment.addToClasspath(new File(InitializerApplet.class.getResource("rt.jar")));
 //            environment.addToClasspath(new File("kotlin-runtime.jar"));
