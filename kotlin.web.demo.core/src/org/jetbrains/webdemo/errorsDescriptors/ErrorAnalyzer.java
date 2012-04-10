@@ -23,6 +23,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
+import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.Interval;
@@ -64,7 +66,8 @@ public class ErrorAnalyzer {
         try {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY).getBindingContext();
+                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY,
+                        CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR)).getBindingContext();
             } else {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
             }
@@ -93,8 +96,22 @@ public class ErrorAnalyzer {
                     continue;
                 }
                 if (diagnostic.getSeverity() != Severity.INFO) {
-                    //TODO
-                    TextRange firstRange = diagnostic.getTextRanges().iterator().next();
+                    Iterator<TextRange> textRangeIterator = diagnostic.getTextRanges().iterator();
+                    if (textRangeIterator == null) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator is null",
+                                diagnostic.getTextRanges() + " " + diagnostic.getMessage(),
+                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
+                        continue;
+                    }
+
+                    if (!textRangeIterator.hasNext()) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator hasNext() == false",
+                                diagnostic.getTextRanges() + " " + diagnostic.getMessage(),
+                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
+                        continue;
+                    }
+                    TextRange firstRange = textRangeIterator.next();
+
                     String className = diagnostic.getSeverity().name();
                     if (!(diagnostic instanceof UnresolvedReferenceDiagnostic) && (diagnostic.getSeverity() == Severity.ERROR)) {
                         className = "red_wavy_line";
