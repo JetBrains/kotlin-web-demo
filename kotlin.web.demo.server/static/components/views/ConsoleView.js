@@ -71,7 +71,7 @@ var ConsoleView = (function () {
                 createException(data[i]);
                 i++;
             }
-        } else if (typeof data != "undefined" || data == null) {
+        } else if (typeof data == "undefined" || data == null || data == "") {
         } else {
             $("#console").html("");
             $("#tabs").tabs("select", 1);
@@ -136,7 +136,9 @@ var ConsoleView = (function () {
             try {
                 dataJs = eval(data);
             } catch (e) {
-                writeException(e);
+                writeException("<p>" + e
+                    + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='ConsoleView.showJsCode();'>"
+                    + SHOW_JAVASCRIPT_CODE + "</a></p>");
                 return;
             }
             generatedJsCode = data;
