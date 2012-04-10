@@ -25,7 +25,7 @@
 
 var StatusBarView = (function () {
 
-    var Messages = {
+    StatusBarView.Messages = {
         load_example_ok:"Example is loaded.",
         load_example_fail:"Can't load the example from server.",
         load_help_for_examples_ok:"Help for examples was loaded from server.",
@@ -63,113 +63,19 @@ var StatusBarView = (function () {
         get_result_from_applet_fail:"Your browser can't run Java Applets."
     };
 
-    var eventHandler = new EventsHandler();
 
     function StatusBarView() {
 
         var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
-            },
-            setStatusBarMessage:function (message) {
+            setMessage:function (message) {
                 $("#statusbar").html(message);
             },
-            loadExample:function (status) {
-                if (status) setMessage(Messages.load_example_ok);
-                else setMessage(Messages.load_example_fail);
-            },
-            loadProgram:function (status) {
-                if (status) setMessage(Messages.load_program_ok);
-                else setMessage(Messages.load_program_fail);
-            },
-            loadHelpForExamples:function (status) {
-                if (status) setMessage(Messages.load_help_for_examples_ok);
-                else setMessage(Messages.load_help_for_examples_fail);
-            },
-            loadHelpForWords:function (status) {
-                if (status) setMessage(Messages.load_help_for_words_ok);
-                else setMessage(Messages.load_help_for_words_fail);
-            },
-            changeConfiguration:function (status) {
-                if (status) setMessage(Messages.change_configuration_ok);
-                else setMessage(Messages.change_configuration_fail);
-            },
-            processHighlighting:function (status) {
-                if (status) setMessage(Messages.get_highlighting_ok);
-                else setMessage(Messages.get_highlighting_fail);
-            },
-            processCompletion:function (status) {
-                if (status) setMessage(Messages.get_completion_ok);
-                else setMessage(Messages.get_completion_fail);
-            },
-            processOutput:function (status) {
-                if (status) setMessage(Messages.run_java_ok);
-                else setMessage(Messages.run_java_fail);
-            },
-            processOutputForJs:function (status) {
-                if (status) setMessage(Messages.run_js_ok);
-                else setMessage(Messages.run_js_fail);
-            },
-            login:function (status, name) {
-                if (status && name == "[\"null\"]") {
-
-                } else if (status && name != "[\"null\"]") {
-                    setMessage(Messages.login_ok);
-                }
-                else {
-                    setMessage(Messages.login_fail);
-                }
-            },
-            generatePublicLink:function (status) {
-                if (status) setMessage(Messages.generate_link_ok);
-                else setMessage(Messages.generate_link_fail);
-            },
-            logout:function (status) {
-                if (status) setMessage(Messages.logout_ok);
-                else setMessage(Messages.logout_fail);
-            },
-            deleteProgram:function (status) {
-                if (status) setMessage(Messages.delete_program_ok);
-                else setMessage(Messages.delete_program_fail);
-            },
-            saveProgram:function (status) {
-                if (status) setMessage(Messages.save_program_ok);
-                else setMessage(Messages.save_program_fail);
-            },
-            processConverterResult:function (status) {
-                if (status) setMessage(Messages.convert_java_to_kotlin_ok);
-                else setMessage(Messages.convert_java_to_kotlin_fail);
-            },
-            processCursorActivity:function (status, data) {
-                if (data[0] != "") {
-                    setMessage(data[0]);
-                }
-            },
-            loadHighlighting:function (param) {
-                if (param[1] == Configuration.mode.SERVER) {
-                    setMessage(Messages.loading_highlighting);
-                }
-            },
-            loadCompletion:function (param) {
-                if (param[1] == Configuration.mode.SERVER) {
-                    setMessage(Messages.loading_completion);
-                }
+            setError:function (message) {
+                $("#statusbar").html("<font color=\"red\">" + message + "</font>");
             }
-
         };
 
         return instance;
-    }
-
-    function setMessage(message) {
-        $("#statusbar").html(message);
-    }
-
-    function setError(message) {
-        $("#statusbar").html("<font color=\"red\">" + message + "</font>");
     }
 
     return StatusBarView;

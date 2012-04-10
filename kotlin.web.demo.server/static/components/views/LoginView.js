@@ -31,19 +31,17 @@ var LoginView = (function () {
 
     function LoginView() {
         var instance = {
-            processUserName: function (status, name) {
-                if (status && name != "[\"null\"]") setUserName(eval(name)[0]);
+            setUserName:function (name) {
+                if (name != "[\"null\"]") setUserName(eval(name)[0]);
             },
-            isLoggedIn: function() {
+            isLoggedIn:function () {
                 return isLoggedIn;
             },
-            processLogout: function (status, data) {
-                if (status) {
-                    isLoggedIn = false;
-                    $("#login").css("display", "block");
-                    $("#userName").html("");
-                    $("#userName").css("display", "none");
-                }
+            logout:function () {
+                isLoggedIn = false;
+                $("#login").css("display", "block");
+                $("#userName").html("");
+                $("#userName").css("display", "none");
             }
         };
 

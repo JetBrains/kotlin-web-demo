@@ -28,17 +28,10 @@ var ArgumentsView = (function () {
     function ArgumentsView() {
 
         var instance = {
-            loadArgs: function(status, data){
-               if (status) {
-                   $("#arguments").val(data);
-               }
+            setArgs:function (args) {
+                $("#arguments").val(args);
             },
-            loadExampleOrProgram: function(status, example){
-                if (status) {
-                    $("#arguments").val(example.args);
-                }
-            },
-            getArguments: function () {
+            getArguments:function () {
                 return $("#arguments").val();
             }
         };

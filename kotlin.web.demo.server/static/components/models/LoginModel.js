@@ -28,26 +28,23 @@
  */
 
 var LoginModel = (function () {
-    var eventHandler = new EventsHandler();
+
+    var instance;
 
     function LoginModel() {
 
-        var instance = {
-            addListener: function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire: function (name, status, param) {
-                eventHandler.fire(name, status, param);
-            },
+        instance = {
             login: function(type) {
                 login(type);
             },
             logout: function() {
-               eventHandler.fire("logout", true, null);
+               instance.onLogout(true, null);
             },
             getUserName: function() {
                 getUserName();
-            }
+            },
+            onLogin: function(status, data) {},
+            onLogout: function(status, data) {}
         };
 
         return instance;
@@ -62,7 +59,7 @@ var LoginModel = (function () {
             type:"GET",
             timeout:10000,
             error:function () {
-                eventHandler.fire("login", false, null);
+                instance.onLogin(false, null);
             }
         });
     }
@@ -72,13 +69,13 @@ var LoginModel = (function () {
             url:RequestGenerator.generateAjaxUrl("getUserName", ""),
             context:document.body,
             success:function(data) {
-                eventHandler.fire("login", true, data);
+                instance.onLogin(true, data);
             },
             dataType:"text",
             type:"GET",
             timeout:10000,
             error:function () {
-                eventHandler.fire("login", false, null);
+                instance.onLogin(false, null);
             }
         });
     }

@@ -33,14 +33,14 @@ var ConsoleView = (function () {
     function ConsoleView() {
 
         var instance = {
-            processOutput:function (status, data) {
-                if (status) updateConsole(data);
+            setOutput:function (data) {
+                updateConsole(data);
             },
-            processOutputForJs:function (status, data) {
-                if (status) updateConsoleForJs(data[0].text);
+            setOutputForJs:function (data) {
+                updateConsoleForJs(data[0].text);
             },
-            changeConfiguration:function (status, conf) {
-                if (status) configuration = conf;
+            setConfiguration:function (conf) {
+                configuration = conf;
             },
             writeException:function (data) {
                 writeException(data);
@@ -71,7 +71,7 @@ var ConsoleView = (function () {
                 createException(data[i]);
                 i++;
             }
-        } else if (typeof data == "undefined" || data == null || data == "") {
+        } else if (typeof data != "undefined" || data == null) {
         } else {
             $("#console").html("");
             $("#tabs").tabs("select", 1);
@@ -136,9 +136,7 @@ var ConsoleView = (function () {
             try {
                 dataJs = eval(data);
             } catch (e) {
-                writeException("<p>" + e
-                    + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='ConsoleView.showJsCode();'>"
-                    + SHOW_JAVASCRIPT_CODE + "</a></p>");
+                writeException(e);
                 return;
             }
             generatedJsCode = data;

@@ -35,22 +35,16 @@ var AccordionView = (function () {
 
     var lastSelectedItem = 0;
 
-    var eventHandler = new EventsHandler();
-
     var examplesModel = new ExamplesModel();
     var examplesView = new ExamplesView();
     var programsView = new ProgramsView();
     var programsModel = new ProgramsModel();
 
+    var instance;
+
     function AccordionView() {
 
-        var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
-            },
+        instance = {
             getLastSelectedItem:function () {
                 return lastSelectedItem;
             },
@@ -60,19 +54,34 @@ var AccordionView = (function () {
             saveProgram:function () {
                 programsView.saveProgram();
             },
-            loadAllContent:function (status, data) {
-                if (status) examplesView.loadAllContent();
-
+            loadAllContent:function () {
+                examplesView.loadAllContent();
             },
-            changeConfiguration:programsView.changeConfiguration
+            setConfiguration:programsView.setConfiguration,
+            onLoadProgram: function(status, data) {},
+            onLoadExample: function(status, data) {},
+            onPublicLinkGenerated: function(status) {},
+            onSaveProgram: function(status) {},
+            onDeleteProgram: function(status) {},
+            onLoadAllContent: function() {}
 
         };
 
-        examplesView.addListener("load_all_content", programsView.loadAllContent);
+        /*examplesView.addListener("load_all_content", programsView.loadAllContent);
         programsView.addListener("load_all_content", function () {
             makeAccordion();
             loadFirstItem();
-        });
+            instance.onLoadAllContent();
+        });*/
+
+        examplesView.onAllExamplesLoaded = function() {
+            programsView.loadAllContent()
+        };
+        programsView.onAllProgramsLoaded = function() {
+            makeAccordion();
+            loadFirstItem();
+            instance.onLoadAllContent();
+        };
 
 
         ProgramsView.setLastSelectedItem = function (item) {
@@ -89,39 +98,52 @@ var AccordionView = (function () {
         };
 
 
-        programsModel.addListener("load_program", function (status, data) {
-            eventHandler.fire("load_program", status, data)
-        });
-        programsModel.addListener("generate_public_link", function (status, data) {
-            eventHandler.fire("generate_public_link", status, data)
-        });
-        programsModel.addListener("delete_program", function (status, data) {
-            eventHandler.fire("delete_program", status, data)
-        });
-        programsModel.addListener("save_program", function (status, data) {
-            eventHandler.fire("save_program", status, data)
-        });
-        programsModel.addListener("write_exception", function (status, data) {
+        programsModel.onLoadProgram = function (status, data) {
+            instance.onLoadProgram(status, data);
+        };
+        programsModel.onPublicLinkGenerated =  function (status, data) {
+            programsView.generatePublicLink(data);
+            instance.onPublicLinkGenerated(status);
+        };
+        programsModel.onDeleteProgram = function (status, data) {
+            programsView.deleteProgram(data);
+            instance.onDeleteProgram(status);
+        };
+        programsModel.onSaveProgram = function (status, data) {
+            programsView.saveProgramWithName(data);
+            instance.onSaveProgram(status);
+        };
+        /*programsModel.addListener("write_exception", function (status, data) {
             eventHandler.fire("write_exception", status, data)
-        });
-        examplesModel.addListener("load_example", function (status, data) {
-            eventHandler.fire("load_example", status, data)
-        });
-        examplesModel.addListener("write_exception", function (status, data) {
-            eventHandler.fire("write_exception", status, data)
-        });
+        });*/
+        examplesModel.onLoadExample = function (status, data) {
+            instance.onLoadExample(status, data);
+        };
 
-        examplesModel.addListener("get_all_examples", examplesView.loadAllExamples);
-        programsModel.addListener("get_all_programs",  programsView.loadAllPrograms);
+        /*examplesModel.addListener("write_exception", function (status, data) {
+            eventHandler.fire("write_exception", status, data)
+        });*/
+
+        examplesModel.onAllExamplesLoaded = function(status, data) {
+           if (status) examplesView.loadAllExamples(data);
+        };
+        programsModel.onAllProgramsLoaded = function(status, data) {
+           if (status) programsView.loadAllPrograms(data);
+        };
+
+//        examplesModel.addListener("get_all_examples", examplesView.loadAllExamples);
+//        programsModel.addListener("get_all_programs",  programsView.loadAllPrograms);
 
 
 //        eventHandler.addListener("get_all_examples", examplesView.loadAllExamples);
 
 //        eventHandler.addListener("get_all_programs", programsView.loadAllPrograms);
 
-        eventHandler.addListener("generate_public_link", programsView.generatePublicLink);
-        eventHandler.addListener("delete_program", programsView.processDeleteProgram);
-        eventHandler.addListener("save_program", programsView.processSaveProgram);
+
+
+//        eventHandler.addListener("generate_public_link", programsView.generatePublicLink);
+//        eventHandler.addListener("delete_program", programsView.processDeleteProgram);
+//        eventHandler.addListener("save_program", programsView.processSaveProgram);
 
         return instance;
     }

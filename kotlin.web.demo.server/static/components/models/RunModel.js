@@ -29,32 +29,28 @@
  */
 
 var RunModel = (function () {
-    var eventHandler = new EventsHandler();
+
+    var instance;
 
     var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.dependencies.JAVA, Configuration.runner.JAVA);
 
+    var highlightingProvider = new HighlightingProvider();
+
     function RunModel() {
 
-        var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
-            },
+        instance = {
             run:function () {
                 checkHighlightingBeforeRun();
             },
-            processHighlighting:function (status, highlightingResult) {
-                if (status) {
-                    run(highlightingResult);
-                } else {
-                    eventHandler.fire("run_java", false, null);
-                    eventHandler.fire("run_js", false, null);
-                }
+            processHighlighting:function (highlightingResult) {
+                run(highlightingResult);
             },
-            changeConfiguration:function (status, conf) {
-                if (status) configuration = conf;
+            setConfiguration:function (conf) {
+                configuration = conf;
+            },
+            onRun:function (status, data) {
+            },
+            onRunJs:function (status, data) {
             }
         };
 
@@ -68,7 +64,7 @@ var RunModel = (function () {
         isRunInProgress = true;
         var parameters = [];
         parameters.push(configuration.dependencies, Configuration.mode.SERVER, RunModel.getProgramText());
-        eventHandler.fire("get_highlighting", parameters);
+        highlightingProvider.getHighlighting(parameters);
     }
 
     function run(highlightingResult) {
@@ -81,8 +77,8 @@ var RunModel = (function () {
                     runJs();
                 }
             } else {
-                eventHandler.fire("run_java", false, null);
-                eventHandler.fire("run_js", false, null);
+                instance.onRun(false, null);
+                instance.onRunJs(false, null);
             }
         }
     }
@@ -101,7 +97,7 @@ var RunModel = (function () {
                 context:document.body,
                 success:function (data) {
                     isCompiling = false;
-                    eventHandler.fire("run_java", true, data);
+                    instance.onRun(true, data);
                 },
                 dataType:"json",
                 type:"POST",
@@ -109,7 +105,7 @@ var RunModel = (function () {
                 timeout:10000,
                 error:function () {
                     isCompiling = false;
-                    eventHandler.fire("run_java", false, null);
+                    instance.onRun(false, null);
                 }
             });
 
@@ -133,10 +129,10 @@ var RunModel = (function () {
                         return;
                     }
                     isCompiling = false;
-                    eventHandler.fire("run_js", true, eval(dataFromApplet));
+                    instance.onRunJs(true, eval(dataFromApplet));
                 } catch (e) {
                     isCompiling = false;
-                    eventHandler.fire("run_js", false, e);
+                    instance.onRunJs(false, e);
                 }
             } else {
                 loadJsFromServer(programText, arguments);
@@ -165,7 +161,7 @@ var RunModel = (function () {
             context:document.body,
             success:function (data) {
                 isCompiling = false;
-                eventHandler.fire("run_js", true, data);
+                instance.onRunJs(true, data);
             },
             dataType:"json",
             type:"POST",
@@ -173,7 +169,7 @@ var RunModel = (function () {
             timeout:10000,
             error:function () {
                 isCompiling = false;
-                eventHandler.fire("run_js", false, null);
+                instance.onRunJs(false, null);
             }
         });
     }

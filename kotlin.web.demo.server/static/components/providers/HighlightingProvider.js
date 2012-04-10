@@ -29,19 +29,16 @@
 
 var HighlightingProvider = (function () {
 
-    var eventHandler = new EventsHandler();
+    var instance;
 
     function HighlightingProvider() {
 
-        var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
-            },
+        instance = {
             getHighlighting:function (param) {
                 getHighlighting(param[0], param[1], param[2]);
+            },
+            onHighlight: function(status, data) {
+
             }
         };
 
@@ -65,7 +62,7 @@ var HighlightingProvider = (function () {
                     context:document.body,
                     success:function (data) {
                         isLoadingHighlighting = false;
-                        eventHandler.fire("get_highlighting", true, data);
+                        instance.onHighlight(true, data);
                     },
                     dataType:"json",
                     type:"POST",
@@ -73,7 +70,7 @@ var HighlightingProvider = (function () {
                     timeout:10000,
                     error:function () {
                         isLoadingHighlighting = false;
-                        eventHandler.fire("get_highlighting", false, null);
+                        instance.onHighlight(true, null);
                     }
                 });
             }
@@ -109,24 +106,22 @@ var HighlightingProvider = (function () {
                      $("#appletclient").attr("title", title + ". " + GET_FROM_APPLET_FAILED);
                      }*/
                 } else {
-                    eventHandler.fire("get_highlighting", false, null);
-                }
+                    instance.onHighlight(false, null);}
 
                 return;
             }
             var data = eval(dataFromApplet);
             if (typeof data != "undefined") {
                 if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                    eventHandler.fire("get_highlighting", false, null);
-                    eventHandler.fire("write_exception", false, data);
+                    instance.onHighlight(false, null);
                 } else {
                     isLoadingHighlighting = false;
-                    eventHandler.fire("get_highlighting", true, data);
+                    instance.onHighlight(true, data);
                 }
             }
         } catch (e) {
             isLoadingHighlighting = false;
-            eventHandler.fire("get_highlighting", false, e);
+            instance.onHighlight(false, null);
         }
     }
 

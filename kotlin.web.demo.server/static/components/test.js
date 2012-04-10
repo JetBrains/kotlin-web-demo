@@ -24,11 +24,7 @@
 
 
 function changeConfiguration(mode) {
-    var ex = new Example();
-    ex.dependencies = mode;
-    ex.runner = mode;
-    ex.defaultDependencies = mode;
-    configuration.loadExampleOrProgram(true, ex);
+    configuration.updateRunnerAndDependencies(mode, mode);
 }
 
 function setEditorValue(text) {

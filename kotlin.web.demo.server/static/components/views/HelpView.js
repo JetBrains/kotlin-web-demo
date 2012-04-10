@@ -43,40 +43,29 @@ var HelpView = (function () {
 
         var instance = {
 
-            loadExample:function (status, example) {
-                if (status) {
-                    loadHelpForExample(example.name);
+            loadHelpForExample:function (name) {
+                loadHelpForExample(name);
+            },
+            helpForExamplesLoaded:function (data) {
+                var i = 0;
+                while (data[i] != undefined) {
+                    var helpEl = new HelpElement(data[i].name, data[i].text);
+                    helpForExamples.push(helpEl);
+                    i++;
                 }
             },
-            helpForExamplesLoaded:function (status, data) {
-                if (status) {
-                    if (data != null) {
-                        var i = 0;
-                        while (typeof data[i] != "undefined") {
-                            var helpEl = new HelpElement(data[i].name, data[i].text);
-                            helpForExamples.push(helpEl);
-                            i++;
-                        }
+            helpForWordsLoaded:function (data) {
+                if (data != null) {
+                    var i = 0;
+                    while (typeof data[i] != "undefined") {
+                        var helpEl = new HelpElement(data[i].name, data[i].text);
+                        helpForWords.push(helpEl);
+                        i++;
                     }
                 }
             },
-            helpForWordsLoaded:function (status, data) {
-                if (status) {
-                    if (data != null) {
-                        var i = 0;
-                        while (typeof data[i] != "undefined") {
-                            var helpEl = new HelpElement(data[i].name, data[i].text);
-                            helpForWords.push(helpEl);
-                            i++;
-                        }
-                    }
-                }
-            },
-            loadHelpForWord:function (word) {
-                loadHelpForWord(word);
-            },
-            processCursorActivity:function (status, data) {
-                if (status) loadHelpForWord(data[1]);
+            changeHelpForWord:function (data) {
+                loadHelpForWord(data);
             }
         };
 

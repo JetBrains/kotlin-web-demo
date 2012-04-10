@@ -26,23 +26,16 @@
 var ExamplesView = (function () {
     var model = new ExamplesModel();
 
-    var eventHandler = new EventsHandler();
     var confirmDialog = new ConfirmDialog();
+
+    var instance;
 
     function ExamplesView() {
 
-        var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
-            },
-            loadAllExamples:function (status, data) {
-                if (status) {
-                    addAllExamplesInAccordion(data);
-                }
-                eventHandler.fire("load_all_content", true, "");
+        instance = {
+            loadAllExamples:function (data) {
+                addAllExamplesInAccordion(data);
+                instance.onAllExamplesLoaded();
             },
             processLoadExample:function (status, data) {
                 if (status) {
@@ -54,6 +47,8 @@ var ExamplesView = (function () {
             },
             loadExample:function (url) {
                 loadExample(url);
+            },
+            onAllExamplesLoaded:function () {
             }
         };
 

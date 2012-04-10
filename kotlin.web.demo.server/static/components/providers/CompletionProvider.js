@@ -28,22 +28,17 @@
  */
 
 var CompletionProvider = (function () {
-
-    var eventHandler = new EventsHandler();
+    var instance;
 
     function CompletionProvider() {
 
-        var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
-            },
+        instance = {
             getCompletion:function (data) {
                 getCompletion(data[0], data[1], data[2], data[3], data[4]);
-            }
+            },
+            onComplete:function (status, data) {
 
+            }
         };
 
         return instance;
@@ -55,7 +50,7 @@ var CompletionProvider = (function () {
         //TODO runTimerForNonPrinting();
         if (mode == Configuration.mode.ONRUN) {
             isCompletionInProgress = false;
-            eventHandler.fire("get_completion", true, COMPLETION_ISNOT_AVAILABLE);
+            instance.onComplete(true, COMPLETION_ISNOT_AVAILABLE);
             return;
         }
         if (!isCompletionInProgress) {
@@ -69,7 +64,7 @@ var CompletionProvider = (function () {
                     context:document.body,
                     success:function (data) {
                         isCompletionInProgress = false;
-                        eventHandler.fire("get_completion", true, data);
+                        instance.onComplete(true, data);
                     },
                     dataType:"json",
                     type:"POST",
@@ -77,7 +72,7 @@ var CompletionProvider = (function () {
                     timeout:10000,
                     error:function () {
                         isCompletionInProgress = false;
-                        eventHandler.fire("get_completion", false, null);
+                        instance.onComplete(false, null);
                     }
                 });
             }
@@ -113,23 +108,16 @@ var CompletionProvider = (function () {
                     //    $("#appletclient").attr("title", title + ". " + GET_FROM_APPLET_FAILED);
                     //}
                 } else {
-                    eventHandler.fire("get_completion", false, null);
+                    instance.onComplete(false, null);
                 }
                 return;
             }
             var data = eval(dataFromApplet);
-            if (typeof data != "undefined") {
-                if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                    eventHandler.fire("get_completion", false, data);
-                    eventHandler.fire("write_exception", true, data);
-                } else {
-                    isCompletionInProgress = false;
-                    eventHandler.fire("get_completion", true, data);
-                }
-            }
+            isCompletionInProgress = false;
+            instance.onComplete(true, data);
         } catch (e) {
             isCompletionInProgress = false;
-            eventHandler.fire("get_completion", false, e);
+            instance.onComplete(false, null);
         }
     }
 

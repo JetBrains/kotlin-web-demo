@@ -25,17 +25,13 @@
 
 var RefreshButtonView = (function () {
 
-    var eventHandler = new EventsHandler();
+    var instance;
 
     function RefreshButtonView() {
 
-        var instance = {
-            addListener: function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire: function (name, param) {
-                eventHandler.fire(name, param);
-            }
+        instance = {
+           onRefresh: function() {
+           }
         };
 
         if (navigator.appVersion.indexOf("Mac") != -1) {
@@ -44,13 +40,11 @@ var RefreshButtonView = (function () {
         }
 
         $("#refresh").click(function () {
-            eventHandler.fire("get_highlighting");
+            instance.onRefresh();
         });
-
 
         return instance;
     }
-
 
     return RefreshButtonView;
 })();

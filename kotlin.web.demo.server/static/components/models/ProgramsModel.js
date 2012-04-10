@@ -32,47 +32,24 @@
  */
 
 var ProgramsModel = (function () {
-    var eventHandler = new EventsHandler();
 
+    var instance;
 
     function ProgramsModel() {
 
-        var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
-            },
+        instance = {
             loadProgram:function (url) {
                 $.ajax({
                     url:RequestGenerator.generateAjaxUrl("loadProgram", url),
                     context:document.body,
-                    success:function(data) {
-                        if (data != null && typeof data != "undefined") {
-                            if (data[0] != null && typeof data[0] != "undefined"
-                                && typeof data[0].exception != "undefined") {
-                                eventHandler.fire("write_exception", data);
-                            } else {
-                                var result = new Example();
-                                result.name = url;
-                                result.text = data[0].text;
-                                result.args = data[0].args;
-                                //TODO
-                                result.runner = substringDependencies(data[0].runner);
-                                result.dependencies = data[0].dependencies;
-                                result.defaultDependencies = substringDependencies(data[0].dependencies);
-                                eventHandler.fire("load_program", true, result);
-                            }
-                        } else {
-                            eventHandler.fire("write_exception", "Received data is null.");
-                        }
+                    success:function (data) {
+                        instance.onLoadProgram(true, data);
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
                     error:function () {
-                        eventHandler.fire("load_program", false, null);
+                        instance.onLoadProgram(false, null);
                     }
                 });
             },
@@ -80,51 +57,61 @@ var ProgramsModel = (function () {
                 $.ajax({
                     url:RequestGenerator.generateAjaxUrl("generatePublicLink", url),
                     context:document.body,
-                    success:function(data) {
-                        eventHandler.fire("generate_public_link", true, data);
+                    success:function (data) {
+                        instance.onPublicLinkGenerated(true, data);
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
                     error:function () {
-                        eventHandler.fire("generate_public_link", false, null);
+                        instance.onPublicLinkGenerated(false, null);
                     }
                 });
             },
             getAllPrograms:function () {
                 getAllPrograms();
             },
-            deleteProgram: function (name) {
+            deleteProgram:function (name) {
                 $.ajax({
                     url:RequestGenerator.generateAjaxUrl("deleteProgram", name),
                     context:document.body,
-                    success:function(data) {
-                        eventHandler.fire("delete_program", true, data);
+                    success:function (data) {
+                        instance.onDeleteProgram(true, data);
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
                     error:function () {
-                        eventHandler.fire("delete_program", false, null);
+                        instance.onDeleteProgram(false, null);
                     }
                 });
             },
-            saveProgram: function(id, dependencies) {
+            saveProgram:function (id, dependencies) {
                 var i = ProgramsModel.getEditorContent();
                 var arguments = ProgramsModel.getArguments();
                 $.ajax({
                     url:RequestGenerator.generateAjaxUrl("saveProgram", id + "&runConf=" + dependencies),
-                    success:function(data) {
-                        eventHandler.fire("save_program", true, data);
+                    success:function (data) {
+                        instance.onSaveProgram(true, data);
                     },
                     dataType:"json",
                     type:"POST",
                     data:{text:i, consoleArgs:arguments},
                     timeout:10000,
                     error:function () {
-                        eventHandler.fire("save_program", false, null);
+                        instance.onSaveProgram(false, null);
                     }
                 });
+            },
+            onLoadProgram:function (status, data) {
+            },
+            onPublicLinkGenerated:function (status, data) {
+            },
+            onDeleteProgram:function (status, data) {
+            },
+            onSaveProgram:function (status, data) {
+            },
+            onAllProgramsLoaded:function (status, data) {
             }
         };
 
@@ -139,21 +126,25 @@ var ProgramsModel = (function () {
         return dependencies;
     }
 
-    ProgramsModel.getEditorContent = function() {return ""};
-    ProgramsModel.getArguments = function() {return ""};
+    ProgramsModel.getEditorContent = function () {
+        return ""
+    };
+    ProgramsModel.getArguments = function () {
+        return ""
+    };
 
     function getAllPrograms() {
         $.ajax({
             url:RequestGenerator.generateAjaxUrl("loadProgram", "all"),
             context:document.body,
             success:function (data) {
-                eventHandler.fire("get_all_programs", true, data);
+                instance.onAllProgramsLoaded(true, data);
             },
             dataType:"json",
             type:"GET",
             timeout:10000,
             error:function () {
-                eventHandler.fire("get_all_programs", false, null);
+                instance.onAllProgramsLoaded(false, null);
             }
         });
     }

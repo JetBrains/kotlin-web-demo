@@ -26,40 +26,29 @@
 var ProgramsView = (function () {
     var model = new ProgramsModel();
 
-    var eventHandler = new EventsHandler();
-
     var configuration = new Configuration(null, Configuration.dependencies.JAVA, Configuration.runner.JAVA);
     var BEFORE_DELETE_PROGRAM = "Do you really want to delete the program?";
 
     var confirmDialog = new ConfirmDialog();
 
+    var instance;
+
     function ProgramsView() {
-        var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
+        instance = {
+            loadAllPrograms:function (data) {
+                addAllProgramsInAccordion(data);
             },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
+            setConfiguration:function (conf) {
+                configuration = conf;
             },
-            loadAllPrograms:function (status, data) {
-                if (status) {
-                    addAllProgramsInAccordion(data);
-                }
+            generatePublicLink:function (data) {
+                processPublicLink(data);
             },
-            processLoadProgram:function (status, data) {
-                if (status) loadProgramSuccess(data);
+            deleteProgram:function (data) {
+                processDeleteProgram(data);
             },
-            changeConfiguration:function (status, conf) {
-                if (status)  configuration = conf;
-            },
-            generatePublicLink:function (status, data) {
-                if (status) processPublicLink(data);
-            },
-            processDeleteProgram:function (status, data) {
-                if (status) processDeleteProgram(data);
-            },
-            processSaveProgram:function (status, data) {
-                if (status) processSaveProgram(data);
+            saveProgramWithName:function (data) {
+                processSaveProgram(data);
             },
             loadAllContent:function () {
                 loadAllContent();
@@ -69,7 +58,8 @@ var ProgramsView = (function () {
             },
             saveProgram:function () {
                 saveProgram();
-            }
+            },
+            onAllProgramsLoaded: function(){}
 
         };
 
@@ -98,7 +88,7 @@ var ProgramsView = (function () {
             }
         });
 
-        $("#saveDialog form").submit(function() {
+        $("#saveDialog form").submit(function () {
             saveAsProgram();
         });
 
@@ -127,7 +117,7 @@ var ProgramsView = (function () {
             var i = 0;
             while (typeof data[i] != "undefined") {
                 if (data[i].type == "exception") {
-                    eventHandler.fire("write_exception", data);
+                    //todo eventHandler.fire("write_exception", data);
                 } else if (data[i].type == "programId") {
                 } else {
                     var pos = data[i].text.indexOf("&id=");
@@ -151,7 +141,7 @@ var ProgramsView = (function () {
         if (data != null && typeof data != "undefined") {
             if (data[0] != null && typeof data[0] != "undefined") {
                 if (data[0].type == "exception") {
-                    eventHandler.fire("write_exception", data);
+                    //TODO eventHandler.fire("write_exception", data);
                 } else {
                     document.getElementById(createExampleUrl(data[0].args, "My Programs")).parentNode.parentNode.parentNode.innerHTML = "";
                 }
@@ -163,7 +153,7 @@ var ProgramsView = (function () {
         if (data != null && typeof data != "undefined") {
             if (data[0] != null && typeof data[0] != "undefined") {
                 if (data[0].type == "exception") {
-                    eventHandler.fire("write_exception", data);
+                    //TODO eventHandler.fire("write_exception", data);
                 } else {
                     var programId = data[0].text.substring(data[0].text.indexOf("publicLink=") + 11);
                     var name = createExampleUrl(programId, "My Programs");
@@ -228,7 +218,7 @@ var ProgramsView = (function () {
         if (ProgramsView.isLoggedIn()) {
             model.getAllPrograms();
         } else {
-            eventHandler.fire("load_all_content", true, "");
+            instance.onAllProgramsLoaded();
         }
     }
 
@@ -239,7 +229,7 @@ var ProgramsView = (function () {
             $("#myprogramscontent").append(createProgramListElement(createExampleUrl(data[i].id, "My Programs"), replaceAll(data[i].name, "%20", " "), data[i].runConf));
             i++;
         }
-        eventHandler.fire("load_all_content", true, "");
+        instance.onAllProgramsLoaded();
     }
 
     function createProgramListElement(id, name, runConf) {
@@ -297,8 +287,8 @@ var ProgramsView = (function () {
 
     function deleteProgram(name) {
         if (confirm(BEFORE_DELETE_PROGRAM)) {
-            if (ProblemsView.getLastSelectedItem() == name) {
-                ProblemsView.setLastSelectedItem("");
+            if (ProgramsView.getLastSelectedItem() == name) {
+                ProgramsView.setLastSelectedItem("");
             }
             model.deleteProgram(name);
         }
@@ -322,9 +312,6 @@ var ProgramsView = (function () {
                 model.loadProgram(url);
             };
         }(url));
-    }
-
-    function loadProgramSuccess(data) {
     }
 
     function saveProgram() {

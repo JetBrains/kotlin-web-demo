@@ -89,7 +89,6 @@ var MainPageView = (function () {
         if (!this_instance.checkIEVersion()) {
             this_instance.resize();
             this_instance.setKotlinVersion();
-            $('#loader').hide();
         }
     };
 

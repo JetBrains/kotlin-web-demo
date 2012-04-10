@@ -28,8 +28,8 @@ var ProblemsView = (function () {
     function ProblemsView() {
 
         var instance = {
-            processHighlighting:function (status, data) {
-                if (status) updateProblemView(data);
+            addErrors:function (data) {
+                updateProblemView(data);
             },
             clear: function() {
                 $("#problems").html("");

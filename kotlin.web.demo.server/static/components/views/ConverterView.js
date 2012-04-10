@@ -31,7 +31,7 @@ var ConverterView = (function () {
     function ConverterView() {
 
         var instance = {
-            processConverterResult:function (status, data) {
+            closeDialog:function () {
                 $("#convertToKotlinDialog").dialog("close");
             }
         };

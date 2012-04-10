@@ -59,7 +59,12 @@ function replaceTag(tag) {
 }
 
 function safe_tags_replace(str) {
-    return str.replace(/[&<>]/g, replaceTag);
+    try {
+        return str.replace(/[&<>]/g, replaceTag);
+    } catch (e) {
+        return str;
+    }
+
 }
 
 function replaceAll(str, replaced, replacement) {
@@ -69,3 +74,12 @@ function replaceAll(str, replaced, replacement) {
         return str;
     }
 }
+
+function substringDependencies(dependencies) {
+    var pos = dependencies.indexOf(" ");
+    if (pos >= 0) {
+        return dependencies.substring(0, pos);
+    }
+    return dependencies;
+}
+

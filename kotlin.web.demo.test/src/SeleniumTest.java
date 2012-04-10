@@ -600,6 +600,7 @@ public class SeleniumTest extends TestCase {
             public Boolean apply(WebDriver d) {
                 return (statusBar.getText().equals("Compilation competed successfully.")
                         || statusBar.getText().equals("Your program has terminated with an exception.")
+                        || statusBar.getText().equals("Errors and warnings were loaded.")
                         || statusBar.getText().equals("Translation competed successfully."));
             }
         });

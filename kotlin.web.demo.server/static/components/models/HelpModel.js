@@ -28,46 +28,45 @@
  */
 
 var HelpModel = (function () {
-    var eventHandler = new EventsHandler();
-
+    var instance;
     function HelpModel() {
 
-        var instance = {
-            addListener: function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire: function (name, param) {
-                eventHandler.fire(name, param);
-            },
-            getAllHelpForExamples: function(){
+        instance = {
+            getAllHelpForExamples:function () {
                 $.ajax({
                     url:RequestGenerator.generateAjaxUrl("loadHelpForExamples", "null"),
                     context:document.body,
-                    success:function(data) {
-                        eventHandler.fire("help_for_examples", true, data);
+                    success:function (data) {
+                        instance.onHelpForExamplesLoaded(true, data);
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:30000,
                     error:function () {
-                        eventHandler.fire("help_for_examples", false, null);
+                        instance.onHelpForExamplesLoaded(false, null);
                     }
                 });
             },
-            getAllHelpForWords: function() {
+            getAllHelpForWords:function () {
                 $.ajax({
                     url:RequestGenerator.generateAjaxUrl("loadHelpForWords", "null"),
                     context:document.body,
-                    success:function(data) {
-                        eventHandler.fire("help_for_words", true, data);
+                    success:function (data) {
+                        instance.onHelpForWordsLoaded(true, data);
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:30000,
                     error:function () {
-                        eventHandler.fire("help_for_words", false, null);
+                        instance.onHelpForWordsLoaded(false, null);
                     }
                 });
+            },
+            onHelpForExamplesLoaded:function (status, data) {
+
+            },
+            onHelpForWordsLoaded:function (status, data) {
+
             }
         };
 

@@ -27,7 +27,7 @@ function Example() {
 var configuration = new ConfigurationComponent();
 var requestGenerator = new RequestGenerator();
 
-var editor = new Editor();
+var editor = new KotlinEditor();
 
 var argumentsView = new ArgumentsView();
 var statusBarView = new StatusBarView();
@@ -47,97 +47,204 @@ var converterModel = new ConverterModel();
 var accordion = new AccordionView();
 var highlighting = new HighlightingProvider();
 var completion = new CompletionProvider();
+var loader = new LoaderComponent();
 
-//WARN
 ConfirmDialog.getEditorChangeState = editor.getEditorChangeState;
 ConfirmDialog.isLoggedIn = loginView.isLoggedIn;
 ConfirmDialog.saveProgram = accordion.saveProgram;
 
 
-converterModel.addListener("write_exception", consoleView.writeException);
-helpModel.addListener("write_exception", consoleView.writeException);
-runModel.addListener("write_exception", consoleView.writeException);
-accordion.addListener("write_exception", consoleView.writeException);
-loginModel.addListener("write_exception", consoleView.writeException);
-highlighting.addListener("write_exception", consoleView.writeException);
-completion.addListener("write_exception", consoleView.writeException);
-editor.addListener("write_exception", consoleView.writeException);
+refreshButtonView.onRefresh = function () {
+    editor.clearMarkers();
+    problemsView.clear();
+};
 
-refreshButtonView.addListener("get_highlighting", editor.clearMarkers);
-refreshButtonView.addListener("get_highlighting", problemsView.clear);
+converterModel.onConvert = function (status, data) {
+    if (status && checkDataForNull(data) && checkDataForException(data)) {
+        editor.refreshMode();
+        editor.setText(data[0].text);
+        editor.indentAll();
+        converterView.closeDialog();
+        statusBarView.setMessage(StatusBarView.Messages.convert_java_to_kotlin_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.convert_java_to_kotlin_ok);
+    }
+};
 
-converterModel.addListener("convert_java_to_kotlin", editor.processConverterResult);
-converterModel.addListener("convert_java_to_kotlin", converterView.processConverterResult);
-converterModel.addListener("convert_java_to_kotlin", statusBarView.processConverterResult);
+helpModel.onHelpForExamplesLoaded = function (status, data) {
+    if (status && checkDataForNull(data)) {
+        helpView.helpForExamplesLoaded(data);
+        statusBarView.setMessage(StatusBarView.Messages.load_help_for_examples_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.load_help_for_examples_fail);
+    }
+};
 
-helpModel.addListener("help_for_examples", helpView.helpForExamplesLoaded);
-helpModel.addListener("help_for_examples", statusBarView.loadHelpForExamples);
+helpModel.onHelpForWordsLoaded = function (status, data) {
+    if (status && checkDataForNull(data)) {
+        helpView.helpForWordsLoaded(data);
+        statusBarView.setMessage(StatusBarView.Messages.load_help_for_words_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.load_help_for_words_fail);
+    }
+};
 
-helpModel.addListener("help_for_words", helpView.helpForWordsLoaded);
-helpModel.addListener("help_for_words", statusBarView.loadHelpForWords);
+configuration.onChangeConfiguration = function (status, data) {
+    if (status && checkDataForNull(data)) {
+        editor.setConfiguration(data);
+        runModel.setConfiguration(data);
+        consoleView.setConfiguration(data);
+        accordion.setConfiguration(data);
+        statusBarView.setMessage(StatusBarView.Messages.change_configuration_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.change_configuration_fail);
+    }
+};
 
-configuration.addListener("change_configuration", editor.changeConfiguration);
-configuration.addListener("change_configuration", runModel.changeConfiguration);
-configuration.addListener("change_configuration", consoleView.changeConfiguration);
-configuration.addListener("change_configuration", accordion.changeConfiguration);
-configuration.addListener("change_configuration", statusBarView.changeConfiguration);
+editor.moveCursor = function (data) {
+    if (checkDataForNull(data)) {
+        if (data[0] != "") {
+            statusBarView.setMessage(data[0]);
+        }
+        helpView.changeHelpForWord(data[1]);
+    }
+};
 
-editor.addListener("get_highlighting", highlighting.getHighlighting);
-editor.addListener("get_highlighting", statusBarView.loadHighlighting);
-editor.addListener("get_completion", completion.getCompletion);
-editor.addListener("get_completion", statusBarView.loadCompletion);
-editor.addListener("move_cursor", helpView.processCursorActivity);
-editor.addListener("move_cursor", statusBarView.processCursorActivity);
+highlighting.onHighlight = function (status, data) {
+    if (status && checkDataForNull(data) && checkDataForException(data)) {
+        editor.addErrors(data);
+        problemsView.addErrors(data);
+        //TODO
+        runModel.processHighlighting(data);
+        statusBarView.setMessage(StatusBarView.Messages.get_highlighting_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.get_highlighting_fail);
+    }
+};
 
-highlighting.addListener("get_highlighting", editor.processHighlighting);
-highlighting.addListener("get_highlighting", problemsView.processHighlighting);
-highlighting.addListener("get_highlighting", runModel.processHighlighting);
-highlighting.addListener("get_highlighting", statusBarView.processHighlighting);
+completion.onComplete = function (status, data) {
+    if (status && checkDataForNull(data) && checkDataForException(data)) {
+        editor.addCompletionWidget(data);
+        statusBarView.setMessage(StatusBarView.Messages.get_completion_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.get_completion_fail);
+    }
+};
 
-completion.addListener("get_completion", editor.processCompletion);
-completion.addListener("get_completion", statusBarView.processCompletion);
+runModel.onRun = function (status, data) {
+    if (status && checkDataForNull(data) && checkDataForException(data)) {
+        runButtonView.setVisible();
+        consoleView.setOutput(data);
+        statusBarView.setMessage(StatusBarView.Messages.run_java_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.run_java_fail);
+    }
+};
 
-runModel.addListener("run_java", runButtonView.processRunResult);
-runModel.addListener("run_java", consoleView.processOutput);
-//runModel.addListener("run_java", problemsView.processOutput);
-runModel.addListener("run_java", statusBarView.processOutput);
-runModel.addListener("run_js", runButtonView.processRunResult);
-runModel.addListener("run_js", consoleView.processOutputForJs);
-runModel.addListener("run_js", statusBarView.processOutputForJs);
+runModel.onRunJs = function (status, data) {
+    if (status && checkDataForNull(data) && checkDataForException(data)) {
+        runButtonView.setVisible();
+        consoleView.setOutputForJs(data);
+        statusBarView.setMessage(StatusBarView.Messages.run_js_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.run_js_fail);
+    }
+};
 
-runModel.addListener("get_highlighting", highlighting.getHighlighting);
-runModel.addListener("get_highlighting", statusBarView.loadHighlighting);
 RunModel.getProgramText = editor.getProgramText;
 RunModel.getArguments = argumentsView.getArguments;
-
 
 ProgramsView.isLoggedIn = loginView.isLoggedIn;
 ProgramsModel.getEditorContent = editor.getProgramText;
 ProgramsModel.getArguments = argumentsView.getArguments;
 
-accordion.addListener("load_program", editor.loadExampleOrProgram);
-accordion.addListener("load_program", argumentsView.loadExampleOrProgram);
-accordion.addListener("load_program", configuration.loadExampleOrProgram);
-accordion.addListener("load_program", statusBarView.loadProgram);
-accordion.addListener("generate_public_link", statusBarView.generatePublicLink);
 
-accordion.addListener("delete_program", statusBarView.deleteProgram);
-accordion.addListener("save_program", editor.resetChangeState);
-accordion.addListener("save_program", statusBarView.saveProgram);
+accordion.onLoadProgram = function (status, data) {
+    if (status && checkDataForNull(data) && checkDataForException(data)) {
+        editor.setText(data[0].text);
+        argumentsView.setArgs(data[0].args);
+        configuration.updateRunnerAndDependencies(substringDependencies(data[0].dependencies), substringDependencies(data[0].dependencies));
+        statusBarView.setMessage(StatusBarView.Messages.load_program_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.load_program_fail);
+    }
+};
 
-accordion.addListener("load_example", configuration.loadExampleOrProgram);
-accordion.addListener("load_example", argumentsView.loadExampleOrProgram);
-accordion.addListener("load_example", helpView.loadExample);
-accordion.addListener("load_example", editor.loadExampleOrProgram);
-accordion.addListener("load_example", statusBarView.loadExample);
+accordion.onLoadExample = function (status, data) {
+    if (status && checkDataForNull(data) && checkDataForException(data)) {
+        helpView.loadHelpForExample(data[0].name);
+        editor.setText(data[0].text);
+        argumentsView.setArgs(data[0].args);
+        configuration.updateRunnerAndDependencies(substringDependencies(data[0].dependencies), substringDependencies(data[0].dependencies));
+        statusBarView.setMessage(StatusBarView.Messages.load_example_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.load_example_fail);
+    }
+};
+accordion.onPublicLinkGenerated = function (status) {
+    if (status) {
+        statusBarView.setMessage(StatusBarView.Messages.generate_link_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.generate_link_fail);
+    }
+};
 
-loginModel.addListener("login", loginView.processUserName);
-loginModel.addListener("login", accordion.loadAllContent);
-loginModel.addListener("login", statusBarView.login);
+accordion.onLoadAllContent = function () {
+    loader.hide();
+};
 
-loginModel.addListener("logout", loginView.processLogout);
-loginModel.addListener("logout", accordion.loadAllContent);
-loginModel.addListener("logout", statusBarView.logout);
+accordion.onDeleteProgram = function (status) {
+    if (status) {
+        statusBarView.setMessage(StatusBarView.Messages.delete_program_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.delete_program_fail);
+    }
+};
+
+accordion.onSaveProgram = function (status) {
+    if (status) {
+        editor.resetChangeState();
+        statusBarView.setMessage(StatusBarView.Messages.save_program_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.save_program_fail);
+    }
+};
+
+loginModel.onLogin = function (status, data) {
+    if (status) {
+        loginView.setUserName(data);
+        statusBarView.setMessage(StatusBarView.Messages.login_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.login_fail);
+    }
+    accordion.loadAllContent();
+};
+
+loginModel.onLogout = function (status, data) {
+    if (status) {
+        loginView.logout();
+        statusBarView.setMessage(StatusBarView.Messages.logout_ok);
+    } else {
+        statusBarView.setMessage(StatusBarView.Messages.logout_fail);
+    }
+    accordion.loadAllContent();
+};
+
+function checkDataForNull(data) {
+    if (data == null || data == undefined) {
+        statusBarView.setMessage("Received data is null");
+        return false;
+    }
+    return true;
+}
+
+function checkDataForException(data) {
+    if (data[0] != null && data[0] == undefined && data[0].exception != undefined) {
+        consoleView.writeException(data);
+        return false;
+    }
+    return true;
+}
 
 $(document).keydown(function (e) {
     if (navigator.appVersion.indexOf("Mac") != -1) {

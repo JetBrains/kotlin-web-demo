@@ -26,20 +26,16 @@
  convert_java_to_kotlin
  */
 var ConverterModel = (function () {
-    var eventHandler = new EventsHandler();
+
+    var instance;
 
     function ConverterModel() {
 
-        var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
-            },
+        instance = {
             convert:function (text) {
                 convert(text);
-            }
+            },
+            onConvert: function(status, data) {}
         };
 
         return instance;
@@ -50,14 +46,14 @@ var ConverterModel = (function () {
             url:RequestGenerator.generateAjaxUrl("convertToKotlin", ""),
             context:document.body,
             success:function (data) {
-                eventHandler.fire("convert_java_to_kotlin", true, data);
+                instance.onConvert(true, data);
             },
             dataType:"json",
             type:"POST",
             data:{text:text},
             timeout:10000,
             error:function () {
-                eventHandler.fire("convert_java_to_kotlin", false, null);
+                instance.onConvert(false, null);
             }
         });
     }

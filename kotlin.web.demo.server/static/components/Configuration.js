@@ -34,29 +34,22 @@ Configuration.runner = {JAVA:"java", JS:"js", CANVAS:"canvas"};
 
 var ConfigurationComponent = (function () {
 
-    var eventHandler = new EventsHandler();
     var configuration = new Configuration(null, Configuration.dependencies.JAVA, Configuration.runner.JAVA);
+
+    var instance;
 
     function ConfigurationComponent() {
 
-        var instance = {
-            addListener: function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire: function (name, param) {
-                eventHandler.fire(name, param);
-            },
-            getConfiguration: function() {
+        instance = {
+            getConfiguration:function () {
                 return configuration;
             },
-            loadExampleOrProgram: function(status, example) {
-                if (status) {
-                    //TODO
-                    configuration.dependencies = example.defaultDependencies;
-                    configuration.runner = example.defaultDependencies;
-                    $("#runConfigurationMode").selectmenu("value", example.defaultDependencies);
-                }
-            }
+            updateRunnerAndDependencies:function (dependencies, runner) {
+                configuration.dependencies = dependencies;
+                configuration.runner = runner;
+                $("#runConfigurationMode").selectmenu("value", dependencies);
+            },
+            onChangeConfiguration: function(status, data) {}
         };
 
         $("#dialogAboutRunConfiguration").dialog({
@@ -114,7 +107,7 @@ var ConfigurationComponent = (function () {
                         $("#appletclient").attr("title", title);
                     }
                 } catch (e) {
-                    eventHandler.fire("hide_loader");
+                    //TODO eventHandler.fire("hide_loader");
                     $(".applet-disable").click();
                 }
             }
@@ -125,7 +118,7 @@ var ConfigurationComponent = (function () {
                 $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet05042012.jar\" style=\"display: none;\"></applet>");
             }
             var applet = $("#myapplet")[0];
-            eventHandler.fire("show_loader");
+            //TODO eventHandler.fire("show_loader");
             function performAppletCode(count) {
                 if (!applet.checkApplet && count > 0) {
                     setTimeout(function () {
@@ -196,9 +189,9 @@ var ConfigurationComponent = (function () {
 
     function fireChangeEvent() {
         if (configuration.mode != null && configuration.runner != null && configuration.dependencies != null) {
-            eventHandler.fire("change_configuration", true, configuration);
+            instance.onChangeConfiguration(true, configuration);
         } else {
-            eventHandler.fire("change_configuration", false, null);
+            instance.onChangeConfiguration(false, null);
         }
     }
 

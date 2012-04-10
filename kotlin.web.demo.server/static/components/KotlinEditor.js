@@ -24,13 +24,14 @@
 
 var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
 
-var Editor = (function () {
-    var eventHandler = new EventsHandler();
+var KotlinEditor = (function () {
+    //var eventHandler = new EventsHandler();
 
     var my_editor;
-    //var configuration = Editor.getConfiguration();
     var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.dependencies.JAVA, Configuration.runner.JAVA);
 
+    var completionProvider = new CompletionProvider();
+    var highlightingProvider = new HighlightingProvider();
 
     var CompletionObject = (function () {
         var keywords;
@@ -63,11 +64,11 @@ var Editor = (function () {
             var cur = my_editor.getCursor(null);
             var token = my_editor.getTokenAt(cur);
 
-            if ((data != null) && (typeof data != "undefined")) {
-                if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
+            //if ((data != null) && (typeof data != "undefined")) {
+                /*if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
                     eventHandler.fire("write_exception", data);
                     return;
-                }
+                }*/
                 if (!isContinueComplete) {
                     keywords = [];
                 }
@@ -81,13 +82,13 @@ var Editor = (function () {
                         i++;
                     }
                 }
-            } else {
+            /*} else {
                 if (!isContinueComplete) {
                     keywords = [];
                     return;
                 }
                 isContinueComplete = false;
-            }
+            }*/
             var completions;
             if (data == COMPLETION_ISNOT_AVAILABLE) {
                 completions = getCompletions(COMPLETION_ISNOT_AVAILABLE);
@@ -340,15 +341,12 @@ var Editor = (function () {
         }
 
         function process(data) {
-            if (data == null) {
-                return;
-            }
             removeStyles();
             arrayClasses = [];
             arrayLinesMarkers = [];
 
-            if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                eventHandler.fire("write_exception", data);
+            if ((data[0] != undefined) && (data[0].exception != undefined)) {
+                //todo eventHandler.fire("write_exception", data);
                 return;
             }
 
@@ -408,7 +406,7 @@ var Editor = (function () {
     var completion = new CompletionObject();
     var highlighting = new HighlightingObject();
 
-    function Editor() {
+    function KotlinEditor() {
 
         my_editor = CodeMirror.fromTextArea(document.getElementById("code"), {
             lineNumbers:true,
@@ -422,7 +420,8 @@ var Editor = (function () {
                     parameters.push(my_editor.getValue());
                     parameters.push(my_editor.getCursor(true).line);
                     parameters.push(my_editor.getCursor(true).ch);
-                    eventHandler.fire("get_completion", parameters);
+                    completionProvider.getCompletion(parameters);
+                    //eventHandler.fire("get_completion", parameters);
                 }
 
             },
@@ -437,33 +436,34 @@ var Editor = (function () {
                     if (text.length > 90) text = text.substring(0, 90) + "...";
                     message = "line " + (lineNumber + 1) + " - " + text;
                 }
-                eventHandler.fire("move_cursor", true, [message, my_editor.getTokenAt(my_editor.getCursor()).string]);
+                instance.moveCursor([message, my_editor.getTokenAt(my_editor.getCursor()).string]);
+                //eventHandler.fire("move_cursor", true, [message, my_editor.getTokenAt(my_editor.getCursor()).string]);
             },
             minHeight:"430px",
             tabSize:2
         });
 
         var instance = {
-            addListener:function (name, f) {
+            /*addListener:function (name, f) {
                 eventHandler.addListener(name, f);
             },
             fire:function (name, param) {
                 eventHandler.fire(name, param);
-            },
+            },*/
             loadExampleOrProgram:function (status, example) {
                 if (status) {
                     my_editor.setValue(example.text);
                     isEditorContentChanged = false;
                 }
             },
-            processCompletion:function (status, data) {
-                if (status) completion.processCompletionResult(data);
+            addCompletionWidget:function (data) {
+                completion.processCompletionResult(data);
             },
-            processHighlighting:function (status, data) {
-                if (status) highlighting.processHighlightingResult(data);
+            addErrors:function (data) {
+                highlighting.processHighlightingResult(data);
             },
-            changeConfiguration:function (status, conf) {
-                if (status)  configuration = conf;
+            setConfiguration:function (conf) {
+                configuration = conf;
             },
             getProgramText:function () {
                 return my_editor.getValue();
@@ -476,7 +476,19 @@ var Editor = (function () {
                     isEditorContentChanged = false;
                 }
             },
-            processConverterResult:function (status, data) {
+            indentAll: function() {
+                my_editor.setSelection({line:0, ch:0}, {line:my_editor.lineCount() - 1, ch:0});
+                my_editor.indentSelection("smart");
+            },
+            refreshMode: function() {
+                my_editor.setOption("mode", "kotlin");
+            },
+            setText: function(text) {
+                my_editor.focus();
+                my_editor.setValue(text);
+                isEditorContentChanged = false;
+            },
+            /*processConverterResult:function (status, data) {
                 if (status) {
                     my_editor.focus();
                     my_editor.setOption("mode", "kotlin");
@@ -487,7 +499,7 @@ var Editor = (function () {
 
                     isEditorContentChanged = false;
                 }
-            },
+            },*/
             clearMarkers: function () {
                 for (var i = 0; i < my_editor.lineCount(); i++) {
                     try {
@@ -500,8 +512,13 @@ var Editor = (function () {
                 parameters.push(configuration.dependencies);
                 parameters.push(Configuration.mode.SERVER);
                 parameters.push(my_editor.getValue());
-                eventHandler.fire("get_highlighting", parameters);
-            }
+                highlightingProvider.getHighlighting(parameters);
+                //eventHandler.fire("get_highlighting", parameters);
+            }/*,
+            setText: function(data) {
+                my_editor.setValue(data[0].text);
+                isEditorContentChanged = false;
+            }*/
         };
 
         return instance;
@@ -528,8 +545,9 @@ var Editor = (function () {
         parameters.push(configuration.dependencies);
         parameters.push(configuration.mode);
         parameters.push(my_editor.getValue());
-        eventHandler.fire("get_highlighting", parameters);
+        highlightingProvider.getHighlighting(parameters);
+        //eventHandler.fire("get_highlighting", parameters);
     }
 
-    return Editor;
+    return KotlinEditor;
 })();

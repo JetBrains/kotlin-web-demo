@@ -29,64 +29,36 @@
  */
 
 var ExamplesModel = (function () {
-    var eventHandler = new EventsHandler();
+    var instance;
 
     function ExamplesModel() {
 
-        var instance = {
-            addListener:function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire:function (name, param) {
-                eventHandler.fire(name, param);
-            },
+        instance = {
             loadExample:function (url) {
                 $.ajax({
                     url:RequestGenerator.generateAjaxUrl("loadExample", url),
                     context:document.body,
                     success:function (data) {
-                        if (data != null && typeof data != "undefined") {
-                            if (data[0] != null && typeof data[0] != "undefined"
-                                && typeof data[0].exception != "undefined") {
-                                eventHandler.fire("write_exception", data);
-                            } else {
-                                var result = new Example();
-                                result.name = getNameByUrl(url);
-                                result.text = data[0].text;
-                                result.args = data[0].args;
-                                //TODO
-                                result.runner = substringDependencies(data[0].runner);
-                                result.dependencies = data[0].dependencies;
-                                result.defaultDependencies = substringDependencies(data[0].dependencies);
-                                eventHandler.fire("load_example", true, result);
-                            }
-                        } else {
-                            eventHandler.fire("write_exception", "Received data is null.");
-                        }
-
+                        instance.onLoadExample(true, data);
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
                     error:function () {
-                        eventHandler.fire("load_example", false, null);
+                        instance.onLoadExample(false, null);
                     }
                 });
             },
             getAllExamples:function () {
                 getAllExamples();
+            },
+            onAllExamplesLoaded:function (status, data) {
+            },
+            onLoadExample:function (status, data) {
             }
         };
 
         return instance;
-    }
-
-    function substringDependencies(dependencies) {
-        var pos = dependencies.indexOf(" ");
-        if (pos >= 0) {
-            return dependencies.substring(0, pos);
-        }
-        return dependencies;
     }
 
 
@@ -95,13 +67,13 @@ var ExamplesModel = (function () {
             url:RequestGenerator.generateAjaxUrl("loadExample", "all"),
             context:document.body,
             success:function (data) {
-                eventHandler.fire("get_all_examples", true, data);
+                instance.onAllExamplesLoaded(true, data);
             },
             dataType:"json",
             type:"GET",
             timeout:10000,
             error:function () {
-                eventHandler.fire("get_all_examples", false, null);
+                instance.onAllExamplesLoaded(false, null);
             }
         });
     }

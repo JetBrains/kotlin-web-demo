@@ -92,6 +92,7 @@ public class ExamplesHolder {
             }
         }
 
+        resultMap.put("name", example.name);
         resultMap.put("text", fileContent);
         resultMap.put("args", example.args);
         resultMap.put("runner", example.runner);

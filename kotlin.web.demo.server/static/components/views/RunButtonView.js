@@ -30,7 +30,7 @@ var RunButtonView = (function () {
     function RunButtonView() {
 
         var instance = {
-            processRunResult: function(){
+            setVisible: function(){
                 $("#run").css({opacity:1});
             },
             buttonClick: function() {
