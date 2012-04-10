@@ -26,7 +26,7 @@ class HelloKotlin() {
 
 
   val message = "Hello, Kotlin!"
-  val textHeightInPixels = 60
+  val textHeightInPixels = 20
   {
     context.font = "bold ${textHeightInPixels}px Georgia, serif"
   }
