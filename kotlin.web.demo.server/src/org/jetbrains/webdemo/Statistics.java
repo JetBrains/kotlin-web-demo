@@ -79,13 +79,17 @@ public class Statistics {
         File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + "counter.txt");
         if (!file.exists()) {
             try {
+                //todo
+                if (file.getAbsolutePath().contains("BuildAgent")) {
+                    return;
+                }
                 file.createNewFile();
                 FileWriter writer = new FileWriter(file);
 
                 writer.write(URLDecoder.decode("0", "UTF-8"));
                 writer.close();
             } catch (IOException e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), file.getAbsolutePath());
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "STATISTICS", file.getAbsolutePath());
             }
         }
         try {
