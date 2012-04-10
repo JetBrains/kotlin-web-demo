@@ -26,5 +26,9 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <session-config>
+        <session-timeout>20000</session-timeout>
+    </session-config>
+
 
 </web-app>
