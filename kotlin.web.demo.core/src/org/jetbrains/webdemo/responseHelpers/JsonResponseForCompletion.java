@@ -191,6 +191,8 @@ public class JsonResponseForCompletion {
             return "property";
         } else if (descriptor instanceof ClassDescriptor) {
             return "class";
+        } else if (descriptor instanceof NamespaceDescriptorImpl) {
+            return "package";
         } else if (descriptor instanceof ValueParameterDescriptor) {
             return "genericValue";
         } else {
