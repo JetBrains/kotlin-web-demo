@@ -581,7 +581,6 @@ public class SeleniumTest extends TestCase {
             }
         });*/
 
-        System.out.println(isRunTested);
         if (!isRunTested) {
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("changeConfiguration(\"js\");");
@@ -604,6 +603,8 @@ public class SeleniumTest extends TestCase {
                         || statusBar.getText().equals("Translation competed successfully."));
             }
         });
+
+        Thread.sleep(500);
 
         if (getName().contains("DifficultExamples")) {
             if (isSpaceReplaced) {
