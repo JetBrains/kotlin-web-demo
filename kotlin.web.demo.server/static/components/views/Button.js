@@ -19,41 +19,40 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
 
-var RunButtonView = (function () {
+var Button = (function () {
 
-    var model = new RunModel();
 
-    function RunButtonView() {
+    function Button(element, /*Nullable*/ shortcut) {
 
         var instance = {
-            setVisible: function(){
-                $("#run").css({opacity:1});
+            setEnabled:function (bool) {
+                if (bool) {
+                    element.css({opacity:1});
+                } else {
+                    element.css({opacity:0.5});
+                }
             },
-            buttonClick: function() {
-                runButtonClick();
+            click:function () {
+                instance.onClick();
+            },
+            onClick:function () {
             }
         };
 
-        if (navigator.appVersion.indexOf("Mac") != -1) {
-            var title = $("#run").attr("title").replace("F9", "R");
-            $("#run").attr("title", title);
+        if (shortcut != null) {
+            var title = element.attr("title").replace("@shortcut@", shortcut);
+            element.attr("title", title);
         }
 
-        $("#run").click(function () {
-            runButtonClick();
+        element.click(function () {
+            instance.onClick();
         });
 
         return instance;
     }
 
-    function runButtonClick() {
-        $("#run").css({opacity:0.5});
-        model.run();
-    }
-
-    return RunButtonView;
+    return Button;
 })();

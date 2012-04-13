@@ -218,7 +218,7 @@
                             <option value="canvas">JavaScript (Canvas)</option>
                         </select></td>
                         <td><img src="/static/icons/execute.png" id="run"
-                                 title="Run file (Ctrl + F9) using Run configuration"/></td>
+                                 title="Run file (@shortcut@) using Run configuration"/></td>
                         <td id="whatisitRunConf">
                             <a id="whatimgRunConf"><img title="Help" src="/static/icons/help.png"/></a>
                         </td>
@@ -255,10 +255,10 @@
             </div>
             <div class="helpcontent">
                 <div id="help3">
-                    Use <b>Ctrl+Space</b> for code completion <br/>
-                    Use <b>Ctrl+F9</b> to run with JVM<br/>
-                    Use <b>Ctrl+Shift+F9</b> to run with Pre-Alpha JavaScript back-end<br/>
-                    Use <b>Ctrl+Alt+L</b> to reformat selected fragment<br/>
+                    Use <b>@shortcut-autocomplete@</b> for code completion <br/>
+                    Use <b>@shortcut-run@</b> to run program using Run Configuration<br/>
+                    Use <b>@shortcut-reformat@</b> to reformat selected fragment<br/>
+                    Use <b>@shortcut-save@</b> to save current program (you must be logged in)<br/>
                 </div>
             </div>
         </div>
@@ -301,6 +301,8 @@
 <div id="popupForCanvas" title="Canvas example">
     <canvas id="mycanvas"></canvas>
 </div>
+
+
 
 <div id="showInfoAboutLoginDialog" title="Help">
     <p>You can save and share your programs.</p>
@@ -352,51 +354,54 @@
     Do you want to save your changes?
 </div>
 
-<div id="convertToKotlinDialog" title="Enter Java code">
-    <textarea class="CodeMirror" id="codeOnJava" name="codeOnJava"></textarea>
-
-</div>
-
 <link type="text/css" href="/static/jquery/development-bundle/themes/smoothness/jquery.ui.selectmenu.css"
       rel="stylesheet"/>
 
 <script type="text/javascript" src="/static/jquery/development-bundle/ui/jquery.ui.selectmenu.js"></script>
 
+<script src="/static/components/common.js"></script>
 <script src="/static/components/EventsHandler.js"></script>
 <script src="/static/components/ConfirmDialog.js"></script>
 <script src="/static/components/RequestGenerator.js"></script>
 <script src="/static/components/Configuration.js"></script>
 <script src="/static/components/loader_component.js"></script>
+<script src="/static/components/popup/CanvasPopup.js"></script>
 
-<script src="/static/components/providers/HighlightingProvider.js"></script>
+<!--WARN: order-->
+<script src="/static/components/highlighting/HighlightingFromClient.js"></script>
+<script src="/static/components/highlighting/HighlightingFromServer.js"></script>
+<script src="/static/components/highlighting/HighlightingProvider.js"></script>
+
 <script src="/static/components/providers/CompletionProvider.js"></script>
+
 <script src="/static/components/models/HelpModel.js"></script>
 <script src="/static/components/models/ExamplesModel.js"></script>
 <script src="/static/components/models/ProgramsModel.js"></script>
-<script src="/static/components/models/RunModel.js"></script>
-<script src="/static/components/models/LoginModel.js"></script>
+<script src="/static/components/providers/RunProvider.js"></script>
+<script src="/static/components/providers/LoginProvider.js"></script>
 <script src="/static/components/models/ConverterModel.js"></script>
+
+<script src="/static/components/views/StatusBarView.js"></script>
 
 <script src="/static/components/views/LoginView.js"></script>
 
-<!--WARN: order-->
 <script src="/static/components/views/ProgramsView.js"></script>
 <script src="/static/components/views/ExamplesView.js"></script>
 <script src="/static/components/views/AccordionComponent.js"></script>
 
-<script src="/static/components/RefreshButton.js"></script>
+<script src="/static/components/views/Button.js"></script>
 <script src="/static/components/views/HelpView.js"></script>
 <script src="/static/components/views/ConverterView.js"></script>
-<script src="/static/components/views/StatusBarView.js"></script>
 <script src="/static/components/views/ArgumentsView.js"></script>
-<script src="/static/components/views/RunButtonView.js"></script>
 <script src="/static/components/views/ConsoleView.js"></script>
 <script src="/static/components/views/ProblemsView.js"></script>
 <script src="/static/components/views/MainPageView.js"></script>
+
+
+<script src="/static/components/Shortcuts.js"></script>
 <script src="/static/components/KotlinEditor.js"></script>
 <script src="/static/components/MainPage.js"></script>
 
-<script src="/static/components/common.js"></script>
 <script src="/static/components/test.js"></script>
 
 <!--<applet id="myapplet" code="org.jetbrains.webdemo.MainApplet" width="0" height="0"
