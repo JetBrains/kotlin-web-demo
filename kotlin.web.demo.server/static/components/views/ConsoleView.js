@@ -19,25 +19,22 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
 var ConsoleView = (function () {
 
-    var generatedJsCode = "";
-    var COMPILE_IN_JS_APPLET_ERROR = "The Pre-Alpha JavaScript back-end could not generate code for this program.<br/>Try to run it using JVM.";
-    var SHOW_JAVASCRIPT_CODE = "Show generated JavaScript code";
+    var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.type.JAVA);
 
-    var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.dependencies.JAVA, Configuration.runner.JAVA);
+    var console;
 
-    function ConsoleView() {
+    function ConsoleView(element, /*Nullable*/ tabs) {
+
+        var JAVASCRIPT_CODE = "Generated JavaScript code";
+        console = element;
 
         var instance = {
             setOutput:function (data) {
                 updateConsole(data);
-            },
-            setOutputForJs:function (data) {
-                updateConsoleForJs(data[0].text);
             },
             setConfiguration:function (conf) {
                 configuration = conf;
@@ -47,146 +44,141 @@ var ConsoleView = (function () {
             }
         };
 
-
-        $("#tabs").tabs();
-
-        $("#popupForCanvas").dialog({
-            width:630,
-            height:350,
-            autoOpen:false,
-            close:function () {
-                $("#popupForCanvas").html("");
-            }
-        });
-
-        return instance;
-    }
-
-    function writeException(data) {
-        if (typeof data != "undefined" && typeof data[0] != "undefined" && typeof data[0].exception != "undefined") {
-            $("#console").html("");
-            $("#tabs").tabs("select", 1);
-            var i = 0;
-            while (typeof data[i] != "undefined") {
-                createException(data[i]);
-                i++;
-            }
-        } else if (typeof data != "undefined" || data == null) {
-        } else {
-            $("#console").html("");
-            $("#tabs").tabs("select", 1);
-            $("#console").html("ERROR: " + data);
+        if (tabs != null) {
+            tabs.tabs();
         }
-    }
 
-    function createException(ex) {
-        var console = document.createElement("div");
-        if (ex.type == "out") {
-            document.getElementById("console").appendChild(createElementForConsole("STACKTRACE", null, unEscapeString(ex.exception)));
-        } else {
-            document.getElementById("console").appendChild(createElementForConsole("ERROR", null, unEscapeString(ex.exception)));
-        }
-    }
-
-    function createElementForConsole(severity, start, title) {
-        var p = document.createElement("p");
-        if (severity == 'WARNING') {
-            if (title.indexOf("is never used") > 0) {
-                p.className = "problemsViewWarningNeverUsed";
+        function writeException(data) {
+            if (typeof data != "undefined" && typeof data[0] != "undefined" && typeof data[0].exception != "undefined") {
+                element.html("");
+                if (tabs != null) {
+                    tabs.tabs("select", 1);
+                }
+                var i = 0;
+                while (typeof data[i] != "undefined") {
+                    createException(data[i]);
+                    i++;
+                }
+            } else if (data == undefined || data == null) {
             } else {
-                p.className = "problemsViewWarning";
+                element.html("");
+                if (tabs != null) {
+                    tabs.tabs("select", 1);
+                }
+                element.html(createRedElement("EXCEPTION: " + data));
             }
-
-        } else if (severity == 'STACKTRACE') {
-            p.className = "problemsViewStacktrace";
-        } else {
-            p.className = "problemsViewError";
         }
-        var titleDiv = document.createElement("span");
-        if (start == null) {
-            titleDiv.innerHTML = " " + unEscapeString(title);
-        } else {
-            titleDiv.innerHTML = "(" + (start.line + 1) + ", " + (start.ch + 1) + ") : " + unEscapeString(title);
-        }
-        p.appendChild(titleDiv);
-        return p;
-    }
 
-
-    ConsoleView.showJsCode = function () {
-        document.getElementById("console").removeChild(document.getElementById("console").childNodes[1]);
-        $("#console :first-child").after("<p class='consoleViewInfo'>" + generatedJsCode + "</p>");
-    };
-
-
-    function updateConsoleForJs(data) {
-        $("#console").html("");
-        $("#tabs").tabs("select", 1);
-
-        var dataJs;
-        if (data.indexOf("exception=") == 0) {
-            writeException(data);
-        } else {
-            $("#popupForCanvas").html("");
-            $("#popupForCanvas").append("<canvas width=\"" + $("#popupForCanvas").dialog("option", "width")
-                + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 50) + "\" id=\"mycanvas\"></canvas>");
-            if (configuration.dependencies == "canvas") {
-                $("#popupForCanvas").dialog("open");
-            }
-            try {
-                dataJs = eval(data);
-            } catch (e) {
-                writeException(e);
-                return;
-            }
-            generatedJsCode = data;
-            $("#console").html("<p>" + safe_tags_replace(dataJs)
-                + "</p><p class='consoleViewInfo'><a href='javascript:void(0);' onclick='ConsoleView.showJsCode();'>"
-                + SHOW_JAVASCRIPT_CODE + "</a></p>");
-        }
-    }
-
-
-    function setConsoleMessage(message) {
-        $("#console").html(message);
-    }
-
-    function updateConsole(data) {
-        $("#console").html("");
-        $("#tabs").tabs("select", 1);
-
-        if (data != null) {
-            if ((typeof data[0] != "undefined") && (typeof data[0].exception != "undefined")) {
-                writeException(data);
+        function createException(ex) {
+            var console = document.createElement("div");
+            if (ex.type == "out") {
+                element.append(createElementForConsole("STACKTRACE", null, unEscapeString(ex.exception)));
             } else {
-                $("#tabs").tabs("select", 1);
+                element.append(createElementForConsole("ERROR", null, unEscapeString(ex.exception)));
+            }
+        }
+
+        function createElementForConsole(severity, start, title) {
+            var p = document.createElement("p");
+            if (severity == 'WARNING') {
+                if (title.indexOf("is never used") > 0) {
+                    p.className = "problemsViewWarningNeverUsed";
+                } else {
+                    p.className = "problemsViewWarning";
+                }
+
+            } else if (severity == 'STACKTRACE') {
+                p.className = "problemsViewStacktrace";
+            } else {
+                p.className = "problemsViewError";
+            }
+            var titleDiv = document.createElement("span");
+            if (start == null) {
+                titleDiv.innerHTML = " " + unEscapeString(title);
+            } else {
+                titleDiv.innerHTML = "(" + (start.line + 1) + ", " + (start.ch + 1) + ") : " + unEscapeString(title);
+            }
+            p.appendChild(titleDiv);
+            return p;
+        }
+
+        function setConsoleMessage(message) {
+            element.html(message);
+        }
+
+        function updateConsole(data) {
+            element.html("");
+            if (tabs != null) {
+                tabs.tabs("select", 1);
+            }
+
+            if (data != null) {
+                if (tabs != null) {
+                    tabs.tabs("select", 1);
+                }
                 var i = 0;
                 var errors = document.createElement("div");
                 while (typeof data[i] != "undefined") {
                     var p = document.createElement("p");
-                    if ((data[i].type == "err") && (data[i].text != "")) {
-                        p.className = "consoleViewError";
-                    }
-                    if (data[i].type == "info") {
+                    if (data[i].type == "toggle-info") {
+                        p.appendChild(createToggleElement(data[i]));
                         p.className = "consoleViewInfo";
+                    } else {
+                        if ((data[i].type == "err") && (data[i].text != "")) {
+                            p.className = "consoleViewError";
+                        }
+                        if (data[i].type == "info") {
+                            p.className = "consoleViewInfo";
+                        }
+                        p.innerHTML = unEscapeString(data[i].text);
                     }
-                    p.innerHTML = unEscapeString(data[i].text);
+
                     errors.appendChild(p);
                     i++;
                 }
-                document.getElementById("console").appendChild(errors);
+                element.append(errors);
             }
         }
+
+        function createToggleElement(data) {
+            var mainDiv = document.createElement("div");
+            var toggleDiv = document.createElement("div");
+            var elementName = "toggledDivForJsCode" + random();
+            toggleDiv.className = elementName;
+            toggleDiv.style.marginTop = "5px";
+            toggleDiv.style.display = "none";
+            toggleDiv.innerHTML = safe_tags_replace(data.text);
+            var divLink = document.createElement("div");
+            divLink.innerHTML = "<a href='javascript:void(0);' onclick='ConsoleView.toggleElement(\"" + elementName + "\");'>"
+                + JAVASCRIPT_CODE + "</a>";
+
+            mainDiv.appendChild(divLink);
+            mainDiv.appendChild(toggleDiv);
+            return mainDiv;
+        }
+
+        function createRedElement(text) {
+            var div = document.createElement("div");
+            var p = document.createElement("p");
+            p.className = "consoleViewError";
+            p.innerHTML = text;
+            div.appendChild(p);
+            return div.innerHTML;
+        }
+
+        return instance;
     }
 
-    function createRedElement(text) {
-        var div = document.createElement("div");
-        var p = document.createElement("p");
-        p.className = "consoleViewError";
-        p.innerHTML = text;
-        div.appendChild(p);
-        return div.innerHTML;
-    }
+
+    /*ConsoleView.showJsCode = function () {
+     $(":nth-child(2)", console).remove();
+     $(":first-child", console).after("<p class='consoleViewInfo'>" + generatedJsCode + "</p>");
+     };*/
+
+    ConsoleView.toggleElement = function (name) {
+        $("div." + name).toggle();
+    };
+
 
     return ConsoleView;
 })();

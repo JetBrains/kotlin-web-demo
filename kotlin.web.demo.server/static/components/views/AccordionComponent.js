@@ -22,15 +22,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-/* EVENTS:
- load_program
- generate_public_link
- delete_program
- save_program
- write_exception
- load_example
- */
-
 var AccordionView = (function () {
 
     var lastSelectedItem = 0;
@@ -42,11 +33,11 @@ var AccordionView = (function () {
 
     var instance;
 
-    function AccordionView() {
+    function AccordionView(element) {
 
         instance = {
-            getLastSelectedItem:function () {
-                return lastSelectedItem;
+            getMainElement:function () {
+                return element;
             },
             setLastSelectedItem:function (item) {
                 lastSelectedItem = item;
@@ -58,26 +49,25 @@ var AccordionView = (function () {
                 examplesView.loadAllContent();
             },
             setConfiguration:programsView.setConfiguration,
-            onLoadProgram: function(status, data) {},
-            onLoadExample: function(status, data) {},
-            onPublicLinkGenerated: function(status) {},
-            onSaveProgram: function(status) {},
-            onDeleteProgram: function(status) {},
-            onLoadAllContent: function() {}
+            onLoadCode:function (example, type) {
+            },
+            onGeneratePublicLink:function () {
+            },
+            onSaveProgram:function () {
+            },
+            onDeleteProgram:function () {
+            },
+            onLoadAllContent:function () {
+            },
+            onFail:function (exception, messageForStatusBar) {
+            }
 
         };
 
-        /*examplesView.addListener("load_all_content", programsView.loadAllContent);
-        programsView.addListener("load_all_content", function () {
-            makeAccordion();
-            loadFirstItem();
-            instance.onLoadAllContent();
-        });*/
-
-        examplesView.onAllExamplesLoaded = function() {
+        examplesView.onAllExamplesLoaded = function () {
             programsView.loadAllContent()
         };
-        programsView.onAllProgramsLoaded = function() {
+        programsView.onAllProgramsLoaded = function () {
             makeAccordion();
             loadFirstItem();
             instance.onLoadAllContent();
@@ -96,60 +86,48 @@ var AccordionView = (function () {
         ExamplesView.getLastSelectedItem = function () {
             return lastSelectedItem;
         };
-
-
-        programsModel.onLoadProgram = function (status, data) {
-            instance.onLoadProgram(status, data);
+        ProgramsView.getMainElement = function () {
+            return instance.getMainElement();
         };
-        programsModel.onPublicLinkGenerated =  function (status, data) {
+        ExamplesView.getMainElement = function () {
+            return instance.getMainElement();
+        };
+
+
+        programsModel.onFail = function (data, statusBarMessage) {
+            instance.onFail(data, statusBarMessage);
+        };
+        programsModel.onLoadProgram = function (program) {
+            instance.onLoadCode(program, "program");
+        };
+        programsModel.onGeneratePublicLink = function (data) {
             programsView.generatePublicLink(data);
-            instance.onPublicLinkGenerated(status);
+            instance.onGeneratePublicLink();
         };
-        programsModel.onDeleteProgram = function (status, data) {
+        programsModel.onDeleteProgram = function (data) {
             programsView.deleteProgram(data);
-            instance.onDeleteProgram(status);
+            instance.onDeleteProgram();
         };
-        programsModel.onSaveProgram = function (status, data) {
+        programsModel.onSaveProgram = function (data) {
             programsView.saveProgramWithName(data);
-            instance.onSaveProgram(status);
+            instance.onSaveProgram();
         };
-        /*programsModel.addListener("write_exception", function (status, data) {
-            eventHandler.fire("write_exception", status, data)
-        });*/
-        examplesModel.onLoadExample = function (status, data) {
-            instance.onLoadExample(status, data);
+        programsModel.onAllProgramsLoaded = function (data) {
+            programsView.loadAllPrograms(data);
         };
 
-        /*examplesModel.addListener("write_exception", function (status, data) {
-            eventHandler.fire("write_exception", status, data)
-        });*/
-
-        examplesModel.onAllExamplesLoaded = function(status, data) {
-           if (status) examplesView.loadAllExamples(data);
+        examplesModel.onLoadExample = function (example) {
+            instance.onLoadCode(example, "example");
         };
-        programsModel.onAllProgramsLoaded = function(status, data) {
-           if (status) programsView.loadAllPrograms(data);
+        examplesModel.onAllExamplesLoaded = function (data) {
+            examplesView.loadAllExamples(data);
         };
-
-//        examplesModel.addListener("get_all_examples", examplesView.loadAllExamples);
-//        programsModel.addListener("get_all_programs",  programsView.loadAllPrograms);
-
-
-//        eventHandler.addListener("get_all_examples", examplesView.loadAllExamples);
-
-//        eventHandler.addListener("get_all_programs", programsView.loadAllPrograms);
-
-
-
-//        eventHandler.addListener("generate_public_link", programsView.generatePublicLink);
-//        eventHandler.addListener("delete_program", programsView.processDeleteProgram);
-//        eventHandler.addListener("save_program", programsView.processSaveProgram);
 
         return instance;
     }
 
     function makeAccordion() {
-        $("#accordion").accordion({
+        $(".accordionForExamplesAndPrograms").accordion({
             autoHeight:false,
             navigation:true
         }).find('#tools img').click(function (ev) {

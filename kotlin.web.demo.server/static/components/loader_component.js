@@ -27,7 +27,7 @@ var LoaderComponent = (function () {
 
     var eventHandler = new EventsHandler();
 
-    function LoaderComponent() {
+    function LoaderComponent(element) {
 
         var instance = {
             addListener: function (name, f) {
@@ -37,10 +37,10 @@ var LoaderComponent = (function () {
                 eventHandler.fire(name, param);
             },
             hide: function() {
-                $('#loader').hide();
+                element.hide();
             },
             show: function() {
-                $('#loader').show();
+                element.show();
             }
 
         };

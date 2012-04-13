@@ -1202,7 +1202,7 @@ div.fixedpage {
     height: 30px !important;
 }
 
-#accordion div table a, #accordion div table a:hover {
+.accordionForExamplesAndPrograms div table a, .accordionForExamplesAndPrograms div table a:hover {
     display: inline-block;
     /**display:inline;*/
     /*width: 75% !important;*/
@@ -1292,6 +1292,11 @@ div#convertToKotlin {
 #whatimgjavatokotlin {
     margin-left: 10px;
 }
+
+/*div.toggledDivForJsCode {
+    margin-top: 5px;
+    display: none;
+}*/
 
 
 

@@ -19,124 +19,38 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
 
 var HelpView = (function () {
 
-    var helpForExamples = [];
-    var helpForWords = [];
-
-    var model = new HelpModel();
-
-    var isShortcutsShow = true;
-
-    function HelpElement(name, text) {
-        this.name = name;
-        this.text = text;
-    }
-
-    function HelpView() {
-        model.getAllHelpForExamples();
-        model.getAllHelpForWords();
+    function HelpView(helpType, element, helpModel) {
+        var model = helpModel;
+        model.loadAllHelpElements();
 
         var instance = {
-
-            loadHelpForExample:function (name) {
-                loadHelpForExample(name);
-            },
-            helpForExamplesLoaded:function (data) {
-                var i = 0;
-                while (data[i] != undefined) {
-                    var helpEl = new HelpElement(data[i].name, data[i].text);
-                    helpForExamples.push(helpEl);
-                    i++;
-                }
-            },
-            helpForWordsLoaded:function (data) {
-                if (data != null) {
-                    var i = 0;
-                    while (typeof data[i] != "undefined") {
-                        var helpEl = new HelpElement(data[i].name, data[i].text);
-                        helpForWords.push(helpEl);
-                        i++;
-                    }
-                }
-            },
-            changeHelpForWord:function (data) {
-                loadHelpForWord(data);
+            update: function(name) {
+                var text = model.loadHelpElement(name);
+                setText(text);
             }
         };
 
-        $(".toggleShortcuts").click(function () {
-            $("#help3").toggle();
-            if (isShortcutsShow) {
-                isShortcutsShow = false;
-                document.getElementById("toggleShortcutsButton").src = "/static/images/toogleShortcutsOpen.png";
+        function setText(text) {
+            if (checkDataForNull(text)) {
+                element.html(text);
             } else {
-                isShortcutsShow = true;
-                document.getElementById("toggleShortcutsButton").src = "/static/images/toogleShortcuts.png";
-
+                if (helpType == "Examples") {
+                    $("#help1").html("Description not available.");
+                } else {
+                    $("#help2").html("Click on the keyword to see help.");
+                }
             }
-        });
-
-        $("#help3").toggle(true);
-
-        if (navigator.appVersion.indexOf("Mac") != -1) {
-            var text = $("#help3").html();
-            text = text.replace("F9", "R");
-            $("#help3").html(text.replace("F9", "R"));
         }
+
 
         return instance;
     }
 
-    var isHelpForWordLoaded = false;
-
-    function loadHelpForWord(word) {
-        isHelpForWordLoaded = false;
-        forEachInArrayWithArgs(helpForWords, word, compareHelpForWords);
-        if (!isHelpForWordLoaded) {
-            $("#help2").html("Click on the keyword to see help.");
-            isHelpForWordLoaded = false;
-        }
-    }
-
-
-    var counterForExamplesHelp = 0;
-    var isHelpForExampleLoaded = false;
-
-    function loadHelpForExample(name) {
-        if (helpForExamples.length <= 0 && counterForExamplesHelp < 10) {
-            setTimeout(function () {
-                counterForExamplesHelp++;
-                loadHelpForExample(name);
-            }, 100);
-        } else {
-            counterForExamplesHelp = 0;
-            isHelpForExampleLoaded = false;
-            forEachInArrayWithArgs(helpForExamples, name, compareHelpForExamples);
-            if (!isHelpForExampleLoaded) {
-                $("#help1").html("Description not available.");
-            }
-        }
-
-    }
-
-    function compareHelpForWords(name, elementArray) {
-        if (name == elementArray.name) {
-            $("#help2").html(elementArray.text);
-            isHelpForWordLoaded = true;
-        }
-    }
-
-    function compareHelpForExamples(name, elementArray) {
-        if (name == elementArray.name) {
-            $("#help1").html(elementArray.text);
-            isHelpForExampleLoaded = true;
-        }
-    }
 
     return HelpView;
 })();

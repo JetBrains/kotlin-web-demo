@@ -25,6 +25,7 @@
 var BEFORE_EXIT = "The changes you made to the program will be lost when you change an example. Do you want to leave the page?";
 
 var KOTLIN_VERSION = "0.0.0";
+var APPLET_VERSION = "05042012";
 var WEB_DEMO_VERSION = "0.0.0";
 
 function forEachInArrayWithArgs(arr, data, f) {
@@ -75,11 +76,26 @@ function replaceAll(str, replaced, replacement) {
     }
 }
 
-function substringDependencies(dependencies) {
-    var pos = dependencies.indexOf(" ");
+function getFirstConfiguration(confStr) {
+    var pos = confStr.indexOf(" ");
     if (pos >= 0) {
-        return dependencies.substring(0, pos);
+        return confStr.substring(0, pos);
     }
-    return dependencies;
+    return confStr;
+}
+
+function checkDataForNull(data) {
+    return !(data == null || data == undefined);
+
+}
+
+function checkDataForException(data) {
+        //consoleView.writeException(data);
+    return !(data[0] != null && data[0] != undefined && data[0].exception != undefined);
+
+}
+
+function random() {
+    return Math.floor((Math.random()*100)+1);
 }
 

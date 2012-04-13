@@ -19,59 +19,87 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
- */
-
-/* EVENTS:
- help_for_examples
- help_for_words
  */
 
 var HelpModel = (function () {
-    var instance;
-    function HelpModel() {
 
-        instance = {
-            getAllHelpForExamples:function () {
-                $.ajax({
-                    url:RequestGenerator.generateAjaxUrl("loadHelpForExamples", "null"),
-                    context:document.body,
-                    success:function (data) {
-                        instance.onHelpForExamplesLoaded(true, data);
-                    },
-                    dataType:"json",
-                    type:"GET",
-                    timeout:30000,
-                    error:function () {
-                        instance.onHelpForExamplesLoaded(false, null);
-                    }
-                });
-            },
-            getAllHelpForWords:function () {
-                $.ajax({
-                    url:RequestGenerator.generateAjaxUrl("loadHelpForWords", "null"),
-                    context:document.body,
-                    success:function (data) {
-                        instance.onHelpForWordsLoaded(true, data);
-                    },
-                    dataType:"json",
-                    type:"GET",
-                    timeout:30000,
-                    error:function () {
-                        instance.onHelpForWordsLoaded(false, null);
-                    }
-                });
-            },
-            onHelpForExamplesLoaded:function (status, data) {
+    function HelpElement(name, text) {
+        this.name = name;
+        this.text = text;
+    }
 
-            },
-            onHelpForWordsLoaded:function (status, data) {
+    function HelpModel(helpType) {
+        var helpArray = [];
 
+        var instance = {
+            onLoadAllHelpElements:function () {
+            },
+            onFail:function (exception) {
+            },
+            loadAllHelpElements:function () {
+                loadAllHelp();
+            },
+            loadHelpElement:function (name) {
+                return loadHelpElement(name);
             }
         };
 
+        function loadAllHelp() {
+            $.ajax({
+                url:generateAjaxUrl("loadHelpFor" + helpType, "null"),
+                context:document.body,
+                success:function (data) {
+                    if (checkDataForNull(data)) {
+                        processResult(data);
+                    } else {
+                        instance.onFail("Incorrect data format.");
+                    }
+                },
+                dataType:"json",
+                type:"GET",
+                timeout:30000,
+                error:function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown);
+                }
+            });
+        }
+
+        function processResult(data) {
+            var i = 0;
+            while (data[i] != undefined) {
+                var helpEl = new HelpElement(data[i].name, data[i].text);
+                helpArray.push(helpEl);
+                i++;
+            }
+            instance.onLoadAllHelpElements();
+        }
+
+        var counter = 0;
+        var result = null;
+
+        function loadHelpElement(name) {
+            result = null;
+            if (helpArray.length <= 0 && counter < 10) {
+                setTimeout(function () {
+                    counter++;
+                    loadHelpElement(name);
+                }, 100);
+            } else {
+                counter = 0;
+                forEachInArrayWithArgs(helpArray, name, compareHelp);
+            }
+            return result;
+        }
+
+        function compareHelp(name, elementArray) {
+            if (name == elementArray.name) {
+                result = elementArray.text;
+            }
+        }
+
         return instance;
     }
+
 
     return HelpModel;
 })();

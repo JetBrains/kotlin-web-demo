@@ -19,12 +19,8 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
-/* EVENTS:
- convert_java_to_kotlin
- */
 var ConverterModel = (function () {
 
     var instance;
@@ -35,7 +31,8 @@ var ConverterModel = (function () {
             convert:function (text) {
                 convert(text);
             },
-            onConvert: function(status, data) {}
+            onConvert: function(text) {},
+            onFail: function(error) {}
         };
 
         return instance;
@@ -43,17 +40,25 @@ var ConverterModel = (function () {
 
     function convert(text) {
         $.ajax({
-            url:RequestGenerator.generateAjaxUrl("convertToKotlin", ""),
+            url:generateAjaxUrl("convertToKotlin", ""),
             context:document.body,
             success:function (data) {
-                instance.onConvert(true, data);
+                if (checkDataForNull(data)) {
+                    if (checkDataForException(data)) {
+                        instance.onConvert(data[0].text);
+                    } else {
+                        instance.onFail(data);
+                    }
+                } else {
+                    instance.onFail("Incorrect data format.");
+                }
             },
             dataType:"json",
             type:"POST",
             data:{text:text},
             timeout:10000,
-            error:function () {
-                instance.onConvert(false, null);
+            error:function (jqXHR, textStatus, errorThrown) {
+                instance.onFail(textStatus + " : " + errorThrown);
             }
         });
     }

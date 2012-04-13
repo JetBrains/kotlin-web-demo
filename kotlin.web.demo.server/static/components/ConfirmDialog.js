@@ -46,7 +46,7 @@ var ConfirmDialog = (function () {
     }
 
 
-    ConfirmDialog.getEditorChangeState = function () {
+    ConfirmDialog.isEditorContentChanged = function () {
         return false;
     };
     ConfirmDialog.isLoggedIn = function () {
@@ -57,7 +57,7 @@ var ConfirmDialog = (function () {
     };
 
     function showConfirmDialog(fun) {
-        if (ConfirmDialog.getEditorChangeState()) {
+        if (ConfirmDialog.isEditorContentChanged()) {
             $("#confirmDialog").dialog({
                 buttons:[
                     { text:"Save changes",

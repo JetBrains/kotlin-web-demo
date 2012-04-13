@@ -19,12 +19,11 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
 var LoginView = (function () {
 
-    var model = new LoginModel();
+    var model = new LoginProvider();
     var isLoggedIn = false;
 
     var confirmDialog = new ConfirmDialog();
@@ -61,89 +60,89 @@ var LoginView = (function () {
 
         model.getUserName();
 
-        return instance;
-    }
-
-    function login(param) {
-        confirmDialog.open(function (param) {
-            return function () {
-                model.login(param);
-            };
-        }(param));
-    }
-
-    function setUserName(userName) {
-        if (userName != "") {
-            $("#login").css("display", "none");
-            $("#userName").css("display", "block");
-            isLoggedIn = true;
-            userName = decodeURI(userName);
-            userName = replaceAll(userName, "\\+", " ");
-
-            $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/static/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
-            document.getElementById("userNameTitle").onclick = function (e) {
-                userNameClick(e);
-            };
+        function login(param) {
+            confirmDialog.open(function (param) {
+                return function () {
+                    model.login(param);
+                };
+            }(param));
         }
-    }
 
-    var isLogoutShown = false;
+        function setUserName(userName) {
+            if (userName != "") {
+                $("#login").css("display", "none");
+                $("#userName").css("display", "block");
+                isLoggedIn = true;
+                userName = decodeURI(userName);
+                userName = replaceAll(userName, "\\+", " ");
 
-    function userNameClick(e) {
-        if (!isLogoutShown) {
-            $("#headerlinks").bind("mouseleave", function () {
-                var timeout = setTimeout(function () {
-                    close();
-                }, 100);
-                $("#logout").bind("mouseover", function () {
+                $("#userName").html("<div id='userNameTitle'><span>Welcome, " + userName + "</span><img src='/static/images/toogleShortcutsOpen.png' id='userNameImg'/></div>");
+                document.getElementById("userNameTitle").onclick = function (e) {
+                    userNameClick(e);
+                };
+            }
+        }
 
-                    clearTimeout(timeout);
-                    $("#logout").bind("mouseleave", function () {
-                        timeout = setTimeout(function () {
-                            close();
-                        }, 500);
+        var isLogoutShown = false;
+
+        function userNameClick(e) {
+            if (!isLogoutShown) {
+                $("#headerlinks").bind("mouseleave", function () {
+                    var timeout = setTimeout(function () {
+                        close();
+                    }, 100);
+                    $("#logout").bind("mouseover", function () {
+
+                        clearTimeout(timeout);
+                        $("#logout").bind("mouseleave", function () {
+                            timeout = setTimeout(function () {
+                                close();
+                            }, 500);
+                        });
                     });
+
                 });
 
-            });
+                isLogoutShown = true;
+                var div = document.createElement("div");
+                div.id = "logout";
+                div.innerHTML = "Logout";
+                div.style.position = "absolute";
 
-            isLogoutShown = true;
-            var div = document.createElement("div");
-            div.id = "logout";
-            div.innerHTML = "Logout";
-            div.style.position = "absolute";
+                var element = document.getElementById("userNameTitle");
+                if (element == null) {
+                    return;
+                }
 
-            var element = document.getElementById("userNameTitle");
-            if (element == null) {
-                return;
-            }
+                var left = element.offsetLeft;
+                var top = element.offsetTop;
+                for (var parent = element.offsetParent; parent; parent = parent.offsetParent) {
+                    left += parent.offsetLeft - parent.scrollLeft;
+                    top += parent.offsetTop - parent.scrollTop
+                }
 
-            var left = element.offsetLeft;
-            var top = element.offsetTop;
-            for (var parent = element.offsetParent; parent; parent = parent.offsetParent) {
-                left += parent.offsetLeft - parent.scrollLeft;
-                top += parent.offsetTop - parent.scrollTop
-            }
-
-            div.style.left = left + 240 - 42 + "px";
-            div.style.top = top + 27 - 3 + "px";
-            div.onclick = function () {
+                div.style.left = left + 240 - 42 + "px";
+                div.style.top = top + 27 - 3 + "px";
+                div.onclick = function () {
+                    close();
+                    model.logout();
+                };
+                document.body.appendChild(div);
+            } else {
                 close();
-                model.logout();
-            };
-            document.body.appendChild(div);
-        } else {
-            close();
-        }
+            }
 
 
-        function close() {
-            isLogoutShown = false;
-            var el = document.getElementById("logout");
-            if (el != null) {
-                el.parentNode.removeChild(document.getElementById("logout"));
+            function close() {
+                isLogoutShown = false;
+                var el = document.getElementById("logout");
+                if (el != null) {
+                    el.parentNode.removeChild(document.getElementById("logout"));
+                }
             }
         }
+
+        return instance;
     }
 
     return LoginView;

@@ -19,16 +19,6 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
- */
-
-/* EVENTS:
- load_program
- write_exception
- generate_public_link
- delete_program
- save_program
- get_all_programs
  */
 
 var ProgramsModel = (function () {
@@ -40,31 +30,47 @@ var ProgramsModel = (function () {
         instance = {
             loadProgram:function (url) {
                 $.ajax({
-                    url:RequestGenerator.generateAjaxUrl("loadProgram", url),
+                    url:generateAjaxUrl("loadProgram", url),
                     context:document.body,
                     success:function (data) {
-                        instance.onLoadProgram(true, data);
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                instance.onLoadProgram(data[0]);
+                            } else {
+                                instance.onFail(data, ActionCodes.load_program_fail);
+                            }
+                        } else {
+                            instance.onFail("Incorrect data format.", ActionCodes.load_program_fail);
+                        }
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
-                    error:function () {
-                        instance.onLoadProgram(false, null);
+                    error:function (jqXHR, textStatus, errorThrown) {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.load_program_fail);
                     }
                 });
             },
             generatePublicLink:function (url) {
                 $.ajax({
-                    url:RequestGenerator.generateAjaxUrl("generatePublicLink", url),
+                    url:generateAjaxUrl("generatePublicLink", url),
                     context:document.body,
                     success:function (data) {
-                        instance.onPublicLinkGenerated(true, data);
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                instance.onGeneratePublicLink(data);
+                            } else {
+                                instance.onFail(data, ActionCodes.generate_link_fail);
+                            }
+                        } else {
+                            instance.onFail("Incorrect data format.", ActionCodes.generate_link_fail);
+                        }
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
-                    error:function () {
-                        instance.onPublicLinkGenerated(false, null);
+                    error:function (jqXHR, textStatus, errorThrown) {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.generate_link_fail);
                     }
                 });
             },
@@ -73,16 +79,24 @@ var ProgramsModel = (function () {
             },
             deleteProgram:function (name) {
                 $.ajax({
-                    url:RequestGenerator.generateAjaxUrl("deleteProgram", name),
+                    url:generateAjaxUrl("deleteProgram", name),
                     context:document.body,
                     success:function (data) {
-                        instance.onDeleteProgram(true, data);
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                instance.onDeleteProgram(data);
+                            } else {
+                                instance.onFail(data, ActionCodes.delete_program_fail);
+                            }
+                        } else {
+                            instance.onFail("Incorrect data format.", ActionCodes.delete_program_fail);
+                        }
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
-                    error:function () {
-                        instance.onDeleteProgram(false, null);
+                    error:function (jqXHR, textStatus, errorThrown) {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.delete_program_fail);
                     }
                 });
             },
@@ -90,40 +104,42 @@ var ProgramsModel = (function () {
                 var i = ProgramsModel.getEditorContent();
                 var arguments = ProgramsModel.getArguments();
                 $.ajax({
-                    url:RequestGenerator.generateAjaxUrl("saveProgram", id + "&runConf=" + dependencies),
+                    url:generateAjaxUrl("saveProgram", id + "&runConf=" + dependencies),
                     success:function (data) {
-                        instance.onSaveProgram(true, data);
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                instance.onSaveProgram(data);
+                            } else {
+                                instance.onFail(data, ActionCodes.save_program_fail);
+                            }
+                        } else {
+                            instance.onFail("Incorrect data format.", ActionCodes.save_program_fail);
+                        }
                     },
                     dataType:"json",
                     type:"POST",
                     data:{text:i, consoleArgs:arguments},
                     timeout:10000,
-                    error:function () {
-                        instance.onSaveProgram(false, null);
+                    error:function (jqXHR, textStatus, errorThrown) {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.save_program_fail);
                     }
                 });
             },
-            onLoadProgram:function (status, data) {
+            onLoadProgram:function (data) {
             },
-            onPublicLinkGenerated:function (status, data) {
+            onGeneratePublicLink:function (data) {
             },
-            onDeleteProgram:function (status, data) {
+            onDeleteProgram:function (data) {
             },
-            onSaveProgram:function (status, data) {
+            onSaveProgram:function (data) {
             },
-            onAllProgramsLoaded:function (status, data) {
+            onAllProgramsLoaded:function (data) {
+            },
+            onFail:function (exception, statusBarMessage) {
             }
         };
 
         return instance;
-    }
-
-    function substringDependencies(dependencies) {
-        var pos = dependencies.indexOf(" ");
-        if (pos >= 0) {
-            return dependencies.substring(0, pos);
-        }
-        return dependencies;
     }
 
     ProgramsModel.getEditorContent = function () {
@@ -135,16 +151,24 @@ var ProgramsModel = (function () {
 
     function getAllPrograms() {
         $.ajax({
-            url:RequestGenerator.generateAjaxUrl("loadProgram", "all"),
+            url:generateAjaxUrl("loadProgram", "all"),
             context:document.body,
             success:function (data) {
-                instance.onAllProgramsLoaded(true, data);
+                if (checkDataForNull(data)) {
+                    if (checkDataForException(data)) {
+                        instance.onAllProgramsLoaded(data);
+                    } else {
+                        instance.onFail(data, ActionCodes.load_programs_fail);
+                    }
+                } else {
+                    instance.onFail("Incorrect data format.", ActionCodes.load_programs_fail);
+                }
             },
             dataType:"json",
             type:"GET",
             timeout:10000,
-            error:function () {
-                instance.onAllProgramsLoaded(false, null);
+            error:function (jqXHR, textStatus, errorThrown) {
+                instance.onFail(textStatus + " : " + errorThrown, ActionCodes.load_programs_fail);
             }
         });
     }

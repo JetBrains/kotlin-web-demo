@@ -25,85 +25,79 @@
 
 var ProblemsView = (function () {
 
-    function ProblemsView() {
+    function ProblemsView(element, /*Nullable*/ tabs) {
 
         var instance = {
-            addErrors:function (data) {
-                updateProblemView(data);
+            addMessages:function (data) {
+                addMessagesToProblemsView(data);
             },
-            clear: function() {
-                $("#problems").html("");
-            }/*,
-            processOutput: function(status, data) {
-                if (!status && data == "errors") {
-                    $("#tabs").tabs("select", 0);
-                }
-            }*/
+            clear:function () {
+                element.html("");
+            }
         };
 
+        function addMessagesToProblemsView(data) {
+            element.html("");
+            if (tabs != null) {
+                tabs.tabs("select", 0);
+            }
+            var i = 0;
+            var problems = document.createElement("div");
+
+            function processError(i, p, f) {
+                if (typeof data[i] == "undefined") {
+                    element.html(problems.innerHTML);
+                    return;
+                }
+
+                var title = unEscapeString(data[i].titleName);
+                var start = eval('(' + data[i].x + ')');
+                var severity = data[i].severity;
+
+                var problem = createElementForProblemsView(severity, start, title);
+                p.appendChild(problem);
+                i++;
+
+                setTimeout(function (i, problems) {
+                    return function () {
+                        f(i, problems, processError);
+                    }
+                }(i, problems), 10);
+            }
+
+            processError(i, problems, processError);
+        }
+
+        function createElementForProblemsView(severity, start, title) {
+            var p = document.createElement("p");
+            var img = document.createElement("img");
+            if (severity == 'WARNING') {
+                img.src = "/static/icons/warning.png";
+                if (title.indexOf("is never used") > 0) {
+                    p.className = "problemsViewWarningNeverUsed";
+                } else {
+                    p.className = "problemsViewWarning";
+                }
+
+            } else if (severity == 'STACKTRACE') {
+                p.className = "problemsViewStacktrace";
+            } else {
+                img.src = "/static/icons/error.png";
+                p.className = "problemsViewError";
+            }
+            p.appendChild(img);
+            var titleDiv = document.createElement("span");
+            if (start == null) {
+                titleDiv.innerHTML = " " + unEscapeString(title);
+            } else {
+
+                titleDiv.innerHTML = "(" + (start.line + 1) + ", " + (start.ch + 1) + ") : " + unEscapeString(title);
+            }
+            p.appendChild(titleDiv);
+            return p;
+        }
 
         return instance;
-    }
-
-    function updateProblemView(data) {
-        $("#problems").html("");
-        $("#tabs").tabs("select", 0);
-        var i = 0;
-        var problems = document.createElement("div");
-
-        function processError(i, p, f) {
-            if (typeof data[i] == "undefined") {
-                if (i > 0) {
-                }
-                $("#problems").html(problems.innerHTML);
-                return;
-            }
-
-            var title = unEscapeString(data[i].titleName);
-            var start = eval('(' + data[i].x + ')');
-            var severity = data[i].severity;
-
-            var problem = createElementForProblemView(severity, start, title);
-            p.appendChild(problem);
-            i++;
-
-            setTimeout(function (i, problems) {
-                return function () {
-                    f(i, problems, processError);
-                }
-            }(i, problems), 10);
-        }
-
-        processError(i, problems, processError);
-    }
-
-    function createElementForProblemView(severity, start, title) {
-        var p = document.createElement("p");
-        var img = document.createElement("img");
-        if (severity == 'WARNING') {
-            img.src = "/static/icons/warning.png";
-            if (title.indexOf("is never used") > 0) {
-                p.className = "problemsViewWarningNeverUsed";
-            } else {
-                p.className = "problemsViewWarning";
-            }
-
-        } else if (severity == 'STACKTRACE') {
-            p.className = "problemsViewStacktrace";
-        } else {
-            img.src = "/static/icons/error.png";
-            p.className = "problemsViewError";
-        }
-        p.appendChild(img);
-        var titleDiv = document.createElement("span");
-        if (start == null) {
-            titleDiv.innerHTML = " " + unEscapeString(title);
-        } else {
-
-            titleDiv.innerHTML = "(" + (start.line + 1) + ", " + (start.ch + 1) + ") : " + unEscapeString(title);
-        }
-        p.appendChild(titleDiv);
-        return p;
     }
 
     return ProblemsView;

@@ -19,32 +19,30 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
-/* EVENTS:
- login
- logout
- */
-
-var LoginModel = (function () {
+var LoginProvider = (function () {
 
     var instance;
 
-    function LoginModel() {
+    function LoginProvider() {
 
         instance = {
-            login: function(type) {
+            login:function (type) {
                 login(type);
             },
-            logout: function() {
-               instance.onLogout(true, null);
+            logout:function () {
+                instance.onLogout();
             },
-            getUserName: function() {
+            getUserName:function () {
                 getUserName();
             },
-            onLogin: function(status, data) {},
-            onLogout: function(status, data) {}
+            onLogin:function (userName) {
+            },
+            onLogout:function () {
+            },
+            onFail:function (status, statusBarMessage) {
+            }
         };
 
         return instance;
@@ -52,30 +50,34 @@ var LoginModel = (function () {
 
     function login(type) {
         $.ajax({
-            url:RequestGenerator.generateAjaxUrl("authorization", type),
+            url:generateAjaxUrl("authorization", type),
             context:document.body,
             success:onLoginSuccess,
             dataType:"text",
             type:"GET",
             timeout:10000,
-            error:function () {
-                instance.onLogin(false, null);
+            error:function (jqXHR, textStatus, errorThrown) {
+                instance.onFail(textStatus + " : " + errorThrown, ActionCodes.login_fail);
             }
         });
     }
 
     function getUserName() {
         $.ajax({
-            url:RequestGenerator.generateAjaxUrl("getUserName", ""),
+            url:generateAjaxUrl("getUserName", ""),
             context:document.body,
-            success:function(data) {
-                instance.onLogin(true, data);
+            success:function (data) {
+                if (checkDataForNull(data)) {
+                    instance.onLogin(data);
+                } else {
+                    instance.onFail("Username is null.", ActionCodes.login_fail);
+                }
             },
             dataType:"text",
             type:"GET",
             timeout:10000,
-            error:function () {
-                instance.onLogin(false, null);
+            error:function (jqXHR, textStatus, errorThrown) {
+                instance.onFail(textStatus + " : " + errorThrown, ActionCodes.login_fail);
             }
         });
     }
@@ -84,5 +86,5 @@ var LoginModel = (function () {
         document.location.href = data;
     }
 
-    return LoginModel;
+    return LoginProvider;
 })();

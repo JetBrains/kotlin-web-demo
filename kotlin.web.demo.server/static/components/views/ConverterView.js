@@ -25,49 +25,42 @@
 
 var ConverterView = (function () {
 
-    var my_editor;
-    var model = new ConverterModel();
+    function ConverterView(element) {
+        var my_editor;
+        var model = new ConverterModel();
 
-    function ConverterView() {
+        $("body div:first").after("<div class=\"myPopupForConverterFromJavaToKotlin\" title=\"Enter Java code\"><textarea class=\"CodeMirror\" name=\"myTextareaForConverterFromJavaToKotlin\"></textarea></div>");
+
+        var popup = $(".myPopupForConverterFromJavaToKotlin");
 
         var instance = {
             closeDialog:function () {
-                $("#convertToKotlinDialog").dialog("close");
+                popup.dialog("close");
             }
         };
 
-        my_editor = CodeMirror.fromTextArea(document.getElementById("codeOnJava"), {
+        my_editor = CodeMirror.fromTextArea(document.getElementsByName("myTextareaForConverterFromJavaToKotlin")[0], {
             lineNumbers:true,
             matchBrackets:true,
             mode:"text/x-java",
             minHeight:"430px"
         });
 
-        $("#javaToKotlin").click(function () {
-            var height = $("#convertToKotlinDialog").dialog("option", "height") - 120;
-            $("div#convertToKotlinDialog div #scroll").css("height", height + "px");
-            $("#convertToKotlinDialog").dialog("open");
+        element.click(function () {
+            var height = popup.dialog("option", "height") - 120;
+            $("div #scroll", popup).css("height", height + "px");
+            popup.dialog("open");
             my_editor.refresh();
         });
 
-        $("#whatimgjavatokotlin").click(function () {
-            $("#dialogAboutJavaToKotlinConverter").dialog("open");
-        });
-
-        $("#dialogAboutJavaToKotlinConverter").dialog({
-            modal:"true",
-            width:300,
-            autoOpen:false
-        });
-
-        $("#convertToKotlinDialog").dialog({
+        popup.dialog({
             modal:"true",
             width:640,
             height:480,
             autoOpen:false,
             resizeStop:function (event, ui) {
-                var height = $("#convertToKotlinDialog").dialog("option", "height") - 120;
-                $("div#convertToKotlinDialog div #scroll").css("height", height + "px");
+                var height = popup.dialog("option", "height") - 120;
+                $("div #scroll", popup).css("height", height + "px");
                 my_editor.refresh();
             },
             buttons:[
@@ -78,7 +71,7 @@ var ConverterView = (function () {
                 },
                 { text:"Cancel",
                     click:function () {
-                        $("#convertToKotlinDialog").dialog("close");
+                        popup.dialog("close");
                     }
                 }
             ]

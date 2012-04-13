@@ -24,7 +24,7 @@
 
 
 function changeConfiguration(mode) {
-    configuration.updateRunnerAndDependencies(mode, mode);
+    configurationManager.updateConfiguration(mode);
 }
 
 function setEditorValue(text) {
@@ -38,5 +38,5 @@ function setLogin() {
     ex.text = "fun main(){}";
     editor.loadExampleOrProgram(true, ex);
     var userName = "[\"Natalia Ukhorskaya\"]";
-    loginModel.fire("login", true, userName);
+    loginProvider.fire("login", true, userName);
 }

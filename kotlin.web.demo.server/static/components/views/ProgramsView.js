@@ -26,7 +26,7 @@
 var ProgramsView = (function () {
     var model = new ProgramsModel();
 
-    var configuration = new Configuration(null, Configuration.dependencies.JAVA, Configuration.runner.JAVA);
+    var configuration = new Configuration(null, Configuration.type.JAVA);
     var BEFORE_DELETE_PROGRAM = "Do you really want to delete the program?";
 
     var confirmDialog = new ConfirmDialog();
@@ -59,7 +59,8 @@ var ProgramsView = (function () {
             saveProgram:function () {
                 saveProgram();
             },
-            onAllProgramsLoaded: function(){}
+            onAllProgramsLoaded:function () {
+            }
 
         };
 
@@ -107,6 +108,9 @@ var ProgramsView = (function () {
     ProgramsView.getLastSelectedItem = function () {
 
     };
+    ProgramsView.getMainElement = function () {
+
+    };
 
     ProgramsView.isLoggedIn = function () {
         return false;
@@ -125,7 +129,8 @@ var ProgramsView = (function () {
                         var name = replaceAll(data[i].text.substring(0, pos), "%20", " ");
                         var id = data[i].text.substring(pos + 4);
 
-                        $("div#myprogramscontent").append(createProgramListElement(createExampleUrl(id, "My Programs"), name, configuration.dependencies));
+                        $("div#myprogramscontent").append(createProgramListElement(createExampleUrl(id, "My Programs"), name,
+                            Configuration.getStringFromType(configuration.type)));
                         $("a#My_Programs").click();
                         $("a[id='" + ProgramsView.getLastSelectedItem() + "']").attr("class", "");
                         ProgramsView.setLastSelectedItem(createExampleUrl(id, "My Programs"));
@@ -171,7 +176,7 @@ var ProgramsView = (function () {
     }
 
     function loadAllContent() {
-        var acc = document.getElementById("accordion");
+        var acc = $(".accordionForExamplesAndPrograms");
 
         var myProg = document.createElement("h3");
         var innerDiv = document.createElement("div");
@@ -209,12 +214,11 @@ var ProgramsView = (function () {
             innerDiv.appendChild(infoImg);
         }
         myProg.appendChild(innerDiv);
-        acc.appendChild(myProg);
+        acc.append(myProg);
 
         var myProgCont = document.createElement("div");
         myProgCont.id = "myprogramscontent";
-        acc.appendChild(myProgCont);
-
+        acc.append(myProgCont);
         if (ProgramsView.isLoggedIn()) {
             model.getAllPrograms();
         } else {
@@ -226,23 +230,23 @@ var ProgramsView = (function () {
         var i = 0;
         var cont = document.getElementById("myprogramscontent");
         while (typeof data[i] != "undefined") {
-            $("#myprogramscontent").append(createProgramListElement(createExampleUrl(data[i].id, "My Programs"), replaceAll(data[i].name, "%20", " "), data[i].runConf));
+            $("#myprogramscontent").append(createProgramListElement(createExampleUrl(data[i].id, "My Programs"), replaceAll(data[i].name, "%20", " "), data[i].confType));
             i++;
         }
         instance.onAllProgramsLoaded();
     }
 
-    function createProgramListElement(id, name, runConf) {
+    function createProgramListElement(id, name, confType) {
         var table = document.createElement("table");
         var tr = document.createElement("tr");
         var tdIcon = document.createElement("td");
         tdIcon.style.width = "16px";
         var span = document.createElement("div");
         span.className = "bullet";
-        if (typeof runConf == "undefined") {
+        if (typeof confType == "undefined") {
             span.style.background = "url(/static/icons/text.png) no-repeat";
         } else {
-            span.style.background = "url(/static/icons/" + runConf + ".png) no-repeat";
+            span.style.background = "url(/static/icons/" + confType + ".png) no-repeat";
         }
 
         tdIcon.appendChild(span);
@@ -326,7 +330,7 @@ var ProgramsView = (function () {
                 return;
             }
 
-            model.saveProgram("id=" + ProgramsView.getLastSelectedItem(), configuration.dependencies);
+            model.saveProgram("id=" + ProgramsView.getLastSelectedItem(), Configuration.getStringFromType(configuration.type));
 
         } else {
             $("#showInfoAboutLogin").click();
@@ -338,12 +342,11 @@ var ProgramsView = (function () {
             $("#saveDialog").dialog("close");
             var programName = $("#programName").val();
             $("#programName").val("");
-            model.saveProgram(programName, configuration.dependencies);
+            model.saveProgram(programName, Configuration.getStringFromType(configuration.type));
         } else {
             $("#showInfoAboutLogin").click();
         }
     }
-
 
     return ProgramsView;
 })();

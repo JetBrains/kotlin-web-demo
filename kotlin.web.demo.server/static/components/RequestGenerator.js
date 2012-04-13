@@ -24,7 +24,7 @@
 
 
 var RequestGenerator = (function () {
-    var sessionId = -1;
+
 
     function RequestGenerator() {
         setSessionId();
@@ -35,39 +35,7 @@ var RequestGenerator = (function () {
         return instance;
     }
 
-    RequestGenerator.generateAjaxUrl = function (type, args) {
-        var url = [location.protocol, '//', location.host, "/"].join('');
-        return url + "kotlinServer?sessionId=" + sessionId + "&type=" + type + "&args=" + args;
-    };
 
-    function setSessionId() {
-        $.ajax({
-            url:RequestGenerator.generateAjaxUrl("getSessionId", "null"),
-            context:document.body,
-            type:"GET",
-            dataType:"json",
-            timeout:10000,
-            success:getSessionIdSuccess
-        });
-    }
-
-    function getSessionIdSuccess(data) {
-        data = eval(data);
-        if (data[0] != null && data[0] != '') {
-            sessionId = data[0];
-        }
-
-        var info = "browser: " + navigator.appName + " " + navigator.appVersion;
-        info += " " + "system: " + navigator.platform;
-
-        $.ajax({
-            url:RequestGenerator.generateAjaxUrl("sendUserData", "null"),
-            context:document.body,
-            type:"POST",
-            data:{text:info},
-            timeout:5000
-        });
-    }
 
     return RequestGenerator;
 })();

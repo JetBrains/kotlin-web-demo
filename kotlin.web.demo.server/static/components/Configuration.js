@@ -19,22 +19,30 @@
  * User: Natalia.Ukhorskaya
  * Date: 4/2/12
  * Time: 6:44 PM
- * To change this template use File | Settings | File Templates.
  */
 
 
-function Configuration(mode, dependencies, runner) {
+function Configuration(mode, type) {
     this.mode = mode;
-    this.dependencies = dependencies;
-    this.runner = runner;
+    this.type = type;
 }
+
+function Type(runner, dependencies) {
+    this.runner = runner;
+    this.dependencies = dependencies;
+}
+
+Type.runner = {JAVA:"java", JS:"js"};
+Type.dependencies = {STANDARD:"standard", CANVAS:"canvas"};
+
 Configuration.mode = {CLIENT:"client", SERVER:"server", ONRUN:"onrun"};
-Configuration.dependencies = {JAVA:"java", JS:"js", CANVAS:"canvas"};
-Configuration.runner = {JAVA:"java", JS:"js", CANVAS:"canvas"};
+Configuration.type = {JAVA:new Type(Type.runner.JAVA, Type.dependencies.STANDARD),
+    JS:new Type(Type.runner.JS, Type.dependencies.STANDARD),
+    CANVAS:new Type(Type.runner.JS, Type.dependencies.CANVAS)};
 
 var ConfigurationComponent = (function () {
 
-    var configuration = new Configuration(null, Configuration.dependencies.JAVA, Configuration.runner.JAVA);
+    var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.type.JAVA);
 
     var instance;
 
@@ -44,12 +52,14 @@ var ConfigurationComponent = (function () {
             getConfiguration:function () {
                 return configuration;
             },
-            updateRunnerAndDependencies:function (dependencies, runner) {
-                configuration.dependencies = dependencies;
-                configuration.runner = runner;
-                $("#runConfigurationMode").selectmenu("value", dependencies);
+            // type: String
+            updateConfiguration:function (type) {
+                configuration = new Configuration(configuration.mode,  Configuration.getTypeFromString(type));
+                $("#runConfigurationMode").selectmenu("value", type);
+                fireChangeEvent();
             },
-            onChangeConfiguration: function(status, data) {}
+            onChange:function (configuration) {
+            }
         };
 
         $("#dialogAboutRunConfiguration").dialog({
@@ -68,8 +78,7 @@ var ConfigurationComponent = (function () {
 
         $("#runConfigurationMode").selectmenu({
                 change:function () {
-                    configuration.dependencies = $("#runConfigurationMode").val();
-                    configuration.runner = $("#runConfigurationMode").val();
+                    configuration = new Configuration(configuration.mode, Configuration.getTypeFromString($("#runConfigurationMode").val()));
                     fireChangeEvent();
                 }
             }
@@ -94,7 +103,8 @@ var ConfigurationComponent = (function () {
             $("#appletcheckbox").attr('checked', true);
             $("#nohighlightingcheckbox").attr('checked', false);
             saveModeToCookies("applet");
-            configuration.mode = Configuration.mode.CLIENT;
+            configuration = new Configuration(Configuration.mode.CLIENT, configuration.type);
+            fireChangeEvent();
             if (!isAppletLoaded) {
                 waitLoadingApplet();
                 try {
@@ -115,7 +125,7 @@ var ConfigurationComponent = (function () {
 
         function waitLoadingApplet() {
             if (document.getElementById("myapplet") == null) {
-                $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet05042012.jar\" style=\"display: none;\"></applet>");
+                $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet" + APPLET_VERSION + ".jar\" style=\"display: none;\"></applet>");
             }
             var applet = $("#myapplet")[0];
             //TODO eventHandler.fire("show_loader");
@@ -144,8 +154,8 @@ var ConfigurationComponent = (function () {
             $("#appletcheckbox").attr('checked', false);
             $("#nohighlightingcheckbox").attr('checked', false);
             saveModeToCookies("server");
-            configuration.mode = Configuration.mode.SERVER;
-            //todo setStatusBarMessage("");
+            configuration = new Configuration(Configuration.mode.SERVER, configuration.type);
+            fireChangeEvent();
         });
 
         $(".applet-nohighlighting").click(function () {
@@ -157,27 +167,41 @@ var ConfigurationComponent = (function () {
             $(this).addClass('selected');
             $("#nohighlightingcheckbox").attr('checked', true);
             saveModeToCookies("nohighlighting");
-            configuration.mode = Configuration.mode.ONRUN;
-            //todo setStatusBarMessage("");
+            configuration = new Configuration(Configuration.mode.ONRUN, configuration.type);
+            fireChangeEvent();
         });
 
         var mode = getModeFromCookies();
         if (mode == "applet") {
-            configuration.mode = Configuration.mode.CLIENT;
             $(".applet-enable").click();
         } else if (mode == "server") {
-            configuration.mode = Configuration.mode.SERVER;
             $(".applet-disable").click();
         } else {
-            configuration.mode = Configuration.mode.ONRUN;
             $(".applet-nohighlighting").click();
         }
 
-        //todo
-        setTimeout(fireChangeEvent, 100);
-
         return instance;
     }
+
+    Configuration.getStringFromType = function (type) {
+        if (type == Configuration.type.JS) {
+            return "js";
+        } else if (type == Configuration.type.CANVAS) {
+            return "canvas";
+        } else {
+            return "java";
+        }
+    };
+
+    Configuration.getTypeFromString = function(type) {
+        if (type == "js") {
+            return Configuration.type.JS;
+        } else if (type == "canvas") {
+            return Configuration.type.CANVAS;
+        } else {
+            return Configuration.type.JAVA;
+        }
+    };
 
     function saveModeToCookies(mode) {
         $.cookie("typeCheckerMode", mode);
@@ -188,10 +212,10 @@ var ConfigurationComponent = (function () {
     }
 
     function fireChangeEvent() {
-        if (configuration.mode != null && configuration.runner != null && configuration.dependencies != null) {
-            instance.onChangeConfiguration(true, configuration);
+        if (configuration.mode != null && configuration.type.runner != null && configuration.type.dependencies != null) {
+            instance.onChange(configuration);
         } else {
-            instance.onChangeConfiguration(false, null);
+            instance.onFail("Incorrect format for configuration");
         }
     }
 

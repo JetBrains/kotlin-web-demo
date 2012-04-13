@@ -22,12 +22,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-/* EVENTS:
- write_exception
- load_example
- get_all_examples
- */
-
 var ExamplesModel = (function () {
     var instance;
 
@@ -36,25 +30,35 @@ var ExamplesModel = (function () {
         instance = {
             loadExample:function (url) {
                 $.ajax({
-                    url:RequestGenerator.generateAjaxUrl("loadExample", url),
+                    url:generateAjaxUrl("loadExample", url),
                     context:document.body,
                     success:function (data) {
-                        instance.onLoadExample(true, data);
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                instance.onLoadExample(data[0]);
+                            } else {
+                                instance.onFail(data, ActionCodes.load_example_fail);
+                            }
+                        } else {
+                            instance.onFail("Incorrect data format.", ActionCodes.load_example_fail);
+                        }
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
-                    error:function () {
-                        instance.onLoadExample(false, null);
+                    error:function (jqXHR, textStatus, errorThrown) {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.load_example_fail);
                     }
                 });
             },
             getAllExamples:function () {
                 getAllExamples();
             },
-            onAllExamplesLoaded:function (status, data) {
+            onAllExamplesLoaded:function (data) {
             },
-            onLoadExample:function (status, data) {
+            onLoadExample:function (data) {
+            },
+            onFail:function (exception, statusBarMessage) {
             }
         };
 
@@ -64,16 +68,24 @@ var ExamplesModel = (function () {
 
     function getAllExamples() {
         $.ajax({
-            url:RequestGenerator.generateAjaxUrl("loadExample", "all"),
+            url:generateAjaxUrl("loadExample", "all"),
             context:document.body,
             success:function (data) {
-                instance.onAllExamplesLoaded(true, data);
+                if (checkDataForNull(data)) {
+                    if (checkDataForException(data)) {
+                        instance.onAllExamplesLoaded(data);
+                    } else {
+                        instance.onFail(data, ActionCodes.load_examples_fail);
+                    }
+                } else {
+                    instance.onFail("Incorrect data format.", ActionCodes.load_examples_fail);
+                }
             },
             dataType:"json",
             type:"GET",
             timeout:10000,
-            error:function () {
-                instance.onAllExamplesLoaded(false, null);
+            error:function (jqXHR, textStatus, errorThrown) {
+                instance.onFail(textStatus + " : " + errorThrown, ActionCodes.load_examples_fail);
             }
         });
     }

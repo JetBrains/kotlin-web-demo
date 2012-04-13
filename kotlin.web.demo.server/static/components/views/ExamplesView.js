@@ -19,7 +19,6 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
 
@@ -56,22 +55,22 @@ var ExamplesView = (function () {
     }
 
     ExamplesView.setLastSelectedItem = function () {
-
     };
     ExamplesView.getLastSelectedItem = function () {
-
+    };
+    ExamplesView.getMainElement = function () {
     };
 
     function loadAllContent() {
-        $("#examplesaccordion").html("");
+        ExamplesView.getMainElement().html("");
         var acc = document.createElement("div");
-        acc.id = "accordion";
-        $("#examplesaccordion").append(acc);
+        acc.className = "accordionForExamplesAndPrograms";
+        ExamplesView.getMainElement().append(acc);
         model.getAllExamples();
     }
 
     function addAllExamplesInAccordion(data) {
-        var acc = document.getElementById("accordion");
+        var acc = $("div.accordionForExamplesAndPrograms");
         var i = 0;
         while (typeof data[i] != "undefined") {
             var lastFolderName;
@@ -85,7 +84,7 @@ var ExamplesView = (function () {
                 folderA.innerHTML = data[i].text;
                 lastFolderName = data[i].text;
                 folder.appendChild(folderA);
-                acc.appendChild(folder);
+                acc.append(folder);
                 var cont = document.createElement("div");
             }
             if (data[i].type == "content") {
@@ -140,7 +139,7 @@ var ExamplesView = (function () {
 
                 cont.appendChild(table);
             }
-            acc.appendChild(cont);
+            acc.append(cont);
 
             i++;
         }

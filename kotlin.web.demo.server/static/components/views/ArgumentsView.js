@@ -25,14 +25,14 @@
 
 var ArgumentsView = (function () {
 
-    function ArgumentsView() {
+    function ArgumentsView(element) {
 
         var instance = {
             setArgs:function (args) {
-                $("#arguments").val(args);
+                element.val(args);
             },
             getArguments:function () {
-                return $("#arguments").val();
+                return element.val();
             }
         };
 

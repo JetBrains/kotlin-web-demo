@@ -19,12 +19,6 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/28/12
  * Time: 6:40 PM
- * To change this template use File | Settings | File Templates.
- */
-
-/* EVENTS:
- get_completion
- write_exception
  */
 
 var CompletionProvider = (function () {
@@ -36,8 +30,9 @@ var CompletionProvider = (function () {
             getCompletion:function (data) {
                 getCompletion(data[0], data[1], data[2], data[3], data[4]);
             },
-            onComplete:function (status, data) {
-
+            onComplete:function (data) {
+            },
+            onFail:function (error) {
             }
         };
 
@@ -50,7 +45,7 @@ var CompletionProvider = (function () {
         //TODO runTimerForNonPrinting();
         if (mode == Configuration.mode.ONRUN) {
             isCompletionInProgress = false;
-            instance.onComplete(true, COMPLETION_ISNOT_AVAILABLE);
+            instance.onComplete(COMPLETION_ISNOT_AVAILABLE);
             return;
         }
         if (!isCompletionInProgress) {
@@ -60,19 +55,27 @@ var CompletionProvider = (function () {
                 isCompletionInProgress = false;
             } else {
                 $.ajax({
-                    url:RequestGenerator.generateAjaxUrl("complete", cursorLine + "," + cursorCh + "&runConf=" + dependencies),
+                    url:generateAjaxUrl("complete", cursorLine + "," + cursorCh + "&runConf=" + dependencies),
                     context:document.body,
                     success:function (data) {
                         isCompletionInProgress = false;
-                        instance.onComplete(true, data);
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                instance.onComplete(data);
+                            } else {
+                                instance.onFail(data);
+                            }
+                        } else {
+                            instance.onFail("Incorrect data format.");
+                        }
                     },
                     dataType:"json",
                     type:"POST",
                     data:{text:file},
                     timeout:10000,
-                    error:function () {
+                    error:function (jqXHR, textStatus, errorThrown) {
                         isCompletionInProgress = false;
-                        instance.onComplete(false, null);
+                        instance.onFail(textStatus + " : " + errorThrown);
                     }
                 });
             }
@@ -83,7 +86,7 @@ var CompletionProvider = (function () {
 
     function getCompletionFromApplet(dependencies, file, cursorLine, cursorCh) {
         if (document.getElementById("myapplet") == null) {
-            $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet05042012.jar\" style=\"display: none;\"></applet>");
+            $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet" + APPLET_VERSION + ".jar\" style=\"display: none;\"></applet>");
         }
         try {
             var dataFromApplet;
@@ -108,16 +111,16 @@ var CompletionProvider = (function () {
                     //    $("#appletclient").attr("title", title + ". " + GET_FROM_APPLET_FAILED);
                     //}
                 } else {
-                    instance.onComplete(false, null);
+                    instance.onComplete(e);
                 }
                 return;
             }
             var data = eval(dataFromApplet);
             isCompletionInProgress = false;
-            instance.onComplete(true, data);
+            instance.onComplete(data);
         } catch (e) {
             isCompletionInProgress = false;
-            instance.onComplete(false, null);
+            instance.onComplete(e);
         }
     }
 
