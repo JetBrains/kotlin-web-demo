@@ -18,7 +18,6 @@ package org.jetbrains.webdemo;
 
 import com.intellij.lang.java.JavaParserDefinition;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.openapi.util.Getter;
@@ -26,13 +25,14 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.encoding.EncodingRegistry;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
-import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
-import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.jet.compiler.CompileEnvironment;
+import org.jetbrains.jet.compiler.CompileEnvironmentUtil;
 import org.jetbrains.jet.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
+import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
+import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.jet.plugin.JetFileType;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 import java.net.URL;
@@ -157,7 +157,7 @@ public class ServerInitializer extends Initializer {
         if (!ApplicationSettings.RT_JAR.equals("")) {
             rtJar = new File(ApplicationSettings.RT_JAR);
         } else {
-            rtJar = CompileEnvironment.findRtJar();
+            rtJar = CompileEnvironmentUtil.findRtJar();
         }
         if ((rtJar == null || !rtJar.exists())) {
             if (ApplicationSettings.JAVA_HOME == null) {

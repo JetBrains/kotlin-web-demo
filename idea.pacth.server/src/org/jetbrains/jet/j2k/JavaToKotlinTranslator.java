@@ -18,15 +18,13 @@ package org.jetbrains.jet.j2k;
 import com.intellij.core.JavaCoreEnvironment;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiJavaFile;
-import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.compiler.CompileEnvironment;
+import org.jetbrains.jet.compiler.CompileEnvironmentUtil;
 import org.jetbrains.jet.j2k.visitors.ClassVisitor;
 
 import java.io.File;
@@ -96,7 +94,7 @@ public class JavaToKotlinTranslator {
         String javaHome = System.getenv("JAVA_HOME").replaceAll("%20", " ");
         File rtJar;
         if (javaHome == null) {
-            rtJar = CompileEnvironment.findRtJar();
+            rtJar = CompileEnvironmentUtil.findRtJar();
             if (rtJar == null || !rtJar.exists()) {
                 throw new SetupJavaCoreEnvironmentException("JAVA_HOME environment variable needs to be defined");
             }
