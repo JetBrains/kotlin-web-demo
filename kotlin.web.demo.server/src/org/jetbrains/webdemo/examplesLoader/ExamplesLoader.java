@@ -48,7 +48,7 @@ public class ExamplesLoader {
         for (Map<String, String> map : list) {
             ExampleObject example = ExamplesHolder.getExample(map.get("text"));
             if (example != null) {
-                String dependencies = example.dependencies;
+                String dependencies = example.confType;
                 if (dependencies != null) {
                     map.put("icon", dependencies);
                 }

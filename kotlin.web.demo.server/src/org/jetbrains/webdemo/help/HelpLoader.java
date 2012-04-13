@@ -179,8 +179,7 @@ public class HelpLoader {
                         @Nullable String mode = getTagValue("mode", element);
                         @Nullable String args = getTagValue("args", element);
                         if (mode != null) {
-                            example.runner = mode;
-                            example.dependencies = mode;
+                            example.confType = mode;
                         }
                         if (args != null) {
                             example.args = args;

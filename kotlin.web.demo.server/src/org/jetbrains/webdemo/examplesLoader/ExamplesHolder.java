@@ -95,8 +95,7 @@ public class ExamplesHolder {
         resultMap.put("name", example.name);
         resultMap.put("text", fileContent);
         resultMap.put("args", example.args);
-        resultMap.put("runner", example.runner);
-        resultMap.put("dependencies", example.dependencies);
+        resultMap.put("confType", example.confType);
 
 
         array.put(resultMap);

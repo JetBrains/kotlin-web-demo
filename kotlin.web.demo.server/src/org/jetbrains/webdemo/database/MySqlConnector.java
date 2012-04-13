@@ -420,8 +420,7 @@ public class MySqlConnector {
                 args = "";
             }
             map.put("args", args);
-            map.put("dependencies", rs.getString("RUN_CONF"));
-            map.put("runner", rs.getString("RUN_CONF"));
+            map.put("confType", rs.getString("RUN_CONF"));
             array.put(map);
             return array.toString();
 
@@ -522,8 +521,7 @@ public class MySqlConnector {
                 args = "";
             }
             map.put("args", args);
-            map.put("runner", rs.getString("RUN_CONF"));
-            map.put("dependencies", rs.getString("RUN_CONF"));
+            map.put("confType", rs.getString("RUN_CONF"));
             array.put(map);
             return array.toString();
         } catch (Throwable e) {
@@ -565,7 +563,7 @@ public class MySqlConnector {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("id", rs.getString("PROGRAM_ID"));
                 map.put("name", rs.getString("PROGRAM_NAME"));
-                map.put("runConf", rs.getString("RUN_CONF"));
+                map.put("confType", rs.getString("RUN_CONF"));
                 result.put(map);
             }
 

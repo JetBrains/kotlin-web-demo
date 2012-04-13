@@ -25,7 +25,6 @@ public class ExampleObject {
     public String fileName;
     public String parent;
     public String args = "";
-    public String dependencies = "java";
-    public String runner = "java";
+    public String confType = "java";
 
 }
