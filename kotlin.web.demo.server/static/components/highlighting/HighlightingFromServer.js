@@ -19,7 +19,6 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/29/12
  * Time: 1:56 PM
- * To change this template use File | Settings | File Templates.
  */
 
 /* EVENTS:
@@ -29,17 +28,14 @@
 
 var HighlightingFromServer = (function () {
 
-    var instance;
-
     function HighlightingFromServer() {
 
-        instance = {
+        var instance = {
             getHighlighting:function (confType, programText, callback) {
                 var confTypeString = Configuration.getStringFromType(confType);
                 getHighlighting(confTypeString, programText, callback);
             },
             onHighlight:function (data, callback) {
-
             },
             onFail:function (exception) {
             }

@@ -19,15 +19,14 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
 
 var ConverterView = (function () {
 
-    function ConverterView(element) {
+    function ConverterView(element, converterModel) {
         var my_editor;
-        var model = new ConverterModel();
+        var model = converterModel;
 
         $("body div:first").after("<div class=\"myPopupForConverterFromJavaToKotlin\" title=\"Enter Java code\"><textarea class=\"CodeMirror\" name=\"myTextareaForConverterFromJavaToKotlin\"></textarea></div>");
 
@@ -78,9 +77,6 @@ var ConverterView = (function () {
         });
 
         return instance;
-    }
-
-    function processResult(data) {
     }
 
     return ConverterView;

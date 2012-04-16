@@ -19,71 +19,58 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/29/12
  * Time: 1:56 PM
- * To change this template use File | Settings | File Templates.
  */
 
-var HighlightingProvider = (function () {
+var HighlighterDecorator = (function () {
 
-    var instance;
+    function HighlighterDecorator() {
+        var currentHighlighter = null;
 
-
-    var highlightingFromClient = new HighlightingFromClient();
-    var highlightingFromServer = new HighlightingFromServer();
-
-    var currentHighlighter = highlightingFromServer;
-
-    function HighlightingProvider() {
-
-        highlightingFromClient.onHighlight = function (data, callback) {
-            instance.onHighlight(data);
-            callback(data);
-        };
-        highlightingFromClient.onFail = function (exception) {
-            instance.onFail(exception);
-        };
-
-        highlightingFromServer.onHighlight = function (data, callback) {
-            instance.onHighlight(data);
-            callback(data);
-        };
-        highlightingFromServer.onFail = function (exception) {
-            instance.onFail(exception);
-        };
-
-
-        instance = {
+        var instance = {
             getHighlighting:function (configurationType, programText, callback) {
-                currentHighlighter.getHighlighting(configurationType, programText, callback);
+                if (currentHighlighter != null) {
+                    currentHighlighter.getHighlighting(configurationType, programText, callback);
+                }
             },
             onHighlight:function (data) {
 
             },
-            setConfiguration:function (configuration) {
-                if (configuration.mode == Configuration.mode.CLIENT) {
-                    currentHighlighter = highlightingFromClient;
-                } else if (configuration.mode == Configuration.mode.SERVER) {
-                    currentHighlighter = highlightingFromServer;
-                } else {
-                    currentHighlighter = highlightingFromServer;
+            setHighlighter:function (highlighter) {
+                if (currentHighlighter != null) {
+                    currentHighlighter.onHighlight = null;
+                    currentHighlighter.onFail = null;
                 }
+                currentHighlighter = highlighter;
+                currentHighlighter.onHighlight = function (data, callback) {
+                    instance.onHighlight(data);
+                    callback(data);
+                };
+                currentHighlighter.onFail = function (exception) {
+                    instance.onFail(exception);
+                };
             },
             onFail:function (message) {
-            },
-            checkIfThereAreErrors:function (data) {
-                var i = 0;
-                while (typeof data[i] != "undefined") {
-                    var severity = data[i].severity;
-                    if (severity == "ERROR") {
-                        return true;
-                    }
-                    i++;
-                }
-                return false;
             }
         };
 
         return instance;
     }
 
-    return HighlightingProvider;
+    return HighlighterDecorator;
 })();
+
+
+/*var arrayOfHighlighters = [];
+ arrayOfHighlighters.push(Configuration.mode.CLIENT.highlighter);
+ arrayOfHighlighters.push(Configuration.mode.SERVER.highlighter);
+
+ var i = 0;
+ for (i = 0; i < arrayOfHighlighters.length; ++i) {
+ arrayOfHighlighters[i].onHighlight = function (data, callback) {
+ instance.onHighlight(data);
+ callback(data);
+ };
+ arrayOfHighlighters[i].onFail = function (exception) {
+ instance.onFail(exception);
+ };
+ }*/

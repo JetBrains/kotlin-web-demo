@@ -19,7 +19,6 @@
  * User: Natalia.Ukhorskaya
  * Date: 11/30/11
  * Time: 2:05 PM
- * To change this template use File | Settings | File Templates.
  */
 
 var BEFORE_EXIT = "The changes you made to the program will be lost when you change an example. Do you want to leave the page?";
@@ -98,4 +97,88 @@ function checkDataForException(data) {
 function random() {
     return Math.floor((Math.random()*100)+1);
 }
+
+function checkIfThereAreErrorsInHighlightingResult(highlightingResult) {
+    var i = 0;
+    while (highlightingResult[i] != undefined) {
+        var severity = highlightingResult[i].severity;
+        if (severity == "ERROR") {
+            return true;
+        }
+        i++;
+    }
+    return false;
+}
+
+function getNameByUrl(url) {
+    var pos = url.indexOf("&name=");
+    if (pos != -1) {
+        return replaceAll(url.substring(pos + 6), "_", " ");
+
+    }
+    return "";
+}
+
+function getFolderNameByUrl(url) {
+    var pos = url.indexOf("&name=");
+    if (pos != -1) {
+        return url.substring(0, pos);
+    }
+    return "";
+}
+
+function createExampleUrl(name, folder) {
+    return replaceAll(folder, " ", "_") + "&name=" + replaceAll(name, " ", "_");
+}
+
+
+//Intervals: clear interval for canvas
+
+//window.timeoutList = new Array();
+window.intervalList = new Array();
+
+//window.oldSetTimeout = window.setTimeout;
+window.oldSetInterval = window.setInterval;
+//window.oldClearTimeout = window.clearTimeout;
+window.oldClearInterval = window.clearInterval;
+
+/*window.setTimeout = function(code, delay) {
+    var retval = window.oldSetTimeout(code, delay);
+    window.timeoutList.push(retval);
+    return retval;
+};
+window.clearTimeout = function(id) {
+    var ind = window.timeoutList.indexOf(id);
+    if(ind >= 0) {
+        window.timeoutList.splice(ind, 1);
+    }
+    var retval = window.oldClearTimeout(id);
+    return retval;
+};*/
+
+window.setInterval = function(code, delay) {
+    var retval = window.oldSetInterval(code, delay);
+    window.intervalList.push(retval);
+    return retval;
+};
+window.clearInterval = function(id) {
+    var ind = window.intervalList.indexOf(id);
+    if(ind >= 0) {
+        window.intervalList.splice(ind, 1);
+    }
+    var retval = window.oldClearInterval(id);
+    return retval;
+};
+/*window.clearAllTimeouts = function() {
+    for(var i in window.timeoutList) {
+        window.oldClearTimeout(window.timeoutList[i]);
+    }
+    window.timeoutList = new Array();
+};*/
+window.clearAllIntervals = function() {
+    for(var i in window.intervalList) {
+        window.oldClearInterval(window.intervalList[i]);
+    }
+    window.intervalList = new Array();
+};
 

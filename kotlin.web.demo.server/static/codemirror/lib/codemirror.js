@@ -2362,7 +2362,7 @@ var CodeMirror = (function () {
         "PageUp":"goPageUp", "PageDown":"goPageDown",
         "Delete":"delCharRight", "Backspace":"delCharLeft", "Tab":"indentMore", "Shift-Tab":"indentLess",
         "Enter":"newlineAndIndent", "Cmd-A":"selectAll",
-        "Cmd-Z":"undo", "Alt-Right":"goWordRight", "Alt-Left":"goWordLeft", "Ctrl-Alt-L":"indentAuto",
+        "Cmd-Z":"undo", "Alt-Right":"goWordRight", "Alt-Left":"goWordLeft", "Cmd-Alt-L":"indentAuto",
         "Cmd-Left":"goLineStartSmart", "Cmd-Right":"goLineEnd",
         "Ctrl-Home":"goDocStart", "Ctrl-End":"goDocEnd"
     };

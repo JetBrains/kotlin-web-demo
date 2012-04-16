@@ -78,9 +78,7 @@
         <table>
             <tr>
                 <td>
-                    <img src="/static/images/kotlinlogo2.png" id="kotlinlogo" title="Kotlin"/>
-                    <img src="/static/images/kotlinlogowobackground.png" id="kotlinlogofork2js" title="Kotlin"
-                         style="display: none;"/>
+                    <a target="_blank" href="http://kotlin.jetbrains.org"><img src="/static/images/kotlinlogo2.png" id="kotlinlogo" title="Kotlin"/></a>
                 </td>
                 <td id="headertitle">
                     Kotlin Web Demo<span id="kotlinVersionTop"></span>
@@ -96,6 +94,7 @@
                     </div>
                     <a target="_blank"
                        href="http://confluence.jetbrains.net/display/Kotlin/Welcome">Documentation</a>
+                    <a target="_blank" href="http://devnet.jetbrains.com/community/kotlin?view=discussions">Forum</a>
                     <a target="_blank" href="http://youtrack.jetbrains.net/issues/KT">BugTracker</a>
                     <a target="_blank" href="http://blog.jetbrains.com/kotlin/">Blog</a>
                     <a target="_blank" href="https://twitter.com/#!/project_kotlin">Twitter</a>
@@ -360,17 +359,18 @@
 <script type="text/javascript" src="/static/jquery/development-bundle/ui/jquery.ui.selectmenu.js"></script>
 
 <script src="/static/components/common.js"></script>
-<script src="/static/components/EventsHandler.js"></script>
-<script src="/static/components/ConfirmDialog.js"></script>
-<script src="/static/components/RequestGenerator.js"></script>
-<script src="/static/components/Configuration.js"></script>
-<script src="/static/components/loader_component.js"></script>
-<script src="/static/components/popup/CanvasPopup.js"></script>
 
 <!--WARN: order-->
 <script src="/static/components/highlighting/HighlightingFromClient.js"></script>
 <script src="/static/components/highlighting/HighlightingFromServer.js"></script>
 <script src="/static/components/highlighting/HighlightingProvider.js"></script>
+
+<script src="/static/components/actions/ActionManager.js"></script>
+<script src="/static/components/ConfirmDialog.js"></script>
+<script src="/static/components/Configuration.js"></script>
+<script src="/static/components/loader_component.js"></script>
+<script src="/static/components/popup/CanvasPopup.js"></script>
+
 
 <script src="/static/components/providers/CompletionProvider.js"></script>
 
@@ -379,7 +379,7 @@
 <script src="/static/components/models/ProgramsModel.js"></script>
 <script src="/static/components/providers/RunProvider.js"></script>
 <script src="/static/components/providers/LoginProvider.js"></script>
-<script src="/static/components/models/ConverterModel.js"></script>
+<script src="/static/components/providers/ConverterProvider.js"></script>
 
 <script src="/static/components/views/StatusBarView.js"></script>
 

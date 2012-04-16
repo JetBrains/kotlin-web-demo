@@ -19,16 +19,13 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/29/12
  * Time: 1:56 PM
- * To change this template use File | Settings | File Templates.
  */
 
 var HighlightingFromClient = (function () {
 
-    var instance;
-
     function HighlightingFromClient() {
 
-        instance = {
+        var instance = {
             getHighlighting:function (confType, programText, callback) {
                 var confTypeString = Configuration.getStringFromType(confType);
                 getHighlighting(confTypeString, programText, callback);
@@ -59,27 +56,16 @@ var HighlightingFromClient = (function () {
                     dataFromApplet = $("#myapplet")[0].getHighlighting(file, confTypeString);
                 } catch (e) {
                     // For Chrome: wait until user accept work with applet
-                    if (e.indexOf("getHighlighting") > 0) {
-                        var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-                        if (is_chrome && isFirstTryToLoadApplet) {
-                            isFirstTryToLoadApplet = false;
-                            setTimeout(function () {
-                                getDataFromApplet(confTypeString, file, callback);
-                            }, 3000);
-                            return;
-                        }
-                        //TODO set tooltip for applet mode
-                        /*$(".applet-nohighlighting").click();
-                         setStatusBarError(GET_FROM_APPLET_FAILED);
-
-                         var title = $("#appletclient").attr("title");
-                         if (title.indexOf(GET_FROM_APPLET_FAILED) == -1) {
-                         $("#appletclient").attr("title", title + ". " + GET_FROM_APPLET_FAILED);
-                         }*/
+                    var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+                    if (is_chrome && e.indexOf("getHighlighting") > 0 && isFirstTryToLoadApplet) {
+                        isFirstTryToLoadApplet = false;
+                        setTimeout(function () {
+                            getDataFromApplet(confTypeString, file, callback);
+                        }, 3000);
+                        return;
                     } else {
                         instance.onFail(e);
                     }
-
                     return;
                 }
                 isLoadingHighlighting = false;

@@ -23,11 +23,9 @@
 
 var LoginProvider = (function () {
 
-    var instance;
-
     function LoginProvider() {
 
-        instance = {
+        var instance = {
             login:function (type) {
                 login(type);
             },
@@ -45,45 +43,45 @@ var LoginProvider = (function () {
             }
         };
 
-        return instance;
-    }
-
-    function login(type) {
-        $.ajax({
-            url:generateAjaxUrl("authorization", type),
-            context:document.body,
-            success:onLoginSuccess,
-            dataType:"text",
-            type:"GET",
-            timeout:10000,
-            error:function (jqXHR, textStatus, errorThrown) {
-                instance.onFail(textStatus + " : " + errorThrown, ActionCodes.login_fail);
-            }
-        });
-    }
-
-    function getUserName() {
-        $.ajax({
-            url:generateAjaxUrl("getUserName", ""),
-            context:document.body,
-            success:function (data) {
-                if (checkDataForNull(data)) {
-                    instance.onLogin(data);
-                } else {
-                    instance.onFail("Username is null.", ActionCodes.login_fail);
+        function login(type) {
+            $.ajax({
+                url:generateAjaxUrl("authorization", type),
+                context:document.body,
+                success:onLoginSuccess,
+                dataType:"text",
+                type:"GET",
+                timeout:10000,
+                error:function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
                 }
-            },
-            dataType:"text",
-            type:"GET",
-            timeout:10000,
-            error:function (jqXHR, textStatus, errorThrown) {
-                instance.onFail(textStatus + " : " + errorThrown, ActionCodes.login_fail);
-            }
-        });
-    }
+            });
+        }
 
-    function onLoginSuccess(data) {
-        document.location.href = data;
+        function getUserName() {
+            $.ajax({
+                url:generateAjaxUrl("getUserName", ""),
+                context:document.body,
+                success:function (data) {
+                    if (checkDataForNull(data)) {
+                        instance.onLogin(data);
+                    } else {
+                        instance.onFail("Username is null.", ActionStatusMessages.login_fail);
+                    }
+                },
+                dataType:"text",
+                type:"GET",
+                timeout:10000,
+                error:function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
+                }
+            });
+        }
+
+        function onLoginSuccess(data) {
+            document.location.href = data;
+        }
+
+        return instance;
     }
 
     return LoginProvider;

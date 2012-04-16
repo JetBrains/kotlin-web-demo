@@ -19,29 +19,19 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
 var AccordionView = (function () {
-
-    var lastSelectedItem = 0;
-
-    var examplesModel = new ExamplesModel();
-    var examplesView = new ExamplesView();
-    var programsView = new ProgramsView();
-    var programsModel = new ProgramsModel();
-
-    var instance;
-
     function AccordionView(element) {
+        var lastSelectedItem = 0;
 
-        instance = {
-            getMainElement:function () {
-                return element;
-            },
-            setLastSelectedItem:function (item) {
-                lastSelectedItem = item;
-            },
+        var examplesModel = new ExamplesModel();
+        var programsModel = new ProgramsModel();
+        var examplesView = new ExamplesView(examplesModel);
+        var programsView = new ProgramsView(programsModel);
+
+
+        var instance = {
             saveProgram:function () {
                 programsView.saveProgram();
             },
@@ -49,9 +39,7 @@ var AccordionView = (function () {
                 examplesView.loadAllContent();
             },
             setConfiguration:programsView.setConfiguration,
-            onLoadCode:function (example, type) {
-            },
-            onGeneratePublicLink:function () {
+            onLoadCode:function (example, isProgram) {
             },
             onSaveProgram:function () {
             },
@@ -87,10 +75,10 @@ var AccordionView = (function () {
             return lastSelectedItem;
         };
         ProgramsView.getMainElement = function () {
-            return instance.getMainElement();
+            return element;
         };
         ExamplesView.getMainElement = function () {
-            return instance.getMainElement();
+            return element;
         };
 
 
@@ -98,11 +86,10 @@ var AccordionView = (function () {
             instance.onFail(data, statusBarMessage);
         };
         programsModel.onLoadProgram = function (program) {
-            instance.onLoadCode(program, "program");
+            instance.onLoadCode(program, true);
         };
         programsModel.onGeneratePublicLink = function (data) {
             programsView.generatePublicLink(data);
-            instance.onGeneratePublicLink();
         };
         programsModel.onDeleteProgram = function (data) {
             programsView.deleteProgram(data);
@@ -117,71 +104,51 @@ var AccordionView = (function () {
         };
 
         examplesModel.onLoadExample = function (example) {
-            instance.onLoadCode(example, "example");
+            instance.onLoadCode(example, false);
         };
         examplesModel.onAllExamplesLoaded = function (data) {
             examplesView.loadAllExamples(data);
         };
 
+        function makeAccordion() {
+            $(".accordionForExamplesAndPrograms").accordion({
+                autoHeight:false,
+                navigation:true
+            }).find('#tools img').click(function (ev) {
+                    ev.preventDefault();
+                    if (this.id == "saveProgram") {
+                        programsView.saveProgram();
+                    } else if (this.id == "saveAsProgram") {
+                        $("#saveDialog").dialog("open");
+                    } else if (this.id == "showInfoAboutLogin") {
+                        $("#showInfoAboutLoginDialog").dialog("open");
+                    }
+                });
+        }
+
+        function loadFirstItem() {
+            var urlAct = [location.protocol, '//', location.host, "/"].join('');
+            var url = document.location.href;
+            if (url.indexOf(urlAct) != -1) {
+                url = url.substring(url.indexOf(urlAct) + urlAct.length);
+                var exampleStr = "?folder=";
+                var publicLink = "?publicLink=";
+                if (url.indexOf(exampleStr) == 0) {
+                    url = url.substring(exampleStr.length);
+                    $("#" + getFolderNameByUrl(url)).click();
+                    examplesView.loadExample(url);
+                } else if (url.indexOf(publicLink) == 0) {
+                    programsView.loadProgram(createExampleUrl(url.substring(publicLink.length), "My Programs"));
+                } else {
+                    examplesView.loadExample("Hello,_world!&name=Simplest_version");
+                }
+            }
+        }
+
         return instance;
     }
 
-    function makeAccordion() {
-        $(".accordionForExamplesAndPrograms").accordion({
-            autoHeight:false,
-            navigation:true
-        }).find('#tools img').click(function (ev) {
-                ev.preventDefault();
-                if (this.id == "saveProgram") {
-                    programsView.saveProgram();
-                } else if (this.id == "saveAsProgram") {
-                    $("#saveDialog").dialog("open");
-                } else if (this.id == "showInfoAboutLogin") {
-                    $("#showInfoAboutLoginDialog").dialog("open");
-                }
-            });
-    }
 
-    function loadFirstItem() {
-        var urlAct = [location.protocol, '//', location.host, "/"].join('');
-        var url = document.location.href;
-        if (url.indexOf(urlAct) != -1) {
-            url = url.substring(url.indexOf(urlAct) + urlAct.length);
-            var exampleStr = "?folder=";
-            var publicLink = "?publicLink=";
-            if (url.indexOf(exampleStr) == 0) {
-                url = url.substring(exampleStr.length);
-                $("#" + getFolderNameByUrl(url)).click();
-                examplesView.loadExample(url);
-            } else if (url.indexOf(publicLink) == 0) {
-                programsView.loadProgram(createExampleUrl(url.substring(publicLink.length), "My Programs"));
-            } else {
-                examplesView.loadExample("Hello,_world!&name=Simplest_version");
-            }
-        }
-    }
 
     return AccordionView;
 })();
-
-
-function getNameByUrl(url) {
-    var pos = url.indexOf("&name=");
-    if (pos != -1) {
-        return replaceAll(url.substring(pos + 6), "_", " ");
-
-    }
-    return "";
-}
-
-function getFolderNameByUrl(url) {
-    var pos = url.indexOf("&name=");
-    if (pos != -1) {
-        return url.substring(0, pos);
-    }
-    return "";
-}
-
-function createExampleUrl(name, folder) {
-    return replaceAll(folder, " ", "_") + "&name=" + replaceAll(name, " ", "_");
-}

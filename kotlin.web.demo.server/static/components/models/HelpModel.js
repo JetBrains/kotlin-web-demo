@@ -39,8 +39,8 @@ var HelpModel = (function () {
             loadAllHelpElements:function () {
                 loadAllHelp();
             },
-            loadHelpElement:function (name) {
-                return loadHelpElement(name);
+            getHelpElement:function (name) {
+                return getHelpElement(name);
             }
         };
 
@@ -77,12 +77,12 @@ var HelpModel = (function () {
         var counter = 0;
         var result = null;
 
-        function loadHelpElement(name) {
+        function getHelpElement(name) {
             result = null;
             if (helpArray.length <= 0 && counter < 10) {
                 setTimeout(function () {
                     counter++;
-                    loadHelpElement(name);
+                    getHelpElement(name);
                 }, 100);
             } else {
                 counter = 0;

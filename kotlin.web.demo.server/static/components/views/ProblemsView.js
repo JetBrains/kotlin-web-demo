@@ -19,7 +19,6 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
 
@@ -45,7 +44,7 @@ var ProblemsView = (function () {
             var problems = document.createElement("div");
 
             function processError(i, p, f) {
-                if (typeof data[i] == "undefined") {
+                if (data[i] == undefined) {
                     element.html(problems.innerHTML);
                     return;
                 }

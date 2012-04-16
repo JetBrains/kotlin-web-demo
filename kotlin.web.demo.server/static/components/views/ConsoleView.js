@@ -34,7 +34,7 @@ var ConsoleView = (function () {
 
         var instance = {
             setOutput:function (data) {
-                updateConsole(data);
+                setOutput(data);
             },
             setConfiguration:function (conf) {
                 configuration = conf;
@@ -49,64 +49,33 @@ var ConsoleView = (function () {
         }
 
         function writeException(data) {
-            if (typeof data != "undefined" && typeof data[0] != "undefined" && typeof data[0].exception != "undefined") {
+            if (data != undefined && data[0] != undefined && data[0].exception != undefined) {
                 element.html("");
                 if (tabs != null) {
                     tabs.tabs("select", 1);
                 }
                 var i = 0;
-                while (typeof data[i] != "undefined") {
-                    createException(data[i]);
+                var output = [];
+                while (data[i] != undefined) {
+                    output.push({"text":data[i].exception, "type":data[i].type});
                     i++;
                 }
+                setOutput(output);
+
             } else if (data == undefined || data == null) {
             } else {
                 element.html("");
                 if (tabs != null) {
                     tabs.tabs("select", 1);
                 }
-                element.html(createRedElement("EXCEPTION: " + data));
+                var output = [
+                    {"text":data, "type":"err"}
+                ];
+                setOutput(output);
             }
         }
 
-        function createException(ex) {
-            var console = document.createElement("div");
-            if (ex.type == "out") {
-                element.append(createElementForConsole("STACKTRACE", null, unEscapeString(ex.exception)));
-            } else {
-                element.append(createElementForConsole("ERROR", null, unEscapeString(ex.exception)));
-            }
-        }
-
-        function createElementForConsole(severity, start, title) {
-            var p = document.createElement("p");
-            if (severity == 'WARNING') {
-                if (title.indexOf("is never used") > 0) {
-                    p.className = "problemsViewWarningNeverUsed";
-                } else {
-                    p.className = "problemsViewWarning";
-                }
-
-            } else if (severity == 'STACKTRACE') {
-                p.className = "problemsViewStacktrace";
-            } else {
-                p.className = "problemsViewError";
-            }
-            var titleDiv = document.createElement("span");
-            if (start == null) {
-                titleDiv.innerHTML = " " + unEscapeString(title);
-            } else {
-                titleDiv.innerHTML = "(" + (start.line + 1) + ", " + (start.ch + 1) + ") : " + unEscapeString(title);
-            }
-            p.appendChild(titleDiv);
-            return p;
-        }
-
-        function setConsoleMessage(message) {
-            element.html(message);
-        }
-
-        function updateConsole(data) {
+        function setOutput(data) {
             element.html("");
             if (tabs != null) {
                 tabs.tabs("select", 1);
@@ -118,7 +87,7 @@ var ConsoleView = (function () {
                 }
                 var i = 0;
                 var errors = document.createElement("div");
-                while (typeof data[i] != "undefined") {
+                while (data[i] != undefined) {
                     var p = document.createElement("p");
                     if (data[i].type == "toggle-info") {
                         p.appendChild(createToggleElement(data[i]));
@@ -155,15 +124,6 @@ var ConsoleView = (function () {
             mainDiv.appendChild(divLink);
             mainDiv.appendChild(toggleDiv);
             return mainDiv;
-        }
-
-        function createRedElement(text) {
-            var div = document.createElement("div");
-            var p = document.createElement("p");
-            p.className = "consoleViewError";
-            p.innerHTML = text;
-            div.appendChild(p);
-            return div.innerHTML;
         }
 
         return instance;

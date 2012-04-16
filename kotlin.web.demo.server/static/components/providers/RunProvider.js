@@ -23,13 +23,9 @@
 
 var RunProvider = (function () {
 
-    var instance;
-
-    var highlightingProvider = new HighlightingProvider();
-
     function RunProvider() {
 
-        instance = {
+        var instance = {
             onExecutionFinish:function (data) {
             },
             onFail:function (message) {
@@ -39,119 +35,119 @@ var RunProvider = (function () {
             }
         };
 
-        return instance;
-    }
-
-    function run(configuration, programText, args) {
-        if (configuration.type == Configuration.type.JAVA) {
-            runJava(configuration, programText, args);
-        } else {
-            runJs(configuration, programText, args);
-        }
-    }
-
-
-    function runJava(configuration, programText, args) {
-        var confTypeString = Configuration.getStringFromType(configuration.type);
-        $.ajax({
-            url:generateAjaxUrl("run", confTypeString),
-            context:document.body,
-            success:function (data) {
-                if (checkDataForNull(data)) {
-                    if (checkDataForException(data)) {
-                        instance.onExecutionFinish(data);
-                    } else {
-                        instance.onFail(data);
-                    }
-                } else {
-                    instance.onFail("Incorrect data format.")
-                }
-            },
-            dataType:"json",
-            type:"POST",
-            data:{text:programText, consoleArgs:args},
-            timeout:10000,
-            error:function (jqXHR, textStatus, errorThrown) {
-                instance.onFail(textStatus + " : " + errorThrown);
+        function run(configuration, programText, args) {
+            if (configuration.type == Configuration.type.JAVA) {
+                runJava(configuration, programText, args);
+            } else {
+                runJs(configuration, programText, args);
             }
-        });
+        }
 
-    }
 
-    function runJs(configuration, programText, args) {
-        if (configuration.mode == Configuration.mode.CLIENT) {
-            try {
-                var data;
+        function runJava(configuration, programText, args) {
+            var confTypeString = Configuration.getStringFromType(configuration.type);
+            $.ajax({
+                url:generateAjaxUrl("run", confTypeString),
+                context:document.body,
+                success:function (data) {
+                    if (checkDataForNull(data)) {
+                        if (checkDataForException(data)) {
+                            instance.onExecutionFinish(data);
+                        } else {
+                            instance.onFail(data);
+                        }
+                    } else {
+                        instance.onFail("Incorrect data format.")
+                    }
+                },
+                dataType:"json",
+                type:"POST",
+                data:{text:programText, consoleArgs:args},
+                timeout:10000,
+                error:function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown);
+                }
+            });
+
+        }
+
+        function runJs(configuration, programText, args) {
+            if (configuration.mode == Configuration.mode.CLIENT.name) {
                 try {
-                    data = $("#myapplet")[0].translateToJS(programText, args);
-                    data = eval(data);
+                    var data;
+                    try {
+                        data = $("#myapplet")[0].translateToJS(programText, args);
+                        data = eval(data);
+                    } catch (e) {
+                        loadJsFromServer(configuration, programText, args);
+                        return;
+                    }
+                    if (checkDataForNull(data)) {
+                        if (checkDataForException(data)) {
+                            var dataJs;
+                            try {
+                                dataJs = eval(data[0].text);
+                            } catch (e) {
+                                instance.onFail(e);
+                                return;
+                            }
+                            var output = [
+                                {"text":safe_tags_replace(dataJs), "type":"out"},
+                                {"text":data[0].text, "type":"toggle-info"}
+                            ];
+                            instance.onExecutionFinish(output);
+                        } else {
+                            instance.onFail(data);
+                        }
+                    } else {
+                        instance.onFail("Incorrect data format.");
+                    }
                 } catch (e) {
-                    loadJsFromServer(configuration, programText, args);
-                    return;
+                    instance.onFail(e);
                 }
-                if (checkDataForNull(data)) {
-                    if (checkDataForException(data)) {
-                        var dataJs;
-                        try {
-                            dataJs = eval(data[0].text);
-                        } catch (e) {
-                            instance.onFail(e);
-                            return;
-                        }
-                        var output = [
-                            {"text":safe_tags_replace(dataJs), "type":"out"},
-                            {"text":data[0].text, "type":"toggle-info"}
-                        ];
-                        instance.onExecutionFinish(output);
-                    } else {
-                        instance.onFail(data);
-                    }
-                } else {
-                    instance.onFail("Incorrect data format.");
-                }
-            } catch (e) {
-                instance.onFail(e);
+            } else {
+                loadJsFromServer(configuration, programText, args);
             }
-        } else {
-            loadJsFromServer(configuration, programText, args);
         }
-    }
 
-    function loadJsFromServer(configuration, i, arguments) {
-        var confTypeString = Configuration.getStringFromType(configuration.type);
-        $.ajax({
-            url:generateAjaxUrl("run", confTypeString),
-            context:document.body,
-            success:function (data) {
-                if (checkDataForNull(data)) {
-                    if (checkDataForException(data)) {
-                        var dataJs;
-                        try {
-                            dataJs = eval(data[0].text);
-                        } catch (e) {
-                            instance.onFail(e);
-                            return;
+        function loadJsFromServer(configuration, i, arguments) {
+            var confTypeString = Configuration.getStringFromType(configuration.type);
+            $.ajax({
+                url:generateAjaxUrl("run", confTypeString),
+                context:document.body,
+                success:function (data) {
+                    if (checkDataForNull(data)) {
+                        if (checkDataForException(data)) {
+                            var dataJs;
+                            try {
+                                dataJs = eval(data[0].text);
+                            } catch (e) {
+                                instance.onFail(e);
+                                return;
+                            }
+                            var output = [
+                                {"text":safe_tags_replace(dataJs), "type":"out"},
+                                {"text":data[0].text, "type":"toggle-info"}
+                            ];
+                            instance.onExecutionFinish(output);
+                        } else {
+                            instance.onFail(data);
                         }
-                        var output = [
-                            {"text":safe_tags_replace(dataJs), "type":"out"},
-                            {"text":data[0].text, "type":"toggle-info"}
-                        ];
-                        instance.onExecutionFinish(output);
                     } else {
-                        instance.onFail(data);
+                        instance.onFail("Incorrect data format.");
                     }
-                } else {
-                    instance.onFail("Incorrect data format.");
+                },
+                dataType:"json",
+                type:"POST",
+                data:{text:i, consoleArgs:arguments},
+                timeout:10000,
+                error:function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown);
                 }
-            },
-            dataType:"json",
-            type:"POST",
-            data:{text:i, consoleArgs:arguments},
-            timeout:10000,
-            error:function (jqXHR, textStatus, errorThrown) {
-                instance.onFail(textStatus + " : " + errorThrown);
-            }
-        });
+            });
+        }
+
+        return instance;
     }
 
     return RunProvider;

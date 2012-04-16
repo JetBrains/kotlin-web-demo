@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-function Shortcuts(name) {
-    this.name = name;
-}
+function Shortcuts() {}
 
 Shortcuts.macShortcuts = {
     RUN:"Ctrl+R",

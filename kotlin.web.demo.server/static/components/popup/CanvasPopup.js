@@ -30,18 +30,15 @@ var CanvasPopup = (function () {
         var instance = {
             show:function () {
                 element.html("");
-//                element.append("<canvas width=\"" + element.dialog("option", "width")
-//                    + "\" height=\"" + (element.dialog("option", "height") - 50) + " id=\"mycanvas\" \"></canvas>");
-//                element.dialog("open");
-
                 element.append("<canvas width=\"" + $("#popupForCanvas").dialog("option", "width")
                     + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 50) + "\" id=\"mycanvas\"></canvas>");
                 element.dialog("open");
-                //id=\"mycanvas\"
             },
             hide:function () {
                 element.html("");
-                element.dialog("close");
+                //element.dialog("close");
+                //WARN: if in the page there is more intevals - they will be stopped.
+                window.clearAllIntervals();
             }
         };
 

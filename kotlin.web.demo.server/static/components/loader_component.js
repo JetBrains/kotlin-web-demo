@@ -19,30 +19,20 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 11:44 AM
- * To change this template use File | Settings | File Templates.
  */
 
 
 var LoaderComponent = (function () {
 
-    var eventHandler = new EventsHandler();
-
     function LoaderComponent(element) {
 
         var instance = {
-            addListener: function (name, f) {
-                eventHandler.addListener(name, f);
-            },
-            fire: function (name, param) {
-                eventHandler.fire(name, param);
-            },
             hide: function() {
                 element.hide();
             },
             show: function() {
                 element.show();
             }
-
         };
 
         return instance;

@@ -23,11 +23,9 @@
 
 var ProgramsModel = (function () {
 
-    var instance;
-
     function ProgramsModel() {
 
-        instance = {
+        var instance = {
             loadProgram:function (url) {
                 $.ajax({
                     url:generateAjaxUrl("loadProgram", url),
@@ -37,17 +35,17 @@ var ProgramsModel = (function () {
                             if (checkDataForException(data)) {
                                 instance.onLoadProgram(data[0]);
                             } else {
-                                instance.onFail(data, ActionCodes.load_program_fail);
+                                instance.onFail(data, ActionStatusMessages.load_program_fail);
                             }
                         } else {
-                            instance.onFail("Incorrect data format.", ActionCodes.load_program_fail);
+                            instance.onFail("Incorrect data format.", ActionStatusMessages.load_program_fail);
                         }
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
                     error:function (jqXHR, textStatus, errorThrown) {
-                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.load_program_fail);
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
                     }
                 });
             },
@@ -60,17 +58,17 @@ var ProgramsModel = (function () {
                             if (checkDataForException(data)) {
                                 instance.onGeneratePublicLink(data);
                             } else {
-                                instance.onFail(data, ActionCodes.generate_link_fail);
+                                instance.onFail(data, ActionStatusMessages.generate_link_fail);
                             }
                         } else {
-                            instance.onFail("Incorrect data format.", ActionCodes.generate_link_fail);
+                            instance.onFail("Incorrect data format.", ActionStatusMessages.generate_link_fail);
                         }
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
                     error:function (jqXHR, textStatus, errorThrown) {
-                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.generate_link_fail);
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.generate_link_fail);
                     }
                 });
             },
@@ -86,17 +84,17 @@ var ProgramsModel = (function () {
                             if (checkDataForException(data)) {
                                 instance.onDeleteProgram(data);
                             } else {
-                                instance.onFail(data, ActionCodes.delete_program_fail);
+                                instance.onFail(data, ActionStatusMessages.delete_program_fail);
                             }
                         } else {
-                            instance.onFail("Incorrect data format.", ActionCodes.delete_program_fail);
+                            instance.onFail("Incorrect data format.", ActionStatusMessages.delete_program_fail);
                         }
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
                     error:function (jqXHR, textStatus, errorThrown) {
-                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.delete_program_fail);
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.delete_program_fail);
                     }
                 });
             },
@@ -110,10 +108,10 @@ var ProgramsModel = (function () {
                             if (checkDataForException(data)) {
                                 instance.onSaveProgram(data);
                             } else {
-                                instance.onFail(data, ActionCodes.save_program_fail);
+                                instance.onFail(data, ActionStatusMessages.save_program_fail);
                             }
                         } else {
-                            instance.onFail("Incorrect data format.", ActionCodes.save_program_fail);
+                            instance.onFail("Incorrect data format.", ActionStatusMessages.save_program_fail);
                         }
                     },
                     dataType:"json",
@@ -121,7 +119,7 @@ var ProgramsModel = (function () {
                     data:{text:i, consoleArgs:arguments},
                     timeout:10000,
                     error:function (jqXHR, textStatus, errorThrown) {
-                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.save_program_fail);
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                     }
                 });
             },
@@ -139,6 +137,31 @@ var ProgramsModel = (function () {
             }
         };
 
+        function getAllPrograms() {
+            $.ajax({
+                url:generateAjaxUrl("loadProgram", "all"),
+                context:document.body,
+                success:function (data) {
+                    if (checkDataForNull(data)) {
+                        if (checkDataForException(data)) {
+                            instance.onAllProgramsLoaded(data);
+                        } else {
+                            instance.onFail(data, ActionStatusMessages.load_programs_fail);
+                        }
+                    } else {
+                        instance.onFail("Incorrect data format.", ActionStatusMessages.load_programs_fail);
+                    }
+                },
+                dataType:"json",
+                type:"GET",
+                timeout:10000,
+                error:function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_programs_fail);
+                }
+            });
+        }
+
+
         return instance;
     }
 
@@ -149,29 +172,6 @@ var ProgramsModel = (function () {
         return ""
     };
 
-    function getAllPrograms() {
-        $.ajax({
-            url:generateAjaxUrl("loadProgram", "all"),
-            context:document.body,
-            success:function (data) {
-                if (checkDataForNull(data)) {
-                    if (checkDataForException(data)) {
-                        instance.onAllProgramsLoaded(data);
-                    } else {
-                        instance.onFail(data, ActionCodes.load_programs_fail);
-                    }
-                } else {
-                    instance.onFail("Incorrect data format.", ActionCodes.load_programs_fail);
-                }
-            },
-            dataType:"json",
-            type:"GET",
-            timeout:10000,
-            error:function (jqXHR, textStatus, errorThrown) {
-                instance.onFail(textStatus + " : " + errorThrown, ActionCodes.load_programs_fail);
-            }
-        });
-    }
 
 
     return ProgramsModel;

@@ -27,28 +27,37 @@ function Configuration(mode, type) {
     this.type = type;
 }
 
-function Type(runner, dependencies) {
+function ConfigurationType(runner, dependencies) {
     this.runner = runner;
     this.dependencies = dependencies;
 }
 
-Type.runner = {JAVA:"java", JS:"js"};
-Type.dependencies = {STANDARD:"standard", CANVAS:"canvas"};
+ConfigurationType.runner = {JAVA:"java", JS:"js"};
+ConfigurationType.dependencies = {STANDARD:"standard", CANVAS:"canvas"};
 
-Configuration.mode = {CLIENT:"client", SERVER:"server", ONRUN:"onrun"};
-Configuration.type = {JAVA:new Type(Type.runner.JAVA, Type.dependencies.STANDARD),
-    JS:new Type(Type.runner.JS, Type.dependencies.STANDARD),
-    CANVAS:new Type(Type.runner.JS, Type.dependencies.CANVAS)};
+function ConfigurationMode(name, highlighter) {
+    this.name = name;
+    this.highlighter = highlighter;
+}
+
+ConfigurationType.runner = {JAVA:"java", JS:"js"};
+ConfigurationType.dependencies = {STANDARD:"standard", CANVAS:"canvas"};
+
+Configuration.mode = {CLIENT:new ConfigurationMode("client", new HighlightingFromClient()),
+    SERVER:new ConfigurationMode("server", new HighlightingFromServer()),
+    ONRUN:new ConfigurationMode("onrun", new HighlightingFromServer())};
+
+Configuration.type = {JAVA:new ConfigurationType(ConfigurationType.runner.JAVA, ConfigurationType.dependencies.STANDARD),
+    JS:new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.STANDARD),
+    CANVAS:new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.CANVAS)};
 
 var ConfigurationComponent = (function () {
 
     var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.type.JAVA);
 
-    var instance;
-
     function ConfigurationComponent() {
 
-        instance = {
+        var instance = {
             getConfiguration:function () {
                 return configuration;
             },
@@ -89,7 +98,6 @@ var ConfigurationComponent = (function () {
             width:400,
             autoOpen:false
         });
-
 
         var isAppletLoaded = false;
 
@@ -180,6 +188,22 @@ var ConfigurationComponent = (function () {
             $(".applet-nohighlighting").click();
         }
 
+        function saveModeToCookies(mode) {
+            $.cookie("typeCheckerMode", mode);
+        }
+
+        function getModeFromCookies() {
+            return $.cookie("typeCheckerMode");
+        }
+
+        function fireChangeEvent() {
+            if (configuration.mode.name != null && configuration.type.runner != null && configuration.type.dependencies != null) {
+                instance.onChange(configuration);
+            } else {
+                instance.onFail("Incorrect format for configuration");
+            }
+        }
+
         return instance;
     }
 
@@ -202,22 +226,6 @@ var ConfigurationComponent = (function () {
             return Configuration.type.JAVA;
         }
     };
-
-    function saveModeToCookies(mode) {
-        $.cookie("typeCheckerMode", mode);
-    }
-
-    function getModeFromCookies() {
-        return $.cookie("typeCheckerMode");
-    }
-
-    function fireChangeEvent() {
-        if (configuration.mode != null && configuration.type.runner != null && configuration.type.dependencies != null) {
-            instance.onChange(configuration);
-        } else {
-            instance.onFail("Incorrect format for configuration");
-        }
-    }
 
     return ConfigurationComponent;
 })();

@@ -30,7 +30,7 @@ var HelpView = (function () {
 
         var instance = {
             update: function(name) {
-                var text = model.loadHelpElement(name);
+                var text = model.getHelpElement(name);
                 setText(text);
             }
         };
@@ -46,7 +46,6 @@ var HelpView = (function () {
                 }
             }
         }
-
 
         return instance;
     }

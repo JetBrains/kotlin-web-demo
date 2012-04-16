@@ -22,13 +22,12 @@
  */
 
 var LoginView = (function () {
+    function LoginView(loginModel) {
+        var model = loginModel;
+        var isLoggedIn = false;
 
-    var model = new LoginProvider();
-    var isLoggedIn = false;
+        var confirmDialog = new ConfirmDialog();
 
-    var confirmDialog = new ConfirmDialog();
-
-    function LoginView() {
         var instance = {
             setUserName:function (name) {
                 if (name != "[\"null\"]") setUserName(eval(name)[0]);

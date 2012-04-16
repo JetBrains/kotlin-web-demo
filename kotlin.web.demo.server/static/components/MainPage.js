@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-var ActionCodes = {
+var ActionStatusMessages = {
     load_example_ok:StatusBarView.Messages.load_example_fail,
     load_example_fail:StatusBarView.Messages.load_example_fail,
     load_program_ok:StatusBarView.Messages.load_program_ok,
@@ -32,14 +32,6 @@ var ActionCodes = {
 };
 
 var sessionId = -1;
-var shortcuts = setShortcuts();
-function setShortcuts() {
-    if (navigator.appVersion.indexOf("Mac") != -1) {
-        return Shortcuts.macShortcuts;
-    } else {
-        return Shortcuts.winShortcuts;
-    }
-}
 
 function Example() {
     var name;
@@ -51,6 +43,7 @@ function Example() {
 }
 
 var configurationManager = new ConfigurationComponent();
+var actionManager = new ActionManager();
 
 var editor = new KotlinEditor();
 
@@ -59,11 +52,9 @@ var statusBarView = new StatusBarView($("#statusbar"));
 var consoleView = new ConsoleView($("#console"), $("#tabs"));
 var problemsView = new ProblemsView($("#problems"), $("#tabs"));
 
-var loginView = new LoginView();
-var converterView = new ConverterView($("#javaToKotlin"));
 var canvasPopup = new CanvasPopup($("#popupForCanvas"));
 
-var runButton = new Button($("#run"), shortcuts.RUN);
+var runButton = new Button($("#run"), actionManager.getShortcutByName("org.jetbrains.web.demo.run"));
 var refreshButton = new Button($("#refresh"), null);
 
 var runProvider = new RunProvider();
@@ -74,12 +65,17 @@ var helpViewForExamples = new HelpView("Examples", $("#help1"), helpModelForExam
 var helpViewForWords = new HelpView("Words", $("#help2"), helpModelForWords);
 
 var loginProvider = new LoginProvider();
-var converterProvider = new ConverterModel();
+var loginView = new LoginView(loginProvider);
+var converterProvider = new ConverterProvider();
+var converterView = new ConverterView($("#javaToKotlin"), converterProvider);
 
 var accordion = new AccordionView($("#examplesaccordion"));
-var highlighting = new HighlightingProvider();
+var highlighting = new HighlighterDecorator();
 var completion = new CompletionProvider();
 var loader = new LoaderComponent($('#loader'));
+
+editor.setHighlighterDecorator(highlighting);
+editor.setCompletionDecorator(completion);
 
 ConfirmDialog.isEditorContentChanged = editor.isEditorContentChanged;
 ConfirmDialog.isLoggedIn = loginView.isLoggedIn;
@@ -123,7 +119,7 @@ helpModelForWords.onFail = function (exception) {
 };
 
 configurationManager.onChange = function (configuration) {
-    highlighting.setConfiguration(configuration);
+    highlighting.setHighlighter(configuration.mode.highlighter);
     editor.setConfiguration(configuration);
     consoleView.setConfiguration(configuration);
     accordion.setConfiguration(configuration);
@@ -148,7 +144,7 @@ runButton.onClick = function () {
     var localConfiguration = configurationManager.getConfiguration();
     highlighting.getHighlighting(localConfiguration.type, editor.getProgramText(), function (highlightingResult) {
         editor.addMarkers(highlightingResult);
-        if (!highlighting.checkIfThereAreErrors(highlightingResult)) {
+        if (!checkIfThereAreErrorsInHighlightingResult(highlightingResult)) {
             //Create canvas element before run it in browser
             if (localConfiguration.type == Configuration.type.CANVAS) {
                 canvasPopup.show();
@@ -170,7 +166,7 @@ highlighting.onFail = function (error) {
     statusBarView.setMessage(StatusBarView.Messages.get_highlighting_fail);
 };
 
-completion.onComplete = function (completionObject) {
+completion.onLoadCompletion = function (completionObject) {
     editor.showCompletionResult(completionObject);
     statusBarView.setMessage(StatusBarView.Messages.get_completion_ok);
 };
@@ -201,8 +197,8 @@ accordion.onFail = function (exception, actionCode) {
     consoleView.writeException(exception);
     statusBarView.setMessage(actionCode);
 };
-accordion.onLoadCode = function (element, type) {
-    if (type == "example") {
+accordion.onLoadCode = function (element, isProgram) {
+    if (!isProgram) {
         helpViewForExamples.update(element.name);
         statusBarView.setMessage(StatusBarView.Messages.load_example_ok);
     } else {
@@ -211,10 +207,6 @@ accordion.onLoadCode = function (element, type) {
     editor.setText(element.text);
     argumentsView.setArgs(element.args);
     configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
-};
-
-accordion.onGeneratePublicLink = function () {
-    statusBarView.setMessage(StatusBarView.Messages.generate_link_ok);
 };
 
 accordion.onLoadAllContent = function () {
@@ -247,31 +239,36 @@ loginProvider.onFail = function (exception, actionCode) {
     statusBarView.setMessage(actionCode);
 };
 
+actionManager.registerAction("org.jetbrains.web.demo.run",
+    new Shortcut("Ctrl+F9", function (e) {
+        return e.keyCode == 120 && e.ctrlKey;
+    }), new Shortcut("Ctrl+R", function (e) {
+        return e.keyCode == 82 && e.ctrlKey;
+    }));
+actionManager.registerAction("org.jetbrains.web.demo.reformat",
+    new Shortcut("Ctrl+Alt+L", null), /*default*/
+    new Shortcut("Cmd+Alt+L", null)); /*mac*/
+actionManager.registerAction("org.jetbrains.web.demo.autocomplete",
+    new Shortcut("Ctrl+Space", null));
+actionManager.registerAction("org.jetbrains.web.demo.save",
+    new Shortcut("Ctrl+S", function (e) {
+        return e.keyCode == 83 && e.ctrlKey;
+    }), new Shortcut("Cmd+S", function (e) {
+        return e.keyCode == 83 && e.metaKey;
+    }));
+
 $(document).keydown(function (e) {
-    if (navigator.appVersion.indexOf("Mac") != -1) {
-        if (e.keyCode == 82 && e.ctrlKey) {
-            runButton.click();
-        } else if (e.keyCode == 83 && e.metaKey) {
-            if (e.preventDefault) e.preventDefault();
-            else e.returnValue = false;
-            accordion.saveProgram();
-        }
+    var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
+    if (shortcut.isPressed(e)) {
+        runButton.click();
     } else {
-        if (e.keyCode == 120 && e.ctrlKey) {
-            runButton.click();
-        } else if (e.keyCode == 83 && e.ctrlKey) {
-            if (e.preventDefault) e.preventDefault();
-            else e.returnValue = false;
+        shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.save");
+        if (shortcut.isPressed(e)) {
             accordion.saveProgram();
         }
     }
-});
 
-/*if (e.keyCode == 120 && e.ctrlKey && e.shiftKey) {
- //runConfiguration.mode = "js";
- //$("#runConfigurationMode").selectmenu("value", "js");
- $("#run").click();
- } else */
+});
 
 var isShortcutsShow = true;
 $(".toggleShortcuts").click(function () {
@@ -290,10 +287,10 @@ $("#help3").toggle(true);
 
 function loadShortcuts() {
     var text = $("#help3").html();
-    text = text.replace("@shortcut-autocomplete@", shortcuts.AUTOCOMPLETE);
-    text = text.replace("@shortcut-run@", shortcuts.RUN);
-    text = text.replace("@shortcut-reformat@", shortcuts.REFORMAT_CODE);
-    text = text.replace("@shortcut-save@", shortcuts.SAVE);
+    text = text.replace("@shortcut-autocomplete@", actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getName());
+    text = text.replace("@shortcut-run@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
+    text = text.replace("@shortcut-reformat@", actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getName());
+    text = text.replace("@shortcut-save@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName());
     $("#help3").html(text);
 }
 
@@ -346,7 +343,8 @@ $("#popupForCanvas").dialog({
     height:350,
     autoOpen:false,
     close:function () {
-        $("#popupForCanvas").html("");
+        canvasPopup.hide();
+        //$("#popupForCanvas").html("");
     }
 });
 

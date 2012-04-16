@@ -19,15 +19,13 @@
  * User: Natalia.Ukhorskaya
  * Date: 3/30/12
  * Time: 3:37 PM
- * To change this template use File | Settings | File Templates.
  */
 
 var ExamplesModel = (function () {
-    var instance;
 
     function ExamplesModel() {
 
-        instance = {
+        var instance = {
             loadExample:function (url) {
                 $.ajax({
                     url:generateAjaxUrl("loadExample", url),
@@ -37,17 +35,17 @@ var ExamplesModel = (function () {
                             if (checkDataForException(data)) {
                                 instance.onLoadExample(data[0]);
                             } else {
-                                instance.onFail(data, ActionCodes.load_example_fail);
+                                instance.onFail(data, ActionStatusMessages.load_example_fail);
                             }
                         } else {
-                            instance.onFail("Incorrect data format.", ActionCodes.load_example_fail);
+                            instance.onFail("Incorrect data format.", ActionStatusMessages.load_example_fail);
                         }
                     },
                     dataType:"json",
                     type:"GET",
                     timeout:10000,
                     error:function (jqXHR, textStatus, errorThrown) {
-                        instance.onFail(textStatus + " : " + errorThrown, ActionCodes.load_example_fail);
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_example_fail);
                     }
                 });
             },
@@ -62,32 +60,32 @@ var ExamplesModel = (function () {
             }
         };
 
-        return instance;
-    }
-
-
-    function getAllExamples() {
-        $.ajax({
-            url:generateAjaxUrl("loadExample", "all"),
-            context:document.body,
-            success:function (data) {
-                if (checkDataForNull(data)) {
-                    if (checkDataForException(data)) {
-                        instance.onAllExamplesLoaded(data);
+        function getAllExamples() {
+            $.ajax({
+                url:generateAjaxUrl("loadExample", "all"),
+                context:document.body,
+                success:function (data) {
+                    if (checkDataForNull(data)) {
+                        if (checkDataForException(data)) {
+                            instance.onAllExamplesLoaded(data);
+                        } else {
+                            instance.onFail(data, ActionStatusMessages.load_examples_fail);
+                        }
                     } else {
-                        instance.onFail(data, ActionCodes.load_examples_fail);
+                        instance.onFail("Incorrect data format.", ActionStatusMessages.load_examples_fail);
                     }
-                } else {
-                    instance.onFail("Incorrect data format.", ActionCodes.load_examples_fail);
+                },
+                dataType:"json",
+                type:"GET",
+                timeout:10000,
+                error:function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_examples_fail);
                 }
-            },
-            dataType:"json",
-            type:"GET",
-            timeout:10000,
-            error:function (jqXHR, textStatus, errorThrown) {
-                instance.onFail(textStatus + " : " + errorThrown, ActionCodes.load_examples_fail);
-            }
-        });
+            });
+        }
+
+
+        return instance;
     }
 
     return ExamplesModel;

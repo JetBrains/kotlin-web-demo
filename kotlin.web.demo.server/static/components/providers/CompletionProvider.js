@@ -22,107 +22,106 @@
  */
 
 var CompletionProvider = (function () {
-    var instance;
-
     function CompletionProvider() {
 
-        instance = {
+        var instance = {
             getCompletion:function (data) {
                 getCompletion(data[0], data[1], data[2], data[3], data[4]);
             },
-            onComplete:function (data) {
+            onLoadCompletion:function (data) {
             },
             onFail:function (error) {
             }
         };
 
+        var isCompletionInProgress = false;
+
+        function getCompletion(dependencies, mode, file, cursorLine, cursorCh) {
+            //TODO runTimerForNonPrinting();
+            if (mode == Configuration.mode.ONRUN.name) {
+                isCompletionInProgress = false;
+                instance.onLoadCompletion(COMPLETION_ISNOT_AVAILABLE);
+                return;
+            }
+            if (!isCompletionInProgress) {
+                isCompletionInProgress = true;
+                if (mode == Configuration.mode.CLIENT.name) {
+                    getCompletionFromApplet(dependencies, file, cursorLine, cursorCh);
+                    isCompletionInProgress = false;
+                } else {
+                    $.ajax({
+                        url:generateAjaxUrl("complete", cursorLine + "," + cursorCh + "&runConf=" + dependencies),
+                        context:document.body,
+                        success:function (data) {
+                            isCompletionInProgress = false;
+                            if (checkDataForNull(data)) {
+                                if (checkDataForException(data)) {
+                                    instance.onLoadCompletion(data);
+                                } else {
+                                    instance.onFail(data);
+                                }
+                            } else {
+                                instance.onFail("Incorrect data format.");
+                            }
+                        },
+                        dataType:"json",
+                        type:"POST",
+                        data:{text:file},
+                        timeout:10000,
+                        error:function (jqXHR, textStatus, errorThrown) {
+                            isCompletionInProgress = false;
+                            instance.onFail(textStatus + " : " + errorThrown);
+                        }
+                    });
+                }
+            }
+        }
+
+        var isFirstTryToLoadApplet = true;
+
+        function getCompletionFromApplet(dependencies, file, cursorLine, cursorCh) {
+            if (document.getElementById("myapplet") == null) {
+                $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet" + APPLET_VERSION + ".jar\" style=\"display: none;\"></applet>");
+            }
+            try {
+                var dataFromApplet;
+                try {
+                    dataFromApplet = $("#myapplet")[0].getCompletion(file, cursorLine, cursorCh, dependencies);
+                } catch (e) {
+                    if (e.indexOf("getCompletion") > 0) {
+                        var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+                        if (is_chrome && isFirstTryToLoadApplet) {
+                            isFirstTryToLoadApplet = false;
+                            setTimeout(function () {
+                                getCompletionFromApplet(dependencies, file, cursorLine, cursorCh);
+                            }, 3000);
+                            return;
+                        }
+                        //TODO add tooltip for client mode
+                        //$(".applet-nohighlighting").click();
+                        //setStatusBarError(GET_FROM_APPLET_FAILED);
+
+                        //var title = $("#appletclient").attr("title");
+                        //if (title.indexOf(GET_FROM_APPLET_FAILED) == -1) {
+                        //    $("#appletclient").attr("title", title + ". " + GET_FROM_APPLET_FAILED);
+                        //}
+                    } else {
+                        instance.onFail(e);
+                    }
+                    return;
+                }
+                var data = eval(dataFromApplet);
+                isCompletionInProgress = false;
+                instance.onLoadCompletion(data);
+            } catch (e) {
+                isCompletionInProgress = false;
+                instance.onFail(e);
+            }
+        }
+
         return instance;
     }
 
-    var isCompletionInProgress = false;
-
-    function getCompletion(dependencies, mode, file, cursorLine, cursorCh) {
-        //TODO runTimerForNonPrinting();
-        if (mode == Configuration.mode.ONRUN) {
-            isCompletionInProgress = false;
-            instance.onComplete(COMPLETION_ISNOT_AVAILABLE);
-            return;
-        }
-        if (!isCompletionInProgress) {
-            isCompletionInProgress = true;
-            if (mode == Configuration.mode.CLIENT) {
-                getCompletionFromApplet(dependencies, file, cursorLine, cursorCh);
-                isCompletionInProgress = false;
-            } else {
-                $.ajax({
-                    url:generateAjaxUrl("complete", cursorLine + "," + cursorCh + "&runConf=" + dependencies),
-                    context:document.body,
-                    success:function (data) {
-                        isCompletionInProgress = false;
-                        if (checkDataForNull(data)) {
-                            if (checkDataForException(data)) {
-                                instance.onComplete(data);
-                            } else {
-                                instance.onFail(data);
-                            }
-                        } else {
-                            instance.onFail("Incorrect data format.");
-                        }
-                    },
-                    dataType:"json",
-                    type:"POST",
-                    data:{text:file},
-                    timeout:10000,
-                    error:function (jqXHR, textStatus, errorThrown) {
-                        isCompletionInProgress = false;
-                        instance.onFail(textStatus + " : " + errorThrown);
-                    }
-                });
-            }
-        }
-    }
-
-    var isFirstTryToLoadApplet = true;
-
-    function getCompletionFromApplet(dependencies, file, cursorLine, cursorCh) {
-        if (document.getElementById("myapplet") == null) {
-            $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet" + APPLET_VERSION + ".jar\" style=\"display: none;\"></applet>");
-        }
-        try {
-            var dataFromApplet;
-            try {
-                dataFromApplet = $("#myapplet")[0].getCompletion(file, cursorLine, cursorCh, dependencies);
-            } catch (e) {
-                if (e.indexOf("getCompletion") > 0) {
-                    var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-                    if (is_chrome && isFirstTryToLoadApplet) {
-                        isFirstTryToLoadApplet = false;
-                        setTimeout(function () {
-                            getCompletionFromApplet(dependencies, file, cursorLine, cursorCh);
-                        }, 3000);
-                        return;
-                    }
-                    //TODO add tooltip for client mode
-                    //$(".applet-nohighlighting").click();
-                    //setStatusBarError(GET_FROM_APPLET_FAILED);
-
-                    //var title = $("#appletclient").attr("title");
-                    //if (title.indexOf(GET_FROM_APPLET_FAILED) == -1) {
-                    //    $("#appletclient").attr("title", title + ". " + GET_FROM_APPLET_FAILED);
-                    //}
-                } else {
-                    instance.onComplete(e);
-                }
-                return;
-            }
-            var data = eval(dataFromApplet);
-            isCompletionInProgress = false;
-            instance.onComplete(data);
-        } catch (e) {
-            isCompletionInProgress = false;
-            instance.onComplete(e);
-        }
-    }
 
     return CompletionProvider;
 })();
