@@ -243,7 +243,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
 
         builder.append("<table border='2' bordercolor='#eee' cellspacing='0' cellpadding='5' style='float: left; margin-right: 20px;'>");
         builder.append("<tr>");
-        builder.append(ResponseUtils.generateTag("td", "№"));
+        builder.append(ResponseUtils.generateTag("td", "&#8470;"));
         builder.append(ResponseUtils.generateTag("td", "user " + type));
         builder.append(ResponseUtils.generateTag("td", "Total"));
         builder.append(ResponseUtils.generateTag("td", "Run"));
