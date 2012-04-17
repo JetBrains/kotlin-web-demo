@@ -71,7 +71,7 @@ var converterView = new ConverterView($("#javaToKotlin"), converterProvider);
 
 var accordion = new AccordionView($("#examplesaccordion"));
 var highlighting = new HighlighterDecorator();
-var completion = new CompletionProvider();
+var completion = new CompletionDecorator();
 var loader = new LoaderComponent($('#loader'));
 
 editor.setHighlighterDecorator(highlighting);
@@ -120,6 +120,7 @@ helpModelForWords.onFail = function (exception) {
 
 configurationManager.onChange = function (configuration) {
     highlighting.setHighlighter(configuration.mode.highlighter);
+    completion.setCompleter(configuration.mode.completer);
     editor.setConfiguration(configuration);
     consoleView.setConfiguration(configuration);
     accordion.setConfiguration(configuration);

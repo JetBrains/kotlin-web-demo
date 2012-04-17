@@ -72,7 +72,7 @@ var KotlinEditor = (function () {
                     } else {
                         var i = 0;
                         while (data[i] != undefined) {
-                            var lookupElement = new LookupElement(data[i].name, data[i].tail, data[i].icon)
+                            var lookupElement = new LookupElement(data[i].name, data[i].tail, data[i].icon);
                             keywords.push(lookupElement);
                             i++;
                         }
@@ -133,6 +133,7 @@ var KotlinEditor = (function () {
 
                 var sel = document.createElement("select");
                 sel.id = "selectId";
+                var i = 0;
                 for (i = 0; i < completions.length; ++i) {
                     var opt = document.createElement("option");
                     var pEl = document.createElement("p");
@@ -140,7 +141,9 @@ var KotlinEditor = (function () {
 
                     var icon = document.createElement("img");
                     icon.className = "lookupElementIcon";
-                    icon.src = "/static/icons/" + completions[i].icon + ".png";
+                    if (completions[i].icon != "") {
+                        icon.src = "/static/icons/" + completions[i].icon + ".png";
+                    }
                     pEl.appendChild(icon);
 
                     var spanName = document.createElement("div");
@@ -182,8 +185,8 @@ var KotlinEditor = (function () {
                 // Hack to hide the scrollbar.
                 if (i <= 10) {
                     complete.css("width", (sel.clientWidth - 1) + "px");
-                    complete.css("height", (sel.size * 18) + "px");
                 }
+                complete.css("height", (sel.size * 18) + "px");
 
                 var done = false;
 
@@ -409,13 +412,8 @@ var KotlinEditor = (function () {
             mode:"text/kotlin",
             extraKeys:{
                 "Ctrl-Space":function () {
-                    var parameters = [];
-                    parameters.push(Configuration.getStringFromType(configuration.type));
-                    parameters.push(configuration.mode.name);
-                    parameters.push(my_editor.getValue());
-                    parameters.push(my_editor.getCursor(true).line);
-                    parameters.push(my_editor.getCursor(true).ch);
-                    completionProvider.getCompletion(parameters);
+                    completionProvider.getCompletion(configuration.type, my_editor.getValue(),
+                        my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
                 }
 
             },

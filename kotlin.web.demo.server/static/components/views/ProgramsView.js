@@ -128,7 +128,7 @@ var ProgramsView = (function () {
                     if (data[0].type == "exception") {
                         //TODO eventHandler.fire("write_exception", data);
                     } else {
-                        document.getElementById(createExampleUrl(data[0].args, "My Programs")).parentNode.parentNode.parentNode.innerHTML = "";
+                        document.getElementById(createExampleUrl(data[0].args, "My Programs")).parentNode.parentNode.parentNode.parentNode.removeChild(document.getElementById(createExampleUrl(data[0].args, "My Programs")).parentNode.parentNode.parentNode);
                     }
                 }
             }

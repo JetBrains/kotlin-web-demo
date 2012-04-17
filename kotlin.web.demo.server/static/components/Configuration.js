@@ -35,17 +35,18 @@ function ConfigurationType(runner, dependencies) {
 ConfigurationType.runner = {JAVA:"java", JS:"js"};
 ConfigurationType.dependencies = {STANDARD:"standard", CANVAS:"canvas"};
 
-function ConfigurationMode(name, highlighter) {
+function ConfigurationMode(name, highlighter, completer) {
     this.name = name;
     this.highlighter = highlighter;
+    this.completer = completer;
 }
 
 ConfigurationType.runner = {JAVA:"java", JS:"js"};
 ConfigurationType.dependencies = {STANDARD:"standard", CANVAS:"canvas"};
 
-Configuration.mode = {CLIENT:new ConfigurationMode("client", new HighlightingFromClient()),
-    SERVER:new ConfigurationMode("server", new HighlightingFromServer()),
-    ONRUN:new ConfigurationMode("onrun", new HighlightingFromServer())};
+Configuration.mode = {CLIENT:new ConfigurationMode("client", new HighlightingFromClient(), new CompletionFromClient()),
+    SERVER:new ConfigurationMode("server", new HighlightingFromServer(), new CompletionFromServer()),
+    ONRUN:new ConfigurationMode("onrun", new HighlightingFromServer(), new CompletionOnRun())};
 
 Configuration.type = {JAVA:new ConfigurationType(ConfigurationType.runner.JAVA, ConfigurationType.dependencies.STANDARD),
     JS:new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.STANDARD),

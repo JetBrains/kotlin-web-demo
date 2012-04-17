@@ -17,20 +17,27 @@
 /**
  * Created with IntelliJ IDEA.
  * User: Natalia.Ukhorskaya
- * Date: 4/5/12
- * Time: 4:32 PM
+ * Date: 3/29/12
+ * Time: 1:56 PM
  */
 
+var CompletionOnRun = (function () {
 
-function changeConfiguration(mode) {
-    configurationManager.updateConfiguration(mode);
-}
+    function CompletionOnRun() {
 
-function setEditorValue(text) {
-    editor.setText(text);
-}
+        var instance = {
+            getCompletion:function (configurationType, programText, cursorLine, cursorCh) {
+                instance.onLoadCompletion(COMPLETION_ISNOT_AVAILABLE);
+            },
+            onLoadCompletion:function (data) {
+            },
+            onFail:function (exception) {
+            }
+        };
 
-function getEditorValue() {
-    return editor.getProgramText();
-}
+        return instance;
+    }
 
+
+    return CompletionOnRun;
+})();
