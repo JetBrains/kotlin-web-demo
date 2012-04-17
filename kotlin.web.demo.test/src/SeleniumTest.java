@@ -19,6 +19,7 @@
 import com.google.common.io.Files;
 import com.thoughtworks.selenium.CommandProcessor;
 import junit.framework.TestCase;
+import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -685,39 +686,137 @@ public class SeleniumTest extends TestCase {
         return str.replaceAll("([\n])", System.getProperty("line.separator"));
     }
 
-    /*public void testSaveProgram() throws InterruptedException {
+    public void testLogin() throws InterruptedException {
+        login();
+
+    }
+
+    private void login() throws InterruptedException {
+        WebElement element = driver.findElement(By.id("login")).findElements(By.tagName("img")).get(2);
+        element.click();
+        element = driver.findElement(By.id("Email"));
+        final WebElement finalElement = element;
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return finalElement.isDisplayed();
+            }
+        });
+        element.sendKeys("kotlin.web.demo.test");
+        element = driver.findElement(By.id("Passwd"));
+        element.sendKeys("kotlinwebdemo");
+        element = driver.findElement(By.id("signIn"));
+        element.click();
+        element = driver.findElement(By.id("allow"));
+        final WebElement finalElement1 = element;
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return finalElement1.isDisplayed();
+            }
+        });
+        element.click();
+        element = driver.findElement(By.id("saveAsProgram"));
+        final WebElement finalElement2 = element;
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return finalElement2.isDisplayed();
+            }
+        });
+    }
+
+    public void testWorkForLoggedInUser() throws InterruptedException {
+        login();
+        int countOfProgramsInListBefore = driver.findElement(By.id("myprogramscontent")).findElements(By.tagName("table")).size();
+        createProgram();
+        Thread.sleep(500);
+        int countOfProgramsInListAfter = driver.findElement(By.id("myprogramscontent")).findElements(By.tagName("table")).size();
+        assertEquals(countOfProgramsInListBefore + 1, countOfProgramsInListAfter);
+
+        createProgram();
+
+        countOfProgramsInListBefore = driver.findElement(By.id("myprogramscontent")).findElements(By.tagName("table")).size();
+        WebElement tableForProgram = driver.findElement(By.id("myprogramscontent")).findElements(By.tagName("table")).get(countOfProgramsInListBefore - 1);
+        String elementId = tableForProgram.findElement(By.tagName("a")).getAttribute("id");
+
+        WebElement element = driver.findElement(By.xpath("//table[tr/td/a[@id=\"" + elementId + "\"]]/tr/td/img[@src=\"/static/icons/link1.png\"]"));
+        element.click();
+
+        assert driver.findElement(By.xpath("//div[@id=\"pld" + elementId + "\"]/div/div/a[img[contains(@src, \"twitter\")]]")).isDisplayed();
+        assert driver.findElement(By.id("pld" + elementId)).isDisplayed();
+        WebElement closePublicLinkButton = driver.findElement(By.xpath("//div[@id=\"pld" + elementId + "\"]/div/div/img[contains(@src, \"close\")]"));
+        assert closePublicLinkButton.isDisplayed();
+        closePublicLinkButton.click();
+
+        assert !driver.findElement(By.xpath("//div[@id=\"pld" + elementId + "\"]/div/div/a[img[contains(@src, \"twitter\")]]")).isDisplayed();
+        assert !driver.findElement(By.id("pld" + elementId)).isDisplayed();
+        assert !closePublicLinkButton.isDisplayed();
+
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-        Thread.sleep(2000);
-        //js.executeScript("setLogin();");
 
-        WebElement el1 = driver.findElement(By.id("login")).findElements(By.tagName("img")).get(2);
-        el1.click();
-        Thread.sleep(1000);
+        js.executeScript("setEditorValue(\"" +
+                "fun main(args : Array<String>) {\\n" +
+                "  println(\\\"Test message!\\\")\\n" +
+                "}" +
+                "\");");
 
-
-        WebElement el = driver.findElement(By.id("saveProgram"));
-        el.click();
-
+        element = driver.findElement(By.id("saveProgram"));
+        element.click();
         Thread.sleep(500);
-        String programName = "test" + new Random().nextInt();
-        js.executeScript("$('#programName').val('" + programName + "');");
-        Thread.sleep(500);
-        WebElement saveInDialog = driver.findElement(By.className("ui-button-text-only"));
-        saveInDialog.click();
-        Thread.sleep(500);
-        assertEquals("Saved as: " + programName + ".", statusBar.getText());
-        el.click();
-        Thread.sleep(500);
-        assertEquals("Your program was successfully saved.", statusBar.getText());
+        checkEditorValue("fun main(args : Array<String>) {\n" +
+                "  println(\"Test message!\")\n" +
+                "}");
 
-        WebElement publicLink = driver.findElement(By.id("myprogramscontent")).findElements(By.tagName("img")).get(1);
-        publicLink.click();
+        driver.findElement(By.id("myprogramscontent")).findElements(By.tagName("table")).get(countOfProgramsInListBefore - 2).findElement(By.tagName("a")).click();
         Thread.sleep(500);
-        assertEquals("Public link was generated.", statusBar.getText());
+        checkEditorValue("fun main(args : Array<String>) {\n" +
+                "  println(\"Hello, world!\")\n" +
+                "}\n");
+        Thread.sleep(500);
 
-    }*/
+        driver.findElement(By.id("myprogramscontent")).findElements(By.tagName("table")).get(countOfProgramsInListBefore - 1).findElement(By.tagName("a")).click();
 
+        checkEditorValue("fun main(args : Array<String>) {\n" +
+                "  println(\"Test message!\")\n" +
+                "}");
+
+        element = driver.findElement(By.xpath("//table[tr/td/a[@id=\"" + elementId + "\"]]/tr/td/img[@src=\"/static/icons/delete.png\"]"));
+        element.click();
+
+
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+        Thread.sleep(500);
+        countOfProgramsInListAfter = driver.findElement(By.id("myprogramscontent")).findElements(By.tagName("table")).size();
+        assertEquals(countOfProgramsInListBefore - 1, countOfProgramsInListAfter);
+    }
+
+    private void checkEditorValue(String expectedResult) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        String editorValue;
+        Alert alertWindow;
+        editorValue = (String) js.executeScript("alert(getEditorValue());");
+        assertEquals(expectedResult, editorValue);
+        alertWindow = driver.switchTo().alert();
+        alertWindow.accept();
+    }
+
+    private void createProgram() {
+        WebElement element = driver.findElement(By.id("My_Programs"));
+        element.click();
+        element = driver.findElement(By.id("saveAsProgram"));
+        element.click();
+        element = driver.findElement(By.id("programName"));
+        final WebElement finalElement = element;
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return finalElement.isDisplayed();
+            }
+        });
+        String testName = "test" + RandomUtils.nextInt();
+        element.sendKeys(testName);
+        element = driver.findElement(By.xpath("//button[span[text()=\"Save\"]]"));
+        element.click();
+    }
 
     @Override
     protected void tearDown() throws Exception {
