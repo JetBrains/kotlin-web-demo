@@ -185,8 +185,12 @@ var KotlinEditor = (function () {
                 // Hack to hide the scrollbar.
                 if (i <= 10) {
                     complete.css("width", (sel.clientWidth - 1) + "px");
+                    complete.css("height", (sel.size * 18) + "px");
+                }   else {
+                    complete.css("width", "auto");
+                    complete.css("height", "auto");
                 }
-                complete.css("height", (sel.size * 18) + "px");
+
 
                 var done = false;
 
