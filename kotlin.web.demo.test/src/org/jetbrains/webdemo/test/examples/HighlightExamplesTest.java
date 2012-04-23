@@ -16,7 +16,8 @@
 
 package org.jetbrains.webdemo.test.examples;
 
-import com.sun.xml.internal.xsom.impl.scd.Iterators;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.Initializer;
@@ -28,18 +29,17 @@ import org.jetbrains.webdemo.test.TestUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * @author Natalia.Ukhorskaya
  */
 
+
 public class HighlightExamplesTest extends BaseTest {
 
+    private static ArrayList<String> jsExamples = new ArrayList<String>();
 
-    public void testExamples() throws IOException {
-        ArrayList<String> jsExamples = new ArrayList<String>();
+    public static Test suite() {
         jsExamples.add("is-checks and smart casts.kt");
         jsExamples.add("Use a while-loop.kt");
         jsExamples.add("Use a for-loop.kt");
@@ -53,75 +53,57 @@ public class HighlightExamplesTest extends BaseTest {
         // jsExamples.add("HTML Builder.kt");
 
 
-        File rootDir = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
-        if (!rootDir.exists() || !rootDir.isDirectory()) {
-            return;
-        }
-        File[] folders = rootDir.listFiles();
-        assert folders != null;
-        Arrays.sort(folders, new Comparator<File>() {
-            public int compare(File f1, File f2) {
-                return f1.getName().compareToIgnoreCase(f2.getName());
-//                        return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-            }
-        });
-        StringBuilder builder = new StringBuilder();
-        for (File folder : folders) {
-            if (folder.isDirectory()) {
-                File[] files = folder.listFiles();
-                assert files != null;
-                Arrays.sort(files, new Comparator<File>() {
-                    public int compare(File f1, File f2) {
-                        return f1.getName().compareToIgnoreCase(f2.getName());
-//                        return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-                    }
-                });
-                for (File file : files) {
-                    if (file.getName().equals("order.txt")) {
-                        continue;
-                    }
-                    if (!folder.getName().equals("Problems")) {
-                        builder.append(file.getName()).append("\n");
-                        if (folder.getName().equals("Canvas")) {
-                            compareResponseAndExpectedResult(file, "[]", "canvas");
-                        } else {
-                            if (jsExamples.contains(file.getName())) {
-                                compareResponseAndExpectedResult(file, "[]", "js");
-                            }
-                            compareResponseAndExpectedResult(file, "[]", "java");
-                        }
-                    }
+        TestSuite suite = new TestSuite();
+        TestSuite ats = new TestSuite();
+        suite.addTest(ats);
+        File parsingSourceDir = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
+        addFilesFromDirToSuite(parsingSourceDir, ats);
+        return suite;
+    }
+
+    private static void addFilesFromDirToSuite(File file, TestSuite ats) {
+        if (file.isDirectory()) {
+            for (File sourceFile : file.listFiles()) {
+                if (!file.getName().equals("Problems")) {
+                    addFilesFromDirToSuite(sourceFile, ats);
                 }
             }
         }
-
-        StringBuilder expectedList = new StringBuilder();
-        expectedList.append("is-checks and smart casts.kt").append("\n");
-        expectedList.append("Null-checks.kt").append("\n");
-        expectedList.append("Use a conditional expression.kt").append("\n");
-        expectedList.append("Use a for-loop.kt").append("\n");
-        expectedList.append("Use a while-loop.kt").append("\n");
-        expectedList.append("Use ranges and in.kt").append("\n");
-        expectedList.append("Use when.kt").append("\n");
-        expectedList.append("Creatures.kt").append("\n");
-        expectedList.append("Fancy lines.kt").append("\n");
-        expectedList.append("Hello, Kotlin.kt").append("\n");
-        expectedList.append("Traffic light.kt").append("\n");
-        expectedList.append("A multi-language Hello.kt").append("\n");
-        expectedList.append("An object-oriented Hello.kt").append("\n");
-        expectedList.append("Reading a name from the command line.kt").append("\n");
-        expectedList.append("Reading many names from the command line.kt").append("\n");
-        expectedList.append("Simplest version.kt").append("\n");
-        expectedList.append("99 Bottles of Beer.kt").append("\n");
-        expectedList.append("HTML Builder.kt").append("\n");
-        expectedList.append("Life.kt").append("\n");
-        expectedList.append("Maze.kt").append("\n");
-
-        assertEquals("Files to compare", expectedList.toString(), builder.toString());
-
+        else {
+            if (file.getName().equals("order.txt")) {
+                return;
+            }
+            if (file.getName().endsWith(".kt")) {
+                if (file.getParentFile().getName().equals("Canvas")) {
+                    ats.addTest(new HighlightExamplesTest(file, "canvas"));
+                }
+                else {
+                    if (jsExamples.contains(file.getName())) {
+                        ats.addTest(new HighlightExamplesTest(file, "js"));
+                    }
+                    ats.addTest(new HighlightExamplesTest(file, "java"));
+                }
+            }
+        }
     }
 
-    private void compareResponseAndExpectedResult(File file, String expectedResult, String runConfiguration) throws IOException {
+
+    private final File sourceFile;
+    private final String runConf;
+
+    public HighlightExamplesTest(File sourceFile, String runConf) {
+        super(sourceFile.getName());
+        this.sourceFile = sourceFile;
+        this.runConf = runConf;
+    }
+
+    @Override
+    protected void runTest() throws Throwable {
+        compareResponseAndExpectedResult(sourceFile, runConf);
+    }
+
+    private void compareResponseAndExpectedResult(File file, String runConfiguration) throws IOException {
+        String expectedResult = "[]";
         sessionInfo.setRunConfiguration(runConfiguration);
         JetFile currentPsiFile = JetPsiFactory.createFile(
                 Initializer.INITIALIZER.getEnvironment().getProject(),
@@ -133,3 +115,4 @@ public class HighlightExamplesTest extends BaseTest {
         assertEquals("Wrong result for example " + file.getName(), expectedResult, actualResult);
     }
 }
+

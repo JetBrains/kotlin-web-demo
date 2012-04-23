@@ -32,13 +32,12 @@ public class TestAll extends TestCase {
     public static TestSuite suite() {
         TestSuite suite = new TestSuite(
                 HighlightingTest.class,
-                HighlightExamplesTest.class,
                 CompletionTest.class,
-                RunExamplesTest.class,
                 RunTest.class,
                 J2KConverterTest.class
         );
-//        suite.addTest(testDslExample.namespace.getSuite());
+        suite.addTest(HighlightExamplesTest.suite());
+        suite.addTest(RunExamplesTest.suite());
         return suite;
     }
 

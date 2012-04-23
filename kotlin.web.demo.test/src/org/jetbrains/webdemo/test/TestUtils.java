@@ -119,6 +119,12 @@ public class TestUtils {
         return result.toString();
     }
 
+    public static  String escape(String str) {
+        str = str.replaceAll("<", "&amp;lt;");
+        str = str.replaceAll(">", "&amp;gt;");
+        return str;
+    }
+
     public static String getUrlFromFileName(String fileName) {
         return "path=" + fileName;
     }
