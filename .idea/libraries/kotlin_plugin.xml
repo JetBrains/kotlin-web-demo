@@ -4,28 +4,6 @@
       <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/kotlin-plugin.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/../kotlin/build-tools/ant/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/build-tools/core/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/compiler/backend/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/compiler/cli/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/compiler/frontend/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/compiler/frontend.java/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/compiler/jet.as.java.psi/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/compiler/tests" />
-      <root url="file://$PROJECT_DIR$/../kotlin/compiler/util/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/confluence/src/main/java" />
-      <root url="file://$PROJECT_DIR$/../kotlin/docs/exPuzzlers/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/examples/src/benchmarks/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/grammar/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/idea/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/idea/tests" />
-      <root url="file://$PROJECT_DIR$/../kotlin/j2k/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/j2k/tests/test" />
-      <root url="file://$PROJECT_DIR$/../kotlin/js/js.tests/test" />
-      <root url="file://$PROJECT_DIR$/../kotlin/js/js.translator/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/runtime/src" />
-      <root url="file://$PROJECT_DIR$/../kotlin/injector-generator/src" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>
