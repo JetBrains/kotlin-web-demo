@@ -100,7 +100,6 @@ public class JarHandlerBase {
                                                 byteArray.write(cont, 0, tmp);
                                                 readFromIS += tmp;
                                             }
-                                            System.out.println(name + " " + readFromIS);
                                             entry.setExtra(byteArray.toByteArray());
                                         }
                                     }

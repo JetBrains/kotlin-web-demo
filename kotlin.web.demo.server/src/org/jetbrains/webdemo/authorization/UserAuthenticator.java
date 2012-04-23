@@ -204,13 +204,9 @@ public class UserAuthenticator extends BasicAuthenticator {
         try {
             facebookUserID = userClient.users_getLoggedInUser();
         } catch (FacebookException ex) {
-            System.out.println("Error while fetching user's facebook ID");
-            System.out.println("Error while getting cached (supplied by request params) value " +
-                    "of the user's facebook ID or while fetching it from the Facebook service " +
-                    "if the cached value was not present for some reason. Cached value = {}" + userClient.getCacheUserId());
             return;
         }
-        System.out.println(facebookUserID);*/
+        */
     }
 
 

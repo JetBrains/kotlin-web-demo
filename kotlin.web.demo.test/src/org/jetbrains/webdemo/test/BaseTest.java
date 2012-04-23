@@ -32,6 +32,13 @@ import java.io.File;
 
 public class BaseTest extends TestCase {
 
+    public BaseTest(String name) {
+        super(name);
+    }
+
+    public BaseTest() {
+    }
+
     protected SessionInfo sessionInfo = new SessionInfo("test");
 
     @Override
@@ -53,7 +60,6 @@ public class BaseTest extends TestCase {
                 true, initEnvironment);
 
         ApplicationSettings.JAVA_EXECUTE = ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
-        System.out.println("setUp: JAVA_EXECUTE=" + ApplicationSettings.JAVA_EXECUTE);
 
         WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(Initializer.INITIALIZER.getEnvironment().getProject());
         ExamplesList.getInstance();

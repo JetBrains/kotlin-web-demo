@@ -131,7 +131,6 @@ public class VirtualJarFile extends VirtualFile {
         /*String manualString = "jar:http://dl.dropbox.com/u/56547825/WebViewApplet.jar/WebViewApplet.jar!/rt.jar";
                 URL manualURL = new URL(manualString);
                 return manualURL.openConnection().getInputStream();*/
-        System.out.println("VirtualJarFile:" + name);
         return VirtualJarFile.class.getResourceAsStream("/" + name);
     }
 }

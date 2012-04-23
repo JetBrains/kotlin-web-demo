@@ -203,7 +203,6 @@ public class MySqlConnector {
 
                 //st = connection.prepareStatement("ALTER TABLE programs ADD COLUMN RUN_CONF VARCHAR(45) NOT NULL DEFAULT '' AFTER PROGRAM_LINK");
                 //st.execute();
-                //System.out.println("add column run_conf");
             } catch (SQLException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),

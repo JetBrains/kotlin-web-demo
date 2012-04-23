@@ -94,7 +94,6 @@ public class CompletionTest extends BaseTest {
 
         assertEquals("Incorrect count of objects in completion", expectedArray.length(), actualArray.length());
 
-        System.out.println(expectedResult + "\n" + actualResult);
 
         for (int i = 0; i < expectedArray.length(); i++) {
             JSONObject expectedObject = (JSONObject) expectedArray.get(i);

@@ -97,7 +97,6 @@ public class RunTest extends BaseTest {
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(currentPsiFile, args, sessionInfo);
             String actualResult = responseForCompilation.getResult();
             if (fileName.endsWith("securityExecutionError.kt") || fileName.endsWith("securityFilePermissionError.kt")) {
-                System.out.println(actualResult);
                 assertTrue("Wrong result: " + fileName, actualResult.contains(expectedResult));
             } else {
                 assertEquals("Wrong result: " + fileName, expectedResult, actualResult);

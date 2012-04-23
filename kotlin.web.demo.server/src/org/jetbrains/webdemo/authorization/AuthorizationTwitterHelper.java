@@ -71,7 +71,6 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
             twitterService.signRequest(accessToken, request); // the access token from step 4
             Response response = request.send();
-            //System.out.println(response.getBody());
 
             Document document = ResponseUtils.getXmlDocument(response.getStream());
             if (document == null) {
