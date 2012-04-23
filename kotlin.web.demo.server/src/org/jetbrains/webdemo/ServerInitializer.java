@@ -25,7 +25,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.encoding.EncodingRegistry;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.compiler.CompileEnvironment;
+import org.jetbrains.jet.compiler.CompileEnvironmentConfiguration;
 import org.jetbrains.jet.compiler.CompileEnvironmentUtil;
 import org.jetbrains.jet.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
@@ -111,7 +111,7 @@ public class ServerInitializer extends Initializer {
     }
 
     public static File getUnpackedRuntimePath() {
-        URL url = CompileEnvironment.class.getClassLoader().getResource("jet/JetObject.class");
+        URL url = CompileEnvironmentConfiguration.class.getClassLoader().getResource("jet/JetObject.class");
         if (url != null && url.getProtocol().equals("file")) {
             return new File(url.getPath()).getParentFile().getParentFile();
         }
@@ -119,7 +119,7 @@ public class ServerInitializer extends Initializer {
     }
 
     public static File getRuntimeJarPath() {
-        URL url = CompileEnvironment.class.getClassLoader().getResource("kotlin/namespace.class");
+        URL url = CompileEnvironmentConfiguration.class.getClassLoader().getResource("kotlin/namespace.class");
         if (url != null && url.getProtocol().equals("jar")) {
             String path = url.getPath();
             return new File(path.substring(path.indexOf(":") + 1, path.indexOf("!/")));
@@ -139,7 +139,6 @@ public class ServerInitializer extends Initializer {
 
             return setJavaCoreEnvironment();
         }
-        ErrorWriterOnServer.writeInfoToConsole("JavaCoreEnvironment is already initialized.");
         return true;
     }
 

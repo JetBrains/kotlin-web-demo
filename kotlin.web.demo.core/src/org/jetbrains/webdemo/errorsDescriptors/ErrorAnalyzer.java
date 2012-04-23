@@ -17,26 +17,26 @@
 package org.jetbrains.webdemo.errorsDescriptors;
 
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
-import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.Initializer;
-import org.jetbrains.webdemo.Interval;
-import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
-import org.jetbrains.webdemo.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
-import org.jetbrains.jet.lang.diagnostics.*;
+import org.jetbrains.jet.lang.diagnostics.Diagnostic;
+import org.jetbrains.jet.lang.diagnostics.Errors;
+import org.jetbrains.jet.lang.diagnostics.Severity;
+import org.jetbrains.jet.lang.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
-
+import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
+import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Interval;
+import org.jetbrains.webdemo.exceptions.KotlinCoreException;
+import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import java.util.*;
 
@@ -89,35 +89,37 @@ public class ErrorAnalyzer {
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
         try {
             for (Diagnostic diagnostic : diagnostics) {
-                if (diagnostic instanceof DiagnosticWithPsiElement && diagnostic.getPsiFile().getName().contains("core")) {
+                //fix for errors in js library files
+                if (diagnostic.getPsiFile().getName().contains("core")) {
                     continue;
                 }
-                if (diagnostic.getMessage().contains("This cast can never succeed")) {
+                String render = DefaultErrorMessages.RENDERER.render(diagnostic);
+                if (render.contains("This cast can never succeed")) {
                     continue;
                 }
                 if (diagnostic.getSeverity() != Severity.INFO) {
                     Iterator<TextRange> textRangeIterator = diagnostic.getTextRanges().iterator();
                     if (textRangeIterator == null) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator is null",
-                                diagnostic.getTextRanges() + " " + diagnostic.getMessage(),
+                                diagnostic.getTextRanges() + " " + render,
                                 SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
                         continue;
                     }
 
                     if (!textRangeIterator.hasNext()) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator hasNext() == false",
-                                diagnostic.getTextRanges() + " " + diagnostic.getMessage(),
+                                diagnostic.getTextRanges() + " " + render,
                                 SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
                         continue;
                     }
                     TextRange firstRange = textRangeIterator.next();
 
                     String className = diagnostic.getSeverity().name();
-                    if (!(diagnostic instanceof UnresolvedReferenceDiagnostic) && (diagnostic.getSeverity() == Severity.ERROR)) {
+                    if (!(diagnostic.getFactory() == Errors.UNRESOLVED_REFERENCE) && (diagnostic.getSeverity() == Severity.ERROR)) {
                         className = "red_wavy_line";
                     }
                     errors.add(new ErrorDescriptor(new Interval(firstRange.getStartOffset(), firstRange.getEndOffset(), currentDocument),
-                            diagnostic.getMessage(), diagnostic.getSeverity(), className));
+                            render, diagnostic.getSeverity(), className));
                 }
             }
         } catch (Throwable e) {
