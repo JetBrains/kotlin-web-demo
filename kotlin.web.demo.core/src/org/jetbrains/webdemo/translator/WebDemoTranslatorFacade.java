@@ -16,7 +16,9 @@
 
 package org.jetbrains.webdemo.translator;
 
+import com.google.common.base.Predicates;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
@@ -54,7 +56,7 @@ public final class WebDemoTranslatorFacade {
     public static BindingContext analyzeProgramCode(@NotNull JetFile file) {
         try {
 //            LOAD_JS_LIBRARY_CONFIG.setProject(Initializer.INITIALIZER.getEnvironment().getProject());
-            return AnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), LOAD_JS_LIBRARY_CONFIG);
+            return AnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), Predicates.<PsiFile>alwaysTrue(), LOAD_JS_LIBRARY_CONFIG);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), file.getText());

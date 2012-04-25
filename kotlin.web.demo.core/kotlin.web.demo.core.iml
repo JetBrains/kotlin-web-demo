@@ -12,6 +12,7 @@
     <orderEntry type="library" name="json" level="project" />
     <orderEntry type="library" name="kotlin" level="project" />
     <orderEntry type="library" name="kotlin-plugin" level="project" />
+    <orderEntry type="library" name="guava" level="project" />
   </component>
 </module>
 
