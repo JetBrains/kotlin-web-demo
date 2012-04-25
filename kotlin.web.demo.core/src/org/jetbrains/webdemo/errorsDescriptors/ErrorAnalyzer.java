@@ -68,7 +68,8 @@ public class ErrorAnalyzer {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY,
                         CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR)).getBindingContext();
-            } else {
+            }
+            else {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
             }
 
@@ -100,16 +101,20 @@ public class ErrorAnalyzer {
                 if (diagnostic.getSeverity() != Severity.INFO) {
                     Iterator<TextRange> textRangeIterator = diagnostic.getTextRanges().iterator();
                     if (textRangeIterator == null) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator is null",
-                                diagnostic.getTextRanges() + " " + render,
-                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new IllegalArgumentException("Text range for diagnostic is null."),
+                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(),
+                                "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() +
+                                "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render + "\n"
+                                + currentPsiFile.getText());
                         continue;
                     }
 
                     if (!textRangeIterator.hasNext()) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range for diagnostic is empty.",
-                                "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() + "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render,
-                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new IllegalArgumentException("Text range for diagnostic is empty."),
+                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(),
+                                "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() +
+                                        "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render + "\n"
+                                        + currentPsiFile.getText());
                         continue;
                     }
                     TextRange firstRange = textRangeIterator.next();
@@ -132,14 +137,18 @@ public class ErrorAnalyzer {
             public int compare(ErrorDescriptor o1, ErrorDescriptor o2) {
                 if (o1.getInterval().startPoint.line > o2.getInterval().startPoint.line) {
                     return 1;
-                } else if (o1.getInterval().startPoint.line < o2.getInterval().startPoint.line) {
+                }
+                else if (o1.getInterval().startPoint.line < o2.getInterval().startPoint.line) {
                     return -1;
-                } else if (o1.getInterval().startPoint.line == o2.getInterval().startPoint.line) {
+                }
+                else if (o1.getInterval().startPoint.line == o2.getInterval().startPoint.line) {
                     if (o1.getInterval().startPoint.charNumber > o2.getInterval().startPoint.charNumber) {
                         return 1;
-                    } else if (o1.getInterval().startPoint.charNumber < o2.getInterval().startPoint.charNumber) {
+                    }
+                    else if (o1.getInterval().startPoint.charNumber < o2.getInterval().startPoint.charNumber) {
                         return -1;
-                    } else if (o1.getInterval().startPoint.charNumber == o2.getInterval().startPoint.charNumber) {
+                    }
+                    else if (o1.getInterval().startPoint.charNumber == o2.getInterval().startPoint.charNumber) {
                         return 0;
                     }
                 }
