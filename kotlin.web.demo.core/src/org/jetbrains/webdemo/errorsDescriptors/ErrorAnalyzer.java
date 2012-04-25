@@ -107,8 +107,8 @@ public class ErrorAnalyzer {
                     }
 
                     if (!textRangeIterator.hasNext()) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator hasNext() == false",
-                                diagnostic.getTextRanges() + " " + render,
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range for diagnostic is empty.",
+                                "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() + "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render,
                                 SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
                         continue;
                     }
@@ -146,6 +146,7 @@ public class ErrorAnalyzer {
                 return -1;
             }
         });
+
     }
 
     private List<ErrorDescriptor> getErrorsByVisitor() {
