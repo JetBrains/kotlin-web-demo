@@ -101,20 +101,16 @@ public class ErrorAnalyzer {
                 if (diagnostic.getSeverity() != Severity.INFO) {
                     Iterator<TextRange> textRangeIterator = diagnostic.getTextRanges().iterator();
                     if (textRangeIterator == null) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new IllegalArgumentException("Text range for diagnostic is null."),
-                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(),
-                                "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() +
-                                "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render + "\n"
-                                + currentPsiFile.getText());
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator is null",
+                                diagnostic.getTextRanges() + " " + render,
+                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
                         continue;
                     }
 
                     if (!textRangeIterator.hasNext()) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new IllegalArgumentException("Text range for diagnostic is empty."),
-                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(),
-                                "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() +
-                                        "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render + "\n"
-                                        + currentPsiFile.getText());
+                        /*ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range for diagnostic is empty.",
+                                "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() + "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render,
+                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());*/
                         continue;
                     }
                     TextRange firstRange = textRangeIterator.next();
