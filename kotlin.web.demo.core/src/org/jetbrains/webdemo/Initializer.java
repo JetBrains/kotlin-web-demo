@@ -16,8 +16,7 @@
 
 package org.jetbrains.webdemo;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.jet.compiler.JetCoreEnvironment;
+import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
 
 /**
  * @author Natalia.Ukhorskaya

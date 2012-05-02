@@ -24,7 +24,7 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiJavaFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.compiler.CompileEnvironmentUtil;
+import org.jetbrains.jet.cli.jvm.compiler.CompileEnvironmentUtil;
 import org.jetbrains.jet.j2k.visitors.ClassVisitor;
 
 import java.io.File;

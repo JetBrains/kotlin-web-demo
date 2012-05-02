@@ -17,7 +17,7 @@
 package org.jetbrains.webdemo;
 
 import com.intellij.openapi.Disposable;
-import org.jetbrains.jet.compiler.JetCoreEnvironment;
+import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
 import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
