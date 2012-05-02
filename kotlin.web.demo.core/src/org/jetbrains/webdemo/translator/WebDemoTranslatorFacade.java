@@ -30,6 +30,8 @@ import org.jetbrains.k2js.utils.JetFileUtils;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.exceptions.KotlinCoreException;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 
@@ -70,48 +72,29 @@ public final class WebDemoTranslatorFacade {
         try {
             JSONArray result = new JSONArray();
             Map<String, String> map = new HashMap<String, String>();
-            try {
-                map.put("text", doTranslate(programText, argumentsString));
-            } catch (Throwable e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText + "\n" + argumentsString);
-                return ResponseUtils.getErrorInJson(e.getMessage());
-            }
+            map.put("text", doTranslate(programText, argumentsString));
             result.put(map);
             return result.toString();
 
-        } catch (AssertionError e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
-            return ResponseUtils.getErrorInJson("Translation error.");
-        } catch (UnsupportedOperationException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
-            return ResponseUtils.getErrorInJson("Unsupported feature.");
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
-            return ResponseUtils.getErrorInJson("Unexpected exception.");
+            KotlinCoreException ex = new KotlinCoreException(e);
+            return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, ex.getStackTraceString());
         }
     }
 
     @NotNull
     private static String doTranslate(@NotNull String programText,
                                       @NotNull String argumentsString) {
-        try {
-            K2JSTranslator translator = new K2JSTranslator(LOAD_JS_LIBRARY_CONFIG);
-            JetFile file = JetFileUtils.createPsiFile("test", programText, Initializer.INITIALIZER.getEnvironment().getProject());
+        K2JSTranslator translator = new K2JSTranslator(LOAD_JS_LIBRARY_CONFIG);
+        JetFile file = JetFileUtils.createPsiFile("test", programText, Initializer.INITIALIZER.getEnvironment().getProject());
 
-            String programCode = translator.generateProgramCode(file) + "\n";
-            String flushOutput = "Kotlin.System.flush();\n";
-            String callToMain = K2JSTranslator.generateCallToMain(file, argumentsString);
-            String programOutput = "Kotlin.System.output();\n";
-            return programCode + flushOutput + callToMain + programOutput;
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
-            return "";
-        }
+        String programCode = translator.generateProgramCode(file) + "\n";
+        String flushOutput = "Kotlin.System.flush();\n";
+        String callToMain = K2JSTranslator.generateCallToMain(file, argumentsString);
+        String programOutput = "Kotlin.System.output();\n";
+        return programCode + flushOutput + callToMain + programOutput;
     }
 
 }
