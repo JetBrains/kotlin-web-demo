@@ -29,10 +29,10 @@ import java.util.*
  * straightly up, down, left or right, no diagonal moves allowed.
  */
 fun findPath(maze : Maze) : List<#(Int, Int)>? {
-  val previous = HashMap<#(Int, Int), #(Int, Int)>
+  val previous = HashMap<#(Int, Int), #(Int, Int)>()
 
-  val queue = LinkedList<#(Int, Int)>
-  val visited = HashSet<#(Int, Int)>
+  val queue = LinkedList<#(Int, Int)>()
+  val visited = HashSet<#(Int, Int)>()
 
   queue.offer(maze.start)
   visited.add(maze.start)
@@ -63,7 +63,7 @@ fun findPath(maze : Maze) : List<#(Int, Int)>? {
  * Find neighbors of the (i, j) cell that are not walls
  */
 fun Maze.neighbors(i : Int, j : Int) : List<#(Int, Int)> {
-  val result = ArrayList<#(Int, Int)>
+  val result = ArrayList<#(Int, Int)>()
   addIfFree(i - 1, j, result)
   addIfFree(i, j - 1, result)
   addIfFree(i + 1, j, result)

@@ -12,7 +12,7 @@ fun parseInt(str : String) : Int? {
 
 fun main(args : Array<String>) {
   if (args.size < 2) {
-    System.out?.print("No number supplied");
+    println("No number supplied");
   } else {
     val x = parseInt(args[0])
     val y = parseInt(args[1])

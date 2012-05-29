@@ -37,7 +37,7 @@ fun main(args : Array<String>) {
       printBottles(Integer.parseInt(args[0]))
     }
     catch (e : NumberFormatException) {
-      System.err?.println("You have passed '${args[0]}' as a number of bottles, " +
+      System.err.println("You have passed '${args[0]}' as a number of bottles, " +
                           "but it is not a valid integral number")
     }
   }

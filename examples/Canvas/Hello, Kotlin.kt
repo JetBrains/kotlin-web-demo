@@ -72,7 +72,7 @@ fun renderBackground() {
   context.restore()
 }
 
-fun main() {
+fun main(args : Array<String>) {
   val interval = 50
   // we pass a literal that constructs a new HelloKotlin object
   val logos = Array(3) {
