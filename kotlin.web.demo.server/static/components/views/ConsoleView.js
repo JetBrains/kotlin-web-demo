@@ -99,7 +99,13 @@ var ConsoleView = (function () {
                         if (data[i].type == "info") {
                             p.className = "consoleViewInfo";
                         }
-                        p.innerHTML = unEscapeString(data[i].text);
+                        var message = data[i].text;
+                        if (data[i].type == "err" && message == "") {
+                            message = "Unknown exception."
+                        } else if (message == "timeout : timeout") {
+                            message = "Server didn't response for 10 seconds."
+                        }
+                        p.innerHTML = unEscapeString(message);
                     }
 
                     errors.appendChild(p);
