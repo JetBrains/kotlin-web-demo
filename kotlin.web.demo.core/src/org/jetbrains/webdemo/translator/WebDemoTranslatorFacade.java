@@ -16,9 +16,6 @@
 
 package org.jetbrains.webdemo.translator;
 
-import com.google.common.base.Predicates;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
@@ -26,6 +23,8 @@ import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.k2js.analyze.AnalyzerFacadeForJS;
 import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.facade.K2JSTranslator;
+import org.jetbrains.k2js.facade.MainCallParameters;
+import org.jetbrains.k2js.facade.exceptions.TranslationException;
 import org.jetbrains.k2js.utils.JetFileUtils;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
@@ -57,8 +56,9 @@ public final class WebDemoTranslatorFacade {
     @Nullable
     public static BindingContext analyzeProgramCode(@NotNull JetFile file) {
         try {
-//            LOAD_JS_LIBRARY_CONFIG.setProject(Initializer.INITIALIZER.getEnvironment().getProject());
-            return AnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), Predicates.<PsiFile>alwaysTrue(), LOAD_JS_LIBRARY_CONFIG);
+            BindingContext bindingContext = AnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), LOAD_JS_LIBRARY_CONFIG);
+            Initializer.reinitializeJavaEnvironment();
+            return bindingContext;
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), file.getText());
@@ -74,9 +74,15 @@ public final class WebDemoTranslatorFacade {
             Map<String, String> map = new HashMap<String, String>();
             map.put("text", doTranslate(programText, argumentsString));
             result.put(map);
+
+            Initializer.reinitializeJavaEnvironment();
+
             return result.toString();
 
         } catch (Throwable e) {
+
+            Initializer.reinitializeJavaEnvironment();
+
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
             KotlinCoreException ex = new KotlinCoreException(e);
@@ -86,15 +92,14 @@ public final class WebDemoTranslatorFacade {
 
     @NotNull
     private static String doTranslate(@NotNull String programText,
-                                      @NotNull String argumentsString) {
+                                      @NotNull String argumentsString) throws TranslationException {
         K2JSTranslator translator = new K2JSTranslator(LOAD_JS_LIBRARY_CONFIG);
         JetFile file = JetFileUtils.createPsiFile("test", programText, Initializer.INITIALIZER.getEnvironment().getProject());
-
-        String programCode = translator.generateProgramCode(file) + "\n";
+        String programCode = translator.generateProgramCode(file,
+                MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
         String flushOutput = "Kotlin.System.flush();\n";
-        String callToMain = K2JSTranslator.generateCallToMain(file, argumentsString);
         String programOutput = "Kotlin.System.output();\n";
-        return programCode + flushOutput + callToMain + programOutput;
+        return flushOutput + programCode + programOutput;
     }
 
 }

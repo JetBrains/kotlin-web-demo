@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.w3c.dom.Document;
@@ -128,13 +129,15 @@ public class ResponseUtils {
         int fPos = str.indexOf(before);
         if (fPos != -1) {
             str = str.substring(fPos + before.length());
-        } else {
+        }
+        else {
             return "";
         }
         int sPos = str.indexOf(after);
         if (sPos != -1) {
             return str.substring(0, sPos);
-        } else {
+        }
+        else {
             return str;
         }
     }
@@ -313,6 +316,47 @@ public class ResponseUtils {
 
     public static String getExampleOrProgramFolderByUrl(String url) {
         return ResponseUtils.substringBefore(url, "&name=").replaceAll("%20", " ");
+    }
+
+    @NotNull
+    public static String[] splitArguments(@NotNull String arguments) {
+        boolean inQuotes = false;
+        ArrayList<String> arrayList = new ArrayList<String>();
+        int firstChar = 0;
+        int i;
+        char ch;
+        for (i = 0; i < arguments.length(); i++) {
+            ch = arguments.charAt(i);
+            if (ch == '\\' && arguments.charAt(i + 1) == '\"') {
+                i++;
+                continue;
+            }
+            if (ch == '\"') {
+                inQuotes = !inQuotes;
+            }
+            if (ch == ' ') {
+                if (!inQuotes) {
+                    arrayList.add(arguments.substring(firstChar, i));
+                    firstChar = i + 1;
+                }
+            }
+        }
+
+        if (firstChar != arguments.length()) {
+            arrayList.add(arguments.substring(firstChar, arguments.length()));
+        }
+
+        String[] result = new String[arrayList.size()];
+
+        int j = 0;
+        for (String element : arrayList) {
+            element = element.replaceAll("\\\\\"", "QUOTE");
+            element = element.replaceAll("\"", "");
+            element = element.replaceAll("QUOTE", "\\\\\"");
+            result[j] = element;
+            j++;
+        }
+        return result;
     }
 
 }
