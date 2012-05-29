@@ -23,6 +23,7 @@ import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
 import org.jetbrains.jet.cli.jvm.compiler.TipsManager;
 import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.psi.*;
+import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
 import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
@@ -89,7 +90,7 @@ public class JsonResponseForCompletion {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
             } else {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile,
+                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList(),
                         CompilerDependencies.compilerDependenciesForProduction(ApplicationSettings.MODE)).getBindingContext();
             }
         } catch (Throwable e) {
