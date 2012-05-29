@@ -58,7 +58,7 @@ public class MainApplet extends JApplet implements ActionListener {
             request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
             ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
             Initializer.INITIALIZER = InitializerApplet.getInstance();
-            ApplicationSettings.MODE = CompilerSpecialMode.APPLET_WEB_DEMO;
+            ApplicationSettings.MODE = CompilerSpecialMode.IDEA;
             WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
 
             SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());

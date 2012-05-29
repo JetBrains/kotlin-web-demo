@@ -83,7 +83,7 @@ public class PathUtil {
     }
 
     @NotNull
-    public static VirtualFile jarFileToVirtualFile(@NotNull File file) {
+    public static VirtualFile jarFileOrDirectoryToVirtualFile(@NotNull File file) {
         /*if (!file.exists() || !file.isFile()) {
             throw new IllegalStateException("file must exist and be regular to be converted to virtual file: " + file);
         }*/
