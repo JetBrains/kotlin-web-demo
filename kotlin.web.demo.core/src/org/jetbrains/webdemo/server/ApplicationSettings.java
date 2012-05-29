@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.server;
 
+import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Natalia.Ukhorskaya
@@ -48,6 +50,12 @@ public class ApplicationSettings {
     public static String RT_JAR = "";
 
     public static final String DATABASE_VERSION = "1.0";
+
+    public static CompilerSpecialMode MODE = CompilerSpecialMode.REGULAR;
+
+    private ApplicationSettings() {
+
+    }
 
 
 }

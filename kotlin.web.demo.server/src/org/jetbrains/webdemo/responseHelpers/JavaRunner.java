@@ -327,7 +327,7 @@ public class JavaRunner {
     }
 
     private String[] generateCommandString(String pathToRootOut) {
-        String[] argsArray = splitArguments();
+        String[] argsArray = ResponseUtils.splitArguments(arguments);
 
         String[] builder;
         if (arguments.isEmpty()) {
@@ -348,45 +348,6 @@ public class JavaRunner {
 
     }
 
-    public String[] splitArguments() {
-        boolean inQuotes = false;
-        ArrayList<String> arrayList = new ArrayList<String>();
-        int firstChar = 0;
-        int i;
-        char ch;
-        for (i = 0; i < arguments.length(); i++) {
-            ch = arguments.charAt(i);
-            if (ch == '\\' && arguments.charAt(i + 1) == '\"') {
-                i++;
-                continue;
-            }
-            if (ch == '\"') {
-                inQuotes = !inQuotes;
-            }
-            if (ch == ' ') {
-                if (!inQuotes) {
-                    arrayList.add(arguments.substring(firstChar, i));
-                    firstChar = i + 1;
-                }
-            }
-        }
-
-        if (firstChar != arguments.length()) {
-            arrayList.add(arguments.substring(firstChar, arguments.length()));
-        }
-
-        String[] result = new String[arrayList.size()];
-
-        int j = 0;
-        for (String element : arrayList) {
-            element = element.replaceAll("\\\\\"", "QUOTE");
-            element = element.replaceAll("\"", "");
-            element = element.replaceAll("QUOTE", "\\\\\"");
-            result[j] = element;
-            j++;
-        }
-        return result;
-    }
 
     private String modifyArguments(String arguments) {
         return StringEscapeUtils.unescapeJavaScript(arguments);

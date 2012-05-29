@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-import com.intellij.openapi.util.Pair;
+import org.jetbrains.jet.internal.com.intellij.openapi.util.Pair;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.server.ApplicationSettings;

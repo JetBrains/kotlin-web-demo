@@ -16,13 +16,12 @@
 
 package org.jetbrains.webdemo.errorsDescriptors;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiFile;
-import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
+import org.jetbrains.jet.internal.com.intellij.openapi.editor.Document;
+import org.jetbrains.jet.internal.com.intellij.openapi.util.TextRange;
+import org.jetbrains.jet.internal.com.intellij.psi.PsiElement;
+import org.jetbrains.jet.internal.com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.jet.internal.com.intellij.psi.PsiErrorElement;
+import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
 import org.jetbrains.jet.lang.diagnostics.Diagnostic;
 import org.jetbrains.jet.lang.diagnostics.Errors;
 import org.jetbrains.jet.lang.diagnostics.Severity;
@@ -35,6 +34,7 @@ import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Interval;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
@@ -66,8 +66,8 @@ public class ErrorAnalyzer {
         try {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY,
-                        CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR)).getBindingContext();
+                        (JetFile) currentPsiFile,
+                        CompilerDependencies.compilerDependenciesForProduction(ApplicationSettings.MODE)).getBindingContext();
             }
             else {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);

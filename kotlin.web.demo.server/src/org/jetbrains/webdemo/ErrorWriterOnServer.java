@@ -16,9 +16,9 @@
 
 package org.jetbrains.webdemo;
 
-import com.intellij.diagnostic.errordialog.Attachment;
-import com.intellij.errorreport.bean.ErrorBean;
-import com.intellij.errorreport.itn.ITNProxy;
+import org.jetbrains.jet.internal.com.intellij.diagnostic.errordialog.Attachment;
+import org.jetbrains.jet.internal.com.intellij.errorreport.bean.ErrorBean;
+import org.jetbrains.jet.internal.com.intellij.errorreport.itn.ITNProxy;
 import org.apache.log4j.Logger;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 

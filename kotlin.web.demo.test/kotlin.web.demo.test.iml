@@ -11,14 +11,11 @@
     <orderEntry type="module" module-name="kotlin.web.demo.server" />
     <orderEntry type="module" module-name="kotlin.web.demo.core" />
     <orderEntry type="library" name="commons-lang" level="project" />
-    <orderEntry type="library" name="annotations" level="project" />
-    <orderEntry type="library" name="guava" level="project" />
     <orderEntry type="library" name="selenium" level="project" />
-    <orderEntry type="library" name="kotlin" level="project" />
-    <orderEntry type="library" name="intellij-core" level="project" />
+    <orderEntry type="library" name="kotlin-runtime" level="project" />
     <orderEntry type="library" name="dartc" level="project" />
-    <orderEntry type="library" name="kotlin-plugin" level="project" />
     <orderEntry type="library" name="junit-4.10" level="project" />
+    <orderEntry type="library" name="kotlin-compiler" level="project" />
   </component>
 </module>
 

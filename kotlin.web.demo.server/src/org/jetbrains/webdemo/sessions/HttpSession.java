@@ -16,8 +16,8 @@
 
 package org.jetbrains.webdemo.sessions;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
+import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;

@@ -16,12 +16,11 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.internal.com.intellij.openapi.editor.Document;
+import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
+import org.jetbrains.jet.internal.com.intellij.psi.PsiElement;
+import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
 import org.jetbrains.jet.cli.jvm.compiler.TipsManager;
-import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.psi.*;
 import org.jetbrains.jet.lang.resolve.BindingContext;
@@ -90,8 +89,8 @@ public class JsonResponseForCompletion {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
             } else {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY,
-                        CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR)).getBindingContext();
+                        (JetFile) currentPsiFile,
+                        CompilerDependencies.compilerDependenciesForProduction(ApplicationSettings.MODE)).getBindingContext();
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
@@ -200,7 +199,7 @@ public class JsonResponseForCompletion {
         } else {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     "Impossible to find icon",
-                    descriptor.getName(), sessionInfo.getType(), "");
+                    descriptor.getName().getName(), sessionInfo.getType(), "");
             return "";
         }
     }

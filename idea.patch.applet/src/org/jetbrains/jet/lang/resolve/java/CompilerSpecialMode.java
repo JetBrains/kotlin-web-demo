@@ -38,7 +38,6 @@ public enum CompilerSpecialMode {
     }
 
     public boolean includeJdk() {
-        System.out.println(this != IDEA && this != APPLET_WEB_DEMO);
         return this != IDEA && this != APPLET_WEB_DEMO;
     }
 

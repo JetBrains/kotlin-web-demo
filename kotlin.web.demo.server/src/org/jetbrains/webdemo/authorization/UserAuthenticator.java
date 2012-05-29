@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.authorization;
 
-import com.intellij.openapi.util.Pair;
+import org.jetbrains.jet.internal.com.intellij.openapi.util.Pair;
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpPrincipal;

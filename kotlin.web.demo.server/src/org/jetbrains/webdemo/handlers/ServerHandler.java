@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.handlers;
 
-import com.google.common.io.ByteStreams;
+import org.jetbrains.jet.internal.com.google.common.io.ByteStreams;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.authorization.*;

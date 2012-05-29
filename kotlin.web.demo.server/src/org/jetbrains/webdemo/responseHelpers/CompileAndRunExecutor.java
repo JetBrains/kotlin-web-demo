@@ -16,15 +16,14 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
+import org.jetbrains.jet.internal.com.intellij.openapi.util.io.FileUtil;
+import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
 import org.jetbrains.jet.analyzer.AnalyzeExhaust;
 import org.jetbrains.jet.codegen.ClassBuilderFactories;
 import org.jetbrains.jet.codegen.ClassFileFactory;
 import org.jetbrains.jet.codegen.CompilationErrorHandler;
 import org.jetbrains.jet.codegen.GenerationState;
-import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
@@ -84,7 +83,7 @@ public class CompileAndRunExecutor {
             GenerationState generationState;
             try {
                 AnalyzeExhaust analyzeExhaust = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY, CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR));
+                        (JetFile) currentPsiFile, CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR));
                 generationState = new GenerationState(currentProject,ClassBuilderFactories.binaries(false), analyzeExhaust, Collections.singletonList((JetFile) currentPsiFile));
 //                generationState = new GenerationState(currentProject, ClassBuilderFactories.binaries(false));
                 generationState.compileCorrectFiles(new CompilationErrorHandler() {

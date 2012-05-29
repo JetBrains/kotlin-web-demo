@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.log;
 
-import com.google.common.io.Files;
+import org.jetbrains.jet.internal.com.google.common.io.Files;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;

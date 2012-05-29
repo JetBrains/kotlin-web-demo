@@ -16,9 +16,9 @@
 
 package org.jetbrains.webdemo;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.internal.com.intellij.openapi.editor.Document;
+import org.jetbrains.jet.internal.com.intellij.openapi.util.TextRange;
+import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
 
 /**
  * Created by IntelliJ IDEA.

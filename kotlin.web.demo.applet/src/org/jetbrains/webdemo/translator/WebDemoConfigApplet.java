@@ -16,12 +16,13 @@
 
 package org.jetbrains.webdemo.translator;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.io.FileUtil;
+import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
+import org.jetbrains.jet.internal.com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.k2js.config.Config;
+import org.jetbrains.k2js.config.EcmaVersion;
 import org.jetbrains.k2js.utils.JetFileUtils;
 
 import java.io.IOException;
@@ -32,14 +33,13 @@ import java.util.List;
 /**
  * @author Pavel Talanov
  */
-//TODO: dup with TestConfig
 public final class WebDemoConfigApplet extends Config {
 
     @Nullable
     private /*var*/ List<JetFile> jsLibFiles = null;
 
     public WebDemoConfigApplet(@NotNull Project project) {
-        super(project);
+        super(project, EcmaVersion.defaultVersion());
     }
 
     @NotNull
