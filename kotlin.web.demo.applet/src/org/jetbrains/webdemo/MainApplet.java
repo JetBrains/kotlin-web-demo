@@ -20,8 +20,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
+import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
@@ -56,6 +58,7 @@ public class MainApplet extends JApplet implements ActionListener {
             request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
             ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
             Initializer.INITIALIZER = InitializerApplet.getInstance();
+            ApplicationSettings.MODE = CompilerSpecialMode.APPLET_WEB_DEMO;
             WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
 
             SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
