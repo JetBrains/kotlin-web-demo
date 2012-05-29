@@ -16,18 +16,16 @@
 
 package org.jetbrains.webdemo;
 
-import com.intellij.lang.java.JavaParserDefinition;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileTypes.FileTypeRegistry;
-import com.intellij.openapi.util.Getter;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.encoding.EncodingRegistry;
-import com.intellij.util.Function;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.cli.jvm.compiler.CompileEnvironmentConfiguration;
 import org.jetbrains.jet.cli.jvm.compiler.CompileEnvironmentUtil;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.jet.cli.jvm.compiler.K2JVMCompileEnvironmentConfiguration;
+import org.jetbrains.jet.internal.com.intellij.lang.java.JavaParserDefinition;
+import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
+import org.jetbrains.jet.internal.com.intellij.openapi.application.ApplicationManager;
+import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistry;
+import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
+import org.jetbrains.jet.internal.com.intellij.openapi.vfs.encoding.EncodingRegistry;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
 import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
@@ -36,7 +34,6 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 import java.net.URL;
-import java.net.URLClassLoader;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,7 +42,6 @@ import java.net.URLClassLoader;
  * Time: 3:49 PM
  */
 public class ServerInitializer extends Initializer {
-    //    private static final Logger LOG = Logger.getLogger(Initializer.class);
     private static ServerInitializer initializer = new ServerInitializer();
 
     private static Getter<FileTypeRegistry> registry;
@@ -68,6 +64,16 @@ public class ServerInitializer extends Initializer {
         return null;
     }
 
+    @Override
+    public Getter<FileTypeRegistry> getRegistry() {
+        return registry;
+    }
+
+    @Override
+    public Disposable getRoot() {
+        return root;
+    }
+
     public boolean setJavaCoreEnvironment() {
         File rtJar = findRtJar();
         if (rtJar == null) {
@@ -86,7 +92,6 @@ public class ServerInitializer extends Initializer {
         environment.registerParserDefinition(new JavaParserDefinition());
 
         registry = FileTypeRegistry.ourInstanceGetter;
-//        ((MockProject) environment.getProject()).registerService(JavaPsiImplementationHelper.class, new CoreJavaPsiImplementationHelper());
 
         return true;
     }
@@ -111,7 +116,7 @@ public class ServerInitializer extends Initializer {
     }
 
     public static File getUnpackedRuntimePath() {
-        URL url = CompileEnvironmentConfiguration.class.getClassLoader().getResource("jet/JetObject.class");
+        URL url = K2JVMCompileEnvironmentConfiguration.class.getClassLoader().getResource("jet/JetObject.class");
         if (url != null && url.getProtocol().equals("file")) {
             return new File(url.getPath()).getParentFile().getParentFile();
         }
@@ -119,7 +124,7 @@ public class ServerInitializer extends Initializer {
     }
 
     public static File getRuntimeJarPath() {
-        URL url = CompileEnvironmentConfiguration.class.getClassLoader().getResource("kotlin/namespace.class");
+        URL url = K2JVMCompileEnvironmentConfiguration.class.getClassLoader().getResource("kotlin/namespace.class");
         if (url != null && url.getProtocol().equals("jar")) {
             String path = url.getPath();
             return new File(path.substring(path.indexOf(":") + 1, path.indexOf("!/")));
@@ -144,10 +149,6 @@ public class ServerInitializer extends Initializer {
 
     public static void reinitializeJavaEnvironment() {
         ApplicationManager.setApplication(environment.getApplication(), registry, EncodingRegistry.ourInstanceGetter, root);
-//        environment.registerFileType(JetFileType.INSTANCE, "kt");
-//        environment.registerFileType(JetFileType.INSTANCE, "kts");
-//        environment.registerFileType(JetFileType.INSTANCE, "ktm");
-//        environment.registerFileType(JetFileType.INSTANCE, "jet");
     }
 
     @Nullable
@@ -170,58 +171,7 @@ public class ServerInitializer extends Initializer {
         return rtJar;
     }
 
-    @Nullable
-    private File findRtJar(String javaHome) {
-        File rtJar = new File(javaHome, "jre" + File.separatorChar + "lib" + File.separatorChar + "rt.jar");
-        ErrorWriterOnServer.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
-        if (rtJar.exists()) {
-            return rtJar;
-        }
-        ErrorWriter.writeErrorToConsole("Couldn't found rt.jar in " + rtJar.getAbsolutePath());
-        return null;
-    }
 
-    @Nullable
-    private File findClassesJar(String javaHome) {
-        File rtJar = new File(javaHome, "Classes" + File.separatorChar + "classes.jar");
-        ErrorWriterOnServer.LOG_FOR_INFO.info(rtJar.getAbsolutePath() + " exists = " + rtJar.exists());
-        if (rtJar.exists()) {
-            return rtJar;
-        }
-        ErrorWriter.writeErrorToConsole("Couldn't found classes.jar in " + rtJar.getAbsolutePath());
-        return null;
-    }
-
-    @Nullable
-    private File findActiveRtJar(boolean failOnError) {
-        ErrorWriter.writeInfoToConsole("Look for active rt.jar");
-        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-        if (systemClassLoader instanceof URLClassLoader) {
-            URLClassLoader loader = (URLClassLoader) systemClassLoader;
-            for (URL url : loader.getURLs()) {
-                if ("file".equals(url.getProtocol())) {
-                    if (url.getFile().endsWith("/lib/rt.jar")) {
-                        return new File(url.getFile().replaceAll("%20", " "));
-                    }
-                    if (url.getFile().endsWith("/Classes/classes.jar")) {
-                        return new File(url.getFile()).getAbsoluteFile();
-                    }
-                }
-            }
-            if (failOnError) {
-                ErrorWriter.writeErrorToConsole("Could not find rt.jar in system class loader: " + StringUtil.join(loader.getURLs(), new Function<URL, String>() {
-                    @Override
-                    public String fun(URL url) {
-                        return url.toString();
-                    }
-                }, ", "));
-            }
-        } else if (failOnError) {
-            ErrorWriter.writeErrorToConsole("System class loader is not an URLClassLoader: " + systemClassLoader);
-        }
-        ErrorWriter.writeErrorToConsole("Couldn't found classes.jar or rt.jar in systemClassLoader " + systemClassLoader.toString());
-        return null;
-    }
 }
 
 

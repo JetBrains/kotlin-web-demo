@@ -16,8 +16,10 @@
 
 package org.jetbrains.webdemo;
 
-import com.intellij.openapi.Disposable;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
+import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistry;
+import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
 import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
@@ -48,19 +50,29 @@ public class InitializerApplet extends Initializer {
         return null;
     }
 
+    private static Getter<FileTypeRegistry> registry;
+    private static Disposable root;
+
+    @Override
+    public Getter<FileTypeRegistry> getRegistry() {
+        return registry;
+    }
+
+    @Override
+    public Disposable getRoot() {
+        return root;
+    }
+
     public boolean initJavaCoreEnvironment() {
         if (environment == null) {
 
-            Disposable root = new Disposable() {
+            root = new Disposable() {
                 @Override
                 public void dispose() {
                 }
             };
-            environment = new JetCoreEnvironment(root, CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR));
-
-//            environment.addToClasspath(new File(InitializerApplet.class.getResource("rt.jar")));
-//            environment.addToClasspath(new File("kotlin-runtime.jar"));
-//            environment.addToClasspath(new File("kotlin-compiler.jar"));
+            environment = new JetCoreEnvironment(root,
+                    CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.APPLET_WEB_DEMO));
 
             environment.registerFileType(JetFileType.INSTANCE, "kt");
             environment.registerFileType(JetFileType.INSTANCE, "kts");
@@ -68,6 +80,7 @@ public class InitializerApplet extends Initializer {
             environment.registerFileType(JetFileType.INSTANCE, "jet");
             environment.registerParserDefinition(new JetParserDefinition());
 
+            registry = FileTypeRegistry.ourInstanceGetter;
 
             return true;
             //return setJavaCoreEnvironment();
