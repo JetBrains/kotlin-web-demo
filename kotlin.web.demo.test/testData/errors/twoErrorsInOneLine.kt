@@ -1,3 +1,3 @@
-fun main(args : Array<String>) { 
-    System.err.println("ERROR"
-}  
+fun main(args : Array<String>) {
+  prntln("ERROR"
+}

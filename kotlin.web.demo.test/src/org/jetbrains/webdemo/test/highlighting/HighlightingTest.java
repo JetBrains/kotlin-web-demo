@@ -34,11 +34,11 @@ public class HighlightingTest extends BaseTest {
 
     public void test$errors$oneError() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Only safe calls (?.) are allowed on a nullable receiver of type java.io.PrintStream?\"," +
-                "\"className\":\"red_wavy_line\"," +
+        String expectedResult = "[{\"titleName\":\"Unresolved reference: prntln\"," +
+                "\"className\":\"ERROR\"," +
                 "\"severity\":\"ERROR\"," +
-                "\"y\":\"{line: 1, ch: 13}\"," +
-                "\"x\":\"{line: 1, ch: 12}\"}]";
+                "\"y\":\"{line: 1, ch: 8}\"," +
+                "\"x\":\"{line: 1, ch: 2}\"}]";
         compareResponseAndExpectedResult(fileName, expectedResult, "java");
         /*expectedResult = "[{\"titleName\":\"Unresolved reference: System\"," +
                 "\"className\":\"ERROR\"," +
@@ -50,7 +50,7 @@ public class HighlightingTest extends BaseTest {
 
     public void test$errors$oneError$js() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this).substring(0, TestUtils.getNameByTestName(this).length() - 3) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Unresolved reference: System\"," +
+        String expectedResult = "[{\"titleName\":\"Unresolved reference: prntln\"," +
                 "\"className\":\"ERROR\"," +
                 "\"severity\":\"ERROR\"," +
                 "\"y\":\"{line: 1, ch: 8}\"," +
@@ -70,16 +70,16 @@ public class HighlightingTest extends BaseTest {
 
     public void test$errors$twoErrorsInOneLine() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Only safe calls (?.) are allowed on a nullable receiver of type java.io.PrintStream?\"," +
-                "\"className\":\"red_wavy_line\"," +
+        String expectedResult = "[{\"titleName\":\"Unresolved reference: prntln\"," +
+                "\"className\":\"ERROR\"," +
                 "\"severity\":\"ERROR\"," +
-                "\"y\":\"{line: 1, ch: 15}\"," +
-                "\"x\":\"{line: 1, ch: 14}\"}," +
+                "\"y\":\"{line: 1, ch: 8}\"," +
+                "\"x\":\"{line: 1, ch: 2}\"}," +
                 "{\"titleName\":\"Expecting ')'\"," +
                 "\"className\":\"red_wavy_line\"," +
                 "\"severity\":\"ERROR\"," +
-                "\"y\":\"{line: 1, ch: 30}\"," +
-                "\"x\":\"{line: 1, ch: 29}\"}]";
+                "\"y\":\"{line: 1, ch: 16}\"," +
+                "\"x\":\"{line: 1, ch: 15}\"}]";
         compareResponseAndExpectedResult(fileName, expectedResult, "java");
     }
 
