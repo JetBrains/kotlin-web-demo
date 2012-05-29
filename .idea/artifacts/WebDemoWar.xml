@@ -9,23 +9,18 @@
           <element id="module-output" name="kotlin.web.demo.core" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="guava" />
-          <element id="library" level="project" name="annotations" />
-          <element id="library" level="project" name="intellij-core" />
-          <element id="library" level="project" name="kotlin" />
+          <element id="library" level="project" name="kotlin-runtime" />
           <element id="library" level="project" name="dartc" />
           <element id="library" level="project" name="json" />
-          <element id="library" level="project" name="picocontainer" />
           <element id="library" level="project" name="log4j" />
           <element id="library" level="project" name="scribe" />
           <element id="library" level="project" name="commons-lang" />
-          <element id="library" level="project" name="trove4j" />
-          <element id="library" level="project" name="asm-all" />
-          <element id="library" level="project" name="kotlin-plugin" />
           <element id="directory" name="alt">
             <element id="library" level="project" name="kotlin-jdk-headers" />
           </element>
           <element id="library" level="project" name="commons-codec" />
+          <element id="library" level="project" name="kotlin-compiler" />
+          <element id="library" level="project" name="kotlin-plugin" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />

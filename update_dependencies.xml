@@ -58,6 +58,8 @@
             <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/alt/kotlin-jdk-headers.jar"
                   todir="kotlin.web.demo.test.applet/resources"/>
         </sequential>
+
+
     </macrodef>
 
     <macrodef name="set_kotlin_version">
@@ -88,6 +90,8 @@
             <mkdir dir="${dependencies.dir}"/>
             <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
         </sequential>
+
+
     </macrodef>
 
     <macrodef name="set_kotlin_version_internal">
@@ -121,7 +125,7 @@
              dest="${dependencies.dir}/build.txt"/>
         <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
         <condition property="isLastVersion">
-            <equals arg1="${version}" arg2="0.1.2245" />
+            <equals arg1="${version}" arg2="0.1.2423" />
         </condition>
     </target>
 

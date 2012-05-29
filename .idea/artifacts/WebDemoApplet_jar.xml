@@ -1,23 +1,14 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="WebDemoApplet:jar">
     <output-path>$PROJECT_DIR$/kotlin.web.demo.server/static</output-path>
-    <root id="archive" name="WebDemoApplet17042012.jar">
+    <root id="archive" name="WebDemoApplet28052012.jar">
       <element id="module-output" name="idea.patch.applet" />
       <element id="module-output" name="kotlin.web.demo.applet" />
       <element id="module-output" name="kotlin.web.demo.core" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/json.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/js/dart-r3300.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/kotlin-plugin.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/annotations.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/intellij-core.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-compiler.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-runtime.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/picocontainer.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/trove4j.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/guava-11.0.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/asm-commons.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/asm-util-3.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/asm.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-compiler.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/json.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/lib/dart-r3300.jar" path-in-jar="/" />
       <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/alt/kotlin-jdk-headers.jar" />
       <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-runtime.jar" />
       <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.core/resources" />
