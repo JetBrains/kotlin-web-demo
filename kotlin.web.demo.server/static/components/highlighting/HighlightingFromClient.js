@@ -50,6 +50,13 @@ var HighlightingFromClient = (function () {
             if (document.getElementById("myapplet") == null) {
                 $("div#all").after("<applet id=\"myapplet\" code=\"org.jetbrains.webdemo.MainApplet\" width=\"0\" height=\"0\" ARCHIVE=\"/static/WebDemoApplet" + APPLET_VERSION + ".jar\" style=\"display: none;\"></applet>");
             }
+
+            if (!checkIfAppletLoaded()) {
+                setTimeout(getDataFromApplet(confTypeString, file, callback), 3000);
+                return;
+            }
+
+
             try {
                 var dataFromApplet;
                 try {
@@ -83,6 +90,16 @@ var HighlightingFromClient = (function () {
                 isLoadingHighlighting = false;
                 instance.onFail(e);
             }
+        }
+
+        function checkIfAppletLoaded() {
+            try {
+                var defined = $("#myapplet")[0].getHighlighting != undefined;
+                return defined;
+            }  catch (e) {
+                return false;
+            }
+
         }
 
         return instance;
