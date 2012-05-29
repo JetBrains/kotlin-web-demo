@@ -45,6 +45,25 @@ function Example() {
 var configurationManager = new ConfigurationComponent();
 var actionManager = new ActionManager();
 
+actionManager.registerAction("org.jetbrains.web.demo.run",
+    new Shortcut("Ctrl+F9", function (e) {
+        return e.keyCode == 120 && e.ctrlKey;
+    }), new Shortcut("Ctrl+R", function (e) {
+        return e.keyCode == 82 && e.ctrlKey;
+    }));
+actionManager.registerAction("org.jetbrains.web.demo.reformat",
+    new Shortcut("Ctrl+Alt+L", null), /*default*/
+    new Shortcut("Cmd+Alt+L", null)); /*mac*/
+actionManager.registerAction("org.jetbrains.web.demo.autocomplete",
+    new Shortcut("Ctrl+Space", null));
+actionManager.registerAction("org.jetbrains.web.demo.save",
+    new Shortcut("Ctrl+S", function (e) {
+        return e.keyCode == 83 && e.ctrlKey;
+    }), new Shortcut("Cmd+S", function (e) {
+        return e.keyCode == 83 && e.metaKey;
+    }));
+
+
 var editor = new KotlinEditor();
 
 var argumentsView = new ArgumentsView($("#arguments"));
@@ -54,7 +73,7 @@ var problemsView = new ProblemsView($("#problems"), $("#tabs"));
 
 var canvasPopup = new CanvasPopup($("#popupForCanvas"));
 
-var runButton = new Button($("#run"), actionManager.getShortcutByName("org.jetbrains.web.demo.run"));
+var runButton = new Button($("#run"), actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
 var refreshButton = new Button($("#refresh"), null);
 
 var runProvider = new RunProvider();
@@ -163,6 +182,7 @@ highlighting.onHighlight = function (highlightingObject) {
 };
 
 highlighting.onFail = function (error) {
+    runButton.setEnabled(true);
     consoleView.writeException(error);
     statusBarView.setMessage(StatusBarView.Messages.get_highlighting_fail);
 };
@@ -239,24 +259,6 @@ loginProvider.onFail = function (exception, actionCode) {
     consoleView.writeException(exception);
     statusBarView.setMessage(actionCode);
 };
-
-actionManager.registerAction("org.jetbrains.web.demo.run",
-    new Shortcut("Ctrl+F9", function (e) {
-        return e.keyCode == 120 && e.ctrlKey;
-    }), new Shortcut("Ctrl+R", function (e) {
-        return e.keyCode == 82 && e.ctrlKey;
-    }));
-actionManager.registerAction("org.jetbrains.web.demo.reformat",
-    new Shortcut("Ctrl+Alt+L", null), /*default*/
-    new Shortcut("Cmd+Alt+L", null)); /*mac*/
-actionManager.registerAction("org.jetbrains.web.demo.autocomplete",
-    new Shortcut("Ctrl+Space", null));
-actionManager.registerAction("org.jetbrains.web.demo.save",
-    new Shortcut("Ctrl+S", function (e) {
-        return e.keyCode == 83 && e.ctrlKey;
-    }), new Shortcut("Cmd+S", function (e) {
-        return e.keyCode == 83 && e.metaKey;
-    }));
 
 $(document).keydown(function (e) {
     var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
