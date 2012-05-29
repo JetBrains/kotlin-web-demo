@@ -72,7 +72,7 @@ public class InitializerApplet extends Initializer {
                 }
             };
             environment = new JetCoreEnvironment(root,
-                    CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.APPLET_WEB_DEMO));
+                    CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.IDEA));
 
             environment.registerFileType(JetFileType.INSTANCE, "kt");
             environment.registerFileType(JetFileType.INSTANCE, "kts");
