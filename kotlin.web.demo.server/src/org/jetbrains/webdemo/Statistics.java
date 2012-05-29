@@ -79,7 +79,6 @@ public class Statistics {
         File file = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + "counter.txt");
         if (!file.exists()) {
             try {
-                //todo
                 if (file.getAbsolutePath().contains("BuildAgent")) {
                     return;
                 }
