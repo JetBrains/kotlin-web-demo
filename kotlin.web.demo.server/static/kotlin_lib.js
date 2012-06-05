@@ -122,6 +122,9 @@ var Kotlin;
     })());
 
     var isType = function (object, klass) {
+        if (object === null) {
+            return false;
+        }
         var current = object.get_class();
         while (current !== klass) {
             if (current === null) {
@@ -286,8 +289,18 @@ var Kotlin;
 
     Kotlin.Exceptions = {};
     Kotlin.Exception = Kotlin.Class.create();
-    Kotlin.Exceptions.IndexOutOfBounds = {};
+    Kotlin.RuntimeException = Kotlin.Class.create(Kotlin.Exception);
+    Kotlin.Exceptions.IndexOutOfBounds = Kotlin.Class.create(Kotlin.Exception);
+    Kotlin.Exceptions.NullPointerException = Kotlin.Class.create(Kotlin.Exception);
+    Kotlin.Exceptions.NoSuchElementException = Kotlin.Class.create(Kotlin.Exception);
+    Kotlin.Exceptions.IllegalArgumentException = Kotlin.Class.create(Kotlin.Exception);
+    Kotlin.Exceptions.IllegalStateException = Kotlin.Class.create(Kotlin.Exception);
+    Kotlin.Exceptions.IndexOutOfBoundsException = Kotlin.Class.create(Kotlin.Exception);
+    Kotlin.Exceptions.UnsupportedOperationException = Kotlin.Class.create(Kotlin.Exception);
 
+    Kotlin.throwNPE = function() {
+        throw new Kotlin.Exceptions.NullPointerException();
+    };
 
     Kotlin.ArrayList = Class.create({
         initialize:function () {
@@ -324,7 +337,15 @@ var Kotlin;
                 this.add(it.next());
             }
         },
-        remove:function (index) {
+        remove:function(value) {
+            for (var i = 0; i < this.$size; ++i) {
+                if (this.array[i] == value) {
+                    this.removeByIndex(i);
+                    return;
+                }
+            }
+        },
+        removeByIndex:function (index) {
             for (var i = index; i < this.$size - 1; ++i) {
                 this.array[i] = this.array[i + 1];
             }
@@ -345,8 +366,51 @@ var Kotlin;
     });
 
 
-    Kotlin.parseInt =
-    function (str) {
+    Kotlin.AbstractList = Class.create({
+        set:function (index, value) {
+            throw new Kotlin.Exceptions.UnsupportedOperationException();
+        },
+        iterator:function () {
+            return new Kotlin.ArrayIterator(this);
+        },
+        isEmpty:function () {
+            return (this.size() === 0);
+        },
+        add:function (element) {
+            throw new Kotlin.Exceptions.UnsupportedOperationException();
+        },
+        addAll:function (collection) {
+            var it = collection.iterator();
+            while (it.hasNext()) {
+                this.add(it.next());
+            }
+        },
+        remove:function(value) {
+            for (var i = 0; i < this.$size; ++i) {
+                if (this.array[i] == value) {
+                    this.removeByIndex(i);
+                    return;
+                }
+            }
+        },
+        removeByIndex:function (index) {
+            throw new Kotlin.Exceptions.UnsupportedOperationException();
+        },
+        clear:function () {
+            throw new Kotlin.Exceptions.UnsupportedOperationException();
+        },
+        contains:function (obj) {
+            for (var i = 0; i < this.$size; ++i) {
+                if (Kotlin.equals(this.array[i], obj)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    });
+
+
+    Kotlin.parseInt = function (str) {
         return parseInt(str, 10);
     }
     ;
@@ -403,16 +467,16 @@ var Kotlin;
         Kotlin.System.out().print(s);
     };
 
-    Kotlin.AbstractFunctionInvokationError = Class.create();
+    Kotlin.AbstractFunctionInvocationError = Class.create();
 
     Kotlin.Iterator = Class.create({
         initialize:function () {
         },
         next:function () {
-            throw new Kotlin.AbstractFunctionInvokationError();
+            throw new Kotlin.AbstractFunctionInvocationError();
         },
         hasNext:function () {
-            throw new Kotlin.AbstractFunctionInvokationError();
+            throw new Kotlin.AbstractFunctionInvocationError();
         }
     });
 
@@ -431,6 +495,7 @@ var Kotlin;
             return this.hasNext();
         }
     });
+
 
     Kotlin.RangeIterator = Kotlin.Class.create(Kotlin.Iterator, {
         initialize:function (start, count, reversed) {
@@ -496,7 +561,7 @@ var Kotlin;
                 initialize:function () {
                 },
                 compare:function (el1, el2) {
-                    throw new Kotlin.AbstractFunctionInvokationError();
+                    throw new Kotlin.AbstractFunctionInvocationError();
                 }
             }
     );

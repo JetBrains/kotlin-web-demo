@@ -6,24 +6,27 @@ Note that only a subset of the api is supported for now.
 
 package fancylines
 
-import js.*;
-import html5.*;
-import jquery.*;
+import js.dom.html5.*
+import js.dom.html.window
+import js.jquery.*
 
-fun main(args : Array<String>) {
-  //jq is a name for JQuery function
+fun main(args: Array<String>) {
   jq {
-    FancyLines().run();
+    FancyLines().run()
   }
 }
 
+val canvas: HTMLCanvasElement
+  get() {
+    return window.document.getElementsByTagName("canvas").item(0) as HTMLCanvasElement
+  }
+
 class FancyLines() {
-  // we use two 'magic' functions here getContext() and getCanvas()
-  val context = getContext();
-  val height = getCanvas().height;
-  val width = getCanvas().width;
-  var x = width * Math.random();
-  var y = height * Math.random();
+  val context = canvas.getContext("2d")!!
+  val height = canvas.height
+  val width = canvas.width
+  var x = width * Math.random()
+  var y = height * Math.random()
   var hue = 0;
 
   fun line() {
@@ -38,7 +41,7 @@ class FancyLines() {
     y = height * Math.random();
 
     context.bezierCurveTo(width * Math.random(), height * Math.random(),
-      width * Math.random(), height * Math.random(), x, y);
+        width * Math.random(), height * Math.random(), x, y);
 
     hue += Math.random() * 10;
 
@@ -58,7 +61,7 @@ class FancyLines() {
   }
 
   fun run() {
-    setInterval({line()}, 40);
-    setInterval({blank()}, 100);
+    window.setInterval({line()}, 40);
+    window.setInterval({blank()}, 100);
   }
 }
