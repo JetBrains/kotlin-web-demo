@@ -62,7 +62,7 @@ public class JavaToKotlinConverter {
         } catch (Throwable e) {
             ServerInitializer.reinitializeJavaEnvironment();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
+                    SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN.name(), code);
             return ResponseUtils.getErrorInJson(e.getMessage());
         }
 
