@@ -31,7 +31,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 // This is the driver's import. You'll use this for instantiating a
@@ -65,20 +64,10 @@ public class SeleniumTest extends TestCase {
 
     public void setUp() throws Exception {
         super.setUp();
-        /*ChromeDriverService service = new ChromeDriverService.Builder()
-                .usingChromeDriverExecutable(new File("C:\\Users\\Natalia.Ukhorskaya\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"))
-                .usingAnyFreePort()
-                .build();
-        service.start();*/
-        /*DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-        capabilities.setCapability("chrome.binary", "C:\\Users\\Natalia.Ukhorskaya\\AppData\\Local\\Google\\Chrome\\Application\\");
-        driver = new ChromeDriver(capabilities);
-        driver = new RemoteWebDriver(service.getUrl(),
-                DesiredCapabilities.chrome());*/
         driver = new FirefoxDriver();
 //        driver.get("http://kotlin-demo.jetbrains.com");
 //        driver.get("http://kotlinsrv.labs.intellij.net");
-        driver.get("http://localhost");
+        driver.get("http://localhost/");
         statusBar = driver.findElement(By.id("statusbar"));
         console = driver.findElement(By.id("console"));
         run = driver.findElement(By.id("run"));
@@ -289,7 +278,7 @@ public class SeleniumTest extends TestCase {
         //One error
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\")\\n" +
                 "}" +
                 "\");");
 
@@ -300,7 +289,7 @@ public class SeleniumTest extends TestCase {
         //Two error in one line
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\"\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\"\\n" +
                 "}" +
                 "\");");
 
@@ -311,7 +300,7 @@ public class SeleniumTest extends TestCase {
         //One warning
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out?.println(\\\"Hello, world!\\\")\\n" +
+                " System.out.println(\\\"Hello, world!\\\")\\n" +
                 " val a = 10\\n" +
                 "}" +
                 "\");");
@@ -323,7 +312,7 @@ public class SeleniumTest extends TestCase {
         //One warning and one error
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\")\\n" +
                 " val a = 10\\n" +
                 "}" +
                 "\");");
@@ -336,7 +325,7 @@ public class SeleniumTest extends TestCase {
         //One warning and one error at one line
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\"); val a = 10\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\"); val a = 10\\n" +
                 " val b = 10\\n" +
                 "}" +
                 "\");");
@@ -353,7 +342,7 @@ public class SeleniumTest extends TestCase {
         //One error
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\")\\n" +
                 "}" +
                 "\");");
 
@@ -364,7 +353,7 @@ public class SeleniumTest extends TestCase {
         //Two error in one line
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\"\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\"\\n" +
                 "}" +
                 "\");");
 
@@ -375,7 +364,7 @@ public class SeleniumTest extends TestCase {
         //One warning
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out?.println(\\\"Hello, world!\\\")\\n" +
+                " System.out.println(\\\"Hello, world!\\\")\\n" +
                 " val a = 10\\n" +
                 "}" +
                 "\");");
@@ -389,7 +378,7 @@ public class SeleniumTest extends TestCase {
         //One warning and one error
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\")\\n" +
                 " val a = 10\\n" +
                 "}" +
                 "\");");
@@ -402,7 +391,7 @@ public class SeleniumTest extends TestCase {
         //One warning and one error at one line
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\"); val a = 10\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\"); val a = 10\\n" +
                 " val b = 10\\n" +
                 "}" +
                 "\");");
@@ -419,7 +408,7 @@ public class SeleniumTest extends TestCase {
         //One error
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\")\\n" +
                 "}" +
                 "\");");
 
@@ -431,7 +420,7 @@ public class SeleniumTest extends TestCase {
         //Two error in one line
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\"\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\"\\n" +
                 "}" +
                 "\");");
 
@@ -442,7 +431,7 @@ public class SeleniumTest extends TestCase {
         //One warning
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out?.println(\\\"Hello, world!\\\")\\n" +
+                " System.out.println(\\\"Hello, world!\\\")\\n" +
                 " val a = 10\\n" +
                 "}" +
                 "\");");
@@ -461,7 +450,7 @@ public class SeleniumTest extends TestCase {
         //One warning and one error
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\")\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\")\\n" +
                 " val a = 10\\n" +
                 "}" +
                 "\");");
@@ -474,7 +463,7 @@ public class SeleniumTest extends TestCase {
         //One warning and one error at one line
         js.executeScript("setEditorValue(\"" +
                 "fun main(args : Array<String>) {\\n" +
-                " System.out.println(\\\"Hello, world!\\\"); val a = 10\\n" +
+                " System.out.prntln(\\\"Hello, world!\\\"); val a = 10\\n" +
                 " val b = 10\\n" +
                 "}" +
                 "\");");
