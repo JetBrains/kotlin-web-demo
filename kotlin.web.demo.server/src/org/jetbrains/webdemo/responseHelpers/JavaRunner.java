@@ -17,8 +17,15 @@
 package org.jetbrains.webdemo.responseHelpers;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.jet.lang.psi.JetPsiUtil;
+import org.jetbrains.jet.lang.resolve.java.JvmAbi;
+import org.jetbrains.jet.lang.resolve.name.FqName;
+import org.jetbrains.jet.lang.resolve.name.Name;
+import org.jetbrains.jet.plugin.JetMainDetector;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
+import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -40,17 +47,17 @@ public class JavaRunner {
     private final List<String> files;
     private String arguments;
     private final JSONArray jsonArray;
-    private final String textFromFile;
+    private final JetFile currentFile;
 
     private final SessionInfo sessionInfo;
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(List<String> files, String arguments, JSONArray array, String text, SessionInfo info) {
+    public JavaRunner(List<String> files, String arguments, JSONArray array, JetFile currentFile, SessionInfo info) {
         this.files = files;
         this.arguments = arguments;
         this.jsonArray = array;
-        this.textFromFile = text;
+        this.currentFile = currentFile;
         this.sessionInfo = info;
     }
 
@@ -100,7 +107,7 @@ public class JavaRunner {
                     }
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            sessionInfo.getType(), textFromFile);
+                            sessionInfo.getType(), currentFile.getText());
                 }
             }
         }.start(); // Starts now
@@ -116,7 +123,7 @@ public class JavaRunner {
                     }
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            sessionInfo.getType(), textFromFile);
+                            sessionInfo.getType(), currentFile.getText());
                 }
             }
         }.start(); // Starts now
@@ -126,7 +133,7 @@ public class JavaRunner {
             exitValue = process.waitFor();
         } catch (InterruptedException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), textFromFile);
+                    sessionInfo.getType(), currentFile.getText());
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
@@ -141,7 +148,7 @@ public class JavaRunner {
                     errStream.append(ApplicationSettings.KOTLIN_ERROR_MESSAGE);
                     String linkForLog = getLinkForLog(outStream.toString());
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
-                            sessionInfo.getType(), textFromFile);
+                            sessionInfo.getType(), currentFile.getText());
                 }
             }
         }
@@ -163,7 +170,8 @@ public class JavaRunner {
                 map.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
                 jsonArray.put(map);
                 mapErr.put("type", "out");
-            } else {
+            }
+            else {
                 ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "error while excecution: " + errStream));
                 mapErr.put("type", "err");
@@ -205,7 +213,7 @@ public class JavaRunner {
                 }
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        sessionInfo.getType(), textFromFile);
+                        sessionInfo.getType(), currentFile.getText());
             }
         }
         return "";
@@ -220,7 +228,7 @@ public class JavaRunner {
             stackTrace = errStream.substring(pos).replaceAll("<br/>", "\n");
         }
         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(message, stackTrace,
-                sessionInfo.getType(), textFromFile);
+                sessionInfo.getType(), currentFile.getText());
     }
 
     private boolean isKotlinLibraryException(String str) {
@@ -265,18 +273,20 @@ public class JavaRunner {
                 out.write(tmp, 0, lengthOut);
                 stringWriter.write(new String(tmp));
                 outStream.append(stringWriter.toString());
-            } else if (lengthOut == -1) {
+            }
+            else if (lengthOut == -1) {
                 returnValue--;
             }
             if ((lengthErr = isErr.read(tmp)) >= 0) {
                 out.write(tmp, 0, lengthErr);
                 errStream.append(new String(tmp));
-            } else if (lengthErr == -1) {
+            }
+            else if (lengthErr == -1) {
                 returnValue--;
             }
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), textFromFile);
+                    sessionInfo.getType(), currentFile.getText());
         }
         return returnValue;
     }
@@ -300,7 +310,8 @@ public class JavaRunner {
                     ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                             sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                 }
-            } else {
+            }
+            else {
                 //list all the directory contents
                 String files[] = file.list();
                 for (String temp : files) {
@@ -317,7 +328,8 @@ public class JavaRunner {
                     }
                 }
             }
-        } else {
+        }
+        else {
             if (file.exists()) {
                 file.delete();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
@@ -332,14 +344,15 @@ public class JavaRunner {
         String[] builder;
         if (arguments.isEmpty()) {
             builder = new String[5];
-        } else {
+        }
+        else {
             builder = new String[argsArray.length + 5];
         }
         builder[0] = ApplicationSettings.JAVA_EXECUTE;
         builder[1] = "-classpath";
         builder[2] = pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB;
         builder[3] = "-Djava.security.manager";
-        builder[4] = modifyClassNameFromPath(files.get(0));
+        builder[4] = findMainClass();
 
         if (!arguments.isEmpty()) {
             System.arraycopy(argsArray, 0, builder, 5, argsArray.length);
@@ -348,14 +361,11 @@ public class JavaRunner {
 
     }
 
-
-    private String modifyArguments(String arguments) {
-        return StringEscapeUtils.unescapeJavaScript(arguments);
-    }
-
-    private String modifyClassNameFromPath(String path) {
-        String name = ResponseUtils.substringBefore(path, ".class");
-        name = name.replaceAll("/", ".");
-        return name;
+    private String findMainClass() {
+        if (JetMainDetector.hasMain(currentFile.getDeclarations())) {
+            FqName fqName = JetPsiUtil.getFQName(currentFile);
+            return fqName.child(Name.identifier(JvmAbi.PACKAGE_CLASS)).toString();
+        }
+        return "namespace.class";
     }
 }
