@@ -19,7 +19,6 @@
     <orderEntry type="library" name="kotlin-runtime" level="project" />
     <orderEntry type="library" name="commons-codec" level="project" />
     <orderEntry type="library" name="kotlin-compiler" level="project" />
-    <orderEntry type="library" name="kotlin-plugin" level="project" />
   </component>
 </module>
 

@@ -34,8 +34,7 @@ public class J2KConverterTest extends BaseTest {
         String expectedResult = "[{\"text\":\"public open class Foo() {\\n}\"}]";
 
         assertTrue(true);
-        //TODO
-        //compareResult(fileName, expectedResult);
+        compareResult(fileName, expectedResult);
     }
 
     private void compareResult(String fileName, String expectedResult) throws IOException {

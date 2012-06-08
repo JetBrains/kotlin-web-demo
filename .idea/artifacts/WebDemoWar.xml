@@ -20,7 +20,6 @@
           </element>
           <element id="library" level="project" name="commons-codec" />
           <element id="library" level="project" name="kotlin-compiler" />
-          <element id="library" level="project" name="kotlin-plugin" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />
