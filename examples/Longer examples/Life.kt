@@ -122,7 +122,7 @@ fun printField(s : String, steps : Int) {
 
 fun makeField(s : String) : Field {
   val lines = s.split("\n").sure()
-  val w = max<String?>(lines.toList(), comparator<String?> {o1, o2 ->
+  val w = max<String>(lines.toList(), comparator<String?> {o1, o2 ->
           val l1 : Int = o1?.size ?: 0
           val l2 = o2?.size ?: 0
           l1 - l2

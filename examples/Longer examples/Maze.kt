@@ -175,7 +175,7 @@ fun printMaze(str : String) {
  */
 fun makeMaze(s : String) : Maze {
   val lines = s.split("\n").sure()
-  val w = max<String?>(lines.toList(), comparator<String?> {o1, o2 ->
+  val w = max<String>(lines.toList(), comparator<String?> {o1, o2 ->
     val l1 : Int = o1?.size ?: 0
     val l2 = o2?.size ?: 0
     l1 - l2

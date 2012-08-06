@@ -21,7 +21,7 @@ fun main(args : Array<String>) {
   test(2, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE)
   test(2, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE)
 
-  System.out?.println("Success")
+  println("Success")
 }
 
 

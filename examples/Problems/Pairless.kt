@@ -30,7 +30,7 @@ fun main(args : Array<String>) {
   test(3,    1, 3, 1, 1, 1)
   test(1,    2, 3, 1, 2, 3)
 
-  System.out?.println("Success")
+  println("Success")
 }
 
 // HELPER FUNCTIONS

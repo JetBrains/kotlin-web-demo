@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.server;
 
-import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
+import org.jetbrains.jet.lang.BuiltinsScopeExtensionMode;
 
 /**
  * Created by IntelliJ IDEA.
@@ -51,7 +51,7 @@ public class ApplicationSettings {
 
     public static final String DATABASE_VERSION = "1.0";
 
-    public static CompilerSpecialMode MODE = CompilerSpecialMode.REGULAR;
+    public static BuiltinsScopeExtensionMode MODE = BuiltinsScopeExtensionMode.ALL;
 
     private ApplicationSettings() {
 

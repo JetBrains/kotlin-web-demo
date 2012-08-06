@@ -18,7 +18,7 @@ fun main(args : Array<String>) {
   test(6, 1, 2, 3)
   test(6, 1, 1, 1, 1, 1, 1)
 
-  System.out?.println("Success")
+  println("Success")
 }
 
 

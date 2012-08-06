@@ -27,7 +27,7 @@ fun main(args : Array<String>) {
   test(false,    "abab")
   test(false,    "abaa")
 
-  System.out?.println("Success")
+  println("Success")
 }
 
 // HELPER FUNCTIONS
