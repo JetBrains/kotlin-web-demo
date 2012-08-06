@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.translator;
 
+import closurecompiler.internal.com.google.common.collect.Lists;
 import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
 import org.jetbrains.jet.internal.com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.NotNull;
@@ -24,57 +25,52 @@ import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.config.EcmaVersion;
 import org.jetbrains.k2js.utils.JetFileUtils;
+import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-/**
- * @author Pavel Talanov
- */
 public final class WebDemoConfigServer extends Config {
 
-    @Nullable
-    private /*var*/ List<JetFile> jsLibFiles = null;
-
     public WebDemoConfigServer(@NotNull Project project) {
-        super(project, EcmaVersion.defaultVersion());
+        super(project, REWRITABLE_MODULE_NAME, EcmaVersion.defaultVersion());
     }
 
+    // Hack for HTMLBuilder example (map[] only presented in stdlib)
+    @NotNull
+    public static final List<String> EXCLUDED_FILES = Arrays.asList(
+            "/core/json.kt",
+            "/jquery/ui.kt"
+    );
+    @NotNull
+    public static final List<String> ADDITIONAL_FILES = Arrays.asList(
+            "/mapset.kt"
+    );
 
     @NotNull
-    protected List<JetFile> initLibFiles() {
+    public List<JetFile> generateLibFiles() {
         List<JetFile> libFiles = new ArrayList<JetFile>();
-        for (String libFileName : LIB_FILE_NAMES) {
-            JetFile file = null;
+        ArrayList<String> jsLibFiles = Lists.newArrayList(LIB_FILES_WITH_DECLARATIONS);
+        jsLibFiles.addAll(ADDITIONAL_FILES);
+        for (String libFileName : jsLibFiles) {
+            if (EXCLUDED_FILES.contains(libFileName)) {
+                continue;
+            }
+            JetFile file;
             @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
             File libFile = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "js" + File.separator + libFileName);
-//            InputStream stream = WebDemoConfigServer.class.getResourceAsStream(libFileName);
             try {
                 String text = FileUtil.loadFile(libFile);
                 file = JetFileUtils.createPsiFile(libFileName, text, getProject());
                 libFiles.add(file);
-            } catch (FileNotFoundException e) {
-                System.err.println(libFileName);
-                e.printStackTrace();
-            } catch (IOException e) {
-                System.err.println(libFileName);
-                e.printStackTrace();
-            } catch (IllegalArgumentException e) {
-                System.err.println(libFileName);
-                e.printStackTrace();
+            } catch (Throwable e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), "Cannot load " + libFileName);
             }
         }
-        return libFiles;
-    }
 
-    @NotNull
-    public List<JetFile> generateLibFiles() {
-        if (jsLibFiles == null) {
-            jsLibFiles = initLibFiles();
-        }
-        return jsLibFiles;
+        return libFiles;
     }
 
 }

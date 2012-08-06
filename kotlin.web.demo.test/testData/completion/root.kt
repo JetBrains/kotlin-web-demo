@@ -10,8 +10,8 @@ fun main(args : Array<String>) {
 
 }
 
-class Greeter(val name : String) {
+class Greeter(val str : String) {
   fun greet() {
-    println("Hello, ${name}");
+    println("Hello, ${str}");
   }
 }

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="kotlin-jdk-headers">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/alt/kotlin-jdk-headers.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

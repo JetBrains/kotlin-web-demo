@@ -16,24 +16,41 @@
 
 package org.jetbrains.webdemo;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jet.cli.common.CLIConfigurationKeys;
+import org.jetbrains.jet.cli.common.ExitCode;
+import org.jetbrains.jet.cli.common.messages.CompilerMessageLocation;
+import org.jetbrains.jet.cli.common.messages.CompilerMessageSeverity;
+import org.jetbrains.jet.cli.jvm.JVMConfigurationKeys;
+import org.jetbrains.jet.cli.jvm.K2JVMCompiler;
+import org.jetbrains.jet.cli.jvm.K2JVMCompilerArguments;
+import org.jetbrains.jet.cli.jvm.compiler.CommandLineScriptUtils;
 import org.jetbrains.jet.cli.jvm.compiler.CompileEnvironmentUtil;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
-import org.jetbrains.jet.cli.jvm.compiler.K2JVMCompileEnvironmentConfiguration;
+import org.jetbrains.jet.cli.jvm.repl.ReplFromTerminal;
+import org.jetbrains.jet.codegen.BuiltinToJavaTypesMapping;
+import org.jetbrains.jet.config.CommonConfigurationKeys;
+import org.jetbrains.jet.config.CompilerConfiguration;
+import org.jetbrains.jet.internal.com.google.common.base.Splitter;
+import org.jetbrains.jet.internal.com.google.common.collect.Lists;
 import org.jetbrains.jet.internal.com.intellij.lang.java.JavaParserDefinition;
 import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
 import org.jetbrains.jet.internal.com.intellij.openapi.application.ApplicationManager;
 import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistry;
 import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
 import org.jetbrains.jet.internal.com.intellij.openapi.vfs.encoding.EncodingRegistry;
+import org.jetbrains.jet.lang.BuiltinsScopeExtensionMode;
 import org.jetbrains.jet.lang.parsing.JetParserDefinition;
-import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
-import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
+import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
 import org.jetbrains.jet.plugin.JetFileType;
+import org.jetbrains.jet.utils.PathUtil;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,10 +73,12 @@ public class ServerInitializer extends Initializer {
 
     private static JetCoreEnvironment environment;
 
+    @Nullable
     public JetCoreEnvironment getEnvironment() {
         if (environment != null) {
             return environment;
         }
+
         ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("initialize", "JavaCoreEnvironment is null.", "null"));
         return null;
     }
@@ -74,57 +93,68 @@ public class ServerInitializer extends Initializer {
         return root;
     }
 
-    public boolean setJavaCoreEnvironment() {
-        File rtJar = findRtJar();
-        if (rtJar == null) {
-            ErrorWriterOnServer.writeErrorToConsole("Returned rtJar is null.");
-            return false;
-        }
-        environment.addToClasspath(rtJar);
-        if (!initializeKotlinRuntime()) {
-            ErrorWriterOnServer.writeInfoToConsole("Cannot found Kotlin Runtime library.");
-        }
-        environment.registerFileType(JetFileType.INSTANCE, "kt");
-        environment.registerFileType(JetFileType.INSTANCE, "kts");
-        environment.registerFileType(JetFileType.INSTANCE, "ktm");
-        environment.registerFileType(JetFileType.INSTANCE, "jet");
-        environment.registerParserDefinition(new JetParserDefinition());
-        environment.registerParserDefinition(new JavaParserDefinition());
+    public boolean initJavaCoreEnvironment() {
+        if (environment == null) {
+            root = new Disposable() {
+                @Override
+                public void dispose() {
+                }
+            };
 
-        registry = FileTypeRegistry.ourInstanceGetter;
+            try {
+                K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
+                CompilerConfiguration configuration = new CompilerConfiguration();
+                configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
+                configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath(arguments));
 
+                configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
+                configuration.put(JVMConfigurationKeys.BUILTINS_SCOPE_EXTENSION_MODE_KEY, BuiltinsScopeExtensionMode.ALL);
+                configuration.put(JVMConfigurationKeys.STUBS, false);
+                configuration.put(JVMConfigurationKeys.BUILTIN_TO_JAVA_TYPES_MAPPING_KEY, BuiltinToJavaTypesMapping.ENABLED);
+
+                environment = new JetCoreEnvironment(root, configuration);
+                registry = FileTypeRegistry.ourInstanceGetter;
+            } catch (Throwable e) {
+                ErrorWriter.writeExceptionToConsole("Impossible to init jetCoreEnvironment", e);
+                return false;
+            }
+
+            return true;
+        }
         return true;
     }
 
-    public boolean initializeKotlinRuntime() {
+    @Nullable
+    private File initializeKotlinRuntime() {
         final File unpackedRuntimePath = getUnpackedRuntimePath();
         if (unpackedRuntimePath != null) {
             ApplicationSettings.KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
-            ErrorWriter.writeInfoToConsole("Kotlin Runtime library found at " + ApplicationSettings.KOTLIN_LIB);
-            environment.addToClasspath(unpackedRuntimePath);
-        } else {
+            ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIB);
+            return unpackedRuntimePath;
+        }
+        else {
             final File runtimeJarPath = getRuntimeJarPath();
             if (runtimeJarPath != null && runtimeJarPath.exists()) {
-                environment.addToClasspath(runtimeJarPath);
                 ApplicationSettings.KOTLIN_LIB = runtimeJarPath.getAbsolutePath();
-                ErrorWriter.writeInfoToConsole("Kotlin Runtime library found at " + ApplicationSettings.KOTLIN_LIB);
-            } else {
-                return false;
+                ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIB);
+                return runtimeJarPath;
             }
         }
-        return true;
+        return null;
     }
 
-    public static File getUnpackedRuntimePath() {
-        URL url = K2JVMCompileEnvironmentConfiguration.class.getClassLoader().getResource("jet/JetObject.class");
+    @Nullable
+    private File getUnpackedRuntimePath() {
+        URL url = K2JVMCompiler.class.getClassLoader().getResource("jet/JetObject.class");
         if (url != null && url.getProtocol().equals("file")) {
             return new File(url.getPath()).getParentFile().getParentFile();
         }
         return null;
     }
 
-    public static File getRuntimeJarPath() {
-        URL url = K2JVMCompileEnvironmentConfiguration.class.getClassLoader().getResource("kotlin/namespace.class");
+    @Nullable
+    private File getRuntimeJarPath() {
+        URL url = K2JVMCompiler.class.getClassLoader().getResource("kotlin/namespace.class");
         if (url != null && url.getProtocol().equals("jar")) {
             String path = url.getPath();
             return new File(path.substring(path.indexOf(":") + 1, path.indexOf("!/")));
@@ -132,19 +162,25 @@ public class ServerInitializer extends Initializer {
         return null;
     }
 
-    public boolean initJavaCoreEnvironment() {
-        if (environment == null) {
+    @NotNull
+    private List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments) {
+        List<File> classpath = Lists.newArrayList();
+        classpath.add(findRtJar());
 
-            root = new Disposable() {
-                @Override
-                public void dispose() {
-                }
-            };
-            environment = new JetCoreEnvironment(root, CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR));
-
-            return setJavaCoreEnvironment();
+        classpath.add(initializeKotlinRuntime());
+        if (arguments.classpath != null) {
+            for (String element : Splitter.on(File.pathSeparatorChar).split(arguments.classpath)) {
+                classpath.add(new File(element));
+            }
         }
-        return true;
+        return classpath;
+    }
+
+    @NotNull
+    private List<File> getAnnotationsPath(@NotNull K2JVMCompilerArguments arguments) {
+        List<File> annotationsPath = Lists.newArrayList();
+        annotationsPath.add(PathUtil.getJdkAnnotationsPath());
+        return annotationsPath;
     }
 
     public static void reinitializeJavaEnvironment() {
@@ -152,17 +188,19 @@ public class ServerInitializer extends Initializer {
     }
 
     @Nullable
-    private File findRtJar() {
+    private static File findRtJar() {
         File rtJar;
         if (!ApplicationSettings.RT_JAR.equals("")) {
             rtJar = new File(ApplicationSettings.RT_JAR);
-        } else {
-            rtJar = CompileEnvironmentUtil.findRtJar();
+        }
+        else {
+            rtJar = PathUtil.findRtJar();
         }
         if ((rtJar == null || !rtJar.exists())) {
             if (ApplicationSettings.JAVA_HOME == null) {
                 ErrorWriter.writeInfoToConsole("You can set java_home variable at config.properties file.");
-            } else {
+            }
+            else {
                 ErrorWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + ApplicationSettings.JAVA_HOME + " or path to rt.jar is incorrect " + ApplicationSettings.RT_JAR);
             }
             return null;
@@ -170,7 +208,6 @@ public class ServerInitializer extends Initializer {
         ApplicationSettings.JAVA_HOME = rtJar.getParentFile().getParentFile().getParentFile().getAbsolutePath();
         return rtJar;
     }
-
 
 }
 

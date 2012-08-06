@@ -35,7 +35,7 @@ import java.util.List;
  * Time: 11:06 AM
  */
 
-public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor<Void, StringBuilder> {
+public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitorEmptyBodies<Void, StringBuilder> {
     @Override
     public Void visitValueParameterDescriptor(ValueParameterDescriptor descriptor, StringBuilder builder) {
         /*builder.append("value-parameter").append(" ");

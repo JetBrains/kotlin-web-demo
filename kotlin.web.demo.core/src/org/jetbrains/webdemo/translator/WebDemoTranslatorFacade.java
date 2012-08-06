@@ -46,6 +46,9 @@ public final class WebDemoTranslatorFacade {
 
     public static Config LOAD_JS_LIBRARY_CONFIG;
 
+    public static final String FLUSH_SYSTEM_OUT = "Kotlin.System.flush();\n";
+    public static final String GET_SYSTEM_OUT = "Kotlin.System.output();\n";
+
     @SuppressWarnings("FieldCanBeLocal")
     private static String EXCEPTION = "exception=";
 
@@ -95,11 +98,8 @@ public final class WebDemoTranslatorFacade {
                                       @NotNull String argumentsString) throws TranslationException {
         K2JSTranslator translator = new K2JSTranslator(LOAD_JS_LIBRARY_CONFIG);
         JetFile file = JetFileUtils.createPsiFile("test", programText, Initializer.INITIALIZER.getEnvironment().getProject());
-        String programCode = translator.generateProgramCode(file,
-                MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
-        String flushOutput = "Kotlin.System.flush();\n";
-        String programOutput = "Kotlin.System.output();\n";
-        return flushOutput + programCode + programOutput;
+        String programCode = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
+        return FLUSH_SYSTEM_OUT + programCode + GET_SYSTEM_OUT;
     }
 
 }

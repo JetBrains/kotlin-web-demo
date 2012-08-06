@@ -35,11 +35,8 @@ import java.util.List;
  */
 public final class WebDemoConfigApplet extends Config {
 
-    @Nullable
-    private /*var*/ List<JetFile> jsLibFiles = null;
-
     public WebDemoConfigApplet(@NotNull Project project) {
-        super(project, EcmaVersion.defaultVersion());
+        super(project, REWRITABLE_MODULE_NAME, EcmaVersion.defaultVersion());
     }
 
     @NotNull

@@ -83,7 +83,9 @@ public class JarHandlerBase {
                         while (entry != null) {
                             final String name = entry.getName();
                             final boolean isDirectory = name.endsWith("/");
-                            if (entry.getExtra() == null) {
+
+                            byte[] extra = entry.getExtra();
+                            if (extra == null) {
                                 byte[] cont = new byte[(int) entry.getSize()];
                                 ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
                                 InputStream stream = getZip();
@@ -91,21 +93,26 @@ public class JarHandlerBase {
                                     int tmp;
                                     if ((tmp = stream.read(cont)) == entry.getSize()) {
                                         byteArray.write(cont, 0, tmp);
-                                        entry.setExtra(byteArray.toByteArray());
-                                    } else {
+                                        extra = byteArray.toByteArray();
+                                    }
+                                    else {
                                         int readFromIS = tmp;
                                         if (tmp < entry.getSize()) {
                                             byteArray.write(cont, 0, tmp);
-                                            while (((tmp = stream.read(cont)) != -1) && (tmp + readFromIS <= entry.getSize()) && (tmp + readFromIS < 0xFFFF)) {
+                                            while (((tmp = stream.read(cont)) != -1) && (tmp + readFromIS <= entry.getSize())/* && (tmp + readFromIS < 0xFFFF)*/) {
                                                 byteArray.write(cont, 0, tmp);
                                                 readFromIS += tmp;
                                             }
-                                            entry.setExtra(byteArray.toByteArray());
+
+                                            extra = byteArray.toByteArray();
+                                            if (byteArray.size() != entry.getSize()) {
+                                                throw new IllegalArgumentException("Sizeof bytearray is different from entry size: " + byteArray.size() + "!=" + entry.getSize());
+                                            }
                                         }
                                     }
                                 }
                             }
-                            getOrCreate(isDirectory ? name.substring(0, name.length() - 1) : name, isDirectory, map, entry.getExtra());
+                            getOrCreate(isDirectory ? name.substring(0, name.length() - 1) : name, isDirectory, map, extra);
 
                             entry = zip.getNextEntry();
                         }
@@ -129,7 +136,8 @@ public class JarHandlerBase {
         if (zip == null) {
             if (inputStream == null) {
                 throw new IllegalArgumentException("Input Stream is null: " + myBasePath);
-            } else {
+            }
+            else {
                 zip = new ZipInputStream(inputStream);
             }
             myZipFile.set(zip);

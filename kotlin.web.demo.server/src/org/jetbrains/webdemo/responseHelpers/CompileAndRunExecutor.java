@@ -29,8 +29,6 @@ import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
-import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
-import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -85,7 +83,7 @@ public class CompileAndRunExecutor {
             try {
                 AnalyzeExhaust analyzeExhaust = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList(),
-                        CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.REGULAR));
+                        ApplicationSettings.MODE);
                 generationState = new GenerationState(currentProject,ClassBuilderFactories.binaries(false), analyzeExhaust, Collections.singletonList((JetFile) currentPsiFile));
 //                generationState = new GenerationState(currentProject, ClassBuilderFactories.binaries(false));
                 generationState.compileCorrectFiles(new CompilationErrorHandler() {

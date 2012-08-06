@@ -17,7 +17,7 @@
 package org.jetbrains.webdemo.servlet;
 
 import org.apache.naming.NamingContext;
-import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
+import org.jetbrains.jet.lang.BuiltinsScopeExtensionMode;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
@@ -64,7 +64,7 @@ public class KotlinHttpServlet extends HttpServlet {
 
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
         Initializer.INITIALIZER = ServerInitializer.getInstance();
-        ApplicationSettings.MODE = CompilerSpecialMode.REGULAR;
+        ApplicationSettings.MODE = BuiltinsScopeExtensionMode.ALL;
 
 
         try {

@@ -17,9 +17,9 @@
 package org.jetbrains.webdemo.test;
 
 import junit.framework.TestCase;
+import org.jetbrains.jet.lang.BuiltinsScopeExtensionMode;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
-import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -49,7 +49,7 @@ public class TestApplet extends TestCase {
         InitializerApplet.getInstance().initJavaCoreEnvironment();
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
         Initializer.INITIALIZER = InitializerApplet.getInstance();
-        ApplicationSettings.MODE = CompilerSpecialMode.IDEA;
+        ApplicationSettings.MODE = BuiltinsScopeExtensionMode.ONLY_STANDARD_CLASSES;
         WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
         ApplicationSettings.IS_TEST_VERSION = "true";
 //        MainApplet.SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());

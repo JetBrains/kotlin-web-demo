@@ -46,9 +46,9 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$all$variable() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"property\",\"name\":\"name\",\"tail\":\"jet.String\"},{\"icon\":\"package\",\"name\":\"namespace jet\",\"tail\":\"\"}]";
-        compareResult(14, 23, expectedResult, "java");
-        compareResult(14, 23, expectedResult, "js");
+        String expectedResult = "[{\"icon\":\"property\",\"name\":\"stdin\",\"tail\":\"java.io.BufferedReader\"},{\"icon\":\"property\",\"name\":\"str\",\"tail\":\"jet.String\"}]";
+        compareResult(14, 24, expectedResult, "java");
+        compareResult(14, 24, expectedResult, "js");
     }
 
     public void test$all$class() throws IOException, JSONException {
@@ -70,13 +70,13 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$js$a() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args : Array<String>\",\"tail\":\"jet.Array<jet.String>\"},{\"icon\":\"method\",\"name\":\"array(t : Array<T>)\",\"tail\":\"jet.Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(values : Array<T>)\",\"tail\":\"java.util.ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(size : Int)\",\"tail\":\"jet.Array<T?>\"},{\"icon\":\"class\",\"name\":\"atomic : Any\",\"tail\":\"\"}]";
+        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args : Array<String>\",\"tail\":\"jet.Array<jet.String>\"},{\"icon\":\"method\",\"name\":\"array(t : Array<T>)\",\"tail\":\"jet.Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(values : Array<T>)\",\"tail\":\"java.util.ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(size : Int)\",\"tail\":\"jet.Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(value : Boolean, lazyMessage : Fu...\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(value : Boolean, message : Any)\",\"tail\":\"Unit\"},{\"icon\":\"class\",\"name\":\"atomic : Any\",\"tail\":\"\"}]";
 
         compareResult(2, 3, expectedResult, "js");
     }
 
     public void test$kt$a() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args : Array<String>\",\"tail\":\"jet.Array<jet.String>\"},{\"icon\":\"method\",\"name\":\"array(t : Array<T>)\",\"tail\":\"jet.Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(values : Array<T>)\",\"tail\":\"java.util.ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(size : Int)\",\"tail\":\"jet.Array<T?>\"},{\"icon\":\"class\",\"name\":\"atomic : Any\",\"tail\":\"\"}]";
+        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args : Array<String>\",\"tail\":\"jet.Array<jet.String>\"},{\"icon\":\"method\",\"name\":\"array(t : Array<T>)\",\"tail\":\"jet.Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(values : Array<T>)\",\"tail\":\"java.util.ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(size : Int)\",\"tail\":\"jet.Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(value : Boolean, lazyMessage : Fu...\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(value : Boolean, message : Any)\",\"tail\":\"Unit\"},{\"icon\":\"class\",\"name\":\"atomic : Any\",\"tail\":\"\"}]";
         compareResult(2, 3, expectedResult, "java");
     }
 

@@ -30,8 +30,6 @@ import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
-import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
-import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Interval;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
@@ -68,7 +66,7 @@ public class ErrorAnalyzer {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList(),
-                        CompilerDependencies.compilerDependenciesForProduction(ApplicationSettings.MODE)).getBindingContext();
+                        ApplicationSettings.MODE).getBindingContext();
             }
             else {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);

@@ -17,13 +17,10 @@
 package org.jetbrains.webdemo;
 
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.jet.config.CompilerConfiguration;
 import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
 import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistry;
 import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
-import org.jetbrains.jet.lang.parsing.JetParserDefinition;
-import org.jetbrains.jet.lang.resolve.java.CompilerDependencies;
-import org.jetbrains.jet.lang.resolve.java.CompilerSpecialMode;
-import org.jetbrains.jet.plugin.JetFileType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -71,19 +68,12 @@ public class InitializerApplet extends Initializer {
                 public void dispose() {
                 }
             };
-            environment = new JetCoreEnvironment(root,
-                    CompilerDependencies.compilerDependenciesForProduction(CompilerSpecialMode.IDEA));
 
-            environment.registerFileType(JetFileType.INSTANCE, "kt");
-            environment.registerFileType(JetFileType.INSTANCE, "kts");
-            environment.registerFileType(JetFileType.INSTANCE, "ktm");
-            environment.registerFileType(JetFileType.INSTANCE, "jet");
-            environment.registerParserDefinition(new JetParserDefinition());
-
+            
+            environment = new JetCoreEnvironment(root, new CompilerConfiguration());
             registry = FileTypeRegistry.ourInstanceGetter;
 
             return true;
-            //return setJavaCoreEnvironment();
         }
         return false;
     }
