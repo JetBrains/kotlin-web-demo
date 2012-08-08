@@ -191,7 +191,6 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
 
     @Override
     public Void visitNamespaceDescriptor(NamespaceDescriptor namespaceDescriptor, StringBuilder builder) {
-        builder.append("namespace").append(" ");
         renderName(namespaceDescriptor, builder);
         return super.visitNamespaceDescriptor(namespaceDescriptor, builder);
     }

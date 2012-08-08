@@ -2,15 +2,13 @@
 <help>
     <example>
         <name>Simplest version</name>
-        <text>Line 1 is the optional namespace header.
-            <br/>
-            Then we declare a namespace-level function main which returns Unit and takes an Array of strings as a
+        <text>We declare a package-level function main which returns Unit and takes an Array of strings as a
             parameter.
             <br/>
             Note that semicolons are optional.
         </text>
         <args/>
-        <mode>java js</mode>
+	 <mode>java js</mode>
     </example>
     <example>
         <name>Reading a name from the command line</name>
@@ -174,7 +172,7 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <name>Hello, Kotlin</name>
         <text>
             <p>
-                This example is just simple text floating around. If u are using chrome, there is a bug that spoil the visuals.
+                This example is just simple text floating around. If you are using chrome, there is a bug that spoil the visuals.
             </p>
         </text>
         <args/>
@@ -184,8 +182,7 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <name>Fancy lines</name>
         <text>
             <p>
-                This example is based on example from html5 canvas2D docs:
-                http://www.w3.org/TR/2dcontext/
+                This example is based on <a href="http://www.w3.org/TR/2dcontext/">example</a> from html5 canvas2D docs.<br/>
                 Note that only a subset of the api is supported for now.
             </p>
         </text>

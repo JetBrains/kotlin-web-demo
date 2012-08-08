@@ -191,14 +191,14 @@ public class JsonResponseForCompletion {
             return "property";
         } else if (descriptor instanceof ClassDescriptor) {
             return "class";
-        } else if (descriptor instanceof NamespaceDescriptorImpl) {
+        } else if (descriptor instanceof AbstractNamespaceDescriptorImpl) {
             return "package";
         } else if (descriptor instanceof ValueParameterDescriptor) {
             return "genericValue";
         } else {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     "Impossible to find icon",
-                    descriptor.getName().getName(), sessionInfo.getType(), "");
+                    descriptor.getName().getName() + " " + descriptor.getClass().toString(), sessionInfo.getType(), "");
             return "";
         }
     }
