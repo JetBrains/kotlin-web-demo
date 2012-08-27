@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.translator;
 
-import closurecompiler.internal.com.google.common.collect.Lists;
+import org.jetbrains.jet.internal.com.google.common.collect.Lists;
 import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
 import org.jetbrains.jet.internal.com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.NotNull;

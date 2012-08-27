@@ -16,6 +16,7 @@
 
 package org.jetbrains.jet.cli.jvm.compiler;
 
+import org.jetbrains.jet.internal.com.intellij.codeInsight.ExternalAnnotationsManager;
 import org.jetbrains.jet.internal.com.intellij.core.CoreJavaFileManager;
 import org.jetbrains.jet.internal.com.intellij.core.JavaCoreApplicationEnvironment;
 import org.jetbrains.jet.internal.com.intellij.core.JavaCoreProjectEnvironment;
@@ -41,8 +42,6 @@ import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.lang.parsing.JetScriptDefinitionProvider;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.java.JetFilesProvider;
-import org.jetbrains.jet.lang.resolve.java.extAnnotations.CoreAnnotationsProvider;
-import org.jetbrains.jet.lang.resolve.java.extAnnotations.ExternalAnnotationsProvider;
 import org.jetbrains.jet.lang.types.lang.JetStandardLibrary;
 import org.jetbrains.jet.plugin.JetFileType;
 import org.jetbrains.jet.utils.PathUtil;
@@ -65,7 +64,7 @@ public class JetCoreEnvironment {
     private final JavaCoreProjectEnvironment projectEnvironment;
     private final List<JetFile> sourceFiles = new ArrayList<JetFile>();
 
-    private final CoreAnnotationsProvider annotationsProvider;
+    private final CoreExternalAnnotationsManager annotationsManager;
 
     private final CompilerConfiguration configuration;
 
@@ -94,8 +93,8 @@ public class JetCoreEnvironment {
                 .getExtensionPoint(PsiElementFinder.EP_NAME)
                 .registerExtension(new JavaElementFinder(project));
 
-        annotationsProvider = new CoreAnnotationsProvider();
-        project.registerService(ExternalAnnotationsProvider.class, annotationsProvider);
+        annotationsManager = new CoreExternalAnnotationsManager(project.getComponent(PsiManager.class));
+        project.registerService(ExternalAnnotationsManager.class, annotationsManager);
         
         addToClasspath("rt.jar");
         addToClasspath("kotlin-runtime.jar");
@@ -131,7 +130,7 @@ public class JetCoreEnvironment {
     }
 
     private void addExternalAnnotationsRoot(VirtualFile root) {
-        annotationsProvider.addExternalAnnotationsRoot(root);
+        annotationsManager.addExternalAnnotationsRoot(root);
     }
 
     private void addSources(File file) {
