@@ -24,6 +24,7 @@ import org.jetbrains.k2js.analyze.AnalyzerFacadeForJS;
 import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.k2js.facade.MainCallParameters;
+import org.jetbrains.k2js.facade.exceptions.MainFunctionNotFoundException;
 import org.jetbrains.k2js.facade.exceptions.TranslationException;
 import org.jetbrains.k2js.utils.JetFileUtils;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -82,8 +83,10 @@ public final class WebDemoTranslatorFacade {
 
             return result.toString();
 
+        } catch (MainFunctionNotFoundException te) {
+            Initializer.reinitializeJavaEnvironment();
+            return ResponseUtils.getErrorInJson(te.getMessage()); 
         } catch (Throwable e) {
-
             Initializer.reinitializeJavaEnvironment();
 
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
