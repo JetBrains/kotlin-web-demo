@@ -242,7 +242,7 @@ public class JavaRunner {
                 || str.contains("InstantiationError")
                 || str.contains("AbstractMethodError")
                 || str.contains("NoSuchFieldError")
-                || str.contains("IllegalAccessError")
+                || (str.contains("IllegalAccessError")  && !str.contains("kotlin.io.namespace"))
                 || str.contains("VerifyError")
                 || str.contains("ClassCircularityError")
                 || str.contains("UnsatisfiedLinkError")
