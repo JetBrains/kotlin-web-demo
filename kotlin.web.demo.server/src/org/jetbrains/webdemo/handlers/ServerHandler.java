@@ -400,9 +400,11 @@ public class ServerHandler {
 
         InputStream is = ServerHandler.class.getResourceAsStream(path);
         if (is == null) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+            if (request.getQueryString() != null) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Broken path to resource"),
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getRequestURI() + "?" + request.getQueryString());
+            }
             writeResponse(response, ("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
             return;
         }
