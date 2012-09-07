@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import org.jetbrains.jet.codegen.state.GenerationStrategy;
 import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
 import org.jetbrains.jet.internal.com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
@@ -23,7 +24,7 @@ import org.jetbrains.jet.analyzer.AnalyzeExhaust;
 import org.jetbrains.jet.codegen.ClassBuilderFactories;
 import org.jetbrains.jet.codegen.ClassFileFactory;
 import org.jetbrains.jet.codegen.CompilationErrorHandler;
-import org.jetbrains.jet.codegen.GenerationState;
+import org.jetbrains.jet.codegen.state.GenerationState;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
@@ -85,17 +86,14 @@ public class CompileAndRunExecutor {
                         (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList(),
                         ApplicationSettings.MODE);
                 generationState = new GenerationState(currentProject,ClassBuilderFactories.binaries(false), analyzeExhaust, Collections.singletonList((JetFile) currentPsiFile));
-//                generationState = new GenerationState(currentProject, ClassBuilderFactories.binaries(false));
-                generationState.compileCorrectFiles(new CompilationErrorHandler() {
+                GenerationStrategy.STANDARD.compileCorrectFiles(generationState, new CompilationErrorHandler() {
                     @Override
                     public void reportException(Throwable throwable, String s) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), s + " " + currentPsiFile.getText());
                     }
                 });
-//                generationState.compileCorrectFiles(bindingContext, Collections.singletonList((JetFile) currentPsiFile));
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
-//                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(sessionInfo.getType(), e, currentPsiFile.getText()));
                 return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
             ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
