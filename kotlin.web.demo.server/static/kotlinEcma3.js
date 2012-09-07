@@ -88,7 +88,7 @@ var Kotlin = {};
   };
   Kotlin.defineModule = function(c, d) {
     if(c in Kotlin.modules) {
-      throw Kotlin.$new(Kotlin.IllegalArgumentException)();
+      //throw Kotlin.$new(Kotlin.IllegalArgumentException)();
     }
     Kotlin.modules[c] = d
   }
