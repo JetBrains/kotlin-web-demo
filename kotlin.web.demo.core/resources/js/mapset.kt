@@ -1,6 +1,5 @@
 package kotlin
 
-import java.util.Map
 import js.native
 
 /** Provides [] access to maps */

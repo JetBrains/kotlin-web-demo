@@ -112,7 +112,7 @@ public class HighlightExamplesTest extends BaseTest {
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
         String actualResult = responseForHighlighting.getResult();
 
-        assertEquals("Wrong result for example " + file.getName(), expectedResult, actualResult);
+        assertEquals("Wrong result for example " + file.getName() + " run configuration: " + runConfiguration, expectedResult, actualResult);
     }
 }
 
