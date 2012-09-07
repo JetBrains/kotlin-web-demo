@@ -28,7 +28,7 @@ import java.util.*
  * free space (a path does not go through walls). One can move only
  * straightly up, down, left or right, no diagonal moves allowed.
  */
-fun findPath(maze : Maze) : List<#(Int, Int)>? {
+fun findPath(maze : Maze) : MutableList<#(Int, Int)>? {
   val previous = HashMap<#(Int, Int), #(Int, Int)>()
 
   val queue = LinkedList<#(Int, Int)>()
@@ -37,14 +37,14 @@ fun findPath(maze : Maze) : List<#(Int, Int)>? {
   queue.offer(maze.start)
   visited.add(maze.start)
   while (!queue.isEmpty()) {
-    val cell = queue.poll()
+    val cell = queue.poll()!!
     if (cell == maze.end) break
 
-    for (newCell in maze.neighbors(cell.sure()._1, cell.sure()._2)) {
+    for (newCell in maze.neighbors(cell._1, cell._2)) {
     if (newCell in visited) continue
-    previous.put(newCell, cell.sure())
+    previous.put(newCell, cell)
     queue.offer(newCell)
-    visited.add(cell.sure())
+    visited.add(cell)
     }
   }
 
@@ -53,7 +53,7 @@ fun findPath(maze : Maze) : List<#(Int, Int)>? {
   val path = ArrayList<#(Int, Int)>()
   var current = previous[maze.end]
   while (current != maze.start) {
-    path.add(0, current.sure())
+    path.add(0, current!!)
     current = previous[current]
   }
   return path
@@ -62,7 +62,7 @@ fun findPath(maze : Maze) : List<#(Int, Int)>? {
 /**
  * Find neighbors of the (i, j) cell that are not walls
  */
-fun Maze.neighbors(i : Int, j : Int) : List<#(Int, Int)> {
+fun Maze.neighbors(i : Int, j : Int) : MutableList<#(Int, Int)> {
   val result = ArrayList<#(Int, Int)>()
   addIfFree(i - 1, j, result)
   addIfFree(i, j - 1, result)
@@ -71,7 +71,7 @@ fun Maze.neighbors(i : Int, j : Int) : List<#(Int, Int)> {
   return result
 }
 
-fun Maze.addIfFree(i : Int, j : Int, result : List<#(Int, Int)>) {
+fun Maze.addIfFree(i : Int, j : Int, result : MutableList<#(Int, Int)>) {
   if (i !in 0..height-1) return
   if (j !in 0..width-1) return
   if (walls[i][j]) return
@@ -174,12 +174,12 @@ fun printMaze(str : String) {
  *    OOOOOOOOOOOOOOOOO
  */
 fun makeMaze(s : String) : Maze {
-  val lines = s.split("\n").sure()
+  val lines = s.split("\n")
   val w = max<String>(lines.toList(), comparator<String?> {o1, o2 ->
     val l1 : Int = o1?.size ?: 0
     val l2 = o2?.size ?: 0
     l1 - l2
-  }).sure()
+  })!!
   val data = Array<Array<Boolean>>(lines.size) {Array<Boolean>(w.size) {false}}
 
   var start : #(Int, Int)? = null
@@ -187,7 +187,7 @@ fun makeMaze(s : String) : Maze {
 
   for (line in lines.indices) {
   for (x in lines[line].indices) {
-    val c = lines[line].sure()[x]
+    val c = lines[line][x]
     data[line][x] = c == 'O'
     when (c) {
     'I' -> start = #(line, x)
@@ -205,10 +205,10 @@ fun makeMaze(s : String) : Maze {
     throw IllegalArgumentException("No goal point in the maze (should be indicated with a '$' sign)")
   }
 
-  return Maze(w.size, lines.size, data, start.sure(), end.sure())
+  return Maze(w.size, lines.size, data, start!!, end!!)
 }
 
 
 // An excerpt from the Standard Library
-val String?.indices : IntRange get() = IntRange(0, this.sure().size)
+val String?.indices : IntRange get() = IntRange(0, this!!.size)
 

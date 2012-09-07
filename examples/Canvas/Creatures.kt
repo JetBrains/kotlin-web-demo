@@ -81,7 +81,6 @@ class Logo(override var pos: Vector): Shape()
   }
 
   override fun draw(state: CanvasState) {
-    val context = state.context
     if (selected) {
       // using helper we defined in Shape class
       state.context.drawShadowedLogo(state)
@@ -370,7 +369,7 @@ fun main(args: Array<String>) {
 
 fun <T> List<T>.reversed(): List<T> {
   val result = ArrayList<T>()
-  var i = size()
+  var i = size()  
   while (i > 0) {
     result.add(get(--i))
   }
