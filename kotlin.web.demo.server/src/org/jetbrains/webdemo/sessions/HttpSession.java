@@ -285,6 +285,7 @@ public class HttpSession {
 
         try {
             response.addHeader("Cache-Control", "no-cache");
+            response.setCharacterEncoding("UTF-8");
             response.setStatus(errorCode);
             writer = response.getWriter();
             writer.write(responseBody);
