@@ -64,7 +64,7 @@ class TextElement(val text: String): Element {
 }
 
 abstract class Tag(val name: String): Element {
-  val children = ArrayList<Element>()
+  val children: ArrayList<Element> = ArrayList<Element>()
   val attributes = HashMap<String, String>()
 
   protected fun initTag<T: Element>(tag: T, init: T.() -> Unit): T {
@@ -74,11 +74,11 @@ abstract class Tag(val name: String): Element {
   }
 
   override fun render(builder: StringBuilder, indent: String) {
-    builder.append("$indent<$name${renderAttributes()}>\n")
+    builder.append("$indent<$name${renderAttributes()}>\n") 
     for (c in children) {
       c.render(builder, indent + "  ")
-    }
-    builder.append("$indent</$name>\n")
+    } 
+    builder.append("$indent</$name>\n") 
   }
 
   private fun renderAttributes(): String? {
