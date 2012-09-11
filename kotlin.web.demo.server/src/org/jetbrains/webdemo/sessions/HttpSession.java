@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.sessions;
 
 import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
+import org.jetbrains.jet.internal.com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
@@ -117,6 +118,7 @@ public class HttpSession {
             ErrorWriterOnServer.LOG_FOR_INFO.info(tmp);
         } else if (type.equals("errorInKotlin")) {
             String tmp = getPostDataFromRequest(true).text;
+            tmp = StringUtil.unescapeXml(StringUtil.unescapeXml(tmp));
             List<String> list = ErrorWriter.parseException(tmp);
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
         } else {
