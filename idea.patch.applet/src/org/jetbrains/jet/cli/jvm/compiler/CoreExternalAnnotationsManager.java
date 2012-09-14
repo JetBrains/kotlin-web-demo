@@ -16,6 +16,7 @@
 
 package org.jetbrains.jet.cli.jvm.compiler;
 
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.internal.com.intellij.codeInsight.BaseExternalAnnotationsManager;
 import org.jetbrains.jet.internal.com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.jet.internal.com.intellij.psi.*;
@@ -64,6 +65,11 @@ public class CoreExternalAnnotationsManager extends BaseExternalAnnotationsManag
     @Override
     public boolean deannotate(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean editExternalAnnotation(@NotNull PsiModifierListOwner psiModifierListOwner, @NotNull String s, @Nullable PsiNameValuePair[] psiNameValuePairs) {
+        return false;
     }
 
     @Override
