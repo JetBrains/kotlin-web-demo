@@ -1,5 +1,6 @@
 Hello, world!
 Basic syntax walk-through
+Multi-declarations
 Longer examples
 Problems
 Canvas
