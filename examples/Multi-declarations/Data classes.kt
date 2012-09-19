@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
   // or
 
   val (name, id) = getUser()
-  println("name = ${name}, id = ${id}")
+  println("name = $name, id = $id")
     
   // or
     

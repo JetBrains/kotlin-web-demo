@@ -121,12 +121,12 @@ fun printField(s : String, steps : Int) {
 }
 
 fun makeField(s : String) : Field {
-  val lines = s.split("\n").sure()
+  val lines = s.split("\n")
   val w = max<String>(lines.toList(), comparator<String?> {o1, o2 ->
           val l1 : Int = o1?.size ?: 0
           val l2 = o2?.size ?: 0
           l1 - l2
-  }).sure()
+  })!!
   val data = Array(lines.size) {Array(w.size) {false}}
 
   // workaround
@@ -138,7 +138,7 @@ fun makeField(s : String) : Field {
 
   for (line in lines.indices) {
     for (x in lines[line].indices) {
-      val c = lines[line].sure()[x]
+      val c = lines[line][x]
       data[line][x] = c == '*'
     }
   }
@@ -149,5 +149,5 @@ fun makeField(s : String) : Field {
 
 
 // An excerpt from the Standard Library
-val String?.indices : IntRange get() = IntRange(0, this.sure().size)
+val String?.indices : IntRange get() = IntRange(0, this!!.size)
 

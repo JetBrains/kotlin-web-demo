@@ -6,10 +6,8 @@ fun main(args: Array<String>) {
   map.put("two", 2)
   
   for ((key, value) in map) { 
-    println("key = ${key}, value = ${value}")
+    println("key = $key, value = $value")
   }
 }
 
-fun <K, V> Map.Entry<K, V>.component1() = getKey()
-fun <K, V> Map.Entry<K, V>.component2() = getValue()
 

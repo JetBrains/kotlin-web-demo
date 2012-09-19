@@ -28,11 +28,11 @@ import java.util.*
  * free space (a path does not go through walls). One can move only
  * straightly up, down, left or right, no diagonal moves allowed.
  */
-fun findPath(maze : Maze) : MutableList<#(Int, Int)>? {
-  val previous = HashMap<#(Int, Int), #(Int, Int)>()
+fun findPath(maze : Maze) : MutableList<Pair<Int, Int>>? {
+  val previous = HashMap<Pair<Int, Int>, Pair<Int, Int>>()
 
-  val queue = LinkedList<#(Int, Int)>()
-  val visited = HashSet<#(Int, Int)>()
+  val queue = LinkedList<Pair<Int, Int>>()
+  val visited = HashSet<Pair<Int, Int>>()
 
   queue.offer(maze.start)
   visited.add(maze.start)
@@ -40,17 +40,17 @@ fun findPath(maze : Maze) : MutableList<#(Int, Int)>? {
     val cell = queue.poll()!!
     if (cell == maze.end) break
 
-    for (newCell in maze.neighbors(cell._1, cell._2)) {
-    if (newCell in visited) continue
-    previous.put(newCell, cell)
-    queue.offer(newCell)
-    visited.add(cell)
+    for (newCell in maze.neighbors(cell.first, cell.second)) {
+      if (newCell in visited) continue
+      previous.put(newCell, cell)
+      queue.offer(newCell)
+      visited.add(cell)
     }
   }
 
   if (previous[maze.end] == null) return null
 
-  val path = ArrayList<#(Int, Int)>()
+  val path = ArrayList<Pair<Int, Int>>()
   var current = previous[maze.end]
   while (current != maze.start) {
     path.add(0, current!!)
@@ -62,8 +62,8 @@ fun findPath(maze : Maze) : MutableList<#(Int, Int)>? {
 /**
  * Find neighbors of the (i, j) cell that are not walls
  */
-fun Maze.neighbors(i : Int, j : Int) : MutableList<#(Int, Int)> {
-  val result = ArrayList<#(Int, Int)>()
+fun Maze.neighbors(i : Int, j : Int) : MutableList<Pair<Int, Int>> {
+  val result = ArrayList<Pair<Int, Int>>()
   addIfFree(i - 1, j, result)
   addIfFree(i, j - 1, result)
   addIfFree(i + 1, j, result)
@@ -71,28 +71,28 @@ fun Maze.neighbors(i : Int, j : Int) : MutableList<#(Int, Int)> {
   return result
 }
 
-fun Maze.addIfFree(i : Int, j : Int, result : MutableList<#(Int, Int)>) {
+fun Maze.addIfFree(i : Int, j : Int, result : MutableList<Pair<Int, Int>>) {
   if (i !in 0..height-1) return
   if (j !in 0..width-1) return
   if (walls[i][j]) return
 
-  result.add(#(i, j))
+  result.add(Pair(i, j))
 }
 
 /**
  * A data class that represents a maze
  */
 class Maze(
-  // Number or columns
-  val width : Int,
-  // Number of rows
-  val height : Int,
-  // true for a wall, false for free space
-  val walls : Array<out Array<out Boolean>>,
-  // The starting point (must not be a wall)
-  val start : #(Int, Int),
-  // The target point (must not be a wall)
-  val end : #(Int, Int)
+    // Number or columns
+    val width : Int,
+    // Number of rows
+    val height : Int,
+    // true for a wall, false for free space
+    val walls : Array<out Array<out Boolean>>,
+    // The starting point (must not be a wall)
+    val start : Pair<Int, Int>,
+    // The target point (must not be a wall)
+    val end : Pair<Int, Int>
 ) {
 }
 
@@ -101,11 +101,11 @@ fun main(args : Array<String>) {
   printMaze("I  $")
   printMaze("I O $")
   printMaze("""
-    O  $
-    O
-    O
-    O
-    O           I
+  O  $
+  O
+  O
+  O
+  O       I
   """)
   printMaze("""
     OOOOOOOOOOO
@@ -139,18 +139,18 @@ fun printMaze(str : String) {
   println("Maze:")
   val path = findPath(maze)
   for (i in 0..maze.height - 1) {
-  for (j in 0..maze.width - 1) {
-    val cell = #(i, j)
-    print(
-      if (maze.walls[i][j]) "O"
-      else if (cell == maze.start) "I"
-      else if (cell == maze.end) "$"
-      else if (path != null && path.contains(cell)) "~"
-      else " "
-    )
+    for (j in 0..maze.width - 1) {
+      val cell = Pair(i, j)
+      print(
+          if (maze.walls[i][j]) "O"
+          else if (cell == maze.start) "I"
+          else if (cell == maze.end) "$"
+          else if (path != null && path.contains(cell)) "~"
+          else " "
+      )
     }
     println("")
-   }
+  }
   println("Result: " + if (path == null) "No path" else "Path found")
   println("")
 }
@@ -182,19 +182,19 @@ fun makeMaze(s : String) : Maze {
   })!!
   val data = Array<Array<Boolean>>(lines.size) {Array<Boolean>(w.size) {false}}
 
-  var start : #(Int, Int)? = null
-  var end : #(Int, Int)? = null
+  var start : Pair<Int, Int>? = null
+  var end : Pair<Int, Int>? = null
 
   for (line in lines.indices) {
-  for (x in lines[line].indices) {
-    val c = lines[line][x]
-    data[line][x] = c == 'O'
-    when (c) {
-    'I' -> start = #(line, x)
-    '$' -> end = #(line, x)
-    else -> {}
+    for (x in lines[line].indices) {
+      val c = lines[line][x]
+      data[line][x] = c == 'O'
+      when (c) {
+        'I' -> start = Pair(line, x)
+        '$' -> end = Pair(line, x)
+        else -> {}
+      }
     }
-  }
   }
 
   if (start == null) {

@@ -210,4 +210,25 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <args/>
         <mode>canvas</mode>
     </example>
+    <example>
+        <name>Multi-declarations</name>
+        <text>
+            <p>
+                In this example introduces a concept that we call <b>mutli-declarations</b>. It creates multiple variable at once.<br/>The <b>component1()</b> and <b>component2()</b> functions are another example of principle of conventions widely used in Kotlin. Anything can be on the right-hand side of a multi-assignement, as long as the required number of component functions can be called on it.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Data classes</name>
+        <text>
+            <p>
+                <b>Data class</b> gets <b>component functions</b>, one for each property declared in the primary constructor, generated automatically (this is already implemented), same for all the other goodies common for data: <b>toString()</b>, <b>equals()</b> and <b>hashCode()</b> (will be there soon).
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+
 </help>
