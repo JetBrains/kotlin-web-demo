@@ -101,11 +101,11 @@ fun main(args : Array<String>) {
   printMaze("I  $")
   printMaze("I O $")
   printMaze("""
-  O  $
-  O
-  O
-  O
-  O       I
+    O  $
+    O
+    O
+    O
+    O           I
   """)
   printMaze("""
     OOOOOOOOOOO
