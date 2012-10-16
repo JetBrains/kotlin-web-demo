@@ -179,7 +179,7 @@ fun makeMaze(s : String) : Maze {
     val l1 : Int = o1?.size ?: 0
     val l2 = o2?.size ?: 0
     l1 - l2
-  })!!
+  })
   val data = Array<Array<Boolean>>(lines.size) {Array<Boolean>(w.size) {false}}
 
   var start : Pair<Int, Int>? = null

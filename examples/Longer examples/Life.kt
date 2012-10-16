@@ -126,7 +126,7 @@ fun makeField(s : String) : Field {
           val l1 : Int = o1?.size ?: 0
           val l2 = o2?.size ?: 0
           l1 - l2
-  })!!
+  })
   val data = Array(lines.size) {Array(w.size) {false}}
 
   // workaround
