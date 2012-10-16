@@ -82,8 +82,9 @@
     <h3>STATISTICS:</h3>
     <span style="margin-right: 20px;">$UPDATETIME$</span>
 
-    <form action="/kotlinServer&sessionId=-1&type=updateStatistics&args=null">
-        <button>Update statistics</button>
+    <form action="/logs">
+        <input type="hidden" name="sessionId"/>
+        <button name="type" value="updateStatistics">Update statistics</button>
     </form>
     <table id="statistics">
         <tr>

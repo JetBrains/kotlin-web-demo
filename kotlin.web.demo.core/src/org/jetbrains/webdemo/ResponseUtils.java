@@ -25,7 +25,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,42 +57,6 @@ public class ResponseUtils {
 
     public static String generateRequestString(String type, String args) {
         return "/kotlinServer?sessionId=-1&type=" + type + "&args=" + args;
-    }
-
-    public static String generateRequestStringWoQuery(String type, String args) {
-        return "/kotlinServer&sessionId=-1&type=" + type + "&args=" + args;
-    }
-
-    //Get Color as String
-    public static String getColor(Color color) {
-        java.util.List<String> colors = new ArrayList<String>();
-        colors.add(Long.toHexString(color.getRed()));
-        colors.add(Long.toHexString(color.getGreen()));
-        colors.add(Long.toHexString(color.getBlue()));
-
-        StringBuilder buffer = new StringBuilder("#");
-        for (String c : colors) {
-            if (c.length() == 1) {
-                buffer.append("0");
-            }
-            buffer.append(c);
-        }
-        return (buffer.toString());
-    }
-
-    //Get fontType as String
-    public static String getFontType(int fontType) {
-        switch (fontType) {
-            case 1:
-                return "font-weight: bold;";
-            case 2:
-                return "font-style: italic;";
-            case 3:
-                return "font-style: italic; font-weight: bold;";
-            default:
-                return "";
-
-        }
     }
 
     public static String substringAfter(String str, String before) {
@@ -312,10 +275,6 @@ public class ResponseUtils {
 
     public static String getExampleOrProgramNameByUrl(String url) {
         return ResponseUtils.substringAfter(url, "&name=").replaceAll("%20", " ");
-    }
-
-    public static String getExampleOrProgramFolderByUrl(String url) {
-        return ResponseUtils.substringBefore(url, "&name=").replaceAll("%20", " ");
     }
 
     @NotNull
