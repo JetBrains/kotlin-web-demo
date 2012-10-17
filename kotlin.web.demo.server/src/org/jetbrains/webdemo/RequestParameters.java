@@ -42,7 +42,7 @@ public class RequestParameters {
 
     public static RequestParameters parseRequestWoQuery(String requestStr) {
         RequestParameters params = new RequestParameters();
-        params.sessionId = ResponseUtils.substringBetween(requestStr, "kotlinServer&sessionId=", "&type=");
+        params.sessionId = ResponseUtils.substringBetween(requestStr, "kotlinServer?sessionId=", "&type=");
         params.type = ResponseUtils.substringBetween(requestStr, "&type=", "&args=");
         params.args = ResponseUtils.substringAfter(requestStr, "&args=");
         return params;

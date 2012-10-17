@@ -167,14 +167,24 @@ public class Statistics {
         TOTAL_USERS_FROM_LOG.value = "for id: " + String.valueOf(userInfoMapForId.size());
         NEW_USERS_PER_DAY.value = getNumberOfNewUsersPerDay();
         USERS_PER_DAY.value = getNumberOfUsersPerDay();
-        REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser / userInfoMapForId.size())
-                + " (" + totalNumberOfRequestsPerUser + " / " + userInfoMapForId.size() + ")";
-        RUN_REQUEST_PER_USER.value = String.valueOf(totalNumberOfRunRequestsPerUser / userInfoMapForId.size())
-                + " (" + totalNumberOfRunRequestsPerUser + " / " + userInfoMapForId.size() + ")";
-        HIGHLIGHT_REQUEST_PER_USER.value = String.valueOf(totalNumberOfHighlightRequestsPerUser / userInfoMapForId.size())
-                + " (" + totalNumberOfHighlightRequestsPerUser + " / " + userInfoMapForId.size() + ")";
-        COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMapForId.size())
-                + " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMapForId.size() + ")";
+
+        if (userInfoMapForId.isEmpty()) {
+            final String ZERO = "0";
+            REQUEST_PER_USER.value = ZERO;
+            RUN_REQUEST_PER_USER.value = ZERO;
+            HIGHLIGHT_REQUEST_PER_USER.value = ZERO;
+            COMPLETE_REQUEST_PER_USER.value = ZERO;
+        }
+        else {
+            REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser / userInfoMapForId.size())
+                    + " (" + totalNumberOfRequestsPerUser + " / " + userInfoMapForId.size() + ")";
+            RUN_REQUEST_PER_USER.value = String.valueOf(totalNumberOfRunRequestsPerUser / userInfoMapForId.size())
+                    + " (" + totalNumberOfRunRequestsPerUser + " / " + userInfoMapForId.size() + ")";
+            HIGHLIGHT_REQUEST_PER_USER.value = String.valueOf(totalNumberOfHighlightRequestsPerUser / userInfoMapForId.size())
+                    + " (" + totalNumberOfHighlightRequestsPerUser + " / " + userInfoMapForId.size() + ")";
+            COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMapForId.size())
+                    + " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMapForId.size() + ")";
+        }
         /* REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser / userInfoMapForId.size())
 + " (" + totalNumberOfRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
 String.valueOf(totalNumberOfRequestsPerUserByIp / userInfoMapForIp.size())
@@ -289,6 +299,9 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
     }
 
     private String getNumberOfNewUsersPerDay() {
+        if (usersPerDayList.isEmpty())
+            return "0";
+
         int i = 0;
         for (Integer count : usersPerDayList) {
             i += count;
@@ -297,6 +310,9 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
     }
 
     private String getNumberOfUsersPerDay() {
+        if (uniqueUsersPerDay.isEmpty())
+            return "0";
+
         int i = 0;
         for (Set<String> count : uniqueUsersPerDay) {
             i += count.size();

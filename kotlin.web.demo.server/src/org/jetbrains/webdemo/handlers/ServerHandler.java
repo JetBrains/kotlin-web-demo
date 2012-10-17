@@ -86,11 +86,7 @@ public class ServerHandler {
                 updateExamples(response);
             } else if (param.startsWith("/logs") || parameters.compareType("updateStatistics")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                if (parameters.compareType("updateStatistics")) {
-                    sendListLogs(request, response, true);
-                } else {
-                    sendListLogs(request, response, false);
-                }
+                sendListLogs(request, response, parameters.compareType("updateStatistics"));
             } else if (parameters.compareType("showUserInfo")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                 sendUserInfoForStatistics(response);
