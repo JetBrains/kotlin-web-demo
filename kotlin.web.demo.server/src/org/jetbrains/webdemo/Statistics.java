@@ -58,10 +58,6 @@ public class Statistics {
 
     //id - userInfo
     private Map<String, UserInfo> userInfoMapForId = new HashMap<String, UserInfo>();
-    //ip - userInfo
-    //private Map<String, UserInfo> userInfoMapForIp = new HashMap<String, UserInfo>();
-    //ip - userIds
-    //private Map<String, Set<Integer>> ipToIdMap = new HashMap<String, Set<Integer>>();
     //stacktrace - description
     private Map<String, ErrorElement> errorElementSet = new HashMap<String, ErrorElement>();
     private List<Integer> usersPerDayList = new ArrayList<Integer>();
@@ -152,17 +148,6 @@ public class Statistics {
             totalNumberOfCompleteRequestsPerUser += userInfo.numberOfCompleteRequest;
         }
 
-        /*double totalNumberOfRequestsPerUserByIp = 0;
-        double totalNumberOfRunRequestsPerUserByIp = 0;
-        double totalNumberOfHighlightRequestsPerUserByIp = 0;
-        double totalNumberOfCompleteRequestsPerUserByIp = 0;
-        for (UserInfo userInfoByIp : userInfoMapForIp.values()) {
-            totalNumberOfRequestsPerUserByIp += userInfoByIp.numberOfRequest;
-            totalNumberOfRunRequestsPerUserByIp += userInfoByIp.numberOfRunRequest;
-            totalNumberOfHighlightRequestsPerUserByIp += userInfoByIp.numberOfHighlightRequest;
-            totalNumberOfCompleteRequestsPerUserByIp += userInfoByIp.numberOfCompleteRequest;
-        }*/
-
         TOTAL_USERS.value = String.valueOf(NUMBER_OF_USERS);
         TOTAL_USERS_FROM_LOG.value = "for id: " + String.valueOf(userInfoMapForId.size());
         NEW_USERS_PER_DAY.value = getNumberOfNewUsersPerDay();
@@ -185,22 +170,6 @@ public class Statistics {
             COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMapForId.size())
                     + " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMapForId.size() + ")";
         }
-        /* REQUEST_PER_USER.value = String.valueOf(totalNumberOfRequestsPerUser / userInfoMapForId.size())
-+ " (" + totalNumberOfRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
-String.valueOf(totalNumberOfRequestsPerUserByIp / userInfoMapForIp.size())
-+ " (" + totalNumberOfRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
-RUN_REQUEST_PER_USER.value = String.valueOf(totalNumberOfRunRequestsPerUser / userInfoMapForId.size())
-+ " (" + totalNumberOfRunRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
-String.valueOf(totalNumberOfRunRequestsPerUserByIp / userInfoMapForIp.size())
-+ " (" + totalNumberOfRunRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
-HIGHLIGHT_REQUEST_PER_USER.value = String.valueOf(totalNumberOfHighlightRequestsPerUser / userInfoMapForId.size())
-+ " (" + totalNumberOfHighlightRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
-String.valueOf(totalNumberOfHighlightRequestsPerUserByIp / userInfoMapForIp.size())
-+ " (" + totalNumberOfHighlightRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";
-COMPLETE_REQUEST_PER_USER.value = String.valueOf(totalNumberOfCompleteRequestsPerUser / userInfoMapForId.size())
-+ " (" + totalNumberOfCompleteRequestsPerUser + " / " + userInfoMapForId.size() + ")" + " for ip: " +
-String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size())
-+ " (" + totalNumberOfCompleteRequestsPerUserByIp + " / " + userInfoMapForIp.size() + ")";*/
         UPDATE_TIME.value = getUpdateTimeForStatistics();
         LOGS_PERIOD.value = getLogsPeriod();
     }
@@ -209,25 +178,6 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
         calculateStatistics();
         StringBuilder builder = new StringBuilder();
         builder.append(generateTableContent("id"));
-        //builder.append(generateTableContent("ip"));
-
-        /*builder.append("<table border='2' bordercolor='#eee' cellspacing='0' cellpadding='5' style='float: left; margin-right: 20px;'>");
-        builder.append("<tr>");
-        builder.append(ResponseUtils.generateTag("td", "userIp"));
-        builder.append(ResponseUtils.generateTag("td", "ids"));
-        builder.append("</tr>");
-        for (String ip : ipToIdMap.keySet()) {
-            builder.append("<tr>");
-            builder.append(ResponseUtils.generateTag("td", ip));
-            Set<Integer> info = ipToIdMap.get(ip);
-            String ids = "";
-            for (Integer id : info) {
-                ids += id + " ";
-            }
-            builder.append(ResponseUtils.generateTag("td", ids));
-            builder.append("</tr>");
-        }
-        builder.append("</table>");*/
 
         return builder.toString();
     }
@@ -240,11 +190,7 @@ String.valueOf(totalNumberOfCompleteRequestsPerUserByIp / userInfoMapForIp.size(
             ValueComparator comparator = new ValueComparator(userInfoMapForId);
             sortedMap = new TreeMap<String, UserInfo>(comparator);
             sortedMap.putAll(userInfoMapForId);
-        }/* else if (type.equals("ip")) {
-            ValueComparator comparator = new ValueComparator(userInfoMapForIp);
-            sortedMap = new TreeMap<String, UserInfo>(comparator);
-            sortedMap.putAll(userInfoMapForIp);
-        }*/
+        }
 
         if (sortedMap == null) {
             return "";
