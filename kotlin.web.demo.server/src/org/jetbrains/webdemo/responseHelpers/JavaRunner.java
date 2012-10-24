@@ -42,7 +42,6 @@ import java.util.*;
  */
 
 public class JavaRunner {
-//    private final Logger LOG = Logger.getLogger(JavaRunner.class);
 
     private final List<String> files;
     private String arguments;
@@ -62,7 +61,6 @@ public class JavaRunner {
     }
 
     public String getResult(String pathToRootOut) {
-//        String commandString = generateCommandString(pathToRootOut);
         String[] commandString = generateCommandString(pathToRootOut);
         Process process;
         sessionInfo.getTimeManager().saveCurrentTime();
@@ -192,11 +190,6 @@ public class JavaRunner {
         String path = ResponseUtils.substringAfter(outStream, "An error report file with more information is saved as:" + ResponseUtils.addNewLine() + "# ");
         path = ResponseUtils.substringBefore(path, ResponseUtils.addNewLine() + "#");
         File log = new File(path);
-        /*if (log.exists()) {
-            String links = ResponseUtils.generateTag("a", "view", "href", "/log=" + log.getAbsolutePath() + "&view");
-            links += ResponseUtils.generateTag("a", "download", "href", "/log=" + log.getAbsolutePath() + "&download");
-            return links;
-        }*/
         FileReader reader = null;
         try {
             reader = new FileReader(log);

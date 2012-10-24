@@ -65,8 +65,7 @@ public class ErrorAnalyzer {
         try {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList(),
-                        ApplicationSettings.MODE).getBindingContext();
+                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList()).getBindingContext();
             }
             else {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);

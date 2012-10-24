@@ -60,8 +60,6 @@ public class MySqlConnector {
             DataSource ds = (DataSource) envCtx.lookup("jdbc/kotlin");
             connection = ds.getConnection();
             databaseUrl = connection.toString();
-//            url = "jdbc:mysql://" + ApplicationSettings.MYSQL_HOST + ":" + ApplicationSettings.MYSQL_PORT + "/" + ApplicationSettings.MYSQL_DATABASE_NAME + "";
-//            connection = DriverManager.getConnection(url, ApplicationSettings.MYSQL_USERNAME, ApplicationSettings.MYSQL_PASSWORD);
             ErrorWriter.writeInfoToConsole("Connected to database: " + databaseUrl);
             ErrorWriter.getInfoForLog("CONNECT_TO_DATABASE", "-1", "Connected to database: " + databaseUrl);
             checkDatabaseVersion();
@@ -311,7 +309,6 @@ public class MySqlConnector {
 
                 return ResponseUtils.getJsonString("programName", programName + "&id=" + programId);
             } else {
-//                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userprogramid table",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
@@ -607,7 +604,6 @@ public class MySqlConnector {
                 st.executeUpdate();
                 return ResponseUtils.getJsonString("text", "Program was successfully deleted.", programId);
             } else {
-//                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
                         SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));

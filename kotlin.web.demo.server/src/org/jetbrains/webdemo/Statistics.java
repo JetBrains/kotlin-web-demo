@@ -31,13 +31,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 12/8/11
- * Time: 2:52 PM
- */
-
 public class Statistics {
     private static int NUMBER_OF_USERS = 0;
 

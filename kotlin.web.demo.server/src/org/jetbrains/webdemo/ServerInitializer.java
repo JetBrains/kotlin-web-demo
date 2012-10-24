@@ -18,32 +18,20 @@ package org.jetbrains.webdemo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.cli.common.CLIConfigurationKeys;
-import org.jetbrains.jet.cli.common.ExitCode;
-import org.jetbrains.jet.cli.common.messages.CompilerMessageLocation;
-import org.jetbrains.jet.cli.common.messages.CompilerMessageSeverity;
 import org.jetbrains.jet.cli.jvm.JVMConfigurationKeys;
 import org.jetbrains.jet.cli.jvm.K2JVMCompiler;
 import org.jetbrains.jet.cli.jvm.K2JVMCompilerArguments;
-import org.jetbrains.jet.cli.jvm.compiler.CommandLineScriptUtils;
-import org.jetbrains.jet.cli.jvm.compiler.CompileEnvironmentUtil;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
-import org.jetbrains.jet.cli.jvm.repl.ReplFromTerminal;
 import org.jetbrains.jet.codegen.BuiltinToJavaTypesMapping;
-import org.jetbrains.jet.config.CommonConfigurationKeys;
 import org.jetbrains.jet.config.CompilerConfiguration;
 import org.jetbrains.jet.internal.com.google.common.base.Splitter;
 import org.jetbrains.jet.internal.com.google.common.collect.Lists;
-import org.jetbrains.jet.internal.com.intellij.lang.java.JavaParserDefinition;
 import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
 import org.jetbrains.jet.internal.com.intellij.openapi.application.ApplicationManager;
 import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistry;
 import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
 import org.jetbrains.jet.internal.com.intellij.openapi.vfs.encoding.EncodingRegistry;
-import org.jetbrains.jet.lang.BuiltinsScopeExtensionMode;
-import org.jetbrains.jet.lang.parsing.JetParserDefinition;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
-import org.jetbrains.jet.plugin.JetFileType;
 import org.jetbrains.jet.utils.PathUtil;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
@@ -52,12 +40,6 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/14/11
- * Time: 3:49 PM
- */
 public class ServerInitializer extends Initializer {
     private static ServerInitializer initializer = new ServerInitializer();
 
@@ -108,7 +90,6 @@ public class ServerInitializer extends Initializer {
                 configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath(arguments));
 
                 configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
-                configuration.put(JVMConfigurationKeys.BUILTINS_SCOPE_EXTENSION_MODE_KEY, BuiltinsScopeExtensionMode.ALL);
                 configuration.put(JVMConfigurationKeys.STUBS, false);
                 configuration.put(JVMConfigurationKeys.BUILTIN_TO_JAVA_TYPES_MAPPING_KEY, BuiltinToJavaTypesMapping.ENABLED);
 

@@ -16,8 +16,6 @@
 
 package org.jetbrains.webdemo.server;
 
-import org.jetbrains.jet.lang.BuiltinsScopeExtensionMode;
-
 /**
  * Created by IntelliJ IDEA.
  * User: Natalia.Ukhorskaya
@@ -45,13 +43,11 @@ public class ApplicationSettings {
     public static String KOTLIN_LIB = "";
 
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
-    public static String KOTLIN_VERSION = "0.0.0";
+    public static String KOTLIN_VERSION = "0.4.108";
 
     public static String RT_JAR = "";
 
     public static final String DATABASE_VERSION = "1.0";
-
-    public static BuiltinsScopeExtensionMode MODE = BuiltinsScopeExtensionMode.ALL;
 
     private ApplicationSettings() {
 

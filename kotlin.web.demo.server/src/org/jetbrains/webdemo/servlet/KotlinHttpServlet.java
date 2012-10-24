@@ -17,7 +17,6 @@
 package org.jetbrains.webdemo.servlet;
 
 import org.apache.naming.NamingContext;
-import org.jetbrains.jet.lang.BuiltinsScopeExtensionMode;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
@@ -38,13 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 1/16/12
- * Time: 12:17 PM
- */
-
 public class KotlinHttpServlet extends HttpServlet {
 
     private final ServerHandler myHandler = new ServerHandler();
@@ -64,8 +56,6 @@ public class KotlinHttpServlet extends HttpServlet {
 
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
         Initializer.INITIALIZER = ServerInitializer.getInstance();
-        ApplicationSettings.MODE = BuiltinsScopeExtensionMode.ALL;
-
 
         try {
             if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
@@ -115,7 +105,6 @@ public class KotlinHttpServlet extends HttpServlet {
         }
 
     }
-
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)

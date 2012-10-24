@@ -22,12 +22,6 @@ import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
 import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistry;
 import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/14/11
- * Time: 3:49 PM
- */
 public class InitializerApplet extends Initializer {
     private static InitializerApplet initializer = new InitializerApplet();
 
@@ -69,7 +63,6 @@ public class InitializerApplet extends Initializer {
                 }
             };
 
-            
             environment = new JetCoreEnvironment(root, new CompilerConfiguration());
             registry = FileTypeRegistry.ourInstanceGetter;
 

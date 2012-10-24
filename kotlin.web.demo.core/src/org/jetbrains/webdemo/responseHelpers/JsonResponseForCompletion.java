@@ -88,8 +88,7 @@ public class JsonResponseForCompletion {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
             } else {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList(),
-                        ApplicationSettings.MODE).getBindingContext();
+                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList()).getBindingContext();
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());

@@ -108,8 +108,6 @@ public class LogDownloader {
                     responseOtherLogs.append(ResponseUtils.generateTag("a", "view", "href", ResponseUtils.generateRequestString("downloadLog", file.getName() + "&view")));
                     responseOtherLogs.append(ResponseUtils.generateTag("a", "download", "href", ResponseUtils.generateRequestString("downloadLog", file.getName() + "&download")));
                     responseOtherLogs.append(ResponseUtils.addNewLine());
-                    //log=C:\Development\contrib\jet-contrib\WebView\logs\kotlincompiler.log&view
-                    //http://localhost:8080/kotlinServer?sessionId=0&type=downloadLog&args=C:\Development\contrib\jet-contrib\WebView\logs\kotlincompiler.log&view
                 }
             }
         }

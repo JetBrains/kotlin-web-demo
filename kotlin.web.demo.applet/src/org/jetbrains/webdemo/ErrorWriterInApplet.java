@@ -41,7 +41,6 @@ public class ErrorWriterInApplet extends ErrorWriter {
     @Override
     public void writeException(String message) {
         sendTextToServer(message, MainApplet.request, "error");
-//        System.out.println(message);
     }
 
     @Override
@@ -56,7 +55,6 @@ public class ErrorWriterInApplet extends ErrorWriter {
 
     @Override
     public void writeInfo(String message) {
-//        sendTextToServer(message, MainApplet.request, "info");
     }
 
     public static void sendTextToServer(String text, String request, String type) {

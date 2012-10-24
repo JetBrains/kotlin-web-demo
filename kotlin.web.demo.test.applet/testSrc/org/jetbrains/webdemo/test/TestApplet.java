@@ -17,7 +17,6 @@
 package org.jetbrains.webdemo.test;
 
 import junit.framework.TestCase;
-import org.jetbrains.jet.lang.BuiltinsScopeExtensionMode;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.*;
@@ -32,8 +31,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Random;
 
-//import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
-
 /**
  * @author Natalia.Ukhorskaya
  */
@@ -44,19 +41,19 @@ public class TestApplet extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-       System.setProperty("kotlin.running.in.server.mode", "true");
+        System.setProperty("kotlin.running.in.server.mode", "true");
         System.setProperty("java.awt.headless", "true");
         InitializerApplet.getInstance().initJavaCoreEnvironment();
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
         Initializer.INITIALIZER = InitializerApplet.getInstance();
-        ApplicationSettings.MODE = BuiltinsScopeExtensionMode.ONLY_STANDARD_CLASSES;
         WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
         ApplicationSettings.IS_TEST_VERSION = "true";
 //        MainApplet.SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
     }
 
 
-    /* Get highlighting under security manager
+    /*
+     * Get highlighting under security manager
      */
     public void testSecurityManager() {
         assertEquals("[]", getHighlighting("fun main(args : Array<String>) { }", "java"));

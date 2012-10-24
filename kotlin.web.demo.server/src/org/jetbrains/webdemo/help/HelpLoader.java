@@ -30,13 +30,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/22/11
- * Time: 6:33 PM
- */
-
 public class HelpLoader {
     private static HelpLoader helpLoader = new HelpLoader();
 
@@ -171,8 +164,6 @@ public class HelpLoader {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("name", getTagValue("name", element));
                     map.put("text", getTagValueWithInnerTags("text", element));
-//                    map.put("args", getTagValue("args", element));
-//                    map.put("mode", getTagValue("mode", element));
 
                     ExampleObject example = ExamplesHolder.getExample(map.get("name"));
                     if (example != null) {

@@ -76,15 +76,11 @@ public class CompileAndRunExecutor {
 
         if (errors.isEmpty() || isOnlyWarnings(errors)) {
             Project currentProject = currentPsiFile.getProject();
-//            BindingContext bindingContext = AnalyzerFacade.analyzeOneFileWithJavaIntegration(
-//                                (JetFile) currentPsiFile, JetControlFlowDataTraceFactory.EMPTY);
-
             sessionInfo.getTimeManager().saveCurrentTime();
             GenerationState generationState;
             try {
                 AnalyzeExhaust analyzeExhaust = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList(),
-                        ApplicationSettings.MODE);
+                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList());
                 generationState = new GenerationState(currentProject,ClassBuilderFactories.binaries(false), analyzeExhaust, Collections.singletonList((JetFile) currentPsiFile));
                 GenerationStrategy.STANDARD.compileCorrectFiles(generationState, new CompilationErrorHandler() {
                     @Override
@@ -111,8 +107,6 @@ public class CompileAndRunExecutor {
                 isOutputExists = outputDir.mkdirs();
             }
             for (String file : files) {
-//                File outputDir = new File(ApplicationSettings.OUTPUT_DIRECTORY);
-//                ApplicationSettings.OUTPUT_DIRECTORY = outputDir.getAbsolutePath();
                 if (isOutputExists) {
                     File target = new File(outputDir, file);
                     try {
@@ -156,23 +150,4 @@ public class CompileAndRunExecutor {
         }
         return true;
     }
-
-    private String generateResponseWithErrors(List<ErrorDescriptor> errors) {
-        JSONArray jsonArray = new JSONArray();
-
-        for (ErrorDescriptor error : errors) {
-            StringBuilder message = new StringBuilder();
-            message.append("(").append(error.getInterval().startPoint.line + 1).append(", ").append(error.getInterval().startPoint.charNumber + 1).append(")");
-//            message.append(error.getInterval());
-            message.append(" - ");
-            message.append(error.getMessage());
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("type", error.getSeverity().name());
-            map.put("message", message.toString());
-            jsonArray.put(map);
-        }
-
-        return jsonArray.toString();
-    }
-
 }

@@ -42,7 +42,6 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
 
     private static Token requestToken;
 
-    private static final String AUTHORIZE_URL = "https://www.google.com/accounts/OAuthAuthorizeToken?oauth_token=";
     private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
     private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
 

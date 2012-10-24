@@ -55,56 +55,6 @@ public class ExamplesList {
         return list;
     }
 
-    /*@Nullable
-    public Pair<Integer, String> findExampleByName(String name) {
-        int i = 0;
-        String lastHead = "";
-        name = name.replaceAll("_", " ");
-        for (Map<String, String> map : list) {
-            if (map.get("type").equals("folder")) {
-                lastHead = map.get("text");
-            } else if (map.get("type").equals("content")) {
-                if (map.get("text").equals(name)) {
-                    return new Pair<Integer, String>(i, lastHead);
-                }
-            }
-            i++;
-        }
-        return null;
-    }*/
-
-
-   /* @Nullable
-    public Pair<Integer, String> findExampleByNameAndHead(String name, String head) {
-        int i = 0;
-        String lastHead = "";
-        name = name.replaceAll("_", " ");
-        head = head.replaceAll("_", " ");
-        for (Map<String, String> map : list) {
-            if (map.get("type").equals("folder")) {
-                lastHead = map.get("text");
-            } else if (map.get("type").equals("content")) {
-                if (map.get("text").equals(name)) {
-                    if (lastHead.equals(head)) {
-                        return new Pair<Integer, String>(i, lastHead);
-                    }
-                }
-            }
-            i++;
-        }
-        return null;
-    }
-
-    public Map<String, String> getMapFromList(int id) {
-        if (id < list.size()) {
-            return list.get(id);
-        }
-        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                new UnsupportedOperationException("Example is absent in map"),
-                SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "There is a request for example with number " + id + " - absent in map");
-        return list.get(1);
-    }
-*/
     private void generateList() {
         File root = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
         if (root.exists()) {

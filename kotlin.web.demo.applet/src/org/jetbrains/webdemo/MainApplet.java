@@ -18,12 +18,10 @@ package org.jetbrains.webdemo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.lang.BuiltinsScopeExtensionMode;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
-import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
@@ -35,18 +33,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Random;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/28/11
- * Time: 10:46 AM
- */
-
 public class MainApplet extends JApplet implements ActionListener {
-    /*private JButton b1;
-    private JButton b2;*/
-
-    private static String EXCEPTION = "exception=";
+    /*private JButton b1;*/
 
     public static String request;
 
@@ -58,7 +46,6 @@ public class MainApplet extends JApplet implements ActionListener {
             request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
             ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
             Initializer.INITIALIZER = InitializerApplet.getInstance();
-            ApplicationSettings.MODE = BuiltinsScopeExtensionMode.ONLY_STANDARD_CLASSES;
             WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
 
             SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
@@ -94,10 +81,6 @@ public class MainApplet extends JApplet implements ActionListener {
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson(writer.toString());
         }
-    }
-
-    public void checkApplet() {
-
     }
 
     @Nullable
@@ -142,12 +125,6 @@ public class MainApplet extends JApplet implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        /*if (e.getActionCommand().equals("highlighting")) {
-            getHighlighting("fun main() { val a = java.util.ArrayList<String>(); System.out?.println(\"sss\" + a}");
-        } else if (e.getActionCommand().equals("completion")) {
-            getCompletion("import fun main() { System.out?.println(\"sss\" + a)}", "0", "7");
-        }*/
-//        getHighlighting("fun main() { val a = Object()}");
 //        getHighlighting("fun main() { val a = String(\"aaa\") }");
     }
 }

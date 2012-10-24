@@ -16,18 +16,21 @@
 
 package org.jetbrains.webdemo.handlers;
 
-import org.jetbrains.jet.internal.com.google.common.io.ByteStreams;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jet.internal.com.google.common.io.ByteStreams;
 import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.authorization.*;
+import org.jetbrains.webdemo.authorization.AuthorizationFacebookHelper;
+import org.jetbrains.webdemo.authorization.AuthorizationGoogleHelper;
+import org.jetbrains.webdemo.authorization.AuthorizationHelper;
+import org.jetbrains.webdemo.authorization.AuthorizationTwitterHelper;
 import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.server.ApplicationSettings;
-import org.jetbrains.webdemo.session.UserInfo;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.examplesLoader.ExamplesLoader;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.log.LogDownloader;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.session.UserInfo;
 import org.jetbrains.webdemo.sessions.HttpSession;
 import org.json.JSONArray;
 
@@ -37,13 +40,6 @@ import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Calendar;
-
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 8/10/11
- * Time: 1:16 PM
- */
 
 public class ServerHandler {
 
@@ -108,7 +104,6 @@ public class ServerHandler {
             } else if (parameters.compareType("highlight")
                     || parameters.compareType("complete")
                     || parameters.compareType("run")
-//                    || parameters.compareType("convertToJs")
                     || parameters.compareType("convertToKotlin")
                     || parameters.compareType("loadExample")
                     || parameters.compareType("saveProgram")
@@ -254,10 +249,6 @@ public class ServerHandler {
         if (request.getSession().isNew()) {
             Statistics.incNumberOfUsers();
         }
-        /*if (!sessionId.equals(request.getSession().getId()) && !sessionId.equals("-1")) {
-            ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.info(ErrorWriter.getExceptionForLog("SET_SESSION_ID",
-                    "Different id form request string and from servlet", sessionId + " " + request.getSession().getId()));
-        }*/
         SessionInfo sessionInfo = new SessionInfo(request.getSession().getId());
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
 

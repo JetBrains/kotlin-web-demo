@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.resolve.scopes.receivers.ReceiverDescriptor;
-import org.jetbrains.jet.lang.types.lang.JetStandardClasses;
 import org.jetbrains.jet.lang.types.JetType;
+import org.jetbrains.jet.lang.types.lang.KotlinBuiltIns;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -207,7 +207,7 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
 //        builder.append(keyword).append(" ");
         renderName(descriptor, builder);
         renderTypeParameters(descriptor.getTypeConstructor().getParameters(), builder);
-        if (!descriptor.equals(JetStandardClasses.getNothing())) {
+        if (!descriptor.equals(KotlinBuiltIns.getInstance().getNothing())) {
             Collection<? extends JetType> supertypes = descriptor.getTypeConstructor().getSupertypes();
             if (!supertypes.isEmpty()) {
                 builder.append(" : ");
@@ -230,7 +230,7 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
         renderName(descriptor, builder);
         if (!descriptor.getUpperBounds().isEmpty()) {
             JetType bound = descriptor.getUpperBounds().iterator().next();
-            if (bound != JetStandardClasses.getDefaultBound()) {
+            if (bound != KotlinBuiltIns.getInstance().getDefaultBound()) {
                 builder.append(" : ").append(bound);
                 if (descriptor.getUpperBounds().size() > 1) {
                     builder.append(" (...)");

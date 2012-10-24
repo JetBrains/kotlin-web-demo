@@ -16,26 +16,10 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-import org.jetbrains.jet.internal.com.intellij.openapi.util.Pair;
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ApplicationSettings;
-import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/16/11
- * Time: 5:29 PM
- */
 
 public class ExamplesLoader {
 
