@@ -132,8 +132,6 @@ public class UserAuthenticator extends BasicAuthenticator {
                         "com.sun.jndi.ldap.LdapCtxFactory");
                 env.put(Context.SECURITY_AUTHENTICATION, "Simple");
                 env.put(Context.SECURITY_PRINCIPAL, login);
-                //                env.put(Context.SECURITY_PRINCIPAL, "labs\\natalia.ukhorskaya");
-                //                env.put(Context.SECURITY_CREDENTIALS, "DeeJou5d");
                 env.put(Context.SECURITY_CREDENTIALS, password);
                 env.put(Context.PROVIDER_URL, "ldap://msdc.labs.intellij.net:389");
                 context = new InitialLdapContext(env, null);
