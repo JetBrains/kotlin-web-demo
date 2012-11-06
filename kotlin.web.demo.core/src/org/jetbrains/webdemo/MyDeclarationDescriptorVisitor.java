@@ -19,7 +19,6 @@ package org.jetbrains.webdemo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.descriptors.*;
-import org.jetbrains.jet.lang.resolve.scopes.receivers.ReceiverDescriptor;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.lang.types.lang.KotlinBuiltIns;
 
@@ -47,7 +46,7 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
 
     @Override
     public Void visitVariableDescriptor(VariableDescriptor descriptor, StringBuilder builder) {
-        String typeString = renderPropertyPrefixAndComputeTypeString(builder, Collections.<TypeParameterDescriptor>emptyList(), ReceiverDescriptor.NO_RECEIVER, descriptor.getType());
+        String typeString = renderPropertyPrefixAndComputeTypeString(builder, Collections.<TypeParameterDescriptor>emptyList(), null, descriptor.getType());
         renderName(descriptor, builder);
         builder.append(" : ").append(typeString);
         return super.visitVariableDescriptor(descriptor, builder);
@@ -76,21 +75,16 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
     private String renderPropertyPrefixAndComputeTypeString(
             @NotNull StringBuilder builder,
             @NotNull List<TypeParameterDescriptor> typeParameters,
-            @NotNull ReceiverDescriptor receiver,
+            @Nullable ReceiverParameterDescriptor receiver,
             @Nullable JetType outType) {
         String typeString = lt() + "no type>";
         if (outType != null) {
-           // builder.append(renderKeyword("var")).append(" ");
-            typeString = renderType(outType);
-        }
-        else if (outType != null) {
-           // builder.append(renderKeyword("val")).append(" ");
             typeString = renderType(outType);
         }
 
         renderTypeParameters(typeParameters, builder);
 
-        if (receiver.exists()) {
+        if (receiver != null) {
             builder.append(escape(renderType(receiver.getType()))).append(".");
         }
 
@@ -131,8 +125,8 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
         //builder.append("fun").append(" ");
         renderTypeParameters(descriptor.getTypeParameters(), builder);
 
-        ReceiverDescriptor receiver = descriptor.getReceiverParameter();
-        if (receiver.exists()) {
+        ReceiverParameterDescriptor receiver = descriptor.getReceiverParameter();
+        if (receiver != null) {
             //builder.append(receiver.getType()).append(".");
         }
 
