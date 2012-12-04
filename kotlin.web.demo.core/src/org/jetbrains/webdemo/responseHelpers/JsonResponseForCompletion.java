@@ -20,7 +20,6 @@ import org.jetbrains.jet.internal.com.intellij.openapi.editor.Document;
 import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
 import org.jetbrains.jet.internal.com.intellij.psi.PsiElement;
 import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
-import org.jetbrains.jet.cli.jvm.compiler.TipsManager;
 import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.psi.*;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
@@ -28,6 +27,7 @@ import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
+import org.jetbrains.jet.plugin.codeInsight.TipsManager;
 import org.jetbrains.jet.resolve.DescriptorRenderer;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.MyDeclarationDescriptorVisitor;
@@ -138,6 +138,7 @@ public class JsonResponseForCompletion {
             }
 
         } catch (Throwable e) {
+            e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     sessionInfo.getType(), currentPsiFile.getText());
             return "[]";

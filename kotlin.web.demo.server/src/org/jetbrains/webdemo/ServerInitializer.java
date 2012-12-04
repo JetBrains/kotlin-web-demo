@@ -160,7 +160,7 @@ public class ServerInitializer extends Initializer {
     @NotNull
     private List<File> getAnnotationsPath(@NotNull K2JVMCompilerArguments arguments) {
         List<File> annotationsPath = Lists.newArrayList();
-        annotationsPath.add(PathUtil.getJdkAnnotationsPath());
+        annotationsPath.add(PathUtil.getKotlinPathsForCompiler().getJdkAnnotationsPath());
         return annotationsPath;
     }
 
