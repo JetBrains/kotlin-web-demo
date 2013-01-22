@@ -24,7 +24,7 @@
 var BEFORE_EXIT = "The changes you made to the program will be lost when you change an example. Do you want to leave the page?";
 
 var KOTLIN_VERSION = "0.0.0";
-var APPLET_VERSION = "14092012";
+var APPLET_VERSION = "22012013";
 var WEB_DEMO_VERSION = "0.0.0";
 
 function forEachInArrayWithArgs(arr, data, f) {
