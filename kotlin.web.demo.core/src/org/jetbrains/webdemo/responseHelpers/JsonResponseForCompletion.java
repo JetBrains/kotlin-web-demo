@@ -28,7 +28,7 @@ import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.plugin.codeInsight.TipsManager;
-import org.jetbrains.jet.resolve.DescriptorRenderer;
+import org.jetbrains.jet.renderer.DescriptorRenderer;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.MyDeclarationDescriptorVisitor;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -195,6 +195,8 @@ public class JsonResponseForCompletion {
             return "package";
         } else if (descriptor instanceof ValueParameterDescriptor) {
             return "genericValue";
+        } else if (descriptor instanceof TypeParameterDescriptorImpl) {
+            return "class";
         } else {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     "Impossible to find icon",
@@ -257,7 +259,9 @@ public class JsonResponseForCompletion {
         if (descriptor instanceof FunctionDescriptor) {
             FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
             JetType returnType = functionDescriptor.getReturnType();
-            tailText = DescriptorRenderer.TEXT.renderType(returnType);
+            if (returnType != null) {
+                tailText = DescriptorRenderer.TEXT.renderType(returnType);
+            }
         } else if (descriptor instanceof VariableDescriptor) {
             JetType outType = ((VariableDescriptor) descriptor).getType();
             tailText = DescriptorRenderer.TEXT.renderType(outType);

@@ -16,6 +16,7 @@
 
 package org.jetbrains.jet.cli.jvm.compiler;
 
+import org.jetbrains.jet.asJava.LightClassGenerationSupport;
 import org.jetbrains.jet.internal.com.intellij.codeInsight.ExternalAnnotationsManager;
 import org.jetbrains.jet.internal.com.intellij.core.CoreJavaFileManager;
 import org.jetbrains.jet.internal.com.intellij.core.JavaCoreApplicationEnvironment;
@@ -89,9 +90,13 @@ public class JetCoreEnvironment {
         project.registerService(JetScriptDefinitionProvider.class, new JetScriptDefinitionProvider());
         project.registerService(JetFilesProvider.class, new CliJetFilesProvider(this));
         project.registerService(CoreJavaFileManager.class, (CoreJavaFileManager) ServiceManager.getService(project, JavaFileManager.class));
+        CliLightClassGenerationSupport cliLightClassGenerationSupport = new CliLightClassGenerationSupport();
+        project.registerService(LightClassGenerationSupport.class, cliLightClassGenerationSupport);
+        project.registerService(CliLightClassGenerationSupport.class, cliLightClassGenerationSupport);
+
         Extensions.getArea(project)
                 .getExtensionPoint(PsiElementFinder.EP_NAME)
-                .registerExtension(new JavaElementFinder(project));
+                .registerExtension(new JavaElementFinder(project, cliLightClassGenerationSupport));
 
         annotationsManager = new CoreExternalAnnotationsManager(project.getComponent(PsiManager.class));
         project.registerService(ExternalAnnotationsManager.class, annotationsManager);

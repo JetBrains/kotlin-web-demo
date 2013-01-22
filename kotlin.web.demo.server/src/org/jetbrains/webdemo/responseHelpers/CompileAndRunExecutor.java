@@ -16,7 +16,8 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.jet.codegen.state.GenerationStrategy;
+import org.jetbrains.jet.codegen.KotlinCodegenFacade;
+import org.jetbrains.jet.codegen.state.StandardGenerationStrategy;
 import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
 import org.jetbrains.jet.internal.com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
@@ -81,8 +82,8 @@ public class CompileAndRunExecutor {
             try {
                 AnalyzeExhaust analyzeExhaust = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList());
-                generationState = new GenerationState(currentProject,ClassBuilderFactories.binaries(false), analyzeExhaust, Collections.singletonList((JetFile) currentPsiFile));
-                GenerationStrategy.STANDARD.compileCorrectFiles(generationState, new CompilationErrorHandler() {
+                generationState = new GenerationState(currentProject,ClassBuilderFactories.binaries(false), analyzeExhaust.getBindingContext(), Collections.singletonList((JetFile) currentPsiFile));
+                KotlinCodegenFacade.compileCorrectFiles(generationState, StandardGenerationStrategy.INSTANCE, new CompilationErrorHandler() {
                     @Override
                     public void reportException(Throwable throwable, String s) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), s + " " + currentPsiFile.getText());

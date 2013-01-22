@@ -34,37 +34,37 @@ import java.io.IOException;
 public class RunTest extends BaseTest {
 
     public void test$execution$FooOutErr() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
     public void test$execution$ManyArgs() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"a<br/>b<br/>c<br/>\",\"type\":\"out\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"a<br/>b<br/>c<br/>\",\"type\":\"out\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "a b c", expectedResult, "java");
 
         compareResult(fileName, "\"a\" b c", expectedResult, "java");
-        expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"a b<br/>c<br/>\",\"type\":\"out\"}]";
+        expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"a b<br/>c<br/>\",\"type\":\"out\"}]";
         compareResult(fileName, "\"a b\" c", expectedResult, "java");
-        expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"}]";
+        expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"}]";
         compareResult(fileName, "", expectedResult, "java");
 
         //"info"},{"text":"a \["Hello]\" b<br/>c<br/>","ty...>
         //"info"},{"text":"a \[\\"Hello\\]\" b<br/>c<br/>","ty
 
-        //expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"a \\\"Hello\\\" b<br/>c<br/>\",\"type\":\"out\"}]";
+        //expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"a \\\"Hello\\\" b<br/>c<br/>\",\"type\":\"out\"}]";
         //compareResult(fileName, "\"a \\\"Hello\\\" b\" c", expectedResult, "java");
     }
 
     public void test$execution$FooOut() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
     public void test$execution$FooErr() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
@@ -72,7 +72,7 @@ public class RunTest extends BaseTest {
     //Runtime.getRuntime().exec() Exception
     public void test$errors$securityExecutionError() throws IOException, InterruptedException {
         String expectedResult = "Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission &amp;lt;&amp;lt;ALL FILES&amp;gt;&amp;gt; execute)";
-//        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission &amp;lt;&amp;lt;ALL FILES&amp;gt;&amp;gt; execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat namespace.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
+//        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission &amp;lt;&amp;lt;ALL FILES&amp;gt;&amp;gt; execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat _DefaultPackage.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
@@ -81,7 +81,7 @@ public class RunTest extends BaseTest {
     //Exception when read file from other directory
     public void test$errors$securityFilePermissionError() throws IOException, InterruptedException {
         String expectedResult = "Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)";
-//        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>namespace.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br/>\\tat java.io.File.exists(File.java:731)<br/>\\tat namespace.main(dummy.jet:3)<br/>\",\"type\":\"err\"}]";
+//        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br/>\\tat java.io.File.exists(File.java:731)<br/>\\tat _DefaultPackage.main(dummy.jet:3)<br/>\",\"type\":\"err\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }

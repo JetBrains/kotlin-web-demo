@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.jet.j2k.JavaToKotlinTranslator;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.ServerInitializer;
@@ -45,8 +44,8 @@ public class JavaToKotlinConverter {
         try {
             String resultFormConverter = "";
             try {
-                resultFormConverter = JavaToKotlinTranslator.translateToKotlin(code);
-
+//                TODO resultFormConverter = JavaToKotlinTranslator.translateToKotlin(code);
+                  resultFormConverter = "Converter is temporary unsupported";
             } catch (Exception e) {
                 ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: " + e.getMessage());

@@ -87,7 +87,7 @@ public class ServerInitializer extends Initializer {
                 K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
                 CompilerConfiguration configuration = new CompilerConfiguration();
                 configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
-                configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath(arguments));
+                configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
 
                 configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
                 configuration.put(JVMConfigurationKeys.STUBS, false);
@@ -135,7 +135,7 @@ public class ServerInitializer extends Initializer {
 
     @Nullable
     private File getRuntimeJarPath() {
-        URL url = K2JVMCompiler.class.getClassLoader().getResource("kotlin/namespace.class");
+        URL url = K2JVMCompiler.class.getClassLoader().getResource("kotlin/KotlinPackage.class");
         if (url != null && url.getProtocol().equals("jar")) {
             String path = url.getPath();
             return new File(path.substring(path.indexOf(":") + 1, path.indexOf("!/")));
@@ -158,7 +158,7 @@ public class ServerInitializer extends Initializer {
     }
 
     @NotNull
-    private List<File> getAnnotationsPath(@NotNull K2JVMCompilerArguments arguments) {
+    private List<File> getAnnotationsPath() {
         List<File> annotationsPath = Lists.newArrayList();
         annotationsPath.add(PathUtil.getKotlinPathsForCompiler().getJdkAnnotationsPath());
         return annotationsPath;

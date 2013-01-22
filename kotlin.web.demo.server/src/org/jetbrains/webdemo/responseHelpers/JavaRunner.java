@@ -16,16 +16,13 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiUtil;
-import org.jetbrains.jet.lang.resolve.java.JvmAbi;
+import org.jetbrains.jet.lang.resolve.java.PackageClassUtils;
 import org.jetbrains.jet.lang.resolve.name.FqName;
-import org.jetbrains.jet.lang.resolve.name.Name;
 import org.jetbrains.jet.plugin.JetMainDetector;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
-import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -357,8 +354,8 @@ public class JavaRunner {
     private String findMainClass() {
         if (JetMainDetector.hasMain(currentFile.getDeclarations())) {
             FqName fqName = JetPsiUtil.getFQName(currentFile);
-            return fqName.child(Name.identifier(JvmAbi.PACKAGE_CLASS)).toString();
+            return PackageClassUtils.getPackageClassFqName(fqName).getFqName();
         }
-        return "namespace.class";
+        return "namespace";
     }
 }
