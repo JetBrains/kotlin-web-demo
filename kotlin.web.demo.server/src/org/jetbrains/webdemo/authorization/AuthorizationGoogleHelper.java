@@ -28,13 +28,6 @@ import org.scribe.builder.api.GoogleApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 12/30/11
- * Time: 3:54 PM
- */
-
 public class AuthorizationGoogleHelper extends AuthorizationHelper {
     private final String TYPE = "google";
 

@@ -24,10 +24,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class TestUtils {
     public static final String TEST_SRC = "kotlin.web.demo.test/testData/";
 

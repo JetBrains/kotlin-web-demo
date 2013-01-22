@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/30/11
- * Time: 2:05 PM
- */
-
 var BEFORE_EXIT = "The changes you made to the program will be lost when you change an example. Do you want to leave the page?";
 
 var KOTLIN_VERSION = "0.0.0";

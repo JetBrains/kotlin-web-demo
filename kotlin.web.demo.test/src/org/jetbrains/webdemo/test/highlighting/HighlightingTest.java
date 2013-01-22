@@ -26,10 +26,6 @@ import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.IOException;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class HighlightingTest extends BaseTest {
 
     public void test$errors$oneError() throws IOException, InterruptedException {

@@ -23,10 +23,6 @@ import org.jetbrains.webdemo.test.highlighting.HighlightingTest;
 import org.jetbrains.webdemo.test.j2kconverter.J2KConverterTest;
 import org.jetbrains.webdemo.test.run.RunTest;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class TestAll extends TestCase {
 
     public static TestSuite suite() {

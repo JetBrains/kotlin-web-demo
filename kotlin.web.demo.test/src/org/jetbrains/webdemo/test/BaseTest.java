@@ -26,10 +26,6 @@ import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import java.io.File;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class BaseTest extends TestCase {
 
     public BaseTest(String name) {

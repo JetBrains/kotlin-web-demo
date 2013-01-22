@@ -16,13 +16,6 @@
 
 package org.jetbrains.webdemo.server;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/8/11
- * Time: 1:20 PM
- */
-
 public class ApplicationSettings {
     public static String JAVA_HOME = null;
     public static String JAVA_EXECUTE = "";

@@ -21,13 +21,6 @@ import org.jetbrains.webdemo.ResponseUtils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/24/11
- * Time: 9:54 AM
- */
-
 public class KotlinCoreException extends RuntimeException {
     private final Throwable e;
 

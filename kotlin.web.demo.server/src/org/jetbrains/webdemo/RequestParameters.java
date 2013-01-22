@@ -16,13 +16,6 @@
 
 package org.jetbrains.webdemo;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 1/18/12
- * Time: 11:36 AM
- */
-
 public class RequestParameters {
     private String sessionId;
     private String type;

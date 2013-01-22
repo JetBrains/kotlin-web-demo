@@ -25,13 +25,6 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 import java.io.IOException;
 import java.util.Collections;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 12/5/11
- * Time: 12:30 PM
- */
-
 public class ErrorWriterOnServer extends ErrorWriter {
     public static final Logger LOG_FOR_EXCEPTIONS = Logger.getLogger("exceptionLogger");
     public static final Logger LOG_FOR_INFO = Logger.getLogger("infoLogger");

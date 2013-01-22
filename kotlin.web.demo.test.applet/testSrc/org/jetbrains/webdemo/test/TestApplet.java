@@ -31,10 +31,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Random;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class TestApplet extends TestCase {
 
 

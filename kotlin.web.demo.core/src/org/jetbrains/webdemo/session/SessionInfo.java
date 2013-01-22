@@ -18,13 +18,6 @@ package org.jetbrains.webdemo.session;
 
 import org.jetbrains.webdemo.TimeManager;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/30/11
- * Time: 1:25 PM
- */
-
 public class SessionInfo {
     private final TimeManager timeManager = new TimeManager();
     private String id;

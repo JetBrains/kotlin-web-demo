@@ -16,22 +16,9 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.Initializer;
-import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
-import org.json.JSONArray;
 
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 12/20/11
- * Time: 5:19 PM
- */
 public class JsConverter {
     private final SessionInfo info;
 

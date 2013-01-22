@@ -31,13 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 9/29/11
- * Time: 4:25 PM
- */
-
 public class JsonResponseForHighlighting {
 
     private final PsiFile currentPsiFile;

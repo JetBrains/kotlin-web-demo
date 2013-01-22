@@ -30,13 +30,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 12/30/11
- * Time: 3:54 PM
- */
-
 public class AuthorizationTwitterHelper extends AuthorizationHelper {
     private final String TYPE = "twitter";
 

@@ -28,12 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/16/11
- * Time: 6:33 PM
- */
 public class ExamplesList {
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
 

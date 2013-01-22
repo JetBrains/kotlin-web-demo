@@ -19,13 +19,6 @@ package org.jetbrains.webdemo.errorsDescriptors;
 import org.jetbrains.webdemo.Interval;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/28/11
- * Time: 11:27 AM
- */
-
 public class ErrorDescriptor {
 
     private final Interval interval;

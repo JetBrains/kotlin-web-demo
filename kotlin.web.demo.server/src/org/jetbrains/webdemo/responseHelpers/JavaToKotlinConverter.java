@@ -25,12 +25,6 @@ import org.json.JSONArray;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 12/20/11
- * Time: 5:19 PM
- */
 public class JavaToKotlinConverter {
     private final SessionInfo info;
 

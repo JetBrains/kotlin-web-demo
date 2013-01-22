@@ -30,11 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
-
 public class HighlightExamplesTest extends BaseTest {
 
     private static ArrayList<String> jsExamples = new ArrayList<String>();

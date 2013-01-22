@@ -31,13 +31,6 @@ import org.json.JSONArray;
 import java.io.*;
 import java.util.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/28/11
- * Time: 12:38 PM
- */
-
 public class JavaRunner {
 
     private final List<String> files;

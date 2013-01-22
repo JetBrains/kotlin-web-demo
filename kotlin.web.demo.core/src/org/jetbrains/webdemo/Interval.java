@@ -20,13 +20,6 @@ import org.jetbrains.jet.internal.com.intellij.openapi.editor.Document;
 import org.jetbrains.jet.internal.com.intellij.openapi.util.TextRange;
 import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/28/11
- * Time: 11:30 AM
- */
-
 public class Interval {
     public final Point startPoint;
     public final Point endPoint;

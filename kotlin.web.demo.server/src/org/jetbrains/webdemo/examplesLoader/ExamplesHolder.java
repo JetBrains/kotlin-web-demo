@@ -29,10 +29,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class ExamplesHolder {
 
     private static final Map<String, ExampleObject> allExamples = new HashMap<String, ExampleObject>();

@@ -27,13 +27,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/27/11
- * Time: 11:06 AM
- */
-
 public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitorEmptyBodies<Void, StringBuilder> {
     @Override
     public Void visitValueParameterDescriptor(ValueParameterDescriptor descriptor, StringBuilder builder) {

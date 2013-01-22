@@ -29,10 +29,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class CompletionTest extends BaseTest {
 
     public void test$java$system() throws IOException, JSONException {

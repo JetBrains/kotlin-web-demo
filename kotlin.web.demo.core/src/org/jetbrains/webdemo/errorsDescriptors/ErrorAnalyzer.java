@@ -39,13 +39,6 @@ import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import java.util.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/28/11
- * Time: 11:24 AM
- */
-
 public class ErrorAnalyzer {
     private final PsiFile currentPsiFile;
     private final Document currentDocument;

@@ -29,13 +29,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/27/11
- * Time: 5:50 PM
- */
-
 public class ResponseUtils {
     public static String escapeString(String string) {
         if (string != null && !string.isEmpty()) {

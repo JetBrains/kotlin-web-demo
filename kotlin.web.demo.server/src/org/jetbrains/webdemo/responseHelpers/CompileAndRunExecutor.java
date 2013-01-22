@@ -45,13 +45,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/20/11
- * Time: 1:41 PM
- */
-
 public class CompileAndRunExecutor {
 
     private final PsiFile currentPsiFile;

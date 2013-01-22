@@ -39,9 +39,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Pavel Talanov
- */
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
 

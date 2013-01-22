@@ -33,13 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 9/6/11
- * Time: 12:14 PM
- */
-
 public class HttpSession {
     protected Project currentProject;
     protected PsiFile currentPsiFile;

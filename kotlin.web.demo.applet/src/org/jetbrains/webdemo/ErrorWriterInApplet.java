@@ -20,13 +20,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 12/5/11
- * Time: 2:27 PM
- */
-
 public class ErrorWriterInApplet extends ErrorWriter {
 
     private static final ErrorWriterInApplet writer = new ErrorWriterInApplet();

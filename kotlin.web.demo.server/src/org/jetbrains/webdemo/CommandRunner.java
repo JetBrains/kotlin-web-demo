@@ -20,13 +20,6 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/14/11
- * Time: 11:54 AM
- */
-
 public class CommandRunner {
 
     public static void setServerSettingFromTomcatConfig(String setting, String value) {

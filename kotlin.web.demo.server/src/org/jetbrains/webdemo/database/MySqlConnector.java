@@ -33,13 +33,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 1/25/12
- * Time: 10:10 AM
- */
-
 public class MySqlConnector {
     private Connection connection;
 

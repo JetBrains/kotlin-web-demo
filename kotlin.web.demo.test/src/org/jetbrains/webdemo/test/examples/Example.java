@@ -21,10 +21,6 @@ import org.jetbrains.webdemo.test.TestUtils;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class Example {
     private String fileName;
     private String result;

@@ -29,13 +29,6 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Comparator;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/21/11
- * Time: 4:37 PM
- */
-
 public class LogDownloader {
     public String download(String name) {
         File log = new File(ApplicationSettings.LOGS_DIRECTORY + File.separator + name);

@@ -23,10 +23,6 @@ import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.IOException;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class J2KConverterTest extends BaseTest {
 
     public void test$j2kconverter$class() throws IOException {

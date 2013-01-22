@@ -25,13 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 12/1/11
- * Time: 5:06 PM
- */
-
 public class VirtualJarFile extends VirtualFile {
     private byte[] byteArray;
     private final CoreJarFileSystem myFileSystem;

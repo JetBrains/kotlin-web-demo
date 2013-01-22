@@ -40,13 +40,6 @@ import org.json.JSONArray;
 
 import java.util.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 10/20/11
- * Time: 1:53 PM
- */
-
 public class JsonResponseForCompletion {
     private final int NUMBER_OF_CHAR_IN_COMPLETION_NAME = 40;
 

@@ -23,10 +23,6 @@ import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistr
 import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
 import org.jetbrains.jet.internal.com.intellij.openapi.vfs.encoding.EncodingRegistry;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public abstract class Initializer {
 
     public static Initializer INITIALIZER;

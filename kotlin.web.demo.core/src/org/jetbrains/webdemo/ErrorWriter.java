@@ -23,13 +23,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 11/9/11
- * Time: 2:16 PM
- */
-
 public abstract class ErrorWriter {
 
     public static ErrorWriter ERROR_WRITER;

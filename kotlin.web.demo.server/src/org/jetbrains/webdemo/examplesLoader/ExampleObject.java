@@ -16,10 +16,6 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class ExampleObject {
     public String name;
     public String fileName;

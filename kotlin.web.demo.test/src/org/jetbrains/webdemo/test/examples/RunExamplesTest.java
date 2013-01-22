@@ -37,11 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
-
 public class RunExamplesTest extends BaseTest {
 
     private static ArrayList<String> jsExamples = new ArrayList<String>();

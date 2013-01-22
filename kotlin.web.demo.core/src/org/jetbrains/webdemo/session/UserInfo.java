@@ -16,13 +16,6 @@
 
 package org.jetbrains.webdemo.session;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Natalia.Ukhorskaya
- * Date: 1/24/12
- * Time: 2:11 PM
- */
-
 public class UserInfo {
     private String name = "";
     private String id = "";

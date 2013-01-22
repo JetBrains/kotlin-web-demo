@@ -30,9 +30,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Pavel Talanov
- */
 public final class WebDemoConfigApplet extends Config {
 
     public WebDemoConfigApplet(@NotNull Project project) {

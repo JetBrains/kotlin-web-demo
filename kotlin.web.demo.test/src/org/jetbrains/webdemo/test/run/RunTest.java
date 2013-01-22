@@ -27,10 +27,6 @@ import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.IOException;
 
-/**
- * @author Natalia.Ukhorskaya
- */
-
 public class RunTest extends BaseTest {
 
     public void test$execution$FooOutErr() throws IOException, InterruptedException {
