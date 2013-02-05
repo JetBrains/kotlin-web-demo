@@ -18,6 +18,7 @@
           <element id="library" level="project" name="commons-codec" />
           <element id="library" level="project" name="kotlin-compiler" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar" />
+          <element id="library" level="project" name="kotlin-j2kConverter" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />
