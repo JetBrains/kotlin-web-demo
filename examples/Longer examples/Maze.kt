@@ -210,5 +210,5 @@ fun makeMaze(s : String) : Maze {
 
 
 // An excerpt from the Standard Library
-val String?.indices : IntRange get() = IntRange(0, this!!.size)
+val String?.indices : IntRange get() = IntRange(0, this!!.size - 1)
 
