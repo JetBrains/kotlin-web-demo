@@ -220,12 +220,12 @@ public class JavaRunner {
                 || str.contains("UnsupportedClassVersionError")
                 || str.contains("GenericSignatureFormatError")
                 || str.contains("ExceptionInInitializerError")
-                || (str.contains("NoClassDefFoundError") && !str.contains("NoClassDefFoundError: namespace/class"))
+                || (str.contains("NoClassDefFoundError") && !str.contains("NoClassDefFoundError: _DefaultPackage/class"))
                 || str.contains("IncompatibleClassChangeError")
                 || str.contains("InstantiationError")
                 || str.contains("AbstractMethodError")
                 || str.contains("NoSuchFieldError")
-                || (str.contains("IllegalAccessError")  && !str.contains("kotlin.io.namespace"))
+                || (str.contains("IllegalAccessError")  && !str.contains("kotlin.io.IoPackage"))
                 || str.contains("VerifyError")
                 || str.contains("ClassCircularityError")
                 || str.contains("UnsatisfiedLinkError")
@@ -349,6 +349,6 @@ public class JavaRunner {
             FqName fqName = JetPsiUtil.getFQName(currentFile);
             return PackageClassUtils.getPackageClassFqName(fqName).getFqName();
         }
-        return "namespace";
+        return PackageClassUtils.getPackageClassName(FqName.ROOT);
     }
 }
