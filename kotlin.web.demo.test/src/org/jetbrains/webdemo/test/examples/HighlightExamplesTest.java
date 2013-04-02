@@ -19,8 +19,8 @@ package org.jetbrains.webdemo.test.examples;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.Initializer;
+import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.test.BaseTest;
@@ -48,11 +48,9 @@ public class HighlightExamplesTest extends BaseTest {
         // jsExamples.add("HTML Builder.kt");
 
 
-        TestSuite suite = new TestSuite();
-        TestSuite ats = new TestSuite();
-        suite.addTest(ats);
+        TestSuite suite = new TestSuite(HighlightExamplesTest.class.getName());
         File parsingSourceDir = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
-        addFilesFromDirToSuite(parsingSourceDir, ats);
+        addFilesFromDirToSuite(parsingSourceDir, suite);
         return suite;
     }
 
@@ -100,7 +98,7 @@ public class HighlightExamplesTest extends BaseTest {
     private void compareResponseAndExpectedResult(File file, String runConfiguration) throws IOException {
         String expectedResult = "[]";
         sessionInfo.setRunConfiguration(runConfiguration);
-        JetFile currentPsiFile = JetPsiFactory.createFile(
+        JetFile currentPsiFile = JetPsiFactoryUtil.createFile(
                 Initializer.INITIALIZER.getEnvironment().getProject(),
                 TestUtils.getDataFromFile(file));
 
