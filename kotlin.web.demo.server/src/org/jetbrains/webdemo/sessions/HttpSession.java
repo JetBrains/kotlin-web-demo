@@ -16,10 +16,18 @@
 
 package org.jetbrains.webdemo.sessions;
 
-import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
-import org.jetbrains.jet.internal.com.intellij.openapi.util.text.StringUtil;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.CharsetToolkit;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.impl.PsiFileFactoryImpl;
+import com.intellij.testFramework.LightVirtualFile;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.jet.plugin.JetLanguage;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
@@ -111,7 +119,7 @@ public class HttpSession {
             ErrorWriterOnServer.LOG_FOR_INFO.info(tmp);
         } else if (type.equals("errorInKotlin")) {
             String tmp = getPostDataFromRequest(true).text;
-            tmp = StringUtil.unescapeXml(StringUtil.unescapeXml(tmp));
+            tmp = unescapeXml(unescapeXml(tmp));
             List<String> list = ErrorWriter.parseException(tmp);
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
         } else {
@@ -120,6 +128,15 @@ public class HttpSession {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
         }
         writeResponse("Data sent", HttpServletResponse.SC_OK);
+    }
+
+    @NonNls
+    private static final String[] REPLACES_REFS = {"&lt;", "&gt;", "&amp;", "&#39;", "&quot;"};
+    @NonNls private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
+
+    public static String unescapeXml(@Nullable final String text) {
+        if (text == null) return null;
+        return StringUtil.replace(text, REPLACES_REFS, REPLACES_DISP);
     }
 
     private void sendGeneratePublicLinkResult() {
@@ -199,10 +216,9 @@ public class HttpSession {
 
         }
         sessionInfo.getTimeManager().saveCurrentTime();
-        currentPsiFile = JetPsiFactory.createFile(currentProject, text);
+        currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, text);
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "PARSER " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: = " + currentPsiFile.getTextLength()));
     }
-
 
     private void sendCompletionResult() {
         String positionString = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");

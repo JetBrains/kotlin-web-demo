@@ -67,7 +67,7 @@ public class MainApplet extends JApplet implements ActionListener {
         System.out.println("get_highlighting");
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
-            JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), data);
+            JetFile currentPsiFile = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), data);
             SESSION_INFO.setRunConfiguration(runConfiguration);
 
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, SESSION_INFO);
@@ -100,7 +100,7 @@ public class MainApplet extends JApplet implements ActionListener {
         System.out.println("get_completion");
         SESSION_INFO.setType(SessionInfo.TypeOfRequest.COMPLETE);
         try {
-            JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), data);
+            JetFile currentPsiFile = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), data);
             SESSION_INFO.setRunConfiguration(runConfiguration);
 
             JsonResponseForCompletion responseForCompletion;

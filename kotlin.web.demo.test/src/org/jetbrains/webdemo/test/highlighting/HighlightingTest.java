@@ -17,8 +17,7 @@
 package org.jetbrains.webdemo.test.highlighting;
 
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetPsiFactory;
-import org.jetbrains.webdemo.Initializer;
+import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
@@ -82,7 +81,7 @@ public class HighlightingTest extends BaseTest {
     private void compareResponseAndExpectedResult(String fileName, String expectedResult, String runConfiguration) throws IOException {
         sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         sessionInfo.setRunConfiguration(runConfiguration);
-        JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
+        JetFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
         String actualResult = responseForHighlighting.getResult();
 

@@ -16,11 +16,14 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.jet.internal.com.intellij.openapi.editor.Document;
-import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiElement;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.lang.descriptors.*;
+import org.jetbrains.jet.lang.descriptors.impl.AbstractNamespaceDescriptorImpl;
+import org.jetbrains.jet.lang.descriptors.impl.LocalVariableDescriptor;
+import org.jetbrains.jet.lang.descriptors.impl.TypeParameterDescriptorImpl;
 import org.jetbrains.jet.lang.psi.*;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
 import org.jetbrains.jet.lang.resolve.BindingContext;
@@ -30,6 +33,7 @@ import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.plugin.codeInsight.TipsManager;
 import org.jetbrains.jet.renderer.DescriptorRenderer;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.MyDeclarationDescriptorVisitor;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
@@ -237,7 +241,7 @@ public class JsonResponseForCompletion {
             StringBuilder buffer = new StringBuilder(text.substring(0, caretPositionOffset));
             buffer.append("IntellijIdeaRulezzz ");
             buffer.append(text.substring(caretPositionOffset));
-            currentPsiFile = JetPsiFactory.createFile(currentProject, buffer.toString());
+            currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, buffer.toString());
             currentDocument = currentPsiFile.getViewProvider().getDocument();
         }
     }

@@ -62,9 +62,11 @@ public class SeleniumTest extends TestCase {
         super(name);
     }
 
+
     public void setUp() throws Exception {
         super.setUp();
         driver = new FirefoxDriver();
+
 //        driver.get("http://kotlin-demo.jetbrains.com");
 //        driver.get("http://kotlinsrv.labs.intellij.net");
         driver.get("http://localhost/");

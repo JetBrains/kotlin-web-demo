@@ -16,9 +16,9 @@
 
 package org.jetbrains.webdemo;
 
-import org.jetbrains.jet.internal.com.intellij.openapi.editor.Document;
-import org.jetbrains.jet.internal.com.intellij.openapi.util.TextRange;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiFile;
 
 public class Interval {
     public final Point startPoint;

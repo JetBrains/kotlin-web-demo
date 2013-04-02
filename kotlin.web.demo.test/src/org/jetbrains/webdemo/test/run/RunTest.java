@@ -17,8 +17,7 @@
 package org.jetbrains.webdemo.test.run;
 
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetPsiFactory;
-import org.jetbrains.webdemo.Initializer;
+import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.responseHelpers.JsConverter;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -30,20 +29,20 @@ import java.io.IOException;
 public class RunTest extends BaseTest {
 
     public void test$execution$FooOutErr() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
     public void test$execution$ManyArgs() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"a<br/>b<br/>c<br/>\",\"type\":\"out\"}]";
+        String expectedResult = "{\"text\":\"a<br/>b<br/>c<br/>\",\"type\":\"out\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "a b c", expectedResult, "java");
 
         compareResult(fileName, "\"a\" b c", expectedResult, "java");
-        expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"a b<br/>c<br/>\",\"type\":\"out\"}]";
+        expectedResult = "{\"text\":\"a b<br/>c<br/>\",\"type\":\"out\"}]";
         compareResult(fileName, "\"a b\" c", expectedResult, "java");
-        expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"}]";
+        expectedResult = "{\"text\":\"\",\"type\":\"out\"}]";
         compareResult(fileName, "", expectedResult, "java");
 
         //"info"},{"text":"a \["Hello]\" b<br/>c<br/>","ty...>
@@ -54,13 +53,13 @@ public class RunTest extends BaseTest {
     }
 
     public void test$execution$FooOut() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"Hello<br/>\",\"type\":\"out\"}]";
+        String expectedResult = "{\"text\":\"Hello<br/>\",\"type\":\"out\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
     public void test$execution$FooErr() throws IOException, InterruptedException {
-        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "{\"text\":\"\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
@@ -87,7 +86,7 @@ public class RunTest extends BaseTest {
         sessionInfo.setRunConfiguration(runConfiguration);
 
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
-            JetFile currentPsiFile = JetPsiFactory.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
+            JetFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
             sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
 
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(currentPsiFile, args, sessionInfo);
@@ -95,7 +94,7 @@ public class RunTest extends BaseTest {
             if (fileName.endsWith("securityExecutionError.kt") || fileName.endsWith("securityFilePermissionError.kt")) {
                 assertTrue("Wrong result: " + fileName, actualResult.contains(expectedResult));
             } else {
-                assertEquals("Wrong result: " + fileName, expectedResult, actualResult);
+                assertTrue("Wrong result: " + fileName, actualResult.endsWith(expectedResult));
             }
         } else {
             sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);

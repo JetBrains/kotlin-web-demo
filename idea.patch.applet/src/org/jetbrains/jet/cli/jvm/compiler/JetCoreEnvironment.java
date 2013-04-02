@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 JetBrains s.r.o.
+ * Copyright 2010-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,35 @@
 
 package org.jetbrains.jet.cli.jvm.compiler;
 
-import org.jetbrains.jet.asJava.LightClassGenerationSupport;
-import org.jetbrains.jet.internal.com.intellij.codeInsight.ExternalAnnotationsManager;
-import org.jetbrains.jet.internal.com.intellij.core.CoreJavaFileManager;
-import org.jetbrains.jet.internal.com.intellij.core.JavaCoreApplicationEnvironment;
-import org.jetbrains.jet.internal.com.intellij.core.JavaCoreProjectEnvironment;
-import org.jetbrains.jet.internal.com.intellij.lang.java.JavaParserDefinition;
-import org.jetbrains.jet.internal.com.intellij.mock.MockApplication;
-import org.jetbrains.jet.internal.com.intellij.mock.MockProject;
-import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
-import org.jetbrains.jet.internal.com.intellij.openapi.components.ServiceManager;
-import org.jetbrains.jet.internal.com.intellij.openapi.extensions.Extensions;
-import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
-import org.jetbrains.jet.internal.com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.jet.internal.com.intellij.openapi.vfs.VirtualFileManager;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiElementFinder;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiManager;
-import org.jetbrains.jet.internal.com.intellij.psi.impl.file.impl.JavaFileManager;
+import com.intellij.codeInsight.ExternalAnnotationsManager;
+import com.intellij.core.CoreApplicationEnvironment;
+import com.intellij.core.CoreJavaFileManager;
+import com.intellij.core.JavaCoreApplicationEnvironment;
+import com.intellij.core.JavaCoreProjectEnvironment;
+import com.intellij.lang.java.JavaParserDefinition;
+import com.intellij.mock.MockApplication;
+import com.intellij.mock.MockProject;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.extensions.Extensions;
+import com.intellij.openapi.fileTypes.PlainTextFileType;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.PsiElementFinder;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy;
+import com.intellij.psi.impl.file.impl.JavaFileManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.jet.CompilerModeProvider;
+import org.jetbrains.jet.OperationModeProvider;
 import org.jetbrains.jet.asJava.JavaElementFinder;
+import org.jetbrains.jet.asJava.LightClassGenerationSupport;
+import org.jetbrains.jet.cli.common.CLIConfigurationKeys;
+import org.jetbrains.jet.cli.common.messages.CompilerMessageLocation;
+import org.jetbrains.jet.cli.common.messages.CompilerMessageSeverity;
+import org.jetbrains.jet.cli.common.messages.MessageCollector;
 import org.jetbrains.jet.cli.jvm.JVMConfigurationKeys;
 import org.jetbrains.jet.config.CommonConfigurationKeys;
 import org.jetbrains.jet.config.CompilerConfiguration;
@@ -51,14 +60,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author yole
- */
+import static org.jetbrains.jet.cli.common.messages.CompilerMessageSeverity.ERROR;
+import static org.jetbrains.jet.cli.common.messages.CompilerMessageSeverity.WARNING;
 
-/*
-  Need a hack because we cannot add non existing files to classpath
- */
-    
 public class JetCoreEnvironment {
 
     private final JavaCoreApplicationEnvironment applicationEnvironment;
@@ -69,13 +73,15 @@ public class JetCoreEnvironment {
 
     private final CompilerConfiguration configuration;
 
-    private boolean initialized = false;
-
     public JetCoreEnvironment(Disposable parentDisposable, @NotNull CompilerConfiguration configuration) {
         this.configuration = configuration.copy();
         this.configuration.setReadOnly(true);
 
         this.applicationEnvironment = new JavaCoreApplicationEnvironment(parentDisposable);
+
+        // ability to get text from annotations xml files
+        applicationEnvironment.registerFileType(PlainTextFileType.INSTANCE, "xml");
+
         applicationEnvironment.registerFileType(JetFileType.INSTANCE, "kt");
         applicationEnvironment.registerFileType(JetFileType.INSTANCE, "kts");
         applicationEnvironment.registerFileType(JetFileType.INSTANCE, "ktm");
@@ -84,12 +90,15 @@ public class JetCoreEnvironment {
         applicationEnvironment.registerParserDefinition(new JavaParserDefinition());
         applicationEnvironment.registerParserDefinition(new JetParserDefinition());
 
+        applicationEnvironment.getApplication().registerService(OperationModeProvider.class, new CompilerModeProvider());
+
         projectEnvironment = new JavaCoreProjectEnvironment(parentDisposable, applicationEnvironment);
 
         MockProject project = projectEnvironment.getProject();
         project.registerService(JetScriptDefinitionProvider.class, new JetScriptDefinitionProvider());
         project.registerService(JetFilesProvider.class, new CliJetFilesProvider(this));
         project.registerService(CoreJavaFileManager.class, (CoreJavaFileManager) ServiceManager.getService(project, JavaFileManager.class));
+
         CliLightClassGenerationSupport cliLightClassGenerationSupport = new CliLightClassGenerationSupport();
         project.registerService(LightClassGenerationSupport.class, cliLightClassGenerationSupport);
         project.registerService(CliLightClassGenerationSupport.class, cliLightClassGenerationSupport);
@@ -98,9 +107,13 @@ public class JetCoreEnvironment {
                 .getExtensionPoint(PsiElementFinder.EP_NAME)
                 .registerExtension(new JavaElementFinder(project, cliLightClassGenerationSupport));
 
+        // This extension point should be registered in JavaCoreApplicationEnvironment
+        CoreApplicationEnvironment.registerExtensionPoint(Extensions.getRootArea(), ClsCustomNavigationPolicy.EP_NAME,
+                ClsCustomNavigationPolicy.class);
+
         annotationsManager = new CoreExternalAnnotationsManager(project.getComponent(PsiManager.class));
         project.registerService(ExternalAnnotationsManager.class, annotationsManager);
-        
+
         addToClasspath("rt.jar");
         addToClasspath("kotlin-runtime.jar");
 
@@ -117,7 +130,6 @@ public class JetCoreEnvironment {
         JetScriptDefinitionProvider.getInstance(project).addScriptDefinitions(configuration.getList(CommonConfigurationKeys.SCRIPT_DEFINITIONS_KEY));
 
         KotlinBuiltIns.initialize(project);
-        initialized = true;
     }
 
     public CompilerConfiguration getConfiguration() {
@@ -165,45 +177,57 @@ public class JetCoreEnvironment {
 
         VirtualFile vFile = applicationEnvironment.getLocalFileSystem().findFileByPath(path);
         if (vFile == null) {
-            throw new CompileEnvironmentException("File/directory not found: " + path);
+            report(ERROR, "Source file or directory not found: " + path);
+            return;
         }
         if (!vFile.isDirectory() && vFile.getFileType() != JetFileType.INSTANCE) {
-            throw new CompileEnvironmentException("Not a Kotlin file: " + path);
+            report(ERROR, "Source entry is not a Kotlin file: " + path);
+            return;
         }
 
         addSources(new File(path));
     }
 
-    public void addToClasspath(File path) {
-        if (initialized) {
-            throw new IllegalStateException("Cannot add class path when JetCoreEnvironment is already initialized");
-        }
+    private void addToClasspath(File path) {
         if (path.isFile()) {
+            VirtualFile jarFile = applicationEnvironment.getJarFileSystem().findFileByPath(path + "!/");
+            if (jarFile == null) {
+                report(WARNING, "Classpath entry points to a file that is not a JAR archive: " + path);
+                return;
+            }
             projectEnvironment.addJarToClassPath(path);
         }
         else {
-            final VirtualFile root = applicationEnvironment.getLocalFileSystem().findFileByPath(path.getAbsolutePath());
+            VirtualFile root = applicationEnvironment.getLocalFileSystem().findFileByPath(path.getAbsolutePath());
             if (root == null) {
-                throw new IllegalArgumentException("trying to add non-existing file to classpath: " + path);
+                report(WARNING, "Classpath entry points to a non-existent location: " + path);
+                return;
             }
             projectEnvironment.addSourcesToClasspath(root);
         }
     }
 
     public void addToClasspath(String path) {
-        if (initialized) {
-            throw new IllegalStateException("Cannot add class path when JetCoreEnvironment is already initialized");
-        }
         final VirtualFile root = VirtualFileManager.getInstance().findFileByUrl("jar://" + path + "!/");
 //         = new VirtualJarFile((CoreJarFileSystem) applicationEnvironment.getJarFileSystem(), path);
         if (root == null) {
             throw new IllegalArgumentException("trying to add non-existing file to classpath: " + path);
         }
-        
+
         projectEnvironment.addSourcesToClasspath(root);
     }
 
     public List<JetFile> getSourceFiles() {
         return sourceFiles;
+    }
+
+    private void report(@NotNull CompilerMessageSeverity severity, @NotNull String message) {
+        MessageCollector messageCollector = configuration.get(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY);
+        if (messageCollector != null) {
+            messageCollector.report(severity, message, CompilerMessageLocation.NO_LOCATION);
+        }
+        else {
+            throw new CompileEnvironmentException(message);
+        }
     }
 }

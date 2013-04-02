@@ -18,10 +18,10 @@ package org.jetbrains.jet.plugin.codeInsight;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.internal.com.google.common.base.Predicate;
-import org.jetbrains.jet.internal.com.google.common.collect.Collections2;
-import org.jetbrains.jet.internal.com.google.common.collect.Lists;
-import org.jetbrains.jet.internal.com.google.common.collect.Sets;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.jetbrains.jet.lang.descriptors.CallableDescriptor;
 import org.jetbrains.jet.lang.descriptors.DeclarationDescriptor;
 import org.jetbrains.jet.lang.descriptors.NamespaceDescriptor;

@@ -16,9 +16,9 @@
 
 package org.jetbrains.webdemo.translator;
 
-import org.jetbrains.jet.internal.com.google.common.collect.Lists;
-import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
-import org.jetbrains.jet.internal.com.intellij.openapi.util.io.FileUtil;
+import com.google.common.collect.Lists;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;

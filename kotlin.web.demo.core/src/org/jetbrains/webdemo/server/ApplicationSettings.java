@@ -22,7 +22,7 @@ public class ApplicationSettings {
     public static String WEBAPP_ROOT_DIRECTORY = "";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
     public static String TIMEOUT_FOR_EXECUTION = "5000";
-    public static String IS_TEST_VERSION = "false";
+    public static String IS_TEST_VERSION = "true";
 
     public static String OUTPUT_DIRECTORY = "out";
     public static String EXAMPLES_DIRECTORY = "examples";
@@ -36,7 +36,7 @@ public class ApplicationSettings {
     public static String KOTLIN_LIB = "";
 
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
-    public static String KOTLIN_VERSION = "0.4.108";
+    public static String KOTLIN_VERSION = "0.5.398";
 
     public static String RT_JAR = "";
 

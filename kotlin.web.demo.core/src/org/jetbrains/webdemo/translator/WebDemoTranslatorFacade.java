@@ -58,7 +58,7 @@ public final class WebDemoTranslatorFacade {
     public static BindingContext analyzeProgramCode(@NotNull JetFile file) {
         try {
             BindingContext bindingContext = AnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), LOAD_JS_LIBRARY_CONFIG);
-            Initializer.reinitializeJavaEnvironment();
+            //Initializer.reinitializeJavaEnvironment();
             return bindingContext;
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,

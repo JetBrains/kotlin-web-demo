@@ -19,7 +19,6 @@ package org.jetbrains.webdemo.test.examples;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.responseHelpers.JsConverter;
@@ -140,7 +139,7 @@ public class RunExamplesTest extends BaseTest {
         StringBuilder output = new StringBuilder();
         String actualResult;
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
-            JetFile currentPsiFile = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), TestUtils.getDataFromFile(file));
+            JetFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), TestUtils.getDataFromFile(file));
             sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
 
             assert example != null;

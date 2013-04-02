@@ -17,11 +17,11 @@
 package org.jetbrains.webdemo;
 
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
-import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
-import org.jetbrains.jet.internal.com.intellij.openapi.application.ApplicationManager;
-import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistry;
-import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
-import org.jetbrains.jet.internal.com.intellij.openapi.vfs.encoding.EncodingRegistry;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.fileTypes.FileTypeRegistry;
+import com.intellij.openapi.util.Getter;
+import com.intellij.openapi.vfs.encoding.EncodingRegistry;
 
 public abstract class Initializer {
 

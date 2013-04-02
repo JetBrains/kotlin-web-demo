@@ -16,12 +16,12 @@
 
 package org.jetbrains.webdemo.errorsDescriptors;
 
-import org.jetbrains.jet.internal.com.intellij.openapi.editor.Document;
-import org.jetbrains.jet.internal.com.intellij.openapi.util.TextRange;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiElement;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiElementVisitor;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiErrorElement;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiErrorElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.lang.diagnostics.Diagnostic;
 import org.jetbrains.jet.lang.diagnostics.Errors;
 import org.jetbrains.jet.lang.diagnostics.Severity;

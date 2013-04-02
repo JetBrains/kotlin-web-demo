@@ -19,9 +19,9 @@
  */
 package org.jetbrains.jet.utils;
 
-import org.jetbrains.jet.internal.com.intellij.openapi.application.PathManager;
-import org.jetbrains.jet.internal.com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.jet.internal.com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

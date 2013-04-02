@@ -17,9 +17,9 @@
 package org.jetbrains.jet.cli.jvm.compiler;
 
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.internal.com.intellij.codeInsight.BaseExternalAnnotationsManager;
-import org.jetbrains.jet.internal.com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.jet.internal.com.intellij.psi.*;
+import com.intellij.codeInsight.BaseExternalAnnotationsManager;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

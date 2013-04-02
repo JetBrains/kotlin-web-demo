@@ -19,7 +19,6 @@ package org.jetbrains.webdemo.test.examples;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -98,9 +97,7 @@ public class HighlightExamplesTest extends BaseTest {
     private void compareResponseAndExpectedResult(File file, String runConfiguration) throws IOException {
         String expectedResult = "[]";
         sessionInfo.setRunConfiguration(runConfiguration);
-        JetFile currentPsiFile = JetPsiFactoryUtil.createFile(
-                Initializer.INITIALIZER.getEnvironment().getProject(),
-                TestUtils.getDataFromFile(file));
+        JetFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), TestUtils.getDataFromFile(file));
 
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
         String actualResult = responseForHighlighting.getResult();

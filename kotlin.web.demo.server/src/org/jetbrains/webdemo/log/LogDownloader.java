@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.log;
 
-import org.jetbrains.jet.internal.com.google.common.io.Files;
+import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -35,7 +35,7 @@ public class LogDownloader {
 
         if (log.exists()) {
             try {
-                return Files.toString(log, Charset.forName("utf-8"));
+                return FileUtil.loadFile(log, Charset.forName("utf-8").displayName(), true);
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), log.getAbsolutePath());

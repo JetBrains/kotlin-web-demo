@@ -16,8 +16,8 @@
 
 package org.jetbrains.webdemo.handlers;
 
+import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.internal.com.google.common.io.ByteStreams;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.authorization.AuthorizationFacebookHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationGoogleHelper;
@@ -397,7 +397,7 @@ public class ServerHandler {
         }
 
         try {
-            ByteStreams.copy(is, response.getOutputStream());
+            FileUtil.copy(is, response.getOutputStream());
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getRequestURI() + "?" + request.getQueryString());

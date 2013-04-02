@@ -17,9 +17,9 @@
 package org.jetbrains.webdemo.responseHelpers;
 
 import org.jetbrains.jet.codegen.KotlinCodegenFacade;
-import org.jetbrains.jet.internal.com.intellij.openapi.project.Project;
-import org.jetbrains.jet.internal.com.intellij.openapi.util.io.FileUtil;
-import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.analyzer.AnalyzeExhaust;
 import org.jetbrains.jet.codegen.ClassBuilderFactories;
 import org.jetbrains.jet.codegen.ClassFileFactory;

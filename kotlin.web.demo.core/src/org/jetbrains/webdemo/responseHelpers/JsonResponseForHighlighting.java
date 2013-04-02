@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.jet.internal.com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.webdemo.Interval;
 import org.jetbrains.webdemo.ResponseUtils;

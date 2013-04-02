@@ -18,19 +18,21 @@ package org.jetbrains.webdemo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.jet.cli.common.CLIConfigurationKeys;
 import org.jetbrains.jet.cli.jvm.JVMConfigurationKeys;
 import org.jetbrains.jet.cli.jvm.K2JVMCompiler;
 import org.jetbrains.jet.cli.jvm.K2JVMCompilerArguments;
+import org.jetbrains.jet.cli.jvm.compiler.CommandLineScriptUtils;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.codegen.BuiltinToJavaTypesMapping;
 import org.jetbrains.jet.config.CompilerConfiguration;
-import org.jetbrains.jet.internal.com.google.common.base.Splitter;
-import org.jetbrains.jet.internal.com.google.common.collect.Lists;
-import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
-import org.jetbrains.jet.internal.com.intellij.openapi.application.ApplicationManager;
-import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistry;
-import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
-import org.jetbrains.jet.internal.com.intellij.openapi.vfs.encoding.EncodingRegistry;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.fileTypes.FileTypeRegistry;
+import com.intellij.openapi.util.Getter;
+import com.intellij.openapi.vfs.encoding.EncodingRegistry;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
 import org.jetbrains.jet.utils.PathUtil;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -84,16 +86,7 @@ public class ServerInitializer extends Initializer {
             };
 
             try {
-                K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
-                CompilerConfiguration configuration = new CompilerConfiguration();
-                configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
-                configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
-
-                configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
-                configuration.put(JVMConfigurationKeys.STUBS, false);
-                configuration.put(JVMConfigurationKeys.BUILTIN_TO_JAVA_TYPES_MAPPING_KEY, BuiltinToJavaTypesMapping.ENABLED);
-
-                environment = new JetCoreEnvironment(root, configuration);
+                environment = createEnvironment(root);
                 registry = FileTypeRegistry.ourInstanceGetter;
             } catch (Throwable e) {
                 ErrorWriter.writeExceptionToConsole("Impossible to init jetCoreEnvironment", e);
@@ -105,8 +98,44 @@ public class ServerInitializer extends Initializer {
         return true;
     }
 
+    public boolean setJavaCoreEnvironment(@NotNull JetCoreEnvironment newEnvironment) {
+        if (environment == null) {
+            root = new Disposable() {
+                @Override
+                public void dispose() {
+                }
+            };
+
+            try {
+                environment = newEnvironment;
+                registry = FileTypeRegistry.ourInstanceGetter;
+            } catch (Throwable e) {
+                ErrorWriter.writeExceptionToConsole("Impossible to init jetCoreEnvironment", e);
+                return false;
+            }
+
+            return true;
+        }
+        return true;
+    }
+
+    public static JetCoreEnvironment createEnvironment(Disposable disposable) {
+        K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
+        CompilerConfiguration configuration = new CompilerConfiguration();
+        configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
+        configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
+
+        configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
+        configuration.put(JVMConfigurationKeys.STUBS, false);
+        configuration.put(JVMConfigurationKeys.BUILTIN_TO_JAVA_TYPES_MAPPING_KEY, BuiltinToJavaTypesMapping.ENABLED);
+
+        configuration.put(JVMConfigurationKeys.GENERATE_NOT_NULL_ASSERTIONS, arguments.notNullAssertions);
+        configuration.put(JVMConfigurationKeys.GENERATE_NOT_NULL_PARAMETER_ASSERTIONS, arguments.notNullParamAssertions);
+        return new JetCoreEnvironment(disposable, configuration);
+    }
+
     @Nullable
-    private File initializeKotlinRuntime() {
+    private static File initializeKotlinRuntime() {
         final File unpackedRuntimePath = getUnpackedRuntimePath();
         if (unpackedRuntimePath != null) {
             ApplicationSettings.KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
@@ -125,7 +154,7 @@ public class ServerInitializer extends Initializer {
     }
 
     @Nullable
-    private File getUnpackedRuntimePath() {
+    private static File getUnpackedRuntimePath() {
         URL url = K2JVMCompiler.class.getClassLoader().getResource("jet/JetObject.class");
         if (url != null && url.getProtocol().equals("file")) {
             return new File(url.getPath()).getParentFile().getParentFile();
@@ -134,7 +163,7 @@ public class ServerInitializer extends Initializer {
     }
 
     @Nullable
-    private File getRuntimeJarPath() {
+    private static File getRuntimeJarPath() {
         URL url = K2JVMCompiler.class.getClassLoader().getResource("kotlin/KotlinPackage.class");
         if (url != null && url.getProtocol().equals("jar")) {
             String path = url.getPath();
@@ -144,7 +173,7 @@ public class ServerInitializer extends Initializer {
     }
 
     @NotNull
-    private List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments) {
+    private static List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments) {
         List<File> classpath = Lists.newArrayList();
         classpath.add(findRtJar());
 
@@ -158,7 +187,7 @@ public class ServerInitializer extends Initializer {
     }
 
     @NotNull
-    private List<File> getAnnotationsPath() {
+    private static List<File> getAnnotationsPath() {
         List<File> annotationsPath = Lists.newArrayList();
         annotationsPath.add(PathUtil.getKotlinPathsForCompiler().getJdkAnnotationsPath());
         return annotationsPath;

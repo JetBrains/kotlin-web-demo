@@ -18,9 +18,9 @@ package org.jetbrains.webdemo;
 
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.config.CompilerConfiguration;
-import org.jetbrains.jet.internal.com.intellij.openapi.Disposable;
-import org.jetbrains.jet.internal.com.intellij.openapi.fileTypes.FileTypeRegistry;
-import org.jetbrains.jet.internal.com.intellij.openapi.util.Getter;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.fileTypes.FileTypeRegistry;
+import com.intellij.openapi.util.Getter;
 
 public class InitializerApplet extends Initializer {
     private static InitializerApplet initializer = new InitializerApplet();

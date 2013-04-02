@@ -15,7 +15,10 @@ package org.jetbrains.webdemo.test;
  * limitations under the License.
  */
 
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.project.Project;
 import junit.framework.TestCase;
+import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
@@ -36,6 +39,8 @@ public class BaseTest extends TestCase {
     }
 
     protected SessionInfo sessionInfo = new SessionInfo("test");
+    protected JetCoreEnvironment myEnvironment;
+    protected Disposable myDisposable;
 
     @Override
     public void setUp() throws Exception {
@@ -44,22 +49,33 @@ public class BaseTest extends TestCase {
         System.setProperty("java.awt.headless", "true");
 
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
-        Initializer.INITIALIZER = ServerInitializer.getInstance();
-
-//        ApplicationSettings.JAVA_HOME = "c:\\Program Files\\Java\\jdk1.6.0_30\\";
 
         ApplicationSettings.WEBAPP_ROOT_DIRECTORY = "kotlin.web.demo.core/resources";
 
         ApplicationSettings.EXAMPLES_DIRECTORY = "examples/";
-        boolean initEnvironment = ServerInitializer.getInstance().initJavaCoreEnvironment();
-        assertEquals("Initialisation of java core environment failed, server didn't start.",
-                true, initEnvironment);
-
+        myDisposable = new Disposable() {
+            @Override
+            public void dispose() {
+            }
+        };
+        ServerInitializer.getInstance().setJavaCoreEnvironment(ServerInitializer.createEnvironment(myDisposable));
+        myEnvironment = ServerInitializer.getInstance().getEnvironment();
         ApplicationSettings.JAVA_EXECUTE = ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
 
-        WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(Initializer.INITIALIZER.getEnvironment().getProject());
+        WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(getProject());
         ExamplesList.getInstance();
         HelpLoader.getInstance();
         Statistics.getInstance();
+    }
+
+    protected Project getProject() {
+        return myEnvironment.getProject();
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        myDisposable = null;
+        myEnvironment = null;
     }
 }
