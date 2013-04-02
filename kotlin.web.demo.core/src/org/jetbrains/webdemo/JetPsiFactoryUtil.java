@@ -27,7 +27,7 @@ import org.jetbrains.jet.plugin.JetLanguage;
 
 public class JetPsiFactoryUtil {
 
-    public static JetFile createFile(Project project, @NotNull String text) {
+    public static JetFile createFile(@NotNull Project project, @NotNull String text) {
         LightVirtualFile virtualFile = new LightVirtualFile("dummy.kt", JetLanguage.INSTANCE, text);
         virtualFile.setCharset(CharsetToolkit.UTF8_CHARSET);
         return (JetFile) ((PsiFileFactoryImpl) PsiFileFactory.getInstance(project)).trySetupPsiForFile(virtualFile, JetLanguage.INSTANCE, true, false);
