@@ -16,23 +16,25 @@
 
 package org.jetbrains.webdemo;
 
-import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileTypes.FileTypeRegistry;
-import com.intellij.openapi.util.Getter;
 import com.intellij.openapi.vfs.encoding.EncodingRegistry;
+import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.webdemo.environment.EnvironmentManager;
 
 public abstract class Initializer {
 
     public static Initializer INITIALIZER;
 
-    public abstract JetCoreEnvironment getEnvironment();
-    public abstract Getter<FileTypeRegistry> getRegistry();
-    public abstract Disposable getRoot();
+    public abstract EnvironmentManager getEnvironmentManager();
 
     public static void reinitializeJavaEnvironment() {
-        ApplicationManager.setApplication(INITIALIZER.getEnvironment().getApplication(), INITIALIZER.getRegistry(), EncodingRegistry.ourInstanceGetter, INITIALIZER.getRoot());
+        ApplicationManager.setApplication(INITIALIZER.getEnvironmentManager().getEnvironment().getApplication(),
+                INITIALIZER.getEnvironmentManager().getRegistry(), EncodingRegistry.ourInstanceGetter,
+                INITIALIZER.getEnvironmentManager().getDisposable());
     }
 
+
+    public JetCoreEnvironment getEnvironment() {
+        return getEnvironmentManager().getEnvironment();
+    }
 }

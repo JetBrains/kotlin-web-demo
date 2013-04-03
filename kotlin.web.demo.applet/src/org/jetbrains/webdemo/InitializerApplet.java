@@ -16,11 +16,8 @@
 
 package org.jetbrains.webdemo;
 
-import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
-import org.jetbrains.jet.config.CompilerConfiguration;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.fileTypes.FileTypeRegistry;
-import com.intellij.openapi.util.Getter;
+import org.jetbrains.webdemo.environment.EnvironmentManager;
+import org.jetbrains.webdemo.environment.EnvironmentManagerForApplet;
 
 public class InitializerApplet extends Initializer {
     private static InitializerApplet initializer = new InitializerApplet();
@@ -32,43 +29,17 @@ public class InitializerApplet extends Initializer {
     private InitializerApplet() {
     }
 
-    private static JetCoreEnvironment environment;
+    private static EnvironmentManager environmentManager = new EnvironmentManagerForApplet();
 
-    public JetCoreEnvironment getEnvironment() {
-        if (environment != null) {
-            return environment;
-        }
-        return null;
-    }
-
-    private static Getter<FileTypeRegistry> registry;
-    private static Disposable root;
-
-    @Override
-    public Getter<FileTypeRegistry> getRegistry() {
-        return registry;
-    }
-
-    @Override
-    public Disposable getRoot() {
-        return root;
-    }
 
     public boolean initJavaCoreEnvironment() {
-        if (environment == null) {
+        environmentManager.getEnvironment();
+        return true;
+    }
 
-            root = new Disposable() {
-                @Override
-                public void dispose() {
-                }
-            };
-
-            environment = new JetCoreEnvironment(root, new CompilerConfiguration());
-            registry = FileTypeRegistry.ourInstanceGetter;
-
-            return true;
-        }
-        return false;
+    @Override
+    public EnvironmentManager getEnvironmentManager() {
+        return environmentManager;
     }
 }
 

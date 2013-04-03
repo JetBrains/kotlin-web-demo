@@ -15,11 +15,13 @@ package org.jetbrains.webdemo.test;
  * limitations under the License.
  */
 
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import junit.framework.TestCase;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.environment.EnvironmentManager;
+import org.jetbrains.webdemo.environment.EnvironmentManagerForServer;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -39,8 +41,8 @@ public class BaseTest extends TestCase {
     }
 
     protected SessionInfo sessionInfo = new SessionInfo("test");
-    protected JetCoreEnvironment myEnvironment;
-    protected Disposable myDisposable;
+    protected EnvironmentManager myEnvironmentManager = new EnvironmentManagerForServer();
+
 
     @Override
     public void setUp() throws Exception {
@@ -48,19 +50,14 @@ public class BaseTest extends TestCase {
         System.setProperty("kotlin.running.in.server.mode", "true");
         System.setProperty("java.awt.headless", "true");
 
+        Initializer.INITIALIZER = ServerInitializer.getInstance();
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
 
         ApplicationSettings.WEBAPP_ROOT_DIRECTORY = "kotlin.web.demo.core/resources";
-
         ApplicationSettings.EXAMPLES_DIRECTORY = "examples/";
-        myDisposable = new Disposable() {
-            @Override
-            public void dispose() {
-            }
-        };
-        ServerInitializer.getInstance().setJavaCoreEnvironment(ServerInitializer.createEnvironment(myDisposable));
-        myEnvironment = ServerInitializer.getInstance().getEnvironment();
         ApplicationSettings.JAVA_EXECUTE = ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
+
+        createManager();
 
         WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(getProject());
         ExamplesList.getInstance();
@@ -68,14 +65,22 @@ public class BaseTest extends TestCase {
         Statistics.getInstance();
     }
 
+    protected JetCoreEnvironment createManager() {
+        myEnvironmentManager.getEnvironment();
+        ServerInitializer.setEnvironmentManager(myEnvironmentManager);
+
+        return myEnvironmentManager.getEnvironment();
+    }
+
     protected Project getProject() {
-        return myEnvironment.getProject();
+        return myEnvironmentManager.getEnvironment().getProject();
     }
 
     @Override
     public void tearDown() throws Exception {
+        Disposer.dispose(myEnvironmentManager.getDisposable());
+        myEnvironmentManager = null;
+        sessionInfo = null;
         super.tearDown();
-        myDisposable = null;
-        myEnvironment = null;
     }
 }

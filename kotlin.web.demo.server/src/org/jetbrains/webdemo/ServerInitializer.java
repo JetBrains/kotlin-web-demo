@@ -16,37 +16,11 @@
 
 package org.jetbrains.webdemo;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.cli.common.CLIConfigurationKeys;
-import org.jetbrains.jet.cli.jvm.JVMConfigurationKeys;
-import org.jetbrains.jet.cli.jvm.K2JVMCompiler;
-import org.jetbrains.jet.cli.jvm.K2JVMCompilerArguments;
-import org.jetbrains.jet.cli.jvm.compiler.CommandLineScriptUtils;
-import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
-import org.jetbrains.jet.codegen.BuiltinToJavaTypesMapping;
-import org.jetbrains.jet.config.CompilerConfiguration;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileTypes.FileTypeRegistry;
-import com.intellij.openapi.util.Getter;
-import com.intellij.openapi.vfs.encoding.EncodingRegistry;
-import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
-import org.jetbrains.jet.utils.PathUtil;
-import org.jetbrains.webdemo.server.ApplicationSettings;
-
-import java.io.File;
-import java.net.URL;
-import java.util.Collections;
-import java.util.List;
+import org.jetbrains.webdemo.environment.EnvironmentManager;
+import org.jetbrains.webdemo.environment.EnvironmentManagerForServer;
 
 public class ServerInitializer extends Initializer {
     private static ServerInitializer initializer = new ServerInitializer();
-
-    private static Getter<FileTypeRegistry> registry;
-    private static Disposable root;
 
     public static ServerInitializer getInstance() {
         return initializer;
@@ -55,170 +29,27 @@ public class ServerInitializer extends Initializer {
     private ServerInitializer() {
     }
 
-    private static JetCoreEnvironment environment;
-
-    @Nullable
-    public JetCoreEnvironment getEnvironment() {
-        if (environment != null) {
-            return environment;
-        }
-
-        ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog("initialize", "JavaCoreEnvironment is null.", "null"));
-        return null;
-    }
-
-    @Override
-    public Getter<FileTypeRegistry> getRegistry() {
-        return registry;
-    }
-
-    @Override
-    public Disposable getRoot() {
-        return root;
-    }
+    private static EnvironmentManager environmentManager = new EnvironmentManagerForServer();
 
     public boolean initJavaCoreEnvironment() {
-        if (environment == null) {
-            root = new Disposable() {
-                @Override
-                public void dispose() {
-                }
-            };
-
-            try {
-                environment = createEnvironment(root);
-                registry = FileTypeRegistry.ourInstanceGetter;
-            } catch (Throwable e) {
-                ErrorWriter.writeExceptionToConsole("Impossible to init jetCoreEnvironment", e);
-                return false;
-            }
-
-            return true;
+        try {
+            environmentManager.getEnvironment();
+        } catch (Throwable e) {
+            ErrorWriter.writeExceptionToConsole("Impossible to init jetCoreEnvironment", e);
+            return false;
         }
+
         return true;
     }
 
-    public boolean setJavaCoreEnvironment(@NotNull JetCoreEnvironment newEnvironment) {
-        if (environment == null) {
-            root = new Disposable() {
-                @Override
-                public void dispose() {
-                }
-            };
-
-            try {
-                environment = newEnvironment;
-                registry = FileTypeRegistry.ourInstanceGetter;
-            } catch (Throwable e) {
-                ErrorWriter.writeExceptionToConsole("Impossible to init jetCoreEnvironment", e);
-                return false;
-            }
-
-            return true;
-        }
-        return true;
+    @Override
+    public EnvironmentManager getEnvironmentManager() {
+        return environmentManager;
     }
 
-    public static JetCoreEnvironment createEnvironment(Disposable disposable) {
-        K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
-        CompilerConfiguration configuration = new CompilerConfiguration();
-        configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
-        configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
-
-        configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
-        configuration.put(JVMConfigurationKeys.STUBS, false);
-        configuration.put(JVMConfigurationKeys.BUILTIN_TO_JAVA_TYPES_MAPPING_KEY, BuiltinToJavaTypesMapping.ENABLED);
-
-        configuration.put(JVMConfigurationKeys.GENERATE_NOT_NULL_ASSERTIONS, arguments.notNullAssertions);
-        configuration.put(JVMConfigurationKeys.GENERATE_NOT_NULL_PARAMETER_ASSERTIONS, arguments.notNullParamAssertions);
-        return new JetCoreEnvironment(disposable, configuration);
+    public static void setEnvironmentManager(EnvironmentManager environmentManager) {
+        ServerInitializer.environmentManager = environmentManager;
     }
-
-    @Nullable
-    private static File initializeKotlinRuntime() {
-        final File unpackedRuntimePath = getUnpackedRuntimePath();
-        if (unpackedRuntimePath != null) {
-            ApplicationSettings.KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
-            ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIB);
-            return unpackedRuntimePath;
-        }
-        else {
-            final File runtimeJarPath = getRuntimeJarPath();
-            if (runtimeJarPath != null && runtimeJarPath.exists()) {
-                ApplicationSettings.KOTLIN_LIB = runtimeJarPath.getAbsolutePath();
-                ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIB);
-                return runtimeJarPath;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    private static File getUnpackedRuntimePath() {
-        URL url = K2JVMCompiler.class.getClassLoader().getResource("jet/JetObject.class");
-        if (url != null && url.getProtocol().equals("file")) {
-            return new File(url.getPath()).getParentFile().getParentFile();
-        }
-        return null;
-    }
-
-    @Nullable
-    private static File getRuntimeJarPath() {
-        URL url = K2JVMCompiler.class.getClassLoader().getResource("kotlin/KotlinPackage.class");
-        if (url != null && url.getProtocol().equals("jar")) {
-            String path = url.getPath();
-            return new File(path.substring(path.indexOf(":") + 1, path.indexOf("!/")));
-        }
-        return null;
-    }
-
-    @NotNull
-    private static List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments) {
-        List<File> classpath = Lists.newArrayList();
-        classpath.add(findRtJar());
-
-        classpath.add(initializeKotlinRuntime());
-        if (arguments.classpath != null) {
-            for (String element : Splitter.on(File.pathSeparatorChar).split(arguments.classpath)) {
-                classpath.add(new File(element));
-            }
-        }
-        return classpath;
-    }
-
-    @NotNull
-    private static List<File> getAnnotationsPath() {
-        List<File> annotationsPath = Lists.newArrayList();
-        annotationsPath.add(PathUtil.getKotlinPathsForCompiler().getJdkAnnotationsPath());
-        return annotationsPath;
-    }
-
-    public static void reinitializeJavaEnvironment() {
-        ApplicationManager.setApplication(environment.getApplication(), registry, EncodingRegistry.ourInstanceGetter, root);
-    }
-
-    @Nullable
-    private static File findRtJar() {
-        File rtJar;
-        if (!ApplicationSettings.RT_JAR.equals("")) {
-            rtJar = new File(ApplicationSettings.RT_JAR);
-        }
-        else {
-            rtJar = PathUtil.findRtJar();
-        }
-        if ((rtJar == null || !rtJar.exists())) {
-            if (ApplicationSettings.JAVA_HOME == null) {
-                ErrorWriter.writeInfoToConsole("You can set java_home variable at config.properties file.");
-            }
-            else {
-                ErrorWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + ApplicationSettings.JAVA_HOME + " or path to rt.jar is incorrect " + ApplicationSettings.RT_JAR);
-            }
-            return null;
-        }
-        ApplicationSettings.JAVA_HOME = rtJar.getParentFile().getParentFile().getParentFile().getAbsolutePath();
-        return rtJar;
-    }
-
 }
 
 
