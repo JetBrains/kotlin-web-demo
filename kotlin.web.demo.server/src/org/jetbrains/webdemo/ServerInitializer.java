@@ -50,6 +50,13 @@ public class ServerInitializer extends Initializer {
     public static void setEnvironmentManager(EnvironmentManager environmentManager) {
         ServerInitializer.environmentManager = environmentManager;
     }
+
+    public static void reinitializeJavaEnvironment() {
+        EnvironmentManagerForServer environmentManager = new EnvironmentManagerForServer();
+        environmentManager.createEnvironment();
+        ServerInitializer.setEnvironmentManager(environmentManager);
+        Initializer.reinitializeJavaEnvironment();
+    }
 }
 
 
