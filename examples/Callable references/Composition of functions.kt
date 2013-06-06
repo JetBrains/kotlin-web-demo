@@ -8,5 +8,5 @@ fun isOdd(x: Int) = x % 2 != 0
 fun length(s: String) = s.size
 
 fun compose<A, B, C>(f: (B) -> C, g: (A) -> B): (A) -> C {
-    return {x -> f(g(x))}
+  return {x -> f(g(x))}
 }

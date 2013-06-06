@@ -17,7 +17,7 @@ class Delegate() {
 }
 
 fun main(args: Array<String>) {
-    val e = Example()
-    println(e.p)
-    e.p = "NEW"
+  val e = Example()
+  println(e.p)
+  e.p = "NEW"
 }
