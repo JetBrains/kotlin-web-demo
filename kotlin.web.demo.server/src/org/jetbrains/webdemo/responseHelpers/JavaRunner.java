@@ -220,7 +220,7 @@ public class JavaRunner {
                 || str.contains("UnsupportedClassVersionError")
                 || str.contains("GenericSignatureFormatError")
                 || str.contains("ExceptionInInitializerError")
-                || (str.contains("NoClassDefFoundError") && !str.contains("NoClassDefFoundError: _DefaultPackage/class"))
+                || (str.contains("NoClassDefFoundError") && !str.contains("_DefaultPackage"))
                 || str.contains("IncompatibleClassChangeError")
                 || str.contains("InstantiationError")
                 || str.contains("AbstractMethodError")
