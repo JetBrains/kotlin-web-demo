@@ -16,11 +16,13 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ExampleObject {
-    public String name;
-    public String fileName;
-    public String parent;
-    public String args = "";
-    public String confType = "java";
+    @NotNull public String name;
+    @NotNull public String fileName;
+    @NotNull public String parent;
+    @NotNull public String args = "";
+    @NotNull public String confType = "java";
 
 }

@@ -60,6 +60,13 @@ public class ExamplesHolder {
 
         ExampleObject example = allExamples.get(exampleName);
 
+        if (example == null) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                    new UnsupportedOperationException("Cannot find an example"),
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), exampleName);
+            return ResponseUtils.getErrorInJson("Cannot find this example. Please choose another example.");
+        }
+
         File exampleFile = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + example.parent + File.separator + example.fileName + ".kt");
         if (!exampleFile.exists()) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(

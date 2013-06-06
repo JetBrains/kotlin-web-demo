@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.examplesLoader;
 
 import com.intellij.openapi.util.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -69,7 +70,7 @@ public class ExamplesList {
         response.append("\nExamples were loaded.");
     }
 
-    private void addWoOrder(File parent, boolean isDirectory) {
+    private void addWoOrder(@NotNull File parent, boolean isDirectory) {
         File[] children = parent.listFiles();
         if (children == null) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
@@ -92,12 +93,14 @@ public class ExamplesList {
                         map.put("text", child.getName());
                     }
 
+                    String exampleName = map.get("text");
+
                     ExampleObject example = new ExampleObject();
-                    example.fileName = map.get("text");
-                    example.name = map.get("text");
+                    example.fileName = exampleName;
+                    example.name = exampleName;
                     example.parent = parent.getName();
 
-                    ExamplesHolder.addExample(map.get("text"), example);
+                    ExamplesHolder.addExample(exampleName, example);
                 }
 
                 list.add(map);
