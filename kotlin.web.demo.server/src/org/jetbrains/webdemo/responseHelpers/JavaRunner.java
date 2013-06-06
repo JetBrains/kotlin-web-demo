@@ -347,7 +347,7 @@ public class JavaRunner {
     private String findMainClass() {
         if (JetMainDetector.hasMain(currentFile.getDeclarations())) {
             FqName fqName = JetPsiUtil.getFQName(currentFile);
-            return PackageClassUtils.getPackageClassFqName(fqName).getFqName();
+            return PackageClassUtils.getPackageClassFqName(fqName).asString();
         }
         return PackageClassUtils.getPackageClassName(FqName.ROOT);
     }

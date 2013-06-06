@@ -200,7 +200,7 @@ public class JsonResponseForCompletion {
         } else {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     "Impossible to find icon",
-                    descriptor.getName().getName() + " " + descriptor.getClass().toString(), sessionInfo.getType(), "");
+                    descriptor.getName().asString() + " " + descriptor.getClass().toString(), sessionInfo.getType(), "");
             return "";
         }
     }
