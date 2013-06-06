@@ -66,6 +66,13 @@ public class RunExamplesTest extends BaseTest {
         expectedResults.put("HTML Builder.kt", new Example("HTML Builder.kt", "", "from txt file"));
         expectedResults.put("Maze.kt", new Example("Maze.kt", "", "from txt file"));
         expectedResults.put("Life.kt", new Example("Life.kt", "", "from txt file"));
+        expectedResults.put("Properties in map.kt", new Example("Properties in map.kt", "", "name = John Doe, age = 25<br/>"));
+        expectedResults.put("Reference to a function.kt", new Example("Reference to a function.kt", "", "[1, 3]<br/>"));
+        expectedResults.put("Custom delegate.kt", new Example("Custom delegate.kt", "", "Example Class, thank you for delegating 'p' to me!<br/>NEW has been assigned to p in Example Class<br/>"));
+        expectedResults.put("Lazy property.kt", new Example("Lazy property.kt", "", "computed!<br/>lazy = my lazy<br/>lazy = my lazy<br/>"));
+        expectedResults.put("NotNull property.kt", new Example("NotNull property.kt", "", "Carl<br/>"));
+        expectedResults.put("Observable property.kt", new Example("Observable property.kt", "", "no name - Carl<br/>"));
+        expectedResults.put("Composition of functions.kt", new Example("Composition of functions.kt", "", "[a, abc]<br/>"));
         expectedResults.put("", new Example("", "", ""));
 
         jsExamples.add("is-checks and smart casts.kt");

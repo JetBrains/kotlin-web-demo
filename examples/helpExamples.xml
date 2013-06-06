@@ -240,5 +240,75 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <args/>
         <mode>java</mode>
     </example>
+    <example>
+        <name>Custom delegate</name>
+        <text>
+            <p>
+                There’s some new syntax: you can say <b>val 'property name': 'Type' by 'expression'</b>. The expression after by is the delegate, because get() and set() methods corresponding to the property will be delegated to it.  Property delegates don’t have to implement any interface, but they have to provide methods named get() and set() to be called.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Lazy property</name>
+        <text>
+            <p>
+                Delegates.lazy() is a function that returns a delegate that implements a lazy property: the first call to get() executes the lambda expression passed to lazy() as an argument and remembers the result, subsequent calls to get() simply return the remembered result. If you want thread safety, use blockingLazy() instead: it guarantees that the values will be computed only in one thread, and that all threads will see the same value.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Observable property</name>
+        <text>
+            <p>
+                The observable() function takes two arguments: initial value and a handler for modifications. The handler gets called every time we assign to ‘name’, it has three parameters: a property being assigned to, the old value and the new one. If you want to be able to ‘veto’ the assignment, use vetoable() instead of observable().
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>NotNull property</name>
+        <text>
+            <p>
+                Users frequently ask what to do when you have a non-null var, but you don’t have an appropriate value to assign to it in constructor (i.e. it must be assigned later)? You can’t have an uninitialized non-abstract property in Kotlin. You could initialize it with null, bit then you’d have to check every time you access it. Now you have a delegate to handle this. If you read from this property before writing to it, it throws an exception, after the first assignment it works as expected.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Properties in map</name>
+        <text>
+            <p>
+                Properties stored in a map. This comes up a lot in applications like parsing JSON or doing other “dynamic” stuff. Delegates take values from this map (by the string keys – names of properties). Of course, you can have var’s as well (with mapVar() function), that will modify the map upon assignment (note that you’d need MutableMap instead of read-only Map).
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Reference to a function</name>
+        <text>
+            <p>
+                “Callable References” or “Feature Literals”, i.e. an ability to pass named functions or properties as values. Users often ask “I have a foo() function, how do I pass it as an argument?”. The answer is: “you prefix it with a ‘::’”.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Composition of functions</name>
+        <text>
+            <p>
+                The composition function return a composition of two functions passed to it: compose(f, g) = f(g(*)). Now, you can apply it to callable references.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
 
 </help>
