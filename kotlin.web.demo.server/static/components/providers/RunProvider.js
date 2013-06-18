@@ -72,6 +72,7 @@ var RunProvider = (function () {
         }
 
         function runJs(configuration, programText, args) {
+            Kotlin.modules = {};
             if (configuration.mode == Configuration.mode.CLIENT.name) {
                 try {
                     var data;
