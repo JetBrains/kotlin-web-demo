@@ -128,8 +128,6 @@ public class JetCoreEnvironment {
         }
 
         JetScriptDefinitionProvider.getInstance(project).addScriptDefinitions(configuration.getList(CommonConfigurationKeys.SCRIPT_DEFINITIONS_KEY));
-
-        KotlinBuiltIns.initialize(project, KotlinBuiltIns.InitializationMode.SINGLE_THREADED);
     }
 
     public CompilerConfiguration getConfiguration() {

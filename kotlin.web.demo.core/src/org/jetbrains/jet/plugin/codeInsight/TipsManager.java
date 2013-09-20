@@ -60,7 +60,7 @@ public final class TipsManager {
             JetScope resolutionScope = context.get(BindingContext.RESOLUTION_SCOPE, expression);
             JetType expressionType = context.get(BindingContext.EXPRESSION_TYPE, receiverExpression);
 
-            if (expressionType != null && resolutionScope != null && !ErrorUtils.isErrorType(expressionType)) {
+            if (expressionType != null && resolutionScope != null && !expressionType.isError()) {
                 if (!(expressionType instanceof NamespaceType)) {
                     ExpressionReceiver receiverValue = new ExpressionReceiver(receiverExpression, expressionType);
                     Set<DeclarationDescriptor> descriptors = new HashSet<DeclarationDescriptor>();

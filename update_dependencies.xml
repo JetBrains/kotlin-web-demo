@@ -57,7 +57,7 @@
                   todir="kotlin.web.demo.test.applet/resources"/>
             <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar"
                   todir="kotlin.web.demo.test.applet/resources"/>
-            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlinEcma3.js"
+            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin.js"
                   todir="kotlin.web.demo.server/static"/>
         </sequential>
 
@@ -125,7 +125,7 @@
              dest="${dependencies.dir}/build.txt"/>
         <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
         <condition property="isLastVersion">
-            <equals arg1="${version}" arg2="0.6.31" />
+            <equals arg1="${version}" arg2="0.6.395" />
         </condition>
     </target>
 
