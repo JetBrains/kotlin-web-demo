@@ -2354,6 +2354,7 @@ var CodeMirror = (function () {
         "Delete":"delCharRight", "Backspace":"delCharLeft", "Tab":"indentMore", "Shift-Tab":"indentLess",
         "Enter":"newlineAndIndent", "Ctrl-A":"selectAll",
         "Ctrl-Z":"undo", "Ctrl-Right":"goWordRight", "Ctrl-Left":"goWordLeft", "Ctrl-Alt-L":"indentAuto",
+        "Ctrl-Backspace":"delWordLeft", "Ctrl-Delete":"delWordRight",
         "Ctrl-Home":"goDocStart", "Ctrl-End":"goDocEnd"
     };
 
@@ -2363,6 +2364,7 @@ var CodeMirror = (function () {
         "Delete":"delCharRight", "Backspace":"delCharLeft", "Tab":"indentMore", "Shift-Tab":"indentLess",
         "Enter":"newlineAndIndent", "Cmd-A":"selectAll",
         "Cmd-Z":"undo", "Alt-Right":"goWordRight", "Alt-Left":"goWordLeft", "Cmd-Alt-L":"indentAuto",
+        "Alt-Backspace":"delWordLeft", "Alt-Delete":"delWordRight",
         "Cmd-Left":"goLineStartSmart", "Cmd-Right":"goLineEnd",
         "Ctrl-Home":"goDocStart", "Ctrl-End":"goDocEnd"
     };
