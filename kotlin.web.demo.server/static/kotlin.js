@@ -1,122 +1,139 @@
 'use strict';(function() {
-  Array.isArray || (Array.isArray = function(c) {
-    return"[object Array]" === Object.prototype.toString.call(c)
+  Array.isArray || (Array.isArray = function(d) {
+    return"[object Array]" === Object.prototype.toString.call(d)
   });
-  Function.prototype.bind || (Function.prototype.bind = function(c) {
+  Function.prototype.bind || (Function.prototype.bind = function(d) {
     if(typeof this !== "function") {
       throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
     }
-    var g = Array.prototype.slice.call(arguments, 1), f = this, e = function() {
+    var h = Array.prototype.slice.call(arguments, 1), g = this, e = function() {
     }, a = function() {
-      return f.apply(this instanceof e && c ? this : c, g.concat(Array.prototype.slice.call(arguments)))
+      return g.apply(this instanceof e && d ? this : d, h.concat(Array.prototype.slice.call(arguments)))
     };
     e.prototype = this.prototype;
     a.prototype = new e;
     return a
   });
-  Object.keys || (Object.keys = function(c) {
-    var g = [], f = 0, e;
-    for(e in c) {
-      c.hasOwnProperty(e) && (g[f++] = e)
+  Object.keys || (Object.keys = function(d) {
+    var h = [], g = 0, e;
+    for(e in d) {
+      d.hasOwnProperty(e) && (h[g++] = e)
     }
-    return g
+    return h
   });
-  Object.create || (Object.create = function(c) {
-    function g() {
+  Object.create || (Object.create = function(d) {
+    function h() {
     }
-    g.prototype = c;
-    return new g
+    h.prototype = d;
+    return new h
   });
-  "function" !== typeof Object.getPrototypeOf && (Object.getPrototypeOf = "object" === typeof"test".__proto__ ? function(c) {
-    return c.__proto__
-  } : function(c) {
-    return c.constructor.prototype
+  "function" !== typeof Object.getPrototypeOf && (Object.getPrototypeOf = "object" === typeof"test".__proto__ ? function(d) {
+    return d.__proto__
+  } : function(d) {
+    return d.constructor.prototype
   })
 })();
 var Kotlin = {};
 (function() {
-  function c(a, d) {
-    if(!(null == a || null == d)) {
-      for(var b in d) {
-        d.hasOwnProperty(b) && (a[b] = d[b])
+  function d(a, b) {
+    if(!(null == a || null == b)) {
+      for(var c in b) {
+        b.hasOwnProperty(c) && (a[c] = b[c])
       }
     }
   }
-  function g(a) {
-    for(var d = 0;d < a.length;d++) {
-      if(null != a[d] && null == a[d].$metadata$ || a[d].$metadata$.type === Kotlin.TYPE.CLASS) {
-        return a[d]
+  function h(a) {
+    for(var b = 0;b < a.length;b++) {
+      if(g(a[b]) || a[b].$metadata$.type === Kotlin.TYPE.CLASS) {
+        return a[b]
       }
     }
     return null
   }
-  function f(a, d, b) {
-    for(var c = 0;c < d.length;c++) {
-      if(!(null != d[c] && null == d[c].$metadata$)) {
-        var h = b(d[c]), e;
-        for(e in h) {
-          if(h.hasOwnProperty(e) && (!a.hasOwnProperty(e) || a[e].$classIndex$ < h[e].$classIndex$)) {
-            a[e] = h[e]
+  function g(a) {
+    return null != a && null == a.$metadata$
+  }
+  function e(a, b, c) {
+    for(var d = 0;d < b.length;d++) {
+      if(!g(b[d])) {
+        var f = c(b[d]), e;
+        for(e in f) {
+          if(f.hasOwnProperty(e) && (!a.hasOwnProperty(e) || a[e].$classIndex$ < f[e].$classIndex$)) {
+            a[e] = f[e]
           }
         }
       }
     }
   }
-  function e(a, d) {
-    var b = {};
-    b.baseClasses = null == a ? [] : Array.isArray(a) ? a : [a];
-    b.baseClass = g(b.baseClasses);
-    b.classIndex = Kotlin.newClassIndex();
-    b.functions = {};
-    b.properties = {};
-    if(null != d) {
-      for(var c in d) {
-        if(d.hasOwnProperty(c)) {
-          var e = d[c];
-          e.$classIndex$ = b.classIndex;
-          "function" === typeof e ? b.functions[c] = e : b.properties[c] = e
+  function a(a, b) {
+    var c = {};
+    c.baseClasses = null == a ? [] : Array.isArray(a) ? a : [a];
+    c.baseClass = h(c.baseClasses);
+    c.classIndex = Kotlin.newClassIndex();
+    c.functions = {};
+    c.properties = {};
+    if(null != b) {
+      for(var d in b) {
+        if(b.hasOwnProperty(d)) {
+          var f = b[d];
+          f.$classIndex$ = c.classIndex;
+          "function" === typeof f ? c.functions[d] = f : c.properties[d] = f
         }
       }
     }
-    f(b.functions, b.baseClasses, function(a) {
+    e(c.functions, c.baseClasses, function(a) {
       return a.$metadata$.functions
     });
-    f(b.properties, b.baseClasses, function(a) {
+    e(c.properties, c.baseClasses, function(a) {
       return a.$metadata$.properties
     });
-    return b
+    return c
   }
-  function a() {
-    "undefined" === typeof this.$object$ && (this.$object$ = this.object_initializer$());
-    return this.$object$
+  function b() {
+    var a = this.object_initializer$();
+    Object.defineProperty(this, "object", {value:a});
+    return a
   }
-  function d() {
-    return function l() {
-      var a = l.$metadata$.initializer;
-      null != a && a.apply(this, arguments)
+  function c(a, b) {
+    if(g(a) || a.$metadata$.classIndex < b.$metadata$.classIndex) {
+      return!1
     }
+    var d = a.$metadata$.baseClasses, f;
+    for(f = 0;f < d.length;f++) {
+      if(d[f] === b) {
+        return!0
+      }
+    }
+    for(f = 0;f < d.length;f++) {
+      if(c(d[f], b)) {
+        return!0
+      }
+    }
+    return!1
   }
-  function b(a, d) {
+  function f(a, b) {
     return function() {
-      if(null !== d) {
-        var b = d;
-        d = null;
-        b.call(a)
+      if(null !== b) {
+        var c = b;
+        b = null;
+        c.call(a)
       }
       return a
     }
   }
-  function h(a) {
-    var d = {};
+  function i(a) {
+    var b = {};
     if(null == a) {
-      return d
+      return b
     }
-    for(var b in a) {
-      a.hasOwnProperty(b) && ("function" === typeof a[b] ? d[b] = a[b] : Object.defineProperty(d, b, a[b]))
+    for(var c in a) {
+      a.hasOwnProperty(c) && ("function" === typeof a[c] ? b[c] = a[c] : Object.defineProperty(b, c, a[c]))
     }
-    return d
+    return b
   }
   var j = function() {
+    return function() {
+    }
   };
   Kotlin.TYPE = {CLASS:"class", TRAIT:"trait", OBJECT:"object"};
   Kotlin.classCount = 0;
@@ -125,73 +142,71 @@ var Kotlin = {};
     Kotlin.classCount++;
     return a
   };
-  Kotlin.createClass = function(b, h, f, g) {
-    var i = d();
-    c(i, g);
-    b = e(b, f);
-    b.type = Kotlin.TYPE.CLASS;
-    f = null !== b.baseClass ? Object.create(b.baseClass.prototype) : {};
-    Object.defineProperties(f, b.properties);
-    c(f, b.functions);
-    var k;
-    null !== b.baseClass && !(null != b.baseClass && null == b.baseClass.$metadata$) && (k = b.baseClass.$metadata$.initializer);
-    null != h ? (b.initializer = h, b.initializer.baseInitializer = k) : b.initializer = j;
-    i.$metadata$ = b;
-    i.prototype = f;
-    i.object$ = a;
-    return i
+  Kotlin.createClass = function(c, f, e, g) {
+    null == f && (f = j());
+    d(f, g);
+    c = a(c, e);
+    c.type = Kotlin.TYPE.CLASS;
+    e = null !== c.baseClass ? Object.create(c.baseClass.prototype) : {};
+    Object.defineProperties(e, c.properties);
+    d(e, c.functions);
+    e.constructor = f;
+    null != c.baseClass && (f.baseInitializer = c.baseClass);
+    f.$metadata$ = c;
+    f.prototype = e;
+    Object.defineProperty(f, "object", {get:b, configurable:!0});
+    return f
   };
-  Kotlin.createObject = function(a, b, d) {
-    a = new (Kotlin.createClass(a, b, d));
+  Kotlin.createObject = function(a, b, c) {
+    a = new (Kotlin.createClass(a, b, c));
     a.$metadata$ = {type:Kotlin.TYPE.OBJECT};
     return a
   };
-  Kotlin.createTrait = function(a, b, d) {
-    var h = function() {
+  Kotlin.createTrait = function(b, c, f) {
+    var e = function() {
     };
-    c(h, d);
-    h.$metadata$ = e(a, b);
-    h.$metadata$.type = Kotlin.TYPE.TRAIT;
-    return h
+    d(e, f);
+    e.$metadata$ = a(b, c);
+    e.$metadata$.type = Kotlin.TYPE.TRAIT;
+    return e
   };
-  Kotlin.keys = Object.keys;
   Kotlin.isType = function(a, b) {
-    return null == a || null == b ? !1 : a instanceof b
+    return null == a || null == b ? !1 : a instanceof b ? !0 : g(b) || b.$metadata$.type == Kotlin.TYPE.CLASS ? !1 : c(a.constructor, b)
   };
-  Kotlin.definePackage = function(a, d) {
-    var c = h(d);
-    return null === a ? {value:c} : {get:b(c, a)}
+  Kotlin.definePackage = function(a, b) {
+    var c = i(b);
+    return null === a ? {value:c} : {get:f(c, a)}
   };
   Kotlin.defineRootPackage = function(a, b) {
-    var d = h(b);
-    d.$initializer$ = null === a ? j : a;
-    return d
+    var c = i(b);
+    c.$initializer$ = null === a ? j() : a;
+    return c
   };
   Kotlin.defineModule = function(a, b) {
     if(a in Kotlin.modules) {
-      throw new Kotlin.IllegalArgumentException;
+      throw Error("Module " + a + " is already defined");
     }
     b.$initializer$.call(b);
     Object.defineProperty(Kotlin.modules, a, {value:b})
   }
 })();
-String.prototype.startsWith = function(c) {
-  return 0 === this.indexOf(c)
+String.prototype.startsWith = function(d) {
+  return 0 === this.indexOf(d)
 };
-String.prototype.endsWith = function(c) {
-  return-1 !== this.indexOf(c, this.length - c.length)
+String.prototype.endsWith = function(d) {
+  return-1 !== this.indexOf(d, this.length - d.length)
 };
-String.prototype.contains = function(c) {
-  return-1 !== this.indexOf(c)
+String.prototype.contains = function(d) {
+  return-1 !== this.indexOf(d)
 };
 (function() {
-  function c(a) {
+  function d(a) {
     return function() {
       throw new TypeError(void 0 !== a ? "Function " + a + " is abstract" : "Function is abstract");
     }
   }
-  Kotlin.equals = function(a, d) {
-    return null == a ? null == d : Array.isArray(a) ? Kotlin.arrayEquals(a, d) : "object" == typeof a && void 0 !== a.equals ? a.equals(d) : a === d
+  Kotlin.equals = function(a, b) {
+    return null == a ? null == b : Array.isArray(a) ? Kotlin.arrayEquals(a, b) : "object" == typeof a && void 0 !== a.equals ? a.equals(b) : a === b
   };
   Kotlin.toString = function(a) {
     return null == a ? "null" : Array.isArray(a) ? Kotlin.arrayToString(a) : a.toString()
@@ -199,11 +214,11 @@ String.prototype.contains = function(c) {
   Kotlin.arrayToString = function(a) {
     return"[" + a.join(", ") + "]"
   };
-  Kotlin.intUpto = function(a, d) {
-    return new Kotlin.NumberRange(a, d)
+  Kotlin.intUpto = function(a, b) {
+    return new Kotlin.NumberRange(a, b)
   };
-  Kotlin.intDownto = function(a, d) {
-    return new Kotlin.Progression(a, d, -1)
+  Kotlin.intDownto = function(a, b) {
+    return new Kotlin.Progression(a, b, -1)
   };
   Kotlin.modules = {};
   Kotlin.RuntimeException = Kotlin.createClass();
@@ -216,8 +231,8 @@ String.prototype.contains = function(c) {
   Kotlin.throwNPE = function() {
     throw new Kotlin.NullPointerException;
   };
-  Kotlin.Iterator = Kotlin.createClass(null, null, {next:c("Iterator#next"), hasNext:c("Iterator#hasNext")});
-  var g = Kotlin.createClass(Kotlin.Iterator, function(a) {
+  Kotlin.Iterator = Kotlin.createClass(null, null, {next:d("Iterator#next"), hasNext:d("Iterator#hasNext")});
+  var h = Kotlin.createClass(Kotlin.Iterator, function(a) {
     this.array = a;
     this.size = a.length;
     this.index = 0
@@ -225,7 +240,7 @@ String.prototype.contains = function(c) {
     return this.array[this.index++]
   }, hasNext:function() {
     return this.index < this.size
-  }}), f = Kotlin.createClass(g, function(a) {
+  }}), g = Kotlin.createClass(h, function(a) {
     this.list = a;
     this.size = a.size();
     this.index = 0
@@ -246,24 +261,24 @@ String.prototype.contains = function(c) {
     function a(a) {
       return this[a]
     }
-    function d() {
+    function b() {
       return this.values$
     }
-    Kotlin.createEnumEntries = function(b) {
-      var c = 0, e = [], f;
-      for(f in b) {
-        if(b.hasOwnProperty(f)) {
-          var g = b[f];
-          e[c] = g;
-          g.ordinal$ = c;
-          g.name$ = f;
-          c++
+    Kotlin.createEnumEntries = function(c) {
+      var f = 0, e = [], d;
+      for(d in c) {
+        if(c.hasOwnProperty(d)) {
+          var g = c[d];
+          e[f] = g;
+          g.ordinal$ = f;
+          g.name$ = d;
+          f++
         }
       }
-      b.values$ = e;
-      b.valueOf = a;
-      b.values = d;
-      return b
+      c.values$ = e;
+      c.valueOf = a;
+      c.values = b;
+      return c
     }
   })();
   Kotlin.PropertyMetadata = Kotlin.createClass(null, function(a) {
@@ -272,33 +287,33 @@ String.prototype.contains = function(c) {
   Kotlin.AbstractCollection = Kotlin.createClass(Kotlin.Collection, null, {size:function() {
     return this.$size
   }, addAll:function(a) {
-    for(var a = a.iterator(), d = this.size();0 < d--;) {
+    for(var a = a.iterator(), b = this.size();0 < b--;) {
       this.add(a.next())
     }
   }, isEmpty:function() {
     return 0 === this.size()
   }, iterator:function() {
-    return new g(this.toArray())
+    return new h(this.toArray())
   }, equals:function(a) {
     if(this.size() !== a.size()) {
       return!1
     }
-    for(var d = this.iterator(), a = a.iterator(), b = this.size();0 < b--;) {
-      if(!Kotlin.equals(d.next(), a.next())) {
+    for(var b = this.iterator(), a = a.iterator(), c = this.size();0 < c--;) {
+      if(!Kotlin.equals(b.next(), a.next())) {
         return!1
       }
     }
     return!0
   }, toString:function() {
-    for(var a = "[", d = this.iterator(), b = !0, c = this.$size;0 < c--;) {
-      b ? b = !1 : a += ", ", a += d.next()
+    for(var a = "[", b = this.iterator(), c = !0, f = this.$size;0 < f--;) {
+      c ? c = !1 : a += ", ", a += b.next()
     }
     return a + "]"
   }, toJSON:function() {
     return this.toArray()
   }});
   Kotlin.AbstractList = Kotlin.createClass(Kotlin.AbstractCollection, null, {iterator:function() {
-    return new f(this)
+    return new g(this)
   }, remove:function(a) {
     a = this.indexOf(a);
     -1 !== a && this.removeAt(a)
@@ -311,21 +326,21 @@ String.prototype.contains = function(c) {
   }, {get:function(a) {
     this.checkRange(a);
     return this.array[a]
-  }, set:function(a, d) {
+  }, set:function(a, b) {
     this.checkRange(a);
-    this.array[a] = d
+    this.array[a] = b
   }, size:function() {
     return this.$size
   }, iterator:function() {
     return Kotlin.arrayIterator(this.array)
   }, add:function(a) {
     this.array[this.$size++] = a
-  }, addAt:function(a, d) {
-    this.array.splice(a, 0, d);
+  }, addAt:function(a, b) {
+    this.array.splice(a, 0, b);
     this.$size++
   }, addAll:function(a) {
-    for(var d = a.iterator(), b = this.$size, c = a.size();0 < c--;) {
-      this.array[b++] = d.next()
+    for(var b = a.iterator(), c = this.$size, f = a.size();0 < f--;) {
+      this.array[c++] = b.next()
     }
     this.$size += a.size()
   }, removeAt:function(a) {
@@ -335,9 +350,9 @@ String.prototype.contains = function(c) {
   }, clear:function() {
     this.$size = this.array.length = 0
   }, indexOf:function(a) {
-    for(var d = 0, b = this.$size;d < b;++d) {
-      if(Kotlin.equals(this.array[d], a)) {
-        return d
+    for(var b = 0, c = this.$size;b < c;++b) {
+      if(Kotlin.equals(this.array[b], a)) {
+        return b
       }
     }
     return-1
@@ -352,10 +367,10 @@ String.prototype.contains = function(c) {
       throw new RangeError;
     }
   }});
-  Kotlin.Runnable = Kotlin.createClass(null, null, {run:c("Runnable#run")});
-  Kotlin.Comparable = Kotlin.createClass(null, null, {compareTo:c("Comparable#compareTo")});
-  Kotlin.Appendable = Kotlin.createClass(null, null, {append:c("Appendable#append")});
-  Kotlin.Closeable = Kotlin.createClass(null, null, {close:c("Closeable#close")});
+  Kotlin.Runnable = Kotlin.createClass(null, null, {run:d("Runnable#run")});
+  Kotlin.Comparable = Kotlin.createClass(null, null, {compareTo:d("Comparable#compareTo")});
+  Kotlin.Appendable = Kotlin.createClass(null, null, {append:d("Appendable#append")});
+  Kotlin.Closeable = Kotlin.createClass(null, null, {close:d("Closeable#close")});
   Kotlin.safeParseInt = function(a) {
     a = parseInt(a, 10);
     return isNaN(a) ? null : a
@@ -364,29 +379,29 @@ String.prototype.contains = function(c) {
     a = parseFloat(a);
     return isNaN(a) ? null : a
   };
-  Kotlin.arrayEquals = function(a, d) {
-    if(a === d) {
+  Kotlin.arrayEquals = function(a, b) {
+    if(a === b) {
       return!0
     }
-    if(!Array.isArray(d) || a.length !== d.length) {
+    if(!Array.isArray(b) || a.length !== b.length) {
       return!1
     }
-    for(var b = 0, c = a.length;b < c;b++) {
-      if(!Kotlin.equals(a[b], d[b])) {
+    for(var c = 0, f = a.length;c < f;c++) {
+      if(!Kotlin.equals(a[c], b[c])) {
         return!1
       }
     }
     return!0
   };
   Kotlin.System = function() {
-    var a = "", d = function(b) {
+    var a = "", b = function(b) {
       void 0 !== b && (a = null === b || "object" !== typeof b ? a + b : a + b.toString())
-    }, b = function(b) {
+    }, c = function(b) {
       this.print(b);
       a += "\n"
     };
     return{out:function() {
-      return{print:d, println:b}
+      return{print:b, println:c}
     }, output:function() {
       return a
     }, flush:function() {
@@ -399,10 +414,10 @@ String.prototype.contains = function(c) {
   Kotlin.print = function(a) {
     Kotlin.System.out().print(a)
   };
-  Kotlin.RangeIterator = Kotlin.createClass(Kotlin.Iterator, function(a, d, b) {
+  Kotlin.RangeIterator = Kotlin.createClass(Kotlin.Iterator, function(a, b, c) {
     this.start = a;
-    this.end = d;
-    this.increment = b;
+    this.end = b;
+    this.increment = c;
     this.i = a
   }, {next:function() {
     var a = this.i;
@@ -411,50 +426,50 @@ String.prototype.contains = function(c) {
   }, hasNext:function() {
     return this.i <= this.end
   }});
-  Kotlin.NumberRange = Kotlin.createClass(null, function(a, d) {
+  Kotlin.NumberRange = Kotlin.createClass(null, function(a, b) {
     this.start = a;
-    this.end = d;
+    this.end = b;
     this.increment = 1
   }, {contains:function(a) {
     return this.start <= a && a <= this.end
   }, iterator:function() {
     return new Kotlin.RangeIterator(this.start, this.end)
   }});
-  Kotlin.Progression = Kotlin.createClass(null, function(a, d, b) {
+  Kotlin.Progression = Kotlin.createClass(null, function(a, b, c) {
     this.start = a;
-    this.end = d;
-    this.increment = b
+    this.end = b;
+    this.increment = c
   }, {iterator:function() {
     return new Kotlin.RangeIterator(this.start, this.end, this.increment)
   }});
-  Kotlin.Comparator = Kotlin.createClass(null, null, {compare:c("Comparator#compare")});
+  Kotlin.Comparator = Kotlin.createClass(null, null, {compare:d("Comparator#compare")});
   var e = Kotlin.createClass(Kotlin.Comparator, function(a) {
     this.compare = a
   });
   Kotlin.comparator = function(a) {
     return new e(a)
   };
-  Kotlin.collectionsMax = function(a, d) {
+  Kotlin.collectionsMax = function(a, b) {
     if(a.isEmpty()) {
       throw Error();
     }
-    for(var b = a.iterator(), c = b.next();b.hasNext();) {
-      var e = b.next();
-      0 > d.compare(c, e) && (c = e)
+    for(var c = a.iterator(), f = c.next();c.hasNext();) {
+      var d = c.next();
+      0 > b.compare(f, d) && (f = d)
     }
-    return c
+    return f
   };
-  Kotlin.collectionsSort = function(a, d) {
-    var b = void 0;
-    void 0 !== d && (b = d.compare.bind(d));
-    a instanceof Array && a.sort(b);
-    for(var c = [], e = a.iterator();e.hasNext();) {
-      c.push(e.next())
+  Kotlin.collectionsSort = function(a, b) {
+    var c = void 0;
+    void 0 !== b && (c = b.compare.bind(b));
+    a instanceof Array && a.sort(c);
+    for(var d = [], e = a.iterator();e.hasNext();) {
+      d.push(e.next())
     }
-    c.sort(b);
-    b = 0;
-    for(e = c.length;b < e;b++) {
-      a.set(b, c[b])
+    d.sort(c);
+    c = 0;
+    for(e = d.length;c < e;c++) {
+      a.set(c, d[c])
     }
   };
   Kotlin.StringBuilder = Kotlin.createClass(null, function() {
@@ -464,14 +479,14 @@ String.prototype.contains = function(c) {
   }, toString:function() {
     return this.string
   }});
-  Kotlin.splitString = function(a, d, b) {
-    return a.split(RegExp(d), b)
+  Kotlin.splitString = function(a, b, c) {
+    return a.split(RegExp(b), c)
   };
   Kotlin.nullArray = function(a) {
-    for(var d = [];0 < a;) {
-      d[--a] = null
+    for(var b = [];0 < a;) {
+      b[--a] = null
     }
-    return d
+    return b
   };
   Kotlin.numberArrayOfSize = function(a) {
     return Kotlin.arrayFromFun(a, function() {
@@ -488,44 +503,44 @@ String.prototype.contains = function(c) {
       return!1
     })
   };
-  Kotlin.arrayFromFun = function(a, d) {
-    for(var b = Array(a), c = 0;c < a;c++) {
-      b[c] = d(c)
+  Kotlin.arrayFromFun = function(a, b) {
+    for(var c = Array(a), d = 0;d < a;d++) {
+      c[d] = b(d)
     }
-    return b
+    return c
   };
   Kotlin.arrayIndices = function(a) {
     return new Kotlin.NumberRange(0, a.length - 1)
   };
   Kotlin.arrayIterator = function(a) {
-    return new g(a)
+    return new h(a)
   };
   Kotlin.jsonFromTuples = function(a) {
-    for(var d = a.length, b = {};0 < d;) {
-      --d, b[a[d][0]] = a[d][1]
+    for(var b = a.length, c = {};0 < b;) {
+      --b, c[a[b][0]] = a[b][1]
     }
-    return b
+    return c
   };
-  Kotlin.jsonAddProperties = function(a, d) {
-    for(var b in d) {
-      d.hasOwnProperty(b) && (a[b] = d[b])
+  Kotlin.jsonAddProperties = function(a, b) {
+    for(var c in b) {
+      b.hasOwnProperty(c) && (a[c] = b[c])
     }
     return a
   }
 })();
-Kotlin.assignOwner = function(c, g) {
-  c.o = g;
-  return c
+Kotlin.assignOwner = function(d, h) {
+  d.o = h;
+  return d
 };
 (function() {
-  function c(a) {
-    return"string" == typeof a ? a : typeof a.hashCode == j ? (a = a.hashCode(), "string" == typeof a ? a : c(a)) : typeof a.toString == j ? a.toString() : "" + a
+  function d(a) {
+    return"string" == typeof a ? a : typeof a.hashCode == i ? (a = a.hashCode(), "string" == typeof a ? a : d(a)) : typeof a.toString == i ? a.toString() : "" + a
   }
-  function g(a, b) {
+  function h(a, b) {
     return a.equals(b)
   }
-  function f(a, b) {
-    return typeof b.equals == j ? b.equals(a) : a === b
+  function g(a, b) {
+    return typeof b.equals == i ? b.equals(a) : a === b
   }
   function e(a) {
     return function(b) {
@@ -537,68 +552,68 @@ Kotlin.assignOwner = function(c, g) {
       }
     }
   }
-  function a(a, b, d, c) {
+  function a(a, b, c, d) {
     this[0] = a;
     this.entries = [];
-    this.addEntry(b, d);
-    null !== c && (this.getEqualityFunction = function() {
-      return c
+    this.addEntry(b, c);
+    null !== d && (this.getEqualityFunction = function() {
+      return d
     })
   }
-  function d(a) {
+  function b(a) {
     return function(b) {
-      for(var d = this.entries.length, c, e = this.getEqualityFunction(b);d--;) {
-        if(c = this.entries[d], e(b, c[0])) {
+      for(var c = this.entries.length, d, e = this.getEqualityFunction(b);c--;) {
+        if(d = this.entries[c], e(b, d[0])) {
           switch(a) {
-            case p:
+            case l:
               return!0;
-            case i:
-              return c;
-            case k:
-              return[d, c[1]]
+            case p:
+              return d;
+            case q:
+              return[c, d[1]]
           }
         }
       }
       return!1
     }
   }
-  function b(a) {
+  function c(a) {
     return function(b) {
-      for(var d = b.length, c = 0, e = this.entries.length;c < e;++c) {
-        b[d + c] = this.entries[c][a]
+      for(var c = b.length, d = 0, e = this.entries.length;d < e;++d) {
+        b[c + d] = this.entries[d][a]
       }
     }
   }
-  function h(b, d) {
-    var c = b[d];
-    return c && c instanceof a ? c : null
+  function f(b, c) {
+    var d = b[c];
+    return d && d instanceof a ? d : null
   }
-  var j = "function", n = typeof Array.prototype.splice == j ? function(a, b) {
+  var i = "function", j = typeof Array.prototype.splice == i ? function(a, b) {
     a.splice(b, 1)
   } : function(a, b) {
-    var d, c, e;
+    var c, d, e;
     if(b === a.length - 1) {
       a.length = b
     }else {
-      d = a.slice(b + 1);
+      c = a.slice(b + 1);
       a.length = b;
-      c = 0;
-      for(e = d.length;c < e;++c) {
-        a[b + c] = d[c]
+      d = 0;
+      for(e = c.length;d < e;++d) {
+        a[b + d] = c[d]
       }
     }
-  }, l = e("key"), o = e("value"), p = 0, i = 1, k = 2;
+  }, k = e("key"), o = e("value"), l = 0, p = 1, q = 2;
   a.prototype = {getEqualityFunction:function(a) {
-    return typeof a.equals == j ? g : f
-  }, getEntryForKey:d(i), getEntryAndIndexForKey:d(k), removeEntryForKey:function(a) {
-    return(a = this.getEntryAndIndexForKey(a)) ? (n(this.entries, a[0]), a[1]) : null
+    return typeof a.equals == i ? h : g
+  }, getEntryForKey:b(p), getEntryAndIndexForKey:b(q), removeEntryForKey:function(a) {
+    return(a = this.getEntryAndIndexForKey(a)) ? (j(this.entries, a[0]), a[1]) : null
   }, addEntry:function(a, b) {
     this.entries[this.entries.length] = [a, b]
-  }, keys:b(0), values:b(1), getEntries:function(a) {
-    for(var b = a.length, d = 0, c = this.entries.length;d < c;++d) {
-      a[b + d] = this.entries[d].slice(0)
+  }, keys:c(0), values:c(1), getEntries:function(a) {
+    for(var b = a.length, c = 0, d = this.entries.length;c < d;++c) {
+      a[b + c] = this.entries[c].slice(0)
     }
-  }, containsKey:d(p), containsValue:function(a) {
+  }, containsKey:b(l), containsValue:function(a) {
     for(var b = this.entries.length;b--;) {
       if(a === this.entries[b][1]) {
         return!0
@@ -606,19 +621,19 @@ Kotlin.assignOwner = function(c, g) {
     }
     return!1
   }};
-  var q = function(b, d) {
-    var e = this, f = [], g = {}, i = typeof b == j ? b : c, k = typeof d == j ? d : null;
-    this.put = function(b, d) {
-      l(b);
-      o(d);
-      var c = i(b), e, j = null;
-      (e = h(g, c)) ? (c = e.getEntryForKey(b)) ? (j = c[1], c[1] = d) : e.addEntry(b, d) : (e = new a(c, b, d, k), f[f.length] = e, g[c] = e);
-      return j
+  var r = function(b, c) {
+    var e = this, g = [], h = {}, m = typeof b == i ? b : d, l = typeof c == i ? c : null;
+    this.put = function(b, c) {
+      k(b);
+      o(c);
+      var d = m(b), e, i = null;
+      (e = f(h, d)) ? (d = e.getEntryForKey(b)) ? (i = d[1], d[1] = c) : e.addEntry(b, c) : (e = new a(d, b, c, l), g[g.length] = e, h[d] = e);
+      return i
     };
     this.get = function(a) {
-      l(a);
-      var b = i(a);
-      if(b = h(g, b)) {
+      k(a);
+      var b = m(a);
+      if(b = f(h, b)) {
         if(a = b.getEntryForKey(a)) {
           return a[1]
         }
@@ -626,95 +641,95 @@ Kotlin.assignOwner = function(c, g) {
       return null
     };
     this.containsKey = function(a) {
-      l(a);
-      var b = i(a);
-      return(b = h(g, b)) ? b.containsKey(a) : !1
+      k(a);
+      var b = m(a);
+      return(b = f(h, b)) ? b.containsKey(a) : !1
     };
     this.containsValue = function(a) {
       o(a);
-      for(var b = f.length;b--;) {
-        if(f[b].containsValue(a)) {
+      for(var b = g.length;b--;) {
+        if(g[b].containsValue(a)) {
           return!0
         }
       }
       return!1
     };
     this.clear = function() {
-      f.length = 0;
-      g = {}
+      g.length = 0;
+      h = {}
     };
     this.isEmpty = function() {
-      return!f.length
+      return!g.length
     };
-    var m = function(a) {
+    var n = function(a) {
       return function() {
-        for(var b = [], d = f.length;d--;) {
-          f[d][a](b)
+        for(var b = [], c = g.length;c--;) {
+          g[c][a](b)
         }
         return b
       }
     };
-    this._keys = m("keys");
-    this._values = m("values");
-    this._entries = m("getEntries");
+    this._keys = n("keys");
+    this._values = n("values");
+    this._entries = n("getEntries");
     this.values = function() {
-      for(var a = this._values(), b = a.length, d = new Kotlin.ArrayList;b--;) {
-        d.add(a[b])
+      for(var a = this._values(), b = a.length, c = new Kotlin.ArrayList;b--;) {
+        c.add(a[b])
       }
-      return d
+      return c
     };
     this.remove = function(a) {
-      l(a);
-      var b = i(a), d = null, c = h(g, b);
-      if(c && (d = c.removeEntryForKey(a), null !== d && !c.entries.length)) {
+      k(a);
+      var b = m(a), c = null, d = f(h, b);
+      if(d && (c = d.removeEntryForKey(a), null !== c && !d.entries.length)) {
         a: {
-          for(a = f.length;a--;) {
-            if(c = f[a], b === c[0]) {
+          for(a = g.length;a--;) {
+            if(d = g[a], b === d[0]) {
               break a
             }
           }
           a = null
         }
-        n(f, a);
-        delete g[b]
+        j(g, a);
+        delete h[b]
       }
-      return d
+      return c
     };
     this.size = function() {
-      for(var a = 0, b = f.length;b--;) {
-        a += f[b].entries.length
+      for(var a = 0, b = g.length;b--;) {
+        a += g[b].entries.length
       }
       return a
     };
     this.each = function(a) {
-      for(var b = e._entries(), d = b.length, c;d--;) {
-        c = b[d], a(c[0], c[1])
+      for(var b = e._entries(), c = b.length, d;c--;) {
+        d = b[c], a(d[0], d[1])
       }
     };
     this.putAll = function(a, b) {
-      for(var d = a._entries(), c, f, g, h = d.length, i = typeof b == j;h--;) {
-        c = d[h];
-        f = c[0];
-        c = c[1];
-        if(i && (g = e.get(f))) {
-          c = b(f, g, c)
+      for(var c = a._entries(), d, f, g, h = c.length, j = typeof b == i;h--;) {
+        d = c[h];
+        f = d[0];
+        d = d[1];
+        if(j && (g = e.get(f))) {
+          d = b(f, g, d)
         }
-        e.put(f, c)
+        e.put(f, d)
       }
     };
     this.clone = function() {
-      var a = new q(b, d);
+      var a = new r(b, c);
       a.putAll(e);
       return a
     };
     this.keySet = function() {
-      for(var a = new Kotlin.ComplexHashSet, b = this._keys(), d = b.length;d--;) {
-        a.add(b[d])
+      for(var a = new Kotlin.ComplexHashSet, b = this._keys(), c = b.length;c--;) {
+        a.add(b[c])
       }
       return a
     }
   };
-  Kotlin.HashTable = q
+  Kotlin.HashTable = r
 })();
 Kotlin.Map = Kotlin.createClass();
 Kotlin.HashMap = Kotlin.createClass(Kotlin.Map, function() {
@@ -722,8 +737,8 @@ Kotlin.HashMap = Kotlin.createClass(Kotlin.Map, function() {
 });
 Kotlin.ComplexHashMap = Kotlin.HashMap;
 (function() {
-  var c = Kotlin.createClass(Kotlin.Iterator, function(c, e) {
-    this.map = c;
+  var d = Kotlin.createClass(Kotlin.Iterator, function(d, e) {
+    this.map = d;
     this.keys = e;
     this.size = e.length;
     this.index = 0
@@ -731,14 +746,14 @@ Kotlin.ComplexHashMap = Kotlin.HashMap;
     return this.map[this.keys[this.index++]]
   }, hasNext:function() {
     return this.index < this.size
-  }}), g = Kotlin.createClass(Kotlin.Collection, function(c) {
-    this.map = c
+  }}), h = Kotlin.createClass(Kotlin.Collection, function(d) {
+    this.map = d
   }, {iterator:function() {
-    return new c(this.map.map, Kotlin.keys(this.map.map))
+    return new d(this.map.map, Object.keys(this.map.map))
   }, isEmpty:function() {
     return 0 === this.map.$size
-  }, contains:function(c) {
-    return this.map.containsValue(c)
+  }, contains:function(d) {
+    return this.map.containsValue(d)
   }});
   Kotlin.PrimitiveHashMap = Kotlin.createClass(Kotlin.Map, function() {
     this.$size = 0;
@@ -747,43 +762,43 @@ Kotlin.ComplexHashMap = Kotlin.HashMap;
     return this.$size
   }, isEmpty:function() {
     return 0 === this.$size
-  }, containsKey:function(c) {
-    return void 0 !== this.map[c]
-  }, containsValue:function(c) {
+  }, containsKey:function(d) {
+    return void 0 !== this.map[d]
+  }, containsValue:function(d) {
     var e = this.map, a;
     for(a in e) {
-      if(e.hasOwnProperty(a) && e[a] === c) {
+      if(e.hasOwnProperty(a) && e[a] === d) {
         return!0
       }
     }
     return!1
-  }, get:function(c) {
-    return this.map[c]
-  }, put:function(c, e) {
-    var a = this.map[c];
-    this.map[c] = void 0 === e ? null : e;
+  }, get:function(d) {
+    return this.map[d]
+  }, put:function(d, e) {
+    var a = this.map[d];
+    this.map[d] = void 0 === e ? null : e;
     void 0 === a && this.$size++;
     return a
-  }, remove:function(c) {
-    var e = this.map[c];
-    void 0 !== e && (delete this.map[c], this.$size--);
+  }, remove:function(d) {
+    var e = this.map[d];
+    void 0 !== e && (delete this.map[d], this.$size--);
     return e
   }, clear:function() {
     this.$size = 0;
     this.map = {}
-  }, putAll:function(c) {
-    var c = c.map, e;
-    for(e in c) {
-      c.hasOwnProperty(e) && (this.map[e] = c[e], this.$size++)
+  }, putAll:function(d) {
+    var d = d.map, e;
+    for(e in d) {
+      d.hasOwnProperty(e) && (this.map[e] = d[e], this.$size++)
     }
   }, keySet:function() {
-    var c = new Kotlin.PrimitiveHashSet, e = this.map, a;
+    var d = new Kotlin.PrimitiveHashSet, e = this.map, a;
     for(a in e) {
-      e.hasOwnProperty(a) && c.add(a)
+      e.hasOwnProperty(a) && d.add(a)
     }
-    return c
+    return d
   }, values:function() {
-    return new g(this)
+    return new h(this)
   }, toJSON:function() {
     return this.map
   }})
@@ -792,33 +807,33 @@ Kotlin.Set = Kotlin.createClass(Kotlin.Collection);
 Kotlin.PrimitiveHashSet = Kotlin.createClass(Kotlin.AbstractCollection, function() {
   this.$size = 0;
   this.map = {}
-}, {contains:function(c) {
-  return!0 === this.map[c]
-}, add:function(c) {
-  var g = this.map[c];
-  this.map[c] = !0;
-  if(!0 === g) {
+}, {contains:function(d) {
+  return!0 === this.map[d]
+}, add:function(d) {
+  var h = this.map[d];
+  this.map[d] = !0;
+  if(!0 === h) {
     return!1
   }
   this.$size++;
   return!0
-}, remove:function(c) {
-  return!0 === this.map[c] ? (delete this.map[c], this.$size--, !0) : !1
+}, remove:function(d) {
+  return!0 === this.map[d] ? (delete this.map[d], this.$size--, !0) : !1
 }, clear:function() {
   this.$size = 0;
   this.map = {}
 }, toArray:function() {
-  return Kotlin.keys(this.map)
+  return Object.keys(this.map)
 }});
 (function() {
-  function c(g, f) {
-    var e = new Kotlin.HashTable(g, f);
+  function d(h, g) {
+    var e = new Kotlin.HashTable(h, g);
     this.add = function(a) {
       e.put(a, !0)
     };
     this.addAll = function(a) {
-      for(var d = a.length;d--;) {
-        e.put(a[d], !0)
+      for(var b = a.length;b--;) {
+        e.put(a[b], !0)
       }
     };
     this.values = function() {
@@ -843,7 +858,7 @@ Kotlin.PrimitiveHashSet = Kotlin.createClass(Kotlin.AbstractCollection, function
       return e.isEmpty()
     };
     this.clone = function() {
-      var a = new c(g, f);
+      var a = new d(h, g);
       a.addAll(e.keys());
       return a
     };
@@ -852,13 +867,13 @@ Kotlin.PrimitiveHashSet = Kotlin.createClass(Kotlin.AbstractCollection, function
         return!1
       }
       if(this.size() === a.size()) {
-        for(var d = this.iterator(), a = a.iterator();;) {
-          var b = d.hasNext(), c = a.hasNext();
-          if(b != c) {
+        for(var b = this.iterator(), a = a.iterator();;) {
+          var c = b.hasNext(), d = a.hasNext();
+          if(c != d) {
             break
           }
-          if(c) {
-            if(b = d.next(), c = a.next(), !Kotlin.equals(b, c)) {
+          if(d) {
+            if(c = b.next(), d = a.next(), !Kotlin.equals(c, d)) {
               break
             }
           }else {
@@ -869,26 +884,26 @@ Kotlin.PrimitiveHashSet = Kotlin.createClass(Kotlin.AbstractCollection, function
       return!1
     };
     this.toString = function() {
-      for(var a = "[", d = this.iterator(), b = !0;d.hasNext();) {
-        b ? b = !1 : a += ", ", a += d.next()
+      for(var a = "[", b = this.iterator(), c = !0;b.hasNext();) {
+        c ? c = !1 : a += ", ", a += b.next()
       }
       return a + "]"
     };
     this.intersection = function(a) {
-      for(var d = new c(g, f), a = a.values(), b = a.length, h;b--;) {
-        h = a[b], e.containsKey(h) && d.add(h)
+      for(var b = new d(h, g), a = a.values(), c = a.length, f;c--;) {
+        f = a[c], e.containsKey(f) && b.add(f)
       }
-      return d
+      return b
     };
     this.union = function(a) {
-      for(var d = this.clone(), a = a.values(), b = a.length, c;b--;) {
-        c = a[b], e.containsKey(c) || d.add(c)
+      for(var b = this.clone(), a = a.values(), c = a.length, d;c--;) {
+        d = a[c], e.containsKey(d) || b.add(d)
       }
-      return d
+      return b
     };
     this.isSubsetOf = function(a) {
-      for(var c = e.keys(), b = c.length;b--;) {
-        if(!a.contains(c[b])) {
+      for(var b = e.keys(), c = b.length;c--;) {
+        if(!a.contains(b[c])) {
           return!1
         }
       }
@@ -896,7 +911,7 @@ Kotlin.PrimitiveHashSet = Kotlin.createClass(Kotlin.AbstractCollection, function
     }
   }
   Kotlin.HashSet = Kotlin.createClass(Kotlin.Set, function() {
-    c.call(this)
+    d.call(this)
   });
   Kotlin.ComplexHashSet = Kotlin.HashSet
 })();

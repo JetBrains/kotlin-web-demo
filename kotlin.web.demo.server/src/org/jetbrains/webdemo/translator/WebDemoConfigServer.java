@@ -63,7 +63,7 @@ public final class WebDemoConfigServer extends Config {
             File libFile = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "js" + File.separator + libFileName);
             try {
                 String text = FileUtil.loadFile(libFile);
-                file = JetFileUtils.createPsiFile(libFileName, text, getProject());
+                file = JetFileUtils.createJetFile(libFileName, text, getProject());
                 libFiles.add(file);
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), "Cannot load " + libFileName);

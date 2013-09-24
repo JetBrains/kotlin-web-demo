@@ -45,7 +45,7 @@ public final class WebDemoConfigApplet extends Config {
             InputStream stream = WebDemoConfigApplet.class.getResourceAsStream("/js" + libFileName);
             try {
                 String text = FileUtil.loadTextAndClose(stream);
-                file = JetFileUtils.createPsiFile(libFileName, text, getProject());
+                file = JetFileUtils.createJetFile(libFileName, text, getProject());
                 libFiles.add(file);
             } catch (IOException e) {
                 System.err.println(libFileName);

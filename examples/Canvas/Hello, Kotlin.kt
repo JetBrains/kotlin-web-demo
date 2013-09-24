@@ -9,7 +9,7 @@ import js.jquery.*
 
 val canvas: HTMLCanvasElement
   get() {
-    return window.document.getElementsByTagName("canvas").item(0)!! as HTMLCanvasElement
+    return window.document.getElementsByTagName("canvas").item(0) as HTMLCanvasElement
   }
 
 val context: CanvasContext
