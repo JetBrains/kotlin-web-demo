@@ -472,6 +472,12 @@ String.prototype.contains = function(d) {
       a.set(c, d[c])
     }
   };
+  Kotlin.copyToArray = function(a) {
+    for(var b = [], a = a.iterator();a.hasNext();) {
+      b.push(a.next())
+    }
+    return b
+  };
   Kotlin.StringBuilder = Kotlin.createClass(null, function() {
     this.string = ""
   }, {append:function(a) {

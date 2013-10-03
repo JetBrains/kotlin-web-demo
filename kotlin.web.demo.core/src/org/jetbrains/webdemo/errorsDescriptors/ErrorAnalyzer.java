@@ -77,7 +77,7 @@ public class ErrorAnalyzer {
     }
 
     private void gerErrorsFromBindingContext(BindingContext bindingContext, List<ErrorDescriptor> errors) {
-        Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics();
+        Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics().all();
         try {
             for (Diagnostic diagnostic : diagnostics) {
                 //fix for errors in js library files
