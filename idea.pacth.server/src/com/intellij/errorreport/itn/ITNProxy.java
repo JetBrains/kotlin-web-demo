@@ -120,7 +120,7 @@ public class ITNProxy {
         params.add(Pair.create("app.name.full", "Kotlin"));
         params.add(Pair.create("app.name.version", "Kotlin"));
         params.add(Pair.create("app.eap", "false"));
-        params.add(Pair.create("app.build", "Kotlin-0.0"));
+        params.add(Pair.create("app.build", "KT-0.0"));
         params.add(Pair.create("app.version.major", kotlinVersion));
         params.add(Pair.create("app.version.minor", kotlinVersion));
         params.add(Pair.create("app.build.date", format(Calendar.getInstance())));
