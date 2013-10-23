@@ -15,7 +15,7 @@
  */
 
 var ActionStatusMessages = {
-    load_example_ok:StatusBarView.Messages.load_example_fail,
+    load_example_ok:StatusBarView.Messages.load_example_ok,
     load_example_fail:StatusBarView.Messages.load_example_fail,
     load_program_ok:StatusBarView.Messages.load_program_ok,
     load_program_fail:StatusBarView.Messages.load_program_fail,
