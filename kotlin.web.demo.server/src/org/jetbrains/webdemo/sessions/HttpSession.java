@@ -18,23 +18,16 @@ package org.jetbrains.webdemo.sessions;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.impl.PsiFileFactoryImpl;
-import com.intellij.testFramework.LightVirtualFile;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.plugin.JetLanguage;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
 import org.jetbrains.webdemo.examplesLoader.ExamplesLoader;
+import org.jetbrains.webdemo.handlers.ServerResponseUtils;
 import org.jetbrains.webdemo.responseHelpers.*;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.jet.lang.psi.JetPsiFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -292,21 +285,13 @@ public class HttpSession {
 
     //Send Response
     private void writeResponse(String responseBody, int errorCode) {
-        PrintWriter writer = null;
-
         try {
-            response.addHeader("Cache-Control", "no-cache");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(errorCode);
-            writer = response.getWriter();
-            writer.write(responseBody);
+            ServerResponseUtils.writeResponse(response, responseBody, errorCode);
             ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                     sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString()));
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
-        } finally {
-            close(writer);
         }
     }
 
@@ -325,13 +310,7 @@ public class HttpSession {
     }
 
     private void close(Closeable closeable) {
-        try {
-            if (closeable != null) {
-                closeable.close();
-            }
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
-        }
+        ServerResponseUtils.close(closeable);
     }
 
 }

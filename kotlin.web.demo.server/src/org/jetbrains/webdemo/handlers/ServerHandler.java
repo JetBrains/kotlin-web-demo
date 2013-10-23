@@ -55,7 +55,7 @@ public class ServerHandler {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         "TEST", "null");
             } finally {
-                close(out);
+                ServerResponseUtils.close(out);
             }
             return;
         }
@@ -129,47 +129,37 @@ public class ServerHandler {
             //Do not stop server
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", param);
-            writeResponse(response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            ServerResponseUtils.writeResponse(response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     private void sendSessionId(HttpServletResponse response, SessionInfo sessionInfo, String param) {
-        String id = sessionInfo.getId();
-        PrintWriter out = null;
         try {
-            response.addHeader("Cache-Control", "no-cache");
-            out = response.getWriter();
+            String id = sessionInfo.getId();
             JSONArray array = new JSONArray();
             array.put(id);
             if (sessionInfo.getUserInfo().isLogin()) {
                 array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
             }
-            out.write(array.toString());
+
+            writeResponse(response, array.toString(), HttpServletResponse.SC_OK);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", param);
-        } finally {
-            close(out);
-        }
-    }
+    }   }
 
     private void sendUserName(HttpServletResponse response, SessionInfo sessionInfo, String param) {
-        PrintWriter out = null;
         try {
-            response.addHeader("Cache-Control", "no-cache");
-            out = response.getWriter();
             JSONArray array = new JSONArray();
             if (sessionInfo.getUserInfo().isLogin()) {
                 array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
             } else {
                 array.put("null");
             }
-            out.write(array.toString());
+            writeResponse(response, array.toString(), HttpServletResponse.SC_OK);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", param);
-        } finally {
-            close(out);
         }
     }
 
@@ -217,7 +207,7 @@ public class ServerHandler {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                             "UNKNOWN", request.getRequestURI() + "/" + request.getQueryString());
                 } finally {
-                    close(out);
+                    ServerResponseUtils.close(out);
                 }
             }
         }
@@ -295,7 +285,7 @@ public class ServerHandler {
             writeResponse(response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
             return;
         } finally {
-            close(is);
+            ServerResponseUtils.close(is);
         }
 
         String links = new LogDownloader().getFilesLinks();
@@ -326,7 +316,7 @@ public class ServerHandler {
             writeResponse(response, "Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         } finally {
-            close(is);
+            ServerResponseUtils.close(is);
         }
         try {
             reqResponse = new StringBuilder(URLDecoder.decode(reqResponse.toString(), "UTF-8"));
@@ -370,7 +360,7 @@ public class ServerHandler {
                 writeResponse(response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
                 return;
             } finally {
-                close(is);
+                ServerResponseUtils.close(is);
             }
 
             OutputStream os = null;
@@ -380,7 +370,7 @@ public class ServerHandler {
             } catch (IOException e) {
                 //This is an exception we can't send data to client
             } finally {
-                close(os);
+                ServerResponseUtils.close(os);
             }
             return;
         }
@@ -405,33 +395,14 @@ public class ServerHandler {
         }
     }
 
-    private void writeResponse(final HttpServletResponse response, String responseBody, int errorCode) {
-        PrintWriter writer = null;
+    //Send Response
+    private void writeResponse(HttpServletResponse response, String responseBody, int errorCode) {
         try {
-//            exchange.sendResponseHeaders(errorCode, responseBody.length);
-            response.addHeader("Cache-Control", "no-cache");
-            response.setStatus(errorCode);
-            writer = response.getWriter();
-            writer.write(responseBody);
+            ServerResponseUtils.writeResponse(response, responseBody, errorCode);
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    "UNKNOWN", "null");
-        } finally {
-            close(writer);
+            //This is an exception we can't send data to client
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "null");
         }
     }
-
-
-    private void close(Closeable closeable) {
-        try {
-            if (closeable != null) {
-                closeable.close();
-            }
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    "UNKNOWN", "null");
-        }
-    }
-
 }
 
