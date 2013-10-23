@@ -74,7 +74,7 @@ public class CompileAndRunExecutor {
             try {
                 AnalyzeExhaust analyzeExhaust = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList());
-                generationState = new GenerationState(currentProject,ClassBuilderFactories.binaries(false), analyzeExhaust.getBindingContext(), Collections.singletonList((JetFile) currentPsiFile));
+                generationState = new GenerationState(currentProject,ClassBuilderFactories.BINARIES, analyzeExhaust.getBindingContext(), Collections.singletonList((JetFile) currentPsiFile));
                 KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
                     @Override
                     public void reportException(Throwable throwable, String s) {

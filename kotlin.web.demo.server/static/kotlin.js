@@ -162,13 +162,23 @@ var Kotlin = {};
     a.$metadata$ = {type:Kotlin.TYPE.OBJECT};
     return a
   };
-  Kotlin.createTrait = function(b, c, f) {
-    var e = function() {
+  Kotlin.createTrait = function(c, f, e) {
+    var g = function() {
     };
-    d(e, f);
-    e.$metadata$ = a(b, c);
-    e.$metadata$.type = Kotlin.TYPE.TRAIT;
-    return e
+    d(g, e);
+    g.$metadata$ = a(c, f);
+    g.$metadata$.type = Kotlin.TYPE.TRAIT;
+    g.prototype = {};
+    Object.defineProperties(g.prototype, g.$metadata$.properties);
+    d(g.prototype, g.$metadata$.functions);
+    Object.defineProperty(g, "object", {get:b, configurable:!0});
+    return g
+  };
+  Kotlin.callGetter = function(a, b, c) {
+    return b.$metadata$.properties[c].get.call(a)
+  };
+  Kotlin.callSetter = function(a, b, c, f) {
+    b.$metadata$.properties[c].set.call(a, f)
   };
   Kotlin.isType = function(a, b) {
     return null == a || null == b ? !1 : a instanceof b ? !0 : g(b) || b.$metadata$.type == Kotlin.TYPE.CLASS ? !1 : c(a.constructor, b)
@@ -265,17 +275,17 @@ String.prototype.contains = function(d) {
       return this.values$
     }
     Kotlin.createEnumEntries = function(c) {
-      var f = 0, e = [], d;
-      for(d in c) {
-        if(c.hasOwnProperty(d)) {
-          var g = c[d];
-          e[f] = g;
+      var f = 0, d = [], e;
+      for(e in c) {
+        if(c.hasOwnProperty(e)) {
+          var g = c[e];
+          d[f] = g;
           g.ordinal$ = f;
-          g.name$ = d;
+          g.name$ = e;
           f++
         }
       }
-      c.values$ = e;
+      c.values$ = d;
       c.valueOf = a;
       c.values = b;
       return c
@@ -334,7 +344,8 @@ String.prototype.contains = function(d) {
   }, iterator:function() {
     return Kotlin.arrayIterator(this.array)
   }, add:function(a) {
-    this.array[this.$size++] = a
+    this.array[this.$size++] = a;
+    return!0
   }, addAt:function(a, b) {
     this.array.splice(a, 0, b);
     this.$size++
@@ -463,13 +474,13 @@ String.prototype.contains = function(d) {
     var c = void 0;
     void 0 !== b && (c = b.compare.bind(b));
     a instanceof Array && a.sort(c);
-    for(var d = [], e = a.iterator();e.hasNext();) {
-      d.push(e.next())
+    for(var f = [], d = a.iterator();d.hasNext();) {
+      f.push(d.next())
     }
-    d.sort(c);
+    f.sort(c);
     c = 0;
-    for(e = d.length;c < e;c++) {
-      a.set(c, d[c])
+    for(d = f.length;c < d;c++) {
+      a.set(c, f[c])
     }
   };
   Kotlin.copyToArray = function(a) {
@@ -481,7 +492,8 @@ String.prototype.contains = function(d) {
   Kotlin.StringBuilder = Kotlin.createClass(null, function() {
     this.string = ""
   }, {append:function(a) {
-    this.string += a.toString()
+    this.string += a.toString();
+    return this
   }, toString:function() {
     return this.string
   }});
@@ -713,14 +725,14 @@ Kotlin.assignOwner = function(d, h) {
       }
     };
     this.putAll = function(a, b) {
-      for(var c = a._entries(), d, f, g, h = c.length, j = typeof b == i;h--;) {
+      for(var c = a._entries(), d, g, f, h = c.length, j = typeof b == i;h--;) {
         d = c[h];
-        f = d[0];
+        g = d[0];
         d = d[1];
-        if(j && (g = e.get(f))) {
-          d = b(f, g, d)
+        if(j && (f = e.get(g))) {
+          d = b(g, f, d)
         }
-        e.put(f, d)
+        e.put(g, d)
       }
     };
     this.clone = function() {
