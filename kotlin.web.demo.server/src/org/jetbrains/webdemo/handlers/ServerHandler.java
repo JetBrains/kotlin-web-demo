@@ -60,6 +60,11 @@ public class ServerHandler {
             return;
         }
 
+        if (!ServerResponseUtils.isOriginAccepted(request)) {
+            ErrorWriter.ERROR_WRITER.writeInfo(request.getHeader("Origin") + " try to connect to server");
+            return;
+        }
+
         SessionInfo sessionInfo;
 
         String param = request.getRequestURI() + "?" + request.getQueryString();
@@ -71,21 +76,21 @@ public class ServerHandler {
                 sendUserInformation(request, response, sessionInfo);
             } else if (parameters.compareType("getSessionId")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
-                sendSessionId(response, sessionInfo, param);
-            }else if (parameters.compareType("getUserName")) {
+                sendSessionId(request, response, sessionInfo, param);
+            } else if (parameters.compareType("getUserName")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
-                sendUserName(response, sessionInfo, param);
+                sendUserName(request, response, sessionInfo, param);
             } else if (parameters.compareType("authorization")) {
                 sessionInfo = setSessionInfo(request, parameters.getSessionId());
                 sendAuthorizationResult(request, response, parameters, sessionInfo);
             } else if (parameters.compareType("updateExamples")) {
-                updateExamples(response);
+                updateExamples(request, response);
             } else if (param.startsWith("/logs") || parameters.compareType("updateStatistics")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                 sendListLogs(request, response, parameters.compareType("updateStatistics"));
             } else if (parameters.compareType("showUserInfo")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                sendUserInfoForStatistics(response);
+                sendUserInfoForStatistics(request, response);
             } else if (parameters.compareType("sortExceptions")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
                 sendSortedExceptions(request, response, parameters);
@@ -94,13 +99,13 @@ public class ServerHandler {
                 sendLog(request, response, parameters);
             } else if (parameters.compareType("loadExample") && parameters.getArgs().equals("all")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
-                sendExamplesList(response);
+                sendExamplesList(request, response);
             } else if (parameters.compareType("loadHelpForExamples")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_EXAMPLES.name());
-                sendHelpContentForExamples(response);
+                sendHelpContentForExamples(request, response);
             } else if (parameters.compareType("loadHelpForWords")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
-                sendHelpContentForWords(response);
+                sendHelpContentForWords(request, response);
             } else if (parameters.compareType("highlight")
                     || parameters.compareType("complete")
                     || parameters.compareType("run")
@@ -129,11 +134,11 @@ public class ServerHandler {
             //Do not stop server
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", param);
-            ServerResponseUtils.writeResponse(response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            ServerResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
-    private void sendSessionId(HttpServletResponse response, SessionInfo sessionInfo, String param) {
+    private void sendSessionId(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
         try {
             String id = sessionInfo.getId();
             JSONArray array = new JSONArray();
@@ -142,13 +147,13 @@ public class ServerHandler {
                 array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
             }
 
-            writeResponse(response, array.toString(), HttpServletResponse.SC_OK);
+            writeResponse(request, response, array.toString(), HttpServletResponse.SC_OK);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", param);
     }   }
 
-    private void sendUserName(HttpServletResponse response, SessionInfo sessionInfo, String param) {
+    private void sendUserName(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
         try {
             JSONArray array = new JSONArray();
             if (sessionInfo.getUserInfo().isLogin()) {
@@ -156,7 +161,7 @@ public class ServerHandler {
             } else {
                 array.put("null");
             }
-            writeResponse(response, array.toString(), HttpServletResponse.SC_OK);
+            writeResponse(request, response, array.toString(), HttpServletResponse.SC_OK);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", param);
@@ -213,15 +218,15 @@ public class ServerHandler {
         }
     }
 
-    private void sendUserInfoForStatistics(final HttpServletResponse response) {
-        writeResponse(response, Statistics.getInstance().showMap(), HttpServletResponse.SC_OK);
+    private void sendUserInfoForStatistics(HttpServletRequest request, final HttpServletResponse response) {
+        writeResponse(request, response, Statistics.getInstance().showMap(), HttpServletResponse.SC_OK);
     }
 
 
-    private void updateExamples(final HttpServletResponse response) {
+    private void updateExamples(HttpServletRequest request, final HttpServletResponse response) {
         String responseStr = ExamplesList.updateList();
         responseStr += HelpLoader.updateExamplesHelp();
-        writeResponse(response, responseStr, HttpServletResponse.SC_OK);
+        writeResponse(request, response, responseStr, HttpServletResponse.SC_OK);
     }
 
     private void sendSortedExceptions(final HttpServletRequest request, final HttpServletResponse response, RequestParameters parameters) {
@@ -231,7 +236,7 @@ public class ServerHandler {
         String from = ResponseUtils.substringBetween(parameters.getArgs(), "from=", "&to=");
         String to = ResponseUtils.substringAfter(parameters.getArgs(), "&to=");
 
-        writeResponse(response, new LogDownloader().getSortedExceptions(from, to), 200);
+        writeResponse(request, response, new LogDownloader().getSortedExceptions(from, to), 200);
     }
 
     @Nullable
@@ -250,12 +255,12 @@ public class ServerHandler {
         return sessionInfo;
     }
 
-    private void sendHelpContentForExamples(final HttpServletResponse response) {
-        writeResponse(response, HelpLoader.getInstance().getHelpForExamples(), 200);
+    private void sendHelpContentForExamples(HttpServletRequest request, final HttpServletResponse response) {
+        writeResponse(request, response, HelpLoader.getInstance().getHelpForExamples(), 200);
     }
 
-    private void sendHelpContentForWords(final HttpServletResponse response) {
-        writeResponse(response, HelpLoader.getInstance().getHelpForWords(), 200);
+    private void sendHelpContentForWords(HttpServletRequest request, final HttpServletResponse response) {
+        writeResponse(request, response, HelpLoader.getInstance().getHelpForWords(), 200);
     }
 
     private void sendLog(final HttpServletRequest request, final HttpServletResponse response, RequestParameters parameters) {
@@ -269,7 +274,7 @@ public class ServerHandler {
             path = ResponseUtils.substringBefore(parameters.getArgs(), "&download");
         }
         path = path.replaceAll("%5C", "/");
-        writeResponse(response, new LogDownloader().download(path), 200);
+        writeResponse(request, response, new LogDownloader().download(path), 200);
     }
 
     private void sendListLogs(final HttpServletRequest request, final HttpServletResponse response, boolean updateStatistics) {
@@ -282,7 +287,7 @@ public class ServerHandler {
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), "Exception until downloading logs.html");
-            writeResponse(response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
+            writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
             return;
         } finally {
             ServerResponseUtils.close(is);
@@ -296,12 +301,12 @@ public class ServerHandler {
             Statistics.getInstance().updateStatistics(true);
         }
         responseStr = Statistics.getInstance().writeStatistics(responseStr);
-        writeResponse(response, responseStr, 200);
+        writeResponse(request, response, responseStr, 200);
     }
 
-    private void sendExamplesList(final HttpServletResponse response) {
+    private void sendExamplesList(HttpServletRequest request, final HttpServletResponse response) {
         ExamplesLoader loader = new ExamplesLoader();
-        writeResponse(response, loader.getExamplesList(), HttpServletResponse.SC_OK);
+        writeResponse(request, response, loader.getExamplesList(), HttpServletResponse.SC_OK);
     }
 
     private void sendUserInformation(final HttpServletRequest request, final HttpServletResponse response, SessionInfo info) {
@@ -313,7 +318,7 @@ public class ServerHandler {
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId());
-            writeResponse(response, "Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            writeResponse(request, response, "Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         } finally {
             ServerResponseUtils.close(is);
@@ -326,7 +331,7 @@ public class ServerHandler {
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
-        writeResponse(response, "OK", HttpServletResponse.SC_OK);
+        writeResponse(request, response, "OK", HttpServletResponse.SC_OK);
     }
 
     private void sendResourceFile(HttpServletRequest request, HttpServletResponse response) {
@@ -337,10 +342,10 @@ public class ServerHandler {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Empty path to resource"),
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), path);
-            writeResponse(response, "Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
+            writeResponse(request, response, "Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
             return;
         } else if (path.startsWith("/messages/")) {
-            writeResponse(response, "", HttpServletResponse.SC_OK);
+            writeResponse(request, response, "", HttpServletResponse.SC_OK);
             return;
         } else if (path.equals("/") || path.equals("/index.html")) {
             path = "/index.html";
@@ -352,12 +357,12 @@ public class ServerHandler {
             } catch (FileNotFoundException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "index.html not found");
-                writeResponse(response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
+                writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
                 return;
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "index.html not found");
-                writeResponse(response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
+                writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
                 return;
             } finally {
                 ServerResponseUtils.close(is);
@@ -382,7 +387,7 @@ public class ServerHandler {
                     new UnsupportedOperationException("Broken path to resource"),
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getRequestURI() + "?" + request.getQueryString());
             }
-            writeResponse(response, ("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
+            writeResponse(request, response, ("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
@@ -391,14 +396,14 @@ public class ServerHandler {
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getRequestURI() + "?" + request.getQueryString());
-            writeResponse(response, "Could not load the resource from the server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            writeResponse(request, response, "Could not load the resource from the server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     //Send Response
-    private void writeResponse(HttpServletResponse response, String responseBody, int errorCode) {
+    private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) {
         try {
-            ServerResponseUtils.writeResponse(response, responseBody, errorCode);
+            ServerResponseUtils.writeResponse(request, response, responseBody, errorCode);
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "null");

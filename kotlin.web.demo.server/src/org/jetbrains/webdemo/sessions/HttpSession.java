@@ -286,7 +286,7 @@ public class HttpSession {
     //Send Response
     private void writeResponse(String responseBody, int errorCode) {
         try {
-            ServerResponseUtils.writeResponse(response, responseBody, errorCode);
+            ServerResponseUtils.writeResponse(request, response, responseBody, errorCode);
             ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                     sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString()));
         } catch (IOException e) {
