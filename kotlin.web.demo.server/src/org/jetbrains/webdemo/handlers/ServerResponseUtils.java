@@ -23,6 +23,10 @@ public class ServerResponseUtils {
         for (String url : URLS_TO_ACCEPT) {
             response.addHeader("Access-Control-Allow-Origin", url);
         }
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+        response.addHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+
         response.addHeader("Cache-Control", "no-cache");
         response.setCharacterEncoding("UTF-8");
     }
