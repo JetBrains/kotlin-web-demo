@@ -3,6 +3,7 @@ package org.jetbrains.webdemo.handlers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.ResponseUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,11 +23,21 @@ public class ServerResponseUtils {
         URLS.add("http://unit-304.labs.intellij.net:8080");
         URLS.add("http://local.hadihariri.com:4000");
         URLS.add("http://hhariri.github.io/tests");
+        URLS.add("http://kotlin-demo.jetbrains.com");
     }
 
     public static boolean isOriginAccepted(@NotNull HttpServletRequest request) {
-        String origin = request.getHeader("Origin");
-        return origin == null || origin.equals(request.getHeader("Host")) || URLS.contains(origin);
+        String originHeader = request.getHeader("origin");
+        //TODO send origin headers
+        if (originHeader == null) {
+            return true;
+        }
+        if (URLS.contains(originHeader)) {
+            return true;
+        }
+
+        String originWithoutHttp = ResponseUtils.substringAfterReturnAll(originHeader, "http://");
+        return originWithoutHttp.equals(request.getHeader("host"));
     }
 
     public static void addHeadersToResponse(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
