@@ -23,6 +23,7 @@ public class ServerResponseUtils {
         URLS.add("http://unit-304.labs.intellij.net:8080");
         URLS.add("http://local.hadihariri.com:4000");
         URLS.add("http://hhariri.github.io/tests");
+        URLS.add("http://hhariri.github.io");
         URLS.add("http://kotlin-demo.jetbrains.com");
     }
 
