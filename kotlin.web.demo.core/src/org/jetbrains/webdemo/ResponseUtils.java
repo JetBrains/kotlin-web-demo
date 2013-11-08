@@ -225,15 +225,15 @@ public class ResponseUtils {
             document = dBuilder.parse(file);
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
             return null;
         } catch (ParserConfigurationException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
             return null;
         } catch (SAXException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
             return null;
         }
         document.getDocumentElement().normalize();
@@ -251,15 +251,15 @@ public class ResponseUtils {
             document = dBuilder.parse(is);
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "");
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", "");
             return null;
         } catch (ParserConfigurationException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "");
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", "");
             return null;
         } catch (SAXException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "");
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", "");
             return null;
         }
         document.getDocumentElement().normalize();

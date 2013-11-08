@@ -38,7 +38,7 @@ public class LogDownloader {
                 return FileUtil.loadFile(log, Charset.forName("utf-8").displayName(), true);
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), log.getAbsolutePath());
+                        SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), "unknown", log.getAbsolutePath());
             }
         }
         return "";

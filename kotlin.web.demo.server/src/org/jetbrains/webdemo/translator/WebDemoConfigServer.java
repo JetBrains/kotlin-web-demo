@@ -20,7 +20,6 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.config.EcmaVersion;
@@ -66,7 +65,7 @@ public final class WebDemoConfigServer extends Config {
                 file = JetFileUtils.createJetFile(libFileName, text, getProject());
                 libFiles.add(file);
             } catch (Throwable e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), "Cannot load " + libFileName);
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), "unknown", "Cannot load " + libFileName);
             }
         }
 

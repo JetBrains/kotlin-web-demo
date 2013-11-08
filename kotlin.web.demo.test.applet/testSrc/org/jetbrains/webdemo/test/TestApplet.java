@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.test;
 
 import junit.framework.TestCase;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -70,7 +69,7 @@ public class TestApplet extends TestCase {
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SESSION_INFO.getType(), data);
+                    SESSION_INFO.getType(), SESSION_INFO.getOriginUrl(), data);
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson(writer.toString());

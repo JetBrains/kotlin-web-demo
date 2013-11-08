@@ -45,7 +45,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
                     .build();
             return facebookService.getAuthorizationUrl(EMPTY_TOKEN);
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "facebook");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "facebook");
         }
         return "";
     }
@@ -66,7 +66,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
             userInfo = new UserInfo();
             userInfo.login((String) object.get("name"), (String) object.get("id"), TYPE);
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "facebook: " + url);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "facebook: " + url);
         }
         return userInfo;
     }

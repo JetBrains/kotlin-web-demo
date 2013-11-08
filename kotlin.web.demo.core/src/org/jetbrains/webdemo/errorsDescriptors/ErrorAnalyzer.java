@@ -60,11 +60,11 @@ public class ErrorAnalyzer {
                         (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList()).getBindingContext();
             }
             else {
-                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
+                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile, sessionInfo);
             }
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
             throw new KotlinCoreException(e);
         }
         String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
@@ -93,7 +93,7 @@ public class ErrorAnalyzer {
                     if (textRangeIterator == null) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator is null",
                                 diagnostic.getTextRanges() + " " + render,
-                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
+                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
                         continue;
                     }
 
@@ -115,7 +115,7 @@ public class ErrorAnalyzer {
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());
+                    SessionInfo.TypeOfRequest.HIGHLIGHT.name(),sessionInfo.getOriginUrl() , currentPsiFile.getText());
         }
 
         Collections.sort(errors, new Comparator<ErrorDescriptor>() {

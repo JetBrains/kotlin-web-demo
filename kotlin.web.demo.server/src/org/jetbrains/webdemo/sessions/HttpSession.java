@@ -87,14 +87,14 @@ public class HttpSession {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendCompletionResult();
             } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), param);
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), sessionInfo.getOriginUrl(), param);
                 writeResponse(ResponseUtils.getErrorInJson("Incorrect request"), HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Throwable e) {
             if (sessionInfo != null && sessionInfo.getType() != null && currentPsiFile != null && currentPsiFile.getText() != null) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
             } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "null");
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
             }
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
@@ -114,11 +114,11 @@ public class HttpSession {
             String tmp = getPostDataFromRequest(true).text;
             tmp = unescapeXml(unescapeXml(tmp));
             List<String> list = ErrorWriter.parseException(tmp);
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown" , list.get(4));
         } else {
             String tmp = getPostDataFromRequest(true).text;
             List<String> list = ErrorWriter.parseException(tmp);
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), list.get(4));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown", list.get(4));
         }
         writeResponse("Data sent", HttpServletResponse.SC_OK);
     }
@@ -243,7 +243,7 @@ public class HttpSession {
             is = request.getInputStream();
             reqResponse.append(ResponseUtils.readData(is, withNewLines));
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), request.getQueryString());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), request.getQueryString());
             writeResponse("Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new PostData("", "");
         } finally {
@@ -254,10 +254,10 @@ public class HttpSession {
         try {
             finalResponse = TextUtils.decodeUrl(reqResponse.toString());
         } catch (UnsupportedEncodingException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), "null");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), "null");
             return new PostData("", "");
         } catch (IllegalArgumentException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), reqResponse.toString());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), reqResponse.toString());
             return new PostData("", "");
         }
         if (finalResponse != null) {
@@ -275,7 +275,7 @@ public class HttpSession {
         } else {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Cannot read data from post request"),
-                    sessionInfo.getType(), currentPsiFile.getText());
+                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
             writeResponse("Cannot read data from post request: ", HttpServletResponse.SC_BAD_REQUEST);
         }
 
@@ -291,7 +291,7 @@ public class HttpSession {
                     sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString()));
         } catch (IOException e) {
             //This is an exception we can't send data to client
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
         }
     }
 

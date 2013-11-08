@@ -48,7 +48,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
             requestToken = twitterService.getRequestToken();
             return twitterService.getAuthorizationUrl(requestToken);
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "twitter");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "twitter");
         }
         return "";
     }
@@ -91,7 +91,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
 
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "twitter: " + url);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "twitter: " + url);
         }
         return userInfo;
     }

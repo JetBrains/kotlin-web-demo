@@ -37,13 +37,13 @@ public class ErrorWriterInApplet extends ErrorWriter {
     }
 
     @Override
-    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String description) {
-        sendTextToServer(ErrorWriter.getExceptionForLog(type, e, description), MainApplet.request, "errorInKotlin");
+    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, String description) {
+        sendTextToServer(ErrorWriter.getExceptionForLog(type, e, originUrl, description), MainApplet.request, "errorInKotlin");
     }
 
     @Override
-    public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String description) {
-        sendTextToServer(ErrorWriter.getExceptionForLog(type, message, stackTrace, description), MainApplet.request, "errorInKotlin");
+    public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String originUrl, String description) {
+        sendTextToServer(ErrorWriter.getExceptionForLog(type, message, originUrl, stackTrace, description), MainApplet.request, "errorInKotlin");
     }
 
     @Override

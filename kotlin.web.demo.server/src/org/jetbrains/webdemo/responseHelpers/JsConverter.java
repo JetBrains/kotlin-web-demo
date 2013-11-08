@@ -27,6 +27,6 @@ public class JsConverter {
     }
 
     public String getResult(String code, String arguments) {
-        return WebDemoTranslatorFacade.translateStringWithCallToMain(code, arguments);
+        return WebDemoTranslatorFacade.translateStringWithCallToMain(code, arguments, info);
     }
 }

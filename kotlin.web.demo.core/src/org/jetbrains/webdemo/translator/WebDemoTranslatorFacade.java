@@ -55,21 +55,21 @@ public final class WebDemoTranslatorFacade {
 
     @SuppressWarnings("UnusedDeclaration")
     @Nullable
-    public static BindingContext analyzeProgramCode(@NotNull JetFile file) {
+    public static BindingContext analyzeProgramCode(@NotNull JetFile file, SessionInfo sessionInfo) {
         try {
             BindingContext bindingContext = AnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), LOAD_JS_LIBRARY_CONFIG);
             //Initializer.reinitializeJavaEnvironment();
             return bindingContext;
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), file.getText());
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), file.getText());
             return null;
         }
     }
 
     @SuppressWarnings("UnusedDeclaration")
     @NotNull
-    public static String translateStringWithCallToMain(@NotNull String programText, @NotNull String argumentsString) {
+    public static String translateStringWithCallToMain(@NotNull String programText, @NotNull String argumentsString, SessionInfo sessionInfo) {
         try {
             JSONArray result = new JSONArray();
             Map<String, String> map = new HashMap<String, String>();
@@ -87,7 +87,7 @@ public final class WebDemoTranslatorFacade {
             Initializer.reinitializeJavaEnvironment();
 
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), programText);
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), programText);
             KotlinCoreException ex = new KotlinCoreException(e);
             return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, ex.getStackTraceString());
         }

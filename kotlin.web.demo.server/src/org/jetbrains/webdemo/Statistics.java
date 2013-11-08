@@ -77,7 +77,7 @@ public class Statistics {
                 writer.write(URLDecoder.decode("0", "UTF-8"));
                 writer.close();
             } catch (IOException e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "STATISTICS", file.getAbsolutePath());
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "STATISTICS", "unknown", file.getAbsolutePath());
             }
         }
         try {
@@ -87,7 +87,7 @@ public class Statistics {
         } catch (FileNotFoundException e) {
             //Impossible
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), file.getAbsolutePath());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), "unknown", file.getAbsolutePath());
         }
 
     }
@@ -222,7 +222,7 @@ public class Statistics {
         try {
             curMillis = DateFormat.getInstance().parse(ResponseUtils.getDate(c) + " 23:59 AM, PDT").getTime();
         } catch (ParseException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), ResponseUtils.getDate(c) + " 23:59 AM, PDT");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), "unknown", ResponseUtils.getDate(c) + " 23:59 AM, PDT");
             curMillis = System.currentTimeMillis();
         }
         c.setTimeInMillis(curMillis - (MILLIS_PER_DAY * uniqueUsersPerDay.size() - MILLIS_PER_MINUTE));
@@ -265,7 +265,7 @@ public class Statistics {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
             }
         }
 
@@ -296,7 +296,7 @@ public class Statistics {
             writer.write("</statistics>");
             writer.close();
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
         }
     }
 
@@ -344,7 +344,7 @@ public class Statistics {
             writer.write(URLDecoder.decode(String.valueOf(NUMBER_OF_USERS), "UTF-8"));
             writer.close();
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
         }
     }
 
@@ -426,7 +426,7 @@ public class Statistics {
         try {
             reader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
             //impossible
             return;
         }
@@ -461,7 +461,7 @@ public class Statistics {
                                 }
 
                             } catch (ParseException e) {
-                                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), tmp);
+                                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), "unknown", tmp);
                             }
                         }
                         if (token.equals("type=INC_NUMBER_OF_REQUESTS")) {
@@ -495,7 +495,7 @@ public class Statistics {
             usersPerDayList.add(numberOfUsersTmp);
             uniqueUsersPerDay.add(set);
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), file.getAbsolutePath());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), "unknown", file.getAbsolutePath());
         }
     }
 
@@ -517,7 +517,7 @@ public class Statistics {
             try {
                 dateFrom = DateFormat.getInstance().parse("12/01/2011 0:0 AM, PDT");
             } catch (ParseException e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "12/01/2011 0:0 AM, PDT");
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", "12/01/2011 0:0 AM, PDT");
             }
             dateTo = new Date();
 
@@ -526,7 +526,7 @@ public class Statistics {
                     try {
                         analyzeExceptionLog(file);
                     } catch (Throwable e) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath());
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
                     }
                 }
             }
@@ -535,7 +535,7 @@ public class Statistics {
             for (String error : errorElementSet.keySet()) {
                 ErrorElement el = errorElementSet.get(error);
                 if (i < 10) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(el.message, error, el.type, el.moreinfo);
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(el.message, error, el.type, "unknown", el.moreinfo);
                 }
             }
         }
@@ -599,8 +599,8 @@ public class Statistics {
             ex.createNewFile();
             if (!ex.exists()) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new FileNotFoundException("Cannot create tmp file"),
-                        "STATISTICS", file.getAbsolutePath()
-                );
+                        "STATISTICS", "unknown",
+                        file.getAbsolutePath());
                 return null;
             }
             FileWriter writer = new FileWriter(ex);
@@ -653,8 +653,8 @@ public class Statistics {
             writer.close();
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), file.getAbsolutePath()
-            );
+                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown",
+                    file.getAbsolutePath());
             return null;
         }
         return ex;
@@ -671,7 +671,7 @@ public class Statistics {
                 return 1;
             }
         } catch (ParseException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), dateStr);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", dateStr);
         }
         return -2;
     }
@@ -700,7 +700,7 @@ public class Statistics {
                 }
             }
         } catch (ParseException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "Incorrect date format: " + from + " " + to);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", "Incorrect date format: " + from + " " + to);
             return "Incorrect date format: " + from + " " + to;
         }
         analyzeLogs("exceptions");

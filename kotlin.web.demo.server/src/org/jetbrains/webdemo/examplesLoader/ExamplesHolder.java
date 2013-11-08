@@ -63,7 +63,7 @@ public class ExamplesHolder {
         if (example == null) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Cannot find an example"),
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), exampleName);
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", exampleName);
             return ResponseUtils.getErrorInJson("Cannot find this example. Please choose another example.");
         }
 
@@ -71,7 +71,7 @@ public class ExamplesHolder {
         if (!exampleFile.exists()) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Cannot find an example"),
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), exampleFile.getAbsolutePath());
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", exampleFile.getAbsolutePath());
             return ResponseUtils.getErrorInJson("Cannot find this example. Please choose another example.");
         }
 
@@ -82,7 +82,7 @@ public class ExamplesHolder {
             fileContent = ResponseUtils.readData(reader, true);
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), exampleFile.getAbsolutePath());
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", exampleFile.getAbsolutePath());
             return ResponseUtils.getErrorInJson("Cannot find this example. Please choose another example.");
         } finally {
             try {
@@ -91,7 +91,7 @@ public class ExamplesHolder {
                 }
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), example.fileName + " " + example.parent);
+                        SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", example.fileName + " " + example.parent);
             }
         }
 

@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-import com.intellij.openapi.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -62,7 +61,7 @@ public class ExamplesList {
         } else {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Examples root doesn't exists"),
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), root.getAbsolutePath());
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", root.getAbsolutePath());
             ErrorWriter.writeErrorToConsole("Examples root doesn't exists");
             response.append("\nExamples root doesn't exists");
         }
@@ -75,7 +74,7 @@ public class ExamplesList {
         if (children == null) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Incorrect structure for examples (folder - files): empty child list"),
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), parent.getAbsolutePath());
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", parent.getAbsolutePath());
             return;
         }
         for (File child : children) {
@@ -116,7 +115,7 @@ public class ExamplesList {
             } else {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                         new UnsupportedOperationException("Incorrect structure for examples (folder - files)."),
-                        SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), child.getAbsolutePath());
+                        SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", child.getAbsolutePath());
             }
         }
     }
@@ -214,10 +213,10 @@ public class ExamplesList {
 
         } catch (FileNotFoundException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), order.getAbsolutePath());
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", order.getAbsolutePath());
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot read order.txt file"),
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), order.getAbsolutePath());
+                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", order.getAbsolutePath());
         }
     }
 

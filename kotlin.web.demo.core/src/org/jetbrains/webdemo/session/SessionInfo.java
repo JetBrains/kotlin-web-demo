@@ -24,6 +24,7 @@ public class SessionInfo {
     private TypeOfRequest type = TypeOfRequest.GET_RESOURCE;
     private RunConfiguration runConfiguration = RunConfiguration.JAVA;
     private UserInfo userInfo = new UserInfo();
+    private String originUrl = null;
 
     public SessionInfo(String sessionId, TypeOfRequest typeOfRequest) {
         this.id = sessionId;
@@ -80,6 +81,14 @@ public class SessionInfo {
         } else {
             this.runConfiguration = RunConfiguration.JAVA;
         }
+    }
+
+    public String getOriginUrl() {
+        return originUrl;
+    }
+
+    public void setOriginUrl(String originUrl) {
+        this.originUrl = originUrl;
     }
 
     public enum TypeOfRequest {

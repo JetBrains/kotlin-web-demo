@@ -44,7 +44,7 @@ public abstract class ErrorWriter {
         System.out.println(message);
     }
 
-    public static String getExceptionForLog(String typeOfRequest, Throwable throwable, String moreinfo) {
+    public static String getExceptionForLog(String typeOfRequest, Throwable throwable, String originUrl, String moreinfo) {
         StringBuilder builder = new StringBuilder();
         builder.append("\n<error>");
         builder.append("\n<version>");
@@ -62,6 +62,9 @@ public abstract class ErrorWriter {
         builder.append(ResponseUtils.escapeString(stringWriter.toString()));
         builder.append("\n</stack>");
         builder.append("\n<moreinfo>");
+        builder.append("\n");
+        builder.append("Origin url: ");
+        builder.append(ResponseUtils.escapeString(originUrl));
         builder.append("\n").append(ResponseUtils.escapeString(moreinfo));
         builder.append("\n</moreinfo>");
         builder.append("\n</error>");
@@ -89,7 +92,7 @@ public abstract class ErrorWriter {
         return list;
     }
 
-    public static String getExceptionForLog(String typeOfRequest, String message, String stackTrace, String moreinfo) {
+    public static String getExceptionForLog(String typeOfRequest, String originUrl, String message, String stackTrace, String moreinfo) {
         StringBuilder builder = new StringBuilder();
         builder.append("\n<error>");
         builder.append("\n<version>");
@@ -105,14 +108,17 @@ public abstract class ErrorWriter {
         builder.append(ResponseUtils.escapeString(stackTrace));
         builder.append("\n</stack>");
         builder.append("\n<moreinfo>");
+        builder.append("\n");
+        builder.append("Origin url: ");
+        builder.append(ResponseUtils.escapeString(originUrl));
         builder.append("\n").append(ResponseUtils.escapeString(moreinfo));
         builder.append("\n</moreinfo>");
         builder.append("\n</error>");
         return builder.toString();
     }
 
-    public static String getExceptionForLog(String typeOfRequest, String message, String moreinfo) {
-        return getExceptionForLog(typeOfRequest, message, message, moreinfo);
+    public static String getExceptionForLog(String typeOfRequest, String message, String originUrl, String moreinfo) {
+        return getExceptionForLog(typeOfRequest, message, message, originUrl, moreinfo);
     }
 
     public static String getInfoForLog(String typeOfRequest, String userId, String message) {
@@ -139,9 +145,9 @@ public abstract class ErrorWriter {
 
     public abstract void writeException(String message);
 
-    public abstract void writeExceptionToExceptionAnalyzer(Throwable e, String type, String description);
+    public abstract void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, String description);
     
-    public abstract void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String description);
+    public abstract void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String originUrl, String description);
 
     public abstract void writeInfo(String message);
 

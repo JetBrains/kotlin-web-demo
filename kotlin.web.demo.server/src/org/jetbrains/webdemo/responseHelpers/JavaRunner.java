@@ -59,7 +59,7 @@ public class JavaRunner {
             process.getOutputStream().close();
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), Arrays.toString(commandString));
+                    sessionInfo.getType(), sessionInfo.getOriginUrl(), Arrays.toString(commandString));
             StringWriter stackTrace = new StringWriter();
             e.printStackTrace(new PrintWriter(stackTrace));
             return ResponseUtils.getErrorWithStackTraceInJson("Impossible to run your program: IOException handled until execution", stackTrace.toString());
@@ -95,7 +95,7 @@ public class JavaRunner {
                     }
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            sessionInfo.getType(), currentFile.getText());
+                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
                 }
             }
         }.start(); // Starts now
@@ -111,7 +111,7 @@ public class JavaRunner {
                     }
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            sessionInfo.getType(), currentFile.getText());
+                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
                 }
             }
         }.start(); // Starts now
@@ -121,7 +121,7 @@ public class JavaRunner {
             exitValue = process.waitFor();
         } catch (InterruptedException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), currentFile.getText());
+                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
@@ -136,7 +136,7 @@ public class JavaRunner {
                     errStream.append(ApplicationSettings.KOTLIN_ERROR_MESSAGE);
                     String linkForLog = getLinkForLog(outStream.toString());
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
-                            sessionInfo.getType(), currentFile.getText());
+                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
                 }
             }
         }
@@ -188,7 +188,7 @@ public class JavaRunner {
             return response;
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), log.getAbsolutePath());
+                    sessionInfo.getType(), sessionInfo.getOriginUrl(), log.getAbsolutePath());
         } finally {
             try {
                 if (reader != null) {
@@ -196,7 +196,7 @@ public class JavaRunner {
                 }
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        sessionInfo.getType(), currentFile.getText());
+                        sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
             }
         }
         return "";
@@ -211,7 +211,7 @@ public class JavaRunner {
             stackTrace = errStream.substring(pos).replaceAll("<br/>", "\n");
         }
         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(message, stackTrace,
-                sessionInfo.getType(), currentFile.getText());
+                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
     }
 
     private boolean isKotlinLibraryException(String str) {
@@ -269,7 +269,7 @@ public class JavaRunner {
             }
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), currentFile.getText());
+                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
         }
         return returnValue;
     }

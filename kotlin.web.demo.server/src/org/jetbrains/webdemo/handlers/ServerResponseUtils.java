@@ -58,7 +58,7 @@ public class ServerResponseUtils {
                 closeable.close();
             }
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "null");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
         }
     }
 

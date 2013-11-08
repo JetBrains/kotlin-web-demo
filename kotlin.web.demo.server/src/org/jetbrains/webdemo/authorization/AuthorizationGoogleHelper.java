@@ -51,7 +51,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             requestToken = googleService.getRequestToken();
             return googleService.getAuthorizationUrl(requestToken);
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "google");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google");
         }
         return "";
     }
@@ -72,7 +72,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             userInfo.login((String) object.get("name"), (String) object.get("id"), TYPE);
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "google: " + url);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google: " + url);
         }
         return userInfo;
     }

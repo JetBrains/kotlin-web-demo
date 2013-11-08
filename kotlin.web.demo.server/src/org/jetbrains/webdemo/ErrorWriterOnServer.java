@@ -46,20 +46,20 @@ public class ErrorWriterOnServer extends ErrorWriter {
         LOG_FOR_INFO.info(message);
     }
 
-    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String description) {
+    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, String description) {
         ErrorBean bean = new ErrorBean(e, type);
         bean.setPluginName("Kotlin Web Demo");
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
         if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
             sendViaITNProxy(bean);
-            LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, description));
+            LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, originUrl, description));
         } else {
-            LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, description));
+            LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, originUrl, description));
         }
     }
 
 
-    public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String description) {
+    public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String originUrl, String description) {
         ErrorBean bean = new ErrorBean(message, stackTrace, type);
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
         bean.setPluginName("Kotlin Web Demo");
@@ -78,13 +78,13 @@ public class ErrorWriterOnServer extends ErrorWriter {
         try {
             String result = ITNProxy.postNewThread(login, password, error, String.valueOf(System.currentTimeMillis()), ApplicationSettings.KOTLIN_VERSION);
             if ("unauthorized".equals(result) || result.startsWith("update ") || result.startsWith("message ")) {
-                LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EA", result, ""));
-                LOG_FOR_EXCEPTIONS.error(getExceptionForLog(error.getLastAction(), error.getMessage(), error.getDescription()));
+                LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EA", result, "", ""));
+                LOG_FOR_EXCEPTIONS.error(getExceptionForLog(error.getLastAction(), error.getMessage(), "", error.getDescription()));
             } else {
                 LOG_FOR_INFO.info("Submitted to Exception Analyzer: " + result);
             }
         } catch (IOException e1) {
-            LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EXCEPTION_ANALYZER", e1, login));
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EXCEPTION_ANALYZER", e1, "", login));
         }
 
     }

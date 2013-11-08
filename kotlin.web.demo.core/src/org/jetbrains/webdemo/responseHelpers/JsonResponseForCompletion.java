@@ -73,7 +73,7 @@ public class JsonResponseForCompletion {
             addExpressionAtCaret();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.COMPLETE.name(), currentPsiFile.getText() + "  " + lineNumber + " " + charNumber);
+                    SessionInfo.TypeOfRequest.COMPLETE.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText() + "  " + lineNumber + " " + charNumber);
             return "[]";
         }
         /* int i = 0;
@@ -85,13 +85,13 @@ public class JsonResponseForCompletion {
         BindingContext bindingContext;
         try {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
-                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile);
+                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile, sessionInfo);
             } else {
                 bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
                         (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList()).getBindingContext();
             }
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
             return ResponseUtils.getErrorInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE
                     + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
@@ -140,7 +140,7 @@ public class JsonResponseForCompletion {
         } catch (Throwable e) {
             e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), currentPsiFile.getText());
+                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
             return "[]";
         }
 
@@ -198,9 +198,8 @@ public class JsonResponseForCompletion {
         } else if (descriptor instanceof TypeParameterDescriptorImpl) {
             return "class";
         } else {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                    "Impossible to find icon",
-                    descriptor.getName().asString() + " " + descriptor.getClass().toString(), sessionInfo.getType(), "");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Impossible to find icon",
+                    descriptor.getName().asString() + " " + descriptor.getClass().toString(), sessionInfo.getType(), sessionInfo.getOriginUrl(), "");
             return "";
         }
     }
@@ -212,8 +211,8 @@ public class JsonResponseForCompletion {
                 element = element.getParent();
             } else {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot find an element to take a completion"),
-                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), currentPsiFile.getText()
-                );
+                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), sessionInfo.getOriginUrl(),
+                        currentPsiFile.getText());
                 break;
             }
         }

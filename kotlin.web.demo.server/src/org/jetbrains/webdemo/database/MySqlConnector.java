@@ -58,9 +58,7 @@ public class MySqlConnector {
             checkDatabaseVersion();
             return true;
         } catch (Throwable e) {
-            ErrorWriter.writeErrorToConsole("Cannot connect to database: " + databaseUrl);
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), databaseUrl);
-            e.printStackTrace();
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", databaseUrl);
             return false;
         }
     }
@@ -70,7 +68,7 @@ public class MySqlConnector {
             return connection.isValid(1000) || connect();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     databaseUrl);
             return false;
         }
@@ -124,7 +122,7 @@ public class MySqlConnector {
         } catch (Throwable e) {
             ErrorWriter.writeErrorToConsole("Cannot create tables in database: " + databaseUrl);
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     databaseUrl);
             e.printStackTrace();
             return false;
@@ -160,7 +158,7 @@ public class MySqlConnector {
             }
         } catch (SQLException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     "Cannot read database version");
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -178,7 +176,7 @@ public class MySqlConnector {
             return false;
         } catch (SQLException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     "Cannot read database version");
             return false;
         }
@@ -196,7 +194,7 @@ public class MySqlConnector {
                 //st.execute();
             } catch (SQLException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                         "Cannot update database");
             } finally {
                 closeStatement(st);
@@ -224,7 +222,7 @@ public class MySqlConnector {
                 return true;
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             } finally {
                 closeStatement(st);
@@ -239,7 +237,7 @@ public class MySqlConnector {
                 st.close();
             }
         } catch (SQLException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "null");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "null");
         }
     }
 
@@ -257,7 +255,7 @@ public class MySqlConnector {
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -303,7 +301,7 @@ public class MySqlConnector {
                 return ResponseUtils.getJsonString("programName", programName + "&id=" + programId);
             } else {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userprogramid table",
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userprogramid table", "unknown",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
                 return ResponseUtils.getErrorInJson("Please, login.");
             }
@@ -312,7 +310,7 @@ public class MySqlConnector {
                 return ResponseUtils.getErrorInJson("Data is too long.");
             }
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             return ResponseUtils.getErrorInJson("Unknown error while saving your program");
         } finally {
@@ -338,7 +336,7 @@ public class MySqlConnector {
             return count < 100;
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             return false;
         } finally {
@@ -371,7 +369,7 @@ public class MySqlConnector {
 
             return ResponseUtils.getJsonString("text", publicLink);
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", programId);
             return ResponseUtils.getErrorInJson("Cannot generate public link");
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -391,7 +389,7 @@ public class MySqlConnector {
             if (!rs.next()) {
 //                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program by id in programIdProgramInfo",
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program by id in programIdProgramInfo","unknown",
                         programId));
                 return ResponseUtils.getErrorInJson("Cannot find program by this link");
             }
@@ -414,7 +412,7 @@ public class MySqlConnector {
             return array.toString();
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", programId);
             return ResponseUtils.getErrorInJson("Unknown error while loading program by link");
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -444,7 +442,7 @@ public class MySqlConnector {
 
             return ResponseUtils.getJsonString("programId", programId);
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", programId);
             return ResponseUtils.getErrorInJson("Unknown error while saving your program");
         } finally {
             closeStatement(st);
@@ -480,7 +478,7 @@ public class MySqlConnector {
             return false;
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             return false;
         } finally {
@@ -514,7 +512,7 @@ public class MySqlConnector {
             array.put(map);
             return array.toString();
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), programId);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", programId);
             return ResponseUtils.getErrorInJson("Unknown error while loading your program");
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -545,7 +543,7 @@ public class MySqlConnector {
                 rs = st.executeQuery();
                 if (!rs.next()) {
                     ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                            SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program with in programs table",
+                            SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program with in programs table", "unknown",
                             userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + id));
                     continue;
                 }
@@ -559,7 +557,7 @@ public class MySqlConnector {
             return result.toString();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             return ResponseUtils.getErrorInJson("Unknown error while loading list of your programs");
         } finally {
@@ -576,7 +574,7 @@ public class MySqlConnector {
                 rs.close();
             }
         } catch (SQLException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "null");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "null");
         }
     }
 
@@ -598,12 +596,12 @@ public class MySqlConnector {
                 return ResponseUtils.getJsonString("text", "Program was successfully deleted.", programId);
             } else {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table",
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table","unknown",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
                 return ResponseUtils.getErrorInJson("Unknown error while deleting your program");
             }
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programId);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programId);
             return ResponseUtils.getErrorInJson("Unknown error while deleting your program");
         } finally {
             closeStatement(st);

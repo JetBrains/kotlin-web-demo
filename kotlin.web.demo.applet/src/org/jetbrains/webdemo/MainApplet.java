@@ -19,7 +19,6 @@ package org.jetbrains.webdemo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetPsiFactory;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -49,6 +48,7 @@ public class MainApplet extends JApplet implements ActionListener {
             WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
 
             SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
+            SESSION_INFO.setOriginUrl(request);
             getHighlighting("fun main(args : Array<String>) {\n" +
                     "  System.out?.println(\"Hello, world!\"\n" +
                     "}");
@@ -76,7 +76,7 @@ public class MainApplet extends JApplet implements ActionListener {
         } catch (Throwable e) {
             e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SESSION_INFO.getType(), data);
+                    SESSION_INFO.getType(), SESSION_INFO.getOriginUrl(), data);
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson(writer.toString());
@@ -87,10 +87,10 @@ public class MainApplet extends JApplet implements ActionListener {
     public String translateToJS(@NotNull String code, @NotNull String arguments) {
         System.out.println("translate");
         try {
-            return WebDemoTranslatorFacade.translateStringWithCallToMain(code, arguments);
+            return WebDemoTranslatorFacade.translateStringWithCallToMain(code, arguments, SESSION_INFO);
         } catch (Throwable e) {
             e.printStackTrace();
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), code);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), SESSION_INFO.getOriginUrl(), code);
             return ResponseUtils.getErrorInJson("Unexpected exception.");
         }
     }
@@ -116,7 +116,7 @@ public class MainApplet extends JApplet implements ActionListener {
         } catch (Throwable e) {
             e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SESSION_INFO.getType(), data + " line: " + line + " ch: " + ch);
+                    SESSION_INFO.getType(), SESSION_INFO.getOriginUrl(), data + " line: " + line + " ch: " + ch);
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             return ResponseUtils.getErrorInJson(writer.toString());
