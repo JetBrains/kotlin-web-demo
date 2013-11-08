@@ -210,9 +210,11 @@ public class JsonResponseForCompletion {
             if (element != null) {
                 element = element.getParent();
             } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot find an element to take a completion"),
-                        SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), sessionInfo.getOriginUrl(),
-                        currentPsiFile.getText());
+                if (currentPsiFile.getText().length() > 5) {
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot find an element to take a completion"),
+                            SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), sessionInfo.getOriginUrl(),
+                            currentPsiFile.getText());
+                }
                 break;
             }
         }
