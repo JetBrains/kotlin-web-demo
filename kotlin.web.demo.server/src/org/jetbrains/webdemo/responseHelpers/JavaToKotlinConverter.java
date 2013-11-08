@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.jet.j2k.JavaToKotlinTranslator;
+import org.jetbrains.jet.j2k.J2kPackage;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.ServerInitializer;
@@ -39,7 +39,7 @@ public class JavaToKotlinConverter {
         try {
             String resultFormConverter;
             try {
-                  resultFormConverter = JavaToKotlinTranslator.translateToKotlin(code);
+                  resultFormConverter = J2kPackage.translateToKotlin(code);
             } catch (Exception e) {
                 ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: " + e.getMessage());
