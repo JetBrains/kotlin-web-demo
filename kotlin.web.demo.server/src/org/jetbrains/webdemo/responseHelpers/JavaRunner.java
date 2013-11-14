@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiUtil;
 import org.jetbrains.jet.lang.resolve.java.PackageClassUtils;
@@ -33,7 +34,7 @@ import java.util.*;
 
 public class JavaRunner {
 
-    private final List<String> files;
+    private final List<OutputFile> files;
     private String arguments;
     private final JSONArray jsonArray;
     private final JetFile currentFile;
@@ -42,7 +43,7 @@ public class JavaRunner {
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(List<String> files, String arguments, JSONArray array, JetFile currentFile, SessionInfo info) {
+    public JavaRunner(List<OutputFile> files, String arguments, JSONArray array, JetFile currentFile, SessionInfo info) {
         this.files = files;
         this.arguments = arguments;
         this.jsonArray = array;
@@ -168,8 +169,8 @@ public class JavaRunner {
             jsonArray.put(mapErr);
         }
 
-        for (String fileName : files) {
-            deleteFile(fileName, pathToRootOut);
+        for (OutputFile file : files) {
+            deleteFile(file.getRelativePath(), pathToRootOut);
         }
 
         timer.cancel();

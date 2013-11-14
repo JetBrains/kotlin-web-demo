@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.codegen.KotlinCodegenFacade;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
@@ -92,17 +93,17 @@ public class CompileAndRunExecutor {
             final ClassFileFactory factory = generationState.getFactory();
 
             sessionInfo.getTimeManager().saveCurrentTime();
-            List<String> files = factory.files();
+            List<OutputFile> files = factory.asList();
             File outputDir = new File(ApplicationSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + new Random().nextInt());
             boolean isOutputExists = true;
             if (!outputDir.exists()) {
                 isOutputExists = outputDir.mkdirs();
             }
-            for (String file : files) {
+            for (OutputFile file : files) {
                 if (isOutputExists) {
-                    File target = new File(outputDir, file);
+                    File target = new File(outputDir, file.getRelativePath());
                     try {
-                        FileUtil.writeToFile(target, factory.asBytes(file));
+                        FileUtil.writeToFile(target, file.asByteArray());
                         stringBuilder.append(file).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
