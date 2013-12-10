@@ -104,7 +104,7 @@ public class CompileAndRunExecutor {
                     File target = new File(outputDir, file.getRelativePath());
                     try {
                         FileUtil.writeToFile(target, file.asByteArray());
-                        stringBuilder.append(file).append(ResponseUtils.addNewLine());
+                        stringBuilder.append(file.getRelativePath()).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                                 sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
