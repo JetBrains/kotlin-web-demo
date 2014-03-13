@@ -3,7 +3,7 @@ import kotlin.properties.Delegates
 class Example {
   var p: String by Delegate()
 
-  fun toString() = "Example Class"
+  override fun toString() = "Example Class"
 }
 
 class Delegate() {

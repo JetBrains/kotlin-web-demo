@@ -1,6 +1,8 @@
 package org.jetbrains.webdemo.environment;
 
+import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +19,7 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -80,7 +83,16 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
     @NotNull
     private static List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments) {
         List<File> classpath = Lists.newArrayList();
-        classpath.add(findRtJar());
+        classpath.addAll(PathUtil.getJdkClassesRoots());
+
+        Collection<File> files = Collections2.filter(PathUtil.getJdkClassesRoots(), new Predicate<File>() {
+            @Override
+            public boolean apply(@NotNull File file) {
+                return file.getName().equals("rt.jar") || file.getName().endsWith("classes.jar");
+            }
+        });
+
+        ApplicationSettings.JAVA_HOME = files.iterator().next().getParentFile().getParentFile().getParentFile().getAbsolutePath();
 
         classpath.add(KOTLIN_RUNTIME);
         if (arguments.classpath != null) {
@@ -96,25 +108,5 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
         List<File> annotationsPath = Lists.newArrayList();
         annotationsPath.add(PathUtil.getKotlinPathsForCompiler().getJdkAnnotationsPath());
         return annotationsPath;
-    }
-
-    @Nullable
-    private static File findRtJar() {
-        File rtJar;
-        if (!ApplicationSettings.RT_JAR.equals("")) {
-            rtJar = new File(ApplicationSettings.RT_JAR);
-        } else {
-            rtJar = PathUtil.findRtJar();
-        }
-        if (!rtJar.exists()) {
-            if (ApplicationSettings.JAVA_HOME == null) {
-                ErrorWriter.writeInfoToConsole("You can set java_home variable at config.properties file.");
-            } else {
-                ErrorWriter.writeErrorToConsole("No rt.jar found under JAVA_HOME=" + ApplicationSettings.JAVA_HOME + " or path to rt.jar is incorrect " + ApplicationSettings.RT_JAR);
-            }
-            return null;
-        }
-        ApplicationSettings.JAVA_HOME = rtJar.getParentFile().getParentFile().getParentFile().getAbsolutePath();
-        return rtJar;
     }
 }

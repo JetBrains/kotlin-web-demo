@@ -24,22 +24,21 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.descriptors.CallableDescriptor;
 import org.jetbrains.jet.lang.descriptors.DeclarationDescriptor;
-import org.jetbrains.jet.lang.descriptors.NamespaceDescriptor;
+import org.jetbrains.jet.lang.descriptors.PackageViewDescriptor;
 import org.jetbrains.jet.lang.descriptors.ReceiverParameterDescriptor;
 import org.jetbrains.jet.lang.psi.JetExpression;
 import org.jetbrains.jet.lang.psi.JetImportDirective;
-import org.jetbrains.jet.lang.psi.JetNamespaceHeader;
+import org.jetbrains.jet.lang.psi.JetPackageDirective;
 import org.jetbrains.jet.lang.psi.JetSimpleNameExpression;
 import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.calls.autocasts.AutoCastServiceImpl;
+import org.jetbrains.jet.lang.resolve.calls.autocasts.AutoCastUtils;
 import org.jetbrains.jet.lang.resolve.calls.autocasts.DataFlowInfo;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.resolve.scopes.JetScopeUtils;
 import org.jetbrains.jet.lang.resolve.scopes.receivers.ExpressionReceiver;
 import org.jetbrains.jet.lang.resolve.scopes.receivers.ReceiverValue;
-import org.jetbrains.jet.lang.types.ErrorUtils;
 import org.jetbrains.jet.lang.types.JetType;
-import org.jetbrains.jet.lang.types.NamespaceType;
+import org.jetbrains.jet.lang.types.PackageType;
 import org.jetbrains.jet.lang.types.expressions.ExpressionTypingUtils;
 
 import java.util.*;
@@ -61,7 +60,7 @@ public final class TipsManager {
             JetType expressionType = context.get(BindingContext.EXPRESSION_TYPE, receiverExpression);
 
             if (expressionType != null && resolutionScope != null && !expressionType.isError()) {
-                if (!(expressionType instanceof NamespaceType)) {
+                if (!(expressionType instanceof PackageType)) {
                     ExpressionReceiver receiverValue = new ExpressionReceiver(receiverExpression, expressionType);
                     Set<DeclarationDescriptor> descriptors = new HashSet<DeclarationDescriptor>();
 
@@ -70,13 +69,12 @@ public final class TipsManager {
                         info = DataFlowInfo.EMPTY;
                     }
 
-                    AutoCastServiceImpl autoCastService = new AutoCastServiceImpl(info, context);
-                    List<ReceiverValue> variantsForExplicitReceiver = autoCastService.getVariantsForReceiver(receiverValue);
+                    List<JetType> variantsForExplicitReceiver = AutoCastUtils.getAutoCastVariants(receiverValue, context, info);
 
-                    for (ReceiverValue descriptor : variantsForExplicitReceiver) {
+                    for (JetType variant : variantsForExplicitReceiver) {
                         descriptors.addAll(includeExternalCallableExtensions(
-                                excludePrivateDescriptors(descriptor.getType().getMemberScope().getAllDescriptors()),
-                                resolutionScope, descriptor));
+                                excludePrivateDescriptors(variant.getMemberScope().getAllDescriptors()),
+                                resolutionScope, receiverValue));
                     }
 
                     return descriptors;
@@ -96,7 +94,7 @@ public final class TipsManager {
     public static Collection<DeclarationDescriptor> getVariantsNoReceiver(JetExpression expression, BindingContext context) {
         JetScope resolutionScope = context.get(BindingContext.RESOLUTION_SCOPE, expression);
         if (resolutionScope != null) {
-            if (expression.getParent() instanceof JetImportDirective || expression.getParent() instanceof JetNamespaceHeader) {
+            if (expression.getParent() instanceof JetImportDirective || expression.getParent() instanceof JetPackageDirective) {
                 return excludeNonPackageDescriptors(resolutionScope.getAllDescriptors());
             }
             else {
@@ -177,7 +175,17 @@ public final class TipsManager {
         return Collections2.filter(descriptors, new Predicate<DeclarationDescriptor>() {
             @Override
             public boolean apply(DeclarationDescriptor declarationDescriptor) {
-                return declarationDescriptor instanceof NamespaceDescriptor;
+                if (declarationDescriptor instanceof PackageViewDescriptor) {
+                    // Heuristic: we don't want to complete "System" in "package java.lang.Sys",
+                    // so we find class of the same name as package, we exclude this package
+                    PackageViewDescriptor parent = ((PackageViewDescriptor) declarationDescriptor).getContainingDeclaration();
+                    if (parent != null) {
+                        JetScope parentScope = parent.getMemberScope();
+                        return parentScope.getClassifier(declarationDescriptor.getName()) == null;
+                    }
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -189,7 +197,7 @@ public final class TipsManager {
     ) {
         // It's impossible to add extension function for namespace
         JetType receiverType = receiverValue.getType();
-        if (receiverType instanceof NamespaceType) {
+        if (receiverType instanceof PackageType) {
             return new HashSet<DeclarationDescriptor>(descriptors);
         }
 

@@ -55,7 +55,7 @@ public class HighlightingTest extends BaseTest {
 
     public void test$warnings$oneWarning() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Unnecessary safe call on a non-null receiver of type jet.Int\"," +
+        String expectedResult = "[{\"titleName\":\"Unnecessary safe call on a non-null receiver of type kotlin.Int\"," +
                 "\"className\":\"WARNING\"," +
                 "\"severity\":\"WARNING\"," +
                 "\"y\":\"{line: 2, ch: 7}\"," +

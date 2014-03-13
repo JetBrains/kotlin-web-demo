@@ -61,7 +61,7 @@ public final class WebDemoConfigServer extends Config {
             @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
             File libFile = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "js" + File.separator + libFileName);
             try {
-                String text = FileUtil.loadFile(libFile);
+                String text = FileUtil.loadFile(libFile, "UTF-8", true);
                 file = JetFileUtils.createJetFile(libFileName, text, getProject());
                 libFiles.add(file);
             } catch (Throwable e) {

@@ -21,7 +21,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.lang.descriptors.*;
-import org.jetbrains.jet.lang.descriptors.impl.AbstractNamespaceDescriptorImpl;
 import org.jetbrains.jet.lang.descriptors.impl.LocalVariableDescriptor;
 import org.jetbrains.jet.lang.descriptors.impl.TypeParameterDescriptorImpl;
 import org.jetbrains.jet.lang.psi.JetExpression;
@@ -191,7 +190,7 @@ public class JsonResponseForCompletion {
             return "property";
         } else if (descriptor instanceof ClassDescriptor) {
             return "class";
-        } else if (descriptor instanceof AbstractNamespaceDescriptorImpl) {
+        } else if (descriptor instanceof PackageFragmentDescriptor || descriptor instanceof PackageViewDescriptor) {
             return "package";
         } else if (descriptor instanceof ValueParameterDescriptor) {
             return "genericValue";

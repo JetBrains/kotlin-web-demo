@@ -178,9 +178,15 @@ public class MyDeclarationDescriptorVisitor extends DeclarationDescriptorVisitor
     }
 
     @Override
-    public Void visitNamespaceDescriptor(NamespaceDescriptor namespaceDescriptor, StringBuilder builder) {
-        renderName(namespaceDescriptor, builder);
-        return super.visitNamespaceDescriptor(namespaceDescriptor, builder);
+    public Void visitPackageViewDescriptor(PackageViewDescriptor descriptor, StringBuilder builder) {
+        renderName(descriptor, builder);
+        return super.visitPackageViewDescriptor(descriptor, builder);
+    }
+
+    @Override
+    public Void visitPackageFragmentDescriptor(PackageFragmentDescriptor descriptor, StringBuilder builder) {
+        renderName(descriptor, builder);
+        return super.visitPackageFragmentDescriptor(descriptor, builder);
     }
 
     @Override

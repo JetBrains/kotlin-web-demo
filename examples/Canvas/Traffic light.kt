@@ -405,7 +405,6 @@ class CanvasState(val canvas: HTMLCanvasElement) {
       val mousePos = mousePos(it)
       for (shape in shapes) {
         if (shape is Button && mousePos in shape) {
-          val name = shape.src
           shape.mouseOver()
         }
       }

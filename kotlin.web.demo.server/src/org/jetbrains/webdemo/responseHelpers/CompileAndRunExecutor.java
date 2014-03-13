@@ -126,7 +126,7 @@ public class CompileAndRunExecutor {
             map.put("text", stringBuilder.toString());
             jsonArray.put(map);
 
-            JavaRunner runner = new JavaRunner(files, arguments, jsonArray, (JetFile) currentPsiFile, sessionInfo);
+            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, arguments, jsonArray, (JetFile) currentPsiFile, sessionInfo);
 
             return runner.getResult(outputDir.getAbsolutePath());
 

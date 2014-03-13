@@ -19,9 +19,10 @@ package org.jetbrains.webdemo.responseHelpers;
 import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetPsiUtil;
+import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.PackageClassUtils;
 import org.jetbrains.jet.lang.resolve.name.FqName;
-import org.jetbrains.jet.plugin.JetMainDetector;
+import org.jetbrains.jet.plugin.MainFunctionDetector;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -34,6 +35,7 @@ import java.util.*;
 
 public class JavaRunner {
 
+    private final BindingContext bindingContext;
     private final List<OutputFile> files;
     private String arguments;
     private final JSONArray jsonArray;
@@ -43,7 +45,8 @@ public class JavaRunner {
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(List<OutputFile> files, String arguments, JSONArray array, JetFile currentFile, SessionInfo info) {
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, JSONArray array, JetFile currentFile, SessionInfo info) {
+        this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;
         this.jsonArray = array;
@@ -346,7 +349,7 @@ public class JavaRunner {
     }
 
     private String findMainClass() {
-        if (JetMainDetector.hasMain(currentFile.getDeclarations())) {
+        if (new MainFunctionDetector(bindingContext).hasMain(currentFile.getDeclarations())) {
             FqName fqName = JetPsiUtil.getFQName(currentFile);
             return PackageClassUtils.getPackageClassFqName(fqName).asString();
         }
