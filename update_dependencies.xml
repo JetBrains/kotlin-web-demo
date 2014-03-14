@@ -16,7 +16,6 @@
 
 <project name="Update Dependencies" default="download_and_update">
 
-    <!--<property name="kotlin.build.number" value="0.1.33"/>-->
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
     <property name="zipped.kotlin.plugin.pattern" value="kotlin-plugin*.zip"/>
@@ -25,7 +24,7 @@
     <property name="teamcity.plugin.build" value="bt345"/>
 
     <property name="tc.plugin"
-              value="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/.lastSuccessful"/>
+              value="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/bootstrap.tcbuildtag"/>
 
     <target name="download_and_update">
         <execute_update/>
@@ -37,12 +36,6 @@
         <execute_update/>
         <unzip_kotlin/>
         <set_kotlin_version_internal/>
-    </target>
-
-    <target name="update">
-        <execute_update/>
-        <unzip_kotlin/>
-        <set_kotlin_version/>
     </target>
 
     <macrodef name="unzip_kotlin">
@@ -59,15 +52,43 @@
                   todir="kotlin.web.demo.test.applet/resources"/>
             <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin.js"
                   todir="kotlin.web.demo.server/static"/>
+
+            <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
+                 dest="${dependencies.dir}/build.txt"/>
+
+            <j2kConverter/>
         </sequential>
+    </macrodef>
 
+    <macrodef name="j2kConverter">
+        <sequential>
+            <unzip src="${unzipped.kotlin.plugin}/Kotlin/lib/kotlin-plugin.jar" dest="${unzipped.kotlin.plugin}/j2k">
+                <patternset>
+                    <include name="org/jetbrains/jet/j2k/**/*.class"/>
+                </patternset>
+            </unzip>
 
+            <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
+
+            <jar jarfile="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/tools/j2k.jar">
+                <fileset dir="${unzipped.kotlin.plugin}/j2k"/>
+
+                <manifest>
+                    <attribute name="Built-By" value="JetBrains"/>
+
+                    <attribute name="Implementation-Vendor" value="JetBrains"/>
+                    <attribute name="Implementation-Title" value="Java to Kotlin Converter"/>
+                    <attribute name="Implementation-Version" value="${version}"/>
+
+                    <attribute name="Main-Class" value="org.jetbrains.jet.j2k.JavaToKotlinTranslator"/>
+                </manifest>
+            </jar>
+            <delete dir="${unzipped.kotlin.plugin}/j2k"/>
+        </sequential>
     </macrodef>
 
     <macrodef name="set_kotlin_version">
         <sequential>
-            <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
-                 dest="${dependencies.dir}/build.txt"/>
             <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
             <echo message="${version}"/>
             <!-- kotlin.version and web.demo.version - from teamcity -->
@@ -96,8 +117,6 @@
 
     <macrodef name="set_kotlin_version_internal">
         <sequential>
-            <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
-                 dest="${dependencies.dir}/build.txt"/>
             <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
             <echo message="${version}"/>
             <replaceregexp file="update_dependencies.xml"
@@ -109,9 +128,8 @@
 
     <target name="check_version" depends="check_version_true, check_version_false" if="isLastVersion"/>
 
-
     <target name="check_version_true" depends="compare_version" if="isLastVersion">
-          <set_kotlin_version_internal/>
+        <set_kotlin_version_internal/>
     </target>
 
     <target name="check_version_false" depends="compare_version" unless="isLastVersion">
