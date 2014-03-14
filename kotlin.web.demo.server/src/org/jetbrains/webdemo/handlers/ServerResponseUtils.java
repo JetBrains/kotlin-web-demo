@@ -26,6 +26,8 @@ public class ServerResponseUtils {
         URLS.add("http://hhariri.github.io");
         URLS.add("http://kotlin-demo.jetbrains.com");
         URLS.add("http://jetbrains.github.io/kotlin-web-site");
+        URLS.add("http://jetbrains.github.io/kotlin-fiddler");
+        URLS.add("http://jetbrains.github.io");
     }
 
     public static boolean isOriginAccepted(@NotNull HttpServletRequest request) {
