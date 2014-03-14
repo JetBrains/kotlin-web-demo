@@ -53,6 +53,7 @@ var MainPageView = (function () {
             setKotlinVersion:function () {
                 $("#kotlinVersionTop").html("(" + KOTLIN_VERSION + ")");
                 $("#kotlinVersion").html(WEB_DEMO_VERSION);
+                $("#currentYear").html(new Date().getFullYear());
             },
             checkIEVersion:function () {
                 if (navigator.appVersion.indexOf("MSIE") != -1) {
