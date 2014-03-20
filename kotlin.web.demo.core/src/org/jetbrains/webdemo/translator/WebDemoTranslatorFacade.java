@@ -26,9 +26,9 @@ import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.k2js.facade.MainCallParameters;
 import org.jetbrains.k2js.facade.exceptions.MainFunctionNotFoundException;
 import org.jetbrains.k2js.facade.exceptions.TranslationException;
-import org.jetbrains.k2js.utils.JetFileUtils;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
+import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -97,7 +97,7 @@ public final class WebDemoTranslatorFacade {
     private static String doTranslate(@NotNull String programText,
                                       @NotNull String argumentsString) throws TranslationException {
         K2JSTranslator translator = new K2JSTranslator(LOAD_JS_LIBRARY_CONFIG);
-        JetFile file = JetFileUtils.createJetFile("test", programText, Initializer.INITIALIZER.getEnvironment().getProject());
+        JetFile file = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), programText);
         String programCode = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
         return FLUSH_SYSTEM_OUT + programCode + GET_SYSTEM_OUT;
     }

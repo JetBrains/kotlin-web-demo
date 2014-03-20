@@ -18,12 +18,12 @@ package org.jetbrains.webdemo.translator;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.psi.PsiFileFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.jet.plugin.JetLanguage;
 import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.config.EcmaVersion;
-import org.jetbrains.k2js.utils.JetFileUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,7 +45,7 @@ public final class WebDemoConfigApplet extends Config {
             InputStream stream = WebDemoConfigApplet.class.getResourceAsStream("/js" + libFileName);
             try {
                 String text = FileUtil.loadTextAndClose(stream);
-                file = JetFileUtils.createJetFile(libFileName, text, getProject());
+                file = (JetFile) PsiFileFactory.getInstance(getProject()).createFileFromText(libFileName, JetLanguage.INSTANCE, text, true, false);
                 libFiles.add(file);
             } catch (IOException e) {
                 System.err.println(libFileName);

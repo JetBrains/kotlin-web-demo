@@ -39,7 +39,7 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$all$variable() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"property\",\"name\":\"stdin\",\"tail\":\"java.io.BufferedReader\"},{\"icon\":\"property\",\"name\":\"str\",\"tail\":\"kotlin.String\"}]";
+        String expectedResult = "[{\"icon\":\"property\",\"name\":\"stdin\",\"tail\":\"java.io.BufferedReader\"},{\"icon\":\"property\",\"name\":\"str\",\"tail\":\"kotlin.String\"},{\"icon\":\"method\",\"name\":\"stream(initialValue : T, nextFunction : ...\",\"tail\":\"kotlin.Stream<T>\"},{\"icon\":\"method\",\"name\":\"stream(nextFunction : Function0<T?>)\",\"tail\":\"kotlin.Stream<T>\"},{\"icon\":\"method\",\"name\":\"streamOf(elements : Array<T>)\",\"tail\":\"kotlin.Stream<T>\"}]";
         compareResult(14, 24, expectedResult, "java");
         compareResult(14, 24, expectedResult, "js");
     }
