@@ -1,7 +1,5 @@
-import java.util.TreeMap
-
 fun main(args: Array<String>) {
-  val map = TreeMap<String, Int>()
+  val map = hashMapOf<String, Int>()
   map.put("one", 1)
   map.put("two", 2)
   
@@ -9,5 +7,3 @@ fun main(args: Array<String>) {
     println("key = $key, value = $value")
   }
 }
-
-
