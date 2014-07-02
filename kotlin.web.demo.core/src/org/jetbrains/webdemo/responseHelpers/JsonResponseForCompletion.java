@@ -16,10 +16,12 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import com.google.common.base.Predicates;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.cli.jvm.compiler.CliLightClassGenerationSupport;
 import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.descriptors.impl.LocalVariableDescriptor;
 import org.jetbrains.jet.lang.descriptors.impl.TypeParameterDescriptorImpl;
@@ -27,23 +29,22 @@ import org.jetbrains.jet.lang.psi.JetExpression;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetQualifiedExpression;
 import org.jetbrains.jet.lang.psi.JetSimpleNameExpression;
-import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
 import org.jetbrains.jet.lang.resolve.BindingContext;
+import org.jetbrains.jet.lang.resolve.BindingTrace;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
+import org.jetbrains.jet.lang.resolve.lazy.ResolveSession;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.plugin.codeInsight.TipsManager;
 import org.jetbrains.jet.renderer.DescriptorRenderer;
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.JetPsiFactoryUtil;
-import org.jetbrains.webdemo.MyDeclarationDescriptorVisitor;
-import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 import org.json.JSONArray;
 
+import java.io.File;
 import java.util.*;
 
 public class JsonResponseForCompletion {
@@ -86,8 +87,7 @@ public class JsonResponseForCompletion {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile, sessionInfo);
             } else {
-                bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList()).getBindingContext();
+                bindingContext = ResolveUtils.getBindingContext((JetFile) currentPsiFile);
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
@@ -260,11 +260,11 @@ public class JsonResponseForCompletion {
             FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
             JetType returnType = functionDescriptor.getReturnType();
             if (returnType != null) {
-                tailText = DescriptorRenderer.TEXT.renderType(returnType);
+                tailText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(returnType);
             }
         } else if (descriptor instanceof VariableDescriptor) {
             JetType outType = ((VariableDescriptor) descriptor).getType();
-            tailText = DescriptorRenderer.TEXT.renderType(outType);
+            tailText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(outType);
         }
         return tailText;
     }

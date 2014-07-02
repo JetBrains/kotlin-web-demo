@@ -16,22 +16,35 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.jet.OutputFile;
-import org.jetbrains.jet.codegen.KotlinCodegenFacade;
+import com.google.common.base.Predicates;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.analyzer.AnalyzeExhaust;
+import org.jetbrains.jet.cli.jvm.compiler.CliLightClassGenerationSupport;
 import org.jetbrains.jet.codegen.ClassBuilderFactories;
 import org.jetbrains.jet.codegen.ClassFileFactory;
 import org.jetbrains.jet.codegen.CompilationErrorHandler;
+import org.jetbrains.jet.codegen.KotlinCodegenFacade;
 import org.jetbrains.jet.codegen.state.GenerationState;
+import org.jetbrains.jet.context.ContextPackage;
+import org.jetbrains.jet.context.GlobalContextImpl;
+import org.jetbrains.jet.di.InjectorForTopDownAnalyzerForJvm;
+import org.jetbrains.jet.lang.descriptors.DependencyKind;
+import org.jetbrains.jet.lang.descriptors.ModuleDescriptorImpl;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
+import org.jetbrains.jet.lang.resolve.BindingContext;
+import org.jetbrains.jet.lang.resolve.BindingTrace;
+import org.jetbrains.jet.lang.resolve.TopDownAnalysisContext;
+import org.jetbrains.jet.lang.resolve.TopDownAnalysisParameters;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
+import org.jetbrains.jet.lang.resolve.lazy.ResolveSession;
+import org.jetbrains.jet.lang.resolve.lazy.ResolveSessionUtils;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
+import org.jetbrains.webdemo.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
@@ -72,9 +85,7 @@ public class CompileAndRunExecutor {
             sessionInfo.getTimeManager().saveCurrentTime();
             GenerationState generationState;
             try {
-                AnalyzeExhaust analyzeExhaust = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList());
-                generationState = new GenerationState(currentProject,ClassBuilderFactories.BINARIES, analyzeExhaust.getBindingContext(), Collections.singletonList((JetFile) currentPsiFile), false);
+                generationState = ResolveUtils.getGenerationState((JetFile) currentPsiFile);
                 KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
                     @Override
                     public void reportException(Throwable throwable, String s) {

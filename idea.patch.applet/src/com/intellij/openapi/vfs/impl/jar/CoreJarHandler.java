@@ -15,6 +15,7 @@
  */
 package com.intellij.openapi.vfs.impl.jar;
 
+import com.intellij.openapi.util.io.FileAttributes;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,7 +46,8 @@ public class CoreJarHandler extends JarHandlerBase {
         CoreJarVirtualFile answer = entries.get(info);
         if (answer == null) {
             EntryInfo parentEntry = info.parent;
-            answer = new CoreJarVirtualFile(this, info, parentEntry != null ? getOrCreateFile(parentEntry, entries) : null);
+            FileAttributes attributes = new FileAttributes(info.isDirectory, false, false, false, info.content.length, System.currentTimeMillis(), false);
+            answer = new CoreJarVirtualFile(this, info.shortName, attributes, parentEntry != null ? getOrCreateFile(parentEntry, entries) : null);
             entries.put(info, answer);
         }
 

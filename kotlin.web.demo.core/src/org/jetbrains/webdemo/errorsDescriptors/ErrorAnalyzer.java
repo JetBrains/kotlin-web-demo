@@ -16,22 +16,24 @@
 
 package org.jetbrains.webdemo.errorsDescriptors;
 
+import com.google.common.base.Predicates;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.cli.jvm.compiler.CliLightClassGenerationSupport;
 import org.jetbrains.jet.lang.diagnostics.Diagnostic;
 import org.jetbrains.jet.lang.diagnostics.Errors;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Interval;
+import org.jetbrains.webdemo.ResolveUtils;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
@@ -56,8 +58,7 @@ public class ErrorAnalyzer {
         BindingContext bindingContext;
         try {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
-                bindingContext = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList()).getBindingContext();
+                bindingContext = ResolveUtils.getBindingContext((JetFile) currentPsiFile);
             }
             else {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile, sessionInfo);

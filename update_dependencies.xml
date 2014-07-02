@@ -24,7 +24,7 @@
     <property name="teamcity.plugin.build" value="bt345"/>
 
     <property name="tc.plugin"
-              value="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/bootstrap.tcbuildtag"/>
+              value="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/M8.tcbuildtag"/>
 
     <target name="download_and_update">
         <execute_update/>
@@ -143,7 +143,7 @@
              dest="${dependencies.dir}/build.txt"/>
         <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
         <condition property="isLastVersion">
-            <equals arg1="${version}" arg2="0.7.111" />
+            <equals arg1="${version}" arg2="0.8.7" />
         </condition>
     </target>
 

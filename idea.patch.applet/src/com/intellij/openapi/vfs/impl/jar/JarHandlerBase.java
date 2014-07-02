@@ -17,7 +17,6 @@ package com.intellij.openapi.vfs.impl.jar;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.TimedReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +30,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class JarHandlerBase {
-    protected final TimedReference<ZipInputStream> myZipFile = new TimedReference<ZipInputStream>(null);
+    protected ZipInputStream myZipFile = null;
     protected SoftReference<Map<String, EntryInfo>> myRelPathsToEntries = new SoftReference<Map<String, EntryInfo>>(null);
     protected final Object lock = new Object();
     private InputStream inputStream;
@@ -128,7 +127,7 @@ public class JarHandlerBase {
 
     @Nullable
     public ZipInputStream getZip() {
-        ZipInputStream zip = myZipFile.get();
+        ZipInputStream zip = myZipFile;
         if (zip == null) {
             if (inputStream == null) {
                 throw new IllegalArgumentException("Input Stream is null: " + myBasePath);
@@ -136,7 +135,7 @@ public class JarHandlerBase {
             else {
                 zip = new ZipInputStream(inputStream);
             }
-            myZipFile.set(zip);
+            myZipFile = zip;
         }
         return zip;
     }
@@ -266,7 +265,7 @@ public class JarHandlerBase {
     public boolean exists(@NotNull final VirtualFile fileOrDirectory) {
         if (fileOrDirectory.getParent() == null) {
             // Optimization. Do not build entries if asked for jar root existence.
-            return myZipFile.get() != null;
+            return myZipFile != null;
 //            return myZipFile.get() != null || getOriginalFile().exists();
         }
 

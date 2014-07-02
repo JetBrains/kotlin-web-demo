@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 JetBrains s.r.o.
+ * Copyright 2010-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,15 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.descriptors.CallableDescriptor;
 import org.jetbrains.jet.lang.descriptors.DeclarationDescriptor;
 import org.jetbrains.jet.lang.descriptors.PackageViewDescriptor;
 import org.jetbrains.jet.lang.descriptors.ReceiverParameterDescriptor;
-import org.jetbrains.jet.lang.psi.JetExpression;
-import org.jetbrains.jet.lang.psi.JetImportDirective;
-import org.jetbrains.jet.lang.psi.JetPackageDirective;
-import org.jetbrains.jet.lang.psi.JetSimpleNameExpression;
+import org.jetbrains.jet.lang.psi.*;
+import org.jetbrains.jet.lang.psi.psiUtil.PsiUtilPackage;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.calls.autocasts.AutoCastUtils;
 import org.jetbrains.jet.lang.resolve.calls.autocasts.DataFlowInfo;
@@ -50,11 +49,13 @@ public final class TipsManager {
 
     @NotNull
     public static Collection<DeclarationDescriptor> getReferenceVariants(
-            @NotNull final JetSimpleNameExpression expression,
-            @NotNull final BindingContext context
+            @NotNull JetSimpleNameExpression expression,
+            @NotNull BindingContext context
     ) {
-        JetExpression receiverExpression = expression.getReceiverExpression();
-        if (receiverExpression != null) {
+        JetExpression receiverExpression = PsiUtilPackage.getReceiverExpression(expression);
+        PsiElement parent = expression.getParent();
+        boolean inPositionForCompletionWithReceiver = parent instanceof JetCallExpression || parent instanceof JetQualifiedExpression;
+        if (receiverExpression != null && inPositionForCompletionWithReceiver) {
             // Process as call expression
             JetScope resolutionScope = context.get(BindingContext.RESOLUTION_SCOPE, expression);
             JetType expressionType = context.get(BindingContext.EXPRESSION_TYPE, receiverExpression);
@@ -144,9 +145,9 @@ public final class TipsManager {
     }
 
     public static Collection<DeclarationDescriptor> excludeNotCallableExtensions(
-            @NotNull Collection<? extends DeclarationDescriptor> descriptors, @NotNull final JetScope scope
+            @NotNull Collection<? extends DeclarationDescriptor> descriptors, @NotNull JetScope scope
     ) {
-        final Set<DeclarationDescriptor> descriptorsSet = Sets.newHashSet(descriptors);
+        Set<DeclarationDescriptor> descriptorsSet = Sets.newHashSet(descriptors);
 
         final List<ReceiverParameterDescriptor> result = scope.getImplicitReceiversHierarchy();
 
@@ -192,10 +193,10 @@ public final class TipsManager {
 
     private static Set<DeclarationDescriptor> includeExternalCallableExtensions(
             @NotNull Collection<DeclarationDescriptor> descriptors,
-            @NotNull final JetScope externalScope,
+            @NotNull JetScope externalScope,
             @NotNull final ReceiverValue receiverValue
     ) {
-        // It's impossible to add extension function for namespace
+        // It's impossible to add extension function for package
         JetType receiverType = receiverValue.getType();
         if (receiverType instanceof PackageType) {
             return new HashSet<DeclarationDescriptor>(descriptors);
