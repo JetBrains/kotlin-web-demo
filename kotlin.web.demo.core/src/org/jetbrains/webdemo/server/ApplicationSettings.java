@@ -36,7 +36,7 @@ public class ApplicationSettings {
     public static String KOTLIN_LIB = "";
 
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
-    public static String KOTLIN_VERSION = "0.5.398";
+    public static String KOTLIN_VERSION = "0.7.396";
 
     public static String RT_JAR = "";
 

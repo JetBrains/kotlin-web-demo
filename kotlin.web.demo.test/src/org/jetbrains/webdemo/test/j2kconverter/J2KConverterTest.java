@@ -27,7 +27,7 @@ public class J2KConverterTest extends BaseTest {
 
     public void test$j2kconverter$class() throws IOException {
         String fileName = TestUtils.getNameByTestName(this) + ".java";
-        String expectedResult = "[{\"text\":\"public open class Foo() {}\"}]";
+        String expectedResult = "[{\"text\":\"public class Foo()\"}]";
 
         assertTrue(true);
         compareResult(fileName, expectedResult);
