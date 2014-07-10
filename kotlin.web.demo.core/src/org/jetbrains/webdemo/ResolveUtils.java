@@ -52,9 +52,9 @@ public class ResolveUtils {
     private static AnalyzeExhaust analyzeFile(JetFile file) {
         Project project = file.getProject();
 
-        CliLightClassGenerationSupport.getInstanceForCli(project).newBindingTrace();
+        WebDemoLightClassGenerationSupport.getInstanceForCli(project).newBindingTrace();
 
-        CliLightClassGenerationSupport support = CliLightClassGenerationSupport.getInstanceForCli(project);
+        CliLightClassGenerationSupport support = WebDemoLightClassGenerationSupport.getInstanceForCli(project);
         BindingTrace sharedTrace = support.getTrace();
 
         return AnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(

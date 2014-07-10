@@ -5,6 +5,7 @@ import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.openapi.util.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.webdemo.WebDemoLightClassGenerationSupport;
 
 public abstract class EnvironmentManager {
 
@@ -23,6 +24,9 @@ public abstract class EnvironmentManager {
     public JetCoreEnvironment getEnvironment() {
         if (environment == null) {
             environment = createEnvironment();
+
+            environment.getApplication().registerService(WebDemoLightClassGenerationSupport.class, new WebDemoLightClassGenerationSupport());
+
             //throw new IllegalStateException("Environment should be initialized before");
         }
         return environment;
