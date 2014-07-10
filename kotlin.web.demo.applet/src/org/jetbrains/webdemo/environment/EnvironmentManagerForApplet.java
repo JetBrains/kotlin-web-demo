@@ -11,7 +11,7 @@ public class EnvironmentManagerForApplet extends EnvironmentManager {
     @NotNull
     @Override
     public JetCoreEnvironment createEnvironment() {
-        JetCoreEnvironment jetCoreEnvironment = new JetCoreEnvironment(getDisposable(), new CompilerConfiguration());
+        JetCoreEnvironment jetCoreEnvironment = JetCoreEnvironment.createForTests(getDisposable(), new CompilerConfiguration());
         registry = FileTypeRegistry.ourInstanceGetter;
         return jetCoreEnvironment;
     }

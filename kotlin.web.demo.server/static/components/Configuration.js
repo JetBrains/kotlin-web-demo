@@ -103,7 +103,8 @@ var ConfigurationComponent = (function () {
         var isAppletLoaded = false;
 
         $(".applet-enable").click(function () {
-            var parent = $(this).parents('.switch');
+            $(".applet-disable").click();
+            /*var parent = $(this).parents('.switch');
             $('.applet-disable', parent).removeClass('selected');
             $('.applet-disable', parent).removeClass('rightServer');
             $('.applet-disable', parent).addClass('leftServer');
@@ -129,7 +130,7 @@ var ConfigurationComponent = (function () {
                     //TODO eventHandler.fire("hide_loader");
                     $(".applet-disable").click();
                 }
-            }
+            }*/
         });
 
         function waitLoadingApplet() {
