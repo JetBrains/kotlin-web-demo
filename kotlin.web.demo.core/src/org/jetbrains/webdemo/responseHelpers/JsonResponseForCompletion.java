@@ -18,8 +18,10 @@ package org.jetbrains.webdemo.responseHelpers;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.descriptors.impl.LocalVariableDescriptor;
 import org.jetbrains.jet.lang.descriptors.impl.TypeParameterDescriptorImpl;
@@ -28,11 +30,15 @@ import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.psi.JetQualifiedExpression;
 import org.jetbrains.jet.lang.psi.JetSimpleNameExpression;
 import org.jetbrains.jet.lang.resolve.BindingContext;
+import org.jetbrains.jet.lang.resolve.DescriptorUtils;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.plugin.codeInsight.TipsManager;
 import org.jetbrains.jet.renderer.DescriptorRenderer;
-import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.JetPsiFactoryUtil;
+import org.jetbrains.webdemo.ResolveUtils;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -157,16 +163,19 @@ public class JsonResponseForCompletion {
             Collections.sort((ArrayList<DeclarationDescriptor>) descriptors, new Comparator<DeclarationDescriptor>() {
                 @Override
                 public int compare(DeclarationDescriptor d1, DeclarationDescriptor d2) {
-                    return getNameFromDescriptor(d1).compareToIgnoreCase(getNameFromDescriptor(d2));
+                    Pair<String, String> d1PresText = getPresentableText(d1);
+                    Pair<String, String> d2PresText = getPresentableText(d2);
+                    return (d1PresText.getFirst() + d1PresText.getSecond()).compareToIgnoreCase((d2PresText.getFirst() + d2PresText.getSecond()));
                 }
             });
 
             for (DeclarationDescriptor descriptor : descriptors) {
-                String name = getNameFromDescriptor(descriptor);
+                Pair<String, String> presentableText = getPresentableText(descriptor);
+                String name = formatName(presentableText.getFirst(), NUMBER_OF_CHAR_IN_COMPLETION_NAME);
                 if (prefix.isEmpty() || name.startsWith(prefix)) {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("icon", getIconFromDescriptor(descriptor));
-                    map.put("tail", getTailText(descriptor));
+                    map.put("tail", presentableText.getSecond());
                     map.put("name", name);
 
                     jsonArray.put(map);
@@ -214,19 +223,50 @@ public class JsonResponseForCompletion {
         return element;
     }
 
-    private String getNameFromDescriptor(DeclarationDescriptor descriptor) {
-        MyDeclarationDescriptorVisitor descriptorVisitor = new MyDeclarationDescriptorVisitor();
-        StringBuilder builder = new StringBuilder();
-        descriptor.accept(descriptorVisitor, builder);
-        return formatName(builder, NUMBER_OF_CHAR_IN_COMPLETION_NAME).toString();
+    // see DescriptorLookupConverter.createLookupElement
+    @NotNull
+    public static Pair<String, String> getPresentableText(@NotNull DeclarationDescriptor descriptor) {
+        String presentableText = descriptor.getName().asString();
+        String typeText = "";
+        String tailText = "";
+
+        if (descriptor instanceof FunctionDescriptor) {
+            FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
+            JetType returnType = functionDescriptor.getReturnType();
+            typeText = returnType != null ? DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(returnType) : "";
+            presentableText += DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderFunctionParameters(functionDescriptor);
+
+            boolean extensionFunction = functionDescriptor.getReceiverParameter() != null;
+            DeclarationDescriptor containingDeclaration = descriptor.getContainingDeclaration();
+            if (containingDeclaration != null && extensionFunction) {
+                tailText += " for " + DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(functionDescriptor.getReceiverParameter().getType());
+                tailText += " in " + DescriptorUtils.getFqName(containingDeclaration);
+            }
+        }
+        else if (descriptor instanceof VariableDescriptor) {
+            JetType outType = ((VariableDescriptor) descriptor).getType();
+            typeText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(outType);
+        }
+        else if (descriptor instanceof ClassDescriptor) {
+            DeclarationDescriptor declaredIn = descriptor.getContainingDeclaration();
+            assert declaredIn != null;
+            tailText = " (" + DescriptorUtils.getFqName(declaredIn) + ")";
+        }
+        else {
+            typeText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.render(descriptor);
+        }
+
+        if (typeText.isEmpty()) {
+            return new Pair<String, String>(presentableText, tailText);
+        }
+        else {
+            return new Pair<String, String>(presentableText, typeText);
+        }
     }
 
-    private StringBuilder formatName(StringBuilder builder, int symbols) {
+    private String formatName(String builder, int symbols) {
         if (builder.length() > symbols) {
-            StringBuilder resultBuilder = new StringBuilder();
-            resultBuilder.append(builder.substring(0, symbols));
-            resultBuilder.append("...");
-            return resultBuilder;
+            return builder.substring(0, symbols) + "...";
         }
         return builder;
     }
@@ -246,20 +286,5 @@ public class JsonResponseForCompletion {
     private int getOffsetFromLineAndChar(int line, int charNumber) {
         int lineStart = currentDocument.getLineStartOffset(line);
         return lineStart + charNumber;
-    }
-
-    private String getTailText(DeclarationDescriptor descriptor) {
-        String tailText = "";
-        if (descriptor instanceof FunctionDescriptor) {
-            FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
-            JetType returnType = functionDescriptor.getReturnType();
-            if (returnType != null) {
-                tailText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(returnType);
-            }
-        } else if (descriptor instanceof VariableDescriptor) {
-            JetType outType = ((VariableDescriptor) descriptor).getType();
-            tailText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(outType);
-        }
-        return tailText;
     }
 }
