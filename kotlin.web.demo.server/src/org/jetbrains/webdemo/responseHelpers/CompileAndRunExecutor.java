@@ -16,22 +16,19 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.jet.OutputFile;
-import org.jetbrains.jet.codegen.KotlinCodegenFacade;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.jet.analyzer.AnalyzeExhaust;
-import org.jetbrains.jet.codegen.ClassBuilderFactories;
+import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.codegen.ClassFileFactory;
 import org.jetbrains.jet.codegen.CompilationErrorHandler;
+import org.jetbrains.jet.codegen.KotlinCodegenFacade;
 import org.jetbrains.jet.codegen.state.GenerationState;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
-import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
+import org.jetbrains.webdemo.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
@@ -42,7 +39,10 @@ import org.json.JSONArray;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class CompileAndRunExecutor {
 
@@ -72,9 +72,7 @@ public class CompileAndRunExecutor {
             sessionInfo.getTimeManager().saveCurrentTime();
             GenerationState generationState;
             try {
-                AnalyzeExhaust analyzeExhaust = AnalyzerFacadeForJVM.analyzeOneFileWithJavaIntegration(
-                        (JetFile) currentPsiFile, Collections.<AnalyzerScriptParameter>emptyList());
-                generationState = new GenerationState(currentProject,ClassBuilderFactories.BINARIES, analyzeExhaust.getBindingContext(), Collections.singletonList((JetFile) currentPsiFile), false);
+                generationState = ResolveUtils.getGenerationState((JetFile) currentPsiFile);
                 KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
                     @Override
                     public void reportException(Throwable throwable, String s) {
