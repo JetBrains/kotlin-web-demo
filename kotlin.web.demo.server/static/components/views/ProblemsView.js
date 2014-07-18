@@ -22,9 +22,7 @@
  */
 
 
-var ProblemsView = (function () {
-
-    function ProblemsView(element, /*Nullable*/ tabs) {
+var ProblemsView = function (element, /*Nullable*/ tabs) {
 
         var instance = {
             addMessages:function (data) {
@@ -67,6 +65,20 @@ var ProblemsView = (function () {
             processError(i, problems, processError);
         }
 
+        function makeCodeReference( lineNo, charNo ){
+            var codeReference  = document.createElement("a");
+            codeReference.href = "#";
+            var id = "error_" + lineNo +"_"+ charNo;
+            codeReference.id = id;
+            codeReference.innerHTML = "(" + (lineNo + 1) + ", " + (charNo + 1) + ")";
+            $(document).on( 'click', "#"+id ,function(){
+                editor.setCursor(lineNo, charNo);
+                editor.focus();
+            });
+
+            return codeReference
+        }
+
         function createElementForProblemsView(severity, start, title) {
             var p = document.createElement("p");
             var img = document.createElement("img");
@@ -89,15 +101,18 @@ var ProblemsView = (function () {
             if (start == null) {
                 titleDiv.innerHTML = " " + unEscapeString(title);
             } else {
-
-                titleDiv.innerHTML = "(" + (start.line + 1) + ", " + (start.ch + 1) + ") : " + unEscapeString(title);
+                p.appendChild(makeCodeReference(start.line, start.ch));
+                titleDiv.innerHTML = " : " + unEscapeString(title);
             }
             p.appendChild(titleDiv);
+            $(p).click(function(event){
+                event.stopPropagation();
+                alert(event.target.id);
+            });
             return p;
         }
 
-        return instance;
-    }
 
-    return ProblemsView;
-})();
+
+        return instance;
+    };

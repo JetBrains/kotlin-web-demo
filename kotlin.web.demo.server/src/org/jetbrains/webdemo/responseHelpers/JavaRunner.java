@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.responseHelpers;
 
 import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetPsiUtil;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.java.PackageClassUtils;
 import org.jetbrains.jet.lang.resolve.name.FqName;
@@ -28,7 +27,10 @@ import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.utils.ExecResult;
+import org.jetbrains.webdemo.utils.StackTraceParser;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.*;
@@ -113,6 +115,7 @@ public class JavaRunner {
                     while ((line = stdErr.readLine()) != null) {
                         errStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
                     }
+
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                             sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
@@ -168,7 +171,8 @@ public class JavaRunner {
                         sessionInfo.getId(), "error while excecution: " + errStream));
                 mapErr.put("type", "err");
             }
-            mapErr.put("text", errStream.toString());
+            ExecResult result =StackTraceParser.parseStackTraceElements(errStream.toString());
+            mapErr.put("text", new JSONObject(result).toString() );
             jsonArray.put(mapErr);
         }
 

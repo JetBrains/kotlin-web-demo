@@ -436,6 +436,13 @@ var KotlinEditor = (function () {
                     isEditorContentChanged = false;
                 }
             },
+            setCursor:function (lineNo, charNo){
+                my_editor.setCursor(lineNo, charNo);
+            },
+            focus:function(){
+                my_editor.focus()
+            },
+
             showCompletionResult:function (data) {
                 completion.processCompletionResult(data);
             },

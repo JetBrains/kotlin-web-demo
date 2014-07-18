@@ -75,6 +75,34 @@ var ConsoleView = (function () {
             }
         }
 
+        function makeCodeReference(file, lineNo)
+        {
+            var a = document.createElement("a");
+            a.href = "#code";
+            a.innerHTML = "(" + file + ":" + lineNo + ")";
+            var id = "stack_trace_code_reference_"+lineNo;
+            a.id = id;
+            $(document).on("click", "#" + id, function(){
+                editor.setCursor(lineNo - 1, 0);
+                editor.focus();
+            });
+            return a;
+        }
+
+        function createErrorForConsoleView(element, template, lines) {
+            var i = 0;
+            var pos = template.indexOf("%STACK_TRACE_LINE%");
+            while ( pos > -1) {
+                var s = document.createElement("span");
+                s.innerHTML = template.substr(0, pos) + "\tat " + lines[i].location;
+                template = template.substr(pos + "%STACK_TRACE_LINE%".length);
+                element.appendChild(s);
+                element.appendChild(makeCodeReference(lines[i].file, lines[i].lineNo));
+                pos = template.indexOf("%STACK_TRACE_LINE%");
+                ++i;
+            }
+        }
+
         function setOutput(data) {
             element.html("");
             if (tabs != null) {
@@ -93,19 +121,26 @@ var ConsoleView = (function () {
                         p.appendChild(createToggleElement(data[i]));
                         p.className = "consoleViewInfo";
                     } else {
-                        if ((data[i].type == "err") && (data[i].text != "")) {
-                            p.className = "consoleViewError";
-                        }
-                        if (data[i].type == "info") {
-                            p.className = "consoleViewInfo";
-                        }
                         var message = data[i].text;
-                        if (data[i].type == "err" && message == "") {
-                            message = "Unknown exception."
-                        } else if (message == "timeout : timeout") {
-                            message = "Server didn't response for 10 seconds."
+
+                        if ((data[i].type == "err") && (message != "")) {
+                            p.className = "consoleViewError";
+                            if (message == "") {
+                                p.innerHTML = "Unknown exception."
+                            } else if (message == "timeout : timeout") {
+                                p.innerHTML = "Server didn't response for 10 seconds."
+                            } else {
+                                var stdErr = JSON.parse(message);
+                                createErrorForConsoleView(p, stdErr.stdErr, stdErr.stackTraceLines)
+                            }
+                        } else if (data[i].type == "info") {
+                            p.className = "consoleViewInfo";
+                            p.innerHTML = unEscapeString(message);
+                        } else {
+                            p.innerHTML = unEscapeString(message);
                         }
-                        p.innerHTML = unEscapeString(message);
+
+
                     }
 
                     errors.appendChild(p);
