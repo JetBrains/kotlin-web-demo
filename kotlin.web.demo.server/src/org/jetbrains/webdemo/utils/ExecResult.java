@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,21 +25,20 @@ import java.util.List;
  */
 public class ExecResult {
     private String stdErr;
-    private List<StackTraceElement> stackTraceLines = new ArrayList<StackTraceElement>();
+    private List<StackTraceLine> stackTraceLines = new ArrayList<StackTraceLine>();
+
+    public ExecResult(String stdErr, List<StackTraceLine> stackTraceLines){
+        this.stdErr = stdErr;
+        this.stackTraceLines = stackTraceLines;
+    }
 
     public String getStdErr() {
         return stdErr;
     }
 
-    public void setStdErr(String stdErr) {
-        this.stdErr = stdErr;
+
+    public List<StackTraceLine> getStackTraceLines() {
+        return Collections.unmodifiableList(stackTraceLines);
     }
 
-    public List<StackTraceElement> getStackTraceLines() {
-        return stackTraceLines;
-    }
-
-    public void addStackTarceLine(StackTraceElement stackTraceLine){
-        stackTraceLines.add(stackTraceLine);
-    }
 }

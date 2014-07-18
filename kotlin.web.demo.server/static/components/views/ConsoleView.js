@@ -89,12 +89,12 @@ var ConsoleView = (function () {
             return a;
         }
 
-        function createErrorForConsoleView(element, template, lines) {
+        function createStdErrorForConsoleView(element, template, lines) {
             var i = 0;
             var pos = template.indexOf("%STACK_TRACE_LINE%");
             while ( pos > -1) {
                 var s = document.createElement("span");
-                s.innerHTML = template.substr(0, pos) + "\tat " + lines[i].location;
+                s.innerHTML = template.substr(0, pos) + "\tat " + lines[i].function;
                 template = template.substr(pos + "%STACK_TRACE_LINE%".length);
                 element.appendChild(s);
                 element.appendChild(makeCodeReference(lines[i].file, lines[i].lineNo));
@@ -131,7 +131,7 @@ var ConsoleView = (function () {
                                 p.innerHTML = "Server didn't response for 10 seconds."
                             } else {
                                 var stdErr = JSON.parse(message);
-                                createErrorForConsoleView(p, stdErr.stdErr, stdErr.stackTraceLines)
+                                createStdErrorForConsoleView(p, stdErr.stdErr, stdErr.stackTraceLines)
                             }
                         } else if (data[i].type == "info") {
                             p.className = "consoleViewInfo";

@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,26 +28,31 @@ public class StackTraceParser {
 
 
     public static ExecResult parseStackTraceElements(String input) {
-        ExecResult execResult = new ExecResult();
-
+        List<StackTraceLine> stackTraceLines = new ArrayList<StackTraceLine>();
         StringBuilder result = new StringBuilder();
         String rest = input;
+
+        //pattern to match stack trace lines, that looks like
+        //  at function_name(file_name:lineNo)
+        //1st group-text in stdErr before this line
         Pattern tracePattern = Pattern.compile("(.*?)<br/>\\s*at\\s+(.*?)\\((.*?):([0-9]+)\\)");
         Matcher traceLineMatcher = tracePattern.matcher(rest);
         while (traceLineMatcher.find()) {
-            StackTraceElement stackTraceElement = new StackTraceElement();
+            stackTraceLines.add(new StackTraceLine(
+                            traceLineMatcher.group(2),
+                            traceLineMatcher.group(3),
+                            traceLineMatcher.group(4)
+                    )
+            );
+
             result.append(traceLineMatcher.group(1));
             result.append("<br/>%STACK_TRACE_LINE%");
-            stackTraceElement.setLocation(traceLineMatcher.group(2));
-            stackTraceElement.setFile(traceLineMatcher.group(3));
-            stackTraceElement.setLineNo(traceLineMatcher.group(4));
-            execResult.addStackTarceLine(stackTraceElement);
+
             rest = rest.substring(traceLineMatcher.group().length());
             traceLineMatcher = tracePattern.matcher(rest);
         }
         result.append(rest);
-        execResult.setStdErr(result.toString());
-        return execResult;
+        return new ExecResult(result.toString(), stackTraceLines);
     }
 
 }

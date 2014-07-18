@@ -22,33 +22,28 @@ import org.json.JSONString;
 /**
  * Created by atamas on 18.07.14.
  */
-public class StackTraceElement implements JSONString{
-    private String location;
+public class StackTraceLine implements JSONString{
+    private String function;
     private String file;
     private String lineNo;
 
-    public String getLocation() {
-        return location;
+    public StackTraceLine(String function, String file, String lineNo) {
+        this.function = function;
+        this.file = file;
+        this.lineNo = lineNo;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public String getFunction() {
+        return function;
     }
 
     public String getFile() {
         return file;
     }
 
-    public void setFile(String file) {
-        this.file = file;
-    }
 
     public String getLineNo() {
         return lineNo;
-    }
-
-    public void setLineNo(String lineNo) {
-        this.lineNo = lineNo;
     }
 
     @Override
