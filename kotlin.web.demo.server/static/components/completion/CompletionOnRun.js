@@ -26,12 +26,12 @@ var CompletionOnRun = (function () {
     function CompletionOnRun() {
 
         var instance = {
-            getCompletion:function (configurationType, programText, cursorLine, cursorCh) {
+            getCompletion: function (configurationType, programText, cursorLine, cursorCh) {
                 instance.onLoadCompletion(COMPLETION_ISNOT_AVAILABLE);
             },
-            onLoadCompletion:function (data) {
+            onLoadCompletion: function (data) {
             },
-            onFail:function (exception) {
+            onFail: function (exception) {
             }
         };
 

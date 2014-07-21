@@ -32,54 +32,54 @@ var ProgramsView = (function () {
         var confirmDialog = new ConfirmDialog();
 
         var instance = {
-            loadAllPrograms:function (data) {
+            loadAllPrograms: function (data) {
                 addAllProgramsInAccordion(data);
             },
-            setConfiguration:function (conf) {
+            setConfiguration: function (conf) {
                 configuration = conf;
             },
-            generatePublicLink:function (data) {
+            generatePublicLink: function (data) {
                 processPublicLink(data);
             },
-            deleteProgram:function (data) {
+            deleteProgram: function (data) {
                 processDeleteProgram(data);
             },
-            saveProgramWithName:function (data) {
+            saveProgramWithName: function (data) {
                 processSaveProgram(data);
             },
-            loadAllContent:function () {
+            loadAllContent: function () {
                 loadAllContent();
             },
-            loadProgram:function (url) {
+            loadProgram: function (url) {
                 loadProgram(url);
             },
-            saveProgram:function () {
+            saveProgram: function () {
                 saveProgram();
             },
-            onAllProgramsLoaded:function () {
+            onAllProgramsLoaded: function () {
             }
 
         };
 
 
         $("#saveDialog").dialog({
-            modal:"true",
-            width:300,
-            height:120,
-            autoOpen:false,
-            buttons:[
-                { text:"Save",
-                    click:function () {
+            modal: "true",
+            width: 300,
+            height: 120,
+            autoOpen: false,
+            buttons: [
+                { text: "Save",
+                    click: function () {
                         saveAsProgram();
                     }
                 },
-                { text:"Cancel",
-                    click:function () {
+                { text: "Cancel",
+                    click: function () {
                         $(this).dialog("close");
                     }
                 }
             ],
-            open:function () {
+            open: function () {
                 setTimeout(function () {
                     $("#programName").focus();
                 }, 200);
@@ -91,9 +91,9 @@ var ProgramsView = (function () {
         });
 
         $("#showInfoAboutLoginDialog").dialog({
-            modal:"true",
-            width:300,
-            autoOpen:false
+            modal: "true",
+            width: 300,
+            autoOpen: false
         });
 
         function processSaveProgram(data) {

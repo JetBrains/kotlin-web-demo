@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.handlers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
@@ -32,7 +34,6 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.jetbrains.webdemo.sessions.HttpSession;
-import org.json.JSONArray;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -142,10 +143,10 @@ public class ServerHandler {
     private void sendSessionId(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
         try {
             String id = sessionInfo.getId();
-            JSONArray array = new JSONArray();
-            array.put(id);
+            ArrayNode array = new ObjectMapper().createArrayNode();
+            array.add(id);
             if (sessionInfo.getUserInfo().isLogin()) {
-                array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
+                array.add(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
             }
 
             writeResponse(request, response, array.toString(), HttpServletResponse.SC_OK);
@@ -156,11 +157,11 @@ public class ServerHandler {
 
     private void sendUserName(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
         try {
-            JSONArray array = new JSONArray();
+            ArrayNode array = new ObjectMapper().createArrayNode();
             if (sessionInfo.getUserInfo().isLogin()) {
-                array.put(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
+                array.add(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
             } else {
-                array.put("null");
+                array.add("null");
             }
             writeResponse(request, response, array.toString(), HttpServletResponse.SC_OK);
         } catch (Throwable e) {

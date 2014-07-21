@@ -32,33 +32,33 @@ var HelpModel = (function () {
         var helpArray = [];
 
         var instance = {
-            onLoadAllHelpElements:function () {
+            onLoadAllHelpElements: function () {
             },
-            onFail:function (exception) {
+            onFail: function (exception) {
             },
-            loadAllHelpElements:function () {
+            loadAllHelpElements: function () {
                 loadAllHelp();
             },
-            getHelpElement:function (name) {
+            getHelpElement: function (name) {
                 return getHelpElement(name);
             }
         };
 
         function loadAllHelp() {
             $.ajax({
-                url:generateAjaxUrl("loadHelpFor" + helpType, "null"),
-                context:document.body,
-                success:function (data) {
+                url: generateAjaxUrl("loadHelpFor" + helpType, "null"),
+                context: document.body,
+                success: function (data) {
                     if (checkDataForNull(data)) {
                         processResult(data);
                     } else {
                         instance.onFail("Incorrect data format.");
                     }
                 },
-                dataType:"json",
-                type:"GET",
-                timeout:30000,
-                error:function (jqXHR, textStatus, errorThrown) {
+                dataType: "json",
+                type: "GET",
+                timeout: 30000,
+                error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown);
                 }
             });

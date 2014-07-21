@@ -26,15 +26,15 @@ var CompletionDecorator = (function () {
     function CompletionDecorator() {
         var currentCompleter = null;
         var instance = {
-            getCompletion:function (configurationType, programText, cursorLine, cursorCh) {
+            getCompletion: function (configurationType, programText, cursorLine, cursorCh) {
                 if (currentCompleter != null) {
                     currentCompleter.getCompletion(configurationType, programText, cursorLine, cursorCh);
                 }
             },
-            onLoadCompletion:function (data) {
+            onLoadCompletion: function (data) {
 
             },
-            setCompleter:function (completer) {
+            setCompleter: function (completer) {
                 if (currentCompleter != null) {
                     currentCompleter.onLoadCompletion = null;
                     currentCompleter.onFail = null;
@@ -47,7 +47,7 @@ var CompletionDecorator = (function () {
                     instance.onFail(exception);
                 };
             },
-            onFail:function (message) {
+            onFail: function (message) {
             }
         };
 

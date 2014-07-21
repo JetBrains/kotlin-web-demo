@@ -29,13 +29,13 @@ var LoginView = (function () {
         var confirmDialog = new ConfirmDialog();
 
         var instance = {
-            setUserName:function (name) {
+            setUserName: function (name) {
                 if (name != "[\"null\"]") setUserName(eval(name)[0]);
             },
-            isLoggedIn:function () {
+            isLoggedIn: function () {
                 return isLoggedIn;
             },
-            logout:function () {
+            logout: function () {
                 isLoggedIn = false;
                 $("#login").css("display", "block");
                 $("#userName").html("");

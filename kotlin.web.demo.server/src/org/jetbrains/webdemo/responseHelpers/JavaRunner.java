@@ -16,6 +16,9 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
@@ -29,29 +32,33 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.utils.ExecResult;
 import org.jetbrains.webdemo.utils.StackTraceParser;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class JavaRunner {
 
     private final BindingContext bindingContext;
     private final List<OutputFile> files;
     private String arguments;
-    private final JSONArray jsonArray;
+
     private final JetFile currentFile;
+
+    private ArrayNode jsonArray;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private final SessionInfo sessionInfo;
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, JSONArray array, JetFile currentFile, SessionInfo info) {
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode jsonArray, JetFile currentFile, SessionInfo info) {
         this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;
-        this.jsonArray = array;
+        this.jsonArray = jsonArray;
         this.currentFile = currentFile;
         this.sessionInfo = info;
     }
@@ -149,31 +156,33 @@ public class JavaRunner {
         }
 
         if (!isTimeoutException) {
-            Map<String, String> mapOut = new HashMap<String, String>();
-            mapOut.put("type", "out");
-            mapOut.put("text", outStream.toString());
-            jsonArray.put(mapOut);
+            ObjectNode jsonObject = jsonArray.addObject();
+            jsonObject.put("type", "out");
+            jsonObject.put("text", outStream.toString());
         }
 
         if (errStream.length() > 0) {
-            Map<String, String> mapErr = new HashMap<String, String>();
+            ObjectNode errObject = new ObjectMapper().createObjectNode();
             if (isKotlinLibraryException(errStream.toString())) {
                 writeErrStreamToLog(errStream.toString());
 
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("type", "err");
-                map.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
-                jsonArray.put(map);
-                mapErr.put("type", "out");
+                ObjectNode jsonObject = jsonArray.addObject();
+                jsonObject.put("type", "err");
+                jsonObject.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
+                errObject.put("type", "out");
             }
             else {
                 ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "error while excecution: " + errStream));
-                mapErr.put("type", "err");
+                errObject.put("type", "err");
             }
             ExecResult result =StackTraceParser.parseStackTraceElements(errStream.toString());
-            mapErr.put("text", new JSONObject(result).toString() );
-            jsonArray.put(mapErr);
+            try {
+                errObject.put("text", objectMapper.writeValueAsString(result));
+            } catch (IOException e) {
+                //unreachable
+            }
+            jsonArray.add(errObject);
         }
 
         for (OutputFile file : files) {

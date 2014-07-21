@@ -26,32 +26,32 @@ var LoginProvider = (function () {
     function LoginProvider() {
 
         var instance = {
-            login:function (type) {
+            login: function (type) {
                 login(type);
             },
-            logout:function () {
+            logout: function () {
                 instance.onLogout();
             },
-            getUserName:function () {
+            getUserName: function () {
                 getUserName();
             },
-            onLogin:function (userName) {
+            onLogin: function (userName) {
             },
-            onLogout:function () {
+            onLogout: function () {
             },
-            onFail:function (status, statusBarMessage) {
+            onFail: function (status, statusBarMessage) {
             }
         };
 
         function login(type) {
             $.ajax({
-                url:generateAjaxUrl("authorization", type),
-                context:document.body,
-                success:onLoginSuccess,
-                dataType:"text",
-                type:"GET",
-                timeout:10000,
-                error:function (jqXHR, textStatus, errorThrown) {
+                url: generateAjaxUrl("authorization", type),
+                context: document.body,
+                success: onLoginSuccess,
+                dataType: "text",
+                type: "GET",
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
                 }
             });
@@ -59,19 +59,19 @@ var LoginProvider = (function () {
 
         function getUserName() {
             $.ajax({
-                url:generateAjaxUrl("getUserName", ""),
-                context:document.body,
-                success:function (data) {
+                url: generateAjaxUrl("getUserName", ""),
+                context: document.body,
+                success: function (data) {
                     if (checkDataForNull(data)) {
                         instance.onLogin(data);
                     } else {
                         instance.onFail("Username is null.", ActionStatusMessages.login_fail);
                     }
                 },
-                dataType:"text",
-                type:"GET",
-                timeout:10000,
-                error:function (jqXHR, textStatus, errorThrown) {
+                dataType: "text",
+                type: "GET",
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
                 }
             });

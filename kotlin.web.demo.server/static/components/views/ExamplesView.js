@@ -28,22 +28,22 @@ var ExamplesView = (function () {
         var model = examplesModel;
 
         var instance = {
-            loadAllExamples:function (data) {
+            loadAllExamples: function (data) {
                 addAllExamplesInAccordion(data);
                 instance.onAllExamplesLoaded();
             },
-            processLoadExample:function (status, data) {
+            processLoadExample: function (status, data) {
                 if (status) {
                     loadExampleSuccess(data);
                 }
             },
-            loadAllContent:function () {
+            loadAllContent: function () {
                 loadAllContent();
             },
-            loadExample:function (url) {
+            loadExample: function (url) {
                 loadExample(url);
             },
-            onAllExamplesLoaded:function () {
+            onAllExamplesLoaded: function () {
             }
         };
 

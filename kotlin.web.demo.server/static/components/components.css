@@ -1075,8 +1075,9 @@ td#removeallguttersTd {
 }
 
 .ui-widget-content table {
-   width: 100%;
+    width: 100%;
 }
+
 .ui-widget-content table img {
     float: right;
     padding-left: 9px;

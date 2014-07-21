@@ -26,11 +26,11 @@ var ProgramsModel = (function () {
     function ProgramsModel() {
 
         var instance = {
-            loadProgram:function (url) {
+            loadProgram: function (url) {
                 $.ajax({
-                    url:generateAjaxUrl("loadProgram", url),
-                    context:document.body,
-                    success:function (data) {
+                    url: generateAjaxUrl("loadProgram", url),
+                    context: document.body,
+                    success: function (data) {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
                                 instance.onLoadProgram(data[0]);
@@ -41,19 +41,19 @@ var ProgramsModel = (function () {
                             instance.onFail("Incorrect data format.", ActionStatusMessages.load_program_fail);
                         }
                     },
-                    dataType:"json",
-                    type:"GET",
-                    timeout:10000,
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    dataType: "json",
+                    type: "GET",
+                    timeout: 10000,
+                    error: function (jqXHR, textStatus, errorThrown) {
                         instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
                     }
                 });
             },
-            generatePublicLink:function (url) {
+            generatePublicLink: function (url) {
                 $.ajax({
-                    url:generateAjaxUrl("generatePublicLink", url),
-                    context:document.body,
-                    success:function (data) {
+                    url: generateAjaxUrl("generatePublicLink", url),
+                    context: document.body,
+                    success: function (data) {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
                                 instance.onGeneratePublicLink(data);
@@ -64,22 +64,22 @@ var ProgramsModel = (function () {
                             instance.onFail("Incorrect data format.", ActionStatusMessages.generate_link_fail);
                         }
                     },
-                    dataType:"json",
-                    type:"GET",
-                    timeout:10000,
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    dataType: "json",
+                    type: "GET",
+                    timeout: 10000,
+                    error: function (jqXHR, textStatus, errorThrown) {
                         instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.generate_link_fail);
                     }
                 });
             },
-            getAllPrograms:function () {
+            getAllPrograms: function () {
                 getAllPrograms();
             },
-            deleteProgram:function (name) {
+            deleteProgram: function (name) {
                 $.ajax({
-                    url:generateAjaxUrl("deleteProgram", name),
-                    context:document.body,
-                    success:function (data) {
+                    url: generateAjaxUrl("deleteProgram", name),
+                    context: document.body,
+                    success: function (data) {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
                                 instance.onDeleteProgram(data);
@@ -90,20 +90,20 @@ var ProgramsModel = (function () {
                             instance.onFail("Incorrect data format.", ActionStatusMessages.delete_program_fail);
                         }
                     },
-                    dataType:"json",
-                    type:"GET",
-                    timeout:10000,
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    dataType: "json",
+                    type: "GET",
+                    timeout: 10000,
+                    error: function (jqXHR, textStatus, errorThrown) {
                         instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.delete_program_fail);
                     }
                 });
             },
-            saveProgram:function (id, dependencies) {
+            saveProgram: function (id, dependencies) {
                 var i = ProgramsModel.getEditorContent();
                 var arguments = ProgramsModel.getArguments();
                 $.ajax({
-                    url:generateAjaxUrl("saveProgram", id + "&runConf=" + dependencies),
-                    success:function (data) {
+                    url: generateAjaxUrl("saveProgram", id + "&runConf=" + dependencies),
+                    success: function (data) {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
                                 instance.onSaveProgram(data);
@@ -114,34 +114,34 @@ var ProgramsModel = (function () {
                             instance.onFail("Incorrect data format.", ActionStatusMessages.save_program_fail);
                         }
                     },
-                    dataType:"json",
-                    type:"POST",
-                    data:{text:i, consoleArgs:arguments},
-                    timeout:10000,
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    dataType: "json",
+                    type: "POST",
+                    data: {text: i, consoleArgs: arguments},
+                    timeout: 10000,
+                    error: function (jqXHR, textStatus, errorThrown) {
                         instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                     }
                 });
             },
-            onLoadProgram:function (data) {
+            onLoadProgram: function (data) {
             },
-            onGeneratePublicLink:function (data) {
+            onGeneratePublicLink: function (data) {
             },
-            onDeleteProgram:function (data) {
+            onDeleteProgram: function (data) {
             },
-            onSaveProgram:function (data) {
+            onSaveProgram: function (data) {
             },
-            onAllProgramsLoaded:function (data) {
+            onAllProgramsLoaded: function (data) {
             },
-            onFail:function (exception, statusBarMessage) {
+            onFail: function (exception, statusBarMessage) {
             }
         };
 
         function getAllPrograms() {
             $.ajax({
-                url:generateAjaxUrl("loadProgram", "all"),
-                context:document.body,
-                success:function (data) {
+                url: generateAjaxUrl("loadProgram", "all"),
+                context: document.body,
+                success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             instance.onAllProgramsLoaded(data);
@@ -152,10 +152,10 @@ var ProgramsModel = (function () {
                         instance.onFail("Incorrect data format.", ActionStatusMessages.load_programs_fail);
                     }
                 },
-                dataType:"json",
-                type:"GET",
-                timeout:10000,
-                error:function (jqXHR, textStatus, errorThrown) {
+                dataType: "json",
+                type: "GET",
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_programs_fail);
                 }
             });
@@ -171,7 +171,6 @@ var ProgramsModel = (function () {
     ProgramsModel.getArguments = function () {
         return ""
     };
-
 
 
     return ProgramsModel;

@@ -26,19 +26,19 @@ var ConfirmDialog = (function () {
     function ConfirmDialog() {
 
         var instance = {
-            open:function (f) {
+            open: function (f) {
                 showConfirmDialog(f);
             },
-            close:function () {
+            close: function () {
                 closeConfirmDialog();
             }
         };
 
         $("#confirmDialog").dialog({
-            modal:"true",
-            width:500,
-            height:120,
-            autoOpen:false
+            modal: "true",
+            width: 500,
+            height: 120,
+            autoOpen: false
         });
 
         return instance;
@@ -58,21 +58,21 @@ var ConfirmDialog = (function () {
     function showConfirmDialog(fun) {
         if (ConfirmDialog.isEditorContentChanged()) {
             $("#confirmDialog").dialog({
-                buttons:[
-                    { text:"Save changes",
-                        click:function () {
+                buttons: [
+                    { text: "Save changes",
+                        click: function () {
                             ConfirmDialog.saveProgram();
                             closeConfirmDialog();
                         }
                     },
-                    { text:"Discard changes",
-                        click:function () {
+                    { text: "Discard changes",
+                        click: function () {
                             closeConfirmDialog();
                             fun();
                         }
                     },
-                    { text:"Cancel",
-                        click:function () {
+                    { text: "Cancel",
+                        click: function () {
                             closeConfirmDialog();
                         }
                     }

@@ -42,9 +42,9 @@ function unEscapeString(str) {
 }
 
 var tagsToReplace = {
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;'
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
 };
 
 function replaceTag(tag) {
@@ -82,13 +82,13 @@ function checkDataForNull(data) {
 }
 
 function checkDataForException(data) {
-        //consoleView.writeException(data);
+    //consoleView.writeException(data);
     return !(data[0] != null && data[0] != undefined && data[0].exception != undefined);
 
 }
 
 function random() {
-    return Math.floor((Math.random()*100)+1);
+    return Math.floor((Math.random() * 100) + 1);
 }
 
 function checkIfThereAreErrorsInHighlightingResult(highlightingResult) {
@@ -136,40 +136,40 @@ window.oldSetInterval = window.setInterval;
 window.oldClearInterval = window.clearInterval;
 
 /*window.setTimeout = function(code, delay) {
-    var retval = window.oldSetTimeout(code, delay);
-    window.timeoutList.push(retval);
-    return retval;
-};
-window.clearTimeout = function(id) {
-    var ind = window.timeoutList.indexOf(id);
-    if(ind >= 0) {
-        window.timeoutList.splice(ind, 1);
-    }
-    var retval = window.oldClearTimeout(id);
-    return retval;
-};*/
+ var retval = window.oldSetTimeout(code, delay);
+ window.timeoutList.push(retval);
+ return retval;
+ };
+ window.clearTimeout = function(id) {
+ var ind = window.timeoutList.indexOf(id);
+ if(ind >= 0) {
+ window.timeoutList.splice(ind, 1);
+ }
+ var retval = window.oldClearTimeout(id);
+ return retval;
+ };*/
 
-window.setInterval = function(code, delay) {
+window.setInterval = function (code, delay) {
     var retval = window.oldSetInterval(code, delay);
     window.intervalList.push(retval);
     return retval;
 };
-window.clearInterval = function(id) {
+window.clearInterval = function (id) {
     var ind = window.intervalList.indexOf(id);
-    if(ind >= 0) {
+    if (ind >= 0) {
         window.intervalList.splice(ind, 1);
     }
     var retval = window.oldClearInterval(id);
     return retval;
 };
 /*window.clearAllTimeouts = function() {
-    for(var i in window.timeoutList) {
-        window.oldClearTimeout(window.timeoutList[i]);
-    }
-    window.timeoutList = new Array();
-};*/
-window.clearAllIntervals = function() {
-    for(var i in window.intervalList) {
+ for(var i in window.timeoutList) {
+ window.oldClearTimeout(window.timeoutList[i]);
+ }
+ window.timeoutList = new Array();
+ };*/
+window.clearAllIntervals = function () {
+    for (var i in window.intervalList) {
         window.oldClearInterval(window.intervalList[i]);
     }
     window.intervalList = new Array();

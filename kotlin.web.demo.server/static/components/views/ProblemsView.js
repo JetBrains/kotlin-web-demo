@@ -24,95 +24,94 @@
 
 var ProblemsView = function (element, /*Nullable*/ tabs) {
 
-        var instance = {
-            addMessages:function (data) {
-                addMessagesToProblemsView(data);
-            },
-            clear:function () {
-                element.html("");
-            }
-        };
-
-        function addMessagesToProblemsView(data) {
+    var instance = {
+        addMessages: function (data) {
+            addMessagesToProblemsView(data);
+        },
+        clear: function () {
             element.html("");
-            if (tabs != null) {
-                tabs.tabs("select", 0);
-            }
-            var i = 0;
-            var problems = document.createElement("div");
-
-            function processError(i, p, f) {
-                if (data[i] == undefined) {
-                    element.html(problems.innerHTML);
-                    return;
-                }
-
-                var title = unEscapeString(data[i].titleName);
-                var start = eval('(' + data[i].x + ')');
-                var severity = data[i].severity;
-
-                var problem = createElementForProblemsView(severity, start, title);
-                p.appendChild(problem);
-                i++;
-
-                setTimeout(function (i, problems) {
-                    return function () {
-                        f(i, problems, processError);
-                    }
-                }(i, problems), 10);
-            }
-
-            processError(i, problems, processError);
         }
-
-        function makeCodeReference( lineNo, charNo ){
-            var codeReference  = document.createElement("a");
-            codeReference.href = "#";
-            var id = "error_" + lineNo +"_"+ charNo;
-            codeReference.id = id;
-            codeReference.innerHTML = "(" + (lineNo + 1) + ", " + (charNo + 1) + ")";
-            $(document).on( 'click', "#"+id ,function(){
-                editor.setCursor(lineNo, charNo);
-                editor.focus();
-            });
-
-            return codeReference
-        }
-
-        function createElementForProblemsView(severity, start, title) {
-            var p = document.createElement("p");
-            var img = document.createElement("img");
-            if (severity == 'WARNING') {
-                img.src = "/static/icons/warning.png";
-                if (title.indexOf("is never used") > 0) {
-                    p.className = "problemsViewWarningNeverUsed";
-                } else {
-                    p.className = "problemsViewWarning";
-                }
-
-            } else if (severity == 'STACKTRACE') {
-                p.className = "problemsViewStacktrace";
-            } else {
-                img.src = "/static/icons/error.png";
-                p.className = "problemsViewError";
-            }
-            p.appendChild(img);
-            var titleDiv = document.createElement("span");
-            if (start == null) {
-                titleDiv.innerHTML = " " + unEscapeString(title);
-            } else {
-                p.appendChild(makeCodeReference(start.line, start.ch));
-                titleDiv.innerHTML = " : " + unEscapeString(title);
-            }
-            p.appendChild(titleDiv);
-            $(p).click(function(event){
-                event.stopPropagation();
-                alert(event.target.id);
-            });
-            return p;
-        }
-
-
-
-        return instance;
     };
+
+    function addMessagesToProblemsView(data) {
+        element.html("");
+        if (tabs != null) {
+            tabs.tabs("select", 0);
+        }
+        var i = 0;
+        var problems = document.createElement("div");
+
+        function processError(i, p, f) {
+            if (data[i] == undefined) {
+                element.html(problems.innerHTML);
+                return;
+            }
+
+            var title = unEscapeString(data[i].titleName);
+            var start = eval('(' + data[i].x + ')');
+            var severity = data[i].severity;
+
+            var problem = createElementForProblemsView(severity, start, title);
+            p.appendChild(problem);
+            i++;
+
+            setTimeout(function (i, problems) {
+                return function () {
+                    f(i, problems, processError);
+                }
+            }(i, problems), 10);
+        }
+
+        processError(i, problems, processError);
+    }
+
+    function makeCodeReference(lineNo, charNo) {
+        var codeReference = document.createElement("a");
+        codeReference.href = "#";
+        var id = "error_" + lineNo + "_" + charNo;
+        codeReference.id = id;
+        codeReference.innerHTML = "(" + (lineNo + 1) + ", " + (charNo + 1) + ")";
+        $(document).on('click', "#" + id, function () {
+            editor.setCursor(lineNo, charNo);
+            editor.focus();
+        });
+
+        return codeReference
+    }
+
+    function createElementForProblemsView(severity, start, title) {
+        var p = document.createElement("p");
+        var img = document.createElement("img");
+        if (severity == 'WARNING') {
+            img.src = "/static/icons/warning.png";
+            if (title.indexOf("is never used") > 0) {
+                p.className = "problemsViewWarningNeverUsed";
+            } else {
+                p.className = "problemsViewWarning";
+            }
+
+        } else if (severity == 'STACKTRACE') {
+            p.className = "problemsViewStacktrace";
+        } else {
+            img.src = "/static/icons/error.png";
+            p.className = "problemsViewError";
+        }
+        p.appendChild(img);
+        var titleDiv = document.createElement("span");
+        if (start == null) {
+            titleDiv.innerHTML = " " + unEscapeString(title);
+        } else {
+            p.appendChild(makeCodeReference(start.line, start.ch));
+            titleDiv.innerHTML = " : " + unEscapeString(title);
+        }
+        p.appendChild(titleDiv);
+        $(p).click(function (event) {
+            event.stopPropagation();
+            alert(event.target.id);
+        });
+        return p;
+    }
+
+
+    return instance;
+};

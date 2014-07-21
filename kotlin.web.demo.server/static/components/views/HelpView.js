@@ -29,7 +29,7 @@ var HelpView = (function () {
         model.loadAllHelpElements();
 
         var instance = {
-            update: function(name) {
+            update: function (name) {
                 var text = model.getHelpElement(name);
                 setText(text);
             }

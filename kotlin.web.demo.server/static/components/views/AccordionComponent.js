@@ -32,22 +32,22 @@ var AccordionView = (function () {
 
 
         var instance = {
-            saveProgram:function () {
+            saveProgram: function () {
                 programsView.saveProgram();
             },
-            loadAllContent:function () {
+            loadAllContent: function () {
                 examplesView.loadAllContent();
             },
-            setConfiguration:programsView.setConfiguration,
-            onLoadCode:function (example, isProgram) {
+            setConfiguration: programsView.setConfiguration,
+            onLoadCode: function (example, isProgram) {
             },
-            onSaveProgram:function () {
+            onSaveProgram: function () {
             },
-            onDeleteProgram:function () {
+            onDeleteProgram: function () {
             },
-            onLoadAllContent:function () {
+            onLoadAllContent: function () {
             },
-            onFail:function (exception, messageForStatusBar) {
+            onFail: function (exception, messageForStatusBar) {
             }
 
         };
@@ -112,18 +112,18 @@ var AccordionView = (function () {
 
         function makeAccordion() {
             $(".accordionForExamplesAndPrograms").accordion({
-                autoHeight:false,
-                navigation:true
+                autoHeight: false,
+                navigation: true
             }).find('#tools img').click(function (ev) {
-                    ev.preventDefault();
-                    if (this.id == "saveProgram") {
-                        programsView.saveProgram();
-                    } else if (this.id == "saveAsProgram") {
-                        $("#saveDialog").dialog("open");
-                    } else if (this.id == "showInfoAboutLogin") {
-                        $("#showInfoAboutLoginDialog").dialog("open");
-                    }
-                });
+                ev.preventDefault();
+                if (this.id == "saveProgram") {
+                    programsView.saveProgram();
+                } else if (this.id == "saveAsProgram") {
+                    $("#saveDialog").dialog("open");
+                } else if (this.id == "showInfoAboutLogin") {
+                    $("#showInfoAboutLoginDialog").dialog("open");
+                }
+            });
         }
 
         function loadFirstItem() {
@@ -147,7 +147,6 @@ var AccordionView = (function () {
 
         return instance;
     }
-
 
 
     return AccordionView;

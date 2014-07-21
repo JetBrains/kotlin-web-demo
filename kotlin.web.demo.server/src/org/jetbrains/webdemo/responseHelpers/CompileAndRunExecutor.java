@@ -16,6 +16,9 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
@@ -35,13 +38,10 @@ import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.json.JSONArray;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class CompileAndRunExecutor {
@@ -118,11 +118,11 @@ public class CompileAndRunExecutor {
             ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                     "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
-            JSONArray jsonArray = new JSONArray();
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("type", "info");
-            map.put("text", stringBuilder.toString());
-            jsonArray.put(map);
+            ArrayNode jsonArray = new ObjectMapper().createArrayNode();
+            ObjectNode jsonObject = jsonArray.addObject();
+            jsonObject.put("type", "info");
+            jsonObject.put("text", stringBuilder.toString());
+
 
             JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, arguments, jsonArray, (JetFile) currentPsiFile, sessionInfo);
 

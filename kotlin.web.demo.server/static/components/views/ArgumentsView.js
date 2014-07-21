@@ -27,10 +27,10 @@ var ArgumentsView = (function () {
     function ArgumentsView(element) {
 
         var instance = {
-            setArgs:function (args) {
+            setArgs: function (args) {
                 element.val(args);
             },
-            getArguments:function () {
+            getArguments: function () {
                 return element.val();
             }
         };

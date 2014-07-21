@@ -32,8 +32,8 @@ function ConfigurationType(runner, dependencies) {
     this.dependencies = dependencies;
 }
 
-ConfigurationType.runner = {JAVA:"java", JS:"js"};
-ConfigurationType.dependencies = {STANDARD:"standard", CANVAS:"canvas"};
+ConfigurationType.runner = {JAVA: "java", JS: "js"};
+ConfigurationType.dependencies = {STANDARD: "standard", CANVAS: "canvas"};
 
 function ConfigurationMode(name, highlighter, completer) {
     this.name = name;
@@ -41,16 +41,16 @@ function ConfigurationMode(name, highlighter, completer) {
     this.completer = completer;
 }
 
-ConfigurationType.runner = {JAVA:"java", JS:"js"};
-ConfigurationType.dependencies = {STANDARD:"standard", CANVAS:"canvas"};
+ConfigurationType.runner = {JAVA: "java", JS: "js"};
+ConfigurationType.dependencies = {STANDARD: "standard", CANVAS: "canvas"};
 
-Configuration.mode = {CLIENT:new ConfigurationMode("client", new HighlightingFromClient(), new CompletionFromClient()),
-    SERVER:new ConfigurationMode("server", new HighlightingFromServer(), new CompletionFromServer()),
-    ONRUN:new ConfigurationMode("onrun", new HighlightingFromServer(), new CompletionOnRun())};
+Configuration.mode = {CLIENT: new ConfigurationMode("client", new HighlightingFromClient(), new CompletionFromClient()),
+    SERVER: new ConfigurationMode("server", new HighlightingFromServer(), new CompletionFromServer()),
+    ONRUN: new ConfigurationMode("onrun", new HighlightingFromServer(), new CompletionOnRun())};
 
-Configuration.type = {JAVA:new ConfigurationType(ConfigurationType.runner.JAVA, ConfigurationType.dependencies.STANDARD),
-    JS:new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.STANDARD),
-    CANVAS:new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.CANVAS)};
+Configuration.type = {JAVA: new ConfigurationType(ConfigurationType.runner.JAVA, ConfigurationType.dependencies.STANDARD),
+    JS: new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.STANDARD),
+    CANVAS: new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.CANVAS)};
 
 var ConfigurationComponent = (function () {
 
@@ -59,23 +59,23 @@ var ConfigurationComponent = (function () {
     function ConfigurationComponent() {
 
         var instance = {
-            getConfiguration:function () {
+            getConfiguration: function () {
                 return configuration;
             },
             // type: String
-            updateConfiguration:function (type) {
-                configuration = new Configuration(configuration.mode,  Configuration.getTypeFromString(type));
+            updateConfiguration: function (type) {
+                configuration = new Configuration(configuration.mode, Configuration.getTypeFromString(type));
                 $("#runConfigurationMode").selectmenu("value", type);
                 fireChangeEvent();
             },
-            onChange:function (configuration) {
+            onChange: function (configuration) {
             }
         };
 
         $("#dialogAboutRunConfiguration").dialog({
-            modal:"true",
-            width:300,
-            autoOpen:false
+            modal: "true",
+            width: 300,
+            autoOpen: false
         });
 
         $("#whatimg").click(function () {
@@ -87,7 +87,7 @@ var ConfigurationComponent = (function () {
         });
 
         $("#runConfigurationMode").selectmenu({
-                change:function () {
+                change: function () {
                     configuration = new Configuration(configuration.mode, Configuration.getTypeFromString($("#runConfigurationMode").val()));
                     fireChangeEvent();
                 }
@@ -95,9 +95,9 @@ var ConfigurationComponent = (function () {
         );
 
         $("#dialog").dialog({
-            modal:"true",
-            width:400,
-            autoOpen:false
+            modal: "true",
+            width: 400,
+            autoOpen: false
         });
 
         var isAppletLoaded = false;
@@ -105,32 +105,32 @@ var ConfigurationComponent = (function () {
         $(".applet-enable").click(function () {
             $(".applet-disable").click();
             /*var parent = $(this).parents('.switch');
-            $('.applet-disable', parent).removeClass('selected');
-            $('.applet-disable', parent).removeClass('rightServer');
-            $('.applet-disable', parent).addClass('leftServer');
-            $('.applet-nohighlighting', parent).removeClass('selected');
-            $(this).addClass('selected');
-            $("#appletcheckbox").attr('checked', true);
-            $("#nohighlightingcheckbox").attr('checked', false);
-            saveModeToCookies("applet");
-            configuration = new Configuration(Configuration.mode.CLIENT, configuration.type);
-            fireChangeEvent();
-            if (!isAppletLoaded) {
-                waitLoadingApplet();
-                try {
-                    document.getElementById("myapplet").style.display = "block";
-                    isAppletLoaded = true;
-                    var title = $("#appletclient").attr("title");
-                    var pos = title.indexOf("Your browser can't run Java Applets.");
-                    if (pos != -1) {
-                        title = title.substring(0, pos);
-                        $("#appletclient").attr("title", title);
-                    }
-                } catch (e) {
-                    //TODO eventHandler.fire("hide_loader");
-                    $(".applet-disable").click();
-                }
-            }*/
+             $('.applet-disable', parent).removeClass('selected');
+             $('.applet-disable', parent).removeClass('rightServer');
+             $('.applet-disable', parent).addClass('leftServer');
+             $('.applet-nohighlighting', parent).removeClass('selected');
+             $(this).addClass('selected');
+             $("#appletcheckbox").attr('checked', true);
+             $("#nohighlightingcheckbox").attr('checked', false);
+             saveModeToCookies("applet");
+             configuration = new Configuration(Configuration.mode.CLIENT, configuration.type);
+             fireChangeEvent();
+             if (!isAppletLoaded) {
+             waitLoadingApplet();
+             try {
+             document.getElementById("myapplet").style.display = "block";
+             isAppletLoaded = true;
+             var title = $("#appletclient").attr("title");
+             var pos = title.indexOf("Your browser can't run Java Applets.");
+             if (pos != -1) {
+             title = title.substring(0, pos);
+             $("#appletclient").attr("title", title);
+             }
+             } catch (e) {
+             //TODO eventHandler.fire("hide_loader");
+             $(".applet-disable").click();
+             }
+             }*/
         });
 
         function waitLoadingApplet() {
@@ -219,7 +219,7 @@ var ConfigurationComponent = (function () {
         }
     };
 
-    Configuration.getTypeFromString = function(type) {
+    Configuration.getTypeFromString = function (type) {
         if (type == "js") {
             return Configuration.type.JS;
         } else if (type == "canvas") {

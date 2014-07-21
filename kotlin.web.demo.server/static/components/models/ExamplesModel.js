@@ -26,11 +26,11 @@ var ExamplesModel = (function () {
     function ExamplesModel() {
 
         var instance = {
-            loadExample:function (url) {
+            loadExample: function (url) {
                 $.ajax({
-                    url:generateAjaxUrl("loadExample", url),
-                    context:document.body,
-                    success:function (data) {
+                    url: generateAjaxUrl("loadExample", url),
+                    context: document.body,
+                    success: function (data) {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
                                 instance.onLoadExample(data[0]);
@@ -41,30 +41,30 @@ var ExamplesModel = (function () {
                             instance.onFail("Incorrect data format.", ActionStatusMessages.load_example_fail);
                         }
                     },
-                    dataType:"json",
-                    type:"GET",
-                    timeout:10000,
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    dataType: "json",
+                    type: "GET",
+                    timeout: 10000,
+                    error: function (jqXHR, textStatus, errorThrown) {
                         instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_example_fail);
                     }
                 });
             },
-            getAllExamples:function () {
+            getAllExamples: function () {
                 getAllExamples();
             },
-            onAllExamplesLoaded:function (data) {
+            onAllExamplesLoaded: function (data) {
             },
-            onLoadExample:function (data) {
+            onLoadExample: function (data) {
             },
-            onFail:function (exception, statusBarMessage) {
+            onFail: function (exception, statusBarMessage) {
             }
         };
 
         function getAllExamples() {
             $.ajax({
-                url:generateAjaxUrl("loadExample", "all"),
-                context:document.body,
-                success:function (data) {
+                url: generateAjaxUrl("loadExample", "all"),
+                context: document.body,
+                success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             instance.onAllExamplesLoaded(data);
@@ -75,10 +75,10 @@ var ExamplesModel = (function () {
                         instance.onFail("Incorrect data format.", ActionStatusMessages.load_examples_fail);
                     }
                 },
-                dataType:"json",
-                type:"GET",
-                timeout:10000,
-                error:function (jqXHR, textStatus, errorThrown) {
+                dataType: "json",
+                type: "GET",
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_examples_fail);
                 }
             });

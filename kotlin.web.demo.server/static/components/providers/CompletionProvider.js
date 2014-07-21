@@ -25,12 +25,12 @@ var CompletionProvider = (function () {
     function CompletionProvider() {
 
         var instance = {
-            getCompletion:function (data) {
+            getCompletion: function (data) {
                 getCompletion(data[0], data[1], data[2], data[3], data[4]);
             },
-            onLoadCompletion:function (data) {
+            onLoadCompletion: function (data) {
             },
-            onFail:function (error) {
+            onFail: function (error) {
             }
         };
 
@@ -50,9 +50,9 @@ var CompletionProvider = (function () {
                     isCompletionInProgress = false;
                 } else {
                     $.ajax({
-                        url:generateAjaxUrl("complete", cursorLine + "," + cursorCh + "&runConf=" + dependencies),
-                        context:document.body,
-                        success:function (data) {
+                        url: generateAjaxUrl("complete", cursorLine + "," + cursorCh + "&runConf=" + dependencies),
+                        context: document.body,
+                        success: function (data) {
                             isCompletionInProgress = false;
                             if (checkDataForNull(data)) {
                                 if (checkDataForException(data)) {
@@ -64,11 +64,11 @@ var CompletionProvider = (function () {
                                 instance.onFail("Incorrect data format.");
                             }
                         },
-                        dataType:"json",
-                        type:"POST",
-                        data:{text:file},
-                        timeout:10000,
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        dataType: "json",
+                        type: "POST",
+                        data: {text: file},
+                        timeout: 10000,
+                        error: function (jqXHR, textStatus, errorThrown) {
                             isCompletionInProgress = false;
                             instance.onFail(textStatus + " : " + errorThrown);
                         }

@@ -33,16 +33,16 @@ var ConverterView = (function () {
         var popup = $(".myPopupForConverterFromJavaToKotlin");
 
         var instance = {
-            closeDialog:function () {
+            closeDialog: function () {
                 popup.dialog("close");
             }
         };
 
         my_editor = CodeMirror.fromTextArea(document.getElementsByName("myTextareaForConverterFromJavaToKotlin")[0], {
-            lineNumbers:true,
-            matchBrackets:true,
-            mode:"text/x-java",
-            minHeight:"430px"
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "text/x-java",
+            minHeight: "430px"
         });
 
         element.click(function () {
@@ -53,23 +53,23 @@ var ConverterView = (function () {
         });
 
         popup.dialog({
-            modal:"true",
-            width:640,
-            height:480,
-            autoOpen:false,
-            resizeStop:function (event, ui) {
+            modal: "true",
+            width: 640,
+            height: 480,
+            autoOpen: false,
+            resizeStop: function (event, ui) {
                 var height = popup.dialog("option", "height") - 120;
                 $("div #scroll", popup).css("height", height + "px");
                 my_editor.refresh();
             },
-            buttons:[
-                { text:"Convert to Kotlin",
-                    click:function () {
+            buttons: [
+                { text: "Convert to Kotlin",
+                    click: function () {
                         model.convert(my_editor.getValue());
                     }
                 },
-                { text:"Cancel",
-                    click:function () {
+                { text: "Cancel",
+                    click: function () {
                         popup.dialog("close");
                     }
                 }

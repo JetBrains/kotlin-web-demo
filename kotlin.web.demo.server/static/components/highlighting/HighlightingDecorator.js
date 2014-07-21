@@ -27,15 +27,15 @@ var HighlighterDecorator = (function () {
         var currentHighlighter = null;
 
         var instance = {
-            getHighlighting:function (configurationType, programText, callback) {
+            getHighlighting: function (configurationType, programText, callback) {
                 if (currentHighlighter != null) {
                     currentHighlighter.getHighlighting(configurationType, programText, callback);
                 }
             },
-            onHighlight:function (data) {
+            onHighlight: function (data) {
 
             },
-            setHighlighter:function (highlighter) {
+            setHighlighter: function (highlighter) {
                 if (currentHighlighter != null) {
                     currentHighlighter.onHighlight = null;
                     currentHighlighter.onFail = null;
@@ -49,7 +49,7 @@ var HighlighterDecorator = (function () {
                     instance.onFail(exception);
                 };
             },
-            onFail:function (message) {
+            onFail: function (message) {
             }
         };
 

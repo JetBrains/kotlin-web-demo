@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-function Shortcuts() {}
+function Shortcuts() {
+}
 
 Shortcuts.macShortcuts = {
-    RUN:"Ctrl+R",
-    REFORMAT_CODE:"Cmd+Alt+L",
-    AUTOCOMPLETE:"Cmd+Space",
+    RUN: "Ctrl+R",
+    REFORMAT_CODE: "Cmd+Alt+L",
+    AUTOCOMPLETE: "Cmd+Space",
     SAVE: "Cmd+S"};
 
 Shortcuts.winShortcuts = {
-    RUN:"Ctrl+F9",
-    REFORMAT_CODE:"Ctrl+Alt+L",
-    AUTOCOMPLETE:"Ctrl+Space",
+    RUN: "Ctrl+F9",
+    REFORMAT_CODE: "Ctrl+Alt+L",
+    AUTOCOMPLETE: "Ctrl+Space",
     SAVE: "Ctrl+S"};

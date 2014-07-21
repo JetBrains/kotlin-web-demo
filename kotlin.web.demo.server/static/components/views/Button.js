@@ -28,17 +28,17 @@ var Button = (function () {
     function Button(element, /*Nullable*/ shortcut) {
 
         var instance = {
-            setEnabled:function (enabled) {
+            setEnabled: function (enabled) {
                 if (enabled) {
-                    element.css({opacity:1});
+                    element.css({opacity: 1});
                 } else {
-                    element.css({opacity:0.5});
+                    element.css({opacity: 0.5});
                 }
             },
-            click:function () {
+            click: function () {
                 instance.onClick();
             },
-            onClick:function () {
+            onClick: function () {
             }
         };
 

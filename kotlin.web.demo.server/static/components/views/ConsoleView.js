@@ -33,13 +33,13 @@ var ConsoleView = (function () {
         console = element;
 
         var instance = {
-            setOutput:function (data) {
+            setOutput: function (data) {
                 setOutput(data);
             },
-            setConfiguration:function (conf) {
+            setConfiguration: function (conf) {
                 configuration = conf;
             },
-            writeException:function (data) {
+            writeException: function (data) {
                 writeException(data);
             }
         };
@@ -57,7 +57,7 @@ var ConsoleView = (function () {
                 var i = 0;
                 var output = [];
                 while (data[i] != undefined) {
-                    output.push({"text":data[i].exception, "type":data[i].type});
+                    output.push({"text": data[i].exception, "type": data[i].type});
                     i++;
                 }
                 setOutput(output);
@@ -69,20 +69,19 @@ var ConsoleView = (function () {
                     tabs.tabs("select", 1);
                 }
                 var output = [
-                    {"text":data, "type":"err"}
+                    {"text": data, "type": "err"}
                 ];
                 setOutput(output);
             }
         }
 
-        function makeCodeReference(file, lineNo)
-        {
+        function makeCodeReference(file, lineNo) {
             var a = document.createElement("a");
             a.href = "#code";
             a.innerHTML = "(" + file + ":" + lineNo + ")";
-            var id = "stack_trace_code_reference_"+lineNo;
+            var id = "stack_trace_code_reference_" + lineNo;
             a.id = id;
-            $(document).on("click", "#" + id, function(){
+            $(document).on("click", "#" + id, function () {
                 editor.setCursor(lineNo - 1, 0);
                 editor.focus();
             });
@@ -92,7 +91,7 @@ var ConsoleView = (function () {
         function createStdErrorForConsoleView(element, template, lines) {
             var i = 0;
             var pos = template.indexOf("%STACK_TRACE_LINE%");
-            while ( pos > -1) {
+            while (pos > -1) {
                 var s = document.createElement("span");
                 s.innerHTML = template.substr(0, pos) + "\tat " + lines[i].function;
                 template = template.substr(pos + "%STACK_TRACE_LINE%".length);

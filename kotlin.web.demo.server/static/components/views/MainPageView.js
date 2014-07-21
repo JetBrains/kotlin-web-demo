@@ -33,7 +33,7 @@ var MainPageView = (function () {
     function MainPageView() {
 
         var instance = {
-            resize:function () {
+            resize: function () {
                 var isIE = navigator.appVersion.indexOf("MSIE") != -1;
 
                 if (!isIE) {
@@ -50,12 +50,12 @@ var MainPageView = (function () {
                     }
                 }
             },
-            setKotlinVersion:function () {
+            setKotlinVersion: function () {
                 $("#kotlinVersionTop").html("(" + KOTLIN_VERSION + ")");
                 $("#kotlinVersion").html(WEB_DEMO_VERSION);
                 $("#currentYear").html(new Date().getFullYear());
             },
-            checkIEVersion:function () {
+            checkIEVersion: function () {
                 if (navigator.appVersion.indexOf("MSIE") != -1) {
                     function getIEVersionNumber() {
                         var ua = navigator.userAgent;

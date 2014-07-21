@@ -26,13 +26,13 @@ var CompletionFromServer = (function () {
     function CompletionFromServer() {
 
         var instance = {
-            getCompletion:function (confType, programText, cursorLine, cursorCh) {
+            getCompletion: function (confType, programText, cursorLine, cursorCh) {
                 var confTypeString = Configuration.getStringFromType(confType);
                 getCompletion(confTypeString, programText, cursorLine, cursorCh);
             },
-            onHighlight:function (data) {
+            onHighlight: function (data) {
             },
-            onFail:function (exception) {
+            onFail: function (exception) {
             }
         };
 
@@ -42,9 +42,9 @@ var CompletionFromServer = (function () {
             if (!isLoadingCompletion) {
                 isLoadingCompletion = true;
                 $.ajax({
-                    url:generateAjaxUrl("complete", cursorLine + "," + cursorCh + "&runConf=" + confTypeString),
-                    context:document.body,
-                    success:function (data) {
+                    url: generateAjaxUrl("complete", cursorLine + "," + cursorCh + "&runConf=" + confTypeString),
+                    context: document.body,
+                    success: function (data) {
                         isLoadingCompletion = false;
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
@@ -56,11 +56,11 @@ var CompletionFromServer = (function () {
                             instance.onFail("Incorrect data format.");
                         }
                     },
-                    dataType:"json",
-                    type:"POST",
-                    data:{text:programText},
-                    timeout:10000,
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    dataType: "json",
+                    type: "POST",
+                    data: {text: programText},
+                    timeout: 10000,
+                    error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingCompletion = false;
                         instance.onFail(textStatus + " : " + errorThrown);
                     }

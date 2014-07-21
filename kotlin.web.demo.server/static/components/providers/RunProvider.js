@@ -26,11 +26,11 @@ var RunProvider = (function () {
     function RunProvider() {
 
         var instance = {
-            onExecutionFinish:function (data) {
+            onExecutionFinish: function (data) {
             },
-            onFail:function (message) {
+            onFail: function (message) {
             },
-            run:function (configuration, programText, args) {
+            run: function (configuration, programText, args) {
                 run(configuration, programText, args);
             }
         };
@@ -47,9 +47,9 @@ var RunProvider = (function () {
         function runJava(configuration, programText, args) {
             var confTypeString = Configuration.getStringFromType(configuration.type);
             $.ajax({
-                url:generateAjaxUrl("run", confTypeString),
-                context:document.body,
-                success:function (data) {
+                url: generateAjaxUrl("run", confTypeString),
+                context: document.body,
+                success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             instance.onExecutionFinish(data);
@@ -60,11 +60,11 @@ var RunProvider = (function () {
                         instance.onFail("Incorrect data format.")
                     }
                 },
-                dataType:"json",
-                type:"POST",
-                data:{text:programText, consoleArgs:args},
-                timeout:10000,
-                error:function (jqXHR, textStatus, errorThrown) {
+                dataType: "json",
+                type: "POST",
+                data: {text: programText, consoleArgs: args},
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown);
                 }
             });
@@ -93,8 +93,8 @@ var RunProvider = (function () {
                                 return;
                             }
                             var output = [
-                                {"text":safe_tags_replace(dataJs), "type":"out"},
-                                {"text":data[0].text, "type":"toggle-info"}
+                                {"text": safe_tags_replace(dataJs), "type": "out"},
+                                {"text": data[0].text, "type": "toggle-info"}
                             ];
                             instance.onExecutionFinish(output);
                         } else {
@@ -114,9 +114,9 @@ var RunProvider = (function () {
         function loadJsFromServer(configuration, i, arguments) {
             var confTypeString = Configuration.getStringFromType(configuration.type);
             $.ajax({
-                url:generateAjaxUrl("run", confTypeString),
-                context:document.body,
-                success:function (data) {
+                url: generateAjaxUrl("run", confTypeString),
+                context: document.body,
+                success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             var dataJs;
@@ -127,8 +127,8 @@ var RunProvider = (function () {
                                 return;
                             }
                             var output = [
-                                {"text":safe_tags_replace(dataJs), "type":"out"},
-                                {"text":data[0].text, "type":"toggle-info"}
+                                {"text": safe_tags_replace(dataJs), "type": "out"},
+                                {"text": data[0].text, "type": "toggle-info"}
                             ];
                             instance.onExecutionFinish(output);
                         } else {
@@ -138,11 +138,11 @@ var RunProvider = (function () {
                         instance.onFail("Incorrect data format.");
                     }
                 },
-                dataType:"json",
-                type:"POST",
-                data:{text:i, consoleArgs:arguments},
-                timeout:10000,
-                error:function (jqXHR, textStatus, errorThrown) {
+                dataType: "json",
+                type: "POST",
+                data: {text: i, consoleArgs: arguments},
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown);
                 }
             });

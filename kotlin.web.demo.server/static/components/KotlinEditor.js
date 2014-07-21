@@ -39,7 +39,7 @@ var KotlinEditor = (function () {
             function CompletionObject() {
                 $("body div:first").after("<div style=\"display: none;\" class=\"completions completionPopUpWindow\"></div>");
                 var instance = {
-                    processCompletionResult:function (data) {
+                    processCompletionResult: function (data) {
                         startComplete(data);
                     }
                 };
@@ -119,9 +119,9 @@ var KotlinEditor = (function () {
                             }
                         }
                         if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
-                            my_editor.replaceRange(str, {line:cur.line, ch:token.end}, {line:cur.line, ch:token.end});
+                            my_editor.replaceRange(str, {line: cur.line, ch: token.end}, {line: cur.line, ch: token.end});
                         } else {
-                            my_editor.replaceRange(str, {line:cur.line, ch:token.start}, {line:cur.line, ch:token.end});
+                            my_editor.replaceRange(str, {line: cur.line, ch: token.start}, {line: cur.line, ch: token.end});
                         }
                     }
                 }
@@ -186,7 +186,7 @@ var KotlinEditor = (function () {
                 if (i <= 10) {
                     complete.css("width", (sel.clientWidth - 1) + "px");
                     complete.css("height", (sel.size * 18) + "px");
-                }   else {
+                } else {
                     complete.css("width", "auto");
                     complete.css("height", "auto");
                 }
@@ -322,7 +322,7 @@ var KotlinEditor = (function () {
 
             function HighlightingObject() {
                 var instance = {
-                    processHighlightingResult:function (data) {
+                    processHighlightingResult: function (data) {
                         process(data);
                     }
                 };
@@ -411,75 +411,75 @@ var KotlinEditor = (function () {
 
 
         my_editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-            lineNumbers:true,
-            matchBrackets:true,
-            mode:"text/kotlin",
-            extraKeys:{
-                "Ctrl-Space":function () {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "text/kotlin",
+            extraKeys: {
+                "Ctrl-Space": function () {
                     completionProvider.getCompletion(configuration.type, my_editor.getValue(),
                         my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
                 }
 
             },
-            onChange:runTimerForNonPrinting,
-            onCursorActivity:function () {
+            onChange: runTimerForNonPrinting,
+            onCursorActivity: function () {
                 instance.onCursorActivity(my_editor.getCursor());
             },
-            minHeight:"430px",
-            tabSize:2
+            minHeight: "430px",
+            tabSize: 2
         });
 
         var instance = {
-            loadExampleOrProgram:function (status, example) {
+            loadExampleOrProgram: function (status, example) {
                 if (status) {
                     my_editor.setValue(example.text);
                     isEditorContentChanged = false;
                 }
             },
-            setCursor:function (lineNo, charNo){
+            setCursor: function (lineNo, charNo) {
                 my_editor.setCursor(lineNo, charNo);
             },
-            focus:function(){
+            focus: function () {
                 my_editor.focus()
             },
 
-            showCompletionResult:function (data) {
+            showCompletionResult: function (data) {
                 completion.processCompletionResult(data);
             },
-            addMarkers:function (data) {
+            addMarkers: function (data) {
                 highlighting.processHighlightingResult(data);
             },
-            setConfiguration:function (conf) {
+            setConfiguration: function (conf) {
                 configuration = conf;
             },
-            setHighlighterDecorator:function (decorator) {
+            setHighlighterDecorator: function (decorator) {
                 highlightingProvider = decorator;
             },
-            setCompletionDecorator:function (decorator) {
+            setCompletionDecorator: function (decorator) {
                 completionProvider = decorator;
             },
-            getProgramText:function () {
+            getProgramText: function () {
                 return my_editor.getValue();
             },
-            isEditorContentChanged:function () {
+            isEditorContentChanged: function () {
                 return isEditorContentChanged;
             },
-            markAsUnchanged:function () {
+            markAsUnchanged: function () {
                 isEditorContentChanged = false;
             },
-            indentAll:function () {
-                my_editor.setSelection({line:0, ch:0}, {line:my_editor.lineCount() - 1, ch:0});
+            indentAll: function () {
+                my_editor.setSelection({line: 0, ch: 0}, {line: my_editor.lineCount() - 1, ch: 0});
                 my_editor.indentSelection("smart");
             },
-            refreshMode:function () {
+            refreshMode: function () {
                 my_editor.setOption("mode", "kotlin");
             },
-            setText:function (text) {
+            setText: function (text) {
                 my_editor.focus();
                 my_editor.setValue(text);
                 isEditorContentChanged = false;
             },
-            clearMarkers:function () {
+            clearMarkers: function () {
                 for (var i = 0; i < my_editor.lineCount(); i++) {
                     try {
                         my_editor.clearMarker(i);
@@ -488,16 +488,16 @@ var KotlinEditor = (function () {
                     }
                 }
             },
-            onCursorActivity:function (cursorPosition) {
+            onCursorActivity: function (cursorPosition) {
             },
-            getWordAtCursor:function (cursorPosition) {
+            getWordAtCursor: function (cursorPosition) {
                 var word = my_editor.getTokenAt(cursorPosition).string;
                 if (checkDataForNull(word)) {
                     return word;
                 }
                 return "";
             },
-            getMessageForLineAtCursor:function (cursorPosition) {
+            getMessageForLineAtCursor: function (cursorPosition) {
                 var message = "";
                 var lineNumber = cursorPosition.line;
                 var text = my_editor.lineInfo(lineNumber).markerText;

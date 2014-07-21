@@ -16,13 +16,10 @@
 
 package org.jetbrains.webdemo.utils;
 
-import org.json.JSONObject;
-import org.json.JSONString;
-
 /**
  * Created by atamas on 18.07.14.
  */
-public class StackTraceLine implements JSONString{
+public class StackTraceLine{
     private String function;
     private String file;
     private String lineNo;
@@ -44,10 +41,5 @@ public class StackTraceLine implements JSONString{
 
     public String getLineNo() {
         return lineNo;
-    }
-
-    @Override
-    public String toJSONString() {
-        return new JSONObject(this).toString();
     }
 }

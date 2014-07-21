@@ -20,7 +20,7 @@ var Shortcut = (function () {
         var isShortcutPressed = functionToCheckIfShortcutPressed;
 
         var instance = {
-            isPressed:function (e) {
+            isPressed: function (e) {
                 if (isShortcutPressed != null && isShortcutPressed(e)) {
                     if (e.preventDefault) e.preventDefault();
                     else e.returnValue = false;
@@ -28,7 +28,7 @@ var Shortcut = (function () {
                 }
                 return false;
             },
-            getName:function () {
+            getName: function () {
                 return name;
             }
         };
@@ -41,7 +41,7 @@ var Shortcut = (function () {
 var ActionManager = (function () {
 
     var NEVER_PRESSED_SHORTCUT = new Shortcut("", function (e) {
-       return false;
+        return false;
     });
 
     function ActionManager() {
@@ -60,7 +60,7 @@ var ActionManager = (function () {
         }
 
         var instance = {
-            getShortcutByName:function (name) {
+            getShortcutByName: function (name) {
                 for (var i = 0; i < currentActionShortcutMap.length; i++) {
                     if (currentActionShortcutMap[i].name == name) {
                         return  currentActionShortcutMap[i].shortcut;
@@ -68,20 +68,20 @@ var ActionManager = (function () {
                 }
                 return NEVER_PRESSED_SHORTCUT;
             },
-            registerAction:function (actionName, defaultShortcut, macShortcut, winShortcut) {
+            registerAction: function (actionName, defaultShortcut, macShortcut, winShortcut) {
                 if (macShortcut != undefined) {
-                    macActionShortcutMap.push({name:actionName, shortcut:macShortcut});
+                    macActionShortcutMap.push({name: actionName, shortcut: macShortcut});
                 } else {
-                    macActionShortcutMap.push({name:actionName, shortcut:defaultShortcut});
+                    macActionShortcutMap.push({name: actionName, shortcut: defaultShortcut});
                 }
 
                 if (winShortcut != undefined) {
-                    winActionShortcutMap.push({name:actionName, shortcut:winShortcut});
+                    winActionShortcutMap.push({name: actionName, shortcut: winShortcut});
                 } else {
-                    winActionShortcutMap.push({name:actionName, shortcut:defaultShortcut});
+                    winActionShortcutMap.push({name: actionName, shortcut: defaultShortcut});
                 }
 
-                defaultActionShortcutMap.push({name:actionName, shortcut:defaultShortcut});
+                defaultActionShortcutMap.push({name: actionName, shortcut: defaultShortcut});
             }
         };
 

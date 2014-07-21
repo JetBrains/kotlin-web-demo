@@ -26,13 +26,13 @@ var HighlightingFromClient = (function () {
     function HighlightingFromClient() {
 
         var instance = {
-            getHighlighting:function (confType, programText, callback) {
+            getHighlighting: function (confType, programText, callback) {
                 var confTypeString = Configuration.getStringFromType(confType);
                 getHighlighting(confTypeString, programText, callback);
             },
-            onHighlight:function (data, callback) {
+            onHighlight: function (data, callback) {
             },
-            onFail:function (exception) {
+            onFail: function (exception) {
             }
         };
 
@@ -94,9 +94,8 @@ var HighlightingFromClient = (function () {
 
         function checkIfAppletLoaded() {
             try {
-                var defined = $("#myapplet")[0].getHighlighting != undefined;
-                return defined;
-            }  catch (e) {
+                return $("#myapplet")[0].getHighlighting != undefined;
+            } catch (e) {
                 return false;
             }
 

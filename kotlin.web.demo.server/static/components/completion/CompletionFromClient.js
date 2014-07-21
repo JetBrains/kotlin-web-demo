@@ -26,13 +26,13 @@ var CompletionFromClient = (function () {
     function CompletionFromClient() {
 
         var instance = {
-            getCompletion:function (configurationType, programText, cursorLine, cursorCh) {
+            getCompletion: function (configurationType, programText, cursorLine, cursorCh) {
                 var confTypeString = Configuration.getStringFromType(configurationType);
                 getCompletion(confTypeString, programText, cursorLine, cursorCh);
             },
-            onLoadCompletion:function (data) {
+            onLoadCompletion: function (data) {
             },
-            onFail:function (exception) {
+            onFail: function (exception) {
             }
         };
 

@@ -31,13 +31,13 @@ var HighlightingFromServer = (function () {
     function HighlightingFromServer() {
 
         var instance = {
-            getHighlighting:function (confType, programText, callback) {
+            getHighlighting: function (confType, programText, callback) {
                 var confTypeString = Configuration.getStringFromType(confType);
                 getHighlighting(confTypeString, programText, callback);
             },
-            onHighlight:function (data, callback) {
+            onHighlight: function (data, callback) {
             },
-            onFail:function (exception) {
+            onFail: function (exception) {
             }
         };
 
@@ -47,9 +47,9 @@ var HighlightingFromServer = (function () {
             if (!isLoadingHighlighting) {
                 isLoadingHighlighting = true;
                 $.ajax({
-                    url:generateAjaxUrl("highlight", confTypeString),
-                    context:document.body,
-                    success:function (data) {
+                    url: generateAjaxUrl("highlight", confTypeString),
+                    context: document.body,
+                    success: function (data) {
                         isLoadingHighlighting = false;
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
@@ -61,11 +61,11 @@ var HighlightingFromServer = (function () {
                             instance.onFail("Incorrect data format.");
                         }
                     },
-                    dataType:"json",
-                    type:"POST",
-                    data:{text:file},
-                    timeout:10000,
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    dataType: "json",
+                    type: "POST",
+                    data: {text: file},
+                    timeout: 10000,
+                    error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingHighlighting = false;
                         instance.onFail(textStatus + " : " + errorThrown);
                     }

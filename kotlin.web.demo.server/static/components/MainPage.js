@@ -15,20 +15,20 @@
  */
 
 var ActionStatusMessages = {
-    load_example_ok:StatusBarView.Messages.load_example_ok,
-    load_example_fail:StatusBarView.Messages.load_example_fail,
-    load_program_ok:StatusBarView.Messages.load_program_ok,
-    load_program_fail:StatusBarView.Messages.load_program_fail,
-    load_programs_fail:StatusBarView.Messages.load_programs_fail,
-    load_examples_fail:StatusBarView.Messages.load_examples_fail,
-    generate_link_ok:StatusBarView.Messages.generate_link_ok,
-    generate_link_fail:StatusBarView.Messages.generate_link_fail,
-    delete_program_ok:StatusBarView.Messages.delete_program_ok,
-    delete_program_fail:StatusBarView.Messages.delete_program_fail,
-    save_program_ok:StatusBarView.Messages.save_program_ok,
-    login_ok:StatusBarView.Messages.login_ok,
-    login_fail:StatusBarView.Messages.login_fail,
-    save_program_fail:StatusBarView.Messages.save_program_fail
+    load_example_ok: StatusBarView.Messages.load_example_ok,
+    load_example_fail: StatusBarView.Messages.load_example_fail,
+    load_program_ok: StatusBarView.Messages.load_program_ok,
+    load_program_fail: StatusBarView.Messages.load_program_fail,
+    load_programs_fail: StatusBarView.Messages.load_programs_fail,
+    load_examples_fail: StatusBarView.Messages.load_examples_fail,
+    generate_link_ok: StatusBarView.Messages.generate_link_ok,
+    generate_link_fail: StatusBarView.Messages.generate_link_fail,
+    delete_program_ok: StatusBarView.Messages.delete_program_ok,
+    delete_program_fail: StatusBarView.Messages.delete_program_fail,
+    save_program_ok: StatusBarView.Messages.save_program_ok,
+    login_ok: StatusBarView.Messages.login_ok,
+    login_fail: StatusBarView.Messages.login_fail,
+    save_program_fail: StatusBarView.Messages.save_program_fail
 };
 
 var sessionId = -1;
@@ -53,7 +53,8 @@ actionManager.registerAction("org.jetbrains.web.demo.run",
     }));
 actionManager.registerAction("org.jetbrains.web.demo.reformat",
     new Shortcut("Ctrl+Alt+L", null), /*default*/
-    new Shortcut("Cmd+Alt+L", null)); /*mac*/
+    new Shortcut("Cmd+Alt+L", null));
+/*mac*/
 actionManager.registerAction("org.jetbrains.web.demo.autocomplete",
     new Shortcut("Ctrl+Space", null));
 actionManager.registerAction("org.jetbrains.web.demo.save",
@@ -302,9 +303,9 @@ $("#whatimgjavatokotlin").click(function () {
 });
 
 $("#dialogAboutJavaToKotlinConverter").dialog({
-    modal:"true",
-    width:300,
-    autoOpen:false
+    modal: "true",
+    width: 300,
+    autoOpen: false
 });
 
 function generateAjaxUrl(type, args) {
@@ -314,12 +315,12 @@ function generateAjaxUrl(type, args) {
 
 function setSessionId() {
     $.ajax({
-        url:generateAjaxUrl("getSessionId", "null"),
-        context:document.body,
-        type:"GET",
-        dataType:"json",
-        timeout:10000,
-        success:getSessionIdSuccess
+        url: generateAjaxUrl("getSessionId", "null"),
+        context: document.body,
+        type: "GET",
+        dataType: "json",
+        timeout: 10000,
+        success: getSessionIdSuccess
     });
 }
 
@@ -333,19 +334,19 @@ function getSessionIdSuccess(data) {
     info += " " + "system: " + navigator.platform;
 
     $.ajax({
-        url:generateAjaxUrl("sendUserData", "null"),
-        context:document.body,
-        type:"POST",
-        data:{text:info},
-        timeout:5000
+        url: generateAjaxUrl("sendUserData", "null"),
+        context: document.body,
+        type: "POST",
+        data: {text: info},
+        timeout: 5000
     });
 }
 
 $("#popupForCanvas").dialog({
-    width:630,
-    height:350,
-    autoOpen:false,
-    close:function () {
+    width: 630,
+    height: 350,
+    autoOpen: false,
+    close: function () {
         canvasPopup.hide();
         //$("#popupForCanvas").html("");
     }

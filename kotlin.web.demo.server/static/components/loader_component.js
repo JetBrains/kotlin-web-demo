@@ -27,10 +27,10 @@ var LoaderComponent = (function () {
     function LoaderComponent(element) {
 
         var instance = {
-            hide: function() {
+            hide: function () {
                 element.hide();
             },
-            show: function() {
+            show: function () {
                 element.show();
             }
         };

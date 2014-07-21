@@ -26,20 +26,20 @@ var ConverterProvider = (function () {
     function ConverterProvider() {
 
         var instance = {
-            convert:function (text) {
+            convert: function (text) {
                 convert(text);
             },
-            onConvert:function (text) {
+            onConvert: function (text) {
             },
-            onFail:function (error) {
+            onFail: function (error) {
             }
         };
 
         function convert(text) {
             $.ajax({
-                url:generateAjaxUrl("convertToKotlin", ""),
-                context:document.body,
-                success:function (data) {
+                url: generateAjaxUrl("convertToKotlin", ""),
+                context: document.body,
+                success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             instance.onConvert(data[0].text);
@@ -50,11 +50,11 @@ var ConverterProvider = (function () {
                         instance.onFail("Incorrect data format.");
                     }
                 },
-                dataType:"json",
-                type:"POST",
-                data:{text:text},
-                timeout:10000,
-                error:function (jqXHR, textStatus, errorThrown) {
+                dataType: "json",
+                type: "POST",
+                data: {text: text},
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown);
                 }
             });
