@@ -16,6 +16,9 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.webdemo.Interval;
@@ -25,11 +28,8 @@ import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.json.JSONArray;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class JsonResponseForHighlighting {
 
@@ -52,25 +52,25 @@ public class JsonResponseForHighlighting {
             return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE
                      , e.getStackTraceString());
         }
-        JSONArray resultArray = new JSONArray();
+        ArrayNode resultArray = new ArrayNode(JsonNodeFactory.instance);
 
         for (ErrorDescriptor errorDescriptor : errorDescriptors) {
-            resultArray.put(getMapForJsonResponse(errorDescriptor.getInterval(), errorDescriptor.getMessage(),
+            resultArray.add(getMapForJsonResponse(errorDescriptor.getInterval(), errorDescriptor.getMessage(),
                     errorDescriptor.getClassName(), errorDescriptor.getSeverity().name()));
         }
         return ResponseUtils.escapeString(resultArray.toString());
     }
 
     @NotNull
-    private Map<String, String> getMapForJsonResponse(Interval interval, String titleName, String className, String severity) {
-        Map<String, String> map = new HashMap<String, String>();
+    private ObjectNode getMapForJsonResponse(Interval interval, String titleName, String className, String severity) {
+        ObjectNode jsonObject = new ObjectNode(JsonNodeFactory.instance);
 
-        map.put("x", "{line: " + interval.startPoint.line + ", ch: " + interval.startPoint.charNumber + "}");
-        map.put("y", "{line: " + interval.endPoint.line + ", ch: " + interval.endPoint.charNumber + "}");
-        map.put("titleName", escape(titleName));
-        map.put("className", className);
-        map.put("severity", severity);
-        return map;
+        jsonObject.put("x", "{line: " + interval.startPoint.line + ", ch: " + interval.startPoint.charNumber + "}");
+        jsonObject.put("y", "{line: " + interval.endPoint.line + ", ch: " + interval.endPoint.charNumber + "}");
+        jsonObject.put("titleName", escape(titleName));
+        jsonObject.put("className", className);
+        jsonObject.put("severity", severity);
+        return jsonObject;
     }
 
 

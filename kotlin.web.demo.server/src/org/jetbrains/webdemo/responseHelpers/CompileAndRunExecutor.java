@@ -16,8 +16,8 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
@@ -118,7 +118,7 @@ public class CompileAndRunExecutor {
             ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                     "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
-            ArrayNode jsonArray = new ObjectMapper().createArrayNode();
+            ArrayNode jsonArray = new ArrayNode(JsonNodeFactory.instance);
             ObjectNode jsonObject = jsonArray.addObject();
             jsonObject.put("type", "info");
             jsonObject.put("text", stringBuilder.toString());

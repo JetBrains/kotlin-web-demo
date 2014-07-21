@@ -16,8 +16,8 @@
 
 package org.jetbrains.webdemo.help;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -118,7 +118,7 @@ public class HelpLoader {
     }
 
     private void generateHelpForWords() {
-        resultWords = new ObjectMapper().createArrayNode();
+        resultWords = new ArrayNode(JsonNodeFactory.instance);
         try {
             File file = new File(ApplicationSettings.HELP_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_WORDS);
             Document doc = ResponseUtils.getXmlDocument(file);
@@ -145,7 +145,7 @@ public class HelpLoader {
     }
 
     private void generateHelpForExamples() {
-        resultExamples = new ObjectMapper().createArrayNode();
+        resultExamples = new ArrayNode(JsonNodeFactory.instance);
         try {
             File file = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_EXAMPLES);
             Document doc = ResponseUtils.getXmlDocument(file);

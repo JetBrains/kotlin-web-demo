@@ -16,8 +16,8 @@
 
 package org.jetbrains.webdemo.handlers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
@@ -143,7 +143,7 @@ public class ServerHandler {
     private void sendSessionId(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
         try {
             String id = sessionInfo.getId();
-            ArrayNode array = new ObjectMapper().createArrayNode();
+            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
             array.add(id);
             if (sessionInfo.getUserInfo().isLogin()) {
                 array.add(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
@@ -157,7 +157,7 @@ public class ServerHandler {
 
     private void sendUserName(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
         try {
-            ArrayNode array = new ObjectMapper().createArrayNode();
+            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
             if (sessionInfo.getUserInfo().isLogin()) {
                 array.add(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
             } else {

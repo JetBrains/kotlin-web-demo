@@ -18,6 +18,7 @@ package org.jetbrains.webdemo.responseHelpers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.lang.psi.JetFile;
@@ -162,7 +163,7 @@ public class JavaRunner {
         }
 
         if (errStream.length() > 0) {
-            ObjectNode errObject = new ObjectMapper().createObjectNode();
+            ObjectNode errObject = new ObjectNode(JsonNodeFactory.instance);
             if (isKotlinLibraryException(errStream.toString())) {
                 writeErrStreamToLog(errStream.toString());
 

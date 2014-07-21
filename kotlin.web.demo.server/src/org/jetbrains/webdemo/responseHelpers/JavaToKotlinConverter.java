@@ -16,8 +16,8 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.jet.j2k.J2kPackage;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -33,7 +33,7 @@ public class JavaToKotlinConverter {
     }
 
     public String getResult(String code) {
-        ArrayNode result = new ObjectMapper().createArrayNode();
+        ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
         ObjectNode jsonObject = result.addObject();
         try {
             String resultFormConverter;

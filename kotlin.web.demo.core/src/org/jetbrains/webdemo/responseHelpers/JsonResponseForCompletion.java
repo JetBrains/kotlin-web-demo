@@ -16,6 +16,9 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -43,9 +46,11 @@ import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
-import org.json.JSONArray;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class JsonResponseForCompletion {
     private final int NUMBER_OF_CHAR_IN_COMPLETION_NAME = 40;
@@ -143,7 +148,7 @@ public class JsonResponseForCompletion {
             return "[]";
         }
 
-        JSONArray jsonArray = new JSONArray();
+        ArrayNode jsonArray = new ArrayNode(JsonNodeFactory.instance);
         if (descriptors != null) {
             String prefix;
             if (isTipsManagerCompletion) {
@@ -173,12 +178,11 @@ public class JsonResponseForCompletion {
                 Pair<String, String> presentableText = getPresentableText(descriptor);
                 String name = formatName(presentableText.getFirst(), NUMBER_OF_CHAR_IN_COMPLETION_NAME);
                 if (prefix.isEmpty() || name.startsWith(prefix)) {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("icon", getIconFromDescriptor(descriptor));
-                    map.put("tail", presentableText.getSecond());
-                    map.put("name", name);
+                    ObjectNode jsonObject = jsonArray.addObject();
+                    jsonObject.put("icon", getIconFromDescriptor(descriptor));
+                    jsonObject.put("tail", presentableText.getSecond());
+                    jsonObject.put("name", name);
 
-                    jsonArray.put(map);
                 }
             }
         }

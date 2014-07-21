@@ -16,8 +16,8 @@
 
 package org.jetbrains.webdemo.database;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -401,7 +401,7 @@ public class MySqlConnector {
                 return ResponseUtils.getErrorInJson("Link for this program is not public");
             }
 
-            ArrayNode array = new ObjectMapper().createArrayNode();
+            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
             ObjectNode jsonObject = array.addObject();
             jsonObject.put("type", "text");
             jsonObject.put("text", rs.getString("PROGRAM_TEXT"));
@@ -501,7 +501,7 @@ public class MySqlConnector {
             if (!rs.next()) {
                 return ResponseUtils.getErrorInJson("Cannot find the program.");
             }
-            ArrayNode array = new ObjectMapper().createArrayNode();
+            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
             ObjectNode jsonObject = array.addObject();
             jsonObject.put("type", "text");
             jsonObject.put("text", rs.getString("PROGRAM_TEXT"));
@@ -530,7 +530,7 @@ public class MySqlConnector {
             st = connection.prepareStatement("SELECT * FROM userprogramid WHERE USER_ID=?");
             st.setString(1, userInfo.getId());
             rs = st.executeQuery();
-            ArrayNode result = new ObjectMapper().createArrayNode();
+            ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
             ArrayList<String> programIds = new ArrayList<String>();
             while (rs.next()) {
                 if (rs.getString("USER_TYPE").equals(userInfo.getType())) {

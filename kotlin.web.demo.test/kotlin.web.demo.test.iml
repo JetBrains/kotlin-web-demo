@@ -10,7 +10,6 @@
     <orderEntry type="library" name="log4j" level="project" />
     <orderEntry type="module" module-name="idea.pacth.server" />
     <orderEntry type="module" module-name="kotlin.web.demo.server" />
-    <orderEntry type="module" module-name="kotlin.web.demo.core" />
     <orderEntry type="library" name="commons-lang" level="project" />
     <orderEntry type="library" name="selenium" level="project" />
     <orderEntry type="library" name="kotlin-runtime" level="project" />

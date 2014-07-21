@@ -16,6 +16,9 @@
 
 package org.jetbrains.webdemo.translator;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
@@ -33,11 +36,8 @@ import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.json.JSONArray;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
@@ -71,10 +71,9 @@ public final class WebDemoTranslatorFacade {
     @NotNull
     public static String translateStringWithCallToMain(@NotNull String programText, @NotNull String argumentsString, SessionInfo sessionInfo) {
         try {
-            JSONArray result = new JSONArray();
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("text", doTranslate(programText, argumentsString));
-            result.put(map);
+            ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
+            ObjectNode jsonObject = result.addObject();
+            jsonObject.put("text", doTranslate(programText, argumentsString));
 
             Initializer.reinitializeJavaEnvironment();
 

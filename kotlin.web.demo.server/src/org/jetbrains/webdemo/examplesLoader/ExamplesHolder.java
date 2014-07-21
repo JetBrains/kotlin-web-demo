@@ -16,8 +16,8 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -56,7 +56,7 @@ public class ExamplesHolder {
 
     public static String loadExample(String url) {
         url = url.replaceAll("_", " ");
-        ArrayNode array = new ObjectMapper().createArrayNode();
+        ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
         ObjectNode resultObj = array.addObject();
         String exampleName = ResponseUtils.getExampleOrProgramNameByUrl(url);
 
