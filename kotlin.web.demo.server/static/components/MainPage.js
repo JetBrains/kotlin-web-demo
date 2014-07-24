@@ -226,7 +226,17 @@ accordion.onLoadCode = function (element, isProgram) {
     } else {
         statusBarView.setMessage(StatusBarView.Messages.load_program_ok);
     }
-    editor.setText(element.text);
+
+    var text = element.text;
+
+
+    if(element.tests != undefined){
+        for(var i = 0; i < element.tests.length; ++i){
+            text = text + "--------TEST---------\n" + element.tests[i].text
+        }
+    }
+
+    editor.setText(text);
     argumentsView.setArgs(element.args);
     configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
 };

@@ -13,7 +13,6 @@
           <element id="library" level="project" name="log4j" />
           <element id="library" level="project" name="kotlin-runtime" />
           <element id="library" level="project" name="dartc" />
-          <element id="library" level="project" name="json" />
           <element id="library" level="project" name="scribe" />
           <element id="library" level="project" name="commons-lang" />
           <element id="library" level="project" name="commons-codec" />
@@ -21,6 +20,7 @@
           <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar" />
           <element id="library" level="project" name="kotlin-j2kConverter" />
           <element id="library" level="project" name="com.fasterxml.jackson.core:com.springsource.com.fasterxml.jackson.core.jackson-databind:2.0.2" />
+          <element id="library" level="project" name="junit-4.10" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />

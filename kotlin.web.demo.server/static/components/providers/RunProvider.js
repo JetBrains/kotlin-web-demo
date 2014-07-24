@@ -62,7 +62,7 @@ var RunProvider = (function () {
                 },
                 dataType: "json",
                 type: "POST",
-                data: {text: programText, consoleArgs: args},
+                data: {text: programText, consoleArgs: args, exampleName: accordion.getSelectedExample()},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown);

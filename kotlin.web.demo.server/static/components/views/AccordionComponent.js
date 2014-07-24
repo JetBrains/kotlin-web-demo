@@ -48,6 +48,9 @@ var AccordionView = (function () {
             onLoadAllContent: function () {
             },
             onFail: function (exception, messageForStatusBar) {
+            },
+            getSelectedExample: function(){
+                return lastSelectedItem
             }
 
         };

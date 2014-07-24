@@ -91,9 +91,9 @@ public class JavaRunner {
                 finalProcess.destroy();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "Timeout exception."));
-                errStream.append("Program was terminated after " + Integer.parseInt(ApplicationSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
+                errStream.append("Program was terminated after " + ApplicationSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
             }
-        }, Integer.parseInt(ApplicationSettings.TIMEOUT_FOR_EXECUTION));
+        }, ApplicationSettings.TIMEOUT_FOR_EXECUTION);
 
         final BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
         final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
@@ -141,8 +141,8 @@ public class JavaRunner {
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                 sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
-                + " timeout=" + isTimeoutException
-                + " commandString=" + Arrays.toString(commandString)));
+                        + " timeout=" + isTimeoutException
+                        + " commandString=" + Arrays.toString(commandString)));
 
         if ((exitValue == 1) && !isTimeoutException) {
             if (outStream.length() > 0) {
@@ -171,13 +171,12 @@ public class JavaRunner {
                 jsonObject.put("type", "err");
                 jsonObject.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
                 errObject.put("type", "out");
-            }
-            else {
+            } else {
                 ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "error while excecution: " + errStream));
                 errObject.put("type", "err");
             }
-            ExecResult result =StackTraceParser.parseStackTraceElements(errStream.toString());
+            ExecResult result = StackTraceParser.parseStackTraceElements(errStream.toString());
             try {
                 errObject.put("text", objectMapper.writeValueAsString(result));
             } catch (IOException e) {
@@ -243,7 +242,7 @@ public class JavaRunner {
                 || str.contains("InstantiationError")
                 || str.contains("AbstractMethodError")
                 || str.contains("NoSuchFieldError")
-                || (str.contains("IllegalAccessError")  && !str.contains("kotlin.io.IoPackage"))
+                || (str.contains("IllegalAccessError") && !str.contains("kotlin.io.IoPackage"))
                 || str.contains("VerifyError")
                 || str.contains("ClassCircularityError")
                 || str.contains("UnsatisfiedLinkError")
@@ -274,15 +273,13 @@ public class JavaRunner {
                 out.write(tmp, 0, lengthOut);
                 stringWriter.write(new String(tmp));
                 outStream.append(stringWriter.toString());
-            }
-            else if (lengthOut == -1) {
+            } else if (lengthOut == -1) {
                 returnValue--;
             }
             if ((lengthErr = isErr.read(tmp)) >= 0) {
                 out.write(tmp, 0, lengthErr);
                 errStream.append(new String(tmp));
-            }
-            else if (lengthErr == -1) {
+            } else if (lengthErr == -1) {
                 returnValue--;
             }
         } catch (IOException e) {
@@ -311,8 +308,7 @@ public class JavaRunner {
                     ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                             sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                 }
-            }
-            else {
+            } else {
                 //list all the directory contents
                 String files[] = file.list();
                 for (String temp : files) {
@@ -329,8 +325,7 @@ public class JavaRunner {
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (file.exists()) {
                 file.delete();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
@@ -345,15 +340,16 @@ public class JavaRunner {
         String[] builder;
         if (arguments.isEmpty()) {
             builder = new String[5];
-        }
-        else {
+        } else {
             builder = new String[argsArray.length + 5];
         }
         builder[0] = ApplicationSettings.JAVA_EXECUTE;
         builder[1] = "-classpath";
-        builder[2] = pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB;
-        builder[3] = "-Djava.security.manager";
-        builder[4] = findMainClass();
+        builder[2] = pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB
+                + File.pathSeparator + ApplicationSettings.JUNIT_LIB;
+//        builder[3] = "-Djava.security.manager";
+        builder[3] = "org.junit.runner.JUnitCore";
+        builder[4] = "Junit4Test";// findMainClass();
 
         if (!arguments.isEmpty()) {
             System.arraycopy(argsArray, 0, builder, 5, argsArray.length);

@@ -1,0 +1,72 @@
+/*
+ * Copyright 2000-2014 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.grid-footer{
+    text-align: center;
+    border: 1px solid;
+    border-color: #969696;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.grid-footer-buttons{
+    float: left;
+    text-align: center;
+    text-decoration: none;
+    position: relative;
+    margin-left: 3px;
+    margin-bottom: 3px;
+}
+
+.grid-footer:after{
+    display: block;
+    clear: both;
+    height: 0;
+    content: '';
+}
+
+.grid-footer-button{
+    color: #000000;
+    font-size: 14px;
+    background-color: #f0f0f0;
+    padding: 0px 6px;
+    line-height: 22px;
+    border: 1px solid;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-color: #969696;
+
+    display: inline-block;
+    cursor: default;
+}
+
+.grid-footer-button:first-child{
+    border-bottom-left-radius: 4px;
+}
+
+.grid-footer-button:last-child{
+    border-bottom-right-radius: 4px;
+    border-right-width: 1px;
+}
+
+.kotlin-info{
+    line-height: 22px;
+    float: right;
+    font-size: 14px;
+    padding: 0 10px;
+    margin-top: 3px;
+    color: #000000;
+}

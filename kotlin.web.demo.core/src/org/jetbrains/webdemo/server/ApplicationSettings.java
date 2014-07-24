@@ -21,7 +21,7 @@ public class ApplicationSettings {
     public static String JAVA_EXECUTE = "";
     public static String WEBAPP_ROOT_DIRECTORY = "";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
-    public static String TIMEOUT_FOR_EXECUTION = "5000";
+    public static int TIMEOUT_FOR_EXECUTION = 5000;
     public static String IS_TEST_VERSION = "true";
 
     public static String OUTPUT_DIRECTORY = "out";
@@ -29,6 +29,7 @@ public class ApplicationSettings {
     public static String HELP_DIRECTORY = "help";
     public static String LOGS_DIRECTORY = "logs";
     public static String STATISTICS_DIRECTORY = "statistics";
+    public static String JUNIT_LIB = "";
 
     public static String HELP_FOR_EXAMPLES = "helpExamples.xml";
     public static String HELP_FOR_WORDS = "helpWords.xml";

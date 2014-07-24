@@ -69,7 +69,17 @@ public class ExamplesHolder {
             return ResponseUtils.getErrorInJson("Cannot find this example. Please choose another example.");
         }
 
-        File exampleFile = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + example.parent + File.separator + example.fileName + ".kt");
+
+        File exampleFile;
+        if (!example.parent.equals("Problems")) {
+            exampleFile = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + example.parent + File.separator + example.fileName + ".kt");
+        } else {
+            exampleFile = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator +
+                    example.parent + File.separator +
+                    example.fileName + File.separator +
+                    example.fileName + ".kt");
+        }
+
         if (!exampleFile.exists()) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Cannot find an example"),
@@ -78,29 +88,45 @@ public class ExamplesHolder {
         }
 
         String fileContent;
-        FileReader reader = null;
-        try {
-            reader = new FileReader(exampleFile);
+
+        try (FileReader reader = new FileReader(exampleFile)) {
             fileContent = ResponseUtils.readData(reader, true);
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", exampleFile.getAbsolutePath());
             return ResponseUtils.getErrorInJson("Cannot find this example. Please choose another example.");
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", example.fileName + " " + example.parent);
-            }
         }
+
 
         resultObj.put("name", example.name);
         resultObj.put("text", fileContent);
         resultObj.put("args", example.args);
         resultObj.put("confType", example.confType);
+
+        File testFolder = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator +
+                example.parent + File.separator +
+                example.fileName + File.separator +
+                "Test");
+
+        ArrayNode tests = resultObj.putArray("tests");
+
+        if (testFolder.exists()) {
+            for (File testFile : testFolder.listFiles()) {
+
+                try (FileReader testFileReader = new FileReader(testFile)) {
+                    String testContent = ResponseUtils.readData(testFileReader, true);
+                    ObjectNode test = tests.addObject();
+                    test.put("name", testFile.getName());
+                    test.put("text", testContent);
+                    test.put("args", "");
+                    test.put("confType", example.confType);
+                } catch (IOException e) {
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                            SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", testFile.getAbsolutePath());
+                }
+
+            }
+        }
 
         return array.toString();
     }
