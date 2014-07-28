@@ -22,6 +22,7 @@ import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
+import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.*;
@@ -35,7 +36,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
 
     private static OAuthService twitterService;
     private static Token requestToken;
-    private static final String PROTECTED_RESOURCE_URL = "http://api.twitter.com/1/account/verify_credentials.xml";
+    private static final String PROTECTED_RESOURCE_URL = "http://api.twitter.com/1.1/account/verify_credentials.json";
 
     public String authorize() {
         try {
@@ -65,31 +66,14 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
             twitterService.signRequest(accessToken, request); // the access token from step 4
             Response response = request.send();
 
-            Document document = ResponseUtils.getXmlDocument(response.getStream());
-            if (document == null) {
-                return userInfo;
-            }
-
+            JSONObject obj = new JSONObject(response.getBody());
             userInfo = new UserInfo();
-            String name = null;
-            String id = null;
-            NodeList nodeList = document.getElementsByTagName("user");
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                NodeList children = nodeList.item(i).getChildNodes();
-                for (int j = 0; j < children.getLength(); j++) {
-                    Node node = children.item(j);
-                    if (node.getNodeName().equals("name")) {
-                        name = node.getTextContent();
-                    } else if (node.getNodeName().equals("id")) {
-                        id = node.getTextContent();
-                    }
-                }
-            }
+            String id = obj.get("id").toString();
+            String name = obj.has("name") ? obj.get("name").toString() : "";
+
             if (name != null && id != null) {
                 userInfo.login(name, id, TYPE);
             }
-
-
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "twitter: " + url);
         }
