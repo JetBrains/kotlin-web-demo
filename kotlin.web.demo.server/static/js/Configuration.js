@@ -60,6 +60,11 @@ var ConfigurationComponent = (function () {
             updateConfiguration: function (type) {
                 configuration = new Configuration(configuration.mode, Configuration.getTypeFromString(type));
                 document.getElementById("run-mode").value = type;
+                if($("#run-mode").val() == "java"){
+                    document.getElementById("generated-code-tab").innerHTML = "Generated classfiles";
+                } else{
+                    document.getElementById("generated-code-tab").innerHTML = "Generated JavaScript code";
+                }
                 fireChangeEvent();
             },
             onChange: function (configuration) {

@@ -51,7 +51,7 @@ var ConfirmDialog = (function () {
     $("#confirmDialog").dialog({
         modal: "true",
         width: 500,
-        minheight: 0,
+        minHeight: 0,
         autoOpen: false});
 
     function showConfirmDialog(fun) {

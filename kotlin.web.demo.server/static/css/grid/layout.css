@@ -31,6 +31,7 @@
         margin-right: 15px; } }
 
 .g-grid {
+    width: inherit;
     font-size: 0;
     margin-right: -30px; }
 

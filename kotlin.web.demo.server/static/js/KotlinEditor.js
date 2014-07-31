@@ -36,6 +36,45 @@ var KotlinEditor = (function () {
             var keywords;
             var isContinueComplete = false;
 
+            var sel = $("#selectId");
+
+            function close() {
+                sel.css("display", "none");
+                sel.html("");
+            }
+
+            sel.menu();
+            sel.on("keydown", function (event) {
+                var code = event.keyCode;
+
+                // Enter and space
+                if (code == 13 || code == 32) {
+                    isContinueComplete = false;
+                }
+                // Escape
+                else if (code == 27) {
+                    isContinueComplete = false;
+                    event.stopPropagation();
+                    close();
+                    my_editor.focus();
+                } else if (code == 8) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    close();
+                    my_editor.focus();
+                    my_editor.deleteH(-1, "char");
+                    setTimeout(continueComplete, 50);
+                } else if (code != 38 && code != 40) {
+                    close();
+                    my_editor.focus();
+                    setTimeout(continueComplete, 50);
+                }
+            });
+
+            sel.on("blur", close);
+
+
+
 
             function CompletionObject() {
                 var instance = {
@@ -58,29 +97,7 @@ var KotlinEditor = (function () {
                 startComplete(null);
             }
 
-            var sel = $("#selectId");
 
-            function close() {
-                sel.css("display", "none");
-                sel.html("");
-            }
-
-            sel.menu({
-                select: function (event, ui) {
-                    var text = ui.item.children().children()[1].innerHTML;
-                    isContinueComplete = false;
-                    if (text == COMPLETION_ISNOT_AVAILABLE) {
-                        close();
-                        my_editor.focus();
-                        return;
-                    }
-                    insert(text);
-                    close();
-                    setTimeout(function () {
-                        my_editor.focus();
-                    }, 50);
-                }
-            }).menu("blur");
 
 
             function startComplete(data) {
@@ -122,7 +139,6 @@ var KotlinEditor = (function () {
                 }
 
 
-
                 function insert(str) {
                     if (str != undefined) {
                         var position = str.indexOf("(");
@@ -153,7 +169,25 @@ var KotlinEditor = (function () {
                     }
                 }
 
+                sel.unbind("menuselect");
+                sel.on("menuselect", function (event, ui) {
+                    var text = ui.item.children().children()[1].innerHTML;
+                    isContinueComplete = false;
+                    if (text == COMPLETION_ISNOT_AVAILABLE) {
+                        close();
+                        my_editor.focus();
+                        return;
+                    }
+                    insert(text);
+                    close();
+                    setTimeout(function () {
+                        my_editor.focus();
+                    }, 50);
+                });
+
+
                 sel.html("");
+
                 var i = 0;
                 for (i = 0; i < completions.length; ++i) {
                     var opt = document.createElement("li");
@@ -188,6 +222,10 @@ var KotlinEditor = (function () {
                     sel.append(opt);
                 }
 
+                if(i >= 10){
+                    sel.css("max-height", (opt.clientHeight*10) + "px" );
+                }
+
                 var pos = my_editor.cursorCoords();
                 sel.css("position", "absolute");
                 sel.css("left", pos.x + "px");
@@ -197,21 +235,11 @@ var KotlinEditor = (function () {
                 sel.css("display", "block");
                 sel.focus();
                 sel.menu("focus", null, sel.find(".ui-menu-item:first"));
-                sel.keydown(function (event) {
-                    code = event.keyCode;
-                    if (!([13, 32, 38, 40, 27].indexOf(code) > -1)) { //enter,space,up,down,escape
-                        close();
-                        my_editor.focus();
-                        if (code == 8) {
-                            event.stopPropagation();
-                            my_editor.focus();
-                            my_editor.deleteH(-1, "char");
-                        }
-                        setTimeout(continueComplete, 50);
-                    }
 
-                });
+
+
             }
+
 
             function getCompletions(token) {
                 var start;

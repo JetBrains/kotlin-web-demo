@@ -66,7 +66,7 @@ var ConsoleView = (function () {
             } else {
                 element.html("");
                 if (tabs != null) {
-                    tabs.tabs("select", 1);
+                    tabs.tabs('option', 'active' , 1);
                 }
                 var output = [
                     {"text": data, "type": "err"}
@@ -111,7 +111,7 @@ var ConsoleView = (function () {
 
             if (data != null) {
                 if (tabs != null) {
-                    tabs.tabs("select", 1);
+                    tabs.tabs("option", "active", 1);
                 }
                 var i = 0;
                 while (data[i] != undefined) {

@@ -45,14 +45,6 @@ var ConverterView = (function () {
             minHeight: "430px"
         });
 
-        element.click(function () {
-            var height = popup.height();
-            $("div #scroll", popup).css("height", height + "px");
-            $("div #gutter", popup).css("height", height + "px");
-            popup.dialog("open");
-            my_editor.refresh();
-        });
-
         popup.dialog({
             modal: true,
             width: 640,
@@ -76,6 +68,14 @@ var ConverterView = (function () {
                     }
                 }
             ]
+        });
+
+        element.click(function () {
+            popup.dialog("open");
+            var height = popup.height();
+            $("div #scroll", popup).css("height", height + "px");
+            $("div #gutter", popup).css("height", height + "px");
+            my_editor.refresh();
         });
 
         return instance;

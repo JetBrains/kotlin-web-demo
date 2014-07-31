@@ -118,7 +118,7 @@ var AccordionView = (function () {
 
         function makeAccordion() {
             $("#examples-list").accordion({
-                autoHeight: false,
+                heightStyle: "content",
                 navigation: true,
                 icons: {
                     activeHeader: "examples-open-folder-icon",
