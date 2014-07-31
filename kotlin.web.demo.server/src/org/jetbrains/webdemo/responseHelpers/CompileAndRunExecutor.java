@@ -16,12 +16,11 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.OutputFile;
+import org.jetbrains.jet.codegen.ClassFileFactory;
 import org.jetbrains.jet.codegen.CompilationErrorHandler;
 import org.jetbrains.jet.codegen.KotlinCodegenFacade;
 import org.jetbrains.jet.codegen.state.GenerationState;
@@ -36,10 +35,13 @@ import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.json.JSONArray;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class CompileAndRunExecutor {
@@ -56,94 +58,78 @@ public class CompileAndRunExecutor {
     }
 
     public String getResult() {
-        try {
-            List<ErrorDescriptor> errors = getErrors();
-
-            if (errors.isEmpty() || isOnlyWarnings(errors)) {
-                GenerationState generationState = compileFiles();
-
-                List<OutputFile> files =  generationState.getFactory().asList();
-                File outputDir = new File(ApplicationSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + new Random().nextInt());
-                String generatedClassfilesInfo = generateClassfiles(files, outputDir);
-
-                ArrayNode jsonArray = new ArrayNode(JsonNodeFactory.instance);
-                ObjectNode jsonObject = jsonArray.addObject();
-                jsonObject.put("type", "info");
-                jsonObject.put("text", generatedClassfilesInfo);
-
-
-                JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, arguments, jsonArray, (JetFile) currentPsiFile, sessionInfo);
-
-                return runner.getResult(outputDir.getAbsolutePath());
-
-            } else {
-                return ResponseUtils.getErrorInJson("There are errors in your code.");
-            }
-        } catch (Exception e){
-            return e.getMessage();
-        }
-    }
-
-    private String generateClassfiles(List<OutputFile> files, File outputDir) throws IOException {
-        sessionInfo.getTimeManager().saveCurrentTime();
-        StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
-        stringBuilder.append(ResponseUtils.addNewLine());
-
-        boolean isOutputExists = true;
-        if (!outputDir.exists()) {
-            isOutputExists = outputDir.mkdirs();
-        }
-        for (OutputFile file : files) {
-            if (isOutputExists) {
-                File target = new File(outputDir, file.getRelativePath());
-                try {
-                    FileUtil.writeToFile(target, file.asByteArray());
-                    stringBuilder.append(file.getRelativePath()).append(ResponseUtils.addNewLine());
-                } catch (IOException e) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
-                    throw new IOException( ResponseUtils.getErrorInJson("Cannot get a result."), e);
-                }
-            } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot create output directory for files"),
-                        SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
-                throw new IOException( ResponseUtils.getErrorInJson("Error on server: cannot run your program.") );
-            }
-
-        }
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
-                "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
-        return stringBuilder.toString();
-    }
-
-    private GenerationState compileFiles() throws Exception {
-        sessionInfo.getTimeManager().saveCurrentTime();
-        GenerationState generationState;
-        try {
-            generationState = ResolveUtils.getGenerationState((JetFile) currentPsiFile);
-            KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
-                @Override
-                public void reportException(Throwable throwable, String s) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), sessionInfo.getOriginUrl(), s + " " + currentPsiFile.getText());
-                }
-            });
-
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
-                    "COMPILE correctNamespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
-            return generationState;
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
-            throw new Exception(ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString()), e);
-        }
-    }
-
-    private List<ErrorDescriptor> getErrors() throws Exception {
         ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile, sessionInfo);
+        List<ErrorDescriptor> errors;
         try {
-            return analyzer.getAllErrors();
+            errors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
-            throw new Exception(ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString()), e);
+            return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
+        }
+
+        if (errors.isEmpty() || isOnlyWarnings(errors)) {
+            Project currentProject = currentPsiFile.getProject();
+            sessionInfo.getTimeManager().saveCurrentTime();
+            GenerationState generationState;
+            try {
+                generationState = ResolveUtils.getGenerationState((JetFile) currentPsiFile);
+                KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
+                    @Override
+                    public void reportException(Throwable throwable, String s) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), sessionInfo.getOriginUrl(), s + " " + currentPsiFile.getText());
+                    }
+                });
+            } catch (Throwable e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+                return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
+            }
+            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
+                    "COMPILE correctNamespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
+
+            StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
+            stringBuilder.append(ResponseUtils.addNewLine());
+            final ClassFileFactory factory = generationState.getFactory();
+
+            sessionInfo.getTimeManager().saveCurrentTime();
+            List<OutputFile> files = factory.asList();
+            File outputDir = new File(ApplicationSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + new Random().nextInt());
+            boolean isOutputExists = true;
+            if (!outputDir.exists()) {
+                isOutputExists = outputDir.mkdirs();
+            }
+            for (OutputFile file : files) {
+                if (isOutputExists) {
+                    File target = new File(outputDir, file.getRelativePath());
+                    try {
+                        FileUtil.writeToFile(target, file.asByteArray());
+                        stringBuilder.append(file.getRelativePath()).append(ResponseUtils.addNewLine());
+                    } catch (IOException e) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+                        return ResponseUtils.getErrorInJson("Cannot get a result.");
+                    }
+                } else {
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot create output directory for files"),
+                            SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+                    return ResponseUtils.getErrorInJson("Error on server: cannot run your program.");
+                }
+
+            }
+            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
+                    "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
+
+            JSONArray jsonArray = new JSONArray();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("type", "info");
+            map.put("text", stringBuilder.toString());
+            jsonArray.put(map);
+
+            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, arguments, jsonArray, (JetFile) currentPsiFile, sessionInfo);
+
+            return runner.getResult(outputDir.getAbsolutePath());
+
+        } else {
+            return ResponseUtils.getErrorInJson("There are errors in your code.");
         }
     }
 

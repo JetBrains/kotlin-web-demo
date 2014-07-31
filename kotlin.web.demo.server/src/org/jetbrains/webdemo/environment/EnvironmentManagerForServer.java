@@ -95,8 +95,6 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
         ApplicationSettings.JAVA_HOME = files.iterator().next().getParentFile().getParentFile().getParentFile().getAbsolutePath();
 
         classpath.add(KOTLIN_RUNTIME);
-        classpath.add(new File(ApplicationSettings.JUNIT_LIB));
-
         if (arguments.classpath != null) {
             for (String element : Splitter.on(File.pathSeparatorChar).split(arguments.classpath)) {
                 classpath.add(new File(element));

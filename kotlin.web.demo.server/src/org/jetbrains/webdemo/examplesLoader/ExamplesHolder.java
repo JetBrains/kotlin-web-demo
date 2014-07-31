@@ -16,14 +16,12 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.json.JSONArray;
 
 import java.io.File;
 import java.io.FileReader;
@@ -56,8 +54,8 @@ public class ExamplesHolder {
 
     public static String loadExample(String url) {
         url = url.replaceAll("_", " ");
-        ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
-        ObjectNode resultObj = array.addObject();
+        JSONArray array = new JSONArray();
+        Map<String, String> resultMap = new HashMap<String, String>();
         String exampleName = ResponseUtils.getExampleOrProgramNameByUrl(url);
 
         ExampleObject example = allExamples.get(exampleName);
@@ -69,17 +67,7 @@ public class ExamplesHolder {
             return ResponseUtils.getErrorInJson("Cannot find this example. Please choose another example.");
         }
 
-
-        File exampleFile;
-        if (!example.parent.equals("Problems")) {
-            exampleFile = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + example.parent + File.separator + example.fileName + ".kt");
-        } else {
-            exampleFile = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator +
-                    example.parent + File.separator +
-                    example.fileName + File.separator +
-                    example.fileName + ".kt");
-        }
-
+        File exampleFile = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + example.parent + File.separator + example.fileName + ".kt");
         if (!exampleFile.exists()) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Cannot find an example"),
@@ -88,46 +76,32 @@ public class ExamplesHolder {
         }
 
         String fileContent;
-
-        try (FileReader reader = new FileReader(exampleFile)) {
+        FileReader reader = null;
+        try {
+            reader = new FileReader(exampleFile);
             fileContent = ResponseUtils.readData(reader, true);
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", exampleFile.getAbsolutePath());
             return ResponseUtils.getErrorInJson("Cannot find this example. Please choose another example.");
-        }
-
-
-        resultObj.put("name", example.name);
-        resultObj.put("text", fileContent);
-        resultObj.put("args", example.args);
-        resultObj.put("confType", example.confType);
-
-        File testFolder = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator +
-                example.parent + File.separator +
-                example.fileName + File.separator +
-                "Test");
-
-        ArrayNode tests = resultObj.putArray("tests");
-
-        if (testFolder.exists()) {
-            for (File testFile : testFolder.listFiles()) {
-
-                try (FileReader testFileReader = new FileReader(testFile)) {
-                    String testContent = ResponseUtils.readData(testFileReader, true);
-                    ObjectNode test = tests.addObject();
-                    test.put("name", testFile.getName());
-                    test.put("text", testContent);
-                    test.put("args", "");
-                    test.put("confType", example.confType);
-                } catch (IOException e) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", testFile.getAbsolutePath());
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
                 }
-
+            } catch (IOException e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", example.fileName + " " + example.parent);
             }
         }
 
+        resultMap.put("name", example.name);
+        resultMap.put("text", fileContent);
+        resultMap.put("args", example.args);
+        resultMap.put("confType", example.confType);
+
+
+        array.put(resultMap);
         return array.toString();
     }
 

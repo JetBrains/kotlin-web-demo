@@ -1,0 +1,285 @@
+/*
+ * Copyright 2000-2014 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.grid-top {
+    height: 580px;
+    border: 1px solid;
+    border-bottom-width: 0;
+    border-color: #969696;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.toolbox {
+    background-color: #e8e8e8;
+    line-height: 1;
+    width: 100%;
+}
+
+.toolbox-left {
+    display: inline-block;
+}
+
+.toolbox-right {
+    margin-top: 10px;
+    margin-right: 10px;
+    float: right;
+}
+
+.imagebox {
+    float: left;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-bottom: 3px;
+    border-right: 1px solid;
+    border-color: #cdcdcd;
+}
+
+.imagebox:first-child {
+    border-left: 1px solid;
+    border-color: #cdcdcd;
+}
+
+.java2kotlin {
+    height: 16px;
+    width: 17px;
+    background: url("../../img/java2kotlin.png");
+}
+
+.save {
+    height: 11px;
+    width: 11px;
+    margin: 3px;
+
+    background: url("../../img/save.png");
+}
+
+.help {
+    font-size: 14px;
+    font-weight: bold;
+    color: #4c96bc;
+    padding: 1px;
+
+}
+
+.type-checking {
+    font-weight: bold;
+    padding-right: 4px;
+    padding-left: 4px;
+    float: left;
+    font-size: 12px;
+}
+
+.type-checking-option {
+    float: left;
+}
+
+.on-the-fly {
+    padding-left: 4px;
+    font-size: 12px;
+    float: left;
+}
+
+.toolbox:after {
+    clear: both;
+    height: 0;
+    content: '';
+}
+
+.run-text {
+    font-weight: bold;
+    float: left;
+    font-size: 12px;
+    padding: 10px 10px;
+    padding-right: 6px;
+}
+
+select {
+    float: left;
+    font-size: 12px;
+    margin-top: 4px;
+    padding: 2px;
+}
+
+.run-button {
+    float: left;
+    height: 14px;
+    width: 14px;
+    margin-top: 8px;
+    margin-left: 6px;
+    background: url("../../img/RunButton.png") no-repeat;
+}
+
+.grid-top:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: '';
+}
+
+.examples-list {
+    height: 100%;
+    width: 25%;
+    float: left;
+    border-right: 1px solid;
+    border-color: #969696;
+}
+
+.workspace {
+    margin-left: 25%;
+    height: 100%;
+}
+
+.workspace:after {
+    display: block;
+    clear: both;
+    height: 0;
+    content: '';
+}
+
+.console-arguments-button {
+    float: left;
+    margin-top: 4px;
+    margin-left: 4px;
+    border: 1px solid;
+    border-bottom-width: 0;
+    border-color: #969696;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    padding: 4px;
+}
+
+.console-arguments-button-active {
+    float: left;
+    margin-top: 4px;
+    margin-left: 4px;
+    background-color: #cfcfcf;
+    border: 1px solid;
+    border-bottom-width: 0;
+    border-color: #969696;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    padding: 4px;
+}
+
+.console-image-active {
+    width: 13px;
+    height: 19px;
+    background: url("../../img/console_image.png");
+}
+
+.console-image{
+    width: 13px;
+    height: 19px;
+    background: url("../../img/console_image.png") no-repeat -0 -21px;
+}
+
+.command-line-arguments-visible{
+    background-color: #cfcfcf;
+    display: block;
+}
+
+.command-line-arguments-hidden{
+    display: none;
+}
+
+/*.command-line-arguments:after {*/
+    /*display: block;*/
+    /*clear: both;*/
+    /*height: 0;*/
+    /*content: '';*/
+/*}*/
+
+.command-line-arguments-text{
+    float: left;
+    display: inline-block;
+    margin-top: 11px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 14px;
+}
+
+.command-line-arguments-textarea{
+    border: 1px solid;
+    border-color: #969696;
+    border-radius: 3px;
+
+    font-size: 14px;
+    line-height: 14px;
+    padding: 5px;
+    display: inline-block;
+    width: 70%;
+    margin: 4px;
+}
+
+.ERROR {
+    color: #ff0000 !important;
+}
+
+.ERRORgutter {
+    background: url(/static/icons/errorGutter.png) no-repeat 95% 95% !important;
+    background-size: 13px;
+    float: left;
+}
+
+.WARNINGgutter {
+    background: url(/static/icons/warningGutter.png) no-repeat 95% 95% !important;
+    float: left;
+}
+
+.lookupElementName {
+    float: left !important;
+}
+
+.lookupElementTail {
+    float: right !important;
+    padding-left: 20px;
+    margin-right: 5px;
+}
+
+.lookupElementIcon {
+    height: 16px;
+    width: 16px;
+    float: left !important;
+    margin-right: 10px;
+}
+
+.lookupElement {
+    padding: 0;
+    margin: 0;
+    height: 18px;
+}
+
+.completions {
+    background-color: #eee;
+    /*border: 1px solid #EEEEEE;*/
+    position: absolute;
+    z-index: 10;
+    overflow: hidden;
+    -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+    box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+}
+
+.completions {
+    background: #fafafa;
+    outline: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-family: monospace;
+}
+

@@ -16,14 +16,15 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.jet.j2k.J2kPackage;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.ServerInitializer;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.json.JSONArray;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class JavaToKotlinConverter {
     private final SessionInfo info;
@@ -33,8 +34,8 @@ public class JavaToKotlinConverter {
     }
 
     public String getResult(String code) {
-        ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
-        ObjectNode jsonObject = result.addObject();
+        JSONArray result = new JSONArray();
+        Map<String, String> map = new HashMap<String, String>();
         try {
             String resultFormConverter;
             try {
@@ -48,7 +49,7 @@ public class JavaToKotlinConverter {
                 return ResponseUtils.getErrorInJson("EXCEPTION: generated code is empty.");
             }
             ServerInitializer.reinitializeJavaEnvironment();
-            jsonObject.put("text", resultFormConverter);
+            map.put("text", resultFormConverter);
         } catch (Throwable e) {
             ServerInitializer.reinitializeJavaEnvironment();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -56,6 +57,7 @@ public class JavaToKotlinConverter {
             return ResponseUtils.getErrorInJson(e.getMessage());
         }
 
+        result.put(map);
         return result.toString();
     }
 

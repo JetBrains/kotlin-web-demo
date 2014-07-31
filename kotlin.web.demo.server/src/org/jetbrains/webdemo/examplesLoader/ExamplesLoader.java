@@ -16,9 +16,7 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import org.json.JSONArray;
 
 import java.util.List;
 import java.util.Map;
@@ -29,8 +27,7 @@ public class ExamplesLoader {
     }
 
     public String getExamplesList() {
-        ArrayNode response = new ArrayNode(JsonNodeFactory.instance);
-        ObjectMapper objectMapper = new ObjectMapper();
+        JSONArray response = new JSONArray();
         List<Map<String, String>> list = ExamplesList.getInstance().getList();
         for (Map<String, String> map : list) {
             ExampleObject example = ExamplesHolder.getExample(map.get("text"));
@@ -40,7 +37,7 @@ public class ExamplesLoader {
                     map.put("icon", dependencies);
                 }
             }
-            response.add(objectMapper.valueToTree(map));
+            response.put(map);
         }
         return response.toString();
     }

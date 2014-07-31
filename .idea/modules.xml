@@ -7,7 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.applet/kotlin.web.demo.applet.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.applet/kotlin.web.demo.applet.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.core/kotlin.web.demo.core.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.core/kotlin.web.demo.core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.test.applet/kotlin.web.demo.test.applet.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.test.applet/kotlin.web.demo.test.applet.iml" />
     </modules>

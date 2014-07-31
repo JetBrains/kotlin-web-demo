@@ -1,0 +1,82 @@
+/*
+ * Copyright 2000-2014 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "result-views.css";
+.result-tabs-footer{
+    text-align: center;
+    border: 1px solid;
+    border-color: #969696;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.result-tab.ui-state-active{
+    background-color: #cfcfcf;
+}
+
+.result-tabs-buttons{
+    float: left;
+    text-align: center;
+    text-decoration: none;
+    position: relative;
+    margin-left: 3px;
+    margin-bottom: 3px;
+}
+
+.result-tabs-footer:after{
+    display: block;
+    clear: both;
+    height: 0;
+    content: '';
+}
+
+.result-tab{
+    color: #000000;
+    font-size: 14px;
+    background-color: #f0f0f0;
+    padding: 0px 6px;
+    line-height: 22px;
+    border: 1px solid;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-color: #969696;
+
+    display: inline-block;
+    cursor: default;
+}
+
+.result-tab:first-child{
+    border-bottom-left-radius: 4px;
+}
+
+.result-tab:last-child{
+    border-bottom-right-radius: 4px;
+    border-right-width: 1px;
+}
+
+.result-tab a{
+    color: #000000;
+    text-decoration: none;
+}
+
+.kotlin-info{
+    line-height: 22px;
+    float: right;
+    font-size: 14px;
+    padding: 0 10px;
+    margin-top: 3px;
+    color: #000000;
+}

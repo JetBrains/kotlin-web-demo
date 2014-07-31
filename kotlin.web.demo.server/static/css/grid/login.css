@@ -1,0 +1,77 @@
+/*
+ * Copyright 2000-2014 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.global-login {
+    background-color: #dee1e4;
+    background-position: center top;
+    padding: 7px 0;
+    text-align: center;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.login{
+    float: right;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+}
+
+.login-text{
+    float:left;
+}
+
+.login-with{
+    float: left;
+    margin-left: 16px;
+    position: relative;
+    width: 15px;
+    height: 15px;
+    font-size: 0;
+}
+
+.facebook{
+    background: url("../../img/login_icons.png") no-repeat;
+}
+
+.google{
+    background: url("../../img/login_icons.png") no-repeat -30px 0;
+}
+
+.twitter{
+    background: url("../../img/login_icons.png") no-repeat -60px 0;
+}
+
+#userName {
+    /*height: 22px;*/
+    /*cursor: pointer;*/
+    /*padding-right: 10px;*/
+    /*padding-bottom: 10px;*/
+
+    /*color: #212121;*/
+    /*font-weight: normal;*/
+    float: right;
+    display: none;
+}
+
+#logout{
+    position: relative;
+    bottom: -2px;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background: url("/static/img/logout.png") no-repeat 0 0;
+}

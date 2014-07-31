@@ -16,9 +16,6 @@
 
 package org.jetbrains.webdemo.help;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -26,9 +23,12 @@ import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
+import org.json.JSONArray;
 import org.w3c.dom.*;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HelpLoader {
     private static HelpLoader helpLoader = new HelpLoader();
@@ -41,8 +41,8 @@ public class HelpLoader {
         generateHelpForExamples();
     }
 
-    private ArrayNode resultExamples;
-    private ArrayNode resultWords;
+    private JSONArray resultExamples;
+    private JSONArray resultWords;
 
     public static HelpLoader getInstance() {
         return helpLoader;
@@ -118,7 +118,7 @@ public class HelpLoader {
     }
 
     private void generateHelpForWords() {
-        resultWords = new ArrayNode(JsonNodeFactory.instance);
+        resultWords = new JSONArray();
         try {
             File file = new File(ApplicationSettings.HELP_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_WORDS);
             Document doc = ResponseUtils.getXmlDocument(file);
@@ -132,9 +132,10 @@ public class HelpLoader {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element element = (Element) node;
-                    ObjectNode jsonObject = resultWords.addObject();
-                    jsonObject.put("name", getTagValue("name", element));
-                    jsonObject.put("text", getTagValueWithInnerTags("text", element));
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("name", getTagValue("name", element));
+                    map.put("text", getTagValueWithInnerTags("text", element));
+                    resultWords.put(map);
                 }
             }
         } catch (Exception e) {
@@ -145,7 +146,7 @@ public class HelpLoader {
     }
 
     private void generateHelpForExamples() {
-        resultExamples = new ArrayNode(JsonNodeFactory.instance);
+        resultExamples = new JSONArray();
         try {
             File file = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_EXAMPLES);
             Document doc = ResponseUtils.getXmlDocument(file);
@@ -160,12 +161,11 @@ public class HelpLoader {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element element = (Element) node;
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("name", getTagValue("name", element));
+                    map.put("text", getTagValueWithInnerTags("text", element));
 
-                    ObjectNode jsonObject = resultExamples.addObject();
-                    jsonObject.put("name", getTagValue("name", element));
-                    jsonObject.put("text", getTagValueWithInnerTags("text", element));
-
-                    ExampleObject example = ExamplesHolder.getExample(jsonObject.get("name").textValue());
+                    ExampleObject example = ExamplesHolder.getExample(map.get("name"));
                     if (example != null) {
                         @Nullable String mode = getTagValue("mode", element);
                         @Nullable String args = getTagValue("args", element);
@@ -177,6 +177,7 @@ public class HelpLoader {
                         }
                     }
 
+                    resultExamples.put(map);
                 }
             }
         } catch (Exception e) {

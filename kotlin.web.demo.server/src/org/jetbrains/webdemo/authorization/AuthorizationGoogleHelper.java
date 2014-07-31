@@ -16,14 +16,13 @@
 
 package org.jetbrains.webdemo.authorization;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
+import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.GoogleApi;
 import org.scribe.model.*;
@@ -69,8 +68,8 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             googleService.signRequest(accessToken, request);
             Response response = request.send();
             userInfo = new UserInfo();
-            JsonNode object = new ObjectMapper().readTree(response.getBody()) ;
-            userInfo.login(object.get("name").textValue(), object.get("id").textValue(), TYPE);
+            JSONObject object = new JSONObject(response.getBody());
+            userInfo.login((String) object.get("name"), (String) object.get("id"), TYPE);
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google: " + url);

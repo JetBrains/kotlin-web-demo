@@ -16,10 +16,6 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
@@ -31,35 +27,28 @@ import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.webdemo.utils.ExecResult;
-import org.jetbrains.webdemo.utils.StackTraceParser;
+import org.json.JSONArray;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class JavaRunner {
 
     private final BindingContext bindingContext;
     private final List<OutputFile> files;
     private String arguments;
-
+    private final JSONArray jsonArray;
     private final JetFile currentFile;
-
-    private ArrayNode jsonArray;
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     private final SessionInfo sessionInfo;
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode jsonArray, JetFile currentFile, SessionInfo info) {
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, JSONArray array, JetFile currentFile, SessionInfo info) {
         this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;
-        this.jsonArray = jsonArray;
+        this.jsonArray = array;
         this.currentFile = currentFile;
         this.sessionInfo = info;
     }
@@ -91,9 +80,9 @@ public class JavaRunner {
                 finalProcess.destroy();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "Timeout exception."));
-                errStream.append("Program was terminated after " + ApplicationSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
+                errStream.append("Program was terminated after " + Integer.parseInt(ApplicationSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
             }
-        }, ApplicationSettings.TIMEOUT_FOR_EXECUTION);
+        }, Integer.parseInt(ApplicationSettings.TIMEOUT_FOR_EXECUTION));
 
         final BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
         final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
@@ -123,7 +112,6 @@ public class JavaRunner {
                     while ((line = stdErr.readLine()) != null) {
                         errStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
                     }
-
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                             sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
@@ -141,8 +129,8 @@ public class JavaRunner {
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                 sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
-                        + " timeout=" + isTimeoutException
-                        + " commandString=" + Arrays.toString(commandString)));
+                + " timeout=" + isTimeoutException
+                + " commandString=" + Arrays.toString(commandString)));
 
         if ((exitValue == 1) && !isTimeoutException) {
             if (outStream.length() > 0) {
@@ -157,32 +145,30 @@ public class JavaRunner {
         }
 
         if (!isTimeoutException) {
-            ObjectNode jsonObject = jsonArray.addObject();
-            jsonObject.put("type", "out");
-            jsonObject.put("text", outStream.toString());
+            Map<String, String> mapOut = new HashMap<String, String>();
+            mapOut.put("type", "out");
+            mapOut.put("text", outStream.toString());
+            jsonArray.put(mapOut);
         }
 
         if (errStream.length() > 0) {
-            ObjectNode errObject = new ObjectNode(JsonNodeFactory.instance);
+            Map<String, String> mapErr = new HashMap<String, String>();
             if (isKotlinLibraryException(errStream.toString())) {
-                writeErrStreamToLog(errStream.toString());
+                writeErrStreamToLog(errStream.toString().replace("\t", "    "));
 
-                ObjectNode jsonObject = jsonArray.addObject();
-                jsonObject.put("type", "err");
-                jsonObject.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
-                errObject.put("type", "out");
-            } else {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("type", "err");
+                map.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
+                jsonArray.put(map);
+                mapErr.put("type", "out");
+            }
+            else {
                 ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "error while excecution: " + errStream));
-                errObject.put("type", "err");
+                mapErr.put("type", "err");
             }
-            ExecResult result = StackTraceParser.parseStackTraceElements(errStream.toString());
-            try {
-                errObject.put("text", objectMapper.writeValueAsString(result));
-            } catch (IOException e) {
-                //unreachable
-            }
-            jsonArray.add(errObject);
+            mapErr.put("text", errStream.toString().replace("\t", "    "));
+            jsonArray.put(mapErr);
         }
 
         for (OutputFile file : files) {
@@ -242,7 +228,7 @@ public class JavaRunner {
                 || str.contains("InstantiationError")
                 || str.contains("AbstractMethodError")
                 || str.contains("NoSuchFieldError")
-                || (str.contains("IllegalAccessError") && !str.contains("kotlin.io.IoPackage"))
+                || (str.contains("IllegalAccessError")  && !str.contains("kotlin.io.IoPackage"))
                 || str.contains("VerifyError")
                 || str.contains("ClassCircularityError")
                 || str.contains("UnsatisfiedLinkError")
@@ -273,13 +259,15 @@ public class JavaRunner {
                 out.write(tmp, 0, lengthOut);
                 stringWriter.write(new String(tmp));
                 outStream.append(stringWriter.toString());
-            } else if (lengthOut == -1) {
+            }
+            else if (lengthOut == -1) {
                 returnValue--;
             }
             if ((lengthErr = isErr.read(tmp)) >= 0) {
                 out.write(tmp, 0, lengthErr);
                 errStream.append(new String(tmp));
-            } else if (lengthErr == -1) {
+            }
+            else if (lengthErr == -1) {
                 returnValue--;
             }
         } catch (IOException e) {
@@ -308,7 +296,8 @@ public class JavaRunner {
                     ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                             sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                 }
-            } else {
+            }
+            else {
                 //list all the directory contents
                 String files[] = file.list();
                 for (String temp : files) {
@@ -325,7 +314,8 @@ public class JavaRunner {
                     }
                 }
             }
-        } else {
+        }
+        else {
             if (file.exists()) {
                 file.delete();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
@@ -340,16 +330,15 @@ public class JavaRunner {
         String[] builder;
         if (arguments.isEmpty()) {
             builder = new String[5];
-        } else {
+        }
+        else {
             builder = new String[argsArray.length + 5];
         }
         builder[0] = ApplicationSettings.JAVA_EXECUTE;
         builder[1] = "-classpath";
-        builder[2] = pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB
-                + File.pathSeparator + ApplicationSettings.JUNIT_LIB;
-//        builder[3] = "-Djava.security.manager";
-        builder[3] = "org.junit.runner.JUnitCore";
-        builder[4] = "Junit4Test";// findMainClass();
+        builder[2] = pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB;
+        builder[3] = "-Djava.security.manager";
+        builder[4] = findMainClass();
 
         if (!arguments.isEmpty()) {
             System.arraycopy(argsArray, 0, builder, 5, argsArray.length);

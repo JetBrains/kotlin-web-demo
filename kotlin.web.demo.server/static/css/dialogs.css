@@ -1,0 +1,138 @@
+/*
+ * Copyright 2000-2014 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+/*java2kotlin codemirror style-Courier new Regular*/
+
+.ui-dialog{
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #969696;
+    overflow: hidden;
+}
+
+.ui-dialog-titlebar{
+    font-size: 14px;
+    padding: 8px;
+    background-color: #dfdfdf;
+}
+
+.ui-dialog-titlebar-close{
+    float: right;
+    font-size: 0;
+    height: 12px;
+    width: 12px;
+    background: url("/static/img/close.png");
+}
+
+.ui-dialog-content{
+    border-bottom: 1px solid;
+    border-color: #969696;
+    background: #ffffff;
+}
+
+.ui-dialog-buttonpane{
+    background: #ffffff;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.ui-dialog-buttonset{
+    float: right;
+}
+
+.ui-button{
+    margin-left: 4px;
+    margin-right: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background-color: #dcdcdc;
+    border: 1px solid;
+    border-color: #969696;
+    border-radius: 3px;
+}
+
+.ui-widget-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #808080;
+    opacity: 0.5;
+}
+
+
+
+#login-dialog{
+    text-align: center;
+    line-height: 30px;
+    padding-top: 15px;
+}
+
+
+.login-with-colored{
+    display: inline-block;
+    margin-left: 16px;
+    position: relative;
+    width: 22px;
+    height: 22px;
+    font-size: 0;
+}
+
+.login-with-colored:first-child{
+    margin-left: 0px;
+}
+
+.colored-facebook{
+    background: url("/static/img/login_icons_color.png") no-repeat;
+}
+
+.colored-google{
+    background: url("/static/img/login_icons_color.png") no-repeat -42px 0;
+}
+
+.colored-twitter{
+    background: url("/static/img/login_icons_color.png") no-repeat -84px 0;
+}
+
+
+#save-dialog{
+    text-align: center;
+    padding: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#program-name-input{
+    width: 280px;
+    border: 1px solid;
+    border-color: #969696;
+    border-radius: 3px;
+}
+
+#confirmDialog{
+    text-align: center;
+    line-height: 60px;
+}
+
+#selectId{
+    border: 1px solid;
+    border-color: #969696;
+    border-radius: 4px;
+}
+
+#selectId .ui-state-focus{
+    background: #f7f7f7;
+}
