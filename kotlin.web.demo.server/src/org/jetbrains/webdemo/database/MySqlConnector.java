@@ -16,6 +16,9 @@
 
 package org.jetbrains.webdemo.database;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
@@ -23,14 +26,11 @@ import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
-import org.json.JSONArray;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class MySqlConnector {
@@ -398,17 +398,16 @@ public class MySqlConnector {
                 return ResponseUtils.getErrorInJson("Link for this program is not public");
             }
 
-            JSONArray array = new JSONArray();
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("type", "text");
-            map.put("text", rs.getString("PROGRAM_TEXT"));
+            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
+            ObjectNode jsonObject = array.addObject();
+            jsonObject.put("type", "text");
+            jsonObject.put("text", rs.getString("PROGRAM_TEXT"));
             String args = rs.getString("PROGRAM_ARGS");
             if (args == null) {
                 args = "";
             }
-            map.put("args", args);
-            map.put("confType", rs.getString("RUN_CONF"));
-            array.put(map);
+            jsonObject.put("args", args);
+            jsonObject.put("confType", rs.getString("RUN_CONF"));
             return array.toString();
 
         } catch (Throwable e) {
@@ -499,17 +498,16 @@ public class MySqlConnector {
             if (!rs.next()) {
                 return ResponseUtils.getErrorInJson("Cannot find the program.");
             }
-            JSONArray array = new JSONArray();
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("type", "text");
-            map.put("text", rs.getString("PROGRAM_TEXT"));
+            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
+            ObjectNode jsonObject = array.addObject();
+            jsonObject.put("type", "text");
+            jsonObject.put("text", rs.getString("PROGRAM_TEXT"));
             String args = rs.getString("PROGRAM_ARGS");
             if (args == null) {
                 args = "";
             }
-            map.put("args", args);
-            map.put("confType", rs.getString("RUN_CONF"));
-            array.put(map);
+            jsonObject.put("args", args);
+            jsonObject.put("confType", rs.getString("RUN_CONF"));
             return array.toString();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", programId);
@@ -529,7 +527,7 @@ public class MySqlConnector {
             st = connection.prepareStatement("SELECT * FROM userprogramid WHERE USER_ID=?");
             st.setString(1, userInfo.getId());
             rs = st.executeQuery();
-            JSONArray result = new JSONArray();
+            ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
             ArrayList<String> programIds = new ArrayList<String>();
             while (rs.next()) {
                 if (rs.getString("USER_TYPE").equals(userInfo.getType())) {
@@ -547,11 +545,10 @@ public class MySqlConnector {
                             userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + id));
                     continue;
                 }
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("id", rs.getString("PROGRAM_ID"));
-                map.put("name", rs.getString("PROGRAM_NAME"));
-                map.put("confType", rs.getString("RUN_CONF"));
-                result.put(map);
+                ObjectNode jsonObject = result.addObject();
+                jsonObject.put("id", rs.getString("PROGRAM_ID"));
+                jsonObject.put("name", rs.getString("PROGRAM_NAME"));
+                jsonObject.put("confType", rs.getString("RUN_CONF"));
             }
 
             return result.toString();

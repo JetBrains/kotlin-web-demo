@@ -16,12 +16,14 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.json.JSONArray;
 
 import java.io.File;
 import java.io.FileReader;
@@ -54,8 +56,8 @@ public class ExamplesHolder {
 
     public static String loadExample(String url) {
         url = url.replaceAll("_", " ");
-        JSONArray array = new JSONArray();
-        Map<String, String> resultMap = new HashMap<String, String>();
+        ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
+        ObjectNode resultObj = array.addObject();
         String exampleName = ResponseUtils.getExampleOrProgramNameByUrl(url);
 
         ExampleObject example = allExamples.get(exampleName);
@@ -95,13 +97,11 @@ public class ExamplesHolder {
             }
         }
 
-        resultMap.put("name", example.name);
-        resultMap.put("text", fileContent);
-        resultMap.put("args", example.args);
-        resultMap.put("confType", example.confType);
+        resultObj.put("name", example.name);
+        resultObj.put("text", fileContent);
+        resultObj.put("args", example.args);
+        resultObj.put("confType", example.confType);
 
-
-        array.put(resultMap);
         return array.toString();
     }
 

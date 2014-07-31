@@ -31,7 +31,7 @@ public class CommandRunner {
         } else if (setting.equals("java_execute")) {
             ApplicationSettings.JAVA_EXECUTE = value;
         } else if (setting.equals("timeout")) {
-            ApplicationSettings.TIMEOUT_FOR_EXECUTION = value;
+            ApplicationSettings.TIMEOUT_FOR_EXECUTION = Integer.parseInt(value);
         } else if (setting.equals("app_home")) {
             ApplicationSettings.OUTPUT_DIRECTORY = value + File.separator + "out";
             ApplicationSettings.STATISTICS_DIRECTORY = value + File.separator + "statistics";

@@ -16,6 +16,9 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
@@ -27,24 +30,26 @@ import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.json.JSONArray;
 
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class JavaRunner {
 
     private final BindingContext bindingContext;
     private final List<OutputFile> files;
     private String arguments;
-    private final JSONArray jsonArray;
+    private final ArrayNode jsonArray;
     private final JetFile currentFile;
 
     private final SessionInfo sessionInfo;
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, JSONArray array, JetFile currentFile, SessionInfo info) {
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, SessionInfo info) {
         this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;
@@ -80,9 +85,9 @@ public class JavaRunner {
                 finalProcess.destroy();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "Timeout exception."));
-                errStream.append("Program was terminated after " + Integer.parseInt(ApplicationSettings.TIMEOUT_FOR_EXECUTION) / 1000 + "s.");
+                errStream.append("Program was terminated after " + ApplicationSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
             }
-        }, Integer.parseInt(ApplicationSettings.TIMEOUT_FOR_EXECUTION));
+        }, ApplicationSettings.TIMEOUT_FOR_EXECUTION);
 
         final BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
         final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
@@ -145,30 +150,27 @@ public class JavaRunner {
         }
 
         if (!isTimeoutException) {
-            Map<String, String> mapOut = new HashMap<String, String>();
-            mapOut.put("type", "out");
-            mapOut.put("text", outStream.toString());
-            jsonArray.put(mapOut);
+            ObjectNode jsonObject = jsonArray.addObject();
+            jsonObject.put("type", "out");
+            jsonObject.put("text", outStream.toString());
         }
 
         if (errStream.length() > 0) {
-            Map<String, String> mapErr = new HashMap<String, String>();
+            ObjectNode errObject = new ObjectNode(JsonNodeFactory.instance);
             if (isKotlinLibraryException(errStream.toString())) {
                 writeErrStreamToLog(errStream.toString().replace("\t", "    "));
 
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("type", "err");
-                map.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
-                jsonArray.put(map);
-                mapErr.put("type", "out");
-            }
-            else {
+                ObjectNode jsonObject = jsonArray.addObject();
+                jsonObject.put("type", "err");
+                jsonObject.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
+                errObject.put("type", "out");
+            } else {
                 ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "error while excecution: " + errStream));
-                mapErr.put("type", "err");
+                errObject.put("type", "err");
             }
-            mapErr.put("text", errStream.toString().replace("\t", "    "));
-            jsonArray.put(mapErr);
+            errObject.put("text", errStream.toString().replace("\t", "    "));
+            jsonArray.add(errObject);
         }
 
         for (OutputFile file : files) {
