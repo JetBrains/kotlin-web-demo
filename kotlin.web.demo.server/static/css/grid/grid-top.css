@@ -57,7 +57,7 @@
     cursor: pointer;
     height: 16px;
     width: 17px;
-    background: url("../../img/java2kotlin.png");
+    background: url("/static/images/icons.png") -0 -39px;
 }
 
 .save {
@@ -66,7 +66,7 @@
     width: 11px;
     margin: 3px;
 
-    background: url("../../img/save.png");
+    background: url("/static/images/icons.png") -20px -59px;
 }
 
 .help {
@@ -124,7 +124,7 @@ select {
     width: 14px;
     margin-top: 8px;
     margin-left: 6px;
-    background: url("../../img/RunButton.png") no-repeat;
+    background: url("/static/images/icons.png") no-repeat -40px -59px;
 }
 
 .grid-top:after {
@@ -182,15 +182,15 @@ select {
 }
 
 .console-image-active {
-    width: 13px;
+    width: 14px;
     height: 19px;
-    background: url("../../img/console_image.png");
+    background: url("/static/images/icons.png") no-repeat -0 -58px;
 }
 
 .console-image{
-    width: 13px;
+    width: 14px;
     height: 19px;
-    background: url("../../img/console_image.png") no-repeat -0 -21px;
+    background: url("/static/images/icons.png") no-repeat -0 -79px;
 }
 
 .command-line-arguments-visible{
@@ -238,14 +238,14 @@ select {
 .ERRORgutter {
     height: 11px;
     width: 11px;
-    background: url("/static/img/errors_and_warnings.png") no-repeat -14px 0 !important;
+    background: url("/static/images/errors_and_warnings.png") no-repeat -14px 0 !important;
     float: left;
 }
 
 .WARNINGgutter {
     height: 11px;
     width: 11px;
-    background: url("/static/img/errors_and_warnings.png") no-repeat -14px -14px !important;
+    background: url("/static/images/errors_and_warnings.png") no-repeat -14px -14px !important;
     float: left;
 }
 
@@ -295,23 +295,23 @@ select {
 }
 
 .class-icon{
-    background: url("/static/img/completion_icons.png") no-repeat 0 0;
+    background: url("/static/images/completion_icons.png") no-repeat 0 0;
 }
 
 .package-icon{
-    background: url("/static/img/completion_icons.png") no-repeat -16px -16px;
+    background: url("/static/images/completion_icons.png") no-repeat -16px -16px;
 }
 
 .method-icon{
-    background: url("/static/img/completion_icons.png") no-repeat 0 -16px;
+    background: url("/static/images/completion_icons.png") no-repeat 0 -16px;
 }
 
 .genericValue-icon{
-    background: url("/static/img/completion_icons.png") no-repeat -16px 0;
+    background: url("/static/images/completion_icons.png") no-repeat -16px 0;
 }
 
 .property-icon{
-    background: url("/static/img/completion_icons.png") no-repeat -33px 0;
+    background: url("/static/images/completion_icons.png") no-repeat -33px 0;
 }
 
 .red_wavy_line {

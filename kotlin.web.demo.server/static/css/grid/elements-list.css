@@ -27,7 +27,7 @@
     display: inline-block;
     width: 37px;
     height: 15px;
-    background-image: url("../../img/closed_folder.png");
+    background: url("/static/images/icons.png") no-repeat -42px -40px;
 }
 
 #examples-list .ui-state-active{
@@ -47,7 +47,7 @@
     display: inline-block;
     width: 37px;
     height: 15px;
-    background-image: url("../../img/open_folder.png");
+    background: url("/static/images/icons.png") no-repeat -19px -76px;
 }
 
 .folder-name-div{
@@ -82,11 +82,11 @@
     margin-right: 5px;
     width: 4px;
     height: 7px;
-    background: url("../../img/right_arrow.png");
+    background: url("/static/images/icons.png") -58px -58px;
 }
 
 .ui-icon{
-    padding-right: 6px;
+    margin-right: 6px;
     float: left;
 }
 
@@ -102,7 +102,7 @@
     width: 12px;
     float: right;
     margin-top: 2px;
-    background: url("/static/img/delete.png");
+    background: url("/static/images/icons.png") no-repeat -20px -39px;
 }
 
 .selected-example{

@@ -38,7 +38,7 @@
     font-size: 0;
     height: 12px;
     width: 12px;
-    background: url("/static/img/close.png");
+    background: url("/static/images/icons.png") no-repeat -84px -40px;
 }
 
 .ui-dialog-content{
@@ -103,15 +103,15 @@
 }
 
 .colored-facebook{
-    background: url("/static/img/login_icons_color.png") no-repeat;
+    background: url("/static/images/icons.png") no-repeat 0 -16px;
 }
 
 .colored-google{
-    background: url("/static/img/login_icons_color.png") no-repeat -42px 0;
+    background: url("/static/images/icons.png") no-repeat -42px -16px;
 }
 
 .colored-twitter{
-    background: url("/static/img/login_icons_color.png") no-repeat -84px 0;
+    background: url("/static/images/icons.png") no-repeat -84px -16px;
 }
 
 

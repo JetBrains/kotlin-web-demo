@@ -76,7 +76,7 @@
     position: relative;
     top: 2px;
     margin-right: 4px;
-    background: url("/static/img/errors_and_warnings.png") no-repeat 0 0;
+    background: url("/static/images/errors_and_warnings.png") no-repeat 0 0;
 }
 
 .problemsViewWarningImg {
@@ -86,7 +86,7 @@
     position: relative;
     top: 2px;
     margin-right: 4px;
-    background: url("/static/img/errors_and_warnings.png") no-repeat 0 -14px;
+    background: url("/static/images/errors_and_warnings.png") no-repeat 0 -14px;
 }
 
 #console, #generated-code {

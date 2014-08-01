@@ -158,7 +158,7 @@
     float: left;
     width: 129px;
     height: 43px;
-    background: url("../../img/logos-sprite.png") no-repeat;
+    background: url("../../images/logos-sprite.png") no-repeat;
     font-size: 0;
     text-decoration: none; }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
