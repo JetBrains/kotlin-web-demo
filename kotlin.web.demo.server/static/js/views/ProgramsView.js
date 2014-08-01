@@ -224,7 +224,6 @@ var ProgramsView = (function () {
             deleteImg.className = "delete-img";
             deleteImg.title = "Delete this program";
             deleteImg.onclick = function () {
-                //in table get td with a element - id of a
                 deleteProgram(this.parentNode.childNodes[1].id);
             };
 
@@ -232,57 +231,6 @@ var ProgramsView = (function () {
             name_div.appendChild(name_span);
             file.appendChild(name_div);
             return file;
-
-//            var table = document.createElement("table");
-//            var tr = document.createElement("tr");
-//            var tdIcon = document.createElement("td");
-//            tdIcon.style.width = "16px";
-//            var span = document.createElement("div");
-//            span.className = "bullet";
-//            if (confType == undefined) {
-//                span.style.background = "url(/static/icons/text.png) no-repeat";
-//            } else {
-//                span.style.background = "url(/static/icons/" + confType + ".png) no-repeat";
-//            }
-//
-//            tdIcon.appendChild(span);
-//            var tdContent = document.createElement("td");
-//            var contA = document.createElement("a");
-//            contA.id = id;
-//            contA.style.cursor = "pointer";
-//            contA.onclick = function () {
-//                loadProgram(this.id);
-//            };
-//            contA.innerHTML = name;
-//            tdContent.appendChild(contA);
-//            var tdDelete = document.createElement("td");
-//            tdDelete.style.width = "16px";
-//            var deleteImg = document.createElement("img");
-//            deleteImg.src = "/static/icons/delete.png";
-//            deleteImg.title = "Delete this program";
-//            deleteImg.onclick = function () {
-//                //in table get td with a element - id of a
-//                deleteProgram(this.parentNode.parentNode.childNodes[1].childNodes[0].id);
-//            };
-//            tdDelete.appendChild(deleteImg);
-//            var tdLink = document.createElement("td");
-//            tdLink.style.width = "16px";
-//            var linkImg = document.createElement("img");
-//            linkImg.src = "/static/icons/link1.png";
-//            linkImg.title = "Public link for this program";
-//            linkImg.onclick = function () {
-//                //in table get td with a element - id of a
-//                // structure table-tr-td-a
-//                generatePublicLink(this.parentNode.parentNode.childNodes[1].childNodes[0].id);
-//            };
-//            tdLink.appendChild(linkImg);
-//
-//            tr.appendChild(tdIcon);
-//            tr.appendChild(tdContent);
-//            tr.appendChild(tdLink);
-//            tr.appendChild(tdDelete);
-//            table.appendChild(tr);
-//            return table;
         }
 
         function deleteProgram(name) {

@@ -236,13 +236,16 @@ select {
 }
 
 .ERRORgutter {
-    background: url(/static/icons/errorGutter.png) no-repeat 95% 95% !important;
-    background-size: 13px;
+    height: 11px;
+    width: 11px;
+    background: url("/static/img/errors_and_warnings.png") no-repeat -14px 0 !important;
     float: left;
 }
 
 .WARNINGgutter {
-    background: url(/static/icons/warningGutter.png) no-repeat 95% 95% !important;
+    height: 11px;
+    width: 11px;
+    background: url("/static/img/errors_and_warnings.png") no-repeat -14px -14px !important;
     float: left;
 }
 
@@ -257,6 +260,8 @@ select {
 }
 
 .lookupElementIcon {
+    margin-top: 1px;
+    margin-left: 2px;
     height: 16px;
     width: 16px;
     float: left !important;
@@ -289,6 +294,25 @@ select {
     font-family: monospace;
 }
 
+.class-icon{
+    background: url("/static/img/completion_icons.png") no-repeat 0 0;
+}
+
+.package-icon{
+    background: url("/static/img/completion_icons.png") no-repeat -16px -16px;
+}
+
+.method-icon{
+    background: url("/static/img/completion_icons.png") no-repeat 0 -16px;
+}
+
+.genericValue-icon{
+    background: url("/static/img/completion_icons.png") no-repeat -16px 0;
+}
+
+.property-icon{
+    background: url("/static/img/completion_icons.png") no-repeat -33px 0;
+}
 
 .red_wavy_line {
     background: url(/static/images/wavyline-red.gif) repeat-x 100% 100% !important;

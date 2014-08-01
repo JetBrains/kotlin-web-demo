@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-.status-bar{
+.status-bar {
     font-size: 12px;
     padding: 10px;
     color: #9e9e9e;
@@ -27,10 +27,10 @@
 
 /*.status-bar:after{*/
 
-    /*display: block;*/
-    /*clear: both;*/
-    /*height: 0;*/
-    /*content: '';*/
+/*display: block;*/
+/*clear: both;*/
+/*height: 0;*/
+/*content: '';*/
 /*}*/
 
 .result-view {
@@ -69,26 +69,26 @@
     word-wrap: break-word;
 }
 
-.problemsViewErrorImg{
+.problemsViewErrorImg {
     display: inline-block;
-    height: 16px;
-    width: 14px;
+    height: 12px;
+    width: 12px;
     position: relative;
-    top: 4px;
-    padding-right: 4px;
-    background: url("/static/icons/error.png");
+    top: 2px;
+    margin-right: 4px;
+    background: url("/static/img/errors_and_warnings.png") no-repeat 0 0;
 }
 
-.problemsViewWarningImg{
+.problemsViewWarningImg {
     display: inline-block;
-    height: 16px;
-    width: 14px;
+    height: 12px;
+    width: 12px;
     position: relative;
-    top: 4px;
-    padding-right: 4px;
-    background: url("/static/icons/warning.png");
+    top: 2px;
+    margin-right: 4px;
+    background: url("/static/img/errors_and_warnings.png") no-repeat 0 -14px;
 }
 
-#console, #generated-code{
+#console, #generated-code {
     font-family: monospace;
 }

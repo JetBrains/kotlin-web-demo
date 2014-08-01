@@ -153,11 +153,6 @@ var ConsoleView = (function () {
     }
 
 
-    /*ConsoleView.showJsCode = function () {
-     $(":nth-child(2)", console).remove();
-     $(":first-child", console).after("<p class='consoleViewInfo'>" + generatedJsCode + "</p>");
-     };*/
-
     ConsoleView.toggleElement = function (name) {
         $("div." + name).toggle();
     };

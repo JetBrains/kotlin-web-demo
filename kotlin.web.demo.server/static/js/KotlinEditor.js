@@ -195,9 +195,8 @@ var KotlinEditor = (function () {
                     pEl.className = "lookupElement";
 
                     var icon = document.createElement("div");
-                    icon.className = "lookupElementIcon";
                     if (completions[i].icon != "") {
-                        icon.style.background = "url(\"/static/icons/" + completions[i].icon + ".png" + "\")";
+                        icon.className = "lookupElementIcon " + completions[i].icon + "-icon";
                     }
                     pEl.appendChild(icon);
 

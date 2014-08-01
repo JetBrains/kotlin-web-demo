@@ -29,13 +29,13 @@ var CanvasPopup = (function () {
 
         var instance = {
             show: function () {
-                element.html("");
+                element.empty();
                 element.append("<canvas width=\"" + $("#popupForCanvas").dialog("option", "width")
                     + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 30) + "\" id=\"mycanvas\"></canvas>");
                 element.dialog("open");
             },
             hide: function () {
-                element.html("");
+                element.empty();
                 //element.dialog("close");
                 //WARN: if in the page there is more intevals - they will be stopped.
                 window.clearAllIntervals();
