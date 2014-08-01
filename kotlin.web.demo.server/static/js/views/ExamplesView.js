@@ -68,14 +68,17 @@ var ExamplesView = (function () {
 //                    img.className = "examples-closed-folder-icon";
 //                    folder.appendChild(img);
                     var folder = document.createElement("h3");
+                    var folderDiv = document.createElement("div");
                     folder.className = "examples-folder-name";
 //                    folder.className = "examples-folder-name";
 //
 //                    folder.id = "folder_" +replaceAll(data[i].text, " ", "_");
 
-                    folder.innerHTML = data[i].text;
+                    folderDiv.innerHTML = data[i].text;
+                    folderDiv.className = "folder-name-div";
                     lastFolderName = data[i].text;
 //                    folder.appendChild(folder);
+                    folder.appendChild(folderDiv);
                     acc.append(folder);
                     var cont = document.createElement("div");
                 }
@@ -87,6 +90,9 @@ var ExamplesView = (function () {
                     file.appendChild(img);
                     file.id = "bullet" + replaceAll(data[i].text, " ", "_");
 
+                    var spanDiv = document.createElement("div");
+                    spanDiv.className = "file-name-span";
+
                     var name = document.createElement("span");
                     name.id = createExampleUrl(data[i].text, lastFolderName);
                     name.style.cursor = "pointer";
@@ -94,7 +100,9 @@ var ExamplesView = (function () {
                         loadExample(this.id);
                     };
                     name.innerHTML = data[i].text;
-                    file.appendChild(name);
+
+                    spanDiv.appendChild(name);
+                    file.appendChild(spanDiv);
 
                     cont.appendChild(file);
                 }
@@ -111,12 +119,12 @@ var ExamplesView = (function () {
                         return;
                     }
 
-                    var selecteExample = ExamplesView.getLastSelectedItem()
+                    var selecteExample = ExamplesView.getLastSelectedItem();
                     if (selecteExample != 0) {
-                        $("span[id='" + selecteExample +"']").parent().attr("class", "examples-file-name");
+                        $("span[id='" + selecteExample +"']").parent().parent().attr("class", "examples-file-name");
                     }
                     ExamplesView.setLastSelectedItem(url);
-                    $("span[id='" + ExamplesView.getLastSelectedItem() + "']").parent().attr("class", "selected-example");
+                    $("span[id='" + ExamplesView.getLastSelectedItem() + "']").parent().parent().attr("class", "selected-example");
 
                     model.loadExample(url);
                 };

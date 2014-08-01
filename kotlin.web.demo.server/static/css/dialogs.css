@@ -133,7 +133,7 @@
 }
 
 #selectId{
-    overflow: auto;
+    overflow-y: scroll;
     border: 1px solid;
     border-color: #969696;
     border-radius: 4px;

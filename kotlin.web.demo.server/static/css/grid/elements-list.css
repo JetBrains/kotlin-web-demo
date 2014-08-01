@@ -47,12 +47,22 @@
     background-image: url("../../img/open_folder.png");
 }
 
+.folder-name-div{
+    padding-left: 43px;
+    padding-top: 2px;
+    max-width: 95%;
+}
+
 .examples-folder-name{
     /*display: inline-block;*/
     font-size: 14px;
     padding-left: 6px;
 }
 
+.file-name-span{
+    display: inline-block;
+    max-width: 85%;
+}
 
 .examples-file-name{
     display: block;
@@ -64,8 +74,9 @@
 
 .right-arrow{
     display: inline-block;
-    margin-bottom: 2px;
-    margin-right: 3px;
+    float: left;
+    margin-top: 3px;
+    margin-right: 5px;
     width: 4px;
     height: 7px;
     background: url("../../img/right_arrow.png");
@@ -73,6 +84,7 @@
 
 .ui-icon{
     padding-right: 6px;
+    float: left;
 }
 
 .login-link{

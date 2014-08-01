@@ -115,9 +115,9 @@ var ProgramsView = (function () {
                             $("div#myprogramscontent").append(createProgramListElement(createExampleUrl(id, "My Programs"), name,
                                 Configuration.getStringFromType(configuration.type)));
                             $("a#My_Programs").click();
-                            $("span[id='" + ProgramsView.getLastSelectedItem() + "']").parent().attr("class", "examples-file-name");
+                            $("span[id='" + ProgramsView.getLastSelectedItem() + "']").parent().parent().attr("class", "examples-file-name");
                             ProgramsView.setLastSelectedItem(createExampleUrl(id, "My Programs"));
-                            $("span[id='" + ProgramsView.getLastSelectedItem() + "']").parent().attr("class", "selected-example");
+                            $("span[id='" + ProgramsView.getLastSelectedItem() + "']").parent().parent().attr("class", "selected-example");
                         }
                     }
                     i++;
@@ -208,6 +208,7 @@ var ProgramsView = (function () {
             file.appendChild(img);
             file.id = "bullet" + id;
 
+            var name_div = document.createElement("div");
             var name_span = document.createElement("span");
             name_span.id = id;
             name_span.style.cursor = "pointer";
@@ -215,7 +216,7 @@ var ProgramsView = (function () {
                 loadProgram(this.id);
             };
             name_span.innerHTML = name;
-            file.appendChild(name_span);
+            name_span.className = "file-name-span";
 
             var deleteImg = document.createElement("div");
             deleteImg.className = "delete-img";
@@ -224,7 +225,10 @@ var ProgramsView = (function () {
                 //in table get td with a element - id of a
                 deleteProgram(this.parentNode.childNodes[1].id);
             };
-            file.appendChild(deleteImg);
+
+            name_div.appendChild(deleteImg);
+            name_div.appendChild(name_span);
+            file.appendChild(name_div);
             return file;
 
 //            var table = document.createElement("table");
@@ -299,9 +303,9 @@ var ProgramsView = (function () {
                         return;
                     }
 
-                    $("span[id='" + ProgramsView.getLastSelectedItem() + "']").parent().attr("class", "examples-file-name");
+                    $("span[id='" + ProgramsView.getLastSelectedItem() + "']").parent().parent().attr("class", "examples-file-name");
                     ProgramsView.setLastSelectedItem(url);
-                    $("span[id='" + ProgramsView.getLastSelectedItem() + "']").parent().attr("class", "selected-example");
+                    $("span[id='" + ProgramsView.getLastSelectedItem() + "']").parent().parent().attr("class", "selected-example");
 
                     model.loadProgram(url);
                 };

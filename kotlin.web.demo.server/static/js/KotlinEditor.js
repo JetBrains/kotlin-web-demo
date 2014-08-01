@@ -40,7 +40,7 @@ var KotlinEditor = (function () {
 
             function close() {
                 sel.css("display", "none");
-                sel.html("");
+                sel.empty();
             }
 
             sel.menu();
@@ -186,7 +186,7 @@ var KotlinEditor = (function () {
                 });
 
 
-                sel.html("");
+                sel.empty();
 
                 var i = 0;
                 for (i = 0; i < completions.length; ++i) {
@@ -222,9 +222,6 @@ var KotlinEditor = (function () {
                     sel.append(opt);
                 }
 
-                if(i >= 10){
-                    sel.css("max-height", (opt.clientHeight*10) + "px" );
-                }
 
                 var pos = my_editor.cursorCoords();
                 sel.css("position", "absolute");
