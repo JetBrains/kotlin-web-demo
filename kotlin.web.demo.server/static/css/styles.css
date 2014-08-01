@@ -23,7 +23,9 @@
 
 @import "grid/layout.css";
 @import "grid/login.css";
-@import "dialogs.css";
 @import "grid/result-tabs.css";
 @import "grid/grid-top.css";
 @import "grid/elements-list.css";
+
+@import "dialogs.css";
+@import "completions.css";

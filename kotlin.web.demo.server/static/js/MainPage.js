@@ -67,7 +67,7 @@ actionManager.registerAction("org.jetbrains.web.demo.save",
 
 var editor = new KotlinEditor();
 
-var argumentsView = new ArgumentsView($("#arguments"));
+var argumentsView = $("#arguments");
 var statusBarView = new StatusBarView($("#statusbar"));
 var generatedCodeView = new GeneratedCodeView($("#generated-code"));
 var consoleView = new ConsoleView($("#console"), $("#result-tabs"));
@@ -75,7 +75,7 @@ var problemsView = new ProblemsView($("#problems"), $("#result-tabs"));
 
 var canvasPopup = new CanvasPopup($("#popupForCanvas"));
 
-var runButton = new Button($("#run-button"), actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
+//var runButton = new Button($("#run-button"), actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
 
 var runProvider = new RunProvider();
 
@@ -86,7 +86,6 @@ var converterView = new ConverterView($("#java2kotlin"), converterProvider);
 
 var accordion = new AccordionView($("#examples-list"));
 var highlighting = new HighlightingFromServer();
-var loader = new LoaderComponent($('#loader'));
 
 editor.setHighlighterDecorator(highlighting);
 
@@ -129,39 +128,41 @@ editor.onCursorActivity = function (cursorPosition) {
 //    helpViewForWords.update(editor.getWordAtCursor(cursorPosition));
 };
 
-runButton.onClick = function () {
-    runButton.setEnabled(false);
-    var localConfiguration = configurationManager.getConfiguration();
-    highlighting.getHighlighting(localConfiguration.type, editor.getProgramText(), function (highlightingResult) {
-        editor.addMarkers(highlightingResult);
-        if (!checkIfThereAreErrorsInHighlightingResult(highlightingResult)) {
-            //Create canvas element before run it in browser
-            if (localConfiguration.type == Configuration.type.CANVAS) {
-                canvasPopup.show();
+var run_button = $("#run-button")
+    .button()
+    .click(function () {
+        run_button.button("option", "disabled", true);
+        var localConfiguration = configurationManager.getConfiguration();
+        highlighting.getHighlighting(localConfiguration.type, editor.getProgramText(), function (highlightingResult) {
+            editor.addMarkers(highlightingResult);
+            if (!checkIfThereAreErrorsInHighlightingResult(highlightingResult)) {
+                //Create canvas element before run it in browser
+                if (localConfiguration.type == Configuration.type.CANVAS) {
+                    canvasPopup.show();
+                }
+                runProvider.run(configurationManager.getConfiguration(), editor.getProgramText(), argumentsView.val());
+            } else {
+                run_button.button("option", "disabled", false);
             }
-            runProvider.run(configurationManager.getConfiguration(), editor.getProgramText(), argumentsView.getArguments());
-        } else {
-            runButton.setEnabled(true);
-        }
+        });
     });
-};
 
 
 runProvider.onExecutionFinish = function (output) {
-    runButton.setEnabled(true);
+    run_button.button("option", "disabled", false);
     consoleView.setOutput(output);
     statusBarView.setMessage(StatusBarView.Messages.run_java_ok);
 };
 
 runProvider.onFail = function (error) {
-    runButton.setEnabled(true);
+    run_button.button("option", "disabled", false);
     consoleView.writeException(error);
     statusBarView.setMessage(StatusBarView.Messages.run_java_fail);
 };
 
 ProgramsView.isLoggedIn = loginView.isLoggedIn;
 ProgramsModel.getEditorContent = editor.getProgramText;
-ProgramsModel.getArguments = argumentsView.getArguments;
+ProgramsModel.getArguments = argumentsView.val;
 
 
 accordion.onFail = function (exception, actionCode) {
@@ -178,19 +179,15 @@ accordion.onLoadCode = function (element, isProgram) {
     var text = element.text;
 
 
-    if(element.tests != undefined){
-        for(var i = 0; i < element.tests.length; ++i){
+    if (element.tests != undefined) {
+        for (var i = 0; i < element.tests.length; ++i) {
             text = text + "--------TEST---------\n" + element.tests[i].text
         }
     }
 
     editor.setText(text);
-    argumentsView.setArgs(element.args);
+    argumentsView.val(element.args);
     configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
-};
-
-accordion.onLoadAllContent = function () {
-    loader.hide();
 };
 
 accordion.onDeleteProgram = function () {
@@ -209,7 +206,6 @@ loginProvider.onLogin = function (data) {
 };
 
 loginProvider.onLogout = function () {
-    $("#save").css("opacity", "0.3");
     $("#examples-list").accordion("destroy");
     loginView.logout();
     statusBarView.setMessage(StatusBarView.Messages.logout_ok);
@@ -225,7 +221,7 @@ loginProvider.onFail = function (exception, actionCode) {
 $(document).keydown(function (e) {
     var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
     if (shortcut.isPressed(e)) {
-        runButton.click();
+        run_button.click();
     } else {
         shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.save");
         if (shortcut.isPressed(e)) {
@@ -314,16 +310,41 @@ $("#popupForCanvas").dialog({
 });
 
 
-$("#save").click( function(){
-    if(ProgramsView.isLoggedIn()){
+$("#save").click(function () {
+    if (ProgramsView.isLoggedIn()) {
         $("#save-dialog").dialog("open");
-    } else{
+    } else {
         $("#login-dialog").dialog("open");
     }
 })
 
-$("#run-button").attr("title" , $("#run-button").attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName()));
-$("#save").attr("title" , $("#save").attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
+run_button.attr("title", run_button.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName()));
+$("#save").attr("title", $("#save").attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
+
+
+var show = function () {
+    document.getElementById("console-image").className = "console-image-active";
+    document.getElementById("console-image").onclick = hide;
+    document.getElementById("console-button").className = "console-arguments-button-active";
+    document.getElementById("command-line-arguments").className = "command-line-arguments-visible";
+
+    document.getElementById("scroll").style.height = "509px";
+    document.getElementById("gutter").style.height = "509px";
+};
+
+var hide = function () {
+    document.getElementById("console-image").className = "console-image";
+    document.getElementById("console-image").onclick = show;
+    document.getElementById("console-button").className = "console-arguments-button";
+    document.getElementById("command-line-arguments").className = "command-line-arguments-hidden";
+
+    document.getElementById("scroll").style.height = "548px";
+    document.getElementById("gutter").style.height = "548px";
+};
+document.getElementById("console-image").onclick = hide;
+
+document.getElementById("scroll").style.height = "509px";
+document.getElementById("gutter").style.height = "509px";
 
 setSessionId();
 

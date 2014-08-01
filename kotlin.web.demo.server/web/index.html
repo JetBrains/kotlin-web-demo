@@ -92,11 +92,13 @@
                                 <option value="canvas">JavaScript(Canvas)</option>
                             </select>
 
-                            <div id="run-button" class="run-button" title="Run file(@shortcut@) using run configuration"></div>
+                            <div id="run-button" class="run-button"
+                                 title="Run file(@shortcut@) using run configuration"></div>
                         </div>
                         <div class="toolbox-right">
                             <div class="imagebox">
-                                <div id="java2kotlin" class="java2kotlin" title="Convert your Java code to Kotlin"></div>
+                                <div id="java2kotlin" class="java2kotlin"
+                                     title="Convert your Java code to Kotlin"></div>
                             </div>
                             <div class="imagebox">
                                 <div id="save" class="save" title="Save your program(@shortcut@)"></div>
@@ -135,7 +137,8 @@
                     <ul class="result-tabs-buttons">
                         <li class="result-tab"><a href="#problems">Problems view</a></li>
                         <li class="result-tab"><a href="#console">Console</a></li>
-                        <li class="result-tab"><a href="#generated-code" id="generated-code-tab">Generated classfiles</a></li>
+                        <li class="result-tab"><a href="#generated-code" id="generated-code-tab">Generated
+                            classfiles</a></li>
                     </ul>
                     <div class="kotlin-info">
                         This demo is running on Kotlin v.0.8.11
@@ -189,32 +192,6 @@
 
 </ul>
 
-<script type="text/javascript">
-    {
-        var show = function () {
-            document.getElementById("console-image").className = "console-image-active";
-            document.getElementById("console-image").onclick = hide;
-            document.getElementById("console-button").className = "console-arguments-button-active";
-            document.getElementById("command-line-arguments").className = "command-line-arguments-visible";
-
-            document.getElementById("scroll").style.height = "509px";
-            document.getElementById("gutter").style.height = "509px";
-        };
-
-        var hide = function () {
-            document.getElementById("console-image").className = "console-image";
-            document.getElementById("console-image").onclick = show;
-            document.getElementById("console-button").className = "console-arguments-button";
-            document.getElementById("command-line-arguments").className = "command-line-arguments-hidden";
-
-            document.getElementById("scroll").style.height = "548px";
-            document.getElementById("gutter").style.height = "548px";
-        };
-        document.getElementById("console-image").onclick = hide;
-    }
-
-</script>
-
 
 <script src="/static/js/common.js"></script>
 
@@ -226,7 +203,6 @@
 
 <script src="/static/js/ConfirmDialog.js"></script>
 <script src="/static/js/Configuration.js"></script>
-<script src="/static/js/loader_component.js"></script>
 <script src="/static/js/popup/CanvasPopup.js"></script>
 
 
@@ -244,9 +220,7 @@
 <script src="/static/js/views/ExamplesView.js"></script>
 <script src="/static/js/views/AccordionComponent.js"></script>
 
-<script src="/static/js/views/Button.js"></script>
 <script src="/static/js/views/ConverterView.js"></script>
-<script src="/static/js/views/ArgumentsView.js"></script>
 <script src="/static/js/views/GeneratedCodeView.js"></script>
 <script src="/static/js/views/ConsoleView.js"></script>
 <script src="/static/js/views/ProblemsView.js"></script>
@@ -259,11 +233,6 @@
 
 <script src="/static/js/test.js"></script>
 
-
-<script type="text/javascript">
-    document.getElementById("scroll").style.height = "509px";
-    document.getElementById("gutter").style.height = "509px";
-</script>
 
 </body>
 </html>

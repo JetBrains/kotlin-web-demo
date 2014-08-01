@@ -42,7 +42,7 @@ var HighlightingFromServer = (function () {
             },
 
             onFail: function (error) {
-                runButton.setEnabled(true);
+                run_button.button("option", "disabled", false);
                 consoleView.writeException(error);
                 statusBarView.setMessage(StatusBarView.Messages.get_highlighting_fail);
             }
