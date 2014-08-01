@@ -32,6 +32,7 @@
 }
 
 .ui-dialog-titlebar-close{
+    cursor: pointer;
     border: 0;
     float: right;
     font-size: 0;
@@ -57,6 +58,7 @@
 }
 
 .ui-dialog-buttonset .ui-button{
+    cursor: pointer;
     margin-left: 4px;
     margin-right: 4px;
     padding-top: 4px;
@@ -133,6 +135,7 @@
 }
 
 #selectId{
+    max-height: 200px;
     overflow-y: scroll;
     border: 1px solid;
     border-color: #969696;

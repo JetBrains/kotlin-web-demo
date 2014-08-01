@@ -52,7 +52,7 @@ var ConsoleView = (function () {
             if (data != undefined && data[0] != undefined && data[0].exception != undefined) {
                 element.html("");
                 if (tabs != null) {
-                    tabs.tabs("select", 1);
+                    tabs.tabs("option", "active", 1);
                 }
                 var i = 0;
                 var output = [];

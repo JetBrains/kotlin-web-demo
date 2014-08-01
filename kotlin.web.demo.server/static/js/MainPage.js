@@ -209,6 +209,7 @@ loginProvider.onLogin = function (data) {
 };
 
 loginProvider.onLogout = function () {
+    $("#save").css("opacity", "0.3");
     $("#examples-list").accordion("destroy");
     loginView.logout();
     statusBarView.setMessage(StatusBarView.Messages.logout_ok);
@@ -312,9 +313,18 @@ $("#popupForCanvas").dialog({
     }
 });
 
+
 $("#save").click( function(){
-    $("#save-dialog").dialog("open");
-});
+    if(ProgramsView.isLoggedIn()){
+        $("#save-dialog").dialog("open");
+    } else{
+        $("#login-dialog").dialog("open");
+    }
+})
+
+$("#run-button").attr("title" , $("#run-button").attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName()));
+$("#save").attr("title" , $("#save").attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
 
 setSessionId();
+
 //loadShortcuts();

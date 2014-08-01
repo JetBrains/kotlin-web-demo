@@ -31,10 +31,13 @@
 }
 
 #examples-list .ui-state-active{
+    cursor: default;
     color: #000000;
 }
 
 .ui-accordion-header{
+    outline: none;
+    cursor: pointer;
     color: #3164a0;
     padding-top: 6px;
     padding-bottom: 6px;
@@ -50,7 +53,7 @@
 .folder-name-div{
     padding-left: 43px;
     padding-top: 2px;
-    max-width: 95%;
+    padding-right: 10px;
 }
 
 .examples-folder-name{
@@ -94,6 +97,7 @@
 }
 
 .delete-img{
+    cursor: pointer;
     height: 12px;
     width: 12px;
     float: right;

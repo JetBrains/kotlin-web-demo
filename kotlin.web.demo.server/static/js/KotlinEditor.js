@@ -222,7 +222,6 @@ var KotlinEditor = (function () {
                     sel.append(opt);
                 }
 
-
                 var pos = my_editor.cursorCoords();
                 sel.css("position", "absolute");
                 sel.css("left", pos.x + "px");

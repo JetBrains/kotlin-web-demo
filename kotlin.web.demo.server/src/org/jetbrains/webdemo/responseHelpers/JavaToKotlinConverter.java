@@ -40,20 +40,19 @@ public class JavaToKotlinConverter {
             try {
                   resultFormConverter = J2kPackage.translateToKotlin(code);
             } catch (Exception e) {
-                ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: " + e.getMessage());
             }
             if (resultFormConverter.isEmpty()) {
-                ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: generated code is empty.");
             }
-            ServerInitializer.reinitializeJavaEnvironment();
+
             jsonObject.put("text", resultFormConverter);
         } catch (Throwable e) {
-            ServerInitializer.reinitializeJavaEnvironment();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN.name(), info.getOriginUrl(), code);
             return ResponseUtils.getErrorInJson(e.getMessage());
+        } finally {
+            ServerInitializer.reinitializeJavaEnvironment();
         }
 
         return result.toString();

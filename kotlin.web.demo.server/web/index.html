@@ -65,7 +65,7 @@
             <div id="userName">
                 <span id="userNameTitle"></span>
 
-                <div id="logout"></div>
+                <div id="logout" title="Log out"></div>
 
             </div>
         </div>
@@ -79,8 +79,8 @@
                 <div class="workspace">
                     <div class="toolbox">
                         <div class="toolbox-left">
-                            <div id="console-button" class="console-arguments-button">
-                                <div id="console-image" class="console-image"></div>
+                            <div id="console-button" class="console-arguments-button-active">
+                                <div id="console-image" class="console-image-active"></div>
                                 <div class="down-arrow"></div>
                             </div>
                             <span class="run-text">
@@ -92,17 +92,17 @@
                                 <option value="canvas">JavaScript(Canvas)</option>
                             </select>
 
-                            <div id="run-button" class="run-button"></div>
+                            <div id="run-button" class="run-button" title="Run file(@shortcut@) using run configuration"></div>
                         </div>
                         <div class="toolbox-right">
                             <div class="imagebox">
-                                <div id="java2kotlin" class="java2kotlin"></div>
+                                <div id="java2kotlin" class="java2kotlin" title="Convert your Java code to Kotlin"></div>
                             </div>
                             <div class="imagebox">
-                                <div id="save" class="save"></div>
+                                <div id="save" class="save" title="Save your program(@shortcut@)"></div>
                             </div>
                             <div class="imagebox">
-                                <div class="help">?</div>
+                                <div class="help" title="Help">?</div>
                             </div>
                             <span class="type-checking">Type checking</span>
                             ` <input id="on-the-fly-checkbox" type="checkbox" class="type-checking-option"
@@ -110,7 +110,7 @@
                             <span class="on-the-fly">On-the-fly</span>
                         </div>
                     </div>
-                    <div id="command-line-arguments" class="command-line-arguments-hidden">
+                    <div id="command-line-arguments" class="command-line-arguments-visible">
                                 <span class="command-line-arguments-text">
                                     Command-line-arguments
                                 </span>
@@ -210,7 +210,7 @@
             document.getElementById("scroll").style.height = "548px";
             document.getElementById("gutter").style.height = "548px";
         };
-        document.getElementById("console-image").onclick = show;
+        document.getElementById("console-image").onclick = hide;
     }
 
 </script>
@@ -261,8 +261,8 @@
 
 
 <script type="text/javascript">
-    document.getElementById("scroll").style.height = "548px";
-    document.getElementById("gutter").style.height = "548px";
+    document.getElementById("scroll").style.height = "509px";
+    document.getElementById("gutter").style.height = "509px";
 </script>
 
 </body>
