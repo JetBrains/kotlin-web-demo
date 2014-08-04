@@ -43,7 +43,8 @@
     float: left;
     padding-left: 4px;
     padding-right: 4px;
-    margin-bottom: 3px;
+    position: relative;
+    bottom: 3px;
     border-right: 1px solid;
     border-color: #cdcdcd;
 }
@@ -187,11 +188,13 @@ select {
 }
 
 .command-line-arguments-visible{
+    height: 35px;
     background-color: #cfcfcf;
     display: block;
 }
 
 .command-line-arguments-hidden{
+    height: 35px;
     display: none;
 }
 
@@ -203,7 +206,6 @@ select {
 /*}*/
 
 .command-line-arguments-text{
-    float: left;
     display: inline-block;
     margin-top: 11px;
     padding-left: 4px;
@@ -217,11 +219,14 @@ select {
     border-radius: 3px;
 
     font-size: 14px;
-    line-height: 14px;
-    padding: 5px;
+    padding: 2px 5px;
     display: inline-block;
     width: 70%;
     margin: 4px;
+}
+
+.CodeMirror{
+    line-height: 1.4;
 }
 
 .ERROR {
@@ -254,6 +259,56 @@ select {
     padding-bottom: 2px;
 }
 
-.ui-button-disabled{
+.ui-button-disabled {
     opacity: 0.5;
+}
+
+
+.ui-selectmenu-button{
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #969696;
+    float: left;
+    background-color: #e1e1e1;
+    padding: 4px;
+    margin-top: 4px;
+    font-size: 12px;
+    border-radius: 3px;
+}
+
+
+.ui-selectmenu-menu {
+    cursor: pointer;
+    background-color: #ffffff;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+.ui-menu-item{
+    padding: 2px;
+}
+
+.ui-selectmenu-open {
+    display: block;
+}
+
+.ui-front {
+    z-index: 100;
+}
+
+.selectmenu-arrow-icon{
+    width: 6px;
+    height: 3px;
+    float: right;
+    margin-top: 4px;
+    background: url("/static/images/icons.png") -4px -94px;
+}
+
+
+.ui-selectmenu-menu .ui-state-focus{
+    background-color: #eeeeee;
 }

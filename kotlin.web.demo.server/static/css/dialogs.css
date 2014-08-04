@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-
 /*java2kotlin codemirror style-Courier new Regular*/
 
-.ui-dialog{
-    z-index:1002;
+.ui-dialog {
+    z-index: 1002;
     border: 1px solid;
     border-radius: 5px;
     border-color: #969696;
     overflow: hidden;
+    outline: none;
 }
 
-.ui-dialog-titlebar{
+.ui-dialog-titlebar {
     font-size: 14px;
     padding: 8px;
     background-color: #dfdfdf;
 }
 
-.ui-dialog-titlebar-close{
+.ui-dialog-titlebar-close {
     cursor: pointer;
     border: 0;
     float: right;
@@ -41,23 +41,23 @@
     background: url("/static/images/icons.png") no-repeat -84px -40px;
 }
 
-.ui-dialog-content{
+.ui-dialog-content {
     border-bottom: 1px solid;
     border-color: #969696;
     background: #ffffff;
 }
 
-.ui-dialog-buttonpane{
+.ui-dialog-buttonpane {
     background: #ffffff;
     padding: 8px;
     overflow: hidden;
 }
 
-.ui-dialog-buttonset{
+.ui-dialog-buttonset {
     float: right;
 }
 
-.ui-dialog-buttonset .ui-button{
+.ui-dialog-buttonset .ui-button {
     cursor: pointer;
     margin-left: 4px;
     margin-right: 4px;
@@ -73,23 +73,20 @@
     width: 100%;
     height: 100%;
     z-index: 1001;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background-color: #808080;
     opacity: 0.5;
 }
 
-
-
-#login-dialog{
+#login-dialog {
     text-align: center;
     line-height: 30px;
     padding-top: 15px;
 }
 
-
-.login-with-colored{
+.login-with-colored {
     display: inline-block;
     margin-left: 16px;
     position: relative;
@@ -98,56 +95,101 @@
     font-size: 0;
 }
 
-.login-with-colored:first-child{
+.login-with-colored:first-child {
     margin-left: 0px;
 }
 
-.colored-facebook{
+.colored-facebook {
     background: url("/static/images/icons.png") no-repeat 0 -16px;
 }
 
-.colored-google{
+.colored-google {
     background: url("/static/images/icons.png") no-repeat -42px -16px;
 }
 
-.colored-twitter{
+.colored-twitter {
     background: url("/static/images/icons.png") no-repeat -84px -16px;
 }
 
-
-#save-dialog{
+#save-dialog {
     text-align: center;
     padding: 40px;
     padding-left: 20px;
     padding-right: 20px;
 }
 
-#program-name-input{
+#program-name-input {
     width: 280px;
     border: 1px solid;
     border-color: #969696;
     border-radius: 3px;
 }
 
-#confirmDialog{
+#confirmDialog {
     text-align: center;
     line-height: 60px;
 }
 
-#selectId{
+#selectId {
     max-height: 200px;
     overflow-y: scroll;
-    border: 1px solid;
-    border-color: #969696;
+    border: 1px solid #969696;
     border-radius: 4px;
     background-color: #f7f7f7;
 }
 
-#selectId:focus{
+#selectId:focus {
     outline-width: 0;
 }
 
-#selectId .ui-state-focus{
+#selectId .ui-state-focus {
     background-color: #d8d8d8;
 
+}
+
+#help-dialog {
+    padding: 8px;
+    line-height: 16px;
+}
+
+#help-dialog h3 {
+    text-align: center;
+    background-color: #f6f6f6;
+    line-height: 22px;
+}
+
+.help-text {
+    padding: 6px;
+    text-align: center;
+}
+
+#words-help {
+    width: 300px;
+    background-color: #eeeeee;
+    border: 1px solid #969696;
+    border-radius: 3px;
+}
+
+#words-help-text {
+    line-height: 1.25;
+    padding: 4px;
+}
+
+.words-help-text pre {
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: #cfcfcf;
+}
+
+.words-help-text pre:first-of-type {
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    padding-top: 6px;
+    margin-top: 4px;
+}
+.words-help-text pre:last-of-type{
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    padding-bottom: 6px;
+    margin-bottom: 4px;
 }

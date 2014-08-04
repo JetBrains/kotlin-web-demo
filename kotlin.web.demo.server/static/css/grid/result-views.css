@@ -15,6 +15,7 @@
  */
 
 .status-bar {
+    font-family: menlo, consolas, monospace;
     font-size: 12px;
     padding: 10px;
     color: #9e9e9e;
@@ -25,6 +26,8 @@
     border-color: #969696;
 }
 
+
+
 /*.status-bar:after{*/
 
 /*display: block;*/
@@ -34,16 +37,22 @@
 /*}*/
 
 .result-view {
+    font-family: menlo, consolas, monospace;
     overflow: auto;
     white-space: pre;
     height: 185px;
     padding: 5px;
     font-size: 12px;
-    line-height: 14px;
+    line-height: 1.4;
     border: 1px solid;
     border-top-width: 0;
     border-bottom-width: 0;
     border-color: #969696;
+}
+
+.result-view a{
+    cursor: pointer;
+    color: #7a7a7a;
 }
 
 .consoleViewError {
@@ -60,7 +69,6 @@
 }
 
 .problemsViewError {
-    color: #ff0000 !important;
     margin: 0;
     vertical-align: top;
 }
@@ -92,3 +100,4 @@
 #console, #generated-code {
     font-family: monospace;
 }
+

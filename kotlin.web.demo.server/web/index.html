@@ -15,12 +15,14 @@
   ~ limitations under the License.
   -->
 
-<html xmlns="http://www.w3.org/1999/html">
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head lang="en">
+    <link rel="Shortcut Icon" href="/static/images/favicon.ico" type="image/x-icon">
     <!--<link rel="stylesheet" href="/static/jquery/jquery-ui/jquery-ui-1.11.0.custom/jquery-ui.css">-->
 
-    <link rel="stylesheet" href="/static/css/styles.css">
+
     <link rel="stylesheet" href="/static/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
 
     <script src="/static/codemirror/lib/codemirror.js"></script>
     <script src="/static/codemirror/mode/clike/clike.js"></script>
@@ -104,7 +106,7 @@
                                 <div id="save" class="save" title="Save your program(@shortcut@)"></div>
                             </div>
                             <div class="imagebox">
-                                <div class="help" title="Help">?</div>
+                                <div id="help" class="help" title="Help">?</div>
                             </div>
                             <span class="type-checking">Type checking</span>
                             ` <input id="on-the-fly-checkbox" type="checkbox" class="type-checking-option"
@@ -114,7 +116,7 @@
                     </div>
                     <div id="command-line-arguments" class="command-line-arguments-visible">
                                 <span class="command-line-arguments-text">
-                                    Command-line-arguments
+                                    Program arguments
                                 </span>
                         <input id="arguments" class="command-line-arguments-textarea">
                     </div>
@@ -188,6 +190,26 @@
     Do you want to save your changes?
 </div>
 
+<div id="help-dialog" title="Help">
+    <div id="example-help">
+        <h3>Example description</h3>
+
+        <div id="example-help-text" class="help-text"></div>
+    </div>
+    <h3>Shortcuts</h3>
+
+    <div id="shortcuts-help" class="help-text">
+        Use @run_shortcut@ to run program<br>
+        Use @completion_shortcut@ for code completion<br>
+        Use @reformat_shortcut@ to reformat selected fragment<br>
+        Use @save_shortcut@ to save current program (you must be logged in)<br>
+    </div>
+</div>
+
+<div id="words-help">
+    <div id="words-help-text" class="words-help-text"></div>
+</div>
+
 <ul id="selectId">
 
 </ul>
@@ -216,6 +238,8 @@
 
 <script src="/static/js/views/LoginView.js"></script>
 
+<script src="/static/js/HelpModel.js"></script>
+
 <script src="/static/js/views/ProgramsView.js"></script>
 <script src="/static/js/views/ExamplesView.js"></script>
 <script src="/static/js/views/AccordionComponent.js"></script>
@@ -223,6 +247,7 @@
 <script src="/static/js/views/ConverterView.js"></script>
 <script src="/static/js/views/GeneratedCodeView.js"></script>
 <script src="/static/js/views/ConsoleView.js"></script>
+<script src="/static/js/views/HelpView.js"></script>
 <script src="/static/js/views/ProblemsView.js"></script>
 <script src="/static/js/views/MainPageView.js"></script>
 

@@ -77,6 +77,13 @@ var canvasPopup = new CanvasPopup($("#popupForCanvas"));
 
 //var runButton = new Button($("#run-button"), actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
 
+var helpModelForExamples = new HelpModel("Examples");
+var helpViewForExamples = new HelpView("Examples", $("#example-help-text"), helpModelForExamples);
+var helpModelForWords = new HelpModel("Words");
+var helpViewForWords = new HelpView("Words", $("#words-help-text"), helpModelForWords);
+helpViewForWords.hide();
+
+
 var runProvider = new RunProvider();
 
 var loginProvider = new LoginProvider();
@@ -119,14 +126,30 @@ configurationManager.onFail = function (exception) {
     statusBarView.setMessage(StatusBarView.Messages.change_configuration_fail);
 };
 
+var timer;
 editor.onCursorActivity = function (cursorPosition) {
+    helpViewForWords.hide();
     var messageForLineAtCursor = editor.getMessageForLineAtCursor(cursorPosition);
     //Save previous message if current is empty
     if (messageForLineAtCursor != "") {
         statusBarView.setMessage(messageForLineAtCursor);
     }
-//    helpViewForWords.update(editor.getWordAtCursor(cursorPosition));
+
+    var wordsHelp = $("#words-help");
+    var pos = editor.cursorCoords();
+    wordsHelp.css("position", "absolute");
+    wordsHelp.css("left", pos.x + "px");
+    wordsHelp.css("top", pos.yBot + "px");
+
+
+    if(timer) {
+        clearTimeout(timer);
+        timer = setTimeout(function(){helpViewForWords.update(editor.getWordAtCursor(cursorPosition))}, 1000);
+    } else {
+        timer = setTimeout(function(){helpViewForWords.update(editor.getWordAtCursor(cursorPosition))}, 1000);
+    }
 };
+
 
 var run_button = $("#run-button")
     .button()
@@ -171,23 +194,19 @@ accordion.onFail = function (exception, actionCode) {
 };
 accordion.onLoadCode = function (element, isProgram) {
     if (!isProgram) {
+        helpViewForExamples.update(element.name);
         statusBarView.setMessage(StatusBarView.Messages.load_example_ok);
     } else {
+        helpViewForExamples.hide();
         statusBarView.setMessage(StatusBarView.Messages.load_program_ok);
     }
 
     var text = element.text;
 
-
-    if (element.tests != undefined) {
-        for (var i = 0; i < element.tests.length; ++i) {
-            text = text + "--------TEST---------\n" + element.tests[i].text
-        }
-    }
-
     editor.setText(text);
     argumentsView.val(element.args);
     configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
+
 };
 
 accordion.onDeleteProgram = function () {
@@ -321,6 +340,32 @@ $("#save").click(function () {
 run_button.attr("title", run_button.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName()));
 $("#save").attr("title", $("#save").attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
 
+function loadShortcuts() {
+    var text = $("#shortcuts-help").html();
+    text = text.replace("@completion_shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getName());
+    text = text.replace("@run_shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
+    text = text.replace("@reformat_shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getName());
+    text = text.replace("@save_shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName());
+    $("#shortcuts-help").html(text);
+}
+
+helpDialog = $("#help-dialog");
+helpDialog.dialog(
+    {
+        width: 350,
+        autoOpen: false,
+        modal: true
+    }
+);
+
+$("#help").click(function () {
+        helpDialog.dialog("open")
+    }
+);
+
+$("#run-mode").selectmenu({
+    icons:{button: "selectmenu-arrow-icon"}
+});
 
 var show = function () {
     document.getElementById("console-image").className = "console-image-active";
@@ -328,8 +373,8 @@ var show = function () {
     document.getElementById("console-button").className = "console-arguments-button-active";
     document.getElementById("command-line-arguments").className = "command-line-arguments-visible";
 
-    document.getElementById("scroll").style.height = "509px";
-    document.getElementById("gutter").style.height = "509px";
+    document.getElementById("scroll").style.height = "513px";
+    document.getElementById("gutter").style.height = "513px";
 };
 
 var hide = function () {
@@ -343,9 +388,8 @@ var hide = function () {
 };
 document.getElementById("console-image").onclick = hide;
 
-document.getElementById("scroll").style.height = "509px";
-document.getElementById("gutter").style.height = "509px";
+document.getElementById("scroll").style.height = "513px";
+document.getElementById("gutter").style.height = "513px";
 
 setSessionId();
-
-//loadShortcuts();
+loadShortcuts();

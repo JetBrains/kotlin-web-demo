@@ -483,6 +483,9 @@ var KotlinEditor = (function () {
                     message = "line " + (lineNumber + 1) + " - " + text;
                 }
                 return message;
+            },
+            cursorCoords: function(){
+                return my_editor.cursorCoords();
             }
         };
 
@@ -495,11 +498,13 @@ var KotlinEditor = (function () {
             if (timer) {
                 clearTimeout(timer);
                 timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
+
             }
             else {
                 timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
             }
         }
+
 
         function getHighlighting() {
             if (configuration.mode.name != Configuration.mode.ONRUN.name) {

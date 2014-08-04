@@ -59,10 +59,10 @@ var ConfigurationComponent = (function () {
             // type: String
             updateConfiguration: function (type) {
                 configuration = new Configuration(configuration.mode, Configuration.getTypeFromString(type));
-                document.getElementById("run-mode").value = type;
-                if($("#run-mode").val() == "java"){
+                $("#run-mode").val(type).selectmenu("refresh");
+                if ($("#run-mode").val() == "java") {
                     document.getElementById("generated-code-tab").innerHTML = "Generated classfiles";
-                } else{
+                } else {
                     document.getElementById("generated-code-tab").innerHTML = "Generated JavaScript code";
                 }
                 fireChangeEvent();
@@ -71,16 +71,15 @@ var ConfigurationComponent = (function () {
             }
         };
 
-        $(document).on( "change", "#run-mode", function () {
-                    if($("#run-mode").val() == "java"){
-                        document.getElementById("generated-code-tab").innerHTML = "Generated classfiles";
-                    } else{
-                        document.getElementById("generated-code-tab").innerHTML = "Generated JavaScript code";
-                    }
-                    configuration = new Configuration(configuration.mode, Configuration.getTypeFromString($("#run-mode").val()));
-                    fireChangeEvent();
-         });
-
+        $("#run-mode").on("selectmenuchange", function () {
+            if ($("#run-mode").val() == "java") {
+                document.getElementById("generated-code-tab").innerHTML = "Generated classfiles";
+            } else {
+                document.getElementById("generated-code-tab").innerHTML = "Generated JavaScript code";
+            }
+            configuration = new Configuration(configuration.mode, Configuration.getTypeFromString($("#run-mode").val()));
+            fireChangeEvent();
+        });
 
 
         function saveModeToCookies(mode) {
@@ -92,19 +91,19 @@ var ConfigurationComponent = (function () {
             if (mode == "on-the-fly") {
                 document.getElementById("on-the-fly-checkbox").checked = true;
                 configuration = new Configuration(Configuration.mode.SERVER, configuration.type);
-            }else {
+            } else {
                 document.getElementById("on-the-fly-checkbox").checked = false;
                 configuration = new Configuration(Configuration.mode.ONRUN, configuration.type);
             }
             fireChangeEvent();
         })();
 
-        $(document).on( "change", "#on-the-fly-checkbox", function(){
+        $(document).on("change", "#on-the-fly-checkbox", function () {
             var checkbox = document.getElementById("on-the-fly-checkbox");
-            if(checkbox.checked == true){
+            if (checkbox.checked == true) {
                 configuration = new Configuration(Configuration.mode.SERVER, configuration.type);
                 saveModeToCookies("on-the-fly")
-            } else{
+            } else {
                 configuration = new Configuration(Configuration.mode.ONRUN, configuration.type)
                 saveModeToCookies("on-run")
             }

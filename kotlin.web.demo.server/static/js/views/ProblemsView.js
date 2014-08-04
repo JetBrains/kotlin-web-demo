@@ -68,7 +68,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         codeReference.href = "#";
         var id = "error_" + lineNo + "_" + charNo;
         codeReference.id = id;
-        codeReference.innerHTML = "(" + (lineNo + 1) + ", " + (charNo + 1) + ")";
+        codeReference.innerHTML = (lineNo + 1) + "," + (charNo + 1);
         $(document).on('click', "#" + id, function () {
             editor.setCursor(lineNo, charNo);
             editor.focus();
@@ -99,8 +99,13 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         if (start == null) {
             titleDiv.innerHTML = " " + unEscapeString(title);
         } else {
+            var span = document.createElement("span");
+            span.innerHTML = "(";
+            p.appendChild(span);
+
             p.appendChild(makeCodeReference(start.line, start.ch));
-            titleDiv.innerHTML = " : " + unEscapeString(title);
+
+            titleDiv.innerHTML = "): " + unEscapeString(title);
         }
         p.appendChild(titleDiv);
         return p;

@@ -75,30 +75,38 @@ var ConsoleView = (function () {
             }
         }
 
-        function makeCodeReference(file, lineNo) {
+        var i = 0;
+        function makeCodeReference( lineNo ) {
             var a = document.createElement("a");
-            a.href = "#code";
-            a.innerHTML = "(" + file + ":" + lineNo + ")";
-            var id = "stack_trace_code_reference_" + lineNo;
-            a.id = id;
-            $(document).on("click", "#" + id, function () {
-                editor.setCursor(lineNo - 1, 0);
+            a.ref="#code";
+            a.innerHTML = "dummy.kt:" + lineNo;
+            a.id = "code_reference_" + i;
+            $(document).on("click", "#code_reference_" + i, function(){
+                editor.setCursor(parseInt(lineNo - 1, 0));
                 editor.focus();
             });
+           i = i+1;
             return a;
         }
 
-        function createStdErrorForConsoleView(element, template, lines) {
-            var i = 0;
-            var pos = template.indexOf("%STACK_TRACE_LINE%");
-            while (pos > -1) {
-                var s = document.createElement("span");
-                s.innerHTML = template.substr(0, pos) + "\tat " + lines[i].function;
-                template = template.substr(pos + "%STACK_TRACE_LINE%".length);
-                element.appendChild(s);
-                element.appendChild(makeCodeReference(lines[i].file, lines[i].lineNo));
-                pos = template.indexOf("%STACK_TRACE_LINE%");
-                ++i;
+        function createStdErrorForConsoleView(element, message) {
+            var regExp = /(.*?)\(dummy\.kt:([1-9]+)\)/;
+            var ref = regExp.exec(message);
+            while(ref != null){
+
+                var span = document.createElement("span");
+                span.innerHTML = ref[1] + "(";
+                element.appendChild(span);
+
+
+                element.appendChild(makeCodeReference(ref[2]));
+
+                span = document.createElement("span");
+                span.innerHTML = ")";
+                element.appendChild(span);
+
+                message = message.substr(ref[0].length);
+                ref = regExp.exec(message);
             }
         }
 
@@ -128,14 +136,11 @@ var ConsoleView = (function () {
                             } else if (message == "timeout : timeout") {
                                 p.innerHTML = "Server didn't response for 10 seconds."
                             } else {
-                                p.innerHTML = unEscapeString(message);
-//                                var stdErr = JSON.parse(message);
-//                                createStdErrorForConsoleView(p, stdErr.stdErr, stdErr.stackTraceLines)
+//                                p.innerHTML = unEscapeString(message);
+                                createStdErrorForConsoleView(p, message)
                             }
                         } else if (data[i].type == "info") {
                             generatedCodeView.setOutput(data[i]);
-//                            p.className = "consoleViewInfo";
-//                            p.innerHTML = unEscapeString(message);
                         } else {
                             p.innerHTML = unEscapeString(message);
                         }

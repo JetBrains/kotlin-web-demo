@@ -129,7 +129,7 @@ var ExamplesView = (function () {
                     model.loadExample(url);
                 };
             }(url));
-
+            helpViewForExamples.update();
         }
 
         function loadExampleSuccess(data) {

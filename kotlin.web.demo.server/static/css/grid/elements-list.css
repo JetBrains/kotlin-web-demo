@@ -88,7 +88,7 @@
     background: url("/static/images/icons.png") -58px -58px;
 }
 
-.ui-icon{
+#examples-list .ui-icon{
     margin-right: 6px;
     float: left;
 }
