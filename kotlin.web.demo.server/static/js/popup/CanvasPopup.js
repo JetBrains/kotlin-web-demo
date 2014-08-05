@@ -27,18 +27,19 @@ var CanvasPopup = (function () {
 
     function CanvasPopup(element) {
 
+
+
         var instance = {
+
             show: function () {
-                element.empty();
-                element.append("<canvas width=\"" + $("#popupForCanvas").dialog("option", "width")
-                    + "\" height=\"" + ($("#popupForCanvas").dialog("option", "height") - 30) + "\" id=\"mycanvas\"></canvas>");
-                element.dialog("open");
+//                element.empty();
+
+//                var canvas = element.firstChild();
+
+
             },
             hide: function () {
-                element.empty();
-                //element.dialog("close");
-                //WARN: if in the page there is more intevals - they will be stopped.
-                window.clearAllIntervals();
+
             }
         };
 

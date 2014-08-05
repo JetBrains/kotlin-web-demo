@@ -73,7 +73,23 @@ var generatedCodeView = new GeneratedCodeView($("#generated-code"));
 var consoleView = new ConsoleView($("#console"), $("#result-tabs"));
 var problemsView = new ProblemsView($("#problems"), $("#result-tabs"));
 
-var canvasPopup = new CanvasPopup($("#popupForCanvas"));
+var canvas;
+canvasDialog = $("#popupForCanvas").dialog({
+    width: 630,
+    height: 350,
+    autoOpen: false,
+    modal: true,
+    close: function () {
+        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+        //element.dialog("close");
+        //WARN: if in the page there is more intevals - they will be stopped.
+        window.clearAllIntervals();
+    }
+});
+
+canvas = document.getElementById("mycanvas");
+canvas.setAttribute("width", canvasDialog.dialog("option", "width") + "");
+canvas.setAttribute("height", (canvasDialog.dialog("option", "height") - 30) + "");
 
 //var runButton = new Button($("#run-button"), actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
 
@@ -142,11 +158,15 @@ editor.onCursorActivity = function (cursorPosition) {
     wordsHelp.css("top", pos.yBot + "px");
 
 
-    if(timer) {
+    if (timer) {
         clearTimeout(timer);
-        timer = setTimeout(function(){helpViewForWords.update(editor.getWordAtCursor(cursorPosition))}, 1000);
+        timer = setTimeout(function () {
+            helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
+        }, 1000);
     } else {
-        timer = setTimeout(function(){helpViewForWords.update(editor.getWordAtCursor(cursorPosition))}, 1000);
+        timer = setTimeout(function () {
+            helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
+        }, 1000);
     }
 };
 
@@ -161,7 +181,7 @@ var run_button = $("#run-button")
             if (!checkIfThereAreErrorsInHighlightingResult(highlightingResult)) {
                 //Create canvas element before run it in browser
                 if (localConfiguration.type == Configuration.type.CANVAS) {
-                    canvasPopup.show();
+                    canvasDialog.dialog("open");
                 }
                 runProvider.run(configurationManager.getConfiguration(), editor.getProgramText(), argumentsView.val());
             } else {
@@ -318,16 +338,6 @@ function getSessionIdSuccess(data) {
     });
 }
 
-$("#popupForCanvas").dialog({
-    width: 630,
-    height: 350,
-    autoOpen: false,
-    close: function () {
-        canvasPopup.hide();
-        //$("#popupForCanvas").html("");
-    }
-});
-
 
 $("#save").click(function () {
     if (ProgramsView.isLoggedIn()) {
@@ -364,7 +374,7 @@ $("#help").click(function () {
 );
 
 $("#run-mode").selectmenu({
-    icons:{button: "selectmenu-arrow-icon"}
+    icons: {button: "selectmenu-arrow-icon"}
 });
 
 var show = function () {
@@ -390,6 +400,12 @@ document.getElementById("console-image").onclick = hide;
 
 document.getElementById("scroll").style.height = "513px";
 document.getElementById("gutter").style.height = "513px";
+
+setKotlinVersion = function () {
+    $("#kotlinVersionTop").html("(" + KOTLIN_VERSION + ")");
+    $("#kotlinVersion").html(WEB_DEMO_VERSION);
+    $("#currentYear").html(new Date().getFullYear());
+};
 
 setSessionId();
 loadShortcuts();

@@ -27,7 +27,7 @@ class FancyLines() {
   val width = canvas.width
   var x = width * Math.random()
   var y = height * Math.random()
-  var hue = 0;
+  var hue = 0.0;
 
   fun line() {
     context.save();

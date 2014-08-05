@@ -44,15 +44,15 @@
 }
 
 .facebook{
-    background: url("/static/images/icons.png") no-repeat;
+    background: url("/static/images/icons.png") no-repeat -57px -75px;
 }
 
 .google{
-    background: url("/static/images/icons.png")  no-repeat -30px 0;
+    background: url("/static/images/icons.png")  no-repeat -74px -75px;
 }
 
 .twitter{
-    background: url("/static/images/icons.png")  no-repeat -60px 0;
+    background: url("/static/images/icons.png")  no-repeat -90px -75px;
 }
 
 #userName {
