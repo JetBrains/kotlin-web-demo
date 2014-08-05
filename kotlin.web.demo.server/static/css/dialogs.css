@@ -32,6 +32,7 @@
 }
 
 .ui-dialog-titlebar-close {
+    outline: none;
     cursor: pointer;
     border: 0;
     float: right;

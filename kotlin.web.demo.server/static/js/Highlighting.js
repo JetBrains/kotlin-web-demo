@@ -37,14 +37,14 @@ var HighlightingFromServer = (function () {
             },
             onHighlight: function (data, callback) {
                 problemsView.addMessages(data);
-                statusBarView.setMessage(StatusBarView.Messages.get_highlighting_ok);
+                statusBarView.html(ActionStatusMessages.get_highlighting_ok);
                 callback(data);
             },
 
             onFail: function (error) {
                 run_button.button("option", "disabled", false);
                 consoleView.writeException(error);
-                statusBarView.setMessage(StatusBarView.Messages.get_highlighting_fail);
+                statusBarView.html(ActionStatusMessages.get_highlighting_fail);
             }
         };
 

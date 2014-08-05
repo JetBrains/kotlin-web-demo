@@ -32,11 +32,11 @@ var CompletionFromServer = (function () {
             },
             onLoadCompletion:function (completionObject) {
                 editor.showCompletionResult(completionObject);
-                statusBarView.setMessage(StatusBarView.Messages.get_completion_ok);
+                statusBarView.html(ActionStatusMessages.get_completion_ok);
             },
             onFail: function (error) {
             consoleView.writeException(error);
-            statusBarView.setMessage(StatusBarView.Messages.get_completion_fail);
+            statusBarView.html(ActionStatusMessages.get_completion_fail);
             }
         };
 
