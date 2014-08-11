@@ -1,3 +1,23 @@
 Kotlin Web Demo is a web-based application capable of editing/running Kotlin code in the browser: http://kotlin-demo.jetbrains.com
 
-To build it, open the project in IntelliJ IDEA and build the WAR artifact for Tomcat.
+Installing tomcat:
+1) Download tomcat7
+2) Download mysql connector and add it to tomcat libraries
+3) Add tomcat to Idea(if you are working in Idea) and include tomcat dbcp and mysql connector libraries
+4) Set output directory for Web Demo artifact tomcat-home/webapps
+
+To launch Web Demo you must set several properties in tomcat config(tomcat-home/conf/context.xml)
+
+--------EXAMPLE-------
+<Environment override="false" type="java.lang.String" value="C:\\Program Files\\Java\\jdk1.8.0_11\" name="java_home"/>
+
+<Environment override="false" type="java.lang.String" value="C:\\Program Files\\Java\\jdk1.8.0_11\\bin\\java.exe" name="java_execute"/>
+
+<Environment override="false" type="java.lang.String" value="C:\\development\\kotlin-web-demo\" name="app_home"/>
+
+<Environment override="false" type="java.lang.String" value="localhost:8080" name="auth_redirect"/>
+
+<Environment override="false" type="java.lang.String" value="true" name="is_test_version"/>
+
+<Resource type="javax.sql.DataSource" name="jdbc/kotlin" factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory" url="URL" driverClassName="com.mysql.jdbc.Driver" password="PASSWORD" username="USERNAME" auth="Container"/>
+----------------------
