@@ -1,0 +1,7 @@
+{
+    "name": "is-checks and smart casts",
+    "fileName": "is-checks and smart casts.kt",
+    "args": "",
+    "confType": "java js",
+    "help": "The is operator checks if an expression is an instance of a type (and <a href=\"http://confluence.jetbrains.net/display/Kotlin/Pattern+matching\">more</a>).If we is-checked an immutable local variable or property, there's no need to cast it explicitly to the is-checked type.See <a href=\"http://confluence.jetbrains.net/display/Kotlin/Classes+and+Inheritance\">Classes and Inheritance</a>.See <a href=\"http://confluence.jetbrains.net/display/Kotlin/Type+casts\">Type casts</a>."
+}

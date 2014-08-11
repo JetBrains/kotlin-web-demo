@@ -62,22 +62,13 @@ var ExamplesView = (function () {
                 var lastFolderName;
                 var ids = [];
                 if (data[i].type == "folder") {
-//                    var folder = document.createElement("div");
-//                    folder.className = "examples-folder";
-//                    var img = document.createElement("div");
-//                    img.className = "examples-closed-folder-icon";
-//                    folder.appendChild(img);
                     var folder = document.createElement("h3");
                     var folderDiv = document.createElement("div");
                     folder.className = "examples-folder-name";
-//                    folder.className = "examples-folder-name";
-//
-//                    folder.id = "folder_" +replaceAll(data[i].text, " ", "_");
 
                     folderDiv.innerHTML = data[i].text;
                     folderDiv.className = "folder-name-div";
                     lastFolderName = data[i].text;
-//                    folder.appendChild(folder);
                     folder.appendChild(folderDiv);
                     acc.append(folder);
                     var cont = document.createElement("div");
@@ -129,7 +120,6 @@ var ExamplesView = (function () {
                     model.loadExample(url);
                 };
             }(url));
-            helpViewForExamples.update();
         }
 
         function loadExampleSuccess(data) {

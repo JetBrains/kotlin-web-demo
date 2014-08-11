@@ -1,7 +1,7 @@
-Use a conditional expression.kt
-Null-checks.kt
-is-checks and smart casts.kt
-Use a while-loop.kt
-Use a for-loop.kt
-Use ranges and in.kt
-Use when.kt
+Use a conditional expression
+Null-checks
+is-checks and smart casts
+Use a while-loop
+Use a for-loop
+Use ranges and in
+Use when

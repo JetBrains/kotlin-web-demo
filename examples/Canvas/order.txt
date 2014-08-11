@@ -1,4 +1,4 @@
-Hello, Kotlin.kt
-Fancy lines.kt
-Creatures.kt
-Traffic light.kt
+Hello, Kotlin
+Fancy lines
+Creatures
+Traffic light

@@ -69,7 +69,7 @@ public class ExamplesHolder {
             return ResponseUtils.getErrorInJson("Cannot find this example. Please choose another example.");
         }
 
-        File exampleFile = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + example.parent + File.separator + example.fileName + ".kt");
+        File exampleFile = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + example.parent + File.separator + example.name + File.separator + example.fileName);
         if (!exampleFile.exists()) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Cannot find an example"),
@@ -100,6 +100,7 @@ public class ExamplesHolder {
         resultObj.put("name", example.name);
         resultObj.put("text", fileContent);
         resultObj.put("args", example.args);
+        resultObj.put("help", example.help);
         resultObj.put("confType", example.confType);
 
         return array.toString();

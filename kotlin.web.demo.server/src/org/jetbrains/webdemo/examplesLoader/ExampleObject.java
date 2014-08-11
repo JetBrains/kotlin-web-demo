@@ -24,5 +24,5 @@ public class ExampleObject {
     @NotNull public String parent;
     @NotNull public String args = "";
     @NotNull public String confType = "java";
-
+    @NotNull public String help = "";
 }

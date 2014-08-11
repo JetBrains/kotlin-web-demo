@@ -1,0 +1,7 @@
+{
+    "name": "Use ranges and in",
+    "fileName": "Use ranges and in.kt",
+    "args": "4",
+    "confType": "java",
+    "help": "Check if a number lies within a range.<br/>Check if a number is out of range.<br/>Check if a collection contains an object<br/>See <a href=\"http://confluence.jetbrains.net/display/Kotlin/Ranges\">Ranges</a>"
+}

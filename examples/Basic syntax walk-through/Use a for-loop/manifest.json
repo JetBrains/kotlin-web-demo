@@ -1,0 +1,7 @@
+{
+    "name": "Use a for-loop",
+    "fileName": "Use a for-loop.kt",
+    "args": "guest1 guest2 guest3",
+    "confType": "java js",
+    "help": "For loop iterates through anything that provides an iterator.See <a href=\"http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-For\">for-loop</a>."
+}

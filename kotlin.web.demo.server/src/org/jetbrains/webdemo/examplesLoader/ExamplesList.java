@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -41,6 +43,8 @@ public class ExamplesList {
 
     private static List<Map<String, String>> list;
 
+    private static List<ExampleObject> exampleList = new ArrayList<>();
+
     public static ExamplesList getInstance() {
         return EXAMPLES_LIST;
     }
@@ -58,6 +62,8 @@ public class ExamplesList {
             } else {
                 addWoOrder(root, true);
             }
+            ErrorWriter.writeInfoToConsole("Examples were loaded.");
+            response.append("\nExamples were loaded.");
         } else {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Examples root doesn't exists"),
@@ -65,8 +71,6 @@ public class ExamplesList {
             ErrorWriter.writeErrorToConsole("Examples root doesn't exists");
             response.append("\nExamples root doesn't exists");
         }
-        ErrorWriter.writeInfoToConsole("Examples were loaded.");
-        response.append("\nExamples were loaded.");
     }
 
     private void addWoOrder(@NotNull File parent, boolean isDirectory) {
@@ -94,12 +98,11 @@ public class ExamplesList {
 
                     String exampleName = map.get("text");
 
-                    ExampleObject example = new ExampleObject();
-                    example.fileName = exampleName;
-                    example.name = exampleName;
-                    example.parent = parent.getName();
+                    try {
+                        ExamplesHolder.addExample(exampleName, loadExample(parent, exampleName));
+                    } catch (IOException e) {
 
-                    ExamplesHolder.addExample(exampleName, example);
+                    }
                 }
 
                 list.add(map);
@@ -142,13 +145,11 @@ public class ExamplesList {
                         } else {
                             map.put("text", child.getName());
                         }
+                        try {
+                            ExamplesHolder.addExample(map.get("text"), loadExample(parent, map.get("text")));
+                        } catch (IOException e){
 
-                        ExampleObject example = new ExampleObject();
-                        example.fileName = map.get("text");
-                        example.name = map.get("text");
-                        example.parent = parent.getName();
-
-                        ExamplesHolder.addExample(map.get("text"), example);
+                        }
                     }
                     list.add(map);
 
@@ -184,13 +185,11 @@ public class ExamplesList {
                                     map.put("type", "folder");
                                 } else {
                                     map.put("type", "content");
-
-                                    ExampleObject example = new ExampleObject();
-                                    example.fileName = map.get("text");
-                                    example.name = map.get("text");
-                                    example.parent = parent.getName();
-
-                                    ExamplesHolder.addExample(map.get("text"), example);
+                                    try{
+                                    ExamplesHolder.addExample(map.get("text"), loadExample(parent, map.get("text")));
+                                    } catch (IOException e){
+                                        e.printStackTrace();
+                                    }
                                 }
                                 list.add(map);
 
@@ -219,6 +218,17 @@ public class ExamplesList {
                     SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", order.getAbsolutePath());
         }
     }
+
+
+    private ExampleObject loadExample(File parent, String name) throws IOException {
+        String exampleFolderPath = parent + File.separator + name;
+        File manifest = new File(exampleFolderPath + File.separator + "manifest.json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        ExampleObject ans = objectMapper.readValue(manifest, ExampleObject.class);
+        ans.parent = parent.getName();
+        return ans;
+    }
+
 
     @Nullable
     private File checkIsOrderTxtExists(File root) {

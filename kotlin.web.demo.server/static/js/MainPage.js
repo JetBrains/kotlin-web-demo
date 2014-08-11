@@ -117,7 +117,7 @@ canvas.setAttribute("height", (canvasDialog.dialog("option", "height") - 30) + "
 //var runButton = new Button($("#run-button"), actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
 
 var helpModelForExamples = new HelpModel("Examples");
-var helpViewForExamples = new HelpView("Examples", $("#example-help-text"), helpModelForExamples);
+var helpViewForExamples = new ExamplesHelpView($("#example-help-text"), helpModelForExamples);
 var helpModelForWords = new HelpModel("Words");
 var helpViewForWords = new HelpView("Words", $("#words-help-text"), helpModelForWords);
 helpViewForWords.hide();
@@ -237,7 +237,7 @@ accordion.onFail = function (exception, actionCode) {
 };
 accordion.onLoadCode = function (element, isProgram) {
     if (!isProgram) {
-        helpViewForExamples.update(element.name);
+        helpViewForExamples.showHelp(element.help);
         statusBarView.html(ActionStatusMessages.load_example_ok);
     } else {
         helpViewForExamples.hide();

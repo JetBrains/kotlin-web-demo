@@ -1,2 +1,2 @@
-Reference to a function.kt
-Composition of functions.kt
+Reference to a function
+Composition of functions
