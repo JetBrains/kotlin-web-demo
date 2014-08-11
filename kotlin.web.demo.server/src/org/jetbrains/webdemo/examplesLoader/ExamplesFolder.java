@@ -17,15 +17,14 @@
 package org.jetbrains.webdemo.examplesLoader;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Semyon.Atamas on 8/11/2014.
@@ -33,12 +32,9 @@ import java.util.Map;
 public class ExamplesFolder {
     private static ObjectMapper objectMapper = new ObjectMapper();
     public String name;
-    Map<String, ExampleObject> examples = new HashMap<>();
+    public List<ExampleObject> examplesList = new ArrayList<>();
+    @JsonIgnore public Map<String, ExampleObject> examples = new HashMap<>();
     private String path;
-
-    public Collection getExamplesList(){
-        return examples.values();
-    }
 
     @JsonCreator
     ExamplesFolder(@JsonProperty("folder") String folderName, @JsonProperty("examples") String[] exampleNames) {
@@ -46,6 +42,7 @@ public class ExamplesFolder {
         for (String exampleName : exampleNames) {
             try {
                 ExampleObject example = downloadExample(exampleName);
+                examplesList.add(example);
                 examples.put(exampleName, example);
             } catch (Exception e) {
                 System.err.println("Can't load example " + exampleName + ":\n" + e.getMessage());

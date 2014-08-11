@@ -26,19 +26,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ExamplesList {
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
 
     private static StringBuilder response;
     private static ObjectMapper objectMapper;
+    private static List<ExamplesFolder> examplesFoldersOrder;
     private static Map<String, ExamplesFolder> examplesFolders;
 
     private ExamplesList() {
         response = new StringBuilder();
+        examplesFoldersOrder = new ArrayList<>();
         examplesFolders = new HashMap<>();
         objectMapper = new ObjectMapper();
         generateList();
@@ -50,6 +50,7 @@ public class ExamplesList {
 
     public static String updateList() {
         response = new StringBuilder();
+        examplesFoldersOrder = new ArrayList<>();
         examplesFolders = new HashMap<>();
         ExamplesList.getInstance().generateList();
         return response.toString();
@@ -70,12 +71,12 @@ public class ExamplesList {
     }
 
     public Collection<ExamplesFolder> getList() {
-        return examplesFolders.values();
+        return examplesFoldersOrder;
     }
 
     public String getListAsString() {
         try {
-            return objectMapper.writeValueAsString(examplesFolders.values());
+            return objectMapper.writeValueAsString(examplesFoldersOrder);
         } catch (IOException e) {
             return "";
         }
@@ -90,6 +91,7 @@ public class ExamplesList {
                 File manifest = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName + File.separator + "manifest.json");
                 try {
                     ExamplesFolder examplesFolder = objectMapper.readValue(manifest, ExamplesFolder.class);
+                    examplesFoldersOrder.add(examplesFolder);
                     examplesFolders.put(folderName, examplesFolder);
                 } catch (Exception e) {
                     System.err.println("Can't load folder " + folderName + ":\n" + e.getMessage());

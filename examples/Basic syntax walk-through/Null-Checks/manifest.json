@@ -1,0 +1,12 @@
+{
+    "name": "Null-checks",
+    "files": [
+        {
+            "type":"SOURCE_FILE",
+            "filename" : "Basic syntax walk-through/is-checks and smart casts/Null-checks.kt"
+        }
+    ],
+    "args": "2 3",
+    "confType": "java",
+    "help": "A reference must be explicitly marked as nullable to be able hold a null. See <a href=\"http://confluence.jetbrains.net/display/Kotlin/Null-safety\">Null-safety</a>"
+}
