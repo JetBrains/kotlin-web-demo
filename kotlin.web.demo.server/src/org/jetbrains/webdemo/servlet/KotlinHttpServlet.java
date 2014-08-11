@@ -19,7 +19,6 @@ package org.jetbrains.webdemo.servlet;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
@@ -63,7 +62,6 @@ public class KotlinHttpServlet extends HttpServlet {
                 WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(Initializer.INITIALIZER.getEnvironment().getProject());
                 new File(ApplicationSettings.LOGS_DIRECTORY).mkdirs();
                 new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdirs();
-                ExamplesHolder.getInstance();
                 ExamplesList.getInstance();
                 HelpLoader.getInstance();
                 Statistics.getInstance();

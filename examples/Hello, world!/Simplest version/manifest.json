@@ -1,0 +1,12 @@
+{
+    "name": "Simplest version",
+    "files": [
+        {
+            "filename": "Hello, world!/Simplest version/Simplest version.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "",
+    "confType": "java js",
+    "help": "We declare a package-level function main which returns Unit and takes an Array of strings as a parameter.<br/>Note that semicolons are optional."
+}

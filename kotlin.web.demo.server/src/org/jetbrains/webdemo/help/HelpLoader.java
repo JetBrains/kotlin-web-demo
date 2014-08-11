@@ -19,11 +19,8 @@ package org.jetbrains.webdemo.help;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.examplesLoader.ExampleObject;
-import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.w3c.dom.*;
@@ -34,22 +31,21 @@ public class HelpLoader {
     private static HelpLoader helpLoader = new HelpLoader();
 
     private static StringBuilder response;
+    private ArrayNode resultWords;
 
     private HelpLoader() {
         response = new StringBuilder();
         generateHelpForWords();
-        generateHelpForExamples();
     }
-
-    private ArrayNode resultExamples;
-    private ArrayNode resultWords;
 
     public static HelpLoader getInstance() {
         return helpLoader;
     }
 
-    public String getHelpForExamples() {
-        return resultExamples.toString();
+    public static String updateExamplesHelp() {
+        response = new StringBuilder();
+        HelpLoader.getInstance().generateHelpForWords();
+        return response.toString();
     }
 
     public String getHelpForWords() {
@@ -110,13 +106,6 @@ public class HelpLoader {
         }
     }
 
-    public static String updateExamplesHelp() {
-        response = new StringBuilder();
-        HelpLoader.getInstance().generateHelpForWords();
-        HelpLoader.getInstance().generateHelpForExamples();
-        return response.toString();
-    }
-
     private void generateHelpForWords() {
         resultWords = new ArrayNode(JsonNodeFactory.instance);
         try {
@@ -142,47 +131,5 @@ public class HelpLoader {
         }
         ErrorWriter.writeInfoToConsole("Help for keywords was loaded.");
         response.append("\nHelp for keywords was loaded.");
-    }
-
-    private void generateHelpForExamples() {
-        resultExamples = new ArrayNode(JsonNodeFactory.instance);
-        try {
-            File file = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_EXAMPLES);
-            Document doc = ResponseUtils.getXmlDocument(file);
-            if (doc == null) {
-                return;
-            }
-
-            NodeList nodeList = doc.getElementsByTagName("example");
-
-            for (int temp = 0; temp < nodeList.getLength(); temp++) {
-                Node node = nodeList.item(temp);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-
-                    Element element = (Element) node;
-
-                    ObjectNode jsonObject = resultExamples.addObject();
-                    jsonObject.put("name", getTagValue("name", element));
-                    jsonObject.put("text", getTagValueWithInnerTags("text", element));
-
-                    ExampleObject example = ExamplesHolder.getExample(jsonObject.get("name").textValue());
-                    if (example != null) {
-                        @Nullable String mode = getTagValue("mode", element);
-                        @Nullable String args = getTagValue("args", element);
-                        if (mode != null) {
-                            example.confType = mode;
-                        }
-                        if (args != null) {
-                            example.args = args;
-                        }
-                    }
-
-                }
-            }
-        } catch (Exception e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", "");
-        }
-        ErrorWriter.writeInfoToConsole("Help for examples was loaded.");
-        response.append("\nHelp for examples was loaded.");
     }
 }

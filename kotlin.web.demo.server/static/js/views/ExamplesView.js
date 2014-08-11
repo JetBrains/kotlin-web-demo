@@ -24,6 +24,8 @@
 
 var ExamplesView = (function () {
     function ExamplesView(examplesModel) {
+        var acc = $("#examples-list");
+
         var confirmDialog = new ConfirmDialog();
         var model = examplesModel;
 
@@ -55,50 +57,55 @@ var ExamplesView = (function () {
             model.getAllExamples();
         }
 
+        function addFolder(folderObj) {
+            var folder = document.createElement("h3");
+            var folderDiv = document.createElement("div");
+            folder.className = "examples-folder-name";
+
+            folderDiv.innerHTML = folderObj.name;
+            folderDiv.className = "folder-name-div";
+
+            folder.appendChild(folderDiv);
+            acc.append(folder);
+            var cont = document.createElement("div");
+            var i = 0;
+            while(folderObj.examplesList[i] != undefined){
+                addExample(folderObj.name, cont, folderObj.examplesList[i]);
+                i++;
+            }
+            acc.append(cont);
+        }
+
+        function addExample(folder, cont, example){
+            var file = document.createElement("div");
+            file.className = "examples-file-name";
+            var img = document.createElement("div");
+            img.className = "right-arrow";
+            file.appendChild(img);
+            file.id = "bullet" + replaceAll(example.name, " ", "_");
+
+            var spanDiv = document.createElement("div");
+            spanDiv.className = "file-name-span";
+
+            var name = document.createElement("span");
+            name.id = createExampleUrl(example.name, folder);
+            name.style.cursor = "pointer";
+            name.onclick = function () {
+                loadExample(this.id);
+            };
+            name.innerHTML = example.name;
+
+            spanDiv.appendChild(name);
+            file.appendChild(spanDiv);
+
+            cont.appendChild(file);
+        }
+
         function addAllExamplesInAccordion(data) {
-            var acc = $("#examples-list");
+
             var i = 0;
             while (data[i] != undefined) {
-                var lastFolderName;
-                var ids = [];
-                if (data[i].type == "folder") {
-                    var folder = document.createElement("h3");
-                    var folderDiv = document.createElement("div");
-                    folder.className = "examples-folder-name";
-
-                    folderDiv.innerHTML = data[i].text;
-                    folderDiv.className = "folder-name-div";
-                    lastFolderName = data[i].text;
-                    folder.appendChild(folderDiv);
-                    acc.append(folder);
-                    var cont = document.createElement("div");
-                }
-                if (data[i].type == "content") {
-                    var file = document.createElement("div");
-                    file.className = "examples-file-name";
-                    var img = document.createElement("div");
-                    img.className = "right-arrow";
-                    file.appendChild(img);
-                    file.id = "bullet" + replaceAll(data[i].text, " ", "_");
-
-                    var spanDiv = document.createElement("div");
-                    spanDiv.className = "file-name-span";
-
-                    var name = document.createElement("span");
-                    name.id = createExampleUrl(data[i].text, lastFolderName);
-                    name.style.cursor = "pointer";
-                    name.onclick = function () {
-                        loadExample(this.id);
-                    };
-                    name.innerHTML = data[i].text;
-
-                    spanDiv.appendChild(name);
-                    file.appendChild(spanDiv);
-
-                    cont.appendChild(file);
-                }
-                acc.append(cont);
-
+                addFolder(data[i]);
                 i++;
             }
         }
@@ -112,7 +119,7 @@ var ExamplesView = (function () {
 
                     var selecteExample = ExamplesView.getLastSelectedItem();
                     if (selecteExample != 0) {
-                        $("span[id='" + selecteExample +"']").parent().parent().attr("class", "examples-file-name");
+                        $("span[id='" + selecteExample + "']").parent().parent().attr("class", "examples-file-name");
                     }
                     ExamplesView.setLastSelectedItem(url);
                     $("span[id='" + ExamplesView.getLastSelectedItem() + "']").parent().parent().attr("class", "selected-example");

@@ -16,233 +16,91 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.webdemo.ErrorWriter;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
-import org.jetbrains.webdemo.session.SessionInfo;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ExamplesList {
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
 
     private static StringBuilder response;
+    private static ObjectMapper objectMapper;
+    private static Map<String, ExamplesFolder> examplesFolders;
 
     private ExamplesList() {
         response = new StringBuilder();
-        list = new ArrayList<Map<String, String>>();
+        examplesFolders = new HashMap<>();
+        objectMapper = new ObjectMapper();
         generateList();
     }
-
-    private static List<Map<String, String>> list;
-
-    private static List<ExampleObject> exampleList = new ArrayList<>();
 
     public static ExamplesList getInstance() {
         return EXAMPLES_LIST;
     }
 
-    public List<Map<String, String>> getList() {
-        return list;
-    }
-
-    private void generateList() {
-        File root = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
-        if (root.exists()) {
-            File order = checkIsOrderTxtExists(root);
-            if (order != null) {
-                addInOrder(order, root, true);
-            } else {
-                addWoOrder(root, true);
-            }
-            ErrorWriter.writeInfoToConsole("Examples were loaded.");
-            response.append("\nExamples were loaded.");
-        } else {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                    new UnsupportedOperationException("Examples root doesn't exists"),
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", root.getAbsolutePath());
-            ErrorWriter.writeErrorToConsole("Examples root doesn't exists");
-            response.append("\nExamples root doesn't exists");
-        }
-    }
-
-    private void addWoOrder(@NotNull File parent, boolean isDirectory) {
-        File[] children = parent.listFiles();
-        if (children == null) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                    new UnsupportedOperationException("Incorrect structure for examples (folder - files): empty child list"),
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", parent.getAbsolutePath());
-            return;
-        }
-        for (File child : children) {
-            if ((parent.isDirectory() && isDirectory)
-                    || (parent.exists() && !isDirectory)) {
-                Map<String, String> map = new HashMap<String, String>();
-                if (isDirectory) {
-                    map.put("type", "folder");
-                    map.put("text", child.getName());
-                } else {
-                    map.put("type", "content");
-                    if (child.getName().endsWith(".kt")) {
-                        map.put("text", child.getName().substring(0, child.getName().length() - 3));
-                    } else {
-                        map.put("text", child.getName());
-                    }
-
-                    String exampleName = map.get("text");
-
-                    try {
-                        ExamplesHolder.addExample(exampleName, loadExample(parent, exampleName));
-                    } catch (IOException e) {
-
-                    }
-                }
-
-                list.add(map);
-
-                if (isDirectory) {
-                    File order = new File(child.getAbsolutePath() + File.separator + "order.txt");
-                    if (order.exists()) {
-                        addInOrder(order, child, false);
-                    } else {
-                        addWoOrder(child, false);
-                    }
-                }
-            } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                        new UnsupportedOperationException("Incorrect structure for examples (folder - files)."),
-                        SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", child.getAbsolutePath());
-            }
-        }
-    }
-
-    private void addInOrder(File order, File parent, boolean isDirectory) {
-        try {
-            String[] children = parent.list();
-            FileReader fReader = new FileReader(order);
-            BufferedReader reader = new BufferedReader(fReader);
-            String tmp = "";
-            List<String> orderedChildren = new ArrayList<String>();
-            while ((tmp = reader.readLine()) != null) {
-                File child = new File(parent.getAbsolutePath() + File.separator + tmp);
-                if ((child.isDirectory() && isDirectory)
-                        || (child.exists() && !isDirectory)) {
-                    Map<String, String> map = new HashMap<String, String>();
-                    if (isDirectory) {
-                        map.put("type", "folder");
-                        map.put("text", child.getName());
-                    } else {
-                        map.put("type", "content");
-                        if (child.getName().endsWith(".kt")) {
-                            map.put("text", child.getName().substring(0, child.getName().length() - 3));
-                        } else {
-                            map.put("text", child.getName());
-                        }
-                        try {
-                            ExamplesHolder.addExample(map.get("text"), loadExample(parent, map.get("text")));
-                        } catch (IOException e){
-
-                        }
-                    }
-                    list.add(map);
-
-                    orderedChildren.add(child.getName());
-
-                    if (isDirectory) {
-                        File orderChildren = checkIsOrderTxtExists(child);
-                        if (orderChildren != null) {
-                            addInOrder(orderChildren, child, false);
-                        } else {
-                            addWoOrder(child, false);
-                        }
-                    }
-                }
-            }
-            //+1 for order.txt
-            if (orderedChildren.size() + 1 < children.length) {
-                for (String childName : children) {
-                    if (!childName.equals("order.txt") && !childName.equals("helpExamples.xml")) {
-                        boolean isAdded = false;
-                        for (String orderedChild : orderedChildren) {
-                            if (childName.equals(orderedChild)) {
-                                isAdded = true;
-                            }
-                        }
-                        if (!isAdded) {
-                            File child = new File(parent.getAbsolutePath() + File.separator + childName);
-                            if ((child.isDirectory() && isDirectory)
-                                    || (child.exists() && !isDirectory)) {
-                                Map<String, String> map = new HashMap<String, String>();
-                                map.put("text", child.getName());
-                                if (isDirectory) {
-                                    map.put("type", "folder");
-                                } else {
-                                    map.put("type", "content");
-                                    try{
-                                    ExamplesHolder.addExample(map.get("text"), loadExample(parent, map.get("text")));
-                                    } catch (IOException e){
-                                        e.printStackTrace();
-                                    }
-                                }
-                                list.add(map);
-
-                                ErrorWriter.writeErrorToConsole("File/Directory " + childName + " is absent in order.txt and was added at end.");
-                                response.append("\nFile/Directory ").append(childName).append(" is absent in order.txt and was added at end.");
-
-                                if (isDirectory) {
-                                    File orderChildren = checkIsOrderTxtExists(child);
-                                    if (orderChildren != null) {
-                                        addInOrder(orderChildren, child, false);
-                                    } else {
-                                        addWoOrder(child, false);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", order.getAbsolutePath());
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot read order.txt file"),
-                    SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", order.getAbsolutePath());
-        }
-    }
-
-
-    private ExampleObject loadExample(File parent, String name) throws IOException {
-        String exampleFolderPath = parent + File.separator + name;
-        File manifest = new File(exampleFolderPath + File.separator + "manifest.json");
-        ObjectMapper objectMapper = new ObjectMapper();
-        ExampleObject ans = objectMapper.readValue(manifest, ExampleObject.class);
-        ans.parent = parent.getName();
-        return ans;
-    }
-
-
-    @Nullable
-    private File checkIsOrderTxtExists(File root) {
-        File order = new File(root.getAbsolutePath() + File.separator + "order.txt");
-        if (order.exists()) {
-            return order;
-        }
-        return null;
-    }
-
     public static String updateList() {
         response = new StringBuilder();
-        list = new ArrayList<Map<String, String>>();
+        examplesFolders = new HashMap<>();
         ExamplesList.getInstance().generateList();
         return response.toString();
     }
+
+    public static String loadExample(String url){
+        url = url.replaceAll("_", " ");
+        String folderName = ResponseUtils.getExampleFolderByUrl(url);
+        String exampleName = ResponseUtils.getExampleOrProgramNameByUrl(url);
+
+        ExamplesFolder folder = examplesFolders.get(folderName);
+        ExampleObject example = folder.examples.get(exampleName);
+        ObjectNode responce = new ObjectNode(JsonNodeFactory.instance);
+
+        responce.put("help", example.help);
+        responce.put("files", objectMapper.valueToTree(example.files));
+        return responce.toString();
+    }
+
+    public Collection<ExamplesFolder> getList() {
+        return examplesFolders.values();
+    }
+
+    public String getListAsString() {
+        try {
+            return objectMapper.writeValueAsString(examplesFolders.values());
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
+    private void generateList() {
+        File order = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + "order");
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(order));
+            while (reader.ready()) {
+                String folderName = reader.readLine();
+                File manifest = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName + File.separator + "manifest.json");
+                try {
+                    ExamplesFolder examplesFolder = objectMapper.readValue(manifest, ExamplesFolder.class);
+                    examplesFolders.put(folderName, examplesFolder);
+                } catch (Exception e) {
+                    System.err.println("Can't load folder " + folderName + ":\n" + e.getMessage());
+                    response.append("Can't load folder " + folderName + ":\n" + e.getMessage());
+                }
+
+            }
+        } catch (IOException e) {
+            System.err.println("Can't read order:\n" + e.getMessage());
+            response.append("Can't read order:\n" + e.getMessage());
+        }
+    }
+
 }

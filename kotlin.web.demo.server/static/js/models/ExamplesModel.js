@@ -33,7 +33,7 @@ var ExamplesModel = (function () {
                     success: function (data) {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                instance.onLoadExample(data[0]);
+                                instance.onLoadExample(data);
                             } else {
                                 instance.onFail(data, ActionStatusMessages.load_example_fail);
                             }

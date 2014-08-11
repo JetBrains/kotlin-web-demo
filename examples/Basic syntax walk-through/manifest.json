@@ -1,0 +1,8 @@
+{
+    "name": "Basic syntax walk-through",
+    "folder": "Basic syntax walk-through",
+    "examples": [
+        "is-checks and smart casts",
+        "Null-checks"
+    ]
+}

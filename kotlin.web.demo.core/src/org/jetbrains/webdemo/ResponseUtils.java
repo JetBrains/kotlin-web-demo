@@ -270,6 +270,10 @@ public class ResponseUtils {
         return ResponseUtils.substringAfter(url, "&name=").replaceAll("%20", " ");
     }
 
+    public static String getExampleFolderByUrl(String url){
+        return ResponseUtils.substringBefore(url, "&name").replaceAll("%20", " ");
+    }
+
     @NotNull
     public static String[] splitArguments(@NotNull String arguments) {
         boolean inQuotes = false;

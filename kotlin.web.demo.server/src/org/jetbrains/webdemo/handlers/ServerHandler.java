@@ -27,7 +27,6 @@ import org.jetbrains.webdemo.authorization.AuthorizationHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationTwitterHelper;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
-import org.jetbrains.webdemo.examplesLoader.ExamplesLoader;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.log.LogDownloader;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -54,7 +53,7 @@ public class ServerHandler {
                 out.write("ok");
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        "TEST", request.getHeader("Origin") , "null");
+                        "TEST", request.getHeader("Origin"), "null");
             } finally {
                 ServerResponseUtils.close(out);
             }
@@ -102,9 +101,6 @@ public class ServerHandler {
             } else if (parameters.compareType("loadExample") && parameters.getArgs().equals("all")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
                 sendExamplesList(request, response);
-            } else if (parameters.compareType("loadHelpForExamples")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_EXAMPLES.name());
-                sendHelpContentForExamples(request, response);
             } else if (parameters.compareType("loadHelpForWords")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
                 sendHelpContentForWords(request, response);
@@ -153,7 +149,8 @@ public class ServerHandler {
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", sessionInfo.getOriginUrl(), param);
-    }   }
+        }
+    }
 
     private void sendUserName(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
         try {
@@ -258,10 +255,6 @@ public class ServerHandler {
         return sessionInfo;
     }
 
-    private void sendHelpContentForExamples(HttpServletRequest request, final HttpServletResponse response) {
-        writeResponse(request, response, HelpLoader.getInstance().getHelpForExamples(), 200);
-    }
-
     private void sendHelpContentForWords(HttpServletRequest request, final HttpServletResponse response) {
         writeResponse(request, response, HelpLoader.getInstance().getHelpForWords(), 200);
     }
@@ -308,8 +301,7 @@ public class ServerHandler {
     }
 
     private void sendExamplesList(HttpServletRequest request, final HttpServletResponse response) {
-        ExamplesLoader loader = new ExamplesLoader();
-        writeResponse(request, response, loader.getExamplesList(), HttpServletResponse.SC_OK);
+        writeResponse(request, response, ExamplesList.getInstance().getListAsString(), HttpServletResponse.SC_OK);
     }
 
     private void sendUserInformation(final HttpServletRequest request, final HttpServletResponse response, SessionInfo info) {
@@ -387,8 +379,8 @@ public class ServerHandler {
         if (is == null) {
             if (request.getQueryString() != null) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                    new UnsupportedOperationException("Broken path to resource"),
-                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
+                        new UnsupportedOperationException("Broken path to resource"),
+                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
             }
             writeResponse(request, response, ("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
             return;

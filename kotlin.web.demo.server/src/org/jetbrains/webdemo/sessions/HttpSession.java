@@ -23,15 +23,17 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.examplesLoader.ExamplesHolder;
-import org.jetbrains.webdemo.examplesLoader.ExamplesLoader;
+import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
 import org.jetbrains.webdemo.responseHelpers.*;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class HttpSession {
@@ -195,8 +197,7 @@ public class HttpSession {
     }
 
     private void sendExampleContent() {
-        ExamplesLoader loader = new ExamplesLoader();
-        writeResponse(ExamplesHolder.loadExample(parameters.getArgs()), HttpServletResponse.SC_OK);
+        writeResponse(ExamplesList.loadExample(parameters.getArgs()), HttpServletResponse.SC_OK);
 
     }
 

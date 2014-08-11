@@ -244,7 +244,7 @@ accordion.onLoadCode = function (element, isProgram) {
         statusBarView.html(ActionStatusMessages.load_program_ok);
     }
 
-    var text = element.text;
+    var text = element.files[0].content;
 
     editor.setText(text);
     argumentsView.val(element.args);
