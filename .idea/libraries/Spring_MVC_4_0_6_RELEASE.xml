@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Spring MVC-4.0.6.RELEASE" type="spring-mvc">
+    <properties version="4.0.6.RELEASE" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/kotlin.web.demo.server.mylnikov/lib/spring-webmvc-portlet-4.0.6.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/kotlin.web.demo.server.mylnikov/lib/spring-websocket-4.0.6.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/kotlin.web.demo.server.mylnikov/lib/spring-webmvc-4.0.6.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/kotlin.web.demo.server.mylnikov/lib/spring-web-4.0.6.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
