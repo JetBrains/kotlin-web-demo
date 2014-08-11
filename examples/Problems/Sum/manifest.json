@@ -1,0 +1,12 @@
+{
+    "name": "Sum",
+    "files": [
+        {
+            "filename": "Problems/Sum/Sum.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "",
+    "confType": "java",
+    "help": ""
+}

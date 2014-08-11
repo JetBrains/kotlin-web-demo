@@ -1,6 +1,11 @@
 {
     "name": "Fancy lines",
-    "fileName": "Fancy lines.kt",
+    "files": [
+        {
+            "type": "SOURCE_FILE",
+            "filename": "Canvas/Fancy lines/Fancy lines.kt"
+        }
+    ],
     "args": "",
     "confType": "canvas",
     "help": "<p>This example is based on <a href=\"http://www.w3.org/TR/2dcontext/\">example</a> from html5 canvas2D docs.<br/>Note that only a subset of the api is supported for now.</p>"

@@ -1,6 +1,11 @@
 {
     "name": "Traffic light",
-    "fileName": "Traffic light.kt",
+    "files": [
+        {
+            "type": "SOURCE_FILE",
+            "filename": "Canvas/Traffic light/Traffic light.kt"
+        }
+    ],
     "args": "",
     "confType": "canvas",
     "help": "<p> In this example you can see a crossroads. Traffic light change color by timer, but you can change it manually using controls at the right part of screen.</p>"

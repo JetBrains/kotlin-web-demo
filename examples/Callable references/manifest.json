@@ -1,0 +1,8 @@
+{
+    "name": "Callable references",
+    "folder": "Callable references",
+    "examples": [
+        "Reference to a function",
+        "Composition of functions"
+    ]
+}

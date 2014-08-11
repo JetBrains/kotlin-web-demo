@@ -234,7 +234,7 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <name>Data classes</name>
         <text>
             <p>
-                <b>Data class</b> gets <b>component functions</b>, one for each property declared in the primary constructor, generated automatically, same for all the other goodies common for data: <b>toString()</b>, <b>equals()</b>, <b>hashCode()</b> and <b>copy()</b>.
+                <b>Data class</b> gets <b>component functions</b>, one for each property declared in the primary constructor, generated summatically, same for all the other goodies common for data: <b>toString()</b>, <b>equals()</b>, <b>hashCode()</b> and <b>copy()</b>.
             </p>
         </text>
         <args/>

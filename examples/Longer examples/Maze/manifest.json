@@ -1,0 +1,12 @@
+{
+    "name": "Maze",
+    "files": [
+        {
+            "filename": "Longer examples/Maze/Maze.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "",
+    "confType": "java",
+    "help": "<p>Find your way through a maze to get a prize :)</p>"
+}

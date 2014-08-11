@@ -1,0 +1,12 @@
+{
+    "name": "Pairless",
+    "files": [
+        {
+            "filename": "Problems/Pairless/Pairless.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "",
+    "confType": "java",
+    "help": ""
+}

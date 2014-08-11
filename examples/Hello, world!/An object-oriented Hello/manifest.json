@@ -1,0 +1,12 @@
+{
+    "name": "An object-oriented Hello",
+    "files": [
+        {
+            "filename": "Hello, world!/An object-oriented Hello/An object-oriented Hello.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "guest1",
+    "confType": "java js",
+    "help": "Here we have a<a href=\"http://confluence.jetbrains.net/display/Kotlin/Classes+and+Inheritance\">class</a>with a<i>primary constructor</i>and a member function.<br/>Note that there's no<b>new</b>keyword used to create an object."
+}

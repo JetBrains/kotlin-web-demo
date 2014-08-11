@@ -1,0 +1,11 @@
+{
+    "name": "Problems",
+    "folder": "Problems",
+    "examples": [
+        "Sum",
+        "Index of Maximum",
+        "Runs",
+        "Palindrome",
+        "Pairless"
+    ]
+}

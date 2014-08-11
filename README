@@ -1,5 +1,7 @@
 Kotlin Web Demo is a web-based application capable of editing/running Kotlin code in the browser: http://kotlin-demo.jetbrains.com
 
+Build update dependencies
+
 Installing tomcat:
 1) Download tomcat7
 2) Download mysql connector and add it to tomcat libraries

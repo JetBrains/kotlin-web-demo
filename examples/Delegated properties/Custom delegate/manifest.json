@@ -1,6 +1,11 @@
 {
     "name": "Custom delegate",
-    "fileName": "Custom delegate.kt",
+    "files": [
+        {
+            "type":"SOURCE_FILE",
+            "filename": "Delegated properties/Custom delegate/Custom delegate.kt"
+        }
+    ],
     "args": "",
     "confType": "java",
     "help": "<p>There’s some new syntax: you can say <b>val 'property name': 'Type' by 'expression'</b>. The expression after by is the delegate, because get() and set() methods corresponding to the property will be delegated to it.  Property delegates don’t have to implement any interface, but they have to provide methods named get() and set() to be called.</p>"

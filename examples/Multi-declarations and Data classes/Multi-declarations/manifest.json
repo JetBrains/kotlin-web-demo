@@ -1,0 +1,12 @@
+{
+    "name": "Multi-declarations",
+    "files": [
+        {
+            "filename": "Multi-declarations and Data classes/Multi-declarations/Multi-declarations.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "",
+    "confType": "java js",
+    "help": "<p>In this example introduces a concept that we call <b>mutli-declarations</b>. It creates multiple variable at once. Anything can be on the right-hand side of a mutli-declaration, as long as the required number of <b>component</b> functions can be called on it.</p>"
+}

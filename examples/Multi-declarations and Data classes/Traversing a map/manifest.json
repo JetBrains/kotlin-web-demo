@@ -1,0 +1,12 @@
+{
+    "name": "Traversing a map",
+    "files": [
+        {
+            "filename": "Multi-declarations and Data classes/Traversing a map/Traversing a map.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "",
+    "confType": "java",
+    "help": " <p>Kotlin Standart Library provide <b>component</b> functions for Map.Entry</p>"
+}

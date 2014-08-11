@@ -1,0 +1,12 @@
+{
+    "name": "A multi-language Hello",
+    "files": [
+        {
+            "filename": "Hello, world!/A multi-language Hello/A multi-language Hello.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "FR",
+    "confType": "java js",
+    "help": "In this example,<b>val</b>denotes a declaration of a read-only local variable, that is assigned an<a href=\"http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Ifexpression\"><b>if-expression</b></a>. Then we use very basic<a href=\"http://confluence.jetbrains.net/display/Kotlin/Pattern+matching\">pattern matching</a>expression."
+}

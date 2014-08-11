@@ -1,6 +1,11 @@
 {
     "name": "Composition of functions",
-    "fileName": "Composition of functions.kt",
+    "files": [
+        {
+            "type": "SOURCE_FILE",
+            "filename": "Callable references/Composition of functions/Composition of functions.kt"
+        }
+    ],
     "args": "",
     "confType": "java",
     "help": "<p>The composition function return a composition of two functions passed to it: compose(f, g) = f(g(*)). Now, you can apply it to callable references.</p>"

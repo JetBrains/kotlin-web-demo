@@ -3,7 +3,7 @@
     "files": [
         {
             "type":"SOURCE_FILE",
-            "filename" : "Basic syntax walk-through/is-checks and smart casts/Null-checks.kt"
+            "filename" : "Basic syntax walk-through/Null-checks/Null-checks.kt"
         }
     ],
     "args": "2 3",

@@ -1,6 +1,11 @@
 {
     "name": "Use when",
-    "fileName": "Use when.kt",
+    "files": [
+        {
+            "type": "SOURCE_FILE",
+            "filename": "Basic syntax walk-through/Use when/Use when.kt"
+        }
+    ],
     "args": "",
     "confType": "java",
     "help": "See <a href=\"http://confluence.jetbrains.net/display/Kotlin/Pattern+matching\">Pattern-matching</a>"

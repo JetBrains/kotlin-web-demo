@@ -1,6 +1,11 @@
 {
     "name": "Reference to a function",
-    "fileName": "Reference to a function.kt",
+    "files": [
+        {
+            "type": "SOURCE_FILE",
+            "filename": "Callable references/Reference to a function/Reference to a function.kt"
+        }
+    ],
     "args": "",
     "confType": "java",
     "help": "<p>“Callable References” or “Feature Literals”, i.e. an ability to pass named functions or properties as values. Users often ask “I have a foo() function, how do I pass it as an argument?”. The answer is: “you prefix it with a ‘::’”.</p>"

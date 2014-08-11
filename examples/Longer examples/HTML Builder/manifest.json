@@ -1,0 +1,12 @@
+{
+    "name": "HTML Builder",
+    "files": [
+        {
+            "filename": "Longer examples/HTML Builder/HTML Builder.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "",
+    "confType": "java",
+    "help": " <p>This is an example of a <b>Type-Safe Groovy-style Builder</b><br/>Builders are good for declaratively describing data in your code.In this example we show how to describe an HTML page in Kotlin.See <a href=\"http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-style+builders\">this page</a> for details.</p>"
+}

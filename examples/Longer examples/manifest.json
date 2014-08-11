@@ -1,0 +1,10 @@
+{
+    "name": "Longer examples",
+    "folder": "Longer examples",
+    "examples": [
+        "99 Bottles of Beer",
+        "HTML Builder",
+        "Life",
+        "Maze"
+    ]
+}

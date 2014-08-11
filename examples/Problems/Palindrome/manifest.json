@@ -1,0 +1,12 @@
+{
+    "name": "Palindrome",
+    "files": [
+        {
+            "filename": "Problems/Palindrome/Palindrome.kt",
+            "type": "SOURCE_FILE"
+        }
+    ],
+    "args": "",
+    "confType": "java",
+    "help": ""
+}

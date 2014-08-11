@@ -1,0 +1,11 @@
+{
+    "name": "Delegated properties",
+    "folder": "Delegated properties",
+    "examples": [
+        "Custom delegate",
+        "Lazy property",
+        "Observable property",
+        "NotNull property",
+        "Properties in map"
+    ]
+}

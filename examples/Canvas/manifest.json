@@ -1,0 +1,10 @@
+{
+    "name": "Canvas",
+    "folder": "Canvas",
+    "examples": [
+        "Hello, Kotlin",
+        "Fancy lines",
+        "Creatures",
+        "Traffic light"
+    ]
+}
