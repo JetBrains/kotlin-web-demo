@@ -8,7 +8,6 @@
           <element id="module-output" name="idea.pacth.server" />
           <element id="module-output" name="kotlin.web.demo.core" />
           <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-1.2.16.jar" path-in-jar="/" />
-          <element id="library" level="project" name="junit" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="log4j" />
@@ -25,6 +24,7 @@
         </element>
       </element>
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />
+      <element id="module-output" name="org.jetbrains.junit.runner" />
     </root>
   </artifact>
 </component>

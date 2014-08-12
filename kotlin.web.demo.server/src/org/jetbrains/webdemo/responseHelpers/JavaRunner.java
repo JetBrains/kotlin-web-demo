@@ -340,10 +340,10 @@ public class JavaRunner {
         }
         builder.add(ApplicationSettings.JAVA_EXECUTE);
         builder.add("-classpath");
-        String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB);
+        String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB + File.pathSeparator + ApplicationSettings.WEBAPP_ROOT_DIRECTORY);
         if(sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)){
             builder.add(classpath + File.pathSeparator + ApplicationSettings.LIBS_DIR +"junit.jar");
-            builder.add("org.junit.runner.JUnitCore");
+            builder.add("JunitRunner");
             builder.addAll(Arrays.asList(example.testClasses));
         } else {
             builder.add(classpath);

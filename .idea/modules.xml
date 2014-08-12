@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.server.mylnikov/kotlin.web.demo.server.mylnikov.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.server.mylnikov/kotlin.web.demo.server.mylnikov.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.test.applet/kotlin.web.demo.test.applet.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.test.applet/kotlin.web.demo.test.applet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jetbrains.junit.runner/org.jetbrains.junit.runner.iml" filepath="$PROJECT_DIR$/org.jetbrains.junit.runner/org.jetbrains.junit.runner.iml" />
     </modules>
   </component>
 </project>
