@@ -13,7 +13,6 @@
     <orderEntry type="library" name="selenium" level="project" />
     <orderEntry type="library" name="kotlin-runtime" level="project" />
     <orderEntry type="library" name="dartc" level="project" />
-    <orderEntry type="library" name="junit-4.10" level="project" />
     <orderEntry type="library" name="kotlin-compiler" level="project" />
   </component>
 </module>

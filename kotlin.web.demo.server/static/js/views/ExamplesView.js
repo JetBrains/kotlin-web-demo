@@ -69,33 +69,33 @@ var ExamplesView = (function () {
             acc.append(folder);
             var cont = document.createElement("div");
             var i = 0;
-            while(folderObj.examplesList[i] != undefined){
-                addExample(folderObj.name, cont, folderObj.examplesList[i]);
+            while(folderObj.examplesOrder[i] != undefined){
+                addExample(folderObj.name, cont, folderObj.examplesOrder[i]);
                 i++;
             }
             acc.append(cont);
         }
 
-        function addExample(folder, cont, example){
+        function addExample(folder, cont, name){
             var file = document.createElement("div");
             file.className = "examples-file-name";
             var img = document.createElement("div");
             img.className = "right-arrow";
             file.appendChild(img);
-            file.id = "bullet" + replaceAll(example.name, " ", "_");
+            file.id = "bullet" + replaceAll(name, " ", "_");
 
             var spanDiv = document.createElement("div");
             spanDiv.className = "file-name-span";
 
-            var name = document.createElement("span");
-            name.id = createExampleUrl(example.name, folder);
-            name.style.cursor = "pointer";
-            name.onclick = function () {
+            var nameSpan = document.createElement("span");
+            nameSpan.id = createExampleUrl(name, folder);
+            nameSpan.style.cursor = "pointer";
+            nameSpan.onclick = function () {
                 loadExample(this.id);
             };
-            name.innerHTML = example.name;
+            nameSpan.innerHTML = name;
 
-            spanDiv.appendChild(name);
+            spanDiv.appendChild(nameSpan);
             file.appendChild(spanDiv);
 
             cont.appendChild(file);

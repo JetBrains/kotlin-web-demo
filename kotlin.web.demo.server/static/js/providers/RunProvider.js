@@ -30,21 +30,21 @@ var RunProvider = (function () {
             },
             onFail: function (message) {
             },
-            run: function (configuration, programText, args) {
-                run(configuration, programText, args);
+            run: function (configuration, programText, args, example) {
+                run(configuration, programText, args, example);
             }
         };
 
-        function run(configuration, programText, args) {
-            if (configuration.type == Configuration.type.JAVA) {
-                runJava(configuration, programText, args);
+        function run(configuration, programText, args, example) {
+            if (configuration.type.runner == ConfigurationType.runner.JAVA) {
+                runJava(configuration, programText, args, example);
             } else {
-                runJs(configuration, programText, args);
+                runJs(configuration, programText, args, example);
             }
         }
 
 
-        function runJava(configuration, programText, args) {
+        function runJava(configuration, programText, args, example) {
             var confTypeString = Configuration.getStringFromType(configuration.type);
             $.ajax({
                 url: generateAjaxUrl("run", confTypeString),
@@ -62,7 +62,7 @@ var RunProvider = (function () {
                 },
                 dataType: "json",
                 type: "POST",
-                data: {text: programText, consoleArgs: args},
+                data: {text: programText, consoleArgs: args, example: example},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown);

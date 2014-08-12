@@ -35,6 +35,7 @@ import org.jetbrains.webdemo.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
+import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -50,11 +51,13 @@ public class CompileAndRunExecutor {
     private final String arguments;
 
     private final SessionInfo sessionInfo;
+    private final ExampleObject example;
 
-    public CompileAndRunExecutor(PsiFile currentPsiFile, String arguments, SessionInfo info) {
+    public CompileAndRunExecutor(PsiFile currentPsiFile, String arguments, SessionInfo info, ExampleObject example) {
         this.currentPsiFile = currentPsiFile;
         this.arguments = arguments;
         this.sessionInfo = info;
+        this.example = example;
     }
 
     public String getResult() {
@@ -73,12 +76,7 @@ public class CompileAndRunExecutor {
             GenerationState generationState;
             try {
                 generationState = ResolveUtils.getGenerationState((JetFile) currentPsiFile);
-                KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
-                    @Override
-                    public void reportException(Throwable throwable, String s) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), sessionInfo.getOriginUrl(), s + " " + currentPsiFile.getText());
-                    }
-                });
+                KotlinCodegenFacade.compileCorrectFiles(generationState, (throwable, s) -> ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), sessionInfo.getOriginUrl(), s + " " + currentPsiFile.getText()));
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
                 return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
@@ -124,7 +122,7 @@ public class CompileAndRunExecutor {
             jsonObject.put("text", stringBuilder.toString());
 
 
-            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, arguments, jsonArray, (JetFile) currentPsiFile, sessionInfo);
+            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, arguments, jsonArray, (JetFile) currentPsiFile, sessionInfo, example);
 
             return runner.getResult(outputDir.getAbsolutePath());
 

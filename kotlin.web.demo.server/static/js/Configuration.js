@@ -37,14 +37,15 @@ function ConfigurationMode(name) {
 }
 
 ConfigurationType.runner = {JAVA: "java", JS: "js"};
-ConfigurationType.dependencies = {STANDARD: "standard", CANVAS: "canvas"};
+ConfigurationType.dependencies = {STANDARD: "standard", CANVAS: "canvas", JUNIT: "junit"};
 
 Configuration.mode = { SERVER: new ConfigurationMode("server"),
     ONRUN: new ConfigurationMode("onrun")};
 
 Configuration.type = {JAVA: new ConfigurationType(ConfigurationType.runner.JAVA, ConfigurationType.dependencies.STANDARD),
     JS: new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.STANDARD),
-    CANVAS: new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.CANVAS)};
+    CANVAS: new ConfigurationType(ConfigurationType.runner.JS, ConfigurationType.dependencies.CANVAS),
+    JUNIT: new ConfigurationType(ConfigurationType.runner.JAVA, ConfigurationType.dependencies.JUNIT)};
 
 var ConfigurationComponent = (function () {
 
@@ -126,7 +127,9 @@ var ConfigurationComponent = (function () {
             return "js";
         } else if (type == Configuration.type.CANVAS) {
             return "canvas";
-        } else {
+        } else if(type == Configuration.type.JUNIT){
+            return "junit";
+        } else if(type == Configuration.type.JAVA){
             return "java";
         }
     };
@@ -136,8 +139,10 @@ var ConfigurationComponent = (function () {
             return Configuration.type.JS;
         } else if (type == "canvas") {
             return Configuration.type.CANVAS;
-        } else {
+        } else if( type == "java"){
             return Configuration.type.JAVA;
+        } else if(type == "junit"){
+            return Configuration.type.JUNIT;
         }
     };
 

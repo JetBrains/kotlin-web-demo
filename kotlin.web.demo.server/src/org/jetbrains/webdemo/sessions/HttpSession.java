@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
+import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
 import org.jetbrains.webdemo.responseHelpers.*;
@@ -183,16 +184,20 @@ public class HttpSession {
     private void sendExecutorResult() {
         PostData data = getPostDataFromRequest();
 
+        String consoleArgs = ResponseUtils.substringBefore(data.arguments, "&example");
+
+        ExampleObject example= ExamplesList.getExampleObject(ResponseUtils.substringAfter(data.arguments, "&example=").replaceAll("_", " "));
+
         sessionInfo.setRunConfiguration(parameters.getArgs());
-        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
+        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
             sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
             setGlobalVariables(data.text);
 
-            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(currentPsiFile, data.arguments, sessionInfo);
+            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(currentPsiFile, consoleArgs, sessionInfo, example);
             writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
         } else {
             sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
-            writeResponse(new JsConverter(sessionInfo).getResult(data.text, data.arguments), HttpServletResponse.SC_OK);
+            writeResponse(new JsConverter(sessionInfo).getResult(data.text, consoleArgs), HttpServletResponse.SC_OK);
         }
     }
 

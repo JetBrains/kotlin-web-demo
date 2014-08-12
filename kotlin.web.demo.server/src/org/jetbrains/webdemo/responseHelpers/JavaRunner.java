@@ -28,14 +28,13 @@ import org.jetbrains.jet.plugin.MainFunctionDetector;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class JavaRunner {
 
@@ -49,13 +48,16 @@ public class JavaRunner {
 
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, SessionInfo info) {
+    private ExampleObject example;
+
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, SessionInfo info, ExampleObject example) {
         this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;
         this.jsonArray = array;
         this.currentFile = currentFile;
         this.sessionInfo = info;
+        this.example = example;
     }
 
     public String getResult(String pathToRootOut) {
@@ -329,23 +331,31 @@ public class JavaRunner {
     private String[] generateCommandString(String pathToRootOut) {
         String[] argsArray = ResponseUtils.splitArguments(arguments);
 
-        String[] builder;
+        List<String> builder;
         if (arguments.isEmpty()) {
-            builder = new String[5];
+            builder = new ArrayList<>(5);
         }
         else {
-            builder = new String[argsArray.length + 5];
+            builder = new ArrayList<>(argsArray.length + 5);
         }
-        builder[0] = ApplicationSettings.JAVA_EXECUTE;
-        builder[1] = "-classpath";
-        builder[2] = pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB;
-        builder[3] = "-Djava.security.manager";
-        builder[4] = findMainClass();
+        builder.add(ApplicationSettings.JAVA_EXECUTE);
+        builder.add("-classpath");
+        String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB);
+        if(sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)){
+            builder.add(classpath + File.pathSeparator + ApplicationSettings.LIBS_DIR +"junit.jar");
+            builder.add("org.junit.runner.JUnitCore");
+            builder.addAll(Arrays.asList(example.testClasses));
+        } else {
+            builder.add(classpath);
+            builder.add("-Djava.security.manager");
+            builder.add(findMainClass());
+        }
+
 
         if (!arguments.isEmpty()) {
             System.arraycopy(argsArray, 0, builder, 5, argsArray.length);
         }
-        return builder;
+        return builder.toArray(new String[builder.size()]);
 
     }
 

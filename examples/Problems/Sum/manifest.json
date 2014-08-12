@@ -6,7 +6,8 @@
             "type": "SOURCE_FILE"
         }
     ],
+    "testClasses":["sum.TestSum", "sum.TestSum1"],
     "args": "",
-    "confType": "java",
+    "confType": "junit",
     "help": ""
 }

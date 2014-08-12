@@ -32,7 +32,7 @@ import java.util.*;
 public class ExamplesFolder {
     private static ObjectMapper objectMapper = new ObjectMapper();
     public String name;
-    public List<ExampleObject> examplesList = new ArrayList<>();
+    public List<String> examplesOrder = new ArrayList<>();
     @JsonIgnore public Map<String, ExampleObject> examples = new HashMap<>();
     private String path;
 
@@ -42,7 +42,7 @@ public class ExamplesFolder {
         for (String exampleName : exampleNames) {
             try {
                 ExampleObject example = downloadExample(exampleName);
-                examplesList.add(example);
+                examplesOrder.add(example.name);
                 examples.put(exampleName, example);
             } catch (Exception e) {
                 System.err.println("Can't load example " + exampleName + ":\n" + e.getMessage());

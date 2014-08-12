@@ -5,43 +5,22 @@
 package sum
 
 import java.util.*
+import kotlin.test.*
+import org.junit.Test
 
 fun sum(a : IntArray) : Int {
   // Write your solution here
-  return "?"
+  return 0
 }
 
-fun main(args : Array<String>) {
-  test(0)
-  test(1, 1)
-  test(-1, -1, 0)
-  test(6, 1, 2, 3)
-  test(6, 1, 1, 1, 1, 1, 1)
-
-  println("Success")
+public class TestSum{
+    Test fun testSum(){
+        assertEquals(0,sum(IntArray(0)))
+    }
 }
 
-
-
-
-
-
-
-
-
-// HELPER FUNCTIONS
-
-fun test(expectedSum : Int, vararg data : Int) {
-  val actualSum = sum(data)
-  assertEquals(actualSum, expectedSum, "\ndata = ${Arrays.toString(data)}\n" +
-                         "sum(data) = ${actualSum}, but must be $expectedSum ")
-}
-
-fun assertEquals<T>(actual : T?, expected : T?, message : Any? = null) {
-  if (actual != expected) {
-    if (message == null)
-      throw AssertionError()
-    else
-      throw AssertionError(message)
-  }
+public class TestSum1{
+    Test fun testSum(){
+        assertEquals(1,sum(IntArray(0)))
+    }
 }

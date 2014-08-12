@@ -47,6 +47,7 @@ public class KotlinHttpServlet extends HttpServlet {
         System.setProperty("java.awt.headless", "true");
 
         ApplicationSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
+        ApplicationSettings.LIBS_DIR = ApplicationSettings.WEBAPP_ROOT_DIRECTORY +"WEB-INF" + File.separator + "lib" +File.separator;
 
         if (!loadTomcatParameters()) {
             ErrorWriter.writeErrorToConsole("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");

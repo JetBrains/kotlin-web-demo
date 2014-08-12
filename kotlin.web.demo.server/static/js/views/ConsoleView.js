@@ -66,7 +66,7 @@ var ConsoleView = (function () {
             } else {
                 element.html("");
                 if (tabs != null) {
-                    tabs.tabs('option', 'active' , 1);
+                    tabs.tabs('option', 'active', 1);
                 }
                 var output = [
                     {"text": data, "type": "err"}
@@ -76,37 +76,42 @@ var ConsoleView = (function () {
         }
 
         var i = 0;
-        function makeCodeReference( lineNo ) {
+
+        function makeCodeReference(lineNo) {
             var a = document.createElement("a");
-            a.ref="#code";
+            a.ref = "#code";
             a.innerHTML = "dummy.kt:" + lineNo;
             a.id = "code_reference_" + i;
-            $(document).on("click", "#code_reference_" + i, function(){
+            $(document).on("click", "#code_reference_" + i, function () {
                 editor.setCursor(parseInt(lineNo - 1, 0));
                 editor.focus();
             });
-           i = i+1;
+            i = i + 1;
             return a;
         }
 
         function createStdErrorForConsoleView(element, message) {
             var regExp = /(.*?)\(dummy\.kt:([1-9]+)\)/;
             var ref = regExp.exec(message);
-            while(ref != null){
+            if (regExp == null) {
+                while (ref != null) {
 
-                var span = document.createElement("span");
-                span.innerHTML = ref[1] + "(";
-                element.appendChild(span);
+                    var span = document.createElement("span");
+                    span.innerHTML = ref[1] + "(";
+                    element.appendChild(span);
 
 
-                element.appendChild(makeCodeReference(ref[2]));
+                    element.appendChild(makeCodeReference(ref[2]));
 
-                span = document.createElement("span");
-                span.innerHTML = ")";
-                element.appendChild(span);
+                    span = document.createElement("span");
+                    span.innerHTML = ")";
+                    element.appendChild(span);
 
-                message = message.substr(ref[0].length);
-                ref = regExp.exec(message);
+                    message = message.substr(ref[0].length);
+                    ref = regExp.exec(message);
+                }
+            } else {
+                element.innerHTML = message;
             }
         }
 

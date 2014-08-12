@@ -29,7 +29,7 @@ public class ApplicationSettings {
     public static String HELP_DIRECTORY = "help";
     public static String LOGS_DIRECTORY = "logs";
     public static String STATISTICS_DIRECTORY = "statistics";
-    public static String JUNIT_LIB = "";
+    public static String LIBS_DIR = "";
 
     public static String HELP_FOR_EXAMPLES = "helpExamples.xml";
     public static String HELP_FOR_WORDS = "helpWords.xml";

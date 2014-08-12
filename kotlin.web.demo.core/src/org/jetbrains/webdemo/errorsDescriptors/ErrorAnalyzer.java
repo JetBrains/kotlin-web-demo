@@ -54,10 +54,10 @@ public class ErrorAnalyzer {
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
-            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
+            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) ||
+                    sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
                 bindingContext = ResolveUtils.getBindingContext((JetFile) currentPsiFile);
-            }
-            else {
+            } else {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile, sessionInfo);
             }
 
@@ -113,31 +113,24 @@ public class ErrorAnalyzer {
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.HIGHLIGHT.name(),sessionInfo.getOriginUrl() , currentPsiFile.getText());
+                    SessionInfo.TypeOfRequest.HIGHLIGHT.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
         }
 
-        Collections.sort(errors, new Comparator<ErrorDescriptor>() {
-            @Override
-            public int compare(ErrorDescriptor o1, ErrorDescriptor o2) {
-                if (o1.getInterval().startPoint.line > o2.getInterval().startPoint.line) {
-                    return 1;
-                }
-                else if (o1.getInterval().startPoint.line < o2.getInterval().startPoint.line) {
-                    return -1;
-                }
-                else if (o1.getInterval().startPoint.line == o2.getInterval().startPoint.line) {
-                    if (o1.getInterval().startPoint.charNumber > o2.getInterval().startPoint.charNumber) {
-                        return 1;
-                    }
-                    else if (o1.getInterval().startPoint.charNumber < o2.getInterval().startPoint.charNumber) {
-                        return -1;
-                    }
-                    else if (o1.getInterval().startPoint.charNumber == o2.getInterval().startPoint.charNumber) {
-                        return 0;
-                    }
-                }
+        Collections.sort(errors, (o1, o2) -> {
+            if (o1.getInterval().startPoint.line > o2.getInterval().startPoint.line) {
+                return 1;
+            } else if (o1.getInterval().startPoint.line < o2.getInterval().startPoint.line) {
                 return -1;
+            } else if (o1.getInterval().startPoint.line == o2.getInterval().startPoint.line) {
+                if (o1.getInterval().startPoint.charNumber > o2.getInterval().startPoint.charNumber) {
+                    return 1;
+                } else if (o1.getInterval().startPoint.charNumber < o2.getInterval().startPoint.charNumber) {
+                    return -1;
+                } else if (o1.getInterval().startPoint.charNumber == o2.getInterval().startPoint.charNumber) {
+                    return 0;
+                }
             }
+            return -1;
         });
 
     }

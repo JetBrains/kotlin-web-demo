@@ -206,7 +206,7 @@ var run_button = $("#run-button")
                 if (localConfiguration.type == Configuration.type.CANVAS) {
                     canvasDialog.dialog("open");
                 }
-                runProvider.run(configurationManager.getConfiguration(), editor.getProgramText(), argumentsView.val());
+                runProvider.run(configurationManager.getConfiguration(), editor.getProgramText(), argumentsView.val(), accordion.getSelectedExample());
             } else {
                 run_button.button("option", "disabled", false);
             }

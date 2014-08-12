@@ -78,6 +78,8 @@ public class SessionInfo {
             this.runConfiguration = RunConfiguration.JS;
         } else if ("canvas".equals(runConfiguration)) {
             this.runConfiguration = RunConfiguration.CANVAS;
+        } else if("junit".equals(runConfiguration)){
+            this.runConfiguration = RunConfiguration.JUNIT;
         } else {
             this.runConfiguration = RunConfiguration.JAVA;
         }
@@ -116,7 +118,8 @@ public class SessionInfo {
     public enum RunConfiguration {
         JAVA,
         JS,
-        CANVAS
+        CANVAS,
+        JUNIT
     }
 
 

@@ -1,6 +1,5 @@
 package org.jetbrains.webdemo.environment;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -85,14 +84,17 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
         List<File> classpath = Lists.newArrayList();
         classpath.addAll(PathUtil.getJdkClassesRoots());
 
-        Collection<File> files = Collections2.filter(PathUtil.getJdkClassesRoots(), new Predicate<File>() {
-            @Override
-            public boolean apply(@NotNull File file) {
-                return file.getName().equals("rt.jar") || file.getName().endsWith("classes.jar");
-            }
-        });
+        Collection<File> files = Collections2.filter(PathUtil.getJdkClassesRoots(), file -> file.getName().equals("rt.jar") || file.getName().endsWith("classes.jar"));
 
         ApplicationSettings.JAVA_HOME = files.iterator().next().getParentFile().getParentFile().getParentFile().getAbsolutePath();
+
+        File junit = new File(ApplicationSettings.LIBS_DIR + "junit.jar");
+
+        if(junit.exists()){
+            classpath.add(junit);
+        } else{
+
+        }
 
         classpath.add(KOTLIN_RUNTIME);
         if (arguments.classpath != null) {

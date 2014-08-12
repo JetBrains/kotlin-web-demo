@@ -8,6 +8,7 @@
           <element id="module-output" name="idea.pacth.server" />
           <element id="module-output" name="kotlin.web.demo.core" />
           <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-1.2.16.jar" path-in-jar="/" />
+          <element id="library" level="project" name="junit" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="log4j" />
@@ -20,7 +21,7 @@
           <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar" />
           <element id="library" level="project" name="kotlin-j2kConverter" />
           <element id="library" level="project" name="com.fasterxml.jackson.core:com.springsource.com.fasterxml.jackson.core.jackson-databind:2.0.2" />
-          <element id="library" level="project" name="junit-4.10" />
+          <element id="library" level="project" name="junit" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />

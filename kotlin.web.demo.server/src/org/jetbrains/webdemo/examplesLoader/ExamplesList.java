@@ -63,11 +63,16 @@ public class ExamplesList {
 
         ExamplesFolder folder = examplesFolders.get(folderName);
         ExampleObject example = folder.examples.get(exampleName);
-        ObjectNode responce = new ObjectNode(JsonNodeFactory.instance);
 
-        responce.put("help", example.help);
-        responce.put("files", objectMapper.valueToTree(example.files));
-        return responce.toString();
+        try {
+            return objectMapper.writeValueAsString(example);
+        } catch (IOException e) {
+            return  "";
+        }
+    }
+    public static ExampleObject  getExampleObject(String name){
+        ExamplesFolder examplesFolder = examplesFolders.get(ResponseUtils.substringBefore(name, "&name="));
+        return examplesFolder.examples.get(ResponseUtils.substringAfter(name, "&name="));
     }
 
     public Collection<ExamplesFolder> getList() {
