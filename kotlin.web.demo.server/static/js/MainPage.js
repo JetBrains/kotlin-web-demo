@@ -94,6 +94,7 @@ var argumentsView = $("#arguments");
 var statusBarView = $("#statusbar");
 var generatedCodeView = new GeneratedCodeView($("#generated-code"));
 var consoleView = new ConsoleView($("#console"), $("#result-tabs"));
+var junitView = new JUnitView($("#test-console"), $("#test-tree-div"));
 var problemsView = new ProblemsView($("#problems"), $("#result-tabs"));
 
 var canvas;
@@ -216,7 +217,11 @@ var run_button = $("#run-button")
 
 runProvider.onExecutionFinish = function (output) {
     run_button.button("option", "disabled", false);
-    consoleView.setOutput(output);
+    if(configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
+        junitView.setOutput(output);
+    } else{
+        consoleView.setOutput(output);
+    }
     statusBarView.html(ActionStatusMessages.run_java_ok);
 };
 

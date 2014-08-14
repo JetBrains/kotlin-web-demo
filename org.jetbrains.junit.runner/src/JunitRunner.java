@@ -45,16 +45,17 @@ class MyRunListener extends RunListener {
 
     @Override
     public void testStarted(Description description) {
-        System.out.println("@" + description.getDisplayName() + "@");
+        System.out.println("@" + description.getDisplayName() + " started@");
     }
 
     @Override
     public void testFailure(Failure failure) {
         System.out.println(failure.getMessage());
+        System.out.println("@" + failure.getTestHeader() + " failed@");
     }
 
     @Override
     public void testFinished(Description description) {
-        System.out.println("@finished " + description.getDisplayName() + "@");
+        System.out.println("@" + description.getDisplayName() + " finished@");
     }
 }

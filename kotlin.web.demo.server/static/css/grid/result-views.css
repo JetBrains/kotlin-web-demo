@@ -26,8 +26,6 @@
     border-color: #969696;
 }
 
-
-
 /*.status-bar:after{*/
 
 /*display: block;*/
@@ -50,7 +48,7 @@
     border-color: #969696;
 }
 
-.result-view a{
+.result-view a {
     cursor: pointer;
     color: #7a7a7a;
 }
@@ -99,5 +97,28 @@
 
 #console, #generated-code {
     font-family: monospace;
+}
+
+#test{
+    overflow: hidden;
+    position: relative;
+    white-space: normal;
+    padding: 0px;
+}
+
+#test-tree-div {
+    display: inline-block;
+    width: 25%;
+    height: 100%;
+    border-right: 1px solid #969696;
+}
+
+#test-console{
+    padding: 5px;
+    position: absolute;
+    display: inline-block;
+    width: 70%;
+    height: 100%;
+    white-space: pre;
 }
 
