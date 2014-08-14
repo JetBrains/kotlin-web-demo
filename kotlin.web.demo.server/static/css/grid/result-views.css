@@ -110,6 +110,7 @@
 }
 
 #test-tree-div {
+    overflow: auto;
     float: left;
     width: 25%;
     height: 100%;

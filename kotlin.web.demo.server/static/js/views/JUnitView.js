@@ -36,7 +36,7 @@ var JUnitView = (function () {
                 console = document.createElement("div");
                 console.id = "test-console";
                 element.append(console);
-                setOutput(data);
+                parseTestTree(data);
             }
         };
         return instance;
@@ -148,7 +148,8 @@ var JUnitView = (function () {
         var testClasses = [];
         for (var i = 0; i < data.length; i++) {
             if (data[i].type != "info" && data[i].type != "toggle-info") {
-                var text = data[i].text.split("<br/>");
+
+                var text = data[i].text.replace(/&amp;lt;/g, "").replace(/&amp;gt;/g, "").split("<br/>");
                 var testStart = /@(.*) started@/;
                 var j = 0;
 
@@ -192,10 +193,6 @@ var JUnitView = (function () {
             }
         }
         showTestTree(testClasses);
-    }
-
-    function setOutput(data) {
-        parseTestTree(data)
     }
 
     return JUnitView;
