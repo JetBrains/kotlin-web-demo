@@ -62,9 +62,9 @@ var ConfigurationComponent = (function () {
                 configuration = new Configuration(configuration.mode, Configuration.getTypeFromString(type));
                 $("#run-mode").val(type).selectmenu("refresh");
                 if ($("#run-mode").val() == "java") {
-                    document.getElementById("generated-code-tab").innerHTML = "Generated classfiles";
+                    document.getElementById("generated-code-link").innerHTML = "Generated classfiles";
                 } else {
-                    document.getElementById("generated-code-tab").innerHTML = "Generated JavaScript code";
+                    document.getElementById("generated-code-link").innerHTML = "Generated JavaScript code";
                 }
                 fireChangeEvent();
             },
@@ -74,9 +74,9 @@ var ConfigurationComponent = (function () {
 
         $("#run-mode").on("selectmenuchange", function () {
             if ($("#run-mode").val() == "java") {
-                document.getElementById("generated-code-tab").innerHTML = "Generated classfiles";
+                document.getElementById("generated-code-link").innerHTML = "Generated classfiles";
             } else {
-                document.getElementById("generated-code-tab").innerHTML = "Generated JavaScript code";
+                document.getElementById("generated-code-link").innerHTML = "Generated JavaScript code";
             }
             configuration = new Configuration(configuration.mode, Configuration.getTypeFromString($("#run-mode").val()));
             fireChangeEvent();

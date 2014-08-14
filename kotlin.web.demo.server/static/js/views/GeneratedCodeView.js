@@ -22,9 +22,13 @@
 var GeneratedCodeView = (function () {
 
     function GeneratedCodeView(element) {
+        var console = document.createElement("div");
+        console.className = "result-view";
+        element.append(console);
+
         var instance = {
             clean: function(){
-                element.html("");
+                console.innerHTML = "";
             },
             setOutput: function (data) {
                 setOutput(data);
@@ -39,7 +43,7 @@ var GeneratedCodeView = (function () {
             } else if(data.type == "info"){
                 generatedCode.innerHTML = unEscapeString(data.text);
             }
-            element.append(generatedCode);
+            console.appendChild(generatedCode);
         }
 
         return instance;

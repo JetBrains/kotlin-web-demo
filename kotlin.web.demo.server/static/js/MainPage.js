@@ -94,7 +94,7 @@ var argumentsView = $("#arguments");
 var statusBarView = $("#statusbar");
 var generatedCodeView = new GeneratedCodeView($("#generated-code"));
 var consoleView = new ConsoleView($("#console"), $("#result-tabs"));
-var junitView = new JUnitView($("#test-console"), $("#test-tree-div"));
+var junitView = new JUnitView($("#console"), $("#result-tabs"));
 var problemsView = new ProblemsView($("#problems"), $("#result-tabs"));
 
 var canvas;

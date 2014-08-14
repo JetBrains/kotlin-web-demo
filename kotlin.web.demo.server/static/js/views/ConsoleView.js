@@ -25,22 +25,28 @@ var ConsoleView = (function () {
 
     var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.type.JAVA);
 
-    var console;
 
     function ConsoleView(element, /*Nullable*/ tabs) {
 
         var JAVASCRIPT_CODE = "Generated JavaScript code";
-        console = element;
 
         var instance = {
             setOutput: function (data) {
-                setOutput(data);
+                element.html("");
+                var console = document.createElement("div");
+                console.className = "result-view";
+                element.append(console);
+                setOutput(console, data);
             },
             setConfiguration: function (conf) {
                 configuration = conf;
             },
             writeException: function (data) {
-                writeException(data);
+                element.html("");
+                var console = document.createElement("div");
+                console.className = "result-view";
+                element.append(console);
+                writeException(console, data);
             }
         };
 
@@ -48,9 +54,9 @@ var ConsoleView = (function () {
             tabs.tabs();
         }
 
-        function writeException(data) {
+        function writeException(console, data) {
             if (data != undefined && data[0] != undefined && data[0].exception != undefined) {
-                element.html("");
+                console.innerHTML = "";
                 if (tabs != null) {
                     tabs.tabs("option", "active", 1);
                 }
@@ -64,7 +70,7 @@ var ConsoleView = (function () {
 
             } else if (data == undefined || data == null) {
             } else {
-                element.html("");
+                console.innerHTML = "";
                 if (tabs != null) {
                     tabs.tabs('option', 'active', 1);
                 }
@@ -115,9 +121,8 @@ var ConsoleView = (function () {
             }
         }
 
-        function setOutput(data) {
+        function setOutput(console, data) {
             generatedCodeView.clean();
-            element.html("");
             if (tabs != null) {
                 tabs.tabs("option", "active", 1);
             }
@@ -153,7 +158,7 @@ var ConsoleView = (function () {
 
                     }
 
-                    element.append(p);
+                    console.appendChild(p);
                     i++;
                 }
             }

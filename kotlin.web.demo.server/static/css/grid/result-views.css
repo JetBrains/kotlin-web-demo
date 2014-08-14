@@ -34,18 +34,21 @@
 /*content: '';*/
 /*}*/
 
-.result-view {
+.tab-space {
+    position: relative;
     font-family: menlo, consolas, monospace;
-    overflow: auto;
     white-space: pre;
     height: 185px;
-    padding: 5px;
     font-size: 12px;
     line-height: 1.4;
-    border: 1px solid;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    border-color: #969696;
+    border: 0 solid #969696;
+    border-right-width: 1px;
+    border-left-width: 1px;
+}
+
+.result-view{
+    overflow: auto;
+    height: 100%;
 }
 
 .result-view a {
@@ -107,18 +110,69 @@
 }
 
 #test-tree-div {
-    display: inline-block;
+    float: left;
     width: 25%;
     height: 100%;
     border-right: 1px solid #969696;
 }
 
 #test-console{
-    padding: 5px;
-    position: absolute;
-    display: inline-block;
-    width: 70%;
+    margin-left: 26%;
+    overflow: auto;
     height: 100%;
+    display: block;
     white-space: pre;
 }
 
+#test-tree .ui-accordion-header{
+     outline: none;
+     cursor: pointer;
+     padding-top: 6px;
+     padding-bottom: 6px;
+ }
+
+#test-tree .ui-accordion-icon{
+    display: none;
+}
+
+#test-tree .header-text{
+    display: inline-block;
+    color: #3164a0;
+}
+
+.test-case{
+    padding-left: 30px;
+}
+
+.ok-img{
+    position: relative;
+    top: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    background: url("/static/images/ok.png") no-repeat 0 0;
+}
+
+.fail-img{
+    position: relative;
+    top: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    background: url("/static/images/fail.png") no-repeat 0 0;
+}
+
+.error-img{
+    position: relative;
+    top: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    background: url("/static/images/testError.png") no-repeat 0 0;
+}

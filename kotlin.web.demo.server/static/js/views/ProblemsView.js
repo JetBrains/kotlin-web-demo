@@ -23,18 +23,21 @@
 
 
 var ProblemsView = function (element, /*Nullable*/ tabs) {
+    var console = document.createElement("div");
+    console.className = "result-view";
+    element.append(console);
 
     var instance = {
         addMessages: function (data) {
             addMessagesToProblemsView(data);
         },
         clear: function () {
-            element.html("");
+            console.innerHTML = "";
         }
     };
 
     function addMessagesToProblemsView(data) {
-        element.html("");
+        console.innerHTML = "";
         if (tabs != null) {
             tabs.tabs("option", "active", 0);
         }
@@ -50,7 +53,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
             var severity = data[i].severity;
 
             var problem = createElementForProblemsView(severity, start, title);
-            element.append(problem);
+            console.appendChild(problem);
             i++;
 
             setTimeout(function (i) {

@@ -23,55 +23,131 @@ var JUnitView = (function () {
     var console;
     var navTree;
 
-    function JUnitView(_console, _navTree) {
-        console = _console;
-        navTree = _navTree;
-
+    function JUnitView(element, tabs) {
 
         var instance = {
             setOutput: function (data) {
+                element.empty();
+                tabs.tabs("option", "active", 1);
+                navTree = document.createElement("div");
+                navTree.id = "test-tree-div";
+                element.append(navTree);
+
+                console = document.createElement("div");
+                console.id = "test-console";
+                element.append(console);
                 setOutput(data);
             }
         };
         return instance;
     }
 
-    function showTree() {
-
-    }
-
     function showTestTree(classes) {
+
         var tree = document.createElement("div");
         tree.id = "test-tree";
-        navTree.append(tree);
+        navTree.appendChild(tree);
+
         for (var i = 0; i < classes.length; i++) {
             var li = document.createElement("h3");
-            var className = document.createElement("div");
-            className.innerHTML = classes[i].name;
-            li.appendChild(className);
-            tree.appendChild(li);
-            for(var j = 0; j < classes[i].tests.length; j++){
-                var test = document.createElement("div");
-                var testName = document.createElement("span");
-                testName.innerHTML = classes[i].tests[j].name;
-                test.appendChild(testName);
-                tree.appendChild(test);
+            var img = document.createElement("div");
+            if (classes[i].status == "fail") {
+                img.className = "fail-img";
+            } else if (classes[i].status == "ok") {
+                img.className = "ok-img";
+            } else if (classes[i].status == "error") {
+                img.className = "error-img";
             }
 
-        }
-        $("#test-tree").accordion({ heightStyle: "content",
-            navigation: true,
-            icons: {
-                activeHeader: "examples-open-folder-icon",
-                header: "examples-closed-folder-icon"
+            li.appendChild(img);
+            var className = document.createElement("div");
+            className.innerHTML = classes[i].name;
+            className.className = "header-text";
+            li.appendChild(className);
+            tree.appendChild(li);
+
+            var content = document.createElement("div");
+            tree.appendChild(content);
+
+            for (var j = 0; j < classes[i].tests.length; j++) {
+                var test = document.createElement("div");
+                test.className = "test-case";
+
+                img = document.createElement("div");
+                if (classes[i].tests[j].status == "fail") {
+                    img.className = "fail-img";
+                } else if (classes[i].tests[j].status == "ok") {
+                    img.className = "ok-img";
+                } else if (classes[i].tests[j].status == "error") {
+                    img.className = "error-img";
+                }
+
+                var testName = document.createElement("span");
+                testName.className = "test-name";
+                testName.innerHTML = classes[i].tests[j].name;
+                testName.onclick = (function () {
+                    var lines = classes[i].tests[j].lines;
+
+                    function show() {
+                        console.innerHTML = "";
+                        for (var i = 0; i < lines.length; i++) {
+                            var p = document.createElement("p");
+                            p.innerHTML = lines[i];
+                            console.appendChild(p);
+                        }
+                    }
+
+                    return show;
+                })();
+
+                test.appendChild(img);
+                test.appendChild(testName);
+                content.appendChild(test);
             }
+        }
+
+
+        $("#test-tree").accordion({ heightStyle: "content",
+            navigation: true
         });
+    }
+
+    function getOrCreateClass(classes, classFullName) {
+        for (var i = 0; i < classes.length; i++) {
+            if (classes[i].fullName == classFullName) {
+                return classes[i];
+            }
+        }
+
+        var className = classFullName.substr(classFullName.lastIndexOf(".") + 1);
+        var cl = {fullName: classFullName,
+            name: className,
+            tests: [],
+            status: "ok"
+        };
+        classes.push(cl);
+        return cl;
+    }
+
+    function getOrCreateTest(tests, testName) {
+        for (var i = 0; i < tests.length; i++) {
+            if (tests[i].name == testName) {
+                return tests[i];
+            }
+        }
+        var test ={
+            name: testName,
+            lines: [],
+            status: "ok"
+        };
+        tests.push(test);
+        return test;
     }
 
     function parseTestTree(data) {
         var testClasses = [];
         for (var i = 0; i < data.length; i++) {
-            if (data[i].type == "out") {
+            if (data[i].type != "info" && data[i].type != "toggle-info") {
                 var text = data[i].text.split("<br/>");
                 var testStart = /@(.*) started@/;
                 var j = 0;
@@ -82,33 +158,20 @@ var JUnitView = (function () {
                         var testHeader = text[j].match(testStart)[1];
                         var testNameFormat = /(.*)\((.*)\)/;
 
-                        var className = testHeader.match(testNameFormat)[2];
-                        if (testClass != null) {
-                            if (className != testClass.name) {
-                                testClasses.push(testClass);
-                                testClass = {name: className,
-                                    tests: [],
-                                    failed: false
-                                }
-                            }
-                        } else {
-                            testClass = {name: className,
-                                tests: [],
-                                failed: false
-                            }
-                        }
-
-                        var test = {name: testHeader.match(testNameFormat)[1],
-                            lines: [],
-                            failed: false};
-
-
+                        var fullClassName = testHeader.match(testNameFormat)[2];
+                        testClass = getOrCreateClass(testClasses, fullClassName);
+                        var test = getOrCreateTest(testClass.tests, testHeader.match(testNameFormat)[1]);
                         j++;
 
                         while (text[j] != "@" + testHeader + " finished@") {
                             if (text[j] == "@" + testHeader + " failed@") {
-                                testClass.failed = true;
-                                test.failed = true;
+                                if (testClass.status != "error") {
+                                    testClass.status = "fail";
+                                }
+                                test.status = "fail";
+                            } else if (text[j] == "@" + testHeader + " error@") {
+                                testClass.status = "error";
+                                test.status = "error";
                             } else {
                                 test.lines.push(text[j]);
                             }
@@ -116,20 +179,16 @@ var JUnitView = (function () {
                         }
                         j++;
 
-                        testClass.tests.push(test);
-
 
                     } else {
                         var p = document.createElement("p");
-                        p.innerHTML = text[i];
-                        console.append(p);
+                        p.innerHTML = text[j];
+                        console.appendChild(p);
                         j++;
                     }
                 }
-
-                if (testClass != null) {
-                    testClasses.push(testClass);
-                }
+            } else {
+                generatedCodeView.setOutput(data[i]);
             }
         }
         showTestTree(testClasses);

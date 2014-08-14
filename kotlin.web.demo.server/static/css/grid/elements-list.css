@@ -38,7 +38,7 @@
     color: #000000;
 }
 
-.ui-accordion-header{
+#examples-list .ui-accordion-header{
     outline: none;
     cursor: pointer;
     color: #3164a0;

@@ -46,16 +46,23 @@ class MyRunListener extends RunListener {
     @Override
     public void testStarted(Description description) {
         System.out.println("@" + description.getDisplayName() + " started@");
+        System.err.println("@" + description.getDisplayName() + " started@");
     }
 
     @Override
     public void testFailure(Failure failure) {
-        System.out.println(failure.getMessage());
-        System.out.println("@" + failure.getTestHeader() + " failed@");
+        if(failure.getException() instanceof AssertionError) {
+            System.out.println(failure.getMessage());
+            System.out.println("@" + failure.getTestHeader() + " failed@");
+        } else{
+            failure.getException().printStackTrace();
+            System.out.println("@" + failure.getTestHeader() + " error@");
+        }
     }
 
     @Override
     public void testFinished(Description description) {
         System.out.println("@" + description.getDisplayName() + " finished@");
+        System.err.println("@" + description.getDisplayName() + " finished@");
     }
 }
