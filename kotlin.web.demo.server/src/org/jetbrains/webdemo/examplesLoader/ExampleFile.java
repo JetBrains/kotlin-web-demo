@@ -29,7 +29,7 @@ import java.nio.file.Paths;
  * Created by Semyon.Atamas on 8/11/2014.
  */
 public class ExampleFile {
-    enum Type {
+    public enum Type {
         DATA_FILE,
         TEST_FILE,
         SOURCE_FILE

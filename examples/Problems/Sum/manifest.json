@@ -4,6 +4,10 @@
         {
             "filename": "Problems/Sum/Sum.kt",
             "type": "SOURCE_FILE"
+        },
+        {
+            "filename": "Problems/Sum/Test.kt",
+            "type": "TEST_FILE"
         }
     ],
     "testClasses":["sum.TestSum", "sum.TestSum1"],

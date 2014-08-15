@@ -29,28 +29,27 @@ import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.BindingTrace;
 import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
 
-import java.util.Collections;
+import java.util.List;
 
 public class ResolveUtils {
 
-    public static BindingContext getBindingContext(@NotNull JetFile file) {
-        AnalyzeExhaust analyzeExhaust = analyzeFile(file);
+    public static BindingContext getBindingContext(@NotNull List<JetFile> files, Project project) {
+        AnalyzeExhaust analyzeExhaust = analyzeFile(files, project);
         return analyzeExhaust.getBindingContext();
     }
 
-    public static GenerationState getGenerationState(@NotNull JetFile file) {
-        AnalyzeExhaust analyzeExhaust = analyzeFile(file);
+    public static GenerationState getGenerationState(@NotNull List<JetFile> files, Project project) {
+        AnalyzeExhaust analyzeExhaust = analyzeFile(files, project);
         return new GenerationState(
-                file.getProject(),
+                project,
                 ClassBuilderFactories.BINARIES,
                 analyzeExhaust.getModuleDescriptor(),
                 analyzeExhaust.getBindingContext(),
-                Collections.singletonList(file)
+                files
         );
     }
 
-    private static AnalyzeExhaust analyzeFile(JetFile file) {
-        Project project = file.getProject();
+    private static AnalyzeExhaust analyzeFile(@NotNull List<JetFile> files, Project project) {
 
         WebDemoLightClassGenerationSupport.getInstanceForCli(project).newBindingTrace();
 
@@ -59,7 +58,7 @@ public class ResolveUtils {
 
         return AnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
                 project,
-                Collections.singleton(file),
+                files,
                 sharedTrace,
                 Predicates.<PsiFile>alwaysTrue(),
                 support.getModule(),

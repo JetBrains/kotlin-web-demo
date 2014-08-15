@@ -24,7 +24,6 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.codegen.ClassFileFactory;
-import org.jetbrains.jet.codegen.CompilationErrorHandler;
 import org.jetbrains.jet.codegen.KotlinCodegenFacade;
 import org.jetbrains.jet.codegen.state.GenerationState;
 import org.jetbrains.jet.lang.diagnostics.Severity;
@@ -42,43 +41,47 @@ import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class CompileAndRunExecutor {
 
-    private final PsiFile currentPsiFile;
+    private final List<PsiFile> currentPsiFiles;
     private final String arguments;
 
     private final SessionInfo sessionInfo;
     private final ExampleObject example;
+    private final Project currentProject;
 
-    public CompileAndRunExecutor(PsiFile currentPsiFile, String arguments, SessionInfo info, ExampleObject example) {
-        this.currentPsiFile = currentPsiFile;
+    public CompileAndRunExecutor(List<PsiFile> currentPsiFiles, Project currentProject, String arguments, SessionInfo info, ExampleObject example) {
+        this.currentPsiFiles = currentPsiFiles;
+        this.currentProject = currentProject;
         this.arguments = arguments;
         this.sessionInfo = info;
         this.example = example;
     }
 
     public String getResult() {
-        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile, sessionInfo);
+        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFiles, sessionInfo, currentProject);
         List<ErrorDescriptor> errors;
         try {
             errors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+//            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
             return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
         }
 
         if (errors.isEmpty() || isOnlyWarnings(errors)) {
-            Project currentProject = currentPsiFile.getProject();
+//            Project currentProject = currentPsiFile.getProject();
             sessionInfo.getTimeManager().saveCurrentTime();
             GenerationState generationState;
             try {
-                generationState = ResolveUtils.getGenerationState((JetFile) currentPsiFile);
-                KotlinCodegenFacade.compileCorrectFiles(generationState, (throwable, s) -> ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), sessionInfo.getOriginUrl(), s + " " + currentPsiFile.getText()));
+
+                generationState = ResolveUtils.getGenerationState(convertList(currentPsiFiles), currentProject);
+                KotlinCodegenFacade.compileCorrectFiles(generationState, (throwable, s) -> ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), sessionInfo.getOriginUrl(), s + " " /*+ currentPsiFile.getText()*/));
             } catch (Throwable e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+//                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
                 return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
             ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
@@ -102,13 +105,13 @@ public class CompileAndRunExecutor {
                         FileUtil.writeToFile(target, file.asByteArray());
                         stringBuilder.append(file.getRelativePath()).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+//                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+//                                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
                         return ResponseUtils.getErrorInJson("Cannot get a result.");
                     }
                 } else {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot create output directory for files"),
-                            SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+//                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot create output directory for files"),
+//                            SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
                     return ResponseUtils.getErrorInJson("Error on server: cannot run your program.");
                 }
 
@@ -122,13 +125,21 @@ public class CompileAndRunExecutor {
             jsonObject.put("text", stringBuilder.toString());
 
 
-            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, arguments, jsonArray, (JetFile) currentPsiFile, sessionInfo, example);
+            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, arguments, jsonArray, (JetFile) currentPsiFiles.get(0), sessionInfo, example);
 
             return runner.getResult(outputDir.getAbsolutePath());
 
         } else {
             return ResponseUtils.getErrorInJson("There are errors in your code.");
         }
+    }
+
+    private List<JetFile> convertList(List<PsiFile> list){
+        List<JetFile> ans = new ArrayList<>();
+        for(PsiFile psiFile : list){
+            ans.add((JetFile)psiFile);
+        }
+        return ans;
     }
 
     private boolean isOnlyWarnings(List<ErrorDescriptor> list) {

@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
+import org.jetbrains.webdemo.examplesLoader.ExampleFile;
 import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
@@ -35,6 +36,8 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HttpSession {
@@ -117,7 +120,7 @@ public class HttpSession {
             String tmp = getPostDataFromRequest(true).text;
             tmp = unescapeXml(unescapeXml(tmp));
             List<String> list = ErrorWriter.parseException(tmp);
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown" , list.get(4));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown", list.get(4));
         } else {
             String tmp = getPostDataFromRequest(true).text;
             List<String> list = ErrorWriter.parseException(tmp);
@@ -128,7 +131,8 @@ public class HttpSession {
 
     @NonNls
     private static final String[] REPLACES_REFS = {"&lt;", "&gt;", "&amp;", "&#39;", "&quot;"};
-    @NonNls private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
+    @NonNls
+    private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
 
     public static String unescapeXml(@Nullable final String text) {
         if (text == null) return null;
@@ -186,14 +190,14 @@ public class HttpSession {
 
         String consoleArgs = ResponseUtils.substringBefore(data.arguments, "&example");
 
-        ExampleObject example= ExamplesList.getExampleObject(ResponseUtils.substringAfter(data.arguments, "&example=").replaceAll("_", " "));
+        ExampleObject example = ExamplesList.getExampleObject(ResponseUtils.substringAfter(data.arguments, "&example=").replaceAll("_", " "));
 
         sessionInfo.setRunConfiguration(parameters.getArgs());
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
             sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
-            setGlobalVariables(data.text);
+            List<PsiFile> psiFiles = setGlobalVariables(data.text, example);
 
-            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(currentPsiFile, consoleArgs, sessionInfo, example);
+            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, consoleArgs, sessionInfo, example);
             writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
         } else {
             sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
@@ -206,7 +210,9 @@ public class HttpSession {
 
     }
 
-    private void setGlobalVariables(@Nullable String text) {
+    private List<PsiFile> setGlobalVariables(@Nullable String text, @Nullable ExampleObject example) {
+        List<PsiFile> ans = new ArrayList<>();
+
         currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
         if (text == null) {
             text = "fun main(args : Array<String>) {\n" +
@@ -216,22 +222,33 @@ public class HttpSession {
         }
         sessionInfo.getTimeManager().saveCurrentTime();
         currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, text);
+        ans.add(currentPsiFile);
+
+        if (example != null) {
+            for (ExampleFile exampleFile : example.files) {
+                if (exampleFile.type.equals(ExampleFile.Type.TEST_FILE)) {
+                    ans.add(JetPsiFactoryUtil.createFile(currentProject, exampleFile.content));
+                }
+            }
+        }
+
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "PARSER " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: = " + currentPsiFile.getTextLength()));
+        return ans;
     }
 
     private void sendCompletionResult() {
         String positionString = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");
         sessionInfo.setRunConfiguration(ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
         String[] position = positionString.split(",");
-        setGlobalVariables(getPostDataFromRequest().text);
+        setGlobalVariables(getPostDataFromRequest().text, null);
 
         JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(Integer.parseInt(position[0]), Integer.parseInt(position[1]), currentPsiFile, sessionInfo);
         writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);
     }
 
     private void sendHighlightingResult() {
-        setGlobalVariables(getPostDataFromRequest().text);
-        JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
+        setGlobalVariables(getPostDataFromRequest().text, null);
+        JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(Collections.singletonList(currentPsiFile), sessionInfo, currentProject);
         String response = responseForHighlighting.getResult();
         response = response.replaceAll("\\n", "");
         writeResponse(response, HttpServletResponse.SC_OK);

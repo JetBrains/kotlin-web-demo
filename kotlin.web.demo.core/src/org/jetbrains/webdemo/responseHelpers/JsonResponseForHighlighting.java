@@ -19,6 +19,7 @@ package org.jetbrains.webdemo.responseHelpers;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.webdemo.Interval;
@@ -33,18 +34,20 @@ import java.util.List;
 
 public class JsonResponseForHighlighting {
 
-    private final PsiFile currentPsiFile;
+    private final List<PsiFile> currentPsiFiles;
+    private final Project currentProject;
     
     private final SessionInfo sessionInfo;
 
-    public JsonResponseForHighlighting(PsiFile currentPsiFile, SessionInfo info) {
-        this.currentPsiFile = currentPsiFile;
+    public JsonResponseForHighlighting(List<PsiFile> currentPsiFile, SessionInfo info, Project currentProject) {
+        this.currentPsiFiles = currentPsiFile;
         this.sessionInfo = info;
+        this.currentProject = currentProject;
     }
 
     @NotNull
     public String getResult() {
-        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFile, sessionInfo);
+        ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFiles, sessionInfo, currentProject);
         List<ErrorDescriptor> errorDescriptors;
         try {
             errorDescriptors = analyzer.getAllErrors();

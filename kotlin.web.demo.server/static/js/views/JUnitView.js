@@ -64,6 +64,29 @@ var JUnitView = (function () {
             className.innerHTML = classes[i].name;
             className.className = "header-text";
             li.appendChild(className);
+            li.onclick = (function () {
+                var lines = [];
+                for(var j = 0; j < classes[i].tests.length; j++){
+                    for(var k = 0; k < classes[i].tests[j].lines.length; k++) {
+                        lines.push(classes[i].tests[j].lines[k]);
+                        var p = document.createElement("p");
+                        p.innerHTML = classes[i].tests[j].lines[k];
+                        console.appendChild(p);
+                    }
+                }
+
+                function show() {
+                    console.innerHTML = "";
+                    for (var i = 0; i < lines.length; i++) {
+                        var p = document.createElement("p");
+                        p.innerHTML = lines[i];
+                        console.appendChild(p);
+                    }
+                }
+
+                return show;
+            })();
+
             tree.appendChild(li);
 
             var content = document.createElement("div");

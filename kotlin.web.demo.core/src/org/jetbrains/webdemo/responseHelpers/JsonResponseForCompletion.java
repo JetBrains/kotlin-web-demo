@@ -92,7 +92,7 @@ public class JsonResponseForCompletion {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile, sessionInfo);
             } else {
-                bindingContext = ResolveUtils.getBindingContext((JetFile) currentPsiFile);
+                bindingContext = ResolveUtils.getBindingContext(Collections.singletonList((JetFile)currentPsiFile), currentProject);
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
