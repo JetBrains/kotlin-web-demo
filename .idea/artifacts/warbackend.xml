@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="warbackend">
+    <output-path>$PROJECT_DIR$/out/artifacts/warbackend</output-path>
+    <root id="archive" name="warbackend.war">
+      <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web2" />
+      <element id="directory" name="WEB-INF" />
+      <element id="module-output" name="org.jetbrains.junit.runner" />
+    </root>
+  </artifact>
+</component>
