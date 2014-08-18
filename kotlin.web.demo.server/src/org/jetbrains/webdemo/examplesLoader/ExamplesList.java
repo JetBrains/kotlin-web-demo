@@ -17,8 +17,6 @@
 package org.jetbrains.webdemo.examplesLoader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
@@ -73,6 +71,10 @@ public class ExamplesList {
     public static ExampleObject  getExampleObject(String name){
         ExamplesFolder examplesFolder = examplesFolders.get(ResponseUtils.substringBefore(name, "&name="));
         return examplesFolder.examples.get(ResponseUtils.substringAfter(name, "&name="));
+    }
+    public static ExampleObject  getExampleObject(String name , String folder){
+        ExamplesFolder examplesFolder = examplesFolders.get(folder.replaceAll("_", " "));
+        return examplesFolder.examples.get(name.replaceAll("_", " "));
     }
 
     public Collection<ExamplesFolder> getList() {

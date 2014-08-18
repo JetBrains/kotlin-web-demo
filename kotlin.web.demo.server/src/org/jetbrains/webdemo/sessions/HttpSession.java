@@ -36,9 +36,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class HttpSession {
     protected Project currentProject;
@@ -188,9 +186,11 @@ public class HttpSession {
     private void sendExecutorResult() {
         PostData data = getPostDataFromRequest();
 
-        String consoleArgs = ResponseUtils.substringBefore(data.arguments, "&example");
+        /*String consoleArgs = ResponseUtils.substringBefore(data.arguments, "&example");
 
-        ExampleObject example = ExamplesList.getExampleObject(ResponseUtils.substringAfter(data.arguments, "&example=").replaceAll("_", " "));
+        ExampleObject example = ExamplesList.getExampleObject(ResponseUtils.substringAfter(data.arguments, "&example=").replaceAll("_", " "));*/
+        String consoleArgs=data.arguments;
+        ExampleObject example = ExamplesList.getExampleObject(data.example , data.exampleFolder);
 
         sessionInfo.setRunConfiguration(parameters.getArgs());
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
@@ -274,6 +274,7 @@ public class HttpSession {
         }
 
         String finalResponse;
+
         try {
             finalResponse = TextUtils.decodeUrl(reqResponse.toString());
         } catch (UnsupportedEncodingException e) {
@@ -283,6 +284,33 @@ public class HttpSession {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), reqResponse.toString());
             return new PostData("", "");
         }
+        finalResponse = finalResponse.replaceAll("<br>", "\n");
+        System.out.println(finalResponse);
+        String[] parts = finalResponse.split("&");
+        PostData out=new PostData("fun main(args : Array<String>) {" +
+            "  println(\"Hello, world!\")\n" +
+                    "}");
+
+        Map Request = new HashMap<>();
+        for(String tmp: parts)
+        {
+            Request.put(ResponseUtils.substringBefore(tmp, "="),ResponseUtils.substringAfter(tmp, "="));
+        }
+
+        if(Request.containsKey("text"))
+            out.text=(String)Request.get("text");
+
+        if(Request.containsKey("consoleArgs"))
+            out.arguments=(String)Request.get("consoleArgs");
+
+        if(Request.containsKey("example"))
+            out.exampleFolder=(String)Request.get("example");
+
+        if(Request.containsKey("name"))
+            out.example=(String)Request.get("name");
+        return  out;
+
+        /*
         if (finalResponse != null) {
             finalResponse = finalResponse.replaceAll("<br>", "\n");
             if (finalResponse.length() >= 5) {
@@ -303,6 +331,7 @@ public class HttpSession {
         }
 
         return new PostData("", "");
+        */
     }
 
 
@@ -319,8 +348,10 @@ public class HttpSession {
     }
 
     private class PostData {
-        public final String text;
+        public String text;
         public String arguments = null;
+        public String example =null;
+        public String exampleFolder =null;
 
         private PostData(String text) {
             this.text = text;
@@ -329,6 +360,12 @@ public class HttpSession {
         private PostData(String text, String arguments) {
             this.text = text;
             this.arguments = arguments;
+        }
+
+        private PostData(String text, String arguments, String example) {
+            this.text = text;
+            this.arguments = arguments;
+            this.example=example;
         }
     }
 
