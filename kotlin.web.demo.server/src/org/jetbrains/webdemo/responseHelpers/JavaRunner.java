@@ -329,14 +329,14 @@ public class JavaRunner {
     }
 
     private String[] generateCommandString(String pathToRootOut) {
-        String[] argsArray = ResponseUtils.splitArguments(arguments);
+        List<String> argsArray = Arrays.asList(ResponseUtils.splitArguments(arguments));
 
         List<String> builder;
         if (arguments.isEmpty()) {
             builder = new ArrayList<>(5);
         }
         else {
-            builder = new ArrayList<>(argsArray.length + 5);
+            builder = new ArrayList<>(argsArray.size() + 5);
         }
         builder.add(ApplicationSettings.JAVA_EXECUTE);
         builder.add("-classpath");
@@ -353,7 +353,7 @@ public class JavaRunner {
 
 
         if (!arguments.isEmpty()) {
-            System.arraycopy(argsArray, 0, builder, 5, argsArray.length);
+            builder.addAll(argsArray);
         }
         return builder.toArray(new String[builder.size()]);
 
