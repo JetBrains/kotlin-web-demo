@@ -42,6 +42,7 @@ public class ExamplesFolder {
         for (String exampleName : exampleNames) {
             try {
                 ExampleObject example = downloadExample(exampleName);
+                example.parent = folderName;
                 examplesOrder.add(example.name);
                 examples.put(exampleName, example);
             } catch (Exception e) {

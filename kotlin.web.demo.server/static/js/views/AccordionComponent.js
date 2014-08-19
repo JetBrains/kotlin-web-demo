@@ -53,7 +53,7 @@ var AccordionView = (function () {
             onFail: function (exception, messageForStatusBar) {
             },
             getSelectedExample: function(){
-                return lastSelectedItem
+                return examplesView.getSelectedExample();
             }
 
         };
@@ -110,6 +110,7 @@ var AccordionView = (function () {
         };
 
         examplesModel.onLoadExample = function (example) {
+            examplesView.onLoadExample(example);
             instance.onLoadCode(example, false);
         };
         examplesModel.onAllExamplesLoaded = function (data) {

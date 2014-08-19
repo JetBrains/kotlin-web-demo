@@ -15,6 +15,7 @@
  */
 
 .examples-list {
+    overflow: auto;
     height: 100%;
     width: 25%;
     float: left;
@@ -70,12 +71,18 @@
     max-width: 85%;
 }
 
-.examples-file-name{
+.examples-project-name{
+     display: block;
+     color: #3164a0;
+     font-size: 14px;
+    padding: 6px 6px 6px 45px;
+}
+
+.example-filename{
     display: block;
     color: #3164a0;
     font-size: 14px;
-    padding: 6px;
-    padding-left: 45px;
+    padding: 6px 6px 6px 55px;
 }
 
 .right-arrow{
@@ -108,7 +115,7 @@
     background: url("/static/images/icons.png") no-repeat -20px -39px;
 }
 
-.selected-example{
+.example-filename-selected{
     display: block;
     font-size: 14px;
     padding: 6px;

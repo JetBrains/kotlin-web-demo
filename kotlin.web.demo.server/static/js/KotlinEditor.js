@@ -27,6 +27,7 @@ var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to ena
 var KotlinEditor = (function () {
     function KotlinEditor() {
         var my_editor;
+        var openedElement = null;
         var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.type.JAVA);
 
         var completionProvider = new CompletionFromServer();
@@ -74,8 +75,6 @@ var KotlinEditor = (function () {
             sel.on("blur", close);
 
 
-
-
             function CompletionObject() {
                 var instance = {
                     processCompletionResult: function (data) {
@@ -96,8 +95,6 @@ var KotlinEditor = (function () {
                 isContinueComplete = true;
                 startComplete(null);
             }
-
-
 
 
             function startComplete(data) {
@@ -230,7 +227,6 @@ var KotlinEditor = (function () {
                 sel.css("display", "block");
                 sel.focus();
                 sel.menu("focus", null, sel.find(".ui-menu-item:first"));
-
 
 
             }
@@ -449,7 +445,25 @@ var KotlinEditor = (function () {
             refreshMode: function () {
                 my_editor.setOption("mode", "kotlin");
             },
+            open: function (element) {
+                if (openedElement != null) {
+                    openedElement.content = my_editor.getValue();
+                }
+                openedElement = element;
+                my_editor.focus();
+                my_editor.setValue(element.content);
+                isEditorContentChanged = false;
+            },
+            save: function(){
+                if (openedElement != null) {
+                    openedElement.content = my_editor.getValue();
+                }
+            },
             setText: function (text) {
+                if (openedElement != null) {
+                    openedElement.content = my_editor.getValue();
+                }
+                openedElement = null;
                 my_editor.focus();
                 my_editor.setValue(text);
                 isEditorContentChanged = false;
@@ -484,7 +498,7 @@ var KotlinEditor = (function () {
                 }
                 return message;
             },
-            cursorCoords: function(){
+            cursorCoords: function () {
                 return my_editor.cursorCoords();
             }
         };

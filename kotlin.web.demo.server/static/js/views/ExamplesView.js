@@ -25,6 +25,8 @@
 var ExamplesView = (function () {
     function ExamplesView(examplesModel) {
         var acc = $("#examples-list");
+        var downloadedExamples = new Object();//map exampleID -> example
+        var selectedExample = null;
 
         var confirmDialog = new ConfirmDialog();
         var model = examplesModel;
@@ -34,10 +36,8 @@ var ExamplesView = (function () {
                 addAllExamplesInAccordion(data);
                 instance.onAllExamplesLoaded();
             },
-            processLoadExample: function (status, data) {
-                if (status) {
-                    loadExampleSuccess(data);
-                }
+            onLoadExample: function (exampleContent) {
+                onLoadExample(exampleContent);
             },
             loadAllContent: function () {
                 loadAllContent();
@@ -46,6 +46,9 @@ var ExamplesView = (function () {
                 loadExample(url);
             },
             onAllExamplesLoaded: function () {
+            },
+            getSelectedExample: function () {
+                return selectedExample;
             }
         };
 
@@ -56,6 +59,14 @@ var ExamplesView = (function () {
 //            ExamplesView.getMainElement().append(acc);
             model.getAllExamples();
         }
+
+        function onLoadExample(exampleContent) {
+            var example = new Example(exampleContent);
+            downloadedExamples[example.getURL()] = example;
+            selectedExample = example;
+            example.select();
+        }
+
 
         function addFolder(folderObj) {
             var folder = document.createElement("h3");
@@ -69,36 +80,42 @@ var ExamplesView = (function () {
             acc.append(folder);
             var cont = document.createElement("div");
             var i = 0;
-            while(folderObj.examplesOrder[i] != undefined){
+            while (folderObj.examplesOrder[i] != undefined) {
                 addExample(folderObj.name, cont, folderObj.examplesOrder[i]);
                 i++;
             }
+
+            $(cont).accordion({heightStyle: "content",
+                navigation: true});
+
             acc.append(cont);
         }
 
-        function addExample(folder, cont, name){
-            var file = document.createElement("div");
-            file.className = "examples-file-name";
+        function addExample(folder, cont, name) {
+            var file = document.createElement("h4");
+            file.className = "examples-project-name";
             var img = document.createElement("div");
             img.className = "right-arrow";
             file.appendChild(img);
             file.id = "bullet" + replaceAll(name, " ", "_");
 
-            var spanDiv = document.createElement("div");
-            spanDiv.className = "file-name-span";
 
             var nameSpan = document.createElement("span");
             nameSpan.id = createExampleUrl(name, folder);
+            nameSpan.className = "file-name-span";
             nameSpan.style.cursor = "pointer";
             nameSpan.onclick = function () {
                 loadExample(this.id);
             };
             nameSpan.innerHTML = name;
 
-            spanDiv.appendChild(nameSpan);
-            file.appendChild(spanDiv);
+            file.appendChild(nameSpan);
 
             cont.appendChild(file);
+
+            var exampleContent = document.createElement("div");
+            exampleContent.id = createExampleUrl(name, folder) + "_content";
+            cont.appendChild(exampleContent);
         }
 
         function addAllExamplesInAccordion(data) {
@@ -111,22 +128,16 @@ var ExamplesView = (function () {
         }
 
         function loadExample(url) {
-            confirmDialog.open(function (url) {
-                return function () {
-                    if (ExamplesView.getLastSelectedItem() == url) {
-                        return;
-                    }
 
-                    var selecteExample = ExamplesView.getLastSelectedItem();
-                    if (selecteExample != 0) {
-                        $("span[id='" + selecteExample + "']").parent().parent().attr("class", "examples-file-name");
-                    }
-                    ExamplesView.setLastSelectedItem(url);
-                    $("span[id='" + ExamplesView.getLastSelectedItem() + "']").parent().parent().attr("class", "selected-example");
 
-                    model.loadExample(url);
-                };
-            }(url));
+            if (downloadedExamples[url] == undefined) {
+                model.loadExample(url);
+            } else {
+                selectedExample = downloadedExamples[url];
+                selectedExample.select();
+            }
+
+//            $("span[id='" + ExamplesView.getLastSelectedItem() + "']").parent().attr("class", "selected-example");
         }
 
         function loadExampleSuccess(data) {
@@ -148,6 +159,7 @@ var ExamplesView = (function () {
 
         return instance;
     }
+
 
     ExamplesView.setLastSelectedItem = function () {
     };

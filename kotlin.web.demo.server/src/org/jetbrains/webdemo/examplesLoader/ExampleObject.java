@@ -16,20 +16,22 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ExampleObject {
-    @NotNull public String name;
-    @NotNull public String parent;
-    @NotNull public String args = "";
-    @NotNull public String confType = "java";
+    @NotNull
+    public String name;
+    @NotNull
+    public String parent;
+    @NotNull
+    public String args = "";
+    @NotNull
+    public String confType = "java";
 
-    @NotNull public String help = "";
-    @Nullable public String[] testClasses;
-    @NotNull public ExampleFile[] files;
+    @NotNull
+    public String help = "";
+    @NotNull
+    public String[] testClasses;
+    @NotNull
+    public ExampleFile[] files;
 }

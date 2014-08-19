@@ -35,16 +35,16 @@ var RunProvider = (function () {
             }
         };
 
-        function run(configuration, programText, args, example) {
+        function run(configuration, project, args) {
             if (configuration.type.runner == ConfigurationType.runner.JAVA) {
-                runJava(configuration, programText, args, example);
+                runJava(configuration, project, args);
             } else {
-                runJs(configuration, programText, args, example);
+                runJs(configuration, project, args);
             }
         }
 
 
-        function runJava(configuration, programText, args, example) {
+        function runJava(configuration, project, args) {
             var confTypeString = Configuration.getStringFromType(configuration.type);
             $.ajax({
                 url: generateAjaxUrl("run", confTypeString),
@@ -62,7 +62,7 @@ var RunProvider = (function () {
                 },
                 dataType: "json",
                 type: "POST",
-                data: {text: programText, consoleArgs: args, example: example},
+                data: {project: project, consoleArgs: args},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown);

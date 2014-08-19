@@ -23,6 +23,7 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -39,8 +40,14 @@ public class ExampleFile {
 
     public String content;
 
+    public String name;
+
     @JsonCreator
     public ExampleFile(@JsonProperty("filename") String filename) throws IOException {
-        content = new String(Files.readAllBytes(Paths.get(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + filename)));
+        Path path = Paths.get(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + filename);
+        if(name == null){
+            name = path.getFileName().toString();
+        }
+        content = new String(Files.readAllBytes(path));
     }
 }

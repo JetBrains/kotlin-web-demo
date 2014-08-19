@@ -56,15 +56,6 @@ var ActionStatusMessages = {
 
 var sessionId = -1;
 
-function Example() {
-    var name;
-    var args;
-    var text;
-    var runner;
-    var dependencies;
-    var defaultDependencies;
-}
-
 var configurationManager = new ConfigurationComponent();
 var actionManager = new ActionManager();
 
@@ -207,7 +198,8 @@ var run_button = $("#run-button")
                 if (localConfiguration.type == Configuration.type.CANVAS) {
                     canvasDialog.dialog("open");
                 }
-                runProvider.run(configurationManager.getConfiguration(), editor.getProgramText(), argumentsView.val(), accordion.getSelectedExample());
+                editor.save();
+                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedExample().getContent(), argumentsView.val(), accordion.getSelectedExample());
             } else {
                 run_button.button("option", "disabled", false);
             }
@@ -244,17 +236,14 @@ accordion.onLoadCode = function (element, isProgram) {
     if (!isProgram) {
         helpViewForExamples.showHelp(element.help);
         statusBarView.html(ActionStatusMessages.load_example_ok);
+        argumentsView.val(element.args);
+        configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
     } else {
         helpViewForExamples.hide();
         statusBarView.html(ActionStatusMessages.load_program_ok);
+        argumentsView.val(element.args);
+        configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
     }
-
-    var text = element.files[0].content;
-
-    editor.setText(text);
-    argumentsView.val(element.args);
-    configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
-
 };
 
 accordion.onDeleteProgram = function () {
@@ -313,24 +302,6 @@ $(".toggleShortcuts").click(function () {
 
 $("#help3").toggle(true);
 
-//function loadShortcuts() {
-//    var text = $("#help3").html();
-//    text = text.replace("@shortcut-autocomplete@", actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getName());
-//    text = text.replace("@shortcut-run@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
-//    text = text.replace("@shortcut-reformat@", actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getName());
-//    text = text.replace("@shortcut-save@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName());
-//    $("#help3").html(text);
-//}
-
-$("#whatimgjavatokotlin").click(function () {
-    $("#dialogAboutJavaToKotlinConverter").dialog("open");
-});
-
-$("#dialogAboutJavaToKotlinConverter").dialog({
-    modal: "true",
-    width: 300,
-    autoOpen: false
-});
 
 function generateAjaxUrl(type, args) {
     var url = [location.protocol, '//', location.host, "/"].join('');
