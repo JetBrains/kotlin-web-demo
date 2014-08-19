@@ -7,6 +7,6 @@
         }
     ],
     "args": "guest1",
-    "confType": "java js",
+    "confType": "java",
     "help": "Here we have a<a href=\"http://confluence.jetbrains.net/display/Kotlin/Classes+and+Inheritance\">class</a>with a<i>primary constructor</i>and a member function.<br/>Note that there's no<b>new</b>keyword used to create an object."
 }

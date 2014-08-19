@@ -10,7 +10,7 @@
             "type": "TEST_FILE"
         }
     ],
-    "testClasses":["sum.TestSum", "sum.TestSum1"],
+    "testClasses":["sum.TestSum"],
     "args": "",
     "confType": "junit",
     "help": ""

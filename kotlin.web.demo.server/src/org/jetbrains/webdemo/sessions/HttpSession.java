@@ -16,9 +16,11 @@
 
 package org.jetbrains.webdemo.sessions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
+import kotlin.data;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
@@ -37,20 +39,28 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HttpSession {
-    protected Project currentProject;
-    protected PsiFile currentPsiFile;
-
-    private HttpServletRequest request;
-    private HttpServletResponse response;
-
+    @NonNls
+    private static final String[] REPLACES_REFS = {"&lt;", "&gt;", "&amp;", "&#39;", "&quot;"};
+    @NonNls
+    private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
     private final SessionInfo sessionInfo;
     private final RequestParameters parameters;
+    protected Project currentProject;
+    protected PsiFile currentPsiFile;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
 
     public HttpSession(SessionInfo info, RequestParameters parameters) {
         this.sessionInfo = info;
         this.parameters = parameters;
+    }
+
+    public static String unescapeXml(@Nullable final String text) {
+        if (text == null) return null;
+        return StringUtil.replace(text, REPLACES_REFS, REPLACES_DISP);
     }
 
     public void handle(final HttpServletRequest request, final HttpServletResponse response) {
@@ -95,6 +105,7 @@ public class HttpSession {
                 writeResponse(ResponseUtils.getErrorInJson("Incorrect request"), HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (Throwable e) {
+            e.printStackTrace();
             if (sessionInfo != null && sessionInfo.getType() != null && currentPsiFile != null && currentPsiFile.getText() != null) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
             } else {
@@ -125,16 +136,6 @@ public class HttpSession {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown", list.get(4));
         }
         writeResponse("Data sent", HttpServletResponse.SC_OK);
-    }
-
-    @NonNls
-    private static final String[] REPLACES_REFS = {"&lt;", "&gt;", "&amp;", "&#39;", "&quot;"};
-    @NonNls
-    private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
-
-    public static String unescapeXml(@Nullable final String text) {
-        if (text == null) return null;
-        return StringUtil.replace(text, REPLACES_REFS, REPLACES_DISP);
     }
 
     private void sendGeneratePublicLinkResult() {
@@ -184,30 +185,40 @@ public class HttpSession {
     }
 
     private void sendExecutorResult() {
-        PostData data = getPostDataFromRequest();
+        try (InputStream inputStream = request.getInputStream()) {
 
-        /*String consoleArgs = ResponseUtils.substringBefore(data.arguments, "&example");
+            ExampleObject example = new ObjectMapper().readValue(inputStream, ExampleObject.class);
+            example.unmodifiableFiles = ExamplesList.getExampleObject(example.name, example.parent).unmodifiableFiles;
+            example.testClasses = ExamplesList.getExampleObject(example.name, example.parent).testClasses;
 
-        ExampleObject example = ExamplesList.getExampleObject(ResponseUtils.substringAfter(data.arguments, "&example=").replaceAll("_", " "));*/
-        String consoleArgs=data.arguments;
-        ExampleObject example = ExamplesList.getExampleObject(data.example , data.exampleFolder);
+            sessionInfo.setRunConfiguration(example.confType);
+            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
+                sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+                List<PsiFile> psiFiles = createProjectPsiFiles(example);
 
-        sessionInfo.setRunConfiguration(parameters.getArgs());
-        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
-            sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
-            List<PsiFile> psiFiles = setGlobalVariables(data.text, example);
-
-            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, consoleArgs, sessionInfo, example);
-            writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
-        } else {
-            sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
-            writeResponse(new JsConverter(sessionInfo).getResult(data.text, consoleArgs), HttpServletResponse.SC_OK);
+                CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, sessionInfo, example);
+                writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
+            } else {
+                sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
+//                writeResponse(new JsConverter(sessionInfo).getResult(data.text, consoleArgs), HttpServletResponse.SC_OK);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     private void sendExampleContent() {
         writeResponse(ExamplesList.loadExample(parameters.getArgs()), HttpServletResponse.SC_OK);
 
+    }
+
+    private List<PsiFile> createProjectPsiFiles(ExampleObject example){
+        List<PsiFile> ans = new ArrayList<>();
+        currentProject= Initializer.INITIALIZER.getEnvironment().getProject();
+
+        ans.addAll(example.modifiableFiles.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.name, file.content)).collect(Collectors.toList()));
+        ans.addAll(example.unmodifiableFiles.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.name, file.content)).collect(Collectors.toList()));
+        return ans;
     }
 
     private List<PsiFile> setGlobalVariables(@Nullable String text, @Nullable ExampleObject example) {
@@ -221,13 +232,13 @@ public class HttpSession {
 
         }
         sessionInfo.getTimeManager().saveCurrentTime();
-        currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, text);
+        currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, "dummy.kt", text);
         ans.add(currentPsiFile);
 
         if (example != null) {
-            for (ExampleFile exampleFile : example.files) {
+            for (ExampleFile exampleFile : example.unmodifiableFiles) {
                 if (exampleFile.type.equals(ExampleFile.Type.TEST_FILE)) {
-                    ans.add(JetPsiFactoryUtil.createFile(currentProject, exampleFile.content));
+                    ans.add(JetPsiFactoryUtil.createFile(currentProject, exampleFile.name, exampleFile.content));
                 }
             }
         }
@@ -261,16 +272,12 @@ public class HttpSession {
 
     private PostData getPostDataFromRequest(boolean withNewLines) {
         StringBuilder reqResponse = new StringBuilder();
-        InputStream is = null;
-        try {
-            is = request.getInputStream();
+        try (InputStream is = request.getInputStream()) {
             reqResponse.append(ResponseUtils.readData(is, withNewLines));
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), request.getQueryString());
             writeResponse("Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new PostData("", "");
-        } finally {
-            close(is);
         }
 
         String finalResponse;
@@ -285,30 +292,28 @@ public class HttpSession {
             return new PostData("", "");
         }
         finalResponse = finalResponse.replaceAll("<br>", "\n");
-        System.out.println(finalResponse);
         String[] parts = finalResponse.split("&");
-        PostData out=new PostData("fun main(args : Array<String>) {" +
-            "  println(\"Hello, world!\")\n" +
-                    "}");
+        PostData out = new PostData("fun main(args : Array<String>) {" +
+                "  println(\"Hello, world!\")\n" +
+                "}");
 
         Map Request = new HashMap<>();
-        for(String tmp: parts)
-        {
-            Request.put(ResponseUtils.substringBefore(tmp, "="),ResponseUtils.substringAfter(tmp, "="));
+        for (String tmp : parts) {
+            Request.put(ResponseUtils.substringBefore(tmp, "="), ResponseUtils.substringAfter(tmp, "="));
         }
 
-        if(Request.containsKey("text"))
-            out.text=(String)Request.get("text");
+        if (Request.containsKey("text"))
+            out.text = (String) Request.get("text");
 
-        if(Request.containsKey("consoleArgs"))
-            out.arguments=(String)Request.get("consoleArgs");
+        if (Request.containsKey("consoleArgs"))
+            out.arguments = (String) Request.get("consoleArgs");
 
-        if(Request.containsKey("example"))
-            out.exampleFolder=(String)Request.get("example");
+        if (Request.containsKey("example"))
+            out.exampleFolder = (String) Request.get("example");
 
-        if(Request.containsKey("name"))
-            out.example=(String)Request.get("name");
-        return  out;
+        if (Request.containsKey("name"))
+            out.example = (String) Request.get("name");
+        return out;
 
         /*
         if (finalResponse != null) {
@@ -347,11 +352,12 @@ public class HttpSession {
         }
     }
 
+
     private class PostData {
         public String text;
         public String arguments = null;
-        public String example =null;
-        public String exampleFolder =null;
+        public String example = null;
+        public String exampleFolder = null;
 
         private PostData(String text) {
             this.text = text;
@@ -365,12 +371,8 @@ public class HttpSession {
         private PostData(String text, String arguments, String example) {
             this.text = text;
             this.arguments = arguments;
-            this.example=example;
+            this.example = example;
         }
-    }
-
-    private void close(Closeable closeable) {
-        ServerResponseUtils.close(closeable);
     }
 
 }

@@ -44,10 +44,12 @@ public class ExampleFile {
 
     @JsonCreator
     public ExampleFile(@JsonProperty("filename") String filename) throws IOException {
-        Path path = Paths.get(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + filename);
-        if(name == null){
-            name = path.getFileName().toString();
+        if(filename != null) {
+            Path path = Paths.get(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + filename);
+            if (name == null) {
+                name = path.getFileName().toString();
+            }
+            content = new String(Files.readAllBytes(path)).replaceAll(System.lineSeparator(), "\n");
         }
-        content = new String(Files.readAllBytes(path));
     }
 }

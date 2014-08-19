@@ -48,16 +48,14 @@ import java.util.Random;
 public class CompileAndRunExecutor {
 
     private final List<PsiFile> currentPsiFiles;
-    private final String arguments;
 
     private final SessionInfo sessionInfo;
     private final ExampleObject example;
     private final Project currentProject;
 
-    public CompileAndRunExecutor(List<PsiFile> currentPsiFiles, Project currentProject, String arguments, SessionInfo info, ExampleObject example) {
+    public CompileAndRunExecutor(List<PsiFile> currentPsiFiles, Project currentProject, SessionInfo info, ExampleObject example) {
         this.currentPsiFiles = currentPsiFiles;
         this.currentProject = currentProject;
-        this.arguments = arguments;
         this.sessionInfo = info;
         this.example = example;
     }
@@ -125,7 +123,7 @@ public class CompileAndRunExecutor {
             jsonObject.put("text", stringBuilder.toString());
 
 
-            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, arguments, jsonArray, (JetFile) currentPsiFiles.get(0), sessionInfo, example);
+            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, example.args, jsonArray, (JetFile) currentPsiFiles.get(0), sessionInfo, example);
 
             return runner.getResult(outputDir.getAbsolutePath());
 

@@ -7,6 +7,6 @@
         }
     ],
     "args": "guest",
-    "confType": "java js",
+    "confType": "java",
     "help": "Line 6 demonstrates<a href=\"http://confluence.jetbrains.net/display/Kotlin/Strings#Strings-Templates\">string templates</a>and <a href=\"http://confluence.jetbrains.net/display/Kotlin/Basic+types#Basictypes-Arrays\">array access</a>."
 }

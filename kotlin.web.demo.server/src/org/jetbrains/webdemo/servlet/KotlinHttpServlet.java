@@ -18,6 +18,7 @@ package org.jetbrains.webdemo.servlet;
 
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
@@ -65,7 +66,7 @@ public class KotlinHttpServlet extends HttpServlet {
                 ExamplesList.getInstance();
                 HelpLoader.getInstance();
                 Statistics.getInstance();
-             //   MySqlConnector.getInstance();
+                MySqlConnector.getInstance();
             } else {
                 ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
             }

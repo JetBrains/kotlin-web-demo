@@ -7,6 +7,6 @@
         }
     ],
     "args": "",
-    "confType": "java js",
+    "confType": "java",
     "help": "We declare a package-level function main which returns Unit and takes an Array of strings as a parameter.<br/>Note that semicolons are optional."
 }

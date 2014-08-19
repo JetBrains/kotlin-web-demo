@@ -282,7 +282,7 @@ public class JsonResponseForCompletion {
             StringBuilder buffer = new StringBuilder(text.substring(0, caretPositionOffset));
             buffer.append("IntellijIdeaRulezzz ");
             buffer.append(text.substring(caretPositionOffset));
-            currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, buffer.toString());
+            currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, "dummy.kt", buffer.toString());
             currentDocument = currentPsiFile.getViewProvider().getDocument();
         }
     }

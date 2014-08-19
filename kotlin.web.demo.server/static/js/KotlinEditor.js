@@ -450,6 +450,13 @@ var KotlinEditor = (function () {
                     openedElement.content = my_editor.getValue();
                 }
                 openedElement = element;
+
+                if(element.type == "TEST_FILE"){
+                    my_editor.setOption("readOnly", "nocursor");
+                } else{
+                    my_editor.setOption("readOnly", "false");
+                }
+
                 my_editor.focus();
                 my_editor.setValue(element.content);
                 isEditorContentChanged = false;
@@ -460,6 +467,7 @@ var KotlinEditor = (function () {
                 }
             },
             setText: function (text) {
+                my_editor.setOption("readOnly", "false");
                 if (openedElement != null) {
                     openedElement.content = my_editor.getValue();
                 }

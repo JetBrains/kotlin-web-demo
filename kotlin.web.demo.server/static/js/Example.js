@@ -31,7 +31,7 @@ var Example = (function () {
             },
             select: function () {
                 helpViewForExamples.showHelp(content.help);
-                var text = content.files[0].content;
+                var text = content.modifiableFiles[0].content;
 
                 editor.setText(text);
                 argumentsView.val(content.args);
@@ -40,8 +40,15 @@ var Example = (function () {
             setArguments: function (newArgs) {
                 content.args = newArgs;
             },
-            getContent: function(){
-                return content;
+            getModifiableContent: function () {
+                var modifiableContent = {
+                    args: content.args,
+                    confType: content.confType,
+                    name: content.name,
+                    parent: content.parent,
+                    modifiableFiles: content.modifiableFiles
+                };
+                return modifiableContent;
             },
             getArguments: function () {
                 return content.args;
@@ -57,8 +64,26 @@ var Example = (function () {
             exampleContentElement.innerHTML = "";
 
 
-            for (var i = 0; i < content.files.length; i++) {
-                var file = content.files[i];
+            for (var i = 0; i < content.modifiableFiles.length; i++) {
+                var file = content.modifiableFiles[i];
+                var filenameDiv = document.createElement("div");
+                filenameDiv.id = getFilenameURL(file.name);
+                filenameDiv.className = "example-filename";
+
+                var fileNameSpan = document.createElement("span");
+                fileNameSpan.innerHTML = file.name;
+                filenameDiv.appendChild(fileNameSpan);
+                filenameDiv.onclick = (function (file) {
+                    return function () {
+                        selectFile(file);
+                    }
+                })(file);
+
+                exampleContentElement.appendChild(filenameDiv);
+            }
+
+            for (var i = 0; i < content.unmodifiableFiles.length; i++) {
+                var file = content.unmodifiableFiles[i];
                 var filenameDiv = document.createElement("div");
                 filenameDiv.id = getFilenameURL(file.name);
                 filenameDiv.className = "example-filename";
@@ -75,20 +100,22 @@ var Example = (function () {
                 exampleContentElement.appendChild(filenameDiv);
             }
         }
+
         updateExampleFiles();
 
 
-        function selectFile(file){
-            if(selectedFile!=null) {
+        function selectFile(file) {
+            if (selectedFile != null) {
                 document.getElementById(getFilenameURL(selectedFile.name)).className = "example-filename";
             }
             selectedFile = file;
             document.getElementById(getFilenameURL(file.name)).className = "example-filename-selected";
             editor.open(selectedFile);
         }
-        selectFile(content.files[0]);
 
-        function getFilenameURL(filename){
+        selectFile(content.modifiableFiles[0]);
+
+        function getFilenameURL(filename) {
             return instance.getURL() + "&filename=" + filename.replace(/ /g, "_");
         }
 

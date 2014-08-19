@@ -199,7 +199,7 @@ var run_button = $("#run-button")
                     canvasDialog.dialog("open");
                 }
                 editor.save();
-                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedExample().getContent(), argumentsView.val(), accordion.getSelectedExample());
+                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedExample().getModifiableContent(), argumentsView.val(), accordion.getSelectedExample());
             } else {
                 run_button.button("option", "disabled", false);
             }

@@ -96,7 +96,7 @@ public final class WebDemoTranslatorFacade {
     private static String doTranslate(@NotNull String programText,
                                       @NotNull String argumentsString) throws TranslationException {
         K2JSTranslator translator = new K2JSTranslator(LOAD_JS_LIBRARY_CONFIG);
-        JetFile file = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), programText);
+        JetFile file = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), "dummy.kt", programText);
         String programCode = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
         return FLUSH_SYSTEM_OUT + programCode + GET_SYSTEM_OUT;
     }
