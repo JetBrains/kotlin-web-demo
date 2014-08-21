@@ -31,9 +31,9 @@ var HighlightingFromServer = (function () {
     function HighlightingFromServer() {
 
         var instance = {
-            getHighlighting: function (confType, programText, callback) {
+            getHighlighting: function (confType, project, callback) {
                 var confTypeString = Configuration.getStringFromType(confType);
-                getHighlighting(confTypeString, programText, callback);
+                getHighlighting(confTypeString, project, callback);
             },
             onHighlight: function (data, callback) {
                 problemsView.addMessages(data);
@@ -50,7 +50,7 @@ var HighlightingFromServer = (function () {
 
         var isLoadingHighlighting = false;
 
-        function getHighlighting(confTypeString, file, callback) {
+        function getHighlighting(confTypeString, project, callback) {
             if (!isLoadingHighlighting) {
                 isLoadingHighlighting = true;
                 $.ajax({
@@ -70,7 +70,7 @@ var HighlightingFromServer = (function () {
                     },
                     dataType: "json",
                     type: "POST",
-                    data: {text: file},
+                    data: JSON.stringify(project),
                     timeout: 10000,
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingHighlighting = false;

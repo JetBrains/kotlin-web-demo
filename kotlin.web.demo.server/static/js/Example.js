@@ -22,23 +22,31 @@
 var Example = (function () {
     function Example(exampleContent, element) {
         var content = exampleContent;
-
+        for(var i = 0; i < content.modifiableFiles.length; i++){
+            content.modifiableFiles[i].errors = []
+        }
+        for(var i = 0; i < content.unmodifiableFiles.length; i++){
+            content.unmodifiableFiles[i].errors = []
+        }
 
         var selectedFile = null;
 
         var instance = {
-            onExampleOpen: function () {
-            },
+
             select: function () {
                 helpViewForExamples.showHelp(content.help);
-                var text = content.modifiableFiles[0].content;
-
-                editor.setText(text);
+                editor.open(content.modifiableFiles[0]);
                 argumentsView.val(content.args);
                 configurationManager.updateConfiguration(getFirstConfiguration(content.confType));
             },
-            setArguments: function (newArgs) {
-                content.args = newArgs;
+            processHighlightingResult: function(data){
+                for(var i = 0; i < content.modifiableFiles.length; i++){
+                    content.modifiableFiles[i].errors = data[content.modifiableFiles[i].name];
+                }
+                for( i = 0; i < content.unmodifiableFiles.length; i++){
+                    content.unmodifiableFiles[i].errors = data[content.unmodifiableFiles[i].name];
+                }
+                editor.updateHighlighting();
             },
             getModifiableContent: function () {
                 var modifiableContent = {
@@ -55,6 +63,25 @@ var Example = (function () {
             },
             getURL: function () {
                 return replaceAll(content.parent, " ", "_") + "&name=" + replaceAll(content.name, " ", "_");
+            },
+            errorsExists: function(){
+                for(var i = 0; i < content.modifiableFiles.length; i++){
+                    var errors = content.modifiableFiles[i].errors;
+                    for(var j = 0; j < errors.length; j++){
+                        if(errors[j].severity == "ERROR"){
+                            return true;
+                        }
+                    }
+                }
+                for( i = 0; i < content.unmodifiableFiles.length; i++){
+                     errors = content.unmodifiableFiles[i].errors;
+                    for( j = 0; j < errors.length; j++){
+                        if(errors[j].severity == "ERROR"){
+                            return true;
+                        }
+                    }
+                }
+                return false;
             }
         };
 

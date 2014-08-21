@@ -298,6 +298,9 @@ var KotlinEditor = (function () {
                 var instance = {
                     processHighlightingResult: function (data) {
                         process(data);
+                    },
+                    updateHighlighting: function () {
+                        updateHighlighting()
                     }
                 };
 
@@ -329,7 +332,7 @@ var KotlinEditor = (function () {
 
                 var i = 0;
 
-                function processError(i, f) {
+                function processError(errors, i, f) {
                     if (data[i] == undefined) {
                         return;
                     }
@@ -377,8 +380,50 @@ var KotlinEditor = (function () {
                 processError(i, processError);
             }
 
+            function updateHighlighting() {
+                removeStyles();
+                arrayClasses = [];
+                arrayLinesMarkers = [];
+                for (var i = 0; i < openedElement.errors.length; i++) {
+                    var error = openedElement.errors[i];
+                    var interval = error.interval;
+                    arrayClasses.push(my_editor.markText(interval.start, interval.end, error.className));
+                    var title = unEscapeString(error.message);
+                    var severity = error.severity;
+
+                    if ((my_editor.lineInfo(interval.start.line) != null) && (my_editor.lineInfo(interval.start.line).markerText == null) || (my_editor.lineInfo(interval.start.line) == null)) {
+                        my_editor.setMarker(interval.start.line, '<span class=\"' + severity + 'gutter\" title="' + title + '">  </span>%N%');
+                        arrayLinesMarkers.push(interval.start.line);
+                    } else {
+                        var text = my_editor.lineInfo(interval.start.line).markerText;
+
+                        var resultSpan = "";
+                        if ((severity == "WARNING") && text.indexOf("ERRORgutter") != -1) {
+                            text = text.substring(text.indexOf("title=\"") + 7);
+                            text = text.substring(0, text.indexOf("\""));
+//                    resultSpan += title + "\n ---next error--- \n" + text.substring(pos);
+                            resultSpan = '<span class=\"ERRORgutter\" title="' + text + "\n ---next error--- \n" + title + '">  </span>%N%';
+                        } else {
+                            text = text.substring(text.indexOf("title=\"") + 7);
+                            text = text.substring(0, text.indexOf("\""));
+                            resultSpan = '<span class=\"' + severity + 'gutter\" title="' + text + "\n ---next error--- \n" + title + '">  </span>%N%';
+                        }
+                        //this.arrayLinesMarkers.pop();
+                        my_editor.setMarker(interval.start.line, resultSpan);
+                        arrayLinesMarkers.push(interval.start.line);
+                    }
+
+
+                    var el = document.getElementById(interval.start.line + "_" + interval.start.ch);
+                    if (el != null) {
+                        el.setAttribute("title", title);
+                    }
+                }
+            }
+
             return HighlightingObject;
         })();
+
 
         var completion = new CompletionObject();
         var highlighting = new HighlightingObject();
@@ -390,7 +435,8 @@ var KotlinEditor = (function () {
             mode: "text/kotlin",
             extraKeys: {
                 "Ctrl-Space": function () {
-                    completionProvider.getCompletion(configuration.type, my_editor.getValue(),
+                    instance.save();
+                    completionProvider.getCompletion(configuration.type, accordion.getSelectedExample().getModifiableContent(), openedElement.name,
                         my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
                 }
 
@@ -450,24 +496,28 @@ var KotlinEditor = (function () {
                     openedElement.content = my_editor.getValue();
                 }
                 openedElement = element;
+                highlighting.updateHighlighting();
 
-                if(element.type == "TEST_FILE"){
+                if (element.type == "TEST_FILE") {
                     my_editor.setOption("readOnly", "nocursor");
-                } else{
-                    my_editor.setOption("readOnly", "false");
+                } else {
+                    my_editor.setOption("readOnly", false);
                 }
 
                 my_editor.focus();
                 my_editor.setValue(element.content);
                 isEditorContentChanged = false;
             },
-            save: function(){
+            updateHighlighting: function () {
+                highlighting.updateHighlighting();
+            },
+            save: function () {
                 if (openedElement != null) {
                     openedElement.content = my_editor.getValue();
                 }
             },
             setText: function (text) {
-                my_editor.setOption("readOnly", "false");
+                my_editor.setOption("readOnly", false);
                 if (openedElement != null) {
                     openedElement.content = my_editor.getValue();
                 }
@@ -530,9 +580,10 @@ var KotlinEditor = (function () {
 
         function getHighlighting() {
             if (configuration.mode.name != Configuration.mode.ONRUN.name) {
+                instance.save();
                 highlightingProvider.getHighlighting(
                     configuration.type,
-                    my_editor.getValue(),
+                    accordion.getSelectedExample().getModifiableContent(),
                     instance.addMarkers
                 );
             }

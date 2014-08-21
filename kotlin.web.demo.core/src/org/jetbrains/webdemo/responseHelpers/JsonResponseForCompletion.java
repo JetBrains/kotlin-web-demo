@@ -47,10 +47,8 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class JsonResponseForCompletion {
     private final int NUMBER_OF_CHAR_IN_COMPLETION_NAME = 40;
@@ -62,12 +60,14 @@ public class JsonResponseForCompletion {
     private final int charNumber;
     private int caretPositionOffset;
     private SessionInfo sessionInfo;
+    private List<PsiFile> psiFiles;
 
 
-    public JsonResponseForCompletion(int lineNumber, int charNumber, PsiFile currentPsiFile, SessionInfo sessionInfo) {
+    public JsonResponseForCompletion(List<PsiFile> psiFiles, SessionInfo sessionInfo, String filename,  int lineNumber, int charNumber ) {
         this.lineNumber = lineNumber;
         this.charNumber = charNumber;
-        this.currentPsiFile = currentPsiFile;
+        this.psiFiles = psiFiles;
+        psiFiles.stream().filter(file -> file.getName().equals(filename)).forEach(file -> currentPsiFile = file);
         this.currentProject = currentPsiFile.getProject();
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
         this.sessionInfo = sessionInfo;
@@ -92,7 +92,7 @@ public class JsonResponseForCompletion {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile, sessionInfo);
             } else {
-                bindingContext = ResolveUtils.getBindingContext(Collections.singletonList((JetFile)currentPsiFile), currentProject);
+                bindingContext = ResolveUtils.getBindingContext(psiFiles.stream().map(psiFile -> (JetFile) psiFile).collect(Collectors.toList()), currentProject);
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
@@ -282,7 +282,9 @@ public class JsonResponseForCompletion {
             StringBuilder buffer = new StringBuilder(text.substring(0, caretPositionOffset));
             buffer.append("IntellijIdeaRulezzz ");
             buffer.append(text.substring(caretPositionOffset));
-            currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, "dummy.kt", buffer.toString());
+            psiFiles.remove(currentPsiFile);
+            currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, currentPsiFile.getName(), buffer.toString());
+            psiFiles.add(currentPsiFile);
             currentDocument = currentPsiFile.getViewProvider().getDocument();
         }
     }

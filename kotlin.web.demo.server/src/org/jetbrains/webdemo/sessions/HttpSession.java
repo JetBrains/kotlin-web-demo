@@ -16,10 +16,13 @@
 
 package org.jetbrains.webdemo.sessions;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
+import jdk.nashorn.internal.ir.ObjectNode;
 import kotlin.data;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
@@ -52,6 +55,7 @@ public class HttpSession {
     protected PsiFile currentPsiFile;
     private HttpServletRequest request;
     private HttpServletResponse response;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     public HttpSession(SessionInfo info, RequestParameters parameters) {
         this.sessionInfo = info;
@@ -221,48 +225,36 @@ public class HttpSession {
         return ans;
     }
 
-    private List<PsiFile> setGlobalVariables(@Nullable String text, @Nullable ExampleObject example) {
-        List<PsiFile> ans = new ArrayList<>();
-
-        currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
-        if (text == null) {
-            text = "fun main(args : Array<String>) {\n" +
-                    "  println(\"Hello, world!\")\n" +
-                    "}";
-
-        }
-        sessionInfo.getTimeManager().saveCurrentTime();
-        currentPsiFile = JetPsiFactoryUtil.createFile(currentProject, "dummy.kt", text);
-        ans.add(currentPsiFile);
-
-        if (example != null) {
-            for (ExampleFile exampleFile : example.unmodifiableFiles) {
-                if (exampleFile.type.equals(ExampleFile.Type.TEST_FILE)) {
-                    ans.add(JetPsiFactoryUtil.createFile(currentProject, exampleFile.name, exampleFile.content));
-                }
-            }
-        }
-
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "PARSER " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: = " + currentPsiFile.getTextLength()));
-        return ans;
-    }
-
     private void sendCompletionResult() {
-        String positionString = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");
-        sessionInfo.setRunConfiguration(ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
-        String[] position = positionString.split(",");
-        setGlobalVariables(getPostDataFromRequest().text, null);
+        try(InputStream is = request.getInputStream()) {
+            JsonNode requestObject = objectMapper.readTree(is);
+            String fileName = requestObject.get("filename").textValue();
+            int line = requestObject.get("line").asInt();
+            int ch = requestObject.get("ch").asInt();
+            ExampleObject example = objectMapper.readValue(requestObject.get("project").traverse(), ExampleObject.class);
+            example.unmodifiableFiles = ExamplesList.getExampleObject(example.name, example.parent).unmodifiableFiles;
+            List<PsiFile> psiFiles = createProjectPsiFiles(example);
+            sessionInfo.setRunConfiguration(ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
 
-        JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(Integer.parseInt(position[0]), Integer.parseInt(position[1]), currentPsiFile, sessionInfo);
-        writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);
+            JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(psiFiles, sessionInfo, fileName, line, ch);
+            writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendHighlightingResult() {
-        setGlobalVariables(getPostDataFromRequest().text, null);
-        JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(Collections.singletonList(currentPsiFile), sessionInfo, currentProject);
-        String response = responseForHighlighting.getResult();
-        response = response.replaceAll("\\n", "");
-        writeResponse(response, HttpServletResponse.SC_OK);
+        try(InputStream is = request.getInputStream()) {
+            ExampleObject example = objectMapper.readValue(is, ExampleObject.class);
+            example.unmodifiableFiles = ExamplesList.getExampleObject(example.name, example.parent).unmodifiableFiles;
+            List<PsiFile> psiFiles = createProjectPsiFiles(example);
+            JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, currentProject);
+            String response = responseForHighlighting.getResult();
+            response = response.replaceAll("\\n", "");
+            writeResponse(response, HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

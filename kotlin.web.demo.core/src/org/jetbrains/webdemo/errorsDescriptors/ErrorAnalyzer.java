@@ -35,6 +35,7 @@ import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ErrorAnalyzer {
     private final List<PsiFile> currentPsiFiles;
@@ -50,8 +51,11 @@ public class ErrorAnalyzer {
         this.sessionInfo = info;
     }
 
-    public List<ErrorDescriptor> getAllErrors() {
-        final List<ErrorDescriptor> errors = getErrorsByVisitor();
+    public Map<String, List<ErrorDescriptor>> getAllErrors() {
+        final Map<String, List<ErrorDescriptor>> errors = new HashMap<>();
+        for(PsiFile psiFile : currentPsiFiles){
+            errors.put(psiFile.getName(), getErrorsByVisitor(psiFile));
+        }
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
@@ -70,12 +74,12 @@ public class ErrorAnalyzer {
 //                "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
 //        ErrorWriter.ERROR_WRITER.writeInfo(info);
         if (bindingContext != null) {
-            gerErrorsFromBindingContext(bindingContext, errors);
+            getErrorsFromBindingContext(bindingContext, errors);
         }
         return errors;
     }
 
-    private void gerErrorsFromBindingContext(BindingContext bindingContext, List<ErrorDescriptor> errors) {
+    private void getErrorsFromBindingContext(BindingContext bindingContext, Map<String, List<ErrorDescriptor>> errors) {
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics().all();
         try {
             for (Diagnostic diagnostic : diagnostics) {
@@ -108,7 +112,7 @@ public class ErrorAnalyzer {
                     if (!(diagnostic.getFactory() == Errors.UNRESOLVED_REFERENCE) && (diagnostic.getSeverity() == Severity.ERROR)) {
                         className = "red_wavy_line";
                     }
-                    errors.add(new ErrorDescriptor(new Interval(firstRange.getStartOffset(), firstRange.getEndOffset(), diagnostic.getPsiFile().getViewProvider().getDocument()),
+                    errors.get(diagnostic.getPsiFile().getName()).add(new ErrorDescriptor(new Interval(firstRange.getStartOffset(), firstRange.getEndOffset(), diagnostic.getPsiFile().getViewProvider().getDocument()),
                             render, diagnostic.getSeverity(), className));
                 }
             }
@@ -117,35 +121,32 @@ public class ErrorAnalyzer {
 //                    SessionInfo.TypeOfRequest.HIGHLIGHT.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
         }
 
-        Collections.sort(errors, (o1, o2) -> {
-            if (o1.getInterval().startPoint.line > o2.getInterval().startPoint.line) {
-                return 1;
-            } else if (o1.getInterval().startPoint.line < o2.getInterval().startPoint.line) {
-                return -1;
-            } else if (o1.getInterval().startPoint.line == o2.getInterval().startPoint.line) {
-                if (o1.getInterval().startPoint.charNumber > o2.getInterval().startPoint.charNumber) {
+        for (String key : errors.keySet())
+            Collections.sort(errors.get(key), (o1, o2) -> {
+                if (o1.getInterval().start.line > o2.getInterval().start.line) {
                     return 1;
-                } else if (o1.getInterval().startPoint.charNumber < o2.getInterval().startPoint.charNumber) {
+                } else if (o1.getInterval().start.line < o2.getInterval().start.line) {
                     return -1;
-                } else if (o1.getInterval().startPoint.charNumber == o2.getInterval().startPoint.charNumber) {
-                    return 0;
+                } else if (o1.getInterval().start.line == o2.getInterval().start.line) {
+                    if (o1.getInterval().start.ch > o2.getInterval().start.ch) {
+                        return 1;
+                    } else if (o1.getInterval().start.ch < o2.getInterval().start.ch) {
+                        return -1;
+                    } else if (o1.getInterval().start.ch == o2.getInterval().start.ch) {
+                        return 0;
+                    }
                 }
-            }
-            return -1;
-        });
+                return -1;
+            });
 
     }
 
     private List<JetFile> convertList(List<PsiFile> list) {
-        List<JetFile> ans = new ArrayList<>();
-        for (PsiFile psiFile : list) {
-            ans.add((JetFile) psiFile);
-        }
-        return ans;
+        return list.stream().map(psiFile -> (JetFile) psiFile).collect(Collectors.toList());
     }
 
 
-    private List<ErrorDescriptor> getErrorsByVisitor() {
+    private List<ErrorDescriptor> getErrorsByVisitor(PsiFile psiFile) {
         final List<PsiErrorElement> errorElements = new ArrayList<PsiErrorElement>();
         PsiElementVisitor visitor = new PsiElementVisitor() {
             @Override
@@ -160,16 +161,13 @@ public class ErrorAnalyzer {
 
         };
 
-        final List<ErrorDescriptor> errors = new ArrayList<ErrorDescriptor>();
-        for (PsiFile psiFile : currentPsiFiles) {
-            errorElements.clear();
-            visitor.visitFile(psiFile);
-            for (PsiErrorElement errorElement : errorElements) {
-                int start = errorElement.getTextRange().getStartOffset();
-                int end = errorElement.getTextRange().getEndOffset();
-                Interval interval = new Interval(start, end, psiFile.getViewProvider().getDocument());
-                errors.add(new ErrorDescriptor(interval, errorElement.getErrorDescription(), Severity.ERROR, "red_wavy_line"));
-            }
+        final List<ErrorDescriptor> errors = new ArrayList<>();
+        visitor.visitFile(psiFile);
+        for (PsiErrorElement errorElement : errorElements) {
+            int start = errorElement.getTextRange().getStartOffset();
+            int end = errorElement.getTextRange().getEndOffset();
+            Interval interval = new Interval(start, end, psiFile.getViewProvider().getDocument());
+            errors.add(new ErrorDescriptor(interval, errorElement.getErrorDescription(), Severity.ERROR, "red_wavy_line"));
         }
         return errors;
     }

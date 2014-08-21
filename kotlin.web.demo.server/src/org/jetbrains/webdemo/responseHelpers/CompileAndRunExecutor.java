@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class CompileAndRunExecutor {
@@ -62,7 +63,7 @@ public class CompileAndRunExecutor {
 
     public String getResult() {
         ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFiles, sessionInfo, currentProject);
-        List<ErrorDescriptor> errors;
+        Map<String,List<ErrorDescriptor>> errors;
         try {
             errors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
@@ -140,10 +141,12 @@ public class CompileAndRunExecutor {
         return ans;
     }
 
-    private boolean isOnlyWarnings(List<ErrorDescriptor> list) {
-        for (ErrorDescriptor errorDescriptor : list) {
-            if (errorDescriptor.getSeverity() == Severity.ERROR) {
-                return false;
+    private boolean isOnlyWarnings(Map<String, List<ErrorDescriptor>> map) {
+        for(String key: map.keySet()) {
+            for (ErrorDescriptor errorDescriptor : map.get(key)) {
+                if (errorDescriptor.getSeverity() == Severity.ERROR) {
+                    return false;
+                }
             }
         }
         return true;

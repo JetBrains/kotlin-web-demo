@@ -26,9 +26,9 @@ var CompletionFromServer = (function () {
     function CompletionFromServer() {
 
         var instance = {
-            getCompletion: function (confType, programText, cursorLine, cursorCh) {
+            getCompletion: function (confType, project, filename, cursorLine, cursorCh) {
                 var confTypeString = Configuration.getStringFromType(confType);
-                getCompletion(confTypeString, programText, cursorLine, cursorCh);
+                getCompletion(confTypeString, project, filename, cursorLine, cursorCh);
             },
             onLoadCompletion:function (completionObject) {
                 editor.showCompletionResult(completionObject);
@@ -42,11 +42,11 @@ var CompletionFromServer = (function () {
 
         var isLoadingCompletion = false;
 
-        function getCompletion(confTypeString, programText, cursorLine, cursorCh) {
+        function getCompletion(confTypeString, project, filename, cursorLine, cursorCh) {
             if (!isLoadingCompletion) {
                 isLoadingCompletion = true;
                 $.ajax({
-                    url: generateAjaxUrl("complete", cursorLine + "," + cursorCh + "&runConf=" + confTypeString),
+                    url: generateAjaxUrl("complete", "&runConf=" + confTypeString),
                     context: document.body,
                     success: function (data) {
                         isLoadingCompletion = false;
@@ -62,7 +62,7 @@ var CompletionFromServer = (function () {
                     },
                     dataType: "json",
                     type: "POST",
-                    data: {text: programText},
+                    data: JSON.stringify({ project: project, filename: filename, line : cursorLine, ch : cursorCh}),
                     timeout: 10000,
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingCompletion = false;

@@ -190,15 +190,16 @@ var run_button = $("#run-button")
     .button()
     .click(function () {
         run_button.button("option", "disabled", true);
+        editor.save();
         var localConfiguration = configurationManager.getConfiguration();
-        highlighting.getHighlighting(localConfiguration.type, editor.getProgramText(), function (highlightingResult) {
-            editor.addMarkers(highlightingResult);
-            if (!checkIfThereAreErrorsInHighlightingResult(highlightingResult)) {
+        highlighting.getHighlighting(localConfiguration.type, accordion.getSelectedExample().getModifiableContent(), function (highlightingResult) {
+            var example = accordion.getSelectedExample();
+            example.processHighlightingResult(highlightingResult);
+            if (!example.errorsExists()) {
                 //Create canvas element before run it in browser
                 if (localConfiguration.type == Configuration.type.CANVAS) {
                     canvasDialog.dialog("open");
                 }
-                editor.save();
                 runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedExample().getModifiableContent(), argumentsView.val(), accordion.getSelectedExample());
             } else {
                 run_button.button("option", "disabled", false);

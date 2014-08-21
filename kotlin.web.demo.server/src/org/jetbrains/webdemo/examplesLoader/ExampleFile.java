@@ -17,7 +17,9 @@
 package org.jetbrains.webdemo.examplesLoader;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
@@ -25,11 +27,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Semyon.Atamas on 8/11/2014.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ExampleFile {
+
+
     public enum Type {
         DATA_FILE,
         TEST_FILE,

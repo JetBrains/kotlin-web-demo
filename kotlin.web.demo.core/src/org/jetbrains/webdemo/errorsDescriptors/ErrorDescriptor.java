@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.errorsDescriptors;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.webdemo.Interval;
 
@@ -35,11 +37,11 @@ public class ErrorDescriptor {
     }
 
 
-    public ErrorDescriptor(Interval interval, String message, Severity severity) {
-        this.interval = interval;
-        this.message = message;
-        this.severity = severity;
-    }
+//    public ErrorDescriptor(Interval interval, String message, Severity severity) {
+//        this.interval = interval;
+//        this.message = message;
+//        this.severity = severity;
+//    }
 
     public Interval getInterval() {
         return interval;

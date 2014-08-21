@@ -16,11 +16,13 @@
 
 package org.jetbrains.webdemo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intellij.openapi.editor.Document;
 
 public class Interval {
-    public final Point startPoint;
-    public final Point endPoint;
+    public final Point start;
+    public final Point end;
 
     public Interval(int start, int end, Document currentDocument) {
 
@@ -49,18 +51,23 @@ public class Interval {
                 charNumberForElementEnd++;
             }
         }
-        this.startPoint = new Point(lineNumberForElementStart, charNumberForElementStart);
-        this.endPoint = new Point(lineNumberForElementEnd, charNumberForElementEnd);
+        this.start = new Point(lineNumberForElementStart, charNumberForElementStart);
+        this.end = new Point(lineNumberForElementEnd, charNumberForElementEnd);
 
     }
 
-    public class Point {
-        public final int line;
-        public final int charNumber;
+    public Interval(Point start, Point end){
+        this.start = start;
+        this.end = end;
+    }
 
-        private Point(int line, int charNumber) {
+    public class Point {
+        public int line;
+        public int ch;
+
+        private Point(int line,int ch) {
             this.line = line;
-            this.charNumber = charNumber;
+            this.ch = ch;
         }
     }
 
