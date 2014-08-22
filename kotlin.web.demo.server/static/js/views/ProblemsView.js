@@ -23,94 +23,134 @@
 
 
 var ProblemsView = function (element, /*Nullable*/ tabs) {
+    var scroll = document.createElement("div");
+    scroll.className = "scroll"
+    element.append(scroll);
+
+
     var console = document.createElement("div");
     console.className = "result-view";
-    element.append(console);
+    scroll.appendChild(console);
 
     var instance = {
         addMessages: function (data) {
-            addMessagesToProblemsView(data);
+            addMessagesToProblemsView();
+        },
+        onExampleChange: function(){
+            onExampleChange();
         },
         clear: function () {
             console.innerHTML = "";
         }
     };
 
-    function addMessagesToProblemsView(data) {
+    function onExampleChange () {
         console.innerHTML = "";
+        var example = accordion.getSelectedExample();
+        for(var i = 0; i < example.getFiles().length; i++) {
+            var file = example.getFiles()[i];
+
+            var fileProblemsDiv = document.createElement("div");
+            fileProblemsDiv.id = file.name.replace(/ /g, "_") + "_problems";
+            fileProblemsDiv.style.display = "none";
+
+            var fileProblemsHeader = document.createElement("p");
+            fileProblemsHeader.className = "problemsView-expanded-filename-header";
+            var arrow = document.createElement("div");
+            arrow.className = "arrow";
+            fileProblemsHeader.appendChild(arrow);
+
+            var img = document.createElement("div");
+            img.className = "kotlin-file-icon";
+            fileProblemsHeader.appendChild(img);
+
+            var fileName = document.createElement("span");
+            fileName.innerHTML = file.name;
+            fileProblemsHeader.appendChild(fileName);
+            $(fileProblemsHeader).click(function () {
+                if ($(this).next().is(':hidden')) {
+                    $(this).next().show();
+                    this.className = "problemsView-expanded-filename-header";
+                } else {
+                    $(this).next().hide();
+                    this.className = "problemsView-filename-header";
+                }
+            });
+            fileProblemsDiv.appendChild(fileProblemsHeader);
+
+            var fileProblemsContent = document.createElement("div");
+            fileProblemsContent.id = file.name.replace(/ /g, "_") + "_problems_content";
+            fileProblemsDiv.appendChild(fileProblemsContent);
+
+            console.appendChild(fileProblemsDiv)
+        }
+    }
+
+    function addMessagesToProblemsView() {
         if (tabs != null) {
             tabs.tabs("option", "active", 0);
         }
-        var i = 0;
 
-        function processError(i, f) {
-            if (data[i] == undefined) {
-                return;
-            }
-
-            var title = unEscapeString(data[i].titleName);
-            var start = eval('(' + data[i].x + ')');
-            var severity = data[i].severity;
-
-            var problem = createElementForProblemsView(severity, start, title);
-            console.appendChild(problem);
-            i++;
-
-            setTimeout(function (i) {
-                return function () {
-                    f(i, processError);
+        var example = accordion.getSelectedExample();
+        for(var i = 0; i < example.getFiles().length; i++){
+            var file = example.getFiles()[i];
+            if(file.errors.length > 0) {
+                document.getElementById(file.name.replace(/ /g, "_") + "_problems").style.display = "block";
+                var fileErrors = document.getElementById(file.name.replace(/ /g, "_") + "_problems_content");
+                fileErrors.innerHTML = "";
+                for (var j = 0; j < file.errors.length; j++) {
+                    var error = file.errors[j];
+                    error.message = unEscapeString(error.message);
+                    var problem = createElementForProblemsView(error);
+                    fileErrors.appendChild(problem);
                 }
-            }(i), 10);
+            } else{
+                document.getElementById(file.name.replace(/ /g, "_") + "_problems").style.display = "none";
+            }
         }
-
-        processError(i, processError);
     }
 
-    function makeCodeReference(lineNo, charNo) {
-        var codeReference = document.createElement("a");
-        codeReference.href = "#";
-        var id = "error_" + lineNo + "_" + charNo;
-        codeReference.id = id;
-        codeReference.innerHTML = (lineNo + 1) + "," + (charNo + 1);
-        $(document).on('click', "#" + id, function () {
-            editor.setCursor(lineNo, charNo);
-            editor.focus();
-        });
-
-        return codeReference
-    }
-
-    function createElementForProblemsView(severity, start, title) {
+    function createElementForProblemsView(problem) {
         var p = document.createElement("p");
         var img = document.createElement("div");
-        if (severity == 'WARNING') {
+        if (problem.severity == 'WARNING') {
             img.className = "problemsViewWarningImg";
-            if (title.indexOf("is never used") > 0) {
-                p.className = "problemsViewWarningNeverUsed";
-            } else {
-                p.className = "problemsViewWarning";
-            }
-
-        } else if (severity == 'STACKTRACE') {
+            p.className = "problemsViewWarning";
+        } else if (problem.severity == 'STACKTRACE') {
             p.className = "problemsViewStacktrace";
         } else {
             img.className = "problemsViewErrorImg";
             p.className = "problemsViewError";
         }
         p.appendChild(img);
+
+
+        var typeStr;
+        if(problem.severity == "ERROR") {
+            typeStr = "Error";
+        }else if (problem.severity == "WARNING"){
+            typeStr = "Warning";
+        }else if(problem.severity == "INFO"){
+            typeStr = "Info";
+        }
         var titleDiv = document.createElement("span");
-        if (start == null) {
-            titleDiv.innerHTML = " " + unEscapeString(title);
+        if (problem.interval.start == null) {
+            titleDiv.innerHTML = typeStr + ": " + problem.message;
         } else {
             var span = document.createElement("span");
-            span.innerHTML = "(";
-            p.appendChild(span);
+            var pos = problem.interval.start;
 
-            p.appendChild(makeCodeReference(start.line, start.ch));
-
-            titleDiv.innerHTML = "): " + unEscapeString(title);
+            titleDiv.innerHTML = typeStr + ":(" + pos.line + "," + pos.ch + ") " + problem.message;
         }
+
         p.appendChild(titleDiv);
+        $(p).click((function(){
+            function click() {
+                editor.setCursor(pos.line, pos.ch);
+                editor.focus();
+            }
+            return click;
+        })(problem.interval.start));
         return p;
     }
 

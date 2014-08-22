@@ -3,7 +3,7 @@
     "files": [
         {
             "filename": "Problems/Pairless/Pairless.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         }
     ],
     "args": "",

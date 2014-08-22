@@ -23,13 +23,9 @@
 
 var RunProvider = (function () {
 
-    function RunProvider() {
+    function RunProvider(onSuccess, onFail) {
 
         var instance = {
-            onExecutionFinish: function (data) {
-            },
-            onFail: function (message) {
-            },
             run: function (configuration, programText, args, example) {
                 run(configuration, programText, args, example);
             }
@@ -52,12 +48,12 @@ var RunProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            instance.onExecutionFinish(data);
+                            onSuccess(data);
                         } else {
-                            instance.onFail(data);
+                            onFail(data);
                         }
                     } else {
-                        instance.onFail("Incorrect data format.")
+                        onFail("Incorrect data format.")
                     }
                 },
                 dataType: "json",
@@ -65,7 +61,7 @@ var RunProvider = (function () {
                 data: JSON.stringify(project),
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown);
+                    onFail(textStatus + " : " + errorThrown);
                 }
             });
 
@@ -88,19 +84,19 @@ var RunProvider = (function () {
                             try {
                                 dataJs = eval(data[0].text);
                             } catch (e) {
-                                instance.onFail(e);
+                                onFail(e);
                                 return;
                             }
                             var output = [
                                 {"text": safe_tags_replace(dataJs), "type": "out"},
                                 {"text": data[0].text, "type": "toggle-info"}
                             ];
-                            instance.onExecutionFinish(output);
+                            onSuccess(output);
                         } else {
-                            instance.onFail(data);
+                            onFail(data);
                         }
                     } else {
-                        instance.onFail("Incorrect data format.");
+                        onFail("Incorrect data format.");
                     }
                 },
                 dataType: "json",
@@ -108,7 +104,7 @@ var RunProvider = (function () {
                 data: {text: i, consoleArgs: arguments},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown);
+                    onFail(textStatus + " : " + errorThrown);
                 }
             });
         }

@@ -10,6 +10,7 @@
     <orderEntry type="library" name="kotlin-runtime" level="project" />
     <orderEntry type="library" name="kotlin-compiler" level="project" />
     <orderEntry type="library" name="com.fasterxml.jackson.core:com.springsource.com.fasterxml.jackson.core.jackson-databind:2.0.2" level="project" />
+    <orderEntry type="library" name="kotlin-plugin" level="project" />
   </component>
 </module>
 

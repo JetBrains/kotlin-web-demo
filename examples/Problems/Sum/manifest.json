@@ -3,11 +3,11 @@
     "files": [
         {
             "filename": "Problems/Sum/Sum.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         },
         {
             "filename": "Problems/Sum/Test.kt",
-            "type": "TEST_FILE"
+            "modifiable": "false"
         }
     ],
     "testClasses":["sum.TestSum"],

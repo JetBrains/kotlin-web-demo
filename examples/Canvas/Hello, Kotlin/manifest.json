@@ -2,7 +2,7 @@
     "name": "Hello, Kotlin",
     "files": [
         {
-            "type": "SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Canvas/Hello, Kotlin/Hello, Kotlin.kt"
         }
     ],

@@ -2,7 +2,7 @@
     "name": "Creatures",
     "files": [
         {
-            "type": "SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Canvas/Creatures/Creatures.kt"
         }
     ],

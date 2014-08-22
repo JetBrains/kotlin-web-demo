@@ -3,7 +3,7 @@
     "files": [
         {
             "filename": "Hello, world!/An object-oriented Hello/An object-oriented Hello.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         }
     ],
     "args": "guest1",

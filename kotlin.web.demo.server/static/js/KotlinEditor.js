@@ -30,9 +30,6 @@ var KotlinEditor = (function () {
         var openedElement = null;
         var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.type.JAVA);
 
-        var completionProvider = new CompletionFromServer();
-        var highlightingProvider;
-
         var CompletionObject = (function () {
             var keywords;
             var isContinueComplete = false;
@@ -301,6 +298,9 @@ var KotlinEditor = (function () {
                     },
                     updateHighlighting: function () {
                         updateHighlighting()
+                    },
+                    removeStyles: function(){
+                        removeStyles()
                     }
                 };
 
@@ -472,9 +472,6 @@ var KotlinEditor = (function () {
             setConfiguration: function (conf) {
                 configuration = conf;
             },
-            setHighlighterDecorator: function (decorator) {
-                highlightingProvider = decorator;
-            },
             getProgramText: function () {
                 return my_editor.getValue();
             },
@@ -495,10 +492,11 @@ var KotlinEditor = (function () {
                 if (openedElement != null) {
                     openedElement.content = my_editor.getValue();
                 }
+                highlighting.removeStyles();
                 openedElement = element;
-                highlighting.updateHighlighting();
 
-                if (element.type == "TEST_FILE") {
+
+                if (!element.modifiable) {
                     my_editor.setOption("readOnly", "nocursor");
                 } else {
                     my_editor.setOption("readOnly", false);
@@ -507,6 +505,7 @@ var KotlinEditor = (function () {
                 my_editor.focus();
                 my_editor.setValue(element.content);
                 isEditorContentChanged = false;
+                highlighting.updateHighlighting();
             },
             updateHighlighting: function () {
                 highlighting.updateHighlighting();
@@ -525,15 +524,6 @@ var KotlinEditor = (function () {
                 my_editor.focus();
                 my_editor.setValue(text);
                 isEditorContentChanged = false;
-            },
-            clearMarkers: function () {
-                for (var i = 0; i < my_editor.lineCount(); i++) {
-                    try {
-                        my_editor.clearMarker(i);
-                    } catch (e) {
-                        //Absent marker for line
-                    }
-                }
             },
             onCursorActivity: function (cursorPosition) {
             },
@@ -581,10 +571,11 @@ var KotlinEditor = (function () {
         function getHighlighting() {
             if (configuration.mode.name != Configuration.mode.ONRUN.name) {
                 instance.save();
+                var example = accordion.getSelectedExample();
                 highlightingProvider.getHighlighting(
                     configuration.type,
-                    accordion.getSelectedExample().getModifiableContent(),
-                    instance.addMarkers
+                    example.getModifiableContent(),
+                    highlighting.updateHighlighting
                 );
             }
 

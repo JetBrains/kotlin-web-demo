@@ -21,22 +21,14 @@
  * Time: 1:56 PM
  */
 
-var CompletionFromServer = (function () {
+var CompletionProvider = (function () {
 
-    function CompletionFromServer() {
+    function CompletionProvider(onSuccess, onFail) {
 
         var instance = {
             getCompletion: function (confType, project, filename, cursorLine, cursorCh) {
                 var confTypeString = Configuration.getStringFromType(confType);
                 getCompletion(confTypeString, project, filename, cursorLine, cursorCh);
-            },
-            onLoadCompletion:function (completionObject) {
-                editor.showCompletionResult(completionObject);
-                statusBarView.html(ActionStatusMessages.get_completion_ok);
-            },
-            onFail: function (error) {
-            consoleView.writeException(error);
-            statusBarView.html(ActionStatusMessages.get_completion_fail);
             }
         };
 
@@ -52,12 +44,12 @@ var CompletionFromServer = (function () {
                         isLoadingCompletion = false;
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                instance.onLoadCompletion(data);
+                                onSuccess(data);
                             } else {
-                                instance.onFail(data);
+                                onFail(data);
                             }
                         } else {
-                            instance.onFail("Incorrect data format.");
+                            onFail("Incorrect data format.");
                         }
                     },
                     dataType: "json",
@@ -66,7 +58,7 @@ var CompletionFromServer = (function () {
                     timeout: 10000,
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingCompletion = false;
-                        instance.onFail(textStatus + " : " + errorThrown);
+                        onFail(textStatus + " : " + errorThrown);
                     }
                 });
             }
@@ -76,5 +68,5 @@ var CompletionFromServer = (function () {
     }
 
 
-    return CompletionFromServer;
+    return CompletionProvider;
 })();

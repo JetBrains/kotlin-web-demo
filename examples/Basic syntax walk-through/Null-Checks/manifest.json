@@ -2,7 +2,7 @@
     "name": "Null-checks",
     "files": [
         {
-            "type":"SOURCE_FILE",
+            "modifiable": "true",
             "filename" : "Basic syntax walk-through/Null-checks/Null-checks.kt"
         }
     ],

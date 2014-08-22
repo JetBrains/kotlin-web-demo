@@ -40,25 +40,6 @@ public class ExampleObject {
     @NotNull
     public String[] testClasses;
     @NotNull
-    public List<ExampleFile> modifiableFiles;
-    @NotNull
-    public List<ExampleFile> unmodifiableFiles;
-
-
-
-
-    public ExampleObject(@JsonProperty("files") ExampleFile [] files){
-        if(files != null) {
-            unmodifiableFiles = new ArrayList<>();
-            modifiableFiles = new ArrayList<>();
-            for (ExampleFile file : files) {
-                if (file.type.equals(ExampleFile.Type.TEST_FILE)) {
-                    unmodifiableFiles.add(file);
-                } else {
-                    modifiableFiles.add(file);
-                }
-            }
-        }
-    }
+    public List<ExampleFile> files;
 
 }

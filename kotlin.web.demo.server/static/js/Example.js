@@ -22,41 +22,36 @@
 var Example = (function () {
     function Example(exampleContent, element) {
         var content = exampleContent;
-        for(var i = 0; i < content.modifiableFiles.length; i++){
-            content.modifiableFiles[i].errors = []
-        }
-        for(var i = 0; i < content.unmodifiableFiles.length; i++){
-            content.unmodifiableFiles[i].errors = []
+        for(var i = 0; i < content.files.length; i++){
+            content.files[i].errors = []
         }
 
         var selectedFile = null;
 
         var instance = {
-
             select: function () {
+                problemsView.onExampleChange()
                 helpViewForExamples.showHelp(content.help);
-                editor.open(content.modifiableFiles[0]);
+                editor.open(content.files[0]);
                 argumentsView.val(content.args);
-                configurationManager.updateConfiguration(getFirstConfiguration(content.confType));
+                configurationManager.updateConfiguration(content.confType);
             },
             processHighlightingResult: function(data){
-                for(var i = 0; i < content.modifiableFiles.length; i++){
-                    content.modifiableFiles[i].errors = data[content.modifiableFiles[i].name];
-                }
-                for( i = 0; i < content.unmodifiableFiles.length; i++){
-                    content.unmodifiableFiles[i].errors = data[content.unmodifiableFiles[i].name];
+                for(var i = 0; i < content.files.length; i++){
+                    content.files[i].errors = data[content.files[i].name];
                 }
                 editor.updateHighlighting();
             },
             getModifiableContent: function () {
-                var modifiableContent = {
+                return {
                     args: content.args,
                     confType: content.confType,
                     name: content.name,
                     parent: content.parent,
-                    modifiableFiles: content.modifiableFiles
+                    files: content.files.filter(function (file) {
+                        return file.modifiable;
+                    })
                 };
-                return modifiableContent;
             },
             getArguments: function () {
                 return content.args;
@@ -65,24 +60,24 @@ var Example = (function () {
                 return replaceAll(content.parent, " ", "_") + "&name=" + replaceAll(content.name, " ", "_");
             },
             errorsExists: function(){
-                for(var i = 0; i < content.modifiableFiles.length; i++){
-                    var errors = content.modifiableFiles[i].errors;
+                for(var i = 0; i < content.files.length; i++){
+                    var errors = content.files[i].errors;
                     for(var j = 0; j < errors.length; j++){
                         if(errors[j].severity == "ERROR"){
                             return true;
                         }
                     }
                 }
-                for( i = 0; i < content.unmodifiableFiles.length; i++){
-                     errors = content.unmodifiableFiles[i].errors;
-                    for( j = 0; j < errors.length; j++){
-                        if(errors[j].severity == "ERROR"){
-                            return true;
-                        }
-                    }
-                }
                 return false;
+            },
+            save: function(){
+                content.confType = configurationManager.getType();
+                content.args = argumentsView.val();
+            },
+            getFiles: function(){
+                return content.files;
             }
+
         };
 
 
@@ -91,13 +86,23 @@ var Example = (function () {
             exampleContentElement.innerHTML = "";
 
 
-            for (var i = 0; i < content.modifiableFiles.length; i++) {
-                var file = content.modifiableFiles[i];
+            for (var i = 0; i < content.files.length; i++){
+                var file = content.files[i];
+
                 var filenameDiv = document.createElement("div");
                 filenameDiv.id = getFilenameURL(file.name);
                 filenameDiv.className = "example-filename";
 
-                var fileNameSpan = document.createElement("span");
+                var icon = document.createElement("div");
+                if(file.type == "Kotlin"){
+                    icon.className = "kotlin-file-type-default"
+                }
+                filenameDiv.appendChild(icon);
+
+
+
+                var fileNameSpan = document.createElement("div");
+                fileNameSpan.style.paddingLeft = "19px";
                 fileNameSpan.innerHTML = file.name;
                 filenameDiv.appendChild(fileNameSpan);
                 filenameDiv.onclick = (function (file) {
@@ -109,23 +114,6 @@ var Example = (function () {
                 exampleContentElement.appendChild(filenameDiv);
             }
 
-            for (var i = 0; i < content.unmodifiableFiles.length; i++) {
-                var file = content.unmodifiableFiles[i];
-                var filenameDiv = document.createElement("div");
-                filenameDiv.id = getFilenameURL(file.name);
-                filenameDiv.className = "example-filename";
-
-                var fileNameSpan = document.createElement("span");
-                fileNameSpan.innerHTML = file.name;
-                filenameDiv.appendChild(fileNameSpan);
-                filenameDiv.onclick = (function (file) {
-                    return function () {
-                        selectFile(file);
-                    }
-                })(file);
-
-                exampleContentElement.appendChild(filenameDiv);
-            }
         }
 
         updateExampleFiles();
@@ -140,7 +128,7 @@ var Example = (function () {
             editor.open(selectedFile);
         }
 
-        selectFile(content.modifiableFiles[0]);
+        selectFile(content.files[0]);
 
         function getFilenameURL(filename) {
             return instance.getURL() + "&filename=" + filename.replace(/ /g, "_");

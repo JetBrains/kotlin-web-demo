@@ -3,7 +3,7 @@
     "files": [
         {
             "filename": "Hello, world!/Reading a name from the command line/Reading a name from the command line.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         }
     ],
     "args": "guest",

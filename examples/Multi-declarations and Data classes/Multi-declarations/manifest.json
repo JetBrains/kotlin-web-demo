@@ -3,7 +3,7 @@
     "files": [
         {
             "filename": "Multi-declarations and Data classes/Multi-declarations/Multi-declarations.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         }
     ],
     "args": "",

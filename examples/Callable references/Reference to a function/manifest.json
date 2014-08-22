@@ -2,7 +2,7 @@
     "name": "Reference to a function",
     "files": [
         {
-            "type": "SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Callable references/Reference to a function/Reference to a function.kt"
         }
     ],

@@ -2,7 +2,7 @@
     "name": "Lazy property",
     "files": [
         {
-            "type":"SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Delegated properties/Lazy property/Lazy property.kt"
         }
     ],

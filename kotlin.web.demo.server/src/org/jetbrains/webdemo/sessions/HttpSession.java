@@ -191,9 +191,7 @@ public class HttpSession {
     private void sendExecutorResult() {
         try (InputStream inputStream = request.getInputStream()) {
 
-            ExampleObject example = new ObjectMapper().readValue(inputStream, ExampleObject.class);
-            example.unmodifiableFiles = ExamplesList.getExampleObject(example.name, example.parent).unmodifiableFiles;
-            example.testClasses = ExamplesList.getExampleObject(example.name, example.parent).testClasses;
+            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(inputStream, ExampleObject.class));
 
             sessionInfo.setRunConfiguration(example.confType);
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
@@ -217,12 +215,8 @@ public class HttpSession {
     }
 
     private List<PsiFile> createProjectPsiFiles(ExampleObject example){
-        List<PsiFile> ans = new ArrayList<>();
         currentProject= Initializer.INITIALIZER.getEnvironment().getProject();
-
-        ans.addAll(example.modifiableFiles.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.name, file.content)).collect(Collectors.toList()));
-        ans.addAll(example.unmodifiableFiles.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.name, file.content)).collect(Collectors.toList()));
-        return ans;
+        return example.files.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.name, file.content)).collect(Collectors.toList());
     }
 
     private void sendCompletionResult() {
@@ -231,8 +225,8 @@ public class HttpSession {
             String fileName = requestObject.get("filename").textValue();
             int line = requestObject.get("line").asInt();
             int ch = requestObject.get("ch").asInt();
-            ExampleObject example = objectMapper.readValue(requestObject.get("project").traverse(), ExampleObject.class);
-            example.unmodifiableFiles = ExamplesList.getExampleObject(example.name, example.parent).unmodifiableFiles;
+            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(requestObject.get("project").traverse(), ExampleObject.class));
+
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
             sessionInfo.setRunConfiguration(ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
 
@@ -245,8 +239,8 @@ public class HttpSession {
 
     private void sendHighlightingResult() {
         try(InputStream is = request.getInputStream()) {
-            ExampleObject example = objectMapper.readValue(is, ExampleObject.class);
-            example.unmodifiableFiles = ExamplesList.getExampleObject(example.name, example.parent).unmodifiableFiles;
+            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(is, ExampleObject.class));
+
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, currentProject);
             String response = responseForHighlighting.getResult();
@@ -344,6 +338,12 @@ public class HttpSession {
         }
     }
 
+    private ExampleObject addUnmodifiableDataToExample(ExampleObject exampleObject){
+        ExampleObject storedExample = ExamplesList.getExampleObject(exampleObject.name, exampleObject.parent);
+        exampleObject.files.addAll(storedExample.files.stream().filter((file)->!file.modifiable).collect(Collectors.toList()));
+        exampleObject.testClasses = storedExample.testClasses;
+        return exampleObject;
+    }
 
     private class PostData {
         public String text;

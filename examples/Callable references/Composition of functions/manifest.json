@@ -2,7 +2,7 @@
     "name": "Composition of functions",
     "files": [
         {
-            "type": "SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Callable references/Composition of functions/Composition of functions.kt"
         }
     ],

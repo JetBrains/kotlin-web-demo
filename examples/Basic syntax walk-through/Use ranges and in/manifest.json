@@ -2,7 +2,7 @@
     "name": "Use ranges and in",
     "files": [
         {
-            "type": "SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Basic syntax walk-through/Use ranges and in/Use ranges and in.kt"
         }
     ],

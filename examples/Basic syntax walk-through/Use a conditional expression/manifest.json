@@ -2,7 +2,7 @@
     "name": "Use a conditional expression",
     "files": [
         {
-            "type":"SOURCE_FILE",
+            "modifiable": "true",
             "filename":"Basic syntax walk-through/Use a conditional expression/Use a conditional expression.kt"
         }
     ],

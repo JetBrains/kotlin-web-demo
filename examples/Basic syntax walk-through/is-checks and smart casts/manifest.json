@@ -3,7 +3,7 @@
     "files": [
         {
             "filename": "Basic syntax walk-through/is-checks and smart casts/is-checks and smart casts.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         }
     ],
     "args": "",

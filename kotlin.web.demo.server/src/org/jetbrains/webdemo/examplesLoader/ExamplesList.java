@@ -54,7 +54,7 @@ public class ExamplesList {
         return response.toString();
     }
 
-    public static String loadExample(String url){
+    public static String loadExample(String url) {
         url = url.replaceAll("_", " ");
         String folderName = ResponseUtils.getExampleFolderByUrl(url);
         String exampleName = ResponseUtils.getExampleOrProgramNameByUrl(url);
@@ -65,16 +65,22 @@ public class ExamplesList {
         try {
             return objectMapper.writeValueAsString(example);
         } catch (IOException e) {
-            return  "";
+            return "";
         }
     }
-    public static ExampleObject  getExampleObject(String name){
+
+    public static ExampleObject getExampleObject(String name) {
         ExamplesFolder examplesFolder = examplesFolders.get(ResponseUtils.substringBefore(name, "&name="));
         return examplesFolder.examples.get(ResponseUtils.substringAfter(name, "&name="));
     }
-    public static ExampleObject  getExampleObject(String name , String folder){
+
+    public static ExampleObject getExampleObject(String name, String folder) {
         ExamplesFolder examplesFolder = examplesFolders.get(folder.replaceAll("_", " "));
-        return examplesFolder.examples.get(name.replaceAll("_", " "));
+        if(examplesFolder != null) {
+            return examplesFolder.examples.get(name.replaceAll("_", " "));
+        } else{
+            return null;
+        }
     }
 
     public Collection<ExamplesFolder> getList() {

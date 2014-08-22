@@ -36,6 +36,7 @@
 
 .tab-space {
     position: relative;
+    cursor: default;
     font-family: menlo, consolas, monospace;
     white-space: pre;
     height: 185px;
@@ -46,9 +47,13 @@
     border-left-width: 1px;
 }
 
-.result-view{
+.tab-space .scroll{
     overflow: auto;
     height: 100%;
+}
+
+.result-view{
+    padding: 4px;
 }
 
 .result-view a {
@@ -69,13 +74,36 @@
     vertical-align: top;
 }
 
-.problemsViewError {
+.problemsViewError, .problemsViewWarning{
+    padding-left: 25px;
     margin: 0;
     vertical-align: top;
 }
 
-.problemsViewError span {
-    word-wrap: break-word;
+.problemsView-filename-header span, .problemsView-expanded-filename-header span{
+    position: absolute;
+}
+
+.problemsView-filename-header, .problemsView-expanded-filename-header{
+    position: relative;
+}
+
+.problemsView-filename-header .arrow{
+    display: inline-block;
+    float: left;
+    margin-top: 3px;
+    width: 4px;
+    height: 7px;
+    background: url("/static/images/icons.png") -58px -58px;
+}
+
+.problemsView-expanded-filename-header .arrow{
+    display: inline-block;
+    float: left;
+    margin-top: 5px;
+    width: 7px;
+    height: 4px;
+    background: url("/static/images/icons.png") -58px -66px;
 }
 
 .problemsViewErrorImg {
@@ -176,4 +204,12 @@
     height: 14px;
     width: 14px;
     background: url("/static/images/testError.png") no-repeat 0 0;
+}
+
+.kotlin-file-icon{
+    top: 1px;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background: url("/static/images/kotlin_file.png");
 }

@@ -3,7 +3,7 @@
     "files": [
         {
             "filename": "Hello, world!/A multi-language Hello/A multi-language Hello.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         }
     ],
     "args": "FR",

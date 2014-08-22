@@ -57,6 +57,9 @@ var ConfigurationComponent = (function () {
             getConfiguration: function () {
                 return configuration;
             },
+            getType: function () {
+                return Configuration.getStringFromType(configuration.type);
+            },
             // type: String
             updateConfiguration: function (type) {
                 configuration = new Configuration(configuration.mode, Configuration.getTypeFromString(type));

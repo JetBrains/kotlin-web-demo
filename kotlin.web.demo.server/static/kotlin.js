@@ -16,16 +16,16 @@
     return null;
   }
   function k(a, b, c) {
-    for (var d = 0;d < b.length;d++) {
-      if (null == b[d] || null != b[d].$metadata$) {
-        var e = c(b[d]), f;
-        for (f in e) {
-          e.hasOwnProperty(f) && (!a.hasOwnProperty(f) || a[f].$classIndex$ < e[f].$classIndex$) && (a[f] = e[f]);
+    for (var f = 0;f < b.length;f++) {
+      if (null == b[f] || null != b[f].$metadata$) {
+        var d = c(b[f]), e;
+        for (e in d) {
+          d.hasOwnProperty(e) && (!a.hasOwnProperty(e) || a[e].$classIndex$ < d[e].$classIndex$) && (a[e] = d[e]);
         }
       }
     }
   }
-  function f(a, b) {
+  function g(a, b) {
     var c = {};
     c.baseClasses = null == a ? [] : Array.isArray(a) ? a : [a];
     c.baseClass = h(c.baseClasses);
@@ -33,11 +33,11 @@
     c.functions = {};
     c.properties = {};
     if (null != b) {
-      for (var d in b) {
-        if (b.hasOwnProperty(d)) {
-          var e = b[d];
-          e.$classIndex$ = c.classIndex;
-          "function" === typeof e ? c.functions[d] = e : c.properties[d] = e;
+      for (var f in b) {
+        if (b.hasOwnProperty(f)) {
+          var d = b[f];
+          d.$classIndex$ = c.classIndex;
+          "function" === typeof d ? c.functions[f] = d : c.properties[f] = d;
         }
       }
     }
@@ -61,14 +61,14 @@
     if (null != a && null == a.$metadata$ || a.$metadata$.classIndex < b.$metadata$.classIndex) {
       return!1;
     }
-    var d = a.$metadata$.baseClasses, e;
-    for (e = 0;e < d.length;e++) {
-      if (d[e] === b) {
+    var d = a.$metadata$.baseClasses, f;
+    for (f = 0;f < d.length;f++) {
+      if (d[f] === b) {
         return!0;
       }
     }
-    for (e = 0;e < d.length;e++) {
-      if (c(d[e], b)) {
+    for (f = 0;f < d.length;f++) {
+      if (c(d[f], b)) {
         return!0;
       }
     }
@@ -84,7 +84,7 @@
       return a;
     };
   }
-  function l(a) {
+  function m(a) {
     var b = {};
     if (null == a) {
       return b;
@@ -94,7 +94,7 @@
     }
     return b;
   }
-  var m = function() {
+  var l = function() {
     return function() {
     };
   };
@@ -105,10 +105,10 @@
     Kotlin.classCount++;
     return a;
   };
-  Kotlin.createClassNow = function(b, c, d, g) {
-    null == c && (c = m());
-    e(c, g);
-    b = f(b, d);
+  Kotlin.createClassNow = function(b, c, d, f) {
+    null == c && (c = l());
+    e(c, f);
+    b = g(b, d);
     b.type = Kotlin.TYPE.CLASS;
     d = null !== b.baseClass ? Object.create(b.baseClass.prototype) : {};
     Object.defineProperties(d, b.properties);
@@ -126,34 +126,34 @@
     return a;
   };
   Kotlin.createTraitNow = function(b, c, d) {
-    var g = function() {
+    var f = function() {
     };
-    e(g, d);
-    g.$metadata$ = f(b, c);
-    g.$metadata$.type = Kotlin.TYPE.TRAIT;
-    g.prototype = {};
-    Object.defineProperties(g.prototype, g.$metadata$.properties);
-    e(g.prototype, g.$metadata$.functions);
-    Object.defineProperty(g, "object", {get:a, configurable:!0});
-    return g;
-  };
-  Kotlin.createClass = function(a, c, d, e) {
-    function f() {
-      var l = Kotlin.createClassNow(b(a), c, d, e);
-      Object.defineProperty(this, f.className, {value:l});
-      return l;
-    }
-    f.type = Kotlin.TYPE.INIT_FUN;
+    e(f, d);
+    f.$metadata$ = g(b, c);
+    f.$metadata$.type = Kotlin.TYPE.TRAIT;
+    f.prototype = {};
+    Object.defineProperties(f.prototype, f.$metadata$.properties);
+    e(f.prototype, f.$metadata$.functions);
+    Object.defineProperty(f, "object", {get:a, configurable:!0});
     return f;
   };
-  Kotlin.createTrait = function(a, c, d) {
+  Kotlin.createClass = function(a, c, d, f) {
     function e() {
-      var f = Kotlin.createTraitNow(b(a), c, d);
-      Object.defineProperty(this, e.className, {value:f});
-      return f;
+      var g = Kotlin.createClassNow(b(a), c, d, f);
+      Object.defineProperty(this, e.className, {value:g});
+      return g;
     }
     e.type = Kotlin.TYPE.INIT_FUN;
     return e;
+  };
+  Kotlin.createTrait = function(a, c, d) {
+    function f() {
+      var e = Kotlin.createTraitNow(b(a), c, d);
+      Object.defineProperty(this, f.className, {value:e});
+      return e;
+    }
+    f.type = Kotlin.TYPE.INIT_FUN;
+    return f;
   };
   Kotlin.createObject = function(a, c, d) {
     return Kotlin.createObjectNow(b(a), c, d);
@@ -167,14 +167,62 @@
   Kotlin.isType = function(a, b) {
     return null == a || null == b ? !1 : a instanceof b ? !0 : null != b && null == b.$metadata$ || b.$metadata$.type == Kotlin.TYPE.CLASS ? !1 : c(a.constructor, b);
   };
+  Kotlin.getCallableRefForMemberFunction = function(a, b) {
+    return function() {
+      return this[b].apply(this, arguments);
+    };
+  };
+  Kotlin.getCallableRefForExtensionFunction = function(a) {
+    return function() {
+      var b = [this];
+      Array.prototype.push.apply(b, arguments);
+      return a.apply(null, b);
+    };
+  };
+  Kotlin.getCallableRefForConstructor = function(a) {
+    return function() {
+      var b = Object.create(a.prototype);
+      a.apply(b, arguments);
+      return b;
+    };
+  };
+  Kotlin.getCallableRefForTopLevelProperty = function(a, b, c) {
+    var d = {};
+    d.name = b;
+    d.get = function() {
+      return a[b];
+    };
+    c && (d.set_za3rmp$ = function(c) {
+      a[b] = c;
+    });
+    return d;
+  };
+  Kotlin.getCallableRefForMemberProperty = function(a, b) {
+    var c = {};
+    c.name = a;
+    c.get_za3rmp$ = function(b) {
+      return b[a];
+    };
+    b && (c.set_wn2jw4$ = function(b, c) {
+      b[a] = c;
+    });
+    return c;
+  };
+  Kotlin.getCallableRefForExtensionProperty = function(a, b, c) {
+    var d = {};
+    d.name = a;
+    d.get_za3rmp$ = b;
+    void 0 !== c && (d.set_wn2jw4$ = c);
+    return d;
+  };
   Kotlin.modules = {};
   Kotlin.definePackage = function(a, b) {
-    var c = l(b);
+    var c = m(b);
     return null === a ? {value:c} : {get:d(c, a)};
   };
   Kotlin.defineRootPackage = function(a, b) {
-    var c = l(b);
-    c.$initializer$ = null === a ? m() : a;
+    var c = m(b);
+    c.$initializer$ = null === a ? l() : a;
     return c;
   };
   Kotlin.defineModule = function(a, b) {
@@ -287,13 +335,13 @@
       return this.values$;
     }
     Kotlin.createEnumEntries = function(c) {
-      var d = 0, e = [], f;
-      for (f in c) {
-        if (c.hasOwnProperty(f)) {
-          var h = c[f];
+      var d = 0, e = [], g;
+      for (g in c) {
+        if (c.hasOwnProperty(g)) {
+          var h = c[g];
           e[d] = h;
           h.ordinal$ = d;
-          h.name$ = f;
+          h.name$ = g;
           d++;
         }
       }
@@ -495,11 +543,11 @@
     return 0 < this.increment ? this.start > this.end : this.start < this.end;
   }});
   Kotlin.Comparator = Kotlin.createClassNow(null, null, {compare:e("Comparator#compare")});
-  var f = Kotlin.createClassNow(Kotlin.Comparator, function(a) {
+  var g = Kotlin.createClassNow(Kotlin.Comparator, function(a) {
     this.compare = a;
   });
   Kotlin.comparator = function(a) {
-    return new f(a);
+    return new g(a);
   };
   Kotlin.collectionsMax = function(a, b) {
     if (a.isEmpty()) {
@@ -621,7 +669,7 @@
       return Object.prototype.toString.call(a);
     }
   }
-  function f(a, b) {
+  function g(a, b) {
     return a.equals_za3rmp$(b);
   }
   function a(a, b) {
@@ -644,7 +692,7 @@
               return!0;
             case r:
               return d;
-            case g:
+            case f:
               return[c, d[1]];
           }
         }
@@ -659,11 +707,11 @@
       }
     };
   }
-  function l(a, c) {
+  function m(a, c) {
     var d = a[c];
     return d && d instanceof b ? d : null;
   }
-  function m() {
+  function l() {
     Kotlin.ComplexHashMap.call(this);
     this.orderedKeys = [];
     this.super_put_wn2jw4$ = this.put_wn2jw4$;
@@ -717,10 +765,10 @@
         a[b + d] = c[d];
       }
     }
-  }, n = 0, r = 1, g = 2;
+  }, n = 0, r = 1, f = 2;
   b.prototype = {getEqualityFunction:function(b) {
-    return null != b && "function" == typeof b.equals_za3rmp$ ? f : a;
-  }, getEntryForKey:c(r), getEntryAndIndexForKey:c(g), removeEntryForKey:function(a) {
+    return null != b && "function" == typeof b.equals_za3rmp$ ? g : a;
+  }, getEntryForKey:c(r), getEntryAndIndexForKey:c(f), removeEntryForKey:function(a) {
     return(a = this.getEntryAndIndexForKey(a)) ? (q(this.entries, a[0]), a) : null;
   }, addEntry:function(a, b) {
     this.entries[this.entries.length] = [a, b];
@@ -737,15 +785,15 @@
     return!1;
   }};
   var s = function(a, c) {
-    var d = this, f = [], g = {}, m = "function" == typeof a ? a : k, n = "function" == typeof c ? c : null;
+    var d = this, f = [], g = {}, l = "function" == typeof a ? a : k, n = "function" == typeof c ? c : null;
     this.put_wn2jw4$ = function(a, c) {
-      var d = m(a), e, t = null;
-      (e = l(g, d)) ? (d = e.getEntryForKey(a)) ? (t = d[1], d[1] = c) : e.addEntry(a, c) : (e = new b(d, a, c, n), f[f.length] = e, g[d] = e);
+      var d = l(a), e, t = null;
+      (e = m(g, d)) ? (d = e.getEntryForKey(a)) ? (t = d[1], d[1] = c) : e.addEntry(a, c) : (e = new b(d, a, c, n), f[f.length] = e, g[d] = e);
       return t;
     };
     this.get_za3rmp$ = function(a) {
-      var b = m(a);
-      if (b = l(g, b)) {
+      var b = l(a);
+      if (b = m(g, b)) {
         if (a = b.getEntryForKey(a)) {
           return a[1];
         }
@@ -753,8 +801,8 @@
       return null;
     };
     this.containsKey_za3rmp$ = function(a) {
-      var b = m(a);
-      return(b = l(g, b)) ? b.containsKey_za3rmp$(a) : !1;
+      var b = l(a);
+      return(b = m(g, b)) ? b.containsKey_za3rmp$(a) : !1;
     };
     this.containsValue_za3rmp$ = function(a) {
       for (var b = f.length;b--;) {
@@ -789,7 +837,7 @@
       return c;
     };
     this.remove_za3rmp$ = function(a) {
-      var b = m(a), c = null, d = null, e = l(g, b);
+      var b = l(a), c = null, d = null, e = m(g, b);
       if (e && (d = e.removeEntryForKey(a), null !== d && (c = d[1], !e.entries.length))) {
         a: {
           for (a = f.length;a--;) {
@@ -907,8 +955,8 @@
   }, toJSON:function() {
     return this.map;
   }});
-  m.prototype = Object.create(Kotlin.ComplexHashMap);
-  Kotlin.LinkedHashMap = m;
+  l.prototype = Object.create(Kotlin.ComplexHashMap);
+  Kotlin.LinkedHashMap = l;
   Kotlin.LinkedHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, function() {
     this.map = new Kotlin.LinkedHashMap;
   }, {size:function() {
@@ -966,38 +1014,38 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
 }});
 (function() {
   function e(h, k) {
-    var f = new Kotlin.HashTable(h, k);
+    var g = new Kotlin.HashTable(h, k);
     this.addAll_xeylzf$ = Kotlin.AbstractCollection.prototype.addAll_xeylzf$;
     this.removeAll_xeylzf$ = Kotlin.AbstractCollection.prototype.removeAll_xeylzf$;
     this.retainAll_xeylzf$ = Kotlin.AbstractCollection.prototype.retainAll_xeylzf$;
     this.containsAll_xeylzf$ = Kotlin.AbstractCollection.prototype.containsAll_xeylzf$;
     this.add_za3rmp$ = function(a) {
-      return!f.put_wn2jw4$(a, !0);
+      return!g.put_wn2jw4$(a, !0);
     };
     this.toArray = function() {
-      return f._keys();
+      return g._keys();
     };
     this.iterator = function() {
       return new SetIterator(this);
     };
     this.remove_za3rmp$ = function(a) {
-      return null != f.remove_za3rmp$(a);
+      return null != g.remove_za3rmp$(a);
     };
     this.contains_za3rmp$ = function(a) {
-      return f.containsKey_za3rmp$(a);
+      return g.containsKey_za3rmp$(a);
     };
     this.clear = function() {
-      f.clear();
+      g.clear();
     };
     this.size = function() {
-      return f.size();
+      return g.size();
     };
     this.isEmpty = function() {
-      return f.isEmpty();
+      return g.isEmpty();
     };
     this.clone = function() {
       var a = new e(h, k);
-      a.addAll_xeylzf$(f.keys());
+      a.addAll_xeylzf$(g.keys());
       return a;
     };
     this.equals_za3rmp$ = function(a) {
@@ -1032,7 +1080,7 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
       var b = new e(h, k);
       a = a.values();
       for (var c = a.length, d;c--;) {
-        d = a[c], f.containsKey_za3rmp$(d) && b.add_za3rmp$(d);
+        d = a[c], g.containsKey_za3rmp$(d) && b.add_za3rmp$(d);
       }
       return b;
     };
@@ -1040,12 +1088,12 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
       var b = this.clone();
       a = a.values();
       for (var c = a.length, d;c--;) {
-        d = a[c], f.containsKey_za3rmp$(d) || b.add_za3rmp$(d);
+        d = a[c], g.containsKey_za3rmp$(d) || b.add_za3rmp$(d);
       }
       return b;
     };
     this.isSubsetOf = function(a) {
-      for (var b = f.keys(), c = b.length;c--;) {
+      for (var b = g.keys(), c = b.length;c--;) {
         if (!a.contains_za3rmp$(b[c])) {
           return!1;
         }

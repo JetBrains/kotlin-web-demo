@@ -3,7 +3,7 @@
     "files": [
         {
             "filename": "Problems/Index of Maximum/Index of Maximum.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         }
     ],
     "args": "",

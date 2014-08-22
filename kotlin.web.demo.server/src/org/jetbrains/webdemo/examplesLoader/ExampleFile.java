@@ -19,9 +19,13 @@ package org.jetbrains.webdemo.examplesLoader;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.intellij.psi.PsiFile;
+import org.jetbrains.webdemo.Initializer;
+import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,17 +41,12 @@ import java.util.List;
 public class ExampleFile {
 
 
-    public enum Type {
-        DATA_FILE,
-        TEST_FILE,
-        SOURCE_FILE
-    }
-
-    public Type type;
-
+    public Boolean modifiable;
     public String content;
-
     public String name;
+    public String type;
+
+    private PsiFile psiFile;
 
     @JsonCreator
     public ExampleFile(@JsonProperty("filename") String filename) throws IOException {
@@ -57,6 +56,15 @@ public class ExampleFile {
                 name = path.getFileName().toString();
             }
             content = new String(Files.readAllBytes(path)).replaceAll(System.lineSeparator(), "\n");
+            psiFile = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), filename, content);
+            type = psiFile.getFileType().getDescription();
         }
+
+    }
+
+    public enum Type {
+        DATA_FILE,
+        TEST_FILE,
+        SOURCE_FILE
     }
 }

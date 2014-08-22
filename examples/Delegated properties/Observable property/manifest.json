@@ -2,7 +2,7 @@
     "name": "Observable property",
     "files": [
         {
-            "type":"SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Delegated properties/Observable property/Observable property.kt"
         }
     ],

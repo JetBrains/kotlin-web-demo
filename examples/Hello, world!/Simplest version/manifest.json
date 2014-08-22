@@ -3,7 +3,7 @@
     "files": [
         {
             "filename": "Hello, world!/Simplest version/Simplest version.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         }
     ],
     "args": "",

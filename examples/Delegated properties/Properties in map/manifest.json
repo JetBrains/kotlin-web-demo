@@ -2,7 +2,7 @@
     "name": "Properties in map",
     "files": [
         {
-            "type":"SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Delegated properties/Properties in map/Properties in map.kt"
         }
     ],

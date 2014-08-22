@@ -2,7 +2,7 @@
     "name": "Use when",
     "files": [
         {
-            "type": "SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Basic syntax walk-through/Use when/Use when.kt"
         }
     ],

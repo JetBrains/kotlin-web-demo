@@ -61,7 +61,7 @@ public class ResolveUtils {
                 files,
                 sharedTrace,
                 Predicates.<PsiFile>alwaysTrue(),
-                support.getModule(),
+                support.newModule(),
                 null,
                 null
         );

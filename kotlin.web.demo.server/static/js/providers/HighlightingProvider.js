@@ -26,25 +26,14 @@
  write_exception
  */
 
-var HighlightingFromServer = (function () {
+var HighlichtingProvider = (function () {
 
-    function HighlightingFromServer() {
+    function HighlightingFromServer(onSuccess, onFail) {
 
         var instance = {
             getHighlighting: function (confType, project, callback) {
                 var confTypeString = Configuration.getStringFromType(confType);
                 getHighlighting(confTypeString, project, callback);
-            },
-            onHighlight: function (data, callback) {
-                problemsView.addMessages(data);
-                statusBarView.html(ActionStatusMessages.get_highlighting_ok);
-                callback(data);
-            },
-
-            onFail: function (error) {
-                run_button.button("option", "disabled", false);
-                consoleView.writeException(error);
-                statusBarView.html(ActionStatusMessages.get_highlighting_fail);
             }
         };
 
@@ -60,12 +49,12 @@ var HighlightingFromServer = (function () {
                         isLoadingHighlighting = false;
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                instance.onHighlight(data, callback);
+                                onSuccess(data, callback);
                             } else {
-                                instance.onFail(data);
+                                onFail(data);
                             }
                         } else {
-                            instance.onFail("Incorrect data format.");
+                            onFail("Incorrect data format.");
                         }
                     },
                     dataType: "json",
@@ -74,7 +63,7 @@ var HighlightingFromServer = (function () {
                     timeout: 10000,
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingHighlighting = false;
-                        instance.onFail(textStatus + " : " + errorThrown);
+                        onFail(textStatus + " : " + errorThrown);
                     }
                 });
             }

@@ -23,15 +23,11 @@
 
 var ConverterProvider = (function () {
 
-    function ConverterProvider() {
+    function ConverterProvider( onSuccess, onFail) {
 
         var instance = {
             convert: function (text) {
                 convert(text);
-            },
-            onConvert: function (text) {
-            },
-            onFail: function (error) {
             }
         };
 
@@ -42,12 +38,12 @@ var ConverterProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            instance.onConvert(data[0].text);
+                            onSuccess(data[0].text);
                         } else {
-                            instance.onFail(data);
+                            onFail(data);
                         }
                     } else {
-                        instance.onFail("Incorrect data format.");
+                        onFail("Incorrect data format.");
                     }
                 },
                 dataType: "json",
@@ -55,7 +51,7 @@ var ConverterProvider = (function () {
                 data: {text: text},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown);
+                    onFail(textStatus + " : " + errorThrown);
                 }
             });
         }

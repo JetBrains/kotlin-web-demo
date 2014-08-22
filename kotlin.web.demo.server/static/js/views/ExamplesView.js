@@ -43,7 +43,7 @@ var ExamplesView = (function () {
                 loadAllContent();
             },
             loadExample: function (url) {
-                loadExample(url);
+                model.loadExample(url);
             },
             onAllExamplesLoaded: function () {
             },
@@ -63,8 +63,7 @@ var ExamplesView = (function () {
         function onLoadExample(exampleContent) {
             var example = new Example(exampleContent);
             downloadedExamples[example.getURL()] = example;
-            selectedExample = example;
-            example.select();
+            showExample(example.getURL());
         }
 
 
@@ -85,9 +84,6 @@ var ExamplesView = (function () {
                 i++;
             }
 
-            $(cont).accordion({heightStyle: "content",
-                navigation: true});
-
             acc.append(cont);
         }
 
@@ -95,9 +91,9 @@ var ExamplesView = (function () {
             var file = document.createElement("h4");
             file.className = "examples-project-name";
             var img = document.createElement("div");
-            img.className = "right-arrow";
+            img.className = "arrow";
             file.appendChild(img);
-            file.id = "bullet" + replaceAll(name, " ", "_");
+            file.id = createExampleUrl(name, folder) + "_header";
 
 
             var nameSpan = document.createElement("span");
@@ -105,7 +101,11 @@ var ExamplesView = (function () {
             nameSpan.className = "file-name-span";
             nameSpan.style.cursor = "pointer";
             nameSpan.onclick = function () {
-                loadExample(this.id);
+                if (downloadedExamples[this.id] == undefined) {
+                    model.loadExample(this.id);
+                } else {
+                    showExample(this.id)
+                }
             };
             nameSpan.innerHTML = name;
 
@@ -127,14 +127,28 @@ var ExamplesView = (function () {
             }
         }
 
-        function loadExample(url) {
-
-
-            if (downloadedExamples[url] == undefined) {
-                model.loadExample(url);
-            } else {
+        function showExample(url) {
+            if (downloadedExamples[url] != selectedExample) {
+                if(selectedExample != null) {
+                    selectedExample.save();
+                    var element = document.getElementById(selectedExample.getURL() + "_header");
+                    element.className = "examples-project-name";
+                    $(element).next().slideUp();
+                }
                 selectedExample = downloadedExamples[url];
+                element = document.getElementById(selectedExample.getURL() + "_header");
+                element.className = "expanded-project-name";
+                $(element).next().slideDown();
                 selectedExample.select();
+            } else {
+                var element = document.getElementById(selectedExample.getURL() + "_header");
+                if (element.className.indexOf("expanded-project-name") > -1) {
+                    element.className = "current-project-name";
+                    $(element).next().slideUp()
+                } else {
+                    element.className = "expanded-project-name";
+                    $(element).next().slideDown()
+                }
             }
 
 //            $("span[id='" + ExamplesView.getLastSelectedItem() + "']").parent().attr("class", "selected-example");

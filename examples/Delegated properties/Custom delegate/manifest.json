@@ -2,7 +2,7 @@
     "name": "Custom delegate",
     "files": [
         {
-            "type":"SOURCE_FILE",
+            "modifiable": "true",
             "filename": "Delegated properties/Custom delegate/Custom delegate.kt"
         }
     ],

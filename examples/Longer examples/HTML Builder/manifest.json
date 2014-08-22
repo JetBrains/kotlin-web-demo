@@ -3,7 +3,7 @@
     "files": [
         {
             "filename": "Longer examples/HTML Builder/HTML Builder.kt",
-            "type": "SOURCE_FILE"
+            "modifiable": "true"
         }
     ],
     "args": "",
