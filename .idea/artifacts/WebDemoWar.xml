@@ -21,7 +21,6 @@
           <element id="library" level="project" name="kotlin-j2kConverter" />
           <element id="library" level="project" name="com.fasterxml.jackson.core:com.springsource.com.fasterxml.jackson.core.jackson-databind:2.0.2" />
           <element id="library" level="project" name="junit" />
-          <element id="library" level="project" name="kotlin-plugin" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />
