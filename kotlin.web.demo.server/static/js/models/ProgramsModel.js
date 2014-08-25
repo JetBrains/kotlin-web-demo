@@ -123,6 +123,19 @@ var ProgramsModel = (function () {
                     }
                 });
             },
+            addNewProject: function(name){
+                $.ajax({
+                    url: generateAjaxUrl("addProject", name),
+                    success: function(){
+                        accordion.addNewProject(name);
+                    },
+                    type: "POST",
+                    timeout: 10000,
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    }
+                })
+            },
             onLoadProgram: function (data) {
             },
             onGeneratePublicLink: function (data) {

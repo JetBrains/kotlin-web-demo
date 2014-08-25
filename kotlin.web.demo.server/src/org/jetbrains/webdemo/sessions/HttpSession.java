@@ -94,6 +94,8 @@ public class HttpSession {
                 sendConversationResult();
             } else if (parameters.compareType("saveProgram")) {
                 sendSaveProgramResult();
+            } else if(parameters.compareType("addProject")){
+                MySqlConnector.getInstance().addExample(sessionInfo.getUserInfo(), parameters.getArgs());
             } else if (parameters.compareType("loadProgram")) {
                 sendLoadProgramResult();
             } else if (parameters.compareType("deleteProgram")) {

@@ -195,41 +195,51 @@ var ProgramsView = (function () {
             var i = 0;
             var cont = document.getElementById("myprogramscontent");
             while (data[i] != undefined) {
-                $("#myprogramscontent").append(createProgramListElement(createExampleUrl(data[i].id, "My Programs"), replaceAll(data[i].name, "%20", " "), data[i].confType));
+                createProgramListElement(data[i]);
                 i++;
             }
             instance.onAllProgramsLoaded();
         }
 
-        function createProgramListElement(id, name, confType) {
-            var file = document.createElement("div");
-            file.className = "examples-file-name";
-            var img = document.createElement("div");
-            img.className = "right-arrow";
-            file.appendChild(img);
-            file.id = "bullet" + id;
+        function createProgramListElement(projectData) {
+            var project = document.createElement("h2");
+            project.className = "examples-project-name";
+            project.id = "&name=" + projectData.name.replace(/ /g, "_");
+            project.innerHTML = projectData.name;
 
-            var name_div = document.createElement("div");
-            var name_span = document.createElement("span");
-            name_span.id = id;
-            name_span.style.cursor = "pointer";
-            name_span.onclick = function () {
-                loadProgram(this.id);
-            };
-            name_span.innerHTML = name;
-            name_span.className = "file-name-span";
-
-            var deleteImg = document.createElement("div");
-            deleteImg.className = "delete-img";
-            deleteImg.title = "Delete this program";
-            deleteImg.onclick = function () {
-                deleteProgram(this.parentNode.childNodes[1].id);
-            };
-
-            name_div.appendChild(deleteImg);
-            name_div.appendChild(name_span);
-            file.appendChild(name_div);
-            return file;
+            var projectContent = document.createElement("div");
+            projectContent.id = "&name=" + projectData.name.replace(/ /g, "_") + "_content";
+            $(project).append(projectContent);
+            $("#myprogramscontent").append(project);
+            new Example(projectData);
+//            var file = document.createElement("div");
+//            file.className = "examples-file-name";
+//            var img = document.createElement("div");
+//            img.className = "right-arrow";
+//            file.appendChild(img);
+//            file.id = "bullet" + id;
+//
+//            var name_div = document.createElement("div");
+//            var name_span = document.createElement("span");
+//            name_span.id = id;
+//            name_span.style.cursor = "pointer";
+//            name_span.onclick = function () {
+//                loadProgram(this.id);
+//            };
+//            name_span.innerHTML = name;
+//            name_span.className = "file-name-span";
+//
+//            var deleteImg = document.createElement("div");
+//            deleteImg.className = "delete-img";
+//            deleteImg.title = "Delete this program";
+//            deleteImg.onclick = function () {
+//                deleteProgram(this.parentNode.childNodes[1].id);
+//            };
+//
+//            name_div.appendChild(deleteImg);
+//            name_div.appendChild(name_span);
+//            file.appendChild(name_div);
+//            return file;
         }
 
         function deleteProgram(name) {

@@ -50,7 +50,7 @@ public class ExampleFile {
 
     @JsonCreator
     public ExampleFile(@JsonProperty("filename") String filename) throws IOException {
-        if(filename != null) {
+        if (filename != null) {
             Path path = Paths.get(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + filename);
             if (name == null) {
                 name = path.getFileName().toString();
@@ -60,6 +60,11 @@ public class ExampleFile {
             type = psiFile.getFileType().getDescription();
         }
 
+    }
+
+    public ExampleFile(String name, String content) {
+        this.name = name;
+        this.content = content;
     }
 
     public enum Type {

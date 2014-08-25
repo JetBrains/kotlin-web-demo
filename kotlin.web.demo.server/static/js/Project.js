@@ -30,7 +30,7 @@ var Example = (function () {
 
         var instance = {
             select: function () {
-                problemsView.onExampleChange()
+                problemsView.onExampleChange();
                 helpViewForExamples.showHelp(content.help);
                 editor.open(content.files[0]);
                 argumentsView.val(content.args);

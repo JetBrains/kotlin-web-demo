@@ -36,6 +36,10 @@ public class ExamplesFolder {
     @JsonIgnore public Map<String, ExampleObject> examples = new HashMap<>();
     private String path;
 
+    public ExamplesFolder(String name){
+        this.name =name;
+    }
+
     @JsonCreator
     ExamplesFolder(@JsonProperty("folder") String folderName, @JsonProperty("examples") String[] exampleNames) {
         path = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName;

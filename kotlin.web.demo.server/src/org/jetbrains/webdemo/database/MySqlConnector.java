@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.database;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,6 +24,9 @@ import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.examplesLoader.ExampleFile;
+import org.jetbrains.webdemo.examplesLoader.ExampleObject;
+import org.jetbrains.webdemo.examplesLoader.ExamplesFolder;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
@@ -31,19 +35,22 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MySqlConnector {
-    private Connection connection;
-
-    private String databaseUrl;
-
     private static final MySqlConnector connector = new MySqlConnector();
+    private Connection connection;
+    private String databaseUrl;
 
     private MySqlConnector() {
         if (!connect() || !createTablesIfNecessary()) {
             System.exit(1);
         }
+    }
+
+    public static MySqlConnector getInstance() {
+        return connector;
     }
 
     private boolean connect() {
@@ -82,40 +89,40 @@ public class MySqlConnector {
             PreparedStatement st = connection.prepareStatement("SHOW TABLES");
             ResultSet rs = st.executeQuery();
             if (!rs.next()) {
-                st = connection.prepareStatement("CREATE TABLE databaseinfo (" +
-                        "  VERSION VARCHAR(45)" +
-                        ")" +
-                        "ENGINE = InnoDB;");
-                st.execute();
-                st = connection.prepareStatement("CREATE TABLE users (" +
-                        "  USER_ID VARCHAR(45) NOT NULL DEFAULT ''," +
-                        "  USER_TYPE VARCHAR(45) NOT NULL DEFAULT ''," +
-                        "  USER_NAME VARCHAR(45) NOT NULL DEFAULT ''" +
-                        ")" +
-                        "ENGINE = InnoDB;");
-                st.execute();
-                st = connection.prepareStatement("CREATE TABLE programs (" +
-                        "  PROGRAM_ID VARCHAR(45) NOT NULL DEFAULT ''," +
-                        "  PROGRAM_NAME VARCHAR(45) NOT NULL DEFAULT ''," +
-                        "  PROGRAM_TEXT LONGTEXT," +
-                        "  PROGRAM_ARGS VARCHAR(45)," +
-                        "  PROGRAM_LINK VARCHAR(150)," +
-                        "  RUN_CONF VARCHAR(45) NOT NULL DEFAULT ''," +
-                        "  PRIMARY KEY(PROGRAM_ID)" +
-                        ")" +
-                        "ENGINE = InnoDB;");
-                st.execute();
-
-                st = connection.prepareStatement("CREATE TABLE userprogramid (" +
-                        "  USER_ID VARCHAR(45) NOT NULL DEFAULT ''," +
-                        "  USER_TYPE VARCHAR(45) NOT NULL DEFAULT ''," +
-                        "  PROGRAM_ID VARCHAR(45) NOT NULL DEFAULT ''" +
-                        ")" +
-                        "ENGINE = InnoDB;");
-                st.execute();
-                st = connection.prepareStatement("INSERT INTO databaseinfo (VERSION) VALUES (?)");
-                st.setString(1, ApplicationSettings.DATABASE_VERSION);
-                st.executeUpdate();
+//                st = connection.prepareStatement("CREATE TABLE databaseinfo (" +
+//                        "  VERSION VARCHAR(45)" +
+//                        ")" +
+//                        "ENGINE = InnoDB;");
+//                st.execute();
+//                st = connection.prepareStatement("CREATE TABLE users (" +
+//                        "  USER_ID VARCHAR(45) NOT NULL DEFAULT ''," +
+//                        "  USER_TYPE VARCHAR(45) NOT NULL DEFAULT ''," +
+//                        "  USER_NAME VARCHAR(45) NOT NULL DEFAULT ''" +
+//                        ")" +
+//                        "ENGINE = InnoDB;");
+//                st.execute();
+//                st = connection.prepareStatement("CREATE TABLE programs (" +
+//                        "  PROGRAM_ID VARCHAR(45) NOT NULL DEFAULT ''," +
+//                        "  PROGRAM_NAME VARCHAR(45) NOT NULL DEFAULT ''," +
+//                        "  PROGRAM_TEXT LONGTEXT," +
+//                        "  PROGRAM_ARGS VARCHAR(45)," +
+//                        "  PROGRAM_LINK VARCHAR(150)," +
+//                        "  RUN_CONF VARCHAR(45) NOT NULL DEFAULT ''," +
+//                        "  PRIMARY KEY(PROGRAM_ID)" +
+//                        ")" +
+//                        "ENGINE = InnoDB;");
+//                st.execute();
+//
+//                st = connection.prepareStatement("CREATE TABLE userprogramid (" +
+//                        "  USER_ID VARCHAR(45) NOT NULL DEFAULT ''," +
+//                        "  USER_TYPE VARCHAR(45) NOT NULL DEFAULT ''," +
+//                        "  PROGRAM_ID VARCHAR(45) NOT NULL DEFAULT ''" +
+//                        ")" +
+//                        "ENGINE = InnoDB;");
+//                st.execute();
+//                st = connection.prepareStatement("INSERT INTO databaseinfo (VERSION) VALUES (?)");
+//                st.setString(1, ApplicationSettings.DATABASE_VERSION);
+//                st.executeUpdate();
             }
             closeStatementAndResultSet(st, rs);
             return true;
@@ -136,20 +143,20 @@ public class MySqlConnector {
             st = connection.prepareStatement("SHOW TABLES");
             rs = st.executeQuery();
             if (!checkIfDatabaseInfoExists(rs)) {
-                st = connection.prepareStatement("CREATE TABLE databaseinfo (" +
-                        "  VERSION VARCHAR(45)" +
+                st = connection.prepareStatement("CREATE TABLE dbinfo (" +
+                        "  version VARCHAR(45)" +
                         ") " +
                         "ENGINE = InnoDB;");
                 st.execute();
                 System.out.println("Create table databaseInfo");
-                st = connection.prepareStatement("INSERT databaseinfo (VERSION) SET VERSION=?");
+                st = connection.prepareStatement("INSERT dbinfo (VERSION) SET VERSION=?");
                 st.setString(1, ApplicationSettings.DATABASE_VERSION);
                 st.executeUpdate();
                 System.out.println("add database version");
                 return false;
             }
             if (rs.next()) {
-                st = connection.prepareStatement("SELECT * FROM databaseinfo");
+                st = connection.prepareStatement("SELECT * FROM dbinfo");
                 rs = st.executeQuery();
                 if (rs.next()) {
                     String version = rs.getString("VERSION");
@@ -169,7 +176,7 @@ public class MySqlConnector {
     private boolean checkIfDatabaseInfoExists(ResultSet rs) {
         try {
             while (rs.next()) {
-                if (rs.getString(1).equals("databaseinfo")) {
+                if (rs.getString(1).equals("dbinfo")) {
                     return true;
                 }
             }
@@ -186,7 +193,7 @@ public class MySqlConnector {
         if (!compareVersion()) {
             PreparedStatement st = null;
             try {
-                st = connection.prepareStatement("UPDATE databaseinfo SET VERSION=?");
+                st = connection.prepareStatement("UPDATE dbinfo SET VERSION=?");
                 st.setString(1, ApplicationSettings.DATABASE_VERSION);
                 st.executeUpdate();
 
@@ -202,19 +209,12 @@ public class MySqlConnector {
         }
     }
 
-    public static MySqlConnector getInstance() {
-        return connector;
-    }
-
-
     public boolean addNewUser(UserInfo userInfo) {
         if (!checkConnection()) {
             return false;
         }
         if (!findUser(userInfo)) {
-            PreparedStatement st = null;
-            try {
-                st = connection.prepareStatement("INSERT INTO users (USER_ID, USER_TYPE, USER_NAME) VALUES (?, ?, ?)");
+            try (PreparedStatement st = connection.prepareStatement("INSERT INTO users (client_id, provider, username) VALUES (?, ?, ?)")) {
                 st.setString(1, userInfo.getId());
                 st.setString(2, userInfo.getType());
                 st.setString(3, userInfo.getName());
@@ -224,8 +224,6 @@ public class MySqlConnector {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
-            } finally {
-                closeStatement(st);
             }
         }
         return false;
@@ -242,26 +240,18 @@ public class MySqlConnector {
     }
 
     public boolean findUser(UserInfo userInfo) {
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        try {
-            st = connection.prepareStatement("SELECT * FROM users WHERE USER_ID=?");
-            st.setString(1, userInfo.getId());
-            rs = st.executeQuery();
-            while (rs.next()) {
-                if (rs.getString("USER_TYPE").equals(userInfo.getType())) {
-                    return true;
-                }
-            }
+        try (PreparedStatement st =
+                     connection.prepareStatement(
+                             "SELECT * FROM users WHERE (client_id=" + userInfo.getId() + ", provider=" + userInfo.getType() + ")"
+                     );
+             ResultSet rs = st.executeQuery()) {
+            return rs.next();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
-        } finally {
-            closeStatementAndResultSet(st, rs);
+            return false;
         }
-        return false;
-
     }
 
     public String saveProgram(UserInfo userInfo, String programName, String programText, String args, String runConfiguration) {
@@ -389,7 +379,7 @@ public class MySqlConnector {
             if (!rs.next()) {
 //                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), url);
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program by id in programIdProgramInfo","unknown",
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program by id in programIdProgramInfo", "unknown",
                         programId));
                 return ResponseUtils.getErrorInJson("Cannot find program by this link");
             }
@@ -485,6 +475,25 @@ public class MySqlConnector {
         }
     }
 
+    public void addExample(UserInfo userInfo, String name){
+        try (PreparedStatement getUserStatement =
+                     connection.prepareStatement("select id from users where (users.client_id = ? and users.provider = ?)")) {
+            getUserStatement.setString(1, userInfo.getId());
+            getUserStatement.setString(2, userInfo.getType());
+            ResultSet rs = getUserStatement.executeQuery();
+            if(rs.next()) {
+                try (PreparedStatement st = connection.prepareStatement("insert into projects (owner_id, name) values (?,?) ")) {
+                    st.setString(1, rs.getInt("id") + "");
+                    st.setString(2, name);
+                    st.execute();
+                }
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getProgramText(String programId) {
         if (!checkConnection()) {
             return ResponseUtils.getErrorInJson("Cannot connect to database for load your program.");
@@ -524,34 +533,22 @@ public class MySqlConnector {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            st = connection.prepareStatement("SELECT * FROM userprogramid WHERE USER_ID=?");
+            st = connection.prepareStatement(
+                    "select projects.id, projects.name from projects join " +
+                    "users on projects.owner_id = users.id where " +
+                    "(users.client_id = ? and users.provider = ?)"
+            );
             st.setString(1, userInfo.getId());
+            st.setString(2, userInfo.getType());
+
             rs = st.executeQuery();
-            ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
-            ArrayList<String> programIds = new ArrayList<String>();
-            while (rs.next()) {
-                if (rs.getString("USER_TYPE").equals(userInfo.getType())) {
-                    programIds.add(rs.getString("PROGRAM_ID"));
-                }
+
+            ExamplesFolder examplesFolder = new ExamplesFolder("My Programs");
+            while (rs.next()){
+                examplesFolder.examplesOrder.add(rs.getString("name"));
             }
 
-            st = connection.prepareStatement("SELECT * FROM programs WHERE PROGRAM_ID=?");
-            for (String id : programIds) {
-                st.setString(1, id);
-                rs = st.executeQuery();
-                if (!rs.next()) {
-                    ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                            SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find program with in programs table", "unknown",
-                            userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + id));
-                    continue;
-                }
-                ObjectNode jsonObject = result.addObject();
-                jsonObject.put("id", rs.getString("PROGRAM_ID"));
-                jsonObject.put("name", rs.getString("PROGRAM_NAME"));
-                jsonObject.put("confType", rs.getString("RUN_CONF"));
-            }
-
-            return result.toString();
+            return new ObjectMapper().writeValueAsString(examplesFolder);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
@@ -593,7 +590,7 @@ public class MySqlConnector {
                 return ResponseUtils.getJsonString("text", "Program was successfully deleted.", programId);
             } else {
                 ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table","unknown",
+                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table", "unknown",
                         userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
                 return ResponseUtils.getErrorInJson("Unknown error while deleting your program");
             }

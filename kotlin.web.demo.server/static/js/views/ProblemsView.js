@@ -24,7 +24,7 @@
 
 var ProblemsView = function (element, /*Nullable*/ tabs) {
     var scroll = document.createElement("div");
-    scroll.className = "scroll"
+    scroll.className = "scroll";
     element.append(scroll);
 
 
@@ -46,7 +46,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
 
     function onExampleChange () {
         console.innerHTML = "";
-        var example = accordion.getSelectedExample();
+        var example = accordion.getSelectedProject();
         for(var i = 0; i < example.getFiles().length; i++) {
             var file = example.getFiles()[i];
 
@@ -91,7 +91,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
             tabs.tabs("option", "active", 0);
         }
 
-        var example = accordion.getSelectedExample();
+        var example = accordion.getSelectedProject();
         for(var i = 0; i < example.getFiles().length; i++){
             var file = example.getFiles()[i];
             if(file.errors.length > 0) {

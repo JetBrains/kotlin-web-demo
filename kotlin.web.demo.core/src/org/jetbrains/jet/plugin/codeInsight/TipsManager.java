@@ -132,15 +132,12 @@ public final class TipsManager {
             @NotNull Collection<DeclarationDescriptor> descriptors
     ) {
 
-        return Collections2.filter(descriptors, new Predicate<DeclarationDescriptor>() {
-            @Override
-            public boolean apply(@Nullable DeclarationDescriptor descriptor) {
-                if (descriptor == null) {
-                    return false;
-                }
-
-                return true;
+        return Collections2.filter(descriptors, descriptor -> {
+            if (descriptor == null) {
+                return false;
             }
+
+            return true;
         });
     }
 
@@ -152,19 +149,16 @@ public final class TipsManager {
         final List<ReceiverParameterDescriptor> result = scope.getImplicitReceiversHierarchy();
 
         descriptorsSet.removeAll(
-                Collections2.filter(JetScopeUtils.getAllExtensions(scope), new Predicate<CallableDescriptor>() {
-                    @Override
-                    public boolean apply(CallableDescriptor callableDescriptor) {
-                        if (callableDescriptor.getReceiverParameter() == null) {
+                Collections2.filter(JetScopeUtils.getAllExtensions(scope), callableDescriptor -> {
+                    if (callableDescriptor.getReceiverParameter() == null) {
+                        return false;
+                    }
+                    for (ReceiverParameterDescriptor receiverDescriptor : result) {
+                        if (ExpressionTypingUtils.checkIsExtensionCallable(receiverDescriptor.getValue(), callableDescriptor)) {
                             return false;
                         }
-                        for (ReceiverParameterDescriptor receiverDescriptor : result) {
-                            if (ExpressionTypingUtils.checkIsExtensionCallable(receiverDescriptor.getValue(), callableDescriptor)) {
-                                return false;
-                            }
-                        }
-                        return true;
                     }
+                    return true;
                 }));
 
         return Lists.newArrayList(descriptorsSet);
@@ -173,21 +167,18 @@ public final class TipsManager {
     private static Collection<DeclarationDescriptor> excludeNonPackageDescriptors(
             @NotNull Collection<DeclarationDescriptor> descriptors
     ) {
-        return Collections2.filter(descriptors, new Predicate<DeclarationDescriptor>() {
-            @Override
-            public boolean apply(DeclarationDescriptor declarationDescriptor) {
-                if (declarationDescriptor instanceof PackageViewDescriptor) {
-                    // Heuristic: we don't want to complete "System" in "package java.lang.Sys",
-                    // so we find class of the same name as package, we exclude this package
-                    PackageViewDescriptor parent = ((PackageViewDescriptor) declarationDescriptor).getContainingDeclaration();
-                    if (parent != null) {
-                        JetScope parentScope = parent.getMemberScope();
-                        return parentScope.getClassifier(declarationDescriptor.getName()) == null;
-                    }
-                    return true;
+        return Collections2.filter(descriptors, declarationDescriptor -> {
+            if (declarationDescriptor instanceof PackageViewDescriptor) {
+                // Heuristic: we don't want to complete "System" in "package java.lang.Sys",
+                // so we find class of the same name as package, we exclude this package
+                PackageViewDescriptor parent = ((PackageViewDescriptor) declarationDescriptor).getContainingDeclaration();
+                if (parent != null) {
+                    JetScope parentScope = parent.getMemberScope();
+                    return parentScope.getClassifier(declarationDescriptor.getName()) == null;
                 }
-                return false;
+                return true;
             }
+            return false;
         });
     }
 
@@ -206,12 +197,7 @@ public final class TipsManager {
 
         descriptorsSet.addAll(
                 Collections2.filter(JetScopeUtils.getAllExtensions(externalScope),
-                        new Predicate<CallableDescriptor>() {
-                            @Override
-                            public boolean apply(CallableDescriptor callableDescriptor) {
-                                return ExpressionTypingUtils.checkIsExtensionCallable(receiverValue, callableDescriptor);
-                            }
-                        }));
+                        callableDescriptor -> ExpressionTypingUtils.checkIsExtensionCallable(receiverValue, callableDescriptor)));
 
         return descriptorsSet;
     }

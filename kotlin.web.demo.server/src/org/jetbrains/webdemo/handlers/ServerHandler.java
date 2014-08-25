@@ -113,7 +113,8 @@ public class ServerHandler {
                     || parameters.compareType("deleteProgram")
                     || parameters.compareType("generatePublicLink")
                     || parameters.compareType("loadProgram")
-                    || parameters.compareType("writeLog")) {
+                    || parameters.compareType("writeLog")
+                    || parameters.compareType("addProject")) {
                 if (!parameters.compareType("writeLog")) {
                     sessionInfo = setSessionInfo(request, parameters.getSessionId());
                 } else {
