@@ -109,12 +109,15 @@ public class ServerHandler {
                     || parameters.compareType("run")
                     || parameters.compareType("convertToKotlin")
                     || parameters.compareType("loadExample")
-                    || parameters.compareType("saveProgram")
-                    || parameters.compareType("deleteProgram")
+                    || parameters.compareType("saveFile")
+                    || parameters.compareType("deleteFile")
                     || parameters.compareType("generatePublicLink")
-                    || parameters.compareType("loadProgram")
+                    || parameters.compareType("loadProject")
+                    || parameters.compareType("addFile")
                     || parameters.compareType("writeLog")
-                    || parameters.compareType("addProject")) {
+                    || parameters.compareType("addProject")
+                    || parameters.compareType("addExampleProject")
+                    || parameters.compareType("deleteProject")){
                 if (!parameters.compareType("writeLog")) {
                     sessionInfo = setSessionInfo(request, parameters.getSessionId());
                 } else {

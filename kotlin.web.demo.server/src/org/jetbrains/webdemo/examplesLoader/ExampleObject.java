@@ -34,6 +34,8 @@ public class ExampleObject {
     public String args = "";
     @NotNull
     public String confType = "java";
+    @NotNull
+    public boolean isLocalVersion = false;
 
     @NotNull
     public String help = "";

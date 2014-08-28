@@ -26,14 +26,14 @@ var ProgramsModel = (function () {
     function ProgramsModel() {
 
         var instance = {
-            loadProgram: function (url) {
+            loadProject: function (url) {
                 $.ajax({
-                    url: generateAjaxUrl("loadProgram", url),
+                    url: generateAjaxUrl("loadProject", url),
                     context: document.body,
                     success: function (data) {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                instance.onLoadProgram(data[0]);
+                                instance.onLoadProject(data);
                             } else {
                                 instance.onFail(data, ActionStatusMessages.load_program_fail);
                             }
@@ -75,9 +75,9 @@ var ProgramsModel = (function () {
             getAllPrograms: function () {
                 getAllPrograms();
             },
-            deleteProgram: function (name) {
+            deleteProgram: function (projectName, fileName) {
                 $.ajax({
-                    url: generateAjaxUrl("deleteProgram", name),
+                    url: generateAjaxUrl("deleteProgram", projectName + "&filename=" + fileName),
                     context: document.body,
                     success: function (data) {
                         if (checkDataForNull(data)) {
@@ -136,7 +136,20 @@ var ProgramsModel = (function () {
                     }
                 })
             },
-            onLoadProgram: function (data) {
+            addNewFile: function(projectName, filename){
+                $.ajax({
+                    url: generateAjaxUrl("addFile", projectName + "&filename=" + filename),
+                    success: function(){
+                        accordion.addNewFile(projectName, filename);
+                    },
+                    type: "POST",
+                    timeout: 10000,
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    }
+                })
+            },
+            onLoadProject: function (data) {
             },
             onGeneratePublicLink: function (data) {
             },
@@ -152,7 +165,7 @@ var ProgramsModel = (function () {
 
         function getAllPrograms() {
             $.ajax({
-                url: generateAjaxUrl("loadProgram", "all"),
+                url: generateAjaxUrl("loadProject", "all"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {

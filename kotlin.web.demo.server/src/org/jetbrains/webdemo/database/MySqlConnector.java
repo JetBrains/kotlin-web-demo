@@ -27,6 +27,7 @@ import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.examplesLoader.ExampleFile;
 import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesFolder;
+import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
@@ -191,9 +192,7 @@ public class MySqlConnector {
 
     private void checkDatabaseVersion() {
         if (!compareVersion()) {
-            PreparedStatement st = null;
-            try {
-                st = connection.prepareStatement("UPDATE dbinfo SET VERSION=?");
+            try (PreparedStatement st = connection.prepareStatement("UPDATE dbinfo SET VERSION=?")) {
                 st.setString(1, ApplicationSettings.DATABASE_VERSION);
                 st.executeUpdate();
 
@@ -203,8 +202,6 @@ public class MySqlConnector {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                         "Cannot update database");
-            } finally {
-                closeStatement(st);
             }
         }
     }
@@ -240,72 +237,22 @@ public class MySqlConnector {
     }
 
     public boolean findUser(UserInfo userInfo) {
-        try (PreparedStatement st =
-                     connection.prepareStatement(
-                             "SELECT * FROM users WHERE (client_id=" + userInfo.getId() + ", provider=" + userInfo.getType() + ")"
-                     );
-             ResultSet rs = st.executeQuery()) {
-            return rs.next();
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
-            return false;
-        }
+        return (getUserId(userInfo) != -1);
     }
 
-    public String saveProgram(UserInfo userInfo, String programName, String programText, String args, String runConfiguration) {
-        if (!checkConnection()) {
-            return ResponseUtils.getErrorInJson("Cannot connect to database for save your program.");
-        }
-        PreparedStatement st = null;
-        try {
-            if (findUser(userInfo)) {
-
-                if (!checkCountOfPrograms(userInfo)) {
-                    return ResponseUtils.getErrorInJson("You can save only 100 programs");
-                }
-                if (findProgramByName(userInfo, programName)) {
-                    return ResponseUtils.getErrorInJson("Program with same name already exists. Please choose the another one.");
-                }
-
-                String programId = userInfo.getId() + new Random().nextInt();
-                st = connection.prepareStatement(
-                        "INSERT INTO programs (PROGRAM_ID, PROGRAM_NAME, PROGRAM_TEXT, PROGRAM_ARGS, PROGRAM_LINK, RUN_CONF) VALUES " +
-                                "(?, ?, ?, ?, ?, ?)");
-                st.setString(1, programId);
-                st.setString(2, programName);
-                st.setString(3, programText);
-                st.setString(4, args);
-                st.setString(5, "");
-                st.setString(6, runConfiguration);
-                st.executeUpdate();
-
-                st = connection.prepareStatement("INSERT INTO userprogramid (USER_ID, USER_TYPE, PROGRAM_ID) VALUES " +
-                        "(?, ?, ?)");
-                st.setString(1, userInfo.getId());
-                st.setString(2, userInfo.getType());
-                st.setString(3, programId);
-                st.executeUpdate();
-
-                return ResponseUtils.getJsonString("programName", programName + "&id=" + programId);
-            } else {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userprogramid table", "unknown",
-                        userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
-                return ResponseUtils.getErrorInJson("Please, login.");
+    public boolean saveFile(UserInfo userInfo, String folderName, String projectName, ExampleFile file){
+        int projectId = getProjectId(userInfo, folderName, projectName);
+        if(projectId != -1) {
+            try (PreparedStatement st = connection.prepareStatement("UPDATE files SET files.content = ? WHERE project_id = ? AND files.name = ?  ")) {
+                st.setString(1, file.content);
+                st.setString(2, projectId + "");
+                st.setString(3, file.name);
+                st.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (Throwable e) {
-            if (e.getMessage().contains("Data too long")) {
-                return ResponseUtils.getErrorInJson("Data is too long.");
-            }
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
-            return ResponseUtils.getErrorInJson("Unknown error while saving your program");
-        } finally {
-            closeStatement(st);
         }
+        return false;
     }
 
     private String escape(String str) {
@@ -475,58 +422,74 @@ public class MySqlConnector {
         }
     }
 
-    public void addExample(UserInfo userInfo, String name){
-        try (PreparedStatement getUserStatement =
-                     connection.prepareStatement("select id from users where (users.client_id = ? and users.provider = ?)")) {
-            getUserStatement.setString(1, userInfo.getId());
-            getUserStatement.setString(2, userInfo.getType());
-            ResultSet rs = getUserStatement.executeQuery();
-            if(rs.next()) {
-                try (PreparedStatement st = connection.prepareStatement("insert into projects (owner_id, name) values (?,?) ")) {
-                    st.setString(1, rs.getInt("id") + "");
-                    st.setString(2, name);
+    public boolean addProject(UserInfo userInfo, String name) {
+        int userId = getUserId(userInfo);
+        if (userId != -1) {
+            try (PreparedStatement st = connection.prepareStatement("insert into projects (owner_id, name) values (?,?) ")) {
+                st.setString(1, userId + "");
+                st.setString(2, name);
+                st.execute();
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public boolean addProject(UserInfo userInfo, ExampleObject project) {
+        int userId = getUserId(userInfo);
+        if (userId != -1) {
+            PreparedStatement st = null;
+            try {
+                st = connection.prepareStatement("insert into projects (owner_id, name, parent, args, run_configuration) values (?,?,?,?,?) ");
+                st.setString(1, userId + "");
+                st.setString(2, project.name);
+                st.setString(3, project.parent);
+                st.setString(4, project.args);
+                st.setString(5, project.confType);
+                st.execute();
+
+                int projectId = getProjectId(userInfo, project.parent, project.name);
+                for (ExampleFile file : project.files) {
+                    st = connection.prepareStatement("insert into files (project_id, name, content) values (?,?,?)");
+                    st.setString(1, projectId + "");
+                    st.setString(2, file.name);
+                    st.setString(3, file.content);
+                    st.execute();
                     st.execute();
                 }
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                closeStatement(st);
             }
-            rs.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+        return false;
     }
 
-    public String getProgramText(String programId) {
-        if (!checkConnection()) {
-            return ResponseUtils.getErrorInJson("Cannot connect to database for load your program.");
-        }
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        try {
-            st = connection.prepareStatement("SELECT * FROM programs WHERE PROGRAM_ID=?");
-            st.setString(1, programId);
-            rs = st.executeQuery();
-            if (!rs.next()) {
-                return ResponseUtils.getErrorInJson("Cannot find the program.");
-            }
-            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
-            ObjectNode jsonObject = array.addObject();
-            jsonObject.put("type", "text");
-            jsonObject.put("text", rs.getString("PROGRAM_TEXT"));
-            String args = rs.getString("PROGRAM_ARGS");
-            if (args == null) {
-                args = "";
-            }
-            jsonObject.put("args", args);
-            jsonObject.put("confType", rs.getString("RUN_CONF"));
-            return array.toString();
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", programId);
-            return ResponseUtils.getErrorInJson("Unknown error while loading your program");
-        } finally {
-            closeStatementAndResultSet(st, rs);
-        }
+    public boolean addFile(UserInfo userInfo, String folderName, String projectName, String fileName) {
+        return addFile(userInfo, folderName, projectName, fileName, "");
     }
 
-    public String getListOfProgramsForUser(UserInfo userInfo) {
+    public boolean addFile(UserInfo userInfo, String folderName, String projectName, String fileName, String content) {
+        int projectId = getProjectId(userInfo, folderName, projectName);
+        if (projectId != -1) {
+            try (PreparedStatement st = connection.prepareStatement("insert into files (project_id, name, content) values (?,?,?) ")) {
+                st.setString(1, projectId + "");
+                st.setString(2, fileName);
+                st.setString(3, content);
+                st.execute();
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public String getProjectNames(UserInfo userInfo) {
         if (!checkConnection()) {
             return ResponseUtils.getErrorInJson("Cannot connect to database to load list of your programs.");
         }
@@ -535,25 +498,74 @@ public class MySqlConnector {
         try {
             st = connection.prepareStatement(
                     "select projects.id, projects.name from projects join " +
-                    "users on projects.owner_id = users.id where " +
-                    "(users.client_id = ? and users.provider = ?)"
+                            "users on projects.owner_id = users.id where " +
+                            "(users.client_id = ? and users.provider = ?)"
             );
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
 
             rs = st.executeQuery();
 
-            ExamplesFolder examplesFolder = new ExamplesFolder("My Programs");
-            while (rs.next()){
-                examplesFolder.examplesOrder.add(rs.getString("name"));
+            List<String> projects = new ArrayList<>();
+            while (rs.next()) {
+                projects.add(rs.getString("name"));
             }
 
-            return new ObjectMapper().writeValueAsString(examplesFolder);
+            return new ObjectMapper().writeValueAsString(projects);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             return ResponseUtils.getErrorInJson("Unknown error while loading list of your programs");
+        } finally {
+            closeStatementAndResultSet(st, rs);
+        }
+    }
+
+
+    public String getProjectContent(UserInfo userInfo, String parent, String projectName) {
+        if (!checkConnection()) {
+            return ResponseUtils.getErrorInJson("Cannot connect to database for load your program.");
+        }
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = connection.prepareStatement(
+                    "select projects.id,projects.args, projects.run_configuration from projects join " +
+                            "users on projects.owner_id = users.id where " +
+                            "(users.client_id = ? and users.provider = ? and projects.parent = ? and projects.name = ?)");
+            st.setString(1, userInfo.getId());
+            st.setString(2, userInfo.getType());
+            st.setString(3, parent);
+            st.setString(4, projectName);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                ExampleObject project = new ExampleObject();
+                project.parent = "My Programs";
+                project.name = projectName;
+                project.args = rs.getString("args");
+                project.confType = rs.getString("run_configuration");
+                project.files = new ArrayList<>();
+                project.isLocalVersion = true;
+
+                st = connection.prepareStatement("select * from files where project_id = ?");
+                st.setString(1, rs.getInt("id") + "");
+                rs = st.executeQuery();
+                while (rs.next()) {
+                    ExampleFile file = new ExampleFile(rs.getString("name"), rs.getString("content"));
+                    project.files.add(file);
+                }
+                return new ObjectMapper().writeValueAsString(project);
+            } else if (!parent.equals("My Programs")) {
+                ExampleObject project = ExamplesList.getExampleObject(projectName, parent);
+                return new ObjectMapper().writeValueAsString(project);
+            } else {
+                return ResponseUtils.getErrorInJson("Can't load your project");
+            }
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", projectName);
+            return ResponseUtils.getErrorInJson("Unknown error while loading your project");
         } finally {
             closeStatementAndResultSet(st, rs);
         }
@@ -572,33 +584,87 @@ public class MySqlConnector {
         }
     }
 
-    public String deleteProgram(UserInfo userInfo, String programId) {
+    public String deleteFile(UserInfo userInfo, String parentName, String projectName, String fileName) {
         if (!checkConnection()) {
             return ResponseUtils.getErrorInJson("Cannot connect to database to delete your program.");
         }
-        PreparedStatement st = null;
-        try {
-            if (findUser(userInfo)) {
-                st = connection.prepareStatement("DELETE FROM programs WHERE PROGRAM_ID=?");
-                st.setString(1, programId);
+        int projectId = getProjectId(userInfo, parentName, projectName);
+        if (projectId != -1) {
+            try (PreparedStatement st = connection.prepareStatement("delete from files where files.project_id =? and files.name = ?")) {
+                st.setString(1, projectId + "");
+                st.setString(2, fileName);
                 st.executeUpdate();
-                st = connection.prepareStatement("DELETE FROM userprogramid WHERE USER_ID=? AND USER_TYPE=? AND PROGRAM_ID=?");
-                st.setString(1, userInfo.getId());
-                st.setString(2, userInfo.getType());
-                st.setString(3, programId);
-                st.executeUpdate();
-                return ResponseUtils.getJsonString("text", "Program was successfully deleted.", programId);
-            } else {
-                ErrorWriterOnServer.LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(
-                        SessionInfo.TypeOfRequest.SAVE_PROGRAM.name(), "Cannot find user at userIdUserInfo table", "unknown",
-                        userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName()));
+                return ResponseUtils.getJsonString("text", "Program was successfully deleted.", fileName);
+            } catch (Throwable e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + fileName);
                 return ResponseUtils.getErrorInJson("Unknown error while deleting your program");
             }
+        } else {
+            return ResponseUtils.getErrorInJson("Can't found project");
+        }
+    }
+
+    public String deleteProject(UserInfo userInfo, String projectName) {
+        if (!checkConnection()) {
+            return ResponseUtils.getErrorInJson("Cannot connect to database to delete your program.");
+        }
+        int userId = getUserId(userInfo);
+        if (userId != -1) {
+            try (PreparedStatement st = connection.prepareStatement("delete from projects where projects.owner_id = ? and projects.name = ?")) {
+                st.setString(1, userId + "");
+                st.setString(2, projectName);
+                st.executeUpdate();
+                return ResponseUtils.getJsonString("text", "Project was successfully deleted.", projectName);
+            } catch (Throwable e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + projectName);
+                return ResponseUtils.getErrorInJson("Unknown error while deleting your program");
+            }
+        } else {
+            return ResponseUtils.getErrorInJson("Can't found project");
+        }
+    }
+
+
+    private int getUserId(UserInfo userInfo) {
+        try (PreparedStatement st = connection.prepareStatement("select users.id from users where (users.client_id = ? and users.provider=?)")) {
+            st.setString(1, userInfo.getId());
+            st.setString(2, userInfo.getType());
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                } else {
+                    return -1;
+                }
+            }
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + programId);
-            return ResponseUtils.getErrorInJson("Unknown error while deleting your program");
-        } finally {
-            closeStatement(st);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
+            return -1;
+        }
+    }
+
+    private int getProjectId(UserInfo userInfo, String parentName, String projectName) {
+        try (PreparedStatement st = connection.prepareStatement(
+                "select projects.id from projects join " +
+                        "users on projects.owner_id =users.id where " +
+                        "( users.client_id = ? and  users.provider = ? and projects.parent = ? and projects.name = ?)")) {
+            st.setString(1, userInfo.getId());
+            st.setString(2, userInfo.getType());
+            st.setString(3, parentName);
+            st.setString(4, projectName);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                } else {
+                    return -1;
+                }
+            }
+        } catch (SQLException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
+            return -1;
         }
     }
 

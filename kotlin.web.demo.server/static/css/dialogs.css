@@ -112,18 +112,16 @@
     background: url("/static/images/icons.png") no-repeat -84px -16px;
 }
 
-#save-dialog {
+#input-dialog {
     text-align: center;
-    padding: 40px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 40px 20px;
 }
 
-#program-name-input {
-    width: 280px;
-    border: 1px solid;
-    border-color: #969696;
+#input-dialog input {
+    width: 260px;
+    border: 1px solid #969696;
     border-radius: 3px;
+    margin-left: 5px;
 }
 
 #confirmDialog {

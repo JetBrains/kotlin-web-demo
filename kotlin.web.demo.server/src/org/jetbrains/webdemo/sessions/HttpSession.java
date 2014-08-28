@@ -18,12 +18,9 @@ package org.jetbrains.webdemo.sessions;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
-import jdk.nashorn.internal.ir.ObjectNode;
-import kotlin.data;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
@@ -37,7 +34,6 @@ import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -92,13 +88,22 @@ public class HttpSession {
             } else if (parameters.compareType("convertToKotlin")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
                 sendConversationResult();
-            } else if (parameters.compareType("saveProgram")) {
+            } else if (parameters.compareType("saveFile")) {
                 sendSaveProgramResult();
-            } else if(parameters.compareType("addProject")){
-                MySqlConnector.getInstance().addExample(sessionInfo.getUserInfo(), parameters.getArgs());
-            } else if (parameters.compareType("loadProgram")) {
-                sendLoadProgramResult();
-            } else if (parameters.compareType("deleteProgram")) {
+            } else if (parameters.compareType("addProject")) {
+                MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.getArgs());
+            } else if (parameters.compareType("addExampleProject")) {
+                addExampleProject();
+            } else if (parameters.compareType("deleteProject")) {
+                MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), ResponseUtils.substringAfter(parameters.getArgs(), "&name="));
+            } else if (parameters.compareType("loadProject")) {
+                sendLoadProjectResult();
+            } else if (parameters.compareType("addFile")) {
+                String folderName = ResponseUtils.substringBefore(parameters.getArgs(), "&name=");
+                String projectName = ResponseUtils.substringBetween(parameters.getArgs(), "&name=", "&filename=");
+                String fileName = ResponseUtils.substringAfter(parameters.getArgs(), "&filename=");
+                MySqlConnector.getInstance().addFile(sessionInfo.getUserInfo(),folderName, projectName, fileName);
+            } else if (parameters.compareType("deleteFile")) {
                 sendDeleteProgramResult();
             } else if (parameters.compareType("generatePublicLink")) {
                 sendGeneratePublicLinkResult();
@@ -153,41 +158,41 @@ public class HttpSession {
 
     private void sendDeleteProgramResult() {
         String result;
-        String programId = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
-        result = MySqlConnector.getInstance().deleteProgram(sessionInfo.getUserInfo(), programId);
+        String folderName = ResponseUtils.substringBefore(parameters.getArgs(), "&name=");
+        String projectName = ResponseUtils.substringBetween(parameters.getArgs(), "&name=", "&filename=");
+        String fileName = ResponseUtils.substringAfter(parameters.getArgs(), "&filename=");
+        result = MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), folderName, projectName, fileName);
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
-    private void sendLoadProgramResult() {
+    private void sendLoadProjectResult() {
         String result;
         if (parameters.getArgs().equals("all")) {
-            result = MySqlConnector.getInstance().getListOfProgramsForUser(sessionInfo.getUserInfo());
+            result = MySqlConnector.getInstance().getProjectNames(sessionInfo.getUserInfo());
         } else {
             String id;
             if (parameters.getArgs().contains("publicLink")) {
                 id = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
                 result = MySqlConnector.getInstance().getProgramTextByPublicLink(id);
             } else {
-                id = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
-                result = MySqlConnector.getInstance().getProgramText(id);
+                String parent = ResponseUtils.substringBefore(parameters.getArgs(), "&name=").replaceAll("_", " ");
+                String name = ResponseUtils.substringAfter(parameters.getArgs(), "&name=").replaceAll("_", " ");
+                result = MySqlConnector.getInstance().getProjectContent(sessionInfo.getUserInfo(), parent, name);
             }
         }
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendSaveProgramResult() {
-        String result;
-        if (parameters.getArgs().startsWith("id=")) {
-            String url = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");
-            String id = ResponseUtils.getExampleOrProgramNameByUrl(url);
-            PostData data = getPostDataFromRequest();
-            result = MySqlConnector.getInstance().updateProgram(id, data.text, data.arguments, ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
-        } else {
-            PostData data = getPostDataFromRequest();
-            String id = ResponseUtils.substringBefore(parameters.getArgs(), "&runConf=");
-            result = MySqlConnector.getInstance().saveProgram(sessionInfo.getUserInfo(), id, data.text, data.arguments, ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
+        try(InputStream inputStream = request.getInputStream()) {
+            String folderName = ResponseUtils.substringBefore(parameters.getArgs(), "&name=").replaceAll("_", " ");
+            String projectName = ResponseUtils.substringBetween(parameters.getArgs(), "&name=", "&filename=").replaceAll("_", " ");
+            ExampleFile file = objectMapper.readValue(inputStream, ExampleFile.class);
+            MySqlConnector.getInstance().saveFile(sessionInfo.getUserInfo(), folderName, projectName, file);
+            writeResponse("ok", HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendExecutorResult() {
@@ -211,18 +216,28 @@ public class HttpSession {
         }
     }
 
+    private void addExampleProject() {
+        try (InputStream inputStream = request.getInputStream()) {
+
+            ExampleObject example = objectMapper.readValue(inputStream, ExampleObject.class);
+            MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), example);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void sendExampleContent() {
         writeResponse(ExamplesList.loadExample(parameters.getArgs()), HttpServletResponse.SC_OK);
 
     }
 
-    private List<PsiFile> createProjectPsiFiles(ExampleObject example){
-        currentProject= Initializer.INITIALIZER.getEnvironment().getProject();
+    private List<PsiFile> createProjectPsiFiles(ExampleObject example) {
+        currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
         return example.files.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.name, file.content)).collect(Collectors.toList());
     }
 
     private void sendCompletionResult() {
-        try(InputStream is = request.getInputStream()) {
+        try (InputStream is = request.getInputStream()) {
             JsonNode requestObject = objectMapper.readTree(is);
             String fileName = requestObject.get("filename").textValue();
             int line = requestObject.get("line").asInt();
@@ -240,7 +255,7 @@ public class HttpSession {
     }
 
     private void sendHighlightingResult() {
-        try(InputStream is = request.getInputStream()) {
+        try (InputStream is = request.getInputStream()) {
             ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(is, ExampleObject.class));
 
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
@@ -340,9 +355,9 @@ public class HttpSession {
         }
     }
 
-    private ExampleObject addUnmodifiableDataToExample(ExampleObject exampleObject){
+    private ExampleObject addUnmodifiableDataToExample(ExampleObject exampleObject) {
         ExampleObject storedExample = ExamplesList.getExampleObject(exampleObject.name, exampleObject.parent);
-        exampleObject.files.addAll(storedExample.files.stream().filter((file)->!file.modifiable).collect(Collectors.toList()));
+        exampleObject.files.addAll(storedExample.files.stream().filter((file) -> !file.modifiable).collect(Collectors.toList()));
         exampleObject.testClasses = storedExample.testClasses;
         return exampleObject;
     }

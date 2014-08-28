@@ -19,25 +19,42 @@
  */
 
 
-var Example = (function () {
-    function Example(exampleContent, element) {
-        var content = exampleContent;
-        for(var i = 0; i < content.files.length; i++){
-            content.files[i].errors = []
-        }
-
+var Project = (function () {
+    function Project(url, element, content) {
+        var content = null;
         var selectedFile = null;
 
         var instance = {
+            onContentLoaded: function (data) {
+                content = data;
+                for (var i = 0; i < content.files.length; i++) {
+                    content.files[i].errors = [];
+                    content.files[i].save = function(){
+                        this.content = editor.getText();
+                        if(loginView.isLoggedIn()) {
+                            projectProvider.saveFile(url, this);
+                        }
+                    }
+                }
+                showProjectContent();
+                if (content.files.length > 0) {
+                    selectFile(content.files[0]);
+                }
+                if(!content.isLocalVersion && loginView.isLoggedIn()){
+                    projectProvider.addNewProjectFromExample(this.getModifiableContent());
+                }
+            },
             select: function () {
                 problemsView.onExampleChange();
                 helpViewForExamples.showHelp(content.help);
-                editor.open(content.files[0]);
+                if (selectedFile != null) {
+                    editor.open(selectedFile);
+                }
                 argumentsView.val(content.args);
                 configurationManager.updateConfiguration(content.confType);
             },
-            processHighlightingResult: function(data){
-                for(var i = 0; i < content.files.length; i++){
+            processHighlightingResult: function (data) {
+                for (var i = 0; i < content.files.length; i++) {
                     content.files[i].errors = data[content.files[i].name];
                 }
                 editor.updateHighlighting();
@@ -53,70 +70,67 @@ var Example = (function () {
                     })
                 };
             },
+            selectFile: function (id) {
+                selectFile(content.files[id]);
+            },
             getArguments: function () {
                 return content.args;
             },
             getURL: function () {
-                return replaceAll(content.parent, " ", "_") + "&name=" + replaceAll(content.name, " ", "_");
+                return url;
             },
-            errorsExists: function(){
-                for(var i = 0; i < content.files.length; i++){
+            getName: function () {
+                return content.name;
+            },
+            errorsExists: function () {
+                for (var i = 0; i < content.files.length; i++) {
                     var errors = content.files[i].errors;
-                    for(var j = 0; j < errors.length; j++){
-                        if(errors[j].severity == "ERROR"){
+                    for (var j = 0; j < errors.length; j++) {
+                        if (errors[j].severity == "ERROR") {
                             return true;
                         }
                     }
                 }
                 return false;
             },
-            save: function(){
+            save: function () {
                 content.confType = configurationManager.getType();
                 content.args = argumentsView.val();
             },
-            getFiles: function(){
+            getFiles: function () {
                 return content.files;
+            },
+            addNewFile: function (filename) {
+                content.files.push({
+                    name: filename,
+                    content: "",
+                    errors: "",
+                    type: "Kotlin"
+                });
+                selectedFile = content.files[content.files.length - 1];
+                showProjectContent();
+            },
+            onDeleteFile: function (id) {
+                content.files.splice(id, 1);
+                showProjectContent();
+            },
+            onFail: function () {
+            },
+            isUserProject: function(){
+                isUserProject();
             }
-
         };
 
+        var projectProvider = new ProjectProvider(instance);
+        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add", projectProvider.addNewFile);
 
-        function updateExampleFiles() {
-            var exampleContentElement = document.getElementById(instance.getURL() + "_content");
-            exampleContentElement.innerHTML = "";
-
-
-            for (var i = 0; i < content.files.length; i++){
-                var file = content.files[i];
-
-                var filenameDiv = document.createElement("div");
-                filenameDiv.id = getFilenameURL(file.name);
-                filenameDiv.className = "example-filename";
-
-                var icon = document.createElement("div");
-                if(file.type == "Kotlin"){
-                    icon.className = "kotlin-file-type-default"
-                }
-                filenameDiv.appendChild(icon);
-
-
-
-                var fileNameSpan = document.createElement("div");
-                fileNameSpan.style.paddingLeft = "19px";
-                fileNameSpan.innerHTML = file.name;
-                filenameDiv.appendChild(fileNameSpan);
-                filenameDiv.onclick = (function (file) {
-                    return function () {
-                        selectFile(file);
-                    }
-                })(file);
-
-                exampleContentElement.appendChild(filenameDiv);
+        if(content == null) {
+            if (isUserProject() || loginView.isLoggedIn()) {
+                projectProvider.loadProject(url);
+            } else {
+                projectProvider.loadExample(url);
             }
-
         }
-
-        updateExampleFiles();
 
 
         function selectFile(file) {
@@ -124,19 +138,76 @@ var Example = (function () {
                 document.getElementById(getFilenameURL(selectedFile.name)).className = "example-filename";
             }
             selectedFile = file;
-            document.getElementById(getFilenameURL(file.name)).className = "example-filename-selected";
+            document.getElementById(getFilenameURL(selectedFile.name)).className = "example-filename-selected";
             editor.open(selectedFile);
         }
-
-        selectFile(content.files[0]);
 
         function getFilenameURL(filename) {
             return instance.getURL() + "&filename=" + filename.replace(/ /g, "_");
         }
 
+        function isUserProject() {
+            return url.indexOf("My_Programs") == 0;
+        }
+
+
+        function showProjectContent() {
+            element.innerHTML = "";
+
+            for (var i = 0; i < content.files.length; i++) {
+                var file = content.files[i];
+
+                var filenameDiv = document.createElement("div");
+                filenameDiv.id = getFilenameURL(file.name);
+                filenameDiv.className = "example-filename";
+
+                var icon = document.createElement("div");
+                if (file.type == "Kotlin") {
+                    icon.className = "kotlin-file-type-default"
+                } else {
+                    icon.className = "kotlin-file-type-default"
+                }
+                filenameDiv.appendChild(icon);
+
+
+                var fileNameSpan = document.createElement("div");
+                fileNameSpan.style.float = "left";
+                fileNameSpan.innerHTML = file.name;
+                filenameDiv.appendChild(fileNameSpan);
+
+                if (isUserProject()) {
+                    var deleteImg = document.createElement("div");
+                    deleteImg.className = "delete-img";
+                    deleteImg.title = "Delete this file";
+                    deleteImg.onclick = (function (url, id) {
+                        return function () {
+                            projectProvider.deleteFile(url, id);
+                        }
+                    })(getFilenameURL(file.name), i);
+                    filenameDiv.appendChild(deleteImg);
+                }
+
+                filenameDiv.onclick = (function (file) {
+                    return function () {
+                        selectFile(file);
+                    }
+                })(file);
+
+                element.appendChild(filenameDiv);
+            }
+
+            if (isUserProject()) {
+                var addFileButton = document.createElement("div");
+                addFileButton.className = "example-filename";
+                addFileButton.innerHTML = "Add new file";
+                addFileButton.onclick = newFileDialog.open;
+                element.appendChild(addFileButton);
+            }
+        }
+
         return instance;
     }
 
-    return Example;
+    return Project;
 })
 ();

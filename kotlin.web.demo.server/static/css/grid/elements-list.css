@@ -87,6 +87,7 @@
 }
 
 .example-filename{
+    overflow: hidden;
     cursor: pointer;
     display: block;
     color: #3164a0;
@@ -137,6 +138,7 @@
 }
 
 .example-filename-selected{
+    overflow: hidden;
     cursor: pointer;
     position: relative;
     display: block;

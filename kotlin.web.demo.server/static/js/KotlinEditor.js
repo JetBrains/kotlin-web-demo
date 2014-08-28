@@ -472,7 +472,7 @@ var KotlinEditor = (function () {
             setConfiguration: function (conf) {
                 configuration = conf;
             },
-            getProgramText: function () {
+            getText: function () {
                 return my_editor.getValue();
             },
             isEditorContentChanged: function () {
@@ -490,7 +490,7 @@ var KotlinEditor = (function () {
             },
             open: function (element) {
                 if (openedElement != null) {
-                    openedElement.content = my_editor.getValue();
+                    openedElement.save();
                 }
                 highlighting.removeStyles();
                 openedElement = element;
@@ -518,7 +518,7 @@ var KotlinEditor = (function () {
             setText: function (text) {
                 my_editor.setOption("readOnly", false);
                 if (openedElement != null) {
-                    openedElement.content = my_editor.getValue();
+                    openedElement.save();
                 }
                 openedElement = null;
                 my_editor.focus();

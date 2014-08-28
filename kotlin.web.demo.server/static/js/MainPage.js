@@ -259,10 +259,8 @@ var run_button = $("#run-button")
             }
         });
     });
-
-ProgramsView.isLoggedIn = loginView.isLoggedIn;
-ProgramsModel.getEditorContent = editor.getProgramText;
-ProgramsModel.getArguments = argumentsView.val;
+//ProgramsModel.getEditorContent = editor.getProgramText;
+//ProgramsModel.getArguments = argumentsView.val;
 
 
 accordion.onFail = function (exception, actionCode) {
