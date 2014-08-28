@@ -159,7 +159,7 @@ var converterProvider = (function () {
 
 var highlightingProvider = (function () {
     function onSuccess(data, callback) {
-        accordion.getSelectedExample().processHighlightingResult(data);
+        accordion.getSelectedProject().processHighlightingResult(data);
         problemsView.addMessages(data);
         statusBarView.html(ActionStatusMessages.get_highlighting_ok);
         callback(data);
@@ -202,7 +202,7 @@ ConfirmDialog.saveProgram = accordion.saveProgram;
 configurationManager.onChange = function (configuration) {
     editor.setConfiguration(configuration);
     consoleView.setConfiguration(configuration);
-    accordion.setConfiguration(configuration);
+//    accordion.setConfiguration(configuration);
 };
 
 configurationManager.onFail = function (exception) {
@@ -245,15 +245,15 @@ var run_button = $("#run-button")
         run_button.button("option", "disabled", true);
         editor.save();
         var localConfiguration = configurationManager.getConfiguration();
-        highlightingProvider.getHighlighting(localConfiguration.type, accordion.getSelectedExample().getModifiableContent(), function (highlightingResult) {
-            var example = accordion.getSelectedExample();
+        highlightingProvider.getHighlighting(localConfiguration.type, accordion.getSelectedProject().getModifiableContent(), function (highlightingResult) {
+            var example = accordion.getSelectedProject();
             example.processHighlightingResult(highlightingResult);
             if (!example.errorsExists()) {
                 //Create canvas element before run it in browser
                 if (localConfiguration.type == Configuration.type.CANVAS) {
                     canvasDialog.dialog("open");
                 }
-                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedExample().getModifiableContent(), argumentsView.val(), accordion.getSelectedExample());
+                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject().getModifiableContent(), argumentsView.val(), accordion.getSelectedProject());
             } else {
                 run_button.button("option", "disabled", false);
             }

@@ -43,6 +43,9 @@ var ProjectProvider = (function () {
             },
             saveFile: function(url, data){
                 saveFile(url, data);
+            },
+            saveProject: function(content){
+                saveProject(content);
             }
         };
 
@@ -162,6 +165,19 @@ var ProjectProvider = (function () {
                 timeout: 10000,
                 dataType: "json",
                 data: {file: JSON.stringify(data)},
+                error: function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                }
+            })
+        }
+
+        function saveProject(content){
+            $.ajax({
+                url: generateAjaxUrl("saveProject"),
+                type: "POST",
+                timeout: 10000,
+                dataType: "json",
+                data: {project: JSON.stringify(content)},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }

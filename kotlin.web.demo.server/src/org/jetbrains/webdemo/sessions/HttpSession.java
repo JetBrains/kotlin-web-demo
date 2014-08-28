@@ -18,6 +18,7 @@ package org.jetbrains.webdemo.sessions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NonNls;
@@ -27,6 +28,7 @@ import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExampleFile;
 import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
+import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
 import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.responseHelpers.JavaToKotlinConverter;
@@ -36,9 +38,7 @@ import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,47 +75,62 @@ public class HttpSession {
 
             ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
-            if (parameters.get("type")[0].equals("run")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
-                sendExecutorResult();
-            } else if (parameters.get("type")[0].equals("loadExample")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
-                sendExampleContent();
-            } else if (parameters.get("type")[0].equals("highlight")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
-                sessionInfo.setRunConfiguration(parameters.get("args")[0]);
-                sendHighlightingResult();
-            } else if (parameters.get("type")[0].equals("writeLog")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
-                sendWriteLogResult();
-            } else if (parameters.get("type")[0].equals("convertToKotlin")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
-                sendConversationResult();
-            } else if (parameters.get("type")[0].equals("saveFile")) {
-                sendSaveFileResult();
-            } else if (parameters.get("type")[0].equals("addProject")) {
-                MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0]);
-            } else if (parameters.get("type")[0].equals("addExampleProject")) {
-                addExampleProject();
-            } else if (parameters.get("type")[0].equals("deleteProject")) {
-                MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0]);
-            } else if (parameters.get("type")[0].equals("loadProject")) {
-                sendLoadProjectResult();
-            } else if (parameters.get("type")[0].equals("addFile")) {
-                MySqlConnector.getInstance().addFile(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0], parameters.get("filename")[0]);
-            } else if (parameters.get("type")[0].equals("deleteFile")) {
-                sendDeleteProgramResult();
-            } else if (parameters.get("type")[0].equals("generatePublicLink")) {
-                sendGeneratePublicLinkResult();
-            } else if (parameters.get("type")[0].equals("complete")) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
-                sendCompletionResult();
-            } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), sessionInfo.getOriginUrl(), param);
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), sessionInfo.getOriginUrl(), param);
-                writeResponse(ResponseUtils.getErrorInJson("Incorrect request"), HttpServletResponse.SC_BAD_REQUEST);
+            switch (parameters.get("type")[0]) {
+                case("run"):
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                    sendExecutorResult();
+                    break;
+                case("loadExample"):
+                    sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                    sendExampleContent();
+                    break;
+                case("highlight"):
+                    sendHighlightingResult();
+                    break;
+                case("writeLog"):
+                    sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
+                    sendWriteLogResult();
+                    break;
+                case("convertToKotlin"):
+                    sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
+                    sendConversationResult();
+                    break;
+                case("saveFile"):
+                    sendSaveFileResult();
+                    break;
+                case("addProject"):
+                    MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0]);
+                    break;
+                case("addExampleProject"):
+                    addExampleProject();
+                    break;
+                case ("deleteProject"):
+                    MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0]);
+                    break;
+                case ("saveProject"):
+                    sendSaveProjectResult();
+                    break;
+                case("loadProject"):
+                    sendLoadProjectResult();
+                    break;
+                case("addFile"):
+                    MySqlConnector.getInstance().addFile(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0], parameters.get("filename")[0]);
+                case("deleteFile"):
+                    sendDeleteProgramResult();
+                    break;
+                case("generatePublicLink"):
+                    sendGeneratePublicLinkResult();
+                    break;
+                case("complete"):
+                    sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                    sendCompletionResult();
+                    break;
+                default:
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + param);
+                    sendResourceFile(request, response);
+                    break;
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -182,6 +197,16 @@ public class HttpSession {
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
+    private void sendSaveProjectResult(){
+        try {
+            ExampleObject project = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
+            MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), project);
+            writeResponse("ок", HttpServletResponse.SC_OK);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
     private void sendSaveFileResult() {
         try{
             String folderName = parameters.get("args")[0].replaceAll("_", " ");
@@ -235,7 +260,7 @@ public class HttpSession {
         return example.files.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.name, file.content)).collect(Collectors.toList());
     }
 
-    private void sendCompletionResult() {
+    public void sendCompletionResult() {
         try{
             String fileName = parameters.get("filename")[0];
             int line = Integer.parseInt(parameters.get("line")[0]);
@@ -252,7 +277,9 @@ public class HttpSession {
         }
     }
 
-    private void sendHighlightingResult() {
+    public void sendHighlightingResult() {
+        sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
+        sessionInfo.setRunConfiguration(parameters.get("args")[0]);
         try{
             ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(parameters.get("project")[0], ExampleObject.class));
 
@@ -382,4 +409,79 @@ public class HttpSession {
         }
     }
 
+
+    private void sendResourceFile(HttpServletRequest request, HttpServletResponse response) {
+        String path = request.getRequestURI() + "?" + request.getQueryString();
+        path = ResponseUtils.substringAfterReturnAll(path, "resources");
+        ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "-1", "Resource doesn't downloaded from nginx: " + path));
+        if (path.equals("")) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                    new UnsupportedOperationException("Empty path to resource"),
+                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), path);
+            writeResponse(request, response, "Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
+            return;
+        } else if (path.startsWith("/messages/")) {
+            writeResponse(request, response, "", HttpServletResponse.SC_OK);
+            return;
+        } else if (path.equals("/") || path.equals("/index.html")) {
+            path = "/index.html";
+            StringBuilder responseStr = new StringBuilder();
+            InputStream is = null;
+            try {
+                is = ServerHandler.class.getResourceAsStream(path);
+                responseStr.append(ResponseUtils.readData(is, true));
+            } catch (FileNotFoundException e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), "index.html not found");
+                writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
+                return;
+            } catch (IOException e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), "index.html not found");
+                writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
+                return;
+            } finally {
+                ServerResponseUtils.close(is);
+            }
+
+            OutputStream os = null;
+            try {
+                os = response.getOutputStream();
+                os.write(responseStr.toString().getBytes());
+            } catch (IOException e) {
+                //This is an exception we can't send data to client
+            } finally {
+                ServerResponseUtils.close(os);
+            }
+            return;
+        }
+
+        InputStream is = ServerHandler.class.getResourceAsStream(path);
+        if (is == null) {
+            if (request.getQueryString() != null) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                        new UnsupportedOperationException("Broken path to resource"),
+                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
+            }
+            writeResponse(request, response, ("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        try {
+            FileUtil.copy(is, response.getOutputStream());
+        } catch (IOException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
+            writeResponse(request, response, "Could not load the resource from the server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) {
+        try {
+            ServerResponseUtils.writeResponse(request, response, responseBody, errorCode);
+        } catch (IOException e) {
+            //This is an exception we can't send data to client
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", request.getHeader("Origin"), "null");
+        }
+    }
 }

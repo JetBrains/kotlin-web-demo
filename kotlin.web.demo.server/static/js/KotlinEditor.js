@@ -436,7 +436,7 @@ var KotlinEditor = (function () {
             extraKeys: {
                 "Ctrl-Space": function () {
                     instance.save();
-                    completionProvider.getCompletion(configuration.type, accordion.getSelectedExample().getModifiableContent(), openedElement.name,
+                    completionProvider.getCompletion(configuration.type, accordion.getSelectedProject().getModifiableContent(), openedElement.name,
                         my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
                 }
 
@@ -571,7 +571,7 @@ var KotlinEditor = (function () {
         function getHighlighting() {
             if (configuration.mode.name != Configuration.mode.ONRUN.name) {
                 instance.save();
-                var example = accordion.getSelectedExample();
+                var example = accordion.getSelectedProject();
                 highlightingProvider.getHighlighting(
                     configuration.type,
                     example.getModifiableContent(),

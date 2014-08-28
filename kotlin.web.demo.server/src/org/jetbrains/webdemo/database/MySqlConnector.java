@@ -356,72 +356,28 @@ public class MySqlConnector {
         }
     }
 
-    public String updateProgram(String programId, String programText, String args, String runConfiguration) {
-        if (!checkConnection()) {
-            return ResponseUtils.getErrorInJson("Cannot connect to database for save your program.");
-        }
-        PreparedStatement st = null;
-        try {
-            st = connection.prepareStatement("UPDATE programs SET PROGRAM_TEXT=? WHERE PROGRAM_ID=?");
-            st.setString(1, programText);
-            st.setString(2, programId);
-            st.executeUpdate();
 
-            st = connection.prepareStatement("UPDATE programs SET PROGRAM_ARGS=? WHERE PROGRAM_ID=?");
-            st.setString(1, args);
-            st.setString(2, programId);
-            st.executeUpdate();
-
-            st = connection.prepareStatement("UPDATE programs SET RUN_CONF=? WHERE PROGRAM_ID=?");
-            st.setString(1, runConfiguration);
-            st.setString(2, programId);
-            st.executeUpdate();
-
-            return ResponseUtils.getJsonString("programId", programId);
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", programId);
-            return ResponseUtils.getErrorInJson("Unknown error while saving your program");
-        } finally {
-            closeStatement(st);
-        }
-    }
-
-    public boolean findProgramByName(UserInfo userInfo, String programName) {
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        try {
-            st = connection.prepareStatement("SELECT * FROM programs WHERE PROGRAM_NAME=?");
-            st.setString(1, programName);
-            rs = st.executeQuery();
-
-            ArrayList<String> programIds = new ArrayList<String>();
-            while (rs.next()) {
-                programIds.add(rs.getString("PROGRAM_ID"));
+    public boolean saveProject(UserInfo userInfo, ExampleObject project){
+        int userId = getUserId(userInfo);
+        if(userId != -1){
+            try(PreparedStatement st = connection.prepareStatement(
+                    "update projects set projects.args = ? , projects.run_configuration = ? " +
+                    "where projects.owner_id = ? and projects.parent = ? and projects.name = ?")){
+                st.setString(1, project.args);
+                st.setString(2, project.confType);
+                st.setString(3, userId + "");
+                st.setString(4, project.parent);
+                st.setString(5, project.name);
+                st.execute();
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
 
-
-            for (String programId : programIds) {
-                st = connection.prepareStatement("SELECT * FROM userprogramid WHERE PROGRAM_ID=?");
-                st.setString(1, programId);
-                rs = st.executeQuery();
-                if (!rs.next()) {
-                    return false;
-                }
-
-                if (rs.getString("USER_ID").equals(userInfo.getId()) && rs.getString("USER_TYPE").equals(userInfo.getType())) {
-                    return true;
-                }
-            }
-            return false;
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
-            return false;
-        } finally {
-            closeStatementAndResultSet(st, rs);
         }
+        return false;
     }
+
 
     public boolean addProject(UserInfo userInfo, String name) {
         int userId = getUserId(userInfo);
@@ -457,7 +413,6 @@ public class MySqlConnector {
                     st.setString(1, projectId + "");
                     st.setString(2, file.name);
                     st.setString(3, file.content);
-                    st.execute();
                     st.execute();
                 }
                 return true;
@@ -543,7 +498,7 @@ public class MySqlConnector {
 
             if (rs.next()) {
                 ExampleObject project = new ExampleObject();
-                project.parent = "My Programs";
+                project.parent = parent;
                 project.name = projectName;
                 project.args = rs.getString("args");
                 project.confType = rs.getString("run_configuration");

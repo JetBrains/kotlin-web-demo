@@ -21,7 +21,6 @@
 
 var Project = (function () {
     function Project(url, element, content) {
-        var content = null;
         var selectedFile = null;
 
         var instance = {
@@ -43,9 +42,10 @@ var Project = (function () {
                 if(!content.isLocalVersion && loginView.isLoggedIn()){
                     projectProvider.addNewProjectFromExample(this.getModifiableContent());
                 }
+                instance.select();
             },
             select: function () {
-                problemsView.onExampleChange();
+                problemsView.onProjectChange();
                 helpViewForExamples.showHelp(content.help);
                 if (selectedFile != null) {
                     editor.open(selectedFile);
@@ -96,6 +96,13 @@ var Project = (function () {
             save: function () {
                 content.confType = configurationManager.getType();
                 content.args = argumentsView.val();
+                projectProvider.saveProject({
+                    args: content.args,
+                    confType: content.confType,
+                    name: content.name,
+                    parent: content.parent,
+                    files: []
+                });
             },
             getFiles: function () {
                 return content.files;

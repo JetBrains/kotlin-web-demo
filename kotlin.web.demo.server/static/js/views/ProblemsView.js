@@ -36,15 +36,15 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         addMessages: function (data) {
             addMessagesToProblemsView();
         },
-        onExampleChange: function(){
-            onExampleChange();
+        onProjectChange: function(){
+            onProjectChange();
         },
         clear: function () {
             console.innerHTML = "";
         }
     };
 
-    function onExampleChange () {
+    function onProjectChange () {
         console.innerHTML = "";
         var example = accordion.getSelectedProject();
         for(var i = 0; i < example.getFiles().length; i++) {

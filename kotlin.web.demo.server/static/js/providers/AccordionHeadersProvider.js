@@ -40,7 +40,7 @@ var AccordionHeadersProvider = (function () {
 
         function getAllExamples() {
             $.ajax({
-                url: generateAjaxUrl("loadExample", "all"),
+                url: generateAjaxUrl("loadExampleHeaders", "all"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {

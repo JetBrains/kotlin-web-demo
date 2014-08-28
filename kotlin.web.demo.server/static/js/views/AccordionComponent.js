@@ -78,8 +78,6 @@ var AccordionView = (function () {
             deleteProject: function () {
                 this.loadAllContent();
             },
-            onLoadAllContent: function () {
-            },
             onFail: function (exception, messageForStatusBar) {
             },
             getSelectedProject: function () {

@@ -48,7 +48,7 @@ public class ServerHandler {
     public void handle(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
         if (request.getQueryString() != null && request.getQueryString().equals("test")) {
-            try (PrintWriter out = response.getWriter()){
+            try (PrintWriter out = response.getWriter()) {
                 out.write("ok");
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -62,67 +62,64 @@ public class ServerHandler {
             String param = request.getRequestURI() + "?" + request.getQueryString();
             try {
                 Map<String, String[]> parameters = request.getParameterMap();
-                if (parameters.get("type")[0].equals("sendUserData")) {
-                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
-                    MySqlConnector.getInstance().findUser(sessionInfo.getUserInfo());
-                    sendUserInformation(request, response, sessionInfo);
-                } else if (parameters.get("type")[0].equals("getSessionId")) {
-                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
-                    sendSessionId(request, response, sessionInfo, param);
-                } else if (parameters.get("type")[0].equals("getUserName")) {
-                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
-                    sendUserName(request, response, sessionInfo, param);
-                } else if (parameters.get("type")[0].equals("authorization")) {
-                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
-                    sendAuthorizationResult(request, response, parameters, sessionInfo);
-                } else if (parameters.get("type")[0].equals("updateExamples")) {
-                    updateExamples(request, response);
-                } else if (param.startsWith("/logs") || parameters.get("type")[0].equals("updateStatistics")) {
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
-                    sendListLogs(request, response, parameters.get("type")[0].equals("updateStatistics"), sessionInfo);
-                } else if (parameters.get("type")[0].equals("showUserInfo")) {
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                    sendUserInfoForStatistics(request, response);
-                } else if (parameters.get("type")[0].equals("sortExceptions")) {
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
-                    sendSortedExceptions(request, response, parameters);
-                } else if (parameters.get("type")[0].equals("downloadLog")) {
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + param);
-                    sendLog(request, response, parameters);
-                } else if (parameters.get("type")[0].equals("loadExample") && parameters.get("args")[0].equals("all")) {
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
-                    sendExamplesList(request, response);
-                } else if (parameters.get("type")[0].equals("loadHelpForWords")) {
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
-                    sendHelpContentForWords(request, response);
-                } else if (parameters.get("type")[0].equals("highlight")
-                        || parameters.get("type")[0].equals("complete")
-                        || parameters.get("type")[0].equals("run")
-                        || parameters.get("type")[0].equals("convertToKotlin")
-                        || parameters.get("type")[0].equals("loadExample")
-                        || parameters.get("type")[0].equals("saveFile")
-                        || parameters.get("type")[0].equals("deleteFile")
-                        || parameters.get("type")[0].equals("generatePublicLink")
-                        || parameters.get("type")[0].equals("loadProject")
-                        || parameters.get("type")[0].equals("addFile")
-                        || parameters.get("type")[0].equals("writeLog")
-                        || parameters.get("type")[0].equals("addProject")
-                        || parameters.get("type")[0].equals("addExampleProject")
-                        || parameters.get("type")[0].equals("deleteProject")) {
-                    if (!parameters.get("type")[0].equals("writeLog")) {
+                switch (parameters.get("type")[0]) {
+                    case ("sendUserData"):
                         sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
-                    } else {
-                        sessionInfo = new SessionInfo(request.getSession().getId());
+                        MySqlConnector.getInstance().findUser(sessionInfo.getUserInfo());
+                        sendUserInformation(request, response, sessionInfo);
+                        break;
+                    case ("getSessionId"):
+                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        sendSessionId(request, response, sessionInfo, param);
+                        break;
+                    case ("getUserName"):
+                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        sendUserName(request, response, sessionInfo, param);
+                        break;
+                    case ("authorization"):
+                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        sendAuthorizationResult(request, response, parameters, sessionInfo);
+                        break;
+                    case ("updateExamples"):
+                        updateExamples(request, response);
+                        break;
+                    case ("updateStatistics"):
+                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
+                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        sendListLogs(request, response, parameters.get("type")[0].equals("updateStatistics"), sessionInfo);
+                        break;
+                    case ("showUserInfo"):
+                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
+                        sendUserInfoForStatistics(request, response);
+                        break;
+                    case ("sortExceptions"):
+                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
+                        sendSortedExceptions(request, response, parameters);
+                        break;
+                    case ("downloadLog"):
+                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + param);
+                        sendLog(request, response, parameters);
+                        break;
+                    case ("loadExampleHeaders"):
+                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
+                        sendExamplesList(request, response);
+                        break;
+                    case ("loadHelpForWords"):
+                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
+                        sendHelpContentForWords(request, response);
+                        break;
+                    default: {
+                        if (!parameters.get("type")[0].equals("writeLog")) {
+                            sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        } else {
+                            sessionInfo = new SessionInfo(request.getSession().getId());
+                        }
+                        if (!parameters.get("sessionId")[0].equals(sessionInfo.getId())) {
+                            parameters.put("sessionId", new String[]{sessionInfo.getId()});
+                        }
+                        HttpSession session = new HttpSession(sessionInfo, parameters);
+                        session.handle(request, response);
                     }
-                    if (!parameters.get("sessionId")[0].equals(sessionInfo.getId())) {
-                        parameters.put("sessionId", new String[]{sessionInfo.getId()});
-                    }
-                    HttpSession session = new HttpSession(sessionInfo, parameters);
-                    session.handle(request, response);
-                } else {
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + param);
-                    sendResourceFile(request, response);
                 }
             } catch (Throwable e) {
                 //Do not stop server
@@ -179,9 +176,9 @@ public class ServerHandler {
             }
             if (parameters.containsKey("oauth_verifier") || parameters.containsKey("code")) {
                 UserInfo info;
-                if(parameters.containsKey("oauth_verifier")){
+                if (parameters.containsKey("oauth_verifier")) {
                     info = helper.verify(parameters.get("oauth_verifier")[0]);
-                } else{
+                } else {
                     info = helper.verify(parameters.get("code")[0]);
                 }
                 if (info != null) {
@@ -204,7 +201,7 @@ public class ServerHandler {
                 }
             } else {
                 String verifyKey = helper.authorize();
-                try (PrintWriter out = response.getWriter()){
+                try (PrintWriter out = response.getWriter()) {
                     out.write(verifyKey);
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -326,71 +323,6 @@ public class ServerHandler {
         writeResponse(request, response, "OK", HttpServletResponse.SC_OK);
     }
 
-    private void sendResourceFile(HttpServletRequest request, HttpServletResponse response) {
-        String path = request.getRequestURI() + "?" + request.getQueryString();
-        path = ResponseUtils.substringAfterReturnAll(path, "resources");
-        ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "-1", "Resource doesn't downloaded from nginx: " + path));
-        if (path.equals("")) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                    new UnsupportedOperationException("Empty path to resource"),
-                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), path);
-            writeResponse(request, response, "Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
-            return;
-        } else if (path.startsWith("/messages/")) {
-            writeResponse(request, response, "", HttpServletResponse.SC_OK);
-            return;
-        } else if (path.equals("/") || path.equals("/index.html")) {
-            path = "/index.html";
-            StringBuilder responseStr = new StringBuilder();
-            InputStream is = null;
-            try {
-                is = ServerHandler.class.getResourceAsStream(path);
-                responseStr.append(ResponseUtils.readData(is, true));
-            } catch (FileNotFoundException e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), "index.html not found");
-                writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
-                return;
-            } catch (IOException e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), "index.html not found");
-                writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
-                return;
-            } finally {
-                ServerResponseUtils.close(is);
-            }
-
-            OutputStream os = null;
-            try {
-                os = response.getOutputStream();
-                os.write(responseStr.toString().getBytes());
-            } catch (IOException e) {
-                //This is an exception we can't send data to client
-            } finally {
-                ServerResponseUtils.close(os);
-            }
-            return;
-        }
-
-        InputStream is = ServerHandler.class.getResourceAsStream(path);
-        if (is == null) {
-            if (request.getQueryString() != null) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                        new UnsupportedOperationException("Broken path to resource"),
-                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
-            }
-            writeResponse(request, response, ("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        try {
-            FileUtil.copy(is, response.getOutputStream());
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
-            writeResponse(request, response, "Could not load the resource from the server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
-    }
 
     //Send Response
     private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) {
