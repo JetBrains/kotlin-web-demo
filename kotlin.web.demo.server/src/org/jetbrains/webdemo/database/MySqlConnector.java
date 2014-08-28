@@ -26,7 +26,6 @@ import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.examplesLoader.ExampleFile;
 import org.jetbrains.webdemo.examplesLoader.ExampleObject;
-import org.jetbrains.webdemo.examplesLoader.ExamplesFolder;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -34,10 +33,12 @@ import org.jetbrains.webdemo.session.UserInfo;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MySqlConnector {
     private static final MySqlConnector connector = new MySqlConnector();
@@ -554,6 +555,7 @@ public class MySqlConnector {
                 rs = st.executeQuery();
                 while (rs.next()) {
                     ExampleFile file = new ExampleFile(rs.getString("name"), rs.getString("content"));
+                    file.modifiable = true;
                     project.files.add(file);
                 }
                 return new ObjectMapper().writeValueAsString(project);

@@ -512,7 +512,7 @@ var KotlinEditor = (function () {
             },
             save: function () {
                 if (openedElement != null) {
-                    openedElement.content = my_editor.getValue();
+                    openedElement.save();
                 }
             },
             setText: function (text) {

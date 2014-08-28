@@ -46,14 +46,14 @@ public class HttpSession {
     @NonNls
     private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
     private final SessionInfo sessionInfo;
-    private final RequestParameters parameters;
+    private final Map<String, String[]> parameters;
     protected Project currentProject;
     protected PsiFile currentPsiFile;
     private HttpServletRequest request;
     private HttpServletResponse response;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public HttpSession(SessionInfo info, RequestParameters parameters) {
+    public HttpSession(SessionInfo info, Map<String, String[]> parameters) {
         this.sessionInfo = info;
         this.parameters = parameters;
     }
@@ -71,43 +71,43 @@ public class HttpSession {
 
             ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
-            if (parameters.compareType("run")) {
+            if (parameters.get("type")[0].equals("run")) {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExecutorResult();
-            } else if (parameters.compareType("loadExample")) {
+            } else if (parameters.get("type")[0].equals("loadExample")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendExampleContent();
-            } else if (parameters.compareType("highlight")) {
+            } else if (parameters.get("type")[0].equals("highlight")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
-                sessionInfo.setRunConfiguration(parameters.getArgs());
+                sessionInfo.setRunConfiguration(parameters.get("args")[0]);
                 sendHighlightingResult();
-            } else if (parameters.compareType("writeLog")) {
+            } else if (parameters.get("type")[0].equals("writeLog")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
                 sendWriteLogResult();
-            } else if (parameters.compareType("convertToKotlin")) {
+            } else if (parameters.get("type")[0].equals("convertToKotlin")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
                 sendConversationResult();
-            } else if (parameters.compareType("saveFile")) {
+            } else if (parameters.get("type")[0].equals("saveFile")) {
                 sendSaveProgramResult();
-            } else if (parameters.compareType("addProject")) {
-                MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.getArgs());
-            } else if (parameters.compareType("addExampleProject")) {
+            } else if (parameters.get("type")[0].equals("addProject")) {
+                MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0]);
+            } else if (parameters.get("type")[0].equals("addExampleProject")) {
                 addExampleProject();
-            } else if (parameters.compareType("deleteProject")) {
-                MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), ResponseUtils.substringAfter(parameters.getArgs(), "&name="));
-            } else if (parameters.compareType("loadProject")) {
+            } else if (parameters.get("type")[0].equals("deleteProject")) {
+                MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), ResponseUtils.substringAfter(parameters.get("args")[0], "&name="));
+            } else if (parameters.get("type")[0].equals("loadProject")) {
                 sendLoadProjectResult();
-            } else if (parameters.compareType("addFile")) {
-                String folderName = ResponseUtils.substringBefore(parameters.getArgs(), "&name=");
-                String projectName = ResponseUtils.substringBetween(parameters.getArgs(), "&name=", "&filename=");
-                String fileName = ResponseUtils.substringAfter(parameters.getArgs(), "&filename=");
+            } else if (parameters.get("type")[0].equals("addFile")) {
+                String folderName = ResponseUtils.substringBefore(parameters.get("args")[0], "&name=");
+                String projectName = ResponseUtils.substringBetween(parameters.get("args")[0], "&name=", "&filename=");
+                String fileName = ResponseUtils.substringAfter(parameters.get("args")[0], "&filename=");
                 MySqlConnector.getInstance().addFile(sessionInfo.getUserInfo(),folderName, projectName, fileName);
-            } else if (parameters.compareType("deleteFile")) {
+            } else if (parameters.get("type")[0].equals("deleteFile")) {
                 sendDeleteProgramResult();
-            } else if (parameters.compareType("generatePublicLink")) {
+            } else if (parameters.get("type")[0].equals("generatePublicLink")) {
                 sendGeneratePublicLinkResult();
-            } else if (parameters.compareType("complete")) {
+            } else if (parameters.get("type")[0].equals("complete")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendCompletionResult();
@@ -132,7 +132,7 @@ public class HttpSession {
     }
 
     private void sendWriteLogResult() {
-        String type = parameters.getArgs();
+        String type = parameters.get("args")[0];
         if (type.equals("info")) {
             String tmp = getPostDataFromRequest(true).text;
             ErrorWriterOnServer.LOG_FOR_INFO.info(tmp);
@@ -151,32 +151,32 @@ public class HttpSession {
 
     private void sendGeneratePublicLinkResult() {
         String result;
-        String programId = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
+        String programId = ResponseUtils.getExampleOrProgramNameByUrl(parameters.get("args")[0]);
         result = MySqlConnector.getInstance().generatePublicLink(programId);
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendDeleteProgramResult() {
         String result;
-        String folderName = ResponseUtils.substringBefore(parameters.getArgs(), "&name=");
-        String projectName = ResponseUtils.substringBetween(parameters.getArgs(), "&name=", "&filename=");
-        String fileName = ResponseUtils.substringAfter(parameters.getArgs(), "&filename=");
+        String folderName = ResponseUtils.substringBefore(parameters.get("args")[0], "&name=");
+        String projectName = ResponseUtils.substringBetween(parameters.get("args")[0], "&name=", "&filename=");
+        String fileName = ResponseUtils.substringAfter(parameters.get("args")[0], "&filename=");
         result = MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), folderName, projectName, fileName);
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendLoadProjectResult() {
         String result;
-        if (parameters.getArgs().equals("all")) {
+        if (parameters.get("args")[0].equals("all")) {
             result = MySqlConnector.getInstance().getProjectNames(sessionInfo.getUserInfo());
         } else {
             String id;
-            if (parameters.getArgs().contains("publicLink")) {
-                id = ResponseUtils.getExampleOrProgramNameByUrl(parameters.getArgs());
+            if (parameters.get("args")[0].contains("publicLink")) {
+                id = ResponseUtils.getExampleOrProgramNameByUrl(parameters.get("args")[0]);
                 result = MySqlConnector.getInstance().getProgramTextByPublicLink(id);
             } else {
-                String parent = ResponseUtils.substringBefore(parameters.getArgs(), "&name=").replaceAll("_", " ");
-                String name = ResponseUtils.substringAfter(parameters.getArgs(), "&name=").replaceAll("_", " ");
+                String parent = ResponseUtils.substringBefore(parameters.get("args")[0], "&name=").replaceAll("_", " ");
+                String name = ResponseUtils.substringAfter(parameters.get("args")[0], "&name=").replaceAll("_", " ");
                 result = MySqlConnector.getInstance().getProjectContent(sessionInfo.getUserInfo(), parent, name);
             }
         }
@@ -185,8 +185,8 @@ public class HttpSession {
 
     private void sendSaveProgramResult() {
         try(InputStream inputStream = request.getInputStream()) {
-            String folderName = ResponseUtils.substringBefore(parameters.getArgs(), "&name=").replaceAll("_", " ");
-            String projectName = ResponseUtils.substringBetween(parameters.getArgs(), "&name=", "&filename=").replaceAll("_", " ");
+            String folderName = ResponseUtils.substringBefore(parameters.get("args")[0], "&name=").replaceAll("_", " ");
+            String projectName = ResponseUtils.substringBetween(parameters.get("args")[0], "&name=", "&filename=").replaceAll("_", " ");
             ExampleFile file = objectMapper.readValue(inputStream, ExampleFile.class);
             MySqlConnector.getInstance().saveFile(sessionInfo.getUserInfo(), folderName, projectName, file);
             writeResponse("ok", HttpServletResponse.SC_OK);
@@ -227,7 +227,7 @@ public class HttpSession {
     }
 
     private void sendExampleContent() {
-        writeResponse(ExamplesList.loadExample(parameters.getArgs()), HttpServletResponse.SC_OK);
+        writeResponse(ExamplesList.loadExample(parameters.get("args")[0]), HttpServletResponse.SC_OK);
 
     }
 
@@ -245,7 +245,7 @@ public class HttpSession {
             ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(requestObject.get("project").traverse(), ExampleObject.class));
 
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
-            sessionInfo.setRunConfiguration(ResponseUtils.substringAfter(parameters.getArgs(), "&runConf="));
+            sessionInfo.setRunConfiguration(ResponseUtils.substringAfter(parameters.get("args")[0], "&runConf="));
 
             JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(psiFiles, sessionInfo, fileName, line, ch);
             writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);

@@ -393,6 +393,12 @@ function loadShortcuts() {
     $("#shortcuts-help").html(text);
 }
 
+window.onbeforeunload = closingCode;
+function closingCode(){
+    editor.save();
+    return null;
+}
+
 helpDialog = $("#help-dialog");
 helpDialog.dialog(
     {

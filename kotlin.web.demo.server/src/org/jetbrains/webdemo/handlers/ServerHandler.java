@@ -40,6 +40,7 @@ import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Calendar;
+import java.util.Map;
 
 public class ServerHandler {
 
@@ -47,96 +48,88 @@ public class ServerHandler {
     public void handle(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
         if (request.getQueryString() != null && request.getQueryString().equals("test")) {
-            PrintWriter out = null;
-            try {
-                out = response.getWriter();
+            try (PrintWriter out = response.getWriter()){
                 out.write("ok");
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         "TEST", request.getHeader("Origin"), "null");
-            } finally {
-                ServerResponseUtils.close(out);
             }
-            return;
-        }
-
-        if (!ServerResponseUtils.isOriginAccepted(request)) {
+        } else if (!ServerResponseUtils.isOriginAccepted(request)) {
             ErrorWriter.ERROR_WRITER.writeInfo(request.getHeader("Origin") + " try to connect to server");
-            return;
-        }
+        } else {
+            SessionInfo sessionInfo;
 
-        SessionInfo sessionInfo;
-
-        String param = request.getRequestURI() + "?" + request.getQueryString();
-        try {
-            RequestParameters parameters = RequestParameters.parseRequest(param);
-            if (parameters.compareType("sendUserData")) {
-                sessionInfo = setSessionInfo(request, parameters.getSessionId());
-                MySqlConnector.getInstance().findUser(sessionInfo.getUserInfo());
-                sendUserInformation(request, response, sessionInfo);
-            } else if (parameters.compareType("getSessionId")) {
-                sessionInfo = setSessionInfo(request, parameters.getSessionId());
-                sendSessionId(request, response, sessionInfo, param);
-            } else if (parameters.compareType("getUserName")) {
-                sessionInfo = setSessionInfo(request, parameters.getSessionId());
-                sendUserName(request, response, sessionInfo, param);
-            } else if (parameters.compareType("authorization")) {
-                sessionInfo = setSessionInfo(request, parameters.getSessionId());
-                sendAuthorizationResult(request, response, parameters, sessionInfo);
-            } else if (parameters.compareType("updateExamples")) {
-                updateExamples(request, response);
-            } else if (param.startsWith("/logs") || parameters.compareType("updateStatistics")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                sessionInfo = setSessionInfo(request, parameters.getSessionId());
-                sendListLogs(request, response, parameters.compareType("updateStatistics"), sessionInfo);
-            } else if (parameters.compareType("showUserInfo")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                sendUserInfoForStatistics(request, response);
-            } else if (parameters.compareType("sortExceptions")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
-                sendSortedExceptions(request, response, parameters);
-            } else if (parameters.compareType("downloadLog")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + param);
-                sendLog(request, response, parameters);
-            } else if (parameters.compareType("loadExample") && parameters.getArgs().equals("all")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
-                sendExamplesList(request, response);
-            } else if (parameters.compareType("loadHelpForWords")) {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
-                sendHelpContentForWords(request, response);
-            } else if (parameters.compareType("highlight")
-                    || parameters.compareType("complete")
-                    || parameters.compareType("run")
-                    || parameters.compareType("convertToKotlin")
-                    || parameters.compareType("loadExample")
-                    || parameters.compareType("saveFile")
-                    || parameters.compareType("deleteFile")
-                    || parameters.compareType("generatePublicLink")
-                    || parameters.compareType("loadProject")
-                    || parameters.compareType("addFile")
-                    || parameters.compareType("writeLog")
-                    || parameters.compareType("addProject")
-                    || parameters.compareType("addExampleProject")
-                    || parameters.compareType("deleteProject")){
-                if (!parameters.compareType("writeLog")) {
-                    sessionInfo = setSessionInfo(request, parameters.getSessionId());
+            String param = request.getRequestURI() + "?" + request.getQueryString();
+            try {
+                Map<String, String[]> parameters = request.getParameterMap();
+                if (parameters.get("type")[0].equals("sendUserData")) {
+                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                    MySqlConnector.getInstance().findUser(sessionInfo.getUserInfo());
+                    sendUserInformation(request, response, sessionInfo);
+                } else if (parameters.get("type")[0].equals("getSessionId")) {
+                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                    sendSessionId(request, response, sessionInfo, param);
+                } else if (parameters.get("type")[0].equals("getUserName")) {
+                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                    sendUserName(request, response, sessionInfo, param);
+                } else if (parameters.get("type")[0].equals("authorization")) {
+                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                    sendAuthorizationResult(request, response, parameters, sessionInfo);
+                } else if (parameters.get("type")[0].equals("updateExamples")) {
+                    updateExamples(request, response);
+                } else if (param.startsWith("/logs") || parameters.get("type")[0].equals("updateStatistics")) {
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
+                    sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                    sendListLogs(request, response, parameters.get("type")[0].equals("updateStatistics"), sessionInfo);
+                } else if (parameters.get("type")[0].equals("showUserInfo")) {
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
+                    sendUserInfoForStatistics(request, response);
+                } else if (parameters.get("type")[0].equals("sortExceptions")) {
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
+                    sendSortedExceptions(request, response, parameters);
+                } else if (parameters.get("type")[0].equals("downloadLog")) {
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + param);
+                    sendLog(request, response, parameters);
+                } else if (parameters.get("type")[0].equals("loadExample") && parameters.get("args")[0].equals("all")) {
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
+                    sendExamplesList(request, response);
+                } else if (parameters.get("type")[0].equals("loadHelpForWords")) {
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
+                    sendHelpContentForWords(request, response);
+                } else if (parameters.get("type")[0].equals("highlight")
+                        || parameters.get("type")[0].equals("complete")
+                        || parameters.get("type")[0].equals("run")
+                        || parameters.get("type")[0].equals("convertToKotlin")
+                        || parameters.get("type")[0].equals("loadExample")
+                        || parameters.get("type")[0].equals("saveFile")
+                        || parameters.get("type")[0].equals("deleteFile")
+                        || parameters.get("type")[0].equals("generatePublicLink")
+                        || parameters.get("type")[0].equals("loadProject")
+                        || parameters.get("type")[0].equals("addFile")
+                        || parameters.get("type")[0].equals("writeLog")
+                        || parameters.get("type")[0].equals("addProject")
+                        || parameters.get("type")[0].equals("addExampleProject")
+                        || parameters.get("type")[0].equals("deleteProject")) {
+                    if (!parameters.get("type")[0].equals("writeLog")) {
+                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                    } else {
+                        sessionInfo = new SessionInfo(request.getSession().getId());
+                    }
+                    if (!parameters.get("sessionId")[0].equals(sessionInfo.getId())) {
+                        parameters.put("sessionId", new String[]{sessionInfo.getId()});
+                    }
+                    HttpSession session = new HttpSession(sessionInfo, parameters);
+                    session.handle(request, response);
                 } else {
-                    sessionInfo = new SessionInfo(request.getSession().getId());
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + param);
+                    sendResourceFile(request, response);
                 }
-                if (!parameters.getSessionId().equals(sessionInfo.getId())) {
-                    parameters.setSessionId(sessionInfo.getId());
-                }
-                HttpSession session = new HttpSession(sessionInfo, parameters);
-                session.handle(request, response);
-            } else {
-                ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + param);
-                sendResourceFile(request, response);
+            } catch (Throwable e) {
+                //Do not stop server
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        "UNKNOWN", "unknown", param);
+                ServerResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-        } catch (Throwable e) {
-            //Do not stop server
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    "UNKNOWN", "unknown", param);
-            ServerResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -171,21 +164,21 @@ public class ServerHandler {
         }
     }
 
-    private void sendAuthorizationResult(HttpServletRequest request, HttpServletResponse response, RequestParameters parameters, SessionInfo sessionInfo) {
-        if (parameters.getArgs().equals("logout")) {
+    private void sendAuthorizationResult(HttpServletRequest request, HttpServletResponse response, Map<String, String[]> parameters, SessionInfo sessionInfo) {
+        if (parameters.get("args")[0].equals("logout")) {
             sessionInfo.getUserInfo().logout();
             request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
         } else {
             AuthorizationHelper helper;
-            if (parameters.getArgs().contains("twitter")) {
+            if (parameters.get("args")[0].contains("twitter")) {
                 helper = new AuthorizationTwitterHelper();
-            } else if (parameters.getArgs().contains("google")) {
+            } else if (parameters.get("args")[0].contains("google")) {
                 helper = new AuthorizationGoogleHelper();
             } else {
                 helper = new AuthorizationFacebookHelper();
             }
-            if (parameters.getArgs().contains("oauth_verifier") || parameters.getArgs().contains("code=")) {
-                UserInfo info = helper.verify(parameters.getArgs());
+            if (parameters.get("args")[0].contains("oauth_verifier") || parameters.get("args")[0].contains("code=")) {
+                UserInfo info = helper.verify(parameters.get("args")[0]);
                 if (info != null) {
 
                     sessionInfo.setUserInfo(info);
@@ -198,7 +191,7 @@ public class ServerHandler {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                             "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
                 }
-            } else if (parameters.getArgs().contains("denied=")) {
+            } else if (parameters.get("args")[0].contains("denied=")) {
                 try {
                     response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
                 } catch (IOException e) {
@@ -232,12 +225,12 @@ public class ServerHandler {
         writeResponse(request, response, responseStr, HttpServletResponse.SC_OK);
     }
 
-    private void sendSortedExceptions(final HttpServletRequest request, final HttpServletResponse response, RequestParameters parameters) {
-        if (parameters.getArgs().contains("download")) {
+    private void sendSortedExceptions(final HttpServletRequest request, final HttpServletResponse response, Map<String, String[]> parameters) {
+        if (parameters.get("args")[0].contains("download")) {
             response.addHeader("Content-type", "application/x-download");
         }
-        String from = ResponseUtils.substringBetween(parameters.getArgs(), "from=", "&to=");
-        String to = ResponseUtils.substringAfter(parameters.getArgs(), "&to=");
+        String from = ResponseUtils.substringBetween(parameters.get("args")[0], "from=", "&to=");
+        String to = ResponseUtils.substringAfter(parameters.get("args")[0], "&to=");
 
         writeResponse(request, response, new LogDownloader().getSortedExceptions(from, to), 200);
     }
@@ -263,15 +256,15 @@ public class ServerHandler {
         writeResponse(request, response, HelpLoader.getInstance().getHelpForWords(), 200);
     }
 
-    private void sendLog(final HttpServletRequest request, final HttpServletResponse response, RequestParameters parameters) {
+    private void sendLog(final HttpServletRequest request, final HttpServletResponse response, Map<String, String[]> parameters) {
         String path;
-        if (parameters.getArgs().contains("&download")) {
+        if (parameters.get("args")[0].contains("&download")) {
             response.addHeader("Content-type", "application/x-download");
         }
-        if (parameters.getArgs().contains("&view")) {
-            path = ResponseUtils.substringBefore(parameters.getArgs(), "&view");
+        if (parameters.get("args")[0].contains("&view")) {
+            path = ResponseUtils.substringBefore(parameters.get("args")[0], "&view");
         } else {
-            path = ResponseUtils.substringBefore(parameters.getArgs(), "&download");
+            path = ResponseUtils.substringBefore(parameters.get("args")[0], "&download");
         }
         path = path.replaceAll("%5C", "/");
         writeResponse(request, response, new LogDownloader().download(path), 200);
