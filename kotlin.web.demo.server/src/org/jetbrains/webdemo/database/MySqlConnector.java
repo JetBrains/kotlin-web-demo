@@ -606,15 +606,16 @@ public class MySqlConnector {
         }
     }
 
-    public String deleteProject(UserInfo userInfo, String projectName) {
+    public String deleteProject(UserInfo userInfo, String parent, String projectName) {
         if (!checkConnection()) {
             return ResponseUtils.getErrorInJson("Cannot connect to database to delete your program.");
         }
         int userId = getUserId(userInfo);
         if (userId != -1) {
-            try (PreparedStatement st = connection.prepareStatement("delete from projects where projects.owner_id = ? and projects.name = ?")) {
+            try (PreparedStatement st = connection.prepareStatement("delete from projects where projects.owner_id = ? and projects.parent=? and projects.name = ?")) {
                 st.setString(1, userId + "");
-                st.setString(2, projectName);
+                st.setString(2, parent);
+                st.setString(3, projectName);
                 st.executeUpdate();
                 return ResponseUtils.getJsonString("text", "Project was successfully deleted.", projectName);
             } catch (Throwable e) {

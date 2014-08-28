@@ -29,6 +29,8 @@ import org.scribe.builder.api.FacebookApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
+import java.util.Map;
+
 public class AuthorizationFacebookHelper extends AuthorizationHelper {
     private final String TYPE = "facebook";
     
@@ -53,11 +55,10 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
 
     @Override
     @Nullable
-    public UserInfo verify(String url) {
+    public UserInfo verify(String oauthVerifier) {
         UserInfo userInfo = null;
         try {
-            String code = ResponseUtils.substringAfter(url, "code=");
-            Verifier verifier = new Verifier(code);
+            Verifier verifier = new Verifier(oauthVerifier);
             Token accessToken = facebookService.getAccessToken(EMPTY_TOKEN, verifier);
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
             facebookService.signRequest(accessToken, request);
@@ -67,7 +68,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
             userInfo = new UserInfo();
             userInfo.login(object.get("name").textValue(), object.get("id").textValue(), TYPE);
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "facebook: " + url);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "facebook: " + oauthVerifier);
         }
         return userInfo;
     }

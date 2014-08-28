@@ -59,11 +59,10 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
 
     @Override
     @Nullable
-    public UserInfo verify(String url) {
+    public UserInfo verify(String oauthVerifier) {
         UserInfo userInfo = null;
         try {
-            url = ResponseUtils.substringBetween(url, "oauth_verifier=", "&oauth_token=");
-            Verifier verifier = new Verifier(url);
+            Verifier verifier = new Verifier(oauthVerifier);
             Token accessToken = googleService.getAccessToken(requestToken, verifier);
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
             googleService.signRequest(accessToken, request);
@@ -73,7 +72,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             userInfo.login(object.get("name").textValue(), object.get("id").textValue(), TYPE);
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google: " + url);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google: " + oauthVerifier);
         }
         return userInfo;
     }

@@ -170,17 +170,21 @@ public class ServerHandler {
             request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
         } else {
             AuthorizationHelper helper;
-            if (parameters.get("args")[0].contains("twitter")) {
+            if (parameters.get("args")[0].equals("twitter")) {
                 helper = new AuthorizationTwitterHelper();
-            } else if (parameters.get("args")[0].contains("google")) {
+            } else if (parameters.get("args")[0].equals("google")) {
                 helper = new AuthorizationGoogleHelper();
             } else {
                 helper = new AuthorizationFacebookHelper();
             }
-            if (parameters.get("args")[0].contains("oauth_verifier") || parameters.get("args")[0].contains("code=")) {
-                UserInfo info = helper.verify(parameters.get("args")[0]);
+            if (parameters.containsKey("oauth_verifier") || parameters.containsKey("code")) {
+                UserInfo info;
+                if(parameters.containsKey("oauth_verifier")){
+                    info = helper.verify(parameters.get("oauth_verifier")[0]);
+                } else{
+                    info = helper.verify(parameters.get("code")[0]);
+                }
                 if (info != null) {
-
                     sessionInfo.setUserInfo(info);
                     MySqlConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
                     request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
@@ -191,7 +195,7 @@ public class ServerHandler {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                             "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
                 }
-            } else if (parameters.get("args")[0].contains("denied=")) {
+            } else if (parameters.containsKey("denied")) {
                 try {
                     response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
                 } catch (IOException e) {
@@ -200,15 +204,11 @@ public class ServerHandler {
                 }
             } else {
                 String verifyKey = helper.authorize();
-                PrintWriter out = null;
-                try {
-                    out = response.getWriter();
+                try (PrintWriter out = response.getWriter()){
                     out.write(verifyKey);
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                             "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "/" + request.getQueryString());
-                } finally {
-                    ServerResponseUtils.close(out);
                 }
             }
         }

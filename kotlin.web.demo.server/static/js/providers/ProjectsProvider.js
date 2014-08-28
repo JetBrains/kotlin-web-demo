@@ -148,7 +148,7 @@ var ProjectProvider = (function () {
                 type: "POST",
                 timeout: 10000,
                 dataType: "json",
-                data: JSON.stringify(data),
+                data: {project: JSON.stringify(data)},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }
@@ -161,7 +161,7 @@ var ProjectProvider = (function () {
                 type: "POST",
                 timeout: 10000,
                 dataType: "json",
-                data: JSON.stringify(data),
+                data: {file: JSON.stringify(data)},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }

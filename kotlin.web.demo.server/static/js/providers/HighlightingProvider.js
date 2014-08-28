@@ -59,7 +59,7 @@ var HighlichtingProvider = (function () {
                     },
                     dataType: "json",
                     type: "POST",
-                    data: JSON.stringify(project),
+                    data: {project: JSON.stringify(project)},
                     timeout: 10000,
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingHighlighting = false;

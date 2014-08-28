@@ -54,7 +54,7 @@ var CompletionProvider = (function () {
                     },
                     dataType: "json",
                     type: "POST",
-                    data: JSON.stringify({ project: project, filename: filename, line : cursorLine, ch : cursorCh}),
+                    data: { project: JSON.stringify(project), filename: filename, line : cursorLine, ch : cursorCh},
                     timeout: 10000,
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingCompletion = false;

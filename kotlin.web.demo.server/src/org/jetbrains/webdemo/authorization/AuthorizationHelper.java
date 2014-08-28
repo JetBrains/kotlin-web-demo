@@ -19,11 +19,13 @@ package org.jetbrains.webdemo.authorization;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.session.UserInfo;
 
+import java.util.Map;
+
 public abstract class AuthorizationHelper {
     protected String type;
 
     public abstract String authorize();
 
     @Nullable
-    public abstract UserInfo verify(String url);
+    public abstract UserInfo verify(String oauthVerifier);
 }

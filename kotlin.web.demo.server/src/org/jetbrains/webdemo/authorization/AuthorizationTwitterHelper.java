@@ -30,6 +30,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.Map;
+
 public class AuthorizationTwitterHelper extends AuthorizationHelper {
     private final String TYPE = "twitter";
 
@@ -55,11 +57,10 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
 
     @Override
     @Nullable
-    public UserInfo verify(String url) {
+    public UserInfo verify(String oauthVerifier) {
         UserInfo userInfo = null;
         try {
-            String authUrl = ResponseUtils.substringAfter(url, "oauth_verifier=");
-            Verifier verifier = new Verifier(authUrl);
+            Verifier verifier = new Verifier(oauthVerifier);
             Token accessToken = twitterService.getAccessToken(requestToken, verifier);
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
             twitterService.signRequest(accessToken, request); // the access token from step 4
@@ -91,7 +92,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
 
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "twitter: " + url);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "twitter");
         }
         return userInfo;
     }

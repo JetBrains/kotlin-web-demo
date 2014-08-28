@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.sessions;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -29,7 +28,10 @@ import org.jetbrains.webdemo.examplesLoader.ExampleFile;
 import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
-import org.jetbrains.webdemo.responseHelpers.*;
+import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
+import org.jetbrains.webdemo.responseHelpers.JavaToKotlinConverter;
+import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
+import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +39,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HttpSession {
@@ -89,20 +93,17 @@ public class HttpSession {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
                 sendConversationResult();
             } else if (parameters.get("type")[0].equals("saveFile")) {
-                sendSaveProgramResult();
+                sendSaveFileResult();
             } else if (parameters.get("type")[0].equals("addProject")) {
                 MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0]);
             } else if (parameters.get("type")[0].equals("addExampleProject")) {
                 addExampleProject();
             } else if (parameters.get("type")[0].equals("deleteProject")) {
-                MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), ResponseUtils.substringAfter(parameters.get("args")[0], "&name="));
+                MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0]);
             } else if (parameters.get("type")[0].equals("loadProject")) {
                 sendLoadProjectResult();
             } else if (parameters.get("type")[0].equals("addFile")) {
-                String folderName = ResponseUtils.substringBefore(parameters.get("args")[0], "&name=");
-                String projectName = ResponseUtils.substringBetween(parameters.get("args")[0], "&name=", "&filename=");
-                String fileName = ResponseUtils.substringAfter(parameters.get("args")[0], "&filename=");
-                MySqlConnector.getInstance().addFile(sessionInfo.getUserInfo(),folderName, projectName, fileName);
+                MySqlConnector.getInstance().addFile(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0], parameters.get("filename")[0]);
             } else if (parameters.get("type")[0].equals("deleteFile")) {
                 sendDeleteProgramResult();
             } else if (parameters.get("type")[0].equals("generatePublicLink")) {
@@ -112,6 +113,7 @@ public class HttpSession {
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                 sendCompletionResult();
             } else {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), sessionInfo.getOriginUrl(), param);
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Incorrect request"), sessionInfo.getType(), sessionInfo.getOriginUrl(), param);
                 writeResponse(ResponseUtils.getErrorInJson("Incorrect request"), HttpServletResponse.SC_BAD_REQUEST);
             }
@@ -158,10 +160,7 @@ public class HttpSession {
 
     private void sendDeleteProgramResult() {
         String result;
-        String folderName = ResponseUtils.substringBefore(parameters.get("args")[0], "&name=");
-        String projectName = ResponseUtils.substringBetween(parameters.get("args")[0], "&name=", "&filename=");
-        String fileName = ResponseUtils.substringAfter(parameters.get("args")[0], "&filename=");
-        result = MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), folderName, projectName, fileName);
+        result = MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0], parameters.get("filename")[0]);
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
@@ -175,19 +174,20 @@ public class HttpSession {
                 id = ResponseUtils.getExampleOrProgramNameByUrl(parameters.get("args")[0]);
                 result = MySqlConnector.getInstance().getProgramTextByPublicLink(id);
             } else {
-                String parent = ResponseUtils.substringBefore(parameters.get("args")[0], "&name=").replaceAll("_", " ");
-                String name = ResponseUtils.substringAfter(parameters.get("args")[0], "&name=").replaceAll("_", " ");
+                String parent = parameters.get("args")[0].replaceAll("_", " ");
+                String name = parameters.get("name")[0].replaceAll("_", " ");
                 result = MySqlConnector.getInstance().getProjectContent(sessionInfo.getUserInfo(), parent, name);
             }
         }
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
-    private void sendSaveProgramResult() {
-        try(InputStream inputStream = request.getInputStream()) {
-            String folderName = ResponseUtils.substringBefore(parameters.get("args")[0], "&name=").replaceAll("_", " ");
-            String projectName = ResponseUtils.substringBetween(parameters.get("args")[0], "&name=", "&filename=").replaceAll("_", " ");
-            ExampleFile file = objectMapper.readValue(inputStream, ExampleFile.class);
+    private void sendSaveFileResult() {
+        try{
+            String folderName = parameters.get("args")[0].replaceAll("_", " ");
+            String projectName = parameters.get("name")[0].replaceAll("_", " ");
+
+            ExampleFile file = objectMapper.readValue(parameters.get("file")[0], ExampleFile.class);
             MySqlConnector.getInstance().saveFile(sessionInfo.getUserInfo(), folderName, projectName, file);
             writeResponse("ok", HttpServletResponse.SC_OK);
         } catch (IOException e) {
@@ -196,9 +196,9 @@ public class HttpSession {
     }
 
     private void sendExecutorResult() {
-        try (InputStream inputStream = request.getInputStream()) {
+        try{
 
-            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(inputStream, ExampleObject.class));
+            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(parameters.get("project")[0], ExampleObject.class));
 
             sessionInfo.setRunConfiguration(example.confType);
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
@@ -217,18 +217,17 @@ public class HttpSession {
     }
 
     private void addExampleProject() {
-        try (InputStream inputStream = request.getInputStream()) {
-
-            ExampleObject example = objectMapper.readValue(inputStream, ExampleObject.class);
+        try {
+            ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
             MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), example);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private void sendExampleContent() {
-        writeResponse(ExamplesList.loadExample(parameters.get("args")[0]), HttpServletResponse.SC_OK);
-
+        writeResponse(ExamplesList.loadExample(parameters.get("args")[0].replaceAll("_", " "), parameters.get("name")[0].replaceAll("_", " ")), HttpServletResponse.SC_OK);
     }
 
     private List<PsiFile> createProjectPsiFiles(ExampleObject example) {
@@ -237,15 +236,14 @@ public class HttpSession {
     }
 
     private void sendCompletionResult() {
-        try (InputStream is = request.getInputStream()) {
-            JsonNode requestObject = objectMapper.readTree(is);
-            String fileName = requestObject.get("filename").textValue();
-            int line = requestObject.get("line").asInt();
-            int ch = requestObject.get("ch").asInt();
-            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(requestObject.get("project").traverse(), ExampleObject.class));
+        try{
+            String fileName = parameters.get("filename")[0];
+            int line = Integer.parseInt(parameters.get("line")[0]);
+            int ch = Integer.parseInt(parameters.get("ch")[0]);
+            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(parameters.get("project")[0], ExampleObject.class));
 
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
-            sessionInfo.setRunConfiguration(ResponseUtils.substringAfter(parameters.get("args")[0], "&runConf="));
+            sessionInfo.setRunConfiguration(parameters.get("runConf")[0]);
 
             JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(psiFiles, sessionInfo, fileName, line, ch);
             writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);
@@ -255,8 +253,8 @@ public class HttpSession {
     }
 
     private void sendHighlightingResult() {
-        try (InputStream is = request.getInputStream()) {
-            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(is, ExampleObject.class));
+        try{
+            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(parameters.get("project")[0], ExampleObject.class));
 
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, currentProject);

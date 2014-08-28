@@ -54,10 +54,9 @@ public class ExamplesList {
         return response.toString();
     }
 
-    public static String loadExample(String url) {
-        url = url.replaceAll("_", " ");
-        String folderName = ResponseUtils.getExampleFolderByUrl(url);
-        String exampleName = ResponseUtils.getExampleOrProgramNameByUrl(url);
+    public static String loadExample(String folderName, String exampleName) {
+        folderName = folderName.replaceAll("_", " ");
+        exampleName = exampleName.replaceAll("_", " ");
 
         ExamplesFolder folder = examplesFolders.get(folderName);
         ExampleObject example = folder.examples.get(exampleName);
