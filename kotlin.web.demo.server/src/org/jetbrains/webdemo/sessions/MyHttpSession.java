@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HttpSession {
+public class MyHttpSession {
     @NonNls
     private static final String[] REPLACES_REFS = {"&lt;", "&gt;", "&amp;", "&#39;", "&quot;"};
     @NonNls
@@ -57,7 +57,7 @@ public class HttpSession {
     private HttpServletResponse response;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public HttpSession(SessionInfo info, Map<String, String[]> parameters) {
+    public MyHttpSession(SessionInfo info, Map<String, String[]> parameters) {
         this.sessionInfo = info;
         this.parameters = parameters;
     }

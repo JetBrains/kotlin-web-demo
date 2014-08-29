@@ -23,7 +23,7 @@
 
 var AccordionView = (function () {
     function AccordionView(element) {
-
+        element.html("");
         element.accordion({
             heightStyle: "content",
             navigation: true,
@@ -74,6 +74,11 @@ var AccordionView = (function () {
                 this.loadAllContent();
             },
             onFail: function (exception, messageForStatusBar) {
+            },
+            onLogout: function(){
+                downloadedProjects = {};
+                selectedProject = null;
+                instance.loadAllContent();
             },
             getSelectedProject: function () {
                 return selectedProject;

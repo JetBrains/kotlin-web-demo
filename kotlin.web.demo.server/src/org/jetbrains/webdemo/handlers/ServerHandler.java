@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.handlers;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.authorization.AuthorizationFacebookHelper;
@@ -32,10 +31,11 @@ import org.jetbrains.webdemo.log.LogDownloader;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
-import org.jetbrains.webdemo.sessions.HttpSession;
+import org.jetbrains.webdemo.sessions.MyHttpSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -108,13 +108,21 @@ public class ServerHandler {
                         ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
                         sendHelpContentForWords(request, response);
                         break;
+                    case ("logout"): {
+                        HttpSession session = request.getSession();
+                        if (session != null) {
+                            session.invalidate();
+                        }
+                        writeResponse(request, response, "ok", HttpServletResponse.SC_OK);
+                        break;
+                    }
                     default: {
                         if (!parameters.get("type")[0].equals("writeLog")) {
                             sessionInfo = setSessionInfo(request);
                         } else {
                             sessionInfo = new SessionInfo(request.getSession().getId());
                         }
-                        HttpSession session = new HttpSession(sessionInfo, parameters);
+                        MyHttpSession session = new MyHttpSession(sessionInfo, parameters);
                         session.handle(request, response);
                     }
                 }

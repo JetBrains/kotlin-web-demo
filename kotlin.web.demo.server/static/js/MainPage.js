@@ -297,11 +297,9 @@ loginProvider.onLogin = function (data) {
 };
 
 loginProvider.onLogout = function () {
-    $("#examples-list").accordion("destroy");
     loginView.logout();
     statusBarView.html(ActionStatusMessages.logout_ok);
-    accordion.loadAllContent();
-
+    accordion.onLogout();
 };
 
 loginProvider.onFail = function (exception, actionCode) {
