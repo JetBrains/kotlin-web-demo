@@ -64,20 +64,20 @@ public class ServerHandler {
                 Map<String, String[]> parameters = request.getParameterMap();
                 switch (parameters.get("type")[0]) {
                     case ("sendUserData"):
-                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        sessionInfo = setSessionInfo(request);
                         MySqlConnector.getInstance().findUser(sessionInfo.getUserInfo());
                         sendUserInformation(request, response, sessionInfo);
                         break;
                     case ("getSessionId"):
-                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        sessionInfo = setSessionInfo(request);
                         sendSessionId(request, response, sessionInfo, param);
                         break;
                     case ("getUserName"):
-                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        sessionInfo = setSessionInfo(request);
                         sendUserName(request, response, sessionInfo, param);
                         break;
                     case ("authorization"):
-                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        sessionInfo = setSessionInfo(request);
                         sendAuthorizationResult(request, response, parameters, sessionInfo);
                         break;
                     case ("updateExamples"):
@@ -85,7 +85,7 @@ public class ServerHandler {
                         break;
                     case ("updateStatistics"):
                         ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                        sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                        sessionInfo = setSessionInfo(request);
                         sendListLogs(request, response, parameters.get("type")[0].equals("updateStatistics"), sessionInfo);
                         break;
                     case ("showUserInfo"):
@@ -110,12 +110,9 @@ public class ServerHandler {
                         break;
                     default: {
                         if (!parameters.get("type")[0].equals("writeLog")) {
-                            sessionInfo = setSessionInfo(request, parameters.get("sessionId")[0]);
+                            sessionInfo = setSessionInfo(request);
                         } else {
                             sessionInfo = new SessionInfo(request.getSession().getId());
-                        }
-                        if (!parameters.get("sessionId")[0].equals(sessionInfo.getId())) {
-                            parameters.put("sessionId", new String[]{sessionInfo.getId()});
                         }
                         HttpSession session = new HttpSession(sessionInfo, parameters);
                         session.handle(request, response);
@@ -233,7 +230,7 @@ public class ServerHandler {
     }
 
     @Nullable
-    private SessionInfo setSessionInfo(final HttpServletRequest request, String sessionId) {
+    private SessionInfo setSessionInfo(final HttpServletRequest request) {
         if (request.getSession().isNew()) {
             Statistics.incNumberOfUsers();
         }

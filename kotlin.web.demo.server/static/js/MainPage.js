@@ -408,6 +408,12 @@ helpDialog.dialog(
     }
 );
 
+$("#login-dialog").dialog({
+    modal: "true",
+    width: 300,
+    autoOpen: false
+});
+
 $("#help").click(function () {
         helpDialog.dialog("open")
     }

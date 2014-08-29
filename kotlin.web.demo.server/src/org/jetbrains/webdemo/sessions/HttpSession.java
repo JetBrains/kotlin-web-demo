@@ -144,22 +144,20 @@ public class HttpSession {
     }
 
     private void sendConversationResult() {
-        PostData data = getPostDataFromRequest();
-        writeResponse(new JavaToKotlinConverter(sessionInfo).getResult(data.text), HttpServletResponse.SC_OK);
+        writeResponse(new JavaToKotlinConverter(sessionInfo).getResult(parameters.get("text")[0]), HttpServletResponse.SC_OK);
     }
 
     private void sendWriteLogResult() {
         String type = parameters.get("args")[0];
         if (type.equals("info")) {
-            String tmp = getPostDataFromRequest(true).text;
-            ErrorWriterOnServer.LOG_FOR_INFO.info(tmp);
+            ErrorWriterOnServer.LOG_FOR_INFO.info(parameters.get("text")[0]);
         } else if (type.equals("errorInKotlin")) {
-            String tmp = getPostDataFromRequest(true).text;
+            String tmp = parameters.get("text")[0];
             tmp = unescapeXml(unescapeXml(tmp));
             List<String> list = ErrorWriter.parseException(tmp);
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown", list.get(4));
         } else {
-            String tmp = getPostDataFromRequest(true).text;
+            String tmp = parameters.get("text")[0];
             List<String> list = ErrorWriter.parseException(tmp);
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown", list.get(4));
         }
@@ -294,78 +292,6 @@ public class HttpSession {
     }
 
 
-    private PostData getPostDataFromRequest() {
-        return getPostDataFromRequest(false);
-    }
-
-    private PostData getPostDataFromRequest(boolean withNewLines) {
-        StringBuilder reqResponse = new StringBuilder();
-        try (InputStream is = request.getInputStream()) {
-            reqResponse.append(ResponseUtils.readData(is, withNewLines));
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), request.getQueryString());
-            writeResponse("Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return new PostData("", "");
-        }
-
-        String finalResponse;
-
-        try {
-            finalResponse = TextUtils.decodeUrl(reqResponse.toString());
-        } catch (UnsupportedEncodingException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), "null");
-            return new PostData("", "");
-        } catch (IllegalArgumentException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), reqResponse.toString());
-            return new PostData("", "");
-        }
-        finalResponse = finalResponse.replaceAll("<br>", "\n");
-        String[] parts = finalResponse.split("&");
-        PostData out = new PostData("fun main(args : Array<String>) {" +
-                "  println(\"Hello, world!\")\n" +
-                "}");
-
-        Map Request = new HashMap<>();
-        for (String tmp : parts) {
-            Request.put(ResponseUtils.substringBefore(tmp, "="), ResponseUtils.substringAfter(tmp, "="));
-        }
-
-        if (Request.containsKey("text"))
-            out.text = (String) Request.get("text");
-
-        if (Request.containsKey("consoleArgs"))
-            out.arguments = (String) Request.get("consoleArgs");
-
-        if (Request.containsKey("example"))
-            out.exampleFolder = (String) Request.get("example");
-
-        if (Request.containsKey("name"))
-            out.example = (String) Request.get("name");
-        return out;
-
-        /*
-        if (finalResponse != null) {
-            finalResponse = finalResponse.replaceAll("<br>", "\n");
-            if (finalResponse.length() >= 5) {
-                if (finalResponse.contains("&consoleArgs=")) {
-                    return new PostData(ResponseUtils.substringBetween(finalResponse, "text=", "&consoleArgs="), ResponseUtils.substringAfter(finalResponse, "&consoleArgs="));
-                } else {
-                    return new PostData(ResponseUtils.substringAfter(finalResponse, "text="));
-                }
-            } else {
-                writeResponse("Post request is too short", HttpServletResponse.SC_BAD_REQUEST);
-                return new PostData("", "");
-            }
-        } else {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                    new UnsupportedOperationException("Cannot read data from post request"),
-                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
-            writeResponse("Cannot read data from post request: ", HttpServletResponse.SC_BAD_REQUEST);
-        }
-
-        return new PostData("", "");
-        */
-    }
 
 
     //Send Response
@@ -385,28 +311,6 @@ public class HttpSession {
         exampleObject.files.addAll(storedExample.files.stream().filter((file) -> !file.modifiable).collect(Collectors.toList()));
         exampleObject.testClasses = storedExample.testClasses;
         return exampleObject;
-    }
-
-    private class PostData {
-        public String text;
-        public String arguments = null;
-        public String example = null;
-        public String exampleFolder = null;
-
-        private PostData(String text) {
-            this.text = text;
-        }
-
-        private PostData(String text, String arguments) {
-            this.text = text;
-            this.arguments = arguments;
-        }
-
-        private PostData(String text, String arguments, String example) {
-            this.text = text;
-            this.arguments = arguments;
-            this.example = example;
-        }
     }
 
 
