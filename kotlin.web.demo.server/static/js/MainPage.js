@@ -297,9 +297,11 @@ loginProvider.onLogin = function (data) {
 };
 
 loginProvider.onLogout = function () {
+    $("#examples-list").accordion("destroy");
     loginView.logout();
     statusBarView.html(ActionStatusMessages.logout_ok);
-    accordion.onLogout();
+    accordion.loadAllContent();
+
 };
 
 loginProvider.onFail = function (exception, actionCode) {
@@ -405,12 +407,6 @@ helpDialog.dialog(
         modal: true
     }
 );
-
-$("#login-dialog").dialog({
-    modal: "true",
-    width: 300,
-    autoOpen: false
-});
 
 $("#help").click(function () {
         helpDialog.dialog("open")

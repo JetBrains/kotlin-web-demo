@@ -38,7 +38,8 @@ var LoginView = (function () {
             logout: function () {
                 isLoggedIn = false;
                 $("#login").css("display", "block");
-                $("#userName").html("").css("display", "none");
+                $("#userName").html("");
+                $("#userName").css("display", "none");
             }
         };
 
@@ -63,9 +64,9 @@ var LoginView = (function () {
             login("google");
         });
 
-        document.getElementById("logout").onclick = function () {
+        $("#logout").click(function (e) {
             model.logout();
-        };
+        });
 
         model.getUserName();
 
@@ -87,6 +88,9 @@ var LoginView = (function () {
                 userName = replaceAll(userName, "\\+", " ");
 
                 $("#userNameTitle").text("Welcome, " + userName);
+                $("#logout").click(function (e) {
+                    model.logout();
+                });
 
             }
         }

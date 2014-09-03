@@ -312,3 +312,21 @@ select {
 .ui-selectmenu-menu .ui-state-focus{
     background-color: #eeeeee;
 }
+
+
+#editor-notifications{
+    background-color: #eee;
+}
+
+#editor-notifications-messages{
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px;
+    margin-left: 40px;
+}
+
+.editor-notifications-action{
+    padding: 4px;
+    font-size: 12px;
+    float: right;
+}

@@ -33,21 +33,22 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
     scroll.appendChild(console);
 
     var instance = {
-        addMessages: function () {
+        addMessages: function (data) {
             addMessagesToProblemsView();
         },
-        onProjectChange: function(newProject){
-            onProjectChange(newProject);
+        onProjectChange: function(){
+            onProjectChange();
         },
         clear: function () {
             console.innerHTML = "";
         }
     };
 
-    function onProjectChange (newProject) {
+    function onProjectChange () {
         console.innerHTML = "";
-        for(var i = 0; i < newProject.getFiles().length; i++) {
-            var file = newProject.getFiles()[i];
+        var example = accordion.getSelectedProject();
+        for(var i = 0; i < example.getFiles().length; i++) {
+            var file = example.getFiles()[i];
 
             var fileProblemsDiv = document.createElement("div");
             fileProblemsDiv.id = file.name.replace(/ /g, "_") + "_problems";

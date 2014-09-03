@@ -30,7 +30,7 @@ var LoginProvider = (function () {
                 login(type);
             },
             logout: function () {
-                logout();
+                instance.onLogout();
             },
             getUserName: function () {
                 getUserName();
@@ -48,20 +48,6 @@ var LoginProvider = (function () {
                 url: generateAjaxUrl("authorization", type),
                 context: document.body,
                 success: onLoginSuccess,
-                dataType: "text",
-                type: "GET",
-                timeout: 10000,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
-                }
-            });
-        }
-
-        function logout(){
-            $.ajax({
-                url: generateAjaxUrl("logout"),
-                context: document.body,
-                success: instance.onLogout,
                 dataType: "text",
                 type: "GET",
                 timeout: 10000,

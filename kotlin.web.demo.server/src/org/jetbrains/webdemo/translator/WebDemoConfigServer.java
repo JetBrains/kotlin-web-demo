@@ -53,7 +53,7 @@ public final class WebDemoConfigServer extends Config {
 
     @NotNull
     public List<JetFile> generateLibFiles() {
-        List<JetFile> libFiles = new ArrayList<JetFile>();
+        List<JetFile> libFiles = new ArrayList<>();
         ArrayList<String> jsLibFiles = Lists.newArrayList(LIB_FILES_WITH_DECLARATIONS);
         jsLibFiles.addAll(ADDITIONAL_FILES);
         for (String libFileName : jsLibFiles) {

@@ -45,7 +45,7 @@ var Project = (function () {
                 instance.select();
             },
             select: function () {
-                problemsView.onProjectChange(instance);
+                problemsView.onProjectChange();
                 helpViewForExamples.showHelp(content.help);
                 if (selectedFile != null) {
                     editor.open(selectedFile);
