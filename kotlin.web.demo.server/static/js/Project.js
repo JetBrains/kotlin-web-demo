@@ -21,31 +21,49 @@
 
 var Project = (function () {
     function Project(url, element, content) {
+
         var selectedFile = null;
+        var isProjectContentChanged = false;
+        var isLocalCopyExist = false;
+        var isDatabaseCopyExist = false;
 
         var instance = {
             onContentLoaded: function (data) {
                 content = data;
                 for (var i = 0; i < content.files.length; i++) {
                     content.files[i].errors = [];
-                    content.files[i].save = function(){
+                    content.files[i].save = function () {
                         this.content = editor.getText();
-                        if(loginView.isLoggedIn()) {
-                            projectProvider.saveFile(url, this);
+                        localStorage.setItem(url, JSON.stringify(content));
+
+                        if (loginView.isLoggedIn()) {
+                            if (isDatabaseCopyExist) {
+                                projectProvider.saveFile(url, this);
+                            } else {
+                                projectProvider.addNewProjectFromExample(this.getModifiableContent());
+                                isDatabaseCopyExist = true;
+                            }
                         }
+                    };
+
+                    content.files.onContentChange = function () {
+                        isProjectContentChanged = true;
                     }
+
                 }
                 showProjectContent();
                 if (content.files.length > 0) {
                     selectFile(content.files[0]);
                 }
-                if(!content.isLocalVersion && loginView.isLoggedIn()){
-                    projectProvider.addNewProjectFromExample(this.getModifiableContent());
-                }
                 instance.select();
+
             },
             select: function () {
-                problemsView.onProjectChange();
+                argumentsView.change = function () {
+                    content.args = argumentsView.val();
+                };
+
+                problemsView.onProjectChange(instance);
                 helpViewForExamples.showHelp(content.help);
                 if (selectedFile != null) {
                     editor.open(selectedFile);
@@ -94,15 +112,23 @@ var Project = (function () {
                 return false;
             },
             save: function () {
-                content.confType = configurationManager.getType();
-                content.args = argumentsView.val();
-                projectProvider.saveProject({
-                    args: content.args,
-                    confType: content.confType,
-                    name: content.name,
-                    parent: content.parent,
-                    files: []
-                });
+                if (isProjectContentChanged) {
+                    if (loginView.isLoggedIn()) {
+                        projectProvider.saveProject({
+                            args: content.args,
+                            confType: content.confType,
+                            name: content.name,
+                            parent: content.parent,
+                            files: []
+                        });
+                    } else {
+                        localStorage.setItem(url, JSON.stringify(content));
+                    }
+                }
+            },
+            changeConfiguration: function (confType) {
+                isProjectContentChanged = true;
+                content.confType = confType;
             },
             getFiles: function () {
                 return content.files;
@@ -123,21 +149,57 @@ var Project = (function () {
             },
             onFail: function () {
             },
-            isUserProject: function(){
+            isUserProject: function () {
                 isUserProject();
             }
         };
 
         var projectProvider = new ProjectProvider(instance);
-        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add", projectProvider.addNewFile);
 
-        if(content == null) {
-            if (isUserProject() || loginView.isLoggedIn()) {
-                projectProvider.loadProject(url);
-            } else {
-                projectProvider.loadExample(url);
+
+        (function loadProject() {
+            if (content == null) {
+                var localContent = JSON.parse(localStorage.getItem(url));
+                if (localContent != null) {
+                    instance.onContentLoaded(localContent);
+                    var notifications = document.getElementById("editor-notifications");
+                    notifications.style.display = "block";
+                    document.getElementById("editor-notifications-messages").innerHTML = "Example was loaded from the local storage";
+
+                    var restore = document.createElement("div");
+                    restore.className = "editor-notifications-action";
+                    restore.innerHTML = "Load original";
+                    restore.onclick = function () {
+                        notifications.style.display = "none";
+                        localStorage.removeItem(url);
+                        projectProvider.loadExample(url);
+                    };
+                    document.getElementById("editor-notifications").appendChild(restore);
+
+                    if (loginProvider.isLoggedIn()) {
+                        var loadDb = document.createElement("div");
+                        loadDb.className = "editor-notifications-action";
+                        loadDb.innerHTML = "Load original";
+                        loadDb.onclick = function () {
+                            this.style.display = "none";
+                            localStorage.removeItem(url);
+                            projectProvider.loadProject(url);
+                        };
+                        document.getElementById("editor-notifications").appendChild(loadDb);
+                    }
+
+                } else {
+                    if (loginProvider.isLoggedIn()) {
+                        projectProvider.loadProject(url);
+                    } else {
+                        projectProvider.loadExample(url);
+                    }
+                }
             }
-        }
+        })();
+
+
+        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add", projectProvider.addNewFile);
 
 
         function selectFile(file) {

@@ -23,9 +23,7 @@
 
 var AccordionView = (function () {
     function AccordionView(element) {
-
-        var lastSelectedItem = 0;
-
+        element.html("");
         element.accordion({
             heightStyle: "content",
             navigation: true,
@@ -34,9 +32,6 @@ var AccordionView = (function () {
                 activeHeader: "examples-open-folder-icon",
                 header: "examples-closed-folder-icon"
             }
-        }).find(".login-link").click(function (event) {
-            $("#login-dialog").dialog("open");
-            event.stopPropagation()
         });
 //        var programsView = new ProgramsView(programsModel);
 
@@ -80,6 +75,11 @@ var AccordionView = (function () {
             },
             onFail: function (exception, messageForStatusBar) {
             },
+            onLogout: function(){
+                downloadedProjects = {};
+                selectedProject = null;
+                instance.loadAllContent();
+            },
             getSelectedProject: function () {
                 return selectedProject;
             }
@@ -90,43 +90,6 @@ var AccordionView = (function () {
         })();
 
         var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add", headersProvider.addNewProject);
-
-//        examplesView.onAllExamplesLoaded = function () {
-//            programsView.loadAllContent()
-//        };
-
-//
-//        ProgramsView.setLastSelectedItem = function (item) {
-//            lastSelectedItem = item;
-//        };
-//        ProgramsView.getLastSelectedItem = function () {
-//            return lastSelectedItem;
-//        };
-//        ProgramsView.getMainElement = function () {
-//            return element;
-//        };
-
-
-//        programsModel.onFail = function (data, statusBarMessage) {
-//            instance.onFail(data, statusBarMessage);
-//        };
-//        programsModel.onLoadProject = onLoadProject;
-//        programsModel.onGeneratePublicLink = function (data) {
-//            programsView.generatePublicLink(data);
-//        };
-//        programsModel.onDeleteProgram = function (data) {
-//            programsView.deleteProgram(data);
-//            instance.onDeleteProgram();
-//        };
-//        programsModel.onSaveProgram = function (data) {
-//            programsView.saveProgramWithName(data);
-//            instance.onSaveProgram();
-//        };
-//
-//        examplesModel.onLoadExample = function (example) {
-//            onLoadProject(example);
-//            instance.onLoadCode(example, false);
-//        };
 
         function createProject(name) {
             var url = getProjectURL("My Programs", name);
@@ -252,6 +215,10 @@ var AccordionView = (function () {
                 login_link.id = "login-link";
                 login_link.className = "login-link";
                 login_link.innerHTML = "(please log in)";
+                element.find("#login_link").click(function (event) {
+                    $("#login-dialog").dialog("open");
+                    event.stopPropagation()
+                });
                 myProg.appendChild(login_link);
             }
 
@@ -305,13 +272,6 @@ var AccordionView = (function () {
             }
 
 //            $("span[id='" + ExamplesView.getLastSelectedItem() + "']").parent().attr("class", "selected-example");
-        }
-
-
-        function onLoadProject(projectContent) {
-            var project = new Project(projectContent);
-            downloadedProjects[project.getURL()] = project;
-            showProject(project.getURL());
         }
 
         function getProjectURL(parent, name) {

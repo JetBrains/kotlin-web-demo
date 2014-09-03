@@ -146,8 +146,6 @@ var ProjectProvider = (function () {
         function addNewProjectFromExample(data){
             $.ajax({
                 url: generateAjaxUrl("addExampleProject"),
-                success: function(){
-                },
                 type: "POST",
                 timeout: 10000,
                 dataType: "json",

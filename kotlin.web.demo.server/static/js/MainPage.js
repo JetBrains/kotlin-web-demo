@@ -297,11 +297,9 @@ loginProvider.onLogin = function (data) {
 };
 
 loginProvider.onLogout = function () {
-    $("#examples-list").accordion("destroy");
     loginView.logout();
     statusBarView.html(ActionStatusMessages.logout_ok);
-    accordion.loadAllContent();
-
+    accordion.onLogout();
 };
 
 loginProvider.onFail = function (exception, actionCode) {
@@ -395,6 +393,7 @@ function loadShortcuts() {
 
 window.onbeforeunload = closingCode;
 function closingCode(){
+    accordion.getSelectedProject().save();
     editor.save();
     return null;
 }
@@ -407,6 +406,12 @@ helpDialog.dialog(
         modal: true
     }
 );
+
+$("#login-dialog").dialog({
+    modal: "true",
+    width: 300,
+    autoOpen: false
+});
 
 $("#help").click(function () {
         helpDialog.dialog("open")

@@ -489,7 +489,7 @@ var KotlinEditor = (function () {
                 my_editor.setOption("mode", "kotlin");
             },
             open: function (element) {
-                if (openedElement != null) {
+                if (isEditorContentChanged && openedElement != null) {
                     openedElement.save();
                 }
                 highlighting.removeStyles();
@@ -511,13 +511,13 @@ var KotlinEditor = (function () {
                 highlighting.updateHighlighting();
             },
             save: function () {
-                if (openedElement != null) {
+                if (openedElement != null && isEditorContentChanged) {
                     openedElement.save();
                 }
             },
             setText: function (text) {
                 my_editor.setOption("readOnly", false);
-                if (openedElement != null) {
+                if (isEditorContentChanged && openedElement != null) {
                     openedElement.save();
                 }
                 openedElement = null;

@@ -82,6 +82,7 @@ var ConfigurationComponent = (function () {
                 document.getElementById("generated-code-link").innerHTML = "Generated JavaScript code";
             }
             configuration = new Configuration(configuration.mode, Configuration.getTypeFromString($("#run-mode").val()));
+            accordion.getSelectedProject().changeConfiguration();
             fireChangeEvent();
         });
 
