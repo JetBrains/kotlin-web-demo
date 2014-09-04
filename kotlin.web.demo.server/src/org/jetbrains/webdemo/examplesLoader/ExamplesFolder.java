@@ -30,7 +30,7 @@ import java.util.*;
  * Created by Semyon.Atamas on 8/11/2014.
  */
 public class ExamplesFolder {
-    private static ObjectMapper objectMapper = new ObjectMapper();
+
     public String name;
     public List<String> examplesOrder = new ArrayList<>();
     @JsonIgnore public Map<String, ExampleObject> examples = new HashMap<>();
@@ -45,7 +45,7 @@ public class ExamplesFolder {
         path = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName;
         for (String exampleName : exampleNames) {
             try {
-                ExampleObject example = downloadExample(exampleName);
+                ExampleObject example = new ExampleObject(folderName, exampleName);
                 example.parent = folderName;
                 examplesOrder.add(example.name);
                 examples.put(exampleName, example);
@@ -53,10 +53,5 @@ public class ExamplesFolder {
                 System.err.println("Can't load example " + exampleName + ":\n" + e.getMessage());
             }
         }
-    }
-
-    private ExampleObject downloadExample(String exampleName) throws IOException {
-        File manifest = new File(path + File.separator + exampleName + File.separator + "manifest.json");
-        return objectMapper.readValue(manifest, ExampleObject.class);
     }
 }

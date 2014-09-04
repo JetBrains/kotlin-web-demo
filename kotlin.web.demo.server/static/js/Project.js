@@ -40,7 +40,7 @@ var Project = (function () {
                             if (isDatabaseCopyExist) {
                                 projectProvider.saveFile(url, this);
                             } else {
-                                projectProvider.addNewProjectFromExample(this.getModifiableContent());
+                                projectProvider.addNewProjectFromExample(instance.getModifiableContent());
                                 isDatabaseCopyExist = true;
                             }
                         }
@@ -70,6 +70,7 @@ var Project = (function () {
                 }
                 argumentsView.val(content.args);
                 configurationManager.updateConfiguration(content.confType);
+                actionsView.refresh();
             },
             processHighlightingResult: function (data) {
                 for (var i = 0; i < content.files.length; i++) {
@@ -88,11 +89,11 @@ var Project = (function () {
                     })
                 };
             },
-            selectFile: function (id) {
-                selectFile(content.files[id]);
+            restoreDefault : function () {
+                projectProvider.loadExample(url);
             },
-            getArguments: function () {
-                return content.args;
+            loadFromDb: function(){
+                projectProvider.loadProject(url);
             },
             getURL: function () {
                 return url;
@@ -113,6 +114,7 @@ var Project = (function () {
             },
             save: function () {
                 if (isProjectContentChanged) {
+                    localStorage.setItem(url, JSON.stringify(content));
                     if (loginView.isLoggedIn()) {
                         projectProvider.saveProject({
                             args: content.args,
@@ -121,9 +123,8 @@ var Project = (function () {
                             parent: content.parent,
                             files: []
                         });
-                    } else {
-                        localStorage.setItem(url, JSON.stringify(content));
                     }
+                    actionsView.setStatus("default");
                 }
             },
             changeConfiguration: function (confType) {
@@ -154,7 +155,34 @@ var Project = (function () {
             }
         };
 
+        var actionsView = new ProjectActionsView(document.getElementById("editor-notifications"), instance);
+
         var projectProvider = new ProjectProvider(instance);
+        projectProvider.onExampleLoaded = function(data){
+            localStorage.removeItem(url);
+            isLocalCopyExist = false;
+            if(loginView.isLoggedIn()){
+                projectProvider.deleteProject(url);
+                isDatabaseCopyExist = false;
+            }
+            actionsView.setStatus("default");
+            instance.onContentLoaded(data);
+        };
+
+        projectProvider.onProjectLoaded = function(data){
+            localStorage.removeItem(url);
+            if(data.origin == "db") {
+                actionsView.setStatus("dbVersion");
+            } else if(data.origin == "default"){
+                actionsView.setStatus("default");
+            }
+            instance.onContentLoaded(data.content);
+        };
+
+        projectProvider.onDeleteProject = function(){
+            isDatabaseCopyExist = false;
+        };
+
 
 
         (function loadProject() {
@@ -162,34 +190,9 @@ var Project = (function () {
                 var localContent = JSON.parse(localStorage.getItem(url));
                 if (localContent != null) {
                     instance.onContentLoaded(localContent);
-                    var notifications = document.getElementById("editor-notifications");
-                    notifications.style.display = "block";
-                    document.getElementById("editor-notifications-messages").innerHTML = "Example was loaded from the local storage";
-
-                    var restore = document.createElement("div");
-                    restore.className = "editor-notifications-action";
-                    restore.innerHTML = "Load original";
-                    restore.onclick = function () {
-                        notifications.style.display = "none";
-                        localStorage.removeItem(url);
-                        projectProvider.loadExample(url);
-                    };
-                    document.getElementById("editor-notifications").appendChild(restore);
-
-                    if (loginProvider.isLoggedIn()) {
-                        var loadDb = document.createElement("div");
-                        loadDb.className = "editor-notifications-action";
-                        loadDb.innerHTML = "Load original";
-                        loadDb.onclick = function () {
-                            this.style.display = "none";
-                            localStorage.removeItem(url);
-                            projectProvider.loadProject(url);
-                        };
-                        document.getElementById("editor-notifications").appendChild(loadDb);
-                    }
-
+                    actionsView.setStatus("localVersion");
                 } else {
-                    if (loginProvider.isLoggedIn()) {
+                    if (loginView.isLoggedIn()) {
                         projectProvider.loadProject(url);
                     } else {
                         projectProvider.loadExample(url);

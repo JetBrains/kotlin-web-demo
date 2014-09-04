@@ -44,6 +44,7 @@ public class MySqlConnector {
     private static final MySqlConnector connector = new MySqlConnector();
     private Connection connection;
     private String databaseUrl;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private MySqlConnector() {
         if (!connect() || !createTablesIfNecessary()) {
@@ -245,9 +246,9 @@ public class MySqlConnector {
         int projectId = getProjectId(userInfo, folderName, projectName);
         if(projectId != -1) {
             try (PreparedStatement st = connection.prepareStatement("UPDATE files SET files.content = ? WHERE project_id = ? AND files.name = ?  ")) {
-                st.setString(1, file.content);
+                st.setString(1, file.getContent());
                 st.setString(2, projectId + "");
-                st.setString(3, file.name);
+                st.setString(3, file.getName());
                 st.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -411,8 +412,8 @@ public class MySqlConnector {
                 for (ExampleFile file : project.files) {
                     st = connection.prepareStatement("insert into files (project_id, name, content) values (?,?,?)");
                     st.setString(1, projectId + "");
-                    st.setString(2, file.name);
-                    st.setString(3, file.content);
+                    st.setString(2, file.getName());
+                    st.setString(3, file.getContent());
                     st.execute();
                 }
                 return true;
@@ -509,14 +510,19 @@ public class MySqlConnector {
                 st.setString(1, rs.getInt("id") + "");
                 rs = st.executeQuery();
                 while (rs.next()) {
-                    ExampleFile file = new ExampleFile(rs.getString("name"), rs.getString("content"));
-                    file.modifiable = true;
+                    ExampleFile file = new ExampleFile(rs.getString("name"), rs.getString("content"), true);
                     project.files.add(file);
                 }
-                return new ObjectMapper().writeValueAsString(project);
+                ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
+                response.put("origin", "db");
+                response.put("content", objectMapper.valueToTree(project));
+                return objectMapper.writeValueAsString(response);
             } else if (!parent.equals("My Programs")) {
                 ExampleObject project = ExamplesList.getExampleObject(projectName, parent);
-                return new ObjectMapper().writeValueAsString(project);
+                ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
+                response.put("origin", "default");
+                response.put("content", objectMapper.valueToTree(project));
+                return objectMapper.writeValueAsString(response);
             } else {
                 return ResponseUtils.getErrorInJson("Can't load your project");
             }
@@ -562,6 +568,8 @@ public class MySqlConnector {
     }
 
     public String deleteProject(UserInfo userInfo, String parent, String projectName) {
+        parent = parent.replaceAll("_", " ");
+        projectName = projectName.replaceAll("_", " ");
         if (!checkConnection()) {
             return ResponseUtils.getErrorInJson("Cannot connect to database to delete your program.");
         }

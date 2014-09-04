@@ -14,4 +14,9 @@ public class TestSum {
         var i  = 0
         assertEquals("Hello world!", "hello world!".capitalize())
     }
+
+        Test fun testSum2() {
+            var i  = 0
+            assertEquals("Hello world", "hello world!".capitalize())
+        }
 }

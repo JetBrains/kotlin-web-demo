@@ -3,7 +3,7 @@
     "files": [
         {
             "modifiable": "true",
-            "filename": "Canvas/Creatures/Creatures.kt"
+            "filename": "Creatures.kt"
         }
     ],
     "args": "",

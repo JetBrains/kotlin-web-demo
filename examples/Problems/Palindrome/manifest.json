@@ -2,7 +2,7 @@
     "name": "Palindrome",
     "files": [
         {
-            "filename": "Problems/Palindrome/Palindrome.kt",
+            "filename": "Palindrome.kt",
             "modifiable": "true"
         }
     ],

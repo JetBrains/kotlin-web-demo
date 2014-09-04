@@ -2,7 +2,7 @@
     "name": "A multi-language Hello",
     "files": [
         {
-            "filename": "Hello, world!/A multi-language Hello/A multi-language Hello.kt",
+            "filename": "A multi-language Hello.kt",
             "modifiable": "true"
         }
     ],

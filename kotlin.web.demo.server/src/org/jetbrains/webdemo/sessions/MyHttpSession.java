@@ -255,7 +255,7 @@ public class MyHttpSession {
 
     private List<PsiFile> createProjectPsiFiles(ExampleObject example) {
         currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
-        return example.files.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.name, file.content)).collect(Collectors.toList());
+        return example.files.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.getName(), file.getContent())).collect(Collectors.toList());
     }
 
     public void sendCompletionResult() {
@@ -308,7 +308,7 @@ public class MyHttpSession {
 
     private ExampleObject addUnmodifiableDataToExample(ExampleObject exampleObject) {
         ExampleObject storedExample = ExamplesList.getExampleObject(exampleObject.name, exampleObject.parent);
-        exampleObject.files.addAll(storedExample.files.stream().filter((file) -> !file.modifiable).collect(Collectors.toList()));
+        exampleObject.files.addAll(storedExample.files.stream().filter((file) -> !file.getModifiable()).collect(Collectors.toList()));
         exampleObject.testClasses = storedExample.testClasses;
         return exampleObject;
     }

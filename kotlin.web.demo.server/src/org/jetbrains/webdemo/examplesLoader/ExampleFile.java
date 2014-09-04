@@ -16,55 +16,47 @@
 
 package org.jetbrains.webdemo.examplesLoader;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
-import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
-import org.jetbrains.webdemo.server.ApplicationSettings;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Semyon.Atamas on 8/11/2014.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class ExampleFile {
 
 
-    public Boolean modifiable;
-    public String content;
-    public String name;
-    public String type;
+    private Boolean modifiable;
+    private String content;
+    private String name;
+    private String type;
 
     private PsiFile psiFile;
 
-    @JsonCreator
-    public ExampleFile(@JsonProperty("filename") String filename) throws IOException {
-        if (filename != null) {
-            Path path = Paths.get(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + filename);
-            if (name == null) {
-                name = path.getFileName().toString();
-            }
-            content = new String(Files.readAllBytes(path)).replaceAll(System.lineSeparator(), "\n");
-            psiFile = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), filename, content);
-            type = psiFile.getFileType().getDescription();
-        }
 
-    }
-
-    public ExampleFile(String name, String content) {
+    public ExampleFile(String name, String content, boolean modifiable) {
         this.name = name;
         this.content = content;
+        this.modifiable = modifiable;
+        psiFile = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), name, content);
+        type = psiFile.getFileType().getDescription();
+    }
+
+    public Boolean getModifiable() {
+        return modifiable;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public enum Type {

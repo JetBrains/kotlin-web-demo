@@ -29,6 +29,9 @@ var ProjectProvider = (function () {
             loadProject: function (url) {
                 loadProject(url);
             },
+            deleteProject: function(url){
+                deleteProject(url);
+            },
             deleteFile: function (url, id) {
                 deleteFile(url, id);
             },
@@ -46,6 +49,14 @@ var ProjectProvider = (function () {
             },
             saveProject: function(content){
                 saveProject(content);
+            },
+            onExampleLoaded: function(data){
+            },
+            onProjectLoaded: function(data){
+
+            },
+            onDeleteProject: function(){
+
             }
         };
 
@@ -56,7 +67,7 @@ var ProjectProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            project.onContentLoaded(data);
+                            instance.onExampleLoaded(data);
                         } else {
                             project.onFail(data, ActionStatusMessages.load_example_fail);
                         }
@@ -80,7 +91,7 @@ var ProjectProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            project.onContentLoaded(data);
+                            instance.onProjectLoaded(data);
                         } else {
                             project.onFail(data, ActionStatusMessages.load_program_fail);
                         }
@@ -109,6 +120,22 @@ var ProjectProvider = (function () {
                     project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }
             })
+        }
+
+        function deleteProject(url){
+            $.ajax({
+                url: generateAjaxUrl("deleteProject", url),
+                context: document.body,
+                success: function () {
+                    instance.onDeleteProject(url);
+                },
+                dataType: "json",
+                type: "POST",
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
+                }
+            });
         }
 
         function deleteFile(url, id) {

@@ -3,7 +3,7 @@
     "files": [
         {
             "modifiable": "true",
-            "filename" : "Basic syntax walk-through/Null-checks/Null-checks.kt"
+            "filename" : "Null-checks.kt"
         }
     ],
     "args": "2 3",

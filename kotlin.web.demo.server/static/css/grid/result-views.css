@@ -145,12 +145,44 @@
     border-right: 1px solid #969696;
 }
 
-#test-console{
+#test-wrapper{
     margin-left: 26%;
-    overflow: auto;
     height: 100%;
+}
+
+#test-console{
+    overflow: auto;
     display: block;
     white-space: pre;
+}
+
+
+.status-bar-rect-ok, .status-bar-rect-fail{
+    height: 14px;
+    display: inline-block;
+    width: 5px;
+    border-radius: 1px;
+    margin-right: 1px;
+}
+
+.status-bar-rect-fail{
+    background-color: #ff0000;
+}
+
+.status-bar-rect-ok{
+    background-color: #00f000;
+}
+
+#test-status-bar{
+    float: right;
+    padding: 1px;
+    border: solid 1px #969696;
+    border-radius: 3px;
+}
+
+#unit-test-statistic{
+    overflow: hidden;
+    border-bottom: 1px solid #000;
 }
 
 #test-tree .ui-accordion-header{

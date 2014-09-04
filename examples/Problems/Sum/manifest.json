@@ -2,11 +2,11 @@
     "name": "Sum",
     "files": [
         {
-            "filename": "Problems/Sum/Sum.kt",
+            "filename": "Sum.kt",
             "modifiable": "true"
         },
         {
-            "filename": "Problems/Sum/Test.kt",
+            "filename": "Test.kt",
             "modifiable": "false"
         }
     ],

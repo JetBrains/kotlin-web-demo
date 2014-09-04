@@ -318,7 +318,7 @@ select {
     background-color: #eee;
 }
 
-#editor-notifications-messages{
+.editor-notifications-messages{
     display: inline-block;
     font-size: 12px;
     padding: 4px;

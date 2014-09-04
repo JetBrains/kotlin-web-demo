@@ -21,6 +21,7 @@
 
 var JUnitView = (function () {
     var console;
+    var statistic;
     var navTree;
 
     function JUnitView(element, tabs) {
@@ -33,9 +34,21 @@ var JUnitView = (function () {
                 navTree.id = "test-tree-div";
                 element.append(navTree);
 
+
                 console = document.createElement("div");
                 console.id = "test-console";
-                element.append(console);
+
+
+                statistic = document.createElement("div");
+                statistic.id = "unit-test-statistic";
+                console.appendChild(statistic);
+
+                var wrapper = document.createElement("div");
+                wrapper.id = "test-wrapper";
+                wrapper.appendChild(statistic);
+                wrapper.appendChild(console);
+
+                element.append(wrapper);
                 parseTestTree(data);
             }
         };
@@ -65,18 +78,42 @@ var JUnitView = (function () {
             className.className = "header-text";
             li.appendChild(className);
             li.onclick = (function () {
+                var cl = classes[i];
                 var lines = [];
-                for(var j = 0; j < classes[i].tests.length; j++){
-                    for(var k = 0; k < classes[i].tests[j].lines.length; k++) {
-                        lines.push(classes[i].tests[j].lines[k]);
+                for (var j = 0; j < cl.tests.length; j++) {
+                    for (var k = 0; k < cl.tests[j].lines.length; k++) {
+                        lines.push(cl.tests[j].lines[k]);
                         var p = document.createElement("p");
-                        p.innerHTML = classes[i].tests[j].lines[k];
+                        p.innerHTML = cl.tests[j].lines[k];
                         console.appendChild(p);
                     }
                 }
 
                 function show() {
                     console.innerHTML = "";
+
+                    console.innerHTML = "";
+                    if (cl.status == "fail") {
+                        statistic.innerHTML = "Fail (" + cl.time / 1000 + "s)";
+                    } else if (cl.status == "ok") {
+                        statistic.innerHTML = "Passed (" + cl.time / 1000 + "s)";
+                    } else if (cl.status == "error") {
+                        statistic.innerHTML = "Error (" + cl.time / 1000 + "s)";
+                    }
+
+                    var statusBar = document.createElement("div");
+                    statusBar.id = "test-status-bar";
+                    for (var i = 0; i < 20; i++) {
+                        var statusBarRect = document.createElement("div");
+                        if (cl.status == "ok") {
+                            statusBarRect.className = "status-bar-rect-ok"
+                        } else {
+                            statusBarRect.className = "status-bar-rect-fail"
+                        }
+                        statusBar.appendChild(statusBarRect);
+                    }
+                    statistic.appendChild(statusBar);
+
                     for (var i = 0; i < lines.length; i++) {
                         var p = document.createElement("p");
                         p.innerHTML = lines[i];
@@ -109,11 +146,33 @@ var JUnitView = (function () {
                 testName.className = "test-name";
                 testName.innerHTML = classes[i].tests[j].name;
                 testName.onclick = (function () {
-                    var lines = classes[i].tests[j].lines;
+                    var test = classes[i].tests[j];
+
 
                     function show() {
                         console.innerHTML = "";
-                        for (var i = 0; i < lines.length; i++) {
+                        if (test.status == "fail") {
+                            statistic.innerHTML = "Fail (" + test.time / 1000 + "s)";
+                        } else if (test.status == "ok") {
+                            statistic.innerHTML = "Passed (" + test.time / 1000 + "s)";
+                        } else if (test.status == "error") {
+                            statistic.innerHTML = "Error (" + test.time / 1000 + "s)";
+                        }
+
+                        var statusBar = document.createElement("div");
+                        statusBar.id = "test-status-bar";
+                        for (var i = 0; i < 20; i++) {
+                            var statusBarRect = document.createElement("div");
+                            if (test.status == "ok") {
+                                statusBarRect.className = "status-bar-rect-ok"
+                            } else {
+                                statusBarRect.className = "status-bar-rect-fail"
+                            }
+                            statusBar.appendChild(statusBarRect);
+                        }
+                        statistic.appendChild(statusBar);
+
+                        for (var i = 0; i < test.lines.length; i++) {
                             var p = document.createElement("p");
                             p.innerHTML = lines[i];
                             console.appendChild(p);
@@ -158,9 +217,10 @@ var JUnitView = (function () {
                 return tests[i];
             }
         }
-        var test ={
+        var test = {
             name: testName,
             lines: [],
+            time: -1,
             status: "ok"
         };
         tests.push(test);
@@ -173,51 +233,77 @@ var JUnitView = (function () {
             if (data[i].type != "info" && data[i].type != "toggle-info") {
 
                 var text = data[i].text.replace(/&amp;lt;/g, "").replace(/&amp;gt;/g, "").split("<br/>");
-                var testStart = /@(.*) started@/;
+                var startRegExp = /@(.*) started@/;
+
                 var j = 0;
+                if (text[j].match(startRegExp) != null) {
+                    var className = text[0].match(startRegExp)[1];
+                    j = j + 1;
+                    var start = j;
 
-                var testClass = null;
-                while (j < text.length) {
-                    if (text[j].match(testStart) != null) {
-                        var testHeader = text[j].match(testStart)[1];
-                        var testNameFormat = /(.*)\((.*)\)/;
-
-                        var fullClassName = testHeader.match(testNameFormat)[2];
-                        testClass = getOrCreateClass(testClasses, fullClassName);
-                        var test = getOrCreateTest(testClass.tests, testHeader.match(testNameFormat)[1]);
-                        j++;
-
-                        while (text[j] != "@" + testHeader + " finished@") {
-                            if (text[j] == "@" + testHeader + " failed@") {
-                                if (testClass.status != "error") {
-                                    testClass.status = "fail";
-                                }
-                                test.status = "fail";
-                            } else if (text[j] == "@" + testHeader + " error@") {
-                                testClass.status = "error";
-                                test.status = "error";
-                            } else {
-                                test.lines.push(text[j]);
-                            }
-                            j++;
-                        }
-                        j++;
-
-
-                    } else {
-                        var p = document.createElement("p");
-                        p.innerHTML = text[j];
-                        console.appendChild(p);
-                        j++;
+                    while (text[j] != "@" + className + " finished@") {
+                        j = j + 1;
                     }
+                    var testClass = getOrCreateClass(testClasses, className);
+                    if(text[j-1].match(/@time: ([0-9]*)@/) != null) {
+                        testClass.time = text[j - 1].match(/@time: ([0-9]*)@/)[1];
+                        parseClassOutput(text.slice(start, j - 1), testClass);
+                    } else{
+                        parseClassOutput(text.slice(start, j), testClass);
+                    }
+                    j = j + 1;
                 }
+
+
             } else {
                 generatedCodeView.setOutput(data[i]);
             }
+
         }
         showTestTree(testClasses);
     }
 
-    return JUnitView;
-})
-();
+    function parseClassOutput(text, testClass) {
+        var j = 0;
+        var startRegExp = /@(.*) started@/;
+        while (j < text.length - 1) {
+            if (text[j].match(startRegExp) != null) {
+                var testHeader = text[j].match(startRegExp)[1];
+                var testNameFormat = /(.*)\((.*)\)/;
+                var test = getOrCreateTest(testClass.tests, testHeader.match(testNameFormat)[1]);
+                j++;
+
+                while (text[j] != "@" + testHeader + " finished@") {
+                    if (text[j] == "@" + testHeader + " failed@") {
+                        if (testClass.status != "error") {
+                            testClass.status = "fail";
+                        }
+                        test.status = "fail";
+                    } else if (text[j] == "@" + testHeader + " error@") {
+                        testClass.status = "error";
+                        test.status = "error";
+                    } else if (text[j].match(/@time: ([0-9]*)@/)) {
+                        test.time = text[j].match(/@time: ([0-9]*)@/)[1];
+                    } else {
+                        test.lines.push(text[j]);
+                    }
+                    j++;
+                }
+                j++;
+
+
+            } else {
+                var p = document.createElement("p");
+                p.innerHTML = text[j];
+                console.appendChild(p);
+                j++;
+            }
+        }
+        }
+
+
+        return JUnitView;
+    }
+
+    )
+    ();

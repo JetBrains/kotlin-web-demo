@@ -17,6 +17,7 @@
 /**
  * Created by Semyon.Atamas on 8/12/2014.
  */
+
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.Failure;
@@ -28,11 +29,19 @@ public class JunitRunner {
     public static void main(String[] args) {
         JUnitCore jUnitCore = new JUnitCore();
         jUnitCore.addListener(new MyRunListener());
-        for(String className : args){
+        for (String className : args) {
+            long startTime = System.currentTimeMillis();
             try {
+                System.out.println("@" + className + " started@");
+                System.err.println("@" + className + " started@");
                 jUnitCore.run(Class.forName(className));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+            } finally {
+                long executionTime = System.currentTimeMillis() - startTime;
+                System.out.println("@time: " + executionTime + "@");
+                System.out.println("@" + className + " finished@");
+                System.err.println("@" + className + " finished@");
             }
         }
     }
@@ -42,19 +51,21 @@ public class JunitRunner {
 
 
 class MyRunListener extends RunListener {
+    long startTime;
 
     @Override
     public void testStarted(Description description) {
         System.out.println("@" + description.getDisplayName() + " started@");
         System.err.println("@" + description.getDisplayName() + " started@");
+        startTime = System.currentTimeMillis();
     }
 
     @Override
     public void testFailure(Failure failure) {
-        if(failure.getException() instanceof AssertionError) {
+        if (failure.getException() instanceof AssertionError) {
             System.out.println(failure.getMessage());
             System.out.println("@" + failure.getTestHeader() + " failed@");
-        } else{
+        } else {
             failure.getException().printStackTrace();
             System.out.println("@" + failure.getTestHeader() + " error@");
         }
@@ -62,6 +73,8 @@ class MyRunListener extends RunListener {
 
     @Override
     public void testFinished(Description description) {
+        long executionTime = System.currentTimeMillis() - startTime;
+        System.out.println("@time: " + executionTime + "@");
         System.out.println("@" + description.getDisplayName() + " finished@");
         System.err.println("@" + description.getDisplayName() + " finished@");
     }
