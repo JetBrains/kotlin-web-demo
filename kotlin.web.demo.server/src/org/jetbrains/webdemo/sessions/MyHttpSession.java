@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.examplesLoader.ExampleFile;
+import org.jetbrains.webdemo.examplesLoader.ProjectFile;
 import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
@@ -39,7 +39,6 @@ import org.jetbrains.webdemo.session.SessionInfo;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -100,10 +99,8 @@ public class MyHttpSession {
                     sendSaveFileResult();
                     break;
                 case("addProject"):
-                    MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0]);
-                    break;
-                case("addExampleProject"):
-                    addExampleProject();
+                    sendAddProjectResult();
+
                     break;
                 case ("deleteProject"):
                     MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0]);
@@ -171,6 +168,23 @@ public class MyHttpSession {
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
+    private void sendAddProjectResult(){
+        String content = parameters.get("content")[0];
+        if(content != null) {
+            try {
+                ExampleObject project = objectMapper.readValue(content, ExampleObject.class);
+                String originURL = project.parent + "&name=" + project.name;
+                project.name = parameters.get("args")[0]; //when user calls save as we must change project name
+                project.parent = "My Programs"; //to show that it is user project, not example
+                MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), project, originURL);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else{
+            MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0]);
+        }
+    }
+
     private void sendDeleteProgramResult() {
         String result;
         result = MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0], parameters.get("filename")[0]);
@@ -210,7 +224,7 @@ public class MyHttpSession {
             String folderName = parameters.get("args")[0].replaceAll("_", " ");
             String projectName = parameters.get("name")[0].replaceAll("_", " ");
 
-            ExampleFile file = objectMapper.readValue(parameters.get("file")[0], ExampleFile.class);
+            ProjectFile file = objectMapper.readValue(parameters.get("file")[0], ProjectFile.class);
             MySqlConnector.getInstance().saveFile(sessionInfo.getUserInfo(), folderName, projectName, file);
             writeResponse("ok", HttpServletResponse.SC_OK);
         } catch (IOException e) {
@@ -221,7 +235,10 @@ public class MyHttpSession {
     private void sendExecutorResult() {
         try{
 
-            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(parameters.get("project")[0], ExampleObject.class));
+            ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
+            if(!example.parent.equals("My Programs")){
+                addUnmodifiableDataToExample(example);
+            }
 
             sessionInfo.setRunConfiguration(example.confType);
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
@@ -239,16 +256,6 @@ public class MyHttpSession {
         }
     }
 
-    private void addExampleProject() {
-        try {
-            ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
-            MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), example);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void sendExampleContent() {
         writeResponse(ExamplesList.loadExample(parameters.get("args")[0].replaceAll("_", " "), parameters.get("name")[0].replaceAll("_", " ")), HttpServletResponse.SC_OK);
     }
@@ -263,7 +270,10 @@ public class MyHttpSession {
             String fileName = parameters.get("filename")[0];
             int line = Integer.parseInt(parameters.get("line")[0]);
             int ch = Integer.parseInt(parameters.get("ch")[0]);
-            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(parameters.get("project")[0], ExampleObject.class));
+            ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
+            if(!example.parent.equals("My Programs")){
+                addUnmodifiableDataToExample(example);
+            }
 
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
             sessionInfo.setRunConfiguration(parameters.get("runConf")[0]);
@@ -279,7 +289,11 @@ public class MyHttpSession {
         sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         sessionInfo.setRunConfiguration(parameters.get("args")[0]);
         try{
-            ExampleObject example = addUnmodifiableDataToExample(objectMapper.readValue(parameters.get("project")[0], ExampleObject.class));
+
+            ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
+            if(!example.parent.equals("My Programs")){
+                addUnmodifiableDataToExample(example);
+            }
 
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, currentProject);

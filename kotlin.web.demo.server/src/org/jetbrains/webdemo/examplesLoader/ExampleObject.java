@@ -17,11 +17,8 @@
 package org.jetbrains.webdemo.examplesLoader;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
@@ -33,7 +30,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class ExampleObject {
     private static ObjectMapper objectMapper = new ObjectMapper();
@@ -52,18 +48,22 @@ public class ExampleObject {
     @NotNull
     public String[] testClasses;
     @NotNull
-    public List<ExampleFile> files = new ArrayList<>();
+    public List<ProjectFile> files = new ArrayList<>();
 
 
-    private String exampleFolderPath;
     public ExampleObject(){
 
     }
 
-    @JsonCreator
-    public ExampleObject(String parent, String example) throws IOException {
+    /**
+     * This constructor is used to get examples from server.
+     * @param parent - Name of parent folder
+     * @param exampleFolderName - Name of example folder
+     * @throws IOException - if example folder has no manifest file, if example files do not exists, or some other problem with IO.
+     */
+    public ExampleObject(@NotNull String parent, @NotNull String exampleFolderName) throws IOException {
         this.parent = parent;
-        exampleFolderPath = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + parent + File.separator + example + File.separator;
+        String exampleFolderPath = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + parent + File.separator + exampleFolderName + File.separator;
         File manifest = new File(exampleFolderPath + "manifest.json");
         JsonNode objectNode = objectMapper.readTree(manifest);
 
@@ -88,7 +88,7 @@ public class ExampleObject {
             } else{
                 fileContent = fileDescriptor.get("content").asText();
             }
-            ExampleFile file = new ExampleFile(fileName, fileContent, modifiable);
+            ProjectFile file = new ProjectFile(fileName, fileContent, modifiable);
             files.add(file);
         }
     }

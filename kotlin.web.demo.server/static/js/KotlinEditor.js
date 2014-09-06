@@ -299,7 +299,7 @@ var KotlinEditor = (function () {
                     updateHighlighting: function () {
                         updateHighlighting()
                     },
-                    removeStyles: function(){
+                    removeStyles: function () {
                         removeStyles()
                     }
                 };
@@ -441,7 +441,12 @@ var KotlinEditor = (function () {
                 }
 
             },
-            onChange: runTimerForNonPrinting,
+            onChange: function () {
+                if(openedElement != null) {
+                    openedElement.onContentChange();
+                }
+                runTimerForNonPrinting()
+            },
             onCursorActivity: function () {
                 instance.onCursorActivity(my_editor.getCursor());
             },
@@ -492,8 +497,9 @@ var KotlinEditor = (function () {
                 if (isEditorContentChanged && openedElement != null) {
                     openedElement.save();
                 }
+                openedElement = null; //without this my_editor.setValue will launch on change event
                 highlighting.removeStyles();
-                openedElement = element;
+
 
 
                 if (!element.modifiable) {
@@ -505,6 +511,7 @@ var KotlinEditor = (function () {
                 my_editor.focus();
                 my_editor.setValue(element.content);
                 isEditorContentChanged = false;
+                openedElement = element;
                 highlighting.updateHighlighting();
             },
             updateHighlighting: function () {

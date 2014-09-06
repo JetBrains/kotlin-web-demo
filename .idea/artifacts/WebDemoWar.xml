@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="war" name="WebDemoWar">
-    <output-path>/opt/apache-tomcat-7.0.54/webapps</output-path>
+    <output-path>$PROJECT_DIR$/out/production</output-path>
     <root id="archive" name="WebDemoWar.war">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">

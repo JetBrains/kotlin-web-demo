@@ -20,6 +20,10 @@ var KOTLIN_VERSION = "0.8.313";
 var APPLET_VERSION = "22012013";
 var WEB_DEMO_VERSION = "${web.demo.version}";
 
+String.prototype.endsWith = function(a) {
+    return-1 !== this.indexOf(a, this.length - a.length);
+};
+
 function forEachInArrayWithArgs(arr, data, f) {
     var i = 0;
     while (arr[i] != undefined) {

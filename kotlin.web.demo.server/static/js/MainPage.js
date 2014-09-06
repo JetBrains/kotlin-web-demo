@@ -191,14 +191,6 @@ var converterView = new ConverterView($("#java2kotlin"), converterProvider);
 var accordion = new AccordionView($("#examples-list"));
 
 
-
-
-
-ConfirmDialog.isEditorContentChanged = editor.isEditorContentChanged;
-ConfirmDialog.isLoggedIn = loginView.isLoggedIn;
-ConfirmDialog.saveProgram = accordion.saveProgram;
-
-
 configurationManager.onChange = function (configuration) {
     editor.setConfiguration(configuration);
     consoleView.setConfiguration(configuration);

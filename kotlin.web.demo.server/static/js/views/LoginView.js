@@ -26,7 +26,6 @@ var LoginView = (function () {
         var model = loginModel;
         var isLoggedIn = false;
 
-        var confirmDialog = new ConfirmDialog();
 
         var instance = {
             setUserName: function (name) {
@@ -70,11 +69,7 @@ var LoginView = (function () {
         model.getUserName();
 
         function login(param) {
-            confirmDialog.open(function (param) {
-                return function () {
-                    model.login(param);
-                };
-            }(param));
+            model.login(param);
         }
 
         function setUserName(userName) {

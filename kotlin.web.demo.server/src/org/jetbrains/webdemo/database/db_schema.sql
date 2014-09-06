@@ -18,6 +18,7 @@ create table if not exists projects(
 	args varchar(45) not null,
 	run_configuration ENUM ('java', 'js', 'canvas', 'jquery') not null default 'java',
 	link varchar(150) unique,
+  origin varchar(100) not null default 'User project',
 	constraint project_name unique (owner_id, parent, name),
 	foreign key (owner_id) references users(id) on delete cascade
 );

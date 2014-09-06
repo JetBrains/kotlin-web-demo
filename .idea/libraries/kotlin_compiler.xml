@@ -4,10 +4,6 @@
       <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-compiler.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-compiler-sources.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-compiler-sources.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-compiler-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

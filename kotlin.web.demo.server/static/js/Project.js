@@ -34,20 +34,16 @@ var Project = (function () {
                     content.files[i].errors = [];
                     content.files[i].save = function () {
                         this.content = editor.getText();
-                        localStorage.setItem(url, JSON.stringify(content));
-
-                        if (loginView.isLoggedIn()) {
-                            if (isDatabaseCopyExist) {
-                                projectProvider.saveFile(url, this);
-                            } else {
-                                projectProvider.addNewProjectFromExample(instance.getModifiableContent());
-                                isDatabaseCopyExist = true;
-                            }
+                        if (isUserProject()) {
+                            projectProvider.saveFile(url, this);
+                        } else {
+                            localStorage.setItem(url, JSON.stringify(content));
                         }
                     };
 
-                    content.files.onContentChange = function () {
+                    content.files[i].onContentChange = function () {
                         isProjectContentChanged = true;
+                        actionsView.setStatus("unsavedChanges");
                     }
 
                 }
@@ -89,11 +85,8 @@ var Project = (function () {
                     })
                 };
             },
-            restoreDefault : function () {
+            restoreDefault: function () {
                 projectProvider.loadExample(url);
-            },
-            loadFromDb: function(){
-                projectProvider.loadProject(url);
             },
             getURL: function () {
                 return url;
@@ -113,9 +106,8 @@ var Project = (function () {
                 return false;
             },
             save: function () {
-                if (isProjectContentChanged) {
-                    localStorage.setItem(url, JSON.stringify(content));
-                    if (loginView.isLoggedIn()) {
+                if (isUserProject()) {
+                    if (isProjectContentChanged) {
                         projectProvider.saveProject({
                             args: content.args,
                             confType: content.confType,
@@ -123,8 +115,17 @@ var Project = (function () {
                             parent: content.parent,
                             files: []
                         });
+                        actionsView.setStatus("default");
                     }
-                    actionsView.setStatus("default");
+                } else {
+                    localStorage.setItem(url, JSON.stringify(content));
+                }
+            },
+            saveAs: function () {
+                if (loginView.isLoggedIn()) {
+                    saveProjectDialog.open(projectProvider.addNewProject.bind(null, content))
+                } else {
+                    $("#login-dialog").dialog("open");
                 }
             },
             changeConfiguration: function (confType) {
@@ -158,31 +159,22 @@ var Project = (function () {
         var actionsView = new ProjectActionsView(document.getElementById("editor-notifications"), instance);
 
         var projectProvider = new ProjectProvider(instance);
-        projectProvider.onExampleLoaded = function(data){
+        projectProvider.onExampleLoaded = function (data) {
             localStorage.removeItem(url);
             isLocalCopyExist = false;
-            if(loginView.isLoggedIn()){
-                projectProvider.deleteProject(url);
-                isDatabaseCopyExist = false;
-            }
             actionsView.setStatus("default");
             instance.onContentLoaded(data);
         };
 
-        projectProvider.onProjectLoaded = function(data){
+        projectProvider.onProjectLoaded = function (data) {
             localStorage.removeItem(url);
-            if(data.origin == "db") {
-                actionsView.setStatus("dbVersion");
-            } else if(data.origin == "default"){
-                actionsView.setStatus("default");
-            }
+            actionsView.setStatus("default");
             instance.onContentLoaded(data.content);
         };
 
-        projectProvider.onDeleteProject = function(){
+        projectProvider.onDeleteProject = function () {
             isDatabaseCopyExist = false;
         };
-
 
 
         (function loadProject() {
@@ -190,9 +182,9 @@ var Project = (function () {
                 var localContent = JSON.parse(localStorage.getItem(url));
                 if (localContent != null) {
                     instance.onContentLoaded(localContent);
-                    actionsView.setStatus("localVersion");
+                    actionsView.setStatus("unsavedChanges");
                 } else {
-                    if (loginView.isLoggedIn()) {
+                    if (isUserProject()) {
                         projectProvider.loadProject(url);
                     } else {
                         projectProvider.loadExample(url);
@@ -202,8 +194,8 @@ var Project = (function () {
         })();
 
 
-        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add", projectProvider.addNewFile);
-
+        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
+        var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
 
         function selectFile(file) {
             if (selectedFile != null) {
@@ -272,7 +264,7 @@ var Project = (function () {
                 var addFileButton = document.createElement("div");
                 addFileButton.className = "example-filename";
                 addFileButton.innerHTML = "Add new file";
-                addFileButton.onclick = newFileDialog.open;
+                addFileButton.onclick = newFileDialog.open.bind(null, projectProvider.addNewFile);
                 element.appendChild(addFileButton);
             }
         }

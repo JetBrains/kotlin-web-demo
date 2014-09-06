@@ -124,11 +124,6 @@
     margin-left: 5px;
 }
 
-#confirmDialog {
-    text-align: center;
-    line-height: 60px;
-}
-
 #selectId {
     max-height: 200px;
     overflow-y: scroll;

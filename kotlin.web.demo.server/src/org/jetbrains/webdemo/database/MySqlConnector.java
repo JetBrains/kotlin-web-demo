@@ -24,7 +24,7 @@ import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.examplesLoader.ExampleFile;
+import org.jetbrains.webdemo.examplesLoader.ProjectFile;
 import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -242,7 +242,7 @@ public class MySqlConnector {
         return (getUserId(userInfo) != -1);
     }
 
-    public boolean saveFile(UserInfo userInfo, String folderName, String projectName, ExampleFile file){
+    public boolean saveFile(UserInfo userInfo, String folderName, String projectName, ProjectFile file){
         int projectId = getProjectId(userInfo, folderName, projectName);
         if(projectId != -1) {
             try (PreparedStatement st = connection.prepareStatement("UPDATE files SET files.content = ? WHERE project_id = ? AND files.name = ?  ")) {
@@ -395,21 +395,21 @@ public class MySqlConnector {
         return false;
     }
 
-    public boolean addProject(UserInfo userInfo, ExampleObject project) {
+    public boolean addProject(UserInfo userInfo, ExampleObject project, String originURL) {
         int userId = getUserId(userInfo);
         if (userId != -1) {
             PreparedStatement st = null;
             try {
-                st = connection.prepareStatement("insert into projects (owner_id, name, parent, args, run_configuration) values (?,?,?,?,?) ");
+                st = connection.prepareStatement("insert into projects (owner_id, name, args, run_configuration, origin) values (?,?,?,?, ?) ");
                 st.setString(1, userId + "");
                 st.setString(2, project.name);
-                st.setString(3, project.parent);
-                st.setString(4, project.args);
-                st.setString(5, project.confType);
+                st.setString(3, project.args);
+                st.setString(4, project.confType);
+                st.setString(5, originURL);
                 st.execute();
 
                 int projectId = getProjectId(userInfo, project.parent, project.name);
-                for (ExampleFile file : project.files) {
+                for (ProjectFile file : project.files) {
                     st = connection.prepareStatement("insert into files (project_id, name, content) values (?,?,?)");
                     st.setString(1, projectId + "");
                     st.setString(2, file.getName());
@@ -510,7 +510,7 @@ public class MySqlConnector {
                 st.setString(1, rs.getInt("id") + "");
                 rs = st.executeQuery();
                 while (rs.next()) {
-                    ExampleFile file = new ExampleFile(rs.getString("name"), rs.getString("content"), true);
+                    ProjectFile file = new ProjectFile(rs.getString("name"), rs.getString("content"), true);
                     project.files.add(file);
                 }
                 ObjectNode response = new ObjectNode(JsonNodeFactory.instance);

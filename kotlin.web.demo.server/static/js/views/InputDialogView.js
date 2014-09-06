@@ -21,7 +21,7 @@
 
 var InputDialogView = (function () {
 
-    function InputDialogView(title, inputText, buttonText, callback) {
+    function InputDialogView(title, inputText, buttonText) {
         var dialog = document.createElement("div");
         dialog.id = "input-dialog";
 
@@ -37,26 +37,27 @@ var InputDialogView = (function () {
         $(dialog).dialog({
             modal: "true",
             width: 380,
-            autoOpen: false,
-            buttons: [
-                {
-                    text: buttonText,
-                    click: function(){
-                        callback(input.value);
-                        $(this).dialog("close");
-                    }
-                },
-                {
-                    text: "Cancel",
-                    click: function () {
-                        $(this).dialog("close");
-                    }
-                }
-            ]
+            autoOpen: false
         });
 
         var instance = {
-            open: function () {
+            open: function (callback) {
+                $(dialog).dialog("option", "buttons",  [
+                    {
+                        text: buttonText,
+                        click: function () {
+                            callback(input.value);
+                            $(this).dialog("close");
+                        }
+                    },
+                    {
+                        text: "Cancel",
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                ]
+                );
                 $(dialog).dialog("open");
             }
         };

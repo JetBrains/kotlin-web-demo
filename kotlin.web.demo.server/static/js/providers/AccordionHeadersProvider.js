@@ -27,13 +27,13 @@ var AccordionHeadersProvider = (function () {
             getAllExamples: function () {
                 getAllExamples();
             },
-            getAllPrograms: function(){
+            getAllPrograms: function () {
                 getAllPrograms();
             },
             addNewProject: function(name){
                 addNewProject(name);
             },
-            deleteProject: function(url){
+            deleteProject: function (url) {
                 deleteProject(url);
             }
         };
@@ -100,10 +100,10 @@ var AccordionHeadersProvider = (function () {
             })
         }
 
-        function deleteProject(url){
+        function deleteProject(url) {
             $.ajax({
                 url: generateAjaxUrl("deleteProject", url),
-                success: function(){
+                success: function () {
                     accordion.deleteProject();
                 },
                 type: "POST",

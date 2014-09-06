@@ -38,11 +38,8 @@ var ProjectProvider = (function () {
             addNewFile: function (projectName, fileName) {
                 addNewFile(projectName, fileName);
             },
-            addNewProject: function(url){
-                addNewProject(url)
-            },
-            addNewProjectFromExample: function(data){
-                addNewProjectFromExample(data)
+            addNewProject: function(content, url){
+                addNewProject(content, url)
             },
             saveFile: function(url, data){
                 saveFile(url, data);
@@ -108,7 +105,26 @@ var ProjectProvider = (function () {
             });
         }
 
+
+        function addNewProject(content, name) {
+            $.ajax({
+                url: generateAjaxUrl("addProject", name),
+                success: function () {
+                    accordion.addNewProject(name);
+                },
+                type: "POST",
+                timeout: 10000,
+                data: {content: JSON.stringify(content)},
+                error: function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                }
+            })
+        }
+
         function addNewFile(filename) {
+            if(!filename.endsWith(".kt")){
+                filename = filename + ".kt";
+            }
             $.ajax({
                 url: generateAjaxUrl("addFile", project.getURL() + "&filename=" + filename),
                 success: function () {
@@ -152,35 +168,6 @@ var ProjectProvider = (function () {
                     project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
                 }
             });
-        }
-
-
-        function addNewProject(name){
-            $.ajax({
-                url: generateAjaxUrl("addProject", name),
-                success: function(){
-                    accordion.addNewProject(name);
-                },
-                type: "POST",
-                timeout: 10000,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                }
-            })
-        }
-
-
-        function addNewProjectFromExample(data){
-            $.ajax({
-                url: generateAjaxUrl("addExampleProject"),
-                type: "POST",
-                timeout: 10000,
-                dataType: "json",
-                data: {project: JSON.stringify(data)},
-                error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                }
-            })
         }
 
         function saveFile(url, data) {

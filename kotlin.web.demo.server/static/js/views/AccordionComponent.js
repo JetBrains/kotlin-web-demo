@@ -55,16 +55,16 @@ var AccordionView = (function () {
                 }
                 addNewProjectButton();
             },
-            saveProgram: function () {
-                programsView.saveProgram();
+            saveProject: function () {
+                selectedProject.save();
             },
             loadAllContent: function () {
                 element.html("");
                 headersProvider.getAllExamples();
             },
-            addNewProject: function (name) {
-                createProject(name);
-                this.loadAllContent();
+            addNewProject: function (name, /*nullable*/ content) {
+                createProject(name, content);
+                instance.loadAllContent();
             },
             onLoadCode: function (example, isProgram) {
             },
@@ -89,18 +89,21 @@ var AccordionView = (function () {
             return new AccordionHeadersProvider(instance.onLoadExampleHeaders, instance.onLoadUserProjectsHeaders, instance.onFail);
         })();
 
-        var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add", headersProvider.addNewProject);
+        var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add");
 
-        function createProject(name) {
+        function createProject(name, content) {
             var url = getProjectURL("My Programs", name);
-            downloadedProjects[url] = new Project(url, document.getElementById(url + "_content"), {
-                name: name,
-                parent: "My Program",
-                args: "",
-                confType: "java",
-                help: "",
-                files: []
-            });
+            if(content == null){
+                content = {
+                    name: name,
+                    parent: "My Program",
+                    args: "",
+                    confType: "java",
+                    help: "",
+                    files: []
+                }
+            }
+            downloadedProjects[url] = new Project(url, document.getElementById(url + "_content"), content);
         }
 
         function loadFirstItem() {
@@ -137,7 +140,7 @@ var AccordionView = (function () {
             addNewProjectText.className = "examples-project-name";
             addNewProjectDiv.appendChild(addNewProjectText);
 
-            addNewProjectDiv.onclick = newProjectDialog.open;
+            addNewProjectDiv.onclick = newProjectDialog.open.bind(null, headersProvider.addNewProject);
             cont.appendChild(addNewProjectDiv);
         }
 

@@ -20,20 +20,20 @@
 
 
 var ProjectActionsView = (function () {
-    function ProjectActionsView(element, project){
+    function ProjectActionsView(element, project) {
         var status = "default";
         var instance = {
-            setStatus: function(newStatus){
+            setStatus: function (newStatus) {
                 status = newStatus;
                 instance.refresh();
             },
-            refresh:function(){
-                switch (status){
+            refresh: function () {
+                switch (status) {
                     case "localVersion":
                         setLocalVersionStatus();
                         break;
-                    case "dbVersion":
-                        setDBVersionStatus();
+                    case "unsavedChanges":
+                        setUnsavedChangesStatus();
                         break;
                     case "default":
                         element.innerHTML = "";
@@ -45,30 +45,34 @@ var ProjectActionsView = (function () {
             }
         };
 
-        function setDBVersionStatus(){
-            if(project.isUserProject()) {
+        function setUnsavedChangesStatus() {
+            if (!project.isUserProject()) {
                 element.innerHTML = "";
                 element.style.display = "block";
 
                 var message = document.createElement("span");
                 message.className = "editor-notifications-messages";
-                message.innerHTML = "Example was loaded from the database";
+                message.innerHTML = "This is local version of example";
                 element.appendChild(message);
 
-                if (!project.isUserProject()) {
-                    var restore = document.createElement("div");
-                    restore.className = "editor-notifications-action";
-                    restore.innerHTML = "Load original";
-                    restore.onclick = project.restoreDefault;
-                    element.appendChild(restore);
-                }
-            } else{
+                var restore = document.createElement("div");
+                restore.className = "editor-notifications-action";
+                restore.innerHTML = "Load original";
+                restore.onclick = project.restoreDefault;
+                element.appendChild(restore);
+
+                var save = document.createElement("div");
+                save.className = "editor-notifications-action";
+                save.innerHTML = "Save";
+                save.onclick = project.saveAs;
+                element.appendChild(save);
+            } else {
                 element.innerHTML = "";
                 element.style.display = "none";
             }
         }
 
-        function setLocalVersionStatus(){
+        function setLocalVersionStatus() {
             element.innerHTML = "";
             element.style.display = "block";
 
@@ -77,23 +81,12 @@ var ProjectActionsView = (function () {
             message.innerHTML = "Example was loaded from the local storage";
             element.appendChild(message);
 
-            if(!project.isUserProject()) {
+            if (!project.isUserProject()) {
                 var restore = document.createElement("div");
                 restore.className = "editor-notifications-action";
                 restore.innerHTML = "Load original";
                 restore.onclick = project.restoreDefault;
                 element.appendChild(restore);
-            }
-
-            if (loginView.isLoggedIn()) {
-                var loadDb = document.createElement("div");
-                loadDb.className = "editor-notifications-action";
-                loadDb.innerHTML = "Load from database";
-                loadDb.onclick = function () {
-                    this.style.display = "none";
-                    project.loadFromDb();
-                };
-                element.appendChild(loadDb);
             }
         }
 
