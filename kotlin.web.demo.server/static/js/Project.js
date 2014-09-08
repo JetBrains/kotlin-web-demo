@@ -123,7 +123,7 @@ var Project = (function () {
             },
             saveAs: function () {
                 if (loginView.isLoggedIn()) {
-                    saveProjectDialog.open(projectProvider.addNewProject.bind(null, content))
+                    saveProjectDialog.open(projectProvider.addNewProject.bind(null, instance.getModifiableContent()))
                 } else {
                     $("#login-dialog").dialog("open");
                 }
@@ -152,7 +152,7 @@ var Project = (function () {
             onFail: function () {
             },
             isUserProject: function () {
-                isUserProject();
+                return isUserProject();
             }
         };
 
@@ -235,7 +235,7 @@ var Project = (function () {
 
 
                 var fileNameSpan = document.createElement("div");
-                fileNameSpan.style.float = "left";
+                fileNameSpan.className = "example-filename-text";
                 fileNameSpan.innerHTML = file.name;
                 filenameDiv.appendChild(fileNameSpan);
 
@@ -264,6 +264,7 @@ var Project = (function () {
                 var addFileButton = document.createElement("div");
                 addFileButton.className = "example-filename";
                 addFileButton.innerHTML = "Add new file";
+                addFileButton.style.cursor = "pointer";
                 addFileButton.onclick = newFileDialog.open.bind(null, projectProvider.addNewFile);
                 element.appendChild(addFileButton);
             }

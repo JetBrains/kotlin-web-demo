@@ -175,7 +175,6 @@ var ProjectProvider = (function () {
                 url: generateAjaxUrl("saveFile", url),
                 type: "POST",
                 timeout: 10000,
-                dataType: "json",
                 data: {file: JSON.stringify(data)},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
@@ -188,7 +187,6 @@ var ProjectProvider = (function () {
                 url: generateAjaxUrl("saveProject"),
                 type: "POST",
                 timeout: 10000,
-                dataType: "json",
                 data: {project: JSON.stringify(content)},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);

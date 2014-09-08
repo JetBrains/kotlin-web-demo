@@ -326,6 +326,7 @@ select {
 }
 
 .editor-notifications-action{
+    cursor: pointer;
     padding: 4px;
     font-size: 12px;
     float: right;

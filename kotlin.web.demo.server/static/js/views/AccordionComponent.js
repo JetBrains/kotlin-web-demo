@@ -138,6 +138,7 @@ var AccordionView = (function () {
             var addNewProjectText = document.createElement("div");
             addNewProjectText.innerHTML = "Add new project";
             addNewProjectText.className = "examples-project-name";
+            addNewProjectText.style.cursor = "pointer";
             addNewProjectDiv.appendChild(addNewProjectText);
 
             addNewProjectDiv.onclick = newProjectDialog.open.bind(null, headersProvider.addNewProject);

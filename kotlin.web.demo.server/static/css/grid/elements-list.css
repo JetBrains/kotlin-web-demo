@@ -23,23 +23,23 @@
     border-color: #969696;
 }
 
-.examples-folder{
+.examples-folder {
     padding: 8px;
 }
 
-.examples-closed-folder-icon{
+.examples-closed-folder-icon {
     display: inline-block;
     width: 37px;
     height: 15px;
     background: url("/static/images/icons.png") no-repeat -42px -40px;
 }
 
-#examples-list .ui-state-active{
+#examples-list .ui-state-active {
     cursor: default;
     color: #000000;
 }
 
-#examples-list .ui-accordion-header{
+#examples-list .ui-accordion-header {
     outline: none;
     cursor: pointer;
     color: #3164a0;
@@ -47,38 +47,39 @@
     padding-bottom: 6px;
 }
 
-.examples-open-folder-icon{
+.examples-open-folder-icon {
     display: inline-block;
     width: 37px;
     height: 15px;
     background: url("/static/images/icons.png") no-repeat -19px -76px;
 }
 
-.folder-name-div{
+.folder-name-div {
     padding-left: 43px;
     padding-top: 2px;
     padding-right: 10px;
 }
 
-.examples-folder-name{
+.examples-folder-name {
     /*display: inline-block;*/
     font-size: 14px;
     padding-left: 6px;
 }
 
-.file-name-span{
+.file-name-span {
     display: inline-block;
     max-width: 85%;
 }
 
-.examples-project-name, .expanded-project-name{
-     display: block;
-     color: #3164a0;
-     font-size: 14px;
+.examples-project-name, .expanded-project-name {
+    cursor: pointer;
+    display: block;
+    color: #3164a0;
+    font-size: 14px;
     padding: 6px 6px 6px 45px;
 }
 
-.current-project-name{
+.current-project-name {
     display: block;
     font-size: 14px;
     padding: 6px 6px 6px 45px;
@@ -86,18 +87,7 @@
     background-color: #d8d8d8;
 }
 
-.example-filename{
-    overflow: hidden;
-    cursor: pointer;
-    display: block;
-    color: #3164a0;
-    line-height: 16px;
-    font-size: 14px;
-    position: relative;
-    padding: 6px 6px 6px 65px;
-}
-
-.examples-project-name .arrow, .current-project-name .arrow{
+.examples-project-name .arrow, .current-project-name .arrow {
     display: inline-block;
     float: left;
     margin-top: 3px;
@@ -107,7 +97,7 @@
     background: url("/static/images/icons.png") -58px -58px;
 }
 
-.expanded-project-name .arrow{
+.expanded-project-name .arrow {
     display: inline-block;
     float: left;
     margin-top: 3px;
@@ -117,18 +107,18 @@
     background: url("/static/images/icons.png") -58px -66px;
 }
 
-#examples-list .ui-icon{
+#examples-list .ui-icon {
     margin-right: 6px;
     float: left;
 }
 
-.login-link{
+.login-link {
     font-size: 14px;
     padding-left: 6px;
     color: #3164a0;
 }
 
-.delete-img{
+.delete-img {
     cursor: pointer;
     height: 12px;
     width: 12px;
@@ -137,7 +127,18 @@
     background: url("/static/images/icons.png") no-repeat -20px -39px;
 }
 
-.example-filename-selected{
+.example-filename {
+    overflow: hidden;
+    cursor: pointer;
+    display: block;
+    color: #3164a0;
+    line-height: 16px;
+    font-size: 14px;
+    position: relative;
+    padding: 6px 6px 6px 65px;
+}
+
+.example-filename-selected {
     overflow: hidden;
     cursor: pointer;
     position: relative;
@@ -149,8 +150,13 @@
     line-height: 16px;
 }
 
+.example-filename-text {
+    max-width: 80%;
+    word-wrap: break-word;
+    display: inline-block;
+}
 
-.kotlin-file-type-default{
+.kotlin-file-type-default {
     top: 1px;
     float: left;
     margin-right: 3px;

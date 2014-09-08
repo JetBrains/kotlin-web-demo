@@ -39,6 +39,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MySqlConnector {
     private static final MySqlConnector connector = new MySqlConnector();
@@ -480,7 +481,7 @@ public class MySqlConnector {
     }
 
 
-    public String getProjectContent(UserInfo userInfo, String parent, String projectName) {
+    public String getProjectContent(UserInfo userInfo, String projectName) {
         if (!checkConnection()) {
             return ResponseUtils.getErrorInJson("Cannot connect to database for load your program.");
         }
@@ -488,23 +489,26 @@ public class MySqlConnector {
         ResultSet rs = null;
         try {
             st = connection.prepareStatement(
-                    "select projects.id,projects.args, projects.run_configuration from projects join " +
+                    "select projects.id,projects.args, projects.run_configuration, projects.origin from projects join " +
                             "users on projects.owner_id = users.id where " +
-                            "(users.client_id = ? and users.provider = ? and projects.parent = ? and projects.name = ?)");
+                            "(users.client_id = ? and users.provider = ? and projects.name = ?)");
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
-            st.setString(3, parent);
-            st.setString(4, projectName);
+            st.setString(3, projectName);
             rs = st.executeQuery();
 
             if (rs.next()) {
                 ExampleObject project = new ExampleObject();
-                project.parent = parent;
+                project.parent = "My Programs";
                 project.name = projectName;
                 project.args = rs.getString("args");
                 project.confType = rs.getString("run_configuration");
                 project.files = new ArrayList<>();
                 project.isLocalVersion = true;
+                if(!rs.getString("origin").equals("User project")){
+                    ExampleObject storedExample = ExamplesList.getExampleObject(rs.getString("origin"));
+                    project.files.addAll(storedExample.files.stream().filter(file -> !file.isModifiable()).collect(Collectors.toList()));
+                }
 
                 st = connection.prepareStatement("select * from files where project_id = ?");
                 st.setString(1, rs.getInt("id") + "");
@@ -515,12 +519,6 @@ public class MySqlConnector {
                 }
                 ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
                 response.put("origin", "db");
-                response.put("content", objectMapper.valueToTree(project));
-                return objectMapper.writeValueAsString(response);
-            } else if (!parent.equals("My Programs")) {
-                ExampleObject project = ExamplesList.getExampleObject(projectName, parent);
-                ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
-                response.put("origin", "default");
                 response.put("content", objectMapper.valueToTree(project));
                 return objectMapper.writeValueAsString(response);
             } else {

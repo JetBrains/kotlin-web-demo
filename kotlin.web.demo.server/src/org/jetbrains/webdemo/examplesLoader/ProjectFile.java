@@ -63,7 +63,7 @@ public class ProjectFile {
 //        type = psiFile.getFileType().getDescription();
     }
 
-    public Boolean getModifiable() {
+    public Boolean isModifiable() {
         return modifiable;
     }
 
