@@ -100,10 +100,9 @@ public class MyHttpSession {
                     break;
                 case("addProject"):
                     sendAddProjectResult();
-
                     break;
                 case ("deleteProject"):
-                    MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0]);
+                    MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), parameters.get("name")[0]);
                     break;
                 case ("saveProject"):
                     sendSaveProjectResult();
@@ -113,6 +112,7 @@ public class MyHttpSession {
                     break;
                 case("addFile"):
                     sendAddFileResult();
+                    break;
                 case("deleteFile"):
                     sendDeleteProgramResult();
                     break;
@@ -162,10 +162,9 @@ public class MyHttpSession {
     }
 
     private void sendAddFileResult(){
-        String folderName = parameters.get("args")[0].replaceAll("_", " ");
         String projectName = parameters.get("name")[0].replaceAll("_", " ");
         String fileName = parameters.get("filename")[0].replaceAll("_", " ");
-        MySqlConnector.getInstance().addFile(sessionInfo.getUserInfo(), folderName, projectName, fileName);
+        MySqlConnector.getInstance().addFile(sessionInfo.getUserInfo(), projectName, fileName);
     }
 
     private void sendGeneratePublicLinkResult() {
@@ -180,10 +179,9 @@ public class MyHttpSession {
         if(content != null) {
             try {
                 ExampleObject project = objectMapper.readValue(content[0], ExampleObject.class);
-                String originURL = project.parent + "&name=" + project.name;
                 project.name = parameters.get("args")[0]; //when user calls save as we must change project name
                 project.parent = "My Programs"; //to show that it is user project, not example
-                MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), project, originURL);
+                MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), project);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -194,7 +192,7 @@ public class MyHttpSession {
 
     private void sendDeleteProgramResult() {
         String result;
-        result = MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), parameters.get("args")[0], parameters.get("name")[0], parameters.get("filename")[0]);
+        result = MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), parameters.get("name")[0], parameters.get("filename")[0]);
         writeResponse(result, HttpServletResponse.SC_OK);
     }
 
@@ -227,11 +225,10 @@ public class MyHttpSession {
 
     private void sendSaveFileResult() {
         try{
-            String folderName = parameters.get("args")[0].replaceAll("_", " ");
             String projectName = parameters.get("name")[0].replaceAll("_", " ");
 
             ProjectFile file = objectMapper.readValue(parameters.get("file")[0], ProjectFile.class);
-            MySqlConnector.getInstance().saveFile(sessionInfo.getUserInfo(), folderName, projectName, file);
+            MySqlConnector.getInstance().saveFile(sessionInfo.getUserInfo(), projectName, file);
             writeResponse("ok", HttpServletResponse.SC_OK);
         } catch (IOException e) {
             e.printStackTrace();
@@ -244,6 +241,8 @@ public class MyHttpSession {
             ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
             if(!example.parent.equals("My Programs")){
                 addUnmodifiableDataToExample(example);
+            } else if(example.originUrl != null){
+                addUnmodifiableDataToExample(example, example.originUrl);
             }
 
             sessionInfo.setRunConfiguration(example.confType);
@@ -279,6 +278,8 @@ public class MyHttpSession {
             ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
             if(!example.parent.equals("My Programs")){
                 addUnmodifiableDataToExample(example);
+            } else if(example.originUrl != null){
+                addUnmodifiableDataToExample(example, example.originUrl);
             }
 
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
@@ -299,6 +300,8 @@ public class MyHttpSession {
             ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
             if(!example.parent.equals("My Programs")){
                 addUnmodifiableDataToExample(example);
+            } else if(example.originUrl != null){
+                addUnmodifiableDataToExample(example, example.originUrl);
             }
 
             List<PsiFile> psiFiles = createProjectPsiFiles(example);
@@ -328,6 +331,13 @@ public class MyHttpSession {
 
     private ExampleObject addUnmodifiableDataToExample(ExampleObject exampleObject) {
         ExampleObject storedExample = ExamplesList.getExampleObject(exampleObject.name, exampleObject.parent);
+        exampleObject.files.addAll(storedExample.files.stream().filter((file) -> !file.isModifiable()).collect(Collectors.toList()));
+        exampleObject.testClasses = storedExample.testClasses;
+        return exampleObject;
+    }
+
+    private ExampleObject addUnmodifiableDataToExample(ExampleObject exampleObject, String originUrl) {
+        ExampleObject storedExample = ExamplesList.getExampleObject(originUrl);
         exampleObject.files.addAll(storedExample.files.stream().filter((file) -> !file.isModifiable()).collect(Collectors.toList()));
         exampleObject.testClasses = storedExample.testClasses;
         return exampleObject;

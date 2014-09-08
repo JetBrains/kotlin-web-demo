@@ -32,7 +32,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ExampleObject {
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    /**
+     * This field is needed when user makes copy of example. Url of this example will be stored here.
+     */
+    public String originUrl;
     @NotNull
     public String name;
     @NotNull
@@ -62,6 +65,8 @@ public class ExampleObject {
      * @throws IOException - if example folder has no manifest file, if example files do not exists, or some other problem with IO.
      */
     public ExampleObject(@NotNull String parent, @NotNull String exampleFolderName) throws IOException {
+        originUrl = parent + "&name=" + exampleFolderName;
+        ObjectMapper objectMapper = new ObjectMapper();
         this.parent = parent;
         String exampleFolderPath = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + parent + File.separator + exampleFolderName + File.separator;
         File manifest = new File(exampleFolderPath + "manifest.json");

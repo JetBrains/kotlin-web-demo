@@ -243,8 +243,8 @@ public class MySqlConnector {
         return (getUserId(userInfo) != -1);
     }
 
-    public boolean saveFile(UserInfo userInfo, String folderName, String projectName, ProjectFile file){
-        int projectId = getProjectId(userInfo, folderName, projectName);
+    public boolean saveFile(UserInfo userInfo, String projectName, ProjectFile file){
+        int projectId = getProjectId(userInfo, projectName);
         if(projectId != -1) {
             try (PreparedStatement st = connection.prepareStatement("UPDATE files SET files.content = ? WHERE project_id = ? AND files.name = ?  ")) {
                 st.setString(1, file.getContent());
@@ -364,12 +364,11 @@ public class MySqlConnector {
         if(userId != -1){
             try(PreparedStatement st = connection.prepareStatement(
                     "update projects set projects.args = ? , projects.run_configuration = ? " +
-                    "where projects.owner_id = ? and projects.parent = ? and projects.name = ?")){
+                    "where projects.owner_id = ?  and projects.name = ?")){
                 st.setString(1, project.args);
                 st.setString(2, project.confType);
                 st.setString(3, userId + "");
-                st.setString(4, project.parent);
-                st.setString(5, project.name);
+                st.setString(4, project.name);
                 st.execute();
                 return true;
             } catch (SQLException e) {
@@ -396,7 +395,7 @@ public class MySqlConnector {
         return false;
     }
 
-    public boolean addProject(UserInfo userInfo, ExampleObject project, String originURL) {
+    public boolean addProject(UserInfo userInfo, ExampleObject project) {
         int userId = getUserId(userInfo);
         if (userId != -1) {
             PreparedStatement st = null;
@@ -406,10 +405,10 @@ public class MySqlConnector {
                 st.setString(2, project.name);
                 st.setString(3, project.args);
                 st.setString(4, project.confType);
-                st.setString(5, originURL);
+                st.setString(5, project.originUrl);
                 st.execute();
 
-                int projectId = getProjectId(userInfo, project.parent, project.name);
+                int projectId = getProjectId(userInfo, project.name);
                 for (ProjectFile file : project.files) {
                     st = connection.prepareStatement("insert into files (project_id, name, content) values (?,?,?)");
                     st.setString(1, projectId + "");
@@ -427,12 +426,12 @@ public class MySqlConnector {
         return false;
     }
 
-    public boolean addFile(UserInfo userInfo, String folderName, String projectName, String fileName) {
-        return addFile(userInfo, folderName, projectName, fileName, "");
+    public boolean addFile(UserInfo userInfo, String projectName, String fileName) {
+        return addFile(userInfo, projectName, fileName, "");
     }
 
-    public boolean addFile(UserInfo userInfo, String folderName, String projectName, String fileName, String content) {
-        int projectId = getProjectId(userInfo, folderName, projectName);
+    public boolean addFile(UserInfo userInfo, String projectName, String fileName, String content) {
+        int projectId = getProjectId(userInfo, projectName);
         if (projectId != -1) {
             try (PreparedStatement st = connection.prepareStatement("insert into files (project_id, name, content) values (?,?,?) ")) {
                 st.setString(1, projectId + "");
@@ -504,8 +503,10 @@ public class MySqlConnector {
                 project.args = rs.getString("args");
                 project.confType = rs.getString("run_configuration");
                 project.files = new ArrayList<>();
+
                 project.isLocalVersion = true;
-                if(!rs.getString("origin").equals("User project")){
+                if(rs.getString("origin") != null){
+                    project.originUrl = rs.getString("origin");
                     ExampleObject storedExample = ExamplesList.getExampleObject(rs.getString("origin"));
                     project.files.addAll(storedExample.files.stream().filter(file -> !file.isModifiable()).collect(Collectors.toList()));
                 }
@@ -545,11 +546,11 @@ public class MySqlConnector {
         }
     }
 
-    public String deleteFile(UserInfo userInfo, String parentName, String projectName, String fileName) {
+    public String deleteFile(UserInfo userInfo, String projectName, String fileName) {
         if (!checkConnection()) {
             return ResponseUtils.getErrorInJson("Cannot connect to database to delete your program.");
         }
-        int projectId = getProjectId(userInfo, parentName, projectName);
+        int projectId = getProjectId(userInfo, projectName);
         if (projectId != -1) {
             try (PreparedStatement st = connection.prepareStatement("delete from files where files.project_id =? and files.name = ?")) {
                 st.setString(1, projectId + "");
@@ -565,18 +566,16 @@ public class MySqlConnector {
         }
     }
 
-    public String deleteProject(UserInfo userInfo, String parent, String projectName) {
-        parent = parent.replaceAll("_", " ");
+    public String deleteProject(UserInfo userInfo, String projectName) {
         projectName = projectName.replaceAll("_", " ");
         if (!checkConnection()) {
             return ResponseUtils.getErrorInJson("Cannot connect to database to delete your program.");
         }
         int userId = getUserId(userInfo);
         if (userId != -1) {
-            try (PreparedStatement st = connection.prepareStatement("delete from projects where projects.owner_id = ? and projects.parent=? and projects.name = ?")) {
+            try (PreparedStatement st = connection.prepareStatement("delete from projects where projects.owner_id = ? and projects.name = ?")) {
                 st.setString(1, userId + "");
-                st.setString(2, parent);
-                st.setString(3, projectName);
+                st.setString(2, projectName);
                 st.executeUpdate();
                 return ResponseUtils.getJsonString("text", "Project was successfully deleted.", projectName);
             } catch (Throwable e) {
@@ -608,15 +607,14 @@ public class MySqlConnector {
         }
     }
 
-    private int getProjectId(UserInfo userInfo, String parentName, String projectName) {
+    private int getProjectId(UserInfo userInfo, String projectName) {
         try (PreparedStatement st = connection.prepareStatement(
                 "select projects.id from projects join " +
                         "users on projects.owner_id =users.id where " +
-                        "( users.client_id = ? and  users.provider = ? and projects.parent = ? and projects.name = ?)")) {
+                        "( users.client_id = ? and  users.provider = ? and projects.name = ?)")) {
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
-            st.setString(3, parentName);
-            st.setString(4, projectName);
+            st.setString(3, projectName);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("id");

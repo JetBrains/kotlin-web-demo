@@ -80,6 +80,7 @@ var Project = (function () {
                     confType: content.confType,
                     name: content.name,
                     parent: content.parent,
+                    originUrl: content.originUrl,
                     files: content.files.filter(function (file) {
                         return file.modifiable;
                     })
@@ -140,10 +141,24 @@ var Project = (function () {
                     name: filename,
                     content: "",
                     errors: "",
-                    type: "Kotlin"
+                    modifiable: "true",
+                    type: "Kotlin",
+                    save: function () {
+                        this.content = editor.getText();
+                        if (isUserProject()) {
+                            projectProvider.saveFile(url, this);
+                        } else {
+                            localStorage.setItem(url, JSON.stringify(content));
+                        }
+                    },
+                    onContentChange: function () {
+                        isProjectContentChanged = true;
+                        actionsView.setStatus("unsavedChanges");
+                    }
                 });
-                selectedFile = content.files[content.files.length - 1];
                 showProjectContent();
+                selectFile(content.files[content.files.length - 1]);
+
             },
             onDeleteFile: function (id) {
                 content.files.splice(id, 1);
@@ -239,7 +254,7 @@ var Project = (function () {
                 fileNameSpan.innerHTML = file.name;
                 filenameDiv.appendChild(fileNameSpan);
 
-                if (isUserProject()) {
+                if (isUserProject() && content.originUrl == null) {
                     var deleteImg = document.createElement("div");
                     deleteImg.className = "delete-img";
                     deleteImg.title = "Delete this file";
@@ -260,7 +275,7 @@ var Project = (function () {
                 element.appendChild(filenameDiv);
             }
 
-            if (isUserProject()) {
+            if (isUserProject() && content.originUrl == null) {
                 var addFileButton = document.createElement("div");
                 addFileButton.className = "example-filename";
                 addFileButton.innerHTML = "Add new file";
