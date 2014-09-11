@@ -93,7 +93,7 @@ var AccordionView = (function () {
         function createProject(name, contentElement, content) {
             var url = getProjectURL("My Programs", name);
             if (content == null) {
-                var filename = name.endsWith(".kt") ? name : name +".kt";
+                var filename = name.endsWith(".kt") ? name : name + ".kt";
                 content = {
                     name: name,
                     parent: "My Program",
@@ -111,10 +111,10 @@ var AccordionView = (function () {
         function loadFirstItem() {
             var openedItemUrl = localStorage.getItem("openedItemUrl");
             localStorage.removeItem("openedItemUrl");
-            if(openedItemUrl != null && document.getElementById(openedItemUrl) != null){
+            if (openedItemUrl != null && document.getElementById(openedItemUrl) != null) {
                 document.getElementById(openedItemUrl).parentNode.parentNode.previousSibling.click();
                 document.getElementById(openedItemUrl).click();
-            } else{
+            } else {
                 element.accordion('option', 'active', 0);
                 element.children()[1].children[0].click();
             }
@@ -149,7 +149,7 @@ var AccordionView = (function () {
             img.className = "arrow";
             projectHeader.appendChild(img);
             projectHeader.id = createExampleUrl(name, folder) + "_header";
-            projectHeader.onclick = function(event){
+            projectHeader.onclick = function (event) {
                 onProjectHeaderClick(this.id.substring(0, this.id.indexOf("_header")));
             };
 
@@ -193,6 +193,7 @@ var AccordionView = (function () {
 
 
             createProject(name, exampleContent, content);
+            element.accordion('option', 'active', element.find("h3").length - 1);
             document.getElementById(getProjectURL("My Programs", name)).click();
         }
 
@@ -211,12 +212,12 @@ var AccordionView = (function () {
             var project = downloadedProjects[url];
             if (project != null) {
                 project.onDelete();
-                if(project == selectedProject) {
+                if (project == selectedProject) {
                     selectedProject = null;
                     var myPrograms = document.getElementById("My_Programs_content");
-                    if(myPrograms.firstElementChild.id == "add_new_project"){
+                    if (myPrograms.firstElementChild.id == "add_new_project") {
                         loadFirstItem();
-                    } else{
+                    } else {
                         myPrograms.firstChild.click();
                     }
                 }

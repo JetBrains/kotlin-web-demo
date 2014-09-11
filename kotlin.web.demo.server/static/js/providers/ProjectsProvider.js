@@ -38,8 +38,8 @@ var ProjectProvider = (function () {
             addNewFile: function (projectName, fileName) {
                 addNewFile(projectName, fileName);
             },
-            addNewProject: function(content, url){
-                addNewProject(content, url)
+            forkProject: function(content, url){
+                forkProject(content, url)
             },
             saveFile: function(url, data){
                 saveFile(url, data);
@@ -56,6 +56,9 @@ var ProjectProvider = (function () {
 
             },
             onDeleteFile: function (id) {
+
+            },
+            onProjectFork: function(){
 
             }
         };
@@ -109,11 +112,11 @@ var ProjectProvider = (function () {
         }
 
 
-        function addNewProject(content, name) {
+        function forkProject(content, name) {
             $.ajax({
                 url: generateAjaxUrl("addProject", name),
                 success: function () {
-                    accordion.addNewProject(name);
+                    instance.onProjectFork(name);
                 },
                 type: "POST",
                 timeout: 10000,

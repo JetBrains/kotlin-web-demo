@@ -565,6 +565,8 @@ public class MySqlConnector {
             PreparedStatement st = null;
             ResultSet resultSet = null;
             try {
+
+
                 st = connection.prepareStatement("DELETE FROM files WHERE files.project_id =? AND files.name = ?");
                 st.setString(1, projectId + "");
                 st.setString(2, fileName);
@@ -573,8 +575,16 @@ public class MySqlConnector {
                 st = connection.prepareStatement("select * from files where files.project_id=" + projectId);
                 resultSet = st.executeQuery();
                 if (!resultSet.next()) {
-                    st = connection.prepareStatement("delete from projects where projects.id=" + projectId);
-                    st.execute();
+                    st = connection.prepareStatement("select * from projects where projects.id=" + projectId);
+                    resultSet = st.executeQuery();
+                    resultSet.next();
+                    String originUrl = resultSet.getString("origin");
+                    ExampleObject origin = ExamplesList.getExampleObject(originUrl);
+
+                    if(origin.files.size() == 0) {
+                        st = connection.prepareStatement("delete from projects where projects.id=" + projectId);
+                        st.execute();
+                    }
                 }
                 return ResponseUtils.getJsonString("text", "Program was successfully deleted.", fileName);
             } catch (Throwable e) {

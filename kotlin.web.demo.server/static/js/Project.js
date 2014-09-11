@@ -125,7 +125,7 @@ var Project = (function () {
             },
             saveAs: function () {
                 if (loginView.isLoggedIn()) {
-                    saveProjectDialog.open(projectProvider.addNewProject.bind(null, instance.getModifiableContent()))
+                    saveProjectDialog.open(projectProvider.forkProject.bind(null, instance.getModifiableContent()))
                 } else {
                     $("#login-dialog").dialog("open");
                 }
@@ -196,6 +196,13 @@ var Project = (function () {
         projectProvider.onDeleteFile = function(id){
             onDeleteFile(id);
             problemsView.onProjectChange(instance);
+        };
+
+        projectProvider.onProjectFork = function (name) {
+            var newContent = copy(content);
+            newContent.name = name;
+            newContent.parent = "My Programs";
+            accordion.addNewProject(newContent.name, newContent);
         };
 
         var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
@@ -276,7 +283,7 @@ var Project = (function () {
                 fileNameSpan.innerHTML = file.name;
                 filenameDiv.appendChild(fileNameSpan);
 
-                if (isUserProject() && content.originUrl == null) {
+                if (isUserProject() && file.modifiable) {
                     var deleteImg = document.createElement("div");
                     deleteImg.className = "delete-img";
                     deleteImg.title = "Delete this file";
@@ -298,7 +305,7 @@ var Project = (function () {
                 element.appendChild(filenameDiv);
             }
 
-            if (isUserProject() && content.originUrl == null) {
+            if (isUserProject()) {
                 var addFileButton = document.createElement("div");
                 addFileButton.className = "example-filename";
                 addFileButton.innerHTML = "Add new file";

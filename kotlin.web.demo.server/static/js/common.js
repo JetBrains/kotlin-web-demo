@@ -107,6 +107,30 @@ function checkIfThereAreErrorsInHighlightingResult(highlightingResult) {
     return false;
 }
 
+function copy(obejct){
+    var cp;
+
+    if (null == obejct || "object" != typeof obejct) return obejct;
+
+    if (obejct instanceof Array) {
+        cp = [];
+        for (var i = 0, len = obejct.length; i < len; i++) {
+            cp[i] = copy(obejct[i]);
+        }
+        return cp;
+    }
+
+    if (obejct instanceof Object) {
+        cp = {};
+        for (var attr in obejct) {
+            if (obejct.hasOwnProperty(attr)) cp[attr] = copy(obejct[attr]);
+        }
+        return cp;
+    }
+
+    return cp;
+}
+
 function getNameByUrl(url) {
     var pos = url.indexOf("&name=");
     if (pos != -1) {
