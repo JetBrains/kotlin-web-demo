@@ -239,9 +239,7 @@ public class MyHttpSession {
         try{
 
             ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
-            if(!example.parent.equals("My Programs")){
-                addUnmodifiableDataToExample(example);
-            } else if(example.originUrl != null){
+            if(example.originUrl != null){
                 addUnmodifiableDataToExample(example, example.originUrl);
             }
 
@@ -276,9 +274,7 @@ public class MyHttpSession {
             int line = Integer.parseInt(parameters.get("line")[0]);
             int ch = Integer.parseInt(parameters.get("ch")[0]);
             ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
-            if(!example.parent.equals("My Programs")){
-                addUnmodifiableDataToExample(example);
-            } else if(example.originUrl != null){
+            if(example.originUrl != null){
                 addUnmodifiableDataToExample(example, example.originUrl);
             }
 
@@ -298,9 +294,7 @@ public class MyHttpSession {
         try{
 
             ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
-            if(!example.parent.equals("My Programs")){
-                addUnmodifiableDataToExample(example);
-            } else if(example.originUrl != null){
+            if(example.originUrl != null){
                 addUnmodifiableDataToExample(example, example.originUrl);
             }
 

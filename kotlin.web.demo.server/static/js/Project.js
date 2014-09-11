@@ -107,8 +107,9 @@ var Project = (function () {
                 return false;
             },
             save: function () {
-                if (isUserProject()) {
-                    if (isProjectContentChanged) {
+                if (isProjectContentChanged) {
+                    if (isUserProject()) {
+
                         projectProvider.saveProject({
                             args: content.args,
                             confType: content.confType,
@@ -117,9 +118,9 @@ var Project = (function () {
                             files: []
                         });
                         actionsView.setStatus("default");
+                    } else {
+                        localStorage.setItem(url, JSON.stringify(content));
                     }
-                } else {
-                    localStorage.setItem(url, JSON.stringify(content));
                 }
             },
             saveAs: function () {
@@ -175,6 +176,7 @@ var Project = (function () {
 
         var projectProvider = new ProjectProvider(instance);
         projectProvider.onExampleLoaded = function (data) {
+            isProjectContentChanged = false;
             localStorage.removeItem(url);
             isLocalCopyExist = false;
             actionsView.setStatus("default");

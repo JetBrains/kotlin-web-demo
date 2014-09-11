@@ -89,7 +89,7 @@ public class ExampleObject {
             String fileContent;
             if(fileName != null){
                 Path path = Paths.get(exampleFolderPath + File.separator + fileName);
-                fileContent = new String(Files.readAllBytes(path)).replaceAll(System.lineSeparator(), "\n");
+                fileContent = new String(Files.readAllBytes(path)).replaceAll("\r\n", "\n");
             } else{
                 fileContent = fileDescriptor.get("content").asText();
             }

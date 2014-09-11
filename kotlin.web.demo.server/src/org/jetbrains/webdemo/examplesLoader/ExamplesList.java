@@ -69,8 +69,8 @@ public class ExamplesList {
     }
 
     public static ExampleObject getExampleObject(String url) {
-        ExamplesFolder examplesFolder = examplesFolders.get(ResponseUtils.substringBefore(url, "&name="));
-        return examplesFolder.examples.get(ResponseUtils.substringAfter(url, "&name="));
+        ExamplesFolder examplesFolder = examplesFolders.get(ResponseUtils.substringBefore(url, "&name=").replaceAll("_", " "));
+        return examplesFolder.examples.get(ResponseUtils.substringAfter(url, "&name=").replaceAll("_", " "));
     }
 
     public static ExampleObject getExampleObject(String name, String folder) {
