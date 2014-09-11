@@ -243,9 +243,9 @@ public class MySqlConnector {
         return (getUserId(userInfo) != -1);
     }
 
-    public boolean saveFile(UserInfo userInfo, String projectName, ProjectFile file){
+    public boolean saveFile(UserInfo userInfo, String projectName, ProjectFile file) {
         int projectId = getProjectId(userInfo, projectName);
-        if(projectId != -1) {
+        if (projectId != -1) {
             try (PreparedStatement st = connection.prepareStatement("UPDATE files SET files.content = ? WHERE project_id = ? AND files.name = ?  ")) {
                 st.setString(1, file.getContent());
                 st.setString(2, projectId + "");
@@ -359,12 +359,12 @@ public class MySqlConnector {
     }
 
 
-    public boolean saveProject(UserInfo userInfo, ExampleObject project){
+    public boolean saveProject(UserInfo userInfo, ExampleObject project) {
         int userId = getUserId(userInfo);
-        if(userId != -1){
-            try(PreparedStatement st = connection.prepareStatement(
-                    "update projects set projects.args = ? , projects.run_configuration = ? " +
-                    "where projects.owner_id = ?  and projects.name = ?")){
+        if (userId != -1) {
+            try (PreparedStatement st = connection.prepareStatement(
+                    "UPDATE projects SET projects.args = ? , projects.run_configuration = ? " +
+                            "WHERE projects.owner_id = ?  AND projects.name = ?")) {
                 st.setString(1, project.args);
                 st.setString(2, project.confType);
                 st.setString(3, userId + "");
@@ -383,10 +383,20 @@ public class MySqlConnector {
     public boolean addProject(UserInfo userInfo, String name) {
         int userId = getUserId(userInfo);
         if (userId != -1) {
-            try (PreparedStatement st = connection.prepareStatement("insert into projects (owner_id, name) values (?,?) ")) {
+            try (PreparedStatement st = connection.prepareStatement("INSERT INTO projects (owner_id, name) VALUES (?,?) ")) {
                 st.setString(1, userId + "");
                 st.setString(2, name);
                 st.execute();
+                int projectId = getProjectId(userInfo, name);
+                if (projectId != -1) {
+                    try (PreparedStatement st2 = connection.prepareStatement("INSERT INTO files (project_id, name, content) VALUES (?, ?, ?)")) {
+                        String fileName = name.endsWith(".kt") ? name : name + ".kt";
+                        st2.setString(1, projectId + "");
+                        st2.setString(2, fileName);
+                        st2.setString(3, "");
+                        st2.execute();
+                    }
+                }
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -400,7 +410,7 @@ public class MySqlConnector {
         if (userId != -1) {
             PreparedStatement st = null;
             try {
-                st = connection.prepareStatement("insert into projects (owner_id, name, args, run_configuration, origin) values (?,?,?,?, ?) ");
+                st = connection.prepareStatement("INSERT INTO projects (owner_id, name, args, run_configuration, origin) VALUES (?,?,?,?, ?) ");
                 st.setString(1, userId + "");
                 st.setString(2, project.name);
                 st.setString(3, project.args);
@@ -410,7 +420,7 @@ public class MySqlConnector {
 
                 int projectId = getProjectId(userInfo, project.name);
                 for (ProjectFile file : project.files) {
-                    st = connection.prepareStatement("insert into files (project_id, name, content) values (?,?,?)");
+                    st = connection.prepareStatement("INSERT INTO files (project_id, name, content) VALUES (?,?,?)");
                     st.setString(1, projectId + "");
                     st.setString(2, file.getName());
                     st.setString(3, file.getContent());
@@ -433,7 +443,7 @@ public class MySqlConnector {
     public boolean addFile(UserInfo userInfo, String projectName, String fileName, String content) {
         int projectId = getProjectId(userInfo, projectName);
         if (projectId != -1) {
-            try (PreparedStatement st = connection.prepareStatement("insert into files (project_id, name, content) values (?,?,?) ")) {
+            try (PreparedStatement st = connection.prepareStatement("INSERT INTO files (project_id, name, content) VALUES (?,?,?) ")) {
                 st.setString(1, projectId + "");
                 st.setString(2, fileName);
                 st.setString(3, content);
@@ -454,9 +464,9 @@ public class MySqlConnector {
         ResultSet rs = null;
         try {
             st = connection.prepareStatement(
-                    "select projects.id, projects.name from projects join " +
-                            "users on projects.owner_id = users.id where " +
-                            "(users.client_id = ? and users.provider = ?)"
+                    "SELECT projects.id, projects.name FROM projects JOIN " +
+                            "users ON projects.owner_id = users.id WHERE " +
+                            "(users.client_id = ? AND users.provider = ?)"
             );
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
@@ -488,9 +498,9 @@ public class MySqlConnector {
         ResultSet rs = null;
         try {
             st = connection.prepareStatement(
-                    "select projects.id,projects.args, projects.run_configuration, projects.origin from projects join " +
-                            "users on projects.owner_id = users.id where " +
-                            "(users.client_id = ? and users.provider = ? and projects.name = ?)");
+                    "SELECT projects.id,projects.args, projects.run_configuration, projects.origin FROM projects JOIN " +
+                            "users ON projects.owner_id = users.id WHERE " +
+                            "(users.client_id = ? AND users.provider = ? AND projects.name = ?)");
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
             st.setString(3, projectName);
@@ -505,13 +515,13 @@ public class MySqlConnector {
                 project.files = new ArrayList<>();
 
                 project.isLocalVersion = true;
-                if(rs.getString("origin") != null){
+                if (rs.getString("origin") != null) {
                     project.originUrl = rs.getString("origin");
                     ExampleObject storedExample = ExamplesList.getExampleObject(rs.getString("origin"));
                     project.files.addAll(storedExample.files.stream().filter(file -> !file.isModifiable()).collect(Collectors.toList()));
                 }
 
-                st = connection.prepareStatement("select * from files where project_id = ?");
+                st = connection.prepareStatement("SELECT * FROM files WHERE project_id = ?");
                 st.setString(1, rs.getInt("id") + "");
                 rs = st.executeQuery();
                 while (rs.next()) {
@@ -552,19 +562,32 @@ public class MySqlConnector {
         }
         int projectId = getProjectId(userInfo, projectName);
         if (projectId != -1) {
-            try (PreparedStatement st = connection.prepareStatement("delete from files where files.project_id =? and files.name = ?")) {
+            PreparedStatement st = null;
+            ResultSet resultSet = null;
+            try {
+                st = connection.prepareStatement("DELETE FROM files WHERE files.project_id =? AND files.name = ?");
                 st.setString(1, projectId + "");
                 st.setString(2, fileName);
                 st.executeUpdate();
+
+                st = connection.prepareStatement("select * from files where files.project_id=" + projectId);
+                resultSet = st.executeQuery();
+                if (!resultSet.next()) {
+                    st = connection.prepareStatement("delete from projects where projects.id=" + projectId);
+                    st.execute();
+                }
                 return ResponseUtils.getJsonString("text", "Program was successfully deleted.", fileName);
             } catch (Throwable e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + fileName);
                 return ResponseUtils.getErrorInJson("Unknown error while deleting your program");
+            } finally {
+                closeStatementAndResultSet(st, resultSet);
             }
         } else {
             return ResponseUtils.getErrorInJson("Can't found project");
         }
     }
+
 
     public String deleteProject(UserInfo userInfo, String projectName) {
         projectName = projectName.replaceAll("_", " ");
@@ -573,7 +596,7 @@ public class MySqlConnector {
         }
         int userId = getUserId(userInfo);
         if (userId != -1) {
-            try (PreparedStatement st = connection.prepareStatement("delete from projects where projects.owner_id = ? and projects.name = ?")) {
+            try (PreparedStatement st = connection.prepareStatement("DELETE FROM projects WHERE projects.owner_id = ? AND projects.name = ?")) {
                 st.setString(1, userId + "");
                 st.setString(2, projectName);
                 st.executeUpdate();
@@ -589,7 +612,7 @@ public class MySqlConnector {
 
 
     private int getUserId(UserInfo userInfo) {
-        try (PreparedStatement st = connection.prepareStatement("select users.id from users where (users.client_id = ? and users.provider=?)")) {
+        try (PreparedStatement st = connection.prepareStatement("SELECT users.id FROM users WHERE (users.client_id = ? AND users.provider=?)")) {
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
             try (ResultSet rs = st.executeQuery()) {
@@ -609,9 +632,9 @@ public class MySqlConnector {
 
     private int getProjectId(UserInfo userInfo, String projectName) {
         try (PreparedStatement st = connection.prepareStatement(
-                "select projects.id from projects join " +
-                        "users on projects.owner_id =users.id where " +
-                        "( users.client_id = ? and  users.provider = ? and projects.name = ?)")) {
+                "SELECT projects.id FROM projects JOIN " +
+                        "users ON projects.owner_id =users.id WHERE " +
+                        "( users.client_id = ? AND  users.provider = ? AND projects.name = ?)")) {
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
             st.setString(3, projectName);

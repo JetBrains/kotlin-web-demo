@@ -63,19 +63,18 @@ var AccordionView = (function () {
                 headersProvider.getAllExamples();
             },
             addNewProject: function (name, /*nullable*/ content) {
-                createProject(name, content);
-                instance.loadAllContent();
+                addNewProject(name, content);
             },
             onLoadCode: function (example, isProgram) {
             },
             onSaveProgram: function () {
             },
-            deleteProject: function () {
-                this.loadAllContent();
+            deleteProject: function (url) {
+                deleteProject(url);
             },
             onFail: function (exception, messageForStatusBar) {
             },
-            onLogout: function(){
+            onLogout: function () {
                 downloadedProjects = {};
                 selectedProject = null;
                 instance.loadAllContent();
@@ -91,37 +90,33 @@ var AccordionView = (function () {
 
         var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add");
 
-        function createProject(name, content) {
+        function createProject(name, contentElement, content) {
             var url = getProjectURL("My Programs", name);
-            if(content == null){
+            if (content == null) {
+                var filename = name.endsWith(".kt") ? name : name +".kt";
                 content = {
                     name: name,
                     parent: "My Program",
                     args: "",
                     confType: "java",
                     help: "",
-                    files: []
+                    files: [
+                        {name: filename, content: "", modifiable: true}
+                    ]
                 }
             }
-            downloadedProjects[url] = new Project(url, document.getElementById(url + "_content"), content);
+            downloadedProjects[url] = new Project(url, contentElement, content);
         }
 
         function loadFirstItem() {
-            var urlAct = [location.protocol, '//', location.host, "/"].join('');
-            var url = document.location.href;
-            if (url.indexOf(urlAct) != -1) {
-                url = url.substring(url.indexOf(urlAct) + urlAct.length);
-                var exampleStr = "?folder=";
-                var publicLink = "?publicLink=";
-                if (url.indexOf(exampleStr) == 0) {
-                    url = url.substring(exampleStr.length);
-                    $("#" + getFolderNameByUrl(url)).click();
-                    examplesModel.loadExample(url);
-                } else if (url.indexOf(publicLink) == 0) {
-                    programsView.loadProgram(createExampleUrl(url.substring(publicLink.length), "My Programs"));
-                } else {
-                    document.getElementById("Hello,_world!&name=Simplest_version").click();
-                }
+            var openedItemUrl = localStorage.getItem("openedItemUrl");
+            localStorage.removeItem("openedItemUrl");
+            if(openedItemUrl != null && document.getElementById(openedItemUrl) != null){
+                document.getElementById(openedItemUrl).parentNode.parentNode.previousSibling.click();
+                document.getElementById(openedItemUrl).click();
+            } else{
+                element.accordion('option', 'active', 0);
+                element.children()[1].children[0].click();
             }
         }
 
@@ -130,6 +125,7 @@ var AccordionView = (function () {
             var cont = document.getElementById("My_Programs_content");
 
             var addNewProjectDiv = document.createElement("div");
+            addNewProjectDiv.id = "add_new_project";
 
             var addNewProjectIcon = document.createElement("div");
             addNewProjectIcon.innerHTML = "+";
@@ -146,44 +142,86 @@ var AccordionView = (function () {
         }
 
 
-        function addProject(folder, element, name) {
-            var file = document.createElement("h4");
-            file.className = "examples-project-name";
+        function createProjectHeader(folder, name) {
+            var projectHeader = document.createElement("h4");
+            projectHeader.className = "examples-project-name";
             var img = document.createElement("div");
             img.className = "arrow";
-            file.appendChild(img);
-            file.id = createExampleUrl(name, folder) + "_header";
+            projectHeader.appendChild(img);
+            projectHeader.id = createExampleUrl(name, folder) + "_header";
+            projectHeader.onclick = function(event){
+                onProjectHeaderClick(this.id.substring(0, this.id.indexOf("_header")));
+            };
 
 
             var nameSpan = document.createElement("span");
             nameSpan.id = createExampleUrl(name, folder);
             nameSpan.className = "file-name-span";
             nameSpan.style.cursor = "pointer";
-            nameSpan.onclick = function () {
+            nameSpan.onclick = function (event) {
                 onProjectHeaderClick(this.id);
+                event.stopPropagation();
             };
             nameSpan.innerHTML = name;
-            file.appendChild(nameSpan);
+            projectHeader.appendChild(nameSpan);
 
-            if(folder == "My Programs"){
+            if (folder == "My Programs") {
                 var deleteButton = document.createElement("div");
                 deleteButton.className = "delete-img";
                 deleteButton.title = "Delete this project";
-                deleteButton.onclick = (function(url){
-                    return function() {
+                deleteButton.onclick = (function (url) {
+                    return function (event) {
                         headersProvider.deleteProject(url);
+                        event.stopPropagation();
                     }
                 })(createExampleUrl(name, folder));
-                file.appendChild(deleteButton);
+                projectHeader.appendChild(deleteButton);
             }
 
-            element.appendChild(file);
+            return projectHeader;
+        }
+
+        function addNewProject(name, /*nullable*/ content) {
+            var myProg = document.getElementById("My_Programs_content");
+            var newProjectNode = myProg.lastChild;
+            myProg.insertBefore(createProjectHeader("My Programs", name), newProjectNode);
+
+
+            var exampleContent = document.createElement("div");
+            exampleContent.id = createExampleUrl(name, "My Programs") + "_content";
+            myProg.insertBefore(exampleContent, newProjectNode);
+
+
+            createProject(name, exampleContent, content);
+            document.getElementById(getProjectURL("My Programs", name)).click();
+        }
+
+        function addProject(folder, element, name) {
+            element.appendChild(createProjectHeader(folder, name));
 
             var exampleContent = document.createElement("div");
             exampleContent.id = createExampleUrl(name, folder) + "_content";
             element.appendChild(exampleContent);
+        }
 
+        function deleteProject(url) {
+            var header = document.getElementById(url + "_header");
+            header.parentNode.removeChild(header);
 
+            var project = downloadedProjects[url];
+            if (project != null) {
+                project.onDelete();
+                if(project == selectedProject) {
+                    selectedProject = null;
+                    var myPrograms = document.getElementById("My_Programs_content");
+                    if(myPrograms.firstElementChild.id == "add_new_project"){
+                        loadFirstItem();
+                    } else{
+                        myPrograms.firstChild.click();
+                    }
+                }
+            }
+            delete downloadedProjects[url];
         }
 
         function addFolder(data) {

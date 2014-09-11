@@ -157,15 +157,15 @@ var Project = (function () {
                         actionsView.setStatus("unsavedChanges");
                     }
                 });
+                problemsView.onProjectChange(instance);
                 showProjectContent();
                 selectFile(content.files[content.files.length - 1]);
 
             },
-            onDeleteFile: function (id) {
-                content.files.splice(id, 1);
-                showProjectContent();
-            },
             onFail: function () {
+            },
+            onDelete: function () {
+                element.parentNode.removeChild(element);
             },
             isUserProject: function () {
                 return isUserProject();
@@ -193,6 +193,13 @@ var Project = (function () {
             isDatabaseCopyExist = false;
         };
 
+        projectProvider.onDeleteFile = function(id){
+            onDeleteFile(id);
+            problemsView.onProjectChange(instance);
+        };
+
+        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
+        var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
 
         (function loadProject() {
             if (content == null) {
@@ -207,12 +214,25 @@ var Project = (function () {
                         projectProvider.loadExample(url);
                     }
                 }
+            } else {
+                instance.onContentLoaded(content);
             }
         })();
 
-
-        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
-        var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
+        function onDeleteFile(id) {
+            content.files.splice(id, 1);
+            if (content.files.length != 0) {
+                selectedFile = null;
+                showProjectContent();
+                if(id != 0){
+                    selectFile(content.files[id-1]);
+                } else{
+                    selectFile(content.files[id]);
+                }
+            } else {
+                accordion.deleteProject(url);
+            }
+        }
 
         function selectFile(file) {
             if (selectedFile != null) {
@@ -261,8 +281,9 @@ var Project = (function () {
                     deleteImg.className = "delete-img";
                     deleteImg.title = "Delete this file";
                     deleteImg.onclick = (function (url, id) {
-                        return function () {
+                        return function (event) {
                             projectProvider.deleteFile(url, id);
+                            event.stopPropagation();
                         }
                     })(getFilenameURL(file.name), i);
                     filenameDiv.appendChild(deleteImg);

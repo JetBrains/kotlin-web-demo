@@ -104,7 +104,7 @@ var AccordionHeadersProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("deleteProject", url),
                 success: function () {
-                    accordion.deleteProject();
+                    accordion.deleteProject(url);
                 },
                 type: "POST",
                 timeout: 10000,

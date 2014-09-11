@@ -54,6 +54,9 @@ var ProjectProvider = (function () {
             },
             onDeleteProject: function(){
 
+            },
+            onDeleteFile: function (id) {
+
             }
         };
 
@@ -159,7 +162,7 @@ var ProjectProvider = (function () {
                 url: generateAjaxUrl("deleteFile", url),
                 context: document.body,
                 success: function () {
-                    project.onDeleteFile(id);
+                    instance.onDeleteFile(id);
                 },
                 dataType: "json",
                 type: "POST",
