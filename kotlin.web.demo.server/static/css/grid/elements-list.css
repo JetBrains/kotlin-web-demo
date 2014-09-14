@@ -118,6 +118,16 @@
     color: #3164a0;
 }
 
+.rename-img {
+    cursor: pointer;
+    height: 12px;
+    width: 12px;
+    float: right;
+    margin-top: 2px;
+    margin-right: 2px;
+    background: url("/static/images/icons.png") no-repeat -85px -58px;
+}
+
 .delete-img {
     cursor: pointer;
     height: 12px;

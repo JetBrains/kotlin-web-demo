@@ -193,8 +193,8 @@ var Project = (function () {
             isDatabaseCopyExist = false;
         };
 
-        projectProvider.onDeleteFile = function(id){
-            onDeleteFile(id);
+        projectProvider.onDeleteFile = function (url) {
+            onDeleteFile(url);
             problemsView.onProjectChange(instance);
         };
 
@@ -205,8 +205,21 @@ var Project = (function () {
             accordion.addNewProject(newContent.name, newContent);
         };
 
+        projectProvider.onFileRenamed = function (url, newName) {
+            newName = newName.endsWith(".kt") ? newName : newName + ".kt";
+            renameFileHeader(url, newName);
+            var oldName = url.substr(url.indexOf("&filename=") + "&filename=".length);
+            for (var i = 0; i < content.files.length; ++i) {
+                if (content.files[i].name == oldName) {
+                    content.files[i].name = newName;
+                    break;
+                }
+            }
+        };
+
         var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
         var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
+        var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
 
         (function loadProject() {
             if (content == null) {
@@ -226,27 +239,35 @@ var Project = (function () {
             }
         })();
 
-        function onDeleteFile(id) {
+        function onDeleteFile(url) {
+            var fileName = url.substr(url.indexOf("&filename=") + "&filename=".length);
+            var id = -1;
+            for (var i = 0; i < content.files.length; ++i) {
+                if (content.files[i].name == fileName) {
+                    id = i;
+                    break;
+                }
+            }
             content.files.splice(id, 1);
             if (content.files.length != 0) {
                 selectedFile = null;
                 showProjectContent();
-                if(id != 0){
-                    selectFile(content.files[id-1]);
-                } else{
+                if (id != 0) {
+                    selectFile(content.files[id - 1]);
+                } else {
                     selectFile(content.files[id]);
                 }
             } else {
-                accordion.deleteProject(url);
+                accordion.deleteProject(instance.getURL());
             }
         }
 
         function selectFile(file) {
             if (selectedFile != null) {
-                document.getElementById(getFilenameURL(selectedFile.name)).className = "example-filename";
+                document.getElementById(getFilenameURL(selectedFile.name) + "_header").className = "example-filename";
             }
             selectedFile = file;
-            document.getElementById(getFilenameURL(selectedFile.name)).className = "example-filename-selected";
+            document.getElementById(getFilenameURL(selectedFile.name) + "_header").className = "example-filename-selected";
             editor.open(selectedFile);
         }
 
@@ -266,7 +287,7 @@ var Project = (function () {
                 var file = content.files[i];
 
                 var filenameDiv = document.createElement("div");
-                filenameDiv.id = getFilenameURL(file.name);
+                filenameDiv.id = getFilenameURL(file.name) + "_header";
                 filenameDiv.className = "example-filename";
 
                 var icon = document.createElement("div");
@@ -281,19 +302,31 @@ var Project = (function () {
                 var fileNameSpan = document.createElement("div");
                 fileNameSpan.className = "example-filename-text";
                 fileNameSpan.innerHTML = file.name;
+                fileNameSpan.id = getFilenameURL(file.name);
                 filenameDiv.appendChild(fileNameSpan);
 
                 if (isUserProject() && file.modifiable) {
+                    var renameImg = document.createElement("div");
+                    renameImg.className = "rename-img";
+                    renameImg.title = "Rename this file";
+                    renameImg.onclick = (function (file) {
+                        return function (event) {
+                            renameFileDialog.open(projectProvider.renameFile.bind(null, getFilenameURL(file.name)));
+                            event.stopPropagation();
+                        }
+                    })(file);
+
                     var deleteImg = document.createElement("div");
                     deleteImg.className = "delete-img";
                     deleteImg.title = "Delete this file";
-                    deleteImg.onclick = (function (url, id) {
+                    deleteImg.onclick = (function (file) {
                         return function (event) {
-                            projectProvider.deleteFile(url, id);
+                            projectProvider.deleteFile(getFilenameURL(file.name));
                             event.stopPropagation();
                         }
-                    })(getFilenameURL(file.name), i);
+                    })(file);
                     filenameDiv.appendChild(deleteImg);
+                    filenameDiv.appendChild(renameImg);
                 }
 
                 filenameDiv.onclick = (function (file) {
@@ -313,6 +346,13 @@ var Project = (function () {
                 addFileButton.onclick = newFileDialog.open.bind(null, projectProvider.addNewFile);
                 element.appendChild(addFileButton);
             }
+        }
+
+        function renameFileHeader(url, newName) {
+
+            var element = document.getElementById(url);
+            element.innerHTML = newName;
+            element.id = getFilenameURL(newName);
         }
 
         return instance;

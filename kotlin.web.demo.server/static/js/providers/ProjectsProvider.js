@@ -29,36 +29,42 @@ var ProjectProvider = (function () {
             loadProject: function (url) {
                 loadProject(url);
             },
-            deleteProject: function(url){
+            deleteProject: function (url) {
                 deleteProject(url);
             },
-            deleteFile: function (url, id) {
-                deleteFile(url, id);
+            deleteFile: function (url) {
+                deleteFile(url);
             },
             addNewFile: function (projectName, fileName) {
                 addNewFile(projectName, fileName);
             },
-            forkProject: function(content, url){
+            forkProject: function (content, url) {
                 forkProject(content, url)
             },
-            saveFile: function(url, data){
+            saveFile: function (url, data) {
                 saveFile(url, data);
             },
-            saveProject: function(content){
+            saveProject: function (content) {
                 saveProject(content);
             },
-            onExampleLoaded: function(data){
+            renameFile: function (url, newName) {
+                renameFile(url, newName)
             },
-            onProjectLoaded: function(data){
+            onExampleLoaded: function (data) {
+            },
+            onProjectLoaded: function (data) {
 
             },
-            onDeleteProject: function(){
+            onDeleteProject: function () {
 
             },
-            onDeleteFile: function (id) {
+            onDeleteFile: function (url) {
 
             },
-            onProjectFork: function(){
+            onProjectFork: function () {
+
+            },
+            onFileRenamed: function () {
 
             }
         };
@@ -128,13 +134,13 @@ var ProjectProvider = (function () {
         }
 
         function addNewFile(filename) {
-            if(!filename.endsWith(".kt")){
+            if (!filename.endsWith(".kt")) {
                 filename = filename + ".kt";
             }
             $.ajax({
                 url: generateAjaxUrl("addFile", project.getURL() + "&filename=" + filename),
                 success: function () {
-                    project.addNewFile( filename);
+                    project.addNewFile(filename);
                 },
                 type: "POST",
                 timeout: 10000,
@@ -144,7 +150,7 @@ var ProjectProvider = (function () {
             })
         }
 
-        function deleteProject(url){
+        function deleteProject(url) {
             $.ajax({
                 url: generateAjaxUrl("deleteProject", url),
                 context: document.body,
@@ -160,12 +166,12 @@ var ProjectProvider = (function () {
             });
         }
 
-        function deleteFile(url, id) {
+        function deleteFile(url) {
             $.ajax({
                 url: generateAjaxUrl("deleteFile", url),
                 context: document.body,
                 success: function () {
-                    instance.onDeleteFile(id);
+                    instance.onDeleteFile(url);
                 },
                 dataType: "json",
                 type: "POST",
@@ -188,7 +194,7 @@ var ProjectProvider = (function () {
             })
         }
 
-        function saveProject(content){
+        function saveProject(content) {
             $.ajax({
                 url: generateAjaxUrl("saveProject"),
                 type: "POST",
@@ -197,6 +203,16 @@ var ProjectProvider = (function () {
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }
+            })
+        }
+
+        function renameFile(url, newName) {
+            $.ajax({
+                url: generateAjaxUrl("renameFile", url),
+                success: function(data){instance.onFileRenamed(url, newName)},
+                type: "POST",
+                timeout: 10000,
+                data: {newName: newName}
             })
         }
 

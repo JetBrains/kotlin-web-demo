@@ -579,9 +579,13 @@ public class MySqlConnector {
                     resultSet = st.executeQuery();
                     resultSet.next();
                     String originUrl = resultSet.getString("origin");
-                    ExampleObject origin = ExamplesList.getExampleObject(originUrl);
-
-                    if(origin.files.size() == 0) {
+                    if (originUrl != null) {
+                        ExampleObject origin = ExamplesList.getExampleObject(originUrl);
+                        if (origin.files.size() == 0) {
+                            st = connection.prepareStatement("delete from projects where projects.id=" + projectId);
+                            st.execute();
+                        }
+                    } else {
                         st = connection.prepareStatement("delete from projects where projects.id=" + projectId);
                         st.execute();
                     }
@@ -596,6 +600,25 @@ public class MySqlConnector {
         } else {
             return ResponseUtils.getErrorInJson("Can't found project");
         }
+    }
+
+
+    public boolean renameFile(UserInfo userInfo, String projectName, String fileName, String newName) {
+        int projectId = getProjectId(userInfo, projectName);
+        if (projectId != -1) {
+            try (PreparedStatement st = connection.prepareStatement("UPDATE files SET files.name = ? WHERE files.name = ? AND files.project_id = ?")) {
+                st.setString(1, newName);
+                st.setString(2, fileName);
+                st.setString(3, projectId + "");
+                st.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            return false;
+        }
+        return true;
     }
 
 

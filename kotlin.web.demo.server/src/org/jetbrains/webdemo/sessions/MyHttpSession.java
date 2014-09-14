@@ -116,6 +116,9 @@ public class MyHttpSession {
                 case("deleteFile"):
                     sendDeleteProgramResult();
                     break;
+                case ("renameFile"):
+                    sendRenameFileResult();
+                    break;
                 case("generatePublicLink"):
                     sendGeneratePublicLinkResult();
                     break;
@@ -188,6 +191,15 @@ public class MyHttpSession {
         } else{
             MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0]);
         }
+    }
+
+    private void sendRenameFileResult(){
+        String projectName = parameters.get("name")[0];
+        String fileName = parameters.get("filename")[0];
+        String newName = parameters.get("newName")[0];
+        newName = newName.endsWith(".kt") ? newName : newName +".kt";
+        MySqlConnector.getInstance().renameFile(sessionInfo.getUserInfo(), projectName, fileName, newName);
+        writeResponse("ok", HttpServletResponse.SC_OK);
     }
 
     private void sendDeleteProgramResult() {

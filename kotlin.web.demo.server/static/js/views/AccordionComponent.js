@@ -47,13 +47,16 @@ var AccordionView = (function () {
                 addMyProjectsFolder();
                 element.accordion("refresh");
                 element.accordion("option", "active", 0);
-                loadFirstItem();
+                if(!loginView.isLoggedIn()){
+                    loadFirstItem();
+                }
             },
             onLoadUserProjectsHeaders: function (data) {
                 for (var i = 0; i < data.length; i++) {
                     addProject("My Programs", document.getElementById("My_Programs_content"), data[i]);
                 }
                 addNewProjectButton();
+                loadFirstItem();
             },
             saveProject: function () {
                 selectedProject.save();
@@ -175,7 +178,13 @@ var AccordionView = (function () {
                         event.stopPropagation();
                     }
                 })(createExampleUrl(name, folder));
+
+//                var renameImg = document.createElement("div");
+//                renameImg.className = "rename-img";
+//                renameImg.title = "Rename this file";
+
                 projectHeader.appendChild(deleteButton);
+//                projectHeader.appendChild(renameImg);
             }
 
             return projectHeader;
