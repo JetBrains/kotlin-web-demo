@@ -54,6 +54,12 @@ var Project = (function () {
                 instance.select();
 
             },
+            rename: function (newName) {
+                url = url.substring(0, url.indexOf("&name=") + "&name=".length) + newName;
+                content.name = newName;
+                showProjectContent();
+                selectFile(selectedFile);
+            },
             select: function () {
                 argumentsView.change = function () {
                     content.args = argumentsView.val();
@@ -353,6 +359,7 @@ var Project = (function () {
             var element = document.getElementById(url);
             element.innerHTML = newName;
             element.id = getFilenameURL(newName);
+            element.parentNode.id = getFilenameURL(newName) + "_header";
         }
 
         return instance;

@@ -643,6 +643,23 @@ public class MySqlConnector {
         }
     }
 
+    public boolean renameProject(UserInfo userInfo, String projectName, String newName){
+        int userId = getUserId(userInfo);
+        if(userId != -1){
+            try(PreparedStatement st= connection.prepareStatement("update projects set projects.name = ? where projects.name =? and projects.owner_id = ?")){
+                st.setString(1, newName);
+                st.setString(2, projectName);
+                st.setString(3, userId +"");
+                st.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else{
+            return false;
+        }
+        return true;
+    }
 
     private int getUserId(UserInfo userInfo) {
         try (PreparedStatement st = connection.prepareStatement("SELECT users.id FROM users WHERE (users.client_id = ? AND users.provider=?)")) {

@@ -119,6 +119,8 @@ public class MyHttpSession {
                 case ("renameFile"):
                     sendRenameFileResult();
                     break;
+                case ("renameProject"):
+                    sendRenameProjectResult();
                 case("generatePublicLink"):
                     sendGeneratePublicLinkResult();
                     break;
@@ -320,7 +322,12 @@ public class MyHttpSession {
         }
     }
 
-
+    public void sendRenameProjectResult(){
+        String projectName = parameters.get("name")[0];
+        String newName = parameters.get("newName")[0];
+        MySqlConnector.getInstance().renameProject(sessionInfo.getUserInfo(), projectName, newName);
+        writeResponse("ok", HttpServletResponse.SC_OK);
+    }
 
 
     //Send Response

@@ -35,6 +35,12 @@ var AccordionHeadersProvider = (function () {
             },
             deleteProject: function (url) {
                 deleteProject(url);
+            },
+            renameProject: function(url, newName){
+                renameProject(url, newName);
+            },
+            onRenameProject: function(url, newName) {
+
             }
         };
 
@@ -93,6 +99,21 @@ var AccordionHeadersProvider = (function () {
                     accordion.addNewProject(name);
                 },
                 type: "POST",
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                }
+            })
+        }
+
+        function renameProject(url, newName){
+            $.ajax({
+                url: generateAjaxUrl("renameProject", url),
+                success: function () {
+                    instance.onRenameProject(url, newName);
+                },
+                type: "POST",
+                data:{newName: newName},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);

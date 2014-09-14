@@ -47,7 +47,7 @@ var AccordionView = (function () {
                 addMyProjectsFolder();
                 element.accordion("refresh");
                 element.accordion("option", "active", 0);
-                if(!loginView.isLoggedIn()){
+                if (!loginView.isLoggedIn()) {
                     loadFirstItem();
                 }
             },
@@ -88,10 +88,18 @@ var AccordionView = (function () {
         };
 
         var headersProvider = (function () {
-            return new AccordionHeadersProvider(instance.onLoadExampleHeaders, instance.onLoadUserProjectsHeaders, instance.onFail);
+            var provider = new AccordionHeadersProvider(instance.onLoadExampleHeaders, instance.onLoadUserProjectsHeaders, instance.onFail);
+
+            provider.onRenameProject = function (url, newName) {
+                renameProject(url, newName);
+            };
+
+            return provider;
         })();
 
+
         var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add");
+        var renameProjectDialog = new InputDialogView("Rename project", "Project name:", "Rename");
 
         function createProject(name, contentElement, content) {
             var url = getProjectURL("My Programs", name);
@@ -161,10 +169,6 @@ var AccordionView = (function () {
             nameSpan.id = createExampleUrl(name, folder);
             nameSpan.className = "file-name-span";
             nameSpan.style.cursor = "pointer";
-            nameSpan.onclick = function (event) {
-                onProjectHeaderClick(this.id);
-                event.stopPropagation();
-            };
             nameSpan.innerHTML = name;
             projectHeader.appendChild(nameSpan);
 
@@ -172,19 +176,25 @@ var AccordionView = (function () {
                 var deleteButton = document.createElement("div");
                 deleteButton.className = "delete-img";
                 deleteButton.title = "Delete this project";
-                deleteButton.onclick = (function (url) {
-                    return function (event) {
-                        headersProvider.deleteProject(url);
-                        event.stopPropagation();
-                    }
-                })(createExampleUrl(name, folder));
+                deleteButton.onclick = function (event) {
+                    var url = this.parentNode.id.substring(0, this.parentNode.id.indexOf("_header"));
+                    headersProvider.deleteProject(url);
+                    event.stopPropagation();
+                };
 
-//                var renameImg = document.createElement("div");
-//                renameImg.className = "rename-img";
-//                renameImg.title = "Rename this file";
+
+                var renameImg = document.createElement("div");
+                renameImg.className = "rename-img";
+                renameImg.title = "Rename this file";
+                renameImg.onclick = function (event) {
+                    var url = this.parentNode.id.substring(0, this.parentNode.id.indexOf("_header"));
+                    renameProjectDialog.open(headersProvider.renameProject.bind(null, url));
+                    event.stopPropagation();
+
+                };
 
                 projectHeader.appendChild(deleteButton);
-//                projectHeader.appendChild(renameImg);
+                projectHeader.appendChild(renameImg);
             }
 
             return projectHeader;
@@ -285,6 +295,20 @@ var AccordionView = (function () {
             element.append(myProgCont);
             if (loginView.isLoggedIn()) {
                 headersProvider.getAllPrograms();
+            }
+        }
+
+        function renameProject(url, newName) {
+            var element = document.getElementById(url);
+            element.innerHTML = newName;
+            var newUrl = getProjectURL("My Programs", newName);
+            element.id = newUrl;
+            element.parentNode.nextSibling.id = newUrl + "_content";
+            element.parentNode.id = newUrl + "_header";
+            if (downloadedProjects[url] != undefined) {
+                downloadedProjects[newUrl] = downloadedProjects[url];
+                delete downloadedProjects[url];
+                downloadedProjects[newUrl].rename(newName);
             }
         }
 
