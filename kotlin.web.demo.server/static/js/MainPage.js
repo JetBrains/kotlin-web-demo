@@ -235,7 +235,6 @@ var run_button = $("#run-button")
     .button()
     .click(function () {
         run_button.button("option", "disabled", true);
-        editor.save();
         var localConfiguration = configurationManager.getConfiguration();
         highlightingProvider.getHighlighting(localConfiguration.type, accordion.getSelectedProject().getModifiableContent(), function (highlightingResult) {
             var example = accordion.getSelectedProject();
@@ -364,11 +363,7 @@ function getSessionIdSuccess(data) {
 
 
 $("#save").click(function () {
-    if (ProgramsView.isLoggedIn()) {
-        $("#save-dialog").dialog("open");
-    } else {
-        $("#login-dialog").dialog("open");
-    }
+    accordion.getSelectedProject().save();
 })
 
 run_button.attr("title", run_button.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName()));

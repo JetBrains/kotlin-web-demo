@@ -66,6 +66,9 @@ var ProjectProvider = (function () {
             },
             onFileRenamed: function () {
 
+            },
+            onProjectSave: function () {
+
             }
         };
 
@@ -198,6 +201,7 @@ var ProjectProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("saveProject"),
                 type: "POST",
+                success: instance.onProjectSave,
                 timeout: 10000,
                 data: {project: JSON.stringify(content)},
                 error: function (jqXHR, textStatus, errorThrown) {

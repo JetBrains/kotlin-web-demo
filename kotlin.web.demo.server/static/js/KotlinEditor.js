@@ -443,7 +443,7 @@ var KotlinEditor = (function () {
             },
             onChange: function () {
                 if(openedElement != null) {
-                    openedElement.onContentChange();
+                    openedElement.onContentChange(my_editor.getValue());
                 }
                 runTimerForNonPrinting()
             },
@@ -567,7 +567,6 @@ var KotlinEditor = (function () {
             if (timer) {
                 clearTimeout(timer);
                 timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
-
             }
             else {
                 timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
@@ -577,7 +576,6 @@ var KotlinEditor = (function () {
 
         function getHighlighting() {
             if (configuration.mode.name != Configuration.mode.ONRUN.name) {
-                instance.save();
                 var example = accordion.getSelectedProject();
                 highlightingProvider.getHighlighting(
                     configuration.type,

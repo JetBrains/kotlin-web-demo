@@ -24,8 +24,6 @@ var Project = (function () {
 
         var selectedFile = null;
         var isProjectContentChanged = false;
-        var isLocalCopyExist = false;
-        var isDatabaseCopyExist = false;
 
         var instance = {
             onContentLoaded: function (data) {
@@ -41,8 +39,9 @@ var Project = (function () {
                         }
                     };
 
-                    content.files[i].onContentChange = function () {
+                    content.files[i].onContentChange = function (text) {
                         isProjectContentChanged = true;
+                        this.content = text;
                         actionsView.setStatus("unsavedChanges");
                     }
 
@@ -184,9 +183,12 @@ var Project = (function () {
         projectProvider.onExampleLoaded = function (data) {
             isProjectContentChanged = false;
             localStorage.removeItem(url);
-            isLocalCopyExist = false;
             actionsView.setStatus("default");
             instance.onContentLoaded(data);
+        };
+
+        projectProvider.onProjectSave = function() {
+            isProjectContentChanged = false;
         };
 
         projectProvider.onProjectLoaded = function (data) {
@@ -196,7 +198,7 @@ var Project = (function () {
         };
 
         projectProvider.onDeleteProject = function () {
-            isDatabaseCopyExist = false;
+
         };
 
         projectProvider.onDeleteFile = function (url) {
