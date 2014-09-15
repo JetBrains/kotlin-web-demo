@@ -33,9 +33,13 @@ var ConsoleView = (function () {
         var instance = {
             setOutput: function (data) {
                 element.html("");
+                var scroll = document.createElement("div");
+                scroll.className = "scroll";
+                element.append(scroll);
+
                 var console = document.createElement("div");
                 console.className = "result-view";
-                element.append(console);
+                scroll.appendChild(console);
                 setOutput(console, data);
             },
             setConfiguration: function (conf) {
@@ -43,9 +47,13 @@ var ConsoleView = (function () {
             },
             writeException: function (data) {
                 element.html("");
+                var scroll = document.createElement("div");
+                scroll.className = "scroll";
+                element.append(scroll);
+
                 var console = document.createElement("div");
                 console.className = "result-view";
-                element.append(console);
+                scroll.appendChild(console);
                 writeException(console, data);
             }
         };
