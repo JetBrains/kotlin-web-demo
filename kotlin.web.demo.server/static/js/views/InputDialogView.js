@@ -22,17 +22,23 @@
 var InputDialogView = (function () {
 
     function InputDialogView(title, inputText, buttonText) {
-        var dialog = document.createElement("div");
-        dialog.id = "input-dialog";
+        var dialog, text, input;
+        if (document.getElementById("input-dialog") == null) {
+            dialog = document.createElement("div");
+            dialog.id = "input-dialog";
 
-        var text = document.createElement("span");
-        var input = document.createElement("input");
+            text = document.createElement("span");
+            text.id = "input-dialog-text";
+            input = document.createElement("input");
+            input.id = "input-dialog-input";
 
-        dialog.appendChild(text);
-        dialog.appendChild(input);
-
-        dialog.title = title;
-        text.innerHTML = inputText;
+            dialog.appendChild(text);
+            dialog.appendChild(input);
+        } else {
+            dialog = document.getElementById("input-dialog");
+            text = document.getElementById("input-dialog-text");
+            input = document.getElementById("input-dialog-input");
+        }
 
         $(dialog).dialog({
             modal: "true",
@@ -42,21 +48,23 @@ var InputDialogView = (function () {
 
         var instance = {
             open: function (callback) {
-                $(dialog).dialog("option", "buttons",  [
-                    {
-                        text: buttonText,
-                        click: function () {
-                            callback(input.value);
-                            $(this).dialog("close");
+                $(dialog).dialog('option', 'title', title);
+                text.innerHTML = inputText;
+                $(dialog).dialog("option", "buttons", [
+                        {
+                            text: buttonText,
+                            click: function () {
+                                callback(input.value);
+                                $(this).dialog("close");
+                            }
+                        },
+                        {
+                            text: "Cancel",
+                            click: function () {
+                                $(this).dialog("close");
+                            }
                         }
-                    },
-                    {
-                        text: "Cancel",
-                        click: function () {
-                            $(this).dialog("close");
-                        }
-                    }
-                ]
+                    ]
                 );
                 $(dialog).dialog("open");
             }

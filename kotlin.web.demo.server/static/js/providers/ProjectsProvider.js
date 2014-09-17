@@ -32,23 +32,14 @@ var ProjectProvider = (function () {
             deleteProject: function (url) {
                 deleteProject(url);
             },
-            deleteFile: function (url) {
-                deleteFile(url);
-            },
             addNewFile: function (projectName, fileName) {
                 addNewFile(projectName, fileName);
             },
             forkProject: function (content, url) {
                 forkProject(content, url)
             },
-            saveFile: function (url, data) {
-                saveFile(url, data);
-            },
             saveProject: function (content) {
                 saveProject(content);
-            },
-            renameFile: function (url, newName) {
-                renameFile(url, newName)
             },
             onExampleLoaded: function (data) {
             },
@@ -58,13 +49,7 @@ var ProjectProvider = (function () {
             onDeleteProject: function () {
 
             },
-            onDeleteFile: function (url) {
-
-            },
             onProjectFork: function () {
-
-            },
-            onFileRenamed: function () {
 
             },
             onProjectSave: function () {
@@ -168,33 +153,6 @@ var ProjectProvider = (function () {
             });
         }
 
-        function deleteFile(url) {
-            $.ajax({
-                url: generateAjaxUrl("deleteFile", url),
-                context: document.body,
-                success: function () {
-                    instance.onDeleteFile(url);
-                },
-                type: "POST",
-                timeout: 10000,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
-                }
-            });
-        }
-
-        function saveFile(url, data) {
-            $.ajax({
-                url: generateAjaxUrl("saveFile", url),
-                type: "POST",
-                timeout: 10000,
-                data: {file: JSON.stringify(data)},
-                error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                }
-            })
-        }
-
         function saveProject(content) {
             $.ajax({
                 url: generateAjaxUrl("saveProject"),
@@ -208,15 +166,6 @@ var ProjectProvider = (function () {
             })
         }
 
-        function renameFile(url, newName) {
-            $.ajax({
-                url: generateAjaxUrl("renameFile", url),
-                success: function(data){instance.onFileRenamed(url, newName)},
-                type: "POST",
-                timeout: 10000,
-                data: {newName: newName}
-            })
-        }
 
         return instance;
     }

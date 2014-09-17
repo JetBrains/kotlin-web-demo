@@ -33,7 +33,7 @@ var Project = (function () {
                     var fileData = projectContent.files[i];
                     var fileHeader = document.createElement("div");
                     element.appendChild(fileHeader);
-                    projectContent.files[i] = new File(fileData.name, fileData.content, fileData.modifiable, fileHeader);
+                    projectContent.files[i] = new File(instance, fileData.name, fileData.content, fileData.modifiable, fileHeader);
                 }
                 if (isUserProject()) {
                     element.appendChild(createAddFileButton());
@@ -64,6 +64,9 @@ var Project = (function () {
                 argumentsView.val(projectContent.args);
                 configurationManager.updateConfiguration(projectContent.confType);
                 actionsView.refresh();
+            },
+            selectFile: function(file){
+                selectFile(file)
             },
             processHighlightingResult: function (data) {
                 for (var i = 0; i < projectContent.files.length; i++) {
@@ -106,7 +109,7 @@ var Project = (function () {
             save: function () {
                 if (isProjectContentChanged) {
                     if (isUserProject()) {
-
+                        selectedFile.save();
                         projectProvider.saveProject({
                             args: projectContent.args,
                             confType: projectContent.confType,
@@ -137,115 +140,29 @@ var Project = (function () {
             addNewFile: function (filename) {
                 var fileHeader = document.createElement("div");
                 element.insertBefore(fileHeader, element.lastChild);
-                projectContent.files.push(new File(filename, "", true, fileHeader));
+                projectContent.files.push(new File(instance, filename, "", true, fileHeader));
                 problemsView.onProjectChange(instance);
 //                showProjectContent();
                 selectFile(projectContent.files[projectContent.files.length - 1]);
 
+            },
+            onChange: function(){
+                isProjectContentChanged = true;
+                actionsView.setStatus("unsavedChanges");
             },
             onFail: function () {
             },
             onDelete: function () {
                 element.parentNode.removeChild(element);
             },
+            onDeleteFile: function (file) {
+                onDeleteFile(file)
+            },
             isUserProject: function () {
                 return isUserProject();
             }
         };
 
-        var File = (function (_super) {
-            function File(name, content, modifiable, element) {
-                var fileNameElement;
-
-                var instance = {
-                    name: name,
-                    content: content,
-                    modifiable: modifiable,
-                    errors: [],
-                    type: "Kotlin",
-                    getUrl: function () {
-                        return getUrl();
-                    },
-                    save: function () {
-                        instance.content = editor.getText();
-                        if (isUserProject()) {
-                            projectProvider.saveFile(url, this);
-                        } else {
-                            _super.save();
-                        }
-                    },
-                    onProjectRenamed: function () {
-                        element.id = getUrl();
-                    },
-                    onContentChange: function (text) {
-                        isProjectContentChanged = true;
-                        instance.content = text;
-                        actionsView.setStatus("unsavedChanges");
-                    },
-                    onDelete: function () {
-                        element.parentElement.removeChild(element);
-                    },
-                    rename: function (newName) {
-                        instance.name = newName;
-                        element.id = getUrl();
-                        fileNameElement.innerHTML = newName;
-                    }
-                };
-
-                if (element != null) {
-
-                    element.id = getUrl();
-                    element.className = "example-filename";
-
-                    var icon = document.createElement("div");
-                    if (instance.type == "Kotlin") {
-                        icon.className = "kotlin-file-type-default"
-                    } else {
-                        icon.className = "kotlin-file-type-default"
-                    }
-                    element.appendChild(icon);
-
-
-                    fileNameElement = document.createElement("div");
-                    fileNameElement.className = "example-filename-text";
-                    fileNameElement.innerHTML = instance.name;
-                    element.appendChild(fileNameElement);
-
-                    if (isUserProject() && instance.modifiable) {
-                        var renameImg = document.createElement("div");
-                        renameImg.className = "rename-img";
-                        renameImg.title = "Rename this file";
-                        renameImg.onclick = function (event) {
-                            renameFileDialog.open(projectProvider.renameFile.bind(null, getUrl()));
-                            event.stopPropagation();
-                        };
-
-
-                        var deleteImg = document.createElement("div");
-                        deleteImg.className = "delete-img";
-                        deleteImg.title = "Delete this file";
-                        deleteImg.onclick = function (event) {
-                            projectProvider.deleteFile(instance.getUrl());
-                            event.stopPropagation();
-                        };
-                        element.appendChild(deleteImg);
-                        element.appendChild(renameImg);
-                    }
-
-                    element.onclick = function () {
-                        selectFile(instance);
-                    };
-                }
-
-                function getUrl() {
-                    return _super.getUrl() + "&filename=" + instance.name;
-                }
-
-                return instance;
-            }
-
-            return File;
-        })(instance);
 
         var actionsView = new ProjectActionsView(document.getElementById("editor-notifications"), instance);
 
@@ -283,20 +200,9 @@ var Project = (function () {
             accordion.addNewProject(newContent.name, newContent);
         };
 
-        projectProvider.onFileRenamed = function (url, newName) {
-            newName = newName.endsWith(".kt") ? newName : newName + ".kt";
-            for (var i = 0; i < projectContent.files.length; ++i) {
-                if (projectContent.files[i].getUrl() == url) {
-                    projectContent.files[i].rename(newName);
-                    break;
-                }
-            }
-            problemsView.onProjectChange(instance);
-        };
-
         var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
         var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
-        var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
+
 
         (function loadProject() {
             if (projectContent == null) {
@@ -316,17 +222,14 @@ var Project = (function () {
             }
         })();
 
-        function onDeleteFile(url) {
-            var fileName = url.substr(url.indexOf("&filename=") + "&filename=".length);
+        function onDeleteFile(file) {
             var id = -1;
             for (var i = 0; i < projectContent.files.length; ++i) {
-                if (projectContent.files[i].name == fileName) {
-                    var file = projectContent.files[i];
+                if (projectContent.files[i] == file) {
                     id = i;
                     break;
                 }
             }
-            file.onDelete();
             projectContent.files.splice(id, 1);
             if (projectContent.files.length == 0) {
                 accordion.deleteProject(instance.getUrl());
