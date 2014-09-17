@@ -141,7 +141,7 @@ var ProjectProvider = (function () {
                 filename = filename + ".kt";
             }
             $.ajax({
-                url: generateAjaxUrl("addFile", project.getURL() + "&filename=" + filename),
+                url: generateAjaxUrl("addFile", project.getUrl() + "&filename=" + filename),
                 success: function () {
                     project.addNewFile(filename);
                 },
@@ -160,7 +160,6 @@ var ProjectProvider = (function () {
                 success: function () {
                     instance.onDeleteProject(url);
                 },
-                dataType: "json",
                 type: "POST",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -176,7 +175,6 @@ var ProjectProvider = (function () {
                 success: function () {
                     instance.onDeleteFile(url);
                 },
-                dataType: "json",
                 type: "POST",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {

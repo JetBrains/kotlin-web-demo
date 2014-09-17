@@ -66,14 +66,10 @@ public class ServerResponseUtils {
     }
 
     public static void writeResponse(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull String responseBody, int errorCode) throws IOException {
-        PrintWriter writer = null;
-        try {
+        try (PrintWriter writer = response.getWriter()){
             addHeadersToResponse(request, response);
             response.setStatus(errorCode);
-            writer = response.getWriter();
             writer.write(responseBody);
-        } finally {
-            close(writer);
         }
     }
 }

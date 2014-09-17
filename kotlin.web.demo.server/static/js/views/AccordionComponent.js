@@ -317,7 +317,7 @@ var AccordionView = (function () {
             if (downloadedProjects[url] == undefined) {
                 if (selectedProject != null) {
                     selectedProject.save();
-                    element = document.getElementById(selectedProject.getURL() + "_header");
+                    element = document.getElementById(selectedProject.getUrl() + "_header");
                     element.className = "examples-project-name";
                     $(element).next().slideUp();
                 }
@@ -327,17 +327,17 @@ var AccordionView = (function () {
             } else if (downloadedProjects[url] != selectedProject) {
                 if (selectedProject != null) {
                     selectedProject.save();
-                    element = document.getElementById(selectedProject.getURL() + "_header");
+                    element = document.getElementById(selectedProject.getUrl() + "_header");
                     element.className = "examples-project-name";
                     $(element).next().slideUp();
                 }
                 selectedProject = downloadedProjects[url];
-                element = document.getElementById(selectedProject.getURL() + "_header");
+                element = document.getElementById(selectedProject.getUrl() + "_header");
                 element.className = "expanded-project-name";
                 $(element).next().slideDown();
                 selectedProject.select();
             } else {
-                element = document.getElementById(selectedProject.getURL() + "_header");
+                element = document.getElementById(selectedProject.getUrl() + "_header");
                 if (element.className.indexOf("expanded-project-name") > -1) {
                     element.className = "current-project-name";
                     $(element).next().slideUp()

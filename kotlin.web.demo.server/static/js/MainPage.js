@@ -380,7 +380,7 @@ function loadShortcuts() {
 
 window.onbeforeunload = closingCode;
 function closingCode(){
-    localStorage.setItem("openedItemUrl", accordion.getSelectedProject().getURL());
+    localStorage.setItem("openedItemUrl", accordion.getSelectedProject().getUrl());
     accordion.getSelectedProject().save();
     editor.save();
     return null;
