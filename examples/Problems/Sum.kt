@@ -37,7 +37,7 @@ fun test(expectedSum : Int, vararg data : Int) {
                          "sum(data) = ${actualSum}, but must be $expectedSum ")
 }
 
-fun assertEquals<T>(actual : T?, expected : T?, message : Any? = null) {
+fun assertEquals<T>(actual : T, expected : T, message : Any? = null) {
   if (actual != expected) {
     if (message == null)
       throw AssertionError()
