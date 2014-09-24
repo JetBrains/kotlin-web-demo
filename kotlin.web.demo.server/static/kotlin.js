@@ -7,7 +7,7 @@
       }
     }
   }
-  function g(a) {
+  function h(a) {
     for (var b = 0;b < a.length;b++) {
       if (null != a[b] && null == a[b].$metadata$ || a[b].$metadata$.type === Kotlin.TYPE.CLASS) {
         return a[b];
@@ -16,28 +16,28 @@
     return null;
   }
   function l(a, b, c) {
-    for (var d = 0;d < b.length;d++) {
-      if (null == b[d] || null != b[d].$metadata$) {
-        var e = c(b[d]), f;
-        for (f in e) {
-          e.hasOwnProperty(f) && (!a.hasOwnProperty(f) || a[f].$classIndex$ < e[f].$classIndex$) && (a[f] = e[f]);
+    for (var f = 0;f < b.length;f++) {
+      if (null == b[f] || null != b[f].$metadata$) {
+        var d = c(b[f]), e;
+        for (e in d) {
+          d.hasOwnProperty(e) && (!a.hasOwnProperty(e) || a[e].$classIndex$ < d[e].$classIndex$) && (a[e] = d[e]);
         }
       }
     }
   }
-  function f(a, b) {
+  function g(a, b) {
     var c = {};
     c.baseClasses = null == a ? [] : Array.isArray(a) ? a : [a];
-    c.baseClass = g(c.baseClasses);
+    c.baseClass = h(c.baseClasses);
     c.classIndex = Kotlin.newClassIndex();
     c.functions = {};
     c.properties = {};
     if (null != b) {
-      for (var d in b) {
-        if (b.hasOwnProperty(d)) {
-          var e = b[d];
-          e.$classIndex$ = c.classIndex;
-          "function" === typeof e ? c.functions[d] = e : c.properties[d] = e;
+      for (var f in b) {
+        if (b.hasOwnProperty(f)) {
+          var d = b[f];
+          d.$classIndex$ = c.classIndex;
+          "function" === typeof d ? c.functions[f] = d : c.properties[f] = d;
         }
       }
     }
@@ -61,14 +61,14 @@
     if (null != a && null == a.$metadata$ || a.$metadata$.classIndex < b.$metadata$.classIndex) {
       return!1;
     }
-    var d = a.$metadata$.baseClasses, e;
-    for (e = 0;e < d.length;e++) {
-      if (d[e] === b) {
+    var k = a.$metadata$.baseClasses, f;
+    for (f = 0;f < k.length;f++) {
+      if (k[f] === b) {
         return!0;
       }
     }
-    for (e = 0;e < d.length;e++) {
-      if (c(d[e], b)) {
+    for (f = 0;f < k.length;f++) {
+      if (c(k[f], b)) {
         return!0;
       }
     }
@@ -84,7 +84,7 @@
       return a;
     };
   }
-  function h(a) {
+  function m(a) {
     var b = {};
     if (null == a) {
       return b;
@@ -94,7 +94,7 @@
     }
     return b;
   }
-  var m = function() {
+  var n = function() {
     return function() {
     };
   };
@@ -105,10 +105,10 @@
     Kotlin.classCount++;
     return a;
   };
-  Kotlin.createClassNow = function(b, c, d, k) {
-    null == c && (c = m());
-    e(c, k);
-    b = f(b, d);
+  Kotlin.createClassNow = function(b, c, d, f) {
+    null == c && (c = n());
+    e(c, f);
+    b = g(b, d);
     b.type = Kotlin.TYPE.CLASS;
     d = null !== b.baseClass ? Object.create(b.baseClass.prototype) : {};
     Object.defineProperties(d, b.properties);
@@ -126,34 +126,54 @@
     return a;
   };
   Kotlin.createTraitNow = function(b, c, d) {
-    var k = function() {
+    var f = function() {
     };
-    e(k, d);
-    k.$metadata$ = f(b, c);
-    k.$metadata$.type = Kotlin.TYPE.TRAIT;
-    k.prototype = {};
-    Object.defineProperties(k.prototype, k.$metadata$.properties);
-    e(k.prototype, k.$metadata$.functions);
-    Object.defineProperty(k, "object", {get:a, configurable:!0});
-    return k;
-  };
-  Kotlin.createClass = function(a, c, d, e) {
-    function f() {
-      var h = Kotlin.createClassNow(b(a), c, d, e);
-      Object.defineProperty(this, f.className, {value:h});
-      return h;
-    }
-    f.type = Kotlin.TYPE.INIT_FUN;
+    e(f, d);
+    f.$metadata$ = g(b, c);
+    f.$metadata$.type = Kotlin.TYPE.TRAIT;
+    f.prototype = {};
+    Object.defineProperties(f.prototype, f.$metadata$.properties);
+    e(f.prototype, f.$metadata$.functions);
+    Object.defineProperty(f, "object", {get:a, configurable:!0});
     return f;
   };
-  Kotlin.createTrait = function(a, c, d) {
+  Kotlin.createClass = function(a, c, d, f) {
     function e() {
-      var f = Kotlin.createTraitNow(b(a), c, d);
-      Object.defineProperty(this, e.className, {value:f});
-      return f;
+      var g = Kotlin.createClassNow(b(a), c, d, f);
+      Object.defineProperty(this, e.className, {value:g});
+      return g;
     }
     e.type = Kotlin.TYPE.INIT_FUN;
     return e;
+  };
+  Kotlin.createEnumClass = function(a, b, c, d) {
+    return Kotlin.createClass(a, b, d, {object_initializer$:function() {
+      var a = c(), b = 0, d = [], p;
+      for (p in a) {
+        if (a.hasOwnProperty(p)) {
+          var q = a[p];
+          d[b] = q;
+          q.ordinal$ = b;
+          q.name$ = p;
+          b++;
+        }
+      }
+      a.values$ = d;
+      return a;
+    }, values:function() {
+      return this.object.values$;
+    }, valueOf_61zpoe$:function(a) {
+      return this.object[a];
+    }});
+  };
+  Kotlin.createTrait = function(a, c, d) {
+    function f() {
+      var e = Kotlin.createTraitNow(b(a), c, d);
+      Object.defineProperty(this, f.className, {value:e});
+      return e;
+    }
+    f.type = Kotlin.TYPE.INIT_FUN;
+    return f;
   };
   Kotlin.createObject = function(a, c, d) {
     return Kotlin.createObjectNow(b(a), c, d);
@@ -167,14 +187,62 @@
   Kotlin.isType = function(a, b) {
     return null == a || null == b ? !1 : a instanceof b ? !0 : null != b && null == b.$metadata$ || b.$metadata$.type == Kotlin.TYPE.CLASS ? !1 : c(a.constructor, b);
   };
+  Kotlin.getCallableRefForMemberFunction = function(a, b) {
+    return function() {
+      return this[b].apply(this, arguments);
+    };
+  };
+  Kotlin.getCallableRefForExtensionFunction = function(a) {
+    return function() {
+      var b = [this];
+      Array.prototype.push.apply(b, arguments);
+      return a.apply(null, b);
+    };
+  };
+  Kotlin.getCallableRefForConstructor = function(a) {
+    return function() {
+      var b = Object.create(a.prototype);
+      a.apply(b, arguments);
+      return b;
+    };
+  };
+  Kotlin.getCallableRefForTopLevelProperty = function(a, b, c) {
+    var d = {};
+    d.name = b;
+    d.get = function() {
+      return a[b];
+    };
+    c && (d.set_za3rmp$ = function(c) {
+      a[b] = c;
+    });
+    return d;
+  };
+  Kotlin.getCallableRefForMemberProperty = function(a, b) {
+    var c = {};
+    c.name = a;
+    c.get_za3rmp$ = function(b) {
+      return b[a];
+    };
+    b && (c.set_wn2jw4$ = function(b, c) {
+      b[a] = c;
+    });
+    return c;
+  };
+  Kotlin.getCallableRefForExtensionProperty = function(a, b, c) {
+    var d = {};
+    d.name = a;
+    d.get_za3rmp$ = b;
+    void 0 !== c && (d.set_wn2jw4$ = c);
+    return d;
+  };
   Kotlin.modules = {};
   Kotlin.definePackage = function(a, b) {
-    var c = h(b);
+    var c = m(b);
     return null === a ? {value:c} : {get:d(c, a)};
   };
   Kotlin.defineRootPackage = function(a, b) {
-    var c = h(b);
-    c.$initializer$ = null === a ? m() : a;
+    var c = m(b);
+    c.$initializer$ = null === a ? n() : a;
     return c;
   };
   Kotlin.defineModule = function(a, b) {
@@ -232,6 +300,15 @@
   Kotlin.arrayToString = function(a) {
     return "[" + a.join(", ") + "]";
   };
+  Kotlin.compareTo = function(a, b) {
+    return a < b ? -1 : a > b ? 1 : 0;
+  };
+  Kotlin.toShort = function(a) {
+    return(a & 65535) << 16 >> 16;
+  };
+  Kotlin.toByte = function(a) {
+    return(a & 255) << 24 >> 24;
+  };
   Kotlin.intUpto = function(a, b) {
     return new Kotlin.NumberRange(a, b);
   };
@@ -249,7 +326,7 @@
     throw new Kotlin.NullPointerException;
   };
   Kotlin.Iterator = Kotlin.createClassNow(null, null, {next:e("Iterator#next"), hasNext:e("Iterator#hasNext")});
-  var g = Kotlin.createClassNow(Kotlin.Iterator, function(a) {
+  var h = Kotlin.createClassNow(Kotlin.Iterator, function(a) {
     this.array = a;
     this.index = 0;
   }, {next:function() {
@@ -262,7 +339,7 @@
     }
     this.index--;
     this.array.splice(this.index, 1);
-  }}), l = Kotlin.createClassNow(g, function(a) {
+  }}), l = Kotlin.createClassNow(h, function(a) {
     this.list = a;
     this.size = a.size();
     this.index = 0;
@@ -279,30 +356,6 @@
   }, toString:function() {
     return this.name();
   }});
-  (function() {
-    function a(a) {
-      return this[a];
-    }
-    function b() {
-      return this.values$;
-    }
-    Kotlin.createEnumEntries = function(c) {
-      var d = 0, e = [], f;
-      for (f in c) {
-        if (c.hasOwnProperty(f)) {
-          var g = c[f];
-          e[d] = g;
-          g.ordinal$ = d;
-          g.name$ = f;
-          d++;
-        }
-      }
-      c.values$ = e;
-      c.valueOf_61zpoe$ = a;
-      c.values = b;
-      return c;
-    };
-  })();
   Kotlin.PropertyMetadata = Kotlin.createClassNow(null, function(a) {
     this.name = a;
   });
@@ -332,7 +385,7 @@
   }, isEmpty:function() {
     return 0 === this.size();
   }, iterator:function() {
-    return new g(this.toArray());
+    return new h(this.toArray());
   }, equals_za3rmp$:function(a) {
     if (this.size() !== a.size()) {
       return!1;
@@ -495,11 +548,11 @@
     return 0 < this.increment ? this.start > this.end : this.start < this.end;
   }});
   Kotlin.Comparator = Kotlin.createClassNow(null, null, {compare:e("Comparator#compare")});
-  var f = Kotlin.createClassNow(Kotlin.Comparator, function(a) {
+  var g = Kotlin.createClassNow(Kotlin.Comparator, function(a) {
     this.compare = a;
   });
   Kotlin.comparator = function(a) {
-    return new f(a);
+    return new g(a);
   };
   Kotlin.collectionsMax = function(a, b) {
     if (a.isEmpty()) {
@@ -576,7 +629,7 @@
     return new Kotlin.NumberRange(0, a.length - 1);
   };
   Kotlin.arrayIterator = function(a) {
-    return new g(a);
+    return new h(a);
   };
   Kotlin.jsonFromTuples = function(a) {
     for (var b = a.length, c = {};0 < b;) {
@@ -596,13 +649,16 @@
     this.key = a;
     this.value = b;
   }
-  function g(a) {
+  function h(a) {
     for (a = a.entrySet().iterator();a.hasNext();) {
       var b = a.next();
       this.put_wn2jw4$(b.getKey(), b.getValue());
     }
   }
   function l(a) {
+    if (null == a) {
+      return "";
+    }
     if ("string" == typeof a) {
       return a;
     }
@@ -618,23 +674,13 @@
       return Object.prototype.toString.call(a);
     }
   }
-  function f(a, b) {
+  function g(a, b) {
     return a.equals_za3rmp$(b);
   }
   function a(a, b) {
-    return "function" == typeof b.equals_za3rmp$ ? b.equals_za3rmp$(a) : a === b;
+    return null != b && "function" == typeof b.equals_za3rmp$ ? b.equals_za3rmp$(a) : a === b;
   }
-  function b(a) {
-    return function(b) {
-      if (null === b) {
-        throw Error("null is not a valid " + a);
-      }
-      if ("undefined" == typeof b) {
-        throw Error(a + " must not be undefined");
-      }
-    };
-  }
-  function c(a, b, c, d) {
+  function b(a, b, c, d) {
     this[0] = a;
     this.entries = [];
     this.addEntry(b, c);
@@ -642,16 +688,16 @@
       return d;
     });
   }
-  function d(a) {
+  function c(a) {
     return function(b) {
       for (var c = this.entries.length, d, e = this.getEqualityFunction(b);c--;) {
         if (d = this.entries[c], e(b, d[0])) {
           switch(a) {
             case t:
               return!0;
-            case u:
+            case k:
               return d;
-            case w:
+            case f:
               return[c, d[1]];
           }
         }
@@ -659,16 +705,16 @@
       return!1;
     };
   }
-  function h(a) {
+  function d(a) {
     return function(b) {
       for (var c = b.length, d = 0, e = this.entries.length;d < e;++d) {
         b[c + d] = this.entries[d][a];
       }
     };
   }
-  function m(a, b) {
-    var d = a[b];
-    return d && d instanceof c ? d : null;
+  function m(a, c) {
+    var d = a[c];
+    return d && d instanceof b ? d : null;
   }
   function n() {
     Kotlin.ComplexHashMap.call(this);
@@ -724,18 +770,18 @@
         a[b + d] = c[d];
       }
     }
-  }, p = b("key"), k = b("value"), t = 0, u = 1, w = 2;
-  c.prototype = {getEqualityFunction:function(b) {
-    return "function" == typeof b.equals_za3rmp$ ? f : a;
-  }, getEntryForKey:d(u), getEntryAndIndexForKey:d(w), removeEntryForKey:function(a) {
-    return(a = this.getEntryAndIndexForKey(a)) ? (s(this.entries, a[0]), a[1]) : null;
+  }, t = 0, k = 1, f = 2;
+  b.prototype = {getEqualityFunction:function(b) {
+    return null != b && "function" == typeof b.equals_za3rmp$ ? g : a;
+  }, getEntryForKey:c(k), getEntryAndIndexForKey:c(f), removeEntryForKey:function(a) {
+    return(a = this.getEntryAndIndexForKey(a)) ? (s(this.entries, a[0]), a) : null;
   }, addEntry:function(a, b) {
     this.entries[this.entries.length] = [a, b];
-  }, keys:h(0), values:h(1), getEntries:function(a) {
+  }, keys:d(0), values:d(1), getEntries:function(a) {
     for (var b = a.length, c = 0, d = this.entries.length;c < d;++c) {
       a[b + c] = this.entries[c].slice(0);
     }
-  }, containsKey_za3rmp$:d(t), containsValue_za3rmp$:function(a) {
+  }, containsKey_za3rmp$:c(t), containsValue_za3rmp$:function(a) {
     for (var b = this.entries.length;b--;) {
       if (a === this.entries[b][1]) {
         return!0;
@@ -743,19 +789,16 @@
     }
     return!1;
   }};
-  var x = function(a, b) {
-    var d = this, f = [], h = {}, q = "function" == typeof a ? a : l, n = "function" == typeof b ? b : null;
-    this.put_wn2jw4$ = function(a, b) {
-      p(a);
-      k(b);
-      var d = q(a), e, v = null;
-      (e = m(h, d)) ? (d = e.getEntryForKey(a)) ? (v = d[1], d[1] = b) : e.addEntry(a, b) : (e = new c(d, a, b, n), f[f.length] = e, h[d] = e);
-      return v;
+  var u = function(a, c) {
+    var d = this, f = [], g = {}, k = "function" == typeof a ? a : l, n = "function" == typeof c ? c : null;
+    this.put_wn2jw4$ = function(a, c) {
+      var d = k(a), e, p = null;
+      (e = m(g, d)) ? (d = e.getEntryForKey(a)) ? (p = d[1], d[1] = c) : e.addEntry(a, c) : (e = new b(d, a, c, n), f[f.length] = e, g[d] = e);
+      return p;
     };
     this.get_za3rmp$ = function(a) {
-      p(a);
-      var b = q(a);
-      if (b = m(h, b)) {
+      var b = k(a);
+      if (b = m(g, b)) {
         if (a = b.getEntryForKey(a)) {
           return a[1];
         }
@@ -763,12 +806,10 @@
       return null;
     };
     this.containsKey_za3rmp$ = function(a) {
-      p(a);
-      var b = q(a);
-      return(b = m(h, b)) ? b.containsKey_za3rmp$(a) : !1;
+      var b = k(a);
+      return(b = m(g, b)) ? b.containsKey_za3rmp$(a) : !1;
     };
     this.containsValue_za3rmp$ = function(a) {
-      k(a);
       for (var b = f.length;b--;) {
         if (f[b].containsValue_za3rmp$(a)) {
           return!0;
@@ -778,7 +819,7 @@
     };
     this.clear = function() {
       f.length = 0;
-      h = {};
+      g = {};
     };
     this.isEmpty = function() {
       return!f.length;
@@ -801,9 +842,8 @@
       return c;
     };
     this.remove_za3rmp$ = function(a) {
-      p(a);
-      var b = q(a), c = null, d = m(h, b);
-      if (d && (c = d.removeEntryForKey(a), null !== c && !d.entries.length)) {
+      var b = k(a), c = null, d = null, e = m(g, b);
+      if (e && (d = e.removeEntryForKey(a), null !== d && (c = d[1], !e.entries.length))) {
         a: {
           for (a = f.length;a--;) {
             if (d = f[a], b === d[0]) {
@@ -813,7 +853,7 @@
           a = null;
         }
         s(f, a);
-        delete h[b];
+        delete g[b];
       }
       return c;
     };
@@ -828,11 +868,11 @@
         e = b[c], a(e[0], e[1]);
       }
     };
-    this.putAll_za3j1t$ = g;
+    this.putAll_za3j1t$ = h;
     this.clone = function() {
-      var c = new x(a, b);
-      c.putAll_za3j1t$(d);
-      return c;
+      var b = new u(a, c);
+      b.putAll_za3j1t$(d);
+      return b;
     };
     this.keySet = function() {
       for (var a = new Kotlin.ComplexHashSet, b = this._keys(), c = b.length;c--;) {
@@ -848,13 +888,13 @@
       return a;
     };
   };
-  Kotlin.HashTable = x;
+  Kotlin.HashTable = u;
   Kotlin.Map = Kotlin.createClassNow();
   Kotlin.HashMap = Kotlin.createClassNow(Kotlin.Map, function() {
     Kotlin.HashTable.call(this);
   });
   Kotlin.ComplexHashMap = Kotlin.HashMap;
-  var y = Kotlin.createClassNow(Kotlin.Iterator, function(a, b) {
+  var v = Kotlin.createClassNow(Kotlin.Iterator, function(a, b) {
     this.map = a;
     this.keys = b;
     this.size = b.length;
@@ -863,10 +903,10 @@
     return this.map[this.keys[this.index++]];
   }, hasNext:function() {
     return this.index < this.size;
-  }}), z = Kotlin.createClassNow(Kotlin.Collection, function(a) {
+  }}), w = Kotlin.createClassNow(Kotlin.Collection, function(a) {
     this.map = a;
   }, {iterator:function() {
-    return new y(this.map.map, Object.keys(this.map.map));
+    return new v(this.map.map, Object.keys(this.map.map));
   }, isEmpty:function() {
     return 0 === this.map.$size;
   }, contains:function(a) {
@@ -903,7 +943,7 @@
   }, clear:function() {
     this.$size = 0;
     this.map = {};
-  }, putAll_za3j1t$:g, entrySet:function() {
+  }, putAll_za3j1t$:h, entrySet:function() {
     var a = new Kotlin.ComplexHashSet, b = this.map, c;
     for (c in b) {
       a.add_za3rmp$(new e(c, b[c]));
@@ -916,7 +956,7 @@
     }
     return a;
   }, values:function() {
-    return new z(this);
+    return new w(this);
   }, toJSON:function() {
     return this.map;
   }});
@@ -962,9 +1002,9 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
 }, iterator:function() {
   return new SetIterator(this);
 }, add_za3rmp$:function(e) {
-  var g = this.map[e];
+  var h = this.map[e];
   this.map[e] = !0;
-  if (!0 === g) {
+  if (!0 === h) {
     return!1;
   }
   this.$size++;
@@ -978,39 +1018,39 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
   return Object.keys(this.map);
 }});
 (function() {
-  function e(g, l) {
-    var f = new Kotlin.HashTable(g, l);
+  function e(h, l) {
+    var g = new Kotlin.HashTable(h, l);
     this.addAll_xeylzf$ = Kotlin.AbstractCollection.prototype.addAll_xeylzf$;
     this.removeAll_xeylzf$ = Kotlin.AbstractCollection.prototype.removeAll_xeylzf$;
     this.retainAll_xeylzf$ = Kotlin.AbstractCollection.prototype.retainAll_xeylzf$;
     this.containsAll_xeylzf$ = Kotlin.AbstractCollection.prototype.containsAll_xeylzf$;
     this.add_za3rmp$ = function(a) {
-      return!f.put_wn2jw4$(a, !0);
+      return!g.put_wn2jw4$(a, !0);
     };
     this.toArray = function() {
-      return f._keys();
+      return g._keys();
     };
     this.iterator = function() {
       return new SetIterator(this);
     };
     this.remove_za3rmp$ = function(a) {
-      return null != f.remove_za3rmp$(a);
+      return null != g.remove_za3rmp$(a);
     };
     this.contains_za3rmp$ = function(a) {
-      return f.containsKey_za3rmp$(a);
+      return g.containsKey_za3rmp$(a);
     };
     this.clear = function() {
-      f.clear();
+      g.clear();
     };
     this.size = function() {
-      return f.size();
+      return g.size();
     };
     this.isEmpty = function() {
-      return f.isEmpty();
+      return g.isEmpty();
     };
     this.clone = function() {
-      var a = new e(g, l);
-      a.addAll_xeylzf$(f.keys());
+      var a = new e(h, l);
+      a.addAll_xeylzf$(g.keys());
       return a;
     };
     this.equals_za3rmp$ = function(a) {
@@ -1042,10 +1082,10 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
       return a + "]";
     };
     this.intersection = function(a) {
-      var b = new e(g, l);
+      var b = new e(h, l);
       a = a.values();
       for (var c = a.length, d;c--;) {
-        d = a[c], f.containsKey_za3rmp$(d) && b.add_za3rmp$(d);
+        d = a[c], g.containsKey_za3rmp$(d) && b.add_za3rmp$(d);
       }
       return b;
     };
@@ -1053,12 +1093,12 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
       var b = this.clone();
       a = a.values();
       for (var c = a.length, d;c--;) {
-        d = a[c], f.containsKey_za3rmp$(d) || b.add_za3rmp$(d);
+        d = a[c], g.containsKey_za3rmp$(d) || b.add_za3rmp$(d);
       }
       return b;
     };
     this.isSubsetOf = function(a) {
-      for (var b = f.keys(), c = b.length;c--;) {
+      for (var b = g.keys(), c = b.length;c--;) {
         if (!a.contains_za3rmp$(b[c])) {
           return!1;
         }
