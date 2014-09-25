@@ -67,7 +67,11 @@ public class JsonResponseForCompletion {
         this.lineNumber = lineNumber;
         this.charNumber = charNumber;
         this.psiFiles = psiFiles;
-        psiFiles.stream().filter(file -> file.getName().equals(filename)).forEach(file -> currentPsiFile = file);
+        for(PsiFile file : psiFiles){
+            if(file.getName().equals(filename)){
+                currentPsiFile = file;
+            }
+        }
         this.currentProject = currentPsiFile.getProject();
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
         this.sessionInfo = sessionInfo;
@@ -92,7 +96,7 @@ public class JsonResponseForCompletion {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile, sessionInfo);
             } else {
-                bindingContext = ResolveUtils.getBindingContext(psiFiles.stream().map(psiFile -> (JetFile) psiFile).collect(Collectors.toList()), currentProject);
+                bindingContext = ResolveUtils.getBindingContext(convertList(psiFiles), currentProject);
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
@@ -292,5 +296,13 @@ public class JsonResponseForCompletion {
     private int getOffsetFromLineAndChar(int line, int charNumber) {
         int lineStart = currentDocument.getLineStartOffset(line);
         return lineStart + charNumber;
+    }
+
+    private List<JetFile> convertList(List<PsiFile> list) {
+        List<JetFile> result = new ArrayList<>();
+        for(PsiFile file : list){
+            result.add((JetFile)file);
+        }
+        return result;
     }
 }

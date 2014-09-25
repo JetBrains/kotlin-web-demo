@@ -20,6 +20,9 @@
 
 
 var Project = (function () {
+    var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
+    var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
+
     function Project(url, element, projectContent) {
 
 
@@ -200,8 +203,6 @@ var Project = (function () {
             accordion.addNewProject(newContent.name, newContent);
         };
 
-        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
-        var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
 
 
         (function loadProject() {

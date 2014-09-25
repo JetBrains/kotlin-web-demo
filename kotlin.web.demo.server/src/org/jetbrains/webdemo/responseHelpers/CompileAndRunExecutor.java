@@ -24,6 +24,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.OutputFile;
 import org.jetbrains.jet.codegen.ClassFileFactory;
+import org.jetbrains.jet.codegen.CompilationErrorHandler;
 import org.jetbrains.jet.codegen.KotlinCodegenFacade;
 import org.jetbrains.jet.codegen.state.GenerationState;
 import org.jetbrains.jet.lang.diagnostics.Severity;
@@ -78,7 +79,12 @@ public class CompileAndRunExecutor {
             try {
 
                 generationState = ResolveUtils.getGenerationState(convertList(currentPsiFiles), currentProject);
-                KotlinCodegenFacade.compileCorrectFiles(generationState, (throwable, s) -> ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), sessionInfo.getOriginUrl(), s + " " /*+ currentPsiFile.getText()*/));
+                KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
+                    @Override
+                    public void reportException(Throwable throwable, String s) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, sessionInfo.getType(), sessionInfo.getOriginUrl(), s + " ");
+                    }
+                });
             } catch (Throwable e) {
 //                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
                 return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());

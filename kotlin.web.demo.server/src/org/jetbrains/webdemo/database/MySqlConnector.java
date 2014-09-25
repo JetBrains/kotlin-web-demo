@@ -544,7 +544,11 @@ public class MySqlConnector {
                 if (rs.getString("origin") != null) {
                     project.originUrl = rs.getString("origin");
                     ExampleObject storedExample = ExamplesList.getExampleObject(rs.getString("origin"));
-                    project.files.addAll(storedExample.files.stream().filter(file -> !file.isModifiable()).collect(Collectors.toList()));
+                    for(ProjectFile file : storedExample.files){
+                        if(!file.isModifiable()){
+                            project.files.add(file);
+                        }
+                    }
                 }
 
                 st = connection.prepareStatement("SELECT * FROM files WHERE project_id = ?");

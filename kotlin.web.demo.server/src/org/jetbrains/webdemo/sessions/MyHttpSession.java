@@ -40,6 +40,7 @@ import org.jetbrains.webdemo.session.SessionInfo;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -312,8 +313,12 @@ public class MyHttpSession {
     }
 
     private List<PsiFile> createProjectPsiFiles(ExampleObject example) {
+        List<PsiFile> result = new ArrayList<>();
         currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
-        return example.files.stream().map(file -> JetPsiFactoryUtil.createFile(currentProject, file.getName(), file.getContent())).collect(Collectors.toList());
+        for(ProjectFile file : example.files){
+            result.add(JetPsiFactoryUtil.createFile(currentProject, file.getName(), file.getContent()));
+        }
+        return result;
     }
 
     public void sendCompletionResult() {
@@ -388,16 +393,14 @@ public class MyHttpSession {
         }
     }
 
-    private ExampleObject addUnmodifiableDataToExample(ExampleObject exampleObject) {
-        ExampleObject storedExample = ExamplesList.getExampleObject(exampleObject.name, exampleObject.parent);
-        exampleObject.files.addAll(storedExample.files.stream().filter((file) -> !file.isModifiable()).collect(Collectors.toList()));
-        exampleObject.testClasses = storedExample.testClasses;
-        return exampleObject;
-    }
 
     private ExampleObject addUnmodifiableDataToExample(ExampleObject exampleObject, String originUrl) {
         ExampleObject storedExample = ExamplesList.getExampleObject(originUrl);
-        exampleObject.files.addAll(storedExample.files.stream().filter((file) -> !file.isModifiable()).collect(Collectors.toList()));
+        for(ProjectFile file : storedExample.files){
+            if(!file.isModifiable()){
+                exampleObject.files.add(file);
+            }
+        }
         exampleObject.testClasses = storedExample.testClasses;
         return exampleObject;
     }

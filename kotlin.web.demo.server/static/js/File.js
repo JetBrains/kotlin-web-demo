@@ -19,6 +19,8 @@
  */
 
 var File = (function () {
+    var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
+
     function File(project, name, content, modifiable, element) {
         var fileNameElement;
 
@@ -56,8 +58,6 @@ var File = (function () {
                 fileNameElement.innerHTML = newName;
             }
         };
-
-        var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
 
         var provider = (function () {
             provider = new FileProvider();

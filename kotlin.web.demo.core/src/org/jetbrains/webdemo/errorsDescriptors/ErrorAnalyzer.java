@@ -122,27 +122,34 @@ public class ErrorAnalyzer {
         }
 
         for (String key : errors.keySet())
-            Collections.sort(errors.get(key), (o1, o2) -> {
-                if (o1.getInterval().start.line > o2.getInterval().start.line) {
-                    return 1;
-                } else if (o1.getInterval().start.line < o2.getInterval().start.line) {
-                    return -1;
-                } else if (o1.getInterval().start.line == o2.getInterval().start.line) {
-                    if (o1.getInterval().start.ch > o2.getInterval().start.ch) {
+            Collections.sort(errors.get(key), new Comparator<ErrorDescriptor>() {
+                @Override
+                public int compare(ErrorDescriptor o1, ErrorDescriptor o2) {
+                    if (o1.getInterval().start.line > o2.getInterval().start.line) {
                         return 1;
-                    } else if (o1.getInterval().start.ch < o2.getInterval().start.ch) {
+                    } else if (o1.getInterval().start.line < o2.getInterval().start.line) {
                         return -1;
-                    } else if (o1.getInterval().start.ch == o2.getInterval().start.ch) {
-                        return 0;
+                    } else if (o1.getInterval().start.line == o2.getInterval().start.line) {
+                        if (o1.getInterval().start.ch > o2.getInterval().start.ch) {
+                            return 1;
+                        } else if (o1.getInterval().start.ch < o2.getInterval().start.ch) {
+                            return -1;
+                        } else if (o1.getInterval().start.ch == o2.getInterval().start.ch) {
+                            return 0;
+                        }
                     }
+                    return -1;
                 }
-                return -1;
             });
 
     }
 
     private List<JetFile> convertList(List<PsiFile> list) {
-        return list.stream().map(psiFile -> (JetFile) psiFile).collect(Collectors.toList());
+        List<JetFile> result = new ArrayList<>();
+        for(PsiFile file : list){
+            result.add((JetFile)file);
+        }
+        return result;
     }
 
 
