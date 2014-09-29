@@ -1,11 +1,27 @@
 /*
+ * Copyright 2000-2014 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
   This shows simple text floating around.
 */
 package hello
 
-import js.dom.html5.*
-import js.dom.html.window
-import js.jquery.*
+import kotlin.js.dom.html.window
+import kotlin.js.dom.html5.*
+import jquery.*
 
 val canvas: HTMLCanvasElement
   get() {
@@ -56,7 +72,7 @@ class HelloKotlin() {
     // if you using chrome chances are good you wont see the shadow
     context.shadowColor = "#000000"
     context.shadowBlur = 5.0
-    context.shadowOffsetX = - 4.0
+    context.shadowOffsetX = -4.0
     context.shadowOffsetY = 4.0
     context.fillStyle = "rgb(242,160,110)"
     context.fillText(message, absX.toInt(), absY.toInt())
@@ -66,21 +82,21 @@ class HelloKotlin() {
   fun move() {
     val relTextWidth = textWidthInPixels / width
     if (relX > (1.0 - relTextWidth - relXVelocity.abs) || relX < relXVelocity.abs) {
-      relXVelocity *= - 1
+      relXVelocity *= -1
     }
     val relTextHeight = textHeightInPixels / height
     if (relY > (1.0 - relYVelocity.abs) || relY < relYVelocity.abs + relTextHeight) {
-      relYVelocity *= - 1
+      relYVelocity *= -1
     }
     relX += relXVelocity
     relY += relYVelocity
   }
 
-  fun randomVelocity() = 0.03 * Math.random() * (if (Math.random() < 0.5) 1 else - 1)
+  fun randomVelocity() = 0.03 * Math.random() * (if (Math.random() < 0.5) 1 else -1)
 
 
   val Double.abs: Double
-    get() = if (this > 0) this else - this
+    get() = if (this > 0) this else -this
 }
 
 fun renderBackground() {
@@ -99,11 +115,11 @@ fun main(args: Array<String>) {
     }
 
     window.setInterval({
-      renderBackground()
-      for (logo in logos) {
-        logo.draw()
-      }
-    }, interval)
+                 renderBackground()
+                 for (logo in logos) {
+                   logo.draw()
+                 }
+               }, interval)
   }
 }
 

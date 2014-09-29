@@ -23,11 +23,12 @@ var ProjectProvider = (function () {
 
     function ProjectsProvider(project) {
         var instance = {
-            loadExample: function (url) {
-                loadExample(url);
-            },
             loadProject: function (url) {
-                loadProject(url);
+                if(project.isUserProject()) {
+                    loadProject(url);
+                } else{
+                    loadExample(url)
+                }
             },
             deleteProject: function (url) {
                 deleteProject(url);
@@ -40,8 +41,6 @@ var ProjectProvider = (function () {
             },
             saveProject: function (content) {
                 saveProject(content);
-            },
-            onExampleLoaded: function (data) {
             },
             onProjectLoaded: function (data) {
 
@@ -64,7 +63,7 @@ var ProjectProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            instance.onExampleLoaded(data);
+                            instance.onProjectLoaded(data);
                         } else {
                             project.onFail(data, ActionStatusMessages.load_example_fail);
                         }

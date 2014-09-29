@@ -15,7 +15,7 @@
     }
     return null;
   }
-  function k(a, b, c) {
+  function l(a, b, c) {
     for (var f = 0;f < b.length;f++) {
       if (null == b[f] || null != b[f].$metadata$) {
         var d = c(b[f]), e;
@@ -41,10 +41,10 @@
         }
       }
     }
-    k(c.functions, c.baseClasses, function(a) {
+    l(c.functions, c.baseClasses, function(a) {
       return a.$metadata$.functions;
     });
-    k(c.properties, c.baseClasses, function(a) {
+    l(c.properties, c.baseClasses, function(a) {
       return a.$metadata$.properties;
     });
     return c;
@@ -61,14 +61,14 @@
     if (null != a && null == a.$metadata$ || a.$metadata$.classIndex < b.$metadata$.classIndex) {
       return!1;
     }
-    var d = a.$metadata$.baseClasses, f;
-    for (f = 0;f < d.length;f++) {
-      if (d[f] === b) {
+    var k = a.$metadata$.baseClasses, f;
+    for (f = 0;f < k.length;f++) {
+      if (k[f] === b) {
         return!0;
       }
     }
-    for (f = 0;f < d.length;f++) {
-      if (c(d[f], b)) {
+    for (f = 0;f < k.length;f++) {
+      if (c(k[f], b)) {
         return!0;
       }
     }
@@ -94,7 +94,7 @@
     }
     return b;
   }
-  var l = function() {
+  var n = function() {
     return function() {
     };
   };
@@ -106,7 +106,7 @@
     return a;
   };
   Kotlin.createClassNow = function(b, c, d, f) {
-    null == c && (c = l());
+    null == c && (c = n());
     e(c, f);
     b = g(b, d);
     b.type = Kotlin.TYPE.CLASS;
@@ -145,6 +145,26 @@
     }
     e.type = Kotlin.TYPE.INIT_FUN;
     return e;
+  };
+  Kotlin.createEnumClass = function(a, b, c, d) {
+    return Kotlin.createClass(a, b, d, {object_initializer$:function() {
+      var a = c(), b = 0, d = [], p;
+      for (p in a) {
+        if (a.hasOwnProperty(p)) {
+          var q = a[p];
+          d[b] = q;
+          q.ordinal$ = b;
+          q.name$ = p;
+          b++;
+        }
+      }
+      a.values$ = d;
+      return a;
+    }, values:function() {
+      return this.object.values$;
+    }, valueOf_61zpoe$:function(a) {
+      return this.object[a];
+    }});
   };
   Kotlin.createTrait = function(a, c, d) {
     function f() {
@@ -222,7 +242,7 @@
   };
   Kotlin.defineRootPackage = function(a, b) {
     var c = m(b);
-    c.$initializer$ = null === a ? l() : a;
+    c.$initializer$ = null === a ? n() : a;
     return c;
   };
   Kotlin.defineModule = function(a, b) {
@@ -280,6 +300,15 @@
   Kotlin.arrayToString = function(a) {
     return "[" + a.join(", ") + "]";
   };
+  Kotlin.compareTo = function(a, b) {
+    return a < b ? -1 : a > b ? 1 : 0;
+  };
+  Kotlin.toShort = function(a) {
+    return(a & 65535) << 16 >> 16;
+  };
+  Kotlin.toByte = function(a) {
+    return(a & 255) << 24 >> 24;
+  };
   Kotlin.intUpto = function(a, b) {
     return new Kotlin.NumberRange(a, b);
   };
@@ -310,7 +339,7 @@
     }
     this.index--;
     this.array.splice(this.index, 1);
-  }}), k = Kotlin.createClassNow(h, function(a) {
+  }}), l = Kotlin.createClassNow(h, function(a) {
     this.list = a;
     this.size = a.size();
     this.index = 0;
@@ -327,30 +356,6 @@
   }, toString:function() {
     return this.name();
   }});
-  (function() {
-    function a(a) {
-      return this[a];
-    }
-    function b() {
-      return this.values$;
-    }
-    Kotlin.createEnumEntries = function(c) {
-      var d = 0, e = [], g;
-      for (g in c) {
-        if (c.hasOwnProperty(g)) {
-          var h = c[g];
-          e[d] = h;
-          h.ordinal$ = d;
-          h.name$ = g;
-          d++;
-        }
-      }
-      c.values$ = e;
-      c.valueOf_61zpoe$ = a;
-      c.values = b;
-      return c;
-    };
-  })();
   Kotlin.PropertyMetadata = Kotlin.createClassNow(null, function(a) {
     this.name = a;
   });
@@ -402,7 +407,7 @@
     return this.toArray();
   }});
   Kotlin.AbstractList = Kotlin.createClassNow(Kotlin.AbstractCollection, null, {iterator:function() {
-    return new k(this);
+    return new l(this);
   }, remove_za3rmp$:function(a) {
     a = this.indexOf_za3rmp$(a);
     return-1 !== a ? (this.remove_za3lpa$(a), !0) : !1;
@@ -650,7 +655,7 @@
       this.put_wn2jw4$(b.getKey(), b.getValue());
     }
   }
-  function k(a) {
+  function l(a) {
     if (null == a) {
       return "";
     }
@@ -658,7 +663,7 @@
       return a;
     }
     if ("function" == typeof a.hashCode) {
-      return a = a.hashCode(), "string" == typeof a ? a : k(a);
+      return a = a.hashCode(), "string" == typeof a ? a : l(a);
     }
     if ("function" == typeof a.toString) {
       return a.toString();
@@ -688,9 +693,9 @@
       for (var c = this.entries.length, d, e = this.getEqualityFunction(b);c--;) {
         if (d = this.entries[c], e(b, d[0])) {
           switch(a) {
-            case n:
+            case t:
               return!0;
-            case r:
+            case k:
               return d;
             case f:
               return[c, d[1]];
@@ -711,7 +716,7 @@
     var d = a[c];
     return d && d instanceof b ? d : null;
   }
-  function l() {
+  function n() {
     Kotlin.ComplexHashMap.call(this);
     this.orderedKeys = [];
     this.super_put_wn2jw4$ = this.put_wn2jw4$;
@@ -754,7 +759,7 @@
   e.prototype.getValue = function() {
     return this.value;
   };
-  var q = "function" == typeof Array.prototype.splice ? function(a, b) {
+  var s = "function" == typeof Array.prototype.splice ? function(a, b) {
     a.splice(b, 1);
   } : function(a, b) {
     var c, d, e;
@@ -765,18 +770,18 @@
         a[b + d] = c[d];
       }
     }
-  }, n = 0, r = 1, f = 2;
+  }, t = 0, k = 1, f = 2;
   b.prototype = {getEqualityFunction:function(b) {
     return null != b && "function" == typeof b.equals_za3rmp$ ? g : a;
-  }, getEntryForKey:c(r), getEntryAndIndexForKey:c(f), removeEntryForKey:function(a) {
-    return(a = this.getEntryAndIndexForKey(a)) ? (q(this.entries, a[0]), a) : null;
+  }, getEntryForKey:c(k), getEntryAndIndexForKey:c(f), removeEntryForKey:function(a) {
+    return(a = this.getEntryAndIndexForKey(a)) ? (s(this.entries, a[0]), a) : null;
   }, addEntry:function(a, b) {
     this.entries[this.entries.length] = [a, b];
   }, keys:d(0), values:d(1), getEntries:function(a) {
     for (var b = a.length, c = 0, d = this.entries.length;c < d;++c) {
       a[b + c] = this.entries[c].slice(0);
     }
-  }, containsKey_za3rmp$:c(n), containsValue_za3rmp$:function(a) {
+  }, containsKey_za3rmp$:c(t), containsValue_za3rmp$:function(a) {
     for (var b = this.entries.length;b--;) {
       if (a === this.entries[b][1]) {
         return!0;
@@ -784,15 +789,15 @@
     }
     return!1;
   }};
-  var s = function(a, c) {
-    var d = this, f = [], g = {}, l = "function" == typeof a ? a : k, n = "function" == typeof c ? c : null;
+  var u = function(a, c) {
+    var d = this, f = [], g = {}, k = "function" == typeof a ? a : l, n = "function" == typeof c ? c : null;
     this.put_wn2jw4$ = function(a, c) {
-      var d = l(a), e, t = null;
-      (e = m(g, d)) ? (d = e.getEntryForKey(a)) ? (t = d[1], d[1] = c) : e.addEntry(a, c) : (e = new b(d, a, c, n), f[f.length] = e, g[d] = e);
-      return t;
+      var d = k(a), e, p = null;
+      (e = m(g, d)) ? (d = e.getEntryForKey(a)) ? (p = d[1], d[1] = c) : e.addEntry(a, c) : (e = new b(d, a, c, n), f[f.length] = e, g[d] = e);
+      return p;
     };
     this.get_za3rmp$ = function(a) {
-      var b = l(a);
+      var b = k(a);
       if (b = m(g, b)) {
         if (a = b.getEntryForKey(a)) {
           return a[1];
@@ -801,7 +806,7 @@
       return null;
     };
     this.containsKey_za3rmp$ = function(a) {
-      var b = l(a);
+      var b = k(a);
       return(b = m(g, b)) ? b.containsKey_za3rmp$(a) : !1;
     };
     this.containsValue_za3rmp$ = function(a) {
@@ -819,7 +824,7 @@
     this.isEmpty = function() {
       return!f.length;
     };
-    var p = function(a) {
+    var r = function(a) {
       return function() {
         for (var b = [], c = f.length;c--;) {
           f[c][a](b);
@@ -827,9 +832,9 @@
         return b;
       };
     };
-    this._keys = p("keys");
-    this._values = p("values");
-    this._entries = p("getEntries");
+    this._keys = r("keys");
+    this._values = r("values");
+    this._entries = r("getEntries");
     this.values = function() {
       for (var a = this._values(), b = a.length, c = new Kotlin.ArrayList;b--;) {
         c.add_za3rmp$(a[b]);
@@ -837,7 +842,7 @@
       return c;
     };
     this.remove_za3rmp$ = function(a) {
-      var b = l(a), c = null, d = null, e = m(g, b);
+      var b = k(a), c = null, d = null, e = m(g, b);
       if (e && (d = e.removeEntryForKey(a), null !== d && (c = d[1], !e.entries.length))) {
         a: {
           for (a = f.length;a--;) {
@@ -847,7 +852,7 @@
           }
           a = null;
         }
-        q(f, a);
+        s(f, a);
         delete g[b];
       }
       return c;
@@ -865,7 +870,7 @@
     };
     this.putAll_za3j1t$ = h;
     this.clone = function() {
-      var b = new s(a, c);
+      var b = new u(a, c);
       b.putAll_za3j1t$(d);
       return b;
     };
@@ -883,13 +888,13 @@
       return a;
     };
   };
-  Kotlin.HashTable = s;
+  Kotlin.HashTable = u;
   Kotlin.Map = Kotlin.createClassNow();
   Kotlin.HashMap = Kotlin.createClassNow(Kotlin.Map, function() {
     Kotlin.HashTable.call(this);
   });
   Kotlin.ComplexHashMap = Kotlin.HashMap;
-  var u = Kotlin.createClassNow(Kotlin.Iterator, function(a, b) {
+  var v = Kotlin.createClassNow(Kotlin.Iterator, function(a, b) {
     this.map = a;
     this.keys = b;
     this.size = b.length;
@@ -898,10 +903,10 @@
     return this.map[this.keys[this.index++]];
   }, hasNext:function() {
     return this.index < this.size;
-  }}), v = Kotlin.createClassNow(Kotlin.Collection, function(a) {
+  }}), w = Kotlin.createClassNow(Kotlin.Collection, function(a) {
     this.map = a;
   }, {iterator:function() {
-    return new u(this.map.map, Object.keys(this.map.map));
+    return new v(this.map.map, Object.keys(this.map.map));
   }, isEmpty:function() {
     return 0 === this.map.$size;
   }, contains:function(a) {
@@ -951,12 +956,12 @@
     }
     return a;
   }, values:function() {
-    return new v(this);
+    return new w(this);
   }, toJSON:function() {
     return this.map;
   }});
-  l.prototype = Object.create(Kotlin.ComplexHashMap);
-  Kotlin.LinkedHashMap = l;
+  n.prototype = Object.create(Kotlin.ComplexHashMap);
+  Kotlin.LinkedHashMap = n;
   Kotlin.LinkedHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, function() {
     this.map = new Kotlin.LinkedHashMap;
   }, {size:function() {
@@ -1013,8 +1018,8 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
   return Object.keys(this.map);
 }});
 (function() {
-  function e(h, k) {
-    var g = new Kotlin.HashTable(h, k);
+  function e(h, l) {
+    var g = new Kotlin.HashTable(h, l);
     this.addAll_xeylzf$ = Kotlin.AbstractCollection.prototype.addAll_xeylzf$;
     this.removeAll_xeylzf$ = Kotlin.AbstractCollection.prototype.removeAll_xeylzf$;
     this.retainAll_xeylzf$ = Kotlin.AbstractCollection.prototype.retainAll_xeylzf$;
@@ -1044,7 +1049,7 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
       return g.isEmpty();
     };
     this.clone = function() {
-      var a = new e(h, k);
+      var a = new e(h, l);
       a.addAll_xeylzf$(g.keys());
       return a;
     };
@@ -1077,7 +1082,7 @@ Kotlin.PrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, funct
       return a + "]";
     };
     this.intersection = function(a) {
-      var b = new e(h, k);
+      var b = new e(h, l);
       a = a.values();
       for (var c = a.length, d;c--;) {
         d = a[c], g.containsKey_za3rmp$(d) && b.add_za3rmp$(d);

@@ -494,6 +494,7 @@ var KotlinEditor = (function () {
                 my_editor.setOption("mode", "kotlin");
             },
             open: function (element) {
+                document.getElementById("workspace-overlay").style.display = "none";
                 if (isEditorContentChanged && openedElement != null) {
                     openedElement.save();
                 }
@@ -513,6 +514,12 @@ var KotlinEditor = (function () {
                 isEditorContentChanged = false;
                 openedElement = element;
                 highlighting.updateHighlighting();
+            },
+            closeFile: function(){
+                openedElement = null;
+                highlighting.removeStyles();
+                my_editor.setValue("");
+                document.getElementById("workspace-overlay").style.display = "block";
             },
             updateHighlighting: function () {
                 highlighting.updateHighlighting();

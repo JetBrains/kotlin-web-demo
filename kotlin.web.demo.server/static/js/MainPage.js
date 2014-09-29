@@ -305,7 +305,7 @@ $(document).keydown(function (e) {
     } else {
         shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.save");
         if (shortcut.isPressed(e)) {
-            accordion.saveProgram();
+            saveButton.click();
         }
     }
 
@@ -362,12 +362,16 @@ function getSessionIdSuccess(data) {
 }
 
 
-$("#save").click(function () {
-    accordion.getSelectedProject().save();
-})
+var saveButton = $("#save").click(function () {
+    if(accordion.getSelectedProject().isUserProject()) {
+        accordion.saveProject();
+    } else{
+        accordion.saveProjectAs();
+    }
+});
 
 run_button.attr("title", run_button.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName()));
-$("#save").attr("title", $("#save").attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
+saveButton.attr("title", saveButton.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
 
 function loadShortcuts() {
     var text = $("#shortcuts-help").html();

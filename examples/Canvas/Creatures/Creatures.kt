@@ -4,14 +4,14 @@
 */
 package creatures
 
-import js.dom.html5.CanvasContext
-import js.jquery.*
-import js.dom.html5.CanvasGradient
-import js.dom.html5.HTMLCanvasElement
 import java.util.ArrayList
-import js.dom.html.window
-import js.dom.html.HTMLElement
-import js.dom.html.HTMLImageElement
+import jquery.*
+import kotlin.js.dom.html.window
+import kotlin.js.dom.html.HTMLElement
+import kotlin.js.dom.html.HTMLImageElement
+import kotlin.js.dom.html5.CanvasContext
+import kotlin.js.dom.html5.CanvasGradient
+import kotlin.js.dom.html5.HTMLCanvasElement
 
 
 fun getImage(path: String): HTMLImageElement {
@@ -60,10 +60,9 @@ abstract class Shape() {
 
 val Kotlin = Logo(v(250.0, 75.0))
 
-class Logo(override var pos: Vector): Shape()
-{
+class Logo(override var pos: Vector) : Shape() {
   val relSize: Double = 0.25
-  val shadowOffset = v(- 3.0, 3.0)
+  val shadowOffset = v(-3.0, 3.0)
   val imageSize = v(377.0, 393.0)
   var size: Vector = imageSize * relSize
   // get-only properties like this saves you lots of typing and are very expressive
@@ -81,22 +80,16 @@ class Logo(override var pos: Vector): Shape()
   }
 
   override fun draw(state: CanvasState) {
+    val context = state.context
     if (selected) {
       // using helper we defined in Shape class
-      state.context.drawShadowedLogo(state)
-    } else {
+      context.shadowed(shadowOffset, 0.2) {
+        drawLogo(state)
+      }
+    }
+    else {
       drawLogo(state)
     }
-  }
-
-  fun CanvasContext.drawShadowedLogo(state: CanvasState) {
-    save()
-    shadowColor = "rgba(100, 100, 100, 0.2)"
-    shadowBlur = 5.0
-    shadowOffsetX = shadowOffset.x
-    shadowOffsetY = shadowOffset.y
-    drawLogo(state)
-    restore()
   }
 
   override fun contains(mousePos: Vector): Boolean = mousePos.isInRect(pos, size)
@@ -115,7 +108,7 @@ val gradientGenerator: RadialGradientGenerator? = null
 
 class Creature(override var pos: Vector, val state: CanvasState): Shape() {
 
-  val shadowOffset = v(- 5.0, 5.0)
+  val shadowOffset = v(-5.0, 5.0)
   val colorStops = gradientGenerator!!.getNext()
   val relSize = 0.05
   // these properties have no backing fields and in java/javascript they could be represented as little helper functions
@@ -131,30 +124,32 @@ class Creature(override var pos: Vector, val state: CanvasState): Shape() {
 
   // defining more nice extension functions
   fun CanvasContext.circlePath(position: Vector, rad: Double) {
-    beginPath()
     arc(position.x, position.y, rad, 0.0, 2 * Math.PI, false)
-    closePath()
-    fill()
   }
 
   //notice we can use an extension function we just defined inside another extension function
   fun CanvasContext.fillCircle(position: Vector, rad: Double) {
-    circlePath(position, rad)
+    fillPath {
+      circlePath(position, rad)
+    }
   }
 
   override fun draw(state: CanvasState) {
     val context = state.context
     if (!selected) {
       drawCreature(context)
-    } else {
+    }
+    else {
       drawCreatureWithShadow(context)
     }
   }
 
   fun drawCreature(context: CanvasContext) {
     context.fillStyle = getGradient(context)
-    context.tailPath(context)
-    context.circlePath(position, radius)
+    context.fillPath {
+      tailPath(context)
+      circlePath(position, radius)
+    }
     drawEye(context)
   }
 
@@ -167,21 +162,18 @@ class Creature(override var pos: Vector, val state: CanvasState): Shape() {
     return gradient
   }
 
-  fun CanvasContext.tailPath(context: CanvasContext) {
-    beginPath()
-    val tailDirection = - directionToLogo
+  fun tailPath(context: CanvasContext) {
+    val tailDirection = -directionToLogo
     val tailPos = position + tailDirection * radius * 1.0
     val tailSize = radius * 1.6
     val angle = Math.PI / 6.0
     val p1 = tailPos + tailDirection.rotatedBy(angle) * tailSize
-    val p2 = tailPos + tailDirection.rotatedBy(- angle) * tailSize
+    val p2 = tailPos + tailDirection.rotatedBy(-angle) * tailSize
     val middlePoint = position + tailDirection * radius * 1.0
     context.moveTo(tailPos.x.toInt(), tailPos.y.toInt())
     context.lineTo(p1.x.toInt(), p1.y.toInt())
     context.quadraticCurveTo(middlePoint.x, middlePoint.y, p2.x, p2.y)
     context.lineTo(tailPos.x.toInt(), tailPos.y.toInt())
-    closePath()
-    fill()
   }
 
   fun drawEye(context: CanvasContext) {
@@ -195,27 +187,14 @@ class Creature(override var pos: Vector, val state: CanvasState): Shape() {
   }
 
   fun drawCreatureWithShadow(context: CanvasContext) {
-    context.drawShadowedCircle(context)
-    /*context.shadowed(shadowOffset, 0.7) {
+    context.shadowed(shadowOffset, 0.7) {
       context.fillStyle = getGradient(context)
       fillPath {
-      tailPath(context)
-      context.circlePath(position, radius)
+        tailPath(context)
+        context.circlePath(position, radius)
       }
-    } */
+    }
     drawEye(context)
-  }
-
-  fun CanvasContext.drawShadowedCircle(context: CanvasContext) {
-    save()
-    shadowColor = "rgba(100, 100, 100, 0.7)"
-    shadowBlur = 5.0
-    shadowOffsetX = shadowOffset.x
-    shadowOffsetY = shadowOffset.y
-    context.fillStyle = getGradient(context)
-    context.tailPath(context)
-    context.circlePath(position, radius)
-    restore()
   }
 }
 
@@ -336,7 +315,7 @@ fun v(x: Double, y: Double) = Vector(x, y)
 
 class Vector(val x: Double = 0.0, val y: Double = 0.0) {
   fun plus(v: Vector) = v(x + v.x, y + v.y)
-  fun minus() = v(- x, - y)
+  fun minus() = v(-x, -y)
   fun minus(v: Vector) = v(x - v.x, y - v.y)
   fun times(koef: Double) = v(x * koef, y * koef)
   fun distanceTo(v: Vector) = Math.sqrt((this - v).sqr)
@@ -362,8 +341,8 @@ fun main(args: Array<String>) {
     state.addShape(Creature(state.size * 0.25, state))
     state.addShape(Creature(state.size * 0.75, state))
     window.setTimeout({
-      state.valid = false
-    }, 1000)
+                state.valid = false
+              }, 1000)
   }
 }
 

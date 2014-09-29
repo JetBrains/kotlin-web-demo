@@ -61,6 +61,9 @@ var AccordionView = (function () {
             saveProject: function () {
                 selectedProject.save();
             },
+            saveProjectAs: function(){
+                selectedProject.saveAs();
+            },
             loadAllContent: function () {
                 element.html("");
                 headersProvider.getAllExamples();
@@ -272,7 +275,6 @@ var AccordionView = (function () {
 
             if (!loginView.isLoggedIn()) {
                 myProg.style.color = "rgba(0,0,0,0.5)";
-                $("#save").attr("title", "Save your program(you must be logged in)");
                 var login_link = document.createElement("span");
                 login_link.id = "login-link";
                 login_link.className = "login-link";

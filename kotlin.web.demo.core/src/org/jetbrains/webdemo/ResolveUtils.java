@@ -24,14 +24,19 @@ import org.jetbrains.jet.analyzer.AnalyzeExhaust;
 import org.jetbrains.jet.cli.jvm.compiler.CliLightClassGenerationSupport;
 import org.jetbrains.jet.codegen.ClassBuilderFactories;
 import org.jetbrains.jet.codegen.state.GenerationState;
+import org.jetbrains.jet.lang.descriptors.impl.ModuleDescriptorImpl;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.BindingTrace;
-import org.jetbrains.jet.lang.resolve.java.AnalyzerFacadeForJVM;
+import org.jetbrains.jet.lang.resolve.BindingTraceContext;
+import org.jetbrains.jet.lang.resolve.java.TopDownAnalyzerFacadeForJVM;
+import org.jetbrains.jet.lang.types.lang.KotlinBuiltIns;
 
 import java.util.List;
 
 public class ResolveUtils {
+
+    private ResolveUtils() {
+    }
 
     public static BindingContext getBindingContext(@NotNull List<JetFile> files, Project project) {
         AnalyzeExhaust analyzeExhaust = analyzeFile(files, project);
@@ -51,22 +56,24 @@ public class ResolveUtils {
 
     private static AnalyzeExhaust analyzeFile(@NotNull List<JetFile> files, Project project) {
 
-        WebDemoLightClassGenerationSupport.getInstanceForCli(project).newBindingTrace();
+        BindingTraceContext bindingTraceContext = new BindingTraceContext();
 
-        CliLightClassGenerationSupport support = WebDemoLightClassGenerationSupport.getInstanceForCli(project);
-        BindingTrace sharedTrace = support.getTrace();
-
-        return AnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
+        ModuleDescriptorImpl module = TopDownAnalyzerFacadeForJVM.createJavaModule("<module>");
+        module.addDependencyOnModule(module);
+        module.addDependencyOnModule(KotlinBuiltIns.getInstance().getBuiltInsModule());
+        module.seal();
+        CliLightClassGenerationSupport lightClassGenerationSupport = CliLightClassGenerationSupport.getInstanceForCli(project);
+        if (lightClassGenerationSupport != null) {
+            lightClassGenerationSupport.setModule(module);
+        }
+        return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
                 project,
                 files,
-                sharedTrace,
+                bindingTraceContext,
                 Predicates.<PsiFile>alwaysTrue(),
-                support.newModule(),
+                module,
                 null,
                 null
         );
-    }
-
-    private ResolveUtils() {
     }
 }

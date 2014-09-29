@@ -80,11 +80,11 @@ class Tester<R>(val f : (IntArray) -> R, val skipSuccessful : Boolean = true) {
                                    "  expected = $expected\n")
   }
 
-  private fun assertEquals<T>(actual : T?, expected : T?, message : Any? = null) {
+  private fun assertEquals<T>(actual : T, expected : T, message : Any? = null) {
     if (actual != expected) {
       errors++
       println("Test failed")
-      val trace = Thread.currentThread()?.getStackTrace()!!
+      val trace: Array<StackTraceElement> = Thread.currentThread().getStackTrace()
       if (trace.size > 6) {
         // Finding relevant stack frames
         val location = trace.getFrameAfter("runs.Tester", "expect")
@@ -99,16 +99,16 @@ class Tester<R>(val f : (IntArray) -> R, val skipSuccessful : Boolean = true) {
   }
 }
 
-fun Array<StackTraceElement?>.indexOf(className : String?, methodName : String?) : Int? {
+fun Array<StackTraceElement>.indexOf(className : String?, methodName : String?) : Int? {
   for (i in indices) {
-    val frame = this[i]!!
+    val frame = this[i]
     if (frame.getClassName() == className && frame.getMethodName() == methodName)
       return i
   }
   return null
 }
 
-fun Array<StackTraceElement?>.getFrameAfter(className : String?, methodName : String?) : StackTraceElement? {
+fun Array<StackTraceElement>.getFrameAfter(className : String?, methodName : String?) : StackTraceElement? {
   val index = indexOf(className, methodName)
   if (index == null) return null
   return this[index + 1]

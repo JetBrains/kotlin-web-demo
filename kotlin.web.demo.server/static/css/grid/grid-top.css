@@ -137,6 +137,7 @@ select {
 
 
 .workspace {
+    position: relative;
     margin-left: 25%;
     height: 100%;
 }
@@ -279,6 +280,8 @@ select {
 
 .ui-selectmenu-menu {
     cursor: pointer;
+    border: 1px solid #969696;
+    border-radius: 3px;
     background-color: #ffffff;
     padding: 0;
     margin: 0;
@@ -330,4 +333,14 @@ select {
     padding: 4px;
     font-size: 12px;
     float: right;
+}
+
+#workspace-overlay{
+    position: absolute;
+    display: none;
+    z-index: 1001;
+    width: 100%;
+    height: 100%;
+    background-color: #808080;
+    opacity: 0.5;
 }

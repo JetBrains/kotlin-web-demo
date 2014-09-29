@@ -31,6 +31,7 @@ var Project = (function () {
 
         var instance = {
             onContentLoaded: function (data) {
+                element.innerHTML = "";
                 projectContent = data;
                 for (var i = 0; i < projectContent.files.length; i++) {
                     var fileData = projectContent.files[i];
@@ -63,6 +64,8 @@ var Project = (function () {
                 helpViewForExamples.showHelp(projectContent.help);
                 if (selectedFile != null) {
                     editor.open(selectedFile);
+                } else{
+                    editor.closeFile();
                 }
                 argumentsView.val(projectContent.args);
                 configurationManager.updateConfiguration(projectContent.confType);
@@ -90,7 +93,7 @@ var Project = (function () {
                 };
             },
             restoreDefault: function () {
-                projectProvider.loadExample(url);
+                projectProvider.loadProject(url);
             },
             getUrl: function () {
                 return url;
@@ -170,21 +173,16 @@ var Project = (function () {
         var actionsView = new ProjectActionsView(document.getElementById("editor-notifications"), instance);
 
         var projectProvider = new ProjectProvider(instance);
-        projectProvider.onExampleLoaded = function (data) {
-            isProjectContentChanged = false;
-            localStorage.removeItem(url);
-            actionsView.setStatus("default");
-            instance.onContentLoaded(data);
-        };
 
         projectProvider.onProjectSave = function () {
             isProjectContentChanged = false;
         };
 
         projectProvider.onProjectLoaded = function (data) {
+            isProjectContentChanged = false;
             localStorage.removeItem(url);
             actionsView.setStatus("default");
-            instance.onContentLoaded(data.content);
+            instance.onContentLoaded(data);
         };
 
         projectProvider.onDeleteProject = function () {
@@ -212,11 +210,7 @@ var Project = (function () {
                     instance.onContentLoaded(localContent);
                     actionsView.setStatus("unsavedChanges");
                 } else {
-                    if (isUserProject()) {
-                        projectProvider.loadProject(url);
-                    } else {
-                        projectProvider.loadExample(url);
-                    }
+                    projectProvider.loadProject(url);
                 }
             } else {
                 instance.onContentLoaded(projectContent);
@@ -233,7 +227,7 @@ var Project = (function () {
             }
             projectContent.files.splice(id, 1);
             if (projectContent.files.length == 0) {
-                accordion.deleteProject(instance.getUrl());
+                editor.closeFile();
             } else if (selectedFile == file) {
                 selectedFile = null;
                 selectFile(projectContent.files[0]);

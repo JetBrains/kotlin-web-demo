@@ -36,7 +36,7 @@ var File = (function () {
             save: function () {
                 instance.content = editor.getText();
                 if (project.isUserProject()) {
-                    provider.saveFile(url, this);
+                    provider.saveFile(instance.getUrl(), this);
                 } else {
                     project.save();
                 }

@@ -558,10 +558,7 @@ public class MySqlConnector {
                     ProjectFile file = new ProjectFile(rs.getString("name"), rs.getString("content"), true);
                     project.files.add(file);
                 }
-                ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
-                response.put("origin", "db");
-                response.put("content", objectMapper.valueToTree(project));
-                return objectMapper.writeValueAsString(response);
+                return objectMapper.writeValueAsString(project);
             } else {
                 return ResponseUtils.getErrorInJson("Can't load your project");
             }
@@ -598,25 +595,6 @@ public class MySqlConnector {
             st.setString(1, projectId + "");
             st.setString(2, fileName);
             st.executeUpdate();
-
-            st = connection.prepareStatement("select * from files where files.project_id=" + projectId);
-            resultSet = st.executeQuery();
-            if (!resultSet.next()) {
-                st = connection.prepareStatement("select * from projects where projects.id=" + projectId);
-                resultSet = st.executeQuery();
-                resultSet.next();
-                String originUrl = resultSet.getString("origin");
-                if (originUrl != null) {
-                    ExampleObject origin = ExamplesList.getExampleObject(originUrl);
-                    if (origin.files.size() == 0) {
-                        st = connection.prepareStatement("delete from projects where projects.id=" + projectId);
-                        st.execute();
-                    }
-                } else {
-                    st = connection.prepareStatement("delete from projects where projects.id=" + projectId);
-                    st.execute();
-                }
-            }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + fileName);
             throw new DatabaseOperationException("Unknown exception ", e);

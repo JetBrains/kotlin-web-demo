@@ -41,7 +41,7 @@ fun test(expected : Int?, vararg data : Int) {
                          "pairless(data) = ${actual}, but must be $expected ")
 }
 
-fun assertEquals<T>(actual : T?, expected : T?, message : Any? = null) {
+fun assertEquals<T>(actual : T, expected : T, message : Any? = null) {
   if (actual != expected) {
     if (message == null)
       throw AssertionError()

@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.k2js.analyze.AnalyzerFacadeForJS;
+import org.jetbrains.k2js.analyze.TopDownAnalyzerFacadeForJS;
 import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.k2js.facade.MainCallParameters;
@@ -57,7 +57,7 @@ public final class WebDemoTranslatorFacade {
     @Nullable
     public static BindingContext analyzeProgramCode(@NotNull JetFile file, SessionInfo sessionInfo) {
         try {
-            BindingContext bindingContext = AnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), LOAD_JS_LIBRARY_CONFIG);
+            BindingContext bindingContext = TopDownAnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), LOAD_JS_LIBRARY_CONFIG);
             //Initializer.reinitializeJavaEnvironment();
             return bindingContext;
         } catch (Throwable e) {
