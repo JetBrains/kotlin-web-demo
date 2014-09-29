@@ -109,9 +109,9 @@ public class JsonResponseForCompletion {
         boolean isTipsManagerCompletion = true;
         try {
             if (element instanceof JetSimpleNameExpression) {
-                descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element, bindingContext);
+                descriptors = TipsManager.INSTANCE$.getReferenceVariants((JetSimpleNameExpression) element, bindingContext);
             } else if (element.getParent() instanceof JetSimpleNameExpression) {
-                descriptors = TipsManager.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext);
+                descriptors = TipsManager.INSTANCE$.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext);
             } else {
                 isTipsManagerCompletion = false;
                 JetScope resolutionScope;
