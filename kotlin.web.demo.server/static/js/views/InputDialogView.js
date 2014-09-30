@@ -21,47 +21,76 @@
 
 var InputDialogView = (function () {
 
-    function InputDialogView(title, inputText, buttonText) {
-        var dialog, text, input;
-        if (document.getElementById("input-dialog") == null) {
-            dialog = document.createElement("div");
-            dialog.id = "input-dialog";
+    var dialog, text, input;
+    dialog = document.createElement("div");
+    dialog.id = "input-dialog";
 
-            text = document.createElement("span");
-            text.id = "input-dialog-text";
-            input = document.createElement("input");
-            input.id = "input-dialog-input";
+    text = document.createElement("span");
+    text.id = "input-dialog-text";
+    input = document.createElement("input");
+    input.id = "input-dialog-input";
+    $(input).on( "input", function(){
+        this.style.outlineColor = "";
+        $(dialog).parent().find("button:eq(1)").button( "option", "disabled", false );
+    });
 
-            dialog.appendChild(text);
-            dialog.appendChild(input);
-        } else {
-            dialog = document.getElementById("input-dialog");
-            text = document.getElementById("input-dialog-text");
-            input = document.getElementById("input-dialog-input");
+    dialog.appendChild(text);
+    dialog.appendChild(input);
+
+
+
+
+    $(dialog).dialog({
+        modal: "true",
+        width: 380,
+        autoOpen: false
+    });
+
+    //now first button is default button
+    $(dialog).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $(this).parent()
+                .find("button:eq(1)").trigger("click");
+            return false;
         }
+        event.stopPropagation();
+    });
 
-        $(dialog).dialog({
-            modal: "true",
-            width: 380,
-            autoOpen: false
-        });
+    function InputDialogView(title, inputText, buttonText) {
+
 
         var instance = {
-            open: function (callback) {
+
+            open: function (callback, verificator) {
+                input.style.outlineColor = "";
+                $(dialog).parent().find("button:eq(1)").button( "option", "disabled", true );
                 $(dialog).dialog('option', 'title', title);
                 text.innerHTML = inputText;
                 $(dialog).dialog("option", "buttons", [
                         {
                             text: buttonText,
-                            click: function () {
-                                callback(input.value);
-                                $(this).dialog("close");
+                            click: function (event) {
+                                if (verificator != undefined && verificator != null) {
+                                    if(verificator(input.value)){
+                                        callback(input.value);
+                                        $(this).dialog("close");
+                                    } else{
+                                        input.style.outlineColor = "red";
+                                        $(this).parent().find("button:eq(1)").button( "option", "disabled", true );
+                                        input.focus();
+                                    }
+                                } else{
+                                    callback(input.value);
+                                    $(this).dialog("close");
+                                }
+                                event.stopPropagation();
                             }
                         },
                         {
                             text: "Cancel",
-                            click: function () {
+                            click: function (event) {
                                 $(this).dialog("close");
+                                event.stopPropagation();
                             }
                         }
                     ]

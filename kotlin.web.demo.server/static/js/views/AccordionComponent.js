@@ -36,6 +36,7 @@ var AccordionView = (function () {
 //        var programsView = new ProgramsView(programsModel);
 
         var downloadedProjects = {};
+        var userProjectUrls = [];
         var selectedProject = null;
         var instance = {
             onLoadExampleHeaders: function (data) {
@@ -87,6 +88,14 @@ var AccordionView = (function () {
             },
             getSelectedProject: function () {
                 return selectedProject;
+            },
+            verifyNewProjectname: function(projectName){
+                for(var i=0; i < userProjectUrls.length; ++i){
+                    if(userProjectUrls[i] == "My_Programs&name=" + projectName){
+                        return false;
+                    }
+                }
+                return true;
             }
         };
 
@@ -151,7 +160,7 @@ var AccordionView = (function () {
             addNewProjectText.style.cursor = "pointer";
             addNewProjectDiv.appendChild(addNewProjectText);
 
-            addNewProjectDiv.onclick = newProjectDialog.open.bind(null, headersProvider.addNewProject);
+            addNewProjectDiv.onclick = newProjectDialog.open.bind(null, headersProvider.addNewProject, accordion.verifyNewProjectname);
             cont.appendChild(addNewProjectDiv);
         }
 
@@ -176,6 +185,7 @@ var AccordionView = (function () {
             projectHeader.appendChild(nameSpan);
 
             if (folder == "My Programs") {
+                userProjectUrls.push(createExampleUrl(name, folder));
                 var deleteButton = document.createElement("div");
                 deleteButton.className = "delete-img";
                 deleteButton.title = "Delete this project";
@@ -191,7 +201,7 @@ var AccordionView = (function () {
                 renameImg.title = "Rename this file";
                 renameImg.onclick = function (event) {
                     var url = this.parentNode.id.substring(0, this.parentNode.id.indexOf("_header"));
-                    renameProjectDialog.open(headersProvider.renameProject.bind(null, url));
+                    renameProjectDialog.open(headersProvider.renameProject.bind(null, url), accordion.verifyNewProjectname);
                     event.stopPropagation();
 
                 };

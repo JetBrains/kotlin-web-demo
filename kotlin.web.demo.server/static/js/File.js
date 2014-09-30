@@ -98,7 +98,7 @@ var File = (function () {
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename this file";
                 renameImg.onclick = function (event) {
-                    renameFileDialog.open(provider.renameFile.bind(null, getUrl()));
+                    renameFileDialog.open(provider.renameFile.bind(null, getUrl()), project.verifyNewFilename);
                     event.stopPropagation();
                 };
 

@@ -131,7 +131,7 @@ var Project = (function () {
             },
             saveAs: function () {
                 if (loginView.isLoggedIn()) {
-                    saveProjectDialog.open(projectProvider.forkProject.bind(null, instance.getModifiableContent()))
+                    saveProjectDialog.open(projectProvider.forkProject.bind(null, instance.getModifiableContent()), accordion.verifyNewProjectname)
                 } else {
                     $("#login-dialog").dialog("open");
                 }
@@ -166,6 +166,15 @@ var Project = (function () {
             },
             isUserProject: function () {
                 return isUserProject();
+            },
+            verifyNewFilename: function(fileName){
+                fileName = fileName.endsWith(".kt") ? fileName : fileName + ".kt";
+                for(var i = 0; i< projectContent.files.length; i++){
+                    if(projectContent.files[i].name == fileName){
+                        return false;
+                    }
+                }
+                return true;
             }
         };
 
@@ -252,7 +261,7 @@ var Project = (function () {
             addFileButton.className = "example-filename";
             addFileButton.innerHTML = "Add new file";
             addFileButton.style.cursor = "pointer";
-            addFileButton.onclick = newFileDialog.open.bind(null, projectProvider.addNewFile);
+            addFileButton.onclick = newFileDialog.open.bind(null, projectProvider.addNewFile, instance.verifyNewFilename);
             return addFileButton;
         }
 

@@ -117,7 +117,6 @@
 .global-header .try-kotlin-button {
     top: -1px; }
 .global-header .get-kotlin-button {
-    margin-left: 24px;
     top: -2px; }
 .global-header .get-kotlin-button .version {
     font-size: 12px; }
@@ -163,8 +162,8 @@
     text-decoration: none; }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .global-header-logo {
-        background-image: url("logos-sprite@2x.png");
-        background-image: url("logos-sprite@2x.png");
+        background-image: url("../../images/logos-sprite@2x.png");
+        background-image: url("../../images/logos-sprite@2x.png");
         background-size: 150px 100px; } }
 
 .page_index .global-header-logo {

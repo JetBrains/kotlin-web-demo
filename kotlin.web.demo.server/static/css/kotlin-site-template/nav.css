@@ -45,12 +45,12 @@
 }
 
 .global-nav .extra-nav {
-    overflow: hidden;
+    display: inline-block;
     left: 100%;
-    margin-left: 15px;
+    font-size: 14px;
+    margin-left: 24px;
     white-space: nowrap;
 }
-
 @media (max-width: 1205px) {
     .global-nav .extra-nav {
         left: auto;
