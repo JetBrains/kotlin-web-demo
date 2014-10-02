@@ -442,7 +442,7 @@ var KotlinEditor = (function () {
 
             },
             onChange: function () {
-                if(openedElement != null) {
+                if (openedElement != null) {
                     openedElement.onContentChange(my_editor.getValue());
                 }
                 runTimerForNonPrinting()
@@ -455,6 +455,15 @@ var KotlinEditor = (function () {
         });
 
         var instance = {
+            resize: function () {
+                var workspaceHeight = document.getElementById("workspace").clientHeight;
+                var toolBoxHeight = document.getElementById("toolbox").clientHeight;
+                var commandLineArgumentsHeight = document.getElementById("command-line-arguments").clientHeight;
+                var notificationsHeight = document.getElementById("editor-notifications").clientHeight;
+                var editorHeight = workspaceHeight - toolBoxHeight - commandLineArgumentsHeight - notificationsHeight;
+                document.getElementById("scroll").style.height = editorHeight + "px";
+                document.getElementById("gutter").style.height = editorHeight + "px";
+            },
             loadExampleOrProgram: function (status, example) {
                 if (status) {
                     my_editor.setValue(example.text);
@@ -502,7 +511,6 @@ var KotlinEditor = (function () {
                 highlighting.removeStyles();
 
 
-
                 if (!element.modifiable) {
                     my_editor.setOption("readOnly", "nocursor");
                 } else {
@@ -515,7 +523,7 @@ var KotlinEditor = (function () {
                 openedElement = element;
                 highlighting.updateHighlighting();
             },
-            closeFile: function(){
+            closeFile: function () {
                 openedElement = null;
                 highlighting.removeStyles();
                 my_editor.setValue("");

@@ -421,8 +421,7 @@ var show = function () {
     document.getElementById("console-button").className = "console-arguments-button-active";
     document.getElementById("command-line-arguments").className = "command-line-arguments-visible";
 
-    document.getElementById("scroll").style.height = "513px";
-    document.getElementById("gutter").style.height = "513px";
+    editor.resize();
 };
 
 var hide = function () {
@@ -431,13 +430,11 @@ var hide = function () {
     document.getElementById("console-button").className = "console-arguments-button";
     document.getElementById("command-line-arguments").className = "command-line-arguments-hidden";
 
-    document.getElementById("scroll").style.height = "548px";
-    document.getElementById("gutter").style.height = "548px";
+    editor.resize();
 };
 document.getElementById("console-image").onclick = hide;
 
-document.getElementById("scroll").style.height = "513px";
-document.getElementById("gutter").style.height = "513px";
+editor.resize();
 
 setKotlinVersion = function () {
     $("#kotlinVersionTop").html("(" + KOTLIN_VERSION + ")");

@@ -23,7 +23,7 @@
     border-top-left-radius: 4px;
 }
 
-.toolbox {
+#toolbox {
     background-color: #e8e8e8;
     line-height: 1;
     width: 100%;
@@ -97,7 +97,7 @@
     float: left;
 }
 
-.toolbox:after {
+#toolbox:after {
     clear: both;
     height: 0;
     content: '';
@@ -136,10 +136,11 @@ select {
 }
 
 
-.workspace {
+#workspace {
     position: relative;
     margin-left: 25%;
     height: 100%;
+    border-left: 1px  solid #969696;
 }
 
 .workspace:after {
@@ -154,9 +155,8 @@ select {
     float: left;
     margin-top: 4px;
     margin-left: 4px;
-    border: 1px solid;
+    border: 1px solid #969696;
     border-bottom-width: 0;
-    border-color: #969696;
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
     padding: 4px;

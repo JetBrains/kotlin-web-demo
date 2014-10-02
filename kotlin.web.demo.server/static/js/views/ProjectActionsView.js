@@ -42,6 +42,7 @@ var ProjectActionsView = (function () {
                     default:
                         throw "Unknown project actions view status";
                 }
+                editor.resize();
             }
         };
 
