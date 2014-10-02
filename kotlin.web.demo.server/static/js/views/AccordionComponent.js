@@ -138,7 +138,10 @@ var AccordionView = (function () {
             localStorage.removeItem("openedItemUrl");
             if (openedItemUrl != null && document.getElementById(openedItemUrl) != null) {
                 document.getElementById(openedItemUrl).parentNode.parentNode.previousSibling.click();
-                document.getElementById(openedItemUrl).click();
+                onProjectHeaderClick(openedItemUrl);
+                if(localStorage.getItem("incompleteAction") == "save"){
+                    selectedProject.saveAs();
+                }
             } else {
                 element.accordion('option', 'active', 0);
                 element.children()[1].children[0].click();

@@ -140,6 +140,7 @@ var Project = (function () {
                 if (loginView.isLoggedIn()) {
                     saveProjectDialog.open(forkProject, instance.getName())
                 } else {
+                    localStorage.setItem("incompleteAction", "save");
                     $("#login-dialog").dialog("open");
                 }
             },
