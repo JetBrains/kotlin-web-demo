@@ -110,7 +110,9 @@ var File = (function () {
                 deleteImg.className = "delete-img";
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
-                    provider.deleteFile(instance.getUrl());
+                    if(confirm("Delete file " + instance.name)){
+                        provider.deleteFile(instance.getUrl());
+                    }
                     event.stopPropagation();
                 };
                 element.appendChild(deleteImg);

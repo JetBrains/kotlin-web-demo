@@ -193,7 +193,10 @@ var AccordionView = (function () {
                 deleteButton.title = "Delete this project";
                 deleteButton.onclick = function (event) {
                     var url = this.parentNode.id.substring(0, this.parentNode.id.indexOf("_header"));
-                    headersProvider.deleteProject(url);
+                    var name = url.substring(url.indexOf("&name=") + "&name=".length );
+                    if(confirm("Delete project " + name + "?")) {
+                        headersProvider.deleteProject(url);
+                    }
                     event.stopPropagation();
                 };
 
