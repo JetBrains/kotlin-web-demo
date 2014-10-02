@@ -14,46 +14,6 @@
  * limitations under the License.
  */
 
-var ActionStatusMessages = {
-    load_example_ok: "Example is loaded.",
-    load_example_fail: "Can't load the example from server.",
-    load_help_for_examples_ok: "Help for examples was loaded from server.",
-    load_help_for_examples_fail: "Can't get help for examples from server.",
-    load_help_for_words_ok: "Help for words was loaded from server.",
-    load_help_for_words_fail: "Can't get help for words from server.",
-    change_configuration_ok: "Configuration was changed.",
-    change_configuration_fail: "Can't change configuration.",
-    get_highlighting_ok: "Errors and warnings were loaded.",
-    get_highlighting_fail: "Can't get errors/warnings.",
-    get_completion_ok: "Completion proposal list was loaded from server.",
-    get_completion_fail: "Can't get completion proposal list from server.",
-    run_java_ok: "Compilation competed successfully.",
-    run_java_fail: "Can't get program output.",
-    run_js_ok: "Translation competed successfully.",
-    run_js_fail: "Can't get translation result from server.",
-    login_ok: "Log in successful.",
-    login_fail: "Log in fail.",
-    logout_ok: "Log out successful.",
-    logout_fail: "Log out fail.",
-    load_program_ok: "Program is loaded.",
-    load_program_fail: "Can't load the program from server.",
-    load_programs_fail: "Can't load programs from server.",
-    load_examples_fail: "Can't load examples from server.",
-    generate_link_ok: "Public link is generated.",
-    generate_link_fail: "Can't generate the public link for program.",
-    delete_program_ok: "Program is deleted.",
-    delete_program_fail: "Can't delete the program from server.",
-    convert_java_to_kotlin_ok: "Translation result was loaded in editor.",
-    convert_java_to_kotlin_fail: "Can't convert you Java file to Kotlin.",
-    save_program_ok: "Program was successfully saved.",
-    save_program_fail: "Can't save the program on server.",
-    loading_highlighting: "Loading highlighting...",
-    loading_completion: "Loading completion..",
-
-
-    get_result_from_applet_fail: "Your browser can't run Java Applets."
-};
-
 var sessionId = -1;
 
 var configurationManager = new ConfigurationComponent();
@@ -82,7 +42,7 @@ actionManager.registerAction("org.jetbrains.web.demo.save",
 var editor = new KotlinEditor();
 
 var argumentsView = $("#arguments");
-var statusBarView = $("#statusbar");
+var statusBarView = new StatusBarView(document.getElementById("status-bar"));
 var generatedCodeView = new GeneratedCodeView($("#generated-code"));
 var consoleView = new ConsoleView($("#console"), $("#result-tabs"));
 var junitView = new JUnitView($("#console"), $("#result-tabs"));
@@ -124,13 +84,13 @@ var runProvider = (function () {
         } else {
             consoleView.setOutput(output);
         }
-        statusBarView.html(ActionStatusMessages.run_java_ok);
+        statusBarView.setStatus(statusBarView.statusMessages.run_java_ok);
     }
 
     function onFail (error) {
         run_button.button("option", "disabled", false);
         consoleView.writeException(error);
-        statusBarView.html(ActionStatusMessages.run_java_fail);
+        statusBarView.setStatus(statusBarView.statusMessages.run_java_fail);
     }
 
     return new RunProvider(onSuccess, onFail);
@@ -145,13 +105,13 @@ var converterProvider = (function () {
         editor.refreshMode();
         editor.setText(data);
         editor.indentAll();
-        statusBarView.html(ActionStatusMessages.convert_java_to_kotlin_ok);
+        statusBarView.setStatus(statusBarView.statusMessages.convert_java_to_kotlin_ok);
     }
 
     function onFail(error){
         converterView.closeDialog();
         consoleView.writeException(error);
-        statusBarView.html(ActionStatusMessages.convert_java_to_kotlin_fail);
+        statusBarView.setStatus(statusBarView.statusMessages.convert_java_to_kotlin_fail);
     }
 
     return new ConverterProvider(onSuccess, onFail);
@@ -161,14 +121,20 @@ var highlightingProvider = (function () {
     function onSuccess(data, callback) {
         accordion.getSelectedProject().processHighlightingResult(data);
         problemsView.addMessages(data);
-        statusBarView.html(ActionStatusMessages.get_highlighting_ok);
+
+        var noOfErrorsAndWarnings = 0;
+
+        for(var filename in data){
+            noOfErrorsAndWarnings += data[filename].length
+        }
+        statusBarView.setStatus(statusBarView.statusMessages.get_highlighting_ok, [noOfErrorsAndWarnings]);
         callback(data);
     }
 
     function onFail(error) {
         run_button.button("option", "disabled", false);
         consoleView.writeException(error);
-        statusBarView.html(ActionStatusMessages.get_highlighting_fail);
+        statusBarView.setStatus(statusBarView.statusMessages.get_highlighting_fail);
     }
 
     return new HighlichtingProvider(onSuccess, onFail)
@@ -177,11 +143,11 @@ var highlightingProvider = (function () {
 var completionProvider = (function () {
     function onSuccess(completionObject) {
         editor.showCompletionResult(completionObject);
-        statusBarView.html(ActionStatusMessages.get_completion_ok);
+        statusBarView.setStatus(statusBarView.statusMessages.get_completion_ok);
     }
     function onFail(error) {
         consoleView.writeException(error);
-        statusBarView.html(ActionStatusMessages.get_completion_fail);
+        statusBarView.setStatus(statusBarView.statusMessages.get_completion_fail);
     }
 
     return new CompletionProvider(onSuccess, onFail);
@@ -199,7 +165,7 @@ configurationManager.onChange = function (configuration) {
 
 configurationManager.onFail = function (exception) {
     consoleView.writeException(exception);
-    statusBarView.html(ActionStatusMessages.change_configuration_fail);
+    statusBarView.setMessage(ActionStatusMessages.change_configuration_fail);
 };
 
 var timer;
@@ -208,7 +174,7 @@ editor.onCursorActivity = function (cursorPosition) {
     var messageForLineAtCursor = editor.getMessageForLineAtCursor(cursorPosition);
     //Save previous message if current is empty
     if (messageForLineAtCursor != "") {
-        statusBarView.html(messageForLineAtCursor);
+        statusBarView.setMessage(messageForLineAtCursor);
     }
 
     var wordsHelp = $("#words-help");
@@ -256,47 +222,47 @@ var run_button = $("#run-button")
 
 accordion.onFail = function (exception, actionCode) {
     consoleView.writeException(exception);
-    statusBarView.html(actionCode);
+    statusBarView.setMessage(actionCode);
 };
 accordion.onLoadCode = function (element, isProgram) {
     if (!isProgram) {
         helpViewForExamples.showHelp(element.help);
-        statusBarView.html(ActionStatusMessages.load_example_ok);
+        statusBarView.setStatus(statusBarView.statusMessages.load_example_ok);
         argumentsView.val(element.args);
         configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
     } else {
         helpViewForExamples.hide();
-        statusBarView.html(ActionStatusMessages.load_program_ok);
+        statusBarView.setStatus(statusBarView.statusMessages.load_program_ok);
         argumentsView.val(element.args);
         configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
     }
 };
 
 accordion.onDeleteProgram = function () {
-    statusBarView.html(ActionStatusMessages.delete_program_ok);
+    statusBarView.setStatus(statusBarView.statusMessages.delete_program_ok);
 };
 
 accordion.onSaveProgram = function () {
     editor.markAsUnchanged();
-    statusBarView.html(ActionStatusMessages.save_program_ok);
+    statusBarView.setStatus(statusBarView.statusMessages.save_program_ok);
 };
 
 loginProvider.onLogin = function (data) {
     loginView.setUserName(data);
-    statusBarView.html(ActionStatusMessages.login_ok);
+    statusBarView.setStatus(statusBarView.statusMessages.login_ok);
     accordion.loadAllContent();
 };
 
 loginProvider.onLogout = function () {
     accordion.getSelectedProject().save();
     loginView.logout();
-    statusBarView.html(ActionStatusMessages.logout_ok);
+    statusBarView.setStatus(statusBarView.statusMessages.logout_ok);
     accordion.onLogout();
 };
 
 loginProvider.onFail = function (exception, actionCode) {
     consoleView.writeException(exception);
-    statusBarView.html(actionCode);
+    statusBarView.setMessage(actionCode);
 };
 
 $(document).keydown(function (e) {
