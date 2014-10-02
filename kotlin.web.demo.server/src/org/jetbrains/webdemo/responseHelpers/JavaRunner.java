@@ -28,12 +28,11 @@ import org.jetbrains.jet.plugin.MainFunctionDetector;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.examplesLoader.ExampleObject;
+import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class JavaRunner {
@@ -48,9 +47,9 @@ public class JavaRunner {
 
     private volatile boolean isTimeoutException = false;
 
-    private ExampleObject example;
+    private Project example;
 
-    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, SessionInfo info, ExampleObject example) {
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, SessionInfo info, Project example) {
         this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;

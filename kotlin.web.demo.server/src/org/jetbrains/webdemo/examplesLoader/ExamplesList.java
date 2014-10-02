@@ -59,7 +59,7 @@ public class ExamplesList {
         exampleName = exampleName.replaceAll("_", " ");
 
         ExamplesFolder folder = examplesFolders.get(folderName);
-        ExampleObject example = folder.examples.get(exampleName);
+        Project example = folder.examples.get(exampleName);
 
         try {
             return objectMapper.writeValueAsString(example);
@@ -68,12 +68,12 @@ public class ExamplesList {
         }
     }
 
-    public static ExampleObject getExampleObject(String url) {
+    public static Project getExampleObject(String url) {
         ExamplesFolder examplesFolder = examplesFolders.get(ResponseUtils.substringBefore(url, "&name=").replaceAll("_", " "));
         return examplesFolder.examples.get(ResponseUtils.substringAfter(url, "&name=").replaceAll("_", " "));
     }
 
-    public static ExampleObject getExampleObject(String name, String folder) {
+    public static Project getExampleObject(String name, String folder) {
         ExamplesFolder examplesFolder = examplesFolders.get(folder.replaceAll("_", " "));
         if(examplesFolder != null) {
             return examplesFolder.examples.get(name.replaceAll("_", " "));

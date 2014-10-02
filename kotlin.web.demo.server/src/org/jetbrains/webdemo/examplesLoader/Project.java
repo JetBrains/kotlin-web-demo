@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ExampleObject {
+public class Project {
     /**
      * This field is needed when user makes copy of example. Url of this example will be stored here.
      */
@@ -54,7 +54,7 @@ public class ExampleObject {
     public List<ProjectFile> files = new ArrayList<>();
 
 
-    public ExampleObject(){
+    public Project(){
 
     }
 
@@ -64,8 +64,8 @@ public class ExampleObject {
      * @param exampleFolderName - Name of example folder
      * @throws IOException - if example folder has no manifest file, if example files do not exists, or some other problem with IO.
      */
-    public ExampleObject(@NotNull String parent, @NotNull String exampleFolderName) throws IOException {
-        originUrl = parent + "&name=" + exampleFolderName;
+    public Project(@NotNull String parent, @NotNull String exampleFolderName) throws IOException {
+        originUrl = parent.replaceAll(" ", "_") + "&name=" + exampleFolderName.replaceAll(" ", "_");
         ObjectMapper objectMapper = new ObjectMapper();
         this.parent = parent;
         String exampleFolderPath = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + parent + File.separator + exampleFolderName + File.separator;

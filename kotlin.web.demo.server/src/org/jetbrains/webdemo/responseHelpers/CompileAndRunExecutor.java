@@ -19,7 +19,6 @@ package org.jetbrains.webdemo.responseHelpers;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.jet.OutputFile;
@@ -35,7 +34,7 @@ import org.jetbrains.webdemo.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
-import org.jetbrains.webdemo.examplesLoader.ExampleObject;
+import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -52,10 +51,10 @@ public class CompileAndRunExecutor {
     private final List<PsiFile> currentPsiFiles;
 
     private final SessionInfo sessionInfo;
-    private final ExampleObject example;
-    private final Project currentProject;
+    private final Project example;
+    private final com.intellij.openapi.project.Project currentProject;
 
-    public CompileAndRunExecutor(List<PsiFile> currentPsiFiles, Project currentProject, SessionInfo info, ExampleObject example) {
+    public CompileAndRunExecutor(List<PsiFile> currentPsiFiles, com.intellij.openapi.project.Project currentProject, SessionInfo info, Project example) {
         this.currentPsiFiles = currentPsiFiles;
         this.currentProject = currentProject;
         this.sessionInfo = info;

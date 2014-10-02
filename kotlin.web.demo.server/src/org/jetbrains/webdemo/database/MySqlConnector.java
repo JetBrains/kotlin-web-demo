@@ -24,8 +24,8 @@ import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;
-import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -39,7 +39,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MySqlConnector {
     private static final MySqlConnector connector = new MySqlConnector();
@@ -370,7 +369,7 @@ public class MySqlConnector {
     }
 
 
-    public void saveProject(UserInfo userInfo, ExampleObject project) throws DatabaseOperationException {
+    public void saveProject(UserInfo userInfo, Project project) throws DatabaseOperationException {
         int userId = getUserId(userInfo);
         try (PreparedStatement st = connection.prepareStatement(
                 "UPDATE projects SET projects.args = ? , projects.run_configuration = ? " +
@@ -423,7 +422,7 @@ public class MySqlConnector {
         }
     }
 
-    public void addProject(UserInfo userInfo, ExampleObject project) throws DatabaseOperationException {
+    public void addProject(UserInfo userInfo, Project project) throws DatabaseOperationException {
         int userId = getUserId(userInfo);
         PreparedStatement st = null;
         try {
@@ -533,7 +532,7 @@ public class MySqlConnector {
             rs = st.executeQuery();
 
             if (rs.next()) {
-                ExampleObject project = new ExampleObject();
+                Project project = new Project();
                 project.parent = "My Programs";
                 project.name = projectName;
                 project.args = rs.getString("args");
@@ -543,7 +542,7 @@ public class MySqlConnector {
                 project.isLocalVersion = true;
                 if (rs.getString("origin") != null) {
                     project.originUrl = rs.getString("origin");
-                    ExampleObject storedExample = ExamplesList.getExampleObject(rs.getString("origin"));
+                    Project storedExample = ExamplesList.getExampleObject(rs.getString("origin"));
                     for(ProjectFile file : storedExample.files){
                         if(!file.isModifiable()){
                             project.files.add(file);

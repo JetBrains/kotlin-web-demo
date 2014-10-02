@@ -19,11 +19,9 @@ package org.jetbrains.webdemo.examplesLoader;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -33,7 +31,7 @@ public class ExamplesFolder {
 
     public String name;
     public List<String> examplesOrder = new ArrayList<>();
-    @JsonIgnore public Map<String, ExampleObject> examples = new HashMap<>();
+    @JsonIgnore public Map<String, Project> examples = new HashMap<>();
     private String path;
 
     public ExamplesFolder(String name){
@@ -45,7 +43,7 @@ public class ExamplesFolder {
         path = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName;
         for (String exampleName : exampleNames) {
             try {
-                ExampleObject example = new ExampleObject(folderName, exampleName);
+                Project example = new Project(folderName, exampleName);
                 example.parent = folderName;
                 examplesOrder.add(example.name);
                 examples.put(exampleName, example);

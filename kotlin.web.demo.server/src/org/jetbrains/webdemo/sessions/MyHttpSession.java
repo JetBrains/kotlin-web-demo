@@ -17,7 +17,6 @@
 package org.jetbrains.webdemo.sessions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
@@ -26,8 +25,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
+import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;
-import org.jetbrains.webdemo.examplesLoader.ExampleObject;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
@@ -43,7 +42,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MyHttpSession {
     @NonNls
@@ -52,7 +50,7 @@ public class MyHttpSession {
     private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
     private final SessionInfo sessionInfo;
     private final Map<String, String[]> parameters;
-    protected Project currentProject;
+    protected com.intellij.openapi.project.Project currentProject;
     protected PsiFile currentPsiFile;
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -192,7 +190,7 @@ public class MyHttpSession {
         try {
             if (content != null) {
                 try {
-                    ExampleObject project = objectMapper.readValue(content[0], ExampleObject.class);
+                    Project project = objectMapper.readValue(content[0], Project.class);
                     project.name = parameters.get("args")[0].replaceAll("_", " "); //when user calls save as we must change project name
                     project.parent = "My Programs"; //to show that it is user project, not example
                     MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), project);
@@ -256,7 +254,7 @@ public class MyHttpSession {
 
     private void sendSaveProjectResult() {
         try {
-            ExampleObject project = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
+            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
             MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), project);
             writeResponse("ок", HttpServletResponse.SC_OK);
         } catch (IOException e) {
@@ -287,7 +285,7 @@ public class MyHttpSession {
     private void sendExecutorResult() {
         try {
 
-            ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
+            Project example = objectMapper.readValue(parameters.get("project")[0], Project.class);
             if (example.originUrl != null) {
                 addUnmodifiableDataToExample(example, example.originUrl);
             }
@@ -314,7 +312,7 @@ public class MyHttpSession {
         writeResponse(ExamplesList.loadExample(parameters.get("args")[0].replaceAll("_", " "), parameters.get("name")[0].replaceAll("_", " ")), HttpServletResponse.SC_OK);
     }
 
-    private List<PsiFile> createProjectPsiFiles(ExampleObject example) {
+    private List<PsiFile> createProjectPsiFiles(Project example) {
         List<PsiFile> result = new ArrayList<>();
         currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
         for(ProjectFile file : example.files){
@@ -328,7 +326,7 @@ public class MyHttpSession {
             String fileName = parameters.get("filename")[0].replaceAll("_", " ");
             int line = Integer.parseInt(parameters.get("line")[0]);
             int ch = Integer.parseInt(parameters.get("ch")[0]);
-            ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
+            Project example = objectMapper.readValue(parameters.get("project")[0], Project.class);
             if (example.originUrl != null) {
                 addUnmodifiableDataToExample(example, example.originUrl);
             }
@@ -349,7 +347,7 @@ public class MyHttpSession {
         sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         sessionInfo.setRunConfiguration(parameters.get("args")[0]);
         try {
-            ExampleObject example = objectMapper.readValue(parameters.get("project")[0], ExampleObject.class);
+            Project example = objectMapper.readValue(parameters.get("project")[0], Project.class);
             if (example.originUrl != null) {
                 addUnmodifiableDataToExample(example, example.originUrl);
             }
@@ -396,8 +394,8 @@ public class MyHttpSession {
     }
 
 
-    private ExampleObject addUnmodifiableDataToExample(ExampleObject exampleObject, String originUrl) {
-        ExampleObject storedExample = ExamplesList.getExampleObject(originUrl);
+    private Project addUnmodifiableDataToExample(Project exampleObject, String originUrl) {
+        Project storedExample = ExamplesList.getExampleObject(originUrl);
         for(ProjectFile file : storedExample.files){
             if(!file.isModifiable()){
                 exampleObject.files.add(file);
