@@ -62,8 +62,9 @@ var LoginView = (function () {
             login("google");
         });
 
-        document.getElementById("logout").onclick = function () {
+        document.getElementById("logout").onclick = function (event) {
             model.logout();
+            event.stopPropagation();
         };
 
         model.getUserName();
