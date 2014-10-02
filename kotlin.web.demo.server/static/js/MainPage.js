@@ -288,6 +288,7 @@ loginProvider.onLogin = function (data) {
 };
 
 loginProvider.onLogout = function () {
+    accordion.getSelectedProject().save();
     loginView.logout();
     statusBarView.html(ActionStatusMessages.logout_ok);
     accordion.onLogout();
