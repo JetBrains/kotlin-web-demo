@@ -20,7 +20,7 @@
 
 
 var ProjectActionsView = (function () {
-    function ProjectActionsView(element) {
+    function ProjectActionsView(element, project) {
 
         var status = "default";
         var instance = {
@@ -54,7 +54,6 @@ var ProjectActionsView = (function () {
         };
 
         function setUnsavedChangesStatus() {
-            var project = accordion.getSelectedProject();
             if (!project.isUserProject()) {
                 element.innerHTML = "";
                 element.style.display = "block";
@@ -82,7 +81,6 @@ var ProjectActionsView = (function () {
         }
 
         function setLocalVersionStatus() {
-            var project = accordion.getSelectedProject();
             element.innerHTML = "";
             element.style.display = "block";
 

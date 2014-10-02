@@ -140,6 +140,7 @@ var Project = (function () {
                 if (loginView.isLoggedIn()) {
                     saveProjectDialog.open(forkProject, instance.getName())
                 } else {
+                    localStorage.setItem(url, JSON.stringify(projectContent));
                     localStorage.setItem("incompleteAction", "save");
                     $("#login-dialog").dialog("open");
                 }
@@ -248,7 +249,9 @@ var Project = (function () {
                 }
             }
             projectContent.files.splice(id, 1);
+
             if (projectContent.files.length == 0) {
+                selectedFile = null;
                 editor.closeFile();
             } else if (selectedFile == file) {
                 selectedFile = null;
