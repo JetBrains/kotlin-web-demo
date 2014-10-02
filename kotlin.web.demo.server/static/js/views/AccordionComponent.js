@@ -82,6 +82,7 @@ var AccordionView = (function () {
             onFail: function (exception, messageForStatusBar) {
             },
             onLogout: function () {
+                localStorage.setItem("openedItemUrl", accordion.getSelectedProject().getUrl());
                 downloadedProjects = {};
                 selectedProject = null;
                 instance.loadAllContent();
@@ -140,6 +141,7 @@ var AccordionView = (function () {
                 document.getElementById(openedItemUrl).parentNode.parentNode.previousSibling.click();
                 onProjectHeaderClick(openedItemUrl);
                 if(localStorage.getItem("incompleteAction") == "save"){
+                    localStorage.removeItem("incompleteAction");
                     selectedProject.saveAs();
                 }
             } else {
