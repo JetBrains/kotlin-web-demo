@@ -19,7 +19,7 @@
  */
 
 var File = (function () {
-    var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
+
 
     function File(project, name, content, modifiable, element) {
         var fileNameElement;
@@ -58,6 +58,9 @@ var File = (function () {
                 fileNameElement.innerHTML = newName;
             }
         };
+
+        var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
+        renameFileDialog.verify = project.verifyNewFilename;
 
         var provider = (function () {
             provider = new FileProvider();
@@ -98,7 +101,7 @@ var File = (function () {
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename this file";
                 renameImg.onclick = function (event) {
-                    renameFileDialog.open(provider.renameFile.bind(null, getUrl()), project.verifyNewFilename);
+                    renameFileDialog.open( provider.renameFile.bind(null, getUrl()), getNameWithoutExtension() );
                     event.stopPropagation();
                 };
 
@@ -121,6 +124,10 @@ var File = (function () {
 
         function getUrl() {
             return project.getUrl() + "&filename=" + instance.name;
+        }
+
+        function getNameWithoutExtension(){
+            return instance.name.slice(0, -3);
         }
 
         return instance;

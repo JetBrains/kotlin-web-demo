@@ -20,8 +20,6 @@
 
 
 var Project = (function () {
-    var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
-    var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
 
     function Project(url, element, projectContent) {
 
@@ -131,7 +129,7 @@ var Project = (function () {
             },
             saveAs: function () {
                 if (loginView.isLoggedIn()) {
-                    saveProjectDialog.open(projectProvider.forkProject.bind(null, instance.getModifiableContent()), accordion.verifyNewProjectname)
+                    saveProjectDialog.open(projectProvider.forkProject.bind(null, instance.getModifiableContent()), instance.getName())
                 } else {
                     $("#login-dialog").dialog("open");
                 }
@@ -178,6 +176,10 @@ var Project = (function () {
             }
         };
 
+        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
+        newFileDialog.verify = instance.verifyNewFilename;
+        var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
+        saveProjectDialog.verify = accordion.verifyNewProjectname;
 
         var actionsView = new ProjectActionsView(document.getElementById("editor-notifications"), instance);
 
@@ -261,7 +263,9 @@ var Project = (function () {
             addFileButton.className = "example-filename";
             addFileButton.innerHTML = "Add new file";
             addFileButton.style.cursor = "pointer";
-            addFileButton.onclick = newFileDialog.open.bind(null, projectProvider.addNewFile, instance.verifyNewFilename);
+            addFileButton.onclick = function(){
+                newFileDialog.open(projectProvider.addNewFile, "File");
+            };
             return addFileButton;
         }
 

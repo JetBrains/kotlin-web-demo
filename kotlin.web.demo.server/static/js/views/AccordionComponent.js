@@ -89,9 +89,9 @@ var AccordionView = (function () {
             getSelectedProject: function () {
                 return selectedProject;
             },
-            verifyNewProjectname: function(projectName){
-                for(var i=0; i < userProjectUrls.length; ++i){
-                    if(userProjectUrls[i] == "My_Programs&name=" + projectName){
+            verifyNewProjectname: function (projectName) {
+                for (var url in downloadedProjects) {
+                    if (url == "My_Programs&name=" + projectName.replace(/ /g, "_")) {
                         return false;
                     }
                 }
@@ -111,7 +111,9 @@ var AccordionView = (function () {
 
 
         var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add");
+        newProjectDialog.verify = instance.verifyNewProjectname;
         var renameProjectDialog = new InputDialogView("Rename project", "Project name:", "Rename");
+        renameProjectDialog.verify = instance.verifyNewProjectname;
 
         function createProject(name, contentElement, content) {
             var url = getProjectURL("My Programs", name);
@@ -160,12 +162,13 @@ var AccordionView = (function () {
             addNewProjectText.style.cursor = "pointer";
             addNewProjectDiv.appendChild(addNewProjectText);
 
-            addNewProjectDiv.onclick = newProjectDialog.open.bind(null, headersProvider.addNewProject, accordion.verifyNewProjectname);
+            addNewProjectDiv.onclick = newProjectDialog.open.bind(null, headersProvider.addNewProject, "Project");
             cont.appendChild(addNewProjectDiv);
         }
 
 
         function createProjectHeader(folder, name) {
+            downloadedProjects[createExampleUrl(name, folder)] = null;
             var projectHeader = document.createElement("h4");
             projectHeader.className = "examples-project-name";
             var img = document.createElement("div");
@@ -185,7 +188,6 @@ var AccordionView = (function () {
             projectHeader.appendChild(nameSpan);
 
             if (folder == "My Programs") {
-                userProjectUrls.push(createExampleUrl(name, folder));
                 var deleteButton = document.createElement("div");
                 deleteButton.className = "delete-img";
                 deleteButton.title = "Delete this project";
@@ -201,7 +203,8 @@ var AccordionView = (function () {
                 renameImg.title = "Rename this file";
                 renameImg.onclick = function (event) {
                     var url = this.parentNode.id.substring(0, this.parentNode.id.indexOf("_header"));
-                    renameProjectDialog.open(headersProvider.renameProject.bind(null, url), accordion.verifyNewProjectname);
+                    var name = url.substring(url.indexOf("&name=") + "&name=".length );
+                    renameProjectDialog.open(headersProvider.renameProject.bind(null, url), name);
                     event.stopPropagation();
 
                 };
@@ -326,7 +329,7 @@ var AccordionView = (function () {
 
         function onProjectHeaderClick(url) {
             var element;
-            if (downloadedProjects[url] == undefined) {
+            if (downloadedProjects[url] == null) {
                 if (selectedProject != null) {
                     selectedProject.save();
                     element = document.getElementById(selectedProject.getUrl() + "_header");

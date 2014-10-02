@@ -29,15 +29,10 @@ var InputDialogView = (function () {
     text.id = "input-dialog-text";
     input = document.createElement("input");
     input.id = "input-dialog-input";
-    $(input).on( "input", function(){
-        this.style.outlineColor = "";
-        $(dialog).parent().find("button:eq(1)").button( "option", "disabled", false );
-    });
+
 
     dialog.appendChild(text);
     dialog.appendChild(input);
-
-
 
 
     $(dialog).dialog({
@@ -46,12 +41,13 @@ var InputDialogView = (function () {
         autoOpen: false
     });
 
-    //now first button is default button
+
     $(dialog).keydown(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13) { /*enter*/
             $(this).parent()
                 .find("button:eq(1)").trigger("click");
-            return false;
+        } else if(event.keyCode == 27){ /*escape*/
+            $(this).dialog("close");
         }
         event.stopPropagation();
     });
@@ -61,27 +57,39 @@ var InputDialogView = (function () {
 
         var instance = {
 
-            open: function (callback, verificator) {
-                input.style.outlineColor = "";
-                $(dialog).parent().find("button:eq(1)").button( "option", "disabled", true );
+            open: function (callback, defaultValue) {
+
+                input.oninput = function () {
+                    if (instance.verify(input.value)){
+                        enableInput()
+                    } else{
+                        disableInput()
+                    }
+                };
+
+                if (defaultValue != null && defaultValue != undefined) {
+                    var verifiedDefaultValue = defaultValue;
+                    var i = 1;
+                    while (!instance.verify(verifiedDefaultValue)) {
+                        verifiedDefaultValue = defaultValue + i;
+                        i = i + 1;
+                    }
+                    input.value = verifiedDefaultValue;
+                }
+
+                enableInput();
+
                 $(dialog).dialog('option', 'title', title);
                 text.innerHTML = inputText;
                 $(dialog).dialog("option", "buttons", [
                         {
                             text: buttonText,
                             click: function (event) {
-                                if (verificator != undefined && verificator != null) {
-                                    if(verificator(input.value)){
-                                        callback(input.value);
-                                        $(this).dialog("close");
-                                    } else{
-                                        input.style.outlineColor = "red";
-                                        $(this).parent().find("button:eq(1)").button( "option", "disabled", true );
-                                        input.focus();
-                                    }
-                                } else{
+                                if (instance.verify(input.value)) {
                                     callback(input.value);
                                     $(this).dialog("close");
+                                } else {
+                                    disableInput();
                                 }
                                 event.stopPropagation();
                             }
@@ -96,8 +104,25 @@ var InputDialogView = (function () {
                     ]
                 );
                 $(dialog).dialog("open");
+            },
+            verify: function (input) {
+                return true;
             }
         };
+
+
+
+        function disableInput(){
+            input.style.outlineColor = "red";
+            $(dialog).parent().find("button:eq(1)").button("option", "disabled", true);
+            input.focus();
+        }
+
+        function enableInput(){
+            input.style.outlineColor = "";
+            $(dialog).parent().find("button:eq(1)").button("option", "disabled", false);
+            input.focus();
+        }
 
         return instance;
     }
