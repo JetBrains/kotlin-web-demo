@@ -101,7 +101,12 @@ var AccordionView = (function () {
         };
 
         var headersProvider = (function () {
-            var provider = new AccordionHeadersProvider(instance.onLoadExampleHeaders, instance.onLoadUserProjectsHeaders, instance.onFail);
+            var provider = new AccordionHeadersProvider(instance.onLoadExampleHeaders, instance.onLoadUserProjectsHeaders);
+
+            provider.onFail = function(data, status){
+                console.log(data);
+                statusBarView.setStatus(status);
+            };
 
             provider.onRenameProject = function (url, newName) {
                 renameProject(url, newName);

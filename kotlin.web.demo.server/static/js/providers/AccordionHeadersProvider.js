@@ -21,7 +21,7 @@
 
 var AccordionHeadersProvider = (function () {
 
-    function AccordionHeadersProvider(onAllExamplesLoaded, onAllProgramsLoaded, onFail) {
+    function AccordionHeadersProvider(onAllExamplesLoaded, onAllProgramsLoaded) {
 
         var instance = {
             getAllExamples: function () {
@@ -41,6 +41,8 @@ var AccordionHeadersProvider = (function () {
             },
             onRenameProject: function(url, newName) {
 
+            },
+            onFail: function(){
             }
         };
 
@@ -53,17 +55,17 @@ var AccordionHeadersProvider = (function () {
                         if (checkDataForException(data)) {
                             onAllExamplesLoaded(data);
                         } else {
-                            onFail(data, ActionStatusMessages.load_examples_fail);
+                            instance.onFail(data, statusBarView.statusMessages.load_examples_fail);
                         }
                     } else {
-                        onFail("Incorrect data format.", ActionStatusMessages.load_examples_fail);
+                        instance.onFail("Incorrect data format.", statusBarView.statusMessages.load_examples_fail);
                     }
                 },
                 dataType: "json",
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_examples_fail);
+                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.load_examples_fail);
                 }
             });
         }
@@ -77,17 +79,17 @@ var AccordionHeadersProvider = (function () {
                         if (checkDataForException(data)) {
                             onAllProgramsLoaded(data);
                         } else {
-                            onFail(data, ActionStatusMessages.load_programs_fail);
+                            instance.onFail(data, statusBarView.statusMessages.load_programs_fail);
                         }
                     } else {
-                        onFail("Incorrect data format.", ActionStatusMessages.load_programs_fail);
+                        instance.onFail("Incorrect data format.", statusBarView.statusMessages.load_programs_fail);
                     }
                 },
                 dataType: "json",
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_programs_fail);
+                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.load_programs_fail);
                 }
             });
         }
@@ -101,7 +103,7 @@ var AccordionHeadersProvider = (function () {
                 type: "POST",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
                 }
             })
         }
@@ -116,7 +118,7 @@ var AccordionHeadersProvider = (function () {
                 data:{newName: newName},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
                 }
             })
         }
@@ -130,7 +132,7 @@ var AccordionHeadersProvider = (function () {
                 type: "POST",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
                 }
             })
         }
