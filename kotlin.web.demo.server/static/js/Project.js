@@ -26,6 +26,7 @@ var Project = (function () {
 
         var selectedFile = null;
         var isProjectContentChanged = false;
+        var selected = true;
 
         var instance = {
             onContentLoaded: function (data) {
@@ -40,10 +41,14 @@ var Project = (function () {
                 if (isUserProject()) {
                     element.appendChild(createAddFileButton());
                 }
+
                 if (projectContent.files.length > 0) {
                     selectFile(projectContent.files[0]);
                 }
-                instance.select();
+
+                if(selected) {
+                    instance.select();
+                }
             },
             rename: function (newName) {
                 url = url.substring(0, url.indexOf("&name=") + "&name=".length) + newName;
@@ -53,7 +58,11 @@ var Project = (function () {
                 }
 //                selectFile(selectedFile);
             },
+            deselect: function(){
+                selected = false;
+            },
             select: function () {
+                selected = true;
                 argumentsView.change = function () {
                     projectContent.args = argumentsView.val();
                 };
@@ -129,7 +138,7 @@ var Project = (function () {
             },
             saveAs: function () {
                 if (loginView.isLoggedIn()) {
-                    saveProjectDialog.open(projectProvider.forkProject.bind(null, instance.getModifiableContent()), instance.getName())
+                    saveProjectDialog.open(forkProject, instance.getName())
                 } else {
                     $("#login-dialog").dialog("open");
                 }
@@ -210,6 +219,7 @@ var Project = (function () {
             newContent.name = name;
             newContent.parent = "My Programs";
             accordion.addNewProject(newContent.name, newContent);
+            instance.restoreDefault();
         };
 
 
@@ -251,7 +261,9 @@ var Project = (function () {
             }
             selectedFile = file;
             document.getElementById(selectedFile.getUrl()).className = "example-filename-selected";
-            editor.open(selectedFile);
+            if(selected) {
+                editor.open(selectedFile);
+            }
         }
 
         function isUserProject() {
@@ -267,6 +279,10 @@ var Project = (function () {
                 newFileDialog.open(projectProvider.addNewFile, "File");
             };
             return addFileButton;
+        }
+
+        function forkProject(newProjectName){
+            projectProvider.forkProject(instance.getModifiableContent(), newProjectName)
         }
 
         return instance;

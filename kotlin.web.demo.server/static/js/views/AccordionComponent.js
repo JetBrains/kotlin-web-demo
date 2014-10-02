@@ -334,6 +334,7 @@ var AccordionView = (function () {
             var element;
             if (downloadedProjects[url] == null) {
                 if (selectedProject != null) {
+                    selectedProject.deselect();
                     selectedProject.save();
                     element = document.getElementById(selectedProject.getUrl() + "_header");
                     element.className = "examples-project-name";
@@ -344,6 +345,7 @@ var AccordionView = (function () {
                 selectedProject = downloadedProjects[url];
             } else if (downloadedProjects[url] != selectedProject) {
                 if (selectedProject != null) {
+                    selectedProject.deselect();
                     selectedProject.save();
                     element = document.getElementById(selectedProject.getUrl() + "_header");
                     element.className = "examples-project-name";
