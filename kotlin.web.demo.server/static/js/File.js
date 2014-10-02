@@ -23,6 +23,7 @@ var File = (function () {
 
     function File(project, name, content, modifiable, element) {
         var fileNameElement;
+        var isContentChanged = false;
 
         var instance = {
             name: name,
@@ -34,6 +35,7 @@ var File = (function () {
                 return getUrl();
             },
             save: function () {
+                isContentChanged = false;
                 instance.content = editor.getText();
                 if (project.isUserProject()) {
                     provider.saveFile(instance.getUrl(), this);
@@ -45,6 +47,7 @@ var File = (function () {
                 element.id = getUrl();
             },
             onContentChange: function (text) {
+                isContentChanged = true;
                 instance.content = text;
                 project.onChange();
             },
@@ -56,6 +59,9 @@ var File = (function () {
                 instance.name = newName;
                 element.id = getUrl();
                 fileNameElement.innerHTML = newName;
+            },
+            isContentChanged: function () {
+                return isContentChanged;
             }
         };
 

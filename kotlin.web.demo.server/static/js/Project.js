@@ -262,8 +262,14 @@ var Project = (function () {
             }
             selectedFile = file;
             document.getElementById(selectedFile.getUrl()).className = "example-filename-selected";
+
             if(selected) {
                 editor.open(selectedFile);
+                if (file.modifiable) {
+                    actionsView.show();
+                } else {
+                    actionsView.hide();
+                }
             }
         }
 
