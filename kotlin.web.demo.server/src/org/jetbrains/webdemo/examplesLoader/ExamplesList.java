@@ -68,16 +68,16 @@ public class ExamplesList {
         }
     }
 
-    public static Project getExampleObject(String url) {
+    public static Project getExample(String url) {
         ExamplesFolder examplesFolder = examplesFolders.get(ResponseUtils.substringBefore(url, "&name=").replaceAll("_", " "));
         return examplesFolder.examples.get(ResponseUtils.substringAfter(url, "&name=").replaceAll("_", " "));
     }
 
-    public static Project getExampleObject(String name, String folder) {
+    public static Project getExample(String name, String folder) {
         ExamplesFolder examplesFolder = examplesFolders.get(folder.replaceAll("_", " "));
-        if(examplesFolder != null) {
+        if (examplesFolder != null) {
             return examplesFolder.examples.get(name.replaceAll("_", " "));
-        } else{
+        } else {
             return null;
         }
     }

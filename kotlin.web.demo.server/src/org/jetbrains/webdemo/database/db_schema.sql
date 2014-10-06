@@ -1,37 +1,39 @@
-drop table if exists dbinfo;
-drop table if exists files;
-drop table if exists projects;
-drop table if exists users;
+DROP TABLE IF EXISTS dbinfo;
+DROP TABLE IF EXISTS files;
+DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS users;
 
-create table if not exists dbinfo(
-	version varchar(45)
+CREATE TABLE IF NOT EXISTS dbinfo (
+  version VARCHAR(45)
 );
 
-create table if not exists users(
-	id int not null primary key auto_increment,
-	client_id varchar(45) not null,
-	provider ENUM ('google', 'twitter', 'facebook') not null,
-	username varchar(45) not null default '',
-	constraint client_id unique(client_id, provider)
+CREATE TABLE IF NOT EXISTS users (
+  id        INT                                    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  client_id VARCHAR(45)                            NOT NULL,
+  provider  ENUM ('google', 'twitter', 'facebook') NOT NULL,
+  username  VARCHAR(45)                            NOT NULL DEFAULT '',
+  CONSTRAINT client_id UNIQUE (client_id, provider)
 );
 
-create table if not exists projects(
-	id int not null primary key auto_increment,
-	owner_id int not null,
-	name varchar(45) not null default '',
-	args varchar(45) not null default '',
-	run_configuration ENUM ('java', 'js', 'canvas', 'junit') not null default 'java',
-	link varchar(150) unique,
-  origin varchar(100),
-	constraint project_name unique (owner_id, name),
-	foreign key (owner_id) references users(id) on delete cascade
+CREATE TABLE IF NOT EXISTS projects (
+  id                INT                                    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  owner_id          INT                                    NOT NULL,
+  name              VARCHAR(45)                            NOT NULL DEFAULT '',
+  args              VARCHAR(45)                            NOT NULL DEFAULT '',
+  run_configuration ENUM ('java', 'js', 'canvas', 'junit') NOT NULL DEFAULT 'java',
+  origin            VARCHAR(100),
+  CONSTRAINT project_name UNIQUE (owner_id, name),
+  FOREIGN KEY (owner_id) REFERENCES users (id)
+    ON DELETE CASCADE
 );
 
-create table if not exists files(
-	id int not null primary key auto_increment,
-	project_id int not null,
-	name varchar(45) not null,
-	content longtext,
-	constraint file_name unique (project_id, name),
-	foreign key (project_id) references projects(id) on delete cascade
+CREATE TABLE IF NOT EXISTS files (
+  id         INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  project_id INT         NOT NULL,
+  public_id  VARCHAR(45) NOT NULL UNIQUE,
+  name       VARCHAR(45) NOT NULL,
+  content    LONGTEXT,
+  CONSTRAINT file_name UNIQUE (project_id, name),
+  FOREIGN KEY (project_id) REFERENCES projects (id)
+    ON DELETE CASCADE
 );

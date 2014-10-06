@@ -26,7 +26,6 @@ import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
@@ -39,12 +38,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MySqlConnector {
     private static final MySqlConnector connector = new MySqlConnector();
     private Connection connection;
     private String databaseUrl;
     private ObjectMapper objectMapper = new ObjectMapper();
+    private Random idGenerator = new Random();
 
     private MySqlConnector() {
         if (!connect() || !createTablesIfNecessary()) {
@@ -294,38 +295,6 @@ public class MySqlConnector {
         }
     }
 
-    public String generatePublicLink(String programId) {
-        if (!checkConnection()) {
-            return ResponseUtils.getErrorInJson("Cannot connect to database for generate public link.");
-        }
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        try {
-            st = connection.prepareStatement("SELECT * FROM programs WHERE PROGRAM_ID=?");
-            st.setString(1, programId);
-            rs = st.executeQuery();
-            if (!rs.next()) {
-                return ResponseUtils.getErrorInJson("Cannot find the program.");
-            }
-
-            String publicLink = rs.getString("PROGRAM_LINK");
-            if (publicLink == null || publicLink.isEmpty()) {
-                publicLink = "http://" + ApplicationSettings.AUTH_REDIRECT + "/?publicLink=" + programId;
-                st = connection.prepareStatement("UPDATE programs  SET PROGRAM_LINK=? WHERE PROGRAM_ID=?");
-                st.setString(1, publicLink);
-                st.setString(2, programId);
-                st.executeUpdate();
-            }
-
-            return ResponseUtils.getJsonString("text", publicLink);
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", programId);
-            return ResponseUtils.getErrorInJson("Cannot generate public link");
-        } finally {
-            closeStatementAndResultSet(st, rs);
-        }
-    }
-
     public String getProgramTextByPublicLink(String programId) {
         if (!checkConnection()) {
             return ResponseUtils.getErrorInJson("Cannot connect to database for load program by link.");
@@ -399,15 +368,10 @@ public class MySqlConnector {
             st.setString(1, userId + "");
             st.setString(2, name);
             st.execute();
+
             int projectId = getProjectId(userInfo, name);
             if (projectId != -1) {
-                try (PreparedStatement st2 = connection.prepareStatement("INSERT INTO files (project_id, name, content) VALUES (?, ?, ?)")) {
-                    String fileName = name.endsWith(".kt") ? name : name + ".kt";
-                    st2.setString(1, projectId + "");
-                    st2.setString(2, fileName);
-                    st2.setString(3, "");
-                    st2.execute();
-                }
+                addFileToProject(userInfo, projectId, name, "");
             }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
@@ -436,11 +400,7 @@ public class MySqlConnector {
 
             int projectId = getProjectId(userInfo, project.name);
             for (ProjectFile file : project.files) {
-                st = connection.prepareStatement("INSERT INTO files (project_id, name, content) VALUES (?,?,?)");
-                st.setString(1, projectId + "");
-                st.setString(2, file.getName());
-                st.setString(3, file.getContent());
-                st.execute();
+                addFileToProject(userInfo, projectId, file.getName(), file.getContent());
             }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
@@ -457,26 +417,35 @@ public class MySqlConnector {
         }
     }
 
-    public void addFile(UserInfo userInfo, String projectName, String fileName) throws DatabaseOperationException {
-        addFile(userInfo, projectName, fileName, "");
+    public String addFileToProject(UserInfo userInfo, String projectName, String fileName) throws DatabaseOperationException {
+        return addFileToProject(userInfo, getProjectId(userInfo, projectName), fileName, "");
     }
 
-    public void addFile(UserInfo userInfo, String projectName, String fileName, String content) throws DatabaseOperationException {
-        int projectId = getProjectId(userInfo, projectName);
-        try (PreparedStatement st = connection.prepareStatement("INSERT INTO files (project_id, name, content) VALUES (?,?,?) ")) {
+    public String addFileToProject(UserInfo userInfo, String projectName, String fileName, String content) throws DatabaseOperationException {
+        return addFileToProject(userInfo, getProjectId(userInfo, projectName), fileName, content);
+    }
+
+    private String addFileToProject(UserInfo userInfo, int projectId, String fileName, String content) throws DatabaseOperationException {
+        fileName = fileName.endsWith(".kt") ? fileName : fileName + ".kt";
+        try (PreparedStatement st = connection.prepareStatement("INSERT INTO files (project_id, public_id, name, content) VALUES (?,?,?,?) ")) {
+            String publicId = userInfo.getId() + idGenerator.nextInt();
+
             st.setString(1, projectId + "");
-            st.setString(2, fileName);
-            st.setString(3, content);
+            st.setString(2, publicId);
+            st.setString(3, fileName);
+            st.setString(4, content);
             st.execute();
+
+            return publicId;
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new DatabaseOperationException("File with this name already exist in this project", e);
             } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + projectName + " " + fileName);
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + projectId + " " + fileName);
                 throw new DatabaseOperationException("Unknown exception", e);
             }
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + projectName + " " + fileName);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + projectId + " " + fileName);
             throw new DatabaseOperationException("Unknown exception", e);
         }
     }
@@ -532,29 +501,19 @@ public class MySqlConnector {
             rs = st.executeQuery();
 
             if (rs.next()) {
-                Project project = new Project();
-                project.parent = "My Programs";
-                project.name = projectName;
-                project.args = rs.getString("args");
-                project.confType = rs.getString("run_configuration");
-                project.files = new ArrayList<>();
-
-                project.isLocalVersion = true;
-                if (rs.getString("origin") != null) {
-                    project.originUrl = rs.getString("origin");
-                    Project storedExample = ExamplesList.getExampleObject(rs.getString("origin"));
-                    for(ProjectFile file : storedExample.files){
-                        if(!file.isModifiable()){
-                            project.files.add(file);
-                        }
-                    }
-                }
+                Project project = new Project(
+                        projectName,
+                        "My Programs",
+                        rs.getString("args"),
+                        rs.getString("run_configuration"),
+                        rs.getString("origin")
+                );
 
                 st = connection.prepareStatement("SELECT * FROM files WHERE project_id = ?");
                 st.setString(1, rs.getInt("id") + "");
                 rs = st.executeQuery();
                 while (rs.next()) {
-                    ProjectFile file = new ProjectFile(rs.getString("name"), rs.getString("content"), true);
+                    ProjectFile file = new ProjectFile(rs.getString("name"), rs.getString("content"), true, "id=" + rs.getString("public_id"));
                     project.files.add(file);
                 }
                 return objectMapper.writeValueAsString(project);
@@ -701,6 +660,72 @@ public class MySqlConnector {
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             throw new DatabaseOperationException("UnknownException", e);
+        }
+    }
+
+    public String getProjectByFileId(UserInfo userInfo, String publicId) throws DatabaseOperationException {
+        if (!checkConnection()) {
+            throw new DatabaseOperationException("Cannot connect to database for load your program.");
+        }
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = connection.prepareStatement("SELECT * FROM files JOIN " +
+                    "projects ON files.project_id = projects.id JOIN " +
+                    "users ON projects.owner_id = users.id WHERE" +
+                    " files.public_id = ?");
+            st.setString(1, publicId);
+            rs = st.executeQuery();
+            if (rs.next()) {
+                boolean isUserProject = rs.getString("client_id").equals(userInfo.getId()) && rs.getString("provider").equals(userInfo.getType());
+                String projectParent = isUserProject ? "My programs" : "Public links";
+
+
+                Project project = new Project(
+                        rs.getString("name"),
+                        projectParent,
+                        rs.getString("args"),
+                        rs.getString("run_configuration"),
+                        rs.getString("origin")
+                );
+
+                addProjectContentToProject(project, rs.getInt("project_id"));
+
+                String selectedFileName = rs.getString("name");
+                ObjectNode ans = new ObjectNode(JsonNodeFactory.instance);
+                ans.put("project", objectMapper.writeValueAsString(project));
+                ans.put("selectedFile", selectedFileName);
+                ans.put("isUserProject", isUserProject);
+                return objectMapper.writeValueAsString(ans);
+            } else {
+                throw new DatabaseOperationException("File with this ID do not exist");
+            }
+        } catch (Exception e) {
+            throw new DatabaseOperationException("Unknown exception");
+        } finally {
+            closeStatementAndResultSet(st, rs);
+        }
+    }
+
+
+    private Project addProjectContentToProject(Project project, int projectId) throws DatabaseOperationException {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = connection.prepareStatement("SELECT files.name, files.content, files.public_id FROM files JOIN" +
+                    " projects ON projects.id = files.project_id  WHERE" +
+                    " projects.id = ?");
+            st.setString(1, projectId + "");
+            rs = st.executeQuery();
+            while (rs.next()) {
+                project.files.add(new ProjectFile(rs.getString("name"), rs.getString("content"), true, rs.getString("public_id")));
+            }
+
+            return project;
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Project with this ID do not exist");
+        } finally {
+            closeStatementAndResultSet(st, rs);
         }
     }
 

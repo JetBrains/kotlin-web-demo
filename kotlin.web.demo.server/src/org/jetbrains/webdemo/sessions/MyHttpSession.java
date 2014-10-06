@@ -25,9 +25,9 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
+import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
 import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
@@ -38,7 +38,10 @@ import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -121,13 +124,13 @@ public class MyHttpSession {
                     break;
                 case ("renameProject"):
                     sendRenameProjectResult();
-                case ("generatePublicLink"):
-                    sendGeneratePublicLinkResult();
-                    break;
                 case ("complete"):
                     sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
                     ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendCompletionResult();
+                    break;
+                case ("loadProjectByFileId"):
+                    sendLoadProjectByFileIdResult();
                     break;
                 default:
                     ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + param);
@@ -142,6 +145,17 @@ public class MyHttpSession {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
             }
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendLoadProjectByFileIdResult() {
+        try {
+            String id = parameters.get("id")[0];
+            writeResponse(MySqlConnector.getInstance().getProjectByFileId(sessionInfo.getUserInfo(), id), HttpServletResponse.SC_OK);
+        } catch (NullPointerException e) {
+            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (DatabaseOperationException e) {
+            writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
@@ -170,19 +184,13 @@ public class MyHttpSession {
         try {
             String projectName = parameters.get("name")[0].replaceAll("_", " ");
             String fileName = parameters.get("filename")[0].replaceAll("_", " ");
-            MySqlConnector.getInstance().addFile(sessionInfo.getUserInfo(), projectName, fileName);
+            String id = MySqlConnector.getInstance().addFileToProject(sessionInfo.getUserInfo(), projectName, fileName);
+            writeResponse(id, HttpServletResponse.SC_OK);
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         } catch (DatabaseOperationException e) {
             writeResponse(e.getMessage(), HttpServletResponse.SC_FORBIDDEN);
         }
-    }
-
-    private void sendGeneratePublicLinkResult() {
-        String result;
-        String programId = ResponseUtils.getExampleOrProgramNameByUrl(parameters.get("args")[0]);
-        result = MySqlConnector.getInstance().generatePublicLink(programId);
-        writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendAddProjectResult() {
@@ -315,7 +323,7 @@ public class MyHttpSession {
     private List<PsiFile> createProjectPsiFiles(Project example) {
         List<PsiFile> result = new ArrayList<>();
         currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
-        for(ProjectFile file : example.files){
+        for (ProjectFile file : example.files) {
             result.add(JetPsiFactoryUtil.createFile(currentProject, file.getName(), file.getContent()));
         }
         return result;
@@ -395,9 +403,9 @@ public class MyHttpSession {
 
 
     private Project addUnmodifiableDataToExample(Project exampleObject, String originUrl) {
-        Project storedExample = ExamplesList.getExampleObject(originUrl);
-        for(ProjectFile file : storedExample.files){
-            if(!file.isModifiable()){
+        Project storedExample = ExamplesList.getExample(originUrl);
+        for (ProjectFile file : storedExample.files) {
+            if (!file.isModifiable()) {
                 exampleObject.files.add(file);
             }
         }

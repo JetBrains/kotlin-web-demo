@@ -17,12 +17,9 @@
 package org.jetbrains.webdemo.examplesLoader;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.webdemo.Initializer;
-import org.jetbrains.webdemo.JetPsiFactoryUtil;
 
 /**
  * Created by Semyon.Atamas on 8/11/2014.
@@ -33,6 +30,7 @@ public class ProjectFile {
 
 
     private Boolean modifiable;
+    private String publicId;
     private String content;
     private String name;
     private String type;
@@ -42,22 +40,24 @@ public class ProjectFile {
     /**
      * This constructor is used to deserialize project file from user request. Jackson calls it wia
      * reflection when we using it to deserialize user project
-     * @param name - File name
+     *
+     * @param name    - File name
      * @param content - File content
      */
     @JsonCreator
     public ProjectFile(@JsonProperty("name") String name,
-                       @JsonProperty("content") String content){
+                       @JsonProperty("content") String content) {
         this.name = name;
         this.content = content;
         this.modifiable = true;
     }
 
 
-    public ProjectFile(String name, String content, boolean modifiable) {
+    public ProjectFile(String name, String content, boolean modifiable, String publicId) {
         this.name = name;
         this.content = content;
         this.modifiable = modifiable;
+        this.publicId = publicId;
         this.type = "Kotlin";
 //        psiFile = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), name, content);
 //        type = psiFile.getFileType().getDescription();
@@ -77,6 +77,10 @@ public class ProjectFile {
 
     public String getType() {
         return type;
+    }
+
+    public String getPublicId() {
+        return publicId;
     }
 
     public enum Type {

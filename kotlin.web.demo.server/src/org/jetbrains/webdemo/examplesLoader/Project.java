@@ -44,30 +44,62 @@ public class Project {
     public String args = "";
     @NotNull
     public String confType = "java";
-    public boolean isLocalVersion = false;
 
     @NotNull
     public String help = "";
     @NotNull
     public String[] testClasses;
     @NotNull
-    public List<ProjectFile> files = new ArrayList<>();
+    public List<ProjectFile> files;
 
-
-    public Project(){
+    /**
+     * For Jackson
+     */
+    public Project() {
 
     }
 
     /**
+     * This constructor is used to get examples from database.
+     *
+     * @param name      - Project name
+     * @param parent    - Project folder
+     * @param args      - Project args
+     * @param confType  - Project run configuration
+     * @param originUrl - Project origin URL
+     */
+    public Project(@NotNull String name, @NotNull String parent, @NotNull String args, @NotNull String confType, String originUrl) {
+        this.name = name;
+        this.parent = parent;
+        this.args = args;
+        this.confType = confType;
+        this.originUrl = originUrl;
+        this.files = new ArrayList<>();
+
+        if (originUrl != null) {
+            Project storedExample = ExamplesList.getExample(originUrl);
+            for (ProjectFile file : storedExample.files) {
+                if (!file.isModifiable()) {
+                    files.add(file);
+                }
+            }
+        }
+    }
+
+    /**
      * This constructor is used to get examples from server.
-     * @param parent - Name of parent folder
+     *
+     * @param parent            - Name of parent folder
      * @param exampleFolderName - Name of example folder
      * @throws IOException - if example folder has no manifest file, if example files do not exists, or some other problem with IO.
      */
     public Project(@NotNull String parent, @NotNull String exampleFolderName) throws IOException {
+        this.files = new ArrayList<>();
+        this.parent = parent;
+
         originUrl = parent.replaceAll(" ", "_") + "&name=" + exampleFolderName.replaceAll(" ", "_");
         ObjectMapper objectMapper = new ObjectMapper();
-        this.parent = parent;
+
         String exampleFolderPath = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + parent + File.separator + exampleFolderName + File.separator;
         File manifest = new File(exampleFolderPath + "manifest.json");
         JsonNode objectNode = objectMapper.readTree(manifest);
@@ -75,25 +107,26 @@ public class Project {
         name = objectNode.get("name").textValue();
         args = objectNode.get("args").textValue();
         confType = objectNode.get("confType").textValue();
-        isLocalVersion = true;
+
         help = objectNode.get("help").textValue();
-        if(confType.equals("junit")) {
+        if (confType.equals("junit")) {
             testClasses = objectMapper.readValue(objectNode.get("testClasses").traverse(), String[].class);
         }
         Iterator<JsonNode> it = objectNode.get("files").elements();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             JsonNode fileDescriptor = it.next();
 
             String fileName = fileDescriptor.get("filename").textValue();
             boolean modifiable = fileDescriptor.get("modifiable").asBoolean();
             String fileContent;
-            if(fileName != null){
+            if (fileName != null) {
                 Path path = Paths.get(exampleFolderPath + File.separator + fileName);
                 fileContent = new String(Files.readAllBytes(path)).replaceAll("\r\n", "\n");
-            } else{
+            } else {
                 fileContent = fileDescriptor.get("content").asText();
             }
-            ProjectFile file = new ProjectFile(fileName, fileContent, modifiable);
+            String filePublicId = "folder=" + parent + "&project=" + name + "&file=" + fileName;
+            ProjectFile file = new ProjectFile(fileName, fileContent, modifiable, filePublicId);
             files.add(file);
         }
     }
