@@ -236,10 +236,10 @@ public class JsonResponseForCompletion {
             typeText = returnType != null ? DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(returnType) : "";
             presentableText += DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderFunctionParameters(functionDescriptor);
 
-            boolean extensionFunction = functionDescriptor.getReceiverParameter() != null;
+            boolean extensionFunction = functionDescriptor.getExtensionReceiverParameter() != null;
             DeclarationDescriptor containingDeclaration = descriptor.getContainingDeclaration();
             if (containingDeclaration != null && extensionFunction) {
-                tailText += " for " + DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(functionDescriptor.getReceiverParameter().getType());
+                tailText += " for " + DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(functionDescriptor.getExtensionReceiverParameter().getType());
                 tailText += " in " + DescriptorUtils.getFqName(containingDeclaration);
             }
         }
