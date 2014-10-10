@@ -22,7 +22,6 @@ import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import javax.swing.*;
@@ -45,7 +44,6 @@ public class MainApplet extends JApplet implements ActionListener {
             request = getCodeBase().getProtocol() + "://" + getCodeBase().getHost();
             ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
             Initializer.INITIALIZER = InitializerApplet.getInstance();
-            WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
 
             SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
             SESSION_INFO.setOriginUrl(request);

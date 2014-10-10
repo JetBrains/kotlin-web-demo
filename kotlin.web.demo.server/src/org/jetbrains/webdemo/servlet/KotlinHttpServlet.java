@@ -24,8 +24,6 @@ import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.server.ApplicationSettings;
-import org.jetbrains.webdemo.translator.WebDemoConfigServer;
-import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -60,7 +58,6 @@ public class KotlinHttpServlet extends HttpServlet {
         try {
             if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-                WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(Initializer.INITIALIZER.getEnvironment().getProject());
                 new File(ApplicationSettings.LOGS_DIRECTORY).mkdirs();
                 new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdirs();
                 ExamplesHolder.getInstance();

@@ -79,7 +79,7 @@ public class ErrorAnalyzer {
         try {
             for (Diagnostic diagnostic : diagnostics) {
                 //fix for errors in js library files
-                if (diagnostic.getPsiFile().getName().contains("core")) {
+                if (diagnostic.getPsiFile().getVirtualFile().getPresentableUrl().startsWith(WebDemoTranslatorFacade.JS_LIB_ROOT)) {
                     continue;
                 }
                 String render = DefaultErrorMessages.RENDERER.render(diagnostic);

@@ -26,8 +26,6 @@ import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.webdemo.translator.WebDemoConfigServer;
-import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import java.io.File;
 
@@ -59,7 +57,6 @@ public class BaseTest extends TestCase {
 
         createManager();
 
-        WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(getProject());
         ExamplesList.getInstance();
         HelpLoader.getInstance();
         Statistics.getInstance();

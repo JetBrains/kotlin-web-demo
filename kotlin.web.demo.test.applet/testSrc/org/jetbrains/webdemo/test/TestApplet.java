@@ -22,7 +22,6 @@ import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.webdemo.translator.WebDemoConfigApplet;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 import sun.applet.AppletSecurity;
 
@@ -41,7 +40,6 @@ public class TestApplet extends TestCase {
         InitializerApplet.getInstance().initJavaCoreEnvironment();
         ErrorWriter.ERROR_WRITER = ErrorWriterInApplet.getInstance();
         Initializer.INITIALIZER = InitializerApplet.getInstance();
-        WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigApplet(Initializer.INITIALIZER.getEnvironment().getProject());
         ApplicationSettings.IS_TEST_VERSION = "true";
 //        MainApplet.SESSION_INFO = new SessionInfo("applet" + new Random().nextInt());
     }
