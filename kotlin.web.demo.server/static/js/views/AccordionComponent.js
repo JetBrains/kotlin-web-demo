@@ -36,7 +36,8 @@ var AccordionView = (function () {
 //        var programsView = new ProgramsView(programsModel);
 
         var downloadedProjects = {};
-        var userProjectUrls = [];
+        var publicLinks = JSON.parse(localStorage.getItem("publicLinks"));
+        if (publicLinks == null) publicLinks = [];
         var selectedProject = null;
         var instance = {
             onLoadExampleHeaders: function (data) {
@@ -46,38 +47,42 @@ var AccordionView = (function () {
                     }
                 }
                 addMyProjectsFolder();
+
                 element.accordion("refresh");
                 element.accordion("option", "active", 0);
                 if (!loginView.isLoggedIn()) {
+                    addPublicLinkFolder();
                     loadFirstItem();
                 }
             },
+
             onLoadUserProjectsHeaders: function (data) {
                 for (var i = 0; i < data.length; i++) {
-                    addProject("My Programs", document.getElementById("My_Programs_content"), data[i]);
+                    addProject("My Programs", document.getElementById("My_Programs_content"), data[i].name, data[i].publicId);
                 }
                 addNewProjectButton();
+                addPublicLinkFolder();
                 loadFirstItem();
             },
             saveProject: function () {
                 selectedProject.save();
             },
-            saveProjectAs: function(){
+            saveProjectAs: function () {
                 selectedProject.saveAs();
             },
             loadAllContent: function () {
                 element.html("");
                 headersProvider.getAllExamples();
             },
-            addNewProject: function (name, /*nullable*/ content) {
-                addNewProject(name, content);
+            addNewProject: function (name, publicId, fileId, /*nullable*/ content) {
+                addNewProject(name, publicId, fileId, content);
             },
             onLoadCode: function (example, isProgram) {
             },
             onSaveProgram: function () {
             },
-            deleteProject: function (url) {
-                deleteProject(url);
+            deleteProject: function (publicId) {
+                deleteProject(publicId);
             },
             onFail: function (exception, messageForStatusBar) {
             },
@@ -97,19 +102,40 @@ var AccordionView = (function () {
                     }
                 }
                 return true;
+            },
+            onBeforeUnload: function () {
+                localStorage.setItem("publicLinks", JSON.stringify(publicLinks))
             }
         };
 
         var headersProvider = (function () {
             var provider = new AccordionHeadersProvider(instance.onLoadExampleHeaders, instance.onLoadUserProjectsHeaders);
 
-            provider.onFail = function(data, status){
+            provider.onFail = function (data, status) {
                 console.log(data);
                 statusBarView.setStatus(status);
+                statusBarView.setStatus(status)
             };
 
-            provider.onRenameProject = function (url, newName) {
-                renameProject(url, newName);
+            provider.onRenameProject = function (publicId, newName) {
+                renameProject(publicId, newName);
+            };
+
+            provider.onProjectInfoLoaded = function (data) {
+                if (data.isUserProject) {
+                    onProjectHeaderClick(createUserProjectUrl(data.projectId));
+                } else {
+                    for (var i = 0; i < publicLinks.length; ++i) {
+                        if (publicLinks[i].id == data.projectId) {
+                            onProjectHeaderClick(createUserProjectUrl(data.projectId));
+                            return
+                        }
+                    }
+
+                    publicLinks.push({name: data.name, id: data.projectId});
+                    addNewPublicLink(data.name, data.projectId);
+                    onProjectHeaderClick(createUserProjectUrl(data.projectId));
+                }
             };
 
             return provider;
@@ -121,8 +147,8 @@ var AccordionView = (function () {
         var renameProjectDialog = new InputDialogView("Rename project", "Project name:", "Rename");
         renameProjectDialog.verify = instance.verifyNewProjectname;
 
-        function createProject(name, contentElement, content) {
-            var url = getProjectURL("My Programs", name);
+        function createProject(name, contentElement, content, projectId, fileId) {
+            var url = createUserProjectUrl(projectId);
             if (content == null) {
                 var filename = name.endsWith(".kt") ? name : name + ".kt";
                 content = {
@@ -132,26 +158,38 @@ var AccordionView = (function () {
                     confType: "java",
                     help: "",
                     files: [
-                        {name: filename, content: "", modifiable: true}
+                        {name: filename, content: "", modifiable: true, publicId: fileId}
                     ]
                 }
             }
-            downloadedProjects[url] = new Project(url, contentElement, content);
+            downloadedProjects[url] = new Project(url, contentElement, content, ProjectType.USER_PROJECT);
         }
 
         function loadFirstItem() {
-            var openedItemUrl = localStorage.getItem("openedItemUrl");
-            localStorage.removeItem("openedItemUrl");
-            if (openedItemUrl != null && document.getElementById(openedItemUrl) != null) {
-                document.getElementById(openedItemUrl).parentNode.parentNode.previousSibling.click();
-                onProjectHeaderClick(openedItemUrl);
-                if(localStorage.getItem("incompleteAction") == "save"){
-                    localStorage.removeItem("incompleteAction");
-                    selectedProject.saveAs();
-                }
+
+            var folder = getParameterByName("folder");
+            var project = getParameterByName("project");
+            var file = getParameterByName("file");
+            var id = getParameterByName("id");
+
+            if (folder != "" && project != "" && file != "") {
+                onProjectHeaderClick(createExampleUrl(project, folder));
+            } else if (id != "") {
+                headersProvider.getInfoAboutProject(id);
             } else {
-                element.accordion('option', 'active', 0);
-                element.children()[1].children[0].click();
+                var openedItemUrl = localStorage.getItem("openedItemUrl");
+                localStorage.removeItem("openedItemUrl");
+                if (openedItemUrl != null && document.getElementById(openedItemUrl) != null) {
+                    document.getElementById(openedItemUrl).parentNode.parentNode.previousSibling.click();
+                    onProjectHeaderClick(openedItemUrl);
+                    if (localStorage.getItem("incompleteAction") == "save") {
+                        localStorage.removeItem("incompleteAction");
+                        selectedProject.saveAs();
+                    }
+                } else {
+                    element.accordion('option', 'active', 0);
+                    element.children()[1].children[0].click();
+                }
             }
         }
 
@@ -177,21 +215,28 @@ var AccordionView = (function () {
         }
 
 
-        function createProjectHeader(folder, name) {
-            downloadedProjects[createExampleUrl(name, folder)] = null;
+        function createProjectHeader(folder, name, /*nullable*/ id) {
+            if (id == null) {
+                downloadedProjects[createExampleUrl(name, folder)] = null;
+            } else {
+                downloadedProjects[createUserProjectUrl(id)] = null;
+            }
             var projectHeader = document.createElement("h4");
             projectHeader.className = "examples-project-name";
             var img = document.createElement("div");
             img.className = "arrow";
             projectHeader.appendChild(img);
-            projectHeader.id = createExampleUrl(name, folder) + "_header";
+            if (id == null) {
+                projectHeader.id = createExampleUrl(name, folder) + "_header";
+            } else {
+                projectHeader.id = "project_" + id + "_header";
+            }
             projectHeader.onclick = function (event) {
                 onProjectHeaderClick(this.id.substring(0, this.id.indexOf("_header")));
             };
 
 
             var nameSpan = document.createElement("span");
-            nameSpan.id = createExampleUrl(name, folder);
             nameSpan.className = "file-name-span";
             nameSpan.style.cursor = "pointer";
             nameSpan.innerHTML = name;
@@ -202,10 +247,10 @@ var AccordionView = (function () {
                 deleteButton.className = "delete-img";
                 deleteButton.title = "Delete this project";
                 deleteButton.onclick = function (event) {
-                    var url = this.parentNode.id.substring(0, this.parentNode.id.indexOf("_header"));
-                    var name = url.substring(url.indexOf("&name=") + "&name=".length );
-                    if(confirm("Delete project " + name + "?")) {
-                        headersProvider.deleteProject(url);
+                    var publicId = this.parentNode.id.substring("project_".length, this.parentNode.id.indexOf("_header"));
+                    var name = this.parentNode.childNodes[1].innerHTML;
+                    if (confirm("Delete project " + name + "?")) {
+                        headersProvider.deleteProject(publicId);
                     }
                     event.stopPropagation();
                 };
@@ -215,9 +260,9 @@ var AccordionView = (function () {
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename this file";
                 renameImg.onclick = function (event) {
-                    var url = this.parentNode.id.substring(0, this.parentNode.id.indexOf("_header"));
-                    var name = url.substring(url.indexOf("&name=") + "&name=".length );
-                    renameProjectDialog.open(headersProvider.renameProject.bind(null, url), name);
+                    var publicId = this.parentNode.id.substring("project_".length, this.parentNode.id.indexOf("_header"));
+                    var name = this.parentNode.childNodes[1].innerHTML;
+                    renameProjectDialog.open(headersProvider.renameProject.bind(null, publicId), name);
                     event.stopPropagation();
 
                 };
@@ -229,10 +274,10 @@ var AccordionView = (function () {
             return projectHeader;
         }
 
-        function addNewProject(name, /*nullable*/ content) {
+        function addNewProject(name, publicId, fileId, /*nullable*/ content) {
             var myProg = document.getElementById("My_Programs_content");
             var newProjectNode = myProg.lastChild;
-            myProg.insertBefore(createProjectHeader("My Programs", name), newProjectNode);
+            myProg.insertBefore(createProjectHeader("My Programs", name, publicId), newProjectNode);
 
 
             var exampleContent = document.createElement("div");
@@ -240,24 +285,37 @@ var AccordionView = (function () {
             myProg.insertBefore(exampleContent, newProjectNode);
 
 
-            createProject(name, exampleContent, content);
+            createProject(name, exampleContent, content, publicId, fileId);
             element.accordion('option', 'active', element.find("h3").length - 1);
-            document.getElementById(getProjectURL("My Programs", name)).click();
+            document.getElementById(createUserProjectUrl(publicId) + "_header").click();
         }
 
-        function addProject(folder, element, name) {
-            element.appendChild(createProjectHeader(folder, name));
+        function addNewPublicLink(name, id) {
+            var publicLinks = document.getElementById("Public_Links_content");
+            publicLinks.insertBefore(createProjectHeader("Public Links", name, id), publicLinks.firstChild);
 
             var exampleContent = document.createElement("div");
-            exampleContent.id = createExampleUrl(name, folder) + "_content";
+            exampleContent.id = createUserProjectUrl(id) + "_content";
+            publicLinks.insertBefore(exampleContent, publicLinks.firstChild.nextSibling);
+        }
+
+        function addProject(folder, element, name, /*nullable*/ id) {
+            element.appendChild(createProjectHeader(folder, name, id));
+
+            var exampleContent = document.createElement("div");
+            if (id == null) {
+                exampleContent.id = createExampleUrl(name, folder) + "_content";
+            } else {
+                exampleContent.id = createUserProjectUrl(id) + "_content";
+            }
             element.appendChild(exampleContent);
         }
 
-        function deleteProject(url) {
-            var header = document.getElementById(url + "_header");
+        function deleteProject(publicId) {
+            var header = document.getElementById(createUserProjectUrl(publicId) + "_header");
             header.parentNode.removeChild(header);
 
-            var project = downloadedProjects[url];
+            var project = downloadedProjects[createUserProjectUrl(publicId)];
             if (project != null) {
                 project.onDelete();
                 if (project == selectedProject) {
@@ -270,7 +328,37 @@ var AccordionView = (function () {
                     }
                 }
             }
-            delete downloadedProjects[url];
+            delete downloadedProjects[createUserProjectUrl(publicId)];
+        }
+
+        function addPublicLinkFolder() {
+            var folder = document.createElement("h3");
+            folder.className = "examples-folder-name";
+            element.append(folder);
+
+            var folderDiv = document.createElement("div");
+            folderDiv.innerHTML = "Public links";
+            folderDiv.className = "folder-name-div";
+            folder.appendChild(folderDiv);
+
+            var cont = document.createElement("div");
+            cont.id = "Public_Links_content";
+            element.append(cont);
+
+            if (publicLinks != null) {
+                publicLinks.filter(function (publicLink) {
+                    for (var url in downloadedProjects) {
+                        if (createUserProjectUrl(publicLink.id) == url) {
+                            localStorage.removeItem(url);
+                            return false;
+                        }
+                    }
+                    addNewPublicLink(publicLink.name, publicLink.id);
+                    return true;
+                });
+            }
+
+            element.accordion("refresh");
         }
 
         function addFolder(data) {
@@ -326,21 +414,14 @@ var AccordionView = (function () {
             }
         }
 
-        function renameProject(url, newName) {
-            var element = document.getElementById(url);
+        function renameProject(publicId, newName) {
+            var element = document.getElementById(createUserProjectUrl(publicId) + "_header").childNodes[1];
             element.innerHTML = newName;
-            var newUrl = getProjectURL("My Programs", newName);
-            element.id = newUrl;
-            element.parentNode.nextSibling.id = newUrl + "_content";
-            element.parentNode.id = newUrl + "_header";
-            if (downloadedProjects[url] != undefined) {
-                downloadedProjects[newUrl] = downloadedProjects[url];
-                delete downloadedProjects[url];
-                downloadedProjects[newUrl].rename(newName);
-            }
+            downloadedProjects[createUserProjectUrl(publicId)].rename(newName);
         }
 
         function onProjectHeaderClick(url) {
+            document.getElementById(url + "_header").parentNode.previousSibling.click();
             var element;
             if (downloadedProjects[url] == null) {
                 if (selectedProject != null) {
@@ -351,7 +432,15 @@ var AccordionView = (function () {
                     $(element).next().slideUp();
                 }
                 var content = document.getElementById(url + "_content");
-                downloadedProjects[url] = new Project(url, content);
+                var type;
+                if (document.getElementById(url + "_header").parentNode.id.startsWith("My_Programs")) {
+                    type = ProjectType.USER_PROJECT
+                } else if (document.getElementById(url + "_header").parentNode.id.startsWith("Public_Links")) {
+                    type = ProjectType.PUBLIC_LINK
+                } else {
+                    type = ProjectType.EXAMPLE
+                }
+                downloadedProjects[url] = new Project(url, content, null, type);
                 selectedProject = downloadedProjects[url];
             } else if (downloadedProjects[url] != selectedProject) {
                 if (selectedProject != null) {
@@ -378,10 +467,6 @@ var AccordionView = (function () {
             }
 
 //            $("span[id='" + ExamplesView.getLastSelectedItem() + "']").parent().attr("class", "selected-example");
-        }
-
-        function getProjectURL(parent, name) {
-            return replaceAll(parent, " ", "_") + "&name=" + replaceAll(name, " ", "_");
         }
 
         return instance;

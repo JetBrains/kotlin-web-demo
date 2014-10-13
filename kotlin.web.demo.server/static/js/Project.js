@@ -19,14 +19,23 @@
  */
 
 
+var ProjectType = {
+    EXAMPLE: "example",
+    USER_PROJECT: "user",
+    PUBLIC_LINK: "public"
+};
+
 var Project = (function () {
 
-    function Project(url, element, projectContent) {
-
+    function Project(url, element, projectContent, type) {
+        if (type != ProjectType.EXAMPLE) {
+            var publicId = url.substring("project_".length);
+        }
 
         var selectedFile = null;
         var isProjectContentChanged = false;
         var selected = true;
+        var ifDatabaseCopyExist = false;
 
         var instance = {
             onContentLoaded: function (data) {
@@ -36,9 +45,9 @@ var Project = (function () {
                     var fileData = projectContent.files[i];
                     var fileHeader = document.createElement("div");
                     element.appendChild(fileHeader);
-                    projectContent.files[i] = new File(instance, fileData.name, fileData.content, fileData.modifiable, fileHeader);
+                    projectContent.files[i] = new File(instance, fileData.name, fileData.content, fileData.modifiable, fileData.publicId, fileHeader);
                 }
-                if (isUserProject()) {
+                if (type != ProjectType.EXAMPLE) {
                     element.appendChild(createAddFileButton());
                 }
 
@@ -51,12 +60,7 @@ var Project = (function () {
                 }
             },
             rename: function (newName) {
-                url = url.substring(0, url.indexOf("&name=") + "&name=".length) + newName;
                 projectContent.name = newName;
-                for (var i = 0; i < projectContent.files.length; i++) {
-                    projectContent.files[i].onProjectRenamed();
-                }
-//                selectFile(selectedFile);
             },
             deselect: function(){
                 selected = false;
@@ -70,7 +74,7 @@ var Project = (function () {
                 problemsView.onProjectChange(instance);
                 helpViewForExamples.showHelp(projectContent.help);
                 if (selectedFile != null) {
-                    editor.open(selectedFile);
+                    selectedFile.open();
                 } else{
                     editor.closeFile();
                 }
@@ -100,7 +104,11 @@ var Project = (function () {
                 };
             },
             restoreDefault: function () {
-                projectProvider.loadProject(url);
+                if (type == ProjectType.EXAMPLE) {
+                    projectProvider.loadExample(url);
+                } else {
+                    projectProvider.loadProject(publicId);
+                }
             },
             getUrl: function () {
                 return url;
@@ -121,7 +129,7 @@ var Project = (function () {
             },
             save: function () {
                 if (isProjectContentChanged) {
-                    if (isUserProject()) {
+                    if (type == ProjectType.USER_PROJECT) {
                         selectedFile.save();
                         projectProvider.saveProject({
                             args: projectContent.args,
@@ -129,7 +137,7 @@ var Project = (function () {
                             name: projectContent.name,
                             parent: projectContent.parent,
                             files: []
-                        });
+                        }, publicId);
                         actionsView.setStatus("default");
                     } else {
                         localStorage.setItem(url, JSON.stringify(projectContent));
@@ -152,18 +160,20 @@ var Project = (function () {
             getFiles: function () {
                 return projectContent.files;
             },
-            addNewFile: function (filename) {
+            addNewFile: function (filename, publicId) {
                 var fileHeader = document.createElement("div");
                 element.insertBefore(fileHeader, element.lastChild);
-                projectContent.files.push(new File(instance, filename, "", true, fileHeader));
+                projectContent.files.push(new File(instance, filename, "", true, publicId, fileHeader));
                 problemsView.onProjectChange(instance);
 //                showProjectContent();
                 selectFile(projectContent.files[projectContent.files.length - 1]);
 
             },
             onChange: function(){
-                isProjectContentChanged = true;
-                actionsView.setStatus("unsavedChanges");
+                if (!isProjectContentChanged) {
+                    isProjectContentChanged = true;
+                    actionsView.setStatus("unsavedChanges");
+                }
             },
             onFail: function () {
             },
@@ -173,8 +183,8 @@ var Project = (function () {
             onDeleteFile: function (file) {
                 onDeleteFile(file)
             },
-            isUserProject: function () {
-                return isUserProject();
+            getType: function () {
+                return type;
             },
             verifyNewFilename: function(fileName){
                 fileName = fileName.endsWith(".kt") ? fileName : fileName + ".kt";
@@ -184,6 +194,9 @@ var Project = (function () {
                     }
                 }
                 return true;
+            },
+            checkIfDatabaseCopyExists: function (onSuccess, onFail) {
+                projectProvider.checkIfProjectExists(publicId, onSuccess, onFail)
             }
         };
 
@@ -216,14 +229,17 @@ var Project = (function () {
             problemsView.onProjectChange(instance);
         };
 
-        projectProvider.onProjectFork = function (name) {
+        projectProvider.onProjectFork = function (name, publicId) {
             var newContent = copy(projectContent);
             newContent.name = name;
             newContent.parent = "My Programs";
-            accordion.addNewProject(newContent.name, newContent);
+            accordion.addNewProject(newContent.name, publicId, null, newContent);
             instance.restoreDefault();
         };
 
+        projectProvider.onExistenceChecked = function (flag) {
+            ifDatabaseCopyExist = flag;
+        };
 
 
         (function loadProject() {
@@ -232,8 +248,10 @@ var Project = (function () {
                 if (localContent != null) {
                     instance.onContentLoaded(localContent);
                     actionsView.setStatus("unsavedChanges");
+                } else if (type == ProjectType.EXAMPLE) {
+                    projectProvider.loadExample(url);
                 } else {
-                    projectProvider.loadProject(url);
+                    projectProvider.loadProject(publicId);
                 }
             } else {
                 instance.onContentLoaded(projectContent);
@@ -267,7 +285,7 @@ var Project = (function () {
             document.getElementById(selectedFile.getUrl()).className = "example-filename-selected";
 
             if(selected) {
-                editor.open(selectedFile);
+                selectedFile.open();
                 if (file.modifiable) {
                     actionsView.show();
                 } else {
@@ -276,17 +294,13 @@ var Project = (function () {
             }
         }
 
-        function isUserProject() {
-            return url.indexOf("My_Programs") == 0;
-        }
-
         function createAddFileButton() {
             var addFileButton = document.createElement("div");
             addFileButton.className = "example-filename";
             addFileButton.innerHTML = "Add new file";
             addFileButton.style.cursor = "pointer";
             addFileButton.onclick = function(){
-                newFileDialog.open(projectProvider.addNewFile, "File");
+                newFileDialog.open(projectProvider.addNewFile.bind(null, publicId), "File");
             };
             return addFileButton;
         }

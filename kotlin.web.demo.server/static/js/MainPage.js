@@ -38,7 +38,6 @@ actionManager.registerAction("org.jetbrains.web.demo.save",
         return e.keyCode == 83 && e.metaKey;
     }));
 
-
 var editor = new KotlinEditor();
 
 var argumentsView = $("#arguments");
@@ -330,7 +329,7 @@ function getSessionIdSuccess(data) {
 
 
 var saveButton = $("#save").click(function () {
-    if(accordion.getSelectedProject().isUserProject()) {
+    if (accordion.getSelectedProject().getType() == ProjectType.USER_PROJECT) {
         accordion.saveProject();
     } else{
         accordion.saveProjectAs();
@@ -351,6 +350,7 @@ function loadShortcuts() {
 
 window.onbeforeunload = closingCode;
 function closingCode(){
+    accordion.onBeforeUnload();
     localStorage.setItem("openedItemUrl", accordion.getSelectedProject().getUrl());
     accordion.getSelectedProject().save();
     editor.save();
@@ -407,6 +407,17 @@ setKotlinVersion = function () {
     $("#kotlinVersion").html(WEB_DEMO_VERSION);
     $("#currentYear").html(new Date().getFullYear());
 };
+
+//
+//function fullScreenView(){
+//    document.getElementById("global-header").style.display = "none";
+//    document.getElementById("global-footer").style.display = "none";
+//    $(".global-layout").addClass("fullscreen").addClass("no-after");
+//    $(".g-layout").addClass("fullscreen");
+//    $(".g-grid").addClass("fullscreen");
+//}
+//
+//document.getElementById("fullscreen").onclick = fullScreenView;
 
 setSessionId();
 loadShortcuts();

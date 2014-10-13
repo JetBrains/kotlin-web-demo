@@ -30,9 +30,6 @@ var ProjectActionsView = (function () {
             },
             refresh: function () {
                 switch (status) {
-                    case "localVersion":
-                        setLocalVersionStatus();
-                        break;
                     case "unsavedChanges":
                         setUnsavedChangesStatus();
                         break;
@@ -54,20 +51,40 @@ var ProjectActionsView = (function () {
         };
 
         function setUnsavedChangesStatus() {
-            if (!project.isUserProject()) {
+            if (project.getType() == ProjectType.EXAMPLE || project.getType() == ProjectType.PUBLIC_LINK) {
                 element.innerHTML = "";
                 element.style.display = "block";
 
                 var message = document.createElement("span");
                 message.className = "editor-notifications-messages";
-                message.innerHTML = "This is local version of example";
+                if (project.getType() == ProjectType.EXAMPLE) {
+                    message.innerHTML = "This is local version of example";
+                } else {
+                    message.innerHTML = "This is local version of project";
+                }
                 element.appendChild(message);
 
-                var restore = document.createElement("div");
-                restore.className = "editor-notifications-action";
-                restore.innerHTML = "Load original";
-                restore.onclick = project.restoreDefault;
-                element.appendChild(restore);
+                if (project.getType() == ProjectType.EXAMPLE) {
+                    var restore = document.createElement("div");
+                    restore.className = "editor-notifications-action";
+                    restore.innerHTML = "Load original";
+                    restore.id = "load-original-action";
+                    restore.onclick = project.restoreDefault;
+                    element.appendChild(restore);
+                } else {
+                    project.checkIfDatabaseCopyExists(function () {
+                        var restore = document.createElement("div");
+                        restore.className = "editor-notifications-action";
+                        restore.innerHTML = "Load original";
+                        restore.id = "load-original-action";
+                        restore.onclick = project.checkIfDatabaseCopyExists.bind(null, project.restoreDefault, function () {
+                            restore.parentNode.removeChild(restore)
+                        });
+                        element.appendChild(restore);
+                    }, function () {
+                    })
+                }
+
 
                 var save = document.createElement("div");
                 save.className = "editor-notifications-action";
@@ -77,24 +94,6 @@ var ProjectActionsView = (function () {
             } else {
                 element.innerHTML = "";
                 element.style.display = "none";
-            }
-        }
-
-        function setLocalVersionStatus() {
-            element.innerHTML = "";
-            element.style.display = "block";
-
-            var message = document.createElement("span");
-            message.className = "editor-notifications-messages";
-            message.innerHTML = "Example was loaded from the local storage";
-            element.appendChild(message);
-
-            if (!project.isUserProject()) {
-                var restore = document.createElement("div");
-                restore.className = "editor-notifications-action";
-                restore.innerHTML = "Load original";
-                restore.onclick = project.restoreDefault;
-                element.appendChild(restore);
             }
         }
 

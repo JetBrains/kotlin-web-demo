@@ -20,8 +20,12 @@ var KOTLIN_VERSION = "0.8.313";
 var APPLET_VERSION = "22012013";
 var WEB_DEMO_VERSION = "${web.demo.version}";
 
-String.prototype.endsWith = function(a) {
+String.prototype.endsWith = function (a) {
     return-1 !== this.indexOf(a, this.length - a.length);
+};
+
+String.prototype.startsWith = function (a) {
+    return 0 === this.indexOf(a);
 };
 
 function forEachInArrayWithArgs(arr, data, f) {
@@ -107,7 +111,7 @@ function checkIfThereAreErrorsInHighlightingResult(highlightingResult) {
     return false;
 }
 
-function copy(obejct){
+function copy(obejct) {
     var cp;
 
     if (null == obejct || "object" != typeof obejct) return obejct;
@@ -150,6 +154,10 @@ function getFolderNameByUrl(url) {
 
 function createExampleUrl(name, folder) {
     return replaceAll(folder, " ", "_") + "&name=" + replaceAll(name, " ", "_");
+}
+
+function createUserProjectUrl(id) {
+    return "project_" + id;
 }
 
 
@@ -203,3 +211,10 @@ window.clearAllIntervals = function () {
     window.intervalList = new Array();
 };
 
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}

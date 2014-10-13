@@ -23,24 +23,23 @@ var ProjectProvider = (function () {
 
     function ProjectsProvider(project) {
         var instance = {
-            loadProject: function (url) {
-                if(project.isUserProject()) {
-                    loadProject(url);
-                } else{
-                    loadExample(url)
-                }
+            loadExample: function (url) {
+                loadExample(url)
             },
-            deleteProject: function (url) {
-                deleteProject(url);
+            loadProject: function (publicId) {
+                loadProject(publicId)
             },
-            addNewFile: function (projectName, fileName) {
-                addNewFile(projectName, fileName);
+//            deleteProject: function (publicId) {
+//                deleteProject(publicId);
+//            },
+            addNewFile: function (publicId, fileName) {
+                addNewFile(publicId, fileName);
             },
             forkProject: function (content, url) {
                 forkProject(content, url)
             },
-            saveProject: function (content) {
-                saveProject(content);
+            saveProject: function (content, publicId) {
+                saveProject(content, publicId);
             },
             onProjectLoaded: function (data) {
 
@@ -53,6 +52,9 @@ var ProjectProvider = (function () {
             },
             onProjectSave: function () {
 
+            },
+            checkIfProjectExists: function (publicId, onSuccess, onFail) {
+                checkIfProjectExists(publicId, onSuccess, onFail);
             }
         };
 
@@ -80,9 +82,9 @@ var ProjectProvider = (function () {
             });
         }
 
-        function loadProject(url) {
+        function loadProject(publicId) {
             $.ajax({
-                url: generateAjaxUrl("loadProject", url),
+                url: generateAjaxUrl("loadProject"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {
@@ -96,6 +98,7 @@ var ProjectProvider = (function () {
                     }
                 },
                 dataType: "json",
+                data: {publicId: publicId},
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -108,8 +111,8 @@ var ProjectProvider = (function () {
         function forkProject(content, name) {
             $.ajax({
                 url: generateAjaxUrl("addProject", name),
-                success: function () {
-                    instance.onProjectFork(name);
+                success: function (publicId) {
+                    instance.onProjectFork(name, publicId);
                 },
                 type: "POST",
                 timeout: 10000,
@@ -120,45 +123,66 @@ var ProjectProvider = (function () {
             })
         }
 
-        function addNewFile(filename) {
+        function addNewFile(projectPublicId, filename) {
             if (!filename.endsWith(".kt")) {
                 filename = filename + ".kt";
             }
             $.ajax({
-                url: generateAjaxUrl("addFile", project.getUrl() + "&filename=" + filename),
-                success: function () {
-                    project.addNewFile(filename);
+                url: generateAjaxUrl("addFile"),
+                success: function (data) {
+                    project.addNewFile(filename, data);
                 },
                 type: "POST",
                 timeout: 10000,
+                data: {publicId: projectPublicId, filename: filename},
                 error: function (jqXHR, textStatus, errorThrown) {
                     project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }
             })
         }
 
-        function deleteProject(url) {
+        function checkIfProjectExists(publicId, onSuccess, onFail) {
             $.ajax({
-                url: generateAjaxUrl("deleteProject", url),
-                context: document.body,
-                success: function () {
-                    instance.onDeleteProject(url);
+                url: generateAjaxUrl("checkIfProjectExists"),
+                success: function (flag) {
+                    if (flag == "true") {
+                        onSuccess()
+                    } else {
+                        onFail();
+                    }
                 },
                 type: "POST",
                 timeout: 10000,
+                data: {publicId: publicId},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
+                    project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }
-            });
+            })
         }
 
-        function saveProject(content) {
+//        function deleteProject(publicId) {
+//            $.ajax({
+//                url: generateAjaxUrl("deleteProject"),
+//                context: document.body,
+//                success: function () {
+//                    instance.onDeleteProject(publicId);
+//                },
+//                type: "POST",
+//                data:{publicId: publicId},
+//                timeout: 10000,
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
+//                }
+//            });
+//        }
+
+        function saveProject(content, publicId) {
             $.ajax({
                 url: generateAjaxUrl("saveProject"),
                 type: "POST",
                 success: instance.onProjectSave,
                 timeout: 10000,
-                data: {project: JSON.stringify(content)},
+                data: {project: JSON.stringify(content), publicId: publicId},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }

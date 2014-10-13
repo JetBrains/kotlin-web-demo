@@ -36,7 +36,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         addMessages: function () {
             addMessagesToProblemsView();
         },
-        onProjectChange: function(newProject){
+        onProjectChange: function (newProject) {
             onProjectChange(newProject);
         },
         clear: function () {
@@ -44,9 +44,9 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         }
     };
 
-    function onProjectChange (newProject) {
+    function onProjectChange(newProject) {
         console.innerHTML = "";
-        for(var i = 0; i < newProject.getFiles().length; i++) {
+        for (var i = 0; i < newProject.getFiles().length; i++) {
             var file = newProject.getFiles()[i];
 
             var fileProblemsDiv = document.createElement("div");
@@ -91,9 +91,9 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         }
 
         var example = accordion.getSelectedProject();
-        for(var i = 0; i < example.getFiles().length; i++){
+        for (var i = 0; i < example.getFiles().length; i++) {
             var file = example.getFiles()[i];
-            if(file.errors.length > 0) {
+            if (file.errors.length > 0) {
                 document.getElementById(file.name.replace(/ /g, "_") + "_problems").style.display = "block";
                 var fileErrors = document.getElementById(file.name.replace(/ /g, "_") + "_problems_content");
                 fileErrors.innerHTML = "";
@@ -103,7 +103,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
                     var problem = createElementForProblemsView(error);
                     fileErrors.appendChild(problem);
                 }
-            } else{
+            } else {
                 document.getElementById(file.name.replace(/ /g, "_") + "_problems").style.display = "none";
             }
         }
@@ -125,11 +125,11 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
 
 
         var typeStr;
-        if(problem.severity == "ERROR") {
+        if (problem.severity == "ERROR") {
             typeStr = "Error";
-        }else if (problem.severity == "WARNING"){
+        } else if (problem.severity == "WARNING") {
             typeStr = "Warning";
-        }else if(problem.severity == "INFO"){
+        } else if (problem.severity == "INFO") {
             typeStr = "Info";
         }
         var titleDiv = document.createElement("span");
@@ -139,15 +139,16 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
             var span = document.createElement("span");
             var pos = problem.interval.start;
 
-            titleDiv.innerHTML = typeStr + ":(" + pos.line + "," + pos.ch + ") " + problem.message;
+            titleDiv.innerHTML = typeStr + ":(" + pos.line + ", " + pos.ch + ") " + problem.message;
         }
 
         p.appendChild(titleDiv);
-        $(p).click((function(){
+        $(p).click((function () {
             function click() {
                 editor.setCursor(pos.line, pos.ch);
                 editor.focus();
             }
+
             return click;
         })(problem.interval.start));
         return p;

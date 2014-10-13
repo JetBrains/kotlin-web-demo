@@ -30,19 +30,25 @@ var AccordionHeadersProvider = (function () {
             getAllPrograms: function () {
                 getAllPrograms();
             },
-            addNewProject: function(name){
+            addNewProject: function (name) {
                 addNewProject(name);
             },
             deleteProject: function (url) {
                 deleteProject(url);
             },
-            renameProject: function(url, newName){
-                renameProject(url, newName);
+            renameProject: function (publicId, newName) {
+                renameProject(publicId, newName);
             },
-            onRenameProject: function(url, newName) {
+            getInfoAboutProject: function (publicId) {
+                getInfoAboutProject(publicId);
+            },
+            onRenameProject: function (url, newName) {
 
             },
-            onFail: function(){
+            onFail: function () {
+            },
+            onProjectInfoLoaded: function (data) {
+
             }
         };
 
@@ -94,13 +100,29 @@ var AccordionHeadersProvider = (function () {
             });
         }
 
-        function addNewProject(name){
+        function addNewProject(name) {
             $.ajax({
                 url: generateAjaxUrl("addProject", name),
-                success: function(){
-                    accordion.addNewProject(name);
+                success: function (data) {
+                    accordion.addNewProject(name, data.projectId, data.fileId, null);
                 },
                 type: "POST",
+                timeout: 10000,
+                dataType: 'json',
+                error: function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
+                }
+            })
+        }
+
+        function renameProject(publicId, newName) {
+            $.ajax({
+                url: generateAjaxUrl("renameProject"),
+                success: function () {
+                    instance.onRenameProject(publicId, newName);
+                },
+                type: "POST",
+                data: {publicId: publicId, newName: newName},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
@@ -108,14 +130,14 @@ var AccordionHeadersProvider = (function () {
             })
         }
 
-        function renameProject(url, newName){
+        function deleteProject(publicId) {
             $.ajax({
-                url: generateAjaxUrl("renameProject", url),
+                url: generateAjaxUrl("deleteProject"),
                 success: function () {
-                    instance.onRenameProject(url, newName);
+                    accordion.deleteProject(publicId);
                 },
                 type: "POST",
-                data:{newName: newName},
+                data: {publicId: publicId},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
@@ -123,14 +145,18 @@ var AccordionHeadersProvider = (function () {
             })
         }
 
-        function deleteProject(url) {
+        function getInfoAboutProject(publicId) {
             $.ajax({
-                url: generateAjaxUrl("deleteProject", url),
-                success: function () {
-                    accordion.deleteProject(url);
+                url: generateAjaxUrl("loadProjectInfoByFileId"),
+                success: function (data) {
+                    instance.onProjectInfoLoaded(data);
                 },
-                type: "POST",
+                type: "GET",
                 timeout: 10000,
+                dataType: "json",
+                data: {
+                    id: publicId
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
                 }

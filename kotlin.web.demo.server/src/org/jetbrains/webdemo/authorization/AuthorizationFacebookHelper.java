@@ -29,14 +29,11 @@ import org.scribe.builder.api.FacebookApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
-import java.util.Map;
-
 public class AuthorizationFacebookHelper extends AuthorizationHelper {
-    private final String TYPE = "facebook";
-    
-    private static OAuthService facebookService;
     private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/me";
     private static final Token EMPTY_TOKEN = null;
+    private static OAuthService facebookService;
+    private final String TYPE = "facebook";
 
     public String authorize() {
         try {
@@ -64,7 +61,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
             facebookService.signRequest(accessToken, request);
             Response response = request.send();
 
-            JsonNode object = new ObjectMapper().readTree(response.getBody()) ;
+            JsonNode object = new ObjectMapper().readTree(response.getBody());
             userInfo = new UserInfo();
             userInfo.login(object.get("name").textValue(), object.get("id").textValue(), TYPE);
         } catch (Throwable e) {

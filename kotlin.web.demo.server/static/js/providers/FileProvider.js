@@ -18,16 +18,16 @@ var FileProvider = (function () {
 
     function FileProvider() {
         var instance = {
-            renameFile: function (url, newName) {
-                renameFile(url, newName)
+            renameFile: function (publicId, newName) {
+                renameFile(publicId, newName)
             },
-            saveFile: function (url, data) {
-                saveFile(url, data);
+            saveFile: function (publicId, data) {
+                saveFile(publicId, data);
             },
-            deleteFile: function (url) {
-                deleteFile(url);
+            deleteFile: function (publicId) {
+                deleteFile(publicId);
             },
-            onFileRenamed: function(newName){
+            onFileRenamed: function (newName) {
             },
             onDeleteFile: function () {
 
@@ -35,25 +35,28 @@ var FileProvider = (function () {
         };
 
 
-
-        function renameFile(url, newName) {
+        function renameFile(publicId, newName) {
             $.ajax({
-                url: generateAjaxUrl("renameFile", url),
-                success: function(){instance.onFileRenamed(newName)},
+                url: generateAjaxUrl("renameFile"),
+                success: function () {
+                    instance.onFileRenamed(newName)
+                },
                 type: "POST",
                 timeout: 10000,
-                data: {newName: newName}
+                data: {publicId: publicId,
+                    newName: newName}
             })
         }
 
-        function deleteFile(url) {
+        function deleteFile(publicId) {
             $.ajax({
-                url: generateAjaxUrl("deleteFile", url),
+                url: generateAjaxUrl("deleteFile"),
                 context: document.body,
                 success: function () {
-                    instance.onDeleteFile(url);
+                    instance.onDeleteFile();
                 },
                 type: "POST",
+                data: {publicId: publicId},
                 timeout: 10000
 //                error: function (jqXHR, textStatus, errorThrown) {
 //                    project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
@@ -61,12 +64,12 @@ var FileProvider = (function () {
             });
         }
 
-        function saveFile(url, data) {
+        function saveFile(publicId, data) {
             $.ajax({
-                url: generateAjaxUrl("saveFile", url),
+                url: generateAjaxUrl("saveFile"),
                 type: "POST",
                 timeout: 10000,
-                data: {file: JSON.stringify(data)}
+                data: {publicId: publicId, file: JSON.stringify(data)}
 //                error: function (jqXHR, textStatus, errorThrown) {
 //                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
 //                }

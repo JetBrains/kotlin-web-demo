@@ -21,17 +21,15 @@
 
 var InputDialogView = (function () {
 
-    var dialog, text, input;
-    dialog = document.createElement("div");
+    var dialog = document.createElement("div");
     dialog.id = "input-dialog";
 
-    text = document.createElement("span");
+    var text = document.createElement("span");
     text.id = "input-dialog-text";
-    input = document.createElement("input");
-    input.id = "input-dialog-input";
-
-
     dialog.appendChild(text);
+
+    var input = document.createElement("input");
+    input.id = "input-dialog-input";
     dialog.appendChild(input);
 
 
@@ -46,25 +44,21 @@ var InputDialogView = (function () {
         if (event.keyCode == 13) { /*enter*/
             $(this).parent()
                 .find("button:eq(1)").trigger("click");
-        } else if(event.keyCode == 27){ /*escape*/
+        } else if (event.keyCode == 27) { /*escape*/
             $(this).dialog("close");
         }
         event.stopPropagation();
     });
 
     function InputDialogView(title, inputText, buttonText) {
-
-
         var instance = {
 
             open: function (callback, defaultValue) {
 
+                validationResult(true);
+
                 input.oninput = function () {
-                    if (instance.verify(input.value)){
-                        enableInput()
-                    } else{
-                        disableInput()
-                    }
+                    validationResult(instance.verify(input.value));
                 };
 
                 if (defaultValue != null && defaultValue != undefined) {
@@ -72,12 +66,10 @@ var InputDialogView = (function () {
                     var i = 1;
                     while (!instance.verify(verifiedDefaultValue)) {
                         verifiedDefaultValue = defaultValue + i;
-                        i = i + 1;
+                        ++i;
                     }
                     input.value = verifiedDefaultValue;
                 }
-
-                enableInput();
 
                 $(dialog).dialog('option', 'title', title);
                 text.innerHTML = inputText;
@@ -89,7 +81,7 @@ var InputDialogView = (function () {
                                     callback(input.value);
                                     $(this).dialog("close");
                                 } else {
-                                    disableInput();
+                                    validationResult(false);
                                 }
                                 event.stopPropagation();
                             }
@@ -110,17 +102,9 @@ var InputDialogView = (function () {
             }
         };
 
-
-
-        function disableInput(){
-            input.style.outlineColor = "red";
-            $(dialog).parent().find("button:eq(1)").button("option", "disabled", true);
-            input.focus();
-        }
-
-        function enableInput(){
-            input.style.outlineColor = "";
-            $(dialog).parent().find("button:eq(1)").button("option", "disabled", false);
+        function validationResult(result) {
+            input.style.outlineColor = result ? "" : "red";
+            $(dialog).parent().find("button:eq(1)").button("option", "disabled", !result);
             input.focus();
         }
 

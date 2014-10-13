@@ -21,7 +21,7 @@
 var File = (function () {
 
 
-    function File(project, name, content, modifiable, element) {
+    function File(project, name, content, modifiable, publicId, element) {
         var fileNameElement;
         var isContentChanged = false;
 
@@ -31,20 +31,26 @@ var File = (function () {
             modifiable: modifiable,
             errors: [],
             type: "Kotlin",
+            publicId: publicId,
             getUrl: function () {
                 return getUrl();
             },
             save: function () {
                 isContentChanged = false;
                 instance.content = editor.getText();
-                if (project.isUserProject()) {
-                    provider.saveFile(instance.getUrl(), this);
+                if (project.getType() == ProjectType.USER_PROJECT) {
+                    provider.saveFile(publicId, this);
                 } else {
                     project.save();
                 }
             },
-            onProjectRenamed: function () {
-                element.id = getUrl();
+            open: function () {
+                editor.open(instance);
+                if (publicId.startsWith("folder")) {
+                    window.history.pushState("", "", "?" + publicId)
+                } else {
+                    window.history.pushState("", "", "?id=" + publicId)
+                }
             },
             onContentChange: function (text) {
                 isContentChanged = true;
@@ -57,7 +63,6 @@ var File = (function () {
             rename: function (newName) {
                 newName = newName.endsWith(".kt") ? newName : newName + ".kt";
                 instance.name = newName;
-                element.id = getUrl();
                 fileNameElement.innerHTML = newName;
             },
             isContentChanged: function () {
@@ -102,12 +107,12 @@ var File = (function () {
             fileNameElement.innerHTML = instance.name;
             element.appendChild(fileNameElement);
 
-            if (project.isUserProject() && instance.modifiable) {
+            if (project.getType() == ProjectType.USER_PROJECT && instance.modifiable) {
                 var renameImg = document.createElement("div");
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename this file";
                 renameImg.onclick = function (event) {
-                    renameFileDialog.open( provider.renameFile.bind(null, getUrl()), getNameWithoutExtension() );
+                    renameFileDialog.open(provider.renameFile.bind(null, publicId), getNameWithoutExtension());
                     event.stopPropagation();
                 };
 
@@ -117,7 +122,7 @@ var File = (function () {
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
                     if(confirm("Delete file " + instance.name)){
-                        provider.deleteFile(instance.getUrl());
+                        provider.deleteFile(publicId);
                     }
                     event.stopPropagation();
                 };
@@ -131,7 +136,7 @@ var File = (function () {
         }
 
         function getUrl() {
-            return project.getUrl() + "&filename=" + instance.name;
+            return "file_" + publicId;
         }
 
         function getNameWithoutExtension(){

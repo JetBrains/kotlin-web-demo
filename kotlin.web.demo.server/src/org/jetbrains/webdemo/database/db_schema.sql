@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS projects (
   id                INT                                    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  public_id         VARCHAR(45)                            NOT NULL UNIQUE,
   owner_id          INT                                    NOT NULL,
   name              VARCHAR(45)                            NOT NULL DEFAULT '',
   args              VARCHAR(45)                            NOT NULL DEFAULT '',
@@ -29,8 +30,8 @@ CREATE TABLE IF NOT EXISTS projects (
 
 CREATE TABLE IF NOT EXISTS files (
   id         INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  project_id INT         NOT NULL,
   public_id  VARCHAR(45) NOT NULL UNIQUE,
+  project_id INT         NOT NULL,
   name       VARCHAR(45) NOT NULL,
   content    LONGTEXT,
   CONSTRAINT file_name UNIQUE (project_id, name),

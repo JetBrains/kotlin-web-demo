@@ -42,6 +42,7 @@ var KotlinEditor = (function () {
             }
 
             sel.menu();
+            close();
             sel.on("keydown", function (event) {
                 var code = event.keyCode;
 
