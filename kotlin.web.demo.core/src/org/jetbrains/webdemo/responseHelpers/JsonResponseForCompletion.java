@@ -34,7 +34,9 @@ import org.jetbrains.jet.lang.resolve.DescriptorUtils;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.plugin.codeInsight.TipsManager;
+import org.jetbrains.jet.plugin.util.IdeDescriptorRenderers;
 import org.jetbrains.jet.renderer.DescriptorRenderer;
+import org.jetbrains.jet.renderer.DescriptorRendererBuilder;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.ResolveUtils;
@@ -48,6 +50,13 @@ import org.json.JSONArray;
 import java.util.*;
 
 public class JsonResponseForCompletion {
+    private static final DescriptorRenderer RENDERER = new DescriptorRendererBuilder()
+            .setShortNames(true)
+            .setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES)
+            .setWithoutFunctionParameterNames(true)
+            .setRenderDefaultValues(false)
+            .build();
+
     private final int NUMBER_OF_CHAR_IN_COMPLETION_NAME = 40;
 
     private final Project currentProject;
@@ -233,19 +242,19 @@ public class JsonResponseForCompletion {
         if (descriptor instanceof FunctionDescriptor) {
             FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
             JetType returnType = functionDescriptor.getReturnType();
-            typeText = returnType != null ? DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(returnType) : "";
-            presentableText += DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderFunctionParameters(functionDescriptor);
+            typeText = returnType != null ? RENDERER.renderType(returnType) : "";
+            presentableText += RENDERER.renderFunctionParameters(functionDescriptor);
 
             boolean extensionFunction = functionDescriptor.getExtensionReceiverParameter() != null;
             DeclarationDescriptor containingDeclaration = descriptor.getContainingDeclaration();
             if (containingDeclaration != null && extensionFunction) {
-                tailText += " for " + DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(functionDescriptor.getExtensionReceiverParameter().getType());
+                tailText += " for " + RENDERER.renderType(functionDescriptor.getExtensionReceiverParameter().getType());
                 tailText += " in " + DescriptorUtils.getFqName(containingDeclaration);
             }
         }
         else if (descriptor instanceof VariableDescriptor) {
             JetType outType = ((VariableDescriptor) descriptor).getType();
-            typeText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(outType);
+            typeText = RENDERER.renderType(outType);
         }
         else if (descriptor instanceof ClassDescriptor) {
             DeclarationDescriptor declaredIn = descriptor.getContainingDeclaration();
@@ -253,7 +262,7 @@ public class JsonResponseForCompletion {
             tailText = " (" + DescriptorUtils.getFqName(declaredIn) + ")";
         }
         else {
-            typeText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.render(descriptor);
+            typeText = RENDERER.render(descriptor);
         }
 
         if (typeText.isEmpty()) {
