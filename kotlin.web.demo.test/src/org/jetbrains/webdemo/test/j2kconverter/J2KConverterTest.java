@@ -35,7 +35,7 @@ public class J2KConverterTest extends BaseTest {
 
     public void test$j2kconverter$dataClass() throws IOException {
         String fileName = TestUtils.getNameByTestName(this) + ".java";
-        String expectedResult = "[{\"text\":\"public class Foo {\\nprivate val foo:Int = 0\\npublic fun getFoo():Int {\\nreturn foo\\n}\\n}\"}]";
+        String expectedResult = "[{\"text\":\"public class Foo {\\npublic val foo:Int = 0\\n}\"}]";
 
         assertTrue(true);
         compareResult(fileName, expectedResult);
