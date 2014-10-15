@@ -84,8 +84,8 @@
       return a;
     };
   }
-  function k(a) {
-    var b = {};
+  function k(a, b) {
+    "undefined" === typeof b && (b = {});
     if (null == a) {
       return b;
     }
@@ -105,9 +105,9 @@
     Kotlin.classCount++;
     return a;
   };
-  Kotlin.createClassNow = function(a, d, g, h) {
+  Kotlin.createClassNow = function(a, d, g, f) {
     null == d && (d = n());
-    c(d, h);
+    c(d, f);
     a = e(a, g);
     a.type = Kotlin.TYPE.CLASS;
     g = null !== a.baseClass ? Object.create(a.baseClass.prototype) : {};
@@ -126,22 +126,22 @@
     return a;
   };
   Kotlin.createTraitNow = function(a, d, g) {
-    var h = function() {
+    var f = function() {
     };
-    c(h, g);
-    h.$metadata$ = e(a, d);
-    h.$metadata$.type = Kotlin.TYPE.TRAIT;
-    h.prototype = {};
-    Object.defineProperties(h.prototype, h.$metadata$.properties);
-    c(h.prototype, h.$metadata$.functions);
-    Object.defineProperty(h, "object", {get:b, configurable:!0});
-    return h;
+    c(f, g);
+    f.$metadata$ = e(a, d);
+    f.$metadata$.type = Kotlin.TYPE.TRAIT;
+    f.prototype = {};
+    Object.defineProperties(f.prototype, f.$metadata$.properties);
+    c(f.prototype, f.$metadata$.functions);
+    Object.defineProperty(f, "object", {get:b, configurable:!0});
+    return f;
   };
   Kotlin.createClass = function(a, b, e, g) {
     function c() {
-      var h = Kotlin.createClassNow(d(a), b, e, g);
-      Object.defineProperty(this, c.className, {value:h});
-      return h;
+      var f = Kotlin.createClassNow(d(a), b, e, g);
+      Object.defineProperty(this, c.className, {value:f});
+      return f;
     }
     c.type = Kotlin.TYPE.INIT_FUN;
     return c;
@@ -240,6 +240,7 @@
     return e;
   };
   Kotlin.modules = {};
+  Kotlin.createDefinition = k;
   Kotlin.definePackage = function(a, b) {
     var d = k(b);
     return null === a ? {value:d} : {get:h(d, a)};
@@ -377,8 +378,10 @@
   Kotlin.throwNPE = function(a) {
     throw new Kotlin.NullPointerException(a);
   };
-  Kotlin.Iterator = Kotlin.createClassNow(null, null, {next:f("Iterator#next"), hasNext:f("Iterator#hasNext")});
-  var e = Kotlin.createClassNow(Kotlin.Iterator, function(a) {
+  var e = {};
+  e.ArrayIterator = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.MutableIterator];
+  }, function(a) {
     this.array = a;
     this.index = 0;
   }, {next:function() {
@@ -391,14 +394,16 @@
     }
     this.index--;
     this.array.splice(this.index, 1);
-  }}), b = Kotlin.createClassNow(e, function(a) {
+  }});
+  e.ListIterator = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.Iterator];
+  }, function(a) {
     this.list = a;
     this.size = a.size();
     this.index = 0;
   }, {next:function() {
     return this.list.get(this.index++);
   }});
-  Kotlin.Collection = Kotlin.createClassNow();
   Kotlin.Enum = Kotlin.createClassNow(null, function() {
     this.ordinal$ = this.name$ = void 0;
   }, {name:function() {
@@ -411,7 +416,9 @@
   Kotlin.PropertyMetadata = Kotlin.createClassNow(null, function(a) {
     this.name = a;
   });
-  Kotlin.AbstractCollection = Kotlin.createClassNow(Kotlin.Collection, null, {addAll_4fm7v2$:function(a) {
+  e.AbstractCollection = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.MutableCollection];
+  }, null, {addAll_4fm7v2$:function(a) {
     var b = !1;
     for (a = a.iterator();a.hasNext();) {
       this.add_za3rmp$(a.next()) && (b = !0);
@@ -437,7 +444,7 @@
   }, isEmpty:function() {
     return 0 === this.size();
   }, iterator:function() {
-    return new e(this.toArray());
+    return new Kotlin.ArrayIterator(this.toArray());
   }, equals_za3rmp$:function(a) {
     if (this.size() !== a.size()) {
       return!1;
@@ -458,15 +465,19 @@
   }, toJSON:function() {
     return this.toArray();
   }});
-  Kotlin.AbstractList = Kotlin.createClassNow(Kotlin.AbstractCollection, null, {iterator:function() {
-    return new b(this);
+  e.AbstractList = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.MutableList, Kotlin.AbstractCollection];
+  }, null, {iterator:function() {
+    return new Kotlin.ListIterator(this);
   }, remove_za3rmp$:function(a) {
     a = this.indexOf_za3rmp$(a);
     return-1 !== a ? (this.remove_za3lpa$(a), !0) : !1;
   }, contains_za3rmp$:function(a) {
     return-1 !== this.indexOf_za3rmp$(a);
   }});
-  Kotlin.ArrayList = Kotlin.createClassNow(Kotlin.AbstractList, function() {
+  e.ArrayList = Kotlin.createClass(function() {
+    return[Kotlin.AbstractList];
+  }, function() {
     this.array = [];
   }, {get_za3lpa$:function(a) {
     this.checkRange(a);
@@ -544,28 +555,49 @@
     }
     return!0;
   };
-  Kotlin.System = function() {
-    var a = "", b = function(b) {
-      void 0 !== b && (a = null === b || "object" !== typeof b ? a + b : a + b.toString());
-    }, d = function(b) {
-      this.print(b);
-      a += "\n";
-    };
-    return{out:function() {
-      return{print:b, println:d};
-    }, output:function() {
-      return a;
-    }, flush:function() {
-      a = "";
-    }};
-  }();
+  var b = Kotlin.createClassNow(null, null, {println:function(a) {
+    "undefined" !== typeof a && this.print(a);
+    this.print("\n");
+  }, flush:function() {
+  }});
+  Kotlin.NodeJsOutput = Kotlin.createClassNow(b, function(a) {
+    this.outputStream = a;
+  }, {print:function(a) {
+    this.outputStream.write(a);
+  }});
+  Kotlin.OutputToConsoleLog = Kotlin.createClassNow(b, null, {print:function(a) {
+    console.log(a);
+  }, println:function(a) {
+    this.print("undefined" !== typeof a ? a : "");
+  }});
+  Kotlin.BufferedOutput = Kotlin.createClassNow(b, function() {
+    this.buffer = "";
+  }, {print:function(a) {
+    this.buffer += String(a);
+  }, flush:function() {
+    this.buffer = "";
+  }});
+  Kotlin.BufferedOutputToConsoleLog = Kotlin.createClassNow(Kotlin.BufferedOutput, function() {
+    Kotlin.BufferedOutput.call(this);
+  }, {print:function(a) {
+    a = String(a);
+    var b = a.lastIndexOf("\n");
+    -1 != b && (this.buffer += a.substr(0, b), this.flush(), a = a.substr(b + 1));
+    this.buffer += a;
+  }, flush:function() {
+    console.log(this.buffer);
+    this.buffer = "";
+  }});
+  Kotlin.out = "undefined" !== typeof process && process.versions && process.versions.node ? new Kotlin.NodeJsOutput(process.stdout) : new Kotlin.BufferedOutputToConsoleLog;
   Kotlin.println = function(a) {
-    Kotlin.System.out().println(a);
+    Kotlin.out.println(a);
   };
   Kotlin.print = function(a) {
-    Kotlin.System.out().print(a);
+    Kotlin.out.print(a);
   };
-  Kotlin.RangeIterator = Kotlin.createClassNow(Kotlin.Iterator, function(a, b, d) {
+  e.RangeIterator = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.Iterator];
+  }, function(a, b, d) {
     this.start = a;
     this.end = b;
     this.increment = d;
@@ -603,7 +635,9 @@
   }, hashCode:function() {
     return this.isEmpty() ? -1 : 31 * (31 * this.start | 0 + this.end | 0) + this.increment | 0;
   }, equals_za3rmp$:a});
-  Kotlin.LongRangeIterator = Kotlin.createClassNow(Kotlin.Iterator, function(a, b, d) {
+  e.LongRangeIterator = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.Iterator];
+  }, function(a, b, d) {
     this.start = a;
     this.end = b;
     this.increment = d;
@@ -641,7 +675,9 @@
   }, hashCode:function() {
     return this.isEmpty() ? -1 : 31 * (31 * this.start.toInt() + this.end.toInt()) + this.increment.toInt();
   }, equals_za3rmp$:a});
-  Kotlin.CharRangeIterator = Kotlin.createClassNow(Kotlin.RangeIterator, function(a, b, d) {
+  e.CharRangeIterator = Kotlin.createClass(function() {
+    return[Kotlin.RangeIterator];
+  }, function(a, b, d) {
     Kotlin.RangeIterator.call(this, a, b, d);
   }, {next:function() {
     var a = this.i;
@@ -765,7 +801,7 @@
     return new Kotlin.NumberRange(0, a.length - 1);
   };
   Kotlin.arrayIterator = function(a) {
-    return new e(a);
+    return new Kotlin.ArrayIterator(a);
   };
   Kotlin.jsonFromTuples = function(a) {
     for (var b = a.length, d = {};0 < b;) {
@@ -779,6 +815,7 @@
     }
     return a;
   };
+  Kotlin.createDefinition(e, Kotlin);
 })();
 (function() {
   function c(a, b) {
@@ -829,11 +866,11 @@
       for (var d = this.entries.length, e, c = this.getEqualityFunction(b);d--;) {
         if (e = this.entries[d], c(b, e[0])) {
           switch(a) {
-            case x:
-              return!0;
             case B:
-              return e;
+              return!0;
             case s:
+              return e;
+            case q:
               return[d, e[1]];
           }
         }
@@ -889,13 +926,101 @@
       return a;
     };
   }
+  function t(a, b) {
+    var d = new Kotlin.HashTable(a, b);
+    this.addAll_4fm7v2$ = Kotlin.AbstractCollection.prototype.addAll_4fm7v2$;
+    this.removeAll_4fm7v2$ = Kotlin.AbstractCollection.prototype.removeAll_4fm7v2$;
+    this.retainAll_4fm7v2$ = Kotlin.AbstractCollection.prototype.retainAll_4fm7v2$;
+    this.containsAll_4fm7v2$ = Kotlin.AbstractCollection.prototype.containsAll_4fm7v2$;
+    this.add_za3rmp$ = function(a) {
+      return!d.put_wn2jw4$(a, !0);
+    };
+    this.toArray = function() {
+      return d._keys();
+    };
+    this.iterator = function() {
+      return new Kotlin.SetIterator(this);
+    };
+    this.remove_za3rmp$ = function(a) {
+      return null != d.remove_za3rmp$(a);
+    };
+    this.contains_za3rmp$ = function(a) {
+      return d.containsKey_za3rmp$(a);
+    };
+    this.clear = function() {
+      d.clear();
+    };
+    this.size = function() {
+      return d.size();
+    };
+    this.isEmpty = function() {
+      return d.isEmpty();
+    };
+    this.clone = function() {
+      var e = new t(a, b);
+      e.addAll_4fm7v2$(d.keys());
+      return e;
+    };
+    this.equals_za3rmp$ = function(a) {
+      if (null === a || void 0 === a) {
+        return!1;
+      }
+      if (this.size() === a.size()) {
+        var b = this.iterator();
+        for (a = a.iterator();;) {
+          var d = b.hasNext(), e = a.hasNext();
+          if (d != e) {
+            break;
+          }
+          if (e) {
+            if (d = b.next(), e = a.next(), !Kotlin.equals(d, e)) {
+              break;
+            }
+          } else {
+            return!0;
+          }
+        }
+      }
+      return!1;
+    };
+    this.toString = function() {
+      for (var a = "[", b = this.iterator(), d = !0;b.hasNext();) {
+        d ? d = !1 : a += ", ", a += b.next();
+      }
+      return a + "]";
+    };
+    this.intersection = function(e) {
+      var c = new t(a, b);
+      e = e.values();
+      for (var g = e.length, f;g--;) {
+        f = e[g], d.containsKey_za3rmp$(f) && c.add_za3rmp$(f);
+      }
+      return c;
+    };
+    this.union = function(a) {
+      var b = this.clone();
+      a = a.values();
+      for (var e = a.length, c;e--;) {
+        c = a[e], d.containsKey_za3rmp$(c) || b.add_za3rmp$(c);
+      }
+      return b;
+    };
+    this.isSubsetOf = function(a) {
+      for (var b = d.keys(), e = b.length;e--;) {
+        if (!a.contains_za3rmp$(b[e])) {
+          return!1;
+        }
+      }
+      return!0;
+    };
+  }
   c.prototype.getKey = function() {
     return this.key;
   };
   c.prototype.getValue = function() {
     return this.value;
   };
-  var t = "function" == typeof Array.prototype.splice ? function(a, b) {
+  var x = "function" == typeof Array.prototype.splice ? function(a, b) {
     a.splice(b, 1);
   } : function(a, b) {
     var d, e, c;
@@ -906,18 +1031,18 @@
         a[b + e] = d[e];
       }
     }
-  }, x = 0, B = 1, s = 2;
+  }, B = 0, s = 1, q = 2;
   d.prototype = {getEqualityFunction:function(a) {
     return null != a && "function" == typeof a.equals_za3rmp$ ? e : b;
-  }, getEntryForKey:g(B), getEntryAndIndexForKey:g(s), removeEntryForKey:function(a) {
-    return(a = this.getEntryAndIndexForKey(a)) ? (t(this.entries, a[0]), a) : null;
+  }, getEntryForKey:g(s), getEntryAndIndexForKey:g(q), removeEntryForKey:function(a) {
+    return(a = this.getEntryAndIndexForKey(a)) ? (x(this.entries, a[0]), a) : null;
   }, addEntry:function(a, b) {
     this.entries[this.entries.length] = [a, b];
   }, keys:h(0), values:h(1), getEntries:function(a) {
     for (var b = a.length, d = 0, e = this.entries.length;d < e;++d) {
       a[b + d] = this.entries[d].slice(0);
     }
-  }, containsKey_za3rmp$:g(x), containsValue_za3rmp$:function(a) {
+  }, containsKey_za3rmp$:g(B), containsValue_za3rmp$:function(a) {
     for (var b = this.entries.length;b--;) {
       if (a === this.entries[b][1]) {
         return!0;
@@ -925,16 +1050,16 @@
     }
     return!1;
   }};
-  var q = function(b, e) {
-    var g = this, h = [], m = {}, s = "function" == typeof b ? b : a, l = "function" == typeof e ? e : null;
+  var m = function(b, e) {
+    var g = this, h = [], s = {}, l = "function" == typeof b ? b : a, q = "function" == typeof e ? e : null;
     this.put_wn2jw4$ = function(a, b) {
-      var e = s(a), c, g = null;
-      (c = k(m, e)) ? (e = c.getEntryForKey(a)) ? (g = e[1], e[1] = b) : c.addEntry(a, b) : (c = new d(e, a, b, l), h[h.length] = c, m[e] = c);
+      var e = l(a), c, g = null;
+      (c = k(s, e)) ? (e = c.getEntryForKey(a)) ? (g = e[1], e[1] = b) : c.addEntry(a, b) : (c = new d(e, a, b, q), h[h.length] = c, s[e] = c);
       return g;
     };
     this.get_za3rmp$ = function(a) {
-      var b = s(a);
-      if (b = k(m, b)) {
+      var b = l(a);
+      if (b = k(s, b)) {
         if (a = b.getEntryForKey(a)) {
           return a[1];
         }
@@ -942,8 +1067,8 @@
       return null;
     };
     this.containsKey_za3rmp$ = function(a) {
-      var b = s(a);
-      return(b = k(m, b)) ? b.containsKey_za3rmp$(a) : !1;
+      var b = l(a);
+      return(b = k(s, b)) ? b.containsKey_za3rmp$(a) : !1;
     };
     this.containsValue_za3rmp$ = function(a) {
       for (var b = h.length;b--;) {
@@ -955,7 +1080,7 @@
     };
     this.clear = function() {
       h.length = 0;
-      m = {};
+      s = {};
     };
     this.isEmpty = function() {
       return!h.length;
@@ -978,7 +1103,7 @@
       return d;
     };
     this.remove_za3rmp$ = function(a) {
-      var b = s(a), d = null, e = null, c = k(m, b);
+      var b = l(a), d = null, e = null, c = k(s, b);
       if (c && (e = c.removeEntryForKey(a), null !== e && (d = e[1], !c.entries.length))) {
         a: {
           for (a = h.length;a--;) {
@@ -988,8 +1113,8 @@
           }
           a = null;
         }
-        t(h, a);
-        delete m[b];
+        x(h, a);
+        delete s[b];
       }
       return d;
     };
@@ -1006,7 +1131,7 @@
     };
     this.putAll_48yl7j$ = f;
     this.clone = function() {
-      var a = new q(b, e);
+      var a = new m(b, e);
       a.putAll_48yl7j$(g);
       return a;
     };
@@ -1024,13 +1149,19 @@
       return a;
     };
   };
-  Kotlin.HashTable = q;
-  Kotlin.Map = Kotlin.createClassNow();
-  Kotlin.HashMap = Kotlin.createClassNow(Kotlin.Map, function() {
+  Kotlin.HashTable = m;
+  var l = {};
+  l.HashMap = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.MutableMap];
+  }, function() {
     Kotlin.HashTable.call(this);
   });
-  Kotlin.ComplexHashMap = Kotlin.HashMap;
-  var m = Kotlin.createClassNow(Kotlin.Iterator, function(a, b) {
+  Object.defineProperty(Kotlin, "ComplexHashMap", {get:function() {
+    return Kotlin.HashMap;
+  }});
+  l.PrimitiveHashMapValuesIterator = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.Iterator];
+  }, function(a, b) {
     this.map = a;
     this.keys = b;
     this.size = b.length;
@@ -1039,16 +1170,21 @@
     return this.map[this.keys[this.index++]];
   }, hasNext:function() {
     return this.index < this.size;
-  }}), l = Kotlin.createClassNow(Kotlin.Collection, function(a) {
+  }});
+  l.PrimitiveHashMapValues = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.Collection];
+  }, function(a) {
     this.map = a;
   }, {iterator:function() {
-    return new m(this.map.map, Object.keys(this.map.map));
+    return new Kotlin.PrimitiveHashMapValuesIterator(this.map.map, Object.keys(this.map.map));
   }, isEmpty:function() {
     return 0 === this.map.$size;
   }, contains:function(a) {
     return this.map.containsValue_za3rmp$(a);
   }});
-  Kotlin.AbstractPrimitiveHashMap = Kotlin.createClassNow(Kotlin.Map, function() {
+  l.AbstractPrimitiveHashMap = Kotlin.createClass(function() {
+    return[Kotlin.HashMap];
+  }, function() {
     this.$size = 0;
     this.map = Object.create(null);
   }, {size:function() {
@@ -1094,36 +1230,47 @@
     }
     return a;
   }, values:function() {
-    return new l(this);
+    return new Kotlin.PrimitiveHashMapValues(this);
   }, toJSON:function() {
     return this.map;
   }});
-  Kotlin.DefaultPrimitiveHashMap = Kotlin.createClassNow(Kotlin.AbstractPrimitiveHashMap, function() {
+  l.DefaultPrimitiveHashMap = Kotlin.createClass(function() {
+    return[Kotlin.AbstractPrimitiveHashMap];
+  }, function() {
     Kotlin.AbstractPrimitiveHashMap.call(this);
   }, {getKeySetClass:function() {
     return Kotlin.DefaultPrimitiveHashSet;
   }});
-  Kotlin.PrimitiveNumberHashMap = Kotlin.createClassNow(Kotlin.AbstractPrimitiveHashMap, function() {
+  l.PrimitiveNumberHashMap = Kotlin.createClass(function() {
+    return[Kotlin.AbstractPrimitiveHashMap];
+  }, function() {
     Kotlin.AbstractPrimitiveHashMap.call(this);
     this.$keySetClass$ = Kotlin.PrimitiveNumberHashSet;
   }, {getKeySetClass:function() {
     return Kotlin.PrimitiveNumberHashSet;
   }});
-  Kotlin.PrimitiveBooleanHashMap = Kotlin.createClassNow(Kotlin.AbstractPrimitiveHashMap, function() {
+  l.PrimitiveBooleanHashMap = Kotlin.createClass(function() {
+    return[Kotlin.AbstractPrimitiveHashMap];
+  }, function() {
     Kotlin.AbstractPrimitiveHashMap.call(this);
   }, {getKeySetClass:function() {
     return Kotlin.PrimitiveBooleanHashSet;
   }});
-  n.prototype = Object.create(Kotlin.ComplexHashMap);
-  Kotlin.LinkedHashMap = n;
-  Kotlin.LinkedHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, function() {
+  l.LinkedHashMap = Kotlin.createClass(function() {
+    return[Kotlin.ComplexHashMap];
+  }, function() {
+    n.call(this);
+  });
+  l.LinkedHashSet = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.MutableSet, Kotlin.HashSet];
+  }, function() {
     this.map = new Kotlin.LinkedHashMap;
   }, {size:function() {
     return this.map.size();
   }, contains_za3rmp$:function(a) {
     return this.map.containsKey_za3rmp$(a);
   }, iterator:function() {
-    return new SetIterator(this);
+    return new Kotlin.SetIterator(this);
   }, add_za3rmp$:function(a) {
     return null == this.map.put_wn2jw4$(a, !0);
   }, remove_za3rmp$:function(a) {
@@ -1133,184 +1280,107 @@
   }, toArray:function() {
     return this.map.orderedKeys.slice();
   }});
-})();
-Kotlin.Set = Kotlin.createClassNow(Kotlin.Collection);
-var SetIterator = Kotlin.createClassNow(Kotlin.Iterator, function(c) {
-  this.set = c;
-  this.keys = c.toArray();
-  this.index = 0;
-}, {next:function() {
-  return this.keys[this.index++];
-}, hasNext:function() {
-  return this.index < this.keys.length;
-}, remove:function() {
-  this.set.remove_za3rmp$(this.keys[this.index - 1]);
-}});
-Kotlin.AbstractPrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractCollection, function() {
-  this.$size = 0;
-  this.map = {};
-}, {size:function() {
-  return this.$size;
-}, contains_za3rmp$:function(c) {
-  return!0 === this.map[c];
-}, iterator:function() {
-  return new SetIterator(this);
-}, add_za3rmp$:function(c) {
-  var f = this.map[c];
-  this.map[c] = !0;
-  if (!0 === f) {
-    return!1;
-  }
-  this.$size++;
-  return!0;
-}, remove_za3rmp$:function(c) {
-  return!0 === this.map[c] ? (delete this.map[c], this.$size--, !0) : !1;
-}, clear:function() {
-  this.$size = 0;
-  this.map = {};
-}, convertKeyToKeyType:function(c) {
-  throw Error("Kotlin.AbstractPrimitiveHashSet.convertKeyToKeyType is abstract");
-}, toArray:function() {
-  for (var c = Object.keys(this.map), f = 0;f < c.length;f++) {
-    c[f] = this.convertKeyToKeyType(c[f]);
-  }
-  return c;
-}});
-var PROTO_NAME = "__proto__";
-Kotlin.DefaultPrimitiveHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveHashSet, function() {
-  var c = Kotlin.AbstractPrimitiveHashSet;
-  c.call(this);
-  this.super = c.prototype;
-  this.containsProto = !1;
-}, {contains_za3rmp$:function(c) {
-  return String(c) === PROTO_NAME ? this.containsProto : this.super.contains_za3rmp$.call(this, c);
-}, add_za3rmp$:function(c) {
-  if (String(c) === PROTO_NAME) {
-    if (c = !this.containsProto) {
-      this.containsProto = !0, this.$size++;
-    }
-    return c;
-  }
-  return this.super.add_za3rmp$.call(this, c);
-}, remove_za3rmp$:function(c) {
-  if (String(c) === PROTO_NAME) {
-    if (c = this.containsProto) {
-      this.containsProto = !1, this.$size++;
-    }
-    return c;
-  }
-  return this.super.remove_za3rmp$.call(this, c);
-}, clear:function() {
-  this.$size = 0;
-  this.containsProto = !1;
-  this.map = {};
-}, toArray:function() {
-  var c = Object.keys(this.map);
-  return this.containsProto ? c.concat(PROTO_NAME) : c;
-}});
-Kotlin.PrimitiveNumberHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveHashSet, function() {
-  Kotlin.AbstractPrimitiveHashSet.call(this);
-}, {convertKeyToKeyType:function(c) {
-  return+c;
-}});
-Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveHashSet, function() {
-  Kotlin.AbstractPrimitiveHashSet.call(this);
-}, {convertKeyToKeyType:function(c) {
-  return "true" == c;
-}});
-(function() {
-  function c(f, a) {
-    var e = new Kotlin.HashTable(f, a);
-    this.addAll_4fm7v2$ = Kotlin.AbstractCollection.prototype.addAll_4fm7v2$;
-    this.removeAll_4fm7v2$ = Kotlin.AbstractCollection.prototype.removeAll_4fm7v2$;
-    this.retainAll_4fm7v2$ = Kotlin.AbstractCollection.prototype.retainAll_4fm7v2$;
-    this.containsAll_4fm7v2$ = Kotlin.AbstractCollection.prototype.containsAll_4fm7v2$;
-    this.add_za3rmp$ = function(a) {
-      return!e.put_wn2jw4$(a, !0);
-    };
-    this.toArray = function() {
-      return e._keys();
-    };
-    this.iterator = function() {
-      return new SetIterator(this);
-    };
-    this.remove_za3rmp$ = function(a) {
-      return null != e.remove_za3rmp$(a);
-    };
-    this.contains_za3rmp$ = function(a) {
-      return e.containsKey_za3rmp$(a);
-    };
-    this.clear = function() {
-      e.clear();
-    };
-    this.size = function() {
-      return e.size();
-    };
-    this.isEmpty = function() {
-      return e.isEmpty();
-    };
-    this.clone = function() {
-      var b = new c(f, a);
-      b.addAll_4fm7v2$(e.keys());
-      return b;
-    };
-    this.equals_za3rmp$ = function(a) {
-      if (null === a || void 0 === a) {
-        return!1;
-      }
-      if (this.size() === a.size()) {
-        var d = this.iterator();
-        for (a = a.iterator();;) {
-          var e = d.hasNext(), c = a.hasNext();
-          if (e != c) {
-            break;
-          }
-          if (c) {
-            if (e = d.next(), c = a.next(), !Kotlin.equals(e, c)) {
-              break;
-            }
-          } else {
-            return!0;
-          }
-        }
-      }
+  l.SetIterator = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.MutableIterator];
+  }, function(a) {
+    this.set = a;
+    this.keys = a.toArray();
+    this.index = 0;
+  }, {next:function() {
+    return this.keys[this.index++];
+  }, hasNext:function() {
+    return this.index < this.keys.length;
+  }, remove:function() {
+    this.set.remove_za3rmp$(this.keys[this.index - 1]);
+  }});
+  l.AbstractPrimitiveHashSet = Kotlin.createClass(function() {
+    return[Kotlin.HashSet];
+  }, function() {
+    this.$size = 0;
+    this.map = {};
+  }, {size:function() {
+    return this.$size;
+  }, contains_za3rmp$:function(a) {
+    return!0 === this.map[a];
+  }, iterator:function() {
+    return new Kotlin.SetIterator(this);
+  }, add_za3rmp$:function(a) {
+    var b = this.map[a];
+    this.map[a] = !0;
+    if (!0 === b) {
       return!1;
-    };
-    this.toString = function() {
-      for (var a = "[", d = this.iterator(), e = !0;d.hasNext();) {
-        e ? e = !1 : a += ", ", a += d.next();
+    }
+    this.$size++;
+    return!0;
+  }, remove_za3rmp$:function(a) {
+    return!0 === this.map[a] ? (delete this.map[a], this.$size--, !0) : !1;
+  }, clear:function() {
+    this.$size = 0;
+    this.map = {};
+  }, convertKeyToKeyType:function(a) {
+    throw Error("Kotlin.AbstractPrimitiveHashSet.convertKeyToKeyType is abstract");
+  }, toArray:function() {
+    for (var a = Object.keys(this.map), b = 0;b < a.length;b++) {
+      a[b] = this.convertKeyToKeyType(a[b]);
+    }
+    return a;
+  }});
+  l.DefaultPrimitiveHashSet = Kotlin.createClass(function() {
+    return[Kotlin.AbstractPrimitiveHashSet];
+  }, function() {
+    var a = Kotlin.AbstractPrimitiveHashSet;
+    a.call(this);
+    this.super = a.prototype;
+    this.containsProto = !1;
+  }, {contains_za3rmp$:function(a) {
+    return "__proto__" === String(a) ? this.containsProto : this.super.contains_za3rmp$.call(this, a);
+  }, add_za3rmp$:function(a) {
+    if ("__proto__" === String(a)) {
+      if (a = !this.containsProto) {
+        this.containsProto = !0, this.$size++;
       }
-      return a + "]";
-    };
-    this.intersection = function(b) {
-      var d = new c(f, a);
-      b = b.values();
-      for (var g = b.length, h;g--;) {
-        h = b[g], e.containsKey_za3rmp$(h) && d.add_za3rmp$(h);
+      return a;
+    }
+    return this.super.add_za3rmp$.call(this, a);
+  }, remove_za3rmp$:function(a) {
+    if ("__proto__" === String(a)) {
+      if (a = this.containsProto) {
+        this.containsProto = !1, this.$size++;
       }
-      return d;
-    };
-    this.union = function(a) {
-      var d = this.clone();
-      a = a.values();
-      for (var c = a.length, f;c--;) {
-        f = a[c], e.containsKey_za3rmp$(f) || d.add_za3rmp$(f);
-      }
-      return d;
-    };
-    this.isSubsetOf = function(a) {
-      for (var d = e.keys(), c = d.length;c--;) {
-        if (!a.contains_za3rmp$(d[c])) {
-          return!1;
-        }
-      }
-      return!0;
-    };
-  }
-  Kotlin.HashSet = Kotlin.createClassNow(Kotlin.Set, function() {
-    c.call(this);
+      return a;
+    }
+    return this.super.remove_za3rmp$.call(this, a);
+  }, clear:function() {
+    this.$size = 0;
+    this.containsProto = !1;
+    this.map = {};
+  }, toArray:function() {
+    var a = Object.keys(this.map);
+    return this.containsProto ? a.concat("__proto__") : a;
+  }});
+  l.PrimitiveNumberHashSet = Kotlin.createClass(function() {
+    return[Kotlin.AbstractPrimitiveHashSet];
+  }, function() {
+    Kotlin.AbstractPrimitiveHashSet.call(this);
+  }, {convertKeyToKeyType:function(a) {
+    return+a;
+  }});
+  l.PrimitiveBooleanHashSet = Kotlin.createClass(function() {
+    return[Kotlin.AbstractPrimitiveHashSet];
+  }, function() {
+    Kotlin.AbstractPrimitiveHashSet.call(this);
+  }, {convertKeyToKeyType:function(a) {
+    return "true" == a;
+  }});
+  l.HashSet = Kotlin.createClass(function() {
+    return[Kotlin.modules.stdlib.kotlin.MutableSet, Kotlin.AbstractCollection];
+  }, function() {
+    t.call(this);
   });
-  Kotlin.ComplexHashSet = Kotlin.HashSet;
+  Object.defineProperty(Kotlin, "ComplexHashSet", {get:function() {
+    return Kotlin.HashSet;
+  }});
+  Kotlin.createDefinition(l, Kotlin);
 })();
 (function(c) {
   c.Long = function(c, a) {
@@ -1652,36 +1722,58 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
       this.lessOrEqual = "\u2264";
       this.greaterOrEqual = "\u2265";
     });
-  }, {ByteIterator:c.createClass(function() {
-    return[c.Iterator];
+  }, {Iterable:c.createTrait(null), MutableIterable:c.createTrait(function() {
+    return[f.kotlin.Iterable];
+  }), Collection:c.createTrait(function() {
+    return[f.kotlin.Iterable];
+  }), MutableCollection:c.createTrait(function() {
+    return[f.kotlin.MutableIterable, f.kotlin.Collection];
+  }), List:c.createTrait(function() {
+    return[f.kotlin.Collection];
+  }), MutableList:c.createTrait(function() {
+    return[f.kotlin.MutableCollection, f.kotlin.List];
+  }), Set:c.createTrait(function() {
+    return[f.kotlin.Collection];
+  }), MutableSet:c.createTrait(function() {
+    return[f.kotlin.MutableCollection, f.kotlin.Set];
+  }), Map:c.createTrait(null), MutableMap:c.createTrait(function() {
+    return[f.kotlin.Map];
+  }), Iterator:c.createTrait(null), MutableIterator:c.createTrait(function() {
+    return[f.kotlin.Iterator];
+  }), ListIterator:c.createTrait(function() {
+    return[f.kotlin.Iterator];
+  }), MutableListIterator:c.createTrait(function() {
+    return[f.kotlin.MutableIterator, f.kotlin.ListIterator];
+  }), ByteIterator:c.createClass(function() {
+    return[f.kotlin.Iterator];
   }, null, {next:function() {
     return this.nextByte();
   }}), CharIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, null, {next:function() {
     return this.nextChar();
   }}), ShortIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, null, {next:function() {
     return this.nextShort();
   }}), IntIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, null, {next:function() {
     return this.nextInt();
   }}), LongIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, null, {next:function() {
     return this.nextLong();
   }}), FloatIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, null, {next:function() {
     return this.nextFloat();
   }}), DoubleIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, null, {next:function() {
     return this.nextDouble();
   }}), BooleanIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, null, {next:function() {
     return this.nextBoolean();
   }}), Range:c.createTrait(null, {start:{get:function() {
@@ -3405,9 +3497,9 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, contains_x27eb7$:function(a, e) {
     return 0 <= f.kotlin.indexOf_x27eb7$(a, e);
   }, contains_pjxz11$:function(a, e) {
-    return c.isType(a, c.modules.stdlib.kotlin.Collection) ? a.contains_za3rmp$(e) : 0 <= f.kotlin.indexOf_pjxz11$(a, e);
+    return c.isType(a, f.kotlin.Collection) ? a.contains_za3rmp$(e) : 0 <= f.kotlin.indexOf_pjxz11$(a, e);
   }, contains_u9guhp$:function(a, e) {
-    return c.isType(a, c.modules.stdlib.kotlin.Collection) ? a.contains_za3rmp$(e) : 0 <= f.kotlin.indexOf_u9guhp$(a, e);
+    return c.isType(a, f.kotlin.Collection) ? a.contains_za3rmp$(e) : 0 <= f.kotlin.indexOf_u9guhp$(a, e);
   }, elementAt_ke1fvl$:function(a, e) {
     return a[e];
   }, elementAt_rz0vgy$:function(a, e) {
@@ -3427,7 +3519,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, elementAt_7naycm$:function(a, e) {
     return a[e];
   }, elementAt_pjxt3m$:function(a, e) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       return a.get_za3lpa$(e);
     }
     for (var b = a.iterator(), d = 0;b.hasNext();) {
@@ -3495,7 +3587,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     }
     return a[0];
   }, first_ir3nkc$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       if (0 === f.kotlin.get_size_4m3c68$(a)) {
         throw new c.NoSuchElementException("Collection is empty");
       }
@@ -3512,7 +3604,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     }
     return a.get_za3lpa$(0);
   }, first_hrarni$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       if (0 === f.kotlin.get_size_4m3c68$(a)) {
         throw new c.NoSuchElementException("Collection is empty");
       }
@@ -3657,7 +3749,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, firstOrNull_i2lc78$:function(a) {
     return 0 < a.length ? a[0] : null;
   }, firstOrNull_ir3nkc$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       return 0 === f.kotlin.get_size_4m3c68$(a) ? null : a.get_za3lpa$(0);
     }
     a = a.iterator();
@@ -3665,7 +3757,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, firstOrNull_fvq2g0$:function(a) {
     return 0 < f.kotlin.get_size_4m3c68$(a) ? a.get_za3lpa$(0) : null;
   }, firstOrNull_hrarni$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       return 0 === f.kotlin.get_size_4m3c68$(a) ? null : a.get_za3lpa$(0);
     }
     a = a.iterator();
@@ -3952,7 +4044,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     }
     return a[a.length - 1];
   }, last_ir3nkc$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       if (0 === f.kotlin.get_size_4m3c68$(a)) {
         throw new c.NoSuchElementException("Collection is empty");
       }
@@ -3972,7 +4064,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     }
     return a.get_za3lpa$(f.kotlin.get_size_4m3c68$(a) - 1);
   }, last_hrarni$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       if (0 === f.kotlin.get_size_4m3c68$(a)) {
         throw new c.NoSuchElementException("Collection is empty");
       }
@@ -4278,7 +4370,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, lastOrNull_i2lc78$:function(a) {
     return 0 < a.length ? a[a.length - 1] : null;
   }, lastOrNull_ir3nkc$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       return 0 < f.kotlin.get_size_4m3c68$(a) ? a.get_za3lpa$(f.kotlin.get_size_4m3c68$(a) - 1) : null;
     }
     a = a.iterator();
@@ -4292,7 +4384,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, lastOrNull_fvq2g0$:function(a) {
     return 0 < f.kotlin.get_size_4m3c68$(a) ? a.get_za3lpa$(f.kotlin.get_size_4m3c68$(a) - 1) : null;
   }, lastOrNull_hrarni$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       return 0 < f.kotlin.get_size_4m3c68$(a) ? a.get_za3lpa$(f.kotlin.get_size_4m3c68$(a) - 1) : null;
     }
     a = a.iterator();
@@ -4501,7 +4593,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return a;
   }, single_ir3nkc$:function(a) {
     var e;
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       e = f.kotlin.get_size_4m3c68$(a);
       if (0 === e) {
         throw new c.NoSuchElementException("Collection is empty");
@@ -4536,7 +4628,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return a;
   }, single_hrarni$:function(a) {
     var e;
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       e = f.kotlin.get_size_4m3c68$(a);
       if (0 === e) {
         throw new c.NoSuchElementException("Collection is empty");
@@ -4782,7 +4874,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, singleOrNull_i2lc78$:function(a) {
     return 1 === a.length ? a[0] : null;
   }, singleOrNull_ir3nkc$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       return 1 === f.kotlin.get_size_4m3c68$(a) ? a.get_za3lpa$(0) : null;
     }
     a = a.iterator();
@@ -4794,7 +4886,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, singleOrNull_fvq2g0$:function(a) {
     return 1 === f.kotlin.get_size_4m3c68$(a) ? a.get_za3lpa$(0) : null;
   }, singleOrNull_hrarni$:function(a) {
-    if (c.isType(a, c.modules.stdlib.kotlin.List)) {
+    if (c.isType(a, f.kotlin.List)) {
       return 1 === f.kotlin.get_size_4m3c68$(a) ? a.get_za3lpa$(0) : null;
     }
     a = a.iterator();
@@ -5373,36 +5465,36 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, filterNotTo_bvc2pq$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) || e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) || e.add_za3rmp$(f);
     }
     return e;
   }, filterNotTo_2dsrxa$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) || e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) || e.add_za3rmp$(f);
     }
     return e;
   }, filterNotTo_qrargo$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) || e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) || e.add_za3rmp$(f);
     }
     return e;
   }, filterNotTo_8u2w7$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) || e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) || e.add_za3rmp$(f);
     }
     return e;
   }, filterNotTo_j51r02$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) || e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) || e.add_za3rmp$(f);
     }
     return e;
   }, filterNotTo_yn17t1$:function(a, e, b) {
@@ -5416,15 +5508,15 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, filterNotTo_tkbl16$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) || e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) || e.add_za3rmp$(f);
     }
     return e;
   }, filterNotTo_w211xu$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) || e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) || e.add_za3rmp$(f);
     }
     return e;
   }, filterNotTo_5pn78a$:function(a, e, b) {
@@ -5459,36 +5551,36 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, filterTo_bvc2pq$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) && e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) && e.add_za3rmp$(f);
     }
     return e;
   }, filterTo_2dsrxa$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) && e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) && e.add_za3rmp$(f);
     }
     return e;
   }, filterTo_qrargo$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) && e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) && e.add_za3rmp$(f);
     }
     return e;
   }, filterTo_8u2w7$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) && e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) && e.add_za3rmp$(f);
     }
     return e;
   }, filterTo_j51r02$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) && e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) && e.add_za3rmp$(f);
     }
     return e;
   }, filterTo_yn17t1$:function(a, e, b) {
@@ -5502,15 +5594,15 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, filterTo_tkbl16$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) && e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) && e.add_za3rmp$(f);
     }
     return e;
   }, filterTo_w211xu$:function(a, e, b) {
     var d;
     for (a = c.arrayIterator(a);a.hasNext();) {
-      var g = a.next();
-      (d = b(g)) && e.add_za3rmp$(g);
+      var f = a.next();
+      (d = b(f)) && e.add_za3rmp$(f);
     }
     return e;
   }, filterTo_5pn78a$:function(a, e, b) {
@@ -5538,131 +5630,131 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, slice_nm6zq8$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a[g]);
+      var f = b.next();
+      d.add_za3rmp$(a[f]);
     }
     return d;
   }, slice_ltfi6n$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a[g]);
+      var f = b.next();
+      d.add_za3rmp$(a[f]);
     }
     return d;
   }, slice_mktw3v$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a[g]);
+      var f = b.next();
+      d.add_za3rmp$(a[f]);
     }
     return d;
   }, slice_yshwt5$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a[g]);
+      var f = b.next();
+      d.add_za3rmp$(a[f]);
     }
     return d;
   }, slice_7o4j4c$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a[g]);
+      var f = b.next();
+      d.add_za3rmp$(a[f]);
     }
     return d;
   }, slice_bkat7f$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a[g]);
+      var f = b.next();
+      d.add_za3rmp$(a[f]);
     }
     return d;
   }, slice_a5s7l4$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a[g]);
+      var f = b.next();
+      d.add_za3rmp$(a[f]);
     }
     return d;
   }, slice_1p4wjj$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a[g]);
+      var f = b.next();
+      d.add_za3rmp$(a[f]);
     }
     return d;
   }, slice_qgho05$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a[g]);
+      var f = b.next();
+      d.add_za3rmp$(a[f]);
     }
     return d;
   }, slice_us3wm7$:function(a, e) {
     var b, d = new c.ArrayList;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.add_za3rmp$(a.get_za3lpa$(g));
+      var f = b.next();
+      d.add_za3rmp$(a.get_za3lpa$(f));
     }
     return d;
   }, slice_jf1m6n$:function(a, e) {
     var b, d = new c.StringBuilder;
     for (b = e.iterator();b.hasNext();) {
-      var g = b.next();
-      d.append(a.charAt(g));
+      var f = b.next();
+      d.append(a.charAt(f));
     }
     return d.toString();
   }, take_ke1fvl$:function(a, e) {
-    var b, d, g = 0, f = e > a.length ? a.length : e, k = new c.ArrayList(f);
+    var b, d, f = 0, h = e > a.length ? a.length : e, k = new c.ArrayList(h);
     b = a.length;
     for (d = 0;d !== b;++d) {
       var n = a[d];
-      if (g++ === f) {
+      if (f++ === h) {
         break;
       }
       k.add_za3rmp$(n);
     }
     return k;
   }, take_rz0vgy$:function(a, e) {
-    var b, d = 0, g = e > a.length ? a.length : e, f = new c.ArrayList(g);
+    var b, d = 0, f = e > a.length ? a.length : e, h = new c.ArrayList(f);
     for (b = c.arrayIterator(a);b.hasNext();) {
       var k = b.next();
-      if (d++ === g) {
+      if (d++ === f) {
         break;
       }
-      f.add_za3rmp$(k);
+      h.add_za3rmp$(k);
     }
-    return f;
+    return h;
   }, take_ucmip8$:function(a, e) {
-    var b, d = 0, g = e > a.length ? a.length : e, f = new c.ArrayList(g);
+    var b, d = 0, f = e > a.length ? a.length : e, h = new c.ArrayList(f);
     for (b = c.arrayIterator(a);b.hasNext();) {
       var k = b.next();
-      if (d++ === g) {
+      if (d++ === f) {
         break;
       }
-      f.add_za3rmp$(k);
+      h.add_za3rmp$(k);
     }
-    return f;
+    return h;
   }, take_cwi0e2$:function(a, e) {
-    var b, d = 0, g = e > a.length ? a.length : e, f = new c.ArrayList(g);
+    var b, d = 0, f = e > a.length ? a.length : e, h = new c.ArrayList(f);
     for (b = c.arrayIterator(a);b.hasNext();) {
       var k = b.next();
-      if (d++ === g) {
+      if (d++ === f) {
         break;
       }
-      f.add_za3rmp$(k);
+      h.add_za3rmp$(k);
     }
-    return f;
+    return h;
   }, take_3qx2rv$:function(a, e) {
-    var b, d = 0, g = e > a.length ? a.length : e, f = new c.ArrayList(g);
+    var b, d = 0, f = e > a.length ? a.length : e, h = new c.ArrayList(f);
     for (b = c.arrayIterator(a);b.hasNext();) {
       var k = b.next();
-      if (d++ === g) {
+      if (d++ === f) {
         break;
       }
-      f.add_za3rmp$(k);
+      h.add_za3rmp$(k);
     }
-    return f;
+    return h;
   }, take_2e964m$:function(a, e) {
     var b, d = 0, f = e > a.length ? a.length : e, h = new c.ArrayList(f);
     for (b = c.arrayIterator(a);b.hasNext();) {
@@ -7579,7 +7671,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     }
     return e;
   }, toMutableSet_ir3nkc$:function(a) {
-    return c.isType(a, c.modules.stdlib.kotlin.Collection) ? f.java.util.LinkedHashSet_4fm7v2$(a) : f.kotlin.toCollection_lhgvru$(a, new c.LinkedHashSet);
+    return c.isType(a, f.kotlin.Collection) ? f.java.util.LinkedHashSet_4fm7v2$(a) : f.kotlin.toCollection_lhgvru$(a, new c.LinkedHashSet);
   }, union_nm1vyb$:function(a, e) {
     var b = f.kotlin.toMutableSet_eg9ybj$(a);
     f.kotlin.addAll_p6ac9a$(b, e);
@@ -8877,7 +8969,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     b.baseInitializer.call(this, d);
   }), iterator_redlek$:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, null, {hasNext:function() {
       return b.hasMoreElements();
     }, next:function() {
@@ -8886,53 +8978,53 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, iterator_p27rlc$:function(b) {
     return b;
   }, stdlib_emptyListClass:c.createClass(function() {
-    return[c.modules.stdlib.kotlin.List];
+    return[f.kotlin.List];
   }, function() {
     this.$delegate_adqzde$ = new c.ArrayList;
-  }, {listIterator_za3lpa$:function(b) {
-    return this.$delegate_adqzde$.listIterator_za3lpa$(b);
+  }, {size:function() {
+    return this.$delegate_adqzde$.size();
   }, indexOf_za3rmp$:function(b) {
     return this.$delegate_adqzde$.indexOf_za3rmp$(b);
-  }, lastIndexOf_za3rmp$:function(b) {
-    return this.$delegate_adqzde$.lastIndexOf_za3rmp$(b);
-  }, containsAll_4fm7v2$:function(b) {
-    return this.$delegate_adqzde$.containsAll_4fm7v2$(b);
-  }, size:function() {
-    return this.$delegate_adqzde$.size();
-  }, get_za3lpa$:function(b) {
-    return this.$delegate_adqzde$.get_za3lpa$(b);
-  }, iterator:function() {
-    return this.$delegate_adqzde$.iterator();
   }, contains_za3rmp$:function(b) {
     return this.$delegate_adqzde$.contains_za3rmp$(b);
   }, subList_vux9f0$:function(b, d) {
     return this.$delegate_adqzde$.subList_vux9f0$(b, d);
-  }, isEmpty:function() {
-    return this.$delegate_adqzde$.isEmpty();
+  }, listIterator_za3lpa$:function(b) {
+    return this.$delegate_adqzde$.listIterator_za3lpa$(b);
   }, listIterator:function() {
     return this.$delegate_adqzde$.listIterator();
+  }, containsAll_4fm7v2$:function(b) {
+    return this.$delegate_adqzde$.containsAll_4fm7v2$(b);
+  }, lastIndexOf_za3rmp$:function(b) {
+    return this.$delegate_adqzde$.lastIndexOf_za3rmp$(b);
+  }, get_za3lpa$:function(b) {
+    return this.$delegate_adqzde$.get_za3lpa$(b);
+  }, isEmpty:function() {
+    return this.$delegate_adqzde$.isEmpty();
+  }, iterator:function() {
+    return this.$delegate_adqzde$.iterator();
   }}), stdlib_emptyList_1:function() {
     return f.kotlin.stdlib_emptyList_w9bu57$;
   }, stdlib_emptyMapClass:c.createClass(function() {
-    return[c.modules.stdlib.kotlin.Map];
+    return[f.kotlin.Map];
   }, function() {
     this.$delegate_pzkcls$ = new c.ComplexHashMap;
-  }, {containsKey_za3rmp$:function(b) {
-    return this.$delegate_pzkcls$.containsKey_za3rmp$(b);
+  }, {values:function() {
+    return this.$delegate_pzkcls$.values();
+  }, get_za3rmp$:function(b) {
+    return this.$delegate_pzkcls$.get_za3rmp$(b);
+  }, isEmpty:function() {
+    return this.$delegate_pzkcls$.isEmpty();
+  }, entrySet:function() {
+    return this.$delegate_pzkcls$.entrySet();
+  }, keySet:function() {
+    return this.$delegate_pzkcls$.keySet();
   }, containsValue_za3rmp$:function(b) {
     return this.$delegate_pzkcls$.containsValue_za3rmp$(b);
   }, size:function() {
     return this.$delegate_pzkcls$.size();
-  }, values:function() {
-    return this.$delegate_pzkcls$.values();
-  }, keySet:function() {
-    return this.$delegate_pzkcls$.keySet();
-  }, entrySet:function() {
-    return this.$delegate_pzkcls$.entrySet();
-  }, isEmpty:function() {
-    return this.$delegate_pzkcls$.isEmpty();
-  }, get_za3rmp$:function(b) {
-    return this.$delegate_pzkcls$.get_za3rmp$(b);
+  }, containsKey_za3rmp$:function(b) {
+    return this.$delegate_pzkcls$.containsKey_za3rmp$(b);
   }}), stdlib_emptyMap_1:function() {
     return f.kotlin.stdlib_emptyMap_h2vi7z$;
   }, listOf_9mqe4v$:function(b) {
@@ -9112,12 +9204,12 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     }
     return d;
   }, addAll_p6ac9a$:function(b, d) {
-    var f;
-    if (c.isType(d, c.modules.stdlib.kotlin.Collection)) {
+    var g;
+    if (c.isType(d, f.kotlin.Collection)) {
       b.addAll_4fm7v2$(d);
     } else {
-      for (f = d.iterator();f.hasNext();) {
-        var h = f.next();
+      for (g = d.iterator();g.hasNext();) {
+        var h = g.next();
         b.add_za3rmp$(h);
       }
     }
@@ -9134,12 +9226,12 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
       b.add_za3rmp$(d[f]);
     }
   }, removeAll_p6ac9a$:function(b, d) {
-    var f;
-    if (c.isType(d, c.modules.stdlib.kotlin.Collection)) {
+    var g;
+    if (c.isType(d, f.kotlin.Collection)) {
       b.removeAll_4fm7v2$(d);
     } else {
-      for (f = d.iterator();f.hasNext();) {
-        var h = f.next();
+      for (g = d.iterator();g.hasNext();) {
+        var h = g.next();
         b.remove_za3rmp$(h);
       }
     }
@@ -9156,7 +9248,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
       b.remove_za3rmp$(d[f]);
     }
   }, retainAll_p6ac9a$:function(b, d) {
-    c.isType(d, c.modules.stdlib.kotlin.Collection) ? b.retainAll_4fm7v2$(d) : b.retainAll_4fm7v2$(f.kotlin.toSet_ir3nkc$(d));
+    c.isType(d, f.kotlin.Collection) ? b.retainAll_4fm7v2$(d) : b.retainAll_4fm7v2$(f.kotlin.toSet_ir3nkc$(d));
   }, retainAll_7g2der$:function(b, d) {
     b.retainAll_4fm7v2$(f.kotlin.toSet_eg9ybj$(d));
   }, Stream:c.createTrait(null), streamOf_9mqe4v$:function(b) {
@@ -9178,7 +9270,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.FilteringStream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.iterator = b.stream_d1u5f3$.iterator();
       this.nextState = -1;
@@ -9215,7 +9307,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.TransformingStream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.iterator = b.stream_d14xvv$.iterator();
     }, {next:function() {
@@ -9233,7 +9325,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.MergingStream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.iterator1 = b.stream1_4x167p$.iterator();
       this.iterator2 = b.stream2_4x167o$.iterator();
@@ -9251,7 +9343,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.FlatteningStream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.iterator = b.stream_joks2l$.iterator();
       this.itemIterator = null;
@@ -9286,7 +9378,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.Multistream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.iterator = b.stream_52hcg2$.iterator();
       this.itemIterator = null;
@@ -9325,7 +9417,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.TakeStream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.iterator = b.stream_k08vbu$.iterator();
     }, {next:function() {
@@ -9346,7 +9438,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.TakeWhileStream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.iterator = b.stream_wew0wh$.iterator();
       this.nextState = -1;
@@ -9386,7 +9478,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.DropStream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.iterator = b.stream_nce33m$.iterator();
     }, {drop:function() {
@@ -9409,7 +9501,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.DropWhileStream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.iterator = b.stream_o9pn95$.iterator();
       this.dropState = -1;
@@ -9445,7 +9537,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     return f.kotlin.FunctionStream.iterator$f(this);
   }}, {iterator$f:function(b) {
     return c.createObject(function() {
-      return[c.Iterator];
+      return[f.kotlin.Iterator];
     }, function() {
       this.nextState = -1;
       this.nextItem = null;
@@ -9599,7 +9691,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, {computeNext:function() {
     this.first_3j2z5n$ ? (this.first_3j2z5n$ = !1, this.setNext_za3rmp$(this.value_3afhyy$)) : this.done();
   }}), IndexIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, function(c) {
     this.iterator_c97ht5$ = c;
     this.index_1ez9dj$ = 0;
@@ -9616,7 +9708,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, {computeNext:function() {
     this.iterator1_viecq$.hasNext() && this.iterator2_viecr$.hasNext() ? this.setNext_za3rmp$(new f.kotlin.Pair(this.iterator1_viecq$.next(), this.iterator2_viecr$.next())) : this.done();
   }}), SkippingIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, function(c, f) {
     this.iterator_jc20mo$ = c;
     this.n_j22owk$ = f;
@@ -10262,7 +10354,9 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     }
   }, nextSiblings_asww5t$:function(c) {
     return new f.kotlin.dom.NextSiblings(c);
-  }, NextSiblings:c.createClass(null, function(c) {
+  }, NextSiblings:c.createClass(function() {
+    return[f.kotlin.Iterable];
+  }, function(c) {
     this.node_9zprnx$ = c;
   }, {iterator:function() {
     return f.kotlin.dom.NextSiblings.iterator$f(this);
@@ -10277,7 +10371,9 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
     }});
   }}), previousSiblings_asww5t$:function(c) {
     return new f.kotlin.dom.PreviousSiblings(c);
-  }, PreviousSiblings:c.createClass(null, function(c) {
+  }, PreviousSiblings:c.createClass(function() {
+    return[f.kotlin.Iterable];
+  }, function(c) {
     this.node_ugyp4f$ = c;
   }, {iterator:function() {
     return f.kotlin.dom.PreviousSiblings.iterator$f(this);
@@ -10641,7 +10737,7 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }, function() {
     return{Ready:new f.kotlin.support.State, NotReady:new f.kotlin.support.State, Done:new f.kotlin.support.State, Failed:new f.kotlin.support.State};
   }), AbstractIterator:c.createClass(function() {
-    return[c.Iterator];
+    return[f.kotlin.Iterator];
   }, function() {
     this.state_xrvatb$ = f.kotlin.support.State.object.NotReady;
     this.nextValue_u0jzfw$ = null;
@@ -10889,3 +10985,4 @@ Kotlin.PrimitiveBooleanHashSet = Kotlin.createClassNow(Kotlin.AbstractPrimitiveH
   }})})})});
   c.defineModule("stdlib", f);
 })(Kotlin);
+"undefined" !== typeof module && module.exports && (module.exports = Kotlin);

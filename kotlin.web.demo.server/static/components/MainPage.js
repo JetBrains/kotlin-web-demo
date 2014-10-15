@@ -323,6 +323,10 @@ function setSessionId() {
     });
 }
 
+function setKotlinJsOutput() {
+    Kotlin.out = new Kotlin.BufferedOutput();
+}
+
 function getSessionIdSuccess(data) {
     data = eval(data);
     if (data[0] != null && data[0] != '') {
@@ -353,3 +357,5 @@ $("#popupForCanvas").dialog({
 
 setSessionId();
 loadShortcuts();
+setKotlinJsOutput();
+
