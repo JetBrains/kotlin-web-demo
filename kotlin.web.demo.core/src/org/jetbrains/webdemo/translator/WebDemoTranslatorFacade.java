@@ -46,8 +46,6 @@ import java.util.Map;
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
     public static final String JS_LIB_ROOT = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "js").getAbsolutePath();
-    public static final String FLUSH_SYSTEM_OUT = "Kotlin.System.flush();\n";
-    public static final String GET_SYSTEM_OUT = "Kotlin.System.output();\n";
 
     private static final List<String> LIBRARY_FILES = Arrays.asList("@stdlib", JS_LIB_ROOT);
 
@@ -113,7 +111,7 @@ public final class WebDemoTranslatorFacade {
                 false));
         JetFile file = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), programText);
         String programCode = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
-        return FLUSH_SYSTEM_OUT + programCode + GET_SYSTEM_OUT;
+        return K2JSTranslator.FLUSH_SYSTEM_OUT + programCode + K2JSTranslator.GET_SYSTEM_OUT;
     }
 
 }
