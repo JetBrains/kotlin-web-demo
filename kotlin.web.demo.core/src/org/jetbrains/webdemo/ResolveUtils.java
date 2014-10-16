@@ -63,7 +63,7 @@ public class ResolveUtils {
         module.addDependencyOnModule(KotlinBuiltIns.getInstance().getBuiltInsModule());
         module.seal();
         CliLightClassGenerationSupport lightClassGenerationSupport = CliLightClassGenerationSupport.getInstanceForCli(project);
-        if (lightClassGenerationSupport != null) {
+        if (lightClassGenerationSupport != null && lightClassGenerationSupport.getLightClassModule() == null) {
             lightClassGenerationSupport.setModule(module);
         }
         return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
