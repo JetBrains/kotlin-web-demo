@@ -27,7 +27,6 @@ import org.jetbrains.jet.codegen.state.GenerationState;
 import org.jetbrains.jet.lang.descriptors.impl.ModuleDescriptorImpl;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.BindingTrace;
 import org.jetbrains.jet.lang.resolve.BindingTraceContext;
 import org.jetbrains.jet.lang.resolve.java.TopDownAnalyzerFacadeForJVM;
 import org.jetbrains.jet.lang.types.lang.KotlinBuiltIns;
@@ -62,7 +61,7 @@ public class ResolveUtils {
         module.addDependencyOnModule(KotlinBuiltIns.getInstance().getBuiltInsModule());
         module.seal();
         CliLightClassGenerationSupport lightClassGenerationSupport = CliLightClassGenerationSupport.getInstanceForCli(project);
-        if (lightClassGenerationSupport != null) {
+        if (lightClassGenerationSupport != null && lightClassGenerationSupport.getLightClassModule() == null) {
             lightClassGenerationSupport.setModule(module);
         }
         return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(

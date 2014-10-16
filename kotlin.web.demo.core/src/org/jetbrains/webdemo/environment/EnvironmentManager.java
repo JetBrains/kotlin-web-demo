@@ -19,7 +19,6 @@ import com.intellij.util.indexing.FileContent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
-import org.jetbrains.webdemo.WebDemoLightClassGenerationSupport;
 
 public abstract class EnvironmentManager {
 
@@ -38,8 +37,6 @@ public abstract class EnvironmentManager {
     public JetCoreEnvironment getEnvironment() {
         if (environment == null) {
             environment = createEnvironment();
-
-            environment.getApplication().registerService(WebDemoLightClassGenerationSupport.class, new WebDemoLightClassGenerationSupport());
 
             Extensions.getRootArea()
                     .getExtensionPoint(ClassFileDecompilers.EP_NAME)
