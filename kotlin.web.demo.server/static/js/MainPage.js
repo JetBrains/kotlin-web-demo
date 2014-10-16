@@ -154,7 +154,7 @@ var completionProvider = (function () {
 })();
 
 var converterView = new ConverterView($("#java2kotlin"), converterProvider);
-var accordion = new AccordionView($("#examples-list"));
+var accordion = new AccordionView(document.getElementById("examples-list"));
 
 
 configurationManager.onChange = function (configuration) {
@@ -283,8 +283,6 @@ var projectProvider = (function () {
 var headersProvider = (function () {
     var headersProvider = new HeadersProvider();
 
-    headersProvider.onHeadersLoaded = accordion.onHeadersLoaded;
-
     return headersProvider;
 })();
 
@@ -354,9 +352,9 @@ function getSessionIdSuccess(data) {
 
 var saveButton = $("#save").click(function () {
     if (accordion.getSelectedProject().getType() == ProjectType.USER_PROJECT) {
-        accordion.saveProject();
+        accordion.getSelectedProject().save();
     } else {
-        accordion.saveProjectAs();
+        accordion.getSelectedProject().saveAs();
     }
 });
 

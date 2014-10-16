@@ -22,9 +22,9 @@
  */
 
 var AccordionView = (function () {
-    function AccordionView(element) {
-        element.html("");
-        element.accordion({
+    function AccordionView(/*Element*/element) {
+        element.innerHTML = "";
+        $(element).accordion({
             heightStyle: "content",
             navigation: true,
             active: 0,
@@ -40,30 +40,29 @@ var AccordionView = (function () {
         var selectedProject = null;
         var instance = {
             loadAllContent: function () {
-                element.html("");
-                headersProvider.getAllHeaders();
-            },
-            onHeadersLoaded: function (orderedFolderNames, foldersContent) {
-                for (var i = 0; i < orderedFolderNames.length; ++i) {
-                    var folderName = orderedFolderNames[i];
-                    var folderContentElement = folderName == "My programs" ? addMyProjectsFolder() : addFolder(folderName);
+                element.innerHTML = "";
+                headersProvider.getAllHeaders(function (orderedFolderNames, foldersContent) {
+                    for (var i = 0; i < orderedFolderNames.length; ++i) {
+                        var folderName = orderedFolderNames[i];
 
-                    for (var j = 0; j < foldersContent[folderName].length; ++j) {
-                        var exampleHeader = foldersContent[folderName][j];
-                        addProject(folderContentElement, exampleHeader);
+                        var folderContentElement;
+                        if (folderName == "My programs") {
+                            folderContentElement = addMyProjectsFolder();
+                            addNewProjectButton();
+                        } else {
+                            folderContentElement = addFolder(folderName)
+                        }
+
+                        for (var j = 0; j < foldersContent[folderName].length; ++j) {
+                            var exampleHeader = foldersContent[folderName][j];
+                            addProject(folderContentElement, exampleHeader);
+                        }
                     }
-                }
-                element.accordion("refresh");
-                loadFirstItem();
+                    $(element).accordion("refresh");
+                    loadFirstItem();
+                });
             },
-            saveProject: function () {
-                selectedProject.save();
-            },
-            saveProjectAs: function () {
-                selectedProject.saveAs();
-            },
-
-            addNewProject: function (name, publicId, fileId, /*nullable*/ content) {
+            addNewProject: function (name, publicId, fileId, /*Nullable*/ content) {
                 addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT});
 
                 if (content == null) {
@@ -107,7 +106,6 @@ var AccordionView = (function () {
         };
 
         var myProgramsContentElement;
-        var publicLinksContent;
         var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add");
         newProjectDialog.verify = instance.verifyNewProjectname;
 
@@ -132,8 +130,8 @@ var AccordionView = (function () {
                         selectedProject.saveAs();
                     }
                 } else {
-                    element.accordion('option', 'active', 0);
-                    element.children()[1].children[0].click();
+                    $(element).accordion('option', 'active', 0);
+                    element.childNodes[1].firstElementChild.click();
                 }
             }
         }
@@ -160,10 +158,15 @@ var AccordionView = (function () {
 
         function addProject(/*Element*/ folderContentElement, header) {
             var projectHeaderElement = document.createElement("div");
-            folderContentElement.appendChild(projectHeaderElement);
-
             var projectContentElement = document.createElement("div");
-            folderContentElement.appendChild(projectContentElement);
+
+            if (folderContentElement == myProgramsContentElement) {
+                folderContentElement.insertBefore(projectHeaderElement, folderContentElement.lastElementChild);
+                folderContentElement.insertBefore(projectContentElement, folderContentElement.lastElementChild);
+            } else {
+                folderContentElement.appendChild(projectHeaderElement);
+                folderContentElement.appendChild(projectContentElement);
+            }
 
 
             var projectView = new ProjectView(header, projectContentElement, projectHeaderElement);
@@ -186,7 +189,7 @@ var AccordionView = (function () {
         function addFolder(name) {
             var folder = document.createElement("h3");
             folder.className = "examples-folder-name";
-            element.append(folder);
+            element.appendChild(folder);
 
             var folderDiv = document.createElement("div");
             folderDiv.innerHTML = name;
@@ -194,7 +197,7 @@ var AccordionView = (function () {
             folder.appendChild(folderDiv);
 
             var cont = document.createElement("div");
-            element.append(cont);
+            element.appendChild(cont);
             return cont
         }
 
@@ -202,11 +205,11 @@ var AccordionView = (function () {
             var myProg = document.createElement("h3");
             myProg.className = "examples-folder-name";
             myProg.innerHTML = "My programs";
-            element.append(myProg);
+            element.appendChild(myProg);
 
             myProgramsContentElement = document.createElement("div");
             myProgramsContentElement.id = "My_Programs_content";
-            element.append(myProgramsContentElement);
+            element.appendChild(myProgramsContentElement);
 
             if (!loginView.isLoggedIn()) {
                 myProg.style.color = "rgba(0,0,0,0.5)";

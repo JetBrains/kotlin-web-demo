@@ -24,8 +24,8 @@ var HeadersProvider = (function () {
     function HeadersProvider() {
 
         var instance = {
-            getAllHeaders: function () {
-                getAllHeaders();
+            getAllHeaders: function (/*Function*/callback) {
+                getAllHeaders(callback);
             },
             getInfoAboutProject: function (publicId) {
                 getInfoAboutProjectHeader(publicId);
@@ -40,7 +40,7 @@ var HeadersProvider = (function () {
             }
         };
 
-        function getAllHeaders() {
+        function getAllHeaders(callback) {
             $.ajax({
                 url: generateAjaxUrl("loadHeaders"),
                 context: document.body,
@@ -81,6 +81,7 @@ var HeadersProvider = (function () {
                                 foldersContent["Public links"] = [];
                             }
 
+                            callback(orderedFolderNames, foldersContent);
                             instance.onHeadersLoaded(orderedFolderNames, foldersContent);
                         } else {
                             instance.onFail(data, statusBarView.statusMessages.load_examples_fail);
