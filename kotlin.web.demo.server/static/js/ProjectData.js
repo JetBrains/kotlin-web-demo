@@ -26,7 +26,35 @@ var ProjectData = (function () {
             args: "",
             confType: "",
             originUrl: null,
-            parent: ""
+            parent: "",
+            getModifiableContent: function () {
+                return {
+                    name: instance.name,
+                    parent: instance.parent,
+                    args: instance.args,
+                    confType: instance.confType,
+                    originUrl: instance.originUrl,
+                    files: instance.files.filter(function (file) {
+                        return file.modifiable;
+                    })
+                };
+            },
+            processHighlightingResult: function (errors) {
+                for (var i = 0; i < instance.files.length; i++) {
+                    instance.files[i].errors = errors[instance.files[i].name];
+                }
+            },
+            hasErrors: function () {
+                for (var i = 0; i < instance.files.length; i++) {
+                    var errors = instance.files[i].errors;
+                    for (var j = 0; j < errors.length; j++) {
+                        if (errors[j].severity == "ERROR") {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
         };
 
         if (content != null) {

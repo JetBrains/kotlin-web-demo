@@ -24,7 +24,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.k2js.analyze.TopDownAnalyzerFacadeForJS;
-import org.jetbrains.k2js.config.Config;
+import org.jetbrains.k2js.config.EcmaVersion;
+import org.jetbrains.k2js.config.LibrarySourcesConfig;
 import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.k2js.facade.MainCallParameters;
 import org.jetbrains.k2js.facade.exceptions.MainFunctionNotFoundException;
@@ -37,12 +38,15 @@ import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
 
-    public static Config LOAD_JS_LIBRARY_CONFIG;
+    public static final String JS_LIB_ROOT = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "js").getAbsolutePath();
+    private static final List<String> LIBRARY_FILES = Arrays.asList("@stdlib", JS_LIB_ROOT);
 
     @SuppressWarnings("FieldCanBeLocal")
     private static String EXCEPTION = "exception=";
@@ -54,9 +58,13 @@ public final class WebDemoTranslatorFacade {
     @Nullable
     public static BindingContext analyzeProgramCode(@NotNull JetFile file, SessionInfo sessionInfo) {
         try {
-            BindingContext bindingContext = TopDownAnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), LOAD_JS_LIBRARY_CONFIG);
-            //Initializer.reinitializeJavaEnvironment();
-            return bindingContext;
+            return TopDownAnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), new LibrarySourcesConfig(
+                    Initializer.INITIALIZER.getEnvironment().getProject(),
+                    "moduleId",
+                    LIBRARY_FILES,
+                    EcmaVersion.defaultVersion(),
+                    false,
+                    false));
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), file.getText());
@@ -78,7 +86,7 @@ public final class WebDemoTranslatorFacade {
 
         } catch (MainFunctionNotFoundException te) {
             Initializer.reinitializeJavaEnvironment();
-            return ResponseUtils.getErrorInJson(te.getMessage()); 
+            return ResponseUtils.getErrorInJson(te.getMessage());
         } catch (Throwable e) {
             Initializer.reinitializeJavaEnvironment();
 
@@ -92,7 +100,13 @@ public final class WebDemoTranslatorFacade {
     @NotNull
     private static String doTranslate(@NotNull String programText,
                                       @NotNull String argumentsString) throws TranslationException {
-        K2JSTranslator translator = new K2JSTranslator(LOAD_JS_LIBRARY_CONFIG);
+        K2JSTranslator translator = new K2JSTranslator(new LibrarySourcesConfig(
+                Initializer.INITIALIZER.getEnvironment().getProject(),
+                "moduleId",
+                LIBRARY_FILES,
+                EcmaVersion.defaultVersion(),
+                false,
+                false));
         JetFile file = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), "dummy.kt", programText);
         String programCode = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
         return K2JSTranslator.FLUSH_SYSTEM_OUT + programCode + K2JSTranslator.GET_SYSTEM_OUT;

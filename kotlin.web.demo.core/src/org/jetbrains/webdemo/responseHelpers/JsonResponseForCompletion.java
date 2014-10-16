@@ -37,7 +37,9 @@ import org.jetbrains.jet.lang.resolve.DescriptorUtils;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.plugin.codeInsight.TipsManager;
+import org.jetbrains.jet.plugin.util.IdeDescriptorRenderers;
 import org.jetbrains.jet.renderer.DescriptorRenderer;
+import org.jetbrains.jet.renderer.DescriptorRendererBuilder;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.ResolveUtils;
@@ -48,33 +50,76 @@ import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class JsonResponseForCompletion {
+    private static final DescriptorRenderer RENDERER = new DescriptorRendererBuilder()
+            .setShortNames(true)
+            .setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES)
+            .setWithoutFunctionParameterNames(true)
+            .setRenderDefaultValues(false)
+            .build();
+
     private final int NUMBER_OF_CHAR_IN_COMPLETION_NAME = 40;
 
     private final Project currentProject;
-    private PsiFile currentPsiFile;
-    private Document currentDocument;
     private final int lineNumber;
     private final int charNumber;
+    private PsiFile currentPsiFile;
+    private Document currentDocument;
     private int caretPositionOffset;
     private SessionInfo sessionInfo;
     private List<PsiFile> psiFiles;
 
 
-    public JsonResponseForCompletion(List<PsiFile> psiFiles, SessionInfo sessionInfo, String filename,  int lineNumber, int charNumber ) {
+    public JsonResponseForCompletion(List<PsiFile> psiFiles, SessionInfo sessionInfo, String filename, int lineNumber, int charNumber) {
         this.lineNumber = lineNumber;
         this.charNumber = charNumber;
         this.psiFiles = psiFiles;
-        for(PsiFile file : psiFiles){
-            if(file.getName().equals(filename)){
+        for (PsiFile file : psiFiles) {
+            if (file.getName().equals(filename)) {
                 currentPsiFile = file;
             }
         }
         this.currentProject = currentPsiFile.getProject();
         this.currentDocument = currentPsiFile.getViewProvider().getDocument();
         this.sessionInfo = sessionInfo;
+    }
+
+    // see DescriptorLookupConverter.createLookupElement
+    @NotNull
+    public static Pair<String, String> getPresentableText(@NotNull DeclarationDescriptor descriptor) {
+        String presentableText = descriptor.getName().asString();
+        String typeText = "";
+        String tailText = "";
+
+        if (descriptor instanceof FunctionDescriptor) {
+            FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
+            JetType returnType = functionDescriptor.getReturnType();
+            typeText = returnType != null ? RENDERER.renderType(returnType) : "";
+            presentableText += RENDERER.renderFunctionParameters(functionDescriptor);
+
+            boolean extensionFunction = functionDescriptor.getExtensionReceiverParameter() != null;
+            DeclarationDescriptor containingDeclaration = descriptor.getContainingDeclaration();
+            if (containingDeclaration != null && extensionFunction) {
+                tailText += " for " + RENDERER.renderType(functionDescriptor.getExtensionReceiverParameter().getType());
+                tailText += " in " + DescriptorUtils.getFqName(containingDeclaration);
+            }
+        } else if (descriptor instanceof VariableDescriptor) {
+            JetType outType = ((VariableDescriptor) descriptor).getType();
+            typeText = RENDERER.renderType(outType);
+        } else if (descriptor instanceof ClassDescriptor) {
+            DeclarationDescriptor declaredIn = descriptor.getContainingDeclaration();
+            assert declaredIn != null;
+            tailText = " (" + DescriptorUtils.getFqName(declaredIn) + ")";
+        } else {
+            typeText = RENDERER.render(descriptor);
+        }
+
+        if (typeText.isEmpty()) {
+            return new Pair<String, String>(presentableText, tailText);
+        } else {
+            return new Pair<String, String>(presentableText, typeText);
+        }
     }
 
     public String getResult() {
@@ -231,47 +276,6 @@ public class JsonResponseForCompletion {
         return element;
     }
 
-    // see DescriptorLookupConverter.createLookupElement
-    @NotNull
-    public static Pair<String, String> getPresentableText(@NotNull DeclarationDescriptor descriptor) {
-        String presentableText = descriptor.getName().asString();
-        String typeText = "";
-        String tailText = "";
-
-        if (descriptor instanceof FunctionDescriptor) {
-            FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
-            JetType returnType = functionDescriptor.getReturnType();
-            typeText = returnType != null ? DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(returnType) : "";
-            presentableText += DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderFunctionParameters(functionDescriptor);
-
-            boolean extensionFunction = functionDescriptor.getReceiverParameter() != null;
-            DeclarationDescriptor containingDeclaration = descriptor.getContainingDeclaration();
-            if (containingDeclaration != null && extensionFunction) {
-                tailText += " for " + DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(functionDescriptor.getReceiverParameter().getType());
-                tailText += " in " + DescriptorUtils.getFqName(containingDeclaration);
-            }
-        }
-        else if (descriptor instanceof VariableDescriptor) {
-            JetType outType = ((VariableDescriptor) descriptor).getType();
-            typeText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(outType);
-        }
-        else if (descriptor instanceof ClassDescriptor) {
-            DeclarationDescriptor declaredIn = descriptor.getContainingDeclaration();
-            assert declaredIn != null;
-            tailText = " (" + DescriptorUtils.getFqName(declaredIn) + ")";
-        }
-        else {
-            typeText = DescriptorRenderer.SHORT_NAMES_IN_TYPES.render(descriptor);
-        }
-
-        if (typeText.isEmpty()) {
-            return new Pair<String, String>(presentableText, tailText);
-        }
-        else {
-            return new Pair<String, String>(presentableText, typeText);
-        }
-    }
-
     private String formatName(String builder, int symbols) {
         if (builder.length() > symbols) {
             return builder.substring(0, symbols) + "...";
@@ -300,8 +304,8 @@ public class JsonResponseForCompletion {
 
     private List<JetFile> convertList(List<PsiFile> list) {
         List<JetFile> result = new ArrayList<>();
-        for(PsiFile file : list){
-            result.add((JetFile)file);
+        for (PsiFile file : list) {
+            result.add((JetFile) file);
         }
         return result;
     }

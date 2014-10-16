@@ -68,7 +68,7 @@ var RunProvider = (function () {
         }
 
         function runJs(configuration, programText, args) {
-            Kotlin.modules = {};
+            Kotlin.modules = {stdlib: Kotlin.modules.stdlib};
             loadJsFromServer(configuration, programText, args);
         }
 

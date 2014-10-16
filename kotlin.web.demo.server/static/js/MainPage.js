@@ -205,7 +205,7 @@ var run_button = $("#run-button")
         highlightingProvider.getHighlighting(localConfiguration.type, accordion.getSelectedProject().getModifiableContent(), function (highlightingResult) {
             var example = accordion.getSelectedProject();
             example.processHighlightingResult(highlightingResult);
-            if (!example.errorsExists()) {
+            if (!example.getProjectData().hasErrors()) {
                 //Create canvas element before run it in browser
                 if (localConfiguration.type == Configuration.type.CANVAS) {
                     canvasDialog.dialog("open");
@@ -441,5 +441,10 @@ setKotlinVersion = function () {
 //
 //document.getElementById("fullscreen").onclick = fullScreenView;
 
+function setKotlinJsOutput() {
+    Kotlin.out = new Kotlin.BufferedOutput();
+}
+
 setSessionId();
 loadShortcuts();
+setKotlinJsOutput();

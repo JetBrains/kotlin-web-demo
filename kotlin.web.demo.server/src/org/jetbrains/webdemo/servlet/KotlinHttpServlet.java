@@ -23,8 +23,6 @@ import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.server.ApplicationSettings;
-import org.jetbrains.webdemo.translator.WebDemoConfigServer;
-import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -47,7 +45,7 @@ public class KotlinHttpServlet extends HttpServlet {
         System.setProperty("java.awt.headless", "true");
 
         ApplicationSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
-        ApplicationSettings.LIBS_DIR = ApplicationSettings.WEBAPP_ROOT_DIRECTORY +"WEB-INF" + File.separator + "lib" +File.separator;
+        ApplicationSettings.LIBS_DIR = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib" + File.separator;
 
         if (!loadTomcatParameters()) {
             ErrorWriter.writeErrorToConsole("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
@@ -60,7 +58,6 @@ public class KotlinHttpServlet extends HttpServlet {
         try {
             if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-                WebDemoTranslatorFacade.LOAD_JS_LIBRARY_CONFIG = new WebDemoConfigServer(Initializer.INITIALIZER.getEnvironment().getProject());
                 new File(ApplicationSettings.LOGS_DIRECTORY).mkdirs();
                 new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdirs();
                 ExamplesList.getInstance();

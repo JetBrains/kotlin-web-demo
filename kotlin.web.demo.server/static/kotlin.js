@@ -1,5 +1,6 @@
-'use strict';var Kotlin = {};
-(function() {
+'use strict';
+var Kotlin = {};
+(function () {
     function c(a, b) {
         if (null != a && null != b) {
             for (var d in b) {
@@ -269,7 +270,7 @@
         Object.defineProperty(Kotlin.modules, a, {value: b});
     };
 })();
-(function() {
+(function () {
     function c(a) {
         return Kotlin.createClassNow(a, function (a) {
             this.message = void 0 !== a ? a : null;

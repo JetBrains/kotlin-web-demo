@@ -17,31 +17,25 @@
 package org.jetbrains.webdemo.server;
 
 public class ApplicationSettings {
+    public static final String DATABASE_VERSION = "1.0";
     public static String JAVA_HOME = null;
     public static String JAVA_EXECUTE = "";
     public static String WEBAPP_ROOT_DIRECTORY = "";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
     public static int TIMEOUT_FOR_EXECUTION = 5000;
     public static String IS_TEST_VERSION = "true";
-
     public static String OUTPUT_DIRECTORY = "out";
     public static String EXAMPLES_DIRECTORY = "examples";
     public static String HELP_DIRECTORY = "help";
     public static String LOGS_DIRECTORY = "logs";
     public static String STATISTICS_DIRECTORY = "statistics";
     public static String LIBS_DIR = "";
-
     public static String HELP_FOR_EXAMPLES = "helpExamples.xml";
     public static String HELP_FOR_WORDS = "helpWords.xml";
-
     public static String KOTLIN_LIB = "";
-
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
-    public static String KOTLIN_VERSION = "0.8.1444";
-
+    public static String KOTLIN_VERSION = "0.9.91";
     public static String RT_JAR = "";
-
-    public static final String DATABASE_VERSION = "1.0";
 
     private ApplicationSettings() {
 

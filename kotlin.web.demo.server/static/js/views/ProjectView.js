@@ -48,6 +48,7 @@ var ProjectView = (function () {
                 if (project == null) {
                     projectProvider.loadProject(header.publicId, header.type, createProject);
                 } else if (selectedFile != null) {
+                    problemsView.onProjectChange();
                     selectedFile.select();
                 }
                 headerElement.className += " selected";
@@ -71,6 +72,15 @@ var ProjectView = (function () {
                     }
                 }
                 return true;
+            },
+            getProjectData: function () {
+                return project;
+            },
+            getModifiableContent: function () {
+                return project.getModifiableContent();
+            },
+            processHighlightingResult: function (errors) {
+                project.processHighlightingResult(errors);
             },
             onDelete: function () {
 
@@ -113,6 +123,8 @@ var ProjectView = (function () {
                 fileViews[fileContent.publicId] = fileView;
                 project.files.push(fileView.getFileData());
             }
+
+            problemsView.onProjectChange();
         }
 
         function onProjectRenamed(newName) {
