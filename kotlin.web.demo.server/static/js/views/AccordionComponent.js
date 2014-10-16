@@ -119,7 +119,7 @@ var AccordionView = (function () {
             var id = getParameterByName("id");
 
             if (folder != "" && project != "" && file != "") {
-                selectProject(createExampleUrl(project, folder));
+                selectProject(createExampleId(project, folder));
             } else if (id != "") {
                 headersProvider.getInfoAboutProject(id);
             } else {

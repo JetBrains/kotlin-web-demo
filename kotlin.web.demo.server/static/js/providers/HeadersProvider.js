@@ -58,7 +58,7 @@ var HeadersProvider = (function () {
                                     foldersContent[orderedFolderNames[i]].push({
                                         name: orderedExampleNames[j],
                                         type: ProjectType.EXAMPLE,
-                                        publicId: createExampleUrl(orderedExampleNames[j], orderedFolderNames[i])
+                                        publicId: createExampleId(orderedExampleNames[j], orderedFolderNames[i])
                                     });
                                 }
                             }

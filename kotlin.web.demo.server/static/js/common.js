@@ -152,7 +152,7 @@ function getFolderNameByUrl(url) {
     return "";
 }
 
-function createExampleUrl(name, folder) {
+function createExampleId(name, folder) {
     return replaceAll(folder, " ", "_") + "&name=" + replaceAll(name, " ", "_");
 }
 
