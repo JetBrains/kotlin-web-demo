@@ -18,49 +18,79 @@ var FileProvider = (function () {
 
     function FileProvider() {
         var instance = {
-            renameFile: function (publicId, newName) {
-                renameFile(publicId, newName)
+            addNewFile: function (publicId, callback, fileName) {
+                addNewFile(publicId, callback, fileName);
+            },
+            renameFile: function (publicId, callback, newName) {
+                renameFile(publicId, callback, newName);
             },
             saveFile: function (publicId, data) {
                 saveFile(publicId, data);
             },
-            deleteFile: function (publicId) {
-                deleteFile(publicId);
+            deleteFile: function (publicId, callback) {
+                deleteFile(publicId, callback);
+            },
+            onNewFileAdded: function () {
+
+            },
+            onDeleteFile: function () {
             },
             onFileRenamed: function (newName) {
             },
-            onDeleteFile: function () {
-
+            onFail: function (message, status) {
             }
         };
 
+        function addNewFile(projectPublicId, callback, filename) {
+            if (!filename.endsWith(".kt")) {
+                filename = filename + ".kt";
+            }
+            $.ajax({
+                url: generateAjaxUrl("addFile"),
+                success: function (publicId) {
+                    instance.onNewFileAdded(filename);
+                    callback(publicId, filename);
+                },
+                type: "POST",
+                timeout: 10000,
+                data: {publicId: projectPublicId, filename: filename},
+                error: function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                }
+            })
+        }
 
-        function renameFile(publicId, newName) {
+        function renameFile(publicId, callback, newName) {
             $.ajax({
                 url: generateAjaxUrl("renameFile"),
                 success: function () {
-                    instance.onFileRenamed(newName)
+                    instance.onFileRenamed(newName);
+                    callback(newName);
                 },
                 type: "POST",
                 timeout: 10000,
                 data: {publicId: publicId,
-                    newName: newName}
+                    newName: newName},
+                error: function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus, errorThrown);
+                }
             })
         }
 
-        function deleteFile(publicId) {
+        function deleteFile(publicId, callback) {
             $.ajax({
                 url: generateAjaxUrl("deleteFile"),
                 context: document.body,
                 success: function () {
                     instance.onDeleteFile();
+                    callback();
                 },
                 type: "POST",
                 data: {publicId: publicId},
-                timeout: 10000
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
-//                }
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
+                }
             });
         }
 

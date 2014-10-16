@@ -27,7 +27,7 @@ var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to ena
 var KotlinEditor = (function () {
     function KotlinEditor() {
         var my_editor;
-        var openedElement = null;
+        var openedFile = null;
         var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.type.JAVA);
 
         var CompletionObject = (function () {
@@ -385,8 +385,8 @@ var KotlinEditor = (function () {
                 removeStyles();
                 arrayClasses = [];
                 arrayLinesMarkers = [];
-                for (var i = 0; i < openedElement.errors.length; i++) {
-                    var error = openedElement.errors[i];
+                for (var i = 0; i < openedFile.errors.length; i++) {
+                    var error = openedFile.errors[i];
                     var interval = error.interval;
                     arrayClasses.push(my_editor.markText(interval.start, interval.end, error.className));
                     var title = unEscapeString(error.message);
@@ -437,14 +437,14 @@ var KotlinEditor = (function () {
             extraKeys: {
                 "Ctrl-Space": function () {
                     instance.save();
-                    completionProvider.getCompletion(configuration.type, accordion.getSelectedProject().getModifiableContent(), openedElement.name,
+                    completionProvider.getCompletion(configuration.type, accordion.getSelectedProject().getModifiableContent(), openedFile.name,
                         my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
                 }
 
             },
             onChange: function () {
-                if (openedElement != null) {
-                    openedElement.onContentChange(my_editor.getValue());
+                if (openedFile != null) {
+                    openedFile.setContent(my_editor.getValue());
                 }
                 runTimerForNonPrinting()
             },
@@ -503,29 +503,28 @@ var KotlinEditor = (function () {
             refreshMode: function () {
                 my_editor.setOption("mode", "kotlin");
             },
-            open: function (element) {
+            open: function (file) {
                 document.getElementById("workspace-overlay").style.display = "none";
-                if (isEditorContentChanged && openedElement != null) {
-                    openedElement.save();
-                }
-                openedElement = null; //without this my_editor.setValue will launch on change event
-                highlighting.removeStyles();
+                if (openedFile == null) {
+                    highlighting.removeStyles();
 
+                    if (!file.modifiable) {
+                        my_editor.setOption("readOnly", "nocursor");
+                    } else {
+                        my_editor.setOption("readOnly", false);
+                    }
 
-                if (!element.modifiable) {
-                    my_editor.setOption("readOnly", "nocursor");
+                    my_editor.focus();
+                    my_editor.setValue(file.content);
+                    isEditorContentChanged = false;
+                    openedFile = file;
+                    highlighting.updateHighlighting();
                 } else {
-                    my_editor.setOption("readOnly", false);
+                    throw("Previous file wasn't closed");
                 }
-
-                my_editor.focus();
-                my_editor.setValue(element.content);
-                isEditorContentChanged = false;
-                openedElement = element;
-                highlighting.updateHighlighting();
             },
             closeFile: function () {
-                openedElement = null;
+                openedFile = null;
                 highlighting.removeStyles();
                 my_editor.setValue("");
                 document.getElementById("workspace-overlay").style.display = "block";
@@ -534,16 +533,16 @@ var KotlinEditor = (function () {
                 highlighting.updateHighlighting();
             },
             save: function () {
-                if (openedElement != null && isEditorContentChanged) {
-                    openedElement.save();
+                if (openedFile != null && isEditorContentChanged) {
+                    openedFile.save();
                 }
             },
             setText: function (text) {
                 my_editor.setOption("readOnly", false);
-                if (isEditorContentChanged && openedElement != null) {
-                    openedElement.save();
+                if (isEditorContentChanged && openedFile != null) {
+                    openedFile.save();
                 }
-                openedElement = null;
+                openedFile = null;
                 my_editor.focus();
                 my_editor.setValue(text);
                 isEditorContentChanged = false;

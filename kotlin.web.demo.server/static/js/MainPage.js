@@ -76,7 +76,7 @@ helpViewForWords.hide();
 
 var runProvider = (function () {
 
-    function onSuccess (output) {
+    function onSuccess(output) {
         run_button.button("option", "disabled", false);
         if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
             junitView.setOutput(output);
@@ -86,7 +86,7 @@ var runProvider = (function () {
         statusBarView.setStatus(statusBarView.statusMessages.run_java_ok);
     }
 
-    function onFail (error) {
+    function onFail(error) {
         run_button.button("option", "disabled", false);
         consoleView.writeException(error);
         statusBarView.setStatus(statusBarView.statusMessages.run_java_fail);
@@ -99,7 +99,7 @@ var loginProvider = new LoginProvider();
 var loginView = new LoginView(loginProvider);
 
 var converterProvider = (function () {
-    function onSuccess(data){
+    function onSuccess(data) {
         converterView.closeDialog();
         editor.refreshMode();
         editor.setText(data);
@@ -107,7 +107,7 @@ var converterProvider = (function () {
         statusBarView.setStatus(statusBarView.statusMessages.convert_java_to_kotlin_ok);
     }
 
-    function onFail(error){
+    function onFail(error) {
         converterView.closeDialog();
         consoleView.writeException(error);
         statusBarView.setStatus(statusBarView.statusMessages.convert_java_to_kotlin_fail);
@@ -123,7 +123,7 @@ var highlightingProvider = (function () {
 
         var noOfErrorsAndWarnings = 0;
 
-        for(var filename in data){
+        for (var filename in data) {
             noOfErrorsAndWarnings += data[filename].length
         }
         statusBarView.setStatus(statusBarView.statusMessages.get_highlighting_ok, [noOfErrorsAndWarnings]);
@@ -144,6 +144,7 @@ var completionProvider = (function () {
         editor.showCompletionResult(completionObject);
         statusBarView.setStatus(statusBarView.statusMessages.get_completion_ok);
     }
+
     function onFail(error) {
         consoleView.writeException(error);
         statusBarView.setStatus(statusBarView.statusMessages.get_completion_fail);
@@ -223,19 +224,6 @@ accordion.onFail = function (exception, actionCode) {
     consoleView.writeException(exception);
     statusBarView.setMessage(actionCode);
 };
-accordion.onLoadCode = function (element, isProgram) {
-    if (!isProgram) {
-        helpViewForExamples.showHelp(element.help);
-        statusBarView.setStatus(statusBarView.statusMessages.load_example_ok);
-        argumentsView.val(element.args);
-        configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
-    } else {
-        helpViewForExamples.hide();
-        statusBarView.setStatus(statusBarView.statusMessages.load_program_ok);
-        argumentsView.val(element.args);
-        configurationManager.updateConfiguration(getFirstConfiguration(element.confType));
-    }
-};
 
 accordion.onDeleteProgram = function () {
     statusBarView.setStatus(statusBarView.statusMessages.delete_program_ok);
@@ -263,6 +251,44 @@ loginProvider.onFail = function (exception, actionCode) {
     consoleView.writeException(exception);
     statusBarView.setMessage(actionCode);
 };
+
+var fileProvider = (function () {
+    var fileProvider = new FileProvider();
+
+    fileProvider.onFileRenamed = function () {
+    };
+
+    fileProvider.onRenameFileFailed = function () {
+    };
+
+    return fileProvider;
+})();
+
+var projectProvider = (function () {
+    var projectProvider = new ProjectProvider();
+
+    projectProvider.onProjectLoaded = function () {
+    };
+
+    projectProvider.onFail = function () {
+    };
+
+    projectProvider.onNewProjectAdded = function (name, projectId, fileId) {
+        accordion.addNewProject(name, projectId, fileId, null);
+    };
+
+    return projectProvider;
+})();
+
+var headersProvider = (function () {
+    var headersProvider = new HeadersProvider();
+
+    headersProvider.onExampleHeadersLoaded = accordion.onExampleHeadersLoaded;
+    headersProvider.onUserProjectHeadersLoaded = accordion.onUserProjectHeadersLoaded;
+    headersProvider.onPublicLinksLoaded = accordion.onPublicLinksLoaded;
+
+    return headersProvider;
+})();
 
 $(document).keydown(function (e) {
     var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
@@ -331,7 +357,7 @@ function getSessionIdSuccess(data) {
 var saveButton = $("#save").click(function () {
     if (accordion.getSelectedProject().getType() == ProjectType.USER_PROJECT) {
         accordion.saveProject();
-    } else{
+    } else {
         accordion.saveProjectAs();
     }
 });
@@ -349,9 +375,9 @@ function loadShortcuts() {
 }
 
 window.onbeforeunload = closingCode;
-function closingCode(){
+function closingCode() {
     accordion.onBeforeUnload();
-    localStorage.setItem("openedItemUrl", accordion.getSelectedProject().getUrl());
+    localStorage.setItem("openedItemId", accordion.getSelectedProject().getPublicId());
     accordion.getSelectedProject().save();
     editor.save();
     return null;

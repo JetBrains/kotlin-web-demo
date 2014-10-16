@@ -19,9 +19,9 @@
  */
 
 
-var AccordionHeadersProvider = (function () {
+var HeadersProvider = (function () {
 
-    function AccordionHeadersProvider(onAllExamplesLoaded, onAllProgramsLoaded) {
+    function HeadersProvider() {
 
         var instance = {
             getAllExamples: function () {
@@ -30,26 +30,31 @@ var AccordionHeadersProvider = (function () {
             getAllPrograms: function () {
                 getAllPrograms();
             },
-            addNewProject: function (name) {
-                addNewProject(name);
-            },
-            deleteProject: function (url) {
-                deleteProject(url);
-            },
-            renameProject: function (publicId, newName) {
-                renameProject(publicId, newName);
+            getAllPublicLinks: function () {
+                if (localStorage.getItem("publicLinks") == null) {
+                    instance.onPublicLinksLoaded([]);
+                } else {
+                    instance.onPublicLinksLoaded(JSON.parse(localStorage.getItem("publicLinks")));
+                }
             },
             getInfoAboutProject: function (publicId) {
-                getInfoAboutProject(publicId);
+                getInfoAboutProjectHeader(publicId);
             },
-            onRenameProject: function (url, newName) {
+            onExampleHeadersLoaded: function () {
 
             },
-            onFail: function () {
+            onUserProjectHeadersLoaded: function () {
+
+            },
+            onPublicLinksLoaded: function () {
+
             },
             onProjectInfoLoaded: function (data) {
 
+            },
+            onFail: function () {
             }
+
         };
 
         function getAllExamples() {
@@ -59,7 +64,7 @@ var AccordionHeadersProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            onAllExamplesLoaded(data);
+                            instance.onExampleHeadersLoaded(data);
                         } else {
                             instance.onFail(data, statusBarView.statusMessages.load_examples_fail);
                         }
@@ -83,7 +88,7 @@ var AccordionHeadersProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            onAllProgramsLoaded(data);
+                            instance.onUserProjectHeadersLoaded(data);
                         } else {
                             instance.onFail(data, statusBarView.statusMessages.load_programs_fail);
                         }
@@ -100,52 +105,8 @@ var AccordionHeadersProvider = (function () {
             });
         }
 
-        function addNewProject(name) {
-            $.ajax({
-                url: generateAjaxUrl("addProject", name),
-                success: function (data) {
-                    accordion.addNewProject(name, data.projectId, data.fileId, null);
-                },
-                type: "POST",
-                timeout: 10000,
-                dataType: 'json',
-                error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
-                }
-            })
-        }
 
-        function renameProject(publicId, newName) {
-            $.ajax({
-                url: generateAjaxUrl("renameProject"),
-                success: function () {
-                    instance.onRenameProject(publicId, newName);
-                },
-                type: "POST",
-                data: {publicId: publicId, newName: newName},
-                timeout: 10000,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
-                }
-            })
-        }
-
-        function deleteProject(publicId) {
-            $.ajax({
-                url: generateAjaxUrl("deleteProject"),
-                success: function () {
-                    accordion.deleteProject(publicId);
-                },
-                type: "POST",
-                data: {publicId: publicId},
-                timeout: 10000,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
-                }
-            })
-        }
-
-        function getInfoAboutProject(publicId) {
+        function getInfoAboutProjectHeader(publicId) {
             $.ajax({
                 url: generateAjaxUrl("loadProjectInfoByFileId"),
                 success: function (data) {
@@ -166,5 +127,5 @@ var AccordionHeadersProvider = (function () {
         return instance;
     }
 
-    return AccordionHeadersProvider;
+    return HeadersProvider;
 })();
