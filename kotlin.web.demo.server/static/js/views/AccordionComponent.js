@@ -41,58 +41,20 @@ var AccordionView = (function () {
         var instance = {
             loadAllContent: function () {
                 element.html("");
-                headersProvider.getAllExamples();
+                headersProvider.getAllHeaders();
             },
-            onExampleHeadersLoaded: function (data) {
-                for (var i = 0; i < data.length; i++) {
-                    var folderContent = data[i];
+            onHeadersLoaded: function (orderedFolderNames, foldersContent) {
+                for (var i = 0; i < orderedFolderNames.length; ++i) {
+                    var folderName = orderedFolderNames[i];
+                    var folderContentElement = folderName == "My programs" ? addMyProjectsFolder() : addFolder(folderName);
 
-                    var folderContentElement = addFolder(folderContent.name);
-
-                    for (var j = 0; j < folderContent.examplesOrder.length; ++j) {
-                        var exampleName = folderContent.examplesOrder[j];
-                        addProject(folderContentElement,
-                            exampleName, createExampleUrl(exampleName, folderContent.name), ProjectType.EXAMPLE);
+                    for (var j = 0; j < foldersContent[folderName].length; ++j) {
+                        var exampleHeader = foldersContent[folderName][j];
+                        addProject(folderContentElement, exampleHeader);
                     }
                 }
-
-
-                addMyProjectsFolder();
-
-                if (!loginView.isLoggedIn()) {
-                    publicLinksContent = addFolder("Public links");
-                    element.accordion("refresh");
-
-                    headersProvider.getAllPublicLinks();
-                    loadFirstItem();
-                }
-            },
-            onUserProjectHeadersLoaded: function (data) {
-                for (var i = 0; i < data.length; i++) {
-                    addProject(myProgramsContentElement, data[i].name, data[i].publicId, ProjectType.USER_PROJECT);
-                }
-                addNewProjectButton();
-
-                publicLinksContent = addFolder("Public links");
                 element.accordion("refresh");
-
-                headersProvider.getAllPublicLinks();
                 loadFirstItem();
-            },
-            onPublicLinksLoaded: function (data) {
-                publicLinks = data;
-                publicLinks = publicLinks.filter(function (publicLink) {
-                    for (var id in downloadedProjects) {
-                        if (publicLink.id == id) {
-                            localStorage.removeItem(publicLink.id);
-                            return false;
-                        }
-                    }
-                    return true;
-                });
-                for (var i = 0; i < publicLinks.length; ++i) {
-                    addProject(publicLinksContent, publicLinks[i].name, publicLinks[i].id, ProjectType.PUBLIC_LINK);
-                }
             },
             saveProject: function () {
                 selectedProject.save();
@@ -102,7 +64,7 @@ var AccordionView = (function () {
             },
 
             addNewProject: function (name, publicId, fileId, /*nullable*/ content) {
-                addProject(myProgramsContentElement, name, publicId, ProjectType.USER_PROJECT, true);
+                addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT});
 
                 if (content == null) {
                     var filename = name.endsWith(".kt") ? name : name + ".kt";
@@ -196,21 +158,18 @@ var AccordionView = (function () {
             myProgramsContentElement.appendChild(addNewProjectDiv);
         }
 
-        function addProject(/*Element*/ element, /*String*/ name, /*String*/ id, type, /*boolean*/ addToEnd) {
-            var projectHeader = document.createElement("div");
-            var projectContent = document.createElement("div");
-            if (addToEnd) {
-                element.insertBefore(projectHeader, element.lastChild);
-                element.insertBefore(projectContent, element.lastChild);
-            } else {
-                element.appendChild(projectHeader);
-                element.appendChild(projectContent);
-            }
+        function addProject(/*Element*/ folderContentElement, header) {
+            var projectHeaderElement = document.createElement("div");
+            folderContentElement.appendChild(projectHeaderElement);
 
-            var projectView = new ProjectView(id, name, projectContent, projectHeader, type);
+            var projectContentElement = document.createElement("div");
+            folderContentElement.appendChild(projectContentElement);
+
+
+            var projectView = new ProjectView(header, projectContentElement, projectHeaderElement);
             projectView.onHeaderClick = selectProject;
             projectView.onDelete = function () {
-                if (selectedProject == downloadedProjects[id]) {
+                if (selectedProject == downloadedProjects[header.publicId]) {
                     selectedProject = null;
                     var myPrograms = document.getElementById("My_Programs_content");
                     if (myPrograms.firstElementChild.id == "add_new_project") {
@@ -219,9 +178,9 @@ var AccordionView = (function () {
                         myPrograms.firstChild.click();
                     }
                 }
-                delete downloadedProjects[id];
+                delete downloadedProjects[header.publicId];
             };
-            downloadedProjects[id] = projectView
+            downloadedProjects[header.publicId] = projectView
         }
 
         function addFolder(name) {
@@ -245,6 +204,7 @@ var AccordionView = (function () {
             myProg.innerHTML = "My programs";
             element.append(myProg);
 
+            myProgramsContentElement = document.createElement("div");
             myProgramsContentElement.id = "My_Programs_content";
             element.append(myProgramsContentElement);
 
@@ -254,14 +214,14 @@ var AccordionView = (function () {
                 login_link.id = "login-link";
                 login_link.className = "login-link";
                 login_link.innerHTML = "(please log in)";
-                login_link.click = function (event) {
+                login_link.onclick = function (event) {
                     $("#login-dialog").dialog("open");
                     event.stopPropagation()
                 };
                 myProg.appendChild(login_link);
-            } else {
-                headersProvider.getAllPrograms();
             }
+
+            return myProgramsContentElement;
         }
 
         function selectProject(publicId) {

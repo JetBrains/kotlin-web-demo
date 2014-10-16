@@ -406,9 +406,9 @@ public class MySqlConnector {
         }
     }
 
-    public String getProjectNames(UserInfo userInfo) {
+    public ArrayNode getProjectHeaders(UserInfo userInfo) throws DatabaseOperationException {
         if (!checkConnection()) {
-            return ResponseUtils.getErrorInJson("Cannot connect to database to load list of your programs.");
+            throw new DatabaseOperationException("Cannot connect to database to load list of your programs.");
         }
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -431,12 +431,12 @@ public class MySqlConnector {
                 projects.add(object);
             }
 
-            return new ObjectMapper().writeValueAsString(projects);
+            return projects;
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
-            return ResponseUtils.getErrorInJson("Unknown error while loading list of your programs");
+            throw new DatabaseOperationException("Unknown error while loading list of your programs");
         } finally {
             closeStatementAndResultSet(st, rs);
         }

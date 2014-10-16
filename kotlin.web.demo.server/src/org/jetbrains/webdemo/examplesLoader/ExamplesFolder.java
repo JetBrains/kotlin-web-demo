@@ -22,7 +22,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Semyon.Atamas on 8/11/2014.
@@ -51,5 +54,9 @@ public class ExamplesFolder {
                 System.err.println("Can't load example " + exampleName + ":\n" + e.getMessage());
             }
         }
+    }
+
+    public List<String> getOrderedExampleNames() {
+        return examplesOrder;
     }
 }

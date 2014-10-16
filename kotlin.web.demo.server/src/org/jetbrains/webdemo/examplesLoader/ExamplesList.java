@@ -24,20 +24,23 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ExamplesList {
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
 
     private static StringBuilder response;
     private static ObjectMapper objectMapper;
-    private static List<ExamplesFolder> examplesFoldersOrder;
-    private static Map<String, ExamplesFolder> examplesFolders;
+    private static List<String> exampleFoldersOrder;
+    private static Map<String, ExamplesFolder> exampleFolders;
 
     private ExamplesList() {
         response = new StringBuilder();
-        examplesFoldersOrder = new ArrayList<>();
-        examplesFolders = new HashMap<>();
+        exampleFoldersOrder = new ArrayList<>();
+        exampleFolders = new HashMap<>();
         objectMapper = new ObjectMapper();
         generateList();
     }
@@ -48,8 +51,8 @@ public class ExamplesList {
 
     public static String updateList() {
         response = new StringBuilder();
-        examplesFoldersOrder = new ArrayList<>();
-        examplesFolders = new HashMap<>();
+        exampleFoldersOrder = new ArrayList<>();
+        exampleFolders = new HashMap<>();
         ExamplesList.getInstance().generateList();
         return response.toString();
     }
@@ -58,7 +61,7 @@ public class ExamplesList {
         folderName = folderName.replaceAll("_", " ");
         exampleName = exampleName.replaceAll("_", " ");
 
-        ExamplesFolder folder = examplesFolders.get(folderName);
+        ExamplesFolder folder = exampleFolders.get(folderName);
         Project example = folder.examples.get(exampleName);
 
         try {
@@ -69,12 +72,12 @@ public class ExamplesList {
     }
 
     public static Project getExample(String url) {
-        ExamplesFolder examplesFolder = examplesFolders.get(ResponseUtils.substringBefore(url, "&name=").replaceAll("_", " "));
+        ExamplesFolder examplesFolder = exampleFolders.get(ResponseUtils.substringBefore(url, "&name=").replaceAll("_", " "));
         return examplesFolder.examples.get(ResponseUtils.substringAfter(url, "&name=").replaceAll("_", " "));
     }
 
     public static Project getExample(String name, String folder) {
-        ExamplesFolder examplesFolder = examplesFolders.get(folder.replaceAll("_", " "));
+        ExamplesFolder examplesFolder = exampleFolders.get(folder.replaceAll("_", " "));
         if (examplesFolder != null) {
             return examplesFolder.examples.get(name.replaceAll("_", " "));
         } else {
@@ -82,16 +85,12 @@ public class ExamplesList {
         }
     }
 
-    public Collection<ExamplesFolder> getList() {
-        return examplesFoldersOrder;
+    public List<String> getOrderedFolderNames() {
+        return exampleFoldersOrder;
     }
 
-    public String getListAsString() {
-        try {
-            return objectMapper.writeValueAsString(examplesFoldersOrder);
-        } catch (IOException e) {
-            return "";
-        }
+    public ExamplesFolder getFolder(String name) {
+        return exampleFolders.get(name);
     }
 
     private void generateList() {
@@ -103,8 +102,8 @@ public class ExamplesList {
                 File manifest = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName + File.separator + "manifest.json");
                 try {
                     ExamplesFolder examplesFolder = objectMapper.readValue(manifest, ExamplesFolder.class);
-                    examplesFoldersOrder.add(examplesFolder);
-                    examplesFolders.put(folderName, examplesFolder);
+                    exampleFoldersOrder.add(folderName);
+                    exampleFolders.put(folderName, examplesFolder);
                 } catch (Exception e) {
                     System.err.println("Can't load folder " + folderName + ":\n" + e.getMessage());
                     response.append("Can't load folder " + folderName + ":\n" + e.getMessage());

@@ -17,6 +17,8 @@
 package org.jetbrains.webdemo.sessions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
@@ -81,6 +83,10 @@ public class MyHttpSession {
                 case ("run"):
                     ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendExecutorResult();
+                    break;
+                case ("loadHeaders"):
+                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
+                    sendExamplesList(request, response);
                     break;
                 case ("loadExample"):
                     sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
@@ -245,6 +251,25 @@ public class MyHttpSession {
         }
     }
 
+    private void sendExamplesList(HttpServletRequest request, final HttpServletResponse response) {
+        try {
+            ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
+
+            List<String> orderedFolderNames = ExamplesList.getInstance().getOrderedFolderNames();
+            responseBody.put("orderedFolderNames", objectMapper.valueToTree(orderedFolderNames));
+            for (String folderName : orderedFolderNames) {
+                responseBody.put(folderName, objectMapper.valueToTree(ExamplesList.getInstance().getFolder(folderName).getOrderedExampleNames()));
+            }
+
+            if (sessionInfo.getUserInfo().isLogin()) {
+                responseBody.put("My programs", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo()));
+            }
+            writeResponse(request, response, responseBody.toString(), HttpServletResponse.SC_OK);
+        } catch (DatabaseOperationException e) {
+            writeResponse(e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     private void sendDeleteFileResult() {
         try {
             String publicId = parameters.get("publicId")[0];
@@ -258,14 +283,14 @@ public class MyHttpSession {
     }
 
     private void sendLoadProjectResult() {
-        String result;
-        if (parameters.get("args")[0].equals("all")) {
-            result = MySqlConnector.getInstance().getProjectNames(sessionInfo.getUserInfo());
-        } else {
+        try {
+            String result;
             String id = parameters.get("publicId")[0];
             result = MySqlConnector.getInstance().getProjectContent(sessionInfo.getUserInfo(), id);
+            writeResponse(result, HttpServletResponse.SC_OK);
+        } catch (NullPointerException e) {
+            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         }
-        writeResponse(result, HttpServletResponse.SC_OK);
     }
 
     private void sendSaveProjectResult() {

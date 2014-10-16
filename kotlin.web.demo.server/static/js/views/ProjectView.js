@@ -26,7 +26,7 @@ var ProjectType = {
 
 var ProjectView = (function () {
 
-    function ProjectView(publicId, name, /*Element*/ contentElement, /*Element*/ headerElement, type) {
+    function ProjectView(header, /*Element*/ contentElement, /*Element*/ headerElement) {
 
         var instance = {
             deselect: function () {
@@ -38,15 +38,15 @@ var ProjectView = (function () {
                 $(contentElement).slideUp();
             },
             getName: function () {
-                return name;
+                return header.name;
             },
             saveAs: function () {
-                saveProjectDialog.open(projectProvider.forkProject.bind(null, project, onProjectFork), name);
+                saveProjectDialog.open(projectProvider.forkProject.bind(null, project, onProjectFork), header.name);
             },
             select: function () {
                 selected = true;
                 if (project == null) {
-                    projectProvider.loadProject(publicId, type, createProject);
+                    projectProvider.loadProject(header.publicId, header.type, createProject);
                 } else if (selectedFile != null) {
                     selectedFile.select();
                 }
@@ -58,7 +58,7 @@ var ProjectView = (function () {
                 createProject(content);
             },
             getType: function () {
-                return type;
+                return header.type;
             },
             onHeaderClick: function (publicId) {
 
@@ -92,7 +92,7 @@ var ProjectView = (function () {
 
         function createProject(content) {
             contentElement.innerHTML = "";
-            if (type == ProjectType.USER_PROJECT) {
+            if (header.type == ProjectType.USER_PROJECT) {
                 addFileButton();
             }
 
@@ -116,8 +116,10 @@ var ProjectView = (function () {
         }
 
         function onProjectRenamed(newName) {
-            name = newName;
-            project.name = newName;
+            header.name = newName;
+            if (project != null) {
+                project.name = newName;
+            }
             nameSpan.innerHTML = newName;
         }
 
@@ -138,7 +140,7 @@ var ProjectView = (function () {
             newContent.name = name;
             newContent.parent = "My Programs";
             accordion.addNewProject(newContent.name, publicId, null, newContent);
-            projectProvider.loadProject(publicId, type, createProject);
+            projectProvider.loadProject(publicId, header.type, createProject);
         }
 
         function init() {
@@ -148,22 +150,22 @@ var ProjectView = (function () {
             img.className = "arrow";
             headerElement.appendChild(img);
             headerElement.onclick = function () {
-                instance.onHeaderClick(publicId);
+                instance.onHeaderClick(header.publicId);
             };
 
             nameSpan = document.createElement("span");
             nameSpan.className = "file-name-span";
             nameSpan.style.cursor = "pointer";
-            nameSpan.innerHTML = name;
+            nameSpan.innerHTML = header.name;
             headerElement.appendChild(nameSpan);
 
-            if (type == ProjectType.USER_PROJECT) {
+            if (header.type == ProjectType.USER_PROJECT) {
                 var deleteButton = document.createElement("div");
                 deleteButton.className = "delete-img";
                 deleteButton.title = "Delete this project";
                 deleteButton.onclick = function (event) {
-                    if (confirm("Delete project " + name + "?")) {
-                        projectProvider.deleteProject(publicId, onDelete);
+                    if (confirm("Delete project " + header.name + "?")) {
+                        projectProvider.deleteProject(header.publicId, onDelete);
                     }
                     event.stopPropagation();
                 };
@@ -173,7 +175,7 @@ var ProjectView = (function () {
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename this file";
                 renameImg.onclick = function (event) {
-                    renameProjectDialog.open(projectProvider.renameProject.bind(null, publicId, onProjectRenamed), name);
+                    renameProjectDialog.open(projectProvider.renameProject.bind(null, header.publicId, onProjectRenamed), header.name);
                     event.stopPropagation();
 
                 };
@@ -188,14 +190,14 @@ var ProjectView = (function () {
             button.innerHTML = "Add new file";
             button.style.cursor = "pointer";
             button.onclick = function () {
-                newFileDialog.open(fileProvider.addNewFile.bind(null, publicId, onNewFileAdded), "File");
+                newFileDialog.open(fileProvider.addNewFile.bind(null, header.publicId, onNewFileAdded), "File");
             };
             contentElement.appendChild(button);
         }
 
         function createFileView(publicId, name, /*nullable*/fileContent) {
             var fileHeader = document.createElement("div");
-            if (type == ProjectType.USER_PROJECT) {
+            if (header.type == ProjectType.USER_PROJECT) {
                 contentElement.insertBefore(fileHeader, contentElement.lastChild);
             } else {
                 contentElement.appendChild(fileHeader);

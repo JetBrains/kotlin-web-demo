@@ -283,9 +283,7 @@ var projectProvider = (function () {
 var headersProvider = (function () {
     var headersProvider = new HeadersProvider();
 
-    headersProvider.onExampleHeadersLoaded = accordion.onExampleHeadersLoaded;
-    headersProvider.onUserProjectHeadersLoaded = accordion.onUserProjectHeadersLoaded;
-    headersProvider.onPublicLinksLoaded = accordion.onPublicLinksLoaded;
+    headersProvider.onHeadersLoaded = accordion.onHeadersLoaded;
 
     return headersProvider;
 })();

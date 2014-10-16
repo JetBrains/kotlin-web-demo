@@ -19,7 +19,10 @@ package org.jetbrains.webdemo.handlers;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.ErrorWriterOnServer;
+import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.Statistics;
 import org.jetbrains.webdemo.authorization.AuthorizationFacebookHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationGoogleHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationHelper;
@@ -36,7 +39,10 @@ import org.jetbrains.webdemo.sessions.MyHttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Calendar;
@@ -99,10 +105,6 @@ public class ServerHandler {
                     case ("downloadLog"):
                         ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + param);
                         sendLog(request, response, parameters);
-                        break;
-                    case ("loadExampleHeaders"):
-                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
-                        sendExamplesList(request, response);
                         break;
                     case ("loadHelpForWords"):
                         ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
@@ -299,9 +301,6 @@ public class ServerHandler {
         writeResponse(request, response, responseStr, 200);
     }
 
-    private void sendExamplesList(HttpServletRequest request, final HttpServletResponse response) {
-        writeResponse(request, response, ExamplesList.getInstance().getListAsString(), HttpServletResponse.SC_OK);
-    }
 
     private void sendUserInformation(final HttpServletRequest request, final HttpServletResponse response, SessionInfo info) {
         StringBuilder reqResponse = new StringBuilder();
