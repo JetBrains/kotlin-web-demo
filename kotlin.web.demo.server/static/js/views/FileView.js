@@ -70,17 +70,6 @@ var FileView = (function () {
         renameFileDialog.verify = project.verifyNewFilename;
         init();
 
-        function onDeleteFile() {
-            instance.deselect();
-            headerElement.parentNode.removeChild(headerElement);
-            instance.onDelete(publicId);
-        }
-
-        function onFileRenamed(newName) {
-            newName = addKotlinExtension(newName);
-            file.name = newName;
-            fileNameElement.innerHTML = newName;
-        }
 
         function init() {
             headerElement.className = "example-filename";
@@ -104,8 +93,13 @@ var FileView = (function () {
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename file";
                 renameImg.onclick = function (event) {
-                    renameFileDialog.open(fileProvider.renameFile.bind(null, publicId, onFileRenamed),
-                        removeKotlinExtension(name));
+                    var renameFileFunction = fileProvider.renameFile.bind(null, publicId, function (newName) {
+                        newName = addKotlinExtension(newName);
+                        file.name = newName;
+                        fileNameElement.innerHTML = newName;
+                    });
+                    renameFileDialog.open(renameFileFunction, removeKotlinExtension(name));
+
                     event.stopPropagation();
                 };
 
@@ -115,7 +109,11 @@ var FileView = (function () {
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
                     if (confirm("Delete file " + name)) {
-                        fileProvider.deleteFile(publicId, onDeleteFile);
+                        fileProvider.deleteFile(publicId, function () {
+                            instance.deselect();
+                            headerElement.parentNode.removeChild(headerElement);
+                            instance.onDelete(publicId);
+                        });
                     }
                     event.stopPropagation();
                 };

@@ -224,11 +224,11 @@ var ProjectView = (function () {
             button.innerHTML = "Add new file";
             button.style.cursor = "pointer";
             button.onclick = function () {
-                newFileDialog.open(fileProvider.addNewFile.bind(null, header.publicId, onNewFileAdded), "File");
-                function onNewFileAdded(publicId, name) {
+                var addNewFileFunction = fileProvider.addNewFile.bind(null, header.publicId, function (publicId, name) {
                     fileViews[publicId] = createFileView(publicId, name);
                     selectFile(publicId);
-                }
+                });
+                newFileDialog.open(fileProvider.addNewFile.bind(null, header.publicId, addNewFileFunction), "File");
             };
             contentElement.appendChild(button);
         }
@@ -270,7 +270,7 @@ var ProjectView = (function () {
         }
 
         return instance;
-    };
+    }
 
 
     return ProjectView;
