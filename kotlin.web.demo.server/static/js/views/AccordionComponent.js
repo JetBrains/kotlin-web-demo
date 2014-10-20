@@ -132,11 +132,13 @@ var AccordionView = (function () {
                 selectProject(createExampleId(project, folder));
             } else if (id != "") {
                 headersProvider.getHeaderByFilePublicId(id, function (header) {
-                    if (header.type == ProjectType.PUBLIC_LINK) {
-                        header.timeStamp = new Date().getTime();
-                        addProject(publicLinksContentElement, header);
-                    } else {
-                        addProject(myProgramsContentElement, header);
+                    if (!(header.id in projects)) {
+                        if (header.type == ProjectType.PUBLIC_LINK) {
+                            header.timeStamp = new Date().getTime();
+                            addProject(publicLinksContentElement, header);
+                        } else {
+                            throw "Project wasn't downloaded";
+                        }
                     }
                     selectProject(header.publicId);
                 });

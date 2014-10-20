@@ -32,6 +32,12 @@ var FileView = (function () {
                 }
             },
             select: function () {
+                if (project.getType() == ProjectType.EXAMPLE) {
+                    history.replaceState("", "", "?" + publicId);
+                } else {
+                    history.replaceState("", "", "?id=" + publicId);
+                }
+
                 if (instance.canBeSelected()) {
                     selected = true;
                     headerElement.className += " selected";
@@ -42,9 +48,11 @@ var FileView = (function () {
                 instance.content = editor.getText();
                 if (project.getType() == ProjectType.USER_PROJECT) {
                     fileProvider.saveFile(publicId, fileData, function () {
+                        $(headerElement).removeClass("selected");
                     });
                 } else {
                     project.save();
+                    $(headerElement).removeClass("selected");
                 }
             },
             getFileData: function () {
