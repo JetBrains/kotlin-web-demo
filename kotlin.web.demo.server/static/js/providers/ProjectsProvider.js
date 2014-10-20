@@ -75,7 +75,7 @@ var ProjectProvider = (function () {
         };
 
 
-        function renameProject(publicId, newName, callback) {
+        function renameProject(publicId, callback, newName) {
             $.ajax({
                 url: generateAjaxUrl("renameProject"),
                 success: function () {

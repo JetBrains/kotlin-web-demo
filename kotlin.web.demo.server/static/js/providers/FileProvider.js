@@ -24,8 +24,8 @@ var FileProvider = (function () {
             renameFile: function (publicId, callback, newName) {
                 renameFile(publicId, callback, newName);
             },
-            saveFile: function (publicId, data) {
-                saveFile(publicId, data);
+            saveFile: function (publicId, data, callback) {
+                saveFile(publicId, data, callback);
             },
             deleteFile: function (publicId, callback) {
                 deleteFile(publicId, callback);
@@ -36,6 +36,8 @@ var FileProvider = (function () {
             onDeleteFile: function () {
             },
             onFileRenamed: function (newName) {
+            },
+            onFileSaved: function () {
             },
             onFail: function (message, status) {
             }
@@ -92,15 +94,19 @@ var FileProvider = (function () {
             });
         }
 
-        function saveFile(publicId, data) {
+        function saveFile(publicId, data, callback) {
             $.ajax({
                 url: generateAjaxUrl("saveFile"),
                 type: "POST",
                 timeout: 10000,
-                data: {publicId: publicId, file: JSON.stringify(data)}
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-//                }
+                success: function () {
+                    instance.onFileSaved();
+                    callback();
+                },
+                data: {publicId: publicId, file: JSON.stringify(data)},
+                error: function (jqXHR, textStatus, errorThrown) {
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                }
             })
         }
 

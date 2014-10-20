@@ -41,7 +41,8 @@ var FileView = (function () {
             save: function () {
                 instance.content = editor.getText();
                 if (project.getType() == ProjectType.USER_PROJECT) {
-                    provider.saveFile(publicId, fileData);
+                    fileProvider.saveFile(publicId, fileData, function () {
+                    });
                 } else {
                     project.save();
                 }
@@ -67,7 +68,13 @@ var FileView = (function () {
         var file = new FileData(fileData);
         var selected = false;
         var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
-        renameFileDialog.verify = project.verifyNewFilename;
+        renameFileDialog.verify = function (newName) {
+            if (removeKotlinExtension(name) == newName) {
+                return true;
+            } else {
+                return project.verifyNewFilename(newName);
+            }
+        };
         init();
 
 

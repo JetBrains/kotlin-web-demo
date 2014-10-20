@@ -30,7 +30,6 @@ var ProjectView = (function () {
 
         var instance = {
             deselect: function () {
-                selected = false;
                 if (selectedFile != null) {
                     selectedFile.deselect();
                 }
@@ -39,6 +38,9 @@ var ProjectView = (function () {
             },
             getHeader: function () {
                 return header;
+            },
+            getPublicId: function () {
+                return header.publicId;
             },
             getName: function () {
                 return header.name;
@@ -64,8 +66,10 @@ var ProjectView = (function () {
                     loginDialog.dialog("open");
                 }
             },
+            isSelected: function () {
+                return accordion.getSelectedProject().getPublicId() == header.publicId;
+            },
             select: function () {
-                selected = true;
                 headerElement.className += " selected";
                 headerElement.parentNode.previousSibling.click();
                 $(contentElement).slideDown();
@@ -119,13 +123,18 @@ var ProjectView = (function () {
         };
 
         var nameSpan;
-        var selected = false;
         var modified = false;
         var project = null;
         var selectedFile = null;
         var fileViews = {};
         var renameProjectDialog = new InputDialogView("Rename project", "Project name:", "Rename");
-        renameProjectDialog.verify = accordion.verifyNewProjectname;
+        renameProjectDialog.verify = function (newName) {
+            if (header.name == newName) {
+                return true;
+            } else {
+                return accordion.verifyNewProjectname(newName);
+            }
+        };
         var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
         newFileDialog.verify = instance.verifyNewFilename;
         var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
@@ -142,22 +151,20 @@ var ProjectView = (function () {
 
             var filesContent = content.files;
             var fileView;
-            if (filesContent.length > 0) {
-                fileView = createFileView(filesContent[0].publicId, filesContent[0].name, filesContent[0]);
-                fileViews[filesContent[0].publicId] = fileView;
-                project.files.push(fileView.getFileData());
-                selectFile(filesContent[0].publicId)
-            }
 
-            for (var i = 1; i < filesContent.length; ++i) {
+            for (var i = 0; i < filesContent.length; ++i) {
                 var fileContent = filesContent[i];
                 fileView = createFileView(fileContent.publicId, fileContent.name, fileContent);
                 fileViews[fileContent.publicId] = fileView;
                 project.files.push(fileView.getFileData());
             }
 
+            if (filesContent.length > 0) {
+                selectFile(filesContent[0].publicId)
+            }
+
             problemsView.onProjectChange();
-            if (selected) {
+            if (instance.isSelected()) {
                 instance.onSelected(instance);
             }
         }
@@ -226,9 +233,10 @@ var ProjectView = (function () {
             button.onclick = function () {
                 var addNewFileFunction = fileProvider.addNewFile.bind(null, header.publicId, function (publicId, name) {
                     fileViews[publicId] = createFileView(publicId, name);
+                    project.files.push(fileViews[publicId].getFileData());
                     selectFile(publicId);
                 });
-                newFileDialog.open(fileProvider.addNewFile.bind(null, header.publicId, addNewFileFunction), "File");
+                newFileDialog.open(addNewFileFunction, "Untitled");
             };
             contentElement.appendChild(button);
         }
@@ -243,7 +251,7 @@ var ProjectView = (function () {
             var fileView = new FileView(instance, name, publicId, fileHeader, fileContent);
 
             fileView.canBeSelected = function () {
-                return selected;
+                return instance.isSelected();
             };
 
             fileView.onDelete = function (publicId) {
