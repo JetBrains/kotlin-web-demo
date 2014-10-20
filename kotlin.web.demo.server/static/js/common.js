@@ -28,6 +28,14 @@ String.prototype.startsWith = function (a) {
     return 0 === this.indexOf(a);
 };
 
+function addKotlinExtension(filename) {
+    return filename.endsWith(".kt") ? filename : filename + ".kt";
+}
+
+function removeKotlinExtension(filename) {
+    return filename.endsWith(".kt") ? filename.substring(0, filename.length - ".kt".length) : filename;
+}
+
 function forEachInArrayWithArgs(arr, data, f) {
     var i = 0;
     while (arr[i] != undefined) {

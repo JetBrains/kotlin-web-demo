@@ -80,7 +80,7 @@ var ProjectView = (function () {
                 }
 
                 if (header.type == ProjectType.PUBLIC_LINK) {
-                    header.timeStamp == new Date().getTime();
+                    header.timeStamp = new Date().getTime();
                 }
             },
             createProject: function (content) {
@@ -90,7 +90,7 @@ var ProjectView = (function () {
                 return header.type;
             },
             verifyNewFilename: function (fileName) {
-                fileName = fileName.endsWith(".kt") ? fileName : fileName + ".kt";
+                fileName = addKotlinExtension(fileName);
                 for (var i = 0; i < project.files.length; i++) {
                     if (project.files[i].name == fileName) {
                         return false;

@@ -69,7 +69,6 @@ var AccordionView = (function () {
                 addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT});
 
                 if (content == null) {
-                    var filename = name.endsWith(".kt") ? name : name + ".kt";
                     content = {
                         name: name,
                         parent: "My Program",
@@ -77,7 +76,7 @@ var AccordionView = (function () {
                         confType: "java",
                         help: "",
                         files: [
-                            {name: filename, content: "", modifiable: true, publicId: fileId}
+                            {name: addKotlinExtension(name), content: "", modifiable: true, publicId: fileId}
                         ]
                     };
                 }

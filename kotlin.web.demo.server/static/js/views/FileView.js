@@ -77,7 +77,7 @@ var FileView = (function () {
         }
 
         function onFileRenamed(newName) {
-            newName = newName.endsWith(".kt") ? newName : newName + ".kt";
+            newName = addKotlinExtension(newName);
             file.name = newName;
             fileNameElement.innerHTML = newName;
         }
@@ -105,7 +105,7 @@ var FileView = (function () {
                 renameImg.title = "Rename file";
                 renameImg.onclick = function (event) {
                     renameFileDialog.open(fileProvider.renameFile.bind(null, publicId, onFileRenamed),
-                        fileData.name.endsWith(".kt") ? fileData.name.substring(0, fileData.name.length - 3) : fileData.name);
+                        removeKotlinExtension(name));
                     event.stopPropagation();
                 };
 

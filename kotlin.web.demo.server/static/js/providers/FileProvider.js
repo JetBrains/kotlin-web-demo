@@ -42,9 +42,7 @@ var FileProvider = (function () {
         };
 
         function addNewFile(projectPublicId, callback, filename) {
-            if (!filename.endsWith(".kt")) {
-                filename = filename + ".kt";
-            }
+            filename = addKotlinExtension(filename);
             $.ajax({
                 url: generateAjaxUrl("addFile"),
                 success: function (publicId) {
