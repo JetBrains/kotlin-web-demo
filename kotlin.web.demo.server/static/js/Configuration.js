@@ -76,41 +76,22 @@ var ConfigurationComponent = (function () {
         };
 
         $("#run-mode").on("selectmenuchange", function () {
-            if ($("#run-mode").val() == "java") {
+            var confType = this.value;
+            if (confType == "java") {
                 document.getElementById("generated-code-link").innerHTML = "Generated classfiles";
             } else {
                 document.getElementById("generated-code-link").innerHTML = "Generated JavaScript code";
             }
-            configuration = new Configuration(configuration.mode, Configuration.getTypeFromString($("#run-mode").val()));
-            accordion.getSelectedProject().changeConfiguration();
+            configuration = new Configuration(configuration.mode, Configuration.getTypeFromString(confType));
             fireChangeEvent();
         });
-
-
-        function saveModeToCookies(mode) {
-            $.cookie("typeCheckerMode", mode);
-        }
-
-        (function getModeFromCookies() {
-            mode = $.cookie("typeCheckerMode");
-            if (mode == "on-the-fly") {
-                document.getElementById("on-the-fly-checkbox").checked = true;
-                configuration = new Configuration(Configuration.mode.SERVER, configuration.type);
-            } else {
-                document.getElementById("on-the-fly-checkbox").checked = false;
-                configuration = new Configuration(Configuration.mode.ONRUN, configuration.type);
-            }
-            fireChangeEvent();
-        })();
 
         $(document).on("change", "#on-the-fly-checkbox", function () {
             var checkbox = document.getElementById("on-the-fly-checkbox");
             if (checkbox.checked == true) {
                 configuration = new Configuration(Configuration.mode.SERVER, configuration.type);
-                saveModeToCookies("on-the-fly")
             } else {
-                configuration = new Configuration(Configuration.mode.ONRUN, configuration.type)
-                saveModeToCookies("on-run")
+                configuration = new Configuration(Configuration.mode.ONRUN, configuration.type);
             }
             fireChangeEvent();
         });
@@ -131,9 +112,9 @@ var ConfigurationComponent = (function () {
             return "js";
         } else if (type == Configuration.type.CANVAS) {
             return "canvas";
-        } else if(type == Configuration.type.JUNIT){
+        } else if (type == Configuration.type.JUNIT) {
             return "junit";
-        } else if(type == Configuration.type.JAVA){
+        } else if (type == Configuration.type.JAVA) {
             return "java";
         }
     };
@@ -143,10 +124,12 @@ var ConfigurationComponent = (function () {
             return Configuration.type.JS;
         } else if (type == "canvas") {
             return Configuration.type.CANVAS;
-        } else if( type == "java"){
+        } else if (type == "java") {
             return Configuration.type.JAVA;
-        } else if(type == "junit"){
+        } else if (type == "junit") {
             return Configuration.type.JUNIT;
+        } else {
+            throw( type + " is not a valid type")
         }
     };
 

@@ -39,8 +39,6 @@ actionManager.registerAction("org.jetbrains.web.demo.save",
     }));
 
 var editor = new KotlinEditor();
-
-var argumentsView = $("#arguments");
 var statusBarView = new StatusBarView(document.getElementById("status-bar"));
 var generatedCodeView = new GeneratedCodeView($("#generated-code"));
 var consoleView = new ConsoleView($("#console"), $("#result-tabs"));
@@ -153,20 +151,31 @@ var completionProvider = (function () {
     return new CompletionProvider(onSuccess, onFail);
 })();
 
-var converterView = new ConverterView($("#java2kotlin"), converterProvider);
-var accordion = new AccordionView(document.getElementById("examples-list"));
 
 
 configurationManager.onChange = function (configuration) {
     editor.setConfiguration(configuration);
     consoleView.setConfiguration(configuration);
-//    accordion.setConfiguration(configuration);
+    accordion.getSelectedProject().getProjectData().setConfiguration(Configuration.getStringFromType(configuration.type));
 };
 
 configurationManager.onFail = function (exception) {
     consoleView.writeException(exception);
     statusBarView.setMessage(ActionStatusMessages.change_configuration_fail);
 };
+
+var converterView = new ConverterView($("#java2kotlin"), converterProvider);
+var argumentsInput = document.getElementById("arguments");
+argumentsInput.oninput = function () {
+    accordion.getSelectedProject().getProjectData().setArguments(argumentsInput.value);
+};
+var accordion = new AccordionView(document.getElementById("examples-list"));
+
+accordion.onProjectSelected = function (projectView) {
+    argumentsInput.value = projectView.getProjectData().args;
+    configurationManager.updateConfiguration(projectView.getProjectData().confType);
+};
+
 
 var timer;
 editor.onCursorActivity = function (cursorPosition) {
@@ -210,7 +219,7 @@ var run_button = $("#run-button")
                 if (localConfiguration.type == Configuration.type.CANVAS) {
                     canvasDialog.dialog("open");
                 }
-                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject().getModifiableContent(), argumentsView.val(), accordion.getSelectedProject());
+                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject().getModifiableContent(), accordion.getSelectedProject());
             } else {
                 run_button.button("option", "disabled", false);
             }
@@ -244,7 +253,7 @@ loginProvider.onLogout = function () {
     accordion.getSelectedProject().save();
     loginView.logout();
     statusBarView.setStatus(statusBarView.statusMessages.logout_ok);
-    accordion.onLogout();
+    accordion.loadAllContent();
 };
 
 loginProvider.onFail = function (exception, actionCode) {
@@ -388,7 +397,7 @@ helpDialog.dialog(
     }
 );
 
-$("#login-dialog").dialog({
+var loginDialog = $("#login-dialog").dialog({
     modal: "true",
     width: 300,
     autoOpen: false

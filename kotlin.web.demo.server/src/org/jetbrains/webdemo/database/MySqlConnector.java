@@ -707,8 +707,13 @@ public class MySqlConnector {
 
                 ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
                 response.put("name", rs.getString("name"));
-                response.put("isUserProject", isUserProject);
-                response.put("projectId", rs.getString("public_id"));
+                response.put("publicId", rs.getString("public_id"));
+                if (isUserProject) {
+                    response.put("type", "USER_PROJECT");
+                } else {
+                    response.put("type", "PUBLIC_LINK");
+                }
+
 
                 return objectMapper.writeValueAsString(response);
             } else {

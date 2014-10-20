@@ -33,8 +33,14 @@ var ProjectProvider = (function () {
             renameProject: function (publicId, callback, newName) {
                 renameProject(publicId, callback, newName);
             },
-            deleteProject: function (id, callback) {
-                deleteProject(id, callback);
+            deleteProject: function (id, type, callback) {
+                if (type == ProjectType.USER_PROJECT) {
+                    deleteProject(id, callback);
+                } else if (type == ProjectType.PUBLIC_LINK) {
+                    callback();
+                } else {
+                    throw ("Can't delete this project");
+                }
             },
             addNewProject: function (name) {
                 addNewProject(name);
@@ -42,21 +48,15 @@ var ProjectProvider = (function () {
             forkProject: function (content, callback, name) {
                 forkProject(content, callback, name)
             },
-//            saveProject: function (content, publicId) {
-//                saveProject(content, publicId);
-//            },
-//            onProjectLoaded: function (data) {
-//
-//            },
-//            onDeleteProject: function () {
-//
-//            },
-            onProjectFork: function () {
+            saveProject: function (content, publicId, callback) {
+                saveProject(content, publicId);
+            },
+            onProjectForked: function () {
 
             },
-//            onProjectSave: function () {
-//
-//            },
+            onProjectSaved: function () {
+
+            },
             checkIfProjectExists: function (publicId, onSuccess, onFail) {
                 checkIfProjectExists(publicId, onSuccess, onFail);
             },
@@ -213,7 +213,10 @@ var ProjectProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("saveProject"),
                 type: "POST",
-                success: instance.onProjectSave,
+                success: function () {
+                    instance.onProjectSaved();
+                    callback();
+                },
                 timeout: 10000,
                 data: {project: JSON.stringify(content), publicId: publicId},
                 error: function (jqXHR, textStatus, errorThrown) {

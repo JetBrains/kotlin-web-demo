@@ -32,10 +32,7 @@ import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
-import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
-import org.jetbrains.webdemo.responseHelpers.JavaToKotlinConverter;
-import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
-import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
+import org.jetbrains.webdemo.responseHelpers.*;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -170,8 +167,8 @@ public class MyHttpSession {
 
     private void sendLoadProjectInfoByFileIdResult() {
         try {
-            String id = parameters.get("id")[0];
-            writeResponse(MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), id), HttpServletResponse.SC_OK);
+            String publicId = parameters.get("publicId")[0];
+            writeResponse(MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), publicId), HttpServletResponse.SC_OK);
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         } catch (DatabaseOperationException e) {
@@ -327,21 +324,22 @@ public class MyHttpSession {
     private void sendExecutorResult() {
         try {
 
-            Project example = objectMapper.readValue(parameters.get("project")[0], Project.class);
-            if (example.originUrl != null) {
-                addUnmodifiableDataToExample(example, example.originUrl);
+            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            if (project.originUrl != null) {
+                addUnmodifiableDataToExample(project, project.originUrl);
             }
+            List<PsiFile> psiFiles = createProjectPsiFiles(project);
 
-            sessionInfo.setRunConfiguration(example.confType);
+            sessionInfo.setRunConfiguration(project.confType);
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
-                List<PsiFile> psiFiles = createProjectPsiFiles(example);
 
-                CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, sessionInfo, example);
+
+                CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, sessionInfo, project);
                 writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
             } else {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
-//                writeResponse(new JsConverter(sessionInfo).getResult(data.text, consoleArgs), HttpServletResponse.SC_OK);
+                writeResponse(new JsConverter(sessionInfo).getResult(psiFiles, project.args), HttpServletResponse.SC_OK);
             }
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
@@ -387,13 +385,13 @@ public class MyHttpSession {
 
     public void sendHighlightingResult() {
         sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
-        sessionInfo.setRunConfiguration(parameters.get("args")[0]);
         try {
-            Project example = objectMapper.readValue(parameters.get("project")[0], Project.class);
-            if (example.originUrl != null) {
-                addUnmodifiableDataToExample(example, example.originUrl);
+            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            sessionInfo.setRunConfiguration(project.confType);
+            if (project.originUrl != null) {
+                addUnmodifiableDataToExample(project, project.originUrl);
             }
-            List<PsiFile> psiFiles = createProjectPsiFiles(example);
+            List<PsiFile> psiFiles = createProjectPsiFiles(project);
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, currentProject);
             String response = responseForHighlighting.getResult();
             response = response.replaceAll("\\n", "");

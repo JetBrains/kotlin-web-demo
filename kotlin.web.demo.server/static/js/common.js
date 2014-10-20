@@ -44,6 +44,10 @@ function forEachInArray(arr, f) {
     }
 }
 
+function compareNumbers(a, b) {
+    return a - b;
+}
+
 function unEscapeString(str) {
     str = replaceAll(str, "&amp;", "&");
     return str;

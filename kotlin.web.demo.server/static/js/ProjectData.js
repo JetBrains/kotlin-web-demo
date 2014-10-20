@@ -24,7 +24,7 @@ var ProjectData = (function () {
             name: "",
             files: [],
             args: "",
-            confType: "",
+            confType: "java",
             originUrl: null,
             parent: "",
             getModifiableContent: function () {
@@ -54,13 +54,24 @@ var ProjectData = (function () {
                     }
                 }
                 return false;
+            },
+            setArguments: function (args) {
+                instance.args = args;
+                instance.onChange();
+            },
+            setConfiguration: function (confType) {
+                instance.confType = confType;
+                instance.onChange();
+            },
+            onChange: function () {
+
             }
         };
 
         if (content != null) {
             var originUrl = content.originUrl;
             instance.name = content.name;
-            instance.confType = content.confTrpe;
+            instance.confType = content.confType;
             instance.parent = content.parent;
         }
         return instance;

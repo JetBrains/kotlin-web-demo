@@ -26,21 +26,21 @@ var RunProvider = (function () {
     function RunProvider(onSuccess, onFail) {
 
         var instance = {
-            run: function (configuration, programText, args, example) {
-                run(configuration, programText, args, example);
+            run: function (configuration, programText, example) {
+                run(configuration, programText, example);
             }
         };
 
-        function run(configuration, project, args) {
+        function run(configuration, project) {
             if (configuration.type.runner == ConfigurationType.runner.JAVA) {
-                runJava(configuration, project, args);
+                runJava(configuration, project);
             } else {
-                runJs(configuration, project, args);
+                runJs(configuration, project);
             }
         }
 
 
-        function runJava(configuration, project, args) {
+        function runJava(configuration, project) {
             var confTypeString = Configuration.getStringFromType(configuration.type);
             $.ajax({
                 url: generateAjaxUrl("run", confTypeString),
@@ -67,12 +67,12 @@ var RunProvider = (function () {
 
         }
 
-        function runJs(configuration, programText, args) {
+        function runJs(configuration, project) {
             Kotlin.modules = {stdlib: Kotlin.modules.stdlib};
-            loadJsFromServer(configuration, programText, args);
+            loadJsFromServer(configuration, project);
         }
 
-        function loadJsFromServer(configuration, i, arguments) {
+        function loadJsFromServer(configuration, project) {
             var confTypeString = Configuration.getStringFromType(configuration.type);
             $.ajax({
                 url: generateAjaxUrl("run", confTypeString),
@@ -101,7 +101,7 @@ var RunProvider = (function () {
                 },
                 dataType: "json",
                 type: "POST",
-                data: {text: i, consoleArgs: arguments},
+                data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     onFail(textStatus + " : " + errorThrown);

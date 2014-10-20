@@ -16,8 +16,13 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import com.intellij.psi.PsiFile;
+import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class JsConverter {
     private final SessionInfo info;
@@ -26,7 +31,15 @@ public class JsConverter {
         this.info = info;
     }
 
-    public String getResult(String code, String arguments) {
-        return WebDemoTranslatorFacade.translateStringWithCallToMain(code, arguments, info);
+    public String getResult(List<PsiFile> files, String arguments) {
+        return WebDemoTranslatorFacade.translateProjectWithCallToMain(convertList(files), arguments, info);
+    }
+
+    private List<JetFile> convertList(List<PsiFile> list) {
+        List<JetFile> ans = new ArrayList<>();
+        for (PsiFile psiFile : list) {
+            ans.add((JetFile) psiFile);
+        }
+        return ans;
     }
 }

@@ -32,7 +32,6 @@ import org.jetbrains.k2js.facade.exceptions.MainFunctionNotFoundException;
 import org.jetbrains.k2js.facade.exceptions.TranslationException;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
-import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -74,11 +73,11 @@ public final class WebDemoTranslatorFacade {
 
     @SuppressWarnings("UnusedDeclaration")
     @NotNull
-    public static String translateStringWithCallToMain(@NotNull String programText, @NotNull String argumentsString, SessionInfo sessionInfo) {
+    public static String translateProjectWithCallToMain(@NotNull List<JetFile> files, @NotNull String arguments, SessionInfo sessionInfo) {
         try {
             ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
             ObjectNode jsonObject = result.addObject();
-            jsonObject.put("text", doTranslate(programText, argumentsString));
+            jsonObject.put("text", doTranslate(files, arguments));
 
             Initializer.reinitializeJavaEnvironment();
 
@@ -91,15 +90,15 @@ public final class WebDemoTranslatorFacade {
             Initializer.reinitializeJavaEnvironment();
 
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), programText);
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
             KotlinCoreException ex = new KotlinCoreException(e);
             return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, ex.getStackTraceString());
         }
     }
 
     @NotNull
-    private static String doTranslate(@NotNull String programText,
-                                      @NotNull String argumentsString) throws TranslationException {
+    private static String doTranslate(@NotNull List<JetFile> files,
+                                      @NotNull String arguments) throws TranslationException {
         K2JSTranslator translator = new K2JSTranslator(new LibrarySourcesConfig(
                 Initializer.INITIALIZER.getEnvironment().getProject(),
                 "moduleId",
@@ -107,8 +106,7 @@ public final class WebDemoTranslatorFacade {
                 EcmaVersion.defaultVersion(),
                 false,
                 false));
-        JetFile file = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), "dummy.kt", programText);
-        String programCode = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
+        String programCode = translator.generateProgramCode(files, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(arguments)))) + "\n";
         return K2JSTranslator.FLUSH_SYSTEM_OUT + programCode + K2JSTranslator.GET_SYSTEM_OUT;
     }
 

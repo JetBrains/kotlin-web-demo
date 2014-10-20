@@ -27,8 +27,8 @@ var HeadersProvider = (function () {
             getAllHeaders: function (/*Function*/callback) {
                 getAllHeaders(callback);
             },
-            getInfoAboutProject: function (publicId) {
-                getInfoAboutProjectHeader(publicId);
+            getHeaderByFilePublicId: function (publicId, /*Function*/callback) {
+                getHeaderByFilePublicId(publicId, callback);
             },
             onHeadersLoaded: function () {
 
@@ -76,7 +76,9 @@ var HeadersProvider = (function () {
                             }
 
                             if (localStorage.getItem("publicLinks") != null) {
-                                foldersContent["Public links"] = JSON.parse(localStorage.getItem("publicLinks"));
+                                foldersContent["Public links"] = JSON.parse(localStorage.getItem("publicLinks")).sort(function (a, b) {
+                                    return a.timeStamp - b.timeStamp;
+                                });
                             } else {
                                 foldersContent["Public links"] = [];
                             }
@@ -99,17 +101,18 @@ var HeadersProvider = (function () {
             });
         }
 
-        function getInfoAboutProjectHeader(publicId) {
+        function getHeaderByFilePublicId(publicId, /*Function*/callback) {
             $.ajax({
                 url: generateAjaxUrl("loadProjectInfoByFileId"),
                 success: function (data) {
+                    callback(data);
                     instance.onProjectInfoLoaded(data);
                 },
                 type: "GET",
                 timeout: 10000,
                 dataType: "json",
                 data: {
-                    id: publicId
+                    publicId: publicId
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
