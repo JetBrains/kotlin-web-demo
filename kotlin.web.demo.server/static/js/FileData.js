@@ -32,6 +32,7 @@ var FileData = (function () {
             setContent: function (content) {
                 instance.modified = true;
                 instance.content = content;
+                instance.onContentChange()
             },
             onContentChange: function () {
             }

@@ -158,11 +158,26 @@
     display: inline-block;
 }
 
-.kotlin-file-type-default {
+.example-filename .kotlinFileIcon {
     top: 1px;
     float: left;
     margin-right: 3px;
-    width: 16px;
-    height: 16px;
-    background: url("/static/images/fileTypeIcons.png");
+    width: 12px;
+    height: 14px;
+    background: url("/static/images/icons.png") no-repeat -19px -92px;
+}
+
+.example-filename.modified .kotlinFileIcon {
+    width: 14px;
+    height: 15px;
+    background: url("/static/images/icons.png") no-repeat -37px -92px;
+}
+
+.unmodifiableKotlinFileIcon {
+    top: 1px;
+    float: left;
+    margin-right: 3px;
+    width: 15px;
+    height: 15px;
+    background: url("/static/images/icons.png") no-repeat -52px -92px;
 }

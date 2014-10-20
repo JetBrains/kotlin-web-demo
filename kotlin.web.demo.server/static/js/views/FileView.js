@@ -66,6 +66,9 @@ var FileView = (function () {
 
         var fileNameElement;
         var file = new FileData(fileData);
+        file.onContentChange = function () {
+            headerElement.className += " modified";
+        };
         var selected = false;
         var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
         renameFileDialog.verify = function (newName) {
@@ -82,10 +85,10 @@ var FileView = (function () {
             headerElement.className = "example-filename";
 
             var icon = document.createElement("div");
-            if (instance.type == "Kotlin") {
-                icon.className = "kotlin-file-type-default"
+            if (file.modifiable) {
+                icon.className = "kotlinFileIcon"
             } else {
-                icon.className = "kotlin-file-type-default"
+                icon.className = "unmodifiableKotlinFileIcon"
             }
             headerElement.appendChild(icon);
 

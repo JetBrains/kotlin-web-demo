@@ -167,14 +167,32 @@ var argumentsInput = document.getElementById("arguments");
 argumentsInput.oninput = function () {
     accordion.getSelectedProject().getProjectData().setArguments(argumentsInput.value);
 };
-var accordion = new AccordionView(document.getElementById("examples-list"));
 
-accordion.onProjectSelected = function (projectView) {
-    argumentsInput.value = projectView.getProjectData().args;
-    configurationManager.updateConfiguration(projectView.getProjectData().confType);
-    helpDialogView.updateProjectHelp(projectView.getProjectData().help);
-};
+var accordion = (function () {
+    var accordion = new AccordionView(document.getElementById("examples-list"));
 
+    accordion.onProjectSelected = function (projectView) {
+        argumentsInput.value = projectView.getProjectData().args;
+        configurationManager.updateConfiguration(projectView.getProjectData().confType);
+        helpDialogView.updateProjectHelp(projectView.getProjectData().help);
+    };
+
+    accordion.onFail = function (exception, actionCode) {
+        consoleView.writeException(exception);
+        statusBarView.setMessage(actionCode);
+    };
+
+    accordion.onDeleteProgram = function () {
+        statusBarView.setStatus(statusBarView.statusMessages.delete_program_ok);
+    };
+
+    accordion.onSaveProgram = function () {
+        editor.markAsUnchanged();
+        statusBarView.setStatus(statusBarView.statusMessages.save_program_ok);
+    };
+
+    return accordion
+})();
 
 var timer;
 editor.onCursorActivity = function (cursorPosition) {
@@ -228,19 +246,7 @@ var run_button = $("#run-button")
 //ProgramsModel.getArguments = argumentsView.val;
 
 
-accordion.onFail = function (exception, actionCode) {
-    consoleView.writeException(exception);
-    statusBarView.setMessage(actionCode);
-};
 
-accordion.onDeleteProgram = function () {
-    statusBarView.setStatus(statusBarView.statusMessages.delete_program_ok);
-};
-
-accordion.onSaveProgram = function () {
-    editor.markAsUnchanged();
-    statusBarView.setStatus(statusBarView.statusMessages.save_program_ok);
-};
 
 loginProvider.onLogin = function (data) {
     loginView.setUserName(data);
