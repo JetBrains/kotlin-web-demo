@@ -27,6 +27,7 @@ var ProjectData = (function () {
             confType: "java",
             originUrl: null,
             parent: "",
+            help: "",
             getModifiableContent: function () {
                 return {
                     name: instance.name,
@@ -73,6 +74,7 @@ var ProjectData = (function () {
             instance.name = content.name;
             instance.confType = content.confType;
             instance.parent = content.parent;
+            instance.help = content.help;
         }
         return instance;
     }

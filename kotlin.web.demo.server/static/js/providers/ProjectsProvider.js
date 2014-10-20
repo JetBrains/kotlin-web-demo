@@ -51,6 +51,8 @@ var ProjectProvider = (function () {
             saveProject: function (content, publicId, callback) {
                 saveProject(content, publicId);
             },
+            onProjectLoaded: function (projectContent) {
+            },
             onProjectForked: function () {
 
             },
@@ -98,7 +100,7 @@ var ProjectProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            instance.onProjectLoaded();
+                            instance.onProjectLoaded(data);
                             callback(data);
                         } else {
                             instance.onFail(data, ActionStatusMessages.load_example_fail);
@@ -138,7 +140,7 @@ var ProjectProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            instance.onProjectLoaded();
+                            instance.onProjectLoaded(data);
                             callback(data)
                         } else {
                             instance.onFail(data, ActionStatusMessages.load_program_fail);

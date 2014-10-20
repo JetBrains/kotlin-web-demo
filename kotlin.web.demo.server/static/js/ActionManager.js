@@ -15,8 +15,13 @@
  */
 
 var Shortcut = (function () {
-    function Shortcut(shortcutName, functionToCheckIfShortcutPressed) {
-        var name = shortcutName;
+    function Shortcut(/*Array*/ shortcutKeyNames, functionToCheckIfShortcutPressed) {
+        var name = "";
+        var separator = "";
+        for (var i = 0; i < shortcutKeyNames.length; ++i) {
+            name = name + separator + shortcutKeyNames[i];
+            separator = " + ";
+        }
         var isShortcutPressed = functionToCheckIfShortcutPressed;
 
         var instance = {
@@ -30,6 +35,9 @@ var Shortcut = (function () {
             },
             getName: function () {
                 return name;
+            },
+            getKeyNames: function () {
+                return shortcutKeyNames;
             }
         };
         return instance;

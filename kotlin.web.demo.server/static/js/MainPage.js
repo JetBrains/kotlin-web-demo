@@ -20,21 +20,21 @@ var configurationManager = new ConfigurationComponent();
 var actionManager = new ActionManager();
 
 actionManager.registerAction("org.jetbrains.web.demo.run",
-    new Shortcut("Ctrl+F9", function (e) {
+    new Shortcut(["Ctrl", "F9"], function (e) {
         return e.keyCode == 120 && e.ctrlKey;
-    }), new Shortcut("Ctrl+R", function (e) {
+    }), new Shortcut(["Ctrl", "R"], function (e) {
         return e.keyCode == 82 && e.ctrlKey;
     }));
 actionManager.registerAction("org.jetbrains.web.demo.reformat",
-    new Shortcut("Ctrl+Alt+L", null), /*default*/
-    new Shortcut("Cmd+Alt+L", null));
+    new Shortcut(["Ctrl", "Alt", "L"], null), /*default*/
+    new Shortcut(["Ctrl", "Alt", "L"], null));
 /*mac*/
 actionManager.registerAction("org.jetbrains.web.demo.autocomplete",
-    new Shortcut("Ctrl+Space", null));
+    new Shortcut(["Ctrl", "Space"], null));
 actionManager.registerAction("org.jetbrains.web.demo.save",
-    new Shortcut("Ctrl+S", function (e) {
+    new Shortcut(["Ctrl", "S"], function (e) {
         return e.keyCode == 83 && e.ctrlKey;
-    }), new Shortcut("Cmd+S", function (e) {
+    }), new Shortcut(["Cmd", "S"], function (e) {
         return e.keyCode == 83 && e.metaKey;
     }));
 
@@ -65,8 +65,7 @@ canvas.setAttribute("height", (canvasDialog.dialog("option", "height") - 30) + "
 
 //var runButton = new Button($("#run-button"), actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
 
-var helpModelForExamples = new HelpModel("Examples");
-var helpViewForExamples = new ExamplesHelpView($("#example-help-text"), helpModelForExamples);
+var helpDialogView = new HelpDialogView();
 var helpModelForWords = new HelpModel("Words");
 var helpViewForWords = new HelpView("Words", $("#words-help-text"), helpModelForWords);
 helpViewForWords.hide();
@@ -152,7 +151,6 @@ var completionProvider = (function () {
 })();
 
 
-
 configurationManager.onChange = function (configuration) {
     editor.setConfiguration(configuration);
     consoleView.setConfiguration(configuration);
@@ -174,6 +172,7 @@ var accordion = new AccordionView(document.getElementById("examples-list"));
 accordion.onProjectSelected = function (projectView) {
     argumentsInput.value = projectView.getProjectData().args;
     configurationManager.updateConfiguration(projectView.getProjectData().confType);
+    helpDialogView.updateProjectHelp(projectView.getProjectData().help);
 };
 
 
@@ -276,7 +275,7 @@ var fileProvider = (function () {
 var projectProvider = (function () {
     var projectProvider = new ProjectProvider();
 
-    projectProvider.onProjectLoaded = function () {
+    projectProvider.onProjectLoaded = function (projectContent) {
     };
 
     projectProvider.onFail = function () {
@@ -371,12 +370,10 @@ run_button.attr("title", run_button.attr("title").replace("@shortcut@", actionMa
 saveButton.attr("title", saveButton.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
 
 function loadShortcuts() {
-    var text = $("#shortcuts-help").html();
-    text = text.replace("@completion_shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getName());
-    text = text.replace("@run_shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
-    text = text.replace("@reformat_shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getName());
-    text = text.replace("@save_shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName());
-    $("#shortcuts-help").html(text);
+    helpDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getKeyNames(), "Code completion");
+    helpDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.run").getKeyNames(), "Run program");
+    helpDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getKeyNames(), "Reformat selected fragment");
+    helpDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.save").getKeyNames(), "Save current project");
 }
 
 window.onbeforeunload = closingCode;
@@ -388,14 +385,6 @@ function closingCode() {
     return null;
 }
 
-helpDialog = $("#help-dialog");
-helpDialog.dialog(
-    {
-        width: 350,
-        autoOpen: false,
-        modal: true
-    }
-);
 
 var loginDialog = $("#login-dialog").dialog({
     modal: "true",
@@ -403,10 +392,7 @@ var loginDialog = $("#login-dialog").dialog({
     autoOpen: false
 });
 
-$("#help").click(function () {
-        helpDialog.dialog("open")
-    }
-);
+document.getElementById("help").onclick = helpDialogView.open;
 
 $("#run-mode").selectmenu({
     icons: {button: "selectmenu-arrow-icon"}

@@ -18,9 +18,8 @@
 
 .ui-dialog {
     z-index: 1002;
-    border: 1px solid;
     border-radius: 5px;
-    border-color: #969696;
+    border: 1px solid #969696;
     overflow: hidden;
     outline: none;
 }
@@ -65,8 +64,7 @@
     padding-top: 4px;
     padding-bottom: 4px;
     background-color: #dcdcdc;
-    border: 1px solid;
-    border-color: #969696;
+    border: 1px solid #969696;
     border-radius: 3px;
 }
 
@@ -97,7 +95,7 @@
 }
 
 .login-with-colored:first-child {
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .colored-facebook {
@@ -142,19 +140,63 @@
 }
 
 #help-dialog {
-    padding: 8px;
+
+}
+
+#example-help {
+    border: 0 solid #969696;
+    border-bottom-width: 1px;
     line-height: 16px;
+    padding: 8px;
+    overflow: auto;
 }
 
-#help-dialog h3 {
-    text-align: center;
-    background-color: #f6f6f6;
-    line-height: 22px;
+#example-help p {
+    padding: 4px;
 }
 
-.help-text {
-    padding: 6px;
-    text-align: center;
+#example-help a {
+    text-decoration: none;
+}
+
+#shortcuts-help {
+    line-height: 16px;
+    margin: 6px;
+}
+
+#shortcutsKeyCombinations {
+    display: inline-block;
+}
+
+#shortcutsDescriptions {
+    display: inline-block;
+    line-height: 25px;
+}
+
+.shortcutKeyCombination {
+    overflow: hidden;
+    padding: 3px;
+}
+
+.shortcutKeyName {
+    float: right;
+    display: inline-block;
+    border: 1px solid #bcbcbc;
+    border-bottom-width: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 3px;
+}
+
+.shortcutSeparator {
+    float: right;
+    display: inline-block;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.shortcutDescription {
+    float: left;
 }
 
 #words-help {
