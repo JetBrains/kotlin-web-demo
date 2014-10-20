@@ -156,6 +156,15 @@
     max-width: 80%;
     word-wrap: break-word;
     display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 16px;
+    white-space: nowrap;
+}
+
+.example-filename:hover .example-filename-text {
+    max-height: none;
+    white-space: normal;
 }
 
 .example-filename .kotlinFileIcon {
