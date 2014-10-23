@@ -65,7 +65,7 @@ public final class WebDemoTranslatorFacade {
                     LIBRARY_FILES,
                     EcmaVersion.defaultVersion(),
                     false,
-                    false));
+                    true));
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), file.getText());
@@ -108,7 +108,7 @@ public final class WebDemoTranslatorFacade {
                 LIBRARY_FILES,
                 EcmaVersion.defaultVersion(),
                 false,
-                false));
+                true));
         JetFile file = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), programText);
         String programCode = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
         return K2JSTranslator.FLUSH_SYSTEM_OUT + programCode + K2JSTranslator.GET_SYSTEM_OUT;
