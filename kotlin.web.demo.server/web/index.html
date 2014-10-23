@@ -84,45 +84,52 @@
                     </div>
                     <div id="toolbox">
                         <div class="toolbox-left">
-                            <div id="console-button" class="console-arguments-button-active">
-                                <div id="console-image" class="console-image-active"></div>
-                                <div class="down-arrow"></div>
+                            <div id="saveButton" class="buttonWrapper" title="Save your program (@shortcut@)">
+                                <div class="img"></div>
+                                <div class="text">Save</div>
                             </div>
-                            <span class="run-text">
-                                Run
-                            </span>
-                            <select id="run-mode">
-                                <option value="java">Java</option>
-                                <option value="js">JavaScript</option>
-                                <option value="canvas">JavaScript(Canvas)</option>
-                                <option value="junit">JUnit</option>
-                            </select>
+                            <div id="saveAsButton" class="buttonWrapper">
+                                <div class="img"></div>
+                                <div class="text">Save as</div>
+                            </div>
+                            <div class="buttonWrapper argumentsButtonWrapper">
+                                <div id="argumentsButton" class="active">
+                                    <div class="img"></div>
+                                    <div class="arrow"></div>
+                                    <div class="text">Arguments</div>
+                                </div>
+                            </div>
+                            <div class="buttonWrapper">
+                                <select id="runMode">
+                                    <option value="java">Java</option>
+                                    <option value="js">JavaScript</option>
+                                    <option value="canvas">JavaScript(Canvas)</option>
+                                    <option value="junit">JUnit</option>
+                                </select>
 
-                            <div id="run-button" class="run-button"
-                                 title="Run file(@shortcut@) using run configuration"></div>
+                                <div id="runButton" title="Run file(@shortcut@) using run configuration">
+                                    <div class="img"></div>
+                                    <div class="text">Run</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="toolbox-right">
-                            <div class="imagebox">
-                                <div id="java2kotlin" class="java2kotlin"
-                                     title="Convert your Java code to Kotlin"></div>
+                            <div id="java2kotlin" class="buttonWrapper">
+                                <div class="img" title="Convert your Java code to Kotlin"></div>
+                                <div class="text">Convert from Java</div>
                             </div>
-                            <div class="imagebox">
-                                <div id="save" class="save" title="Save your program (@shortcut@)"></div>
-                            </div>
-                            <div class="imagebox">
+
+                            <div class="buttonWrapper">
                                 <div id="help" class="help" title="Help">?</div>
+                                <div class="text">Help</div>
                             </div>
-                            <span class="type-checking">Type checking</span>
-                            ` <input id="on-the-fly-checkbox" type="checkbox" class="type-checking-option"
-                                     checked="checked">
-                            <span class="on-the-fly">On-the-fly</span>
                         </div>
                     </div>
-                    <div id="command-line-arguments" class="command-line-arguments-visible">
-                                <span class="command-line-arguments-text">
-                                    Program arguments
-                                </span>
-                        <input id="arguments" class="command-line-arguments-textarea">
+                    <div id="argumentsWrapper">
+                        <div class="text">
+                            Program arguments:
+                        </div>
+                        <label for="arguments"></label><input id="arguments" type="text">
                     </div>
                     <div id="editordiv">
                         <div id="editor-notifications"></div>
@@ -133,9 +140,15 @@
                     </div>
                 </div>
             </div>
-            <div id="status-bar" class="status-bar">
-            </div>
+            <div id="statusBarWrapper">
+                <div id="statusBar"></div>
+                <div id="typeCheckingWrapper">
+                    <label for="on-the-fly-checkbox"></label>
+                    <input id="on-the-fly-checkbox" type="checkbox" checked="checked">
 
+                    <div class="text">On-the-fly type checking</div>
+                </div>
+            </div>
             <div id="result-tabs">
                 <div id="console" class="tab-space"></div>
                 <div id="problems" class="tab-space"></div>

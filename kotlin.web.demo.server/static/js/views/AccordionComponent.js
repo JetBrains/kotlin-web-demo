@@ -158,26 +158,6 @@ var AccordionView = (function () {
             }
         }
 
-
-        function addNewProjectButton() {
-
-            var addNewProjectDiv = document.createElement("div");
-            addNewProjectDiv.id = "add_new_project";
-
-            var addNewProjectIcon = document.createElement("div");
-            addNewProjectIcon.innerHTML = "+";
-            addNewProjectDiv.appendChild(addNewProjectIcon);
-
-            var addNewProjectText = document.createElement("div");
-            addNewProjectText.innerHTML = "Add new project";
-            addNewProjectText.className = "examples-project-name";
-            addNewProjectText.style.cursor = "pointer";
-            addNewProjectDiv.appendChild(addNewProjectText);
-
-            addNewProjectDiv.onclick = newProjectDialog.open.bind(null, projectProvider.addNewProject, "Project");
-            myProgramsContentElement.appendChild(addNewProjectDiv);
-        }
-
         function addProject(/*Element*/ folderContentElement, header) {
             if (header.type == ProjectType.PUBLIC_LINK && projects[header.publicId] != null) {
                 return
@@ -255,7 +235,13 @@ var AccordionView = (function () {
                 };
                 myProg.appendChild(login_link);
             } else {
-                addNewProjectButton();
+                var newProjectButton = document.createElement("div");
+                newProjectButton.className = "newProjectButton";
+                newProjectButton.onclick = function (e) {
+                    newProjectDialog.open(projectProvider.addNewProject, "Project");
+                    e.stopPropagation();
+                };
+                myProg.appendChild(newProjectButton);
             }
 
             return myProgramsContentElement;

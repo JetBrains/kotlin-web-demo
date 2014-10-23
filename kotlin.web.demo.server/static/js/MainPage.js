@@ -39,7 +39,7 @@ actionManager.registerAction("org.jetbrains.web.demo.save",
     }));
 
 var editor = new KotlinEditor();
-var statusBarView = new StatusBarView(document.getElementById("status-bar"));
+var statusBarView = new StatusBarView(document.getElementById("statusBar"));
 var generatedCodeView = new GeneratedCodeView($("#generated-code"));
 var consoleView = new ConsoleView($("#console"), $("#result-tabs"));
 var junitView = new JUnitView($("#console"), $("#result-tabs"));
@@ -223,7 +223,7 @@ editor.onCursorActivity = function (cursorPosition) {
 };
 
 
-var run_button = $("#run-button")
+var run_button = $("#runButton")
     .button()
     .click(function () {
         run_button.button("option", "disabled", true);
@@ -364,7 +364,7 @@ function getSessionIdSuccess(data) {
 }
 
 
-var saveButton = $("#save").click(function () {
+var saveButton = $("#saveButton").click(function () {
     if (accordion.getSelectedProject().getType() == ProjectType.USER_PROJECT) {
         accordion.getSelectedProject().save();
     } else {
@@ -400,28 +400,25 @@ var loginDialog = $("#login-dialog").dialog({
 
 document.getElementById("help").onclick = helpDialogView.open;
 
-$("#run-mode").selectmenu({
+$("#runMode").selectmenu({
     icons: {button: "selectmenu-arrow-icon"}
 });
 
-var show = function () {
-    document.getElementById("console-image").className = "console-image-active";
-    document.getElementById("console-image").onclick = hide;
-    document.getElementById("console-button").className = "console-arguments-button-active";
-    document.getElementById("command-line-arguments").className = "command-line-arguments-visible";
+var argumentsButton = document.getElementById("argumentsButton");
+var argumentsWrapper = document.getElementById("argumentsWrapper");
 
-    editor.resize();
+var show = function () {
+    argumentsButton.onclick = hide;
+    argumentsButton.className = "active";
+    $(argumentsWrapper).slideDown({step: editor.resize});
 };
 
 var hide = function () {
-    document.getElementById("console-image").className = "console-image";
-    document.getElementById("console-image").onclick = show;
-    document.getElementById("console-button").className = "console-arguments-button";
-    document.getElementById("command-line-arguments").className = "command-line-arguments-hidden";
-
-    editor.resize();
+    argumentsButton.onclick = show;
+    $(argumentsButton).removeClass("active");
+    $(argumentsWrapper).slideUp({step: editor.resize});
 };
-document.getElementById("console-image").onclick = hide;
+argumentsButton.onclick = hide;
 
 editor.resize();
 

@@ -27,9 +27,9 @@
 
 .examples-closed-folder-icon {
     display: inline-block;
-    width: 37px;
-    height: 15px;
-    background: url("/static/images/icons.png") no-repeat -42px -40px;
+    width: 17px;
+    height: 14px;
+    background: url("/static/images/icons.png") no-repeat -68px -92px;
 }
 
 #examples-list .ui-state-active {
@@ -48,13 +48,13 @@
 
 .examples-open-folder-icon {
     display: inline-block;
-    width: 37px;
-    height: 15px;
-    background: url("/static/images/icons.png") no-repeat -19px -76px;
+    width: 21px;
+    height: 14px;
+    background: url("/static/images/icons.png") no-repeat -86px -92px;
 }
 
 .folder-name-div {
-    padding-left: 43px;
+    padding-left: 25px;
     padding-top: 2px;
     padding-right: 10px;
 }
@@ -66,16 +66,26 @@
 }
 
 .file-name-span {
+    font-size: 14px;
     display: inline-block;
     max-width: 85%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 16px;
+    max-height: 16px;
+    white-space: nowrap;
+}
+
+.examples-project-name:hover .file-name-span {
+    max-height: none;
+    white-space: normal;
 }
 
 .examples-project-name {
     cursor: pointer;
     display: block;
     color: #3164a0;
-    font-size: 14px;
-    padding: 6px 6px 6px 45px;
+    padding: 6px 6px 6px 25px;
 }
 
 .current-project-name {
@@ -89,21 +99,10 @@
 .examples-project-name .arrow {
     display: inline-block;
     float: left;
-    margin-top: 3px;
     margin-right: 5px;
-    width: 4px;
-    height: 7px;
-    background: url("/static/images/icons.png") -58px -58px;
-}
-
-.examples-project-name.selected .arrow {
-    display: inline-block;
-    float: left;
-    margin-top: 3px;
-    margin-right: 5px;
-    width: 7px;
-    height: 4px;
-    background: url("/static/images/icons.png") -58px -66px;
+    width: 12px;
+    height: 14px;
+    background: url("/static/images/icons.png") -34px -39px;
 }
 
 #examples-list .ui-icon {
@@ -129,10 +128,10 @@
 
 .delete-img {
     cursor: pointer;
-    height: 12px;
-    width: 12px;
+    height: 8px;
+    width: 8px;
     float: right;
-    margin-top: 2px;
+    margin-top: 4px;
     background: url("/static/images/icons.png") no-repeat -20px -39px;
 }
 
@@ -144,7 +143,7 @@
     line-height: 16px;
     font-size: 14px;
     position: relative;
-    padding: 6px 6px 6px 65px;
+    padding: 6px 6px 6px 45px;
 }
 
 .example-filename.selected {
@@ -189,4 +188,12 @@
     width: 15px;
     height: 15px;
     background: url("/static/images/icons.png") no-repeat -52px -92px;
+}
+
+.newProjectButton {
+    float: right;
+    width: 15px;
+    height: 14px;
+    margin-right: 3px;
+    background: url("/static/images/icons.png") no-repeat -48px -39px;
 }
