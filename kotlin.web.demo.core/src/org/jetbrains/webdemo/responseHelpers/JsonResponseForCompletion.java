@@ -21,6 +21,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import kotlin.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.descriptors.impl.LocalVariableDescriptor;
@@ -56,6 +57,13 @@ public class JsonResponseForCompletion {
             .setWithoutFunctionParameterNames(true)
             .setRenderDefaultValues(false)
             .build();
+
+    private static final Function1<DeclarationDescriptor, Boolean> VISIBILITY_FILTER = new Function1<DeclarationDescriptor, Boolean>() {
+        @Override
+        public Boolean invoke(DeclarationDescriptor declarationDescriptor) {
+            return true;
+        }
+    };
 
     private final int NUMBER_OF_CHAR_IN_COMPLETION_NAME = 40;
 
@@ -118,9 +126,10 @@ public class JsonResponseForCompletion {
         boolean isTipsManagerCompletion = true;
         try {
             if (element instanceof JetSimpleNameExpression) {
-                descriptors = TipsManager.INSTANCE$.getReferenceVariants((JetSimpleNameExpression) element, bindingContext);
+
+                descriptors = TipsManager.INSTANCE$.getReferenceVariants((JetSimpleNameExpression) element, bindingContext, VISIBILITY_FILTER);
             } else if (element.getParent() instanceof JetSimpleNameExpression) {
-                descriptors = TipsManager.INSTANCE$.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext);
+                descriptors = TipsManager.INSTANCE$.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext, VISIBILITY_FILTER);
             } else {
                 isTipsManagerCompletion = false;
                 JetScope resolutionScope;
