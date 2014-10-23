@@ -505,17 +505,17 @@ var KotlinEditor = (function () {
             },
             open: function (file) {
                 document.getElementById("workspace-overlay").style.display = "none";
+
                 if (openedFile == null) {
                     highlighting.removeStyles();
-
                     if (!file.modifiable) {
                         my_editor.setOption("readOnly", "nocursor");
                     } else {
                         my_editor.setOption("readOnly", false);
                     }
-
                     my_editor.focus();
                     my_editor.setValue(file.content);
+                    my_editor.clearHistory();
                     isEditorContentChanged = false;
                     openedFile = file;
                     highlighting.updateHighlighting();
@@ -526,6 +526,7 @@ var KotlinEditor = (function () {
             closeFile: function () {
                 openedFile = null;
                 highlighting.removeStyles();
+                my_editor.clearHistory();
                 my_editor.setValue("");
                 document.getElementById("workspace-overlay").style.display = "block";
             },
