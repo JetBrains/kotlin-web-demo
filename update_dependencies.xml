@@ -53,7 +53,7 @@
             <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin.js"
                   todir="kotlin.web.demo.server/static"/>
 
-            <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
+            <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/tag:bootstrap/number"
                  dest="${dependencies.dir}/build.txt"/>
 
             <j2kConverter/>
@@ -139,7 +139,7 @@
     </target>
 
     <target name="compare_version">
-        <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
+        <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/tag:bootstrap/number"
              dest="${dependencies.dir}/build.txt"/>
         <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
         <condition property="isLastVersion">
