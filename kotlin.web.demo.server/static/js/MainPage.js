@@ -80,13 +80,13 @@ var runProvider = (function () {
         } else {
             consoleView.setOutput(output);
         }
-        statusBarView.setStatus(statusBarView.statusMessages.run_java_ok);
+        statusBarView.setStatus(ActionStatusMessages.run_java_ok);
     }
 
     function onFail(error) {
         run_button.button("option", "disabled", false);
         consoleView.writeException(error);
-        statusBarView.setStatus(statusBarView.statusMessages.run_java_fail);
+        statusBarView.setStatus(ActionStatusMessages.run_java_fail);
     }
 
     return new RunProvider(onSuccess, onFail);
@@ -101,13 +101,13 @@ var converterProvider = (function () {
         editor.refreshMode();
         editor.setText(data);
         editor.indentAll();
-        statusBarView.setStatus(statusBarView.statusMessages.convert_java_to_kotlin_ok);
+        statusBarView.setStatus(ActionStatusMessages.convert_java_to_kotlin_ok);
     }
 
     function onFail(error) {
         converterView.closeDialog();
         consoleView.writeException(error);
-        statusBarView.setStatus(statusBarView.statusMessages.convert_java_to_kotlin_fail);
+        statusBarView.setStatus(ActionStatusMessages.convert_java_to_kotlin_fail);
     }
 
     return new ConverterProvider(onSuccess, onFail);
@@ -123,14 +123,14 @@ var highlightingProvider = (function () {
         for (var filename in data) {
             noOfErrorsAndWarnings += data[filename].length
         }
-        statusBarView.setStatus(statusBarView.statusMessages.get_highlighting_ok, [noOfErrorsAndWarnings]);
+        statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [noOfErrorsAndWarnings]);
         callback(data);
     }
 
     function onFail(error) {
         run_button.button("option", "disabled", false);
         consoleView.writeException(error);
-        statusBarView.setStatus(statusBarView.statusMessages.get_highlighting_fail);
+        statusBarView.setStatus(ActionStatusMessages.get_highlighting_fail);
     }
 
     return new HighlichtingProvider(onSuccess, onFail)
@@ -139,12 +139,12 @@ var highlightingProvider = (function () {
 var completionProvider = (function () {
     function onSuccess(completionObject) {
         editor.showCompletionResult(completionObject);
-        statusBarView.setStatus(statusBarView.statusMessages.get_completion_ok);
+        statusBarView.setStatus(ActionStatusMessages.get_completion_ok);
     }
 
     function onFail(error) {
         consoleView.writeException(error);
-        statusBarView.setStatus(statusBarView.statusMessages.get_completion_fail);
+        statusBarView.setStatus(ActionStatusMessages.get_completion_fail);
     }
 
     return new CompletionProvider(onSuccess, onFail);
@@ -183,12 +183,12 @@ var accordion = (function () {
     };
 
     accordion.onDeleteProgram = function () {
-        statusBarView.setStatus(statusBarView.statusMessages.delete_program_ok);
+        statusBarView.setStatus(ActionStatusMessages.delete_program_ok);
     };
 
     accordion.onSaveProgram = function () {
         editor.markAsUnchanged();
-        statusBarView.setStatus(statusBarView.statusMessages.save_program_ok);
+        statusBarView.setStatus(ActionStatusMessages.save_program_ok);
     };
 
     return accordion
@@ -249,15 +249,17 @@ var run_button = $("#runButton")
 
 
 loginProvider.onLogin = function (data) {
-    loginView.setUserName(data);
-    statusBarView.setStatus(statusBarView.statusMessages.login_ok);
+    if (data.isLoggedIn) {
+        loginView.setUserName(data.userName, data.type);
+        statusBarView.setStatus(ActionStatusMessages.login_ok);
+    }
     accordion.loadAllContent();
 };
 
 loginProvider.onLogout = function () {
     accordion.getSelectedProject().save();
     loginView.logout();
-    statusBarView.setStatus(statusBarView.statusMessages.logout_ok);
+    statusBarView.setStatus(ActionStatusMessages.logout_ok);
     accordion.loadAllContent();
 };
 
@@ -296,6 +298,19 @@ var projectProvider = (function () {
 
 var headersProvider = (function () {
     var headersProvider = new HeadersProvider();
+
+    headersProvider.onHeadersLoaded = function () {
+        statusBarView.setStatus(ActionStatusMessages.load_headers_ok);
+    };
+
+    headersProvider.onProjectHeaderLoaded = function () {
+        statusBarView.setStatus(ActionStatusMessages.load_header_ok);
+    };
+
+    headersProvider.onFail = function (message, status) {
+        statusBarView.setStatus(status);
+        console.log(message);
+    };
 
     return headersProvider;
 })();

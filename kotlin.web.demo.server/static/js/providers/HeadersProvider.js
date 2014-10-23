@@ -33,7 +33,7 @@ var HeadersProvider = (function () {
             onHeadersLoaded: function () {
 
             },
-            onProjectInfoLoaded: function (data) {
+            onProjectHeaderLoaded: function (data) {
 
             },
             onFail: function () {
@@ -86,17 +86,17 @@ var HeadersProvider = (function () {
                             callback(orderedFolderNames, foldersContent);
                             instance.onHeadersLoaded(orderedFolderNames, foldersContent);
                         } else {
-                            instance.onFail(data, statusBarView.statusMessages.load_examples_fail);
+                            instance.onFail(data, ActionStatusMessages.load_headers_fail);
                         }
                     } else {
-                        instance.onFail("Incorrect data format.", statusBarView.statusMessages.load_examples_fail);
+                        instance.onFail("Incorrect data format.", ActionStatusMessages.load_headers_fail);
                     }
                 },
                 dataType: "json",
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.load_examples_fail);
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_headers_fail);
                 }
             });
         }
@@ -106,7 +106,7 @@ var HeadersProvider = (function () {
                 url: generateAjaxUrl("loadProjectInfoByFileId"),
                 success: function (data) {
                     callback(data);
-                    instance.onProjectInfoLoaded(data);
+                    instance.onProjectHeaderLoaded(data);
                 },
                 type: "GET",
                 timeout: 10000,
@@ -115,7 +115,7 @@ var HeadersProvider = (function () {
                     publicId: publicId
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
+                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_header_fail);
                 }
             })
         }

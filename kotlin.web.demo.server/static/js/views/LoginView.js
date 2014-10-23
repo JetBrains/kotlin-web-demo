@@ -28,8 +28,8 @@ var LoginView = (function () {
 
 
         var instance = {
-            setUserName: function (name) {
-                if (name != "[\"null\"]") setUserName(eval(name)[0]);
+            setUserName: function (name, type) {
+                setUserName(name, type);
             },
             isLoggedIn: function () {
                 return isLoggedIn;
@@ -73,7 +73,7 @@ var LoginView = (function () {
             model.login(param);
         }
 
-        function setUserName(userName) {
+        function setUserName(userName, type) {
             if (userName != "") {
                 $("#login").css("display", "none");
                 $("#userName").css("display", "inline-block");
@@ -82,8 +82,8 @@ var LoginView = (function () {
                 userName = decodeURI(userName);
                 userName = replaceAll(userName, "\\+", " ");
 
-                $("#userNameTitle").text("Welcome, " + userName);
-
+                $("#userNameTitle").text(userName);
+                $("#userName").find(".img").addClass(type);
             }
         }
 

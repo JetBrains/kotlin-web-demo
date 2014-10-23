@@ -82,7 +82,7 @@ var LoginProvider = (function () {
                         instance.onFail("Username is null.", ActionStatusMessages.login_fail);
                     }
                 },
-                dataType: "text",
+                dataType: "json",
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {

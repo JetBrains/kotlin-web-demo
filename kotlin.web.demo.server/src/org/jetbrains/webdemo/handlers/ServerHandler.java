@@ -18,6 +18,7 @@ package org.jetbrains.webdemo.handlers;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
@@ -155,13 +156,15 @@ public class ServerHandler {
 
     private void sendUserName(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
         try {
-            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
+            ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
             if (sessionInfo.getUserInfo().isLogin()) {
-                array.add(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
+                responseBody.put("isLoggedIn", true);
+                responseBody.put("userName", URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
+                responseBody.put("type", sessionInfo.getUserInfo().getType());
             } else {
-                array.add("null");
+                responseBody.put("isLoggedIn", false);
             }
-            writeResponse(request, response, array.toString(), HttpServletResponse.SC_OK);
+            writeResponse(request, response, responseBody.toString(), HttpServletResponse.SC_OK);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", sessionInfo.getOriginUrl(), param);
