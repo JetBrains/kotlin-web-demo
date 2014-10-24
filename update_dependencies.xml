@@ -111,7 +111,7 @@
         <sequential>
             <delete dir="${dependencies.dir}" failonerror="false"/>
             <mkdir dir="${dependencies.dir}"/>
-            <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
+            <get src="https://teamcity.jetbrains.com/guestAuth/repository/download/bt345/177888:id/kotlin-plugin-0.9.243.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
         </sequential>
     </macrodef>
 
