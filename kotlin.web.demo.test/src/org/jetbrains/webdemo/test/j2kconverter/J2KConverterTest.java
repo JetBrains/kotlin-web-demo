@@ -41,6 +41,14 @@ public class J2KConverterTest extends BaseTest {
         compareResult(fileName, expectedResult);
     }
 
+    public void test$j2kconverter$notNull() throws IOException {
+        String fileName = TestUtils.getNameByTestName(this) + ".java";
+        String expectedResult = "[{\"text\":\"public class Foo {\\npublic val foo:String\\n}\"}]";
+
+        assertTrue(true);
+        compareResult(fileName, expectedResult);
+    }
+
     private void compareResult(String fileName, String expectedResult) throws IOException {
         sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
 
