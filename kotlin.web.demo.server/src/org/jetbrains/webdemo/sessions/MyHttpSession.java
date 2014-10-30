@@ -200,7 +200,7 @@ public class MyHttpSession {
     private void sendAddFileResult() {
         try {
             String projectPublicId = parameters.get("publicId")[0];
-            String fileName = parameters.get("filename")[0].replaceAll("_", " ");
+            String fileName = parameters.get("filename")[0];
             String id = MySqlConnector.getInstance().addFileToProject(sessionInfo.getUserInfo(), projectPublicId, fileName);
             writeResponse(id, HttpServletResponse.SC_OK);
         } catch (NullPointerException e) {
@@ -216,7 +216,7 @@ public class MyHttpSession {
             if (content != null) {
                 try {
                     Project project = objectMapper.readValue(content[0], Project.class);
-                    project.name = parameters.get("args")[0].replaceAll("_", " "); //when user calls save as we must change project name
+                    project.name = parameters.get("args")[0]; //when user calls save as we must change project name
                     project.parent = "My Programs"; //to show that it is user project, not example
                     String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), project);
                     writeResponse(publicId, HttpServletResponse.SC_OK);
@@ -224,7 +224,7 @@ public class MyHttpSession {
                     writeResponse("Can't parse file", HttpServletResponse.SC_BAD_REQUEST);
                 }
             } else {
-                String publicIds = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0].replaceAll("_", " "));
+                String publicIds = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0]);
                 writeResponse(publicIds, HttpServletResponse.SC_OK);
             }
         } catch (NullPointerException e) {
@@ -237,7 +237,7 @@ public class MyHttpSession {
     private void sendRenameFileResult() {
         try {
             String publicId = parameters.get("publicId")[0];
-            String newName = parameters.get("newName")[0].replaceAll("_", " ");
+            String newName = parameters.get("newName")[0];
             newName = newName.endsWith(".kt") ? newName : newName + ".kt";
             MySqlConnector.getInstance().renameFile(sessionInfo.getUserInfo(), publicId, newName);
             writeResponse("ok", HttpServletResponse.SC_OK);
@@ -349,7 +349,8 @@ public class MyHttpSession {
     }
 
     private void sendExampleContent() {
-        writeResponse(ExamplesList.loadExample(parameters.get("args")[0].replaceAll("_", " "), parameters.get("name")[0].replaceAll("_", " ")), HttpServletResponse.SC_OK);
+        writeResponse(ExamplesList.loadExample(parameters.get("args")[0], parameters.get("name")[0]),
+                HttpServletResponse.SC_OK);
     }
 
     private List<PsiFile> createProjectPsiFiles(Project example) {
@@ -363,7 +364,7 @@ public class MyHttpSession {
 
     public void sendCompletionResult() {
         try {
-            String fileName = parameters.get("filename")[0].replaceAll("_", " ");
+            String fileName = parameters.get("filename")[0];
             int line = Integer.parseInt(parameters.get("line")[0]);
             int ch = Integer.parseInt(parameters.get("ch")[0]);
             Project example = objectMapper.readValue(parameters.get("project")[0], Project.class);
@@ -406,7 +407,7 @@ public class MyHttpSession {
     public void sendRenameProjectResult() {
         try {
             String publicId = parameters.get("publicId")[0];
-            String newName = parameters.get("newName")[0].replaceAll("_", " ");
+            String newName = parameters.get("newName")[0];
             MySqlConnector.getInstance().renameProject(sessionInfo.getUserInfo(), publicId, newName);
             writeResponse(HttpServletResponse.SC_OK);
         } catch (DatabaseOperationException e) {
