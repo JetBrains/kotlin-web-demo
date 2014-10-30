@@ -79,11 +79,11 @@ var FileView = (function () {
         };
         var selected = false;
         var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
-        renameFileDialog.verify = function (newName) {
+        renameFileDialog.validate = function (newName) {
             if (removeKotlinExtension(name) == newName) {
-                return true;
+                return {valid: true};
             } else {
-                return project.verifyNewFilename(newName);
+                return project.validateNewFileName(newName);
             }
         };
         init();

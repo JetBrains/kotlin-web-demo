@@ -29,7 +29,9 @@
     <script src="/static/codemirror/mode/clike/kotlin.js"></script>
     <script type="text/javascript" src="/static/jquery/jquery-1.11.1.js"></script>
     <script type="text/javascript"
-            src="/static/jquery/jquery-ui/jquery-ui-1.11.0.custom/jquery-ui.js"></script>
+            src="/static/jquery/jquery-ui/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
+    <link rel="stylesheet"
+          src="/static/jquery/jquery-ui/jquery-ui-1.11.2.custom/jquery-ui.css">
     <script type="text/javascript"
             src="/static/jquery/jquery-cookie/jquery.cookie.js"></script>
     <script type="text/javascript" src="/static/kotlin.js"></script>
@@ -37,9 +39,9 @@
 </head>
 <body>
 
-<div class="global-layout">
-    <div id="global-header" class="global-header">
-        <div class="g-layout">
+<div class="global-layout" fullscreen-sensible>
+    <div id="global-header" class="global-header" fullscreen-sensible>
+    <div class="g-layout">
             <a href="http://kotlin.jetbrains.org" class="global-header-logo">Project Kotlin</a>
             <nav role="navigation" class="global-nav">
                 <a href="http://kotlin-web-site.jetbrains.org/docs/" class="nav-item">Docs</a>
@@ -56,7 +58,12 @@
         </div>
     </div>
     <div class="global-login">
-        <div class="g-layout">
+        <div class="g-layout" fullscreen-sensible>
+            <div id="fullscreenButton" fullscreen-sensible>
+                <div class="img"></div>
+                <div class="text">Expand</div>
+            </div>
+
             <div id="login">
                 <span class="text">Log in:</span>
                 <a href="#" id="login-with-facebook" class="img facebook">facebook</a>
@@ -70,12 +77,13 @@
                 <div id="logout">Log out</div>
             </div>
         </div>
-
     </div>
-    <div class="g-layout global-content">
-        <div class="g-grid">
-            <div class="grid-top">
-                <div id="examples-list" class="examples-list">
+    <div class="g-layout global-content" fullscreen-sensible>
+        <div id="g-grid" class="g-grid" fullscreen-sensible>
+            <div id="grid-top" class="grid-top">
+                <div id="examples-list-resizer">
+                    <div id="examples-list" class="examples-list">
+                    </div>
                 </div>
                 <div id="workspace">
                     <div id="workspace-overlay">
@@ -139,39 +147,41 @@
                     </div>
                 </div>
             </div>
-            <div id="statusBarWrapper">
-                <div id="statusBar"></div>
-                <div id="typeCheckingWrapper">
-                    <label for="on-the-fly-checkbox"></label>
-                    <input id="on-the-fly-checkbox" type="checkbox" checked="checked">
+            <div id="grid-bottom">
+                <div id="statusBarWrapper">
+                    <div id="statusBar"></div>
+                    <div id="typeCheckingWrapper">
+                        <label for="on-the-fly-checkbox"></label>
+                        <input id="on-the-fly-checkbox" type="checkbox" checked="checked">
 
-                    <div class="text">On-the-fly type checking</div>
+                        <div class="text">On-the-fly type checking</div>
+                    </div>
                 </div>
-            </div>
-            <div id="result-tabs">
-                <div id="console" class="tab-space"></div>
-                <div id="problems" class="tab-space"></div>
-                <div id="generated-code" class="tab-space"></div>
+                <div id="result-tabs">
+                    <div id="console" class="tab-space"></div>
+                    <div id="problems" class="tab-space"></div>
+                    <div id="generated-code" class="tab-space"></div>
 
-                <div class="result-tabs-footer">
-                    <ul class="result-tabs-buttons">
-                        <li id="problems-tab" class="result-tab"><a href="#problems">Problems view</a></li>
-                        <li id="console-tab" class="result-tab"><a href="#console">Console</a></li>
-                        <li id="generated-code-tab" class="result-tab"><a href="#generated-code"
-                                                                          id="generated-code-link">Generated
-                            classfiles</a></li>
-                    </ul>
-                    <div class="kotlin-info">
-                        This demo is running on Kotlin v.0.8.11
+                    <div class="result-tabs-footer">
+                        <ul class="result-tabs-buttons">
+                            <li id="problems-tab" class="result-tab"><a href="#problems">Problems view</a></li>
+                            <li id="console-tab" class="result-tab"><a href="#console">Console</a></li>
+                            <li id="generated-code-tab" class="result-tab"><a href="#generated-code"
+                                                                              id="generated-code-link">Generated
+                                classfiles</a></li>
+                        </ul>
+                        <div class="kotlin-info">
+                            This demo is running on Kotlin v.0.8.11
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-<div id="global-footer" role="contentinfo" class="global-footer">
-    <div class="global-footer-terms">
+
+<div id="global-footer" role="contentinfo" class="global-footer" fullscreen-sensible>
+<div class="global-footer-terms">
         <div class="g-layout">
             <div class="terms-copyright">
                 &#169 2000-2014 JetBrains. All rights reserved
@@ -198,17 +208,6 @@
 
 <div id="popupForCanvas" title="Canvas example">
     <canvas id="mycanvas"></canvas>
-</div>
-
-<div id="help-dialog" title="Help">
-    <div id="example-help"></div>
-
-    <table id="shortcuts-help">
-        <!--@run_shortcut@ to run program<br>-->
-        <!--@completion_shortcut@ for code completion<br>-->
-        <!--@reformat_shortcut@ to reformat selected fragment<br>-->
-        <!--@save_shortcut@ to save current program (you must be logged in)<br>-->
-    </table>
 </div>
 
 <div id="words-help">

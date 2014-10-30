@@ -15,14 +15,7 @@
  */
 
 .grid-top {
-    height: 580px;
-}
-
-.grid-top:after {
-    display: block;
-    clear: both;
-    height: 0;
-    content: '';
+    height: 575px;
 }
 
 #workspace {

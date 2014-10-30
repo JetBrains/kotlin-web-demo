@@ -30,6 +30,12 @@ var InputDialogView = (function () {
 
     var input = document.createElement("input");
     input.id = "input-dialog-input";
+    $(input).tooltip({
+        position: {
+            my: "left top",
+            at: "left+15 bottom+3"
+        }
+    });
     dialog.appendChild(input);
 
 
@@ -55,20 +61,21 @@ var InputDialogView = (function () {
 
             open: function (callback, defaultValue) {
 
-                validationResult(true);
+                validationResult({valid: true});
 
                 input.oninput = function () {
-                    validationResult(instance.verify(input.value));
+                    validationResult(instance.validate(input.value));
                 };
 
                 if (defaultValue != null && defaultValue != undefined) {
                     var verifiedDefaultValue = defaultValue;
                     var i = 1;
-                    while (!instance.verify(verifiedDefaultValue)) {
+                    while (!instance.validate(verifiedDefaultValue).valid) {
                         verifiedDefaultValue = defaultValue + i;
                         ++i;
                     }
                     input.value = verifiedDefaultValue;
+                    input.select();
                 }
 
                 $(dialog).dialog('option', 'title', title);
@@ -77,11 +84,12 @@ var InputDialogView = (function () {
                         {
                             text: buttonText,
                             click: function (event) {
-                                if (instance.verify(input.value)) {
+                                var validationResult = instance.validate(input.value);
+                                if (validationResult.valid) {
                                     callback(input.value);
                                     $(this).dialog("close");
                                 } else {
-                                    validationResult(false);
+                                    validationResult(validationResult);
                                 }
                                 event.stopPropagation();
                             }
@@ -97,14 +105,22 @@ var InputDialogView = (function () {
                 );
                 $(dialog).dialog("open");
             },
-            verify: function (input) {
-                return true;
+            validate: function (input) {
+                return {valid: true};
             }
         };
 
         function validationResult(result) {
-            input.style.outlineColor = result ? "" : "red";
-            $(dialog).parent().find("button:eq(1)").button("option", "disabled", !result);
+            input.style.outlineColor = result.valid ? "" : "red";
+            $(dialog).parent().find("button:eq(1)").button("option", "disabled", !result.valid);
+            if (!result.valid && result.message != null) {
+                input.title = result.message;
+
+                $(input).tooltip("open");
+            } else {
+                $(input).tooltip("close");
+                input.title = "";
+            }
             input.focus();
         }
 

@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-.examples-list {
-    overflow: auto;
+#examples-list-resizer {
     height: 100%;
     width: 25%;
     float: left;
+}
+
+.examples-list {
+    max-height: 100%;
+    overflow: auto;
+    width: 100%;
 }
 
 .examples-folder {
@@ -74,6 +79,7 @@
     line-height: 16px;
     max-height: 16px;
     white-space: nowrap;
+    word-wrap: break-word;
 }
 
 .examples-project-name:hover .file-name-span {

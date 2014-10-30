@@ -93,14 +93,14 @@ var AccordionView = (function () {
             getSelectedProject: function () {
                 return selectedProject;
             },
-            verifyNewProjectname: function (projectName) {
+            validateNewProjectName: function (projectName) {
                 for (var url in projects) {
                     if (projects[url].getName() == projectName &&
                         projects[url].getType() == ProjectType.USER_PROJECT) {
-                        return false;
+                        return {valid: false, message: "Project with that name already exists"};
                     }
                 }
-                return true;
+                return {valid: true};
             },
             onBeforeUnload: function () {
                 var publicLinks = [];
@@ -119,7 +119,7 @@ var AccordionView = (function () {
         var myProgramsContentElement;
         var publicLinksContentElement;
         var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add");
-        newProjectDialog.verify = instance.verifyNewProjectname;
+        newProjectDialog.validate = instance.validateNewProjectName;
 
         function loadFirstItem() {
 
@@ -238,7 +238,7 @@ var AccordionView = (function () {
                 var newProjectButton = document.createElement("div");
                 newProjectButton.className = "newProjectButton";
                 newProjectButton.onclick = function (e) {
-                    newProjectDialog.open(projectProvider.addNewProject, "Project");
+                    newProjectDialog.open(projectProvider.addNewProject, "Untitled");
                     e.stopPropagation();
                 };
                 myProg.appendChild(newProjectButton);

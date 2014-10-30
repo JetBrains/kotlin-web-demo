@@ -93,14 +93,14 @@ var ProjectView = (function () {
             getType: function () {
                 return header.type;
             },
-            verifyNewFilename: function (fileName) {
+            validateNewFileName: function (fileName) {
                 fileName = addKotlinExtension(fileName);
                 for (var i = 0; i < project.files.length; i++) {
                     if (project.files[i].name == fileName) {
-                        return false;
+                        return {valid: false, message: "File with this name already exists in the project"};
                     }
                 }
-                return true;
+                return {valid: true};
             },
             getProjectData: function () {
                 return project;
@@ -128,17 +128,17 @@ var ProjectView = (function () {
         var selectedFile = null;
         var fileViews = {};
         var renameProjectDialog = new InputDialogView("Rename project", "Project name:", "Rename");
-        renameProjectDialog.verify = function (newName) {
+        renameProjectDialog.validate = function (newName) {
             if (header.name == newName) {
-                return true;
+                return {valid: true};
             } else {
-                return accordion.verifyNewProjectname(newName);
+                return accordion.validateNewProjectName(newName);
             }
         };
         var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
-        newFileDialog.verify = instance.verifyNewFilename;
+        newFileDialog.validate = instance.validateNewFileName;
         var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
-        saveProjectDialog.verify = accordion.verifyNewProjectname;
+        saveProjectDialog.validate = accordion.validateNewProjectName;
         init();
 
         function createProject(content) {

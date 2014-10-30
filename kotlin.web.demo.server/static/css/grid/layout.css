@@ -36,7 +36,8 @@
 }
 
 .g-grid {
-    width: inherit;
+    width: 100%;
+    height: 820px;
     font-size: 0;
     margin-right: -30px;
     border: 1px solid #969696;

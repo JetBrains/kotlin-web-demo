@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-@import "result-views.css";
-.result-tabs-footer{
+.result-tabs-footer {
     text-align: center;
     border-top: 1px solid;
     border-color: #969696;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
+    height: 28px;
 }
 
-.result-tab.ui-state-active{
+.result-tab.ui-state-active {
     background-color: #cfcfcf;
 }
 
-.result-tabs-buttons{
+.result-tabs-buttons {
     float: left;
     text-align: center;
     text-decoration: none;
@@ -36,14 +36,7 @@
     margin-bottom: 3px;
 }
 
-.result-tabs-footer:after{
-    display: block;
-    clear: both;
-    height: 0;
-    content: '';
-}
-
-.result-tab{
+.result-tab {
     color: #000000;
     font-size: 14px;
     background-color: #f0f0f0;
@@ -56,21 +49,21 @@
     cursor: default;
 }
 
-.result-tab:first-child{
+.result-tab:first-child {
     border-bottom-left-radius: 4px;
 }
 
-.result-tab:last-child{
+.result-tab:last-child {
     border-bottom-right-radius: 4px;
     border-right-width: 1px;
 }
 
-.result-tab a{
+.result-tab a {
     color: #000000;
     text-decoration: none;
 }
 
-.kotlin-info{
+.kotlin-info {
     line-height: 22px;
     float: right;
     font-size: 14px;

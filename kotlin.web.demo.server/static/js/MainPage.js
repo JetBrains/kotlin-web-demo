@@ -246,8 +246,6 @@ var run_button = $("#runButton")
 //ProgramsModel.getArguments = argumentsView.val;
 
 
-
-
 loginProvider.onLogin = function (data) {
     if (data.isLoggedIn) {
         loginView.setUserName(data.userName, data.type);
@@ -397,14 +395,20 @@ function loadShortcuts() {
     helpDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.save").getKeyNames(), "Save current project");
 }
 
-window.onbeforeunload = closingCode;
-function closingCode() {
+window.onbeforeunload = function () {
     accordion.onBeforeUnload();
     localStorage.setItem("openedItemId", accordion.getSelectedProject().getPublicId());
     accordion.getSelectedProject().save();
     editor.save();
+
+    var gridConfiguration = {
+        examplesWidth: $("#examples-list-resizer").width(),
+        gridBottomHeight: $("#grid-bottom").height(),
+        fullscreenMode: $("#fullscreenButton").hasClass("fullscreen")
+    };
+    localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
     return null;
-}
+};
 
 
 var loginDialog = $("#login-dialog").dialog({
@@ -422,18 +426,15 @@ $("#runMode").selectmenu({
 var argumentsButton = document.getElementById("argumentsButton");
 var argumentsWrapper = document.getElementById("argumentsWrapper");
 
-var show = function () {
-    argumentsButton.onclick = hide;
-    argumentsButton.className = "active";
-    $(argumentsWrapper).slideDown({step: editor.resize});
+argumentsButton.onclick = function () {
+    if ($(argumentsButton).hasClass("active")) {
+        $(argumentsButton).removeClass("active");
+        $(argumentsWrapper).slideUp({step: editor.resize});
+    } else {
+        $(argumentsButton).addClass("active");
+        $(argumentsWrapper).slideDown({step: editor.resize});
+    }
 };
-
-var hide = function () {
-    argumentsButton.onclick = show;
-    $(argumentsButton).removeClass("active");
-    $(argumentsWrapper).slideUp({step: editor.resize});
-};
-argumentsButton.onclick = hide;
 
 editor.resize();
 
@@ -443,16 +444,101 @@ setKotlinVersion = function () {
     $("#currentYear").html(new Date().getFullYear());
 };
 
-//
-//function fullScreenView(){
-//    document.getElementById("global-header").style.display = "none";
-//    document.getElementById("global-footer").style.display = "none";
-//    $(".global-layout").addClass("fullscreen").addClass("no-after");
-//    $(".g-layout").addClass("fullscreen");
-//    $(".g-grid").addClass("fullscreen");
-//}
-//
-//document.getElementById("fullscreen").onclick = fullScreenView;
+document.getElementById("fullscreenButton").onclick = function () {
+    var gridElement = document.getElementById("g-grid");
+    var gridTopElement = document.getElementById("grid-top");
+    if ($(this).hasClass("fullscreen")) {
+        var accordionWidth = $("#examples-list-resizer").outerWidth() / $(gridTopElement).width();
+
+        $("[fullscreen-sensible]").removeClass("fullscreen");
+        $(this).find(".text").html("Expand");
+
+        $(gridElement).css("height", "");
+        $(gridTopElement).css("height", "");
+
+        $("#grid-bottom").css("height", "");
+        $("#result-tabs").css("height", "");
+        $(".tab-space").css("height", "");
+
+        $("#examples-list-resizer").css("width", "");
+        $("#workspace").css("margin-left", "");
+        resizeArguments();
+        editor.resize();
+    } else {
+        $("[fullscreen-sensible]").addClass("fullscreen");
+        $(this).find(".text").html("Collapse");
+
+        var gridHeight;
+        gridHeight = $(".global-layout").height() - $(".global-login").outerHeight(true);
+        gridHeight -= ($(gridElement).outerHeight(true) - $(gridElement).height());
+        $(gridElement).css("height", gridHeight);
+
+        var gridTopHeight;
+        gridTopHeight = gridHeight - $("#statusBarWrapper").outerHeight(true) - $("#result-tabs").outerHeight();
+        gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
+        $(gridTopElement).css("height", gridTopHeight);
+        editor.resize();
+        resizeArguments();
+    }
+};
+
+function resizeArguments() {
+    var argumentsWidth = $("#argumentsWrapper").width() - $("#argumentsWrapper").find(".text").outerWidth(true);
+    argumentsWidth -= ($("#arguments").outerWidth(true) - $("#arguments").width());
+    $("#arguments").css("width", argumentsWidth - 20);
+}
+
+$("#examples-list-resizer").resizable({
+    handles: "e",
+    minWidth: 20,
+    maxWidth: (function () {
+        return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
+    })(),
+    start: function () {
+        $(this).resizable({maxWidth: (function () {
+            return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
+        })()});
+    },
+    resize: function () {
+        $("#workspace").css("margin-left", $(this).outerWidth());
+        resizeArguments();
+    }
+});
+
+$("#grid-bottom").resizable({
+    handles: "n",
+    minHeight: (function () {
+        return $("#statusBarWrapper").outerHeight() + $(".result-tabs-footer").outerHeight();
+    })(),
+    start: function () {
+        $(this).resizable({minHeight: (function () {
+            return $("#statusBarWrapper").outerHeight() + $(".result-tabs-footer").outerHeight();
+        })()});
+
+        $(this).resizable({maxHeight: (function () {
+            return $("#g-grid").height() - $("#argumentsWrapper").outerHeight() - $("#toolbox").outerHeight();
+        })()});
+    },
+    resize: function () {
+        $(this).css("top", "");
+        $("#result-tabs").css("height", $(this).height() - $("#statusBarWrapper").outerHeight());
+        $(".tab-space").css("height", $("#result-tabs").height() - $(".result-tabs-footer").outerHeight());
+
+        var gridTopHeight;
+        var gridTopElement = document.getElementById("grid-top");
+        var gridHeight = $("#g-grid").height();
+        gridTopHeight = gridHeight - $(this).outerHeight(true);
+        gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
+        $(gridTopElement).css("height", gridTopHeight);
+        editor.resize();
+    }
+});
+
+var gridConfiguration = localStorage.getItem("gridConfiguration");
+if (gridConfiguration != null) {
+    gridConfiguration = JSON.parse(gridConfiguration);
+    if (gridConfiguration.fullscreenMode) document.getElementById("fullscreenButton").click();
+}
 
 function setKotlinJsOutput() {
     Kotlin.out = new Kotlin.BufferedOutput();
