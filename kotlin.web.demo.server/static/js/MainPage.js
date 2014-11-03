@@ -69,6 +69,15 @@ var helpDialogView = new HelpDialogView();
 var helpModelForWords = new HelpModel("Words");
 var helpViewForWords = new HelpView("Words", $("#words-help-text"), helpModelForWords);
 helpViewForWords.hide();
+var projectActionsView = new ProjectActionsView(document.getElementById("editor-notifications"));
+projectActionsView.registerStatus("localVersion", "This is local version of project", [
+    {
+        name: "Reload file",
+        callback: function () {
+            accordion.getSelectedFile().loadOriginal();
+        }
+    }
+]);
 
 
 var runProvider = (function () {
@@ -177,6 +186,13 @@ var accordion = (function () {
         helpDialogView.updateProjectHelp(projectView.getProjectData().help);
     };
 
+    accordion.onSelectFile = function (previousFile, currentFile) {
+        if (previousFile != null) previousFile.save();
+        editor.closeFile();
+        editor.open(currentFile);
+        currentFile.compareContent();
+    };
+
     accordion.onFail = function (exception, actionCode) {
         consoleView.writeException(exception);
         statusBarView.setMessage(actionCode);
@@ -189,6 +205,14 @@ var accordion = (function () {
     accordion.onSaveProgram = function () {
         editor.markAsUnchanged();
         statusBarView.setStatus(ActionStatusMessages.save_program_ok);
+    };
+
+    accordion.onModifiedSelectedFile = function () {
+        projectActionsView.setStatus("localVersion");
+    };
+
+    accordion.onUnmodifiedSelectedFile = function () {
+        projectActionsView.setStatus("default");
     };
 
     return accordion
@@ -275,6 +299,10 @@ var fileProvider = (function () {
     fileProvider.onRenameFileFailed = function () {
     };
 
+    fileProvider.onOriginalFileLoaded = function () {
+        editor.reloadFile();
+    };
+
     return fileProvider;
 })();
 
@@ -341,15 +369,14 @@ $(".toggleShortcuts").click(function () {
 
 $("#help3").toggle(true);
 
-
-function generateAjaxUrl(type, args) {
+function generateAjaxUrl(type) {
     var url = [location.protocol, '//', location.host, "/"].join('');
-    return url + "kotlinServer?sessionId=" + sessionId + "&type=" + type + "&args=" + args;
+    return url + "kotlinServer?sessionId=" + sessionId + "&type=" + type;
 }
 
 function setSessionId() {
     $.ajax({
-        url: generateAjaxUrl("getSessionId", "null"),
+        url: generateAjaxUrl("getSessionId"),
         context: document.body,
         type: "GET",
         dataType: "json",
@@ -368,7 +395,7 @@ function getSessionIdSuccess(data) {
     info += " " + "system: " + navigator.platform;
 
     $.ajax({
-        url: generateAjaxUrl("sendUserData", "null"),
+        url: generateAjaxUrl("sendUserData"),
         context: document.body,
         type: "POST",
         data: {text: info},
@@ -547,3 +574,4 @@ function setKotlinJsOutput() {
 setSessionId();
 loadShortcuts();
 setKotlinJsOutput();
+

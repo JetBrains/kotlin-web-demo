@@ -69,14 +69,15 @@
 }
 
 #editor-notifications {
-    background-color: #eee;
+    color: #bf6126;
+    background-color: #ffe8bb;
 }
 
-.editor-notifications-messages {
+.editor-notifications-message {
     display: inline-block;
     font-size: 12px;
     padding: 4px;
-    margin-left: 40px;
+    margin-left: 5px;
 }
 
 .editor-notifications-action {
@@ -84,6 +85,7 @@
     padding: 4px;
     font-size: 12px;
     float: right;
+    color: #3164a0;
 }
 
 #workspace-overlay {

@@ -23,7 +23,7 @@
 
 var ConverterProvider = (function () {
 
-    function ConverterProvider( onSuccess, onFail) {
+    function ConverterProvider(onSuccess, onFail) {
 
         var instance = {
             convert: function (text) {
@@ -33,7 +33,7 @@ var ConverterProvider = (function () {
 
         function convert(text) {
             $.ajax({
-                url: generateAjaxUrl("convertToKotlin", ""),
+                url: generateAjaxUrl("convertToKotlin"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {

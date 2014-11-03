@@ -38,7 +38,7 @@ var CompletionProvider = (function () {
             if (!isLoadingCompletion) {
                 isLoadingCompletion = true;
                 $.ajax({
-                    url: generateAjaxUrl("complete", "&runConf=" + confTypeString),
+                    url: generateAjaxUrl("complete"),
                     context: document.body,
                     success: function (data) {
                         isLoadingCompletion = false;
@@ -55,7 +55,13 @@ var CompletionProvider = (function () {
                     dataType: "json",
                     timeout: 10000,
                     type: "POST",
-                    data: { project: JSON.stringify(project), filename: filename, line : cursorLine, ch : cursorCh},
+                    data: {
+                        runConf: confTypeString,
+                        project: JSON.stringify(project),
+                        filename: filename,
+                        line: cursorLine,
+                        ch: cursorCh
+                    },
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingCompletion = false;
                         onFail(textStatus + " : " + errorThrown);

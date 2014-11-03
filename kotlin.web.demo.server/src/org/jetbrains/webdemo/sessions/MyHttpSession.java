@@ -90,6 +90,9 @@ public class MyHttpSession {
                     ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendExampleContent();
                     break;
+                case ("loadExampleFile"):
+                    sendExampleFileContent();
+                    break;
                 case ("highlight"):
                     sendHighlightingResult();
                     break;
@@ -151,6 +154,17 @@ public class MyHttpSession {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
             }
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendExampleFileContent() {
+        try {
+            ProjectFile file = ExamplesList.getExampleFile(parameters.get("publicId")[0]);
+            writeResponse(objectMapper.writeValueAsString(file), HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (NullPointerException e) {
+            writeResponse("Can't find file", HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
@@ -307,10 +321,8 @@ public class MyHttpSession {
 
     private void sendSaveFileResult() {
         try {
-            String publicId = parameters.get("publicId")[0];
-
             ProjectFile file = objectMapper.readValue(parameters.get("file")[0], ProjectFile.class);
-            MySqlConnector.getInstance().saveFile(sessionInfo.getUserInfo(), publicId, file);
+            MySqlConnector.getInstance().saveFile(sessionInfo.getUserInfo(), file);
             writeResponse("ok", HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't parse file", HttpServletResponse.SC_BAD_REQUEST);
@@ -349,8 +361,14 @@ public class MyHttpSession {
     }
 
     private void sendExampleContent() {
-        writeResponse(ExamplesList.loadExample(parameters.get("args")[0], parameters.get("name")[0]),
-                HttpServletResponse.SC_OK);
+        try {
+            Project example = ExamplesList.getExample(parameters.get("publicId")[0]);
+            writeResponse(objectMapper.writeValueAsString(example), HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (NullPointerException e) {
+            writeResponse("Can't find example", HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
     private List<PsiFile> createProjectPsiFiles(Project example) {

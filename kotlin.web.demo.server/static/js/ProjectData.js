@@ -19,7 +19,7 @@
  */
 var ProjectData = (function () {
 
-    function ProjectData(/*nullable*/ content) {
+    function ProjectData(type, publicId, /*nullable*/ content) {
         var instance = {
             name: "",
             files: [],
@@ -56,6 +56,9 @@ var ProjectData = (function () {
                 }
                 return false;
             },
+            getType: function () {
+                return type
+            },
             setArguments: function (args) {
                 instance.args = args;
                 instance.onChange();
@@ -63,6 +66,10 @@ var ProjectData = (function () {
             setConfiguration: function (confType) {
                 instance.confType = confType;
                 instance.onChange();
+            },
+            saveToLocalStorage: function () {
+                if (type == ProjectType.USER_PROJECT) throw "User project shouldn't be saved in local storage";
+                localStorage.setItem(publicId, JSON.stringify(instance));
             },
             onChange: function () {
 

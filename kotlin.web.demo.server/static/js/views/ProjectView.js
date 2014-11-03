@@ -69,6 +69,9 @@ var ProjectView = (function () {
             isSelected: function () {
                 return accordion.getSelectedProject().getPublicId() == header.publicId;
             },
+            setSelectedFile: function (selectedFile_) {
+                selectedFile = selectedFile_;
+            },
             select: function () {
                 headerElement.className += " selected";
                 headerElement.parentNode.previousSibling.click();
@@ -101,6 +104,9 @@ var ProjectView = (function () {
                     }
                 }
                 return {valid: true};
+            },
+            getSelectedFile: function () {
+                return selectedFile;
             },
             getProjectData: function () {
                 return project;
@@ -147,7 +153,7 @@ var ProjectView = (function () {
                 addFileButton();
             }
 
-            project = new ProjectData(content);
+            project = new ProjectData(header.type, header.publicId, content);
 
             var filesContent = content.files;
             var fileView;
@@ -156,11 +162,11 @@ var ProjectView = (function () {
                 var fileContent = filesContent[i];
                 fileView = createFileView(fileContent.publicId, fileContent.name, fileContent);
                 fileViews[fileContent.publicId] = fileView;
-                project.files.push(fileView.getFileData());
+                project.files.push(fileView.getFile());
             }
 
             if (filesContent.length > 0) {
-                selectFile(filesContent[0].publicId)
+                fileViews[filesContent[0].publicId].fireSelectEvent();
             }
 
             problemsView.onProjectChange();
@@ -265,7 +271,6 @@ var ProjectView = (function () {
                 }
             };
 
-            fileView.onHeaderClick = selectFile;
             return fileView;
         }
 

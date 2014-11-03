@@ -20,80 +20,49 @@
 
 
 var ProjectActionsView = (function () {
-    function ProjectActionsView(element, project) {
-
-        var status = "default";
+    function ProjectActionsView(element) {
         var instance = {
-            setStatus: function (newStatus) {
-                status = newStatus;
-                instance.refresh();
-            },
-            refresh: function () {
-                switch (status) {
-                    case "unsavedChanges":
-                        setUnsavedChangesStatus();
-                        break;
-                    case "default":
-                        element.innerHTML = "";
-                        element.style.display = "none";
-                        break;
-                    default:
-                        throw "Unknown project actions view status";
+            registerStatus: function (id, message, actions) {
+                if (id in statuses) {
+                    throw "Status " + id + " already exists";
+                } else {
+                    statuses[id] = {message: message, actions: actions}
                 }
-                editor.resize();
             },
-            hide: function () {
-                element.style.display = "none";
-            },
-            show: function () {
-                element.style.display = "block";
+            setStatus: function (statusId) {
+                setStatus(statusId);
             }
         };
 
-        function setUnsavedChangesStatus() {
-            if (project.getType() == ProjectType.EXAMPLE || project.getType() == ProjectType.PUBLIC_LINK) {
+        var statuses = {
+            default: {}
+        };
+
+        function setStatus(statusId) {
+            if (statusId in statuses) {
+                if (statusId == "default") {
+                    element.style.display = "none";
+                    return;
+                }
+
+                var status = statuses[statusId];
                 element.innerHTML = "";
                 element.style.display = "block";
 
                 var message = document.createElement("span");
-                message.className = "editor-notifications-messages";
-                if (project.getType() == ProjectType.EXAMPLE) {
-                    message.innerHTML = "This is local version of example";
-                } else {
-                    message.innerHTML = "This is local version of project";
-                }
+                message.className = "editor-notifications-message";
+                message.innerHTML = status.message;
                 element.appendChild(message);
 
-                if (project.getType() == ProjectType.EXAMPLE) {
-                    var restore = document.createElement("div");
-                    restore.className = "editor-notifications-action";
-                    restore.innerHTML = "Load original";
-                    restore.id = "load-original-action";
-                    restore.onclick = project.restoreDefault;
-                    element.appendChild(restore);
-                } else {
-                    project.checkIfDatabaseCopyExists(function () {
-                        var restore = document.createElement("div");
-                        restore.className = "editor-notifications-action";
-                        restore.innerHTML = "Load original";
-                        restore.id = "load-original-action";
-                        restore.onclick = project.checkIfDatabaseCopyExists.bind(null, project.restoreDefault, function () {
-                            restore.parentNode.removeChild(restore)
-                        });
-                        element.appendChild(restore);
-                    }, function () {
-                    })
+                for (var i = 0; i < status.actions.length; ++i) {
+                    var action = document.createElement("div");
+                    action.className = "editor-notifications-action";
+                    action.innerHTML = status.actions[i].name;
+                    action.onclick = status.actions[i].callback;
+                    element.appendChild(action);
                 }
-
-
-                var save = document.createElement("div");
-                save.className = "editor-notifications-action";
-                save.innerHTML = "Save";
-                save.onclick = project.saveAs;
-                element.appendChild(save);
             } else {
-                element.innerHTML = "";
-                element.style.display = "none";
+                throw(statusId + " is not a status");
             }
         }
 

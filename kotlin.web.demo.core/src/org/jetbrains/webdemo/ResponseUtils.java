@@ -85,15 +85,13 @@ public class ResponseUtils {
         int fPos = str.indexOf(before);
         if (fPos != -1) {
             str = str.substring(fPos + before.length());
-        }
-        else {
+        } else {
             return "";
         }
         int sPos = str.indexOf(after);
         if (sPos != -1) {
             return str.substring(0, sPos);
-        }
-        else {
+        } else {
             return str;
         }
     }
@@ -266,11 +264,19 @@ public class ResponseUtils {
         return document;
     }
 
+    public static String escapeURL(String input) {
+        return input.replaceAll(" ", "%20");
+    }
+
+    public static String unEscapeURL(String input) {
+        return input.replaceAll("%20", " ");
+    }
+
     public static String getExampleOrProgramNameByUrl(String url) {
         return ResponseUtils.substringAfter(url, "&name=").replaceAll("%20", " ");
     }
 
-    public static String getExampleFolderByUrl(String url){
+    public static String getExampleFolderByUrl(String url) {
         return ResponseUtils.substringBefore(url, "&name").replaceAll("%20", " ");
     }
 

@@ -23,20 +23,6 @@
 
 var AccordionView = (function () {
     function AccordionView(/*Element*/element) {
-        element.innerHTML = "";
-        $(element).accordion({
-            heightStyle: "content",
-            navigation: true,
-            active: 0,
-            icons: {
-                activeHeader: "examples-open-folder-icon",
-                header: "examples-closed-folder-icon"
-            }
-        });
-//        var programsView = new ProgramsView(programsModel);
-
-        var projects = {};
-        var selectedProject = null;
         var instance = {
             loadAllContent: function () {
                 element.innerHTML = "";
@@ -113,8 +99,52 @@ var AccordionView = (function () {
             },
             onProjectSelected: function (selectedProject) {
 
+            },
+            getSelectedFile: function () {
+                return selectedFileView.getFile();
+            },
+            selectFile: function (fileView) {
+                if (!(selectedFileView == fileView)) {
+                    if (selectedProject == fileView.getProjectView()) {
+                        var previousFileView = selectedFileView;
+                        selectedFileView = fileView;
+
+                        var previousFile = null;
+                        if (previousFileView != null) {
+                            $(previousFileView.getHeaderElement()).removeClass("selected");
+                            previousFile = previousFileView.getFile();
+                        }
+                        $(selectedFileView.getHeaderElement()).addClass("selected");
+
+                        instance.onSelectFile(previousFile, selectedFileView.getFile());
+                    } else {
+                        throw "You can't select file from project, that isn't selected";
+                    }
+                }
+            },
+            onSelectFile: function (previousFile, currentFile) {
+            },
+            onUnmodifiedSelectedFile: function () {
+            },
+            onModifiedSelectedFile: function () {
             }
         };
+
+        element.innerHTML = "";
+        $(element).accordion({
+            heightStyle: "content",
+            navigation: true,
+            active: 0,
+            icons: {
+                activeHeader: "examples-open-folder-icon",
+                header: "examples-closed-folder-icon"
+            }
+        });
+//        var programsView = new ProgramsView(programsModel);
+
+        var projects = {};
+        var selectedProject = null;
+        var selectedFileView = null;
 
         var myProgramsContentElement;
         var publicLinksContentElement;
@@ -145,7 +175,7 @@ var AccordionView = (function () {
             } else {
                 var openedItemId = localStorage.getItem("openedItemId");
                 localStorage.removeItem("openedItemId");
-                if (openedItemId != null && document.getElementById(openedItemId) != null) {
+                if (openedItemId != null) {
                     selectProject(openedItemId);
                     if (localStorage.getItem("incompleteAction") == "save") {
                         localStorage.removeItem("incompleteAction");
@@ -167,12 +197,9 @@ var AccordionView = (function () {
             var projectHeaderElement = document.createElement("div");
             var projectContentElement = document.createElement("div");
 
-            if (folderContentElement == myProgramsContentElement) {
-                folderContentElement.insertBefore(projectHeaderElement, folderContentElement.lastElementChild);
-                folderContentElement.insertBefore(projectContentElement, folderContentElement.lastElementChild);
-            } else if (folderContentElement == publicLinksContentElement) {
+            if (folderContentElement == publicLinksContentElement) {
                 folderContentElement.insertBefore(projectContentElement, folderContentElement.firstElementChild);
-                folderContentElement.insertBefore(projectHeaderElement, folderContentElement.firstElementChild);
+                folderContentElement.insertBefore(projectHeaderElement, folderContentElement.firstElementChild.nextSibling);
             } else {
                 folderContentElement.appendChild(projectHeaderElement);
                 folderContentElement.appendChild(projectContentElement);

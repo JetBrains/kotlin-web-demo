@@ -21,7 +21,7 @@
 
 var FileView = (function () {
 
-    function FileView(project, name, publicId, headerElement, /*nullable*/fileData) {
+    function FileView(projectView, name, publicId, headerElement, /*nullable*/fileData) {
 
         var instance = {
             deselect: function () {
@@ -32,7 +32,7 @@ var FileView = (function () {
                 }
             },
             select: function () {
-                if (project.getType() == ProjectType.EXAMPLE) {
+                if (projectView.getType() == ProjectType.EXAMPLE) {
                     history.replaceState("", "", "?" + publicId);
                 } else {
                     history.replaceState("", "", "?id=" + publicId);
@@ -44,19 +44,14 @@ var FileView = (function () {
                     editor.open(file);
                 }
             },
-            save: function () {
-                instance.content = editor.getText();
-                if (project.getType() == ProjectType.USER_PROJECT) {
-                    fileProvider.saveFile(publicId, fileData, function () {
-                        $(headerElement).removeClass("selected");
-                    });
-                } else {
-                    project.save();
-                    $(headerElement).removeClass("selected");
-                }
+            getProjectView: function () {
+                return projectView;
             },
-            getFileData: function () {
+            getFile: function () {
                 return file;
+            },
+            getHeaderElement: function () {
+                return headerElement;
             },
             getPublicId: function () {
                 return publicId;
@@ -64,8 +59,10 @@ var FileView = (function () {
             canBeSelected: function () {
 
             },
-            onHeaderClick: function (publicId) {
-
+            onContentChanged: function () {
+            },
+            fireSelectEvent: function () {
+                accordion.selectFile(instance);
             },
             onDelete: function (publicId) {
 
@@ -73,9 +70,18 @@ var FileView = (function () {
         };
 
         var fileNameElement;
-        var file = new FileData(fileData);
-        file.onContentChange = function () {
-            headerElement.className += " modified";
+        var file = new FileData(projectView.getProjectData(), fileData);
+        file.onModified = function () {
+            $(headerElement).addClass("modified");
+            if (accordion.getSelectedFile() == file) {
+                accordion.onModifiedSelectedFile();
+            }
+        };
+        file.onUnmodified = function () {
+            $(headerElement).removeClass("modified");
+            if (accordion.getSelectedFile() == file) {
+                accordion.onUnmodifiedSelectedFile();
+            }
         };
         var selected = false;
         var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
@@ -83,7 +89,7 @@ var FileView = (function () {
             if (removeKotlinExtension(name) == newName) {
                 return {valid: true};
             } else {
-                return project.validateNewFileName(newName);
+                return projectView.validateNewFileName(newName);
             }
         };
         init();
@@ -106,7 +112,7 @@ var FileView = (function () {
             fileNameElement.innerHTML = name;
             headerElement.appendChild(fileNameElement);
 
-            if (project.getType() == ProjectType.USER_PROJECT && file.modifiable) {
+            if (projectView.getType() == ProjectType.USER_PROJECT && file.modifiable) {
                 var renameImg = document.createElement("div");
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename file";
@@ -139,9 +145,7 @@ var FileView = (function () {
                 headerElement.appendChild(renameImg);
             }
 
-            headerElement.onclick = function () {
-                instance.onHeaderClick(publicId);
-            };
+            headerElement.onclick = instance.fireSelectEvent;
         }
 
         return instance;

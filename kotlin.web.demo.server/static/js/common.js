@@ -165,7 +165,7 @@ function getFolderNameByUrl(url) {
 }
 
 function createExampleId(name, folder) {
-    return replaceAll(folder, " ", "_") + "&name=" + replaceAll(name, " ", "_");
+    return "folder=" + replaceAll(folder, " ", "%20") + "&project=" + replaceAll(name, " ", "%20");
 }
 
 function createUserProjectUrl(id) {

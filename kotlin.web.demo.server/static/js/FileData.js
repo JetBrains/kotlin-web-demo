@@ -20,32 +20,74 @@
 
 var FileData = (function () {
 
-    function FileData(/*nullable*/ data) {
+    function FileData(project, /*nullable*/ data) {
         var instance = {
             name: "",
+            originalContent: "",
             content: "",
             modifiable: true,
             errors: [],
             type: "Kotlin",
             publicId: "",
-            modified: "false",
             setContent: function (content) {
-                instance.modified = true;
                 instance.content = content;
-                instance.onContentChange()
+                instance.compareContent();
             },
-            onContentChange: function () {
+            save: function () {
+                if (project.getType() == ProjectType.USER_PROJECT) {
+                    fileProvider.saveFile(instance.publicId, instance, function () {
+                        instance.originalContent = instance.content;
+                        instance.compareContent();
+                    });
+                } else {
+                    project.saveToLocalStorage();
+                }
+            },
+            setChangesHistory: function (history) {
+                changesHistory = history;
+            },
+            getChangesHistory: function () {
+                return changesHistory;
+            },
+            getProject: function () {
+                return project;
+            },
+            loadOriginal: function () {
+                fileProvider.loadOriginalFile(instance, setFileData);
+            },
+            onFileSaved: function () {
+            },
+            compareContent: function () {
+                if (instance.content == instance.originalContent) {
+                    instance.onUnmodified();
+                } else {
+                    instance.onModified();
+                }
+            },
+            onModified: function () {
+            },
+            onUnmodified: function () {
             }
         };
 
-        if (data != null) {
-            instance.name = data.name;
-            instance.content = data.content;
-            instance.modifiable = data.modifiable;
-            instance.publicId = data.publicId;
+        var changesHistory = [];
+
+        function setFileData(data) {
+            if (data != null) {
+                instance.name = data.name;
+                instance.content = instance.originalContent = data.content;
+                instance.modifiable = data.modifiable;
+                instance.publicId = data.publicId;
+                changesHistory = [];
+            }
         }
+
+        setFileData(data);
+
+
         return instance;
     }
 
     return FileData;
-})();
+})
+();

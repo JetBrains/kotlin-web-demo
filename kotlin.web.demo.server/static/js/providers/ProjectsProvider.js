@@ -93,9 +93,9 @@ var ProjectProvider = (function () {
             })
         }
 
-        function loadExample(url, callback) {
+        function loadExample(publicId, callback) {
             $.ajax({
-                url: generateAjaxUrl("loadExample", url),
+                url: generateAjaxUrl("loadExample"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {
@@ -112,6 +112,7 @@ var ProjectProvider = (function () {
                 dataType: "json",
                 type: "GET",
                 timeout: 10000,
+                data: {publicId: publicId},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_example_fail);
                 }
@@ -120,12 +121,13 @@ var ProjectProvider = (function () {
 
         function addNewProject(name) {
             $.ajax({
-                url: generateAjaxUrl("addProject", name),
+                url: generateAjaxUrl("addProject"),
                 success: function (data) {
                     instance.onNewProjectAdded(name, data.projectId, data.fileId);
                 },
                 type: "POST",
                 timeout: 10000,
+                data: {args: name},
                 dataType: 'json',
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
@@ -162,14 +164,14 @@ var ProjectProvider = (function () {
 
         function forkProject(content, callback, name) {
             $.ajax({
-                url: generateAjaxUrl("addProject", name),
+                url: generateAjaxUrl("addProject"),
                 success: function (publicId) {
                     instance.onProjectFork(name, publicId);
                     callback(name, publicId);
                 },
                 type: "POST",
                 timeout: 10000,
-                data: {content: JSON.stringify(content)},
+                data: {content: JSON.stringify(content), args: name},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }

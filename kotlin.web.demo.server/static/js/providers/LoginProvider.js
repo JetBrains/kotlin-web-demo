@@ -45,11 +45,12 @@ var LoginProvider = (function () {
 
         function login(type) {
             $.ajax({
-                url: generateAjaxUrl("authorization", type),
+                url: generateAjaxUrl("authorization"),
                 context: document.body,
                 success: onLoginSuccess,
                 dataType: "text",
                 type: "GET",
+                data: {args: type},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
@@ -57,7 +58,7 @@ var LoginProvider = (function () {
             });
         }
 
-        function logout(){
+        function logout() {
             $.ajax({
                 url: generateAjaxUrl("logout"),
                 context: document.body,
@@ -73,7 +74,7 @@ var LoginProvider = (function () {
 
         function getUserName() {
             $.ajax({
-                url: generateAjaxUrl("getUserName", ""),
+                url: generateAjaxUrl("getUserName"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {

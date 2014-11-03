@@ -57,33 +57,41 @@ public class ExamplesList {
         return response.toString();
     }
 
-    public static String loadExample(String folderName, String exampleName) {
-        folderName = folderName.replaceAll("_", " ");
-        exampleName = exampleName.replaceAll("_", " ");
-
-        ExamplesFolder folder = exampleFolders.get(folderName);
-        Project example = folder.examples.get(exampleName);
-
-        try {
-            return objectMapper.writeValueAsString(example);
-        } catch (IOException e) {
-            return "";
-        }
-    }
-
     public static Project getExample(String url) {
-        ExamplesFolder examplesFolder = exampleFolders.get(ResponseUtils.substringBefore(url, "&name=").replaceAll("_", " "));
-        return examplesFolder.examples.get(ResponseUtils.substringAfter(url, "&name=").replaceAll("_", " "));
+        url = ResponseUtils.unEscapeURL(url);
+        String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
+        String exampleName = ResponseUtils.substringAfter(url, "&project=");
+        return exampleFolders.get(folderName).examples.get(exampleName);
     }
 
-    public static Project getExample(String name, String folder) {
-        ExamplesFolder examplesFolder = exampleFolders.get(folder.replaceAll("_", " "));
-        if (examplesFolder != null) {
-            return examplesFolder.examples.get(name.replaceAll("_", " "));
-        } else {
-            return null;
+    public static ProjectFile getExampleFile(String url) {
+        url = ResponseUtils.unEscapeURL(url);
+        String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
+        String exampleName = ResponseUtils.substringBetween(url, "&project=", "&file=");
+        String fileName = ResponseUtils.substringAfter(url, "&file=");
+
+        Project example = exampleFolders.get(folderName).examples.get(exampleName);
+        for (ProjectFile file : example.files) {
+            if (file.getName().equals(fileName)) {
+                return file;
+            }
         }
+        throw new NullPointerException("File not found");
     }
+
+//    public static Project getExample(String url) {
+//        ExamplesFolder examplesFolder = exampleFolders.get(ResponseUtils.substringBefore(url, "&name=").replaceAll("_", " "));
+//        return examplesFolder.examples.get(ResponseUtils.substringAfter(url, "&name=").replaceAll("_", " "));
+//    }
+//
+//    public static Project getExample(String name, String folder) {
+//        ExamplesFolder examplesFolder = exampleFolders.get(folder.replaceAll("_", " "));
+//        if (examplesFolder != null) {
+//            return examplesFolder.examples.get(name.replaceAll("_", " "));
+//        } else {
+//            return null;
+//        }
+//    }
 
     public List<String> getOrderedFolderNames() {
         return exampleFoldersOrder;

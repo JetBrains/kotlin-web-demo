@@ -97,7 +97,7 @@ public class Project {
         this.files = new ArrayList<>();
         this.parent = parent;
 
-        originUrl = parent.replaceAll(" ", "_") + "&name=" + exampleFolderName.replaceAll(" ", "_");
+        originUrl = "folder=" + parent.replaceAll(" ", "%20") + "&name=" + exampleFolderName.replaceAll(" ", "%20");
         ObjectMapper objectMapper = new ObjectMapper();
 
         String exampleFolderPath = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + parent + File.separator + exampleFolderName + File.separator;

@@ -43,7 +43,7 @@ var RunProvider = (function () {
         function runJava(configuration, project) {
             var confTypeString = Configuration.getStringFromType(configuration.type);
             $.ajax({
-                url: generateAjaxUrl("run", confTypeString),
+                url: generateAjaxUrl("run"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {
@@ -58,7 +58,7 @@ var RunProvider = (function () {
                 },
                 dataType: "json",
                 type: "POST",
-                data: {project: JSON.stringify(project)},
+                data: {project: JSON.stringify(project), args: confTypeString},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     onFail(textStatus + " : " + errorThrown);
@@ -75,7 +75,7 @@ var RunProvider = (function () {
         function loadJsFromServer(configuration, project) {
             var confTypeString = Configuration.getStringFromType(configuration.type);
             $.ajax({
-                url: generateAjaxUrl("run", confTypeString),
+                url: generateAjaxUrl("run"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {
@@ -101,7 +101,7 @@ var RunProvider = (function () {
                 },
                 dataType: "json",
                 type: "POST",
-                data: {project: JSON.stringify(project)},
+                data: {project: JSON.stringify(project), args: confTypeString},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     onFail(textStatus + " : " + errorThrown);

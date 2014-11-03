@@ -24,14 +24,18 @@ var FileProvider = (function () {
             renameFile: function (publicId, callback, newName) {
                 renameFile(publicId, callback, newName);
             },
-            saveFile: function (publicId, data, callback) {
-                saveFile(publicId, data, callback);
+            saveFile: function (file, callback) {
+                saveFile(file, callback);
             },
             deleteFile: function (publicId, callback) {
                 deleteFile(publicId, callback);
             },
+            loadOriginalFile: function (file, callback) {
+                loadOriginalFile(file, callback);
+            },
             onNewFileAdded: function () {
-
+            },
+            onOriginalFileLoaded: function () {
             },
             onDeleteFile: function () {
             },
@@ -42,6 +46,27 @@ var FileProvider = (function () {
             onFail: function (message, status) {
             }
         };
+
+        function loadOriginalFile(file, callback) {
+            if (file.getProject().getType() == ProjectType.EXAMPLE) {
+                $.ajax({
+                    url: generateAjaxUrl("loadExampleFile"),
+                    success: function (data) {
+                        callback(data);
+                        instance.onOriginalFileLoaded();
+                    },
+                    type: "POST",
+                    timeout: 10000,
+                    data: {publicId: file.publicId},
+                    dataType: "json",
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    }
+                })
+            } else {
+                throw "Only example files can be reloaded from server.";
+            }
+        }
 
         function addNewFile(projectPublicId, callback, filename) {
             filename = addKotlinExtension(filename);
@@ -94,7 +119,7 @@ var FileProvider = (function () {
             });
         }
 
-        function saveFile(publicId, data, callback) {
+        function saveFile(file, callback) {
             $.ajax({
                 url: generateAjaxUrl("saveFile"),
                 type: "POST",
@@ -103,7 +128,7 @@ var FileProvider = (function () {
                     instance.onFileSaved();
                     callback();
                 },
-                data: {publicId: publicId, file: JSON.stringify(data)},
+                data: {file: JSON.stringify(file)},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }

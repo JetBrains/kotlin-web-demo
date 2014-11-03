@@ -43,7 +43,7 @@ var HighlichtingProvider = (function () {
             if (!isLoadingHighlighting) {
                 isLoadingHighlighting = true;
                 $.ajax({
-                    url: generateAjaxUrl("highlight", confTypeString),
+                    url: generateAjaxUrl("highlight"),
                     context: document.body,
                     success: function (data) {
                         isLoadingHighlighting = false;
@@ -59,7 +59,7 @@ var HighlichtingProvider = (function () {
                     },
                     dataType: "json",
                     type: "POST",
-                    data: {project: JSON.stringify(project)},
+                    data: {project: JSON.stringify(project), args: confTypeString},
                     timeout: 10000,
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingHighlighting = false;

@@ -247,7 +247,7 @@ public class MySqlConnector {
 
     }
 
-    public void saveFile(UserInfo userInfo, String publicId, ProjectFile file) throws DatabaseOperationException {
+    public void saveFile(UserInfo userInfo, ProjectFile file) throws DatabaseOperationException {
         try (PreparedStatement st = connection.prepareStatement("UPDATE files JOIN " +
                 "projects ON files.project_id = projects.id JOIN " +
                 "users ON projects.owner_id = users.id SET" +
@@ -256,17 +256,17 @@ public class MySqlConnector {
             st.setString(1, file.getContent());
             st.setString(2, userInfo.getId());
             st.setString(3, userInfo.getType());
-            st.setString(4, publicId);
+            st.setString(4, file.getPublicId());
             st.execute();
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new DatabaseOperationException("File with this name already exist in this project", e);
             } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + publicId + " " + file.getName());
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + file.getPublicId() + " " + file.getName());
                 throw new DatabaseOperationException("Unknown exception", e);
             }
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + publicId + " " + file.getName());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + file.getPublicId() + " " + file.getName());
             throw new DatabaseOperationException("Unknown exception", e);
         }
     }

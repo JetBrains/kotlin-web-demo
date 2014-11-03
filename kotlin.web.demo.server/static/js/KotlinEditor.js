@@ -515,7 +515,7 @@ var KotlinEditor = (function () {
                     }
                     my_editor.focus();
                     my_editor.setValue(file.content);
-                    my_editor.clearHistory();
+                    my_editor.setHistory(file.getChangesHistory());
                     isEditorContentChanged = false;
                     openedFile = file;
                     highlighting.updateHighlighting();
@@ -524,19 +524,26 @@ var KotlinEditor = (function () {
                 }
             },
             closeFile: function () {
-                openedFile = null;
+                if (openedFile != null) {
+                    openedFile.setChangesHistory(my_editor.getHistory());
+                    openedFile = null;
+                }
                 highlighting.removeStyles();
                 my_editor.clearHistory();
                 my_editor.setValue("");
                 document.getElementById("workspace-overlay").style.display = "block";
             },
+            reloadFile: function () {
+                if (openedFile != null) {
+                    my_editor.focus();
+                    my_editor.setValue(openedFile.content);
+                    my_editor.setHistory(openedFile.getChangesHistory());
+                    isEditorContentChanged = false;
+                    highlighting.updateHighlighting();
+                }
+            },
             updateHighlighting: function () {
                 highlighting.updateHighlighting();
-            },
-            save: function () {
-                if (openedFile != null && isEditorContentChanged) {
-                    openedFile.save();
-                }
             },
             setText: function (text) {
                 my_editor.setOption("readOnly", false);
