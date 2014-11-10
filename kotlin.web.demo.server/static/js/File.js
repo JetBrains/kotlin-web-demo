@@ -18,9 +18,9 @@
  * Created by Semyon.Atamas on 10/13/2014.
  */
 
-var FileData = (function () {
+var File = (function () {
 
-    function FileData(project, /*nullable*/ data) {
+    function File(project, content) {
         var instance = {
             name: "",
             originalContent: "",
@@ -70,6 +70,15 @@ var FileData = (function () {
             }
         };
 
+        File.defaultFileContent = (function () {
+            return {
+                name: "",
+                content: "",
+                modifiable: true,
+                publicId: ""
+            };
+        })();
+
         var changesHistory = null;
 
         function setFileData(data) {
@@ -82,12 +91,12 @@ var FileData = (function () {
             }
         }
 
-        setFileData(data);
+        setFileData(content);
 
 
         return instance;
     }
 
-    return FileData;
+    return File;
 })
 ();

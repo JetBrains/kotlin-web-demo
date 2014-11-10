@@ -76,6 +76,12 @@ projectActionsView.registerStatus("localVersion", "This is local version of proj
         callback: function () {
             accordion.getSelectedFile().loadOriginal();
         }
+    },
+    {
+        name: "Reload project",
+        callback: function () {
+            accordion.getSelectedProject().loadOriginal();
+        }
     }
 ]);
 
@@ -186,6 +192,12 @@ var accordion = (function () {
     };
 
     accordion.onSelectFile = function (previousFile, currentFile) {
+        if (currentFile.getProject().getType() == ProjectType.EXAMPLE) {
+            history.replaceState("", "", "?" + currentFile.publicId);
+        } else {
+            history.replaceState("", "", "?id=" + currentFile.getPublicId());
+        }
+
         if (previousFile != null) previousFile.save();
         editor.closeFile();
         editor.open(currentFile);
@@ -202,7 +214,6 @@ var accordion = (function () {
     };
 
     accordion.onSaveProgram = function () {
-        editor.markAsUnchanged();
         statusBarView.setStatus(ActionStatusMessages.save_program_ok);
     };
 

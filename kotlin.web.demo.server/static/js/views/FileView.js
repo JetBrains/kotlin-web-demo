@@ -21,28 +21,10 @@
 
 var FileView = (function () {
 
-    function FileView(projectView, name, publicId, headerElement, /*nullable*/fileData) {
+    function FileView(projectView, headerElement, file) {
 
         var instance = {
-            deselect: function () {
-                if (selected) {
-                    selected = false;
-                    $(headerElement).removeClass("selected");
-                    editor.closeFile();
-                }
-            },
-            select: function () {
-                if (projectView.getType() == ProjectType.EXAMPLE) {
-                    history.replaceState("", "", "?" + publicId);
-                } else {
-                    history.replaceState("", "", "?id=" + publicId);
-                }
-
-                if (instance.canBeSelected()) {
-                    selected = true;
-                    headerElement.className += " selected";
-                    editor.open(file);
-                }
+            onSelect: function () {
             },
             getProjectView: function () {
                 return projectView;
@@ -54,12 +36,10 @@ var FileView = (function () {
                 return headerElement;
             },
             getPublicId: function () {
-                return publicId;
+                return file.publicId;
             },
             canBeSelected: function () {
 
-            },
-            onContentChanged: function () {
             },
             fireSelectEvent: function () {
                 accordion.selectFile(instance);
@@ -70,7 +50,7 @@ var FileView = (function () {
         };
 
         var fileNameElement;
-        var file = new FileData(projectView.getProjectData(), fileData);
+//        var file = new File(projectView.getProjectData(), fileData);
         file.onModified = function () {
             $(headerElement).addClass("modified");
             if (accordion.getSelectedFile() == file) {
@@ -86,7 +66,7 @@ var FileView = (function () {
         var selected = false;
         var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
         renameFileDialog.validate = function (newName) {
-            if (removeKotlinExtension(name) == newName) {
+            if (removeKotlinExtension(file.name) == newName) {
                 return {valid: true};
             } else {
                 return projectView.validateNewFileName(newName);
@@ -109,7 +89,7 @@ var FileView = (function () {
 
             fileNameElement = document.createElement("div");
             fileNameElement.className = "example-filename-text";
-            fileNameElement.innerHTML = name;
+            fileNameElement.innerHTML = file.name;
             headerElement.appendChild(fileNameElement);
 
             if (projectView.getType() == ProjectType.USER_PROJECT && file.modifiable) {
@@ -117,12 +97,12 @@ var FileView = (function () {
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename file";
                 renameImg.onclick = function (event) {
-                    var renameFileFunction = fileProvider.renameFile.bind(null, publicId, function (newName) {
+                    var renameFileFunction = fileProvider.renameFile.bind(null, file.publicId, function (newName) {
                         newName = addKotlinExtension(newName);
                         file.name = newName;
                         fileNameElement.innerHTML = newName;
                     });
-                    renameFileDialog.open(renameFileFunction, removeKotlinExtension(name));
+                    renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.name));
 
                     event.stopPropagation();
                 };
@@ -132,11 +112,11 @@ var FileView = (function () {
                 deleteImg.className = "delete-img";
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
-                    if (confirm("Delete file " + name)) {
-                        fileProvider.deleteFile(publicId, function () {
-                            instance.deselect();
+                    if (confirm("Delete file " + file.name)) {
+                        fileProvider.deleteFile(file.publicId, function () {
+                            editor.closeFile();
                             headerElement.parentNode.removeChild(headerElement);
-                            instance.onDelete(publicId);
+                            instance.onDelete(file.publicId);
                         });
                     }
                     event.stopPropagation();

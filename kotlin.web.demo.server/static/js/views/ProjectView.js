@@ -66,6 +66,9 @@ var ProjectView = (function () {
                     loginDialog.dialog("open");
                 }
             },
+            loadOriginal: function () {
+                projectProvider.loadProject(header.publicId, header.type, createProject);
+            },
             isSelected: function () {
                 return accordion.getSelectedProject().getPublicId() == header.publicId;
             },
@@ -167,7 +170,7 @@ var ProjectView = (function () {
 
             for (var i = 0; i < filesContent.length; ++i) {
                 var fileContent = filesContent[i];
-                fileView = createFileView(fileContent.publicId, fileContent.name, fileContent);
+                fileView = createFileView(fileContent);
                 fileViews[fileContent.publicId] = fileView;
                 project.files.push(fileView.getFile());
             }
@@ -246,8 +249,9 @@ var ProjectView = (function () {
             button.style.cursor = "pointer";
             button.onclick = function () {
                 var addNewFileFunction = fileProvider.addNewFile.bind(null, header.publicId, function (publicId, name) {
-                    fileViews[publicId] = createFileView(publicId, name);
-                    project.files.push(fileViews[publicId].getFileData());
+                    var fileContent = File.defaultFileContent;
+                    fileViews[publicId] = createFileView(fileContent);
+                    project.files.push(fileViews[publicId].getFile());
                     selectFile(publicId);
                 });
                 newFileDialog.open(addNewFileFunction, "Untitled");
@@ -255,14 +259,16 @@ var ProjectView = (function () {
             contentElement.appendChild(button);
         }
 
-        function createFileView(publicId, name, /*nullable*/fileContent) {
+        function createFileView(fileContent) {
             var fileHeader = document.createElement("div");
             if (header.type == ProjectType.USER_PROJECT) {
                 contentElement.insertBefore(fileHeader, contentElement.lastChild);
             } else {
                 contentElement.appendChild(fileHeader);
             }
-            var fileView = new FileView(instance, name, publicId, fileHeader, fileContent);
+
+            var file = new File(instance.getProjectData(), fileContent);
+            var fileView = new FileView(instance, fileHeader, file);
 
             fileView.canBeSelected = function () {
                 return instance.isSelected();
