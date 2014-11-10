@@ -34,24 +34,36 @@
 
 .CodeMirror {
     line-height: 1.4;
+    font-family: menlo, consolas, monospace;
+    font-size: 12px;
+}
+
+.CodeMirror-linenumber {
+    min-width: 0;
+    text-align: center;
 }
 
 .ERROR {
     color: #ff0000 !important;
 }
 
+.errors-and-warnings-gutter {
+    width: 11px;
+    margin-left: 2px;
+}
+
 .ERRORgutter {
     height: 11px;
     width: 11px;
+    margin-top: 3px;
     background: url("/static/images/errors_and_warnings.png") no-repeat -14px 0 !important;
-    float: left;
 }
 
 .WARNINGgutter {
     height: 11px;
     width: 11px;
+    margin-top: 3px;
     background: url("/static/images/errors_and_warnings.png") no-repeat -14px -14px !important;
-    float: left;
 }
 
 .red_wavy_line {

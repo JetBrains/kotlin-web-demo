@@ -20,33 +20,40 @@
 
 var HelpView = (function () {
 
-    function HelpView(helpType, element, helpModel) {
+    function HelpView(helpModel) {
         var model = helpModel;
         model.loadAllHelpElements();
 
         var instance = {
-            update: function(name) {
+            setPosition: function (pos) {
+                element.style.left = pos.left + 2 + "px";
+                element.style.top = pos.top + 15 + "px";
+            },
+            update: function (name) {
                 var text = model.getHelpElement(name);
-                if(text != null) {
+                if (text != null) {
                     setText(text);
-                } else{
+                } else {
                     instance.hide();
                 }
             },
-
-            hide: function() {
-                element.parent().css("display", "none");
+            hide: function () {
+                element.style.display = "none"
             }
         };
 
+        var element = document.createElement("div");
+        element.className = "words-help";
+        document.body.appendChild(element);
+
+        var textElement = document.createElement("div");
+        textElement.className = "text";
+        element.appendChild(textElement);
+
         function setText(text) {
-            element.parent().css("display", "block");
+            element.style.display = "block";
             if (checkDataForNull(text)) {
-                element.html(text);
-            } else {
-                if (helpType == "Examples") {
-                    element.html("Description not available.");
-                }
+                textElement.innerHTML = text;
             }
         }
 

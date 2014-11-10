@@ -42,6 +42,7 @@ var ProjectActionsView = (function () {
             if (statusId in statuses) {
                 if (statusId == "default") {
                     element.style.display = "none";
+                    editor.resize();
                     return;
                 }
 
@@ -61,6 +62,7 @@ var ProjectActionsView = (function () {
                     action.onclick = status.actions[i].callback;
                     element.appendChild(action);
                 }
+                editor.resize();
             } else {
                 throw(statusId + " is not a status");
             }

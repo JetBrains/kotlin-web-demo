@@ -70,7 +70,7 @@ var FileData = (function () {
             }
         };
 
-        var changesHistory = [];
+        var changesHistory = null;
 
         function setFileData(data) {
             if (data != null) {
@@ -78,7 +78,7 @@ var FileData = (function () {
                 instance.content = instance.originalContent = data.content;
                 instance.modifiable = data.modifiable;
                 instance.publicId = data.publicId;
-                changesHistory = [];
+                changesHistory = null;
             }
         }
 

@@ -218,8 +218,8 @@ var KotlinEditor = (function () {
 
                 var pos = my_editor.cursorCoords();
                 sel.css("position", "absolute");
-                sel.css("left", pos.x + "px");
-                sel.css("top", pos.yBot + "px");
+                sel.css("left", pos.left + 2 + "px");
+                sel.css("top", pos.top + 15 + "px");
 
                 sel.menu("refresh");
                 sel.css("display", "block");
@@ -289,137 +289,59 @@ var KotlinEditor = (function () {
         })();
 
         var HighlightingObject = (function () {
-            var arrayClasses = [];
-            var arrayLinesMarkers = [];
-
             function HighlightingObject() {
                 var instance = {
-                    processHighlightingResult: function (data) {
-                        process(data);
-                    },
                     updateHighlighting: function () {
                         updateHighlighting()
                     },
                     removeStyles: function () {
-                        removeStyles()
+                        for (var i = 0; i < arrayClasses.length; ++i) {
+                            arrayClasses[i].clear();
+                        }
+                        my_editor.clearGutter("errors-and-warnings-gutter");
                     }
                 };
 
+                var arrayClasses = [];
+
+                function createGutterElement(severity, title) {
+                    var element = document.createElement("div");
+                    element.className = severity + "gutter";
+                    element.title = title;
+                    return element;
+                }
+
+                function updateHighlighting() {
+                    instance.removeStyles();
+                    for (var i = 0; i < openedFile.errors.length; i++) {
+                        var error = openedFile.errors[i];
+                        var interval = error.interval;
+                        var title = unEscapeString(error.message);
+                        var severity = error.severity;
+
+                        arrayClasses.push(my_editor.markText(interval.start, interval.end, {
+                            className: error.className,
+                            title: title
+                        }));
+
+                        if ((my_editor.lineInfo(interval.start.line) != null) && (my_editor.lineInfo(interval.start.line).gutterMarkers == null)) {
+                            my_editor.setGutterMarker(interval.start.line, "errors-and-warnings-gutter", createGutterElement(severity, title));
+                        } else {
+                            var gutter = my_editor.lineInfo(interval.start.line).gutterMarkers["errors-and-warnings-gutter"];
+                            gutter.title += "\n" + title;
+                            if (gutter.className.indexOf("ERRORgutter") == -1) {
+                                gutter.className = severity + "gutter";
+                            }
+                        }
+
+                        var el = document.getElementById(interval.start.line + "_" + interval.start.ch);
+                        if (el != null) {
+                            el.setAttribute("title", title);
+                        }
+                    }
+                }
+
                 return instance;
-            }
-
-            function removeStyles() {
-                var i = 0;
-                while (arrayClasses[i] != undefined) {
-                    arrayClasses[i].clear();
-                    i++;
-                }
-                i = 0;
-                while (arrayLinesMarkers[i] != undefined) {
-                    my_editor.clearMarker(arrayLinesMarkers[i]);
-                    i++;
-                }
-            }
-
-            function process(data) {
-                removeStyles();
-                arrayClasses = [];
-                arrayLinesMarkers = [];
-
-                if ((data[0] != undefined) && (data[0].exception != undefined)) {
-                    //todo eventHandler.fire("write_exception", data);
-                    return;
-                }
-
-                var i = 0;
-
-                function processError(errors, i, f) {
-                    if (data[i] == undefined) {
-                        return;
-                    }
-                    arrayClasses.push(my_editor.markText(eval('(' + data[i].x + ')'), eval('(' + data[i].y + ')'), data[i].className));
-
-                    var title = unEscapeString(data[i].titleName);
-                    var start = eval('(' + data[i].x + ')');
-                    var severity = data[i].severity;
-
-                    if ((my_editor.lineInfo(start.line) != null) && (my_editor.lineInfo(start.line).markerText == null) || (my_editor.lineInfo(start.line) == null)) {
-                        my_editor.setMarker(start.line, '<span class=\"' + severity + 'gutter\" title="' + title + '">  </span>%N%');
-                        arrayLinesMarkers.push(start.line);
-                    } else {
-                        var text = my_editor.lineInfo(start.line).markerText;
-
-                        var resultSpan = "";
-                        if ((severity == "WARNING") && text.indexOf("ERRORgutter") != -1) {
-                            text = text.substring(text.indexOf("title=\"") + 7);
-                            text = text.substring(0, text.indexOf("\""));
-//                    resultSpan += title + "\n ---next error--- \n" + text.substring(pos);
-                            resultSpan = '<span class=\"ERRORgutter\" title="' + text + "\n ---next error--- \n" + title + '">  </span>%N%';
-                        } else {
-                            text = text.substring(text.indexOf("title=\"") + 7);
-                            text = text.substring(0, text.indexOf("\""));
-                            resultSpan = '<span class=\"' + severity + 'gutter\" title="' + text + "\n ---next error--- \n" + title + '">  </span>%N%';
-                        }
-                        //this.arrayLinesMarkers.pop();
-                        my_editor.setMarker(start.line, resultSpan);
-                        arrayLinesMarkers.push(start.line);
-                    }
-
-                    var el = document.getElementById(start.line + "_" + start.ch);
-                    if (el != null) {
-                        el.setAttribute("title", title);
-                    }
-
-                    i++;
-                    setTimeout(function (i) {
-                        return function () {
-                            f(i, processError);
-                        }
-                    }(i), 10);
-                }
-
-                processError(i, processError);
-            }
-
-            function updateHighlighting() {
-                removeStyles();
-                arrayClasses = [];
-                arrayLinesMarkers = [];
-                for (var i = 0; i < openedFile.errors.length; i++) {
-                    var error = openedFile.errors[i];
-                    var interval = error.interval;
-                    arrayClasses.push(my_editor.markText(interval.start, interval.end, error.className));
-                    var title = unEscapeString(error.message);
-                    var severity = error.severity;
-
-                    if ((my_editor.lineInfo(interval.start.line) != null) && (my_editor.lineInfo(interval.start.line).markerText == null) || (my_editor.lineInfo(interval.start.line) == null)) {
-                        my_editor.setMarker(interval.start.line, '<span class=\"' + severity + 'gutter\" title="' + title + '">  </span>%N%');
-                        arrayLinesMarkers.push(interval.start.line);
-                    } else {
-                        var text = my_editor.lineInfo(interval.start.line).markerText;
-
-                        var resultSpan = "";
-                        if ((severity == "WARNING") && text.indexOf("ERRORgutter") != -1) {
-                            text = text.substring(text.indexOf("title=\"") + 7);
-                            text = text.substring(0, text.indexOf("\""));
-//                    resultSpan += title + "\n ---next error--- \n" + text.substring(pos);
-                            resultSpan = '<span class=\"ERRORgutter\" title="' + text + "\n ---next error--- \n" + title + '">  </span>%N%';
-                        } else {
-                            text = text.substring(text.indexOf("title=\"") + 7);
-                            text = text.substring(0, text.indexOf("\""));
-                            resultSpan = '<span class=\"' + severity + 'gutter\" title="' + text + "\n ---next error--- \n" + title + '">  </span>%N%';
-                        }
-                        //this.arrayLinesMarkers.pop();
-                        my_editor.setMarker(interval.start.line, resultSpan);
-                        arrayLinesMarkers.push(interval.start.line);
-                    }
-
-
-                    var el = document.getElementById(interval.start.line + "_" + interval.start.ch);
-                    if (el != null) {
-                        el.setAttribute("title", title);
-                    }
-                }
             }
 
             return HighlightingObject;
@@ -429,32 +351,6 @@ var KotlinEditor = (function () {
         var completion = new CompletionObject();
         var highlighting = new HighlightingObject();
 
-
-        my_editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-            lineNumbers: true,
-            matchBrackets: true,
-            mode: "text/kotlin",
-            extraKeys: {
-                "Ctrl-Space": function () {
-                    instance.save();
-                    completionProvider.getCompletion(configuration.type, accordion.getSelectedProject().getModifiableContent(), openedFile.name,
-                        my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
-                }
-
-            },
-            onChange: function () {
-                if (openedFile != null) {
-                    openedFile.setContent(my_editor.getValue());
-                }
-                runTimerForNonPrinting()
-            },
-            onCursorActivity: function () {
-                instance.onCursorActivity(my_editor.getCursor());
-            },
-            minHeight: "430px",
-            tabSize: 2
-        });
-
         var instance = {
             resize: function () {
                 var workspaceHeight = $("#workspace").height();
@@ -462,14 +358,7 @@ var KotlinEditor = (function () {
                 var commandLineArgumentsHeight = $(argumentsWrapper).is(':visible') ? $(argumentsWrapper).outerHeight() : 0;
                 var notificationsHeight = $("#editor-notifications").outerHeight();
                 var editorHeight = workspaceHeight - toolBoxHeight - commandLineArgumentsHeight - notificationsHeight;
-                document.getElementById("scroll").style.height = editorHeight + "px";
-                document.getElementById("gutter").style.height = editorHeight + "px";
-            },
-            loadExampleOrProgram: function (status, example) {
-                if (status) {
-                    my_editor.setValue(example.text);
-                    isEditorContentChanged = false;
-                }
+                $(".CodeMirror").css("height", editorHeight);
             },
             setCursor: function (lineNo, charNo) {
                 my_editor.setCursor(lineNo, charNo);
@@ -477,24 +366,14 @@ var KotlinEditor = (function () {
             focus: function () {
                 my_editor.focus()
             },
-
             showCompletionResult: function (data) {
                 completion.processCompletionResult(data);
-            },
-            addMarkers: function (data) {
-                highlighting.processHighlightingResult(data);
             },
             setConfiguration: function (conf) {
                 configuration = conf;
             },
             getText: function () {
                 return my_editor.getValue();
-            },
-            isEditorContentChanged: function () {
-                return isEditorContentChanged;
-            },
-            markAsUnchanged: function () {
-                isEditorContentChanged = false;
             },
             indentAll: function () {
                 my_editor.setSelection({line: 0, ch: 0}, {line: my_editor.lineCount() - 1, ch: 0});
@@ -515,8 +394,7 @@ var KotlinEditor = (function () {
                     }
                     my_editor.focus();
                     my_editor.setValue(file.content);
-                    my_editor.setHistory(file.getChangesHistory());
-                    isEditorContentChanged = false;
+                    file.getChangesHistory() != null ? my_editor.setHistory(file.getChangesHistory()) : my_editor.clearHistory();
                     openedFile = file;
                     highlighting.updateHighlighting();
                 } else {
@@ -537,23 +415,9 @@ var KotlinEditor = (function () {
                 if (openedFile != null) {
                     my_editor.focus();
                     my_editor.setValue(openedFile.content);
-                    my_editor.setHistory(openedFile.getChangesHistory());
-                    isEditorContentChanged = false;
+                    openedFile.getChangesHistory() != null ? my_editor.setHistory(openedFile.getChangesHistory()) : my_editor.clearHistory();
                     highlighting.updateHighlighting();
                 }
-            },
-            updateHighlighting: function () {
-                highlighting.updateHighlighting();
-            },
-            setText: function (text) {
-                my_editor.setOption("readOnly", false);
-                if (isEditorContentChanged && openedFile != null) {
-                    openedFile.save();
-                }
-                openedFile = null;
-                my_editor.focus();
-                my_editor.setValue(text);
-                isEditorContentChanged = false;
             },
             onCursorActivity: function (cursorPosition) {
             },
@@ -581,12 +445,26 @@ var KotlinEditor = (function () {
             }
         };
 
-        var timer;
-        var timerIntervalForNonPrinting = 300;
-        var isEditorContentChanged = false;
+        my_editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "text/kotlin",
+            extraKeys: {
+                "Ctrl-Space": function () {
+                    instance.save();
+                    completionProvider.getCompletion(configuration.type, accordion.getSelectedProject().getModifiableContent(), openedFile.name,
+                        my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
+                }
 
-        function runTimerForNonPrinting() {
-            isEditorContentChanged = true;
+            },
+            gutters: ["errors-and-warnings-gutter"],
+            tabSize: 2
+        });
+
+        my_editor.on("change", function () {
+            if (openedFile != null) {
+                openedFile.setContent(my_editor.getValue());
+            }
             if (timer) {
                 clearTimeout(timer);
                 timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
@@ -594,11 +472,18 @@ var KotlinEditor = (function () {
             else {
                 timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
             }
-        }
+        });
+
+        my_editor.on("cursorActivity", function (codemirror) {
+            instance.onCursorActivity(codemirror.getCursor());
+        });
+
+        var timer;
+        var timerIntervalForNonPrinting = 300;
 
 
         function getHighlighting() {
-            if (configuration.mode.name != Configuration.mode.ONRUN.name) {
+            if (configuration.mode.name == Configuration.mode.ONRUN.name) {
                 var example = accordion.getSelectedProject();
                 highlightingProvider.getHighlighting(
                     configuration.type,

@@ -209,31 +209,34 @@
     float: left;
 }
 
-#words-help {
+.words-help {
+    position: absolute;
     width: 300px;
+    z-index: 10;
     background-color: #eeeeee;
     border: 1px solid #969696;
     border-radius: 3px;
 }
 
-#words-help-text {
+.words-help .text {
     line-height: 1.25;
     padding: 4px;
 }
 
-.words-help-text pre {
+.words-help .text pre {
     padding-left: 6px;
     padding-right: 6px;
     background-color: #cfcfcf;
 }
 
-.words-help-text pre:first-of-type {
+.words-help .text pre:first-of-type {
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
     padding-top: 6px;
     margin-top: 4px;
 }
-.words-help-text pre:last-of-type{
+
+.words-help .text pre:last-of-type {
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
     padding-bottom: 6px;

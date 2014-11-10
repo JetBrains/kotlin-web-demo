@@ -79,9 +79,9 @@ var ProjectView = (function () {
                 if (project == null) {
                     projectProvider.loadProject(header.publicId, header.type, createProject);
                 } else {
-                    if (selectedFile != null) {
+                    if (selectedFileView != null) {
                         problemsView.onProjectChange();
-                        selectedFile.select();
+                        selectedFileView.fireSelectEvent();
                     }
                     instance.onSelected(instance);
                 }
@@ -108,6 +108,12 @@ var ProjectView = (function () {
             getSelectedFile: function () {
                 return selectedFile;
             },
+            getHeaderElement: function () {
+
+            },
+            getContentElement: function () {
+
+            },
             getProjectData: function () {
                 return project;
             },
@@ -132,6 +138,7 @@ var ProjectView = (function () {
         var modified = false;
         var project = null;
         var selectedFile = null;
+        var selectedFileView = null;
         var fileViews = {};
         var renameProjectDialog = new InputDialogView("Rename project", "Project name:", "Rename");
         renameProjectDialog.validate = function (newName) {
@@ -166,7 +173,8 @@ var ProjectView = (function () {
             }
 
             if (filesContent.length > 0) {
-                fileViews[filesContent[0].publicId].fireSelectEvent();
+                selectedFileView = fileViews[filesContent[0].publicId];
+                selectedFileView.fireSelectEvent();
             }
 
             problemsView.onProjectChange();

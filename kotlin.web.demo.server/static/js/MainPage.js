@@ -67,7 +67,7 @@ canvas.setAttribute("height", (canvasDialog.dialog("option", "height") - 30) + "
 
 var helpDialogView = new HelpDialogView();
 var helpModelForWords = new HelpModel("Words");
-var helpViewForWords = new HelpView("Words", $("#words-help-text"), helpModelForWords);
+var helpViewForWords = new HelpView(helpModelForWords);
 helpViewForWords.hide();
 var projectActionsView = new ProjectActionsView(document.getElementById("editor-notifications"));
 projectActionsView.registerStatus("localVersion", "This is local version of project", [
@@ -108,7 +108,6 @@ var converterProvider = (function () {
     function onSuccess(data) {
         converterView.closeDialog();
         editor.refreshMode();
-        editor.setText(data);
         editor.indentAll();
         statusBarView.setStatus(ActionStatusMessages.convert_java_to_kotlin_ok);
     }
@@ -227,12 +226,8 @@ editor.onCursorActivity = function (cursorPosition) {
         statusBarView.setMessage(messageForLineAtCursor);
     }
 
-    var wordsHelp = $("#words-help");
     var pos = editor.cursorCoords();
-    wordsHelp.css("position", "absolute");
-    wordsHelp.css("left", pos.x + "px");
-    wordsHelp.css("top", pos.yBot + "px");
-
+    helpViewForWords.setPosition(pos);
 
     if (timer) {
         clearTimeout(timer);
