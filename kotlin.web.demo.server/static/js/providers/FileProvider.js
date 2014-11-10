@@ -57,7 +57,7 @@ var FileProvider = (function () {
                     },
                     type: "POST",
                     timeout: 10000,
-                    data: {publicId: file.publicId},
+                    data: {publicId: file.getPublicId()},
                     dataType: "json",
                     error: function (jqXHR, textStatus, errorThrown) {
                         instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);

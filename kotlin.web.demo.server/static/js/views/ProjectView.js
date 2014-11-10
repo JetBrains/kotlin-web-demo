@@ -30,9 +30,6 @@ var ProjectView = (function () {
 
         var instance = {
             deselect: function () {
-                if (selectedFile != null) {
-                    selectedFile.deselect();
-                }
                 $(headerElement).removeClass("selected");
                 $(contentElement).slideUp();
             },
@@ -250,6 +247,8 @@ var ProjectView = (function () {
             button.onclick = function () {
                 var addNewFileFunction = fileProvider.addNewFile.bind(null, header.publicId, function (publicId, name) {
                     var fileContent = File.defaultFileContent;
+                    fileContent.publicId = publicId;
+                    fileContent.name = name;
                     fileViews[publicId] = createFileView(fileContent);
                     project.files.push(fileViews[publicId].getFile());
                     selectFile(publicId);
@@ -269,10 +268,6 @@ var ProjectView = (function () {
 
             var file = new File(instance.getProjectData(), fileContent);
             var fileView = new FileView(instance, fileHeader, file);
-
-            fileView.canBeSelected = function () {
-                return instance.isSelected();
-            };
 
             fileView.onDelete = function (publicId) {
                 project.files = project.files.filter(function (element) {

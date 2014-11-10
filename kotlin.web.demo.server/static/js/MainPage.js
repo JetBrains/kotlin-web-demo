@@ -193,7 +193,7 @@ var accordion = (function () {
 
     accordion.onSelectFile = function (previousFile, currentFile) {
         if (currentFile.getProject().getType() == ProjectType.EXAMPLE) {
-            history.replaceState("", "", "?" + currentFile.publicId);
+            history.replaceState("", "", "?" + currentFile.getPublicId());
         } else {
             history.replaceState("", "", "?id=" + currentFile.getPublicId());
         }

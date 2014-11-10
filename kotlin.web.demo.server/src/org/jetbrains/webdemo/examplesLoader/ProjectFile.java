@@ -17,15 +17,12 @@
 package org.jetbrains.webdemo.examplesLoader;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intellij.psi.PsiFile;
 
 /**
  * Created by Semyon.Atamas on 8/11/2014.
  */
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProjectFile {
 
 
@@ -46,9 +43,11 @@ public class ProjectFile {
      */
     @JsonCreator
     public ProjectFile(@JsonProperty("name") String name,
-                       @JsonProperty("content") String content) {
+                       @JsonProperty("text") String content,
+                       @JsonProperty("publicId") String publicId) {
         this.name = name;
         this.content = content;
+        this.publicId = publicId;
         this.modifiable = true;
     }
 

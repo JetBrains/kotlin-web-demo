@@ -52,7 +52,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
             var file = newProjectData.files[i];
 
             var fileProblemsDiv = document.createElement("div");
-            fileProblemsDiv.id = file.name.replace(/ /g, "_") + "_problems";
+            fileProblemsDiv.id = file.getName().replace(/ /g, "_") + "_problems";
             fileProblemsDiv.style.display = "none";
 
             var fileProblemsHeader = document.createElement("p");
@@ -66,7 +66,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
             fileProblemsHeader.appendChild(img);
 
             var fileName = document.createElement("span");
-            fileName.innerHTML = file.name;
+            fileName.innerHTML = file.getName();
             fileProblemsHeader.appendChild(fileName);
             $(fileProblemsHeader).click(function () {
                 if ($(this).next().is(':hidden')) {
@@ -80,7 +80,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
             fileProblemsDiv.appendChild(fileProblemsHeader);
 
             var fileProblemsContent = document.createElement("div");
-            fileProblemsContent.id = file.name.replace(/ /g, "_") + "_problems_content";
+            fileProblemsContent.id = file.getName().replace(/ /g, "_") + "_problems_content";
             fileProblemsDiv.appendChild(fileProblemsContent);
 
             console.appendChild(fileProblemsDiv)
@@ -95,18 +95,18 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         var projectData = accordion.getSelectedProject().getProjectData();
         for (var i = 0; i < projectData.files.length; i++) {
             var file = projectData.files[i];
-            if (file.errors.length > 0) {
-                document.getElementById(file.name.replace(/ /g, "_") + "_problems").style.display = "block";
-                var fileErrors = document.getElementById(file.name.replace(/ /g, "_") + "_problems_content");
+            if (file.getErrors().length > 0) {
+                document.getElementById(file.getName().replace(/ /g, "_") + "_problems").style.display = "block";
+                var fileErrors = document.getElementById(file.getName().replace(/ /g, "_") + "_problems_content");
                 fileErrors.innerHTML = "";
-                for (var j = 0; j < file.errors.length; j++) {
-                    var error = file.errors[j];
+                for (var j = 0; j < file.getErrors().length; j++) {
+                    var error = file.getErrors()[j];
                     error.message = unEscapeString(error.message);
                     var problem = createElementForProblemsView(error);
                     fileErrors.appendChild(problem);
                 }
             } else {
-                document.getElementById(file.name.replace(/ /g, "_") + "_problems").style.display = "none";
+                document.getElementById(file.getName().replace(/ /g, "_") + "_problems").style.display = "none";
             }
         }
     }

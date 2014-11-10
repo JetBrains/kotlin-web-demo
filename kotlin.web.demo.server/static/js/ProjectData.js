@@ -36,18 +36,18 @@ var ProjectData = (function () {
                     confType: instance.confType,
                     originUrl: instance.originUrl,
                     files: instance.files.filter(function (file) {
-                        return file.modifiable;
+                        return file.isModifiable();
                     })
                 };
             },
             processHighlightingResult: function (errors) {
                 for (var i = 0; i < instance.files.length; i++) {
-                    instance.files[i].errors = errors[instance.files[i].name];
+                    instance.files[i].setErrors(errors[instance.files[i].getName()]);
                 }
             },
             hasErrors: function () {
                 for (var i = 0; i < instance.files.length; i++) {
-                    var errors = instance.files[i].errors;
+                    var errors = instance.files[i].getErrors();
                     for (var j = 0; j < errors.length; j++) {
                         if (errors[j].severity == "ERROR") {
                             return true;

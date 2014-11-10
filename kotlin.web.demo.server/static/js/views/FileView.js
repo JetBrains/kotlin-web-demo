@@ -35,12 +35,6 @@ var FileView = (function () {
             getHeaderElement: function () {
                 return headerElement;
             },
-            getPublicId: function () {
-                return file.publicId;
-            },
-            canBeSelected: function () {
-
-            },
             fireSelectEvent: function () {
                 accordion.selectFile(instance);
             },
@@ -66,7 +60,7 @@ var FileView = (function () {
         var selected = false;
         var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
         renameFileDialog.validate = function (newName) {
-            if (removeKotlinExtension(file.name) == newName) {
+            if (removeKotlinExtension(file.getName()) == newName) {
                 return {valid: true};
             } else {
                 return projectView.validateNewFileName(newName);
@@ -79,7 +73,7 @@ var FileView = (function () {
             headerElement.className = "example-filename";
 
             var icon = document.createElement("div");
-            if (file.modifiable) {
+            if (file.isModifiable()) {
                 icon.className = "kotlinFileIcon"
             } else {
                 icon.className = "unmodifiableKotlinFileIcon"
@@ -89,20 +83,20 @@ var FileView = (function () {
 
             fileNameElement = document.createElement("div");
             fileNameElement.className = "example-filename-text";
-            fileNameElement.innerHTML = file.name;
+            fileNameElement.innerHTML = file.getName();
             headerElement.appendChild(fileNameElement);
 
-            if (projectView.getType() == ProjectType.USER_PROJECT && file.modifiable) {
+            if (projectView.getType() == ProjectType.USER_PROJECT && file.isModifiable()) {
                 var renameImg = document.createElement("div");
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename file";
                 renameImg.onclick = function (event) {
-                    var renameFileFunction = fileProvider.renameFile.bind(null, file.publicId, function (newName) {
+                    var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), function (newName) {
                         newName = addKotlinExtension(newName);
-                        file.name = newName;
+                        file.setName(newName);
                         fileNameElement.innerHTML = newName;
                     });
-                    renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.name));
+                    renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.getName()));
 
                     event.stopPropagation();
                 };
@@ -112,11 +106,11 @@ var FileView = (function () {
                 deleteImg.className = "delete-img";
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
-                    if (confirm("Delete file " + file.name)) {
-                        fileProvider.deleteFile(file.publicId, function () {
+                    if (confirm("Delete file " + file.getName())) {
+                        fileProvider.deleteFile(file.getPublicId(), function () {
                             editor.closeFile();
                             headerElement.parentNode.removeChild(headerElement);
-                            instance.onDelete(file.publicId);
+                            instance.onDelete(file.getPublicId());
                         });
                     }
                     event.stopPropagation();
