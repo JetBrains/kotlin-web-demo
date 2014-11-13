@@ -46,9 +46,6 @@ var ProjectView = (function () {
                     loginDialog.dialog("open");
                 }
             },
-            loadOriginal: function () {
-                projectProvider.loadProject(header.publicId, header.type, createProject);
-            },
             setSelectedFileView: function (selectedFileView_) {
                 selectedFileView = selectedFileView_;
             },

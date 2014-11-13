@@ -79,6 +79,9 @@ var ProjectData = (function () {
                     });
                 }
             },
+            loadOriginal: function () {
+                instance.loadContent();
+            },
             onContentLoaded: function (files) {
             },
             addEmptyFile: function (name, publicId) {

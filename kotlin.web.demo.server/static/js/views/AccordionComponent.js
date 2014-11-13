@@ -153,7 +153,7 @@ var AccordionView = (function () {
                 selectProject(createExampleId(project, folder));
             } else if (id != "") {
                 headersProvider.getHeaderByFilePublicId(id, function (header) {
-                    if (!(header.id in projects)) {
+                    if (!(header.publicId in projects)) {
                         if (header.type == ProjectType.PUBLIC_LINK) {
                             header.timeStamp = new Date().getTime();
                             addProject(publicLinksContentElement, header);
