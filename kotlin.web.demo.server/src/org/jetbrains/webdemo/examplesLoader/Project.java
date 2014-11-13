@@ -68,7 +68,11 @@ public class Project {
      * @param confType  - Project run configuration
      * @param originUrl - Project origin URL
      */
-    public Project(@NotNull String name, @NotNull String parent, @NotNull String args, @NotNull String confType, String originUrl) {
+    public Project(@NotNull String name,
+                   @NotNull String parent,
+                   @NotNull String args,
+                   @NotNull String confType,
+                   String originUrl) {
         this.name = name;
         this.parent = parent;
         this.args = args;
@@ -97,7 +101,7 @@ public class Project {
         this.files = new ArrayList<>();
         this.parent = parent;
 
-        originUrl = "folder=" + parent.replaceAll(" ", "%20") + "&name=" + exampleFolderName.replaceAll(" ", "%20");
+        originUrl = "folder=" + parent.replaceAll(" ", "%20") + "&project=" + exampleFolderName.replaceAll(" ", "%20");
         ObjectMapper objectMapper = new ObjectMapper();
 
         String exampleFolderPath = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + parent + File.separator + exampleFolderName + File.separator;

@@ -47,9 +47,9 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
     function onProjectChange() {
         console.innerHTML = "";
 
-        var newProjectData = accordion.getSelectedProject().getProjectData();
-        for (var i = 0; i < newProjectData.files.length; i++) {
-            var file = newProjectData.files[i];
+        var newProjectData = accordion.getSelectedProject();
+        for (var i = 0; i < newProjectData.getFiles().length; i++) {
+            var file = newProjectData.getFiles()[i];
 
             var fileProblemsDiv = document.createElement("div");
             fileProblemsDiv.id = file.getName().replace(/ /g, "_") + "_problems";
@@ -92,9 +92,9 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
             tabs.tabs("option", "active", 0);
         }
 
-        var projectData = accordion.getSelectedProject().getProjectData();
-        for (var i = 0; i < projectData.files.length; i++) {
-            var file = projectData.files[i];
+        var projectData = accordion.getSelectedProject();
+        for (var i = 0; i < projectData.getFiles().length; i++) {
+            var file = projectData.getFiles()[i];
             if (file.getErrors().length > 0) {
                 document.getElementById(file.getName().replace(/ /g, "_") + "_problems").style.display = "block";
                 var fileErrors = document.getElementById(file.getName().replace(/ /g, "_") + "_problems_content");

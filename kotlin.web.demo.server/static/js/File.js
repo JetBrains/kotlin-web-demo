@@ -17,10 +17,6 @@
 /**
  * Created by Semyon.Atamas on 10/13/2014.
  */
-
-/**
- * @constructor
- */
 var File = (function () {
 
     function File(project, content) {
@@ -34,12 +30,9 @@ var File = (function () {
             },
             save: function () {
                 if (project.getType() == ProjectType.USER_PROJECT) {
-                    fileProvider.saveFile(publicId, instance, function () {
-                        originalText = text;
-                        instance.compareContent();
-                    });
+                    save()
                 } else {
-                    project.saveToLocalStorage();
+                    dumpToLocalStorage()
                 }
             },
             loadOriginal: function () {
@@ -58,11 +51,23 @@ var File = (function () {
             },
             onUnmodified: function () {
             },
+            deleteThis: function () {
+                project.deleteFile(publicId);
+                instance.onDeleted();
+            },
+            onDeleted: function () {
+
+            },
+
             getName: function () {
                 return name;
             },
-            setName: function (newName) {
+            rename: function (newName) {
+                newName = addKotlinExtension(newName);
                 name = newName;
+                instance.onRenamed(newName);
+            },
+            onRenamed: function (newName) {
             },
             isModifiable: function () {
                 return modifiable;
@@ -72,6 +77,9 @@ var File = (function () {
             },
             setErrors: function (newErrors) {
                 errors = newErrors;
+            },
+            getProjectType: function () {
+                return project.getType();
             },
             getText: function () {
                 return text;
@@ -88,9 +96,6 @@ var File = (function () {
             },
             getChangesHistory: function () {
                 return changesHistory;
-            },
-            getProject: function () {
-                return project;
             }
         };
 
@@ -103,30 +108,54 @@ var File = (function () {
         var publicId = "";
         var changesHistory = null;
 
-        File.defaultFileContent = (function () {
-            return {
-                name: "",
-                content: "",
-                modifiable: true,
-                publicId: ""
-            };
-        })();
+        function save() {
+            fileProvider.saveFile(instance, function () {
+                originalText = text;
+                instance.compareContent();
+            });
+        }
+
+        function dumpToLocalStorage() {
+            localStorage.setItem(publicId, JSON.stringify({
+                name: name,
+                originalText: originalText,
+                text: text,
+                publicId: publicId,
+                modifiable: modifiable,
+                type: type
+            }))
+        }
 
         function setFileData(data) {
             if (data != null) {
                 name = data.name;
-                text = originalText = data.content;
+                text = data.text;
+                originalText = data.originalText == null ? text : data.originalText;
                 modifiable = data.modifiable;
                 publicId = data.publicId;
+                type = data.type;
                 changesHistory = null;
             }
         }
 
         setFileData(content);
 
-
         return instance;
     }
+
+    File.EmptyFile = function (project, name, publicId) {
+        name = addKotlinExtension(name);
+        return new File(project, {
+            name: name,
+            text: "",
+            modifiable: true,
+            publicId: publicId
+        });
+    };
+
+    File.fromLocalStorage = function (project, publicId) {
+        return new File(project, JSON.parse(localStorage.getItem(publicId)));
+    };
 
     return File;
 })();

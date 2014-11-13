@@ -31,15 +31,14 @@ var HighlichtingProvider = (function () {
     function HighlightingFromServer(onSuccess, onFail) {
 
         var instance = {
-            getHighlighting: function (confType, project, callback) {
-                var confTypeString = Configuration.getStringFromType(confType);
-                getHighlighting(confTypeString, project, callback);
+            getHighlighting: function (project, callback) {
+                getHighlighting(project, callback);
             }
         };
 
         var isLoadingHighlighting = false;
 
-        function getHighlighting(confTypeString, project, callback) {
+        function getHighlighting(project, callback) {
             if (!isLoadingHighlighting) {
                 isLoadingHighlighting = true;
                 $.ajax({
@@ -59,7 +58,7 @@ var HighlichtingProvider = (function () {
                     },
                     dataType: "json",
                     type: "POST",
-                    data: {project: JSON.stringify(project), args: confTypeString},
+                    data: {project: JSON.stringify(project)},
                     timeout: 10000,
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingHighlighting = false;

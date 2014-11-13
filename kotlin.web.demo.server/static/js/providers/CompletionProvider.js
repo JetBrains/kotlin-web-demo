@@ -26,15 +26,14 @@ var CompletionProvider = (function () {
     function CompletionProvider(onSuccess, onFail) {
 
         var instance = {
-            getCompletion: function (confType, project, filename, cursorLine, cursorCh) {
-                var confTypeString = Configuration.getStringFromType(confType);
-                getCompletion(confTypeString, project, filename, cursorLine, cursorCh);
+            getCompletion: function (project, filename, cursorLine, cursorCh) {
+                getCompletion(project, filename, cursorLine, cursorCh);
             }
         };
 
         var isLoadingCompletion = false;
 
-        function getCompletion(confTypeString, project, filename, cursorLine, cursorCh) {
+        function getCompletion(project, filename, cursorLine, cursorCh) {
             if (!isLoadingCompletion) {
                 isLoadingCompletion = true;
                 $.ajax({
@@ -56,7 +55,6 @@ var CompletionProvider = (function () {
                     timeout: 10000,
                     type: "POST",
                     data: {
-                        runConf: confTypeString,
                         project: JSON.stringify(project),
                         filename: filename,
                         line: cursorLine,

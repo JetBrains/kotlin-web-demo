@@ -129,7 +129,7 @@ var converterProvider = (function () {
 
 var highlightingProvider = (function () {
     function onSuccess(data, callback) {
-        accordion.getSelectedProject().processHighlightingResult(data);
+        accordion.getSelectedProject().setErrors(data);
         problemsView.addMessages(data);
 
         var noOfErrorsAndWarnings = 0;
@@ -168,7 +168,7 @@ var completionProvider = (function () {
 configurationManager.onChange = function (configuration) {
     editor.setConfiguration(configuration);
     consoleView.setConfiguration(configuration);
-    accordion.getSelectedProject().getProjectData().setConfiguration(Configuration.getStringFromType(configuration.type));
+    accordion.getSelectedProject().setConfiguration(Configuration.getStringFromType(configuration.type));
 };
 
 configurationManager.onFail = function (exception) {
@@ -179,26 +179,29 @@ configurationManager.onFail = function (exception) {
 var converterView = new ConverterView($("#java2kotlin"), converterProvider);
 var argumentsInput = document.getElementById("arguments");
 argumentsInput.oninput = function () {
-    accordion.getSelectedProject().getProjectData().setArguments(argumentsInput.value);
+    accordion.getSelectedProject().setArguments(argumentsInput.value);
 };
 
 var accordion = (function () {
     var accordion = new AccordionView(document.getElementById("examples-list"));
 
-    accordion.onProjectSelected = function (projectView) {
-        argumentsInput.value = projectView.getProjectData().args;
-        configurationManager.updateConfiguration(projectView.getProjectData().confType);
-        helpDialogView.updateProjectHelp(projectView.getProjectData().help);
+    accordion.onProjectSelected = function (project) {
+        argumentsInput.value = project.getArgs();
+        configurationManager.updateConfiguration(project.getConfiguration());
+        helpDialogView.updateProjectHelp(project.getHelp());
+        problemsView.onProjectChange();
     };
 
     accordion.onSelectFile = function (previousFile, currentFile) {
-        if (currentFile.getProject().getType() == ProjectType.EXAMPLE) {
+        if (previousFile != null) previousFile.save();
+
+        if (currentFile.getProjectType() == ProjectType.EXAMPLE) {
             history.replaceState("", "", "?" + currentFile.getPublicId());
         } else {
             history.replaceState("", "", "?id=" + currentFile.getPublicId());
         }
 
-        if (previousFile != null) previousFile.save();
+
         editor.closeFile();
         editor.open(currentFile);
         currentFile.compareContent();
@@ -223,6 +226,10 @@ var accordion = (function () {
 
     accordion.onUnmodifiedSelectedFile = function () {
         projectActionsView.setStatus("default");
+    };
+
+    accordion.onSelectedFileDeleted = function () {
+        editor.closeFile();
     };
 
     return accordion
@@ -258,15 +265,15 @@ var run_button = $("#runButton")
     .click(function () {
         run_button.button("option", "disabled", true);
         var localConfiguration = configurationManager.getConfiguration();
-        highlightingProvider.getHighlighting(localConfiguration.type, accordion.getSelectedProject().getModifiableContent(), function (highlightingResult) {
+        highlightingProvider.getHighlighting(accordion.getSelectedProject(), function (highlightingResult) {
             var example = accordion.getSelectedProject();
-            example.processHighlightingResult(highlightingResult);
-            if (!example.getProjectData().hasErrors()) {
+            example.setErrors(highlightingResult);
+            if (!example.hasErrors()) {
                 //Create canvas element before run it in browser
                 if (localConfiguration.type == Configuration.type.CANVAS) {
                     canvasDialog.dialog("open");
                 }
-                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject().getModifiableContent(), accordion.getSelectedProject());
+                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject(), accordion.getSelectedProject());
             } else {
                 run_button.button("option", "disabled", false);
             }
@@ -285,6 +292,7 @@ loginProvider.onLogin = function (data) {
 };
 
 loginProvider.onLogout = function () {
+    accordion.getSelectedFile().save();
     accordion.getSelectedProject().save();
     loginView.logout();
     statusBarView.setStatus(ActionStatusMessages.logout_ok);
@@ -412,6 +420,7 @@ function getSessionIdSuccess(data) {
 
 var saveButton = $("#saveButton").click(function () {
     if (accordion.getSelectedProject().getType() == ProjectType.USER_PROJECT) {
+        accordion.getSelectedFile().save();
         accordion.getSelectedProject().save();
     } else {
         accordion.getSelectedProject().saveAs();
@@ -431,6 +440,8 @@ function loadShortcuts() {
 window.onbeforeunload = function () {
     accordion.onBeforeUnload();
     localStorage.setItem("openedItemId", accordion.getSelectedProject().getPublicId());
+
+    accordion.getSelectedFile().save();
     accordion.getSelectedProject().save();
     editor.save();
 

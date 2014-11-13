@@ -28,7 +28,7 @@ public class ProjectFile {
 
     private Boolean modifiable;
     private String publicId;
-    private String content;
+    private String text;
     private String name;
     private String type;
 
@@ -39,22 +39,22 @@ public class ProjectFile {
      * reflection when we using it to deserialize user project
      *
      * @param name    - File name
-     * @param content - File content
+     * @param text - File content
      */
     @JsonCreator
     public ProjectFile(@JsonProperty("name") String name,
-                       @JsonProperty("text") String content,
+                       @JsonProperty("text") String text,
                        @JsonProperty("publicId") String publicId) {
         this.name = name;
-        this.content = content;
+        this.text = text;
         this.publicId = publicId;
         this.modifiable = true;
     }
 
 
-    public ProjectFile(String name, String content, boolean modifiable, String publicId) {
+    public ProjectFile(String name, String text, boolean modifiable, String publicId) {
         this.name = name;
-        this.content = content;
+        this.text = text;
         this.modifiable = modifiable;
         this.publicId = publicId;
         this.type = "Kotlin";
@@ -66,8 +66,8 @@ public class ProjectFile {
         return modifiable;
     }
 
-    public String getContent() {
-        return content;
+    public String getText() {
+        return text;
     }
 
     public String getName() {

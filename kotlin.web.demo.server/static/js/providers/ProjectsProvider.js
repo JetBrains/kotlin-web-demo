@@ -30,8 +30,8 @@ var ProjectProvider = (function () {
                     loadProject(publicId, callback);
                 }
             },
-            renameProject: function (publicId, callback, newName) {
-                renameProject(publicId, callback, newName);
+            renameProject: function (project, newName) {
+                renameProject(project, newName);
             },
             deleteProject: function (id, type, callback) {
                 if (type == ProjectType.USER_PROJECT) {
@@ -48,8 +48,8 @@ var ProjectProvider = (function () {
             forkProject: function (content, callback, name) {
                 forkProject(content, callback, name)
             },
-            saveProject: function (content, publicId, callback) {
-                saveProject(content, publicId);
+            saveProject: function (project, publicId, callback) {
+                saveProject(project, publicId, callback);
             },
             onProjectLoaded: function (projectContent) {
             },
@@ -77,15 +77,15 @@ var ProjectProvider = (function () {
         };
 
 
-        function renameProject(publicId, callback, newName) {
+        function renameProject(project, newName) {
             $.ajax({
                 url: generateAjaxUrl("renameProject"),
                 success: function () {
                     instance.onProjectRenamed(newName);
-                    callback(newName);
+                    project.rename(newName);
                 },
                 type: "POST",
-                data: {publicId: publicId, newName: newName},
+                data: {publicId: project.getPublicId(), newName: newName},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
@@ -213,7 +213,7 @@ var ProjectProvider = (function () {
             })
         }
 
-        function saveProject(content, publicId) {
+        function saveProject(project, publicId, callback) {
             $.ajax({
                 url: generateAjaxUrl("saveProject"),
                 type: "POST",
@@ -222,7 +222,7 @@ var ProjectProvider = (function () {
                     callback();
                 },
                 timeout: 10000,
-                data: {project: JSON.stringify(content), publicId: publicId},
+                data: {project: JSON.stringify(project, publicId), publicId: publicId},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }

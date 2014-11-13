@@ -52,37 +52,25 @@ var AccordionView = (function () {
                 ;
             },
             addNewProject: function (name, publicId, fileId, /*Nullable*/ content) {
-                addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT});
-
-                if (content == null) {
-                    content = {
-                        name: name,
-                        parent: "My Program",
-                        args: "",
-                        confType: "java",
-                        help: "",
-                        files: [
-                            {name: addKotlinExtension(name), content: "", modifiable: true, publicId: fileId}
-                        ]
-                    };
-                }
-
-                projects[publicId].createProject(content);
+                addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT})
+                projects[publicId].getProjectData().setDefaultContent();
                 selectProject(publicId);
+                projects[publicId].getProjectData().addEmptyFile(name, publicId);
             },
             onLogout: function () {
                 localStorage.setItem("openedItemId", instance.getSelectedProject().getPublicId());
                 projects = {};
-                selectedProject = null;
+                selectedProjectView = null;
                 instance.loadAllContent();
             },
             getSelectedProject: function () {
-                return selectedProject;
+                return selectedProjectView.getProjectData();
             },
             validateNewProjectName: function (projectName) {
                 for (var url in projects) {
-                    if (projects[url].getName() == projectName &&
-                        projects[url].getType() == ProjectType.USER_PROJECT) {
+                    var project = projects[url].getProjectData();
+                    if (project.getName() == projectName &&
+                        project.getType() == ProjectType.USER_PROJECT) {
                         return {valid: false, message: "Project with that name already exists"};
                     }
                 }
@@ -105,7 +93,7 @@ var AccordionView = (function () {
             },
             selectFile: function (fileView) {
                 if (!(selectedFileView == fileView)) {
-                    if (selectedProject == fileView.getProjectView()) {
+                    if (selectedProjectView == fileView.getProjectView()) {
                         var previousFileView = selectedFileView;
                         selectedFileView = fileView;
 
@@ -123,6 +111,9 @@ var AccordionView = (function () {
                 }
             },
             onSelectFile: function (previousFile, currentFile) {
+            },
+            onSelectedFileDeleted: function () {
+
             },
             onUnmodifiedSelectedFile: function () {
             },
@@ -143,7 +134,7 @@ var AccordionView = (function () {
 //        var programsView = new ProgramsView(programsModel);
 
         var projects = {};
-        var selectedProject = null;
+        var selectedProjectView = null;
         var selectedFileView = null;
 
         var myProgramsContentElement;
@@ -179,7 +170,7 @@ var AccordionView = (function () {
                     selectProject(openedItemId);
                     if (localStorage.getItem("incompleteAction") == "save") {
                         localStorage.removeItem("incompleteAction");
-                        selectedProject.saveAs();
+                        selectedProjectView.saveAs();
                     }
                 } else {
                     $(element).accordion('option', 'active', 0);
@@ -209,8 +200,8 @@ var AccordionView = (function () {
             var projectView = new ProjectView(header, projectContentElement, projectHeaderElement);
             projectView.onHeaderClick = selectProject;
             projectView.onDelete = function () {
-                if (selectedProject == projects[header.publicId]) {
-                    selectedProject = null;
+                if (selectedProjectView == projects[header.publicId]) {
+                    selectedProjectView = null;
                     history.replaceState({}, "", "index.html");
                     if (myProgramsContentElement.firstElementChild == null || myProgramsContentElement.firstElementChild.id == "add_new_project") {
                         loadFirstItem();
@@ -220,7 +211,9 @@ var AccordionView = (function () {
                 }
                 delete projects[header.publicId];
             };
-            projectView.onSelected = instance.onProjectSelected;
+            projectView.onSelected = function () {
+                instance.onProjectSelected(this.getProjectData());
+            };
 
             projects[header.publicId] = projectView;
         }
@@ -275,11 +268,12 @@ var AccordionView = (function () {
         }
 
         function selectProject(publicId) {
-            if (selectedProject != null) {
-                selectedProject.deselect();
+            if (selectedProjectView != null) {
+                $(selectedProjectView.getHeaderElement()).removeClass("selected");
+                $(selectedProjectView.getContentElement()).slideUp();
             }
-            selectedProject = projects[publicId];
-            selectedProject.select();
+            selectedProjectView = projects[publicId];
+            selectedProjectView.select();
         }
 
         return instance;

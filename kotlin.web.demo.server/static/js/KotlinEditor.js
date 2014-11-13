@@ -157,9 +157,15 @@ var KotlinEditor = (function () {
                             }
                         }
                         if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
-                            my_editor.replaceRange(str, {line: cur.line, ch: token.end}, {line: cur.line, ch: token.end});
+                            my_editor.replaceRange(str, {line: cur.line, ch: token.end}, {
+                                line: cur.line,
+                                ch: token.end
+                            });
                         } else {
-                            my_editor.replaceRange(str, {line: cur.line, ch: token.start}, {line: cur.line, ch: token.end});
+                            my_editor.replaceRange(str, {line: cur.line, ch: token.start}, {
+                                line: cur.line,
+                                ch: token.end
+                            });
                         }
                     }
                 }
@@ -451,8 +457,7 @@ var KotlinEditor = (function () {
             mode: "text/kotlin",
             extraKeys: {
                 "Ctrl-Space": function () {
-                    instance.save();
-                    completionProvider.getCompletion(configuration.type, accordion.getSelectedProject().getModifiableContent(), openedFile.getName(),
+                    completionProvider.getCompletion(accordion.getSelectedProject(), openedFile.getName(),
                         my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
                 }
 
@@ -464,14 +469,15 @@ var KotlinEditor = (function () {
         my_editor.on("change", function () {
             if (openedFile != null) {
                 openedFile.setText(my_editor.getValue());
+                if (timer) {
+                    clearTimeout(timer);
+                    timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
+                }
+                else {
+                    timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
+                }
             }
-            if (timer) {
-                clearTimeout(timer);
-                timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
-            }
-            else {
-                timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);
-            }
+
         });
 
         my_editor.on("cursorActivity", function (codemirror) {
@@ -483,13 +489,9 @@ var KotlinEditor = (function () {
 
 
         function getHighlighting() {
-            if (configuration.mode.name == Configuration.mode.ONRUN.name) {
+            if (configuration.mode.name == Configuration.mode.ONRUN.name && openedFile != null) {
                 var example = accordion.getSelectedProject();
-                highlightingProvider.getHighlighting(
-                    configuration.type,
-                    example.getModifiableContent(),
-                    highlighting.updateHighlighting
-                );
+                highlightingProvider.getHighlighting(example, highlighting.updateHighlighting);
             }
 
         }

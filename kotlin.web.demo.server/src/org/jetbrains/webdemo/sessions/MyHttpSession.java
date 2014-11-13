@@ -375,7 +375,7 @@ public class MyHttpSession {
         List<PsiFile> result = new ArrayList<>();
         currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
         for (ProjectFile file : example.files) {
-            result.add(JetPsiFactoryUtil.createFile(currentProject, file.getName(), file.getContent()));
+            result.add(JetPsiFactoryUtil.createFile(currentProject, file.getName(), file.getText()));
         }
         return result;
     }
@@ -385,13 +385,13 @@ public class MyHttpSession {
             String fileName = parameters.get("filename")[0];
             int line = Integer.parseInt(parameters.get("line")[0]);
             int ch = Integer.parseInt(parameters.get("ch")[0]);
-            Project example = objectMapper.readValue(parameters.get("project")[0], Project.class);
-            if (example.originUrl != null) {
-                addUnmodifiableDataToExample(example, example.originUrl);
+            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            if (project.originUrl != null) {
+                addUnmodifiableDataToExample(project, project.originUrl);
             }
 
-            List<PsiFile> psiFiles = createProjectPsiFiles(example);
-            sessionInfo.setRunConfiguration(parameters.get("runConf")[0]);
+            List<PsiFile> psiFiles = createProjectPsiFiles(project);
+            sessionInfo.setRunConfiguration(project.confType);
 
             JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(psiFiles, sessionInfo, fileName, line, ch);
             writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);

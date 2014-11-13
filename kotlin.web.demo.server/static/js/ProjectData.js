@@ -19,31 +19,28 @@
  */
 var ProjectData = (function () {
 
-    function ProjectData(type, publicId, /*nullable*/ content) {
+    function ProjectData(type, publicId, name) {
         var instance = {
-            name: "",
-            files: [],
-            args: "",
-            confType: "java",
-            originUrl: null,
-            parent: "",
-            help: "",
-            getModifiableContent: function () {
+            toJSON: function () {
                 return {
-                    name: instance.name,
-                    parent: instance.parent,
-                    args: instance.args,
-                    confType: instance.confType,
-                    originUrl: instance.originUrl,
-                    files: instance.files.filter(function (file) {
+                    name: name,
+                    parent: parent,
+                    args: args,
+                    confType: confType,
+                    originUrl: originUrl,
+                    files: files.filter(function (file) {
                         return file.isModifiable();
                     })
                 };
             },
-            processHighlightingResult: function (errors) {
-                for (var i = 0; i < instance.files.length; i++) {
-                    instance.files[i].setErrors(errors[instance.files[i].getName()]);
-                }
+            isContentLoaded: function () {
+                return contentLoaded
+            },
+            rename: function (newName) {
+                name = newName;
+                instance.onRenamed(newName);
+            },
+            onRenamed: function (newName) {
             },
             hasErrors: function () {
                 for (var i = 0; i < instance.files.length; i++) {
@@ -56,35 +53,151 @@ var ProjectData = (function () {
                 }
                 return false;
             },
-            getType: function () {
-                return type
+            save: function () {
+                if (instance.getType() == ProjectType.USER_PROJECT) {
+                    save();
+                } else {
+                    dumpToLocalStorage();
+                }
+            },
+            onChange: function () {
+
+            },
+            loadContent: function () {
+                if (localStorage.getItem(publicId) != null) {
+                    var content = JSON.parse(localStorage.getItem(publicId));
+                    for (var i = 0; i < content.files.length; ++i) {
+                        content.files[i] = File.fromLocalStorage(instance, content.files[i]);
+                    }
+                    onContentLoaded(content)
+                } else {
+                    projectProvider.loadProject(publicId, type, function (content) {
+                        for (var i = 0; i < content.files.length; ++i) {
+                            content.files[i] = new File(instance, content.files[i]);
+                        }
+                        onContentLoaded(content);
+                    });
+                }
+            },
+            onContentLoaded: function (files) {
+            },
+            addEmptyFile: function (name, publicId) {
+                var file = File.EmptyFile(instance, name, publicId);
+                files.push(file);
+                instance.onFileAdded(file);
+            },
+            onFileAdded: function () {
+            },
+            deleteFile: function (publicId) {
+                files = files.filter(function (element) {
+                    return element.getPublicId() != publicId;
+                });
+            },
+            onFileDeleted: function (publicId) {
+
+            },
+
+            setDefaultContent: function () {
+                if (contentLoaded) {
+                    files = [];
+                    contentLoaded = false;
+                    args = "";
+                    confType = "java";
+                    originUrl = null;
+                    parent = "My programs";
+                    help = "";
+                } else {
+                    contentLoaded = true;
+                }
+            },
+
+            getName: function () {
+                return name;
+            },
+            getArgs: function () {
+                return args;
             },
             setArguments: function (args) {
                 instance.args = args;
                 instance.onChange();
             },
+            getPublicId: function () {
+                return publicId
+            },
+            getType: function () {
+                return type
+            },
+            getFiles: function () {
+                return files
+            },
+            getConfiguration: function () {
+                return confType;
+            },
             setConfiguration: function (confType) {
                 instance.confType = confType;
                 instance.onChange();
             },
-            saveToLocalStorage: function () {
-                if (type == ProjectType.USER_PROJECT) throw "User project shouldn't be saved in local storage";
-                localStorage.setItem(publicId, JSON.stringify(instance));
+            getHelp: function () {
+                return help;
             },
-            onChange: function () {
-
+            setErrors: function (errors) {
+                for (var i = 0; i < files.length; i++) {
+                    files[i].setErrors(errors[files[i].getName()]);
+                }
             }
         };
 
-        if (content != null) {
-            var originUrl = content.originUrl;
-            instance.name = content.name;
-            instance.confType = content.confType;
-            instance.parent = content.parent;
-            instance.help = content.help;
+        var files = [];
+        var contentLoaded = false;
+        var args = "";
+        var confType = "java";
+        var originUrl = null;
+        var parent = "My programs";
+        var help = "";
+        var modified = false;
+
+        function save() {
+            if (type != ProjectType.USER_PROJECT) throw "You can't save non-user projects";
+
+            projectProvider.saveProject(instance, publicId, function () {
+                modified = false;
+            })
         }
+
+        function dumpToLocalStorage() {
+            if (type == ProjectType.USER_PROJECT) throw "User project shouldn't be saved in local storage";
+            var fileIDs = [];
+            for (var i = 0; i < files.length; ++i) {
+                fileIDs.push(files.getPublicId());
+            }
+            localStorage.setItem(publicId, JSON.stringify({
+                name: name,
+                files: fileIDs,
+                args: args,
+                confType: confType,
+                originUrl: originUrl,
+                parent: parent,
+                help: help,
+                type: type,
+                publicId: publicId
+            }));
+        }
+
+        function onContentLoaded(content) {
+            contentLoaded = true;
+            originUrl = content.originUrl;
+            args = content.args;
+            name = content.name;
+            confType = content.confType;
+            parent = content.parent;
+            help = content.help;
+            files = content.files;
+            instance.onContentLoaded(files);
+        }
+
         return instance;
     }
 
     return ProjectData;
 })();
+

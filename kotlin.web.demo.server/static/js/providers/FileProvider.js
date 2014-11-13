@@ -18,8 +18,8 @@ var FileProvider = (function () {
 
     function FileProvider() {
         var instance = {
-            addNewFile: function (publicId, callback, fileName) {
-                addNewFile(publicId, callback, fileName);
+            addNewFile: function (project, fileName) {
+                addNewFile(project, fileName);
             },
             renameFile: function (publicId, callback, newName) {
                 renameFile(publicId, callback, newName);
@@ -48,7 +48,7 @@ var FileProvider = (function () {
         };
 
         function loadOriginalFile(file, callback) {
-            if (file.getProject().getType() == ProjectType.EXAMPLE) {
+            if (file.getProjectType() == ProjectType.EXAMPLE) {
                 $.ajax({
                     url: generateAjaxUrl("loadExampleFile"),
                     success: function (data) {
@@ -68,17 +68,17 @@ var FileProvider = (function () {
             }
         }
 
-        function addNewFile(projectPublicId, callback, filename) {
+        function addNewFile(project, filename) {
             filename = addKotlinExtension(filename);
             $.ajax({
                 url: generateAjaxUrl("addFile"),
                 success: function (publicId) {
                     instance.onNewFileAdded(filename);
-                    callback(publicId, filename);
+                    project.addEmptyFile(filename, publicId);
                 },
                 type: "POST",
                 timeout: 10000,
-                data: {publicId: projectPublicId, filename: filename},
+                data: {publicId: project.getPublicId(), filename: filename},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }

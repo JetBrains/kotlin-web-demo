@@ -203,3 +203,17 @@
     margin-right: 3px;
     background: url("/static/images/icons.png") no-repeat -48px -39px;
 }
+
+.new-file-button {
+    display: none;
+    float: right;
+    width: 13px;
+    height: 12px;
+    margin-top: 2px;
+    margin-right: 2px;
+    background: url("/static/images/icons.png") no-repeat -64px -39px;
+}
+
+.examples-project-name.selected .new-file-button {
+    display: block;
+}

@@ -36,28 +36,31 @@ var FileView = (function () {
                 return headerElement;
             },
             fireSelectEvent: function () {
+                projectView.setSelectedFileView(instance);
                 accordion.selectFile(instance);
-            },
-            onDelete: function (publicId) {
-
             }
         };
 
         var fileNameElement;
-//        var file = new File(projectView.getProjectData(), fileData);
         file.onModified = function () {
             $(headerElement).addClass("modified");
-            if (accordion.getSelectedFile() == file) {
+            if (isSelected()) {
                 accordion.onModifiedSelectedFile();
             }
         };
         file.onUnmodified = function () {
             $(headerElement).removeClass("modified");
-            if (accordion.getSelectedFile() == file) {
+            if (isSelected()) {
                 accordion.onUnmodifiedSelectedFile();
             }
         };
-        var selected = false;
+        file.onDeleted = function () {
+            if (isSelected()) {
+                accordion.onSelectedFileDeleted();
+            }
+            headerElement.parentNode.removeChild(headerElement);
+        };
+
         var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
         renameFileDialog.validate = function (newName) {
             if (removeKotlinExtension(file.getName()) == newName) {
@@ -66,9 +69,9 @@ var FileView = (function () {
                 return projectView.validateNewFileName(newName);
             }
         };
+
+
         init();
-
-
         function init() {
             headerElement.className = "example-filename";
 
@@ -91,11 +94,10 @@ var FileView = (function () {
                 renameImg.className = "rename-img";
                 renameImg.title = "Rename file";
                 renameImg.onclick = function (event) {
-                    var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), function (newName) {
-                        newName = addKotlinExtension(newName);
-                        file.setName(newName);
+                    var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), file.rename)
+                    file.onRenamed = function (newName) {
                         fileNameElement.innerHTML = newName;
-                    });
+                    };
                     renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.getName()));
 
                     event.stopPropagation();
@@ -107,11 +109,7 @@ var FileView = (function () {
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
                     if (confirm("Delete file " + file.getName())) {
-                        fileProvider.deleteFile(file.getPublicId(), function () {
-                            editor.closeFile();
-                            headerElement.parentNode.removeChild(headerElement);
-                            instance.onDelete(file.getPublicId());
-                        });
+                        fileProvider.deleteFile(file.getPublicId(), file.deleteThis);
                     }
                     event.stopPropagation();
                 };
@@ -120,6 +118,10 @@ var FileView = (function () {
             }
 
             headerElement.onclick = instance.fireSelectEvent;
+        }
+
+        function isSelected() {
+            return accordion.getSelectedFile() == file;
         }
 
         return instance;

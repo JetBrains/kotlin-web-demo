@@ -253,7 +253,7 @@ public class MySqlConnector {
                 "users ON projects.owner_id = users.id SET" +
                 " files.content = ? WHERE" +
                 " users.client_id = ? AND users.provider = ? AND files.public_id = ?  ")) {
-            st.setString(1, file.getContent());
+            st.setString(1, file.getText());
             st.setString(2, userInfo.getId());
             st.setString(3, userInfo.getType());
             st.setString(4, file.getPublicId());
@@ -358,7 +358,7 @@ public class MySqlConnector {
 
             int projectId = getProjectId(userInfo, publicId);
             for (ProjectFile file : project.files) {
-                addFileToProject(userInfo, projectId, file.getName(), file.getContent());
+                addFileToProject(userInfo, projectId, file.getName(), file.getText());
             }
 
             return publicId;
