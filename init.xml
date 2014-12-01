@@ -18,6 +18,7 @@
         <delete includeemptydirs="true">
             <fileset dir="apache-tomcat/webapps" includes="**/*"/>
         </delete>
+        <chmod file="${tomcat.home}/bin/catalina.sh" perm="777"/>
         <antcall target="getMySQLConnector"/>
     </target>
 
