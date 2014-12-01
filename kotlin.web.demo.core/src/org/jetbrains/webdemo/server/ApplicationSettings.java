@@ -30,15 +30,21 @@ public class ApplicationSettings {
     public static String LOGS_DIRECTORY = "logs";
     public static String STATISTICS_DIRECTORY = "statistics";
     public static String LIBS_DIR = "";
-    public static String HELP_FOR_EXAMPLES = "helpExamples.xml";
     public static String HELP_FOR_WORDS = "helpWords.xml";
     public static String KOTLIN_LIB = "";
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
     public static String KOTLIN_VERSION = "0.9.91";
-    public static String RT_JAR = "";
+    public static OauthCredentials GOOGLE_OAUTH_CREDENTIALS = new OauthCredentials();
+    public static OauthCredentials FACEBOOK_OAUTH_CREDENTIALS = new OauthCredentials();
+    public static OauthCredentials TWITTER_OAUTH_CREDENTIALS = new OauthCredentials();
 
     private ApplicationSettings() {
 
+    }
+
+    public static class OauthCredentials {
+        public String KEY = "";
+        public String SECRET = "";
     }
 
 

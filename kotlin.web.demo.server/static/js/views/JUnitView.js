@@ -20,290 +20,204 @@
 
 
 var JUnitView = (function () {
-    var console;
     var statistic;
+    var statisticText;
     var navTree;
 
     function JUnitView(element, tabs) {
 
         var instance = {
             setOutput: function (data) {
-                element.empty();
+                consoleOutputView.appendTo(document.body);
+                element.innerHTML = "";
+
                 tabs.tabs("option", "active", 1);
                 navTree = document.createElement("div");
                 navTree.id = "test-tree-div";
-                element.append(navTree);
-
-
-                console = document.createElement("div");
-                console.id = "test-console";
-
-
+                element.appendChild(navTree);
                 statistic = document.createElement("div");
                 statistic.id = "unit-test-statistic";
-                console.appendChild(statistic);
+
+                statisticText = document.createElement("span");
+                statistic.appendChild(statisticText);
 
                 var wrapper = document.createElement("div");
                 wrapper.id = "test-wrapper";
+                element.appendChild(wrapper);
                 wrapper.appendChild(statistic);
-                wrapper.appendChild(console);
 
-                element.append(wrapper);
-                parseTestTree(data);
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].type != "info" && data[i].type != "toggle-info") {
+                        data[i].text = data[i].text.substring(0, data[i].text.length - "</br>".length); //remove endl in the end of output
+                        var testsResults = JSON.parse(unEscapeString(data[i].text));
+                        createTestTree(testsResults);
+                        createStatistics(testsResults);
+                    } else {
+                        generatedCodeView.setOutput(data[i]);
+                    }
+                }
+
+                consoleOutputView.appendTo(wrapper);
             }
         };
         return instance;
     }
 
-    function showTestTree(classes) {
+    var Status = {
+        OK: "OK",
+        FAIL: "FAIL",
+        ERROR: "ERROR"
+    };
 
-        var tree = document.createElement("div");
-        tree.id = "test-tree";
-        navTree.appendChild(tree);
-
-        for (var i = 0; i < classes.length; i++) {
-            var li = document.createElement("h3");
-            var img = document.createElement("div");
-            if (classes[i].status == "fail") {
-                img.className = "fail-img";
-            } else if (classes[i].status == "ok") {
-                img.className = "ok-img";
-            } else if (classes[i].status == "error") {
-                img.className = "error-img";
-            }
-
-            li.appendChild(img);
-            var className = document.createElement("div");
-            className.innerHTML = classes[i].name;
-            className.className = "header-text";
-            li.appendChild(className);
-            li.onclick = (function () {
-                var cl = classes[i];
-                var lines = [];
-                for (var j = 0; j < cl.tests.length; j++) {
-                    for (var k = 0; k < cl.tests[j].lines.length; k++) {
-                        lines.push(cl.tests[j].lines[k]);
-                        var p = document.createElement("p");
-                        p.innerHTML = cl.tests[j].lines[k];
-                        console.appendChild(p);
-                    }
-                }
-
-                function show() {
-                    console.innerHTML = "";
-
-                    console.innerHTML = "";
-                    if (cl.status == "fail") {
-                        statistic.innerHTML = "Fail (" + cl.time / 1000 + "s)";
-                    } else if (cl.status == "ok") {
-                        statistic.innerHTML = "Passed (" + cl.time / 1000 + "s)";
-                    } else if (cl.status == "error") {
-                        statistic.innerHTML = "Error (" + cl.time / 1000 + "s)";
-                    }
-
-                    var statusBar = document.createElement("div");
-                    statusBar.id = "test-status-bar";
-                    for (var i = 0; i < 20; i++) {
-                        var statusBarRect = document.createElement("div");
-                        if (cl.status == "ok") {
-                            statusBarRect.className = "status-bar-rect-ok"
-                        } else {
-                            statusBarRect.className = "status-bar-rect-fail"
-                        }
-                        statusBar.appendChild(statusBarRect);
-                    }
-                    statistic.appendChild(statusBar);
-
-                    for (var i = 0; i < lines.length; i++) {
-                        var p = document.createElement("p");
-                        p.innerHTML = lines[i];
-                        console.appendChild(p);
-                    }
-                }
-
-                return show;
-            })();
-
-            tree.appendChild(li);
-
-            var content = document.createElement("div");
-            tree.appendChild(content);
-
-            for (var j = 0; j < classes[i].tests.length; j++) {
-                var test = document.createElement("div");
-                test.className = "test-case";
-
-                img = document.createElement("div");
-                if (classes[i].tests[j].status == "fail") {
-                    img.className = "fail-img";
-                } else if (classes[i].tests[j].status == "ok") {
-                    img.className = "ok-img";
-                } else if (classes[i].tests[j].status == "error") {
-                    img.className = "error-img";
-                }
-
-                var testName = document.createElement("span");
-                testName.className = "test-name";
-                testName.innerHTML = classes[i].tests[j].name;
-                testName.onclick = (function () {
-                    var test = classes[i].tests[j];
-
-
-                    function show() {
-                        console.innerHTML = "";
-                        if (test.status == "fail") {
-                            statistic.innerHTML = "Fail (" + test.time / 1000 + "s)";
-                        } else if (test.status == "ok") {
-                            statistic.innerHTML = "Passed (" + test.time / 1000 + "s)";
-                        } else if (test.status == "error") {
-                            statistic.innerHTML = "Error (" + test.time / 1000 + "s)";
-                        }
-
-                        var statusBar = document.createElement("div");
-                        statusBar.id = "test-status-bar";
-                        for (var i = 0; i < 20; i++) {
-                            var statusBarRect = document.createElement("div");
-                            if (test.status == "ok") {
-                                statusBarRect.className = "status-bar-rect-ok"
-                            } else {
-                                statusBarRect.className = "status-bar-rect-fail"
-                            }
-                            statusBar.appendChild(statusBarRect);
-                        }
-                        statistic.appendChild(statusBar);
-
-                        for (var i = 0; i < test.lines.length; i++) {
-                            var p = document.createElement("p");
-                            p.innerHTML = lines[i];
-                            console.appendChild(p);
-                        }
-                    }
-
-                    return show;
-                })();
-
-                test.appendChild(img);
-                test.appendChild(testName);
-                content.appendChild(test);
-            }
-        }
-
-
-        $("#test-tree").accordion({ heightStyle: "content",
-            navigation: true
-        });
-    }
-
-    function getOrCreateClass(classes, classFullName) {
-        for (var i = 0; i < classes.length; i++) {
-            if (classes[i].fullName == classFullName) {
-                return classes[i];
-            }
-        }
-
-        var className = classFullName.substr(classFullName.lastIndexOf(".") + 1);
-        var cl = {fullName: classFullName,
-            name: className,
-            tests: [],
-            status: "ok"
-        };
-        classes.push(cl);
-        return cl;
-    }
-
-    function getOrCreateTest(tests, testName) {
-        for (var i = 0; i < tests.length; i++) {
-            if (tests[i].name == testName) {
-                return tests[i];
-            }
-        }
-        var test = {
-            name: testName,
-            lines: [],
-            time: -1,
-            status: "ok"
-        };
-        tests.push(test);
-        return test;
-    }
-
-    function parseTestTree(data) {
-        var testClasses = [];
-        for (var i = 0; i < data.length; i++) {
-            if (data[i].type != "info" && data[i].type != "toggle-info") {
-
-                var text = data[i].text.replace(/&amp;lt;/g, "").replace(/&amp;gt;/g, "").split("<br/>");
-                var startRegExp = /@(.*) started@/;
-
-                var j = 0;
-                if (text[j].match(startRegExp) != null) {
-                    var className = text[0].match(startRegExp)[1];
-                    j = j + 1;
-                    var start = j;
-
-                    while (text[j] != "@" + className + " finished@") {
-                        j = j + 1;
-                    }
-                    var testClass = getOrCreateClass(testClasses, className);
-                    if(text[j-1].match(/@time: ([0-9]*)@/) != null) {
-                        testClass.time = text[j - 1].match(/@time: ([0-9]*)@/)[1];
-                        parseClassOutput(text.slice(start, j - 1), testClass);
-                    } else{
-                        parseClassOutput(text.slice(start, j), testClass);
-                    }
-                    j = j + 1;
-                }
-
-
-            } else {
-                generatedCodeView.setOutput(data[i]);
-            }
-
-        }
-        showTestTree(testClasses);
-    }
-
-    function parseClassOutput(text, testClass) {
+    function findCommonPackage(classNames) {
+        classNames = classNames.sort();
+        var firstPackage = classNames[0].split('.');
+        var lastPackage = classNames[classNames.length - 1].split('.');
         var j = 0;
-        var startRegExp = /@(.*) started@/;
-        while (j < text.length - 1) {
-            if (text[j].match(startRegExp) != null) {
-                var testHeader = text[j].match(startRegExp)[1];
-                var testNameFormat = /(.*)\((.*)\)/;
-                var test = getOrCreateTest(testClass.tests, testHeader.match(testNameFormat)[1]);
-                j++;
-
-                while (text[j] != "@" + testHeader + " finished@") {
-                    if (text[j] == "@" + testHeader + " failed@") {
-                        if (testClass.status != "error") {
-                            testClass.status = "fail";
-                        }
-                        test.status = "fail";
-                    } else if (text[j] == "@" + testHeader + " error@") {
-                        testClass.status = "error";
-                        test.status = "error";
-                    } else if (text[j].match(/@time: ([0-9]*)@/)) {
-                        test.time = text[j].match(/@time: ([0-9]*)@/)[1];
-                    } else {
-                        test.lines.push(text[j]);
-                    }
-                    j++;
-                }
-                j++;
-
-
-            } else {
-                var p = document.createElement("p");
-                p.innerHTML = text[j];
-                console.appendChild(p);
-                j++;
-            }
+        while (firstPackage.length > j && lastPackage.length > j && firstPackage[j] == lastPackage[j]) {
+            ++j;
         }
-        }
-
-
-        return JUnitView;
+        return firstPackage.slice(0, j);
     }
 
-    )
-    ();
+    function createTestTree(data) {
+        var testsData = {};
+        for (var i = 0; i < data.length; ++i) {
+            testsData[data[i].className + '.' + data[i].methodName] = {
+                output: data[i].output,
+                exception: data[i].exception
+            };
+        }
+
+        var classNames = [];
+        for (var i = 0; i < data.length; ++i) {
+            classNames.push(data[i].className);
+        }
+        var commonPackage = findCommonPackage(classNames);
+
+        var commonPackageFullName = "";
+        if (commonPackage.length > 0) {
+            commonPackageFullName = commonPackage[0];
+            for (var i = 1; i < commonPackage.length; ++i) {
+                commonPackageFullName += '.' + commonPackage[i];
+            }
+        } else {
+            commonPackageFullName = "<default package>"
+        }
+
+        var rootNode = {
+            children: [],
+            name: "",
+            icon: "ok",
+            id: commonPackageFullName
+        };
+        rootNode.name = commonPackage[commonPackage.length - 1];
+
+        if (commonPackageFullName == classNames[0]) {
+            for (var i = 0; i < data.length; ++i) {
+                var testNode = {
+                    children: [],
+                    name: data[i].methodName,
+                    icon: data[i].status.toLowerCase(),
+                    id: data[i].className + '.' + data[i].methodName
+                };
+                rootNode.children.push(testNode);
+                if (data[i].status == Status.ERROR) {
+                    rootNode.icon = "error";
+                } else if (data[i].status == Status.FAIL && rootNode.icon != "error") {
+                    rootNode.icon = "failed";
+                }
+            }
+        } else {
+
+        }
+
+        var tree = document.createElement("ul");
+        tree.id = "test-tree";
+        displayTreeNode(rootNode, tree);
+        $(tree).a11yTree({
+            toggleSelector: ".tree-node-header .toggle-arrow",
+            treeItemLabelSelector: '.tree-node-header .text',
+            onFocus: function (element, event) {
+                var testData = testsData[element[0].id];
+                if (testData != null) {
+                    consoleOutputView.clear();
+                    consoleOutputView.print(testsData[element[0].id].output);
+                    if (testData.exception != null && testData.exception.fullName != "java.lang.AssertionError") {
+                        consoleOutputView.printException(testData.exception);
+                    }
+                }
+            }
+        });
+        navTree.appendChild(tree);
+    }
+
+    function displayTreeNode(node, parentElement) {
+        var nodeElement = document.createElement("li");
+        nodeElement.className = "tree-node";
+        nodeElement.id = node.id;
+        parentElement.appendChild(nodeElement);
+
+        var nodeElementHeader = document.createElement("div");
+        nodeElementHeader.className = "tree-node-header";
+        nodeElement.appendChild(nodeElementHeader);
+
+        var img = document.createElement("div");
+        img.className = "img " + node.icon;
+        nodeElementHeader.appendChild(img);
+
+        var text = document.createElement("div");
+        text.className = "text";
+        text.innerHTML = node.name;
+        nodeElementHeader.appendChild(text);
+
+        if (node.children.length > 0) {
+            var toggle = document.createElement("div");
+            toggle.className = "toggle-arrow";
+            nodeElementHeader.insertBefore(toggle, nodeElementHeader.firstChild);
+
+            var childrenNode = document.createElement("ul");
+            for (var i = 0; i < node.children.length; ++i) {
+                displayTreeNode(node.children[i], childrenNode);
+            }
+            nodeElement.appendChild(childrenNode);
+        }
+    }
+
+    function createStatistics(data) {
+        var totalTime = 0.0;
+        var noOfFailedTest = 0;
+        for (var i = 0; i < data.length; ++i) {
+            totalTime += data[i].executionTime / 1000.0;
+            if (data[i].status == Status.FAIL || data[i].status == Status.ERROR) {
+                ++noOfFailedTest;
+            }
+        }
+        displayStatistic(data.length, noOfFailedTest, totalTime, null);
+    }
+
+    function displayStatistic(testsNumber, testsFailed, time, status) {
+        if (testsFailed == 0) {
+            statisticText.innerHTML = "All tests passed in " + time.toFixed(3) + "s)";
+        } else {
+            statisticText.innerHTML = "Failed: " + testsFailed + " of " + testsNumber + " (in " + time.toFixed(3) + "s)";
+        }
+
+        var testsStatusElement = document.createElement("div");
+        testsStatusElement.id = "tests-status-bar";
+        statistic.appendChild(testsStatusElement);
+
+        var backgroundElement = document.createElement("div");
+        backgroundElement.className = "background";
+        testsStatusElement.appendChild(backgroundElement);
+
+        if (status == Status.ERROR || status == Status.FAIL) {
+            backgroundElement.className += " fail";
+        } else {
+            backgroundElement.className += " ok";
+        }
+    }
+
+    return JUnitView;
+})
+();

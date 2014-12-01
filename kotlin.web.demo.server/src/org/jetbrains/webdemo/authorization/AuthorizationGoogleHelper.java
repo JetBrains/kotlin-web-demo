@@ -30,21 +30,18 @@ import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
 public class AuthorizationGoogleHelper extends AuthorizationHelper {
-    private final String TYPE = "google";
-
-    private static OAuthService googleService;
-
-    private static Token requestToken;
-
     private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
     private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
+    private static OAuthService googleService;
+    private static Token requestToken;
+    private final String TYPE = "google";
 
     public String authorize() {
         try {
             googleService = new ServiceBuilder()
                     .provider(GoogleApi.class)
-                    .apiKey("anonymous")
-                    .apiSecret("anonymous")
+                    .apiKey(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY)
+                    .apiSecret(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.SECRET)
                     .scope(SCOPE)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "google"))
                     .build();

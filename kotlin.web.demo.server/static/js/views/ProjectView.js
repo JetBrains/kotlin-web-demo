@@ -34,7 +34,6 @@ var ProjectView = (function () {
             },
             saveAs: function () {
                 if (loginView.isLoggedIn()) {
-                    saveProjectDialog.open(projectProvider.forkProject.bind(null, project, onProjectFork), header.name);
                     function onProjectFork(publicId, name) {
                         var newContent = copy(project);
                         newContent.name = name;
@@ -69,6 +68,13 @@ var ProjectView = (function () {
             },
             getType: function () {
                 return header.type;
+            },
+            getFileViewByName: function (name) {
+                for (var fileId in fileViews) {
+                    if (fileViews[fileId].getFile().getName() == name) {
+                        return fileViews[fileId];
+                    }
+                }
             },
             validateNewFileName: function (fileName) {
                 fileName = addKotlinExtension(fileName);
@@ -160,8 +166,7 @@ var ProjectView = (function () {
         };
         var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
         newFileDialog.validate = instance.validateNewFileName;
-        var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
-        saveProjectDialog.validate = accordion.validateNewProjectName;
+
 
         init();
         function init() {

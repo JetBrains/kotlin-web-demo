@@ -39,14 +39,12 @@ public class JavaRunner {
 
     private final BindingContext bindingContext;
     private final List<OutputFile> files;
-    private String arguments;
     private final ArrayNode jsonArray;
     private final JetFile currentFile;
-
     private final SessionInfo sessionInfo;
-
+    int returnValue = 0;
+    private String arguments;
     private volatile boolean isTimeoutException = false;
-
     private Project example;
 
     public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, SessionInfo info, Project example) {
@@ -249,8 +247,6 @@ public class JavaRunner {
         }
     }
 
-    int returnValue = 0;
-
     private int tryReadStreams(StringBuilder errStream, StringBuilder outStream, InputStream isOut, InputStream isErr) {
         StringWriter stringWriter = new StringWriter();
         int lengthOut = 0;
@@ -341,18 +337,23 @@ public class JavaRunner {
         builder.add("-classpath");
         String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB + File.pathSeparator + ApplicationSettings.WEBAPP_ROOT_DIRECTORY);
         if(sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)){
-            builder.add(classpath + File.pathSeparator + ApplicationSettings.LIBS_DIR +"junit.jar");
+            builder.add(classpath +
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "junit.jar" +
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-databind.jar" +
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-core.jar" +
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-annotations.jar");
             builder.add("JunitRunner");
             builder.addAll(Arrays.asList(example.testClasses));
         } else {
-            builder.add(classpath);
-            builder.add("-Djava.security.manager");
+            builder.add(classpath +
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-databind.jar" +
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-core.jar" +
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-annotations.jar");
+            builder.add("DefaultRunner");
             builder.add(findMainClass());
-        }
-
-
-        if (!arguments.isEmpty()) {
-            builder.addAll(argsArray);
+            if (!arguments.isEmpty()) {
+                builder.addAll(argsArray);
+            }
         }
         return builder.toArray(new String[builder.size()]);
 

@@ -20,21 +20,22 @@
     <link rel="Shortcut Icon" href="/static/images/favicon.ico" type="image/x-icon">
     <!--<link rel="stylesheet" href="/static/jquery/jquery-ui/jquery-ui-1.11.0.custom/jquery-ui.css">-->
 
-
     <link rel="stylesheet" href="/static/codemirror/lib/codemirror.css">
-    <link rel="stylesheet" href="/static/css/styles.css">
-
     <script src="/static/codemirror/lib/codemirror.js"></script>
+    <script src="/static/codemirror/addon/selection/active-line.js"></script>
     <script src="/static/codemirror/mode/clike/clike.js"></script>
     <script src="/static/codemirror/mode/clike/kotlin.js"></script>
+
     <script type="text/javascript" src="/static/jquery/jquery-1.11.1.js"></script>
-    <script type="text/javascript"
-            src="/static/jquery/jquery-ui/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
-    <link rel="stylesheet"
-          src="/static/jquery/jquery-ui/jquery-ui-1.11.2.custom/jquery-ui.css">
-    <script type="text/javascript"
-            src="/static/jquery/jquery-cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/static/jquery/jquery-ui/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
+    <!--<link rel="stylesheet" href="/static/jquery/jquery-ui/jquery-ui-1.11.2.custom/jquery-ui.css">-->
+    <script type="text/javascript" src="/static/jquery/jquery-cookie/jquery.cookie.js"></script>
+
+    <script type="text/javascript" src="/static/a11ytree/src/js/jquery.a11yTree.js"></script>
+
     <script type="text/javascript" src="/static/kotlin.js"></script>
+
+    <link rel="stylesheet" href="/static/css/styles.css">
 
 </head>
 <body>
@@ -158,14 +159,14 @@
                     </div>
                 </div>
                 <div id="result-tabs">
-                    <div id="console" class="tab-space"></div>
+                    <div id="program-output" class="tab-space"></div>
                     <div id="problems" class="tab-space"></div>
                     <div id="generated-code" class="tab-space"></div>
 
                     <div class="result-tabs-footer">
                         <ul class="result-tabs-buttons">
                             <li id="problems-tab" class="result-tab"><a href="#problems">Problems view</a></li>
-                            <li id="console-tab" class="result-tab"><a href="#console">Console</a></li>
+                            <li id="console-tab" class="result-tab"><a href="#program-output">Console</a></li>
                             <li id="generated-code-tab" class="result-tab"><a href="#generated-code"
                                                                               id="generated-code-link">Generated
                                 classfiles</a></li>
@@ -248,6 +249,7 @@
 <script src="/static/js/views/ConverterView.js"></script>
 <script src="/static/js/views/GeneratedCodeView.js"></script>
 <script src="/static/js/views/ConsoleView.js"></script>
+<script src="/static/js/views/ConsoleOutputView.js"></script>
 <script src="/static/js/views/HelpView.js"></script>
 <script src="/static/js/views/HelpDialogView.js"></script>
 <script src="/static/js/views/ProblemsView.js"></script>

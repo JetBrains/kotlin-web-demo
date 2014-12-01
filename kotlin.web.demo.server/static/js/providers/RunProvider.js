@@ -48,7 +48,11 @@ var RunProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            onSuccess(data);
+                            if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
+                                onSuccess(data);
+                            } else {
+                                onSuccess(data);
+                            }
                         } else {
                             onFail(data);
                         }

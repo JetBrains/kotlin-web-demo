@@ -16,9 +16,9 @@
 
 package org.jetbrains.webdemo.test.examples;
 
+import com.intellij.psi.PsiFile;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -28,10 +28,20 @@ import org.jetbrains.webdemo.test.TestUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class HighlightExamplesTest extends BaseTest {
 
     private static ArrayList<String> jsExamples = new ArrayList<String>();
+    private final File sourceFile;
+    private final String runConf;
+
+
+    public HighlightExamplesTest(File sourceFile, String runConf) {
+        super(sourceFile.getName());
+        this.sourceFile = sourceFile;
+        this.runConf = runConf;
+    }
 
     public static Test suite() {
         jsExamples.add("is-checks and smart casts.kt");
@@ -79,16 +89,6 @@ public class HighlightExamplesTest extends BaseTest {
         }
     }
 
-
-    private final File sourceFile;
-    private final String runConf;
-
-    public HighlightExamplesTest(File sourceFile, String runConf) {
-        super(sourceFile.getName());
-        this.sourceFile = sourceFile;
-        this.runConf = runConf;
-    }
-
     @Override
     protected void runTest() throws Throwable {
         compareResponseAndExpectedResult(sourceFile, runConf);
@@ -97,9 +97,9 @@ public class HighlightExamplesTest extends BaseTest {
     private void compareResponseAndExpectedResult(File file, String runConfiguration) throws IOException {
         String expectedResult = "[]";
         sessionInfo.setRunConfiguration(runConfiguration);
-        JetFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), TestUtils.getDataFromFile(file));
+        PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(file));
 
-        JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
+        JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(Collections.singletonList(currentPsiFile), sessionInfo, currentPsiFile.getProject());
         String actualResult = responseForHighlighting.getResult();
 
         assertEquals("Wrong result for example " + file.getName() + " run configuration: " + runConfiguration, expectedResult, actualResult);

@@ -22,28 +22,17 @@
  */
 
 var ConsoleView = (function () {
-
-    var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.type.JAVA);
-
-
     function ConsoleView(element, /*Nullable*/ tabs) {
 
         var JAVASCRIPT_CODE = "Generated JavaScript code";
 
         var instance = {
             setOutput: function (data) {
+                consoleOutputView.appendTo(document.body);
                 element.html("");
-                var scroll = document.createElement("div");
-                scroll.className = "scroll";
-                element.append(scroll);
+                consoleOutputView.appendTo(element);
 
-                var console = document.createElement("div");
-                console.className = "result-view";
-                scroll.appendChild(console);
                 setOutput(console, data);
-            },
-            setConfiguration: function (conf) {
-                configuration = conf;
             },
             writeException: function (data) {
                 element.html("");

@@ -28,25 +28,19 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.util.Map;
 
 public class AuthorizationTwitterHelper extends AuthorizationHelper {
-    private final String TYPE = "twitter";
-
+    private static final String PROTECTED_RESOURCE_URL = "http://api.twitter.com/1.1/account/verify_credentials.json";
     private static OAuthService twitterService;
     private static Token requestToken;
-    private static final String PROTECTED_RESOURCE_URL = "http://api.twitter.com/1.1/account/verify_credentials.json";
+    private final String TYPE = "twitter";
 
     public String authorize() {
         try {
             twitterService = new ServiceBuilder()
                     .provider(TwitterApi.class)
-                    .apiKey("g0dAeSZpnxTHxRKV2UZFGg")
-                    .apiSecret("NSfUf8o3BhyT96U6hcCarWIUEwz6Le4FY6Em7WBPtuw")
+                    .apiKey(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.KEY)
+                    .apiSecret(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.SECRET)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "twitter"))
                     .build();
             requestToken = twitterService.getRequestToken();

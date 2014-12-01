@@ -346,7 +346,6 @@ public class MyHttpSession {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
 
-
                 CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, sessionInfo, project);
                 writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
             } else {

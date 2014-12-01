@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.test.completion;
 
-import org.jetbrains.jet.lang.psi.JetFile;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -25,6 +25,7 @@ import org.jetbrains.webdemo.test.TestUtils;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class CompletionTest extends BaseTest {
 
@@ -76,9 +77,9 @@ public class CompletionTest extends BaseTest {
     private void compareResult(int start, int end, String expectedResult, String runConfiguration) throws IOException, JSONException {
         sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
         sessionInfo.setRunConfiguration(runConfiguration);
-        JetFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, "completion/root.kt"));
+        PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, "completion/root.kt"));
 
-        JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(start, end, currentPsiFile, sessionInfo);
+        JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(Collections.singletonList(currentPsiFile), sessionInfo, currentPsiFile.getName(), start, end);
         String actualResult = responseForCompletion.getResult();
         /*JSONArray expectedArray = new JSONArray(expectedResult);
         JSONArray actualArray = new JSONArray(actualResult);

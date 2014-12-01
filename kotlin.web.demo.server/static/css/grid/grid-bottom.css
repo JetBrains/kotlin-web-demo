@@ -49,10 +49,10 @@
 .tab-space {
     position: relative;
     cursor: default;
+    font-size: 12px;
     font-family: menlo, consolas, monospace;
     white-space: pre;
     height: 185px;
-    font-size: 12px;
     line-height: 1.4;
 }
 
@@ -71,6 +71,13 @@
 }
 
 .consoleViewError {
+    white-space: pre;
+    color: #ff0000 !important;
+    margin: 0;
+    vertical-align: top;
+}
+
+.error-output {
     white-space: pre;
     color: #ff0000 !important;
     margin: 0;
@@ -149,49 +156,67 @@
 
 #test-tree-div {
     overflow: auto;
+    font-size: 12px;
     float: left;
     width: 25%;
     height: 100%;
     border-right: 1px solid #969696;
+    box-sizing: border-box;
 }
 
 #test-wrapper {
-    margin-left: 26%;
+    margin-left: 25%;
     height: 100%;
 }
 
 #test-console {
+    font-size: 12px;
     overflow: auto;
     display: block;
     white-space: pre;
 }
 
-.status-bar-rect-ok, .status-bar-rect-fail {
-    height: 14px;
-    display: inline-block;
-    width: 5px;
-    border-radius: 1px;
-    margin-right: 1px;
-}
+/*.status-bar-rect-ok, .status-bar-rect-fail {*/
 
-.status-bar-rect-fail {
-    background-color: #ff0000;
-}
+/*display: inline-block;*/
+/*width: 6px;*/
+/*border-radius: 1px;*/
+/*margin-right: 1px;*/
+/*}*/
 
-.status-bar-rect-ok {
-    background-color: #00f000;
-}
+/*.status-bar-rect-fail {*/
+/*background: url("/static/images/icons.png") no-repeat -76px 0;*/
+/*}*/
 
-#test-status-bar {
+/*.status-bar-rect-ok {*/
+/*background: url("/static/images/icons.png") no-repeat -82px 0;*/
+/*}*/
+
+#tests-status-bar {
     float: right;
+    font-size: 0;
     padding: 1px;
     border: solid 1px #969696;
     border-radius: 3px;
+    width: 50%;
+}
+
+#tests-status-bar .background {
+    height: 11px;
+}
+
+#tests-status-bar .background.ok {
+    background: url("/static/images/testProgressBar.png") repeat-x 0 0;
+}
+
+#tests-status-bar .background.fail {
+    background: url("/static/images/testProgressBar.png") repeat-x -11px 0;
 }
 
 #unit-test-statistic {
     overflow: hidden;
-    border-bottom: 1px solid #000;
+    background-color: #e8e8e8;
+    padding: 3px 3px 3px 7px;
 }
 
 #test-tree .ui-accordion-header {
@@ -214,37 +239,89 @@
     padding-left: 30px;
 }
 
-.ok-img {
+.tree-node .img {
     position: relative;
-    top: 2px;
-    margin-left: 2px;
-    margin-right: 2px;
-    display: inline-block;
+    top: 1px;
     height: 14px;
     width: 14px;
-    background: url("/static/images/ok.png") no-repeat 0 0;
+    margin-left: 4px;
+    margin-right: 4px;
+    display: inline-block;
 }
 
-.fail-img {
-    position: relative;
-    top: 2px;
-    margin-left: 2px;
-    margin-right: 2px;
-    display: inline-block;
-    height: 14px;
-    width: 14px;
-    background: url("/static/images/fail.png") no-repeat 0 0;
+#test-tree {
+    outline: none;
 }
 
-.error-img {
+#test-tree-div ul {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+li[aria-level="2"] > .tree-node-header {
+    padding-left: 33px;
+}
+
+li[aria-level="3"] > .tree-node-header {
+    padding-left: 66px;
+}
+
+li[aria-selected="true"] > .tree-node-header {
+    background-color: #d8d8d8;
+}
+
+li[aria-expanded="false"] > ul {
+    display: none;
+}
+
+.tree-node-header {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    line-height: 1;
     position: relative;
-    top: 2px;
-    margin-left: 2px;
-    margin-right: 2px;
+}
+
+.tree-node-header .img.ok {
+    background: url("/static/images/testTabIcons.png") no-repeat -15px -9px;
+}
+
+.tree-node-header .img.fail {
+    background: url("/static/images/testTabIcons.png") no-repeat 0 -9px;
+}
+
+.tree-node-header .img.error {
+    background: url("/static/images/testTabIcons.png") no-repeat 0 -24px;
+}
+
+.tree-node-header .toggle-arrow {
     display: inline-block;
-    height: 14px;
-    width: 14px;
-    background: url("/static/images/testError.png") no-repeat 0 0;
+}
+
+li[aria-expanded="false"] .tree-node-header .toggle-arrow {
+    margin: 2px 4px 1px;
+    height: 9px;
+    width: 7px;
+    background: url("/static/images/testTabIcons.png") -10px 0;
+}
+
+li[aria-expanded="true"] .tree-node-header .toggle-arrow {
+    margin: 3px 3px 1px;
+    height: 7px;
+    width: 9px;
+    background: url("/static/images/testTabIcons.png");
+}
+
+.tree-node-header .text {
+    -webkit-user-select: none; /* Chrome/Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+    -o-user-select: none;
+    user-select: none;
+    display: inline-block;
+    position: relative;
+    bottom: 1px;
 }
 
 .kotlin-file-icon {

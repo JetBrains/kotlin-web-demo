@@ -38,11 +38,35 @@ actionManager.registerAction("org.jetbrains.web.demo.save",
         return e.keyCode == 83 && e.metaKey;
     }));
 
+var incompleteActionManager = new ActionManager();
+incompleteActionManager.registerAction("save", "onHeadersLoaded", function () {
+
+});
+
 var editor = new KotlinEditor();
+
+/**
+ * @const
+ */
 var statusBarView = new StatusBarView(document.getElementById("statusBar"));
+
+var consoleOutputView = new ConsoleOutputView(document.getElementById(console));
+consoleOutputView.appendTo(document.getElementById("program-output"));
+consoleOutputView.makeReference = function (fileName, lineNo) {
+    var a = document.createElement("a");
+    a.innerHTML = fileName + ':' + lineNo;
+    a.href = "#";
+    var fileView = accordion.getSelectedProjectView().getFileViewByName(fileName);
+    a.onclick = function () {
+        fileView.fireSelectEvent();
+        editor.setCursor(lineNo, 0);
+    };
+    return a;
+};
+
 var generatedCodeView = new GeneratedCodeView($("#generated-code"));
-var consoleView = new ConsoleView($("#console"), $("#result-tabs"));
-var junitView = new JUnitView($("#console"), $("#result-tabs"));
+var consoleView = new ConsoleView(document.getElementById("program-output"), $("#result-tabs"));
+var junitView = new JUnitView(document.getElementById("program-output"), $("#result-tabs"));
 var problemsView = new ProblemsView($("#problems"), $("#result-tabs"));
 
 var canvas;
@@ -167,7 +191,6 @@ var completionProvider = (function () {
 
 configurationManager.onChange = function (configuration) {
     editor.setConfiguration(configuration);
-    consoleView.setConfiguration(configuration);
     accordion.getSelectedProject().setConfiguration(Configuration.getStringFromType(configuration.type));
 };
 
@@ -220,8 +243,10 @@ var accordion = (function () {
         statusBarView.setStatus(ActionStatusMessages.save_program_ok);
     };
 
-    accordion.onModifiedSelectedFile = function () {
-        projectActionsView.setStatus("localVersion");
+    accordion.onModifiedSelectedFile = function (file) {
+        if (file.getProjectType() != ProjectType.USER_PROJECT) {
+            projectActionsView.setStatus("localVersion");
+        }
     };
 
     accordion.onUnmodifiedSelectedFile = function () {
@@ -229,6 +254,7 @@ var accordion = (function () {
     };
 
     accordion.onSelectedFileDeleted = function () {
+        history.replaceState("", "", "index.html");
         editor.closeFile();
     };
 
@@ -425,6 +451,22 @@ var saveButton = $("#saveButton").click(function () {
     } else {
         accordion.getSelectedProject().saveAs();
     }
+});
+
+
+var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
+saveProjectDialog.validate = accordion.validateNewProjectName;
+
+$("#saveAsButton").click(function () {
+    saveProjectDialog.open(projectProvider.forkProject.bind(null, accordion.getSelectedProject(), function (name, publicId) {
+        var projectToFork = accordion.getSelectedProject();
+        var content = projectToFork.getContentCopy();
+        content.name = name;
+        content.publicId = publicId;
+        content.parent = "My programs";
+        accordion.addNewProjectWithContent(content);
+        projectToFork.loadOriginal();
+    }), accordion.getSelectedProject().getName());
 });
 
 run_button.attr("title", run_button.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName()));

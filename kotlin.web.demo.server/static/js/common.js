@@ -56,16 +56,20 @@ function compareNumbers(a, b) {
     return a - b;
 }
 
-function unEscapeString(str) {
-    str = replaceAll(str, "&amp;", "&");
-    return str;
-}
-
 var tagsToReplace = {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;'
 };
+
+function unEscapeString(str) {
+    for (var tag in tagsToReplace) {
+        str = str.replace(new RegExp(tagsToReplace[tag], "g"), tag);
+    }
+    return str;
+}
+
+
 
 function replaceTag(tag) {
     return tagsToReplace[tag] || tag;

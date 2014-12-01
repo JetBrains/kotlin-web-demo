@@ -26,6 +26,7 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -78,10 +79,25 @@ public class KotlinHttpServlet extends HttpServlet {
         try {
             initCtx = new InitialContext();
             NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
-            CommandRunner.setServerSettingFromTomcatConfig("java_home", (String) envCtx.lookup("java_home"));
-            CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
+            try {
+                CommandRunner.setServerSettingFromTomcatConfig("java_home", (String) envCtx.lookup("java_home"));
+            } catch (NamingException e) {
+                CommandRunner.setServerSettingFromTomcatConfig("java_home", System.getenv("JAVA_HOME"));
+            }
+            try {
+                CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
+            } catch (NamingException e) {
+                CommandRunner.setServerSettingFromTomcatConfig("java_home", ApplicationSettings.JAVA_HOME);
+            }
             CommandRunner.setServerSettingFromTomcatConfig("app_home", (String) envCtx.lookup("app_home"));
             CommandRunner.setServerSettingFromTomcatConfig("auth_redirect", (String) envCtx.lookup("auth_redirect"));
+            CommandRunner.setServerSettingFromTomcatConfig("google_key", (String) envCtx.lookup("google_key"));
+            CommandRunner.setServerSettingFromTomcatConfig("google_secret", (String) envCtx.lookup("google_secret"));
+            CommandRunner.setServerSettingFromTomcatConfig("twitter-key", (String) envCtx.lookup("twitter_key"));
+            CommandRunner.setServerSettingFromTomcatConfig("twitter_secret", (String) envCtx.lookup("twitter_secret"));
+            CommandRunner.setServerSettingFromTomcatConfig("facebook-key", (String) envCtx.lookup("facebook_key"));
+            CommandRunner.setServerSettingFromTomcatConfig("facebook-secret", (String) envCtx.lookup("facebook_secret"));
+
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("is_test_version", (String) envCtx.lookup("is_test_version"));
             } catch (NameNotFoundException e) {

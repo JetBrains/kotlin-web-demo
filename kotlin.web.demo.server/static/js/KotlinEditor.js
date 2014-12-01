@@ -395,7 +395,7 @@ var KotlinEditor = (function () {
                     openedFile = file;
                     highlighting.removeStyles();
                     if (!openedFile.isModifiable()) {
-                        my_editor.setOption("readOnly", "nocursor");
+                        my_editor.setOption("readOnly", true);
                     } else {
                         my_editor.setOption("readOnly", false);
                     }
@@ -453,6 +453,7 @@ var KotlinEditor = (function () {
 
         my_editor = CodeMirror.fromTextArea(document.getElementById("code"), {
             lineNumbers: true,
+            styleActiveLine: true,
             matchBrackets: true,
             mode: "text/kotlin",
             extraKeys: {

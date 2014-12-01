@@ -17,6 +17,7 @@
 /**
  * Created by Semyon.Atamas on 10/13/2014.
  */
+
 var ProjectData = (function () {
 
     function ProjectData(type, publicId, name) {
@@ -43,8 +44,8 @@ var ProjectData = (function () {
             onRenamed: function (newName) {
             },
             hasErrors: function () {
-                for (var i = 0; i < instance.files.length; i++) {
-                    var errors = instance.files[i].getErrors();
+                for (var i = 0; i < files.length; i++) {
+                    var errors = files[i].getErrors();
                     for (var j = 0; j < errors.length; j++) {
                         if (errors[j].severity == "ERROR") {
                             return true;
@@ -99,18 +100,19 @@ var ProjectData = (function () {
             onFileDeleted: function (publicId) {
 
             },
-
-            setDefaultContent: function () {
-                if (contentLoaded) {
-                    files = [];
-                    contentLoaded = false;
-                    args = "";
-                    confType = "java";
-                    originUrl = null;
-                    parent = "My programs";
-                    help = "";
-                } else {
+            setContent: function (content) {
+                if (!contentLoaded) {
+                    onContentLoaded(content);
                     contentLoaded = true;
+                } else {
+                    throw "Content was already loaded";
+                }
+            },
+            setDefaultContent: function () {
+                if (!contentLoaded) {
+                    contentLoaded = true;
+                } else {
+                    throw "Content was already loaded";
                 }
             },
 
@@ -119,6 +121,16 @@ var ProjectData = (function () {
             },
             getArgs: function () {
                 return args;
+            },
+            getContentCopy: function () {
+                return copy({
+                    files: files,
+                    args: args,
+                    confType: confType,
+                    originUrl: originUrl,
+                    help: help,
+                    type: type
+                });
             },
             setArguments: function (args) {
                 instance.args = args;

@@ -45,17 +45,27 @@ var AccordionView = (function () {
                                 addProject(folderContentElement, exampleHeader);
                             }
                         }
+                        //actionManager.checkTimepoint("headersLoaded");
                         $(element).accordion("refresh");
                         loadFirstItem();
                     }
                 )
                 ;
             },
-            addNewProject: function (name, publicId, fileId, /*Nullable*/ content) {
-                addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT})
+            addNewProject: function (name, publicId, fileId) {
+                addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT});
                 projects[publicId].getProjectData().setDefaultContent();
                 selectProject(publicId);
                 projects[publicId].getProjectData().addEmptyFile(name, publicId);
+            },
+            addNewProjectWithContent: function (content) {
+                addProject(myProgramsContentElement, {
+                    name: content.name,
+                    publicId: content.publicId,
+                    type: ProjectType.USER_PROJECT
+                });
+                projects[content.publicId].getProjectData().setContent(content);
+                selectProject(content.publicId);
             },
             onLogout: function () {
                 localStorage.setItem("openedItemId", instance.getSelectedProject().getPublicId());
@@ -65,6 +75,9 @@ var AccordionView = (function () {
             },
             getSelectedProject: function () {
                 return selectedProjectView.getProjectData();
+            },
+            getSelectedProjectView: function () {
+                return selectedProjectView;
             },
             validateNewProjectName: function (projectName) {
                 for (var url in projects) {
@@ -202,7 +215,6 @@ var AccordionView = (function () {
             projectView.onDelete = function () {
                 if (selectedProjectView == projects[header.publicId]) {
                     selectedProjectView = null;
-                    history.replaceState({}, "", "index.html");
                     if (myProgramsContentElement.firstElementChild == null || myProgramsContentElement.firstElementChild.id == "add_new_project") {
                         loadFirstItem();
                     } else {

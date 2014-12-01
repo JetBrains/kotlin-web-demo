@@ -166,7 +166,7 @@ var ProjectProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("addProject"),
                 success: function (publicId) {
-                    instance.onProjectFork(name, publicId);
+                    instance.onProjectForked(name, publicId);
                     callback(name, publicId);
                 },
                 type: "POST",
