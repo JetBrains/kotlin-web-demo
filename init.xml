@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="WebView" default="downloadTomcat">
+<project name="initWebView" default="all">
 
     <import file="update_dependencies.xml"/>
 
@@ -42,7 +42,6 @@
             <available file="${tomcat.home}" type="dir"/>
         </condition>
     </target>
-
 
     <target name="all" depends="downloadTomcat, download_and_update"/>
 </project>

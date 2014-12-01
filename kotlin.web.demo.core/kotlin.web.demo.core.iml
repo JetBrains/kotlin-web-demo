@@ -9,7 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="kotlin-runtime" level="project" />
     <orderEntry type="library" name="kotlin-compiler" level="project" />
-    <orderEntry type="library" name="jackson" level="project" />
     <orderEntry type="library" name="kotlin-plugin" level="project" />
+    <orderEntry type="library" name="jackson" level="project" />
   </component>
 </module>
+

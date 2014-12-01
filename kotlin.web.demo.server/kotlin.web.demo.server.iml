@@ -31,5 +31,7 @@
     <orderEntry type="library" name="kotlin-compiler" level="project" />
     <orderEntry type="library" name="kotlin-j2kConverter" level="project" />
     <orderEntry type="library" name="jackson" level="project" />
+    <orderEntry type="library" name="jackson" level="project" />
   </component>
 </module>
+
