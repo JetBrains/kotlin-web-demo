@@ -1,25 +1,19 @@
 Kotlin Web Demo is a web-based application capable of editing/running Kotlin code in the browser: http://kotlin-demo.jetbrains.com
 
-Build update dependencies
+0)Create MySql database
+1)Build ant target init
+2)Open project in Idea and set correct path for the tomcat in Edit Configurations tab
+3)Create context file in kotlin.web.demo.server/web/META_INF
 
-Installing tomcat:
-1) Download tomcat7
-2) Download mysql connector and add it to tomcat libraries
-3) Add tomcat to Idea(if you are working in Idea) and include tomcat dbcp and mysql connector libraries
-4) Set output directory for Web Demo artifact tomcat-home/webapps
+Context variables:
+java_home(optimal)
+java_execute(optimal)
+app_home(optimal)
+auth_redirect(required)
+is_test_version(required)
+(google/twitter/facebook)_key(required)
+(google/twitter/facebook)_secret(required)
 
-To launch Web Demo you must set several properties in tomcat config(tomcat-home/conf/context.xml)
-
---------EXAMPLE-------
-<Environment override="false" type="java.lang.String" value="C:\\Program Files\\Java\\jdk1.8.0_11\" name="java_home"/>
-
-<Environment override="false" type="java.lang.String" value="C:\\Program Files\\Java\\jdk1.8.0_11\\bin\\java.exe" name="java_execute"/>
-
-<Environment override="false" type="java.lang.String" value="C:\\development\\kotlin-web-demo\" name="app_home"/>
-
-<Environment override="false" type="java.lang.String" value="localhost:8080" name="auth_redirect"/>
-
-<Environment override="false" type="java.lang.String" value="true" name="is_test_version"/>
-
-<Resource type="javax.sql.DataSource" name="jdbc/kotlin" factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory" url="URL" driverClassName="com.mysql.jdbc.Driver" password="PASSWORD" username="USERNAME" auth="Container"/>
-----------------------
+Also database connection properties must be specified in context like this:
+<Resource type="javax.sql.DataSource" name="jdbc/kotlin" factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory"
+ url="URL" driverClassName="com.mysql.jdbc.Driver" password="PASSWORD" username="USERNAME" auth="Container"/>
