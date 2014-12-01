@@ -1,4 +1,6 @@
 package sum
+import org.junit.Test
+import kotlin.test.*
 
 fun my_fun(): Int {
     return 0
