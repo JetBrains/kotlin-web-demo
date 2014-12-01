@@ -42,14 +42,13 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
         try {
             twitterService = new ServiceBuilder()
                     .provider(TwitterApi.SSL.class)
-                    .apiKey("g0dAeSZpnxTHxRKV2UZFGg")
-                    .apiSecret("NSfUf8o3BhyT96U6hcCarWIUEwz6Le4FY6Em7WBPtuw")
+                    .apiKey(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.KEY)
+                    .apiSecret(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.SECRET)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "twitter"))
                     .build();
             requestToken = twitterService.getRequestToken();
             return twitterService.getAuthorizationUrl(requestToken);
         } catch (Throwable e) {
-            e.printStackTrace();
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "twitter");
         }
         return "";
