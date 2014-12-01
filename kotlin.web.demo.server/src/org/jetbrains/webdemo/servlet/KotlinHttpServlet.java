@@ -74,6 +74,10 @@ public class KotlinHttpServlet extends HttpServlet {
         }
     }
 
+    private boolean isWindows() {
+        return (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0);
+    }
+
     private boolean loadTomcatParameters() {
         InitialContext initCtx = null;
         try {
@@ -87,9 +91,16 @@ public class KotlinHttpServlet extends HttpServlet {
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
             } catch (NamingException e) {
-                CommandRunner.setServerSettingFromTomcatConfig("java_home", ApplicationSettings.JAVA_HOME);
+                String executable = isWindows() ? "java.exe" : "java";
+                CommandRunner.setServerSettingFromTomcatConfig("java_execute", ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + executable);
             }
-            CommandRunner.setServerSettingFromTomcatConfig("app_home", (String) envCtx.lookup("app_home"));
+            try {
+                CommandRunner.setServerSettingFromTomcatConfig("app_home", (String) envCtx.lookup("app_home"));
+            } catch (NamingException e) {
+                File rootFolder = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY);
+                String appHome = rootFolder.getParentFile().getParentFile().getParent();
+                CommandRunner.setServerSettingFromTomcatConfig("app_home", appHome);
+            }
             CommandRunner.setServerSettingFromTomcatConfig("auth_redirect", (String) envCtx.lookup("auth_redirect"));
             CommandRunner.setServerSettingFromTomcatConfig("google_key", (String) envCtx.lookup("google_key"));
             CommandRunner.setServerSettingFromTomcatConfig("google_secret", (String) envCtx.lookup("google_secret"));

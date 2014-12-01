@@ -15,9 +15,6 @@
   -->
 
 <Context>
-    <Environment name="java_execute" value="C:\\Program Files\\Java\\jdk1.8.0_11\\bin\\java.exe" type="java.lang.String"
-                 override="false"/>
-    <Environment name="app_home" value="C:\\development\\kotlin-web-demo\" type="java.lang.String" override="false"/>
     <Environment name="auth_redirect" value="localhost:8080" type="java.lang.String" override="false"/>
     <Environment name="is_test_version" value="true" type="java.lang.String" override="false"/>
 

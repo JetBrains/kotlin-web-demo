@@ -17,7 +17,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,33 +32,32 @@ public class DefaultRunner {
 
     public static void main(String[] args) {
         PrintStream defaultOutputStream = System.out;
-        System.setOut(new PrintStream(errorOutputStream));
-        System.setErr(new PrintStream(standardOutputStream));
-
-        String className = args[0];
-        RunOutput outputObj = new RunOutput();
         try {
-            Method mainMethod = Class.forName(className).getMethod("main", String[].class);
-            mainMethod.invoke(null, (Object) Arrays.copyOfRange(args, 1, args.length));
-        } catch (InvocationTargetException e) {
-            Throwable cause = e.getCause();
-            outputObj.exception = new ExceptionDescriptor();
-            outputObj.exception.message = cause.getMessage();
-            outputObj.exception.stackTrace = cause.getStackTrace();
-            outputObj.exception.fullName = cause.getClass().getName();
-        } catch (Throwable e) {
-            System.err.print("Internal error");
-            e.printStackTrace();
-        }
+            System.setOut(new PrintStream(errorOutputStream));
+            System.setErr(new PrintStream(standardOutputStream));
 
-//        System.out.flush();
-//        System.err.flush();
-        outputObj.output = outputStream.toString();
-        System.setOut(defaultOutputStream);
-        try {
+            String className = args[0];
+            RunOutput outputObj = new RunOutput();
+            try {
+                Method mainMethod = Class.forName(className).getMethod("main", String[].class);
+                mainMethod.invoke(null, (Object) Arrays.copyOfRange(args, 1, args.length));
+            } catch (InvocationTargetException e) {
+                Throwable cause = e.getCause();
+                outputObj.exception = new ExceptionDescriptor();
+                outputObj.exception.message = cause.getMessage();
+                outputObj.exception.stackTrace = cause.getStackTrace();
+                outputObj.exception.fullName = cause.getClass().getName();
+            }
+
+            System.out.flush();
+            System.err.flush();
+            System.setOut(defaultOutputStream);
+            outputObj.output = outputStream.toString();
             System.out.print(new ObjectMapper().writeValueAsString(outputObj));
-        } catch (IOException e) {
-            System.out.print("{}");
+        } catch (Throwable e) {
+            System.setOut(defaultOutputStream);
+            System.out.print("Internal error");
+            e.printStackTrace();
         }
 
     }

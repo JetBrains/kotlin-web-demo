@@ -44,7 +44,7 @@ class ErrorStream extends OutputStream {
     @Override
     public void write(byte[] b, int offset, int length) throws IOException {
         outputStream.write("<span class=\"error-output\">".getBytes());
-        outputStream.write(b);
+        outputStream.write(b, offset, length);
         outputStream.write("</span>".getBytes());
     }
 }

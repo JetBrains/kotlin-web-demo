@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="WebView" default="downloadTomcat">
 
-    <import file="webview.xml"/>
+    <import file="update_dependencies.xml"/>
 
     <property name="tomcat.home" value="apache-tomcat"/>
 
@@ -44,5 +44,5 @@
     </target>
 
 
-    <target name="all" depends="downloadTomcat, webview.all"/>
+    <target name="all" depends="downloadTomcat, download_and_update"/>
 </project>
