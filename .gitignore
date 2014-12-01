@@ -1,4 +1,9 @@
 out
+apache-tomcat
+dependencies
+examples
+help
+logs
 .idea/workspace.xml
 kotlin.web.demo.test.applet/kotlin.web.demo.test.applet.iml
 kotlin.web.demo.applet/kotlin.web.demo.applet.iml
