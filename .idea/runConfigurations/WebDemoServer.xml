@@ -1,0 +1,78 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="WebDemoServer" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 7.0.57" ALTERNATIVE_JRE_ENABLED="false" ALTERNATIVE_JRE_PATH="">
+    <option name="UPDATING_POLICY" value="restart-server" />
+    <deployment>
+      <artifact name="WebDemoWar">
+        <settings>
+          <option name="CONTEXT_PATH" value="/" />
+        </settings>
+      </artifact>
+    </deployment>
+    <server-settings>
+      <option name="BASE_DIRECTORY_NAME" value="Unnamed_WebView_3" />
+    </server-settings>
+    <predefined_log_file id="Tomcat" enabled="true" />
+    <predefined_log_file id="Tomcat Catalina" enabled="true" />
+    <predefined_log_file id="Tomcat Manager" enabled="false" />
+    <predefined_log_file id="Tomcat Host Manager" enabled="false" />
+    <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+    <RunnerSettings RunnerId="Cover" />
+    <RunnerSettings RunnerId="Debug">
+      <option name="DEBUG_PORT" value="56628" />
+      <option name="TRANSPORT" value="0" />
+      <option name="LOCAL" value="true" />
+    </RunnerSettings>
+    <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+      <option name="USE_ENV_VARIABLES" value="true" />
+      <STARTUP>
+        <option name="USE_DEFAULT" value="true" />
+        <option name="SCRIPT" value="" />
+        <option name="VM_PARAMETERS" value="" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+      </STARTUP>
+      <SHUTDOWN>
+        <option name="USE_DEFAULT" value="true" />
+        <option name="SCRIPT" value="" />
+        <option name="VM_PARAMETERS" value="" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+      </SHUTDOWN>
+    </ConfigurationWrapper>
+    <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+      <option name="USE_ENV_VARIABLES" value="true" />
+      <STARTUP>
+        <option name="USE_DEFAULT" value="true" />
+        <option name="SCRIPT" value="" />
+        <option name="VM_PARAMETERS" value="" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+      </STARTUP>
+      <SHUTDOWN>
+        <option name="USE_DEFAULT" value="true" />
+        <option name="SCRIPT" value="" />
+        <option name="VM_PARAMETERS" value="" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+      </SHUTDOWN>
+    </ConfigurationWrapper>
+    <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+      <option name="USE_ENV_VARIABLES" value="true" />
+      <STARTUP>
+        <option name="USE_DEFAULT" value="true" />
+        <option name="SCRIPT" value="" />
+        <option name="VM_PARAMETERS" value="" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+      </STARTUP>
+      <SHUTDOWN>
+        <option name="USE_DEFAULT" value="true" />
+        <option name="SCRIPT" value="" />
+        <option name="VM_PARAMETERS" value="" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+      </SHUTDOWN>
+    </ConfigurationWrapper>
+    <method>
+      <option name="BuildArtifacts" enabled="true">
+        <artifact name="WebDemoWar" />
+      </option>
+    </method>
+  </configuration>
+</component>
