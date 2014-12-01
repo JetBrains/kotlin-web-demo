@@ -16,6 +16,8 @@
 
 <project name="Update Dependencies" default="download_and_update">
 
+    <property name ="kotlin.build" value="177278"/>
+
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
     <property name="zipped.kotlin.plugin.pattern" value="kotlin-plugin*.zip"/>
@@ -27,13 +29,19 @@
               value="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/bootstrap.tcbuildtag"/>
 
     <target name="download_and_update">
-        <execute_update/>
+        <delete dir="${dependencies.dir}" failonerror="false"/>
+        <mkdir dir="${dependencies.dir}"/>
+        <antcall target="update_to_given_version"/>
+        <antcall target="update_to_latest_version"/>
         <unzip_kotlin/>
         <set_kotlin_version/>
     </target>
 
     <target name="download_and_update_internal">
-        <execute_update/>
+        <delete dir="${dependencies.dir}" failonerror="false"/>
+        <mkdir dir="${dependencies.dir}"/>
+        <antcall target="update_to_given_version"/>
+        <antcall target="update_to_latest_version"/>
         <unzip_kotlin/>
         <set_kotlin_version_internal/>
     </target>
@@ -107,13 +115,13 @@
         </sequential>
     </macrodef>
 
-    <macrodef name="execute_update">
-        <sequential>
-            <delete dir="${dependencies.dir}" failonerror="false"/>
-            <mkdir dir="${dependencies.dir}"/>
-            <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
-        </sequential>
-    </macrodef>
+    <target name="update_to_given_version" if="kotlin.build">
+        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
+    </target>
+
+    <target name="update_to_latest_version" unless="kotlin.build">
+        <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
+    </target>
 
     <macrodef name="set_kotlin_version_internal">
         <sequential>
