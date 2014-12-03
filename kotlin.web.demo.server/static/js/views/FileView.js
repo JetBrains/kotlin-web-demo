@@ -45,13 +45,13 @@ var FileView = (function () {
         file.onModified = function () {
             $(headerElement).addClass("modified");
             if (isSelected()) {
-                accordion.onModifiedSelectedFile();
+                accordion.onModifiedSelectedFile(file);
             }
         };
         file.onUnmodified = function () {
             $(headerElement).removeClass("modified");
             if (isSelected()) {
-                accordion.onUnmodifiedSelectedFile();
+                accordion.onUnmodifiedSelectedFile(file);
             }
         };
         file.onDeleted = function () {

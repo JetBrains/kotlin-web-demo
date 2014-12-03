@@ -59,10 +59,8 @@ var ConsoleOutputView = (function () {
                 a.href = "#";
                 return a;
             },
-            appendTo: function (parentElement) {
-                var elementHeight = $(parentElement).height() - $(parentElement).children().outerHeight(true);
-                parentElement.appendChild(element);
-                $(element).height(elementHeight);
+            writeTo: function (_element) {
+                element = _element;
             }
         };
 

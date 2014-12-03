@@ -24,26 +24,29 @@
 var ConsoleView = (function () {
     function ConsoleView(element, /*Nullable*/ tabs) {
 
-        var JAVASCRIPT_CODE = "Generated JavaScript code";
-
         var instance = {
             setOutput: function (data) {
-                consoleOutputView.appendTo(document.body);
-                element.html("");
-                consoleOutputView.appendTo(element);
-
-                setOutput(console, data);
+                prepareTab();
+                setOutput(data);
             },
             writeException: function (data) {
-                element.html("");
-                var scroll = document.createElement("div");
-                scroll.className = "scroll";
-                element.append(scroll);
-
-                var console = document.createElement("div");
-                console.className = "result-view";
-                scroll.appendChild(console);
-                writeException(console, data);
+                prepareTab();
+                if (data != undefined && data[0] != undefined && data[0].exception != undefined) {
+                    var i = 0;
+                    var output = [];
+                    while (data[i] != undefined) {
+                        output.push({"text": data[i].exception, "type": data[i].type});
+                        i++;
+                    }
+                    setOutput(output);
+                } else if (data == undefined || data == null) {
+                } else {
+                    if (data == "") {
+                        consoleOutputView.printToError(["Unknown exception."]);
+                    } else if (data == "timeout : timeout") {
+                        consoleOutputView.printToError(["Server didn't response for 10 seconds."]);
+                    }
+                }
             }
         };
 
@@ -51,124 +54,39 @@ var ConsoleView = (function () {
             tabs.tabs();
         }
 
-        function writeException(console, data) {
-            if (data != undefined && data[0] != undefined && data[0].exception != undefined) {
-                console.innerHTML = "";
-                if (tabs != null) {
-                    tabs.tabs("option", "active", 1);
-                }
-                var i = 0;
-                var output = [];
-                while (data[i] != undefined) {
-                    output.push({"text": data[i].exception, "type": data[i].type});
-                    i++;
-                }
-                setOutput(output);
-
-            } else if (data == undefined || data == null) {
-            } else {
-                console.innerHTML = "";
-                if (tabs != null) {
-                    tabs.tabs('option', 'active', 1);
-                }
-                var output = [
-                    {"text": data, "type": "err"}
-                ];
-                setOutput(output);
-            }
-        }
-
-        var i = 0;
-
-        function makeCodeReference(lineNo) {
-            var a = document.createElement("a");
-            a.ref = "#code";
-            a.innerHTML = "dummy.kt:" + lineNo;
-            a.id = "code_reference_" + i;
-            $(document).on("click", "#code_reference_" + i, function () {
-                editor.setCursor(parseInt(lineNo - 1, 0));
-                editor.focus();
-            });
-            i = i + 1;
-            return a;
-        }
-
-        function createStdErrorForConsoleView(element, message) {
-            var regExp = /(.*?)\(dummy\.kt:([1-9]+)\)/;
-            var ref = regExp.exec(message);
-            if (regExp == null) {
-                while (ref != null) {
-
-                    var span = document.createElement("span");
-                    span.innerHTML = ref[1] + "(";
-                    element.appendChild(span);
-
-
-                    element.appendChild(makeCodeReference(ref[2]));
-
-                    span = document.createElement("span");
-                    span.innerHTML = ")";
-                    element.appendChild(span);
-
-                    message = message.substr(ref[0].length);
-                    ref = regExp.exec(message);
-                }
-            } else {
-                element.innerHTML = message;
-            }
-        }
-
-        function setOutput(console, data) {
-            generatedCodeView.clean();
+        function prepareTab(){
+            element.innerHTML = "";
+            var consoleOutputElement = document.createElement("div");
+            element.appendChild(consoleOutputElement);
+            consoleOutputView.writeTo(consoleOutputElement);
             if (tabs != null) {
                 tabs.tabs("option", "active", 1);
             }
+        }
 
-            if (data != null) {
-                if (tabs != null) {
-                    tabs.tabs("option", "active", 1);
-                }
-                var i = 0;
-                while (data[i] != undefined) {
-                    if (data[i].type == "toggle-info") {
-                        generatedCodeView.setOutput(data[i]);
-                    } else {
-                        var p = document.createElement("p");
-                        var message = data[i].text;
-
-                        if ((data[i].type == "err") && (message != "")) {
-                            p.className = "consoleViewError";
-                            if (message == "") {
-                                p.innerHTML = "Unknown exception."
-                            } else if (message == "timeout : timeout") {
-                                p.innerHTML = "Server didn't response for 10 seconds."
-                            } else {
-//                                p.innerHTML = unEscapeString(message);
-                                createStdErrorForConsoleView(p, message)
-                            }
-                        } else if (data[i].type == "info") {
-                            generatedCodeView.setOutput(data[i]);
-                        } else {
-                            p.innerHTML = unEscapeString(message);
-                        }
-
-
+        function setOutput(data) {
+            for(var i = 0 ;  i < data.length; ++i){
+                if(data[i].type == "out"){
+                    var outputObject = JSON.parse(unEscapeString(data[i].text));
+                    consoleOutputView.print(outputObject.output);
+                    if(outputObject.exception != null){
+                        consoleOutputView.printException(outputObject.exception);
                     }
-
-                    console.appendChild(p);
-                    i++;
+                } else if (data[i].type == "toggle-info" || data[i].type == "info") {
+                    generatedCodeView.setOutput(data[i]);
+                } else if(data[i].type == "err"){
+                    var message = data[i].text;
+                    if (message == "") {
+                        consoleOutputView.printToError(["Unknown exception."]);
+                    } else if (message == "timeout : timeout") {
+                        consoleOutputView.printToError("Server didn't response for 10 seconds.");
+                    }
                 }
             }
         }
 
         return instance;
     }
-
-
-    ConsoleView.toggleElement = function (name) {
-        $("div." + name).toggle();
-    };
-
 
     return ConsoleView;
 })();

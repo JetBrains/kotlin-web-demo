@@ -149,9 +149,13 @@ public class JavaRunner {
         }
 
         if (!isTimeoutException) {
+            String runnerOutput = outStream.toString();
+            if(runnerOutput.endsWith("<br/>")){
+                runnerOutput = runnerOutput.substring(0, runnerOutput.length() - "<br/>".length());
+            }
             ObjectNode jsonObject = jsonArray.addObject();
             jsonObject.put("type", "out");
-            jsonObject.put("text", outStream.toString());
+            jsonObject.put("text", runnerOutput);
         }
 
         if (errStream.length() > 0) {

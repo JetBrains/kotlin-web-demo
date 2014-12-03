@@ -51,7 +51,8 @@ var editor = new KotlinEditor();
 var statusBarView = new StatusBarView(document.getElementById("statusBar"));
 
 var consoleOutputView = new ConsoleOutputView(document.getElementById(console));
-consoleOutputView.appendTo(document.getElementById("program-output"));
+var consoleOutputElement = document.createElement("div");
+consoleOutputView.writeTo(consoleOutputElement);
 consoleOutputView.makeReference = function (fileName, lineNo) {
     var a = document.createElement("a");
     a.innerHTML = fileName + ':' + lineNo;
@@ -59,7 +60,7 @@ consoleOutputView.makeReference = function (fileName, lineNo) {
     var fileView = accordion.getSelectedProjectView().getFileViewByName(fileName);
     a.onclick = function () {
         fileView.fireSelectEvent();
-        editor.setCursor(lineNo, 0);
+        editor.setCursor(lineNo - 1, 0);
     };
     return a;
 };
