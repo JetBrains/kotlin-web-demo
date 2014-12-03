@@ -98,7 +98,7 @@ public class JavaRunner {
                 String line;
                 try {
                     while ((line = stdOut.readLine()) != null) {
-                        outStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
+                        outStream.append(ResponseUtils.escapeString(line));
                     }
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -133,8 +133,8 @@ public class JavaRunner {
         }
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                 sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
-                + " timeout=" + isTimeoutException
-                + " commandString=" + Arrays.toString(commandString)));
+                        + " timeout=" + isTimeoutException
+                        + " commandString=" + Arrays.toString(commandString)));
 
         if ((exitValue == 1) && !isTimeoutException) {
             if (outStream.length() > 0) {
@@ -149,13 +149,9 @@ public class JavaRunner {
         }
 
         if (!isTimeoutException) {
-            String runnerOutput = outStream.toString();
-            if(runnerOutput.endsWith("<br/>")){
-                runnerOutput = runnerOutput.substring(0, runnerOutput.length() - "<br/>".length());
-            }
             ObjectNode jsonObject = jsonArray.addObject();
             jsonObject.put("type", "out");
-            jsonObject.put("text", runnerOutput);
+            jsonObject.put("text", outStream.toString());
         }
 
         if (errStream.length() > 0) {
@@ -233,7 +229,7 @@ public class JavaRunner {
                 || str.contains("InstantiationError")
                 || str.contains("AbstractMethodError")
                 || str.contains("NoSuchFieldError")
-                || (str.contains("IllegalAccessError")  && !str.contains("kotlin.io.IoPackage"))
+                || (str.contains("IllegalAccessError") && !str.contains("kotlin.io.IoPackage"))
                 || str.contains("VerifyError")
                 || str.contains("ClassCircularityError")
                 || str.contains("UnsatisfiedLinkError")
@@ -262,15 +258,13 @@ public class JavaRunner {
                 out.write(tmp, 0, lengthOut);
                 stringWriter.write(new String(tmp));
                 outStream.append(stringWriter.toString());
-            }
-            else if (lengthOut == -1) {
+            } else if (lengthOut == -1) {
                 returnValue--;
             }
             if ((lengthErr = isErr.read(tmp)) >= 0) {
                 out.write(tmp, 0, lengthErr);
                 errStream.append(new String(tmp));
-            }
-            else if (lengthErr == -1) {
+            } else if (lengthErr == -1) {
                 returnValue--;
             }
         } catch (IOException e) {
@@ -299,8 +293,7 @@ public class JavaRunner {
                     ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                             sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                 }
-            }
-            else {
+            } else {
                 //list all the directory contents
                 String files[] = file.list();
                 for (String temp : files) {
@@ -317,8 +310,7 @@ public class JavaRunner {
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (file.exists()) {
                 file.delete();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
@@ -333,27 +325,27 @@ public class JavaRunner {
         List<String> builder;
         if (arguments.isEmpty()) {
             builder = new ArrayList<>(5);
-        }
-        else {
+        } else {
             builder = new ArrayList<>(argsArray.size() + 5);
         }
         builder.add(ApplicationSettings.JAVA_EXECUTE);
         builder.add("-classpath");
-        String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB + File.pathSeparator + ApplicationSettings.WEBAPP_ROOT_DIRECTORY);
-        if(sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)){
+        String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB + File.pathSeparator +
+                ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes" + File.separator);
+        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
             builder.add(classpath +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "junit.jar" +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-databind.jar" +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-core.jar" +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-annotations.jar");
-            builder.add("JunitRunner");
+            builder.add("org.jetbrains.webdemo.executors.JunitExecutor");
             builder.addAll(Arrays.asList(example.testClasses));
         } else {
             builder.add(classpath +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-databind.jar" +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-core.jar" +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-annotations.jar");
-            builder.add("DefaultRunner");
+            builder.add("org.jetbrains.webdemo.executors.JavaExecutor");
             builder.add(findMainClass());
             if (!arguments.isEmpty()) {
                 builder.addAll(argsArray);

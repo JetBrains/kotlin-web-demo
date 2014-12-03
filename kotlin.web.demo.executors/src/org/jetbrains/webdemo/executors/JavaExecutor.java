@@ -1,4 +1,4 @@
-/*
+package org.jetbrains.webdemo.executors;/*
  * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ import java.util.Arrays;
 /**
  * Created by Semyon.Atamas on 11/27/2014.
  */
-public class DefaultRunner {
+public class JavaExecutor {
     private static ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private static ErrorStream errorOutputStream = new ErrorStream(outputStream);
     private static OutStream standardOutputStream = new OutStream(outputStream);
