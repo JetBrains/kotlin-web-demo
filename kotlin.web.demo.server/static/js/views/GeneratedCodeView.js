@@ -22,20 +22,14 @@
 var GeneratedCodeView = (function () {
 
     function GeneratedCodeView(element) {
-        var console = document.createElement("div");
-        console.className = "result-view";
-        element.append(console);
-
         var instance = {
-            clean: function(){
-                console.innerHTML = "";
-            },
             setOutput: function (data) {
                 setOutput(data);
             }
         };
 
         function setOutput(data) {
+            element.innerHTML = "";
             var generatedCode = document.createElement("p");
             generatedCode.className = "consoleViewInfo";
             if(data.type == "toggle-info") {
@@ -43,7 +37,7 @@ var GeneratedCodeView = (function () {
             } else if(data.type == "info"){
                 generatedCode.innerHTML = unEscapeString(data.text);
             }
-            console.appendChild(generatedCode);
+            element.appendChild(generatedCode);
         }
 
         return instance;

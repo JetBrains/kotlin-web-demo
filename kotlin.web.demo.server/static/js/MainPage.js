@@ -65,7 +65,7 @@ consoleOutputView.makeReference = function (fileName, lineNo) {
     return a;
 };
 
-var generatedCodeView = new GeneratedCodeView($("#generated-code"));
+var generatedCodeView = new GeneratedCodeView(document.getElementById("generated-code"));
 var consoleView = new ConsoleView(document.getElementById("program-output"), $("#result-tabs"));
 var junitView = new JUnitView(document.getElementById("program-output"), $("#result-tabs"));
 var problemsView = new ProblemsView($("#problems"), $("#result-tabs"));

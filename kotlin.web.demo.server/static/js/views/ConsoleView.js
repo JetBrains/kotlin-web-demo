@@ -67,7 +67,7 @@ var ConsoleView = (function () {
         function setOutput(data) {
             for(var i = 0 ;  i < data.length; ++i){
                 if(data[i].type == "out"){
-                    consoleOutputView.print(data[i].text);
+                    consoleOutputView.print(unEscapeString(data[i].text));
                     if(data[i].exception != null){
                         consoleOutputView.printException(data[i].exception);
                     }

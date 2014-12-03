@@ -147,6 +147,12 @@
     font-family: monospace;
 }
 
+#generated-code{
+    height: 180px;
+    padding: 5px 5px 0;
+    overflow: auto;
+}
+
 #test {
     overflow: hidden;
     position: relative;

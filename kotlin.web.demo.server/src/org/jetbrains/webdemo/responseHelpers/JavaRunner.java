@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -136,22 +137,23 @@ public class JavaRunner {
                         + " timeout=" + isTimeoutException
                         + " commandString=" + Arrays.toString(commandString)));
 
-        if ((exitValue == 1) && !isTimeoutException) {
-            if (outStream.length() > 0) {
-                if (outStream.indexOf("An error report file with more information is saved as:") != -1) {
-                    outStream.delete(0, outStream.length());
-                    errStream.append(ApplicationSettings.KOTLIN_ERROR_MESSAGE);
-                    String linkForLog = getLinkForLog(outStream.toString());
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
-                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
-                }
-            }
-        }
 
-        if (!isTimeoutException) {
-            ObjectNode jsonObject = jsonArray.addObject();
-            jsonObject.put("type", "out");
-            jsonObject.put("text", outStream.toString());
+        if ((exitValue == 1) &&
+                !isTimeoutException &&
+                outStream.length() > 0 &&
+                outStream.indexOf("An error report file with more information is saved as:") != -1) {
+            outStream.delete(0, outStream.length());
+            errStream.append(ApplicationSettings.KOTLIN_ERROR_MESSAGE);
+            String linkForLog = getLinkForLog(outStream.toString());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
+                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+        } else if (!isTimeoutException) {
+            try {
+                ObjectNode output = (ObjectNode)new ObjectMapper().readTree(outStream.toString());
+                output.put("type", "out");
+                jsonArray.add(output);
+            } catch (IOException e) {
+            }
         }
 
         if (errStream.length() > 0) {

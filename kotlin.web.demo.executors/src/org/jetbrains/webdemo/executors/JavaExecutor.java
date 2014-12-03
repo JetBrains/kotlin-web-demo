@@ -52,7 +52,7 @@ public class JavaExecutor {
             System.out.flush();
             System.err.flush();
             System.setOut(defaultOutputStream);
-            outputObj.output = outputStream.toString();
+            outputObj.text = outputStream.toString();
             System.out.print(new ObjectMapper().writeValueAsString(outputObj));
         } catch (Throwable e) {
             System.setOut(defaultOutputStream);
@@ -64,6 +64,6 @@ public class JavaExecutor {
 }
 
 class RunOutput {
-    public String output = "";
+    public String text = "";
     public ExceptionDescriptor exception = null;
 }

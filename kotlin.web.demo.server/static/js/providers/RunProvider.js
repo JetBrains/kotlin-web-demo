@@ -47,18 +47,7 @@ var RunProvider = (function () {
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
-                                onSuccess(data);
-                            } else {
-                                for(var i = 0; i < data.length; ++i){
-                                    if(data[i].type == "out"){
-                                        var outputObj = JSON.parse(data[i].text);
-                                        data[i].text = unEscapeString(outputObj.output);
-                                        data[i].exception = outputObj.exception;
-                                    }
-                                }
-                                onSuccess(data);
-                            }
+                            onSuccess(data);
                         } else {
                             onFail(data);
                         }
