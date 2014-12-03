@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -149,9 +150,16 @@ public class JavaRunner {
                     sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
         } else if (!isTimeoutException) {
             try {
-                ObjectNode output = (ObjectNode)new ObjectMapper().readTree(outStream.toString());
-                output.put("type", "out");
-                jsonArray.add(output);
+                if(sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
+                    ObjectNode output = jsonArray.addObject();
+                    ArrayNode executorOutput = (ArrayNode) new ObjectMapper().readTree(outStream.toString());
+                    output.put("testResults", executorOutput);
+                    output.put("type", "out");
+                } else{
+                    ObjectNode output = (ObjectNode) new ObjectMapper().readTree(outStream.toString());
+                    output.put("type", "out");
+                    jsonArray.add(output);
+                }
             } catch (IOException e) {
             }
         }

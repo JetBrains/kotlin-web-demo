@@ -28,7 +28,6 @@ var JUnitView = (function () {
 
         var instance = {
             setOutput: function (data) {
-                consoleOutputView.appendTo(document.body);
                 element.innerHTML = "";
 
                 tabs.tabs("option", "active", 1);
@@ -41,23 +40,24 @@ var JUnitView = (function () {
                 statisticText = document.createElement("span");
                 statistic.appendChild(statisticText);
 
+                var consoleElement = document.createElement("div");
+                consoleOutputView.writeTo(consoleElement);
+
                 var wrapper = document.createElement("div");
                 wrapper.id = "test-wrapper";
                 element.appendChild(wrapper);
                 wrapper.appendChild(statistic);
+                wrapper.appendChild(consoleElement);
 
                 for (var i = 0; i < data.length; i++) {
-                    if (data[i].type != "info" && data[i].type != "toggle-info") {
-                        data[i].text = data[i].text.substring(0, data[i].text.length - "</br>".length); //remove endl in the end of output
-                        var testsResults = JSON.parse(unEscapeString(data[i].text));
-                        createTestTree(testsResults);
-                        createStatistics(testsResults);
+                    if (data[i].type == "out") {
+                        createStatistics(data[i].testResults);
+                        createTestTree(data[i].testResults);
                     } else {
                         generatedCodeView.setOutput(data[i]);
                     }
                 }
-
-                consoleOutputView.appendTo(wrapper);
+                consoleElement.style.height = $(wrapper).height() - $(statistic).outerHeight(true);
             }
         };
         return instance;
@@ -142,7 +142,7 @@ var JUnitView = (function () {
                 var testData = testsData[element[0].id];
                 if (testData != null) {
                     consoleOutputView.clear();
-                    consoleOutputView.print(testsData[element[0].id].output);
+                    consoleOutputView.print(unEscapeString(testsData[element[0].id].output));
                     if (testData.exception != null && testData.exception.fullName != "java.lang.AssertionError") {
                         consoleOutputView.printException(testData.exception);
                     }
