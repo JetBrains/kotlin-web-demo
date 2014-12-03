@@ -67,10 +67,9 @@ var ConsoleView = (function () {
         function setOutput(data) {
             for(var i = 0 ;  i < data.length; ++i){
                 if(data[i].type == "out"){
-                    var outputObject = JSON.parse(unEscapeString(data[i].text));
-                    consoleOutputView.print(outputObject.output);
-                    if(outputObject.exception != null){
-                        consoleOutputView.printException(outputObject.exception);
+                    consoleOutputView.print(data[i].text);
+                    if(data[i].exception != null){
+                        consoleOutputView.printException(data[i].exception);
                     }
                 } else if (data[i].type == "toggle-info" || data[i].type == "info") {
                     generatedCodeView.setOutput(data[i]);

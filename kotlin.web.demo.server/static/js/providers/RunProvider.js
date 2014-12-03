@@ -33,15 +33,14 @@ var RunProvider = (function () {
 
         function run(configuration, project) {
             if (configuration.type.runner == ConfigurationType.runner.JAVA) {
-                runJava(configuration, project);
+                runJava(project);
             } else {
-                runJs(configuration, project);
+                runJs(project);
             }
         }
 
 
-        function runJava(configuration, project) {
-            var confTypeString = Configuration.getStringFromType(configuration.type);
+        function runJava(project) {
             $.ajax({
                 url: generateAjaxUrl("run"),
                 context: document.body,
@@ -51,6 +50,13 @@ var RunProvider = (function () {
                             if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
                                 onSuccess(data);
                             } else {
+                                for(var i = 0; i < data.length; ++i){
+                                    if(data[i].type == "out"){
+                                        var outputObj = JSON.parse(data[i].text);
+                                        data[i].text = unEscapeString(outputObj.output);
+                                        data[i].exception = outputObj.exception;
+                                    }
+                                }
                                 onSuccess(data);
                             }
                         } else {
@@ -62,7 +68,7 @@ var RunProvider = (function () {
                 },
                 dataType: "json",
                 type: "POST",
-                data: {project: JSON.stringify(project), args: confTypeString},
+                data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     onFail(textStatus + " : " + errorThrown);
@@ -71,13 +77,12 @@ var RunProvider = (function () {
 
         }
 
-        function runJs(configuration, project) {
+        function runJs(project) {
             Kotlin.modules = {stdlib: Kotlin.modules.stdlib};
-            loadJsFromServer(configuration, project);
+            loadJsFromServer(project);
         }
 
-        function loadJsFromServer(configuration, project) {
-            var confTypeString = Configuration.getStringFromType(configuration.type);
+        function loadJsFromServer(project) {
             $.ajax({
                 url: generateAjaxUrl("run"),
                 context: document.body,
@@ -105,7 +110,7 @@ var RunProvider = (function () {
                 },
                 dataType: "json",
                 type: "POST",
-                data: {project: JSON.stringify(project), args: confTypeString},
+                data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     onFail(textStatus + " : " + errorThrown);

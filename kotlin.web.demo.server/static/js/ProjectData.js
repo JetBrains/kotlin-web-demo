@@ -148,8 +148,8 @@ var ProjectData = (function () {
             getConfiguration: function () {
                 return confType;
             },
-            setConfiguration: function (confType) {
-                instance.confType = confType;
+            setConfiguration: function (newConfType) {
+                confType = newConfType;
                 instance.onChange();
             },
             getHelp: function () {

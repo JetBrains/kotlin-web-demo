@@ -75,7 +75,7 @@ var ConfigurationComponent = (function () {
             }
         };
 
-        $("#run-mode").on("selectmenuchange", function () {
+        $("#runMode").on("selectmenuchange", function () {
             var confType = this.value;
             if (confType == "java") {
                 document.getElementById("generated-code-link").innerHTML = "Generated classfiles";
