@@ -29,6 +29,11 @@
     color: #9e9e9e;
 }
 
+.consoleOutput{
+    overflow: auto;
+    padding-left: 5px;
+}
+
 #typeCheckingWrapper {
     margin-top: 10px;
     float: right;
@@ -80,6 +85,15 @@
 .error-output {
     white-space: pre;
     color: #ff0000 !important;
+    min-height: 1.4em;
+    margin: 0;
+    vertical-align: top;
+}
+
+.standard-output {
+    white-space: pre;
+    color: #000 !important;
+    min-height: 1.4em;
     margin: 0;
     vertical-align: top;
 }
@@ -305,14 +319,14 @@ li[aria-expanded="false"] > ul {
     display: inline-block;
 }
 
-li[aria-expanded="false"] .tree-node-header .toggle-arrow {
+li[aria-expanded="false"]>.tree-node-header .toggle-arrow {
     margin: 2px 4px 1px;
     height: 9px;
     width: 7px;
     background: url("/static/images/testTabIcons.png") -10px 0;
 }
 
-li[aria-expanded="true"] .tree-node-header .toggle-arrow {
+li[aria-expanded="true"]>.tree-node-header .toggle-arrow {
     margin: 3px 3px 1px;
     height: 7px;
     width: 9px;

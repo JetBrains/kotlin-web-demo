@@ -42,9 +42,9 @@ var ConsoleView = (function () {
                 } else if (data == undefined || data == null) {
                 } else {
                     if (data == "") {
-                        consoleOutputView.printToError(["Unknown exception."]);
+                        consoleOutputView.err.println(["Unknown exception."]);
                     } else if (data == "timeout : timeout") {
-                        consoleOutputView.printToError(["Server didn't response for 10 seconds."]);
+                        consoleOutputView.err.println(["Server didn't response for 10 seconds."]);
                     }
                 }
             }
@@ -59,6 +59,7 @@ var ConsoleView = (function () {
             var consoleOutputElement = document.createElement("div");
             element.appendChild(consoleOutputElement);
             consoleOutputView.writeTo(consoleOutputElement);
+            consoleOutputElement.className = "consoleOutput";
             if (tabs != null) {
                 tabs.tabs("option", "active", 1);
             }
@@ -67,16 +68,16 @@ var ConsoleView = (function () {
         function setOutput(data) {
             for(var i = 0 ;  i < data.length; ++i){
                 if(data[i].type == "out"){
-                    consoleOutputView.print(unEscapeString(data[i].text));
+                    consoleOutputView.out.print(unEscapeString(data[i].text));
                     if(data[i].exception != null){
                         consoleOutputView.printException(data[i].exception);
                     }
                 } else if(data[i].type == "err"){
                     var message = data[i].text;
                     if (message == "") {
-                        consoleOutputView.printToError(["Unknown exception."]);
+                        consoleOutputView.err.println(["Unknown exception."]);
                     } else if (message == "timeout : timeout") {
-                        consoleOutputView.printToError("Server didn't response for 10 seconds.");
+                        consoleOutputView.err.println("Server didn't response for 10 seconds.");
                     }
                 } else if (data[i].type == "toggle-info" || data[i].type == "info" || data[i].type == "generatedJSCode") {
                     generatedCodeView.setOutput(data[i]);

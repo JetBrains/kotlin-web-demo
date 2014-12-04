@@ -21,50 +21,7 @@
 
 var ConsoleOutputView = (function () {
     function ConsoleOutputView() {
-        var instance = {
-            print: function (text) {
-                element.innerHTML += text;
-            },
-            clear: function () {
-                element.innerHTML = ""
-            },
-            printToOutput: function (text) {
-                var span = document.createElement("span");
-                span.className = "standard-output";
-                span.innerHTML = text;
-                element.appendChild(span);
-            },
-            printToError: function (lines) {
-                for (var i = 0; i < lines.length; ++i) {
-                    Error.println(lines[i]);
-                }
-            },
-            printException: function (exception) {
-                Error.println(exception.fullName + ': ' + exception.message + '\n');
-                instance.printStackTrace(exception.stackTrace);
-            },
-            printStackTrace: function (stackTrace) {
-                for (var i = 0; i < stackTrace.length; ++i) {
-                    if (stackTrace[i].className.startsWith("sun.reflect")) {
-                        break;
-                    }
-                    Error.print('    at ' + stackTrace[i].className + '(');
-                    Error.addReference(instance.makeReference(stackTrace[i].fileName, stackTrace[i].lineNumber));
-                    Error.println(')');
-                }
-            },
-            makeReference: function (fileName, lineNo) {
-                var a = document.createElement("a");
-                a.innerHTML = fileName + ':' + lineNo;
-                a.href = "#";
-                return a;
-            },
-            writeTo: function (_element) {
-                element = _element;
-            }
-        };
-
-        var element = document.createElement("div");
+        var currentLine;
         var Error = (function () {
             var instance = {
                 print: function (text) {
@@ -82,20 +39,83 @@ var ConsoleOutputView = (function () {
                 }
             };
 
-            var currentLine;
-
             function newLine() {
                 if (currentLine != null) {
-                    element.appendChild(currentLine);
+                    currentLine.className = "error-output";
                 }
                 currentLine = document.createElement("div");
-                currentLine.className = "error-output";
+                element.appendChild(currentLine);
             }
-
-            newLine();
 
             return instance
         })();
+
+        var Out = (function () {
+            var instance = {
+                print: function (text) {
+                    var span = document.createElement("span");
+                    span.className = "standard-output";
+                    span.innerHTML = text;
+                    currentLine.appendChild(span);
+                },
+                println: function (text) {
+                    instance.print(text);
+                    newLine();
+                },
+                addReference: function (referenceElement) {
+                    currentLine.appendChild(referenceElement);
+                }
+            };
+
+            function newLine() {
+                if (currentLine != null) {
+                    currentLine.className = "standard-output";
+                }
+                currentLine = document.createElement("div");
+                element.appendChild(currentLine);
+            }
+
+            return instance
+        })();
+
+        var instance = {
+            clear: function () {
+                element.innerHTML = "";
+                currentLine = document.createElement("div");
+                element.appendChild(currentLine);
+            },
+            printException: function (exception) {
+                Error.println(exception.fullName + ': ' + exception.message + '\n');
+                instance.printStackTrace(exception.stackTrace);
+            },
+            printStackTrace: function (stackTrace) {
+                for (var i = 0; i < stackTrace.length; ++i) {
+                    if (stackTrace[i].className.startsWith("sun.reflect")) {
+                        break;
+                    }
+                    Error.print('    at ' + stackTrace[i].className + '(');
+                    Error.addReference(instance.makeReference(stackTrace[i].fileName, stackTrace[i].lineNumber));
+                    Error.println(')');
+                }
+                Error.println("");
+            },
+            makeReference: function (fileName, lineNo) {
+                var a = document.createElement("a");
+                a.innerHTML = fileName + ':' + lineNo;
+                a.href = "#";
+                return a;
+            },
+            writeTo: function (_element) {
+                element = _element;
+                currentLine = document.createElement("div");
+                element.appendChild(currentLine);
+            },
+            err: Error,
+            out: Out
+        };
+
+        var element = document.createElement("div");
+
 
         return instance;
     }

@@ -54,15 +54,22 @@ var consoleOutputView = new ConsoleOutputView(document.getElementById(console));
 var consoleOutputElement = document.createElement("div");
 consoleOutputView.writeTo(consoleOutputElement);
 consoleOutputView.makeReference = function (fileName, lineNo) {
-    var a = document.createElement("a");
-    a.innerHTML = fileName + ':' + lineNo;
-    a.href = "#";
     var fileView = accordion.getSelectedProjectView().getFileViewByName(fileName);
-    a.onclick = function () {
-        fileView.fireSelectEvent();
-        editor.setCursor(lineNo - 1, 0);
-    };
-    return a;
+    if (fileView != null) {
+        var a = document.createElement("a");
+        a.innerHTML = fileName + ':' + lineNo;
+        a.href = "#";
+        a.onclick = function () {
+            fileView.fireSelectEvent();
+            editor.setCursor(lineNo - 1, 0);
+            editor.focus();
+        };
+        return a;
+    } else {
+        var span = document.createElement("span");
+        span.innerHTML = fileName + ':' + lineNo;
+        return span;
+    }
 };
 
 var generatedCodeView = new GeneratedCodeView(document.getElementById("generated-code"));
@@ -582,9 +589,11 @@ $("#examples-list-resizer").resizable({
         return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
     })(),
     start: function () {
-        $(this).resizable({maxWidth: (function () {
-            return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
-        })()});
+        $(this).resizable({
+            maxWidth: (function () {
+                return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
+            })()
+        });
     },
     resize: function () {
         $("#workspace").css("margin-left", $(this).outerWidth());
@@ -598,13 +607,17 @@ $("#grid-bottom").resizable({
         return $("#statusBarWrapper").outerHeight() + $(".result-tabs-footer").outerHeight();
     })(),
     start: function () {
-        $(this).resizable({minHeight: (function () {
-            return $("#statusBarWrapper").outerHeight() + $(".result-tabs-footer").outerHeight();
-        })()});
+        $(this).resizable({
+            minHeight: (function () {
+                return $("#statusBarWrapper").outerHeight() + $(".result-tabs-footer").outerHeight();
+            })()
+        });
 
-        $(this).resizable({maxHeight: (function () {
-            return $("#g-grid").height() - $("#argumentsWrapper").outerHeight() - $("#toolbox").outerHeight();
-        })()});
+        $(this).resizable({
+            maxHeight: (function () {
+                return $("#g-grid").height() - $("#argumentsWrapper").outerHeight() - $("#toolbox").outerHeight();
+            })()
+        });
     },
     resize: function () {
         $(this).css("top", "");

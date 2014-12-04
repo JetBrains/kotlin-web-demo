@@ -41,6 +41,7 @@ var JUnitView = (function () {
                 statistic.appendChild(statisticText);
 
                 var consoleElement = document.createElement("div");
+                consoleElement.className = "consoleOutput";
                 consoleOutputView.writeTo(consoleElement);
 
                 var wrapper = document.createElement("div");
@@ -51,17 +52,17 @@ var JUnitView = (function () {
 
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].type == "out") {
-                        if(data[i].testResults.length != 0) {
+                        if (data[i].testResults.length != 0) {
                             createStatistics(data[i].testResults);
                             createTestTree(data[i].testResults);
-                        } else{
+                        } else {
                             element.innerHTML = "No test method found";
                         }
                     } else {
                         generatedCodeView.setOutput(data[i]);
                     }
                 }
-                consoleElement.style.height = $(wrapper).height() - $(statistic).outerHeight(true);
+                $(consoleElement).height($(wrapper).height() - $(statistic).outerHeight(true));
             }
         };
         return instance;
@@ -121,7 +122,7 @@ var JUnitView = (function () {
             for (var i = 0; i < data.length; ++i) {
                 var testNode = {
                     children: [],
-                    name: data[i].methodName,
+                    name: getClassNameWithoutAPackage(data[i].methodName),
                     icon: data[i].status.toLowerCase(),
                     id: data[i].className + '.' + data[i].methodName
                 };
@@ -133,24 +134,70 @@ var JUnitView = (function () {
                 }
             }
         } else {
+            var classNodes = {};
+            for (var i = 0; i < data.length; ++i) {
+                if (classNodes[data[i].className] == null) {
+                    classNodes[data[i].className] = {
+                        children: [],
+                        name: getClassNameWithoutAPackage(data[i].className),
+                        icon: data[i].status.toLowerCase(),
+                        id: data[i].className
+                    };
+                    rootNode.children.push(classNodes[data[i].className]);
+                }
+                var classNode = classNodes[data[i].className];
+                var testNode = {
+                    children: [],
+                    name: data[i].methodName,
+                    icon: data[i].status.toLowerCase(),
+                    id: data[i].className + '.' + data[i].methodName
+                };
+                classNode.children.push(testNode);
 
+                if (data[i].status == Status.ERROR) {
+                    classNode.icon = "error";
+                    rootNode.icon = "error";
+                } else if (data[i].status == Status.FAIL && rootNode.icon != "error") {
+                    classNode.icon = "failed";
+                    rootNode.icon = "failed";
+                }
+            }
         }
 
         var tree = document.createElement("ul");
         tree.id = "test-tree";
         displayTreeNode(rootNode, tree);
+
+        function printTestOutput(element) {
+            if ($(element).hasClass("at-no-children")) {
+                var testData = testsData[element.id];
+                consoleOutputView.out.print(unEscapeString(testsData[element.id].output));
+                if (testData.exception != null && testData.exception.fullName != "java.lang.AssertionError") {
+                    consoleOutputView.printException(testData.exception);
+                } else if (testData.exception != null) {
+                    var difference = getDifference(unEscapeString(testData.exception.message));
+                    consoleOutputView.err.println(testData.exception.fullName + ":");
+                    consoleOutputView.err.println("");
+                    consoleOutputView.out.print("Expected: ");
+                    consoleOutputView.err.println(difference.expected);
+                    consoleOutputView.out.print("Actual: ");
+                    consoleOutputView.err.println(difference.actual);
+                    consoleOutputView.printStackTrace(testData.exception.stackTrace);
+                }
+            } else {
+                $.each($(element).children("ul").children("li"), function (i, elem) {
+                    printTestOutput(elem)
+                });
+            }
+        }
+
         $(tree).a11yTree({
             toggleSelector: ".tree-node-header .toggle-arrow",
             treeItemLabelSelector: '.tree-node-header .text',
             onFocus: function (element, event) {
-                var testData = testsData[element[0].id];
-                if (testData != null) {
-                    consoleOutputView.clear();
-                    consoleOutputView.print(unEscapeString(testsData[element[0].id].output));
-                    if (testData.exception != null && testData.exception.fullName != "java.lang.AssertionError") {
-                        consoleOutputView.printException(testData.exception);
-                    }
-                }
+                consoleOutputView.clear();
+                printTestOutput(element[0]);
+                event.stopPropagation();
             }
         });
         navTree.appendChild(tree);
@@ -219,6 +266,44 @@ var JUnitView = (function () {
             backgroundElement.className += " fail";
         } else {
             backgroundElement.className += " ok";
+        }
+    }
+
+    function getClassNameWithoutAPackage(fullClassName) {
+        var path = fullClassName.split('.');
+        return path[path.length - 1];
+    }
+
+    function getDifference(exceptionMessage) {
+        exceptionMessage = exceptionMessage.replace(/\n/g, '</br>');
+        var regExp = /Expected\s*<(.*)>\s*actual\s*<(.*)>/;
+        var regExpExecResult = regExp.exec(exceptionMessage);
+        var expectedLines = regExpExecResult[1].split('</br>');
+        var actualLines = regExpExecResult[2].split('</br>');
+
+        var differences = [];
+        var i = 0;
+        while (expectedLines[i] != null && actualLines[i] != null) {
+            if (expectedLines[i] != actualLines[i]) {
+                differences.push(i + 1);
+            }
+            ++i;
+        }
+        if (expectedLines.length > i) {
+            while (i < expectedLines.length) {
+                differences.push(++i)
+            }
+        }
+        if (actualLines.length > i) {
+            while (i < actualLines.length) {
+                differences.push(++i)
+            }
+        }
+
+        return {
+            expected: regExpExecResult[1],
+            actual: regExpExecResult[2],
+            differences: differences
         }
     }
 
