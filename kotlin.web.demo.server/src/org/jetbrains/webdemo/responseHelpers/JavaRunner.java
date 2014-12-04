@@ -150,12 +150,12 @@ public class JavaRunner {
                     sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
         } else if (!isTimeoutException) {
             try {
-                if(sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
+                if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
                     ObjectNode output = jsonArray.addObject();
                     ArrayNode executorOutput = (ArrayNode) new ObjectMapper().readTree(outStream.toString());
                     output.put("testResults", executorOutput);
                     output.put("type", "out");
-                } else{
+                } else {
                     ObjectNode output = (ObjectNode) new ObjectMapper().readTree(outStream.toString());
                     output.put("type", "out");
                     jsonArray.add(output);
@@ -339,6 +339,8 @@ public class JavaRunner {
             builder = new ArrayList<>(argsArray.size() + 5);
         }
         builder.add(ApplicationSettings.JAVA_EXECUTE);
+        builder.add("-Djava.security.manager");
+        builder.add("-Djava.security.policy=" + ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
         builder.add("-classpath");
         String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB + File.pathSeparator +
                 ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes" + File.separator);

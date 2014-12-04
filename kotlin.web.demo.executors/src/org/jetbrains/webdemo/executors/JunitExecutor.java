@@ -24,7 +24,6 @@ import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
-import org.junit.runners.model.InitializationError;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -45,6 +44,7 @@ public class JunitExecutor {
                     try {
                         jUnitCore.run(cl);
                     } catch (Throwable e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -56,7 +56,9 @@ public class JunitExecutor {
             }
         } catch (Throwable e) {
             System.setOut(standardOutput);
-            System.out.print("[]");
+            System.out.print("[\"");
+            e.printStackTrace();
+            System.out.print("\"]");
         }
     }
 
