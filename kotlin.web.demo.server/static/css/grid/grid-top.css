@@ -43,6 +43,19 @@
     text-align: center;
 }
 
+.CodeMirror-activeline-background {
+    background: #ffffd7; !important;
+}
+
+#editordiv .CodeMirror-lines{
+    padding: 0;
+}
+
+#editordiv span.CodeMirror-matchingbracket{
+    color: inherit;
+    background-color: #99ccff;
+}
+
 .ERROR {
     color: #ff0000 !important;
 }
