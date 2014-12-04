@@ -182,6 +182,10 @@ var JUnitView = (function () {
                     consoleOutputView.err.println(difference.expected);
                     consoleOutputView.out.print("Actual: ");
                     consoleOutputView.err.println(difference.actual);
+                    consoleOutputView.err.print("    ");
+                    consoleOutputView.addElement(makeDifferenceReference(difference));
+                    consoleOutputView.out.println("");
+                    consoleOutputView.out.println("");
                     consoleOutputView.printStackTrace(testData.exception.stackTrace);
                 }
             } else {
@@ -305,6 +309,16 @@ var JUnitView = (function () {
             actual: regExpExecResult[2],
             differences: differences
         }
+    }
+
+    function makeDifferenceReference(difference){
+        var a = document.createElement("a");
+        a.innerText = "<click to see a difference>";
+        a.onclick = function(event){
+            differenceDialog.open(difference);
+            event.stopPropagation();
+        };
+        return a;
     }
 
     return JUnitView;

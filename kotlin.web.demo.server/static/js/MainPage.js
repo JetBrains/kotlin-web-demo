@@ -18,6 +18,7 @@ var sessionId = -1;
 
 var configurationManager = new ConfigurationComponent();
 var actionManager = new ActionManager();
+var differenceDialog = new DifferenceDialogView();
 
 actionManager.registerAction("org.jetbrains.web.demo.run",
     new Shortcut(["Ctrl", "F9"], function (e) {

@@ -99,6 +99,9 @@ var ConsoleOutputView = (function () {
                 }
                 Error.println("");
             },
+            addElement: function(element){
+                currentLine.appendChild(element);
+            },
             makeReference: function (fileName, lineNo) {
                 var a = document.createElement("a");
                 a.innerHTML = fileName + ':' + lineNo;
