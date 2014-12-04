@@ -456,6 +456,7 @@ var KotlinEditor = (function () {
             styleActiveLine: true,
             matchBrackets: true,
             mode: "text/kotlin",
+            autoCloseBrackets: true,
             extraKeys: {
                 "Ctrl-Space": function () {
                     completionProvider.getCompletion(accordion.getSelectedProject(), openedFile.getName(),
