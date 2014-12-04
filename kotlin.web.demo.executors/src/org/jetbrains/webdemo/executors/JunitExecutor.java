@@ -1,4 +1,4 @@
-package org.jetbrains.webdemo.executors;/*
+/*
  * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,17 +17,16 @@ package org.jetbrains.webdemo.executors;/*
 /**
  * Created by Semyon.Atamas on 8/12/2014.
  */
+package org.jetbrains.webdemo.executors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
+import org.junit.runners.model.InitializationError;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,21 +36,64 @@ public class JunitExecutor {
     private static PrintStream standardOutput = System.out;
 
     public static void main(String[] args) {
-        JUnitCore jUnitCore = new JUnitCore();
-        jUnitCore.addListener(new MyRunListener());
-        for (String className : args) {
+        try {
+            JUnitCore jUnitCore = new JUnitCore();
+            jUnitCore.addListener(new MyRunListener());
+            List<Class> classes = getAllClassesFromTheDir(new File(args[0]));
+            for (Class cl : classes) {
+                if(cl.getConstructors().length == 1 && cl.getConstructors()[0].getParameterCount() == 0) {
+                    try {
+                        jUnitCore.run(cl);
+                    } catch (Throwable e) {
+                    }
+                }
+            }
             try {
-                jUnitCore.run(Class.forName(className));
-            } catch (ClassNotFoundException e) {
+                System.setOut(standardOutput);
+                System.out.print(new ObjectMapper().writeValueAsString(output));
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        try {
+        } catch (Throwable e) {
             System.setOut(standardOutput);
-            System.out.print(new ObjectMapper().writeValueAsString(output));
-        } catch (IOException e) {
-            e.printStackTrace();
+            System.out.print("[]");
         }
+    }
+
+    private static List<Class> getAllClassesFromTheDir(File directory) {
+        List<Class> classes = new ArrayList<Class>();
+        String prefix = "";
+        for (File file : directory.listFiles()) {
+            if (file.isDirectory()) {
+                classes.addAll(getAllClassesFromTheDir(file, prefix));
+            } else {
+                if (file.getName().endsWith(".class")) {
+                    try {
+                        classes.add(Class.forName(prefix + file.getName().substring(0, file.getName().length() - ".class".length())));
+                    } catch (ClassNotFoundException e) {
+                    }
+                }
+            }
+        }
+        return classes;
+    }
+
+    private static List<Class> getAllClassesFromTheDir(File directory, String prefix) {
+        List<Class> classes = new ArrayList<Class>();
+        prefix += directory.getName() + ".";
+        for (File file : directory.listFiles()) {
+            if (file.isDirectory()) {
+                classes.addAll(getAllClassesFromTheDir(file, prefix));
+            } else {
+                if (file.getName().endsWith(".class")) {
+                    try {
+                        classes.add(Class.forName(prefix + file.getName().substring(0, file.getName().length() - ".class".length())));
+                    } catch (ClassNotFoundException e) {
+                    }
+                }
+            }
+        }
+        return classes;
     }
 
 

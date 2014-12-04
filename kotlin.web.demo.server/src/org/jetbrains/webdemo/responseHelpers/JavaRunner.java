@@ -349,7 +349,7 @@ public class JavaRunner {
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-core.jar" +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-annotations.jar");
             builder.add("org.jetbrains.webdemo.executors.JunitExecutor");
-            builder.addAll(Arrays.asList(example.testClasses));
+            builder.add(pathToRootOut);
         } else {
             builder.add(classpath +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-databind.jar" +

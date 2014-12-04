@@ -51,8 +51,12 @@ var JUnitView = (function () {
 
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].type == "out") {
-                        createStatistics(data[i].testResults);
-                        createTestTree(data[i].testResults);
+                        if(data[i].testResults.length != 0) {
+                            createStatistics(data[i].testResults);
+                            createTestTree(data[i].testResults);
+                        } else{
+                            element.innerHTML = "No test method found";
+                        }
                     } else {
                         generatedCodeView.setOutput(data[i]);
                     }
