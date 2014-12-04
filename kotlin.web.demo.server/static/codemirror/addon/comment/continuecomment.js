@@ -9,7 +9,7 @@
   else // Plain browser env
     mod(CodeMirror);
 })(function(CodeMirror) {
-  var modes = ["clike", "css", "javascript"];
+  var modes = ["clike", "css", "javascript", "kotlin"];
 
   for (var i = 0; i < modes.length; ++i)
     CodeMirror.extendMode(modes[i], {blockCommentContinue: " * "});

@@ -272,7 +272,10 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
             else return ctx.indented + (closing ? 0 : config.indentUnit);
         },
 
-        electricChars:"{}"
+        electricChars:"{}",
+        blockCommentStart: "/*",
+        blockCommentEnd: "*/",
+        lineComment: "//"
     };
 });
 

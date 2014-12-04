@@ -457,12 +457,13 @@ var KotlinEditor = (function () {
             matchBrackets: true,
             mode: "text/kotlin",
             autoCloseBrackets: true,
+            continueComments: true,
             extraKeys: {
                 "Ctrl-Space": function () {
                     completionProvider.getCompletion(accordion.getSelectedProject(), openedFile.getName(),
                         my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
-                }
-
+                },
+                "Ctrl-/": "toggleComment"
             },
             gutters: ["errors-and-warnings-gutter"],
             tabSize: 2
