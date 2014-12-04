@@ -87,7 +87,7 @@ var RunProvider = (function () {
                             }
                             var output = [
                                 {"text": safe_tags_replace(dataJs), "type": "out"},
-                                {"text": data[0].text, "type": "toggle-info"}
+                                {"text": data[0].text, "type": "generatedJSCode"}
                             ];
                             onSuccess(output);
                         } else {

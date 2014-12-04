@@ -71,8 +71,6 @@ var ConsoleView = (function () {
                     if(data[i].exception != null){
                         consoleOutputView.printException(data[i].exception);
                     }
-                } else if (data[i].type == "toggle-info" || data[i].type == "info") {
-                    generatedCodeView.setOutput(data[i]);
                 } else if(data[i].type == "err"){
                     var message = data[i].text;
                     if (message == "") {
@@ -80,6 +78,10 @@ var ConsoleView = (function () {
                     } else if (message == "timeout : timeout") {
                         consoleOutputView.printToError("Server didn't response for 10 seconds.");
                     }
+                } else if (data[i].type == "toggle-info" || data[i].type == "info" || data[i].type == "generatedJSCode") {
+                    generatedCodeView.setOutput(data[i]);
+                } else{
+                    throw "Unknown data type";
                 }
             }
         }
