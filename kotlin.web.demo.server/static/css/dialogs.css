@@ -250,6 +250,7 @@
 
 .diff{
     float: left;
+    overflow: auto;
     height: 100%;
     width: 50%;
 }

@@ -53,7 +53,7 @@ var ProjectView = (function () {
                 headerElement.parentNode.previousSibling.click();
                 $(contentElement).slideDown();
                 if (!project.isContentLoaded()) {
-                    project.loadContent();
+                    project.loadContent(false);
                 } else {
                     if (selectedFileView != null) {
                         problemsView.onProjectChange();

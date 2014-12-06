@@ -28,7 +28,7 @@ var KotlinEditor = (function () {
     function KotlinEditor() {
         var my_editor;
         var openedFile = null;
-        var configuration = new Configuration(Configuration.mode.ONRUN, Configuration.type.JAVA);
+        var highlightOnTheFly = false;
 
         var CompletionObject = (function () {
             var keywords;
@@ -375,8 +375,8 @@ var KotlinEditor = (function () {
             showCompletionResult: function (data) {
                 completion.processCompletionResult(data);
             },
-            setConfiguration: function (conf) {
-                configuration = conf;
+            highlightOnTheFly: function (flag) {
+                highlightOnTheFly = flag;
             },
             getText: function () {
                 return my_editor.getValue();
@@ -492,7 +492,7 @@ var KotlinEditor = (function () {
 
 
         function getHighlighting() {
-            if (configuration.mode.name == Configuration.mode.ONRUN.name && openedFile != null) {
+            if (highlightOnTheFly && openedFile != null) {
                 var example = accordion.getSelectedProject();
                 highlightingProvider.getHighlighting(example, highlighting.updateHighlighting);
             }

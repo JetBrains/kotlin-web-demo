@@ -64,8 +64,8 @@ var ProjectData = (function () {
             onChange: function () {
 
             },
-            loadContent: function () {
-                if (localStorage.getItem(publicId) != null) {
+            loadContent: function (fromServer) {
+                if (localStorage.getItem(publicId) != null && !fromServer) {
                     var content = JSON.parse(localStorage.getItem(publicId));
                     for (var i = 0; i < content.files.length; ++i) {
                         content.files[i] = File.fromLocalStorage(instance, content.files[i]);
@@ -81,7 +81,7 @@ var ProjectData = (function () {
                 }
             },
             loadOriginal: function () {
-                instance.loadContent();
+                instance.loadContent(true);
             },
             onContentLoaded: function (files) {
             },
@@ -183,7 +183,7 @@ var ProjectData = (function () {
             if (type == ProjectType.USER_PROJECT) throw "User project shouldn't be saved in local storage";
             var fileIDs = [];
             for (var i = 0; i < files.length; ++i) {
-                fileIDs.push(files.getPublicId());
+                fileIDs.push(files[i].getPublicId());
             }
             localStorage.setItem(publicId, JSON.stringify({
                 name: name,

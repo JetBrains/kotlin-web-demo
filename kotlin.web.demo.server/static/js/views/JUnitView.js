@@ -106,17 +106,22 @@ var JUnitView = (function () {
             for (var i = 1; i < commonPackage.length; ++i) {
                 commonPackageFullName += '.' + commonPackage[i];
             }
+            var rootNode = {
+                children: [],
+                name: commonPackage[commonPackage.length - 1],
+                icon: "ok",
+                id: commonPackageFullName
+            };
         } else {
-            commonPackageFullName = "<default package>"
+            commonPackageFullName = "<default package>";
+            var rootNode = {
+                children: [],
+                name: commonPackageFullName,
+                icon: "ok",
+                id: commonPackageFullName
+            };
         }
 
-        var rootNode = {
-            children: [],
-            name: "",
-            icon: "ok",
-            id: commonPackageFullName
-        };
-        rootNode.name = commonPackage[commonPackage.length - 1];
 
         if (commonPackageFullName == classNames[0]) {
             for (var i = 0; i < data.length; ++i) {
@@ -222,7 +227,7 @@ var JUnitView = (function () {
 
         var text = document.createElement("div");
         text.className = "text";
-        text.innerHTML = node.name;
+        text.innerText = node.name;
         nodeElementHeader.appendChild(text);
 
         if (node.children.length > 0) {

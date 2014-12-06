@@ -199,7 +199,6 @@ var completionProvider = (function () {
 
 
 configurationManager.onChange = function (configuration) {
-    editor.setConfiguration(configuration);
     accordion.getSelectedProject().setConfiguration(Configuration.getStringFromType(configuration.type));
 };
 
@@ -494,8 +493,8 @@ window.onbeforeunload = function () {
 
     accordion.getSelectedFile().save();
     accordion.getSelectedProject().save();
-    editor.save();
 
+    localStorage.setItem("highlightOnTheFly", document.getElementById("on-the-fly-checkbox").checked);
     var gridConfiguration = {
         examplesWidth: $("#examples-list-resizer").width(),
         gridBottomHeight: $("#grid-bottom").height(),
@@ -601,6 +600,14 @@ $("#examples-list-resizer").resizable({
         resizeArguments();
     }
 });
+
+$("#on-the-fly-checkbox")
+    .prop("checked", localStorage.getItem("highlightOnTheFly"))
+    .on("change", function () {
+        var checkbox = document.getElementById("on-the-fly-checkbox");
+        editor.highlightOnTheFly(checkbox.checked);
+    });
+editor.highlightOnTheFly(document.getElementById("on-the-fly-checkbox"));
 
 $("#grid-bottom").resizable({
     handles: "n",

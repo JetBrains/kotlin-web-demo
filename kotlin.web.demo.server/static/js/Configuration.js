@@ -63,8 +63,8 @@ var ConfigurationComponent = (function () {
             // type: String
             updateConfiguration: function (type) {
                 configuration = new Configuration(configuration.mode, Configuration.getTypeFromString(type));
-                $("#run-mode").val(type).selectmenu("refresh");
-                if ($("#run-mode").val() == "java") {
+                $("#runMode").val(type).selectmenu("refresh");
+                if ($("#runMode").val() == "java") {
                     document.getElementById("generated-code-link").innerHTML = "Generated classfiles";
                 } else {
                     document.getElementById("generated-code-link").innerHTML = "Generated JavaScript code";
@@ -86,7 +86,7 @@ var ConfigurationComponent = (function () {
             fireChangeEvent();
         });
 
-        $(document).on("change", "#on-the-fly-checkbox", function () {
+        $("#on-the-fly-checkbox").on("change", function () {
             var checkbox = document.getElementById("on-the-fly-checkbox");
             if (checkbox.checked == true) {
                 configuration = new Configuration(Configuration.mode.SERVER, configuration.type);
