@@ -271,19 +271,14 @@
     padding-left: 2px;
 }
 
-.diff-trapezoid{
-    background-color: #ff0000;
-    position: absolute;
-}
-
 .diff-line.replace{
-    background-color: #C1C144;
+    background-color: #FFFF99;
 }
 
 .diff-line.delete{
-    background-color: #9d1e15;
+    background-color: #F62817;
 }
 
 .diff-line.insert{
-    background-color: #0088ff;
+    background-color: #F62817;
 }

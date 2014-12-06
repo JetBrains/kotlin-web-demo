@@ -27,14 +27,6 @@ var DifferenceDialogView = (function () {
                 var sequenceMatcher = new difflib.SequenceMatcher(baseTextLines, newTextLines);
                 dialogElement.innerHTML = "";
                 dialogElement.appendChild(createDialogContent(baseTextLines, newTextLines, sequenceMatcher.get_opcodes()));
-                //dialogElement.appendChild(diffview.buildView({
-                //    baseTextLines: baseTextLines,
-                //    newTextLines: newTextLines,
-                //    opcodes: sequenceMatcher.get_opcodes(),
-                //    baseTextName: "Expected",
-                //    newTextName: "Actual",
-                //    viewType: 0
-                //}));
                 $(dialogElement).dialog("open");
             }
         };
