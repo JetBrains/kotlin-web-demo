@@ -198,10 +198,9 @@ var JUnitView = (function () {
         $(tree).a11yTree({
             toggleSelector: ".tree-node-header .toggle-arrow",
             treeItemLabelSelector: '.tree-node-header .text',
-            onFocus: function (element, event) {
+            onFocus: function (element) {
                 consoleOutputView.clear();
                 printTestOutput(element[0]);
-                event.stopPropagation();
             }
         });
         navTree.appendChild(tree);

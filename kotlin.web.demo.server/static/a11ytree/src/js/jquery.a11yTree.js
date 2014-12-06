@@ -182,7 +182,7 @@
         focusOn : function($item, $tree) {
             if ($item.length === 1) {
                 if (this.options.onFocus) {
-                    this.options.onFocus($item, event);
+                    this.options.onFocus($item);
                 }
                 $tree.find(LIST_ITEM_SELECTOR).attr(ARIA_SELECTED_ATTR,'false');
                 $item.attr(ARIA_SELECTED_ATTR,'true');
