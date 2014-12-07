@@ -364,7 +364,8 @@ var KotlinEditor = (function () {
                 var commandLineArgumentsHeight = $(argumentsWrapper).is(':visible') ? $(argumentsWrapper).outerHeight() : 0;
                 var notificationsHeight = $("#editor-notifications").outerHeight();
                 var editorHeight = workspaceHeight - toolBoxHeight - commandLineArgumentsHeight - notificationsHeight;
-                $(".CodeMirror").css("height", editorHeight);
+                $("#editorinput").find(".CodeMirror").css("height", editorHeight);
+                my_editor.refresh();
             },
             setCursor: function (lineNo, charNo) {
                 my_editor.setCursor(lineNo, charNo);
@@ -463,10 +464,12 @@ var KotlinEditor = (function () {
                     completionProvider.getCompletion(accordion.getSelectedProject(), openedFile.getName(),
                         my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
                 },
+                "Shift-Tab": false,
+                "Ctrl-Alt-L": "indentAuto",
                 "Ctrl-/": "toggleComment"
             },
             gutters: ["errors-and-warnings-gutter"],
-            tabSize: 2
+            tabSize: 4
         });
 
         my_editor.on("change", function () {

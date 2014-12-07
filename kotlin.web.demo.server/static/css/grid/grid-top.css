@@ -96,6 +96,7 @@
 #editor-notifications {
     color: #bf6126;
     background-color: #ffe8bb;
+    overflow: hidden;
 }
 
 .editor-notifications-message {
