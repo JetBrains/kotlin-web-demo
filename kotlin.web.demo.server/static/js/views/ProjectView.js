@@ -56,7 +56,6 @@ var ProjectView = (function () {
                     project.loadContent(false);
                 } else {
                     if (selectedFileView != null) {
-                        problemsView.onProjectChange();
                         selectedFileView.fireSelectEvent();
                     }
                     instance.onSelected(instance);

@@ -226,7 +226,7 @@ var accordion = (function () {
         argumentsInput.value = project.getArgs();
         configurationManager.updateConfiguration(project.getConfiguration());
         helpDialogView.updateProjectHelp(project.getHelp());
-        problemsView.onProjectChange();
+        problemsView.clear();
     };
 
     accordion.onSelectFile = function (previousFile, currentFile) {

@@ -43,7 +43,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
 
     function addMessagesToProblemsView() {
         var fileNodes = $("#problems-tree").find(">li");
-        var expandedStatus = {}
+        var expandedStatus = {};
         for(var i = 0; i < fileNodes.length; ++i){
             expandedStatus[fileNodes[i].id] = fileNodes[i].getAttribute("aria-expanded");
         }
