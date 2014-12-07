@@ -57,6 +57,8 @@ var ProjectView = (function () {
                 } else {
                     if (selectedFileView != null) {
                         selectedFileView.fireSelectEvent();
+                    } else{
+                        editor.closeFile();
                     }
                     instance.onSelected(instance);
                 }
@@ -130,6 +132,8 @@ var ProjectView = (function () {
                         selectedFileView.fireSelectEvent();
                         instance.onSelected(instance);
                     }
+                } else if(accordion.getSelectedProject().getPublicId() == project.getPublicId()){
+                    editor.closeFile();
                 }
             };
 
@@ -163,7 +167,7 @@ var ProjectView = (function () {
                 return accordion.validateNewProjectName(newName);
             }
         };
-        var newFileDialog = new InputDialogView("Add new file", "Filename:", "Add");
+        var newFileDialog = new InputDialogView("Add new file", "File name:", "Add");
         newFileDialog.validate = instance.validateNewFileName;
 
 

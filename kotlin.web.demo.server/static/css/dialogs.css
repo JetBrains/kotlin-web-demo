@@ -139,25 +139,21 @@
 
 }
 
-.ui-tooltip {
-    width: 210px;
-    border: 1px solid #969696;
-    border-radius: 3px;
-    background-color: #ffffff;
-    padding: 2px;
-    font-size: 12px;
-    z-index: 1003;
-}
-
-#help-dialog {
-
+.input-dialog-error-message{
+    top: 15px;
+    position: relative;
+    color: red;
 }
 
 #example-help {
     border: 0 solid #969696;
+    height: 200px;
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-right: 80px;
     border-bottom-width: 1px;
     line-height: 16px;
-    padding: 8px;
+
     overflow: auto;
 }
 

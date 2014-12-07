@@ -102,6 +102,9 @@ var ProjectData = (function () {
             },
             setContent: function (content) {
                 if (!contentLoaded) {
+                    for (var i = 0; i < content.files.length; ++i) {
+                        content.files[i] = new File(instance, content.files[i]);
+                    }
                     onContentLoaded(content);
                     contentLoaded = true;
                 } else {
@@ -122,22 +125,12 @@ var ProjectData = (function () {
             getArgs: function () {
                 return args;
             },
-            getContentCopy: function () {
-                return copy({
-                    files: files,
-                    args: args,
-                    confType: confType,
-                    originUrl: originUrl,
-                    help: help,
-                    type: type
-                });
-            },
             setArguments: function (args) {
                 instance.args = args;
                 instance.onChange();
             },
             getPublicId: function () {
-                return publicId
+                return publicId;
             },
             getType: function () {
                 return type

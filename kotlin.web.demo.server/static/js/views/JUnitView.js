@@ -227,7 +227,7 @@ var JUnitView = (function () {
 
         var text = document.createElement("div");
         text.className = "text";
-        text.innerText = node.name;
+        text.textContent = node.name;
         nodeElementHeader.appendChild(text);
 
         if (node.children.length > 0) {
@@ -317,7 +317,7 @@ var JUnitView = (function () {
 
     function makeDifferenceReference(difference){
         var a = document.createElement("a");
-        a.innerText = "<click to see a difference>";
+        a.textContent = "<click to see a difference>";
         a.onclick = function(event){
             differenceDialog.open(difference);
             event.stopPropagation();

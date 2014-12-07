@@ -233,7 +233,10 @@ public class MyHttpSession {
                     project.name = parameters.get("args")[0]; //when user calls save as we must change project name
                     project.parent = "My Programs"; //to show that it is user project, not example
                     String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), project);
-                    writeResponse(publicId, HttpServletResponse.SC_OK);
+                    ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
+                    result.put("publicId", publicId);
+                    result.put("content", MySqlConnector.getInstance().getProjectContent(sessionInfo.getUserInfo(), publicId));
+                    writeResponse(result.toString(), HttpServletResponse.SC_OK);
                 } catch (IOException e) {
                     writeResponse("Can't parse file", HttpServletResponse.SC_BAD_REQUEST);
                 }

@@ -120,7 +120,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
 
         var text = document.createElement("div");
         text.className = "text";
-        text.innerText = node.name;
+        text.textContent = node.name;
         nodeElementHeader.appendChild(text);
 
         if (node.children.length > 0) {

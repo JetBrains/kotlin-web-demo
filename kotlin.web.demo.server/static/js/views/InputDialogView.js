@@ -30,14 +30,11 @@ var InputDialogView = (function () {
 
     var input = document.createElement("input");
     input.id = "input-dialog-input";
-    $(input).tooltip({
-        position: {
-            my: "left top",
-            at: "left+15 bottom+3"
-        }
-    });
     dialog.appendChild(input);
 
+    var message = document.createElement("div");
+    dialog.appendChild(message);
+    message.className = "input-dialog-error-message";
 
     $(dialog).dialog({
         modal: "true",
@@ -114,12 +111,9 @@ var InputDialogView = (function () {
             input.style.outlineColor = result.valid ? "" : "red";
             $(dialog).parent().find("button:eq(1)").button("option", "disabled", !result.valid);
             if (!result.valid && result.message != null) {
-                input.title = result.message;
-
-                $(input).tooltip("open");
+                message.textContent = result.message;
             } else {
-                $(input).tooltip("close");
-                input.title = "";
+                message.textContent = "";
             }
             input.focus();
         }

@@ -58,14 +58,14 @@ var AccordionView = (function () {
                 selectProject(publicId);
                 projects[publicId].getProjectData().addEmptyFile(name, publicId);
             },
-            addNewProjectWithContent: function (content) {
+            addNewProjectWithContent: function (publicId, content) {
                 addProject(myProgramsContentElement, {
                     name: content.name,
-                    publicId: content.publicId,
+                    publicId: publicId,
                     type: ProjectType.USER_PROJECT
                 });
-                projects[content.publicId].getProjectData().setContent(content);
-                selectProject(content.publicId);
+                projects[publicId].getProjectData().setContent(content);
+                selectProject(publicId);
             },
             onLogout: function () {
                 localStorage.setItem("openedItemId", instance.getSelectedProject().getPublicId());
@@ -131,6 +131,9 @@ var AccordionView = (function () {
             onUnmodifiedSelectedFile: function () {
             },
             onModifiedSelectedFile: function () {
+            },
+            onProjectDeleted: function(){
+
             }
         };
 
@@ -179,15 +182,15 @@ var AccordionView = (function () {
             } else {
                 var openedItemId = localStorage.getItem("openedItemId");
                 localStorage.removeItem("openedItemId");
-                if (openedItemId != null) {
+                if (openedItemId == null) {
+                    $(element).accordion('option', 'active', 0);
+                    element.childNodes[1].firstElementChild.click();
+                } else {
                     selectProject(openedItemId);
                     if (localStorage.getItem("incompleteAction") == "save") {
                         localStorage.removeItem("incompleteAction");
                         selectedProjectView.saveAs();
                     }
-                } else {
-                    $(element).accordion('option', 'active', 0);
-                    element.childNodes[1].firstElementChild.click();
                 }
             }
         }
@@ -201,25 +204,17 @@ var AccordionView = (function () {
             var projectHeaderElement = document.createElement("div");
             var projectContentElement = document.createElement("div");
 
-            if (folderContentElement == publicLinksContentElement) {
-                folderContentElement.insertBefore(projectContentElement, folderContentElement.firstElementChild);
-                folderContentElement.insertBefore(projectHeaderElement, folderContentElement.firstElementChild.nextSibling);
-            } else {
-                folderContentElement.appendChild(projectHeaderElement);
-                folderContentElement.appendChild(projectContentElement);
-            }
+            folderContentElement.appendChild(projectHeaderElement);
+            folderContentElement.appendChild(projectContentElement);
 
 
             var projectView = new ProjectView(header, projectContentElement, projectHeaderElement);
             projectView.onHeaderClick = selectProject;
             projectView.onDelete = function () {
                 if (selectedProjectView == projects[header.publicId]) {
+                    history.replaceState("", "", "?");
                     selectedProjectView = null;
-                    if (myProgramsContentElement.firstElementChild == null || myProgramsContentElement.firstElementChild.id == "add_new_project") {
-                        loadFirstItem();
-                    } else {
-                        myProgramsContentElement.firstChild.click();
-                    }
+                    loadFirstItem();
                 }
                 delete projects[header.publicId];
             };
@@ -280,12 +275,14 @@ var AccordionView = (function () {
         }
 
         function selectProject(publicId) {
-            if (selectedProjectView != null) {
-                $(selectedProjectView.getHeaderElement()).removeClass("selected");
-                $(selectedProjectView.getContentElement()).slideUp();
+            if(selectedProjectView == null || selectedProjectView.getProjectData().getPublicId() != publicId) {
+                if (selectedProjectView != null) {
+                    $(selectedProjectView.getHeaderElement()).removeClass("selected");
+                    $(selectedProjectView.getContentElement()).slideUp();
+                }
+                selectedProjectView = projects[publicId];
+                selectedProjectView.select();
             }
-            selectedProjectView = projects[publicId];
-            selectedProjectView.select();
         }
 
         return instance;

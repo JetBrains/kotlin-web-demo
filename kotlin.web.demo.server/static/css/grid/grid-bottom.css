@@ -255,6 +255,10 @@
     padding: 3px 3px 3px 7px;
 }
 
+#unit-test-statistic span{
+    float: left;
+}
+
 #test-tree .ui-accordion-header {
     outline: none;
     cursor: pointer;

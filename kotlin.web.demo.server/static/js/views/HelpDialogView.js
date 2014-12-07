@@ -34,7 +34,7 @@ var HelpDialogView = (function () {
 
     $(dialogElement).dialog(
         {
-            width: 350,
+            minWidth: 500,
             autoOpen: false,
             modal: true
         }
@@ -47,10 +47,11 @@ var HelpDialogView = (function () {
             },
             updateProjectHelp: function (data) {
                 if (data != null && data != "") {
-                    exampleHelpElement.parentNode.style.display = "block";
+                    exampleHelpElement.style.display = "block";
                     exampleHelpElement.innerHTML = data;
                 } else {
-                    exampleHelpElement.parentNode.style.display = "none";
+                    exampleHelpElement.style.display = "none";
+                    exampleHelpElement.innerHTML = "";
                 }
             },
             addShortcut: function (keyNames, description) {

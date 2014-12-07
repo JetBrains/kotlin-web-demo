@@ -247,7 +247,8 @@ var accordion = (function () {
         statusBarView.setMessage(actionCode);
     };
 
-    accordion.onDeleteProgram = function () {
+    accordion.onProjectDeleted = function () {
+        history.replaceState("", "", "");
         statusBarView.setStatus(ActionStatusMessages.delete_program_ok);
     };
 
@@ -461,7 +462,7 @@ var saveButton = $("#saveButton").click(function () {
         accordion.getSelectedFile().save();
         accordion.getSelectedProject().save();
     } else {
-        accordion.getSelectedProject().saveAs();
+        $("#saveAsButton").click()
     }
 });
 
@@ -470,15 +471,14 @@ var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Sa
 saveProjectDialog.validate = accordion.validateNewProjectName;
 
 $("#saveAsButton").click(function () {
-    saveProjectDialog.open(projectProvider.forkProject.bind(null, accordion.getSelectedProject(), function (name, publicId) {
-        var projectToFork = accordion.getSelectedProject();
-        var content = projectToFork.getContentCopy();
-        content.name = name;
-        content.publicId = publicId;
-        content.parent = "My programs";
-        accordion.addNewProjectWithContent(content);
-        projectToFork.loadOriginal();
-    }), accordion.getSelectedProject().getName());
+    if(loginView.isLoggedIn()) {
+        saveProjectDialog.open(projectProvider.forkProject.bind(null, accordion.getSelectedProject(), function (data) {
+            accordion.getSelectedProject().loadOriginal();
+            accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
+        }), accordion.getSelectedProject().getName());
+    } else {
+        loginDialog.dialog("open");
+    }
 });
 
 run_button.attr("title", run_button.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName()));
@@ -527,11 +527,12 @@ var argumentsWrapper = document.getElementById("argumentsWrapper");
 argumentsButton.onclick = function () {
     if ($(argumentsButton).hasClass("active")) {
         $(argumentsButton).removeClass("active");
-        $(argumentsWrapper).slideUp({step: editor.resize});
+        argumentsWrapper.style.display = "none";
     } else {
         $(argumentsButton).addClass("active");
-        $(argumentsWrapper).slideDown({step: editor.resize});
+        argumentsWrapper.style.display = "block";
     }
+    editor.resize();
 };
 
 editor.resize();

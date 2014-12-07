@@ -77,7 +77,7 @@ var FileView = (function () {
 
             var icon = document.createElement("div");
             if (file.isModifiable()) {
-                icon.className = "kotlinFileIcon"
+                icon.className = "fileIcon"
             } else {
                 icon.className = "unmodifiableKotlinFileIcon"
             }

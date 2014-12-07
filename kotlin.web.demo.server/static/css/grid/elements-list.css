@@ -172,7 +172,7 @@
     white-space: normal;
 }
 
-.example-filename .kotlinFileIcon {
+.example-filename .fileIcon {
     top: 1px;
     float: left;
     margin-right: 3px;
@@ -181,7 +181,7 @@
     background: url("/static/images/icons.png") no-repeat -19px -92px;
 }
 
-.example-filename.modified .kotlinFileIcon {
+.example-filename.modified .fileIcon {
     width: 14px;
     height: 15px;
     background: url("/static/images/icons.png") no-repeat -37px -92px;

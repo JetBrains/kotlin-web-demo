@@ -165,12 +165,13 @@ var ProjectProvider = (function () {
         function forkProject(content, callback, name) {
             $.ajax({
                 url: generateAjaxUrl("addProject"),
-                success: function (publicId) {
-                    instance.onProjectForked(name, publicId);
-                    callback(name, publicId);
+                success: function (data) {
+                    instance.onProjectForked(name);
+                    callback(data);
                 },
                 type: "POST",
                 timeout: 10000,
+                dataType: "json",
                 data: {content: JSON.stringify(content), args: name},
                 error: function (jqXHR, textStatus, errorThrown) {
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
