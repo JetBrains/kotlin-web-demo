@@ -283,3 +283,23 @@
 .diff-line.insert{
     background-color: #F62817;
 }
+
+#myPopupForConverterFromJavaToKotlin{
+    overflow: hidden;
+}
+
+#myPopupForConverterFromJavaToKotlin>div{
+    float: left;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#myPopupForConverterFromJavaToKotlin .CodeMirror-lines{
+    padding: 0;
+}
+
+#myPopupForConverterFromJavaToKotlin span.CodeMirror-matchingbracket{
+    color: inherit;
+    background-color: #99ccff;
+}

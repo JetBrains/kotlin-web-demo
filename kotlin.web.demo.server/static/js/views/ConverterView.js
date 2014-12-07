@@ -24,59 +24,88 @@
 
 var ConverterView = (function () {
 
-    function ConverterView(element, converterModel) {
-        var my_editor;
-        var model = converterModel;
-
-        $("body div:first").after("<div class=\"myPopupForConverterFromJavaToKotlin\" title=\"Convert your Java code to Kotlin\"><textarea class=\"CodeMirror\" name=\"myTextareaForConverterFromJavaToKotlin\"></textarea></div>");
-
-        var popup = $(".myPopupForConverterFromJavaToKotlin");
-
+    function ConverterView(converterModel) {
         var instance = {
-            closeDialog: function () {
-                popup.dialog("close");
+            open: function(){
+                $(popup).dialog("open");
+                var height = $(popup).height();
+                $(popup).find(".CodeMirror").height(height);
+                $(popup).find(".CodeMirror-scroll").height(height);
+                $(popup).find(".CodeMirror-gutter").height(height);
+                $(popup).find(".CodeMirror-gutters").height(height);
+                //javaEditor.refresh();
+                //kotlinEditor.refresh();
             }
         };
 
-        my_editor = CodeMirror.fromTextArea(document.getElementsByName("myTextareaForConverterFromJavaToKotlin")[0], {
+        var popup = document.createElement("div");
+        popup.id = "myPopupForConverterFromJavaToKotlin";
+        popup.title = "Convert your java code to kotlin";
+        document.body.appendChild(popup);
+
+        var leftHalf = document.createElement("div");
+        var javaCodeTextarea = document.createElement("textarea");
+        leftHalf.appendChild(javaCodeTextarea);
+        popup.appendChild(leftHalf);
+        var javaEditor = CodeMirror.fromTextArea(javaCodeTextarea, {
             lineNumbers: true,
+            styleActiveLine: true,
             matchBrackets: true,
+            autoCloseBrackets: true,
+            continueComments: true,
+            extraKeys: {
+                "Shift-Tab": false,
+                "Ctrl-Alt-L": "indentAuto",
+                "Ctrl-/": "toggleComment"
+            },
             mode: "text/x-java",
-            minHeight: "430px"
+            minHeight: "430px",
+            tabSize: 4
         });
 
-        popup.dialog({
+        var rightHalf = document.createElement("div");
+        var kotlinCodeTextarea = document.createElement("textarea");
+        rightHalf.appendChild(kotlinCodeTextarea);
+        popup.appendChild(rightHalf);
+        var kotlinEditor = CodeMirror.fromTextArea(kotlinCodeTextarea, {
+            lineNumbers: true,
+            matchBrackets: true,
+            styleActiveLine: true,
+            readOnly: true,
+            mode: "text/kotlin",
+            minHeight: "430px",
+            tabSize: 4
+        });
+
+        $(popup).dialog({
             modal: true,
-            width: 640,
-            height: 480,
             autoOpen: false,
+            width: 700,
+            height: 700,
             resizeStop: function (event, ui) {
                 var height = popup.height();
-                $("div #scroll", popup).css("height", height + "px");
-                $("div #gutter", popup).css("height", height + "px");
-                my_editor.refresh();
+                $(popup).find(".CodeMirror").height(height);
+                $(popup).find(".CodeMirror-scroll").height(height);
+                $(popup).find(".CodeMirror-gutter").height(height);
+                $(popup).find(".CodeMirror-gutters").height(height);
+                //javaEditor.refresh();
+                //kotlinEditor.refresh();
             },
             buttons: [
                 { text: "Convert to Kotlin",
                     click: function () {
-                        model.convert(my_editor.getValue());
-                    }
-                },
-                { text: "Cancel",
-                    click: function () {
-                        popup.dialog("close");
+                        converterModel.convert(javaEditor.getValue(), function(text){
+                            kotlinEditor.setValue(text);
+                            var last = kotlinEditor.lineCount();
+                            kotlinEditor.operation(function() {
+                                for (var i = 0; i < last; ++i) kotlinEditor.indentLine(i);
+                            });
+                        });
                     }
                 }
             ]
         });
 
-        element.click(function () {
-            popup.dialog("open");
-            var height = popup.height();
-            $("div #scroll", popup).css("height", height + "px");
-            $("div #gutter", popup).css("height", height + "px");
-            my_editor.refresh();
-        });
 
         return instance;
     }

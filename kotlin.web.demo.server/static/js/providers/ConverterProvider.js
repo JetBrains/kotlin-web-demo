@@ -26,19 +26,20 @@ var ConverterProvider = (function () {
     function ConverterProvider(onSuccess, onFail) {
 
         var instance = {
-            convert: function (text) {
-                convert(text);
+            convert: function (text, callback) {
+                convert(text, callback);
             }
         };
 
-        function convert(text) {
+        function convert(text, callback) {
             $.ajax({
                 url: generateAjaxUrl("convertToKotlin"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            onSuccess(data[0].text);
+                            onSuccess();
+                            callback(data[0].text);
                         } else {
                             onFail(data);
                         }
