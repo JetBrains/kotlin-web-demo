@@ -78,6 +78,12 @@ var consoleView = new ConsoleView(document.getElementById("program-output"), $("
 var junitView = new JUnitView(document.getElementById("program-output"), $("#result-tabs"));
 var problemsView = new ProblemsView($("#problems"), $("#result-tabs"));
 
+problemsView.setCursor = function(filename, line, ch){
+    accordion.getSelectedProjectView().getFileViewByName(filename).fireSelectEvent();
+    editor.setCursor(line, ch);
+    editor.focus();
+};
+
 var canvas;
 canvasDialog = $("#popupForCanvas").dialog({
     width: 630,

@@ -28,6 +28,10 @@ String.prototype.startsWith = function (a) {
     return 0 === this.indexOf(a);
 };
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 function addKotlinExtension(filename) {
     return filename.endsWith(".kt") ? filename : filename + ".kt";
 }

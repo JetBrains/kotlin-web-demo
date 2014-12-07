@@ -23,137 +23,128 @@
 
 
 var ProblemsView = function (element, /*Nullable*/ tabs) {
-    var scroll = document.createElement("div");
-    scroll.className = "scroll";
-    element.append(scroll);
-
-
     var console = document.createElement("div");
-    console.className = "result-view";
-    scroll.appendChild(console);
+    console.className = "scroll";
+    element.append(console);
 
     var instance = {
         addMessages: function () {
             addMessagesToProblemsView();
         },
         onProjectChange: function (newProject) {
-            onProjectChange(newProject);
         },
         clear: function () {
             console.innerHTML = "";
+        },
+        setCursor: function(filename, line, character){
+
         }
     };
 
-    function onProjectChange() {
-        console.innerHTML = "";
-
-        var newProjectData = accordion.getSelectedProject();
-        for (var i = 0; i < newProjectData.getFiles().length; i++) {
-            var file = newProjectData.getFiles()[i];
-
-            var fileProblemsDiv = document.createElement("div");
-            fileProblemsDiv.id = file.getName().replace(/ /g, "_") + "_problems";
-            fileProblemsDiv.style.display = "none";
-
-            var fileProblemsHeader = document.createElement("p");
-            fileProblemsHeader.className = "problemsView-expanded-filename-header";
-            var arrow = document.createElement("div");
-            arrow.className = "arrow";
-            fileProblemsHeader.appendChild(arrow);
-
-            var img = document.createElement("div");
-            img.className = "kotlin-file-icon";
-            fileProblemsHeader.appendChild(img);
-
-            var fileName = document.createElement("span");
-            fileName.innerHTML = file.getName();
-            fileProblemsHeader.appendChild(fileName);
-            $(fileProblemsHeader).click(function () {
-                if ($(this).next().is(':hidden')) {
-                    $(this).next().show();
-                    this.className = "problemsView-expanded-filename-header";
-                } else {
-                    $(this).next().hide();
-                    this.className = "problemsView-filename-header";
-                }
-            });
-            fileProblemsDiv.appendChild(fileProblemsHeader);
-
-            var fileProblemsContent = document.createElement("div");
-            fileProblemsContent.id = file.getName().replace(/ /g, "_") + "_problems_content";
-            fileProblemsDiv.appendChild(fileProblemsContent);
-
-            console.appendChild(fileProblemsDiv)
-        }
-    }
-
     function addMessagesToProblemsView() {
-        if (tabs != null) {
-            tabs.tabs("option", "active", 0);
+        var fileNodes = $("#problems-tree").find(">li");
+        var expandedStatus = {}
+        for(var i = 0; i < fileNodes.length; ++i){
+            expandedStatus[fileNodes[i].id] = fileNodes[i].getAttribute("aria-expanded");
         }
+
+        console.innerHTML = "";
+        var treeElement = document.createElement("ul");
+        treeElement.id = "problems-tree";
+        console.appendChild(treeElement);
 
         var projectData = accordion.getSelectedProject();
         for (var i = 0; i < projectData.getFiles().length; i++) {
             var file = projectData.getFiles()[i];
             if (file.getErrors().length > 0) {
-                document.getElementById(file.getName().replace(/ /g, "_") + "_problems").style.display = "block";
-                var fileErrors = document.getElementById(file.getName().replace(/ /g, "_") + "_problems_content");
-                fileErrors.innerHTML = "";
+                var fileId = file.getName().replace(/ /g, "%20") + "_problems";
+                var fileProblemsNode = {
+                    children: [],
+                    name: file.getName(),
+                    icon: "kotlin-file-icon",
+                    id: fileId
+                };
+
                 for (var j = 0; j < file.getErrors().length; j++) {
                     var error = file.getErrors()[j];
-                    error.message = unEscapeString(error.message);
-                    var problem = createElementForProblemsView(error);
-                    fileErrors.appendChild(problem);
+                    var errorNode = {
+                        children: [],
+                        name: error.severity.toLowerCase().capitalize() + ":(" + (error.interval.start.line + 1) + ", " + error.interval.start.ch + ") " + unEscapeString(error.message),
+                        icon: error.severity,
+                        id: fileId + "_" + error.severity + "_" + error.interval.start.line + "_" + error.interval.start.ch,
+                        filename: file.getName(),
+                        line: error.interval.start.line,
+                        ch: error.interval.start.ch
+                    };
+                    fileProblemsNode.children.push(errorNode);
                 }
-            } else {
-                document.getElementById(file.getName().replace(/ /g, "_") + "_problems").style.display = "none";
+                displayTreeNode(fileProblemsNode, treeElement);
+            }
+        }
+
+        $(treeElement).a11yTree({
+            toggleSelector: ".tree-node-header .toggle-arrow",
+            treeItemLabelSelector: '.tree-node-header .text',
+            onFocus: function(item){
+                if($(document.activeElement).hasClass("tree-node")) {
+                    item.focus();
+                }
+            }
+        });
+
+        $("#problems-tree").find("li[aria-expanded]").attr("aria-expanded", "true");
+        for(var id in expandedStatus){
+            if(expandedStatus[id] == "false"){
+                document.getElementById(id).setAttribute("aria-expanded", "false");
             }
         }
     }
 
-    function createElementForProblemsView(problem) {
-        var p = document.createElement("p");
+    function displayTreeNode(node, parentElement) {
+        var nodeElement = document.createElement("li");
+        nodeElement.className = "tree-node";
+        nodeElement.id = node.id;
+        nodeElement.setAttribute("tabindex", "-1");
+        if(node.expanded == "true"){
+            nodeElement.setAttribute("aria-expanded", "true");
+        }
+        parentElement.appendChild(nodeElement);
+
+        var nodeElementHeader = document.createElement("div");
+        nodeElementHeader.className = "tree-node-header";
+        nodeElement.appendChild(nodeElementHeader);
+
         var img = document.createElement("div");
-        if (problem.severity == 'WARNING') {
-            img.className = "problemsViewWarningImg";
-            p.className = "problemsViewWarning";
-        } else if (problem.severity == 'STACKTRACE') {
-            p.className = "problemsViewStacktrace";
-        } else {
-            img.className = "problemsViewErrorImg";
-            p.className = "problemsViewError";
-        }
-        p.appendChild(img);
+        img.className = "img " + node.icon;
+        nodeElementHeader.appendChild(img);
 
+        var text = document.createElement("div");
+        text.className = "text";
+        text.innerText = node.name;
+        nodeElementHeader.appendChild(text);
 
-        var typeStr;
-        if (problem.severity == "ERROR") {
-            typeStr = "Error";
-        } else if (problem.severity == "WARNING") {
-            typeStr = "Warning";
-        } else if (problem.severity == "INFO") {
-            typeStr = "Info";
-        }
-        var titleDiv = document.createElement("span");
-        if (problem.interval.start == null) {
-            titleDiv.innerHTML = typeStr + ": " + problem.message;
-        } else {
-            var span = document.createElement("span");
-            var pos = problem.interval.start;
+        if (node.children.length > 0) {
+            nodeElementHeader.className += " file-problems-header";
+            var toggle = document.createElement("div");
+            toggle.className = "toggle-arrow";
+            nodeElementHeader.insertBefore(toggle, nodeElementHeader.firstChild);
 
-            titleDiv.innerHTML = typeStr + ":(" + pos.line + ", " + pos.ch + ") " + problem.message;
-        }
-
-        p.appendChild(titleDiv);
-        $(p).click((function () {
-            function click() {
-                editor.setCursor(pos.line, pos.ch);
-                editor.focus();
+            var childrenNode = document.createElement("ul");
+            for (var i = 0; i < node.children.length; ++i) {
+                displayTreeNode(node.children[i], childrenNode);
             }
-
-            return click;
-        })(problem.interval.start));
-        return p;
+            nodeElement.appendChild(childrenNode);
+        } else{
+            nodeElement.ondblclick = function(){
+                instance.setCursor(node.filename, node.line, node.ch);
+            };
+            nodeElement.onkeyup =  function(event){
+                if (event.keyCode == 13) {
+                    event.stopPropagation();
+                    instance.setCursor(node.filename, node.line, node.ch);
+                }
+            };
+        }
     }
 
 

@@ -29,7 +29,7 @@
     color: #9e9e9e;
 }
 
-.consoleOutput{
+.consoleOutput {
     overflow: auto;
     padding-left: 5px;
 }
@@ -112,7 +112,8 @@
 }
 
 .problemsView-filename-header span, .problemsView-expanded-filename-header span {
-    position: absolute;
+    position: relative;
+    padding-left: 2px;
 }
 
 .problemsView-filename-header, .problemsView-expanded-filename-header {
@@ -121,24 +122,39 @@
 
 .problemsView-filename-header .arrow {
     display: inline-block;
-    float: left;
-    margin-top: 3px;
-    width: 4px;
-    height: 7px;
-    background: url("/static/images/icons.png") -58px -58px;
+    margin: 2px 4px 1px;
+    height: 9px;
+    width: 7px;
+    background: url("/static/images/testTabIcons.png") -10px 0;
 }
 
 .problemsView-expanded-filename-header .arrow {
     display: inline-block;
-    float: left;
-    margin-top: 5px;
-    width: 7px;
-    height: 4px;
-    background: url("/static/images/icons.png") -58px -66px;
+    margin: 3px 3px 1px;
+    height: 7px;
+    width: 9px;
+    background: url("/static/images/testTabIcons.png");
 }
 
-.problemsViewErrorImg {
-    display: inline-block;
+#problems-tree {
+    outline: none;
+}
+
+#problems-tree .text {
+    top: 1px;
+}
+
+#problems-tree .file-problems-header .text {
+    top: auto;
+    bottom: 1px;
+}
+
+#problems-tree li {
+    outline: none;
+}
+
+.img.ERROR {
+    float: left;
     height: 12px;
     width: 12px;
     position: relative;
@@ -147,8 +163,8 @@
     background: url("/static/images/errors_and_warnings.png") no-repeat 0 0;
 }
 
-.problemsViewWarningImg {
-    display: inline-block;
+.img.WARNING {
+    float: left;
     height: 12px;
     width: 12px;
     position: relative;
@@ -161,7 +177,7 @@
     font-family: monospace;
 }
 
-#generated-code{
+#generated-code {
     height: 180px;
     padding: 5px 5px 0;
     overflow: auto;
@@ -297,6 +313,7 @@ li[aria-expanded="false"] > ul {
 }
 
 .tree-node-header {
+    overflow: hidden;
     padding-top: 1px;
     padding-bottom: 1px;
     line-height: 1;
@@ -319,14 +336,14 @@ li[aria-expanded="false"] > ul {
     display: inline-block;
 }
 
-li[aria-expanded="false"]>.tree-node-header .toggle-arrow {
+li[aria-expanded="false"] > .tree-node-header .toggle-arrow {
     margin: 2px 4px 1px;
     height: 9px;
     width: 7px;
     background: url("/static/images/testTabIcons.png") -10px 0;
 }
 
-li[aria-expanded="true"]>.tree-node-header .toggle-arrow {
+li[aria-expanded="true"] > .tree-node-header .toggle-arrow {
     margin: 3px 3px 1px;
     height: 7px;
     width: 9px;
@@ -345,7 +362,8 @@ li[aria-expanded="true"]>.tree-node-header .toggle-arrow {
 }
 
 .kotlin-file-icon {
-    top: 1px;
+    position: relative;
+    top: 2px;
     display: inline-block;
     width: 14px;
     height: 14px;
