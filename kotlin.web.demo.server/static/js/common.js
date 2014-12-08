@@ -16,8 +16,7 @@
 
 var BEFORE_EXIT = "The changes you made to the program will be lost when you change an example. Do you want to leave the page?";
 
-var KOTLIN_VERSION = "0.8.313";
-var APPLET_VERSION = "22012013";
+var KOTLIN_VERSION = "0.9.1189";
 var WEB_DEMO_VERSION = "${web.demo.version}";
 
 String.prototype.endsWith = function (a) {

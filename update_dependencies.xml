@@ -104,11 +104,11 @@
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
                            replace="KOTLIN_VERSION = &#34;${version}&#34;"
                            byline="true"/>
-            <replaceregexp file="kotlin.web.demo.server/static/components/common.js"
+            <replaceregexp file="kotlin.web.demo.server/static/js/common.js"
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
                            replace="KOTLIN_VERSION = &#34;${version}&#34;"
                            byline="true"/>
-            <replaceregexp file="kotlin.web.demo.server/static/components/common.js"
+            <replaceregexp file="kotlin.web.demo.server/static/js/common.js"
                            match="WEB_DEMO_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
                            replace="WEB_DEMO_VERSION = &#34;${web.demo.version}&#34;"
                            byline="true"/>

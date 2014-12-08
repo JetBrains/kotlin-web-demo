@@ -657,6 +657,10 @@ function setKotlinJsOutput() {
     Kotlin.out = new Kotlin.BufferedOutput();
 }
 
+function setKotlinVersion(){
+    document.getElementById("version").innerHTML = "(" + KOTLIN_VERSION + ")";
+}
+
 function blockContent(){
     var overlay  = document.getElementById("global-overlay");
     overlay.style.display = "block";
@@ -672,4 +676,5 @@ function unBlockContent(){
 setSessionId();
 loadShortcuts();
 setKotlinJsOutput();
+setKotlinVersion();
 
