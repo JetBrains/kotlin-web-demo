@@ -47,6 +47,9 @@ var ConsoleView = (function () {
                         consoleOutputView.err.println(["Server didn't response for 10 seconds."]);
                     }
                 }
+            },
+            clear: function () {
+                element.innerHTML = "";
             }
         };
 

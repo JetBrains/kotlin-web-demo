@@ -78,7 +78,7 @@ var consoleView = new ConsoleView(document.getElementById("program-output"), $("
 var junitView = new JUnitView(document.getElementById("program-output"), $("#result-tabs"));
 var problemsView = new ProblemsView($("#problems"), $("#result-tabs"));
 
-problemsView.setCursor = function(filename, line, ch){
+problemsView.setCursor = function (filename, line, ch) {
     accordion.getSelectedProjectView().getFileViewByName(filename).fireSelectEvent();
     editor.setCursor(line, ch);
     editor.focus();
@@ -138,7 +138,6 @@ var runProvider = (function () {
     }
 
     function onFail(error) {
-        run_button.button("option", "disabled", false);
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.run_java_fail);
     }
@@ -176,7 +175,6 @@ var highlightingProvider = (function () {
     }
 
     function onFail(error) {
-        run_button.button("option", "disabled", false);
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.get_highlighting_fail);
     }
@@ -220,10 +218,14 @@ var accordion = (function () {
     var accordion = new AccordionView(document.getElementById("examples-list"));
 
     accordion.onProjectSelected = function (project) {
+        consoleView.clear();
+        junitView.clear();
+        generatedCodeView.clear();
+        problemsView.addMessages();
+        $("#result-tabs").tabs("option", "active", 0);
         argumentsInput.value = project.getArgs();
         configurationManager.updateConfiguration(project.getConfiguration());
         helpDialogView.updateProjectHelp(project.getHelp());
-        problemsView.clear();
     };
 
     accordion.onSelectFile = function (previousFile, currentFile) {
@@ -301,7 +303,7 @@ editor.onCursorActivity = function (cursorPosition) {
 var run_button = $("#runButton")
     .button()
     .click(function () {
-        run_button.button("option", "disabled", true);
+        blockContent();
         var localConfiguration = configurationManager.getConfiguration();
         highlightingProvider.getHighlighting(accordion.getSelectedProject(), function (highlightingResult) {
             var example = accordion.getSelectedProject();
@@ -313,13 +315,12 @@ var run_button = $("#runButton")
                 }
                 runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject(), accordion.getSelectedProject());
             } else {
-                run_button.button("option", "disabled", false);
+                $("#result-tabs").tabs("option", "active", 0);
             }
         }, function () {
+            unBlockContent();
         });
     });
-//ProgramsModel.getEditorContent = editor.getProgramText;
-//ProgramsModel.getArguments = argumentsView.val;
 
 
 loginProvider.onLogin = function (data) {
@@ -471,7 +472,7 @@ var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Sa
 saveProjectDialog.validate = accordion.validateNewProjectName;
 
 $("#saveAsButton").click(function () {
-    if(loginView.isLoggedIn()) {
+    if (loginView.isLoggedIn()) {
         saveProjectDialog.open(projectProvider.forkProject.bind(null, accordion.getSelectedProject(), function (data) {
             accordion.getSelectedProject().loadOriginal();
             accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
@@ -657,20 +658,22 @@ function setKotlinJsOutput() {
     Kotlin.out = new Kotlin.BufferedOutput();
 }
 
-function setKotlinVersion(){
+function setKotlinVersion() {
     document.getElementById("version").innerHTML = "(" + KOTLIN_VERSION + ")";
 }
 
-function blockContent(){
-    var overlay  = document.getElementById("global-overlay");
+function blockContent() {
+    var overlay = document.getElementById("global-overlay");
     overlay.style.display = "block";
     overlay.focus();
 }
 
 var unblockTimer;
-function unBlockContent(){
+function unBlockContent() {
     clearTimeout(unblockTimer);
-    unblockTimer = setTimeout(function(){document.getElementById("global-overlay").style.display = "none"}, 1000);
+    unblockTimer = setTimeout(function () {
+        document.getElementById("global-overlay").style.display = "none"
+    }, 1000);
 }
 
 setSessionId();

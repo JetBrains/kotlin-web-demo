@@ -25,6 +25,9 @@ var GeneratedCodeView = (function () {
         var instance = {
             setOutput: function (data) {
                 setOutput(data);
+            },
+            clear: function () {
+                element.innerHTML = "";
             }
         };
 

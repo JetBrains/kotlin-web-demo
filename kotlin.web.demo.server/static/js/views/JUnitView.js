@@ -63,6 +63,9 @@ var JUnitView = (function () {
                     }
                 }
                 $(consoleElement).height($(wrapper).height() - $(statistic).outerHeight(true));
+            },
+            clear: function () {
+                element.innerHTML = "";
             }
         };
         return instance;
@@ -315,10 +318,10 @@ var JUnitView = (function () {
         }
     }
 
-    function makeDifferenceReference(difference){
+    function makeDifferenceReference(difference) {
         var a = document.createElement("a");
         a.textContent = "<click to see a difference>";
-        a.onclick = function(event){
+        a.onclick = function (event) {
             differenceDialog.open(difference);
             event.stopPropagation();
         };
