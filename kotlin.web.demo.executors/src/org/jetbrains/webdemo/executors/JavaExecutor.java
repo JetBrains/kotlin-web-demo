@@ -33,8 +33,8 @@ public class JavaExecutor {
     public static void main(String[] args) {
         PrintStream defaultOutputStream = System.out;
         try {
-            System.setOut(new PrintStream(errorOutputStream));
-            System.setErr(new PrintStream(standardOutputStream));
+            System.setOut(new PrintStream(standardOutputStream));
+            System.setErr(new PrintStream(errorOutputStream));
 
             String className = args[0];
             RunOutput outputObj = new RunOutput();
