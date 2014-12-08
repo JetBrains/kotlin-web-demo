@@ -493,13 +493,16 @@ var KotlinEditor = (function () {
         var timer;
         var timerIntervalForNonPrinting = 300;
 
+        var isLoadingHighlighting = false;
 
         function getHighlighting() {
-            if (highlightOnTheFly && openedFile != null) {
+            if (highlightOnTheFly && openedFile != null && !isLoadingHighlighting) {
+                isLoadingHighlighting = true;
                 var example = accordion.getSelectedProject();
-                highlightingProvider.getHighlighting(example, highlighting.updateHighlighting);
+                highlightingProvider.getHighlighting(example, highlighting.updateHighlighting, function () {
+                    isLoadingHighlighting = false;
+                });
             }
-
         }
 
         return instance;

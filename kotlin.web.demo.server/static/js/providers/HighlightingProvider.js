@@ -26,46 +26,46 @@
  write_exception
  */
 
-var HighlichtingProvider = (function () {
+var HighlightingProvider = (function () {
 
     function HighlightingFromServer(onSuccess, onFail) {
 
         var instance = {
-            getHighlighting: function (project, callback) {
-                getHighlighting(project, callback);
+            getHighlighting: function (project, successCallback, finallyCallback) {
+                getHighlighting(project, successCallback, finallyCallback);
             }
         };
 
         var isLoadingHighlighting = false;
 
-        function getHighlighting(project, callback) {
-            if (!isLoadingHighlighting) {
-                isLoadingHighlighting = true;
-                $.ajax({
-                    url: generateAjaxUrl("highlight"),
-                    context: document.body,
-                    success: function (data) {
-                        isLoadingHighlighting = false;
-                        if (checkDataForNull(data)) {
-                            if (checkDataForException(data)) {
-                                onSuccess(data, callback);
-                            } else {
-                                onFail(data);
-                            }
+        function getHighlighting(project, successCallback, finallyCallback) {
+            $.ajax({
+                url: generateAjaxUrl("highlight"),
+                context: document.body,
+                success: function (data) {
+                    isLoadingHighlighting = false;
+                    if (checkDataForNull(data)) {
+                        if (checkDataForException(data)) {
+                            onSuccess(data);
+                            successCallback(data);
                         } else {
-                            onFail("Incorrect data format.");
+                            onFail(data);
                         }
-                    },
-                    dataType: "json",
-                    type: "POST",
-                    data: {project: JSON.stringify(project)},
-                    timeout: 10000,
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        isLoadingHighlighting = false;
-                        onFail(textStatus + " : " + errorThrown);
+                    } else {
+                        onFail("Incorrect data format.");
                     }
-                });
-            }
+                    finallyCallback()
+                },
+                dataType: "json",
+                type: "POST",
+                data: {project: JSON.stringify(project)},
+                timeout: 10000,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    isLoadingHighlighting = false;
+                    onFail(textStatus + " : " + errorThrown);
+                    finallyCallback()
+                }
+            });
         }
 
         return instance;

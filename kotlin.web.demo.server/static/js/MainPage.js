@@ -163,7 +163,7 @@ var converterProvider = (function () {
 })();
 
 var highlightingProvider = (function () {
-    function onSuccess(data, callback) {
+    function onSuccess(data) {
         accordion.getSelectedProject().setErrors(data);
         problemsView.addMessages(data);
 
@@ -173,7 +173,6 @@ var highlightingProvider = (function () {
             noOfErrorsAndWarnings += data[filename].length
         }
         statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [noOfErrorsAndWarnings]);
-        callback(data);
     }
 
     function onFail(error) {
@@ -182,7 +181,7 @@ var highlightingProvider = (function () {
         statusBarView.setStatus(ActionStatusMessages.get_highlighting_fail);
     }
 
-    return new HighlichtingProvider(onSuccess, onFail)
+    return new HighlightingProvider(onSuccess, onFail)
 })();
 
 var completionProvider = (function () {
@@ -316,6 +315,7 @@ var run_button = $("#runButton")
             } else {
                 run_button.button("option", "disabled", false);
             }
+        }, function () {
         });
     });
 //ProgramsModel.getEditorContent = editor.getProgramText;

@@ -130,6 +130,7 @@ public class MyHttpSession {
                     break;
                 case ("renameProject"):
                     sendRenameProjectResult();
+                    break;
                 case ("complete"):
                     sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
                     ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
