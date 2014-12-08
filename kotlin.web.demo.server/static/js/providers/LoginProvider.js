@@ -44,10 +44,14 @@ var LoginProvider = (function () {
         };
 
         function login(type) {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("authorization"),
                 context: document.body,
-                success: onLoginSuccess,
+                success: function(data){
+                    unBlockContent();
+                    onLoginSuccess(data);
+                },
                 dataType: "text",
                 type: "GET",
                 data: {args: type},
@@ -59,24 +63,31 @@ var LoginProvider = (function () {
         }
 
         function logout() {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("logout"),
                 context: document.body,
-                success: instance.onLogout,
+                success: function () {
+                    unBlockContent();
+                    instance.onLogout();
+                },
                 dataType: "text",
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent();
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
                 }
             });
         }
 
         function getUserName() {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("getUserName"),
                 context: document.body,
                 success: function (data) {
+                    unBlockContent();
                     if (checkDataForNull(data)) {
                         instance.onLogin(data);
                     } else {
@@ -87,6 +98,7 @@ var LoginProvider = (function () {
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent();
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
                 }
             });

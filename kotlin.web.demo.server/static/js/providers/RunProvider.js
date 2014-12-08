@@ -41,10 +41,12 @@ var RunProvider = (function () {
 
 
         function runJava(project) {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("run"),
                 context: document.body,
                 success: function (data) {
+                    unBlockContent()
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             onSuccess(data);
@@ -60,6 +62,7 @@ var RunProvider = (function () {
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent()
                     onFail(textStatus + " : " + errorThrown);
                 }
             });
@@ -72,10 +75,12 @@ var RunProvider = (function () {
         }
 
         function loadJsFromServer(project) {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("run"),
                 context: document.body,
                 success: function (data) {
+                    unBlockContent()
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             var dataJs;
@@ -102,6 +107,7 @@ var RunProvider = (function () {
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent()
                     onFail(textStatus + " : " + errorThrown);
                 }
             });

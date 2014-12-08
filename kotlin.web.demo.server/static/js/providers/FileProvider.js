@@ -49,9 +49,11 @@ var FileProvider = (function () {
 
         function loadOriginalFile(file, callback) {
             if (file.getProjectType() == ProjectType.EXAMPLE) {
+                blockContent();
                 $.ajax({
                     url: generateAjaxUrl("loadExampleFile"),
                     success: function (data) {
+                        unBlockContent();
                         callback(data);
                         instance.onOriginalFileLoaded();
                     },
@@ -60,6 +62,7 @@ var FileProvider = (function () {
                     data: {publicId: file.getPublicId()},
                     dataType: "json",
                     error: function (jqXHR, textStatus, errorThrown) {
+                        unBlockContent();
                         instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                     }
                 })
@@ -69,10 +72,12 @@ var FileProvider = (function () {
         }
 
         function addNewFile(project, filename) {
+            blockContent();
             filename = addKotlinExtension(filename);
             $.ajax({
                 url: generateAjaxUrl("addFile"),
                 success: function (publicId) {
+                    unBlockContent()
                     instance.onNewFileAdded(filename);
                     project.addEmptyFile(filename, publicId);
                 },
@@ -80,15 +85,18 @@ var FileProvider = (function () {
                 timeout: 10000,
                 data: {publicId: project.getPublicId(), filename: filename},
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent()
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }
             })
         }
 
         function renameFile(publicId, callback, newName) {
+            blockContent()
             $.ajax({
                 url: generateAjaxUrl("renameFile"),
                 success: function () {
+                    unBlockContent()
                     instance.onFileRenamed(newName);
                     callback(newName);
                 },
@@ -97,16 +105,19 @@ var FileProvider = (function () {
                 data: {publicId: publicId,
                     newName: newName},
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent()
                     instance.onFail(textStatus, errorThrown);
                 }
             })
         }
 
         function deleteFile(publicId, callback) {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("deleteFile"),
                 context: document.body,
                 success: function () {
+                    unBlockContent()
                     instance.onDeleteFile();
                     callback();
                 },
@@ -114,22 +125,26 @@ var FileProvider = (function () {
                 data: {publicId: publicId},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent()
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
                 }
             });
         }
 
         function saveFile(file, callback) {
+            blockContent()
             $.ajax({
                 url: generateAjaxUrl("saveFile"),
                 type: "POST",
                 timeout: 10000,
                 success: function () {
+                    unBlockContent()
                     instance.onFileSaved();
                     callback();
                 },
                 data: {file: JSON.stringify(file)},
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent()
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }
             })

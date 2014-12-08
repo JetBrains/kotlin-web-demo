@@ -657,6 +657,18 @@ function setKotlinJsOutput() {
     Kotlin.out = new Kotlin.BufferedOutput();
 }
 
+function blockContent(){
+    var overlay  = document.getElementById("global-overlay");
+    overlay.style.display = "block";
+    overlay.focus();
+}
+
+var unblockTimer;
+function unBlockContent(){
+    clearTimeout(unblockTimer);
+    unblockTimer = setTimeout(function(){document.getElementById("global-overlay").style.display = "none"}, 1000);
+}
+
 setSessionId();
 loadShortcuts();
 setKotlinJsOutput();

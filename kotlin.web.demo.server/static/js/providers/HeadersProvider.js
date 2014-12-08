@@ -41,10 +41,12 @@ var HeadersProvider = (function () {
         };
 
         function getAllHeaders(callback) {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("loadHeaders"),
                 context: document.body,
                 success: function (data) {
+                    unBlockContent();
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             var orderedFolderNames = data.orderedFolderNames;
@@ -96,15 +98,18 @@ var HeadersProvider = (function () {
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent();
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_headers_fail);
                 }
             });
         }
 
         function getHeaderByFilePublicId(publicId, /*Function*/callback) {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("loadProjectInfoByFileId"),
                 success: function (data) {
+                    unBlockContent();
                     callback(data);
                     instance.onProjectHeaderLoaded(data);
                 },
@@ -115,6 +120,7 @@ var HeadersProvider = (function () {
                     publicId: publicId
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent();
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_header_fail);
                 }
             })
