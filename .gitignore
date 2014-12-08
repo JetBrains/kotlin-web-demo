@@ -9,3 +9,4 @@ statistics
 kotlin.web.demo.test.applet/kotlin.web.demo.test.applet.iml
 kotlin.web.demo.applet/kotlin.web.demo.applet.iml
 kotlin.web.demo.server/web/META-INF/context.xml
+kotlin.web.demo.executors/executors.policy
