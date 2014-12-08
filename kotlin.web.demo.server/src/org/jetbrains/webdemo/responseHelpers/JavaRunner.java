@@ -343,7 +343,7 @@ public class JavaRunner {
         builder.add("-Djava.security.policy=" + ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
         builder.add("-classpath");
         String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB + File.pathSeparator +
-                ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes" + File.separator);
+                ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes" + File.separator + "Executors.jar");
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
             builder.add(classpath +
                     File.pathSeparator + ApplicationSettings.LIBS_DIR + "junit.jar" +

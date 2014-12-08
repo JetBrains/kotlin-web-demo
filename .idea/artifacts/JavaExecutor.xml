@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="JavaExecutor">
+    <output-path>$PROJECT_DIR$/out/production</output-path>
+    <root id="archive" name="JavaExecutor.jar">
+      <element id="module-output" name="kotlin.web.demo.executors" />
+    </root>
+  </artifact>
+</component>

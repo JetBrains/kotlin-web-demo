@@ -56,7 +56,7 @@ public class JavaExecutor {
             System.out.print(new ObjectMapper().writeValueAsString(outputObj));
         } catch (Throwable e) {
             System.setOut(defaultOutputStream);
-            System.out.println("{text:\"Internal error:");
+            System.out.println("{\"text\":\"Internal error:");
             e.printStackTrace();
             System.out.print("\"}");
             e.printStackTrace();

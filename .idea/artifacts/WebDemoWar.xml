@@ -8,7 +8,7 @@
           <element id="module-output" name="idea.pacth.server" />
           <element id="module-output" name="kotlin.web.demo.core" />
           <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-1.2.16.jar" path-in-jar="/" />
-          <element id="module-output" name="kotlin.web.demo.executors" />
+          <element id="artifact" artifact-name="Executors" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="log4j" />
@@ -27,6 +27,8 @@
       </element>
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />
       <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.executors/executors.policy" />
+      <element id="directory" name="static" />
+      <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.executors/java.executor.policy" />
     </root>
   </artifact>
 </component>
