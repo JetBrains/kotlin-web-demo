@@ -1,5 +1,8 @@
 package palindrome
 
+import org.junit.Test
+import kotlin.test.*
+
 class Tests {
     Test fun testPalindrome() {
         test(true, "")

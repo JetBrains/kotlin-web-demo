@@ -1,5 +1,7 @@
 package sum
 
+import org.junit.Test
+import kotlin.test.*
 import java.util.*
 
 public class Tests {

@@ -1,5 +1,7 @@
 package maxindex
 
+import org.junit.Test
+import kotlin.test.*
 import java.util.Arrays
 
 class Tests {

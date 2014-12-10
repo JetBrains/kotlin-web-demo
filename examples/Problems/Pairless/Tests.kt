@@ -1,5 +1,7 @@
 package pairless
 
+import org.junit.Test
+import kotlin.test.*
 import java.util.*
 
 class Tests {
