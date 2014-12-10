@@ -123,11 +123,15 @@
 }
 
 #selectId {
+    z-index: 10;
     max-height: 200px;
     overflow-y: scroll;
     border: 1px solid #969696;
     border-radius: 4px;
     background-color: #f7f7f7;
+    -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+    box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
 }
 
 #selectId:focus {
@@ -147,13 +151,9 @@
 
 #example-help {
     border: 0 solid #969696;
-    height: 200px;
-    padding-left: 15px;
-    padding-top: 10px;
-    padding-right: 80px;
+    padding: 10px 80px 10px 15px;
     border-bottom-width: 1px;
     line-height: 16px;
-
     overflow: auto;
 }
 
@@ -240,8 +240,14 @@
 }
 
 .difference-dialog-content{
-    height: 100%;
-    width: 100%;
+    overflow: hidden;
+}
+
+.colors-help {
+    text-align: center;
+    background: #f7f7f7;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 
 .diff{
@@ -265,19 +271,32 @@
 }
 
 .diff-line{
+    font-family: menlo, consolas, monospace;
     padding-left: 2px;
 }
 
-.diff-line.replace{
-    background-color: #FFFF99;
+.color-help {
+    padding-top: 5px;
+    padding-left: 15px;
+    display: inline-block;
+    margin-bottom: 3px;
+    margin-right: 4px;
+    margin-left: 4px;
+    border: 1px solid white;
+    border-right-color: #969696;
+    border-bottom-color: #969696;
 }
 
-.diff-line.delete{
-    background-color: #F62817;
+.replace-color {
+    background-color: #cad9fa;
 }
 
-.diff-line.insert{
-    background-color: #F62817;
+.delete-color {
+    background-color: #d6d6d6;
+}
+
+.insert-color {
+    background-color: #c8f2c8;
 }
 
 #myPopupForConverterFromJavaToKotlin{
@@ -298,4 +317,8 @@
 #myPopupForConverterFromJavaToKotlin span.CodeMirror-matchingbracket{
     color: inherit;
     background-color: #99ccff;
+}
+
+#mycanvas {
+    padding: 5px;
 }

@@ -22,24 +22,55 @@ var DifferenceDialogView = (function () {
     function DifferenceDialogView() {
         var instance = {
             open:function(difference){
+                leftLineElements = [];
+                rightLineElements = [];
                 var baseTextLines = difference.expected.split("</br>");
                 var newTextLines = difference.actual.split("</br>");
                 var sequenceMatcher = new difflib.SequenceMatcher(baseTextLines, newTextLines);
-                dialogElement.innerHTML = "";
-                dialogElement.appendChild(createDialogContent(baseTextLines, newTextLines, sequenceMatcher.get_opcodes()));
+                createDialogContent(baseTextLines, newTextLines, sequenceMatcher.get_opcodes());
                 $(dialogElement).dialog("open");
+                $(differenceElement).height($(dialogElement).height() - $(colorsHelp).outerHeight(true));
             }
         };
 
         var leftLineElements = [];
         var rightLineElements = [];
+        var dialogElement = document.createElement("div");
+        dialogElement.className = "difference-dialog";
+        document.body.appendChild(dialogElement);
+        dialogElement.title = "Comparison failure";
+
+        var differenceElement = document.createElement("div");
+        dialogElement.appendChild(differenceElement);
+
+        var colorsHelp = document.createElement("div");
+        colorsHelp.className = "colors-help";
+        dialogElement.appendChild(colorsHelp);
+        createColorHelp("delete");
+        createColorHelp("replace");
+        createColorHelp("insert");
+
+        $(dialogElement).keydown(function (event) {
+            if (event.keyCode == 27) { /*escape enter*/
+                $(this).dialog("close");
+            }
+            event.stopPropagation();
+        });
+
+        $(dialogElement).dialog({
+            minWidth: 700,
+            width: 700,
+            height: 500,
+            minHeight: 700,
+            autoOpen: false,
+            modal: true
+        });
 
         function createDialogContent(expectedLines, actualLines, opCodes){
-            var differenceElement = document.createElement("div");
+            differenceElement.innerHTML = "";
             differenceElement.className = "difference-dialog-content";
             differenceElement.appendChild(createDifferenceElement(expectedLines, opCodes, false));
             differenceElement.appendChild(createDifferenceElement(actualLines, opCodes, true));
-            return differenceElement;
         }
 
         function createDifferenceElement(lines, opCodes, isRightElement){
@@ -77,11 +108,11 @@ var DifferenceDialogView = (function () {
 
                 if(!isRightElement) {
                     for (var j = b; j < be; ++j) {
-                        $(lineElements[j]).addClass(change);
+                        $(lineElements[j]).addClass(change + "-color");
                     }
                 } else{
                     for (var j = n; j < ne; ++j) {
-                        $(lineElements[j]).addClass(change);
+                        $(lineElements[j]).addClass(change + "-color");
                     }
                 }
             }
@@ -94,20 +125,17 @@ var DifferenceDialogView = (function () {
             return glutterElement;
         }
 
-        var dialogElement = document.createElement("div");
-        dialogElement.className = "difference-dialog";
-        document.body.appendChild(dialogElement);
-        dialogElement.title = "Comparison failure";
+        function createColorHelp(name) {
+            var insertColor = document.createElement("div");
+            insertColor.className = "color-help " + name + "-color";
+            colorsHelp.appendChild(insertColor);
 
+            var insertText = document.createElement("span");
+            insertText.className = "text";
+            insertText.innerHTML = name.endsWith("e") ? name + "d" : name + "ed";
+            colorsHelp.appendChild(insertText)
+        }
 
-        $(dialogElement).dialog({
-            minWidth:700,
-            width: 700,
-            height: 700,
-            minHeight:700,
-            autoOpen: false,
-            modal: true
-        });
         return instance;
     }
 

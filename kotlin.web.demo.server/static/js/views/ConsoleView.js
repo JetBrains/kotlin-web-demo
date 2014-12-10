@@ -44,7 +44,7 @@ var ConsoleView = (function () {
                     if (data == "") {
                         consoleOutputView.err.println(["Unknown exception."]);
                     } else if (data == "timeout : timeout") {
-                        consoleOutputView.err.println(["Server didn't response for 10 seconds."]);
+                        consoleOutputView.err.println(["Server didn't respond for 10 seconds."]);
                     }
                 }
             },
@@ -80,7 +80,7 @@ var ConsoleView = (function () {
                     if (message == "") {
                         consoleOutputView.err.println(["Unknown exception."]);
                     } else if (message == "timeout : timeout") {
-                        consoleOutputView.err.println("Server didn't response for 10 seconds.");
+                        consoleOutputView.err.println("Server didn't respond for 10 seconds.");
                     }
                 } else if (data[i].type == "toggle-info" || data[i].type == "info" || data[i].type == "generatedJSCode") {
                     generatedCodeView.setOutput(data[i]);

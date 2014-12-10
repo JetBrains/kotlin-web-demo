@@ -125,8 +125,8 @@ var ProjectData = (function () {
             getArgs: function () {
                 return args;
             },
-            setArguments: function (args) {
-                instance.args = args;
+            setArguments: function (newArgs) {
+                args = newArgs;
                 instance.onChange();
             },
             getPublicId: function () {

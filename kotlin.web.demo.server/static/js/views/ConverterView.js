@@ -77,6 +77,15 @@ var ConverterView = (function () {
             tabSize: 4
         });
 
+        $(popup).keydown(function (event) {
+            if (event.keyCode == 27) { /*escape enter*/
+                $(this).dialog("close");
+            } else if (event.keyCode == 13 && (event.ctrlKey || event.metaKey)) { /*enter*/
+                $(this).parent().find("button:eq(1)").trigger("click");
+            }
+            event.stopPropagation();
+        });
+
         $(popup).dialog({
             modal: true,
             autoOpen: false,

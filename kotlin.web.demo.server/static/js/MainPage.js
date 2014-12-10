@@ -86,14 +86,16 @@ problemsView.setCursor = function (filename, line, ch) {
 
 var canvas;
 canvasDialog = $("#popupForCanvas").dialog({
-    width: 630,
-    height: 350,
+    width: 640,
+    height: 360,
     autoOpen: false,
     modal: true,
+    open: function () {
+        $(canvas).width(canvasDialog.width() - 10);
+        $(canvas).height(canvasDialog.height() - 10);
+    },
     close: function () {
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-        //element.dialog("close");
-        //WARN: if in the page there is more intevals - they will be stopped.
         window.clearAllIntervals();
     }
 });
@@ -111,13 +113,13 @@ helpViewForWords.hide();
 var projectActionsView = new ProjectActionsView(document.getElementById("editor-notifications"));
 projectActionsView.registerStatus("localVersion", "This is local version of project", [
     {
-        name: "Reload file",
+        name: "Revert file",
         callback: function () {
             accordion.getSelectedFile().loadOriginal();
         }
     },
     {
-        name: "Reload project",
+        name: "Revert project",
         callback: function () {
             accordion.getSelectedProject().loadOriginal();
         }

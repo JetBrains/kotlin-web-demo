@@ -31,6 +31,12 @@ var HelpDialogView = (function () {
     shortcutsHelpElement.id = "shortcuts-help";
     dialogElement.appendChild(shortcutsHelpElement);
 
+    $(dialogElement).keydown(function (event) {
+        if (event.keyCode == 27 || event.keyCode == 13) { /*escape enter*/
+            $(this).dialog("close");
+        }
+        event.stopPropagation();
+    });
 
     $(dialogElement).dialog(
         {

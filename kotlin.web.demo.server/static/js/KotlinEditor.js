@@ -500,7 +500,7 @@ var KotlinEditor = (function () {
                 isLoadingHighlighting = true;
                 var example = accordion.getSelectedProject();
                 highlightingProvider.getHighlighting(example, highlighting.updateHighlighting, function () {
-                    isLoadingHighlighting = false;
+                    isLoadingHighlighting = false
                 });
             }
         }
