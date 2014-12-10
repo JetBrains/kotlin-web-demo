@@ -21,11 +21,11 @@
 var DifferenceDialogView = (function () {
     function DifferenceDialogView() {
         var instance = {
-            open:function(difference){
+            open: function (baseText, newText) {
                 leftLineElements = [];
                 rightLineElements = [];
-                var baseTextLines = difference.expected.split("</br>");
-                var newTextLines = difference.actual.split("</br>");
+                var baseTextLines = baseText.split("</br>");
+                var newTextLines = newText.split("</br>");
                 var sequenceMatcher = new difflib.SequenceMatcher(baseTextLines, newTextLines);
                 createDialogContent(baseTextLines, newTextLines, sequenceMatcher.get_opcodes());
                 $(dialogElement).dialog("open");

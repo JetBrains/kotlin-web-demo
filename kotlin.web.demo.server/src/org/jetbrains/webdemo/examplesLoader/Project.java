@@ -48,8 +48,6 @@ public class Project {
     @NotNull
     public String help = "";
     @NotNull
-    public String[] testClasses;
-    @NotNull
     public List<ProjectFile> files;
 
     /**
@@ -113,9 +111,6 @@ public class Project {
         confType = objectNode.get("confType").textValue();
 
         help = objectNode.get("help").textValue();
-        if (confType.equals("junit")) {
-            testClasses = objectMapper.readValue(objectNode.get("testClasses").traverse(), String[].class);
-        }
         Iterator<JsonNode> it = objectNode.get("files").elements();
         while (it.hasNext()) {
             JsonNode fileDescriptor = it.next();

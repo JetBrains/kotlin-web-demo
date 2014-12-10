@@ -463,7 +463,6 @@ public class MyHttpSession {
                 exampleObject.files.add(file);
             }
         }
-        exampleObject.testClasses = storedExample.testClasses;
         return exampleObject;
     }
 

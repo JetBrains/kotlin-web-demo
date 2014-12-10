@@ -664,18 +664,19 @@ function setKotlinVersion() {
     document.getElementById("version").innerHTML = "(" + KOTLIN_VERSION + ")";
 }
 
+var blockTimer;
 function blockContent() {
-    var overlay = document.getElementById("global-overlay");
-    overlay.style.display = "block";
-    overlay.focus();
+    clearTimeout(blockTimer);
+    blockTimer = setTimeout(function () {
+        var overlay = document.getElementById("global-overlay");
+        overlay.style.display = "block";
+        overlay.focus();
+    }, 250);
 }
 
-var unblockTimer;
 function unBlockContent() {
-    clearTimeout(unblockTimer);
-    unblockTimer = setTimeout(function () {
-        document.getElementById("global-overlay").style.display = "none"
-    }, 1000);
+    clearTimeout(blockTimer);
+    document.getElementById("global-overlay").style.display = "none"
 }
 
 setSessionId();

@@ -138,7 +138,7 @@ var JUnitView = (function () {
                 if (data[i].status == Status.ERROR) {
                     rootNode.icon = "error";
                 } else if (data[i].status == Status.FAIL && rootNode.icon != "error") {
-                    rootNode.icon = "failed";
+                    rootNode.icon = "fail";
                 }
             }
         } else {
@@ -183,15 +183,15 @@ var JUnitView = (function () {
                 if (testData.exception != null && testData.exception.fullName != "java.lang.AssertionError") {
                     consoleOutputView.printException(testData.exception);
                 } else if (testData.exception != null) {
-                    var difference = getDifference(unEscapeString(testData.exception.message));
-                    consoleOutputView.err.println(testData.exception.fullName + ":");
+                    var parsedMessage = parseAssertionErrorMessage(unEscapeString(testData.exception.message));
+                    consoleOutputView.err.println(testData.exception.fullName + ":" + parsedMessage.assertionMessage);
                     consoleOutputView.err.println("");
                     consoleOutputView.out.print("Expected: ");
-                    consoleOutputView.err.println(difference.expected);
+                    consoleOutputView.err.println(parsedMessage.expected);
                     consoleOutputView.out.print("Actual: ");
-                    consoleOutputView.err.println(difference.actual);
+                    consoleOutputView.err.println(parsedMessage.actual);
                     consoleOutputView.err.print("    ");
-                    consoleOutputView.addElement(makeDifferenceReference(difference));
+                    consoleOutputView.addElement(makeDifferenceReference(parsedMessage.expected, parsedMessage.actual));
                     consoleOutputView.out.println("");
                     consoleOutputView.out.println("");
                     consoleOutputView.printStackTrace(testData.exception.stackTrace);
@@ -285,44 +285,22 @@ var JUnitView = (function () {
         return path[path.length - 1];
     }
 
-    function getDifference(exceptionMessage) {
-        exceptionMessage = exceptionMessage.replace(/\n/g, '</br>');
-        var regExp = /Expected\s*<(.*)>\s*actual\s*<(.*)>/;
-        var regExpExecResult = regExp.exec(exceptionMessage);
-        var expectedLines = regExpExecResult[1].split('</br>');
-        var actualLines = regExpExecResult[2].split('</br>');
-
-        var differences = [];
-        var i = 0;
-        while (expectedLines[i] != null && actualLines[i] != null) {
-            if (expectedLines[i] != actualLines[i]) {
-                differences.push(i + 1);
-            }
-            ++i;
-        }
-        if (expectedLines.length > i) {
-            while (i < expectedLines.length) {
-                differences.push(++i)
-            }
-        }
-        if (actualLines.length > i) {
-            while (i < actualLines.length) {
-                differences.push(++i)
-            }
-        }
-
+    function parseAssertionErrorMessage(message) {
+        message = message.replace(/\n/g, '</br>');
+        var regExp = /(.*)\.\s*Expected\s*<(.*)>\s*actual\s*<(.*)>/;
+        var regExpExecResult = regExp.exec(message);
         return {
-            expected: regExpExecResult[1],
-            actual: regExpExecResult[2],
-            differences: differences
+            assertionMessage: regExpExecResult[1],
+            expected: regExpExecResult[2],
+            actual: regExpExecResult[3]
         }
     }
 
-    function makeDifferenceReference(difference) {
+    function makeDifferenceReference(expected, actual) {
         var a = document.createElement("a");
         a.textContent = "<click to see a difference>";
         a.onclick = function (event) {
-            differenceDialog.open(difference);
+            differenceDialog.open(expected, actual);
             event.stopPropagation();
         };
         return a;

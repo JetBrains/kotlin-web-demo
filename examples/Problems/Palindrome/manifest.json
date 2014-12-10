@@ -4,9 +4,13 @@
         {
             "filename": "Palindrome.kt",
             "modifiable": "true"
+        },
+        {
+            "filename": "Tests.kt",
+            "modifiable": "false"
         }
     ],
     "args": "",
-    "confType": "java",
+    "confType": "junit",
     "help": ""
 }

@@ -6,11 +6,10 @@
             "modifiable": "true"
         },
         {
-            "filename": "Test.kt",
+            "filename": "Tests.kt",
             "modifiable": "false"
         }
     ],
-    "testClasses":["sum.TestSum"],
     "args": "",
     "confType": "junit",
     "help": ""

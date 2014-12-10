@@ -16,36 +16,8 @@
  */
 package pairless
 
-import java.util.*
-
 fun findPairless(a : IntArray) : Int {
   // Write your solution here
-  return "?"
+  return 0
 }
 
-fun main(args : Array<String>) {
-  test(0,    0)
-  test(1,    0, 1, 0)
-  test(5,    5, -1, -1, 0, 0)
-  test(3,    1, 3, 1, 1, 1)
-  test(1,    2, 3, 1, 2, 3)
-
-  println("Success")
-}
-
-// HELPER FUNCTIONS
-
-fun test(expected : Int?, vararg data : Int) {
-  val actual = findPairless(data)
-  assertEquals(actual, expected, "\ndata = ${Arrays.toString(data)}\n" +
-                         "pairless(data) = ${actual}, but must be $expected ")
-}
-
-fun assertEquals<T>(actual : T, expected : T, message : Any? = null) {
-  if (actual != expected) {
-    if (message == null)
-      throw AssertionError()
-    else
-      throw AssertionError(message)
-  }
-}
