@@ -15,6 +15,8 @@ package org.jetbrains.webdemo.executors;/*
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -47,6 +49,8 @@ public class JavaExecutor {
                 outputObj.exception.message = cause.getMessage();
                 outputObj.exception.stackTrace = cause.getStackTrace();
                 outputObj.exception.fullName = cause.getClass().getName();
+            } catch (NoSuchMethodException e) {
+                System.err.println("No main method found in project.");
             }
 
             System.out.flush();
@@ -56,9 +60,9 @@ public class JavaExecutor {
             System.out.print(new ObjectMapper().writeValueAsString(outputObj));
         } catch (Throwable e) {
             System.setOut(defaultOutputStream);
-            System.out.println("{\"text\":\"Internal error:");
+            System.out.println("{\"text\":\"<errStream>Internal error:");
             e.printStackTrace();
-            System.out.print("\"}");
+            System.out.print("</errStream>\"}");
             e.printStackTrace();
         }
 
