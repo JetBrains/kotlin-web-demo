@@ -16,7 +16,6 @@
 
 #toolbox {
     background-color: #e8e8e8;
-    border-bottom: 1px solid #969696;
     line-height: 1;
     width: 100%;
     overflow: hidden;
@@ -211,6 +210,8 @@
 }
 
 #argumentsWrapper {
+    margin-top: -1px;
+    border-top: 1px solid #969696;
     border-bottom: 1px solid #969696;
     height: 35px;
     background-color: #f2f2f2;
