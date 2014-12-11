@@ -100,7 +100,7 @@ var ConsoleOutputView = (function () {
                 }
                 Error.println("");
             },
-            addElement: function(element){
+            addElement: function (element) {
                 currentLine.appendChild(element);
             },
             makeReference: function (fileName, lineNo) {
@@ -116,14 +116,14 @@ var ConsoleOutputView = (function () {
             },
             printMarkedTextToConsole: function (text) {
                 text = unEscapeString(text);
-                text = text.replace(/\n/g, "</br>");
+                text = text.replace(/(\r\n|\n|\r)/g, "</br>");
                 var outStreamMessages = getOutputStreamMessagesFromMarkedText(text);
-                for (var j = 1; j < outStreamMessages.length; ++j) {
+                for (var j = 0; j < outStreamMessages.length; ++j) {
                     consoleOutputView.out.print(outStreamMessages[j]);
                 }
 
                 var errorStreamMessages = getErrorStreamMessagesFromMarkedText(text);
-                for (var j = 1; j < errorStreamMessages.length; ++j) {
+                for (var j = 0; j < errorStreamMessages.length; ++j) {
                     consoleOutputView.err.print(errorStreamMessages[j]);
                 }
             },
@@ -134,23 +134,21 @@ var ConsoleOutputView = (function () {
         var element = document.createElement("div");
 
         function getOutputStreamMessagesFromMarkedText(text) {
-            var regexp = new RegExp("<outStream>(.*?)</outStream>", "g");
-            var result = regexp.exec(text);
-            if (result == null) {
-                return [];
-            } else {
-                return result;
-            }
+            return getAllRegexpMatches(text, new RegExp("<outStream>(.*?)</outStream>", "g"));
         }
 
         function getErrorStreamMessagesFromMarkedText(text) {
-            var regexp = new RegExp("<errStream>(.*?)</errStream>", "g");
-            var result = regexp.exec(text);
-            if (result == null) {
-                return [];
-            } else {
-                return result;
+            return getAllRegexpMatches(text, new RegExp("<errStream>(.*?)</errStream>", "g"));
+        }
+
+        function getAllRegexpMatches(text, regexp) {
+            var result = [];
+            var match = regexp.exec(text);
+            while (match != null) {
+                result.push(match[1]);
+                match = regexp.exec(text);
             }
+            return result;
         }
 
         return instance;
