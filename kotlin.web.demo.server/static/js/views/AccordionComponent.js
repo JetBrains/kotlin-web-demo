@@ -45,7 +45,7 @@ var AccordionView = (function () {
                                 addProject(folderContentElement, exampleHeader);
                             }
                         }
-                        //actionManager.checkTimepoint("headersLoaded");
+                        incompleteActionManager.checkTimepoint("headersLoaded");
                         $(element).accordion("refresh");
                         loadFirstItem();
                     }
@@ -187,10 +187,6 @@ var AccordionView = (function () {
                     element.childNodes[1].firstElementChild.click();
                 } else {
                     selectProject(openedItemId);
-                    if (localStorage.getItem("incompleteAction") == "save") {
-                        localStorage.removeItem("incompleteAction");
-                        selectedProjectView.saveAs();
-                    }
                 }
             }
         }

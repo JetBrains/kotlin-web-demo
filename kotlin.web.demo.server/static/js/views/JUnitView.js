@@ -180,9 +180,7 @@ var JUnitView = (function () {
             if ($(element).hasClass("at-no-children")) {
                 var testData = testsData[element.id];
                 consoleOutputView.printMarkedTextToConsole(testsData[element.id].output);
-                if (testData.exception != null && testData.exception.fullName != "java.lang.AssertionError") {
-                    consoleOutputView.printException(testData.exception);
-                } else if (testData.exception != null) {
+                if (testData.exception != null) {
                     try {
                         var parsedMessage = parseAssertionErrorMessage(unEscapeString(testData.exception.message));
                         consoleOutputView.err.println(testData.exception.fullName + ":" + parsedMessage.assertionMessage);
@@ -292,13 +290,20 @@ var JUnitView = (function () {
 
     function parseAssertionErrorMessage(message) {
         message = message.replace(/\n/g, '</br>');
-        var regExp = /(.*)\.\s*Expected\s*<(.*)>\s*actual\s*<(.*)>/;
-        var regExpExecResult = regExp.exec(message);
-        return {
-            assertionMessage: regExpExecResult[1],
-            expected: regExpExecResult[2],
-            actual: regExpExecResult[3]
+        var possibleRegExp = [];
+        possibleRegExp.push(/(.*)\.\s*Expected\s*<(.*)>\s*actual\s*<(.*)>/);
+        possibleRegExp.push(/(.*)expected:\s*<(.*)>\s*but was:\s*<(.*)>/);
+        for (var i = 0; i < possibleRegExp.length; ++i) {
+            var regExpExecResult = possibleRegExp[i].exec(message);
+            if (regExpExecResult != null) {
+                return {
+                    assertionMessage: regExpExecResult[1],
+                    expected: regExpExecResult[2],
+                    actual: regExpExecResult[3]
+                }
+            }
         }
+        return null;
     }
 
     function makeDifferenceReference(expected, actual) {

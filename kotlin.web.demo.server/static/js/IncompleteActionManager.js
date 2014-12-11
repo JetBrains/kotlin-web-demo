@@ -21,31 +21,36 @@
 var IncompleteActionManager = (function () {
     function IncompleteActionManager() {
         var instance = {
-            registerAction: function (id, timePoint, callback) {
+            registerAction: function (id, timePoint, onRegistered, callback) {
                 if (!(id in actions)) {
-                    actions[id] = ({timePoint: timePoint, callback: callback})
+                    actions[id] = ({timePoint: timePoint, callback: callback, onRegistered: onRegistered})
                 } else {
                     throw "You can't register actions with same id."
                 }
             },
             incomplete: function (id) {
                 if (id in actions) {
-                    incompletedActions.push(id);
+                    incompleteActions.push(id);
+                    actions[id].onRegistered();
                 } else {
                     throw "Action not registered";
                 }
             },
             checkTimepoint: function (timePoint) {
-                for (var id in incompletedActions) {
-                    if (actions[id].timePoint == timePoint) {
-                        actions[id].callback();
+                for (var i = 0; i < incompleteActions.length; ++i) {
+                    if (actions[incompleteActions[i]].timePoint == "on" + timePoint.capitalize()) {
+                        actions[incompleteActions[i]].callback();
                     }
                 }
+            },
+            onBeforeUnload: function () {
+                localStorage.setItem("incompleteActions", JSON.stringify(incompleteActions))
             }
         };
 
-        var actions = [];
-        var incompletedActions = [];
+        var actions = {};
+        var incompleteActions = localStorage.getItem("incompleteActions") == null ? [] : JSON.parse(localStorage.getItem("incompleteActions"));
+        localStorage.removeItem("incompleteActions");
         return instance;
     }
 

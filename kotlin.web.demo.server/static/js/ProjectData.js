@@ -64,6 +64,7 @@ var ProjectData = (function () {
             loadContent: function (fromServer) {
                 if (localStorage.getItem(publicId) != null && !fromServer) {
                     var content = JSON.parse(localStorage.getItem(publicId));
+                    localStorage.removeItem(publicId);
                     for (var i = 0; i < content.files.length; ++i) {
                         content.files[i] = File.fromLocalStorage(instance, content.files[i]);
                     }

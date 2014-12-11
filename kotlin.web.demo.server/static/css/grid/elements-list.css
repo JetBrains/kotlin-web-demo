@@ -73,7 +73,7 @@
 .file-name-span {
     font-size: 14px;
     display: inline-block;
-    max-width: 85%;
+    max-width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 16px;
@@ -82,7 +82,7 @@
     word-wrap: break-word;
 }
 
-.examples-project-name:hover .file-name-span {
+.examples-project-name.hover .file-name-span {
     max-height: none;
     white-space: normal;
 }
@@ -167,7 +167,7 @@
     white-space: nowrap;
 }
 
-.example-filename:hover .example-filename-text {
+.example-filename.hover .example-filename-text {
     max-height: none;
     white-space: normal;
 }

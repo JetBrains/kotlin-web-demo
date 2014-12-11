@@ -145,12 +145,12 @@ var ProjectProvider = (function () {
         }
 
         function loadProject(publicId, callback) {
-            blockContent()
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("loadProject"),
                 context: document.body,
                 success: function (data) {
-                    unBlockContent()
+                    unBlockContent();
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             instance.onProjectLoaded(data);
@@ -167,7 +167,7 @@ var ProjectProvider = (function () {
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
+                    unBlockContent();
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
                 }
             });
@@ -175,11 +175,11 @@ var ProjectProvider = (function () {
 
 
         function forkProject(content, callback, name) {
-            blockContent()
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("addProject"),
                 success: function (data) {
-                    unBlockContent()
+                    unBlockContent();
                     instance.onProjectForked(name);
                     callback(data);
                 },
@@ -188,18 +188,18 @@ var ProjectProvider = (function () {
                 dataType: "json",
                 data: {content: JSON.stringify(content), args: name},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
+                    unBlockContent();
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }
             })
         }
 
         function checkIfProjectExists(publicId, onSuccess, onFail) {
-            blockContent()
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("checkIfProjectExists"),
                 success: function (flag) {
-                    unBlockContent()
+                    unBlockContent();
                     if (flag == "true") {
                         onSuccess()
                     } else {
@@ -210,18 +210,16 @@ var ProjectProvider = (function () {
                 timeout: 10000,
                 data: {publicId: publicId},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
+                    unBlockContent();
                     project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
                 }
             })
         }
 
         function deleteProject(publicId, callback) {
-            blockContent()
             $.ajax({
                 url: generateAjaxUrl("deleteProject"),
                 success: function () {
-                    unBlockContent()
                     instance.onProjectDeleted();
                     callback();
                 },
@@ -229,19 +227,16 @@ var ProjectProvider = (function () {
                 data: {publicId: publicId},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
                     instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
                 }
             })
         }
 
         function saveProject(project, publicId, callback) {
-            blockContent();
             $.ajax({
                 url: generateAjaxUrl("saveProject"),
                 type: "POST",
                 success: function () {
-                    unBlockContent();
                     instance.onProjectSaved();
                     callback();
                 },

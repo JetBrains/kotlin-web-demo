@@ -75,6 +75,17 @@ var FileView = (function () {
         function init() {
             headerElement.className = "example-filename";
 
+            var hoverTimer;
+            $(headerElement).mouseenter(function () {
+                var element = this;
+                hoverTimer = setTimeout(function () {
+                    $(element).addClass('hover');
+                }, 500);
+            }).mouseleave(function () {
+                clearTimeout(hoverTimer);
+                $(this).removeClass('hover');
+            });
+
             var icon = document.createElement("div");
             if (file.isModifiable()) {
                 icon.className = "fileIcon"

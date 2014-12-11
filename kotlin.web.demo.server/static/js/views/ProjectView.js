@@ -32,19 +32,6 @@ var ProjectView = (function () {
             getHeader: function () {
                 return header;
             },
-            saveAs: function () {
-                if (loginView.isLoggedIn()) {
-                    function onProjectFork(publicId, name) {
-                        var newContent = copy(project);
-                        newContent.name = name;
-                        newContent.parent = "My Programs";
-                        accordion.addNewProject(newContent.name, publicId, null, newContent);
-                        projectProvider.loadProject(publicId, header.type, createProject);
-                    }
-                } else {
-                    loginDialog.dialog("open");
-                }
-            },
             setSelectedFileView: function (selectedFileView_) {
                 selectedFileView = selectedFileView_;
             },
@@ -173,6 +160,17 @@ var ProjectView = (function () {
 
         init();
         function init() {
+            var hoverTimer;
+            $(headerElement).mouseenter(function () {
+                var element = this;
+                hoverTimer = setTimeout(function () {
+                    $(element).addClass('hover');
+                }, 500);
+            }).mouseleave(function () {
+                clearTimeout(hoverTimer);
+                $(this).removeClass('hover');
+            });
+
             $(contentElement).slideUp();
             headerElement.className = "examples-project-name";
             var img = document.createElement("div");
@@ -187,6 +185,7 @@ var ProjectView = (function () {
             nameSpan.style.cursor = "pointer";
             nameSpan.innerHTML = header.name;
             headerElement.appendChild(nameSpan);
+
 
             if (header.type == ProjectType.USER_PROJECT || header.type == ProjectType.PUBLIC_LINK) {
                 var deleteButton = document.createElement("div");

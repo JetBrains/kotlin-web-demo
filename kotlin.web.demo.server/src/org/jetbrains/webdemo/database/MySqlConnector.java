@@ -615,7 +615,7 @@ public class MySqlConnector {
                 if (rs.next()) {
                     return rs.getInt("id");
                 } else {
-                    throw new DatabaseOperationException("User with this id don't exist");
+                    throw new DatabaseOperationException("User with id" + userInfo.getId() + " don't exist");
                 }
             }
         } catch (Throwable e) {

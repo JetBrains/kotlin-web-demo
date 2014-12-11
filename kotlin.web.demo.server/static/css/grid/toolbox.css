@@ -23,7 +23,7 @@
 }
 
 .toolbox-left {
-    display: inline-block;
+    float: left;
     margin-bottom: -1px;
 }
 
@@ -142,6 +142,7 @@
 
 #runButton {
     display: inline-block;
+    cursor: pointer;
     padding-left: 15px;
 }
 
@@ -230,12 +231,6 @@
     border-radius: 3px;
     font-size: 14px;
     padding: 2px 5px;
-    width: 77%;
+    width: 65%;
     margin: 4px;
-}
-
-#toolbox:after {
-    clear: both;
-    height: 0;
-    content: '';
 }

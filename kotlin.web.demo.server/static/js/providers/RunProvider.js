@@ -46,7 +46,6 @@ var RunProvider = (function () {
                 url: generateAjaxUrl("run"),
                 context: document.body,
                 success: function (data) {
-                    unBlockContent()
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             onSuccess(data);
@@ -62,8 +61,10 @@ var RunProvider = (function () {
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
                     onFail(textStatus + " : " + errorThrown);
+                },
+                complete: function () {
+                    unBlockContent();
                 }
             });
 
@@ -80,7 +81,6 @@ var RunProvider = (function () {
                 url: generateAjaxUrl("run"),
                 context: document.body,
                 success: function (data) {
-                    unBlockContent()
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
                             var dataJs;
@@ -91,7 +91,7 @@ var RunProvider = (function () {
                                 return;
                             }
                             var output = [
-                                {"text": safe_tags_replace(dataJs), "type": "out"},
+                                {"text": safe_tags_replace(dataJs), "type": "jsOut"},
                                 {"text": data[0].text, "type": "generatedJSCode"}
                             ];
                             onSuccess(output);
@@ -107,8 +107,11 @@ var RunProvider = (function () {
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
                     onFail(textStatus + " : " + errorThrown);
+                    console.log(e)
+                },
+                complete: function () {
+                    unBlockContent();
                 }
             });
         }

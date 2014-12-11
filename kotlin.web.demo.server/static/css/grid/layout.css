@@ -25,6 +25,7 @@
     margin-left: auto;
     margin-right: auto;
     width: 960px;
+    min-width: 960px;
 }
 
 @media (max-width: 1000px) {

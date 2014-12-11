@@ -39,10 +39,19 @@ actionManager.registerAction("org.jetbrains.web.demo.save",
         return e.keyCode == 83 && e.metaKey;
     }));
 
-var incompleteActionManager = new ActionManager();
-incompleteActionManager.registerAction("save", "onHeadersLoaded", function () {
-
-});
+var incompleteActionManager = new IncompleteActionManager();
+incompleteActionManager.registerAction("save", "onHeadersLoaded",
+    function () {
+        localStorage.setItem("contentToSave", JSON.stringify(accordion.getSelectedProject()));
+    },
+    function () {
+        var content = JSON.parse(localStorage.getItem("contentToSave"));
+        if (content != null) {
+            saveProjectDialog.open(projectProvider.forkProject.bind(null, content, function (data) {
+                accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
+            }), content.name);
+        }
+    });
 
 var editor = new KotlinEditor();
 
@@ -483,6 +492,7 @@ $("#saveAsButton").click(function () {
             accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
         }), accordion.getSelectedProject().getName());
     } else {
+        incompleteActionManager.incomplete("save");
         loginDialog.dialog("open");
     }
 });
@@ -499,6 +509,7 @@ function loadShortcuts() {
 
 window.onbeforeunload = function () {
     accordion.onBeforeUnload();
+    incompleteActionManager.onBeforeUnload();
     localStorage.setItem("openedItemId", accordion.getSelectedProject().getPublicId());
 
     accordion.getSelectedFile().save();
@@ -670,16 +681,18 @@ function setKotlinVersion() {
 var blockTimer;
 function blockContent() {
     clearTimeout(blockTimer);
+    var overlay = document.getElementById("global-overlay");
+    overlay.style.display = "block";
+    overlay.style.visibility = "hidden";
+    overlay.focus();
     blockTimer = setTimeout(function () {
-        var overlay = document.getElementById("global-overlay");
-        overlay.style.display = "block";
-        overlay.focus();
+        overlay.style.visibility = "initial";
     }, 250);
 }
 
 function unBlockContent() {
     clearTimeout(blockTimer);
-    document.getElementById("global-overlay").style.display = "none"
+    document.getElementById("global-overlay").style.display = "none";
 }
 
 setSessionId();
