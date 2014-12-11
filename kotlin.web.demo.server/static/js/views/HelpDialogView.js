@@ -53,12 +53,12 @@ var HelpDialogView = (function () {
             },
             updateProjectHelp: function (data) {
                 if (data != null && data != "") {
-                    exampleHelpElement.style.display = "block";
                     exampleHelpElement.innerHTML = data;
+                    exampleHelpElement.style.padding = "";
                     $(exampleHelpElement).find("a").attr("target", "_blank")
                 } else {
-                    exampleHelpElement.style.display = "none";
                     exampleHelpElement.innerHTML = "";
+                    exampleHelpElement.style.padding = "0";
                 }
             },
             addShortcut: function (keyNames, description) {

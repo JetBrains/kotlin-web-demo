@@ -316,6 +316,8 @@ editor.onCursorActivity = function (cursorPosition) {
 var run_button = $("#runButton")
     .button()
     .click(function () {
+        consoleView.clear();
+        junitView.clear();
         blockContent();
         var localConfiguration = configurationManager.getConfiguration();
         highlightingProvider.getHighlighting(accordion.getSelectedProject(), function (highlightingResult) {

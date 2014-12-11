@@ -339,6 +339,7 @@ public class JavaRunner {
             builder = new ArrayList<>(argsArray.size() + 5);
         }
         builder.add(ApplicationSettings.JAVA_EXECUTE);
+        builder.add("-ea");
         builder.add("-Djava.security.manager");
         builder.add("-Djava.security.policy=" + ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
         builder.add("-classpath");
