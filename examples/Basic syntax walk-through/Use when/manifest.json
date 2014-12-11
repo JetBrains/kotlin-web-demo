@@ -8,5 +8,5 @@
     ],
     "args": "",
     "confType": "java",
-    "help": "See <a href=\"http://confluence.jetbrains.net/display/Kotlin/Pattern+matching\">Pattern-matching</a>"
+    "help": "See <a href=\"http://kotlinlang.org/docs/reference/control-flow.html#when-expression\">when expression</a>"
 }

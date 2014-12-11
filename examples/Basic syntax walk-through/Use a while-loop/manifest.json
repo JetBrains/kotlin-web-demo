@@ -8,5 +8,5 @@
     ],
     "args": "guest1 guest2 guest3 guest4",
     "confType": "java",
-    "help": "<b>While</b> and <b>do..while</b> work as usual:See <a href=\"http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-While\">while-loop</a>."
+    "help": "<b>While</b> and <b>do..while</b> work as usual. See <a href=\"http://kotlinlang.org/docs/reference/control-flow.html#while-loops\">while-loop</a>."
 }
