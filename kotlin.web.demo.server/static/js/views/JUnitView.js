@@ -215,6 +215,7 @@ var JUnitView = (function () {
                 printTestOutput(element[0]);
             }
         });
+        $(tree).find("li[aria-expanded]").attr("aria-expanded", "true");
         navTree.appendChild(tree);
     }
 
