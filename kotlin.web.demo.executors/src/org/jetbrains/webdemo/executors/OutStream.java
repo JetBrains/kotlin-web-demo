@@ -29,22 +29,22 @@ class OutStream extends OutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        outputStream.write("<span class=\"standard-output\">".getBytes());
+        outputStream.write("<outStream>".getBytes());
         outputStream.write(b);
-        outputStream.write("</span>".getBytes());
+        outputStream.write("</outStream>".getBytes());
     }
 
     @Override
     public void write(byte[] b) throws IOException {
-        outputStream.write("<span class=\"standard-output\">".getBytes());
+        outputStream.write("<outStream>".getBytes());
         outputStream.write(b);
-        outputStream.write("</span>".getBytes());
+        outputStream.write("</outStream>".getBytes());
     }
 
     @Override
     public void write(byte[] b, int offset, int length) throws IOException {
-        outputStream.write("<span class=\"standard-output\">".getBytes());
+        outputStream.write("<outStream>".getBytes());
         outputStream.write(b, offset, length);
-        outputStream.write("</span>".getBytes());
+        outputStream.write("</outStream>".getBytes());
     }
 }

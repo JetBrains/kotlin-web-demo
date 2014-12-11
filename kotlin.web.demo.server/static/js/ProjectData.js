@@ -58,11 +58,8 @@ var ProjectData = (function () {
                 if (instance.getType() == ProjectType.USER_PROJECT) {
                     save();
                 } else {
-                    dumpToLocalStorage();
+                    updateProjectInLocalStorage();
                 }
-            },
-            onChange: function () {
-
             },
             loadContent: function (fromServer) {
                 if (localStorage.getItem(publicId) != null && !fromServer) {
@@ -127,7 +124,6 @@ var ProjectData = (function () {
             },
             setArguments: function (newArgs) {
                 args = newArgs;
-                instance.onChange();
             },
             getPublicId: function () {
                 return publicId;
@@ -143,7 +139,6 @@ var ProjectData = (function () {
             },
             setConfiguration: function (newConfType) {
                 confType = newConfType;
-                instance.onChange();
             },
             getHelp: function () {
                 return help;
@@ -172,23 +167,37 @@ var ProjectData = (function () {
             })
         }
 
-        function dumpToLocalStorage() {
+        function updateProjectInLocalStorage() {
             if (type == ProjectType.USER_PROJECT) throw "User project shouldn't be saved in local storage";
-            var fileIDs = [];
-            for (var i = 0; i < files.length; ++i) {
-                fileIDs.push(files[i].getPublicId());
+            if (isModified()) {
+                var fileIDs = [];
+                for (var i = 0; i < files.length; ++i) {
+                    files[i].dumpToLocalStorage();
+                    fileIDs.push(files[i].getPublicId());
+                }
+                localStorage.setItem(publicId, JSON.stringify({
+                    name: name,
+                    files: fileIDs,
+                    args: args,
+                    confType: confType,
+                    originUrl: originUrl,
+                    parent: parent,
+                    help: help,
+                    type: type,
+                    publicId: publicId
+                }));
+            } else {
+                localStorage.removeItem(publicId);
             }
-            localStorage.setItem(publicId, JSON.stringify({
-                name: name,
-                files: fileIDs,
-                args: args,
-                confType: confType,
-                originUrl: originUrl,
-                parent: parent,
-                help: help,
-                type: type,
-                publicId: publicId
-            }));
+        }
+
+        function isModified() {
+            for (var i = 0; i < files.length; ++i) {
+                if (files[i].isModified()) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function onContentLoaded(content) {

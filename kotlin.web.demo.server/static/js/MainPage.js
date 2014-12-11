@@ -156,8 +156,9 @@ var converterProvider = (function () {
     }
 
     function onFail(error) {
-        consoleView.writeException(error);
-        statusBarView.setStatus(ActionStatusMessages.convert_java_to_kotlin_fail);
+        for (var i = 0; i < error.length; ++i) {
+            alert(error[i].exception);
+        }
     }
 
     return new ConverterProvider(onSuccess, onFail);
@@ -231,7 +232,8 @@ var accordion = (function () {
     };
 
     accordion.onSelectFile = function (previousFile, currentFile) {
-        if (previousFile != null) previousFile.save();
+        if (previousFile != null)
+            previousFile.save();
 
         if (currentFile.getProjectType() == ProjectType.EXAMPLE) {
             history.replaceState("", "", "?" + currentFile.getPublicId());
@@ -310,6 +312,7 @@ var run_button = $("#runButton")
         highlightingProvider.getHighlighting(accordion.getSelectedProject(), function (highlightingResult) {
             var example = accordion.getSelectedProject();
             example.setErrors(highlightingResult);
+            editor.updateHighlighting();
             if (!example.hasErrors()) {
                 //Create canvas element before run it in browser
                 if (localConfiguration.type == Configuration.type.CANVAS) {
@@ -610,7 +613,7 @@ $("#examples-list-resizer").resizable({
 });
 
 $("#on-the-fly-checkbox")
-    .prop("checked", localStorage.getItem("highlightOnTheFly"))
+    .prop("checked", localStorage.getItem("highlightOnTheFly") == "true")
     .on("change", function () {
         var checkbox = document.getElementById("on-the-fly-checkbox");
         editor.highlightOnTheFly(checkbox.checked);

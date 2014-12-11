@@ -27,7 +27,7 @@ var ConsoleOutputView = (function () {
                 print: function (text) {
                     var span = document.createElement("span");
                     span.className = "error-output";
-                    span.innerHTML = text;
+                    span.textContent = unEscapeString(text).replace(RegExp("</br>", "g"), "\n");
                     currentLine.appendChild(span);
                 },
                 println: function (text) {
@@ -55,7 +55,7 @@ var ConsoleOutputView = (function () {
                 print: function (text) {
                     var span = document.createElement("span");
                     span.className = "standard-output";
-                    span.innerHTML = text;
+                    span.textContent = unEscapeString(text).replace(RegExp("</br>", "g"), "\n");
                     currentLine.appendChild(span);
                 },
                 println: function (text) {
@@ -85,7 +85,8 @@ var ConsoleOutputView = (function () {
                 element.appendChild(currentLine);
             },
             printException: function (exception) {
-                Error.println(exception.fullName + ': ' + exception.message + '\n');
+                Error.println("");
+                Error.println(exception.fullName + ': ' + unEscapeString(exception.message) + '\n');
                 instance.printStackTrace(exception.stackTrace);
             },
             printStackTrace: function (stackTrace) {
@@ -113,12 +114,44 @@ var ConsoleOutputView = (function () {
                 currentLine = document.createElement("div");
                 element.appendChild(currentLine);
             },
+            printMarkedTextToConsole: function (text) {
+                text = unEscapeString(text);
+                text = text.replace(/\n/g, "</br>");
+                var outStreamMessages = getOutputStreamMessagesFromMarkedText(text);
+                for (var j = 1; j < outStreamMessages.length; ++j) {
+                    consoleOutputView.out.print(outStreamMessages[j]);
+                }
+
+                var errorStreamMessages = getErrorStreamMessagesFromMarkedText(text);
+                for (var j = 1; j < errorStreamMessages.length; ++j) {
+                    consoleOutputView.err.print(errorStreamMessages[j]);
+                }
+            },
             err: Error,
             out: Out
         };
 
         var element = document.createElement("div");
 
+        function getOutputStreamMessagesFromMarkedText(text) {
+            var regexp = new RegExp("<outStream>(.*?)</outStream>", "g");
+            var result = regexp.exec(text);
+            if (result == null) {
+                return [];
+            } else {
+                return result;
+            }
+        }
+
+        function getErrorStreamMessagesFromMarkedText(text) {
+            var regexp = new RegExp("<errStream>(.*?)</errStream>", "g");
+            var result = regexp.exec(text);
+            if (result == null) {
+                return [];
+            } else {
+                return result;
+            }
+        }
 
         return instance;
     }

@@ -31,8 +31,11 @@ var File = (function () {
             save: function () {
                 if (project.getType() == ProjectType.USER_PROJECT) {
                     save()
-                } else {
-                    dumpToLocalStorage()
+                }
+            },
+            dumpToLocalStorage: function () {
+                if (project.getType() != ProjectType.USER_PROJECT) {
+                    dumpToLocalStorage();
                 }
             },
             loadOriginal: function () {
@@ -42,10 +45,15 @@ var File = (function () {
             },
             compareContent: function () {
                 if (text == originalText) {
+                    modified = false;
                     instance.onUnmodified();
                 } else {
+                    modified = true;
                     instance.onModified();
                 }
+            },
+            isModified: function () {
+                return modified;
             },
             onModified: function () {
             },
@@ -76,7 +84,7 @@ var File = (function () {
                 return errors;
             },
             setErrors: function (newErrors) {
-                errors = newErrors;
+                errors = newErrors == null ? [] : newErrors;
             },
             getProjectType: function () {
                 return project.getType();
@@ -107,6 +115,7 @@ var File = (function () {
         var type = "Kotlin";
         var publicId = "";
         var changesHistory = null;
+        var modified = false;
 
         function save() {
             fileProvider.saveFile(instance, function () {

@@ -194,12 +194,11 @@ var ProjectView = (function () {
                 deleteButton.title = "Delete this project";
                 deleteButton.onclick = function (event) {
                     if (confirm("Delete project " + header.name + "?")) {
-                        projectProvider.deleteProject(header.publicId, header.type, onDelete);
-                        function onDelete() {
+                        projectProvider.deleteProject(header.publicId, header.type, function () {
                             headerElement.parentNode.removeChild(headerElement);
                             contentElement.parentNode.removeChild(contentElement);
                             instance.onDelete();
-                        }
+                        });
                     }
                     event.stopPropagation();
                 };

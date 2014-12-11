@@ -449,6 +449,9 @@ var KotlinEditor = (function () {
             },
             cursorCoords: function () {
                 return my_editor.cursorCoords();
+            },
+            updateHighlighting: function () {
+                highlighting.updateHighlighting()
             }
         };
 

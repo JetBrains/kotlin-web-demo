@@ -179,22 +179,26 @@ var JUnitView = (function () {
         function printTestOutput(element) {
             if ($(element).hasClass("at-no-children")) {
                 var testData = testsData[element.id];
-                consoleOutputView.out.print(unEscapeString(testsData[element.id].output));
+                consoleOutputView.printMarkedTextToConsole(testsData[element.id].output);
                 if (testData.exception != null && testData.exception.fullName != "java.lang.AssertionError") {
                     consoleOutputView.printException(testData.exception);
                 } else if (testData.exception != null) {
-                    var parsedMessage = parseAssertionErrorMessage(unEscapeString(testData.exception.message));
-                    consoleOutputView.err.println(testData.exception.fullName + ":" + parsedMessage.assertionMessage);
-                    consoleOutputView.err.println("");
-                    consoleOutputView.out.print("Expected: ");
-                    consoleOutputView.err.println(parsedMessage.expected);
-                    consoleOutputView.out.print("Actual: ");
-                    consoleOutputView.err.println(parsedMessage.actual);
-                    consoleOutputView.err.print("    ");
-                    consoleOutputView.addElement(makeDifferenceReference(parsedMessage.expected, parsedMessage.actual));
-                    consoleOutputView.out.println("");
-                    consoleOutputView.out.println("");
-                    consoleOutputView.printStackTrace(testData.exception.stackTrace);
+                    try {
+                        var parsedMessage = parseAssertionErrorMessage(unEscapeString(testData.exception.message));
+                        consoleOutputView.err.println(testData.exception.fullName + ":" + parsedMessage.assertionMessage);
+                        consoleOutputView.err.println("");
+                        consoleOutputView.out.print("Expected: ");
+                        consoleOutputView.err.println(parsedMessage.expected);
+                        consoleOutputView.out.print("Actual: ");
+                        consoleOutputView.err.println(parsedMessage.actual);
+                        consoleOutputView.err.print("    ");
+                        consoleOutputView.addElement(makeDifferenceReference(parsedMessage.expected, parsedMessage.actual));
+                        consoleOutputView.out.println("");
+                        consoleOutputView.out.println("");
+                        consoleOutputView.printStackTrace(testData.exception.stackTrace);
+                    } catch (exception) {
+                        consoleOutputView.printException(testData.exception);
+                    }
                 }
             } else {
                 $.each($(element).children("ul").children("li"), function (i, elem) {

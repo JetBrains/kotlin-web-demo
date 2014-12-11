@@ -67,9 +67,9 @@ var LoginProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("logout"),
                 context: document.body,
-                success: function () {
+                success: function (data) {
                     unBlockContent();
-                    instance.onLogout();
+                    instance.onLogout(data);
                 },
                 dataType: "text",
                 type: "GET",

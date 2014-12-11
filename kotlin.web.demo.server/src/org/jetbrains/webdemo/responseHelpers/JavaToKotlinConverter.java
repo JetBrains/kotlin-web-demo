@@ -38,14 +38,16 @@ public class JavaToKotlinConverter {
         try {
             String resultFormConverter;
             try {
-                  resultFormConverter = J2kPackage.translateToKotlin(code);
+                resultFormConverter = J2kPackage.translateToKotlin(code);
             } catch (Exception e) {
+                ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: " + e.getMessage());
             }
             if (resultFormConverter.isEmpty()) {
+                ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: generated code is empty.");
             }
-
+            ServerInitializer.reinitializeJavaEnvironment();
             jsonObject.put("text", resultFormConverter);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
