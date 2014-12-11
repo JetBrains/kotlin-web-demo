@@ -165,6 +165,10 @@
     text-decoration: none;
 }
 
+#example-help a:focus {
+    outline: none;
+}
+
 #shortcuts-help {
     line-height: 16px;
     margin: 6px;

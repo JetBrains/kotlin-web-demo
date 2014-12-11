@@ -41,6 +41,7 @@ var IncompleteActionManager = (function () {
                     if (actions[incompleteActions[i]].timePoint == "on" + timePoint.capitalize()) {
                         actions[incompleteActions[i]].callback();
                     }
+                    incompleteActions = incompleteActions.splice(i, 1);
                 }
             },
             onBeforeUnload: function () {

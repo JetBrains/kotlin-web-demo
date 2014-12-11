@@ -55,6 +55,7 @@ var HelpDialogView = (function () {
                 if (data != null && data != "") {
                     exampleHelpElement.style.display = "block";
                     exampleHelpElement.innerHTML = data;
+                    $(exampleHelpElement).find("a").attr("target", "_blank")
                 } else {
                     exampleHelpElement.style.display = "none";
                     exampleHelpElement.innerHTML = "";
