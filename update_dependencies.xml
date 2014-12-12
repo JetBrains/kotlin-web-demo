@@ -20,7 +20,7 @@
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
     <property name="zipped.kotlin.plugin.pattern" value="kotlin-plugin*.zip"/>
 
-    <property name="teamcity" value="http://teamcity.jetbrains.com"/>
+    <property name="teamcity" value="https://teamcity.jetbrains.com"/>
     <property name="teamcity.plugin.build" value="bt345"/>
 
     <property name="tc.plugin"
@@ -46,12 +46,20 @@
             </unzip>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
                    dest="kotlin.web.demo.core/resources/js"/>
+
+            <!--replace kotlin-compiler.jar to kotlin-compiler-before-shrink.jar-->
+            <copy file="${dependencies.dir}/kotlin-compiler.jar"
+                  todir="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib"/>
+
             <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-runtime.jar"
                   todir="kotlin.web.demo.test.applet/resources"/>
             <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar"
                   todir="kotlin.web.demo.test.applet/resources"/>
-            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin.js"
+
+            <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar" dest="${unzipped.kotlin.plugin}/jslib"/>
+            <copy file="${unzipped.kotlin.plugin}/jslib/kotlin.js"
                   todir="kotlin.web.demo.server/static"/>
+            <delete dir="${unzipped.kotlin.plugin}/jslib"/>
 
             <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/tag:bootstrap/number"
                  dest="${dependencies.dir}/build.txt"/>
@@ -111,7 +119,8 @@
         <sequential>
             <delete dir="${dependencies.dir}" failonerror="false"/>
             <mkdir dir="${dependencies.dir}"/>
-            <get src="https://teamcity.jetbrains.com/guestAuth/repository/download/bt345/177888:id/kotlin-plugin-0.9.243.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
+            <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
+            <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar" dest="${dependencies.dir}/kotlin-compiler.jar"/>
         </sequential>
     </macrodef>
 

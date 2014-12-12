@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.cli.common.arguments.K2JVMCompilerArguments;
 import org.jetbrains.jet.cli.jvm.JVMConfigurationKeys;
 import org.jetbrains.jet.cli.jvm.K2JVMCompiler;
+import org.jetbrains.jet.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.config.CompilerConfiguration;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
@@ -38,7 +39,7 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
         configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
 
-        JetCoreEnvironment jetCoreEnvironment = JetCoreEnvironment.createForTests(disposable, configuration);
+        JetCoreEnvironment jetCoreEnvironment = JetCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
         registry = FileTypeRegistry.ourInstanceGetter;
         return jetCoreEnvironment;
     }
