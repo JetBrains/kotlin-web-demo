@@ -31,6 +31,7 @@
       <element id="directory" name="examples">
         <element id="dir-copy" path="$PROJECT_DIR$/examples" />
       </element>
+      <element id="file-copy" path="$PROJECT_DIR$/help/helpWords.xml" />
     </root>
   </artifact>
 </component>
