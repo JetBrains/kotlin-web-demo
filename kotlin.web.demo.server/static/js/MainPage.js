@@ -124,7 +124,9 @@ projectActionsView.registerStatus("localVersion", "This is local version of proj
     {
         name: "Revert file",
         callback: function () {
-            accordion.getSelectedFile().loadOriginal();
+            if (accordion.getSelectedFile() != null) {
+                accordion.getSelectedFile().loadOriginal();
+            }
         }
     },
     {
@@ -230,6 +232,10 @@ var accordion = (function () {
     var accordion = new AccordionView(document.getElementById("examples-list"));
 
     accordion.onProjectSelected = function (project) {
+        if (project.isEmpty()) {
+            editor.closeFile();
+            history.replaceState("", "", "?");
+        }
         consoleView.clear();
         junitView.clear();
         generatedCodeView.clear();
@@ -349,7 +355,9 @@ loginProvider.onLogin = function (data) {
 };
 
 loginProvider.onLogout = function () {
-    accordion.getSelectedFile().save();
+    if (accordion.getSelectedFile() != null) {
+        accordion.getSelectedFile().save();
+    }
     accordion.getSelectedProject().save();
     loginView.logout();
     statusBarView.setStatus(ActionStatusMessages.logout_ok);
@@ -477,8 +485,10 @@ function getSessionIdSuccess(data) {
 
 var saveButton = $("#saveButton").click(function () {
     if (accordion.getSelectedProject().getType() == ProjectType.USER_PROJECT) {
-        accordion.getSelectedFile().save();
         accordion.getSelectedProject().save();
+        if (accordion.getSelectedFile() != null) {
+            accordion.getSelectedFile().save();
+        }
     } else {
         $("#saveAsButton").click()
     }
@@ -515,7 +525,9 @@ window.onbeforeunload = function () {
     incompleteActionManager.onBeforeUnload();
     localStorage.setItem("openedItemId", accordion.getSelectedProject().getPublicId());
 
-    accordion.getSelectedFile().save();
+    if (accordion.getSelectedFile() != null) {
+        accordion.getSelectedFile().save();
+    }
     accordion.getSelectedProject().save();
 
     localStorage.setItem("highlightOnTheFly", document.getElementById("on-the-fly-checkbox").checked);

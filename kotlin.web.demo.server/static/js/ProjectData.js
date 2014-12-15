@@ -148,6 +148,9 @@ var ProjectData = (function () {
                 for (var i = 0; i < files.length; i++) {
                     files[i].setErrors(errors[files[i].getName()]);
                 }
+            },
+            isEmpty: function () {
+                return files.length == 0;
             }
         };
 

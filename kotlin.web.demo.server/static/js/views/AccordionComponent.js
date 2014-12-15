@@ -102,7 +102,11 @@ var AccordionView = (function () {
 
             },
             getSelectedFile: function () {
-                return selectedFileView.getFile();
+                if (selectedFileView != null) {
+                    return selectedFileView.getFile();
+                } else {
+                    return null;
+                }
             },
             selectFile: function (fileView) {
                 if (!(selectedFileView == fileView)) {
@@ -215,6 +219,9 @@ var AccordionView = (function () {
                 delete projects[header.publicId];
             };
             projectView.onSelected = function () {
+                if (projectView.getProjectData().isEmpty()) {
+                    selectedFileView = null;
+                }
                 instance.onProjectSelected(this.getProjectData());
             };
 
