@@ -18,18 +18,32 @@ package org.jetbrains.webdemo;
 
 import org.jetbrains.webdemo.environment.EnvironmentManager;
 import org.jetbrains.webdemo.environment.EnvironmentManagerForServer;
+import org.jetbrains.webdemo.server.ApplicationSettings;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ServerInitializer extends Initializer {
     private static ServerInitializer initializer = new ServerInitializer();
+    private static EnvironmentManager environmentManager = new EnvironmentManagerForServer();
+
+    private ServerInitializer() {
+    }
 
     public static ServerInitializer getInstance() {
         return initializer;
     }
 
-    private ServerInitializer() {
+    public static void reinitializeJavaEnvironment() {
+        EnvironmentManagerForServer environmentManager = new EnvironmentManagerForServer();
+        environmentManager.createEnvironment();
+        ServerInitializer.setEnvironmentManager(environmentManager);
+        Initializer.reinitializeJavaEnvironment();
     }
-
-    private static EnvironmentManager environmentManager = new EnvironmentManagerForServer();
 
     public boolean initJavaCoreEnvironment() {
         try {
@@ -51,11 +65,13 @@ public class ServerInitializer extends Initializer {
         ServerInitializer.environmentManager = environmentManager;
     }
 
-    public static void reinitializeJavaEnvironment() {
-        EnvironmentManagerForServer environmentManager = new EnvironmentManagerForServer();
-        environmentManager.createEnvironment();
-        ServerInitializer.setEnvironmentManager(environmentManager);
-        Initializer.reinitializeJavaEnvironment();
+    public void initializeExecutorsPolicyFile() throws IOException {
+        Path templateFilePath = Paths.get(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
+        String templateFileContent = new String(Files.readAllBytes(templateFilePath));
+        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", ApplicationSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"));
+        try (PrintWriter policyFile = new PrintWriter(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
+            policyFile.write(policyFileContent);
+        }
     }
 }
 

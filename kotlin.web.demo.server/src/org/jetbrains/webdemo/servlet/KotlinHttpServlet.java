@@ -72,6 +72,13 @@ public class KotlinHttpServlet extends HttpServlet {
             ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
             System.exit(1);
         }
+
+        try {
+            ServerInitializer.getInstance().initializeExecutorsPolicyFile();
+        } catch (Throwable e) {
+            ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of executors policy file failed, server didn't start", e);
+            System.exit(1);
+        }
     }
 
     private boolean isWindows() {

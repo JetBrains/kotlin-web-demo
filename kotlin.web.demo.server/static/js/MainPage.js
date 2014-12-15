@@ -334,7 +334,7 @@ var run_button = $("#runButton")
                 $("#result-tabs").tabs("option", "active", 0);
             }
         }, function () {
-            unBlockContent();
+            //unBlockContent();
         });
     });
 
@@ -556,12 +556,6 @@ argumentsButton.onclick = function () {
 
 editor.resize();
 
-setKotlinVersion = function () {
-    $("#kotlinVersionTop").html("(" + KOTLIN_VERSION + ")");
-    $("#kotlinVersion").html(WEB_DEMO_VERSION);
-    $("#currentYear").html(new Date().getFullYear());
-};
-
 document.getElementById("fullscreenButton").onclick = function () {
     var gridElement = document.getElementById("g-grid");
     var gridTopElement = document.getElementById("grid-top");
@@ -677,7 +671,7 @@ function setKotlinJsOutput() {
 }
 
 function setKotlinVersion() {
-    document.getElementById("version").innerHTML = "(" + KOTLIN_VERSION + ")";
+    document.getElementById("webdemo-kotlin-version").innerHTML = KOTLIN_VERSION;
 }
 
 var blockTimer;

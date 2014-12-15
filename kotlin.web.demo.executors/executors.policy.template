@@ -1,35 +1,33 @@
-/* AUTOMATICALLY GENERATED ON Mon Dec 08 13:25:57 MSK 2014*/
-/* DO NOT EDIT */
-
-grant codeBase "file:C:/development/kotlin-web-demo/apache-tomcat/webapps/ROOT/WEB-INF/lib/junit.jar" {
+grant codeBase "file:@WEBAPPS_ROOT@WEB-INF/lib/junit.jar"{
   permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
   permission java.lang.RuntimePermission "setIO";
   permission java.io.FilePermission "<<ALL FILES>>", "read";
   permission java.lang.RuntimePermission "accessDeclaredMembers";
 };
 
-grant codeBase "file:C:/development/kotlin-web-demo/apache-tomcat/webapps/ROOT/WEB-INF/lib/jackson-annotations.jar" {
+grant codeBase "file:@WEBAPPS_ROOT@WEB-INF/lib/jackson-annotations.jar"{
   permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
   permission java.lang.RuntimePermission "setIO";
   permission java.io.FilePermission "<<ALL FILES>>", "read";
   permission java.lang.RuntimePermission "accessDeclaredMembers";
 };
 
-grant codeBase "file:C:/development/kotlin-web-demo/apache-tomcat/webapps/ROOT/WEB-INF/lib/jackson-core.jar" {
+grant codeBase "file:@WEBAPPS_ROOT@WEB-INF/lib/jackson-core.jar"{
   permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
   permission java.lang.RuntimePermission "setIO";
   permission java.io.FilePermission "<<ALL FILES>>", "read";
   permission java.lang.RuntimePermission "accessDeclaredMembers";
 };
 
-grant codeBase "file:C:/development/kotlin-web-demo/apache-tomcat/webapps/ROOT/WEB-INF/lib/jackson-databind.jar" {
+grant codeBase "file:@WEBAPPS_ROOT@WEB-INF/lib/jackson-databind.jar"{
   permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
   permission java.lang.RuntimePermission "setIO";
   permission java.io.FilePermission "<<ALL FILES>>", "read";
   permission java.lang.RuntimePermission "accessDeclaredMembers";
 };
 
-grant codeBase "file:C:/development/kotlin-web-demo/apache-tomcat/webapps/ROOT/WEB-INF/classes/Executors.jar" {
+grant codeBase "file:@WEBAPPS_ROOT@WEB-INF/classes/Executors.jar"
+{
   permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
   permission java.lang.RuntimePermission "setIO";
   permission java.io.FilePermission "<<ALL FILES>>", "read";
