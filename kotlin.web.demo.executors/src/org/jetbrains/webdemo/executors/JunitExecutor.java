@@ -40,7 +40,7 @@ public class JunitExecutor {
             jUnitCore.addListener(new MyRunListener());
             List<Class> classes = getAllClassesFromTheDir(new File(args[0]));
             for (Class cl : classes) {
-                if(cl.getConstructors().length == 1 && cl.getConstructors()[0].getParameterCount() == 0) {
+                if (cl.getConstructors().length == 1 && cl.getConstructors()[0].getParameterTypes().length == 0) {
                     try {
                         jUnitCore.run(cl);
                     } catch (Throwable e) {
