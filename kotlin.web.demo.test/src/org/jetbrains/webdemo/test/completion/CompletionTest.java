@@ -80,29 +80,7 @@ public class CompletionTest extends BaseTest {
 
         JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(lineNumber, charNumber, currentPsiFile, sessionInfo);
         String actualResult = responseForCompletion.getResult();
-        /*JSONArray expectedArray = new JSONArray(expectedResult);
-        JSONArray actualArray = new JSONArray(actualResult);
-
-//        assertEquals(expectedResult, actualResult);
-
-        assertEquals("Incorrect count of objects in completion", expectedArray.length(), actualArray.length());
-
-
-        for (int i = 0; i < expectedArray.length(); i++) {
-            JSONObject expectedObject = (JSONObject) expectedArray.get(i);
-            for (int j = 0; j < actualArray.length(); j++) {
-                if (expectedObject.get("name").equals(((JSONObject) actualArray.get(j)).get("name"))) {
-                    assertEquals(expectedObject.toString(), actualArray.get(j).toString());
-                    break;
-                } else {
-                    if (j == actualArray.length() - 1) {
-                        assertEquals("Cannot find element for " + expectedObject.toString(), true, false);
-                    }
-                }
-            }
-        }*/
 
         assertEquals("Wrong result: " + lineNumber + ", " + charNumber, expectedResult, actualResult);
     }
-
 }
