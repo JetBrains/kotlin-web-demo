@@ -132,7 +132,18 @@ public class JavaRunner {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
             return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
+        } finally {
+            try {
+                stdOut.close();
+                stdErr.close();
+            } catch (IOException e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                //noinspection ReturnInsideFinallyBlock
+                return ResponseUtils.getErrorInJson("Couldn't close output stream after executing code");
+            }
         }
+
         ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                 sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
                         + " timeout=" + isTimeoutException

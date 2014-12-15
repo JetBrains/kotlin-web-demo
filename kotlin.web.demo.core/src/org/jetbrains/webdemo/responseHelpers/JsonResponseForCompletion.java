@@ -35,9 +35,11 @@ import org.jetbrains.jet.lang.psi.JetQualifiedExpression;
 import org.jetbrains.jet.lang.psi.JetSimpleNameExpression;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.DescriptorUtils;
+import org.jetbrains.jet.lang.resolve.name.Name;
+import org.jetbrains.jet.lang.resolve.scopes.DescriptorKindFilter;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.types.JetType;
-import org.jetbrains.jet.plugin.codeInsight.TipsManager;
+import org.jetbrains.jet.plugin.codeInsight.ReferenceVariantsHelper;
 import org.jetbrains.jet.plugin.util.IdeDescriptorRenderers;
 import org.jetbrains.jet.renderer.DescriptorRenderer;
 import org.jetbrains.jet.renderer.DescriptorRendererBuilder;
@@ -66,9 +68,13 @@ public class JsonResponseForCompletion {
             return true;
         }
     };
-
+    private static final Function1<Name, Boolean> NAME_FILTER = new Function1<Name, Boolean>() {
+        @Override
+        public Boolean invoke(Name name) {
+            return true;
+        }
+    };
     private final int NUMBER_OF_CHAR_IN_COMPLETION_NAME = 40;
-
     private final Project currentProject;
     private final int lineNumber;
     private final int charNumber;
@@ -77,7 +83,6 @@ public class JsonResponseForCompletion {
     private int caretPositionOffset;
     private SessionInfo sessionInfo;
     private List<PsiFile> psiFiles;
-
 
     public JsonResponseForCompletion(List<PsiFile> psiFiles, SessionInfo sessionInfo, String filename, int lineNumber, int charNumber) {
         this.lineNumber = lineNumber;
@@ -170,10 +175,11 @@ public class JsonResponseForCompletion {
         Collection<DeclarationDescriptor> descriptors = null;
         boolean isTipsManagerCompletion = true;
         try {
+            ReferenceVariantsHelper helper = new ReferenceVariantsHelper(bindingContext, VISIBILITY_FILTER);
             if (element instanceof JetSimpleNameExpression) {
-                descriptors = TipsManager.INSTANCE$.getReferenceVariants((JetSimpleNameExpression) element, bindingContext, VISIBILITY_FILTER);
+                descriptors = helper.getReferenceVariants((JetSimpleNameExpression) element, DescriptorKindFilter.ALL, false, NAME_FILTER);
             } else if (element.getParent() instanceof JetSimpleNameExpression) {
-                descriptors = TipsManager.INSTANCE$.getReferenceVariants((JetSimpleNameExpression) element.getParent(), bindingContext, VISIBILITY_FILTER);
+                descriptors = helper.getReferenceVariants((JetSimpleNameExpression) element.getParent(), DescriptorKindFilter.ALL, false, NAME_FILTER);
             } else {
                 isTipsManagerCompletion = false;
                 JetScope resolutionScope;

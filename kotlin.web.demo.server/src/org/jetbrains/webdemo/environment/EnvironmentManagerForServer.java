@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.cli.common.arguments.K2JVMCompilerArguments;
 import org.jetbrains.jet.cli.jvm.JVMConfigurationKeys;
 import org.jetbrains.jet.cli.jvm.K2JVMCompiler;
+import org.jetbrains.jet.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.config.CompilerConfiguration;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
@@ -25,23 +26,6 @@ import java.util.List;
 
 public class EnvironmentManagerForServer extends EnvironmentManager {
     private static File KOTLIN_RUNTIME = initializeKotlinRuntime();
-
-    @NotNull
-    public JetCoreEnvironment createEnvironment() {
-        K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
-        CompilerConfiguration configuration = new CompilerConfiguration();
-        configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
-        configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
-
-        configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
-
-        configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
-        configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
-
-        JetCoreEnvironment jetCoreEnvironment = JetCoreEnvironment.createForTests(disposable, configuration);
-        registry = FileTypeRegistry.ourInstanceGetter;
-        return jetCoreEnvironment;
-    }
 
     @Nullable
     private static File initializeKotlinRuntime() {
@@ -96,9 +80,9 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
 
         File junit = new File(ApplicationSettings.LIBS_DIR + "junit.jar");
 
-        if(junit.exists()){
+        if (junit.exists()) {
             classpath.add(junit);
-        } else{
+        } else {
 
         }
 
@@ -109,6 +93,23 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
             }
         }
         return classpath;
+    }
+
+    @NotNull
+    public JetCoreEnvironment createEnvironment() {
+        K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
+        CompilerConfiguration configuration = new CompilerConfiguration();
+        configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
+        configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
+
+        configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
+
+        configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
+        configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
+
+        JetCoreEnvironment jetCoreEnvironment = JetCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
+        registry = FileTypeRegistry.ourInstanceGetter;
+        return jetCoreEnvironment;
     }
 
     @NotNull

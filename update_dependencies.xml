@@ -16,13 +16,13 @@
 
 <project name="Update Dependencies" default="download_and_update">
 
-    <property name ="kotlin.build" value="177278"/>
+    <!--<property name ="kotlin.build" value="177278"/>-->
 
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
     <property name="zipped.kotlin.plugin.pattern" value="kotlin-plugin*.zip"/>
 
-    <property name="teamcity" value="http://teamcity.jetbrains.com"/>
+    <property name="teamcity" value="https://teamcity.jetbrains.com"/>
     <property name="teamcity.plugin.build" value="bt345"/>
 
     <property name="tc.plugin"
@@ -54,12 +54,18 @@
             </unzip>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
                    dest="kotlin.web.demo.core/resources/js"/>
+            <copy file="${dependencies.dir}/kotlin-compiler.jar"
+                  todir="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib"/>
+
             <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-runtime.jar"
                   todir="kotlin.web.demo.test.applet/resources"/>
             <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar"
                   todir="kotlin.web.demo.test.applet/resources"/>
-            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin.js"
+            <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
+                   dest="${unzipped.kotlin.plugin}/jslib"/>
+            <copy file="${unzipped.kotlin.plugin}/jslib/kotlin.js"
                   todir="kotlin.web.demo.server/static"/>
+            <delete dir="${unzipped.kotlin.plugin}/jslib"/>
 
             <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
                  dest="${dependencies.dir}/build.txt"/>
@@ -116,11 +122,16 @@
     </macrodef>
 
     <target name="update_to_given_version" if="kotlin.build">
-        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
+        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-plugin-{build.number}.zip"
+             dest="${dependencies.dir}/kotlin-plugin.zip"/>
+        <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
+             dest="${dependencies.dir}/kotlin-compiler.jar"/>
     </target>
 
     <target name="update_to_latest_version" unless="kotlin.build">
         <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
+        <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
+             dest="${dependencies.dir}/kotlin-compiler.jar"/>
     </target>
 
     <macrodef name="set_kotlin_version_internal">
@@ -151,7 +162,7 @@
              dest="${dependencies.dir}/build.txt"/>
         <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
         <condition property="isLastVersion">
-            <equals arg1="${version}" arg2="0.7.111" />
+            <equals arg1="${version}" arg2="0.7.111"/>
         </condition>
     </target>
 

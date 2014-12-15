@@ -20,14 +20,15 @@ import com.google.common.base.Predicates;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.jet.analyzer.AnalyzeExhaust;
+import org.jetbrains.jet.analyzer.AnalysisResult;
 import org.jetbrains.jet.cli.jvm.compiler.CliLightClassGenerationSupport;
 import org.jetbrains.jet.codegen.ClassBuilderFactories;
 import org.jetbrains.jet.codegen.state.GenerationState;
+import org.jetbrains.jet.context.ContextPackage;
 import org.jetbrains.jet.lang.descriptors.impl.ModuleDescriptorImpl;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.BindingTraceContext;
+import org.jetbrains.jet.lang.resolve.BindingTrace;
 import org.jetbrains.jet.lang.resolve.java.TopDownAnalyzerFacadeForJVM;
 import org.jetbrains.jet.lang.types.lang.KotlinBuiltIns;
 
@@ -39,12 +40,12 @@ public class ResolveUtils {
     }
 
     public static BindingContext getBindingContext(@NotNull List<JetFile> files, Project project) {
-        AnalyzeExhaust analyzeExhaust = analyzeFile(files, project);
+        AnalysisResult analyzeExhaust = analyzeFile(files, project);
         return analyzeExhaust.getBindingContext();
     }
 
     public static GenerationState getGenerationState(@NotNull List<JetFile> files, Project project) {
-        AnalyzeExhaust analyzeExhaust = analyzeFile(files, project);
+        AnalysisResult analyzeExhaust = analyzeFile(files, project);
         return new GenerationState(
                 project,
                 ClassBuilderFactories.BINARIES,
@@ -54,26 +55,15 @@ public class ResolveUtils {
         );
     }
 
-    private static AnalyzeExhaust analyzeFile(@NotNull List<JetFile> files, Project project) {
+    private static AnalysisResult analyzeFile(@NotNull List<JetFile> files, Project project) {
 
-        BindingTraceContext bindingTraceContext = new BindingTraceContext();
+        BindingTrace trace = new CliLightClassGenerationSupport.CliBindingTrace();
 
         ModuleDescriptorImpl module = TopDownAnalyzerFacadeForJVM.createJavaModule("<module>");
         module.addDependencyOnModule(module);
         module.addDependencyOnModule(KotlinBuiltIns.getInstance().getBuiltInsModule());
         module.seal();
-        CliLightClassGenerationSupport lightClassGenerationSupport = CliLightClassGenerationSupport.getInstanceForCli(project);
-        if (lightClassGenerationSupport != null && lightClassGenerationSupport.getLightClassModule() == null) {
-            lightClassGenerationSupport.setModule(module);
-        }
-        return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-                project,
-                files,
-                bindingTraceContext,
-                Predicates.<PsiFile>alwaysTrue(),
-                module,
-                null,
-                null
-        );
+        return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegrationWithCustomContext(
+                project, ContextPackage.GlobalContext(), files, trace, Predicates.<PsiFile>alwaysTrue(), module, null, null);
     }
 }
