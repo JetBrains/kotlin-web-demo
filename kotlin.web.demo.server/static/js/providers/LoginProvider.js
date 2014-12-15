@@ -57,6 +57,7 @@ var LoginProvider = (function () {
                 data: {args: type},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
+                    unBlockContent();
                     instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
                 }
             });
