@@ -30,59 +30,67 @@ public class HighlightingTest extends BaseTest {
 
     public void test$errors$oneError() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Unresolved reference: prntln\"," +
-                "\"className\":\"ERROR\"," +
+        String expectedResult = "{\"" + fileName + "\":[" +
+                "{" +
+                "\"interval\":{\"start\":{\"line\":1,\"ch\":2},\"end\":{\"line\":1,\"ch\":8}}," +
+                "\"message\":\"Unresolved reference: prntln\"," +
                 "\"severity\":\"ERROR\"," +
-                "\"y\":\"{line: 1, ch: 8}\"," +
-                "\"x\":\"{line: 1, ch: 2}\"}]";
+                "\"className\":\"ERROR\"" +
+                "}" +
+                "]}";
         compareResponseAndExpectedResult(fileName, expectedResult, "java");
-        /*expectedResult = "[{\"titleName\":\"Unresolved reference: System\"," +
-                "\"className\":\"ERROR\"," +
-                "\"severity\":\"ERROR\"," +
-                "\"y\":\"{line: 1, ch: 8}\"," +
-                "\"x\":\"{line: 1, ch: 2}\"}]";
-        compareResponseAndExpectedResult(fileName, expectedResult, "js");*/
     }
 
     public void test$errors$oneError$js() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this).substring(0, TestUtils.getNameByTestName(this).length() - 3) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Unresolved reference: prntln\"," +
-                "\"className\":\"ERROR\"," +
+        String expectedResult = "{\"" + fileName + "\":[" +
+                "{" +
+                "\"interval\":{\"start\":{\"line\":1,\"ch\":2},\"end\":{\"line\":1,\"ch\":8}}," +
+                "\"message\":\"Unresolved reference: prntln\"," +
                 "\"severity\":\"ERROR\"," +
-                "\"y\":\"{line: 1, ch: 8}\"," +
-                "\"x\":\"{line: 1, ch: 2}\"}]";
+                "\"className\":\"ERROR\"" +
+                "}" +
+                "]}";
         compareResponseAndExpectedResult(fileName, expectedResult, "js");
     }
 
     public void test$warnings$oneWarning() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Unnecessary safe call on a non-null receiver of type kotlin.Int\"," +
-                "\"className\":\"WARNING\"," +
+        String expectedResult = "{\"" + fileName + "\":[" +
+                "{" +
+                "\"interval\":{\"start\":{\"line\":2,\"ch\":5},\"end\":{\"line\":2,\"ch\":7}}," +
+                "\"message\":\"Unnecessary safe call on a non-null receiver of type kotlin.Int\"," +
                 "\"severity\":\"WARNING\"," +
-                "\"y\":\"{line: 2, ch: 7}\"," +
-                "\"x\":\"{line: 2, ch: 5}\"}]";
+                "\"className\":\"WARNING\"" +
+                "}" +
+                "]}";
         compareResponseAndExpectedResult(fileName, expectedResult, "java");
     }
 
     public void test$errors$twoErrorsInOneLine() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Unresolved reference: prntln\"," +
-                "\"className\":\"ERROR\"," +
+        String expectedResult = "{\"" + fileName + "\":[" +
+                "{" +
+                "\"interval\":{\"start\":{\"line\":1,\"ch\":2},\"end\":{\"line\":1,\"ch\":8}}," +
+                "\"message\":\"Unresolved reference: prntln\"," +
                 "\"severity\":\"ERROR\"," +
-                "\"y\":\"{line: 1, ch: 8}\"," +
-                "\"x\":\"{line: 1, ch: 2}\"}," +
-                "{\"titleName\":\"Expecting ')'\"," +
-                "\"className\":\"red_wavy_line\"," +
+                "\"className\":\"ERROR\"" +
+                "}" +
+                "," +
+                "{" +
+                "\"interval\":{\"start\":{\"line\":1,\"ch\":15},\"end\":{\"line\":1,\"ch\":16}}," +
+                "\"message\":\"Expecting ')'\"," +
                 "\"severity\":\"ERROR\"," +
-                "\"y\":\"{line: 1, ch: 16}\"," +
-                "\"x\":\"{line: 1, ch: 15}\"}]";
+                "\"className\":\"red_wavy_line\"" +
+                "}" +
+                "]}";
         compareResponseAndExpectedResult(fileName, expectedResult, "java");
     }
 
     private void compareResponseAndExpectedResult(String fileName, String expectedResult, String runConfiguration) throws IOException {
         sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         sessionInfo.setRunConfiguration(runConfiguration);
-        PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
+        PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), fileName, TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(Collections.singletonList(currentPsiFile), sessionInfo, currentPsiFile.getProject());
         String actualResult = responseForHighlighting.getResult();
 
