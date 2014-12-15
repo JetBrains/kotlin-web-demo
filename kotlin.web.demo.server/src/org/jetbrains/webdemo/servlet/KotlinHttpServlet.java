@@ -104,11 +104,11 @@ public class KotlinHttpServlet extends HttpServlet {
                 CommandRunner.setServerSettingFromTomcatConfig("java_execute", ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + executable);
             }
             try {
-                CommandRunner.setServerSettingFromTomcatConfig("app_home", (String) envCtx.lookup("app_home"));
+                CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", (String) envCtx.lookup("app_output_dir"));
             } catch (NamingException e) {
                 File rootFolder = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY);
                 String appHome = rootFolder.getParentFile().getParentFile().getParent();
-                CommandRunner.setServerSettingFromTomcatConfig("app_home", appHome);
+                CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", appHome);
             }
             CommandRunner.setServerSettingFromTomcatConfig("auth_redirect", (String) envCtx.lookup("auth_redirect"));
             CommandRunner.setServerSettingFromTomcatConfig("google_key", (String) envCtx.lookup("google_key"));
