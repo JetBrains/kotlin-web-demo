@@ -18,11 +18,14 @@ package org.jetbrains.webdemo.test.run;
 
 import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
+import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
+import org.jetbrains.webdemo.responseHelpers.JsConverter;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class RunTest extends BaseTest {
 
@@ -87,17 +90,18 @@ public class RunTest extends BaseTest {
             PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
             sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
 
-//            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(currentPsiFile), currentPsiFile.getProject(), args, sessionInfo );
-//            String actualResult = responseForCompilation.getResult();
-//            if (fileName.endsWith("securityExecutionError.kt") || fileName.endsWith("securityFilePermissionError.kt")) {
-//                assertTrue("Wrong result: " + fileName, actualResult.contains(expectedResult));
-//            } else {
-//                assertTrue("Wrong result: " + fileName, actualResult.endsWith(expectedResult));
-//            }
+            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(currentPsiFile), currentPsiFile.getProject(), sessionInfo, args);
+            String actualResult = responseForCompilation.getResult();
+            if (fileName.endsWith("securityExecutionError.kt") || fileName.endsWith("securityFilePermissionError.kt")) {
+                assertTrue("Wrong result: " + fileName, actualResult.contains(expectedResult));
+            } else {
+                assertTrue("Wrong result: " + fileName, actualResult.endsWith(expectedResult));
+            }
         } else {
-//            sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
-//            String actualResult = new JsConverter(sessionInfo).getResult(TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName), args);
-//            assertEquals("wrong result", expectedResult, actualResult);
+            sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
+            PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
+            String actualResult = new JsConverter(sessionInfo).getResult(Collections.singletonList(currentPsiFile), args);
+            assertEquals("wrong result", expectedResult, actualResult);
         }
     }
 }

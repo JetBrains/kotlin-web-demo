@@ -243,8 +243,8 @@ public class JsonResponseForCompletion {
                 if (prefix.isEmpty() || name.startsWith(prefix)) {
                     ObjectNode jsonObject = jsonArray.addObject();
                     jsonObject.put("icon", getIconFromDescriptor(descriptor));
-                    jsonObject.put("tail", presentableText.getSecond());
                     jsonObject.put("name", name);
+                    jsonObject.put("tail", presentableText.getSecond());
 
                 }
             }

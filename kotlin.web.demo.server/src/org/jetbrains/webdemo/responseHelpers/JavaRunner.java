@@ -47,16 +47,14 @@ public class JavaRunner {
     int returnValue = 0;
     private String arguments;
     private volatile boolean isTimeoutException = false;
-    private Project example;
 
-    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, SessionInfo info, Project example) {
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, SessionInfo info) {
         this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;
         this.jsonArray = array;
         this.currentFile = currentFile;
         this.sessionInfo = info;
-        this.example = example;
     }
 
     public String getResult(String pathToRootOut) {

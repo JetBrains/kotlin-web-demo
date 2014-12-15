@@ -350,7 +350,7 @@ public class MyHttpSession {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
 
-                CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, sessionInfo, project);
+                CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, sessionInfo, project.args);
                 writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
             } else {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);

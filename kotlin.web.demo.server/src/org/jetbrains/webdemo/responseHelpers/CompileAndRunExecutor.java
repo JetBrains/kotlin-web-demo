@@ -51,14 +51,14 @@ public class CompileAndRunExecutor {
     private final List<PsiFile> currentPsiFiles;
 
     private final SessionInfo sessionInfo;
-    private final Project example;
+    private final String args;
     private final com.intellij.openapi.project.Project currentProject;
 
-    public CompileAndRunExecutor(List<PsiFile> currentPsiFiles, com.intellij.openapi.project.Project currentProject, SessionInfo info, Project example) {
+    public CompileAndRunExecutor(List<PsiFile> currentPsiFiles, com.intellij.openapi.project.Project currentProject, SessionInfo info, String args) {
         this.currentPsiFiles = currentPsiFiles;
         this.currentProject = currentProject;
         this.sessionInfo = info;
-        this.example = example;
+        this.args = args;
     }
 
     public String getResult() {
@@ -129,7 +129,7 @@ public class CompileAndRunExecutor {
             jsonObject.put("text", stringBuilder.toString());
 
 
-            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, example.args, jsonArray, (JetFile) currentPsiFiles.get(0), sessionInfo, example);
+            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, args, jsonArray, (JetFile) currentPsiFiles.get(0), sessionInfo);
 
             return runner.getResult(outputDir.getAbsolutePath());
 
