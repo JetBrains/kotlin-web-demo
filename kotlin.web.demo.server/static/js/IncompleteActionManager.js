@@ -37,12 +37,15 @@ var IncompleteActionManager = (function () {
                 }
             },
             checkTimepoint: function (timePoint) {
+                timePoint = "on" + timePoint.capitalize();
                 for (var i = 0; i < incompleteActions.length; ++i) {
-                    if (actions[incompleteActions[i]].timePoint == "on" + timePoint.capitalize()) {
+                    if (actions[incompleteActions[i]].timePoint == timePoint) {
                         actions[incompleteActions[i]].callback();
                     }
-                    incompleteActions = incompleteActions.splice(i, 1);
                 }
+                incompleteActions = incompleteActions.filter(function (element) {
+                    return element.timePoint == timePoint;
+                })
             },
             onBeforeUnload: function () {
                 localStorage.setItem("incompleteActions", JSON.stringify(incompleteActions))
