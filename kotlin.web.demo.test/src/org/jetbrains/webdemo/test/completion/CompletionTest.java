@@ -73,12 +73,12 @@ public class CompletionTest extends BaseTest {
         compareResult(2, 3, expectedResult, "java");
     }
 
-    private void compareResult(int start, int end, String expectedResult, String runConfiguration) throws IOException, JSONException {
+    private void compareResult(int lineNumber, int charNumber, String expectedResult, String runConfiguration) throws IOException, JSONException {
         sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
         sessionInfo.setRunConfiguration(runConfiguration);
         JetFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, "completion/root.kt"));
 
-        JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(start, end, currentPsiFile, sessionInfo);
+        JsonResponseForCompletion responseForCompletion = new JsonResponseForCompletion(lineNumber, charNumber, currentPsiFile, sessionInfo);
         String actualResult = responseForCompletion.getResult();
         /*JSONArray expectedArray = new JSONArray(expectedResult);
         JSONArray actualArray = new JSONArray(actualResult);
@@ -102,7 +102,7 @@ public class CompletionTest extends BaseTest {
             }
         }*/
 
-        assertEquals("Wrong result: " + start + ", " + end, expectedResult, actualResult);
+        assertEquals("Wrong result: " + lineNumber + ", " + charNumber, expectedResult, actualResult);
     }
 
 }
