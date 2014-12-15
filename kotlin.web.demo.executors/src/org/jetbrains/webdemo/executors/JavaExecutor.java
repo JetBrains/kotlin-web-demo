@@ -36,18 +36,25 @@ public class JavaExecutor {
             System.setOut(new PrintStream(standardOutputStream));
             System.setErr(new PrintStream(errorOutputStream));
 
-            String className = args[0];
             RunOutput outputObj = new RunOutput();
-            try {
-                Method mainMethod = Class.forName(className).getMethod("main", String[].class);
-                mainMethod.invoke(null, (Object) Arrays.copyOfRange(args, 1, args.length));
-            } catch (InvocationTargetException e) {
-                Throwable cause = e.getCause();
-                outputObj.exception = new ExceptionDescriptor();
-                outputObj.exception.message = cause.getMessage();
-                outputObj.exception.stackTrace = cause.getStackTrace();
-                outputObj.exception.fullName = cause.getClass().getName();
-            } catch (NoSuchMethodException e) {
+            String className;
+            if (args.length > 0) {
+                className = args[0];
+                try {
+                    Method mainMethod = Class.forName(className).getMethod("main", String[].class);
+                    mainMethod.invoke(null, (Object) Arrays.copyOfRange(args, 1, args.length));
+                } catch (InvocationTargetException e) {
+                    Throwable cause = e.getCause();
+                    outputObj.exception = new ExceptionDescriptor();
+                    outputObj.exception.message = cause.getMessage();
+                    outputObj.exception.stackTrace = cause.getStackTrace();
+                    outputObj.exception.fullName = cause.getClass().getName();
+                } catch (NoSuchMethodException e) {
+                    System.err.println("No main method found in project.");
+                } catch (ClassNotFoundException e) {
+                    System.err.println("No main method found in project.");
+                }
+            } else {
                 System.err.println("No main method found in project.");
             }
 
@@ -58,8 +65,7 @@ public class JavaExecutor {
             System.out.print(new ObjectMapper().writeValueAsString(outputObj));
         } catch (Throwable e) {
             System.setOut(defaultOutputStream);
-            System.out.println("{\"text\":\"<errStream>Internal error:");
-            e.printStackTrace();
+            System.out.println("{\"text\":\"<errStream>Internal error: " + e.getClass().getName() + " " + e.getMessage());
             System.out.print("</errStream>\"}");
             e.printStackTrace();
         }

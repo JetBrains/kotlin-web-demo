@@ -331,10 +331,11 @@ var run_button = $("#runButton")
                 }
                 runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject(), accordion.getSelectedProject());
             } else {
+                unBlockContent();
                 $("#result-tabs").tabs("option", "active", 0);
             }
         }, function () {
-            //unBlockContent();
+
         });
     });
 
@@ -625,7 +626,7 @@ $("#on-the-fly-checkbox")
         var checkbox = document.getElementById("on-the-fly-checkbox");
         editor.highlightOnTheFly(checkbox.checked);
     });
-editor.highlightOnTheFly(document.getElementById("on-the-fly-checkbox"));
+editor.highlightOnTheFly(document.getElementById("on-the-fly-checkbox").checked);
 
 $("#grid-bottom").resizable({
     handles: "n",

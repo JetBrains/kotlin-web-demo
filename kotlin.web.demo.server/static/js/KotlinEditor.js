@@ -476,6 +476,7 @@ var KotlinEditor = (function () {
         });
 
         my_editor.on("change", function () {
+            highlighting.removeStyles();
             if (openedFile != null) {
                 openedFile.setText(my_editor.getValue());
                 if (timer) {
