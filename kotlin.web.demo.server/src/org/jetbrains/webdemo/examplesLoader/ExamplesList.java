@@ -49,14 +49,6 @@ public class ExamplesList {
         return EXAMPLES_LIST;
     }
 
-    public static String updateList() {
-        response = new StringBuilder();
-        exampleFoldersOrder = new ArrayList<>();
-        exampleFolders = new HashMap<>();
-        ExamplesList.getInstance().generateList();
-        return response.toString();
-    }
-
     public static Project getExample(String url) {
         url = ResponseUtils.unEscapeURL(url);
         String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
@@ -78,20 +70,6 @@ public class ExamplesList {
         }
         throw new NullPointerException("File not found");
     }
-
-//    public static Project getExample(String url) {
-//        ExamplesFolder examplesFolder = exampleFolders.get(ResponseUtils.substringBefore(url, "&name=").replaceAll("_", " "));
-//        return examplesFolder.examples.get(ResponseUtils.substringAfter(url, "&name=").replaceAll("_", " "));
-//    }
-//
-//    public static Project getExample(String name, String folder) {
-//        ExamplesFolder examplesFolder = exampleFolders.get(folder.replaceAll("_", " "));
-//        if (examplesFolder != null) {
-//            return examplesFolder.examples.get(name.replaceAll("_", " "));
-//        } else {
-//            return null;
-//        }
-//    }
 
     public List<String> getOrderedFolderNames() {
         return exampleFoldersOrder;

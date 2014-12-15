@@ -28,6 +28,9 @@
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />
       <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.executors/executors.policy.template" />
       <element id="directory" name="static" />
+      <element id="directory" name="examples">
+        <element id="dir-copy" path="$PROJECT_DIR$/examples" />
+      </element>
     </root>
   </artifact>
 </component>

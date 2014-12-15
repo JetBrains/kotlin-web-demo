@@ -87,9 +87,6 @@ public class ServerHandler {
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         sendAuthorizationResult(request, response, parameters, sessionInfo);
                         break;
-                    case ("updateExamples"):
-                        updateExamples(request, response);
-                        break;
                     case ("updateStatistics"):
                         ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
@@ -223,13 +220,6 @@ public class ServerHandler {
 
     private void sendUserInfoForStatistics(HttpServletRequest request, final HttpServletResponse response) {
         writeResponse(request, response, Statistics.getInstance().showMap(), HttpServletResponse.SC_OK);
-    }
-
-
-    private void updateExamples(HttpServletRequest request, final HttpServletResponse response) {
-        String responseStr = ExamplesList.updateList();
-        responseStr += HelpLoader.updateExamplesHelp();
-        writeResponse(request, response, responseStr, HttpServletResponse.SC_OK);
     }
 
     private void sendSortedExceptions(final HttpServletRequest request, final HttpServletResponse response, Map<String, String[]> parameters) {
