@@ -17,7 +17,9 @@
 package org.jetbrains.webdemo.test.highlighting;
 
 import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
+import org.jetbrains.webdemo.responseHelpers.JsConverter;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
@@ -78,12 +80,40 @@ public class HighlightingTest extends BaseTest {
         compareResponseAndExpectedResult(fileName, expectedResult, "java");
     }
 
+    public void test$errors$errorsFromBackendJava() throws IOException, InterruptedException {
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        String expectedResult = "[{\"titleName\":\"Property delegate must have a 'get(Example, kotlin.PropertyMetadataImpl)' method. None of the following functions is suitable: \\ninternal final fun get(thisRef: kotlin.Any?, prop: kotlin.String): kotlin.String defined in Delegate\\n\"," +
+                "\"className\":\"red_wavy_line\"," +
+                "\"severity\":\"ERROR\"," +
+                "\"y\":\"{line: 3, ch: 31}\"," +
+                "\"x\":\"{line: 3, ch: 21}\"}," +
+                "{\"titleName\":\"Unresolved reference. None of the following candidates is applicable because of receiver type mismatch: \\npublic val java.io.File.name: kotlin.String defined in kotlin.io\\n\"," +
+                "\"className\":\"red_wavy_line\"," +
+                "\"severity\":\"ERROR\"," +
+                "\"y\":\"{line: 10, ch: 63}\"," +
+                "\"x\":\"{line: 10, ch: 59}\"}]";
+        compareResponseAndExpectedResult(fileName, expectedResult, "java");
+    }
+
+    public void test$errors$errorsFromBackendJs() throws IOException, InterruptedException {
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        String expectedResult = "[{\"titleName\":\"Argument must be string literal\"," +
+                "\"className\":\"red_wavy_line\"," +
+                "\"severity\":\"ERROR\"," +
+                "\"y\":\"{line: 2, ch: 6}\"," +
+                "\"x\":\"{line: 2, ch: 4}\"}]";
+        compareResponseAndExpectedResult(fileName, expectedResult, "js");
+    }
+
     private void compareResponseAndExpectedResult(String fileName, String expectedResult, String runConfiguration) throws IOException {
         sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         sessionInfo.setRunConfiguration(runConfiguration);
         JetFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(currentPsiFile, sessionInfo);
         String actualResult = responseForHighlighting.getResult();
+        if (actualResult.equals("[]") && runConfiguration.equals("js")) {
+            actualResult = new JsConverter(sessionInfo).getResult(currentPsiFile.getText(), "");
+        }
 
         assertEquals("Wrong result", expectedResult, actualResult);
     }

@@ -82,9 +82,12 @@ function checkDataForNull(data) {
 }
 
 function checkDataForException(data) {
-        //consoleView.writeException(data);
-    return !(data[0] != null && data[0] != undefined && data[0].exception != undefined);
+    return !(data[0] != null && data[0].exception != undefined);
 
+}
+
+function isDataForHighlighting(data) {
+    return data[0] != null && data[0].titleName != undefined;
 }
 
 function random() {

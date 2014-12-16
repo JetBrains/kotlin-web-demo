@@ -30,6 +30,8 @@ var RunProvider = (function () {
             },
             onFail:function (message) {
             },
+            onErrorsFound:function(message){
+            },
             run:function (configuration, programText, args) {
                 run(configuration, programText, args);
             }
@@ -52,7 +54,12 @@ var RunProvider = (function () {
                 success:function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            instance.onExecutionFinish(data);
+                            if (isDataForHighlighting(data)) {
+                                instance.onErrorsFound(data);
+                            }
+                            else {
+                                instance.onExecutionFinish(data);
+                            }
                         } else {
                             instance.onFail(data);
                         }
@@ -85,18 +92,23 @@ var RunProvider = (function () {
                     }
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            var dataJs;
-                            try {
-                                dataJs = eval(data[0].text);
-                            } catch (e) {
-                                instance.onFail(e);
-                                return;
+                            if (isDataForHighlighting(data)) {
+                                instance.onErrorsFound(data);
                             }
-                            var output = [
-                                {"text":safe_tags_replace(dataJs), "type":"out"},
-                                {"text":data[0].text, "type":"toggle-info"}
-                            ];
-                            instance.onExecutionFinish(output);
+                            else {
+                                var dataJs;
+                                try {
+                                    dataJs = eval(data[0].text);
+                                } catch (e) {
+                                    instance.onFail(e);
+                                    return;
+                                }
+                                var output = [
+                                    {"text":safe_tags_replace(dataJs), "type":"out"},
+                                    {"text":data[0].text, "type":"toggle-info"}
+                                ];
+                                instance.onExecutionFinish(output);
+                            }
                         } else {
                             instance.onFail(data);
                         }
@@ -119,18 +131,23 @@ var RunProvider = (function () {
                 success:function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            var dataJs;
-                            try {
-                                dataJs = eval(data[0].text);
-                            } catch (e) {
-                                instance.onFail(e);
-                                return;
+                            if (isDataForHighlighting(data)) {
+                                instance.onErrorsFound(data);
                             }
-                            var output = [
-                                {"text":safe_tags_replace(dataJs), "type":"out"},
-                                {"text":data[0].text, "type":"toggle-info"}
-                            ];
-                            instance.onExecutionFinish(output);
+                            else {
+                                var dataJs;
+                                try {
+                                    dataJs = eval(data[0].text);
+                                } catch (e) {
+                                    instance.onFail(e);
+                                    return;
+                                }
+                                var output = [
+                                    {"text":safe_tags_replace(dataJs), "type":"out"},
+                                    {"text":data[0].text, "type":"toggle-info"}
+                                ];
+                                instance.onExecutionFinish(output);
+                            }
                         } else {
                             instance.onFail(data);
                         }

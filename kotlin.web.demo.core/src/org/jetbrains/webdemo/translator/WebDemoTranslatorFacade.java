@@ -21,27 +21,27 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.k2js.analyze.TopDownAnalyzerFacadeForJS;
-import org.jetbrains.k2js.config.Config;
 import org.jetbrains.k2js.config.EcmaVersion;
 import org.jetbrains.k2js.config.LibrarySourcesConfig;
 import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.k2js.facade.MainCallParameters;
+import org.jetbrains.k2js.facade.Status;
 import org.jetbrains.k2js.facade.exceptions.MainFunctionNotFoundException;
 import org.jetbrains.k2js.facade.exceptions.TranslationException;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
+import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
+import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.json.JSONArray;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
@@ -78,14 +78,19 @@ public final class WebDemoTranslatorFacade {
     public static String translateStringWithCallToMain(@NotNull String programText, @NotNull String argumentsString, SessionInfo sessionInfo) {
         try {
             JSONArray result = new JSONArray();
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("text", doTranslate(programText, argumentsString));
-            result.put(map);
+            TranslationResult translationResult = doTranslate(programText, argumentsString, sessionInfo);
 
             Initializer.reinitializeJavaEnvironment();
 
-            return result.toString();
+            if (!translationResult.isSuccess) {
+                return translationResult.getOutput();
+            }
 
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("text", translationResult.getOutput());
+            result.put(map);
+
+            return result.toString();
         } catch (MainFunctionNotFoundException te) {
             Initializer.reinitializeJavaEnvironment();
             return ResponseUtils.getErrorInJson(te.getMessage()); 
@@ -100,18 +105,45 @@ public final class WebDemoTranslatorFacade {
     }
 
     @NotNull
-    private static String doTranslate(@NotNull String programText,
-                                      @NotNull String argumentsString) throws TranslationException {
-        K2JSTranslator translator = new K2JSTranslator(new LibrarySourcesConfig(
+    private static TranslationResult doTranslate(@NotNull String programText,
+                                                 @NotNull String argumentsString,
+                                                 @NotNull SessionInfo sessionInfo
+    ) throws TranslationException {
+        LibrarySourcesConfig config = new LibrarySourcesConfig(
                 Initializer.INITIALIZER.getEnvironment().getProject(),
                 "moduleId",
                 LIBRARY_FILES,
                 EcmaVersion.defaultVersion(),
                 false,
-                true));
+                true);
+        K2JSTranslator translator = new K2JSTranslator(config);
         JetFile file = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), programText);
-        String programCode = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString)))) + "\n";
-        return K2JSTranslator.FLUSH_SYSTEM_OUT + programCode + K2JSTranslator.GET_SYSTEM_OUT;
+        Status<String> status = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString))));
+        if (status.isSuccess()) {
+            return new TranslationResult(K2JSTranslator.FLUSH_SYSTEM_OUT + status.getResult() + "\n" + K2JSTranslator.GET_SYSTEM_OUT, true);
+        }
+        else {
+            ArrayList<ErrorDescriptor> errorDescriptors = new ArrayList<ErrorDescriptor>();
+            ErrorAnalyzer errorAnalyzer = new ErrorAnalyzer(file, sessionInfo);
+            errorAnalyzer.gerErrorsFromBindingContext(config.getTrace().getBindingContext(), errorDescriptors);
+
+            return new TranslationResult(JsonResponseForHighlighting.errorDescriptorsToString(errorDescriptors), false);
+        }
+    }
+
+
+    private static class TranslationResult {
+        private final boolean isSuccess;
+        private final String output;
+
+        public TranslationResult(String output, boolean isSuccess) {
+            this.output = output;
+            this.isSuccess = isSuccess;
+        }
+
+        public String getOutput() {
+            return output;
+        }
     }
 
 }

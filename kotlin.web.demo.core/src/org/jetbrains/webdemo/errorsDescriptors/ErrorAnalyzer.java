@@ -18,6 +18,7 @@ package org.jetbrains.webdemo.errorsDescriptors;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
@@ -74,15 +75,17 @@ public class ErrorAnalyzer {
         return errors;
     }
 
-    private void gerErrorsFromBindingContext(BindingContext bindingContext, List<ErrorDescriptor> errors) {
+    public void gerErrorsFromBindingContext(BindingContext bindingContext, List<ErrorDescriptor> errors) {
         Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics().all();
         try {
             for (Diagnostic diagnostic : diagnostics) {
                 //fix for errors in js library files
-                if (diagnostic.getPsiFile().getVirtualFile().getPresentableUrl().startsWith(WebDemoTranslatorFacade.JS_LIB_ROOT)) {
+                VirtualFile virtualFile = diagnostic.getPsiFile().getVirtualFile();
+                if (virtualFile == null || virtualFile.getPresentableUrl().startsWith(WebDemoTranslatorFacade.JS_LIB_ROOT)) {
                     continue;
                 }
-                String render = DefaultErrorMessages.RENDERER.render(diagnostic);
+
+                String render = DefaultErrorMessages.render(diagnostic);
                 if (render.contains("This cast can never succeed")) {
                     continue;
                 }

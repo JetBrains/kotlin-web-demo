@@ -209,6 +209,13 @@ runProvider.onFail = function (error) {
     statusBarView.setMessage(StatusBarView.Messages.run_java_fail);
 };
 
+runProvider.onErrorsFound = function (errors) {
+    runButton.setEnabled(true);
+    editor.addMarkers(errors);
+    problemsView.addMessages(errors);
+    statusBarView.setMessage(StatusBarView.Messages.run_java_fail);
+};
+
 ProgramsView.isLoggedIn = loginView.isLoggedIn;
 ProgramsModel.getEditorContent = editor.getProgramText;
 ProgramsModel.getArguments = argumentsView.getArguments;

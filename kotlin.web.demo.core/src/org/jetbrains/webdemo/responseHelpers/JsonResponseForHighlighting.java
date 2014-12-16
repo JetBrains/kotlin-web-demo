@@ -52,6 +52,10 @@ public class JsonResponseForHighlighting {
             return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE
                      , e.getStackTraceString());
         }
+        return errorDescriptorsToString(errorDescriptors);
+    }
+
+    public static String errorDescriptorsToString(List<ErrorDescriptor> errorDescriptors) {
         JSONArray resultArray = new JSONArray();
 
         for (ErrorDescriptor errorDescriptor : errorDescriptors) {
@@ -62,7 +66,7 @@ public class JsonResponseForHighlighting {
     }
 
     @NotNull
-    private Map<String, String> getMapForJsonResponse(Interval interval, String titleName, String className, String severity) {
+    private static Map<String, String> getMapForJsonResponse(Interval interval, String titleName, String className, String severity) {
         Map<String, String> map = new HashMap<String, String>();
 
         map.put("x", "{line: " + interval.startPoint.line + ", ch: " + interval.startPoint.charNumber + "}");
@@ -74,7 +78,7 @@ public class JsonResponseForHighlighting {
     }
 
 
-    private String escape(String str) {
+    private static String escape(String str) {
         if ((str != null) && (str.contains("\""))) {
             str = str.replaceAll("\\\"", "'");
         }
