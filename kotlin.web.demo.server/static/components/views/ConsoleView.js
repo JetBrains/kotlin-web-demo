@@ -68,8 +68,15 @@ var ConsoleView = (function () {
                 if (tabs != null) {
                     tabs.tabs("select", 1);
                 }
+                var message;
+                if (data instanceof Error) {
+                    message = data.message + ",\nSTACK TRACE:\n" + data.stack;
+                }
+                else {
+                    message = data;
+                }
                 var output = [
-                    {"text":data, "type":"err"}
+                    {"text":message, "type":"err"}
                 ];
                 setOutput(output);
             }
