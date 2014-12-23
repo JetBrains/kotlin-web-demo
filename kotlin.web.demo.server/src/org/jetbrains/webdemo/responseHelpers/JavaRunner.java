@@ -109,7 +109,7 @@ public class JavaRunner {
         stdReader.start(); // Starts now
 
         // Thread that reads std err and feeds the writer given in input
-        Thread errReader = new Thread() {
+        new Thread() {
             @Override
             public void run() {
                 String line;
@@ -122,14 +122,12 @@ public class JavaRunner {
                             sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
                 }
             }
-        };
-        errReader.start(); // Starts now
+        }.start(); // Starts now
 
         int exitValue;
         try {
             exitValue = process.waitFor();
             stdReader.join();
-            errReader.join();
         } catch (InterruptedException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
