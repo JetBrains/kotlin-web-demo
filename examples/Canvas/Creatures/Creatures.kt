@@ -288,7 +288,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
 }
 
 class RadialGradientGenerator(val context: CanvasContext) {
-  val gradients = ArrayList<Array<Pair<Double, String>>>()
+  val gradients = ArrayList<Array<out Pair<Double, String>>>()
   var current = 0
 
   fun newColorStops(vararg colorStops: Pair<Double, String>) {
@@ -304,7 +304,7 @@ class RadialGradientGenerator(val context: CanvasContext) {
     newColorStops(Pair(0.0, "rgb(250,147,250)"), Pair(0.5, "rgb(255,80,255)"), Pair(1.0, "rgb(250,0,217)"))
   }
 
-  fun getNext(): Array<Pair<Double, String>> {
+  fun getNext(): Array<out Pair<Double, String>> {
     val result = gradients.get(current)
     current = (current + 1) % gradients.size()
     return result
@@ -341,8 +341,8 @@ fun main(args: Array<String>) {
     state.addShape(Creature(state.size * 0.25, state))
     state.addShape(Creature(state.size * 0.75, state))
     window.setTimeout({
-                state.valid = false
-              }, 1000)
+        state.valid = false
+    }, 1000)
   }
 }
 
@@ -353,15 +353,4 @@ fun <T> List<T>.reversed(): List<T> {
     result.add(get(--i))
   }
   return result
-}
-
-public class Pair<A, B> (
-    public val first: A,
-    public val second: B
-) {
-  public fun component1(): A = first
-  public fun component2(): B = second
-
-  override fun toString(): String = "($first, $second)"
-
 }
