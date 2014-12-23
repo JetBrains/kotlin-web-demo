@@ -28,16 +28,21 @@ import org.jetbrains.k2js.config.EcmaVersion;
 import org.jetbrains.k2js.config.LibrarySourcesConfig;
 import org.jetbrains.k2js.facade.K2JSTranslator;
 import org.jetbrains.k2js.facade.MainCallParameters;
+import org.jetbrains.k2js.facade.Status;
 import org.jetbrains.k2js.facade.exceptions.MainFunctionNotFoundException;
 import org.jetbrains.k2js.facade.exceptions.TranslationException;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
+import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
+import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,7 +82,7 @@ public final class WebDemoTranslatorFacade {
         try {
             ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
             ObjectNode jsonObject = result.addObject();
-            jsonObject.put("text", doTranslate(files, arguments));
+            jsonObject.put("text", doTranslate(files, arguments, sessionInfo));
 
             Initializer.reinitializeJavaEnvironment();
 
@@ -98,16 +103,18 @@ public final class WebDemoTranslatorFacade {
 
     @NotNull
     private static String doTranslate(@NotNull List<JetFile> files,
-                                      @NotNull String arguments) throws TranslationException {
-        K2JSTranslator translator = new K2JSTranslator(new LibrarySourcesConfig(
+                                      @NotNull String arguments,
+                                      SessionInfo sessionInfo) throws TranslationException {
+        LibrarySourcesConfig config  = new LibrarySourcesConfig(
                 Initializer.INITIALIZER.getEnvironment().getProject(),
                 "moduleId",
                 LIBRARY_FILES,
                 EcmaVersion.defaultVersion(),
                 false,
-                false));
-        String programCode = translator.generateProgramCode(files, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(arguments)))) + "\n";
-        return K2JSTranslator.FLUSH_SYSTEM_OUT + programCode + K2JSTranslator.GET_SYSTEM_OUT;
+                false);
+        K2JSTranslator translator = new K2JSTranslator(config);
+        Status<String> status = translator.generateProgramCode(files, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(arguments))));
+        return K2JSTranslator.FLUSH_SYSTEM_OUT + status.getResult() + "\n" + K2JSTranslator.GET_SYSTEM_OUT;
     }
 
 }

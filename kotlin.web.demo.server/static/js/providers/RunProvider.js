@@ -71,7 +71,7 @@ var RunProvider = (function () {
         }
 
         function runJs(project) {
-            Kotlin.modules = {stdlib: Kotlin.modules.stdlib};
+            Kotlin.modules = {stdlib: Kotlin.modules.stdlib, builtins: Kotlin.modules.builtins};
             loadJsFromServer(project);
         }
 
