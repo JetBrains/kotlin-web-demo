@@ -92,7 +92,7 @@ public class JavaRunner {
         final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
         // Thread that reads std out and feeds the writer given in input
-        new Thread() {
+        Thread stdReader = new Thread() {
             @Override
             public void run() {
                 String line;
@@ -105,10 +105,11 @@ public class JavaRunner {
                             sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
                 }
             }
-        }.start(); // Starts now
+        };
+        stdReader.start(); // Starts now
 
         // Thread that reads std err and feeds the writer given in input
-        new Thread() {
+        Thread errReader = new Thread() {
             @Override
             public void run() {
                 String line;
@@ -121,11 +122,14 @@ public class JavaRunner {
                             sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
                 }
             }
-        }.start(); // Starts now
+        };
+        errReader.start(); // Starts now
 
         int exitValue;
         try {
             exitValue = process.waitFor();
+            stdReader.join();
+            errReader.join();
         } catch (InterruptedException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
@@ -170,6 +174,7 @@ public class JavaRunner {
                     jsonArray.add(output);
                 }
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
