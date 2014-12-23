@@ -44,14 +44,5 @@
         </condition>
     </target>
 
-
-    <target name="updatePolicy">
-        <path id="user.dir.path" location="${user.dir}"/>
-        <pathconvert dirsep="/" refid="user.dir.path" property="user.dir.linuxSeparators"/>
-        <replaceregexp file="kotlin.web.demo.executors/executors.policy"
-                       match="@WEB_DEMO_FOLDER@"
-                       replace="${user.dir.linuxSeparators}"
-                       byline="true"/>
-    </target>
-    <target name="all" depends="downloadTomcat, download_and_update, updatePolicy"/>
+    <target name="all" depends="downloadTomcat, download_and_update"/>
 </project>

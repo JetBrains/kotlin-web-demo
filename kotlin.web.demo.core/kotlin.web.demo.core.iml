@@ -11,6 +11,14 @@
     <orderEntry type="library" name="kotlin-compiler" level="project" />
     <orderEntry type="library" name="kotlin-plugin" level="project" />
     <orderEntry type="library" name="jackson" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/annotations.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
-

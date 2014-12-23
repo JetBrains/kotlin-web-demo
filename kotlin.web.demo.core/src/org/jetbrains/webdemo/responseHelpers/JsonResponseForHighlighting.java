@@ -59,38 +59,12 @@ public class JsonResponseForHighlighting {
             return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE
                      , e.getStackTraceString());
         }
-        ArrayNode resultArray = new ArrayNode(JsonNodeFactory.instance);
-
-//        for (ErrorDescriptor errorDescriptor : errorDescriptors) {
-//            resultArray.add(getMapForJsonResponse(errorDescriptor.getInterval(), errorDescriptor.getMessage(),
-//                    errorDescriptor.getClassName(), errorDescriptor.getSeverity().name()));
-//        }
         try {
             return objectMapper.writeValueAsString(errorDescriptors);
         } catch (IOException e) {
             return "";
             //unreachable
         }
-    }
-
-    @NotNull
-    private ObjectNode getMapForJsonResponse(Interval interval, String titleName, String className, String severity) {
-        ObjectNode jsonObject = new ObjectNode(JsonNodeFactory.instance);
-
-        jsonObject.put("x", "{line: " + interval.start.line + ", ch: " + interval.start.ch + "}");
-        jsonObject.put("y", "{line: " + interval.end.line + ", ch: " + interval.end.ch + "}");
-        jsonObject.put("titleName", escape(titleName));
-        jsonObject.put("className", className);
-        jsonObject.put("severity", severity);
-        return jsonObject;
-    }
-
-
-    private String escape(String str) {
-        if ((str != null) && (str.contains("\""))) {
-            str = str.replaceAll("\\\"", "'");
-        }
-        return str;
     }
 
 }

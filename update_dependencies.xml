@@ -16,7 +16,7 @@
 
 <project name="Update Dependencies" default="download_and_update">
 
-    <!--<property name ="kotlin.build" value="177278"/>-->
+    <property name ="kotlin.build" value="358973"/>
 
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
