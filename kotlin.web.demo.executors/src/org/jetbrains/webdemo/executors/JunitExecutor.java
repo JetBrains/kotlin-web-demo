@@ -163,7 +163,9 @@ class MyRunListener extends RunListener {
         JunitExecutor.output.get(JunitExecutor.output.size() - 1).executionTime = System.currentTimeMillis() - startTime;
         System.out.flush();
         System.err.flush();
-        JunitExecutor.output.get(JunitExecutor.output.size() - 1).output = testOutputStream.toString();
+        JunitExecutor.output.get(JunitExecutor.output.size() - 1).output = testOutputStream.toString()
+                .replaceAll("</errStream><errStream>", "")
+                .replaceAll("</outStream><outStream>", "");
         System.setOut(ignoreStream);
     }
 }

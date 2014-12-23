@@ -61,7 +61,9 @@ public class JavaExecutor {
             System.out.flush();
             System.err.flush();
             System.setOut(defaultOutputStream);
-            outputObj.text = outputStream.toString();
+            outputObj.text = outputStream.toString()
+                    .replaceAll("</errStream><errStream>", "")
+                    .replaceAll("</outStream><outStream>", "");
             System.out.print(new ObjectMapper().writeValueAsString(outputObj));
         } catch (Throwable e) {
             System.setOut(defaultOutputStream);
