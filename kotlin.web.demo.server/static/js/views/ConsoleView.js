@@ -42,9 +42,9 @@ var ConsoleView = (function () {
                 } else if (data == undefined || data == null) {
                 } else {
                     if (data == "") {
-                        consoleOutputView.err.println(["Unknown exception."]);
+                        consoleOutputView.err.println("Unknown exception.");
                     } else if (data == "timeout : timeout") {
-                        consoleOutputView.err.println(["Server didn't respond for 10 seconds."]);
+                        consoleOutputView.err.println("Server didn't respond for 10 seconds.");
                     }
                 }
             },
@@ -80,7 +80,7 @@ var ConsoleView = (function () {
                 } else if(data[i].type == "err"){
                     var message = data[i].text;
                     if (message == "") {
-                        consoleOutputView.err.println(["Unknown exception."]);
+                        consoleOutputView.err.println("Unknown exception.");
                     } else if (message == "timeout : timeout") {
                         consoleOutputView.err.println("Server didn't respond for 10 seconds.");
                     }
