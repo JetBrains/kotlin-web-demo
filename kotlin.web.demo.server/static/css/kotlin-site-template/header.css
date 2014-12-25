@@ -191,11 +191,11 @@
     bottom: 24px;
     position: relative;
 }
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .demo-icon {
-        background-image: url("/static/images/beta_ribbon@2x.png");
-    }
-}
+/*@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {*/
+    /*.demo-icon {*/
+        /*background-image: url("/static/images/beta_ribbon@2x.png");*/
+    /*}*/
+/*}*/
 
 .page_index .global-header-logo {
     top: -19px; }
