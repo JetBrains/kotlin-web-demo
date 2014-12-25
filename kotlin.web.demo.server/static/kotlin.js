@@ -807,12 +807,6 @@
   c.arrayIterator = function(a) {
     return new c.ArrayIterator(a);
   };
-  c.jsonFromTuples = function(a) {
-    for (var b = a.length, d = {};0 < b;) {
-      --b, d[a[b][0]] = a[b][1];
-    }
-    return d;
-  };
   c.jsonAddProperties = function(a, b) {
     for (var d in b) {
       b.hasOwnProperty(d) && (a[d] = b[d]);
@@ -1846,6 +1840,14 @@
     });
   }, {js:c.definePackage(null, {iterator_s8jyvl$:function(a) {
     return null != a.iterator ? a.iterator() : Array.isArray(a) ? c.arrayIterator(a) : a.iterator();
+  }, json_eoa9s7$:function(a) {
+    var e, b, d = {};
+    e = a.length;
+    for (b = 0;b !== e;++b) {
+      var c = a[b], f = c.component1(), c = c.component2();
+      d[f] = c;
+    }
+    return d;
   }, lastIndexOf_orzsrp$:function(a, e, b) {
     return a.lastIndexOf(e.toString(), b);
   }, lastIndexOf_960177$:function(a, e) {
@@ -5582,11 +5584,11 @@
     }
     return b.toString();
   }, filterNot_dgtl0h$:function(a, e) {
-    var b = new c.ArrayList, d, g, f;
+    var b = new c.ArrayList, d, f, h;
     d = a.length;
-    for (g = 0;g !== d;++g) {
-      var k = a[g];
-      (f = e(k)) || b.add_za3rmp$(k);
+    for (f = 0;f !== d;++f) {
+      var k = a[f];
+      (h = e(k)) || b.add_za3rmp$(k);
     }
     return b;
   }, filterNot_n9o8rw$:function(a, e) {

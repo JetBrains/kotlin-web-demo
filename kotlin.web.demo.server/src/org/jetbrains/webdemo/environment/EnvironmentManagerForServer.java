@@ -16,8 +16,11 @@ import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.jet.config.CompilerConfiguration;
 import org.jetbrains.jet.lang.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.jet.lang.resolve.AnalyzerScriptParameter;
+import org.jetbrains.jet.lang.resolve.DiagnosticsWithSuppression;
 import org.jetbrains.jet.lang.resolve.java.diagnostics.DefaultErrorMessagesJvm;
+import org.jetbrains.jet.lang.resolve.kotlin.nativeDeclarations.SuppressNoBodyErrorsForNativeDeclarations;
 import org.jetbrains.jet.utils.PathUtil;
+import org.jetbrains.k2js.analyze.SuppressUnusedParameterForJsNative;
 import org.jetbrains.k2js.resolve.diagnostics.DefaultErrorMessagesJs;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -46,6 +49,8 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
         JetCoreEnvironment jetCoreEnvironment = JetCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
         Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJvm());
         Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJs());
+        Extensions.getRootArea().getExtensionPoint(DiagnosticsWithSuppression.SuppressStringProvider.EP_NAME).registerExtension(new SuppressNoBodyErrorsForNativeDeclarations());
+        Extensions.getRootArea().getExtensionPoint(DiagnosticsWithSuppression.SuppressStringProvider.EP_NAME).registerExtension(new SuppressUnusedParameterForJsNative());
         registry = FileTypeRegistry.ourInstanceGetter;
         return jetCoreEnvironment;
     }
