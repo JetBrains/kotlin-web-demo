@@ -684,6 +684,13 @@ function setKotlinJsOutput() {
 }
 
 function setKotlinVersion() {
+    $.ajax("http://kotlinlang.org/latest_release_version.txt",{
+        type:"GET",
+        timeout: 1000,
+        success:function(kotlinVersion){
+            document.getElementById("kotlinlang-kotlin-version").innerHTML = "(" + kotlinVersion + ")";
+        }
+    });
     document.getElementById("webdemo-kotlin-version").innerHTML = KOTLIN_VERSION;
 }
 
