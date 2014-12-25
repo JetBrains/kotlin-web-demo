@@ -472,7 +472,7 @@ var KotlinEditor = (function () {
                 "Ctrl-/": "toggleComment"
             },
             gutters: ["errors-and-warnings-gutter"],
-            tabSize: 4
+            tabSize: 2
         });
 
         my_editor.on("change", function () {
