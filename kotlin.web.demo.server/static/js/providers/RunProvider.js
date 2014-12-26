@@ -46,14 +46,18 @@ var RunProvider = (function () {
                 url: generateAjaxUrl("run"),
                 context: document.body,
                 success: function (data) {
-                    if (checkDataForNull(data)) {
-                        if (checkDataForException(data)) {
-                            onSuccess(data);
+                    try {
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                onSuccess(data);
+                            } else {
+                                onFail(data);
+                            }
                         } else {
-                            onFail(data);
+                            onFail("Incorrect data format.")
                         }
-                    } else {
-                        onFail("Incorrect data format.")
+                    } catch (e) {
+                        console.log(e);
                     }
                 },
                 dataType: "json",
@@ -61,11 +65,13 @@ var RunProvider = (function () {
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    onFail(textStatus + " : " + errorThrown);
+                    try {
+                        onFail(textStatus + " : " + errorThrown);
+                    } catch (e) {
+                        console.log(e)
+                    }
                 },
-                complete: function () {
-                    unBlockContent();
-                }
+                complete: unBlockContent
             });
 
         }
@@ -81,25 +87,29 @@ var RunProvider = (function () {
                 url: generateAjaxUrl("run"),
                 context: document.body,
                 success: function (data) {
-                    if (checkDataForNull(data)) {
-                        if (checkDataForException(data)) {
-                            var dataJs;
-                            try {
-                                dataJs = eval(data[0].text);
-                            } catch (e) {
-                                onFail(e);
-                                return;
+                    try {
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                var dataJs;
+                                try {
+                                    dataJs = eval(data[0].text);
+                                } catch (e) {
+                                    onFail(e);
+                                    return;
+                                }
+                                var output = [
+                                    {"text": safe_tags_replace(dataJs), "type": "jsOut"},
+                                    {"text": data[0].text, "type": "generatedJSCode"}
+                                ];
+                                onSuccess(output);
+                            } else {
+                                onFail(data);
                             }
-                            var output = [
-                                {"text": safe_tags_replace(dataJs), "type": "jsOut"},
-                                {"text": data[0].text, "type": "generatedJSCode"}
-                            ];
-                            onSuccess(output);
                         } else {
-                            onFail(data);
+                            onFail("Incorrect data format.");
                         }
-                    } else {
-                        onFail("Incorrect data format.");
+                    } catch (e) {
+                        console.log(e)
                     }
                 },
                 dataType: "json",
@@ -107,12 +117,13 @@ var RunProvider = (function () {
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    onFail(textStatus + " : " + errorThrown);
-                    console.log(e)
+                    try {
+                        onFail(textStatus + " : " + errorThrown);
+                    } catch (e) {
+                        console.log(e)
+                    }
                 },
-                complete: function () {
-                    unBlockContent();
-                }
+                complete: unBlockContent
             });
         }
 

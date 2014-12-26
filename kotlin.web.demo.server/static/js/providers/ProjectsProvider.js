@@ -82,36 +82,47 @@ var ProjectProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("renameProject"),
                 success: function () {
-                    unBlockContent();
-                    instance.onProjectRenamed(newName);
-                    project.rename(newName);
+                    try {
+                        instance.onProjectRenamed(newName);
+                        project.rename(newName);
+                    } catch (e) {
+                        console.log(e);
+                    }
                 },
                 type: "POST",
                 data: {publicId: project.getPublicId(), newName: newName},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
-                }
+                    try {
+                        unBlockContent();
+                        instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             })
         }
 
         function loadExample(publicId, callback) {
-            blockContent()
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("loadExample"),
                 context: document.body,
                 success: function (data) {
-                    unBlockContent()
-                    if (checkDataForNull(data)) {
-                        if (checkDataForException(data)) {
-                            instance.onProjectLoaded(data);
-                            callback(data);
+                    try {
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                instance.onProjectLoaded(data);
+                                callback(data);
+                            } else {
+                                instance.onFail(data, ActionStatusMessages.load_example_fail);
+                            }
                         } else {
-                            instance.onFail(data, ActionStatusMessages.load_example_fail);
+                            instance.onFail("Incorrect data format.", ActionStatusMessages.load_example_fail);
                         }
-                    } else {
-                        instance.onFail("Incorrect data format.", ActionStatusMessages.load_example_fail);
+                    } catch (e) {
+                        console.log(e)
                     }
                 },
                 dataType: "json",
@@ -119,28 +130,39 @@ var ProjectProvider = (function () {
                 timeout: 10000,
                 data: {publicId: publicId},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_example_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_example_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             });
         }
 
         function addNewProject(name) {
-            blockContent()
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("addProject"),
                 success: function (data) {
-                    unBlockContent()
-                    instance.onNewProjectAdded(name, data.projectId, data.fileId);
+                    try {
+                        instance.onNewProjectAdded(name, data.projectId, data.fileId);
+                    } catch (e) {
+                        console.log(e);
+                    }
                 },
                 type: "POST",
                 timeout: 10000,
                 data: {args: name},
                 dataType: 'json',
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
-                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             })
         }
 
@@ -150,16 +172,19 @@ var ProjectProvider = (function () {
                 url: generateAjaxUrl("loadProject"),
                 context: document.body,
                 success: function (data) {
-                    unBlockContent();
-                    if (checkDataForNull(data)) {
-                        if (checkDataForException(data)) {
-                            instance.onProjectLoaded(data);
-                            callback(data)
+                    try {
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                instance.onProjectLoaded(data);
+                                callback(data)
+                            } else {
+                                instance.onFail(data, ActionStatusMessages.load_program_fail);
+                            }
                         } else {
-                            instance.onFail(data, ActionStatusMessages.load_program_fail);
+                            project.onFail("Incorrect data format.", ActionStatusMessages.load_program_fail);
                         }
-                    } else {
-                        project.onFail("Incorrect data format.", ActionStatusMessages.load_program_fail);
+                    } catch (e) {
+                        console.log(e)
                     }
                 },
                 dataType: "json",
@@ -167,9 +192,13 @@ var ProjectProvider = (function () {
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             });
         }
 
@@ -179,18 +208,25 @@ var ProjectProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("addProject"),
                 success: function (data) {
-                    unBlockContent();
-                    instance.onProjectForked(name);
-                    callback(data);
+                    try {
+                        instance.onProjectForked(name);
+                        callback(data);
+                    } catch (e) {
+                        console.log(e);
+                    }
                 },
                 type: "POST",
                 timeout: 10000,
                 dataType: "json",
                 data: {content: JSON.stringify(content), args: name},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             })
         }
 
@@ -199,53 +235,79 @@ var ProjectProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("checkIfProjectExists"),
                 success: function (flag) {
-                    unBlockContent();
-                    if (flag == "true") {
-                        onSuccess()
-                    } else {
-                        onFail();
+                    try {
+                        if (flag == "true") {
+                            onSuccess()
+                        } else {
+                            onFail();
+                        }
+                    } catch (e) {
+                        console.log(e)
                     }
                 },
                 type: "POST",
                 timeout: 10000,
                 data: {publicId: publicId},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                }
+                    try {
+                        project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             })
         }
 
         function deleteProject(publicId, callback) {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("deleteProject"),
                 success: function () {
-                    instance.onProjectDeleted();
-                    callback();
+                    try {
+                        instance.onProjectDeleted();
+                        callback();
+                    } catch (e) {
+                        console.log(e)
+                    }
                 },
                 type: "POST",
                 data: {publicId: publicId},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             })
         }
 
         function saveProject(project, publicId, callback) {
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("saveProject"),
                 type: "POST",
                 success: function () {
-                    instance.onProjectSaved();
-                    callback();
+                    try {
+                        instance.onProjectSaved();
+                        callback();
+                    } catch (e) {
+                        console.log(e);
+                    }
                 },
                 timeout: 10000,
                 data: {project: JSON.stringify(project, publicId), publicId: publicId},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                },
+                complete: unBlockContent
             })
         }
 

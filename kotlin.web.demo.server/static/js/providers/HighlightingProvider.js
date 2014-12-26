@@ -43,27 +43,38 @@ var HighlightingProvider = (function () {
                 url: generateAjaxUrl("highlight"),
                 context: document.body,
                 success: function (data) {
-                    isLoadingHighlighting = false;
-                    if (checkDataForNull(data)) {
-                        if (checkDataForException(data)) {
-                            onSuccess(data);
-                            successCallback(data);
+                    try {
+                        isLoadingHighlighting = false;
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                onSuccess(data);
+                                successCallback(data);
+                            } else {
+                                onFail(data);
+                            }
                         } else {
-                            onFail(data);
+                            onFail("Incorrect data format.");
                         }
-                    } else {
-                        onFail("Incorrect data format.");
+                    } catch (e) {
+                        console.log(e);
                     }
-                    finallyCallback()
                 },
                 dataType: "json",
                 type: "POST",
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    isLoadingHighlighting = false;
-                    onFail(textStatus + " : " + errorThrown);
-                    finallyCallback()
+                    try {
+                        isLoadingHighlighting = false;
+                        onFail(textStatus + " : " + errorThrown);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: function () {
+                    if (finallyCallback != null) {
+                        finallyCallback();
+                    }
                 }
             });
         }

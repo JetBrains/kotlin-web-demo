@@ -46,61 +46,68 @@ var HeadersProvider = (function () {
                 url: generateAjaxUrl("loadHeaders"),
                 context: document.body,
                 success: function (data) {
-                    unBlockContent();
-                    if (checkDataForNull(data)) {
-                        if (checkDataForException(data)) {
-                            var orderedFolderNames = data.orderedFolderNames;
-                            var foldersContent = {};
+                    try {
+                        if (checkDataForNull(data)) {
+                            if (checkDataForException(data)) {
+                                var orderedFolderNames = data.orderedFolderNames;
+                                var foldersContent = {};
 
-                            for (var i = 0; i < orderedFolderNames.length; ++i) {
-                                foldersContent[orderedFolderNames[i]] = [];
-                                var orderedExampleNames = data[orderedFolderNames[i]];
+                                for (var i = 0; i < orderedFolderNames.length; ++i) {
+                                    foldersContent[orderedFolderNames[i]] = [];
+                                    var orderedExampleNames = data[orderedFolderNames[i]];
 
-                                for (var j = 0; j < orderedExampleNames.length; ++j) {
-                                    foldersContent[orderedFolderNames[i]].push({
-                                        name: orderedExampleNames[j],
-                                        type: ProjectType.EXAMPLE,
-                                        publicId: createExampleId(orderedExampleNames[j], orderedFolderNames[i])
+                                    for (var j = 0; j < orderedExampleNames.length; ++j) {
+                                        foldersContent[orderedFolderNames[i]].push({
+                                            name: orderedExampleNames[j],
+                                            type: ProjectType.EXAMPLE,
+                                            publicId: createExampleId(orderedExampleNames[j], orderedFolderNames[i])
+                                        });
+                                    }
+                                }
+
+                                data.orderedFolderNames.push("My programs");
+                                data.orderedFolderNames.push("Public links");
+
+                                if (loginView.isLoggedIn()) {
+                                    foldersContent["My programs"] = data["My programs"];
+                                    for (var i = 0; i < foldersContent["My programs"].length; ++i) {
+                                        foldersContent["My programs"][i].type = ProjectType.USER_PROJECT;
+                                    }
+                                } else {
+                                    foldersContent["My programs"] = [];
+                                }
+
+                                if (localStorage.getItem("publicLinks") != null) {
+                                    foldersContent["Public links"] = JSON.parse(localStorage.getItem("publicLinks")).sort(function (a, b) {
+                                        return a.timeStamp - b.timeStamp;
                                     });
+                                } else {
+                                    foldersContent["Public links"] = [];
                                 }
-                            }
 
-                            data.orderedFolderNames.push("My programs");
-                            data.orderedFolderNames.push("Public links");
-
-                            if (loginView.isLoggedIn()) {
-                                foldersContent["My programs"] = data["My programs"];
-                                for (var i = 0; i < foldersContent["My programs"].length; ++i) {
-                                    foldersContent["My programs"][i].type = ProjectType.USER_PROJECT;
-                                }
+                                callback(orderedFolderNames, foldersContent);
+                                instance.onHeadersLoaded(orderedFolderNames, foldersContent);
                             } else {
-                                foldersContent["My programs"] = [];
+                                instance.onFail(data, ActionStatusMessages.load_headers_fail);
                             }
-
-                            if (localStorage.getItem("publicLinks") != null) {
-                                foldersContent["Public links"] = JSON.parse(localStorage.getItem("publicLinks")).sort(function (a, b) {
-                                    return a.timeStamp - b.timeStamp;
-                                });
-                            } else {
-                                foldersContent["Public links"] = [];
-                            }
-
-                            callback(orderedFolderNames, foldersContent);
-                            instance.onHeadersLoaded(orderedFolderNames, foldersContent);
                         } else {
-                            instance.onFail(data, ActionStatusMessages.load_headers_fail);
+                            instance.onFail("Incorrect data format.", ActionStatusMessages.load_headers_fail);
                         }
-                    } else {
-                        instance.onFail("Incorrect data format.", ActionStatusMessages.load_headers_fail);
+                    } catch (e) {
+                        console.log(e);
                     }
                 },
                 dataType: "json",
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_headers_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_headers_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             });
         }
 
@@ -109,9 +116,12 @@ var HeadersProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("loadProjectInfoByFileId"),
                 success: function (data) {
-                    unBlockContent();
-                    callback(data);
-                    instance.onProjectHeaderLoaded(data);
+                    try {
+                        callback(data);
+                        instance.onProjectHeaderLoaded(data);
+                    } catch (e) {
+                        console.log(e)
+                    }
                 },
                 type: "GET",
                 timeout: 10000,
@@ -120,9 +130,13 @@ var HeadersProvider = (function () {
                     publicId: publicId
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_header_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_header_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             })
         }
 

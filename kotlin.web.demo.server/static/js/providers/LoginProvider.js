@@ -49,17 +49,24 @@ var LoginProvider = (function () {
                 url: generateAjaxUrl("authorization"),
                 context: document.body,
                 success: function(data){
-                    unBlockContent();
-                    onLoginSuccess(data);
+                    try {
+                        onLoginSuccess(data);
+                    } catch (e) {
+                        console.log(e)
+                    }
                 },
                 dataType: "text",
                 type: "GET",
                 data: {args: type},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                },
+                complete: unBlockContent
             });
         }
 
@@ -69,16 +76,23 @@ var LoginProvider = (function () {
                 url: generateAjaxUrl("logout"),
                 context: document.body,
                 success: function (data) {
-                    unBlockContent();
-                    instance.onLogout(data);
+                    try {
+                        instance.onLogout(data);
+                    } catch (e) {
+                        console.log(e)
+                    }
                 },
                 dataType: "text",
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                },
+                complete: unBlockContent
             });
         }
 
@@ -88,20 +102,27 @@ var LoginProvider = (function () {
                 url: generateAjaxUrl("getUserName"),
                 context: document.body,
                 success: function (data) {
-                    unBlockContent();
-                    if (checkDataForNull(data)) {
-                        instance.onLogin(data);
-                    } else {
-                        instance.onFail("Username is null.", ActionStatusMessages.login_fail);
+                    try {
+                        if (checkDataForNull(data)) {
+                            instance.onLogin(data);
+                        } else {
+                            instance.onFail("Username is null.", ActionStatusMessages.login_fail);
+                        }
+                    } catch (e) {
+                        console.log(e);
                     }
                 },
                 dataType: "json",
                 type: "GET",
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent();
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             });
         }
 

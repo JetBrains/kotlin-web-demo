@@ -53,18 +53,26 @@ var FileProvider = (function () {
                 $.ajax({
                     url: generateAjaxUrl("loadExampleFile"),
                     success: function (data) {
-                        unBlockContent();
-                        callback(data);
-                        instance.onOriginalFileLoaded();
+                        try {
+                            unBlockContent();
+                            callback(data);
+                            instance.onOriginalFileLoaded();
+                        } catch (e) {
+                            console.log(e);
+                        }
                     },
                     type: "POST",
                     timeout: 10000,
                     data: {publicId: file.getPublicId()},
                     dataType: "json",
                     error: function (jqXHR, textStatus, errorThrown) {
-                        unBlockContent();
-                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                    }
+                        try {
+                            instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                        } catch (e) {
+                            console.log(e)
+                        }
+                    },
+                    complete: unBlockContent
                 })
             } else {
                 throw "Only example files can be reloaded from server.";
@@ -77,37 +85,51 @@ var FileProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("addFile"),
                 success: function (publicId) {
-                    unBlockContent()
-                    instance.onNewFileAdded(filename);
-                    project.addEmptyFile(filename, publicId);
+                    try {
+                        instance.onNewFileAdded(filename);
+                        project.addEmptyFile(filename, publicId);
+                    } catch (e) {
+                        console.log(e)
+                    }
                 },
                 type: "POST",
                 timeout: 10000,
                 data: {publicId: project.getPublicId(), filename: filename},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    } catch (e) {
+                        unBlockContent();
+                    }
+                },
+                complete: unBlockContent
             })
         }
 
         function renameFile(publicId, callback, newName) {
-            blockContent()
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("renameFile"),
                 success: function () {
-                    unBlockContent()
-                    instance.onFileRenamed(newName);
-                    callback(newName);
+                    try {
+                        instance.onFileRenamed(newName);
+                        callback(newName);
+                    } catch (e) {
+                        console.log(e)
+                    }
                 },
                 type: "POST",
                 timeout: 10000,
                 data: {publicId: publicId,
                     newName: newName},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
-                    instance.onFail(textStatus, errorThrown);
-                }
+                    try {
+                        instance.onFail(textStatus, errorThrown);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                },
+                complete: unBlockContent
             })
         }
 
@@ -117,36 +139,50 @@ var FileProvider = (function () {
                 url: generateAjaxUrl("deleteFile"),
                 context: document.body,
                 success: function () {
-                    unBlockContent()
-                    instance.onDeleteFile();
-                    callback();
+                    try {
+                        instance.onDeleteFile();
+                        callback();
+                    } catch (e) {
+                        console.log(e);
+                    }
                 },
                 type: "POST",
                 data: {publicId: publicId},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             });
         }
 
         function saveFile(file, callback) {
-            blockContent()
+            blockContent();
             $.ajax({
                 url: generateAjaxUrl("saveFile"),
                 type: "POST",
                 timeout: 10000,
                 success: function () {
-                    unBlockContent()
-                    instance.onFileSaved();
-                    callback();
+                    try {
+                        instance.onFileSaved();
+                        callback();
+                    } catch (e) {
+                        console.log(e)
+                    }
                 },
                 data: {file: JSON.stringify(file)},
                 error: function (jqXHR, textStatus, errorThrown) {
-                    unBlockContent()
-                    instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                }
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                },
+                complete: unBlockContent
             })
         }
 

@@ -337,11 +337,10 @@ var run_button = $("#runButton")
                 }
                 runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject(), accordion.getSelectedProject());
             } else {
-                unBlockContent();
                 $("#result-tabs").tabs("option", "active", 0);
             }
         }, function () {
-
+            unBlockContent();
         });
     });
 
