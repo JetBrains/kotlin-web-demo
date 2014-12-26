@@ -189,6 +189,7 @@ var highlightingProvider = (function () {
     }
 
     function onFail(error) {
+        unBlockContent();
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.get_highlighting_fail);
     }
@@ -337,10 +338,9 @@ var run_button = $("#runButton")
                 }
                 runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject(), accordion.getSelectedProject());
             } else {
+                unBlockContent();
                 $("#result-tabs").tabs("option", "active", 0);
             }
-        }, function () {
-            unBlockContent();
         });
     });
 
