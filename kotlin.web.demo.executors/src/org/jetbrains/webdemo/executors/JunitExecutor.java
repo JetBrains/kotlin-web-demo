@@ -32,6 +32,7 @@ import java.util.List;
 
 public class JunitExecutor {
     static List<TestRunInfo> output = new ArrayList<TestRunInfo>();
+    static MethodsFinder.TestClass testClass;
     private static PrintStream standardOutput = System.out;
 
     public static void main(String[] args) {
@@ -42,6 +43,9 @@ public class JunitExecutor {
             for (Class cl : classes) {
                 if (cl.getConstructors().length == 1 && cl.getConstructors()[0].getParameterTypes().length == 0) {
                     try {
+                        String classFileName = cl.getName().replace('.', '/') + ".class";
+                        InputStream stream = cl.getClassLoader().getResourceAsStream(classFileName);
+                        testClass = MethodsFinder.readMethodPositions(stream, classFileName);
                         jUnitCore.run(cl);
                     } catch (Throwable e) {
                         e.printStackTrace();
@@ -103,10 +107,12 @@ public class JunitExecutor {
 
 class TestRunInfo {
     public String output = "";
+    public String sourceFileName = "";
     public String className = "";
     public String methodName = "";
     public long executionTime = 0;
     public ExceptionDescriptor exception = null;
+    public int methodPosition;
     public Status status = Status.OK;
 
     public enum Status {
@@ -132,8 +138,11 @@ class MyRunListener extends RunListener {
     @Override
     public void testStarted(Description description) {
         currentTestRunInfo = new TestRunInfo();
+        currentTestRunInfo.sourceFileName = JunitExecutor.testClass.getSourceFileName();
         currentTestRunInfo.className = description.getClassName();
         currentTestRunInfo.methodName = description.getMethodName();
+        currentTestRunInfo.methodPosition = JunitExecutor.testClass.getMethodPosition(currentTestRunInfo.methodName);
+
         JunitExecutor.output.add(currentTestRunInfo);
         testOutputStream = new ByteArrayOutputStream();
         errorStream = new ErrorStream(testOutputStream);
@@ -160,12 +169,15 @@ class MyRunListener extends RunListener {
 
     @Override
     public void testFinished(Description description) {
-        JunitExecutor.output.get(JunitExecutor.output.size() - 1).executionTime = System.currentTimeMillis() - startTime;
         System.out.flush();
         System.err.flush();
-        JunitExecutor.output.get(JunitExecutor.output.size() - 1).output = testOutputStream.toString()
+
+        TestRunInfo testRunInfo = JunitExecutor.output.get(JunitExecutor.output.size() - 1);
+        testRunInfo.executionTime = System.currentTimeMillis() - startTime;
+        testRunInfo.output = testOutputStream.toString()
                 .replaceAll("</errStream><errStream>", "")
                 .replaceAll("</outStream><outStream>", "");
+
         System.setOut(ignoreStream);
     }
 }

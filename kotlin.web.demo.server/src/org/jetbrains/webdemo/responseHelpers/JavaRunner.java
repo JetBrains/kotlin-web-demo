@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -30,7 +29,6 @@ import org.jetbrains.jet.plugin.MainFunctionDetector;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
@@ -359,10 +357,12 @@ public class JavaRunner {
                 ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes" + File.separator + "Executors.jar");
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
             builder.add(classpath +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "junit.jar" +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-databind.jar" +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-core.jar" +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-annotations.jar");
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "junit.jar" +
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-databind.jar" +
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-core.jar" +
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-annotations.jar" +
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "kotlin-compiler.jar"
+            );
             builder.add("org.jetbrains.webdemo.executors.JunitExecutor");
             builder.add(pathToRootOut);
         } else {

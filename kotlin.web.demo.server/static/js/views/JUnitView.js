@@ -132,6 +132,8 @@ var JUnitView = (function () {
                     children: [],
                     name: getClassNameWithoutAPackage(data[i].methodName),
                     icon: data[i].status.toLowerCase(),
+                    sourceFileName: data[i].sourceFileName,
+                    methodPosition: data[i].methodPosition,
                     id: data[i].className + '.' + data[i].methodName
                 };
                 rootNode.children.push(testNode);
@@ -246,6 +248,12 @@ var JUnitView = (function () {
                 displayTreeNode(node.children[i], childrenNode);
             }
             nodeElement.appendChild(childrenNode);
+        } else {
+            nodeElementHeader.ondblclick = function () {
+                accordion.getSelectedProjectView().getFileViewByName(node.sourceFileName).fireSelectEvent();
+                editor.setCursor(node.methodPosition - 1, 0);
+                editor.focus();
+            }
         }
     }
 

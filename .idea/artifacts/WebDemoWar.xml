@@ -23,6 +23,7 @@
           <element id="library" level="project" name="jackson" />
           <element id="library" level="project" name="kotlin-plugin" />
           <element id="library" level="project" name="junit" />
+          <element id="file-copy" path="$APPLICATION_HOME_DIR$/lib/annotations.jar" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />
