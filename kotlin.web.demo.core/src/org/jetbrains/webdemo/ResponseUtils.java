@@ -182,7 +182,7 @@ public class ResponseUtils {
     }
 
     public static String getErrorWithStackTraceInJson(String error, String stackTrace) {
-        return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}, {\"exception\":\"" + stackTrace + "\",\"type\":\"out\"}]";
+        return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}, {\"exception\":\"<outStream>" + stackTrace + "</outStream>\",\"type\":\"out\"}]";
     }
 
     public static String getJsonString(String type, String text) {

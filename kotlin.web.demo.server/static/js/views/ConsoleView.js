@@ -35,7 +35,10 @@ var ConsoleView = (function () {
                     var i = 0;
                     var output = [];
                     while (data[i] != undefined) {
-                        output.push({"text": data[i].exception, "type": data[i].type});
+                        output.push({
+                            "text": data[i].exception.replace(new RegExp("<br/>", "g"), "\n"),
+                            "type": data[i].type
+                        });
                         i++;
                     }
                     setOutput(output);
@@ -45,6 +48,8 @@ var ConsoleView = (function () {
                         consoleOutputView.err.println("Unknown exception.");
                     } else if (data == "timeout : timeout") {
                         consoleOutputView.err.println("Server didn't respond for 10 seconds.");
+                    } else {
+                        consoleOutputView.err.println(data)
                     }
                 }
             },
@@ -83,6 +88,8 @@ var ConsoleView = (function () {
                         consoleOutputView.err.println("Unknown exception.");
                     } else if (message == "timeout : timeout") {
                         consoleOutputView.err.println("Server didn't respond for 10 seconds.");
+                    } else {
+                        consoleOutputView.err.println(message)
                     }
                 } else if (data[i].type == "toggle-info" || data[i].type == "info" || data[i].type == "generatedJSCode") {
                     generatedCodeView.setOutput(data[i]);
