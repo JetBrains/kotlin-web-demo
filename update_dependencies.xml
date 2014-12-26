@@ -52,6 +52,7 @@
             <unzip dest="${unzipped.kotlin.plugin}">
                 <fileset dir="${dependencies.dir}" includes="${zipped.kotlin.plugin.pattern}"/>
             </unzip>
+            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/build.txt" todir="${dependencies.dir}"/>
 
             <delete dir="kotlin.web.demo.core/resources/js" failonerror="false"/>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
@@ -68,9 +69,6 @@
             <copy file="${unzipped.kotlin.plugin}/jslib/kotlin.js"
                   todir="kotlin.web.demo.server/static"/>
             <delete dir="${unzipped.kotlin.plugin}/jslib"/>
-
-            <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
-                 dest="${dependencies.dir}/build.txt"/>
 
             <j2kConverter/>
         </sequential>
