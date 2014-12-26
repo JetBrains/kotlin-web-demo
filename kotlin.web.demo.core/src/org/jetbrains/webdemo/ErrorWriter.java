@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo;
 
+import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.PrintWriter;
@@ -146,6 +147,8 @@ public abstract class ErrorWriter {
     public abstract void writeException(String message);
 
     public abstract void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, String description);
+
+    public abstract void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, List<PsiFile> files);
     
     public abstract void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String originUrl, String description);
 

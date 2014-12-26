@@ -29,6 +29,7 @@ import org.jetbrains.jet.lang.diagnostics.Severity;
 import org.jetbrains.jet.lang.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
+import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Interval;
 import org.jetbrains.webdemo.ResolveUtils;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
@@ -67,7 +68,7 @@ public class ErrorAnalyzer {
             }
 
         } catch (Throwable e) {
-//            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFiles);
             throw new KotlinCoreException(e);
         }
 //        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),

@@ -19,11 +19,14 @@ package org.jetbrains.webdemo;
 import com.intellij.diagnostic.errordialog.Attachment;
 import com.intellij.errorreport.bean.ErrorBean;
 import com.intellij.errorreport.itn.ITNProxy;
+import com.intellij.psi.PsiFile;
 import org.apache.log4j.Logger;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class ErrorWriterOnServer extends ErrorWriter {
     public static final Logger LOG_FOR_EXCEPTIONS = Logger.getLogger("exceptionLogger");
@@ -33,6 +36,10 @@ public class ErrorWriterOnServer extends ErrorWriter {
 
     private ErrorWriterOnServer() {
 
+    }
+
+    public static ErrorWriterOnServer getInstance() {
+        return writer;
     }
 
     @Override
@@ -58,6 +65,25 @@ public class ErrorWriterOnServer extends ErrorWriter {
         }
     }
 
+    @Override
+    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, List<PsiFile> files) {
+        ErrorBean bean = new ErrorBean(e, type);
+        bean.setPluginName("Kotlin Web Demo");
+        List<Attachment> attachments = new ArrayList<>();
+        StringBuilder description = new StringBuilder();
+        for (PsiFile file : files) {
+            attachments.add(new Attachment(file.getName(), file.getText()));
+            description.append(file.getName()).append(":\n");
+            description.append(file.getText());
+        }
+        bean.setAttachments(attachments);
+        if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
+            sendViaITNProxy(bean);
+            LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, originUrl, description.toString()));
+        } else {
+            LOG_FOR_EXCEPTIONS.error(ErrorWriter.getExceptionForLog(type, e, originUrl, description.toString()));
+        }
+    }
 
     public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String originUrl, String description) {
         ErrorBean bean = new ErrorBean(message, stackTrace, type);
@@ -87,9 +113,5 @@ public class ErrorWriterOnServer extends ErrorWriter {
             LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EXCEPTION_ANALYZER", e1, "", login));
         }
 
-    }
-
-    public static ErrorWriterOnServer getInstance() {
-        return writer;
     }
 }
