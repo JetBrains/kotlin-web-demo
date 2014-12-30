@@ -30,7 +30,7 @@ public class ThrowableSerializer extends JsonSerializer<Throwable> {
     @Override
     public void serialize(Throwable throwable, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField("message", throwable.getMessage() != null ? throwable.getMessage() : "");
+        jsonGenerator.writeStringField("message", throwable.getMessage());
         jsonGenerator.writeStringField("fullName", throwable.getClass().getName());
         jsonGenerator.writeObjectField("stackTrace", throwable.getStackTrace());
         jsonGenerator.writeObjectField("cause", throwable.getCause() != throwable ? throwable.getCause() : null);

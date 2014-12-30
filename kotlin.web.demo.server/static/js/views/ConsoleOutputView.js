@@ -86,7 +86,11 @@ var ConsoleOutputView = (function () {
             },
             printException: function (exception) {
                 Error.println("");
-                Error.println("Exception in thread \"main\" " + exception.fullName + ': ' + unEscapeString(exception.message) + '\n');
+                if(exception.message != null) {
+                    Error.println("Exception in thread \"main\" " + exception.fullName + ': ' + unEscapeString(exception.message) + '\n');
+                } else{
+                    Error.println("Exception in thread \"main\" " + exception.fullName + '\n');
+                }
                 instance.printExceptionBody(exception);
             },
             printExceptionBody: function (exception) {
@@ -140,9 +144,14 @@ var ConsoleOutputView = (function () {
 
         function printExceptionCause(exception){
             if(exception.cause != null) {
-                Error.println("Caused by: " + exception.fullName + ': ' + unEscapeString(exception.message) + '\n');
-                printStackTrace(exception.stackTrace);
-                printExceptionCause(exception.cause);
+                var cause = exception.cause;
+                if(cause.message != null) {
+                    Error.println("Caused by: " + cause.fullName + ': ' + unEscapeString(cause.message) + '\n');
+                } else{
+                    Error.println("Caused by: " + cause.fullName + '\n');
+                }
+                printStackTrace(cause.stackTrace);
+                printExceptionCause(cause);
             }
         }
 
