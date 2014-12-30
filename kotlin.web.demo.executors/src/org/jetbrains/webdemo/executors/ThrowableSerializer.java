@@ -25,7 +25,7 @@ import java.io.IOException;
  * Created by Semyon.Atamas on 11/27/2014.
  */
 
-public class ThrowableSerializer extends JsonSerializer<Throwable>{
+public class ThrowableSerializer extends JsonSerializer<Throwable> {
 
     @Override
     public void serialize(Throwable throwable, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
@@ -33,7 +33,7 @@ public class ThrowableSerializer extends JsonSerializer<Throwable>{
         jsonGenerator.writeStringField("message", throwable.getMessage() != null ? throwable.getMessage() : "");
         jsonGenerator.writeStringField("fullName", throwable.getClass().getName());
         jsonGenerator.writeObjectField("stackTrace", throwable.getStackTrace());
-        jsonGenerator.writeObjectField("cause", throwable.getCause());
+        jsonGenerator.writeObjectField("cause", throwable.getCause() != throwable ? throwable.getCause() : null);
         jsonGenerator.writeEndObject();
     }
 }

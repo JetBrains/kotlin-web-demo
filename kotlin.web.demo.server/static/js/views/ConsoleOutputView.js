@@ -86,18 +86,12 @@ var ConsoleOutputView = (function () {
             },
             printException: function (exception) {
                 Error.println("");
-                Error.println(exception.fullName + ': ' + unEscapeString(exception.message) + '\n');
-                instance.printStackTrace(exception.stackTrace);
+                Error.println("Exception in thread \"main\" " + exception.fullName + ': ' + unEscapeString(exception.message) + '\n');
+                instance.printExceptionBody(exception);
             },
-            printStackTrace: function (stackTrace) {
-                for (var i = 0; i < stackTrace.length; ++i) {
-                    if (stackTrace[i].className.startsWith("sun.reflect")) {
-                        break;
-                    }
-                    Error.print('    at ' + stackTrace[i].className + '(');
-                    Error.addReference(instance.makeReference(stackTrace[i].fileName, stackTrace[i].lineNumber));
-                    Error.println(')');
-                }
+            printExceptionBody: function (exception) {
+                printStackTrace(exception.stackTrace);
+                printExceptionCause(exception);
                 Error.println("");
             },
             addElement: function (element) {
@@ -132,6 +126,25 @@ var ConsoleOutputView = (function () {
         };
 
         var element = document.createElement("div");
+
+        function printStackTrace(stackTrace){
+            for (var i = 0; i < stackTrace.length; ++i) {
+                if (stackTrace[i].className.startsWith("sun.reflect")) {
+                    break;
+                }
+                Error.print('    at ' + stackTrace[i].className + '(');
+                Error.addReference(instance.makeReference(stackTrace[i].fileName, stackTrace[i].lineNumber));
+                Error.println(')');
+            }
+        }
+
+        function printExceptionCause(exception){
+            if(exception.cause != null) {
+                Error.println("Caused by: " + exception.fullName + ': ' + unEscapeString(exception.message) + '\n');
+                printStackTrace(exception.stackTrace);
+                printExceptionCause(exception.cause);
+            }
+        }
 
         function getOutputStreamMessagesFromMarkedText(text) {
             return getAllRegexpMatches(text, new RegExp("<outStream>(.*?)</outStream>", "g"));

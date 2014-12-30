@@ -195,7 +195,7 @@ var JUnitView = (function () {
                         consoleOutputView.addElement(makeDifferenceReference(parsedMessage.expected, parsedMessage.actual));
                         consoleOutputView.out.println("");
                         consoleOutputView.out.println("");
-                        consoleOutputView.printStackTrace(testData.exception.stackTrace);
+                        consoleOutputView.printExceptionBody(testData.exception);
                     } catch (exception) {
                         consoleOutputView.printException(testData.exception);
                     }
