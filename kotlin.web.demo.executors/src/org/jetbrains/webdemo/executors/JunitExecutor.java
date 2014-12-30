@@ -156,7 +156,7 @@ class MyRunListener extends RunListener {
     public void testFailure(Failure failure) {
         Throwable exception = failure.getException();
         currentTestRunInfo.exception = new ExceptionDescriptor();
-        currentTestRunInfo.exception.message = exception.getMessage();
+        currentTestRunInfo.exception.message = exception.getMessage() != null ? exception.getMessage() : "";
         currentTestRunInfo.exception.stackTrace = exception.getStackTrace();
         currentTestRunInfo.exception.fullName = exception.getClass().getName();
 
