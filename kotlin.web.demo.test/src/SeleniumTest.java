@@ -141,7 +141,7 @@ public class SeleniumTest extends TestCase {
                 "1 2 3 4 5 \n" +
                 "Out: array has only 3 elements. x = 4\n" +
                 "Yes: array contains aaa\n" +
-                "No: array doesn't contains ddd");
+                "No: array doesn't contain ddd");
         testExampleRun("Use when", "Basic_syntax_walk-through", "Greeting\n" +
                 "One\n" +
                 "Long\n" +

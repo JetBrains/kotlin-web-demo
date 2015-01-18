@@ -47,7 +47,7 @@ public class RunExamplesTest extends BaseTest {
         expectedResults.put("is-checks and smart casts.kt", new Example("is-checks and smart casts.kt", "", "3<br/>null<br/>"));
         expectedResults.put("Use a while-loop.kt", new Example("Use a while-loop.kt", "guest1 guest2 guest3 guest4", "guest1<br/>guest2<br/>guest3<br/>guest4<br/>"));
         expectedResults.put("Use a for-loop.kt", new Example("Use a for-loop.kt", "guest1 guest2 guest3", "guest1<br/>guest2<br/>guest3<br/><br/>guest1<br/>guest2<br/>guest3<br/>"));
-        expectedResults.put("Use ranges and in.kt", new Example("Use ranges and in.kt", "4", "OK<br/>1 2 3 4 5 <br/>Out: array has only 3 elements. x = 4<br/>Yes: array contains aaa<br/>No: array doesn't contains ddd<br/>"));
+        expectedResults.put("Use ranges and in.kt", new Example("Use ranges and in.kt", "4", "OK<br/>1 2 3 4 5 <br/>Out: array has only 3 elements. x = 4<br/>Yes: array contains aaa<br/>No: array doesn't contain ddd<br/>"));
         expectedResults.put("Use when.kt", new Example("Use when.kt", "", "Greeting<br/>One<br/>Long<br/>Not a string<br/>Unknown<br/>"));
         expectedResults.put("Multi-declarations.kt", new Example("Multi-declarations.kt", "", "num = 1, name = one<br/>"));
         expectedResults.put("Data classes.kt", new Example("Data classes.kt", "", "name = Alex, id = 1<br/>name = Alex, id = 1<br/>name = Alex, id = 1<br/>"));

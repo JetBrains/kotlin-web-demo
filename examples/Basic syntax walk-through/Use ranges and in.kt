@@ -28,7 +28,7 @@ fun main(args : Array<String>) {
   if ("ddd" in array) // collection.contains(obj) is called
     println("Yes: array contains ddd")
   else
-    println("No: array doesn't contains ddd")
+    println("No: array doesn't contain ddd")
 }
 
  
