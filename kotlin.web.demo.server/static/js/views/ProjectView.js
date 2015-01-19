@@ -44,7 +44,7 @@ var ProjectView = (function () {
                 } else {
                     if (selectedFileView != null) {
                         selectedFileView.fireSelectEvent();
-                    } else{
+                    } else {
                         editor.closeFile();
                     }
                     instance.onSelected(instance);
@@ -60,6 +60,13 @@ var ProjectView = (function () {
             getFileViewByName: function (name) {
                 for (var fileId in fileViews) {
                     if (fileViews[fileId].getFile().getName() == name) {
+                        return fileViews[fileId];
+                    }
+                }
+            },
+            getFileViewById: function (id) {
+                for (var fileId in fileViews) {
+                    if (fileId == id) {
                         return fileViews[fileId];
                     }
                 }
@@ -114,12 +121,28 @@ var ProjectView = (function () {
                 }
 
                 if (files.length > 0) {
-                    selectedFileView = fileViews[files[0].getPublicId()];
                     if (accordion.getSelectedProject().getPublicId() == project.getPublicId()) {
+
+                        try {
+                            if (project.getType() == ProjectType.EXAMPLE) {
+                                var fileName = getParameterByName("file");
+                                selectedFileView = instance.getFileViewByName(fileName);
+                            } else {
+                                var fileId = getParameterByName("id");
+                                selectedFileView = instance.getFileViewById(fileId);
+                            }
+                        } catch (e) {
+                            console.log(e)
+                        }
+
+
+                        if (selectedFileView == null) {
+                            selectedFileView = fileViews[files[0].getPublicId()];
+                        }
                         selectedFileView.fireSelectEvent();
                         instance.onSelected(instance);
                     }
-                } else if(accordion.getSelectedProject().getPublicId() == project.getPublicId()){
+                } else if (accordion.getSelectedProject().getPublicId() == project.getPublicId()) {
                     editor.closeFile();
                 }
             };
