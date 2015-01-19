@@ -30,8 +30,8 @@ var FileProvider = (function () {
             deleteFile: function (publicId, callback) {
                 deleteFile(publicId, callback);
             },
-            loadOriginalFile: function (file, callback) {
-                loadOriginalFile(file, callback);
+            loadOriginalFile: function (file, onSuccess, onNotFound) {
+                loadOriginalFile(file, onSuccess, onNotFound);
             },
             onNewFileAdded: function () {
             },
@@ -47,7 +47,7 @@ var FileProvider = (function () {
             }
         };
 
-        function loadOriginalFile(file, callback) {
+        function loadOriginalFile(file, onSuccess, onNotFound) {
             if (file.getProjectType() == ProjectType.EXAMPLE) {
                 blockContent();
                 $.ajax({
@@ -55,7 +55,7 @@ var FileProvider = (function () {
                     success: function (data) {
                         try {
                             unBlockContent();
-                            callback(data);
+                            onSuccess(data);
                             instance.onOriginalFileLoaded();
                         } catch (e) {
                             console.log(e);
@@ -81,7 +81,7 @@ var FileProvider = (function () {
                     success: function (data) {
                         try {
                             unBlockContent();
-                            callback(data);
+                            onSuccess(data);
                             instance.onOriginalFileLoaded();
                         } catch (e) {
                             console.log(e);
@@ -91,6 +91,9 @@ var FileProvider = (function () {
                     timeout: 10000,
                     data: {publicId: file.getPublicId()},
                     dataType: "json",
+                    statusCode: {
+                        404: onNotFound
+                    },
                     error: function (jqXHR, textStatus, errorThrown) {
                         try {
                             instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);

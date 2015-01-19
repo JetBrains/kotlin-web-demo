@@ -136,6 +136,14 @@ projectActionsView.registerStatus("localVersion", "This is local version of proj
         }
     }
 ]);
+projectActionsView.registerStatus("localFile", "This is local version of project", [
+    {
+        name: "Revert project",
+        callback: function () {
+            accordion.getSelectedProject().loadOriginal();
+        }
+    }
+]);
 
 
 var runProvider = (function () {

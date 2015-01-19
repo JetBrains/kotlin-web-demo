@@ -164,7 +164,11 @@ public class MyHttpSession {
     private void sendProjectFileContent() {
         try {
             ProjectFile file = MySqlConnector.getInstance().getFile(parameters.get("publicId")[0]);
-            writeResponse(objectMapper.writeValueAsString(file), HttpServletResponse.SC_OK);
+            if (file != null) {
+                writeResponse(objectMapper.writeValueAsString(file), HttpServletResponse.SC_OK);
+            } else {
+                writeResponse("", HttpServletResponse.SC_NOT_FOUND);
+            }
         } catch (IOException e) {
             writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (NullPointerException e) {

@@ -39,7 +39,10 @@ var File = (function () {
                 }
             },
             loadOriginal: function () {
-                fileProvider.loadOriginalFile(instance, setFileData);
+                fileProvider.loadOriginalFile(instance, setFileData, function () {
+                    window.alert("Can't find file origin, maybe it was removed by a user");
+                    projectActionsView.setStatus("localFile");
+                });
             },
             onFileSaved: function () {
             },
