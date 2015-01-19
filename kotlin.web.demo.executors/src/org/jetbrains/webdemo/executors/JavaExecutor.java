@@ -15,6 +15,7 @@ package org.jetbrains.webdemo.executors;/*
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -44,11 +45,7 @@ public class JavaExecutor {
                     Method mainMethod = Class.forName(className).getMethod("main", String[].class);
                     mainMethod.invoke(null, (Object) Arrays.copyOfRange(args, 1, args.length));
                 } catch (InvocationTargetException e) {
-                    Throwable cause = e.getCause();
-                    outputObj.exception = new ExceptionDescriptor();
-                    outputObj.exception.message = cause.getMessage();
-                    outputObj.exception.stackTrace = cause.getStackTrace();
-                    outputObj.exception.fullName = cause.getClass().getName();
+                    outputObj.exception = e.getCause();
                 } catch (NoSuchMethodException e) {
                     System.err.println("No main method found in project.");
                 } catch (ClassNotFoundException e) {
@@ -64,7 +61,11 @@ public class JavaExecutor {
             outputObj.text = outputStream.toString()
                     .replaceAll("</errStream><errStream>", "")
                     .replaceAll("</outStream><outStream>", "");
-            System.out.print(new ObjectMapper().writeValueAsString(outputObj));
+            ObjectMapper objectMapper = new ObjectMapper();
+            SimpleModule module = new SimpleModule();
+            module.addSerializer(Throwable.class, new ThrowableSerializer());
+            objectMapper.registerModule(module);
+            System.out.print(objectMapper.writeValueAsString(outputObj));
         } catch (Throwable e) {
             System.setOut(defaultOutputStream);
             System.out.println("{\"text\":\"<errStream>Internal error: " + e.getClass().getName() + " " + e.getMessage());
@@ -77,5 +78,5 @@ public class JavaExecutor {
 
 class RunOutput {
     public String text = "";
-    public ExceptionDescriptor exception = null;
+    public Throwable exception = null;
 }

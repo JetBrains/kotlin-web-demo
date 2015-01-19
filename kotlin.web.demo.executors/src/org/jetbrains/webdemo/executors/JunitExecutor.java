@@ -20,6 +20,7 @@
 package org.jetbrains.webdemo.executors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.Failure;
@@ -34,6 +35,7 @@ public class JunitExecutor {
     static List<TestRunInfo> output = new ArrayList<TestRunInfo>();
     static MethodsFinder.TestClass testClass;
     private static PrintStream standardOutput = System.out;
+
 
     public static void main(String[] args) {
         try {
@@ -53,8 +55,12 @@ public class JunitExecutor {
                 }
             }
             try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                SimpleModule module = new SimpleModule();
+                module.addSerializer(Throwable.class, new ThrowableSerializer());
+                objectMapper.registerModule(module);
                 System.setOut(standardOutput);
-                System.out.print(new ObjectMapper().writeValueAsString(output));
+                System.out.print(objectMapper.writeValueAsString(output));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -111,7 +117,7 @@ class TestRunInfo {
     public String className = "";
     public String methodName = "";
     public long executionTime = 0;
-    public ExceptionDescriptor exception = null;
+    public Throwable exception = null;
     public int methodPosition;
     public Status status = Status.OK;
 
@@ -155,10 +161,7 @@ class MyRunListener extends RunListener {
     @Override
     public void testFailure(Failure failure) {
         Throwable exception = failure.getException();
-        currentTestRunInfo.exception = new ExceptionDescriptor();
-        currentTestRunInfo.exception.message = exception.getMessage();
-        currentTestRunInfo.exception.stackTrace = exception.getStackTrace();
-        currentTestRunInfo.exception.fullName = exception.getClass().getName();
+        currentTestRunInfo.exception = exception;
 
         if (exception instanceof AssertionError) {
             currentTestRunInfo.status = TestRunInfo.Status.FAIL;
