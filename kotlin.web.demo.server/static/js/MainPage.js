@@ -262,7 +262,11 @@ var accordion = (function () {
         if (currentFile.getProjectType() == ProjectType.EXAMPLE) {
             history.replaceState("", "", "?" + currentFile.getPublicId());
         } else {
-            history.replaceState("", "", "?id=" + currentFile.getPublicId() + "&project_id=" + accordion.getSelectedProject().getPublicId());
+            if (currentFile.isModifiable()) {
+                history.replaceState("", "", "?id=" + currentFile.getPublicId() + "&project_id=" + accordion.getSelectedProject().getPublicId());
+            } else {
+                history.replaceState("", "", "?file=" + currentFile.getName() + "&project_id=" + accordion.getSelectedProject().getPublicId());
+            }
         }
 
 

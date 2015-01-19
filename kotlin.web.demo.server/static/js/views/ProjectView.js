@@ -122,8 +122,8 @@ var ProjectView = (function () {
 
                 if (files.length > 0) {
                     try {
-                        if (project.getType() == ProjectType.EXAMPLE) {
-                            var fileName = getParameterByName("file");
+                        var fileName = getParameterByName("file");
+                        if (fileName != null && fileName != "") {
                             selectedFileView = instance.getFileViewByName(fileName);
                         } else {
                             var fileId = getParameterByName("id");
