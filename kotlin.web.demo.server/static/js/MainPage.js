@@ -269,7 +269,7 @@ var accordion = (function () {
     };
 
     accordion.onProjectDeleted = function () {
-        history.replaceState("", "", "");
+        history.replaceState("", "", "index.html");
         statusBarView.setStatus(ActionStatusMessages.delete_program_ok);
     };
 
@@ -411,8 +411,15 @@ var headersProvider = (function () {
         statusBarView.setStatus(ActionStatusMessages.load_header_ok);
     };
 
-    headersProvider.onFail = function (message, status) {
-        statusBarView.setStatus(status);
+    headersProvider.onProjectHeaderNotFound = function () {
+        statusBarView.setStatus(ActionStatusMessages.load_header_fail);
+        window.alert("Can't find project, maybe it was removed by the user.");
+        history.replaceState("", "", "index.html");
+        accordion.loadFirstItem();
+    };
+
+    headersProvider.onFail = function (message) {
+        statusBarView.setStatus(ActionStatusMessages.load_header_fail);
         console.log(message);
     };
 

@@ -138,6 +138,9 @@ var AccordionView = (function () {
             },
             onProjectDeleted: function(){
 
+            },
+            loadFirstItem: function () {
+                loadFirstItem();
             }
         };
 

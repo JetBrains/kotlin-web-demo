@@ -36,6 +36,9 @@ var HeadersProvider = (function () {
             onProjectHeaderLoaded: function (data) {
 
             },
+            onProjectHeaderNotFound: function (data) {
+
+            },
             onFail: function () {
             }
         };
@@ -129,9 +132,12 @@ var HeadersProvider = (function () {
                 data: {
                     publicId: publicId
                 },
+                statusCode: {
+                    404: instance.onProjectHeaderNotFound
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     try {
-                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_header_fail);
+                        instance.onFail(textStatus + " : " + errorThrown);
                     } catch (e) {
                         console.log(e)
                     }

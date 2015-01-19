@@ -183,7 +183,12 @@ public class MyHttpSession {
     private void sendLoadProjectInfoByFileIdResult() {
         try {
             String publicId = parameters.get("publicId")[0];
-            writeResponse(MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), publicId), HttpServletResponse.SC_OK);
+            String response = MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), publicId);
+            if (response != null) {
+                writeResponse(response, HttpServletResponse.SC_OK);
+            } else {
+                writeResponse("", HttpServletResponse.SC_NOT_FOUND);
+            }
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         } catch (DatabaseOperationException e) {

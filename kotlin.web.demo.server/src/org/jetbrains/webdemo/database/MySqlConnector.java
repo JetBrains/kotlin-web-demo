@@ -677,7 +677,7 @@ public class MySqlConnector {
 
                 return objectMapper.writeValueAsString(response);
             } else {
-                throw new DatabaseOperationException("File with this ID do not exist");
+                return null;
             }
         } catch (Exception e) {
             throw new DatabaseOperationException("Unknown exception");
