@@ -33,21 +33,20 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
     private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
     private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
     private static OAuthService googleService;
-    private static Token requestToken;
+    private static final Token EMPTY_TOKEN = null;
     private final String TYPE = "google";
 
     public String authorize() {
         try {
             googleService = new ServiceBuilder()
-                    .provider(GoogleApi.class)
+                    .provider(Google2Api.class)
                     .apiKey(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.SECRET)
                     .scope(SCOPE)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "google"))
                     .build();
 
-            requestToken = googleService.getRequestToken();
-            return googleService.getAuthorizationUrl(requestToken);
+            return googleService.getAuthorizationUrl(EMPTY_TOKEN);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google");
         }
@@ -60,13 +59,17 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
         UserInfo userInfo = null;
         try {
             Verifier verifier = new Verifier(oauthVerifier);
-            Token accessToken = googleService.getAccessToken(requestToken, verifier);
+            Token accessToken = googleService.getAccessToken(EMPTY_TOKEN, verifier);
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
             googleService.signRequest(accessToken, request);
             Response response = request.send();
             userInfo = new UserInfo();
             JsonNode object = new ObjectMapper().readTree(response.getBody()) ;
-            userInfo.login(object.get("name").textValue(), object.get("id").textValue(), TYPE);
+            String firstName = object.has("given_name") ? object.get("given_name").textValue() : "";
+            String lastName = object.has("family_name") ? object.get("family_name").textValue() : "";
+            String id = object.get("id").textValue();
+
+            userInfo.login(firstName + " " + lastName, id, TYPE);
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google: " + oauthVerifier);
