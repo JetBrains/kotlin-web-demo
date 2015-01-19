@@ -175,18 +175,22 @@ var AccordionView = (function () {
             if (folder != "" && project != "" && file != "") {
                 selectProject(createExampleId(project, folder));
             } else if (project_id != "") {
-                var file_id = getParameterByName("id");
-                headersProvider.getHeaderByFilePublicId(file_id, project_id, function (header) {
-                    if (!(header.publicId in projects)) {
-                        if (header.type == ProjectType.PUBLIC_LINK) {
-                            header.timeStamp = new Date().getTime();
-                            addProject(publicLinksContentElement, header);
-                        } else {
-                            throw "Project wasn't downloaded";
+                if (localStorage.getItem(project_id) == null) {
+                    var file_id = getParameterByName("id");
+                    headersProvider.getHeaderByFilePublicId(file_id, project_id, function (header) {
+                        if (!(header.publicId in projects)) {
+                            if (header.type == ProjectType.PUBLIC_LINK) {
+                                header.timeStamp = new Date().getTime();
+                                addProject(publicLinksContentElement, header);
+                            } else {
+                                throw "Project wasn't downloaded";
+                            }
                         }
-                    }
-                    selectProject(header.publicId);
-                });
+                        selectProject(header.publicId);
+                    });
+                } else {
+                    selectProject(project_id);
+                }
             } else {
                 var openedItemId = localStorage.getItem("openedItemId");
                 localStorage.removeItem("openedItemId");

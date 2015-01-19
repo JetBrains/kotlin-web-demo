@@ -70,12 +70,22 @@ var ProjectData = (function () {
                     }
                     onContentLoaded(content)
                 } else {
-                    projectProvider.loadProject(publicId, type, function (content) {
-                        for (var i = 0; i < content.files.length; ++i) {
-                            content.files[i] = new File(instance, content.files[i]);
-                        }
-                        onContentLoaded(content);
-                    });
+                    projectProvider.loadProject(
+                        publicId,
+                        type,
+                        function (content) {
+                            for (var i = 0; i < content.files.length; ++i) {
+                                content.files[i] = new File(instance, content.files[i]);
+                            }
+                            onContentLoaded(content);
+                        },
+                        function () {
+                            if (type == ProjectType.PUBLIC_LINK) {
+                                window.alert("Can't find project origin, maybe it was removed by the user.");
+                                projectActionsView.setStatus("default");
+                                revertible = false;
+                            }
+                        });
                 }
             },
             loadOriginal: function () {
@@ -151,6 +161,12 @@ var ProjectData = (function () {
             },
             isEmpty: function () {
                 return files.length == 0;
+            },
+            isRevertible: function () {
+                return revertible;
+            },
+            makeNotRevertible: function () {
+                revertible = false
             }
         };
 
@@ -162,6 +178,7 @@ var ProjectData = (function () {
         var parent = "My programs";
         var help = "";
         var modified = false;
+        var revertible = true;
 
         function save() {
             if (type != ProjectType.USER_PROJECT) throw "You can't save non-user projects";
@@ -188,7 +205,8 @@ var ProjectData = (function () {
                     parent: parent,
                     help: help,
                     type: type,
-                    publicId: publicId
+                    publicId: publicId,
+                    revertible: revertible
                 }));
             } else {
                 localStorage.removeItem(publicId);
@@ -214,6 +232,7 @@ var ProjectData = (function () {
             help = content.help;
             files = content.files;
             instance.onContentLoaded(files);
+            revertible = content.hasOwnProperty("revertible") ? content.revertible : true;
         }
 
         return instance;

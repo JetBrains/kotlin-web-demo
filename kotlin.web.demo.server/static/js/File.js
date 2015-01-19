@@ -42,7 +42,7 @@ var File = (function () {
                 fileProvider.loadOriginalFile(instance, setFileData, function () {
                     window.alert("Can't find file origin, maybe it was removed by a user");
                     projectActionsView.setStatus("localFile");
-                    reversible = false;
+                    revertible = false;
                 });
             },
             onFileSaved: function () {
@@ -70,8 +70,8 @@ var File = (function () {
             onDeleted: function () {
 
             },
-            makeUnreversible: function () {
-                reversible = false;
+            makeNotRevertible: function () {
+                revertible = false;
             },
             getName: function () {
                 return name;
@@ -86,8 +86,8 @@ var File = (function () {
             isModifiable: function () {
                 return modifiable;
             },
-            isReversible: function () {
-                return reversible;
+            isRevertible: function () {
+                return revertible;
             },
             getErrors: function () {
                 return errors;
@@ -113,6 +113,9 @@ var File = (function () {
             },
             getChangesHistory: function () {
                 return changesHistory;
+            },
+            getProject: function () {
+                return project;
             }
         };
 
@@ -125,7 +128,7 @@ var File = (function () {
         var publicId = "";
         var changesHistory = null;
         var modified = false;
-        var reversible = true;
+        var revertible = true;
 
         function save() {
             fileProvider.saveFile(instance, function () {
@@ -142,7 +145,7 @@ var File = (function () {
                 publicId: publicId,
                 modifiable: modifiable,
                 type: type,
-                reversible: reversible
+                reversible: revertible
             }))
         }
 
@@ -155,7 +158,7 @@ var File = (function () {
                 publicId = data.publicId;
                 type = data.type;
                 changesHistory = null;
-                reversible = content.hasOwnProperty("reversible") ? content.reversible : true;
+                revertible = content.hasOwnProperty("reversible") ? content.reversible : true;
             }
         }
 

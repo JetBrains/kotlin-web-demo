@@ -174,13 +174,11 @@ public class MyHttpSession {
             } else {
                 response.put("exists", false);
             }
-            writeResponse(objectMapper.writeValueAsString(response), HttpServletResponse.SC_OK);
+            writeResponse(response.toString(), HttpServletResponse.SC_OK);
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         } catch (DatabaseOperationException e) {
             writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
-        } catch (IOException e) {
-            writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -215,7 +213,9 @@ public class MyHttpSession {
     private void sendExistenceCheckResult() {
         try {
             String id = parameters.get("publicId")[0];
-            writeResponse(MySqlConnector.getInstance().isProjectExists(id) + "", HttpServletResponse.SC_OK);
+            ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
+            response.put("exists", MySqlConnector.getInstance().isProjectExists(id));
+            writeResponse(response.toString(), HttpServletResponse.SC_OK);
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         } catch (DatabaseOperationException e) {
@@ -356,9 +356,15 @@ public class MyHttpSession {
             String result;
             String id = parameters.get("publicId")[0];
             result = MySqlConnector.getInstance().getProjectContent(sessionInfo.getUserInfo(), id);
-            writeResponse(result, HttpServletResponse.SC_OK);
+            if (result != null) {
+                writeResponse(result, HttpServletResponse.SC_OK);
+            } else {
+                writeResponse("", HttpServletResponse.SC_NOT_FOUND);
+            }
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (DatabaseOperationException e) {
+            writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 

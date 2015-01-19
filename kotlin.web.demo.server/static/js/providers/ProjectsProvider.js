@@ -23,11 +23,11 @@ var ProjectProvider = (function () {
 
     function ProjectProvider(project) {
         var instance = {
-            loadProject: function (publicId, type, callback) {
+            loadProject: function (publicId, type, callback, onNotFound) {
                 if (type == ProjectType.EXAMPLE) {
                     loadExample(publicId, callback);
                 } else {
-                    loadProject(publicId, callback);
+                    loadProject(publicId, callback, onNotFound);
                 }
             },
             renameProject: function (project, newName) {
@@ -59,8 +59,8 @@ var ProjectProvider = (function () {
             onProjectSaved: function () {
 
             },
-            checkIfProjectExists: function (publicId, onSuccess, onFail) {
-                checkIfProjectExists(publicId, onSuccess, onFail);
+            checkIfProjectExists: function (publicId, onExists, onNotExists) {
+                checkIfProjectExists(publicId, onExists, onNotExists);
             },
             onNewProjectAdded: function (name, projectId, fileId) {
 
@@ -166,7 +166,7 @@ var ProjectProvider = (function () {
             })
         }
 
-        function loadProject(publicId, callback) {
+        function loadProject(publicId, callback, onNotFound) {
             blockContent();
             $.ajax({
                 url: generateAjaxUrl("loadProject"),
@@ -191,6 +191,9 @@ var ProjectProvider = (function () {
                 data: {publicId: publicId},
                 type: "GET",
                 timeout: 10000,
+                statusCode: {
+                    404: onNotFound
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     try {
                         instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
@@ -230,32 +233,23 @@ var ProjectProvider = (function () {
             })
         }
 
-        function checkIfProjectExists(publicId, onSuccess, onFail) {
-            blockContent();
+        function checkIfProjectExists(publicId, onExists, onNotExists) {
             $.ajax({
                 url: generateAjaxUrl("checkIfProjectExists"),
-                success: function (flag) {
-                    try {
-                        if (flag == "true") {
-                            onSuccess()
-                        } else {
-                            onFail();
-                        }
-                    } catch (e) {
-                        console.log(e)
+                success: function (data) {
+                    if (data.exists == true) {
+                        onExists()
+                    } else {
+                        onNotExists();
                     }
                 },
                 type: "POST",
                 timeout: 10000,
                 data: {publicId: publicId},
+                dataType: "json",
                 error: function (jqXHR, textStatus, errorThrown) {
-                    try {
-                        project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
-                    } catch (e) {
-                        console.log(e)
-                    }
-                },
-                complete: unBlockContent
+                    project.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                }
             })
         }
 

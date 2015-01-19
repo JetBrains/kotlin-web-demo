@@ -448,9 +448,9 @@ public class MySqlConnector {
     }
 
 
-    public String getProjectContent(UserInfo userInfo, String publicId) {
+    public String getProjectContent(UserInfo userInfo, String publicId) throws DatabaseOperationException {
         if (!checkConnection()) {
-            return ResponseUtils.getErrorInJson("Cannot connect to database for load your program.");
+            throw new DatabaseOperationException("Cannot connect to database.");
         }
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -479,7 +479,7 @@ public class MySqlConnector {
                 }
                 return objectMapper.writeValueAsString(project);
             } else {
-                return ResponseUtils.getErrorInJson("Can't load your project");
+                return null;
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", publicId);

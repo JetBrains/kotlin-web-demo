@@ -289,17 +289,32 @@ var accordion = (function () {
         if (file.getProjectType() == ProjectType.EXAMPLE) {
             projectActionsView.setStatus("localVersion");
         } else if (file.getProjectType() == ProjectType.PUBLIC_LINK) {
-            if (file.isReversible()) {
-                fileProvider.checkFileExistence(
-                    file.getPublicId(),
-                    projectActionsView.setStatus.bind(null, "localVersion"),
-                    function () {
-                        projectActionsView.setStatus.bind(null, "localFile");
-                        file.makeUnreversible();
+            if (file.getProject().isRevertible()) {
+                var onProjectExist = function () {
+                    if (file.isRevertible()) {
+                        fileProvider.checkFileExistence(
+                            file.getPublicId(),
+                            projectActionsView.setStatus.bind(null, "localVersion"),
+                            function () {
+                                projectActionsView.setStatus.bind(null, "localFile");
+                                file.makeNotRevertible();
+                            }
+                        )
+                    } else {
+                        projectActionsView.setStatus("localFile");
                     }
-                )
+                };
+                var onProjectNotExist = function () {
+                    projectActionsView.setStatus("default");
+                    file.getProject().makeNotRevertible();
+                };
+                projectProvider.checkIfProjectExists(
+                    file.getProject().getPublicId(),
+                    onProjectExist,
+                    onProjectNotExist
+                );
             } else {
-                projectActionsView.setStatus("localFile");
+                projectActionsView.setStatus("default");
             }
         }
     };
