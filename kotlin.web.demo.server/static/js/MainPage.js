@@ -235,7 +235,7 @@ var accordion = (function () {
     accordion.onProjectSelected = function (project) {
         if (project.isEmpty()) {
             editor.closeFile();
-            history.replaceState("", "", "?");
+            history.replaceState("", "", "?project_id=" + project.getPublicId());
         }
         consoleView.clear();
         junitView.clear();
@@ -254,7 +254,7 @@ var accordion = (function () {
         if (currentFile.getProjectType() == ProjectType.EXAMPLE) {
             history.replaceState("", "", "?" + currentFile.getPublicId());
         } else {
-            history.replaceState("", "", "?id=" + currentFile.getPublicId());
+            history.replaceState("", "", "?id=" + currentFile.getPublicId() + "&project_id=" + accordion.getSelectedProject().getPublicId());
         }
 
 
@@ -288,7 +288,7 @@ var accordion = (function () {
     };
 
     accordion.onSelectedFileDeleted = function () {
-        history.replaceState("", "", "index.html");
+        history.replaceState("", "", "?project_id=" + accordion.getSelectedProject().getPublicId());
         editor.closeFile();
     };
 

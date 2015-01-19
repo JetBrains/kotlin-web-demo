@@ -170,12 +170,13 @@ var AccordionView = (function () {
             var folder = getParameterByName("folder");
             var project = getParameterByName("project");
             var file = getParameterByName("file");
-            var id = getParameterByName("id");
+            var project_id = getParameterByName("project_id");
 
             if (folder != "" && project != "" && file != "") {
                 selectProject(createExampleId(project, folder));
-            } else if (id != "") {
-                headersProvider.getHeaderByFilePublicId(id, function (header) {
+            } else if (project_id != "") {
+                var file_id = getParameterByName("id");
+                headersProvider.getHeaderByFilePublicId(file_id, project_id, function (header) {
                     if (!(header.publicId in projects)) {
                         if (header.type == ProjectType.PUBLIC_LINK) {
                             header.timeStamp = new Date().getTime();
@@ -215,7 +216,7 @@ var AccordionView = (function () {
             projectView.onHeaderClick = selectProject;
             projectView.onDelete = function () {
                 if (selectedProjectView == projects[header.publicId]) {
-                    history.replaceState("", "", "?");
+                    history.replaceState("", "", "index.html");
                     selectedProjectView = null;
                     loadFirstItem();
                 }

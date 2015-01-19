@@ -182,8 +182,14 @@ public class MyHttpSession {
 
     private void sendLoadProjectInfoByFileIdResult() {
         try {
-            String publicId = parameters.get("publicId")[0];
-            String response = MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), publicId);
+            String response;
+            if (parameters.get("project_id") == null) {
+                String publicId = parameters.get("publicId")[0];
+                response = MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), publicId, null);
+            } else {
+                String project_id = parameters.get("project_id")[0];
+                response = MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), null, project_id);
+            }
             if (response != null) {
                 writeResponse(response, HttpServletResponse.SC_OK);
             } else {

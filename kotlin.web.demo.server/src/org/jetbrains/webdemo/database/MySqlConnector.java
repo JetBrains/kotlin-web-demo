@@ -649,18 +649,25 @@ public class MySqlConnector {
         }
     }
 
-    public String getProjectHeaderInfoByPublicId(UserInfo userInfo, String publicId) throws DatabaseOperationException {
+    public String getProjectHeaderInfoByPublicId(UserInfo userInfo, String fileId, String projectId) throws DatabaseOperationException {
         if (!checkConnection()) {
             throw new DatabaseOperationException("Cannot connect to database for load your program.");
         }
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            st = connection.prepareStatement("SELECT users.client_id, users.provider, projects.public_id, projects.name FROM files JOIN " +
-                    "projects ON files.project_id = projects.id JOIN " +
-                    "users ON projects.owner_id = users.id WHERE" +
-                    " files.public_id = ?");
-            st.setString(1, publicId);
+            if (projectId == null) {
+                st = connection.prepareStatement("SELECT users.client_id, users.provider, projects.public_id, projects.name FROM files JOIN " +
+                        "projects ON files.project_id = projects.id JOIN " +
+                        "users ON projects.owner_id = users.id WHERE" +
+                        " files.public_id = ?");
+                st.setString(1, fileId);
+            } else {
+                st = connection.prepareStatement("SELECT users.client_id, users.provider, projects.public_id, projects.name FROM projects JOIN " +
+                        "users ON projects.owner_id = users.id WHERE " +
+                        "projects.public_id = ?");
+                st.setString(1, projectId);
+            }
             rs = st.executeQuery();
             if (rs.next()) {
                 boolean isUserProject = rs.getString("client_id").equals(userInfo.getId()) && rs.getString("provider").equals(userInfo.getType());

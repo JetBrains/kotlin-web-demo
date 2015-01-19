@@ -27,8 +27,8 @@ var HeadersProvider = (function () {
             getAllHeaders: function (/*Function*/callback) {
                 getAllHeaders(callback);
             },
-            getHeaderByFilePublicId: function (publicId, /*Function*/callback) {
-                getHeaderByFilePublicId(publicId, callback);
+            getHeaderByFilePublicId: function (publicId, project_id, /*Function*/callback) {
+                getHeaderByFilePublicId(publicId, project_id, callback);
             },
             onHeadersLoaded: function () {
 
@@ -114,7 +114,7 @@ var HeadersProvider = (function () {
             });
         }
 
-        function getHeaderByFilePublicId(publicId, /*Function*/callback) {
+        function getHeaderByFilePublicId(publicId, project_id, /*Function*/callback) {
             blockContent();
             $.ajax({
                 url: generateAjaxUrl("loadProjectInfoByFileId"),
@@ -130,7 +130,8 @@ var HeadersProvider = (function () {
                 timeout: 10000,
                 dataType: "json",
                 data: {
-                    publicId: publicId
+                    publicId: publicId,
+                    project_id: project_id
                 },
                 statusCode: {
                     404: instance.onProjectHeaderNotFound
