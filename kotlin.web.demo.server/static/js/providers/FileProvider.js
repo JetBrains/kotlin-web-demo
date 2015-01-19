@@ -33,6 +33,9 @@ var FileProvider = (function () {
             loadOriginalFile: function (file, onSuccess, onNotFound) {
                 loadOriginalFile(file, onSuccess, onNotFound);
             },
+            checkFileExistence: function (publicId, onExists, onNotExists) {
+                checkFileExistence(publicId, onExists, onNotExists);
+            },
             onNewFileAdded: function () {
             },
             onOriginalFileLoaded: function () {
@@ -46,6 +49,31 @@ var FileProvider = (function () {
             onFail: function (message, status) {
             }
         };
+
+        function checkFileExistence(publicId, onExists, onNotExists) {
+            $.ajax({
+                url: generateAjaxUrl("checkFileExistence"),
+                type: "POST",
+                timeout: 10000,
+                data: {publicId: publicId},
+                dataType: "json",
+                success: function (data) {
+                    if (data.exists) {
+                        onExists();
+                    } else {
+                        onNotExists();
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    try {
+                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                },
+                complete: unBlockContent
+            })
+        }
 
         function loadOriginalFile(file, onSuccess, onNotFound) {
             if (file.getProjectType() == ProjectType.EXAMPLE) {

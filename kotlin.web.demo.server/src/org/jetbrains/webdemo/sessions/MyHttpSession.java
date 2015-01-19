@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.sessions;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -128,6 +130,9 @@ public class MyHttpSession {
                 case ("deleteFile"):
                     sendDeleteFileResult();
                     break;
+                case ("checkFileExistence"):
+                    sendFileExistenceResult();
+                    break;
                 case ("renameFile"):
                     sendRenameFileResult();
                     break;
@@ -158,6 +163,24 @@ public class MyHttpSession {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
             }
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendFileExistenceResult() {
+        try {
+            ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
+            if (MySqlConnector.getInstance().getFile(parameters.get("publicId")[0]) != null) {
+                response.put("exists", true);
+            } else {
+                response.put("exists", false);
+            }
+            writeResponse(objectMapper.writeValueAsString(response), HttpServletResponse.SC_OK);
+        } catch (NullPointerException e) {
+            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (DatabaseOperationException e) {
+            writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+        } catch (IOException e) {
+            writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

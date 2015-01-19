@@ -286,8 +286,21 @@ var accordion = (function () {
     };
 
     accordion.onModifiedSelectedFile = function (file) {
-        if (file.getProjectType() != ProjectType.USER_PROJECT) {
+        if (file.getProjectType() == ProjectType.EXAMPLE) {
             projectActionsView.setStatus("localVersion");
+        } else if (file.getProjectType() == ProjectType.PUBLIC_LINK) {
+            if (file.isReversible()) {
+                fileProvider.checkFileExistence(
+                    file.getPublicId(),
+                    projectActionsView.setStatus.bind(null, "localVersion"),
+                    function () {
+                        projectActionsView.setStatus.bind(null, "localFile");
+                        file.makeUnreversible();
+                    }
+                )
+            } else {
+                projectActionsView.setStatus("localFile");
+            }
         }
     };
 
@@ -698,10 +711,10 @@ function setKotlinJsOutput() {
 }
 
 function setKotlinVersion() {
-    $.ajax("http://kotlinlang.org/latest_release_version.txt",{
-        type:"GET",
+    $.ajax("http://kotlinlang.org/latest_release_version.txt", {
+        type: "GET",
         timeout: 1000,
-        success:function(kotlinVersion){
+        success: function (kotlinVersion) {
             document.getElementById("kotlinlang-kotlin-version").innerHTML = "(" + kotlinVersion + ")";
         }
     });
