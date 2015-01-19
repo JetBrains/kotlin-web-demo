@@ -33,23 +33,21 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
 
     private static OAuthService googleService;
 
-    private static Token requestToken;
-
     private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
     private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
+    private static final Token EMPTY_TOKEN = null;
 
     public String authorize() {
         try {
             googleService = new ServiceBuilder()
-                    .provider(GoogleApi.class)
+                    .provider(Google2Api.class)
                     .apiKey(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.SECRET)
                     .scope(SCOPE)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "google"))
                     .build();
 
-            requestToken = googleService.getRequestToken();
-            return googleService.getAuthorizationUrl(requestToken);
+            return googleService.getAuthorizationUrl(EMPTY_TOKEN);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google");
         }
@@ -61,15 +59,21 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
     public UserInfo verify(String url) {
         UserInfo userInfo = null;
         try {
-            url = ResponseUtils.substringBetween(url, "oauth_verifier=", "&oauth_token=");
+            url = ResponseUtils.substringAfter(url, "code==");
             Verifier verifier = new Verifier(url);
-            Token accessToken = googleService.getAccessToken(requestToken, verifier);
+            Token accessToken = googleService.getAccessToken(EMPTY_TOKEN, verifier);
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
             googleService.signRequest(accessToken, request);
             Response response = request.send();
             userInfo = new UserInfo();
+
             JSONObject object = new JSONObject(response.getBody());
             userInfo.login((String) object.get("name"), (String) object.get("id"), TYPE);
+            String firstName = object.has("given_name") ? ((String) object.get("given_name")) : "";
+            String lastName = object.has("family_name") ? ((String) object.get("family_name")) : "";
+            String id = ((String) object.get("id"));
+
+            userInfo.login(firstName + " " + lastName, id, TYPE);
 
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google: " + url);
