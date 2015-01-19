@@ -74,8 +74,34 @@ var FileProvider = (function () {
                     },
                     complete: unBlockContent
                 })
+            } else if (file.getProjectType() == ProjectType.PUBLIC_LINK) {
+                blockContent();
+                $.ajax({
+                    url: generateAjaxUrl("loadProjectFile"),
+                    success: function (data) {
+                        try {
+                            unBlockContent();
+                            callback(data);
+                            instance.onOriginalFileLoaded();
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    },
+                    type: "POST",
+                    timeout: 10000,
+                    data: {publicId: file.getPublicId()},
+                    dataType: "json",
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        try {
+                            instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                        } catch (e) {
+                            console.log(e)
+                        }
+                    },
+                    complete: unBlockContent
+                })
             } else {
-                throw "Only example files can be reloaded from server.";
+                throw "User files can't be reloaded from server.";
             }
         }
 

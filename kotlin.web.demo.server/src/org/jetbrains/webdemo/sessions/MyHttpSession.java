@@ -110,6 +110,9 @@ public class MyHttpSession {
                 case ("loadProject"):
                     sendLoadProjectResult();
                     break;
+                case ("loadProjectFile"):
+                    sendProjectFileContent();
+                    break;
                 case ("saveProject"):
                     sendSaveProjectResult();
                     break;
@@ -155,6 +158,19 @@ public class MyHttpSession {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
             }
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendProjectFileContent() {
+        try {
+            ProjectFile file = MySqlConnector.getInstance().getFile(parameters.get("publicId")[0]);
+            writeResponse(objectMapper.writeValueAsString(file), HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (NullPointerException e) {
+            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (DatabaseOperationException e) {
+            writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 

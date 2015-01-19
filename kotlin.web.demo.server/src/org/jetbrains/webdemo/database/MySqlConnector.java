@@ -31,6 +31,7 @@ import org.jetbrains.webdemo.session.UserInfo;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -694,4 +695,26 @@ public class MySqlConnector {
     }
 
 
+    public ProjectFile getFile(String publicId) throws DatabaseOperationException {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = connection.prepareStatement("SELECT * FROM files WHERE files.public_id = ?");
+            st.setString(1, publicId);
+            st.execute();
+            rs = st.executeQuery();
+            if (rs.next()) {
+                String name = rs.getString("name");
+                String content = rs.getString("content");
+                return new ProjectFile(name, content, false, publicId);
+            } else {
+                return null;
+            }
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Get file " + publicId);
+            throw new DatabaseOperationException("Unknown exception", e);
+        } finally {
+            closeStatementAndResultSet(st, rs);
+        }
+    }
 }
