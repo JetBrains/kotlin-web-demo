@@ -341,7 +341,7 @@ public class MyHttpSession {
         try {
             boolean modifiable = Boolean.parseBoolean(parameters.get("modifiable")[0]);
             if (modifiable) {
-                String publicId = parameters.get("publicId")[0];
+                String publicId = parameters.get("fileId")[0];
                 MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), publicId);
             } else {
                 String fileName = parameters.get("fileName")[0];
