@@ -100,32 +100,33 @@ var FileView = (function () {
             fileNameElement.innerHTML = file.getName();
             headerElement.appendChild(fileNameElement);
 
-            if (projectView.getType() == ProjectType.USER_PROJECT && file.isModifiable()) {
-                var renameImg = document.createElement("div");
-                renameImg.className = "rename-img";
-                renameImg.title = "Rename file";
-                renameImg.onclick = function (event) {
-                    var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), file.rename)
-                    file.onRenamed = function (newName) {
-                        fileNameElement.innerHTML = newName;
-                    };
-                    renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.getName()));
-
-                    event.stopPropagation();
-                };
-
-
+            if (projectView.getType() == ProjectType.USER_PROJECT) {
                 var deleteImg = document.createElement("div");
                 deleteImg.className = "delete-img";
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
                     if (confirm("Delete file " + file.getName())) {
-                        fileProvider.deleteFile(file.getPublicId(), file.deleteThis);
+                        fileProvider.deleteFile(file, file.deleteThis);
                     }
                     event.stopPropagation();
                 };
                 headerElement.appendChild(deleteImg);
-                headerElement.appendChild(renameImg);
+
+                if (file.isModifiable()) {
+                    var renameImg = document.createElement("div");
+                    renameImg.className = "rename-img";
+                    renameImg.title = "Rename file";
+                    renameImg.onclick = function (event) {
+                        var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), file.rename)
+                        file.onRenamed = function (newName) {
+                            fileNameElement.innerHTML = newName;
+                        };
+                        renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.getName()));
+
+                        event.stopPropagation();
+                    };
+                    headerElement.appendChild(renameImg);
+                }
             }
 
             headerElement.onclick = instance.fireSelectEvent;

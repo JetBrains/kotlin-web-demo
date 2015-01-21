@@ -29,6 +29,7 @@ var ProjectData = (function () {
                     args: args,
                     confType: confType,
                     originUrl: originUrl,
+                    readOnlyFileNames: readOnlyFileNames,
                     files: files.filter(function (file) {
                         return file.isModifiable();
                     })
@@ -179,6 +180,7 @@ var ProjectData = (function () {
         var help = "";
         var modified = false;
         var revertible = true;
+        var readOnlyFileNames = [];
 
         function save() {
             if (type != ProjectType.USER_PROJECT) throw "You can't save non-user projects";
@@ -206,7 +208,8 @@ var ProjectData = (function () {
                     help: help,
                     type: type,
                     publicId: publicId,
-                    revertible: revertible
+                    revertible: revertible,
+                    readOnlyFileNames: readOnlyFileNames
                 }));
             } else {
                 localStorage.removeItem(publicId);
@@ -231,8 +234,9 @@ var ProjectData = (function () {
             parent = content.parent;
             help = content.help;
             files = content.files;
-            instance.onContentLoaded(files);
             revertible = content.hasOwnProperty("revertible") ? content.revertible : true;
+            readOnlyFileNames = content.readOnlyFileNames;
+            instance.onContentLoaded(files);
         }
 
         return instance;

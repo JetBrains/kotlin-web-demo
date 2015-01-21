@@ -32,9 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Project {
-    /**
-     * This field is needed when user makes copy of example. Url of this example will be stored here.
-     */
     public String originUrl;
     @NotNull
     public String name;
@@ -49,12 +46,24 @@ public class Project {
     public String help = "";
     @NotNull
     public List<ProjectFile> files;
+    public List<String> readOnlyFileNames = new ArrayList<>();
 
     /**
      * For Jackson
      */
     public Project() {
 
+    }
+
+    public Project(@NotNull String name,
+                   @NotNull String parent,
+                   @NotNull String args,
+                   @NotNull String confType) {
+        this.name = name;
+        this.parent = parent;
+        this.args = args;
+        this.confType = confType;
+        this.originUrl = null;
     }
 
     /**
@@ -70,7 +79,8 @@ public class Project {
                    @NotNull String parent,
                    @NotNull String args,
                    @NotNull String confType,
-                   String originUrl) {
+                   String originUrl,
+                   List<String> readOnlyFileNames) {
         this.name = name;
         this.parent = parent;
         this.args = args;
@@ -81,7 +91,7 @@ public class Project {
         if (originUrl != null) {
             Project storedExample = ExamplesList.getExample(originUrl);
             for (ProjectFile file : storedExample.files) {
-                if (!file.isModifiable()) {
+                if (!file.isModifiable() && readOnlyFileNames.contains(file.getName())) {
                     files.add(file);
                 }
             }
@@ -115,15 +125,15 @@ public class Project {
         while (it.hasNext()) {
             JsonNode fileDescriptor = it.next();
 
-            String fileName = fileDescriptor.get("filename").textValue();
+            @NotNull String fileName = fileDescriptor.get("filename").textValue();
             boolean modifiable = fileDescriptor.get("modifiable").asBoolean();
-            String fileContent;
-            if (fileName != null) {
-                Path path = Paths.get(exampleFolderPath + File.separator + fileName);
-                fileContent = new String(Files.readAllBytes(path)).replaceAll("\r\n", "\n");
-            } else {
-                fileContent = fileDescriptor.get("content").asText();
+            if (!modifiable) {
+                readOnlyFileNames.add(fileName);
             }
+            String fileContent;
+            Path path = Paths.get(exampleFolderPath + File.separator + fileName);
+            fileContent = new String(Files.readAllBytes(path)).replaceAll("\r\n", "\n");
+
             String filePublicId = "folder=" + parent + "&project=" + name + "&file=" + fileName;
             ProjectFile file = new ProjectFile(fileName, fileContent, modifiable, filePublicId);
             files.add(file);

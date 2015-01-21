@@ -27,8 +27,8 @@ var FileProvider = (function () {
             saveFile: function (file, callback) {
                 saveFile(file, callback);
             },
-            deleteFile: function (publicId, callback) {
-                deleteFile(publicId, callback);
+            deleteFile: function (file, callback) {
+                deleteFile(file, callback);
             },
             loadOriginalFile: function (file, onSuccess, onNotFound) {
                 loadOriginalFile(file, onSuccess, onNotFound);
@@ -190,7 +190,20 @@ var FileProvider = (function () {
             })
         }
 
-        function deleteFile(publicId, callback) {
+        function deleteFile(file, callback) {
+            var data;
+            if (file.isModifiable()) {
+                data = {
+                    fileId: file.getPublicId(),
+                    modifiable: true
+                }
+            } else {
+                data = {
+                    fileName: file.getName(),
+                    modifiable: false,
+                    projectId: file.getProject().getPublicId()
+                }
+            }
             blockContent();
             $.ajax({
                 url: generateAjaxUrl("deleteFile"),
@@ -204,7 +217,7 @@ var FileProvider = (function () {
                     }
                 },
                 type: "POST",
-                data: {publicId: publicId},
+                data: data,
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     try {

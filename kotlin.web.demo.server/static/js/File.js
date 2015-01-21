@@ -145,7 +145,7 @@ var File = (function () {
                 publicId: publicId,
                 modifiable: modifiable,
                 type: type,
-                reversible: revertible
+                revertible: revertible
             }))
         }
 
@@ -158,7 +158,7 @@ var File = (function () {
                 publicId = data.publicId;
                 type = data.type;
                 changesHistory = null;
-                revertible = content.hasOwnProperty("reversible") ? content.reversible : true;
+                revertible = content.hasOwnProperty("revertible") ? content.revertible : true;
             }
         }
 

@@ -16,8 +16,6 @@
 
 package org.jetbrains.webdemo.sessions;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -341,8 +339,15 @@ public class MyHttpSession {
 
     private void sendDeleteFileResult() {
         try {
-            String publicId = parameters.get("publicId")[0];
-            MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), publicId);
+            boolean modifiable = Boolean.parseBoolean(parameters.get("modifiable")[0]);
+            if (modifiable) {
+                String publicId = parameters.get("publicId")[0];
+                MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), publicId);
+            } else {
+                String fileName = parameters.get("fileName")[0];
+                String projectId = parameters.get("projectId")[0];
+                MySqlConnector.getInstance().deleteUnmodifiableFile(sessionInfo.getUserInfo(), fileName, projectId);
+            }
             writeResponse(HttpServletResponse.SC_OK);
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
@@ -516,14 +521,14 @@ public class MyHttpSession {
     }
 
 
-    private Project addUnmodifiableDataToExample(Project exampleObject, String originUrl) {
+    private Project addUnmodifiableDataToExample(Project project, String originUrl) {
         Project storedExample = ExamplesList.getExample(originUrl);
         for (ProjectFile file : storedExample.files) {
-            if (!file.isModifiable()) {
-                exampleObject.files.add(file);
+            if (!file.isModifiable() && project.readOnlyFileNames.contains(file.getName())) {
+                project.files.add(file);
             }
         }
-        return exampleObject;
+        return project;
     }
 
 
