@@ -64,6 +64,7 @@ public class Project {
         this.args = args;
         this.confType = confType;
         this.originUrl = null;
+        this.files = new ArrayList<>();
     }
 
     /**
