@@ -201,6 +201,7 @@ var AccordionView = (function () {
                     selectProject(openedItemId);
                 }
             }
+            localStorage.removeItem("openedItemId");
         }
 
         function addProject(/*Element*/ folderContentElement, header) {
