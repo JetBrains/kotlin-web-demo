@@ -31,7 +31,6 @@ import org.jetbrains.webdemo.session.UserInfo;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -280,12 +279,41 @@ public class MySqlConnector {
         return str.replaceAll("%20", " ");
     }
 
-    public boolean checkCountOfPrograms(UserInfo userInfo) {
+    private boolean checkCountOfFiles(UserInfo userInfo) {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            st = connection.prepareStatement("SELECT count(*) FROM users WHERE USER_ID=?");
+            st = connection.prepareStatement("SELECT count(*) FROM files " +
+                    "JOIN projects ON projects.id = files.project_id " +
+                    "JOIN users ON users.id = projects.owner_id " +
+                    "WHERE (users.client_id=? AND users.provider=?)");
             st.setString(1, userInfo.getId());
+            st.setString(2, userInfo.getType());
+            rs = st.executeQuery();
+            if (!rs.next()) {
+                return false;
+            }
+            int count = Integer.parseInt(rs.getString("count(*)"));
+            return count < 100;
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
+            return false;
+        } finally {
+            closeStatementAndResultSet(st, rs);
+        }
+    }
+
+    private boolean checkCountOfProjects(UserInfo userInfo) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = connection.prepareStatement("SELECT count(*) FROM projects " +
+                    "JOIN users ON users.id = projects.owner_id " +
+                    "WHERE (users.client_id=? AND users.provider=?)");
+            st.setString(1, userInfo.getId());
+            st.setString(2, userInfo.getType());
             rs = st.executeQuery();
             if (!rs.next()) {
                 return false;
@@ -343,6 +371,12 @@ public class MySqlConnector {
     }
 
     public String addProject(UserInfo userInfo, Project project) throws DatabaseOperationException {
+        if (!checkConnection()) {
+            throw new DatabaseOperationException("Can't connect to database.");
+        }
+        if (!checkCountOfProjects(userInfo)) {
+            throw new DatabaseOperationException("You can't save more than 100 projects");
+        }
         int userId = getUserId(userInfo);
         PreparedStatement st = null;
         try {
@@ -387,6 +421,12 @@ public class MySqlConnector {
     }
 
     private String addFileToProject(UserInfo userInfo, int projectId, String fileName, String content) throws DatabaseOperationException {
+        if (!checkConnection()) {
+            throw new DatabaseOperationException("Cannot connect to database.");
+        }
+        if (!checkCountOfFiles(userInfo)) {
+            throw new DatabaseOperationException("You can't save more than 100 files");
+        }
         fileName = escape(fileName.endsWith(".kt") ? fileName : fileName + ".kt");
         try (PreparedStatement st = connection.prepareStatement("INSERT INTO files (project_id, public_id, name, content) VALUES (?,?,?,?) ")) {
             String publicId = userInfo.getId() + idGenerator.nextInt();
