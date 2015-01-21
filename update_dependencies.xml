@@ -124,7 +124,7 @@
     <target name="update_to_given_version" if="kotlin.build">
         <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-plugin-{build.number}.zip"
              dest="${dependencies.dir}/kotlin-plugin.zip"/>
-        <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
+        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/internal/kotlin-compiler-before-shrink.jar"
              dest="${dependencies.dir}/kotlin-compiler.jar"/>
     </target>
 
