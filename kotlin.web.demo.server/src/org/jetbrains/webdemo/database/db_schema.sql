@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS projects (
   args              VARCHAR(45)                            NOT NULL DEFAULT '',
   run_configuration ENUM ('java', 'js', 'canvas', 'junit') NOT NULL DEFAULT 'java',
   origin            VARCHAR(100),
+  read_only_files TEXT,
   CONSTRAINT project_name UNIQUE (owner_id, name),
   FOREIGN KEY (owner_id) REFERENCES users (id)
     ON DELETE CASCADE
