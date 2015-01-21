@@ -146,6 +146,17 @@ var ProjectView = (function () {
                 }
             };
 
+            project.onContentNotFound = function () {
+                if (project.getType() == ProjectType.PUBLIC_LINK) {
+                    window.alert("Can't find project origin, maybe it was removed by the user.");
+                    projectActionsView.setStatus("default");
+                    project.makeNotRevertible();
+                    if (!project.isContentLoaded()) {
+                        onDelete();
+                    }
+                }
+            };
+
             project.onFileAdded = function (file) {
                 var fileView = createFileView(file);
                 fileViews[file.getPublicId()] = fileView;
@@ -215,11 +226,7 @@ var ProjectView = (function () {
                 deleteButton.title = "Delete this project";
                 deleteButton.onclick = function (event) {
                     if (confirm("Delete project " + header.name + "?")) {
-                        projectProvider.deleteProject(header.publicId, header.type, function () {
-                            headerElement.parentNode.removeChild(headerElement);
-                            contentElement.parentNode.removeChild(contentElement);
-                            instance.onDelete();
-                        });
+                        projectProvider.deleteProject(header.publicId, header.type, onDelete);
                     }
                     event.stopPropagation();
                 };
@@ -257,6 +264,12 @@ var ProjectView = (function () {
 
         function isSelected() {
             return accordion.getSelectedProject() == project;
+        }
+
+        function onDelete() {
+            headerElement.parentNode.removeChild(headerElement);
+            contentElement.parentNode.removeChild(contentElement);
+            instance.onDelete();
         }
 
         return instance;

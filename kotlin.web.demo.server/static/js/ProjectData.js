@@ -80,19 +80,17 @@ var ProjectData = (function () {
                             }
                             onContentLoaded(content);
                         },
-                        function () {
-                            if (type == ProjectType.PUBLIC_LINK) {
-                                window.alert("Can't find project origin, maybe it was removed by the user.");
-                                projectActionsView.setStatus("default");
-                                revertible = false;
-                            }
-                        });
+                        instance.onContentNotFound
+                    )
                 }
             },
             loadOriginal: function () {
                 instance.loadContent(true);
             },
             onContentLoaded: function (files) {
+            },
+            onContentNotFound: function () {
+
             },
             addEmptyFile: function (name, publicId) {
                 var file = File.EmptyFile(instance, name, publicId);
