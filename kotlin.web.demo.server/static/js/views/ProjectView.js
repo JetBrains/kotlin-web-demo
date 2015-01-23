@@ -194,6 +194,7 @@ var ProjectView = (function () {
         init();
         function init() {
             var hoverTimer;
+            headerElement.id = header.publicId;
             $(headerElement).mouseenter(function () {
                 var element = this;
                 hoverTimer = setTimeout(function () {

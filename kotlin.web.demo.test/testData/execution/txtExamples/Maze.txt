@@ -1,45 +1,45 @@
 Maze:
 I~~$
-Result:_Path_found
+Result: Path found
 
 Maze:
-I_O_$
-Result:_No_path
+I O $
+Result: No path
 
 Maze:
-_________________
-____O__$_________
-____O__~_________
-____O__~_________
-____O__~_________
-____O__~~~~~~~~~I
-_________________
-Result:_Path_found
+                 
+    O  $         
+    O  ~         
+    O  ~         
+    O  ~         
+    O  ~~~~~~~~~I
+                 
+Result: Path found
 
 Maze:
-_______________
-____OOOOOOOOOOO
-____O_$~~~~~__O
-____OOOOOOO~OOO
-____O____~~~__O
-____OOOOO~OOOOO
-____O~~~~~____O
-____O~OOOOOOOOO
-____O~~~~~~__OO
-____OOOOOO~~~IO
-_______________
-Result:_Path_found
+               
+    OOOOOOOOOOO
+    O $~~~~~  O
+    OOOOOOO~OOO
+    O    ~~~  O
+    OOOOO~OOOOO
+    O~~~~~    O
+    O~OOOOOOOOO
+    O~~~~~~  OO
+    OOOOOO~~~IO
+               
+Result: Path found
 
 Maze:
-_____________________
-____OOOOOOOOOOOOOOOOO
-____O__~~~__________O
-____O$~~O~__________O
-____OOOOO~__________O
-____O_~~~~__________O
-____O_~OOOOOOOOOOOOOO
-____O_~_________O_I_O
-____O_~~~~~~~~~~~~~_O
-____OOOOOOOOOOOOOOOOO
-_____________________
-Result:_Path_found
+                     
+    OOOOOOOOOOOOOOOOO
+    O  ~~~          O
+    O$~~O~          O
+    OOOOO~          O
+    O ~~~~          O
+    O ~OOOOOOOOOOOOOO
+    O ~         O I O
+    O ~~~~~~~~~~~~~ O
+    OOOOOOOOOOOOOOOOO
+                     
+Result: Path found

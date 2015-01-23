@@ -62,7 +62,8 @@ function compareNumbers(a, b) {
 var tagsToReplace = {
     '&': '&amp;',
     '<': '&lt;',
-    '>': '&gt;'
+    '>': '&gt;',
+    ' ': '%20'
 };
 
 function unEscapeString(str) {
@@ -72,7 +73,12 @@ function unEscapeString(str) {
     return str;
 }
 
-
+function escapeString(str) {
+    for (var tag in tagsToReplace) {
+        str = str.replace(new RegExp(tag, "g"), tagsToReplace[tag]);
+    }
+    return str;
+}
 
 function replaceTag(tag) {
     return tagsToReplace[tag] || tag;

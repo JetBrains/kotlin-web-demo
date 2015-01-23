@@ -240,6 +240,7 @@ var AccordionView = (function () {
         function addFolder(name) {
             var folder = document.createElement("h3");
             folder.className = "examples-folder-name";
+            folder.id = escapeString(name);
             element.appendChild(folder);
 
             var folderDiv = document.createElement("div");
@@ -256,6 +257,7 @@ var AccordionView = (function () {
             var myProg = document.createElement("h3");
             myProg.className = "examples-folder-name";
             myProg.innerHTML = "My programs";
+            myProg.id = escapeString("My programs");
             element.appendChild(myProg);
 
             myProgramsContentElement = document.createElement("div");

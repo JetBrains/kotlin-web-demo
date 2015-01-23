@@ -70,6 +70,10 @@
     height: 100%;
 }
 
+#problems {
+    overflow: auto;
+}
+
 .result-view {
     padding: 4px;
 }

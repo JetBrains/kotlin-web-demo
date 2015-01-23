@@ -85,7 +85,7 @@ consoleOutputView.makeReference = function (fileName, lineNo) {
 var generatedCodeView = new GeneratedCodeView(document.getElementById("generated-code"));
 var consoleView = new ConsoleView(document.getElementById("program-output"), $("#result-tabs"));
 var junitView = new JUnitView(document.getElementById("program-output"), $("#result-tabs"));
-var problemsView = new ProblemsView($("#problems"), $("#result-tabs"));
+var problemsView = new ProblemsView(document.getElementById("problems"), $("#result-tabs"));
 
 problemsView.setCursor = function (filename, line, ch) {
     accordion.getSelectedProjectView().getFileViewByName(filename).fireSelectEvent();

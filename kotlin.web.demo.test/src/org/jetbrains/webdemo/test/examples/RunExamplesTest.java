@@ -24,7 +24,6 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
-import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
@@ -131,7 +130,7 @@ public class RunExamplesTest extends BaseTest {
         compareResponseAndExpectedResult(sourceFile, runConf);
     }
 
-    private void compareResponseAndExpectedResult(File file, String runConfiguration) throws IOException, JSONException {
+    private void compareResponseAndExpectedResult(File file, String runConfiguration) throws IOException {
         sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
         sessionInfo.setRunConfiguration(runConfiguration);
 

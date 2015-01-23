@@ -23,9 +23,6 @@
 
 
 var ProblemsView = function (element, /*Nullable*/ tabs) {
-    var console = document.createElement("div");
-    console.className = "scroll";
-    element.append(console);
 
     var instance = {
         addMessages: function () {
@@ -34,7 +31,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         onProjectChange: function (newProject) {
         },
         clear: function () {
-            console.innerHTML = "";
+            element.innerHTML = "";
         },
         setCursor: function(filename, line, character){
 
@@ -48,10 +45,10 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
             expandedStatus[fileNodes[i].id] = fileNodes[i].getAttribute("aria-expanded");
         }
 
-        console.innerHTML = "";
+        element.innerHTML = "";
         var treeElement = document.createElement("ul");
         treeElement.id = "problems-tree";
-        console.appendChild(treeElement);
+        element.appendChild(treeElement);
 
         var projectData = accordion.getSelectedProject();
         for (var i = 0; i < projectData.getFiles().length; i++) {

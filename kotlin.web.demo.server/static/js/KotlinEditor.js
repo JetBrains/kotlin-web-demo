@@ -452,6 +452,12 @@ var KotlinEditor = (function () {
             },
             updateHighlighting: function () {
                 highlighting.updateHighlighting()
+            },
+            /**
+             * For the debug purposes.
+             */
+            setValue: function (text) {
+                my_editor.setValue(text);
             }
         };
 
