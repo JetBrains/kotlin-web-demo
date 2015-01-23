@@ -88,6 +88,7 @@ public class Project {
         this.confType = confType;
         this.originUrl = originUrl;
         this.files = new ArrayList<>();
+        this.readOnlyFileNames = readOnlyFileNames;
 
         if (originUrl != null) {
             Project storedExample = ExamplesList.getExample(originUrl);
