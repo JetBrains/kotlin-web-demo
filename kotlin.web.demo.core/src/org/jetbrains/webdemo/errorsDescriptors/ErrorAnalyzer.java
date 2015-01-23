@@ -64,7 +64,7 @@ public class ErrorAnalyzer {
                     sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
                 bindingContext = ResolveUtils.getBindingContext(convertList(currentPsiFiles), currentProject);
             } else {
-                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFiles.get(0), sessionInfo);
+                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(convertList(currentPsiFiles), sessionInfo);
             }
 
         } catch (Throwable e) {

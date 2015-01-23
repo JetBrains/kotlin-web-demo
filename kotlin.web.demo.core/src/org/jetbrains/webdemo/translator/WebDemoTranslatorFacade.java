@@ -34,15 +34,11 @@ import org.jetbrains.k2js.facade.exceptions.TranslationException;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
-import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,9 +56,9 @@ public final class WebDemoTranslatorFacade {
 
     @SuppressWarnings("UnusedDeclaration")
     @Nullable
-    public static BindingContext analyzeProgramCode(@NotNull JetFile file, SessionInfo sessionInfo) {
+    public static BindingContext analyzeProgramCode(@NotNull List<JetFile> files, SessionInfo sessionInfo) {
         try {
-            return TopDownAnalyzerFacadeForJS.analyzeFiles(Arrays.asList(file), new LibrarySourcesConfig(
+            return TopDownAnalyzerFacadeForJS.analyzeFiles(files, new LibrarySourcesConfig(
                     Initializer.INITIALIZER.getEnvironment().getProject(),
                     "moduleId",
                     LIBRARY_FILES,
@@ -71,7 +67,7 @@ public final class WebDemoTranslatorFacade {
                     false));
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), file.getText());
+                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
             return null;
         }
     }

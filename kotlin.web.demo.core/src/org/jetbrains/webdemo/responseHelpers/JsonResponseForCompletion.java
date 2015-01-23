@@ -152,7 +152,7 @@ public class JsonResponseForCompletion {
         BindingContext bindingContext;
         try {
             if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
-                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode((JetFile) currentPsiFile, sessionInfo);
+                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(convertList(psiFiles), sessionInfo);
             } else {
                 bindingContext = ResolveUtils.getBindingContext(convertList(psiFiles), currentProject);
             }
