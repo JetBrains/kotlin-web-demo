@@ -103,7 +103,11 @@ var ConsoleOutputView = (function () {
             },
             makeReference: function (fileName, lineNo) {
                 var a = document.createElement("a");
-                a.innerHTML = fileName + ':' + lineNo;
+                if (fileName != null) {
+                    a.innerHTML = fileName + ':' + lineNo;
+                } else {
+                    a.innerHTML = "Unknown Source";
+                }
                 a.href = "#";
                 return a;
             },
@@ -136,7 +140,7 @@ var ConsoleOutputView = (function () {
                 if (stackTrace[i].className.startsWith("sun.reflect")) {
                     break;
                 }
-                Error.print('    at ' + stackTrace[i].className + '(');
+                Error.print('    at ' + stackTrace[i].className + '.' + stackTrace[i].methodName + '(');
                 Error.addReference(instance.makeReference(stackTrace[i].fileName, stackTrace[i].lineNumber));
                 Error.println(')');
             }

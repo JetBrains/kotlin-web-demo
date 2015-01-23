@@ -67,7 +67,11 @@ consoleOutputView.makeReference = function (fileName, lineNo) {
     var fileView = accordion.getSelectedProjectView().getFileViewByName(fileName);
     if (fileView != null) {
         var a = document.createElement("a");
-        a.innerHTML = fileName + ':' + lineNo;
+        if (fileName != null) {
+            a.innerHTML = fileName + ':' + lineNo;
+        } else {
+            a.innerHTML = "Unknown Source";
+        }
         a.href = "#";
         a.onclick = function () {
             fileView.fireSelectEvent();
@@ -77,7 +81,11 @@ consoleOutputView.makeReference = function (fileName, lineNo) {
         return a;
     } else {
         var span = document.createElement("span");
-        span.innerHTML = fileName + ':' + lineNo;
+        if (fileName != null) {
+            span.innerHTML = fileName + ':' + lineNo;
+        } else {
+            span.innerHTML = "Unknown Source";
+        }
         return span;
     }
 };
