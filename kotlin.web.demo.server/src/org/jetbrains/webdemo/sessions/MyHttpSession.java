@@ -288,7 +288,7 @@ public class MyHttpSession {
                     String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), project);
                     ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
                     result.put("publicId", publicId);
-                    result.put("content", MySqlConnector.getInstance().getProjectContent(sessionInfo.getUserInfo(), publicId));
+                    result.put("content", MySqlConnector.getInstance().getProjectContent(publicId));
                     writeResponse(result.toString(), HttpServletResponse.SC_OK);
                 } catch (IOException e) {
                     writeResponse("Can't parse file", HttpServletResponse.SC_BAD_REQUEST);
@@ -360,7 +360,7 @@ public class MyHttpSession {
         try {
             String result;
             String id = parameters.get("publicId")[0];
-            result = MySqlConnector.getInstance().getProjectContent(sessionInfo.getUserInfo(), id);
+            result = MySqlConnector.getInstance().getProjectContent(id);
             if (result != null) {
                 writeResponse(result, HttpServletResponse.SC_OK);
             } else {

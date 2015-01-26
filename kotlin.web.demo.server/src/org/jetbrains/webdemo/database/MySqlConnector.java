@@ -74,22 +74,20 @@ public class MySqlConnector {
         }
     }
 
-    private boolean checkConnection() {
+    private void checkConnection() throws DatabaseOperationException {
         try {
-            return connection.isValid(1000) || connect();
-        } catch (Throwable e) {
+            if (!connection.isValid(1000) && !connect()) {
+                throw new DatabaseOperationException("Can't connect to database");
+            }
+        } catch (SQLException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     databaseUrl);
-            return false;
         }
     }
 
     private boolean createTablesIfNecessary() {
         try {
-            if (!checkConnection()) {
-                return false;
-            }
             PreparedStatement st = connection.prepareStatement("SHOW TABLES");
             ResultSet rs = st.executeQuery();
             if (!rs.next()) {
@@ -140,7 +138,8 @@ public class MySqlConnector {
         }
     }
 
-    private boolean compareVersion() {
+    private boolean compareVersion() throws DatabaseOperationException {
+        checkConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
@@ -177,7 +176,8 @@ public class MySqlConnector {
         return false;
     }
 
-    private boolean checkIfDatabaseInfoExists(ResultSet rs) {
+    private boolean checkIfDatabaseInfoExists(ResultSet rs) throws DatabaseOperationException {
+        checkConnection();
         try {
             while (rs.next()) {
                 if (rs.getString(1).equals("dbinfo")) {
@@ -193,7 +193,8 @@ public class MySqlConnector {
         }
     }
 
-    private void checkDatabaseVersion() {
+    private void checkDatabaseVersion() throws DatabaseOperationException {
+        checkConnection();
         if (!compareVersion()) {
             try (PreparedStatement st = connection.prepareStatement("UPDATE dbinfo SET version=?")) {
                 st.setString(1, ApplicationSettings.DATABASE_VERSION);
@@ -207,9 +208,6 @@ public class MySqlConnector {
     }
 
     public boolean addNewUser(UserInfo userInfo) {
-        if (!checkConnection()) {
-            return false;
-        }
         if (!findUser(userInfo)) {
             try (PreparedStatement st = connection.prepareStatement("INSERT INTO users (client_id, provider, username) VALUES (?, ?, ?)")) {
                 st.setString(1, userInfo.getId());
@@ -237,16 +235,23 @@ public class MySqlConnector {
     }
 
     public boolean findUser(UserInfo userInfo) {
-        try {
-            getUserId(userInfo);
-            return true;
-        } catch (DatabaseOperationException e) {
-            return false;
+        try (PreparedStatement st = connection.prepareStatement("SELECT users.id FROM users WHERE (users.client_id = ? AND users.provider=?)")) {
+            checkConnection();
+            st.setString(1, userInfo.getId());
+            st.setString(2, userInfo.getType());
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
         }
-
+        return false;
     }
 
     public void saveFile(UserInfo userInfo, ProjectFile file) throws DatabaseOperationException {
+        checkConnection();
         try (PreparedStatement st = connection.prepareStatement("UPDATE files JOIN " +
                 "projects ON files.project_id = projects.id JOIN " +
                 "users ON projects.owner_id = users.id SET" +
@@ -331,6 +336,7 @@ public class MySqlConnector {
 
 
     public void saveProject(UserInfo userInfo, String publicId, Project project) throws DatabaseOperationException {
+        checkConnection();
         int userId = getUserId(userInfo);
         try (PreparedStatement st = connection.prepareStatement(
                 "UPDATE projects SET projects.args = ? , projects.run_configuration = ? " +
@@ -370,9 +376,7 @@ public class MySqlConnector {
     }
 
     public String addProject(UserInfo userInfo, Project project) throws DatabaseOperationException {
-        if (!checkConnection()) {
-            throw new DatabaseOperationException("Can't connect to database.");
-        }
+        checkConnection();
         if (!checkCountOfProjects(userInfo)) {
             throw new DatabaseOperationException("You can't save more than 100 projects");
         }
@@ -421,9 +425,7 @@ public class MySqlConnector {
     }
 
     private String addFileToProject(UserInfo userInfo, int projectId, String fileName, String content) throws DatabaseOperationException {
-        if (!checkConnection()) {
-            throw new DatabaseOperationException("Cannot connect to database.");
-        }
+        checkConnection();
         if (!checkCountOfFiles(userInfo)) {
             throw new DatabaseOperationException("You can't save more than 100 files");
         }
@@ -452,9 +454,7 @@ public class MySqlConnector {
     }
 
     public ArrayNode getProjectHeaders(UserInfo userInfo) throws DatabaseOperationException {
-        if (!checkConnection()) {
-            throw new DatabaseOperationException("Cannot connect to database to load list of your programs.");
-        }
+        checkConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
@@ -488,10 +488,8 @@ public class MySqlConnector {
     }
 
 
-    public String getProjectContent(UserInfo userInfo, String publicId) throws DatabaseOperationException {
-        if (!checkConnection()) {
-            throw new DatabaseOperationException("Cannot connect to database.");
-        }
+    public String getProjectContent(String publicId) throws DatabaseOperationException {
+        checkConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
@@ -536,9 +534,7 @@ public class MySqlConnector {
     }
 
     public boolean isProjectExists(String publicId) throws DatabaseOperationException {
-        if (!checkConnection()) {
-            throw new DatabaseOperationException("Cannot connect to database to check.");
-        }
+        checkConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
@@ -574,9 +570,7 @@ public class MySqlConnector {
     }
 
     public void deleteFile(UserInfo userInfo, String publicId) throws DatabaseOperationException {
-        if (!checkConnection()) {
-            throw new DatabaseOperationException("Cannot connect to database");
-        }
+        checkConnection();
         try (PreparedStatement st = connection.prepareStatement("DELETE files.* FROM files JOIN" +
                 " projects ON files.project_id = projects.id JOIN " +
                 " users ON projects.owner_id = users.id WHERE " +
@@ -593,9 +587,7 @@ public class MySqlConnector {
     }
 
     public void deleteUnmodifiableFile(UserInfo userInfo, String fileName, String projectId) throws DatabaseOperationException {
-        if (!checkConnection()) {
-            throw new DatabaseOperationException("Cannot connect to database");
-        }
+        checkConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
@@ -627,6 +619,7 @@ public class MySqlConnector {
 
 
     public void renameFile(UserInfo userInfo, String publcId, String newName) throws DatabaseOperationException {
+        checkConnection();
         try (PreparedStatement st = connection.prepareStatement("UPDATE files JOIN " +
                 "projects ON files.project_id = projects.id JOIN " +
                 "users ON projects.owner_id = users.id SET " +
@@ -652,9 +645,7 @@ public class MySqlConnector {
 
 
     public void deleteProject(UserInfo userInfo, String publicId) throws DatabaseOperationException {
-        if (!checkConnection()) {
-            throw new DatabaseOperationException("Cannot connect to database to delete your program.");
-        }
+        checkConnection();
         int userId = getUserId(userInfo);
         try (PreparedStatement st = connection.prepareStatement("DELETE FROM projects WHERE projects.owner_id = ? AND projects.public_id = ?")) {
             st.setString(1, userId + "");
@@ -668,6 +659,7 @@ public class MySqlConnector {
     }
 
     public void renameProject(UserInfo userInfo, String publicId, String newName) throws DatabaseOperationException {
+        checkConnection();
         int userId = getUserId(userInfo);
         try (PreparedStatement st = connection.prepareStatement("UPDATE projects SET projects.name = ? WHERE projects.public_id =? AND projects.owner_id = ?")) {
             st.setString(1, escape(newName));
@@ -688,6 +680,7 @@ public class MySqlConnector {
     }
 
     private int getUserId(UserInfo userInfo) throws DatabaseOperationException {
+        checkConnection();
         try (PreparedStatement st = connection.prepareStatement("SELECT users.id FROM users WHERE (users.client_id = ? AND users.provider=?)")) {
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
@@ -730,9 +723,7 @@ public class MySqlConnector {
     }
 
     public String getProjectHeaderInfoByPublicId(UserInfo userInfo, String fileId, String projectId) throws DatabaseOperationException {
-        if (!checkConnection()) {
-            throw new DatabaseOperationException("Cannot connect to database for load your program.");
-        }
+        checkConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
@@ -775,6 +766,7 @@ public class MySqlConnector {
 
 
     public ProjectFile getFile(String publicId) throws DatabaseOperationException {
+        checkConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
