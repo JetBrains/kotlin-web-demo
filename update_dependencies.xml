@@ -57,6 +57,11 @@
             <delete dir="kotlin.web.demo.core/resources/js" failonerror="false"/>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
                    dest="kotlin.web.demo.core/resources/js"/>
+
+            <delete dir="kotlin.web.demo.test/resources/js" failonerror="false"/>
+            <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
+                   dest="kotlin.web.demo.test/resources/js"/>
+
             <copy file="${dependencies.dir}/kotlin-compiler.jar"
                   todir="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib"/>
 

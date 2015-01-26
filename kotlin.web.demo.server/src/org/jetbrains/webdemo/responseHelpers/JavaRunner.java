@@ -354,22 +354,22 @@ public class JavaRunner {
         builder.add("-Djava.security.policy=" + ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
         builder.add("-classpath");
         String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB + File.pathSeparator +
-                ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes" + File.separator + "Executors.jar");
+                ApplicationSettings.CLASS_PATH + File.separator + "Executors.jar");
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
             builder.add(classpath +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "junit.jar" +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-databind.jar" +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-core.jar" +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-annotations.jar" +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + "kotlin-compiler.jar"
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "junit.jar" +
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-databind.jar" +
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-core.jar" +
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-annotations.jar" +
+                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "kotlin-compiler.jar"
             );
             builder.add("org.jetbrains.webdemo.executors.JunitExecutor");
             builder.add(pathToRootOut);
         } else {
             builder.add(classpath +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-databind.jar" +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-core.jar" +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + "jackson-annotations.jar");
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-databind.jar" +
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-core.jar" +
+                    File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-annotations.jar");
             builder.add("org.jetbrains.webdemo.executors.JavaExecutor");
             builder.add(findMainClass());
             if (!arguments.isEmpty()) {

@@ -28,6 +28,11 @@ import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class BaseTest extends TestCase {
 
@@ -46,14 +51,20 @@ public class BaseTest extends TestCase {
         System.setProperty("kotlin.running.in.server.mode", "true");
         System.setProperty("java.awt.headless", "true");
 
+        Path currentRelativePath = Paths.get("");
+        String currentAbsolutePath = currentRelativePath.toAbsolutePath().toString();
+
         Initializer.INITIALIZER = ServerInitializer.getInstance();
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
 
-        ApplicationSettings.WEBAPP_ROOT_DIRECTORY = "kotlin.web.demo.core/resources";
-        ApplicationSettings.EXAMPLES_DIRECTORY = "examples/";
+        ApplicationSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
+        ApplicationSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
+        ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
         ApplicationSettings.JAVA_EXECUTE = ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
+        ApplicationSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
 
         createManager();
+        initializePolicyFile();
 
         ExamplesList.getInstance();
         HelpLoader.getInstance();
@@ -65,6 +76,16 @@ public class BaseTest extends TestCase {
         ServerInitializer.setEnvironmentManager(myEnvironmentManager);
 
         return myEnvironmentManager.getEnvironment();
+    }
+
+    protected void initializePolicyFile() throws IOException {
+        Path templateFilePath = Paths.get(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
+        String templateFileContent = new String(Files.readAllBytes(templateFilePath));
+        String policyFileContent = templateFileContent.replaceAll("@CLASS_PATH@", ApplicationSettings.CLASS_PATH.replaceAll("\\\\", "/"));
+        policyFileContent = policyFileContent.replaceAll("@LIBS_DIR@", ApplicationSettings.LIBS_DIR.replaceAll("\\\\", "/"));
+        try (PrintWriter policyFile = new PrintWriter(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
+            policyFile.write(policyFileContent);
+        }
     }
 
     protected Project getProject() {

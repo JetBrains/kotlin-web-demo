@@ -16,6 +16,9 @@
 
 package org.jetbrains.webdemo.test.run;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
@@ -25,25 +28,26 @@ import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.IOException;
+import java.security.AccessControlException;
 import java.util.Collections;
 
 public class RunTest extends BaseTest {
 
     public void test$execution$FooOutErr() throws IOException, InterruptedException {
-        String expectedResult = "{\"text\":\"Hello<br/>\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "<outStream>Hello</br></outStream><errStream>ERROR</br></errStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
     public void test$execution$ManyArgs() throws IOException, InterruptedException {
-        String expectedResult = "{\"text\":\"a<br/>b<br/>c<br/>\",\"type\":\"out\"}]";
+        String expectedResult = "<outStream>a</br>b</br>c</br></outStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "a b c", expectedResult, "java");
 
         compareResult(fileName, "\"a\" b c", expectedResult, "java");
-        expectedResult = "{\"text\":\"a b<br/>c<br/>\",\"type\":\"out\"}]";
+        expectedResult = "<outStream>a b</br>c</br></outStream>";
         compareResult(fileName, "\"a b\" c", expectedResult, "java");
-        expectedResult = "{\"text\":\"\",\"type\":\"out\"}]";
+        expectedResult = "";
         compareResult(fileName, "", expectedResult, "java");
 
         //"info"},{"text":"a \["Hello]\" b<br/>c<br/>","ty...>
@@ -54,32 +58,46 @@ public class RunTest extends BaseTest {
     }
 
     public void test$execution$FooOut() throws IOException, InterruptedException {
-        String expectedResult = "{\"text\":\"Hello<br/>\",\"type\":\"out\"}]";
+        String expectedResult = "<outStream>Hello</br></outStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
     public void test$execution$FooErr() throws IOException, InterruptedException {
-        String expectedResult = "{\"text\":\"\",\"type\":\"out\"},{\"text\":\"ERROR<br/>\",\"type\":\"err\"}]";
+        String expectedResult = "<errStream>ERROR</br></errStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
     //Runtime.getRuntime().exec() Exception
     public void test$errors$securityExecutionError() throws IOException, InterruptedException {
-        String expectedResult = "Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission &amp;lt;&amp;lt;ALL FILES&amp;gt;&amp;gt; execute)";
-//        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission &amp;lt;&amp;lt;ALL FILES&amp;gt;&amp;gt; execute)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkExec(SecurityManager.java:782)<br/>\\tat java.lang.ProcessBuilder.start(ProcessBuilder.java:448)<br/>\\tat java.lang.Runtime.exec(Runtime.java:593)<br/>\\tat java.lang.Runtime.exec(Runtime.java:431)<br/>\\tat java.lang.Runtime.exec(Runtime.java:328)<br/>\\tat _DefaultPackage.main(dummy.jet:2)<br/>\",\"type\":\"err\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        compareResult(fileName, "", expectedResult, "java");
+        checkException(fileName, "", "java", AccessControlException.class.getName());
+    }
+
+    private void checkException(String fileName, String args, String runConfiguration, String exceptionName) throws IOException {
+        sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+        sessionInfo.setRunConfiguration(runConfiguration);
+
+        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
+            PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
+            sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+
+            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(currentPsiFile), currentPsiFile.getProject(), sessionInfo, args);
+            ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
+            for (JsonNode outputObject : actualResult) {
+                if (outputObject.get("type").asText().equals("out")) {
+                    assertEquals(actualResult.get(1).get("exception").get("fullName").asText(), exceptionName);
+                }
+            }
+        }
     }
 
 
     //Exception when read file from other directory
     public void test$errors$securityFilePermissionError() throws IOException, InterruptedException {
-        String expectedResult = "Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)";
-//        String expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"\",\"type\":\"out\"},{\"text\":\"Exception in thread \\\"main\\\" java.security.AccessControlException: access denied (java.io.FilePermission test.kt read)<br/>\\tat java.security.AccessControlContext.checkPermission(AccessControlContext.java:374)<br/>\\tat java.security.AccessController.checkPermission(AccessController.java:546)<br/>\\tat java.lang.SecurityManager.checkPermission(SecurityManager.java:532)<br/>\\tat java.lang.SecurityManager.checkRead(SecurityManager.java:871)<br/>\\tat java.io.File.exists(File.java:731)<br/>\\tat _DefaultPackage.main(dummy.jet:3)<br/>\",\"type\":\"err\"}]";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        compareResult(fileName, "", expectedResult, "java");
+        checkException(fileName, "", "java", AccessControlException.class.getName());
     }
 
     private void compareResult(String fileName, String args, String expectedResult, String runConfiguration) throws IOException {
@@ -91,11 +109,13 @@ public class RunTest extends BaseTest {
             sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
 
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(currentPsiFile), currentPsiFile.getProject(), sessionInfo, args);
-            String actualResult = responseForCompilation.getResult();
-            if (fileName.endsWith("securityExecutionError.kt") || fileName.endsWith("securityFilePermissionError.kt")) {
-                assertTrue("Wrong result: " + fileName, actualResult.contains(expectedResult));
-            } else {
-                assertTrue("Wrong result: " + fileName, actualResult.endsWith(expectedResult));
+            ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
+            for (JsonNode outputObject : actualResult) {
+                if (outputObject.get("type").asText().equals("out")) {
+                    String outputText = unEscapeString(outputObject.get("text").asText().replaceAll(System.lineSeparator(), "</br>"));
+                    assertEquals(expectedResult, outputText);
+                    assertTrue(outputObject.get("exception").isNull());
+                }
             }
         } else {
             sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
@@ -103,5 +123,9 @@ public class RunTest extends BaseTest {
             String actualResult = new JsConverter(sessionInfo).getResult(Collections.singletonList(currentPsiFile), args);
             assertEquals("wrong result", expectedResult, actualResult);
         }
+    }
+
+    private String unEscapeString(String input) {
+        return input.replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">");
     }
 }

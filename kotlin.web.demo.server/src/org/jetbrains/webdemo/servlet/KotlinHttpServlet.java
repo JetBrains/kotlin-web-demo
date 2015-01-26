@@ -46,7 +46,8 @@ public class KotlinHttpServlet extends HttpServlet {
         System.setProperty("java.awt.headless", "true");
 
         ApplicationSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
-        ApplicationSettings.LIBS_DIR = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib" + File.separator;
+        ApplicationSettings.CLASS_PATH = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes";
+        ApplicationSettings.LIBS_DIR = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib";
         ApplicationSettings.EXAMPLES_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "examples";
         ApplicationSettings.HELP_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY;
 
@@ -84,7 +85,7 @@ public class KotlinHttpServlet extends HttpServlet {
     }
 
     private boolean isWindows() {
-        return (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0);
+        return (System.getProperty("os.name").toLowerCase().contains("win"));
     }
 
     private boolean loadTomcatParameters() {

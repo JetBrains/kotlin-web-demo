@@ -68,7 +68,7 @@ public class ServerInitializer extends Initializer {
     public void initializeExecutorsPolicyFile() throws IOException {
         Path templateFilePath = Paths.get(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));
-        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", ApplicationSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"));
+        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", ApplicationSettings.WEBAPP_ROOT_DIRECTORY).replaceAll("\\\\", "/");
         try (PrintWriter policyFile = new PrintWriter(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
             policyFile.write(policyFileContent);
         }

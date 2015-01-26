@@ -21,6 +21,7 @@ public class ApplicationSettings {
     public static String JAVA_HOME = null;
     public static String JAVA_EXECUTE = "";
     public static String WEBAPP_ROOT_DIRECTORY = "";
+    public static String CLASS_PATH = "";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
     public static int TIMEOUT_FOR_EXECUTION = 5000;
     public static String IS_TEST_VERSION = "true";
