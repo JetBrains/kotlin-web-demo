@@ -60,10 +60,6 @@
             <copy file="${dependencies.dir}/kotlin-compiler.jar"
                   todir="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib"/>
 
-            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-runtime.jar"
-                  todir="kotlin.web.demo.test.applet/resources"/>
-            <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar"
-                  todir="kotlin.web.demo.test.applet/resources"/>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
                    dest="${unzipped.kotlin.plugin}/jslib"/>
             <copy file="${unzipped.kotlin.plugin}/jslib/kotlin.js"
