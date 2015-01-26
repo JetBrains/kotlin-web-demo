@@ -8,5 +8,6 @@
     ],
     "args": "",
     "confType": "java",
-    "help": " <p>This example implements the famous \"99 Bottles of Beer\" program. See <a href=\"http://99-bottles-of-beer.net/\">99-bottles-of-beer.net</a>.</p><p>Additionally, you can pass the desired initial number of bottles to use (rather than 99) as a command-line argument.</p>"
+    "help": " <p>This example implements the famous \"99 Bottles of Beer\" program. See <a href=\"http://99-bottles-of-beer.net/\">99-bottles-of-beer.net</a>.</p><p>Additionally, you can pass the desired initial number of bottles to use (rather than 99) as a command-line argument.</p>",
+    "expectedOutputFile": "expected output.txt"
 }

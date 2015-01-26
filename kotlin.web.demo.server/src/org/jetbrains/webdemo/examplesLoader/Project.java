@@ -123,7 +123,12 @@ public class Project {
         name = objectNode.get("name").asText();
         args = objectNode.get("args").asText();
         confType = objectNode.get("confType").asText();
-        expectedOutput = objectNode.has("expectedOutput") ? objectNode.get("expectedOutput").asText() : null;
+        if (objectNode.has("expectedOutput")) {
+            expectedOutput = objectNode.get("expectedOutput").asText();
+        } else if (objectNode.has("expectedOutputFile")) {
+            Path path = Paths.get(exampleFolderPath + File.separator + objectNode.get("expectedOutputFile").asText());
+            expectedOutput = new String(Files.readAllBytes(path));
+        }
 
         help = objectNode.get("help").textValue();
         Iterator<JsonNode> it = objectNode.get("files").elements();

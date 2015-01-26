@@ -32,16 +32,13 @@ import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.Common;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RunExamplesTest extends BaseTest {
 
     private static ArrayList<String> jsExamples = new ArrayList<String>();
-    private static Map<String, Example> expectedResults = new HashMap<String, Example>();
     private final Project project;
     private final String runConfiguration;
 
@@ -105,7 +102,7 @@ public class RunExamplesTest extends BaseTest {
     }
 
     private String getStdOut(String programOutput) {
-        programOutput = Common.unEscapeString(programOutput).replaceAll(System.lineSeparator(), "</br>");
+        programOutput = Common.unEscapeString(programOutput).replaceAll("\\r\\n", "</br>").replaceAll("\\n", "</br>");
         StringBuilder builder = new StringBuilder();
         Matcher matcher = Pattern.compile("<outStream>(.*)</outStream>").matcher(programOutput);
         while (matcher.find()) {

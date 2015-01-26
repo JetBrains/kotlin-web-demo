@@ -124,15 +124,16 @@
 
     <target name="update_to_given_version" if="kotlin.build">
         <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-plugin-{build.number}.zip"
-             dest="${dependencies.dir}/kotlin-plugin.zip"/>
+             dest="${dependencies.dir}/kotlin-plugin.zip" usetimestamp="true"/>
         <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/internal/kotlin-compiler-before-shrink.jar"
-             dest="${dependencies.dir}/kotlin-compiler.jar"/>
+             dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>
     </target>
 
     <target name="update_to_latest_version" unless="kotlin.build">
-        <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"/>
+        <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"
+             usetimestamp="true"/>
         <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
-             dest="${dependencies.dir}/kotlin-compiler.jar"/>
+             dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>
     </target>
 
     <macrodef name="set_kotlin_version_internal">
