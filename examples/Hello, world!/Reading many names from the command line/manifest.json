@@ -8,5 +8,6 @@
     ],
     "args": "guest1 guest2 guest3",
     "confType": "java",
-    "help": "Line 2 demonstrates the <a href=\"http://kotlinlang.org/docs/reference/basic-syntax.html#using-a-for-loop\"><b>for</b>-loop</a>, that would have been called \"enhanced\" if there were any other for-loop in Kotlin."
+    "help": "Line 2 demonstrates the <a href=\"http://kotlinlang.org/docs/reference/basic-syntax.html#using-a-for-loop\"><b>for</b>-loop</a>, that would have been called \"enhanced\" if there were any other for-loop in Kotlin.",
+    "expectedOutput": "Hello, guest1!</br>Hello, guest2!</br>Hello, guest3!</br>"
 }

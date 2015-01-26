@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.examplesLoader;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +48,7 @@ public class Project {
     @NotNull
     public List<ProjectFile> files;
     public List<String> readOnlyFileNames = new ArrayList<>();
+    private String expectedOutput;
 
     /**
      * For Jackson
@@ -91,7 +93,7 @@ public class Project {
         this.readOnlyFileNames = readOnlyFileNames;
 
         if (originUrl != null) {
-            Project storedExample = ExamplesList.getExample(originUrl);
+            Project storedExample = ExamplesList.getInstance().getExample(originUrl);
             for (ProjectFile file : storedExample.files) {
                 if (!file.isModifiable() && readOnlyFileNames.contains(file.getName())) {
                     files.add(file);
@@ -118,9 +120,10 @@ public class Project {
         File manifest = new File(exampleFolderPath + "manifest.json");
         JsonNode objectNode = objectMapper.readTree(manifest);
 
-        name = objectNode.get("name").textValue();
-        args = objectNode.get("args").textValue();
-        confType = objectNode.get("confType").textValue();
+        name = objectNode.get("name").asText();
+        args = objectNode.get("args").asText();
+        confType = objectNode.get("confType").asText();
+        expectedOutput = objectNode.has("expectedOutput") ? objectNode.get("expectedOutput").asText() : null;
 
         help = objectNode.get("help").textValue();
         Iterator<JsonNode> it = objectNode.get("files").elements();
@@ -140,5 +143,10 @@ public class Project {
             ProjectFile file = new ProjectFile(fileName, fileContent, modifiable, filePublicId);
             files.add(file);
         }
+    }
+
+    @JsonIgnore
+    public String getExpectedOutput() {
+        return expectedOutput;
     }
 }

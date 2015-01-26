@@ -8,5 +8,6 @@
     ],
     "args": "",
     "confType": "java",
-    "help": " <p>Kotlin Standart Library provide <b>component</b> functions for Map.Entry</p>"
+    "help": " <p>Kotlin Standart Library provide <b>component</b> functions for Map.Entry</p>",
+    "expectedOutput": "key = two, value = 2</br>key = one, value = 1</br>"
 }

@@ -8,5 +8,6 @@
     ],
     "args": "",
     "confType": "java",
-    "help": "<p>The composition function return a composition of two functions passed to it: compose(f, g) = f(g(*)). Now, you can apply it to callable references.</p>"
+    "help": "<p>The composition function return a composition of two functions passed to it: compose(f, g) = f(g(*)). Now, you can apply it to callable references.</p>",
+    "expectedOutput": "[a, abc]</br>"
 }

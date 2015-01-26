@@ -25,6 +25,7 @@ import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.responseHelpers.JsConverter;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
+import org.jetbrains.webdemo.test.Common;
 import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.IOException;
@@ -112,7 +113,7 @@ public class RunTest extends BaseTest {
             ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
             for (JsonNode outputObject : actualResult) {
                 if (outputObject.get("type").asText().equals("out")) {
-                    String outputText = unEscapeString(outputObject.get("text").asText().replaceAll(System.lineSeparator(), "</br>"));
+                    String outputText = Common.unEscapeString(outputObject.get("text").asText().replaceAll(System.lineSeparator(), "</br>"));
                     assertEquals(expectedResult, outputText);
                     assertTrue(outputObject.get("exception").isNull());
                 }
@@ -123,9 +124,5 @@ public class RunTest extends BaseTest {
             String actualResult = new JsConverter(sessionInfo).getResult(Collections.singletonList(currentPsiFile), args);
             assertEquals("wrong result", expectedResult, actualResult);
         }
-    }
-
-    private String unEscapeString(String input) {
-        return input.replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">");
     }
 }

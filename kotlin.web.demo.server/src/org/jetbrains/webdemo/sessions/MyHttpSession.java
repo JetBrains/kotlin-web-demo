@@ -199,7 +199,7 @@ public class MyHttpSession {
 
     private void sendExampleFileContent() {
         try {
-            ProjectFile file = ExamplesList.getExampleFile(parameters.get("publicId")[0]);
+            ProjectFile file = ExamplesList.getInstance().getExampleFile(parameters.get("publicId")[0]);
             writeResponse(objectMapper.writeValueAsString(file), HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -430,7 +430,7 @@ public class MyHttpSession {
 
     private void sendExampleContent() {
         try {
-            Project example = ExamplesList.getExample(parameters.get("publicId")[0]);
+            Project example = ExamplesList.getInstance().getExample(parameters.get("publicId")[0]);
             writeResponse(objectMapper.writeValueAsString(example), HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -522,7 +522,7 @@ public class MyHttpSession {
 
 
     private Project addUnmodifiableDataToExample(Project project, String originUrl) {
-        Project storedExample = ExamplesList.getExample(originUrl);
+        Project storedExample = ExamplesList.getInstance().getExample(originUrl);
         for (ProjectFile file : storedExample.files) {
             if (!file.isModifiable() && project.readOnlyFileNames.contains(file.getName())) {
                 project.files.add(file);

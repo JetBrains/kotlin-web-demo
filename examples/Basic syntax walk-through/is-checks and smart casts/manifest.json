@@ -8,5 +8,6 @@
     ],
     "args": "",
     "confType": "java",
-    "help": "The is operator checks if an expression is an instance of a type (and <a href=\"http://kotlinlang.org/docs/reference/typecasts.html#smart-casts\">more</a>). If we is-checked an immutable local variable or property, there's no need to cast it explicitly to the is-checked type. See <a href=\"http://kotlinlang.org/docs/reference/classes.html#classes-and-inheritance\">Classes and Inheritance</a>."
+    "help": "The is operator checks if an expression is an instance of a type (and <a href=\"http://kotlinlang.org/docs/reference/typecasts.html#smart-casts\">more</a>). If we is-checked an immutable local variable or property, there's no need to cast it explicitly to the is-checked type. See <a href=\"http://kotlinlang.org/docs/reference/classes.html#classes-and-inheritance\">Classes and Inheritance</a>.",
+    "expectedOutput": "3</br>null</br>"
 }

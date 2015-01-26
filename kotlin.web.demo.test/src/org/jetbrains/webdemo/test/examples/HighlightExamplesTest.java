@@ -16,93 +16,90 @@
 
 package org.jetbrains.webdemo.test.examples;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.psi.PsiFile;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
+import org.jetbrains.webdemo.examplesLoader.ExamplesList;
+import org.jetbrains.webdemo.examplesLoader.Project;
+import org.jetbrains.webdemo.examplesLoader.ProjectFile;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
-import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.test.BaseTest;
-import org.jetbrains.webdemo.test.TestUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class HighlightExamplesTest extends BaseTest {
 
     private static ArrayList<String> jsExamples = new ArrayList<String>();
-    private final File sourceFile;
-    private final String runConf;
+    private final Project project;
+    private String runConfiguration;
 
 
-    public HighlightExamplesTest(File sourceFile, String runConf) {
-        super(sourceFile.getName());
-        this.sourceFile = sourceFile;
-        this.runConf = runConf;
+    public HighlightExamplesTest(Project project) {
+        super(project.name);
+        this.project = project;
+        this.runConfiguration = project.confType;
+    }
+
+    public HighlightExamplesTest(Project project, String runConfiguration) {
+        super(project.name + "_" + runConfiguration);
+        this.project = project;
+        this.runConfiguration = runConfiguration;
     }
 
     public static Test suite() {
-        jsExamples.add("is-checks and smart casts.kt");
-        jsExamples.add("Use a while-loop.kt");
-        jsExamples.add("Use a for-loop.kt");
-        jsExamples.add("Simplest version.kt");
-        jsExamples.add("Reading a name from the command line.kt");
-        jsExamples.add("Reading many names from the command line.kt");
+        jsExamples.add("is-checks and smart casts");
+        jsExamples.add("Use a while-loop");
+        jsExamples.add("Use a for-loop");
+        jsExamples.add("Simplest version");
+        jsExamples.add("Reading a name from the command line");
+        jsExamples.add("Reading many names from the command line");
 
-        jsExamples.add("A multi-language Hello.kt");
-        jsExamples.add("An object-oriented Hello.kt");
+        jsExamples.add("A multi-language Hello");
+        jsExamples.add("An object-oriented Hello");
         // TODO add test for js with warning
         // jsExamples.add("HTML Builder.kt");
 
 
         TestSuite suite = new TestSuite(HighlightExamplesTest.class.getName());
-        File parsingSourceDir = new File(ApplicationSettings.EXAMPLES_DIRECTORY);
-        addFilesFromDirToSuite(parsingSourceDir, suite);
+        for (Project project : ExamplesList.getInstance().getAllExamples()) {
+            if (!project.parent.equals("Problems")) {
+                suite.addTest(new HighlightExamplesTest(project));
+            }
+            if (jsExamples.contains(project.name)) {
+                suite.addTest(new HighlightExamplesTest(project, "js"));
+            }
+        }
         return suite;
-    }
-
-    private static void addFilesFromDirToSuite(File file, TestSuite ats) {
-        if (file.isDirectory()) {
-            for (File sourceFile : file.listFiles()) {
-                if (!file.getName().equals("Problems")) {
-                    addFilesFromDirToSuite(sourceFile, ats);
-                }
-            }
-        }
-        else {
-            if (file.getName().equals("order.txt")) {
-                return;
-            }
-            if (file.getName().endsWith(".kt")) {
-                if (file.getParentFile().getName().equals("Canvas")) {
-                    ats.addTest(new HighlightExamplesTest(file, "canvas"));
-                }
-                else {
-                    if (jsExamples.contains(file.getName())) {
-                        ats.addTest(new HighlightExamplesTest(file, "js"));
-                    }
-                    ats.addTest(new HighlightExamplesTest(file, "java"));
-                }
-            }
-        }
     }
 
     @Override
     protected void runTest() throws Throwable {
-        compareResponseAndExpectedResult(sourceFile, runConf);
-    }
-
-    private void compareResponseAndExpectedResult(File file, String runConfiguration) throws IOException {
-        String expectedResult = "[]";
         sessionInfo.setRunConfiguration(runConfiguration);
-        PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(file));
+        List<PsiFile> psiFiles = new ArrayList<>();
+        for (ProjectFile file : project.files) {
+            psiFiles.add(JetPsiFactoryUtil.createFile(getProject(), file.getName(), file.getText()));
+        }
 
-        JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(Collections.singletonList(currentPsiFile), sessionInfo, currentPsiFile.getProject());
-        String actualResult = responseForHighlighting.getResult();
+        JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, getProject());
+        ObjectNode actualResult = (ObjectNode) new ObjectMapper().readTree(responseForHighlighting.getResult());
 
-        assertEquals("Wrong result for example " + file.getName() + " run configuration: " + runConfiguration, expectedResult, actualResult);
+        Iterator<JsonNode> fields = actualResult.elements();
+        while (fields.hasNext()) {
+            ArrayNode errors = (ArrayNode) fields.next();
+            assertEquals(errors.size(), 0);
+        }
+
+        if (jsExamples.contains(project.name)) {
+
+        }
+//        assertEquals("Wrong result for example " + file.getName() + " run configuration: " + runConfiguration, expectedResult, actualResult);
     }
 }
 

@@ -8,5 +8,6 @@
     ],
     "args": "guest",
     "confType": "java",
-    "help": "Line 6 demonstrates <a href=\"http://kotlinlang.org/docs/reference/basic-types.html#strings\">string templates</a> and <a href=\"http://kotlinlang.org/docs/reference/basic-types.html#arrays\">array access</a>."
+    "help": "Line 6 demonstrates <a href=\"http://kotlinlang.org/docs/reference/basic-types.html#strings\">string templates</a> and <a href=\"http://kotlinlang.org/docs/reference/basic-types.html#arrays\">array access</a>.",
+    "expectedOutput": "Hello, guest!</br>"
 }

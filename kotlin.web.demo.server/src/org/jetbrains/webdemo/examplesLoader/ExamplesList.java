@@ -49,14 +49,14 @@ public class ExamplesList {
         return EXAMPLES_LIST;
     }
 
-    public static Project getExample(String url) {
+    public Project getExample(String url) {
         url = ResponseUtils.unEscapeURL(url);
         String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
         String exampleName = ResponseUtils.substringAfter(url, "&project=");
         return exampleFolders.get(folderName).examples.get(exampleName);
     }
 
-    public static ProjectFile getExampleFile(String url) {
+    public ProjectFile getExampleFile(String url) {
         url = ResponseUtils.unEscapeURL(url);
         String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
         String exampleName = ResponseUtils.substringBetween(url, "&project=", "&file=");
@@ -69,6 +69,14 @@ public class ExamplesList {
             }
         }
         throw new NullPointerException("File not found");
+    }
+
+    public List<Project> getAllExamples() {
+        List<Project> examples = new ArrayList<>();
+        for (ExamplesFolder folder : exampleFolders.values()) {
+            examples.addAll(folder.examples.values());
+        }
+        return examples;
     }
 
     public List<String> getOrderedFolderNames() {
