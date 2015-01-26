@@ -748,6 +748,17 @@ function setKotlinVersion() {
     document.getElementById("webdemo-kotlin-version").innerHTML = KOTLIN_VERSION;
 }
 
+function getKey() {
+    $.ajax({
+        url: generateAjaxUrl("google_key"),
+        type: "GET",
+        timeout: 1000,
+        success: function (data) {
+            console.log(data);
+        }
+    });
+}
+
 var blockTimer;
 function blockContent() {
     clearTimeout(blockTimer);

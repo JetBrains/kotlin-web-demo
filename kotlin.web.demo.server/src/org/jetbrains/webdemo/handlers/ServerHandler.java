@@ -29,7 +29,6 @@ import org.jetbrains.webdemo.authorization.AuthorizationGoogleHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationTwitterHelper;
 import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.log.LogDownloader;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -114,6 +113,10 @@ public class ServerHandler {
                             session.invalidate();
                         }
                         writeResponse(request, response, "ok", HttpServletResponse.SC_OK);
+                        break;
+                    }
+                    case ("google_key"): {
+                        writeResponse(request, response, ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY, HttpServletResponse.SC_OK);
                         break;
                     }
                     default: {
