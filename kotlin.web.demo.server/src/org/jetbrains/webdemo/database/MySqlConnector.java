@@ -698,7 +698,7 @@ public class MySqlConnector {
                     throw new DatabaseOperationException("User with id" + userInfo.getId() + " don't exist");
                 }
             }
-        } catch (Throwable e) {
+        } catch (SQLException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
                     userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
