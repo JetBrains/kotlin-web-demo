@@ -46,7 +46,8 @@ incompleteActionManager.registerAction("save", "onHeadersLoaded",
     },
     function () {
         var content = JSON.parse(localStorage.getItem("contentToSave"));
-        if (content != null) {
+        localStorage.removeItem("contentToSave");
+        if (content != null && loginView.isLoggedIn()) {
             saveProjectDialog.open(projectProvider.forkProject.bind(null, content, function (data) {
                 accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
             }), content.name);
