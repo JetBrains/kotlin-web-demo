@@ -22,8 +22,8 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.impl.PsiFileFactoryImpl;
 import com.intellij.testFramework.LightVirtualFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.plugin.JetLanguage;
+import org.jetbrains.kotlin.idea.JetLanguage;
+import org.jetbrains.kotlin.psi.JetFile;
 
 public class JetPsiFactoryUtil {
 

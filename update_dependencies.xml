@@ -16,7 +16,7 @@
 
 <project name="Update Dependencies" default="download_and_update">
 
-    <property name ="kotlin.build" value="358973"/>
+    <property name ="kotlin.build" value="381847"/>
 
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
@@ -79,7 +79,7 @@
         <sequential>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/lib/kotlin-plugin.jar" dest="${unzipped.kotlin.plugin}/j2k">
                 <patternset>
-                    <include name="org/jetbrains/jet/j2k/**/*.class"/>
+                    <include name="org/jetbrains/kotlin/j2k/**/*.class"/>
                 </patternset>
             </unzip>
 
@@ -95,7 +95,7 @@
                     <attribute name="Implementation-Title" value="Java to Kotlin Converter"/>
                     <attribute name="Implementation-Version" value="${version}"/>
 
-                    <attribute name="Main-Class" value="org.jetbrains.jet.j2k.JavaToKotlinTranslator"/>
+                    <attribute name="Main-Class" value="org.jetbrains.kotlin.j2k.JavaToKotlinTranslator"/>
                 </manifest>
             </jar>
             <delete dir="${unzipped.kotlin.plugin}/j2k"/>

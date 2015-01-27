@@ -18,7 +18,7 @@ package org.jetbrains.webdemo;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.encoding.EncodingRegistry;
-import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.webdemo.environment.EnvironmentManager;
 
 public abstract class Initializer {

@@ -17,7 +17,7 @@
 package org.jetbrains.webdemo.responseHelpers;
 
 import com.intellij.psi.PsiFile;
-import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
 
