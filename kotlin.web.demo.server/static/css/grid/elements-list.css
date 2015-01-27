@@ -172,7 +172,7 @@
 }
 
 .example-filename-text {
-    max-width: 80%;
+    max-width: 79%;
     word-wrap: break-word;
     display: inline-block;
     overflow: hidden;

@@ -619,6 +619,7 @@ argumentsButton.onclick = function () {
         $(argumentsButton).addClass("active");
         argumentsWrapper.style.display = "block";
     }
+    resizeArguments();
     editor.resize();
 };
 
@@ -667,25 +668,27 @@ function resizeArguments() {
     argumentsWidth -= ($("#arguments").outerWidth(true) - $("#arguments").width());
     $("#arguments").css("width", argumentsWidth - 20);
 }
-
-$("#examples-list-resizer").resizable({
-    handles: "e",
-    minWidth: 20,
-    maxWidth: (function () {
-        return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
-    })(),
-    start: function () {
-        $(this).resizable({
-            maxWidth: (function () {
-                return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
-            })()
-        });
-    },
-    resize: function () {
-        $("#workspace").css("margin-left", $(this).outerWidth());
-        resizeArguments();
-    }
-});
+//
+//$("#examples-list-resizer").resizable({
+//    handles: "e",
+//    minWidth: 20,
+//    maxWidth: (function () {
+//        return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
+//    })(),
+//    start: function () {
+//        $(this).resizable({
+//            maxWidth: (function () {
+//                return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
+//            })()
+//        });
+//    },
+//    resize: onAccordionResized
+//});
+//
+//function onAccordionResized(){
+//    $("#workspace").css("margin-left", $("#examples-list-resizer").outerWidth());
+//    resizeArguments();
+//}
 
 $("#on-the-fly-checkbox")
     .prop("checked", localStorage.getItem("highlightOnTheFly") == "true")
@@ -713,25 +716,31 @@ $("#grid-bottom").resizable({
             })()
         });
     },
-    resize: function () {
-        $(this).css("top", "");
-        $("#result-tabs").css("height", $(this).height() - $("#statusBarWrapper").outerHeight());
-        $(".tab-space").css("height", $("#result-tabs").height() - $(".result-tabs-footer").outerHeight());
-
-        var gridTopHeight;
-        var gridTopElement = document.getElementById("grid-top");
-        var gridHeight = $("#g-grid").height();
-        gridTopHeight = gridHeight - $(this).outerHeight(true);
-        gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
-        $(gridTopElement).css("height", gridTopHeight);
-        editor.resize();
-    }
+    resize: onOutputViewResized
 });
+
+function onOutputViewResized(){
+    $("#grid-bottom").css("top", "");
+    $("#result-tabs").css("height", $("#grid-bottom").height() - $("#statusBarWrapper").outerHeight());
+    $(".tab-space").css("height", $("#result-tabs").height() - $(".result-tabs-footer").outerHeight());
+
+    var gridTopHeight;
+    var gridTopElement = document.getElementById("grid-top");
+    var gridHeight = $("#g-grid").height();
+    gridTopHeight = gridHeight - $("#grid-bottom").outerHeight(true);
+    gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
+    $(gridTopElement).css("height", gridTopHeight);
+    editor.resize();
+}
 
 var gridConfiguration = localStorage.getItem("gridConfiguration");
 if (gridConfiguration != null) {
     gridConfiguration = JSON.parse(gridConfiguration);
     if (gridConfiguration.fullscreenMode) document.getElementById("fullscreenButton").click();
+    //$("#examples-list-resizer").width(gridConfiguration.examplesWidth);
+    //onAccordionResized();
+    $("#grid-bottom").height(gridConfiguration.gridBottomHeight);
+    onOutputViewResized();
 }
 
 function setKotlinJsOutput() {
