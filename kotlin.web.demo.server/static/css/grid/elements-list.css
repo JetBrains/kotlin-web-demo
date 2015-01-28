@@ -18,6 +18,7 @@
     height: 100%;
     width: 25%;
     float: left;
+    background-color: #f7f7f7;
 }
 
 .examples-list {
@@ -69,7 +70,7 @@
 }
 
 .examples-folder-name {
-    background-color: #f7f7f7;
+    /*background-color: #f7f7f7;*/
     font-size: 14px;
     padding-left: 6px;
 }
@@ -95,6 +96,7 @@
     cursor: pointer;
     display: block;
     color: #3164a0;
+    background-color: #ffffff;
     padding: 6px 6px 6px 25px;
 }
 
