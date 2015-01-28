@@ -133,6 +133,7 @@
 }
 
 .rename-img {
+    display: none;
     cursor: pointer;
     height: 11px;
     width: 11px;
@@ -143,12 +144,24 @@
 }
 
 .delete-img {
+    display: none;
     cursor: pointer;
     height: 7px;
     width: 6px;
     float: right;
     margin-top: 5px;
     background: url("/static/images/icons.png") no-repeat -20px -39px;
+}
+
+.examples-project-name:hover .rename-img,
+.examples-project-name:hover .delete-img,
+.examples-project-name:hover .new-file-button,
+.example-filename:hover .rename-img,
+.example-filename:hover .delete-img,
+.example-filename:hover .new-file-button{
+    display: block;
+    /*-webkit-transition-delay: 1ms;*/
+    /*transition-delay: 1ms;*/
 }
 
 .example-filename {
@@ -244,8 +257,4 @@
     height: 18px;
     margin-right: 4px;
     background: url("/static/images/icons.png") no-repeat -65px -39px;
-}
-
-.examples-project-name.selected .new-file-button {
-    display: block;
 }
