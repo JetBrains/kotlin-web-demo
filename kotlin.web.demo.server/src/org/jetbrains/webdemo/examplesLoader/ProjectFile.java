@@ -30,7 +30,7 @@ public class ProjectFile {
     private String publicId;
     private String text;
     private String name;
-    private String type;
+    private Type type;
 
     private PsiFile psiFile;
 
@@ -49,15 +49,16 @@ public class ProjectFile {
         this.text = text;
         this.publicId = publicId;
         this.modifiable = true;
+        this.type = Type.KOTLIN_FILE;
     }
 
 
-    public ProjectFile(String name, String text, boolean modifiable, String publicId) {
+    public ProjectFile(String name, String text, boolean modifiable, String publicId, Type type) {
         this.name = name;
         this.text = text;
         this.modifiable = modifiable;
         this.publicId = publicId;
-        this.type = "Kotlin";
+        this.type = type;
 //        psiFile = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), name, content);
 //        type = psiFile.getFileType().getDescription();
     }
@@ -74,7 +75,7 @@ public class ProjectFile {
         return name;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
@@ -83,8 +84,7 @@ public class ProjectFile {
     }
 
     public enum Type {
-        DATA_FILE,
-        TEST_FILE,
-        SOURCE_FILE
+        KOTLIN_FILE,
+        KOTLIN_TEST_FILE
     }
 }

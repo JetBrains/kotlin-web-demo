@@ -67,21 +67,23 @@
     height: 16px;
     width: 17px;
     margin: 1px auto;
-    background: url("/static/images/icons.png") -0 -39px;
+    background: url("/static/images/icons.png") -1px -39px;
 }
 
 #saveButton .img {
-    height: 14px;
-    width: 14px;
+    height: 12px;
+    width: 12px;
     margin: 2px auto;
-    background: url("/static/images/icons.png") -20px -59px;
+    background: url("/static/images/icons.png") -21px -59px;
 }
 
 #saveAsButton .img {
     height: 15px;
-    width: 15px;
-    margin: 1px auto;
-    background: url("/static/images/icons.png") -20px -73px;
+    width: 16px;
+    position: relative;
+    top: 1px;
+    margin: 0 auto;
+    background: url("/static/images/icons.png") -19px -73px;
 }
 
 .argumentsButtonWrapper {
@@ -109,10 +111,10 @@
 
 #argumentsButton .img {
     display: inline-block;
-    width: 15px;
-    height: 14px;
-    margin: 2px auto;
-    background: url("/static/images/icons.png") no-repeat -0 -58px;
+    width: 13px;
+    height: 11px;
+    margin: 3px auto;
+    background: url("/static/images/icons.png") no-repeat -2px -60px;
 }
 
 #argumentsButton .arrow {
@@ -146,10 +148,10 @@
 }
 
 #runButton .img {
-    height: 14px;
-    width: 14px;
+    height: 13px;
+    width: 11px;
     margin: 2px auto;
-    background: url("/static/images/icons.png") no-repeat -40px -59px;
+    background: url("/static/images/icons.png") no-repeat -41px -59px;
 }
 
 .help {

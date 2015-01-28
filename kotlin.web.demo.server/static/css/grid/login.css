@@ -89,10 +89,11 @@
 }
 
 #fullscreenButton .img {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 13px;
     float: left;
-    background: url("/static/images/icons.png") no-repeat 0 -82px;
+    margin-top: 1px;
+    background: url("/static/images/icons.png") no-repeat -1px -82px;
 }
 
 #fullscreenButton.fullscreen .img {
@@ -101,6 +102,6 @@
 
 #fullscreenButton .text {
     float: left;
-    padding-left: 5px;
+    padding-left: 4px;
     color: #3164a0;
 }

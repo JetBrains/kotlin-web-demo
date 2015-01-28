@@ -124,35 +124,21 @@
 
 .rename-img {
     cursor: pointer;
-    height: 12px;
-    width: 12px;
+    height: 11px;
+    width: 11px;
     float: right;
     margin-top: 2px;
-    margin-right: 5px;
+    margin-right: 4px;
     background: url("/static/images/icons.png") no-repeat -85px -58px;
-}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .rename-img {
-        background-image: url("/static/images/icons@2x.png");
-        background-size: 109px 109px;
-    }
 }
 
 .delete-img {
     cursor: pointer;
-    height: 8px;
-    width: 7px;
+    height: 7px;
+    width: 6px;
     float: right;
-    margin-top: 4px;
+    margin-top: 5px;
     background: url("/static/images/icons.png") no-repeat -20px -39px;
-}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .delete-img {
-        background-image: url("/static/images/icons@2x.png");
-        background-size: 109px 109px;
-    }
 }
 
 .example-filename {
@@ -186,29 +172,52 @@
     white-space: normal;
 }
 
-.example-filename .fileIcon {
+.example-filename .icon {
     top: 1px;
     float: left;
     margin-right: 3px;
-    width: 12px;
-    height: 14px;
-    background: url("/static/images/icons.png") no-repeat -19px -92px;
+    width: 13px;
+    height: 16px;
+    /*background: url("/static/images/icons.png") no-repeat -19px -92px;*/
 }
 
-.example-filename.modified .fileIcon {
-    width: 14px;
-    height: 15px;
-    background: url("/static/images/icons.png") no-repeat -37px -92px;
+.example-filename.modified .example-filename-text {
+    margin-top: 2px;
 }
 
-.unmodifiableKotlinFileIcon {
-    top: 1px;
-    float: left;
-    margin-right: 3px;
+.example-filename.modified .icon{
     width: 15px;
-    height: 15px;
-    background: url("/static/images/icons.png") no-repeat -52px -92px;
+    height: 18px;
 }
+
+
+.icon.kotlin {
+    background: url("/static/images/icons.png") no-repeat -0px -111px;
+}
+
+.icon.kotlin.unmodifiable {
+    width: 23px;
+    height: 16px;
+    margin-left: -10px;
+    background: url("/static/images/icons.png") no-repeat -54px -109px;
+}
+
+.example-filename.modified .icon.kotlin{
+    background: url("/static/images/icons.png") no-repeat -14px -109px;
+}
+
+.icon.kotlin-test.unmodifiable{
+    width: 23px;
+    height: 19px;
+    margin-left: -10px;
+    background: url("/static/images/icons.png") no-repeat -30px -109px;
+}
+
+/*.example-filename.modified .fileIcon {*/
+    /*background: url("/static/images/icons.png") no-repeat -37px -92px;*/
+/*}*/
+
+
 
 .newProjectButton {
     float: right;

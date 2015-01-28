@@ -518,7 +518,7 @@ public class MySqlConnector {
                 st.setString(1, rs.getInt("id") + "");
                 rs = st.executeQuery();
                 while (rs.next()) {
-                    ProjectFile file = new ProjectFile(unEscape(rs.getString("name")), rs.getString("content"), true, rs.getString("public_id"));
+                    ProjectFile file = new ProjectFile(unEscape(rs.getString("name")), rs.getString("content"), true, rs.getString("public_id"), ProjectFile.Type.KOTLIN_FILE);
                     project.files.add(file);
                 }
                 return objectMapper.writeValueAsString(project);
@@ -777,7 +777,7 @@ public class MySqlConnector {
             if (rs.next()) {
                 String name = rs.getString("name");
                 String content = rs.getString("content");
-                return new ProjectFile(name, content, false, publicId);
+                return new ProjectFile(name, content, false, publicId, ProjectFile.Type.KOTLIN_FILE);
             } else {
                 return null;
             }

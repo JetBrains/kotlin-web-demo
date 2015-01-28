@@ -116,6 +116,9 @@ var File = (function () {
             },
             getProject: function () {
                 return project;
+            },
+            getType: function(){
+                return type;
             }
         };
 
@@ -124,7 +127,7 @@ var File = (function () {
         var text = "";
         var modifiable = true;
         var errors = [];
-        var type = "Kotlin";
+        var type = File.TYPE.KOTLIN_FILE;
         var publicId = "";
         var changesHistory = null;
         var modified = false;
@@ -179,6 +182,11 @@ var File = (function () {
 
     File.fromLocalStorage = function (project, publicId) {
         return new File(project, JSON.parse(localStorage.getItem(publicId)));
+    };
+
+    File.TYPE = {
+        KOTLIN_FILE: "KOTLIN_FILE",
+        KOTLIN_TEST_FILE: "KOTLIN_TEST_FILE"
     };
 
     return File;

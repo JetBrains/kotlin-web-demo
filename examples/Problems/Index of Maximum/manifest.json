@@ -7,7 +7,8 @@
         },
         {
             "filename": "Tests.kt",
-            "modifiable": "false"
+            "modifiable": "false",
+            "type": "kotlin-test"
         }
     ],
     "args": "",

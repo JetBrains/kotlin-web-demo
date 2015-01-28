@@ -145,7 +145,13 @@ public class Project {
             fileContent = new String(Files.readAllBytes(path)).replaceAll("\r\n", "\n");
 
             String filePublicId = "folder=" + parent + "&project=" + name + "&file=" + fileName;
-            ProjectFile file = new ProjectFile(fileName, fileContent, modifiable, filePublicId);
+            ProjectFile.Type fileType = null;
+            if(!fileDescriptor.has("type")){
+                fileType = ProjectFile.Type.KOTLIN_FILE;
+            } else if(fileDescriptor.get("type").asText().equals("kotlin-test")){
+                fileType = ProjectFile.Type.KOTLIN_TEST_FILE;
+            }
+            ProjectFile file = new ProjectFile(fileName, fileContent, modifiable, filePublicId, fileType);
             files.add(file);
         }
     }

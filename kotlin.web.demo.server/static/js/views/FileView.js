@@ -87,10 +87,18 @@ var FileView = (function () {
             });
 
             var icon = document.createElement("div");
-            if (file.isModifiable()) {
-                icon.className = "fileIcon"
-            } else {
-                icon.className = "unmodifiableKotlinFileIcon"
+            $(icon).addClass("icon").addClass("high-res-icon");
+            switch (file.getType()){
+                case File.TYPE.KOTLIN_FILE:
+                    $(icon).addClass("kotlin");
+                    break;
+                case File.TYPE.KOTLIN_TEST_FILE:
+                    $(icon).addClass("kotlin-test");
+                    break;
+            }
+
+            if (!file.isModifiable()) {
+                $(icon).addClass("unmodifiable")
             }
             headerElement.appendChild(icon);
 
@@ -102,7 +110,7 @@ var FileView = (function () {
 
             if (projectView.getType() == ProjectType.USER_PROJECT) {
                 var deleteImg = document.createElement("div");
-                deleteImg.className = "delete-img";
+                deleteImg.className = "delete-img high-res-icon";
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
                     if (confirm("Delete file " + file.getName())) {
@@ -114,10 +122,10 @@ var FileView = (function () {
 
                 if (file.isModifiable()) {
                     var renameImg = document.createElement("div");
-                    renameImg.className = "rename-img";
+                    renameImg.className = "rename-img high-res-icon";
                     renameImg.title = "Rename file";
                     renameImg.onclick = function (event) {
-                        var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), file.rename)
+                        var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), file.rename);
                         file.onRenamed = function (newName) {
                             fileNameElement.innerHTML = newName;
                         };
