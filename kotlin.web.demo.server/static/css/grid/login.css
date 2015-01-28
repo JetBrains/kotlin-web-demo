@@ -90,14 +90,14 @@
 
 #fullscreenButton .img {
     width: 12px;
-    height: 13px;
+    height: 12px;
     float: left;
     margin-top: 1px;
     background: url("/static/images/icons.png") no-repeat -1px -82px;
 }
 
 #fullscreenButton.fullscreen .img {
-    background: url("/static/images/icons.png") no-repeat -38px -74px;
+    background: url("/static/images/icons.png") no-repeat -1px -95px;
 }
 
 #fullscreenButton .text {

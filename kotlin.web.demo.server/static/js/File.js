@@ -48,20 +48,16 @@ var File = (function () {
             onFileSaved: function () {
             },
             compareContent: function () {
-                if (text == originalText) {
-                    modified = false;
-                    instance.onUnmodified();
-                } else {
-                    modified = true;
-                    instance.onModified();
-                }
+                modified = !(text == originalText);
+                $(modifyListeners).each(function(ind, listener){
+                    listener(modified);
+                });
             },
             isModified: function () {
                 return modified;
             },
-            onModified: function () {
-            },
-            onUnmodified: function () {
+            onModified: function (listener) {
+                modifyListeners.push(listener);
             },
             deleteThis: function () {
                 if(modifiable) {
@@ -136,6 +132,7 @@ var File = (function () {
         var changesHistory = null;
         var modified = false;
         var revertible = true;
+        var modifyListeners = [];
 
         function save() {
             fileProvider.saveFile(instance, function () {

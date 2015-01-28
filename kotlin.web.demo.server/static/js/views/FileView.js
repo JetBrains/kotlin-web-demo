@@ -42,18 +42,19 @@ var FileView = (function () {
         };
 
         var fileNameElement;
-        file.onModified = function () {
-            $(headerElement).addClass("modified");
-            if (isSelected()) {
-                accordion.onModifiedSelectedFile(file);
+        file.onModified(function (isFileContentChanged) {
+            if(isFileContentChanged) {
+                $(headerElement).addClass("modified");
+                if (isSelected()) {
+                    accordion.onModifiedSelectedFile(file);
+                }
+            } else {
+                $(headerElement).removeClass("modified");
+                if (isSelected()) {
+                    accordion.onUnmodifiedSelectedFile(file);
+                }
             }
-        };
-        file.onUnmodified = function () {
-            $(headerElement).removeClass("modified");
-            if (isSelected()) {
-                accordion.onUnmodifiedSelectedFile(file);
-            }
-        };
+        });
         file.onDeleted = function () {
             if (isSelected()) {
                 accordion.onSelectedFileDeleted();

@@ -122,7 +122,7 @@
     width: 4px;
     height: 7px;
     margin: auto auto 5px 5px;
-    background: url("/static/images/icons.png") no-repeat -9px -74px;
+    background: url("/static/images/icons.png") no-repeat -58px -58px;
 }
 
 #argumentsButton.active .arrow {
@@ -130,7 +130,7 @@
     width: 7px;
     height: 4px;
     margin: auto auto 5px 4px;
-    background: url("/static/images/icons.png") no-repeat -0px -74px;
+    background: url("/static/images/icons.png") no-repeat -58px -66px;
 }
 
 #runMode {
@@ -204,7 +204,7 @@
     height: 4px;
     float: right;
     margin-top: 3px;
-    background: url("/static/images/icons.png") -0px -74px;
+    background: url("/static/images/icons.png") -58px -66px;
 }
 
 .ui-selectmenu-menu .ui-state-focus {

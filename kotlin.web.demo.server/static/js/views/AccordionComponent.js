@@ -277,7 +277,7 @@ var AccordionView = (function () {
                 myProg.appendChild(login_link);
             } else {
                 var newProjectButton = document.createElement("div");
-                newProjectButton.className = "newProjectButton";
+                newProjectButton.className = "newProjectButton high-res-icon";
                 newProjectButton.onclick = function (e) {
                     newProjectDialog.open(projectProvider.addNewProject, "Untitled");
                     e.stopPropagation();

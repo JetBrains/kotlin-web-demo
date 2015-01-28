@@ -68,6 +68,7 @@ var ProjectData = (function () {
                     localStorage.removeItem(publicId);
                     for (var i = 0; i < content.files.length; ++i) {
                         content.files[i] = File.fromLocalStorage(instance, content.files[i]);
+                        content.files[i].onModified(onModified);
                     }
                     onContentLoaded(content)
                 } else {
@@ -77,6 +78,7 @@ var ProjectData = (function () {
                         function (content) {
                             for (var i = 0; i < content.files.length; ++i) {
                                 content.files[i] = new File(instance, content.files[i]);
+                                content.files[i].onModified(onModified);
                             }
                             onContentLoaded(content);
                         },
@@ -94,6 +96,7 @@ var ProjectData = (function () {
             },
             addEmptyFile: function (name, publicId) {
                 var file = File.EmptyFile(instance, name, publicId);
+                file.onModified(onModified);
                 files.push(file);
                 instance.onFileAdded(file);
             },
@@ -104,7 +107,7 @@ var ProjectData = (function () {
                     return element.getPublicId() != publicId;
                 });
             },
-            deleteUnmodifiableFile: function(name){
+            deleteUnmodifiableFile: function (name) {
                 readOnlyFileNames = readOnlyFileNames.filter(function (element) {
                     return element != name;
                 });
@@ -171,6 +174,9 @@ var ProjectData = (function () {
             },
             makeNotRevertible: function () {
                 revertible = false
+            },
+            onModified: function (listener) {
+                modifyListeners.push(listener);
             }
         };
 
@@ -184,13 +190,12 @@ var ProjectData = (function () {
         var modified = false;
         var revertible = true;
         var readOnlyFileNames = [];
+        var modifyListeners = [];
 
         function save() {
             if (type != ProjectType.USER_PROJECT) throw "You can't save non-user projects";
 
-            projectProvider.saveProject(instance, publicId, function () {
-                modified = false;
-            })
+            projectProvider.saveProject(instance, publicId, onModified)
         }
 
         function updateProjectInLocalStorage() {
@@ -240,6 +245,13 @@ var ProjectData = (function () {
             revertible = content.hasOwnProperty("revertible") ? content.revertible : true;
             readOnlyFileNames = content.readOnlyFileNames;
             instance.onContentLoaded(files);
+        }
+
+        function onModified(){
+            modified = isModified();
+            $(modifyListeners).each(function (ind, listener) {
+                listener(modified);
+            })
         }
 
         return instance;

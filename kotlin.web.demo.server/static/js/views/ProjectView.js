@@ -101,10 +101,17 @@ var ProjectView = (function () {
         };
 
         var nameSpan;
-        var modified = false;
         var project = (function () {
 
             project = new ProjectData(header.type, header.publicId, header.name);
+
+            project.onModified(function(isProjectContentChanged){
+                if(isProjectContentChanged) {
+                    $(headerElement).addClass("modified");
+                } else{
+                    $(headerElement).removeClass("modified");
+                }
+            });
 
             project.onRenamed = function (newName) {
                 nameSpan.innerHTML = newName;
@@ -208,7 +215,7 @@ var ProjectView = (function () {
             $(contentElement).slideUp();
             headerElement.className = "examples-project-name";
             var img = document.createElement("div");
-            img.className = "arrow";
+            img.className = "img high-res-icon";
             headerElement.appendChild(img);
             headerElement.onclick = function () {
                 instance.onHeaderClick(header.publicId);
@@ -245,7 +252,7 @@ var ProjectView = (function () {
                 headerElement.appendChild(renameImg);
 
                 var addFileImg = document.createElement("div");
-                addFileImg.className = "new-file-button";
+                addFileImg.className = "new-file-button high-res-icon";
                 addFileImg.innerHTML = "Add new file";
                 addFileImg.style.cursor = "pointer";
                 addFileImg.onclick = function (event) {

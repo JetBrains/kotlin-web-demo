@@ -32,9 +32,11 @@
 
 .examples-closed-folder-icon {
     display: inline-block;
-    width: 17px;
-    height: 14px;
-    background: url("/static/images/icons.png") no-repeat -68px -92px;
+    width: 5px;
+    height: 10px;
+    background: url("/static/images/icons.png") no-repeat -47px -92px;
+    position: relative;
+    top: 3px;
 }
 
 #examples-list .ui-state-active {
@@ -53,19 +55,21 @@
 
 .examples-open-folder-icon {
     display: inline-block;
-    width: 21px;
-    height: 14px;
-    background: url("/static/images/icons.png") no-repeat -86px -92px;
+    width: 7px;
+    height: 7px;
+    background: url("/static/images/icons.png") no-repeat -38px -92px;
+    top: 6px;
+    position: relative;
 }
 
 .folder-name-div {
-    padding-left: 25px;
+    padding-left: 11px;
     padding-top: 2px;
     padding-right: 10px;
 }
 
 .examples-folder-name {
-    /*display: inline-block;*/
+    background-color: #f7f7f7;
     font-size: 14px;
     padding-left: 6px;
 }
@@ -102,13 +106,17 @@
     background-color: #d8d8d8;
 }
 
-.examples-project-name .arrow {
+.examples-project-name .img {
     display: inline-block;
     float: left;
     margin-right: 5px;
-    width: 12px;
-    height: 14px;
-    background: url("/static/images/icons.png") -34px -39px;
+    width: 15px;
+    height: 13px;
+    background: url("/static/images/icons.png") -53px -91px;
+}
+
+.examples-project-name.modified .img{
+    background: url("/static/images/icons.png") -69px -91px;
 }
 
 #examples-list .ui-icon {
@@ -221,20 +229,19 @@
 
 .newProjectButton {
     float: right;
-    width: 15px;
-    height: 14px;
+    width: 17px;
+    height: 15px;
     margin-right: 3px;
-    background: url("/static/images/icons.png") no-repeat -48px -39px;
+    background: url("/static/images/icons.png") no-repeat -47px -39px;
 }
 
 .new-file-button {
     display: none;
     float: right;
-    width: 13px;
-    height: 12px;
-    margin-top: 2px;
-    margin-right: 2px;
-    background: url("/static/images/icons.png") no-repeat -64px -39px;
+    width: 16px;
+    height: 18px;
+    margin-right: 4px;
+    background: url("/static/images/icons.png") no-repeat -65px -39px;
 }
 
 .examples-project-name.selected .new-file-button {
