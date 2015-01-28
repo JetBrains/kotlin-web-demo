@@ -64,7 +64,11 @@ var File = (function () {
             onUnmodified: function () {
             },
             deleteThis: function () {
-                project.deleteFile(publicId);
+                if(modifiable) {
+                    project.deleteFile(publicId);
+                } else{
+                    project.deleteUnmodifiableFile(name);
+                }
                 instance.onDeleted();
             },
             onDeleted: function () {
@@ -159,9 +163,9 @@ var File = (function () {
                 originalText = data.originalText == null ? text : data.originalText;
                 modifiable = data.modifiable;
                 publicId = data.publicId;
-                type = data.type;
+                type = data.hasOwnProperty("type") ? data.type : type;
                 changesHistory = null;
-                revertible = content.hasOwnProperty("revertible") ? content.revertible : true;
+                revertible = data.hasOwnProperty("revertible") ? data.revertible : true;
             }
         }
 

@@ -104,6 +104,11 @@ var ProjectData = (function () {
                     return element.getPublicId() != publicId;
                 });
             },
+            deleteUnmodifiableFile: function(name){
+                readOnlyFileNames = readOnlyFileNames.filter(function (element) {
+                    return element != name;
+                });
+            },
             onFileDeleted: function (publicId) {
 
             },
