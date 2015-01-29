@@ -215,17 +215,17 @@ var highlightingProvider = (function () {
 })();
 
 var completionProvider = (function () {
-    function onSuccess(completionObject) {
-        editor.showCompletionResult(completionObject);
+    var completionProvider = new CompletionProvider();
+    completionProvider.onSuccess = function() {
         statusBarView.setStatus(ActionStatusMessages.get_completion_ok);
-    }
+    };
 
-    function onFail(error) {
+    completionProvider.onFail = function(error) {
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.get_completion_fail);
-    }
+    };
 
-    return new CompletionProvider(onSuccess, onFail);
+    return completionProvider;
 })();
 
 

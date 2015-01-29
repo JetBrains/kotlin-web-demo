@@ -23,17 +23,23 @@
 
 var CompletionProvider = (function () {
 
-    function CompletionProvider(onSuccess, onFail) {
+    function CompletionProvider() {
 
         var instance = {
-            getCompletion: function (project, filename, cursorLine, cursorCh) {
-                getCompletion(project, filename, cursorLine, cursorCh);
+            onSuccess: function (data) {
+
+            },
+            onFail: function (error) {
+
+            },
+            getCompletion: function (project, filename, cursor, callback) {
+                getCompletion(project, filename, cursor, callback);
             }
         };
 
         var isLoadingCompletion = false;
 
-        function getCompletion(project, filename, cursorLine, cursorCh) {
+        function getCompletion(project, filename, cursor, callback) {
             if (!isLoadingCompletion) {
                 isLoadingCompletion = true;
                 $.ajax({
@@ -43,12 +49,13 @@ var CompletionProvider = (function () {
                         isLoadingCompletion = false;
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                onSuccess(data);
+                                instance.onSuccess(data);
+                                callback(data);
                             } else {
-                                onFail(data);
+                                instance.onFail(data);
                             }
                         } else {
-                            onFail("Incorrect data format.");
+                            instance.onFail("Incorrect data format.");
                         }
                     },
                     dataType: "json",
@@ -57,12 +64,12 @@ var CompletionProvider = (function () {
                     data: {
                         project: JSON.stringify(project),
                         filename: filename,
-                        line: cursorLine,
-                        ch: cursorCh
+                        line: cursor.line,
+                        ch: cursor.ch
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingCompletion = false;
-                        onFail(textStatus + " : " + errorThrown);
+                        instance.onFail(textStatus + " : " + errorThrown);
                     }
                 });
             }

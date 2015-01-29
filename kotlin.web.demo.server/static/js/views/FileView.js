@@ -108,6 +108,9 @@ var FileView = (function () {
             fileNameElement.className = "example-filename-text";
             fileNameElement.innerHTML = file.getName();
             headerElement.appendChild(fileNameElement);
+            if(!file.isModifiable()){
+                $(headerElement).addClass("unmodifiable");
+            }
 
             if (projectView.getType() == ProjectType.USER_PROJECT) {
                 var deleteImg = document.createElement("div");

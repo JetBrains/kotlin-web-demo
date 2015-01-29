@@ -122,27 +122,6 @@
     margin-left: 5px;
 }
 
-#selectId {
-    z-index: 10;
-    max-height: 200px;
-    overflow-y: scroll;
-    border: 1px solid #969696;
-    border-radius: 4px;
-    background-color: #f7f7f7;
-    -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-    -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-    box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-}
-
-#selectId:focus {
-    outline-width: 0;
-}
-
-#selectId .ui-state-focus {
-    background-color: #d8d8d8;
-
-}
-
 .input-dialog-error-message{
     top: 15px;
     position: relative;
