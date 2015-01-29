@@ -122,6 +122,8 @@ var ProjectView = (function () {
                 fileViews = {};
                 contentElement.innerHTML = "";
 
+                nameSpan.innerHTML = project.getName();
+
                 for (var i = 0; i < files.length; ++i) {
                     var fileView;
                     fileView = createFileView(files[i]);
