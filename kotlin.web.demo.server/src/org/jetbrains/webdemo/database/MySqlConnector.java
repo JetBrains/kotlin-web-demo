@@ -835,7 +835,7 @@ public class MySqlConnector {
             if (rs.next()) {
                 String name = rs.getString("name");
                 String content = rs.getString("content");
-                return new ProjectFile(name, content, false, publicId, ProjectFile.Type.KOTLIN_FILE);
+                return new ProjectFile(name, content, true, publicId, ProjectFile.Type.KOTLIN_FILE);
             } else {
                 return null;
             }

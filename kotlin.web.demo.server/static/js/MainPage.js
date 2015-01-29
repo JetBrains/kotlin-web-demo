@@ -426,7 +426,10 @@ var fileProvider = (function () {
     fileProvider.onRenameFileFailed = function () {
     };
 
-    fileProvider.onOriginalFileLoaded = function () {
+    fileProvider.onOriginalFileLoaded = function (data) {
+        if(accordion.getSelectedProject().getType() == ProjectType.PUBLIC_LINK) {
+            accordion.getSelectedProjectView().updateFileViewSafely(accordion.getSelectedFileView(), data.name);
+        }
         editor.reloadFile();
     };
 

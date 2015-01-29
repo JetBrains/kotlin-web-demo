@@ -106,11 +106,13 @@ var ProjectData = (function () {
                 files = files.filter(function (element) {
                     return element.getPublicId() != publicId;
                 });
+                instance.onFileDeleted(publicId);
             },
             deleteUnmodifiableFile: function (name) {
                 readOnlyFileNames = readOnlyFileNames.filter(function (element) {
                     return element != name;
                 });
+                instance.onFileDeleted(publicId);
             },
             onFileDeleted: function (publicId) {
 

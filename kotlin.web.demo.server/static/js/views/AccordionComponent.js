@@ -106,6 +106,9 @@ var AccordionView = (function () {
                     return null;
                 }
             },
+            getSelectedFileView: function(){
+                return selectedFileView;
+            },
             selectFile: function (fileView) {
                 if (!(selectedFileView == fileView)) {
                     if (selectedProjectView == fileView.getProjectView()) {

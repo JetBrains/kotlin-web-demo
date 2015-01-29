@@ -35,6 +35,12 @@ var FileView = (function () {
             getHeaderElement: function () {
                 return headerElement;
             },
+            getHeaderText: function(){
+                return fileNameElement.innerHTML;
+            },
+            updateName: function(){
+                fileNameElement.innerHTML = file.getName();
+            },
             fireSelectEvent: function () {
                 projectView.setSelectedFileView(instance);
                 accordion.selectFile(instance);
