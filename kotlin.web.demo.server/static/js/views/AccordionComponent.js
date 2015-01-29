@@ -129,6 +129,10 @@ var AccordionView = (function () {
             },
             onSelectFile: function (previousFile, currentFile) {
             },
+            selectedFileDeleted: function(){
+                selectedFileView = null;
+                instance.onSelectedFileDeleted();
+            },
             onSelectedFileDeleted: function () {
 
             },
@@ -223,6 +227,7 @@ var AccordionView = (function () {
                 if (selectedProjectView == projects[header.publicId]) {
                     history.replaceState("", "", "index.html");
                     selectedProjectView = null;
+                    selectedFileView = null;
                     loadFirstItem();
                 }
                 delete projects[header.publicId];

@@ -57,7 +57,7 @@ var FileView = (function () {
         });
         file.onDeleted = function () {
             if (isSelected()) {
-                accordion.onSelectedFileDeleted();
+                accordion.selectedFileDeleted();
             }
             headerElement.parentNode.removeChild(headerElement);
         };
