@@ -271,7 +271,7 @@ var JUnitView = (function () {
 
     function displayStatistic(testsNumber, testsFailed, time, status) {
         if (testsFailed == 0) {
-            statisticText.innerHTML = "All tests passed in " + time.toFixed(3) + "s)";
+            statisticText.innerHTML = "All tests passed in " + time.toFixed(3) + "s";
         } else {
             statisticText.innerHTML = "Failed: " + testsFailed + " of " + testsNumber + " (in " + time.toFixed(3) + "s)";
         }
