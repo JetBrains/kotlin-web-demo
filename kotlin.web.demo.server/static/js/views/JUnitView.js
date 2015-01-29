@@ -56,7 +56,7 @@ var JUnitView = (function () {
                             createStatistics(data[i].testResults);
                             createTestTree(data[i].testResults);
                         } else {
-                            element.innerHTML = "No test method found";
+                            consoleView.writeException("No test method found");
                         }
                     } else {
                         generatedCodeView.setOutput(data[i]);
