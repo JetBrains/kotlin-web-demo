@@ -56,7 +56,7 @@ var AccordionView = (function () {
                 addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT});
                 projects[publicId].getProjectData().setDefaultContent();
                 selectProject(publicId);
-                projects[publicId].getProjectData().addEmptyFile(name, publicId);
+                projects[publicId].getProjectData().addEmptyFile(name, fileId);
             },
             addNewProjectWithContent: function (publicId, content) {
                 addProject(myProgramsContentElement, {
