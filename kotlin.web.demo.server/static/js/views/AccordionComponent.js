@@ -27,6 +27,8 @@ var AccordionView = (function () {
             loadAllContent: function () {
                 element.innerHTML = "";
                 projects = {};
+                selectedProjectView = null;
+                selectedFileView = null;
                 headersProvider.getAllHeaders(function (orderedFolderNames, foldersContent) {
                         for (var i = 0; i < orderedFolderNames.length; ++i) {
                             var folderName = orderedFolderNames[i];
@@ -68,10 +70,6 @@ var AccordionView = (function () {
                 selectProject(publicId);
             },
             onLogout: function () {
-                localStorage.setItem("openedItemId", instance.getSelectedProject().getPublicId());
-                projects = {};
-                selectedProjectView = null;
-                instance.loadAllContent();
             },
             getSelectedProject: function () {
                 return selectedProjectView.getProjectData();
