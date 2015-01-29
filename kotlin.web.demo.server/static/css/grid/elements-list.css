@@ -155,13 +155,15 @@
 
 .examples-project-name:hover .rename-img,
 .examples-project-name:hover .delete-img,
-.examples-project-name:hover .new-file-button,
 .example-filename:hover .rename-img,
-.example-filename:hover .delete-img,
-.example-filename:hover .new-file-button{
+.example-filename:hover .delete-img{
     display: block;
     /*-webkit-transition-delay: 1ms;*/
     /*transition-delay: 1ms;*/
+}
+
+.examples-project-name.selected:hover .new-file-button{
+    display: block;
 }
 
 .example-filename {

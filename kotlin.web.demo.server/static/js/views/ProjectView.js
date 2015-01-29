@@ -200,17 +200,7 @@ var ProjectView = (function () {
 
         init();
         function init() {
-            var hoverTimer;
             headerElement.id = header.publicId;
-            $(headerElement).mouseenter(function () {
-                var element = this;
-                hoverTimer = setTimeout(function () {
-                    $(element).addClass('hover');
-                }, 500);
-            }).mouseleave(function () {
-                clearTimeout(hoverTimer);
-                $(this).removeClass('hover');
-            });
 
             $(contentElement).slideUp();
             headerElement.className = "examples-project-name";
