@@ -119,6 +119,7 @@ var ProjectView = (function () {
 
             project.onContentLoaded = function () {
                 var files = project.getFiles();
+                fileViews = {};
                 contentElement.innerHTML = "";
 
                 for (var i = 0; i < files.length; ++i) {
