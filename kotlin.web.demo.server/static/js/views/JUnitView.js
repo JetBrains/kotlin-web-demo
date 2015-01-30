@@ -260,13 +260,15 @@ var JUnitView = (function () {
     function createStatistics(data) {
         var totalTime = 0.0;
         var noOfFailedTest = 0;
+        var status = Status.OK;
         for (var i = 0; i < data.length; ++i) {
             totalTime += data[i].executionTime / 1000.0;
             if (data[i].status == Status.FAIL || data[i].status == Status.ERROR) {
                 ++noOfFailedTest;
+                status = Status.ERROR;
             }
         }
-        displayStatistic(data.length, noOfFailedTest, totalTime, null);
+        displayStatistic(data.length, noOfFailedTest, totalTime, status);
     }
 
     function displayStatistic(testsNumber, testsFailed, time, status) {
@@ -285,9 +287,11 @@ var JUnitView = (function () {
         testsStatusElement.appendChild(backgroundElement);
 
         if (status == Status.ERROR || status == Status.FAIL) {
-            backgroundElement.className += " fail";
-        } else {
-            backgroundElement.className += " ok";
+            $(backgroundElement).addClass("fail");
+        } else if(status == Status.OK){
+            $(backgroundElement).addClass("ok");
+        } else{
+            throw "Bad status";
         }
     }
 

@@ -249,11 +249,11 @@
 }
 
 #tests-status-bar .background.ok {
-    background: url("/static/images/testProgressBar.png") repeat-x 0 0;
+    background: url("/static/images/testProgressBar.png") repeat-x 0 -11px;
 }
 
 #tests-status-bar .background.fail {
-    background: url("/static/images/testProgressBar.png") repeat-x -11px 0;
+    background: url("/static/images/testProgressBar.png") repeat-x 0 0;
 }
 
 #unit-test-statistic {
