@@ -67,9 +67,7 @@ public class RunExamplesTest extends BaseTest {
 
         TestSuite suite = new TestSuite(RunExamplesTest.class.getName());
         for (Project project : ExamplesList.getInstance().getAllExamples()) {
-            if (!project.parent.equals("Problems")) {
-                suite.addTest(new RunExamplesTest(project));
-            }
+            suite.addTest(new RunExamplesTest(project));
             if (jsExamples.contains(project.name)) {
                 suite.addTest(new RunExamplesTest(project, "js"));
             }
@@ -96,6 +94,17 @@ public class RunExamplesTest extends BaseTest {
                         assertEquals(project.getExpectedOutput().replaceAll("</br>", System.lineSeparator()), getStdOut(outputObject.get("text").asText()));
                     }
                     assertTrue(outputObject.get("exception").isNull());
+                }
+            }
+        } else if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
+            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, getProject(), sessionInfo, project.args);
+            ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
+            for (JsonNode outputObject : actualResult){
+                if(outputObject.get("type").asText().equals("out")) {
+                    for (JsonNode testResult : outputObject.get("testResults")){
+                        String message = testResult.get("className").asText() + "." + testResult.get("methodName").asText() + " status:" + testResult.get("status").asText();
+                        assertEquals(message, "OK", testResult.get("status").asText());
+                    }
                 }
             }
         }

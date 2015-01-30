@@ -85,6 +85,7 @@ public class ProjectFile {
 
     public enum Type {
         KOTLIN_FILE,
-        KOTLIN_TEST_FILE
+        KOTLIN_TEST_FILE,
+        SOLUTION_FILE
     }
 }

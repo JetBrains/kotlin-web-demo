@@ -40,7 +40,7 @@ class Tests {
     }
 
     Test fun testRuns5() {
-        test(1, 1, 1, 2, 3)
+        test(3, 1, 1, 2, 3)
     }
 
     Test fun testRuns6() {
