@@ -106,6 +106,7 @@ var canvas;
 canvasDialog = $("#popupForCanvas").dialog({
     width: 640,
     height: 360,
+    resizable: false,
     autoOpen: false,
     modal: true,
     open: function () {
@@ -601,6 +602,7 @@ window.onbeforeunload = function () {
 
 var loginDialog = $("#login-dialog").dialog({
     modal: "true",
+    resizable: false,
     width: 300,
     autoOpen: false
 });

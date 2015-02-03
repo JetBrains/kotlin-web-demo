@@ -37,6 +37,7 @@ var InputDialogView = (function () {
     message.className = "input-dialog-error-message";
 
     $(dialog).dialog({
+        resizable: false,
         modal: "true",
         width: 380,
         autoOpen: false

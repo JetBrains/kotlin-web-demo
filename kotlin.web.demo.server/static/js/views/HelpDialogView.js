@@ -40,6 +40,7 @@ var HelpDialogView = (function () {
 
     $(dialogElement).dialog(
         {
+            resizable: false,
             minWidth: 500,
             autoOpen: false,
             modal: true
