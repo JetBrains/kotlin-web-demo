@@ -30,6 +30,7 @@ var InputDialogView = (function () {
 
     var input = document.createElement("input");
     input.id = "input-dialog-input";
+    input.type = "text";
     dialog.appendChild(input);
 
     var message = document.createElement("div");
@@ -40,7 +41,10 @@ var InputDialogView = (function () {
         resizable: false,
         modal: "true",
         width: 380,
-        autoOpen: false
+        autoOpen: false,
+        open: function(){
+            input.select();
+        }
     });
 
 
@@ -59,6 +63,8 @@ var InputDialogView = (function () {
 
             open: function (callback, defaultValue) {
 
+                input.focus();
+
                 validationResult({valid: true});
 
                 input.oninput = function () {
@@ -73,7 +79,7 @@ var InputDialogView = (function () {
                         ++i;
                     }
                     input.value = verifiedDefaultValue;
-                    input.select();
+                    //input.select();
                 }
 
                 $(dialog).dialog('option', 'title', title);
