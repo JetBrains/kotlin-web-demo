@@ -29,7 +29,7 @@ var File = (function () {
                 }
             },
             save: function () {
-                if (project.getType() == ProjectType.USER_PROJECT) {
+                if (project.getType() == ProjectType.USER_PROJECT && modifiable) {
                     save()
                 }
             },
