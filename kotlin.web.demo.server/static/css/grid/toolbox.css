@@ -134,17 +134,12 @@
 }
 
 #runMode {
-    display: inline-block;
-    float: left;
     font-size: 12px;
-    margin-top: 2px;
-    padding: 2px;
 }
 
 #runButton {
-    display: inline-block;
-    cursor: pointer;
     padding-left: 15px;
+    vertical-align: baseline;
 }
 
 #runButton .img {
@@ -152,6 +147,10 @@
     width: 11px;
     margin: 2px auto;
     background: url("/static/images/icons.png") no-repeat -41px -59px;
+}
+
+#runButton .ui-button-text{
+    line-height: 1;
 }
 
 .help {
@@ -162,16 +161,16 @@
 }
 
 .ui-selectmenu-button {
+    float: left;
     text-align: left;
     outline: none;
-    cursor: pointer;
     border: 1px solid #969696;
-    float: left;
     background-color: #f9f9f9;
+    bottom: 2px;
     padding: 4px;
-    margin-top: 4px;
     font-size: 12px;
     border-radius: 3px;
+    margin-top: 4px;
 }
 
 .ui-selectmenu-menu {
@@ -199,7 +198,8 @@
     z-index: 100;
 }
 
-.selectmenu-arrow-icon {
+.ui-selectmenu-button span.ui-icon.selectmenu-arrow-icon {
+    position: static;
     width: 7px;
     height: 4px;
     float: right;
@@ -207,7 +207,18 @@
     background: url("/static/images/icons.png") -58px -66px;
 }
 
+.ui-selectmenu-button span.ui-selectmenu-text{
+    padding: 0;
+    line-height: 1;
+    display: inline;
+}
+
+.ui-menu .ui-menu-item{
+    padding: 2px;
+}
+
 .ui-selectmenu-menu .ui-state-focus {
+    margin: 0;
     background-color: #eeeeee;
 }
 

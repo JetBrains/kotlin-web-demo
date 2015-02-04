@@ -596,7 +596,7 @@ window.onbeforeunload = function () {
         fullscreenMode: $("#fullscreenButton").hasClass("fullscreen")
     };
     localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
-    return null;
+    //return null;
 };
 
 

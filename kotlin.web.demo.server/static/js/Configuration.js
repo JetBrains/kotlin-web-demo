@@ -64,7 +64,7 @@ var ConfigurationComponent = (function () {
             updateConfiguration: function (type) {
                 configuration = new Configuration(configuration.mode, Configuration.getTypeFromString(type));
                 $("#runMode").val(type).selectmenu("refresh");
-                if ($("#runMode").val() == "java") {
+                if ($("#runMode").val() == "java" || $("#runMode").val() == "junit") {
                     document.getElementById("generated-code-link").innerHTML = "Generated classfiles";
                 } else {
                     document.getElementById("generated-code-link").innerHTML = "Generated JavaScript code";
@@ -77,7 +77,7 @@ var ConfigurationComponent = (function () {
 
         $("#runMode").on("selectmenuchange", function () {
             var confType = this.value;
-            if (confType == "java") {
+            if (confType == "java"  || $("#runMode").val() == "junit") {
                 document.getElementById("generated-code-link").innerHTML = "Generated classfiles";
             } else {
                 document.getElementById("generated-code-link").innerHTML = "Generated JavaScript code";

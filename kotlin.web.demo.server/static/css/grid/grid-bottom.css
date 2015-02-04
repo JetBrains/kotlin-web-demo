@@ -13,7 +13,77 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@import "result-tabs.css";
+
+
+.result-tabs-footer {
+    text-align: center;
+    border-top: 1px solid;
+    border-color: #969696;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    height: 28px;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-state-active {
+    margin: 0;
+    padding: 0 6px;
+    background-color: #cfcfcf;
+}
+
+.ui-tabs .ui-tabs-panel{
+    padding: 0;
+}
+
+.ui-tabs .ui-tabs-nav {
+    float: left;
+    text-align: center;
+    text-decoration: none;
+    position: relative;
+    margin-left: 3px;
+    margin-bottom: 3px;
+}
+
+.ui-tabs .ui-tabs-nav li {
+    color: #000000;
+    font-size: 14px;
+    background-color: #f0f0f0;
+    padding: 0 6px;
+    line-height: 22px;
+    border: 0 solid #969696;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    display: inline-block;
+    cursor: default;
+    margin: 0;
+}
+
+.ui-tabs .ui-tabs-nav li:first-child {
+    border-bottom-left-radius: 4px;
+}
+
+.ui-tabs .ui-tabs-nav li:last-child {
+    border-bottom-right-radius: 4px;
+    border-right-width: 1px;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor{
+    cursor: pointer;
+}
+
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    padding: 0;
+    color: #000000;
+    text-decoration: none;
+}
+
+.kotlin-info {
+    line-height: 22px;
+    float: right;
+    font-size: 14px;
+    padding: 0 10px;
+    margin-top: 3px;
+    color: #000000;
+}
 
 #statusBarWrapper {
     font-family: menlo, consolas, monospace;
@@ -22,6 +92,7 @@
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f7f7f7), to(#f0f0f0));
     background-image: -webkit-linear-gradient(#f7f7f7, #f0f0f0);
     background-image: -o-linear-gradient(#f7f7f7, #f0f0f0);
+    background-color: #f7f7f7;
     border-top: 1px solid #969696;
 }
 
@@ -186,8 +257,11 @@
 
 #generated-code {
     height: 180px;
-    padding: 5px 5px 0;
     overflow: auto;
+}
+
+#generated-code > p {
+    padding-left: 5px;
 }
 
 #test {
@@ -262,7 +336,7 @@
     padding: 3px 3px 3px 7px;
 }
 
-#unit-test-statistic span{
+#unit-test-statistic span {
     float: left;
 }
 
