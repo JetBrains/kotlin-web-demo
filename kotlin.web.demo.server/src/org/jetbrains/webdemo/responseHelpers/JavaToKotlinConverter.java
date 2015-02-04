@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.kotlin.j2k.J2kPackage;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.ServerInitializer;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -40,21 +41,18 @@ public class JavaToKotlinConverter {
             try {
                 resultFormConverter = J2kPackage.translateToKotlin(code);
             } catch (Exception e) {
-                ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: " + e.getMessage());
             }
             if (resultFormConverter.isEmpty()) {
-                ServerInitializer.reinitializeJavaEnvironment();
                 return ResponseUtils.getErrorInJson("EXCEPTION: generated code is empty.");
             }
-            ServerInitializer.reinitializeJavaEnvironment();
             jsonObject.put("text", resultFormConverter);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN.name(), info.getOriginUrl(), code);
             return ResponseUtils.getErrorInJson(e.getMessage());
         } finally {
-            ServerInitializer.reinitializeJavaEnvironment();
+            Initializer.reinitializeJavaEnvironment();
         }
 
         return result.toString();
