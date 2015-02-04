@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,13 @@ import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
+import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
+import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
+import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
+import org.jetbrains.kotlin.load.kotlin.nativeDeclarations.SuppressNoBodyErrorsForNativeDeclarations;
 import org.jetbrains.kotlin.resolve.AnalyzerScriptParameter;
+import org.jetbrains.kotlin.resolve.diagnostics.DiagnosticsWithSuppression;
+import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.server.ApplicationSettings;
@@ -31,14 +38,14 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
     private static File initializeKotlinRuntime() {
         final File unpackedRuntimePath = getUnpackedRuntimePath();
         if (unpackedRuntimePath != null) {
-            ApplicationSettings.KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
-            ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIB);
+            ApplicationSettings.KOTLIN_LIBS_DIR = unpackedRuntimePath.getParentFile().getAbsolutePath();
+            ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIBS_DIR);
             return unpackedRuntimePath;
         } else {
             final File runtimeJarPath = getRuntimeJarPath();
             if (runtimeJarPath != null && runtimeJarPath.exists()) {
-                ApplicationSettings.KOTLIN_LIB = runtimeJarPath.getAbsolutePath();
-                ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIB);
+                ApplicationSettings.KOTLIN_LIBS_DIR = runtimeJarPath.getParentFile().getAbsolutePath();
+                ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIBS_DIR);
                 return runtimeJarPath;
             }
         }
@@ -98,8 +105,6 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
     @NotNull
     public JetCoreEnvironment createEnvironment() {
         K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
-//        Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJvm());
-//        Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJs());
         CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
         configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
@@ -110,6 +115,10 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
 
         JetCoreEnvironment jetCoreEnvironment = JetCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
+        Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJvm());
+        Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJs());
+        Extensions.getRootArea().getExtensionPoint(DiagnosticsWithSuppression.SuppressStringProvider.EP_NAME).registerExtension(new SuppressNoBodyErrorsForNativeDeclarations());
+        Extensions.getRootArea().getExtensionPoint(DiagnosticsWithSuppression.SuppressStringProvider.EP_NAME).registerExtension(new SuppressUnusedParameterForJsNative());
         registry = FileTypeRegistry.ourInstanceGetter;
         return jetCoreEnvironment;
     }

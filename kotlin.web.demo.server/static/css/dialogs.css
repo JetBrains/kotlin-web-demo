@@ -17,20 +17,24 @@
 /*java2kotlin codemirror style-Courier new Regular*/
 
 .ui-dialog {
-    z-index: 1002;
     border-radius: 5px;
     border: 1px solid #969696;
-    overflow: hidden;
-    outline: none;
+    padding: 0;
 }
 
-.ui-dialog-titlebar {
+.ui-dialog .ui-dialog-titlebar {
     font-size: 14px;
     padding: 8px;
     background-color: #dfdfdf;
 }
 
-.ui-dialog-titlebar-close {
+.ui-dialog .ui-dialog-title{
+    overflow: visible;
+}
+
+.ui-dialog-titlebar .ui-dialog-titlebar-close {
+    position: relative;
+    margin: 0;
     outline: none;
     cursor: pointer;
     border: 0;
@@ -41,13 +45,17 @@
     background: url("/static/images/icons.png") no-repeat -84px -40px;
 }
 
-.ui-dialog-content {
+.ui-dialog .ui-dialog-content {
+    position: static;
+    padding: 0;
     border-bottom: 1px solid;
     border-color: #969696;
     background: #ffffff;
+    overflow: hidden;
 }
 
-.ui-dialog-buttonpane {
+.ui-dialog .ui-dialog-buttonpane {
+    margin: 0;
     background: #ffffff;
     padding: 8px;
     overflow: hidden;
@@ -57,15 +65,15 @@
     float: right;
 }
 
-.ui-dialog-buttonset .ui-button {
-    cursor: pointer;
-    margin-left: 4px;
-    margin-right: 4px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+.ui-dialog .ui-dialog-buttonpane button{
+    margin: 0 4px;
     background-color: #dcdcdc;
     border: 1px solid #969696;
     border-radius: 3px;
+}
+
+.ui-dialog-buttonset .ui-button .ui-button-text{
+    padding: 4px 6px;
 }
 
 .ui-widget-overlay {
@@ -120,27 +128,6 @@
     border: 1px solid #969696;
     border-radius: 3px;
     margin-left: 5px;
-}
-
-#selectId {
-    z-index: 10;
-    max-height: 200px;
-    overflow-y: scroll;
-    border: 1px solid #969696;
-    border-radius: 4px;
-    background-color: #f7f7f7;
-    -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-    -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-    box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-}
-
-#selectId:focus {
-    outline-width: 0;
-}
-
-#selectId .ui-state-focus {
-    background-color: #d8d8d8;
-
 }
 
 .input-dialog-error-message{
@@ -244,7 +231,7 @@
 }
 
 .difference-dialog-content{
-    overflow: hidden;
+    height: 500px;
 }
 
 .colors-help {
@@ -262,7 +249,6 @@
 }
 
 .diff-glutters{
-    position: relative;
     float: left;
     height: 100%;
     background-color: #f7f7f7;
@@ -303,15 +289,10 @@
     background-color: #c8f2c8;
 }
 
-#myPopupForConverterFromJavaToKotlin{
-    overflow: hidden;
-}
-
 #myPopupForConverterFromJavaToKotlin>div{
     float: left;
     width: 50%;
     height: 100%;
-    box-sizing: border-box;
 }
 
 #myPopupForConverterFromJavaToKotlin .CodeMirror-lines{

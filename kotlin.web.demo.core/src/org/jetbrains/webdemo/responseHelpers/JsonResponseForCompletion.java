@@ -213,6 +213,7 @@ public class JsonResponseForCompletion {
         }
 
         ArrayNode jsonArray = new ArrayNode(JsonNodeFactory.instance);
+
         if (descriptors != null) {
             String prefix;
             if (isTipsManagerCompletion) {
@@ -240,13 +241,32 @@ public class JsonResponseForCompletion {
 
             for (DeclarationDescriptor descriptor : descriptors) {
                 Pair<String, String> presentableText = getPresentableText(descriptor);
-                String name = formatName(presentableText.getFirst(), NUMBER_OF_CHAR_IN_COMPLETION_NAME);
-                if (prefix.isEmpty() || name.startsWith(prefix)) {
+
+                String fullName = formatName(presentableText.getFirst(), NUMBER_OF_CHAR_IN_COMPLETION_NAME);
+                String completionText = fullName;
+                int position = completionText.indexOf('(');
+                if (position != -1) {
+                    //If this is a string with a package after
+                    if (completionText.charAt(position - 1) == ' ') {
+                        position = position - 2;
+                    }
+                    //if this is a method without args
+                    if (completionText.charAt(position + 1) == ')') {
+                        position++;
+                    }
+                    completionText = completionText.substring(0, position + 1);
+                }
+                position = completionText.indexOf(":");
+                if (position != -1) {
+                    completionText = completionText.substring(0, position - 1);
+                }
+
+                if (prefix.isEmpty() || fullName.startsWith(prefix)) {
                     ObjectNode jsonObject = jsonArray.addObject();
                     jsonObject.put("icon", getIconFromDescriptor(descriptor));
-                    jsonObject.put("name", name);
+                    jsonObject.put("text", completionText);
+                    jsonObject.put("displayText", fullName);
                     jsonObject.put("tail", presentableText.getSecond());
-
                 }
             }
         }

@@ -14,67 +14,62 @@
  * limitations under the License.
  */
 
-.lookupElementName {
-    float: left !important;
+.CodeMirror-hints{
+    border: 1px solid #969696;
+    border-radius: 4px;
+    padding: 0;
+    background-color: #f7f7f7;
+    overflow-y: hidden;
 }
 
-.lookupElementTail {
-    float: right !important;
+.CodeMirror-hint {
+    max-width: 50em;
+    border-radius: 0;
+    margin: 0;
+    padding: 0 4px 0 0;
+    line-height: 18px;
+}
+
+li.CodeMirror-hint-active{
+    background-color: #d8d8d8;
+    color: #000000;
+}
+
+.CodeMirror-hint .name {
+    display: inline-block;
+}
+
+.CodeMirror-hint .tail {
+    float: right;
     padding-left: 20px;
     margin-right: 5px;
 }
 
-.lookupElementIcon {
+.CodeMirror-hint .icon {
     margin-top: 1px;
     margin-left: 2px;
     height: 16px;
     width: 16px;
-    float: left !important;
+    float: left;
     margin-right: 10px;
 }
 
-.lookupElement {
-    padding: 0;
-    margin: 0;
-    height: 18px;
-}
-
-.completions {
-    background-color: #eeeeee;
-    /*border: 1px solid #EEEEEE;*/
-    position: absolute;
-    z-index: 10;
-    overflow: hidden;
-    -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-    -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-    box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-}
-
-.completions {
-    background: #fafafa;
-    outline: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    font-family: monospace;
-}
-
-.class-icon{
+.icon.class{
     background: url("/static/images/completion_icons.png") no-repeat 0 0;
 }
 
-.package-icon{
+.icon.package{
     background: url("/static/images/completion_icons.png") no-repeat -16px -16px;
 }
 
-.method-icon{
+.icon.method{
     background: url("/static/images/completion_icons.png") no-repeat 0 -16px;
 }
 
-.genericValue-icon{
+.icon.genericValue{
     background: url("/static/images/completion_icons.png") no-repeat -16px 0;
 }
 
-.property-icon{
+.icon.property{
     background: url("/static/images/completion_icons.png") no-repeat -33px 0;
 }

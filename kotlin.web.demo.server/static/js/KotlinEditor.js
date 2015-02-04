@@ -21,341 +21,8 @@
  * Time: 3:37 PM
  */
 
-var COMPLETION_ISNOT_AVAILABLE = "Switch to \"Client\" or \"Server\" mode to enable completion";
-
-
 var KotlinEditor = (function () {
     function KotlinEditor() {
-        var my_editor;
-        var openedFile = null;
-        var highlightOnTheFly = false;
-
-        var CompletionObject = (function () {
-            var keywords;
-            var isContinueComplete = false;
-
-            var sel = $("#selectId");
-
-            function close() {
-                sel.css("display", "none");
-                sel.empty();
-            }
-
-            sel.menu();
-            close();
-            sel.on("keydown", function (event) {
-                var code = event.keyCode;
-
-                // Enter and space
-                if (code == 13 || code == 32) {
-                    isContinueComplete = false;
-                }
-                // Escape
-                else if (code == 27) {
-                    isContinueComplete = false;
-                    event.stopPropagation();
-                    close();
-                    my_editor.focus();
-                } else if (code == 8) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    close();
-                    my_editor.focus();
-                    my_editor.deleteH(-1, "char");
-                    setTimeout(continueComplete, 50);
-                } else if (code != 38 && code != 40) {
-                    close();
-                    my_editor.focus();
-                    setTimeout(continueComplete, 50);
-                }
-            });
-
-            sel.on("blur", close);
-
-
-            function CompletionObject() {
-                var instance = {
-                    processCompletionResult: function (data) {
-                        startComplete(data);
-                    }
-                };
-
-                return instance;
-            }
-
-            function LookupElement(name, tail, icon) {
-                this.icon = icon;
-                this.name = name;
-                this.tail = tail;
-            }
-
-            function continueComplete() {
-                isContinueComplete = true;
-                startComplete(null);
-            }
-
-
-            function startComplete(data) {
-                if (my_editor.somethingSelected()) return;
-                var cur = my_editor.getCursor(null);
-                var token = my_editor.getTokenAt(cur);
-
-                if ((data != null) && (data != undefined)) {
-                    if (!isContinueComplete) {
-                        keywords = [];
-                    }
-                    if (data == COMPLETION_ISNOT_AVAILABLE) {
-                        keywords.push(new LookupElement(COMPLETION_ISNOT_AVAILABLE, "", ""));
-                    } else {
-                        var i = 0;
-                        while (data[i] != undefined) {
-                            var lookupElement = new LookupElement(data[i].name, data[i].tail, data[i].icon);
-                            keywords.push(lookupElement);
-                            i++;
-                        }
-                    }
-                } else {
-                    if (!isContinueComplete) {
-                        keywords = [];
-                        return;
-                    }
-                    isContinueComplete = false;
-                }
-                var completions;
-                if (data == COMPLETION_ISNOT_AVAILABLE) {
-                    completions = getCompletions(COMPLETION_ISNOT_AVAILABLE);
-                } else {
-                    completions = getCompletions(token);
-                }
-                if ((completions.length == 0) || (completions == null)) return;
-                if (completions.length == 1 && !isContinueComplete && data != COMPLETION_ISNOT_AVAILABLE) {
-                    insert(completions[0].name);
-                    return;
-                }
-
-
-                function insert(str) {
-                    if (str != undefined) {
-                        var position = str.indexOf("(");
-                        if (position != undefined) {
-                            if (position != -1) {
-                                //If this is a string with a package after
-                                if (str.charAt(position - 1) == ' ') {
-                                    position = position - 2;
-                                }
-                                //if this is a method without args
-                                if (str.charAt(position + 1) == ')') {
-                                    position++;
-                                }
-                                str = str.substring(0, position + 1);
-                            }
-                        }
-                        position = str.indexOf(":");
-                        if (position != undefined) {
-                            if (position != -1) {
-                                str = str.substring(0, position - 1);
-                            }
-                        }
-                        if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
-                            my_editor.replaceRange(str, {line: cur.line, ch: token.end}, {
-                                line: cur.line,
-                                ch: token.end
-                            });
-                        } else {
-                            my_editor.replaceRange(str, {line: cur.line, ch: token.start}, {
-                                line: cur.line,
-                                ch: token.end
-                            });
-                        }
-                    }
-                }
-
-                sel.unbind("menuselect");
-                sel.on("menuselect", function (event, ui) {
-                    var text = ui.item.children().children()[1].innerHTML;
-                    isContinueComplete = false;
-                    if (text == COMPLETION_ISNOT_AVAILABLE) {
-                        close();
-                        my_editor.focus();
-                        return;
-                    }
-                    insert(text);
-                    close();
-                    setTimeout(function () {
-                        my_editor.focus();
-                    }, 50);
-                });
-
-
-                sel.empty();
-
-                var i = 0;
-                for (i = 0; i < completions.length; ++i) {
-                    var opt = document.createElement("li");
-                    var pEl = document.createElement("p");
-                    pEl.className = "lookupElement";
-
-                    var icon = document.createElement("div");
-                    if (completions[i].icon != "") {
-                        icon.className = "lookupElementIcon " + completions[i].icon + "-icon";
-                    }
-                    pEl.appendChild(icon);
-
-                    var spanName = document.createElement("div");
-                    spanName.className = "lookupElementName";
-                    spanName.innerHTML = completions[i].name;
-
-                    var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-                    if (is_chrome && data != COMPLETION_ISNOT_AVAILABLE) {
-                        spanName.innerHTML += " : ";
-                    }
-                    pEl.appendChild(spanName);
-
-                    var spanTail = document.createElement("div");
-                    spanTail.className = "lookupElementTail";
-                    spanTail.innerHTML = completions[i].tail;
-                    pEl.appendChild(spanTail);
-                    opt.appendChild(pEl);
-                    if (i == 0) {
-                        opt.id = "selected";
-                    }
-                    sel.append(opt);
-                }
-
-                var pos = my_editor.cursorCoords();
-                sel.css("position", "absolute");
-                sel.css("left", pos.left + 2 + "px");
-                sel.css("top", pos.top + 15 + "px");
-
-                sel.menu("refresh");
-                sel.css("display", "block");
-                sel.focus();
-                sel.menu("focus", null, sel.find(".ui-menu-item:first"));
-
-
-            }
-
-
-            function getCompletions(token) {
-                var start;
-                if (token == COMPLETION_ISNOT_AVAILABLE) {
-                    start = token;
-                } else {
-                    start = token.string;
-                }
-                var found = [];
-
-                function maybeAdd(lookupElement) {
-                    if (lookupElement.name.indexOf(start) == 0) found.push(lookupElement);
-                }
-
-                function add(str) {
-                    found.push(str);
-                }
-
-                if (keywords == undefined) return found;
-                if ((start.indexOf(' ') == 0) || (start == '.')) {
-                    forEachInArray(keywords, add);
-                } else {
-                    forEachInArray(keywords, maybeAdd);
-                }
-
-                return found;
-            }
-
-            // Minimal event-handling wrapper.
-            function stopEvent() {
-                if (this.preventDefault) {
-                    this.preventDefault();
-                    this.stopPropagation();
-                }
-                else {
-                    this.returnValue = false;
-                    this.cancelBubble = true;
-                }
-            }
-
-            function addStop(event) {
-                if (!event.stop) event.stop = stopEvent;
-                return event;
-            }
-
-            function connect(node, type, handler) {
-                function wrapHandler(event) {
-                    handler(addStop(event || window.event));
-                }
-
-                if (typeof node.addEventListener == "function")
-                    node.addEventListener(type, wrapHandler, false);
-                else
-                    node.attachEvent("on" + type, wrapHandler);
-            }
-
-            return CompletionObject;
-        })();
-
-        var HighlightingObject = (function () {
-            function HighlightingObject() {
-                var instance = {
-                    updateHighlighting: function () {
-                        updateHighlighting()
-                    },
-                    removeStyles: function () {
-                        for (var i = 0; i < arrayClasses.length; ++i) {
-                            arrayClasses[i].clear();
-                        }
-                        my_editor.clearGutter("errors-and-warnings-gutter");
-                    }
-                };
-
-                var arrayClasses = [];
-
-                function createGutterElement(severity, title) {
-                    var element = document.createElement("div");
-                    element.className = severity + "gutter";
-                    element.title = title;
-                    return element;
-                }
-
-                function updateHighlighting() {
-                    instance.removeStyles();
-                    for (var i = 0; i < openedFile.getErrors().length; i++) {
-                        var error = openedFile.getErrors()[i];
-                        var interval = error.interval;
-                        var title = unEscapeString(error.message);
-                        var severity = error.severity;
-
-                        arrayClasses.push(my_editor.markText(interval.start, interval.end, {
-                            className: error.className,
-                            title: title
-                        }));
-
-                        if ((my_editor.lineInfo(interval.start.line) != null) && (my_editor.lineInfo(interval.start.line).gutterMarkers == null)) {
-                            my_editor.setGutterMarker(interval.start.line, "errors-and-warnings-gutter", createGutterElement(severity, title));
-                        } else {
-                            var gutter = my_editor.lineInfo(interval.start.line).gutterMarkers["errors-and-warnings-gutter"];
-                            gutter.title += "\n" + title;
-                            if (gutter.className.indexOf("ERRORgutter") == -1) {
-                                gutter.className = severity + "gutter";
-                            }
-                        }
-
-                        var el = document.getElementById(interval.start.line + "_" + interval.start.ch);
-                        if (el != null) {
-                            el.setAttribute("title", title);
-                        }
-                    }
-                }
-
-                return instance;
-            }
-
-            return HighlightingObject;
-        })();
-
-
-        var completion = new CompletionObject();
-        var highlighting = new HighlightingObject();
 
         var instance = {
             resize: function () {
@@ -373,21 +40,11 @@ var KotlinEditor = (function () {
             focus: function () {
                 my_editor.focus()
             },
-            showCompletionResult: function (data) {
-                completion.processCompletionResult(data);
-            },
             highlightOnTheFly: function (flag) {
                 highlightOnTheFly = flag;
             },
             getText: function () {
                 return my_editor.getValue();
-            },
-            indentAll: function () {
-                my_editor.setSelection({line: 0, ch: 0}, {line: my_editor.lineCount() - 1, ch: 0});
-                my_editor.indentSelection("smart");
-            },
-            refreshMode: function () {
-                my_editor.setOption("mode", "kotlin");
             },
             open: function (file) {
                 document.getElementById("workspace-overlay").style.display = "none";
@@ -461,6 +118,123 @@ var KotlinEditor = (function () {
             }
         };
 
+        var my_editor;
+        var openedFile = null;
+        var highlightOnTheFly = false;
+
+        var HighlightingObject = (function () {
+            function HighlightingObject() {
+                var instance = {
+                    updateHighlighting: function () {
+                        updateHighlighting()
+                    },
+                    removeStyles: function () {
+                        for (var i = 0; i < arrayClasses.length; ++i) {
+                            arrayClasses[i].clear();
+                        }
+                        my_editor.clearGutter("errors-and-warnings-gutter");
+                    }
+                };
+
+                var arrayClasses = [];
+
+                function createGutterElement(severity, title) {
+                    var element = document.createElement("div");
+                    element.className = severity + "gutter";
+                    element.title = title;
+                    return element;
+                }
+
+                function updateHighlighting() {
+                    instance.removeStyles();
+                    for (var i = 0; i < openedFile.getErrors().length; i++) {
+                        var error = openedFile.getErrors()[i];
+                        var interval = error.interval;
+                        var title = unEscapeString(error.message);
+                        var severity = error.severity;
+
+                        arrayClasses.push(my_editor.markText(interval.start, interval.end, {
+                            className: error.className,
+                            title: title
+                        }));
+
+                        if ((my_editor.lineInfo(interval.start.line) != null) && (my_editor.lineInfo(interval.start.line).gutterMarkers == null)) {
+                            my_editor.setGutterMarker(interval.start.line, "errors-and-warnings-gutter", createGutterElement(severity, title));
+                        } else {
+                            var gutter = my_editor.lineInfo(interval.start.line).gutterMarkers["errors-and-warnings-gutter"];
+                            gutter.title += "\n" + title;
+                            if (gutter.className.indexOf("ERRORgutter") == -1) {
+                                gutter.className = severity + "gutter";
+                            }
+                        }
+
+                        var el = document.getElementById(interval.start.line + "_" + interval.start.ch);
+                        if (el != null) {
+                            el.setAttribute("title", title);
+                        }
+                    }
+                }
+
+                return instance;
+            }
+
+            return HighlightingObject;
+        })();
+
+        var highlighting = new HighlightingObject();
+
+        function getCompletions(cm, callback, options) {
+            var cur = cm.getCursor();
+            var token = cm.getTokenAt(cur);
+            completionProvider.getCompletion(accordion.getSelectedProject(), openedFile.getName(),
+                cur, function (data) {
+                    var completionObjects = {
+                        list: data,
+                        from: {
+                            line: cur.line,
+                            ch: token.start
+                        },
+                        to: {
+                            line: cur.line,
+                            ch: token.end
+                        }
+                    };
+                    $(completionObjects.list).each(function(idx, element){
+                        element.render = function(element, self, data){
+                            var icon = document.createElement("div");
+                            icon.className = "icon " + data.icon;
+                            element.appendChild(icon);
+
+                            var textSpan = document.createElement("div");
+                            textSpan.className = "name";
+                            textSpan.innerHTML = data.displayText;
+                            element.appendChild(textSpan);
+
+                            var tail = document.createElement("div");
+                            tail.className = "tail";
+                            tail.innerHTML = data.tail;
+                            element.appendChild(tail);
+                        };
+                        element.hint = function(cm, self, data){
+                            if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
+                                cm.replaceRange(data.text, {line: cur.line, ch: token.end}, {
+                                    line: cur.line,
+                                    ch: token.end
+                                });
+                            } else {
+                                cm.replaceRange(data.text, {line: cur.line, ch: token.start}, {
+                                    line: cur.line,
+                                    ch: token.end
+                                });
+                            }
+                        };
+                    });
+                    callback(completionObjects)
+                })
+        }
+
+        CodeMirror.registerHelper("hint", "kotlin", getCompletions);
+
         my_editor = CodeMirror.fromTextArea(document.getElementById("code"), {
             lineNumbers: true,
             styleActiveLine: true,
@@ -469,17 +243,18 @@ var KotlinEditor = (function () {
             autoCloseBrackets: true,
             continueComments: true,
             extraKeys: {
-                "Ctrl-Space": function () {
-                    completionProvider.getCompletion(accordion.getSelectedProject(), openedFile.getName(),
-                        my_editor.getCursor(true).line, my_editor.getCursor(true).ch);
+                "Ctrl-Space": function (mirror) {
+                    CodeMirror.commands.autocomplete(mirror, CodeMirror.hint.kotlin, {async: true})
                 },
                 "Shift-Tab": false,
                 "Ctrl-Alt-L": "indentAuto",
                 "Ctrl-/": "toggleComment"
             },
+            hintOptions: {async: true},
             gutters: ["errors-and-warnings-gutter"],
             tabSize: 2
         });
+
 
         my_editor.on("change", function () {
             highlighting.removeStyles();

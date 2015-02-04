@@ -261,7 +261,15 @@ public class MySqlConnector {
             st.setString(2, userInfo.getId());
             st.setString(3, userInfo.getType());
             st.setString(4, file.getPublicId());
-            st.execute();
+            int rowsUpdated = st.executeUpdate();
+            if (rowsUpdated != 1) {
+                DatabaseOperationException e = new DatabaseOperationException(rowsUpdated + " files were updated");
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        "unknown",
+                        "user_id " + userInfo.getId() + ", client_type " + userInfo.getType() + ", fileId " + file.getPublicId());
+                throw e;
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new DatabaseOperationException("File with this name already exist in this project", e);
@@ -269,9 +277,6 @@ public class MySqlConnector {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + file.getPublicId() + " " + file.getName());
                 throw new DatabaseOperationException("Unknown exception", e);
             }
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + file.getPublicId() + " " + file.getName());
-            throw new DatabaseOperationException("Unknown exception", e);
         }
     }
 
@@ -346,7 +351,15 @@ public class MySqlConnector {
             st.setString(3, userId + "");
             st.setString(4, escape(project.name));
             st.setString(5, publicId);
-            st.execute();
+            int rowsUpdated = st.executeUpdate();
+            if (rowsUpdated != 1) {
+                DatabaseOperationException e = new DatabaseOperationException(rowsUpdated + " projects were updated");
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        "unknown",
+                        "user_id " + userInfo.getId() + ", client_type " + userInfo.getType() + ", projectId " + publicId);
+                throw e;
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new DatabaseOperationException("Project with this name already exist", e);
@@ -354,9 +367,6 @@ public class MySqlConnector {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add project " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + project.name);
                 throw new DatabaseOperationException("Unknown exception", e);
             }
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Add project " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + project.name);
-            throw new DatabaseOperationException("Unknown exception", e);
         }
     }
 
@@ -518,7 +528,7 @@ public class MySqlConnector {
                 st.setString(1, rs.getInt("id") + "");
                 rs = st.executeQuery();
                 while (rs.next()) {
-                    ProjectFile file = new ProjectFile(unEscape(rs.getString("name")), rs.getString("content"), true, rs.getString("public_id"));
+                    ProjectFile file = new ProjectFile(unEscape(rs.getString("name")), rs.getString("content"), true, rs.getString("public_id"), ProjectFile.Type.KOTLIN_FILE);
                     project.files.add(file);
                 }
                 return objectMapper.writeValueAsString(project);
@@ -578,7 +588,15 @@ public class MySqlConnector {
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
             st.setString(3, publicId);
-            st.executeUpdate();
+            int rowsDeleted = st.executeUpdate();
+            if(rowsDeleted != 1){
+                DatabaseOperationException e = new DatabaseOperationException(rowsDeleted + " files were deleted");
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        "unknown",
+                        "user_id " + userInfo.getId() + ", client_type " + userInfo.getType() + ", fileId " + publicId);
+                throw e;
+            }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + publicId);
             throw new DatabaseOperationException("Unknown exception ", e);
@@ -601,14 +619,33 @@ public class MySqlConnector {
             if (rs.next()) {
                 List<String> readOnlyFileNames = objectMapper.readValue(rs.getString("read_only_files"), List.class);
                 if (readOnlyFileNames != null) {
+                    if (!readOnlyFileNames.contains(fileName)) {
+                        DatabaseOperationException e = new DatabaseOperationException("Can't find read-only file");
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                                SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                                "unknown",
+                                "user_id " + userInfo.getId() + ", client_type " + userInfo.getType() + ", projectId " + projectId + ", fileName" + fileName);
+                        throw e;
+                    }
                     readOnlyFileNames.remove(fileName);
                 }
                 st = connection.prepareStatement("UPDATE projects SET read_only_files=? WHERE projects.public_id = ?");
                 st.setString(1, objectMapper.writeValueAsString(readOnlyFileNames));
                 st.setString(2, projectId);
-                st.executeUpdate();
+                int rowsUpdated = st.executeUpdate();
+                if (rowsUpdated != 1) {
+                    DatabaseOperationException e = new DatabaseOperationException(rowsUpdated + " projects were updated");
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                            SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                            "unknown",
+                            "user_id " + userInfo.getId() + ", client_type " + userInfo.getType() + ", projectId " + projectId + ", fileName" + fileName);
+                    throw e;
+                }
             }
-        } catch (Throwable e) {
+        } catch (SQLException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + fileName);
+            throw new DatabaseOperationException("Unknown exception ", e);
+        } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + fileName);
             throw new DatabaseOperationException("Unknown exception ", e);
         } finally {
@@ -618,7 +655,7 @@ public class MySqlConnector {
     }
 
 
-    public void renameFile(UserInfo userInfo, String publcId, String newName) throws DatabaseOperationException {
+    public void renameFile(UserInfo userInfo, String publicId, String newName) throws DatabaseOperationException {
         checkConnection();
         try (PreparedStatement st = connection.prepareStatement("UPDATE files JOIN " +
                 "projects ON files.project_id = projects.id JOIN " +
@@ -628,18 +665,23 @@ public class MySqlConnector {
             st.setString(1, escape(newName));
             st.setString(2, userInfo.getId());
             st.setString(3, userInfo.getType());
-            st.setString(4, publcId);
-            st.execute();
+            st.setString(4, publicId);
+            int rowsUpdated = st.executeUpdate();
+            if (rowsUpdated != 1) {
+                DatabaseOperationException e = new DatabaseOperationException(rowsUpdated + " files were updated");
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        "unknown",
+                        "user_id " + userInfo.getId() + ", client_type " + userInfo.getType() + ", newName " + newName + ", fileId" + publicId);
+                throw e;
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new DatabaseOperationException("File with this name already exist in this project", e);
             } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Rename file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + publcId);
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Rename file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + publicId);
                 throw new DatabaseOperationException("Unknown exception", e);
             }
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Rename file " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + publcId);
-            throw new DatabaseOperationException("Unknown exception", e);
         }
     }
 
@@ -650,7 +692,15 @@ public class MySqlConnector {
         try (PreparedStatement st = connection.prepareStatement("DELETE FROM projects WHERE projects.owner_id = ? AND projects.public_id = ?")) {
             st.setString(1, userId + "");
             st.setString(2, publicId);
-            st.executeUpdate();
+            int rowsDeleted = st.executeUpdate();
+            if(rowsDeleted != 1){
+                DatabaseOperationException e = new DatabaseOperationException(rowsDeleted + " projects were deleted");
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        "unknown",
+                        "user_id " + userInfo.getId() + ", client_type " + userInfo.getType() + ", projectId " + publicId);
+                throw e;
+            }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Delete project " + userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName() + " " + publicId);
             throw new DatabaseOperationException("Unknown exception");
@@ -665,7 +715,15 @@ public class MySqlConnector {
             st.setString(1, escape(newName));
             st.setString(2, publicId);
             st.setString(3, userId + "");
-            st.execute();
+            int rowsUpdated = st.executeUpdate();
+            if (rowsUpdated != 1) {
+                DatabaseOperationException e = new DatabaseOperationException(rowsUpdated + " projects were updated");
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        "unknown",
+                        "user_id " + userInfo.getId() + ", client_type " + userInfo.getType() + ", newName " + newName + ", projectId" + publicId);
+                throw e;
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new DatabaseOperationException("Project with this name already exist", e);
@@ -777,7 +835,7 @@ public class MySqlConnector {
             if (rs.next()) {
                 String name = rs.getString("name");
                 String content = rs.getString("content");
-                return new ProjectFile(name, content, false, publicId);
+                return new ProjectFile(name, content, true, publicId, ProjectFile.Type.KOTLIN_FILE);
             } else {
                 return null;
             }

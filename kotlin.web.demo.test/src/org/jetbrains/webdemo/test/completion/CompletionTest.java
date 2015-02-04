@@ -33,47 +33,46 @@ import java.util.Collections;
 public class CompletionTest extends BaseTest {
 
     public void test$java$system() throws IOException {
-        String expectedResult = "[{\"icon\":\"class\",\"name\":\"System\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"SystemClassLoaderAction\",\"tail\":\" (java.lang)\"}]";
+        String expectedResult = "[{\"icon\":\"class\",\"text\":\"System\",\"displayText\":\"System\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"SystemClassLoaderAction\",\"displayText\":\"SystemClassLoaderAction\",\"tail\":\" (java.lang)\"}]";
         compareResult(1, 6, expectedResult, "java");
     }
 
     public void test$java$out() throws IOException {
-        String expectedResult = "[{\"icon\":\"property\",\"name\":\"out\",\"tail\":\"PrintStream?\"}]";
+        String expectedResult = "[{\"icon\":\"property\",\"text\":\"out\",\"displayText\":\"out\",\"tail\":\"PrintStream?\"}]";
         compareResult(1, 10, expectedResult, "java");
     }
 
     public void test$all$variable() throws IOException {
-        String expectedResult = "[{\"icon\":\"property\",\"name\":\"stdin\",\"tail\":\"BufferedReader\"},{\"icon\":\"method\",\"name\":\"stream(() -> T?)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"name\":\"stream(T, (T) -> T?)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"name\":\"streamOf(Progression<T>)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"name\":\"streamOf(vararg T)\",\"tail\":\"Stream<T>\"},{\"icon\":\"property\",\"name\":\"str\",\"tail\":\"String\"}]";
+        String expectedResult = "[{\"icon\":\"property\",\"text\":\"stdin\",\"displayText\":\"stdin\",\"tail\":\"BufferedReader\"},{\"icon\":\"method\",\"text\":\"stream(\",\"displayText\":\"stream(() -> T?)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"text\":\"stream(\",\"displayText\":\"stream(T, (T) -> T?)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"text\":\"streamOf(\",\"displayText\":\"streamOf(Progression<T>)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"text\":\"streamOf(\",\"displayText\":\"streamOf(vararg T)\",\"tail\":\"Stream<T>\"},{\"icon\":\"property\",\"text\":\"str\",\"displayText\":\"str\",\"tail\":\"String\"}]";
         compareResult(14, 24, expectedResult, "java");
         compareResult(14, 24, expectedResult, "js");
     }
 
     public void test$all$class() throws IOException {
-        String expectedResult = "[{\"icon\":\"class\",\"name\":\"Greeter\",\"tail\":\" (<root>)\"}]";
+        String expectedResult = "[{\"icon\":\"class\",\"text\":\"Greeter\",\"displayText\":\"Greeter\",\"tail\":\" (<root>)\"}]";
         compareResult(4, 3, expectedResult, "java");
         compareResult(4, 3, expectedResult, "js");
     }
 
     public void test$all$type$in$constructor() throws IOException {
-        String expectedResult = "[{\"icon\":\"class\",\"name\":\"StrictMath\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"String\",\"tail\":\" (kotlin)\"},{\"icon\":\"class\",\"name\":\"StringBuffer\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringBuilder\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringCoding\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringIndexOutOfBoundsException\",\"tail\":\" (java.lang)\"}]";
+        String expectedResult = "[{\"icon\":\"class\",\"text\":\"StrictMath\",\"displayText\":\"StrictMath\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"String\",\"displayText\":\"String\",\"tail\":\" (kotlin)\"},{\"icon\":\"class\",\"text\":\"StringBuffer\",\"displayText\":\"StringBuffer\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"StringBuilder\",\"displayText\":\"StringBuilder\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"StringCoding\",\"displayText\":\"StringCoding\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"StringIndexOutOfBoundsException\",\"displayText\":\"StringIndexOutOfBoundsException\",\"tail\":\" (java.lang)\"}]";
         compareResult(12, 28, expectedResult, "java");
         compareResult(12, 28, expectedResult, "js");
     }
 
     public void test$java$println() throws IOException {
-        String expectedResult = "[{\"icon\":\"method\",\"name\":\"print(Any?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Boolean)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Char)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(CharArray?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Double)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Float)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Int)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Long)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(String?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"printf(Locale?, String, vararg Any?)\",\"tail\":\"PrintStream\"},{\"icon\":\"method\",\"name\":\"printf(String, vararg Any?)\",\"tail\":\"PrintStream\"},{\"icon\":\"method\",\"name\":\"println()\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Any?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Boolean)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Char)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(CharArray?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Double)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Float)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Int)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Long)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(String?)\",\"tail\":\"Unit\"}]";
-
+        String expectedResult = "[{\"icon\":\"method\",\"text\":\"print(\",\"displayText\":\"print(Any?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"print(\",\"displayText\":\"print(Boolean)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"print(\",\"displayText\":\"print(Char)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"print(\",\"displayText\":\"print(CharArray?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"print(\",\"displayText\":\"print(Double)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"print(\",\"displayText\":\"print(Float)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"print(\",\"displayText\":\"print(Int)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"print(\",\"displayText\":\"print(Long)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"print(\",\"displayText\":\"print(String?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"printf(\",\"displayText\":\"printf(Locale?, String, vararg Any?)\",\"tail\":\"PrintStream\"},{\"icon\":\"method\",\"text\":\"printf(\",\"displayText\":\"printf(String, vararg Any?)\",\"tail\":\"PrintStream\"},{\"icon\":\"method\",\"text\":\"println()\",\"displayText\":\"println()\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"println(\",\"displayText\":\"println(Any?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"println(\",\"displayText\":\"println(Boolean)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"println(\",\"displayText\":\"println(Char)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"println(\",\"displayText\":\"println(CharArray?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"println(\",\"displayText\":\"println(Double)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"println(\",\"displayText\":\"println(Float)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"println(\",\"displayText\":\"println(Int)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"println(\",\"displayText\":\"println(Long)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"println(\",\"displayText\":\"println(String?)\",\"tail\":\"Unit\"}]";
         compareResult(1, 15, expectedResult, "java");
     }
 
     public void test$js$a() throws IOException {
-        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"name\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
+        String expectedResult = "[{\"icon\":\"genericValue\",\"text\":\"args\",\"displayText\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"text\":\"array(\",\"displayText\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"text\":\"arrayList(\",\"displayText\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"text\":\"arrayListOf(\",\"displayText\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"text\":\"arrayOfNulls(\",\"displayText\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"text\":\"assert(\",\"displayText\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"assert(\",\"displayText\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
 
         compareResult(2, 3, expectedResult, "js");
     }
 
     public void test$kt$a() throws IOException {
-        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"name\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
+        String expectedResult = "[{\"icon\":\"genericValue\",\"text\":\"args\",\"displayText\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"text\":\"array(\",\"displayText\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"text\":\"arrayList(\",\"displayText\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"text\":\"arrayListOf(\",\"displayText\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"text\":\"arrayOfNulls(\",\"displayText\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"text\":\"assert(\",\"displayText\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"text\":\"assert(\",\"displayText\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
         compareResult(2, 3, expectedResult, "java");
     }
 
@@ -94,19 +93,19 @@ public class CompletionTest extends BaseTest {
         assertEquals("Incorrect count of objects in completion", expectedArray.size(), actualArray.size());
 
 
-        for (int i = 0; i < expectedArray.size(); i++) {
-            ObjectNode expectedObject = (ObjectNode) expectedArray.get(i);
-            for (int j = 0; j < actualArray.size(); j++) {
-                if (expectedObject.get("name").equals(actualArray.get(j).get("name"))) {
-                    assertEquals(expectedObject.toString(), actualArray.get(j).toString());
-                    break;
-                } else {
-                    if (j == actualArray.size() - 1) {
-                        assertEquals("Cannot find element for " + expectedObject.toString(), true, false);
-                    }
-                }
-            }
-        }
+//        for (int i = 0; i < expectedArray.size(); i++) {
+//            ObjectNode expectedObject = (ObjectNode) expectedArray.get(i);
+//            for (int j = 0; j < actualArray.size(); j++) {
+//                if (expectedObject.get("name").equals(actualArray.get(j).get("name"))) {
+//                    assertEquals(expectedObject.toString(), actualArray.get(j).toString());
+//                    break;
+//                } else {
+//                    if (j == actualArray.size() - 1) {
+//                        assertEquals("Cannot find element for " + expectedObject.toString(), true, false);
+//                    }
+//                }
+//            }
+//        }
 
         assertEquals("Wrong result: " + lineNo + ", " + charNo, expectedResult, actualResult);
     }

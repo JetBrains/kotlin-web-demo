@@ -38,7 +38,7 @@ var FileProvider = (function () {
             },
             onNewFileAdded: function () {
             },
-            onOriginalFileLoaded: function () {
+            onOriginalFileLoaded: function (data) {
             },
             onDeleteFile: function () {
             },
@@ -84,7 +84,7 @@ var FileProvider = (function () {
                         try {
                             unBlockContent();
                             onSuccess(data);
-                            instance.onOriginalFileLoaded();
+                            instance.onOriginalFileLoaded(data);
                         } catch (e) {
                             console.log(e);
                         }
@@ -110,7 +110,7 @@ var FileProvider = (function () {
                         try {
                             unBlockContent();
                             onSuccess(data);
-                            instance.onOriginalFileLoaded();
+                            instance.onOriginalFileLoaded(data);
                         } catch (e) {
                             console.log(e);
                         }

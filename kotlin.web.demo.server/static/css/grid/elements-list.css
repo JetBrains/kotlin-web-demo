@@ -18,12 +18,14 @@
     height: 100%;
     width: 25%;
     float: left;
+    background-color: #f7f7f7;
 }
 
 .examples-list {
     max-height: 100%;
     overflow: auto;
     width: 100%;
+    line-height: 1;
 }
 
 .examples-folder {
@@ -32,9 +34,11 @@
 
 .examples-closed-folder-icon {
     display: inline-block;
-    width: 17px;
-    height: 14px;
-    background: url("/static/images/icons.png") no-repeat -68px -92px;
+    width: 5px;
+    height: 10px;
+    background: url("/static/images/icons.png") no-repeat -47px -92px;
+    position: relative;
+    top: 3px;
 }
 
 #examples-list .ui-state-active {
@@ -45,29 +49,25 @@
 #examples-list .ui-accordion-header {
     -webkit-transform: translate3d(0, 0, 0); /*without this first item in accordion sometimes disappears if you are using mac. Deep magic*/
     outline: none;
-    cursor: pointer;
     color: #3164a0;
-    padding-top: 6px;
-    padding-bottom: 6px;
+    margin: 0;
+    padding: 6px 0 6px 6px;
+    font-size: 14px;
 }
 
-.examples-open-folder-icon {
+#examples-list .ui-icon.examples-open-folder-icon {
     display: inline-block;
-    width: 21px;
-    height: 14px;
-    background: url("/static/images/icons.png") no-repeat -86px -92px;
+    width: 7px;
+    height: 7px;
+    background: url("/static/images/icons.png") no-repeat -38px -92px;
+    top: 6px;
+    position: relative;
 }
 
 .folder-name-div {
-    padding-left: 25px;
+    padding-left: 11px;
     padding-top: 2px;
     padding-right: 10px;
-}
-
-.examples-folder-name {
-    /*display: inline-block;*/
-    font-size: 14px;
-    padding-left: 6px;
 }
 
 .file-name-span {
@@ -91,6 +91,7 @@
     cursor: pointer;
     display: block;
     color: #3164a0;
+    background-color: #ffffff;
     padding: 6px 6px 6px 25px;
 }
 
@@ -102,17 +103,25 @@
     background-color: #d8d8d8;
 }
 
-.examples-project-name .arrow {
+.examples-project-name .img {
     display: inline-block;
     float: left;
     margin-right: 5px;
-    width: 12px;
-    height: 14px;
-    background: url("/static/images/icons.png") -34px -39px;
+    width: 15px;
+    height: 13px;
+    background: url("/static/images/icons.png") -53px -91px;
+}
+
+.examples-project-name.modified .img{
+    background: url("/static/images/icons.png") -69px -91px;
 }
 
 #examples-list .ui-icon {
+    position: relative;
+    left: auto;
+    top: 3px;
     margin-right: 6px;
+    margin-top: 0;
     float: left;
 }
 
@@ -123,36 +132,37 @@
 }
 
 .rename-img {
+    display: none;
     cursor: pointer;
-    height: 12px;
-    width: 12px;
+    height: 11px;
+    width: 11px;
     float: right;
     margin-top: 2px;
-    margin-right: 5px;
+    margin-right: 4px;
     background: url("/static/images/icons.png") no-repeat -85px -58px;
 }
 
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .rename-img {
-        background-image: url("/static/images/icons@2x.png");
-        background-size: 109px 109px;
-    }
-}
-
 .delete-img {
+    display: none;
     cursor: pointer;
-    height: 8px;
-    width: 7px;
+    height: 7px;
+    width: 6px;
     float: right;
-    margin-top: 4px;
+    margin-top: 5px;
     background: url("/static/images/icons.png") no-repeat -20px -39px;
 }
 
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .delete-img {
-        background-image: url("/static/images/icons@2x.png");
-        background-size: 109px 109px;
-    }
+.examples-project-name:hover .rename-img,
+.examples-project-name:hover .delete-img,
+.example-filename:hover .rename-img,
+.example-filename:hover .delete-img{
+    display: block;
+    /*-webkit-transition-delay: 1ms;*/
+    /*transition-delay: 1ms;*/
+}
+
+.examples-project-name.selected:hover .new-file-button{
+    display: block;
 }
 
 .example-filename {
@@ -163,6 +173,7 @@
     line-height: 16px;
     font-size: 14px;
     position: relative;
+    background-color: white;
     padding: 6px 6px 6px 45px;
 }
 
@@ -186,48 +197,66 @@
     white-space: normal;
 }
 
-.example-filename .fileIcon {
+.example-filename .icon {
     top: 1px;
     float: left;
     margin-right: 3px;
-    width: 12px;
-    height: 14px;
-    background: url("/static/images/icons.png") no-repeat -19px -92px;
+    width: 13px;
+    height: 16px;
+    /*background: url("/static/images/icons.png") no-repeat -19px -92px;*/
 }
 
-.example-filename.modified .fileIcon {
-    width: 14px;
-    height: 15px;
-    background: url("/static/images/icons.png") no-repeat -37px -92px;
+.example-filename.modified .example-filename-text {
+    margin-top: 2px;
 }
 
-.unmodifiableKotlinFileIcon {
-    top: 1px;
-    float: left;
-    margin-right: 3px;
+.example-filename.modified .icon{
     width: 15px;
-    height: 15px;
-    background: url("/static/images/icons.png") no-repeat -52px -92px;
+    height: 18px;
 }
+
+
+.icon.kotlin {
+    background: url("/static/images/icons.png") no-repeat -0px -111px;
+}
+
+.icon.kotlin.unmodifiable {
+    width: 23px;
+    height: 16px;
+    margin-left: -10px;
+    background: url("/static/images/icons.png") no-repeat -54px -109px;
+}
+
+.example-filename.modified .icon.kotlin{
+    background: url("/static/images/icons.png") no-repeat -14px -109px;
+}
+
+.icon.kotlin-test.unmodifiable{
+    width: 23px;
+    height: 19px;
+    margin-left: -10px;
+    background: url("/static/images/icons.png") no-repeat -30px -109px;
+}
+
+/*.example-filename.modified .fileIcon {*/
+    /*background: url("/static/images/icons.png") no-repeat -37px -92px;*/
+/*}*/
+
+
 
 .newProjectButton {
     float: right;
-    width: 15px;
-    height: 14px;
+    width: 17px;
+    height: 15px;
     margin-right: 3px;
-    background: url("/static/images/icons.png") no-repeat -48px -39px;
+    background: url("/static/images/icons.png") no-repeat -47px -39px;
 }
 
 .new-file-button {
     display: none;
     float: right;
-    width: 13px;
-    height: 12px;
-    margin-top: 2px;
-    margin-right: 2px;
-    background: url("/static/images/icons.png") no-repeat -64px -39px;
-}
-
-.examples-project-name.selected .new-file-button {
-    display: block;
+    width: 16px;
+    height: 18px;
+    margin-right: 4px;
+    background: url("/static/images/icons.png") no-repeat -65px -39px;
 }

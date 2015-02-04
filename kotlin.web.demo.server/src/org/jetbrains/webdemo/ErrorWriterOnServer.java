@@ -55,7 +55,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
 
     public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, String description) {
         ErrorBean bean = new ErrorBean(e, type);
-        bean.setPluginName("Kotlin Web Demo");
+        bean.setPluginName("Kotlin Web Demo Beta");
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
         if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
             sendViaITNProxy(bean);
@@ -68,7 +68,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
     @Override
     public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, List<PsiFile> files) {
         ErrorBean bean = new ErrorBean(e, type);
-        bean.setPluginName("Kotlin Web Demo");
+        bean.setPluginName("Kotlin Web Demo Beta");
         List<Attachment> attachments = new ArrayList<>();
         StringBuilder description = new StringBuilder();
         for (PsiFile file : files) {
@@ -88,7 +88,7 @@ public class ErrorWriterOnServer extends ErrorWriter {
     public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String originUrl, String description) {
         ErrorBean bean = new ErrorBean(message, stackTrace, type);
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
-        bean.setPluginName("Kotlin Web Demo");
+        bean.setPluginName("Kotlin Web Demo Beta");
 
         if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
             sendViaITNProxy(bean);

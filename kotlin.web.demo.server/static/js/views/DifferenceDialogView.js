@@ -59,8 +59,8 @@ var DifferenceDialogView = (function () {
 
         $(dialogElement).dialog({
             minWidth: 700,
+            resizable: false,
             width: 700,
-            height: 500,
             minHeight: 700,
             autoOpen: false,
             modal: true

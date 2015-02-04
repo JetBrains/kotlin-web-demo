@@ -1,16 +1,23 @@
 {
-    "name": "Palindrome",
-    "files": [
-        {
-            "filename": "Palindrome.kt",
-            "modifiable": "true"
-        },
-        {
-            "filename": "Tests.kt",
-            "modifiable": "false"
-        }
-    ],
-    "args": "",
-    "confType": "junit",
-    "help": ""
+  "name": "Palindrome",
+  "files": [
+    {
+      "filename": "Palindrome.kt",
+      "modifiable": "true",
+      "skipInTestVersion": true
+    },
+    {
+      "filename": "Tests.kt",
+      "modifiable": "false",
+      "type": "kotlin-test"
+    },
+    {
+      "filename": "Solution.kt",
+      "modifiable": true,
+      "type": "solution"
+    }
+  ],
+  "args": "",
+  "confType": "junit",
+  "help": ""
 }

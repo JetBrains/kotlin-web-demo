@@ -54,6 +54,20 @@ var ProjectView = (function () {
                     header.timeStamp = new Date().getTime();
                 }
             },
+            updateFileViewSafely: function (fileView, newName) {
+                if (fileView.getHeaderText() == newName) {
+                    return;
+                }
+                var validationResult = instance.validateNewFileName(newName);
+                if (!validationResult.valid) {
+                    instance.updateFileViewSafely(
+                        validationResult.collidedFileView,
+                        addKotlinExtension(removeKotlinExtension(newName) + "'")
+                    );
+                }
+                fileView.getFile().rename(newName);
+                fileView.updateName();
+            },
             getType: function () {
                 return header.type;
             },
@@ -73,9 +87,13 @@ var ProjectView = (function () {
             },
             validateNewFileName: function (fileName) {
                 fileName = addKotlinExtension(fileName);
-                for (var i = 0; i < project.getFiles().length; i++) {
-                    if (project.getFiles()[i].getName() == fileName) {
-                        return {valid: false, message: "File with this name already exists in the project"};
+                for (var i in fileViews) {
+                    if (fileViews[i].getHeaderText() == fileName) {
+                        return {
+                            valid: false,
+                            message: "File with this name already exists in the project",
+                            collidedFileView: fileViews[i]
+                        };
                     }
                 }
                 return {valid: true};
@@ -101,10 +119,17 @@ var ProjectView = (function () {
         };
 
         var nameSpan;
-        var modified = false;
         var project = (function () {
 
             project = new ProjectData(header.type, header.publicId, header.name);
+
+            project.onModified(function (isProjectContentChanged) {
+                if (isProjectContentChanged) {
+                    $(headerElement).addClass("modified");
+                } else {
+                    $(headerElement).removeClass("modified");
+                }
+            });
 
             project.onRenamed = function (newName) {
                 nameSpan.innerHTML = newName;
@@ -112,7 +137,10 @@ var ProjectView = (function () {
 
             project.onContentLoaded = function () {
                 var files = project.getFiles();
+                fileViews = {};
                 contentElement.innerHTML = "";
+
+                nameSpan.innerHTML = project.getName();
 
                 for (var i = 0; i < files.length; ++i) {
                     var fileView;
@@ -167,11 +195,11 @@ var ProjectView = (function () {
             };
 
             project.onFileDeleted = function (publicId) {
-                delete fileViews[publicId];
-                if (selectedFileView.getFile().getPublicId() == publicId && project.files.length > 0) {
+                if (selectedFileView.getFile().getPublicId() == publicId && project.getFiles().length > 0) {
                     selectedFile = null;
-                    contentElement.firstChild.click()
                 }
+                delete fileViews[publicId];
+
             };
 
             return project;
@@ -208,7 +236,7 @@ var ProjectView = (function () {
             $(contentElement).slideUp();
             headerElement.className = "examples-project-name";
             var img = document.createElement("div");
-            img.className = "arrow";
+            img.className = "img high-res-icon";
             headerElement.appendChild(img);
             headerElement.onclick = function () {
                 instance.onHeaderClick(header.publicId);
@@ -245,7 +273,7 @@ var ProjectView = (function () {
                 headerElement.appendChild(renameImg);
 
                 var addFileImg = document.createElement("div");
-                addFileImg.className = "new-file-button";
+                addFileImg.className = "new-file-button high-res-icon";
                 addFileImg.innerHTML = "Add new file";
                 addFileImg.style.cursor = "pointer";
                 addFileImg.onclick = function (event) {

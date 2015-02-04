@@ -106,6 +106,7 @@ var canvas;
 canvasDialog = $("#popupForCanvas").dialog({
     width: 640,
     height: 360,
+    resizable: false,
     autoOpen: false,
     modal: true,
     open: function () {
@@ -215,17 +216,17 @@ var highlightingProvider = (function () {
 })();
 
 var completionProvider = (function () {
-    function onSuccess(completionObject) {
-        editor.showCompletionResult(completionObject);
+    var completionProvider = new CompletionProvider();
+    completionProvider.onSuccess = function() {
         statusBarView.setStatus(ActionStatusMessages.get_completion_ok);
-    }
+    };
 
-    function onFail(error) {
+    completionProvider.onFail = function(error) {
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.get_completion_fail);
-    }
+    };
 
-    return new CompletionProvider(onSuccess, onFail);
+    return completionProvider;
 })();
 
 
@@ -426,7 +427,10 @@ var fileProvider = (function () {
     fileProvider.onRenameFileFailed = function () {
     };
 
-    fileProvider.onOriginalFileLoaded = function () {
+    fileProvider.onOriginalFileLoaded = function (data) {
+        if(accordion.getSelectedProject().getType() == ProjectType.PUBLIC_LINK) {
+            accordion.getSelectedProjectView().updateFileViewSafely(accordion.getSelectedFileView(), data.name);
+        }
         editor.reloadFile();
     };
 
@@ -592,12 +596,13 @@ window.onbeforeunload = function () {
         fullscreenMode: $("#fullscreenButton").hasClass("fullscreen")
     };
     localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
-    return null;
+    //return null;
 };
 
 
 var loginDialog = $("#login-dialog").dialog({
     modal: "true",
+    resizable: false,
     width: 300,
     autoOpen: false
 });

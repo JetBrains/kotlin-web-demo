@@ -89,6 +89,7 @@ var ConverterView = (function () {
         $(popup).dialog({
             modal: true,
             autoOpen: false,
+            resizable: false,
             width: 700,
             height: 700,
             resizeStop: function (event, ui) {

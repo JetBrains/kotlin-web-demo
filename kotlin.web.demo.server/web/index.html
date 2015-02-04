@@ -28,11 +28,14 @@
     <script src="/static/codemirror/addon/comment/comment.js"></script>
     <script src="/static/codemirror/addon/comment/continuecomment.js"></script>
     <script src="/static/codemirror/addon/runmode/runmode.js"></script>
+    <link rel="stylesheet" href="/static/codemirror/addon/hint/show-hint.css">
+    <script src="/static/codemirror/addon/hint/show-hint.js"></script>
     <script src="/static/codemirror/mode/clike/clike.js"></script>
     <script src="/static/codemirror/mode/clike/kotlin.js"></script>
     <script src="/static/codemirror/mode/javascript/javascript.js"></script>
 
     <script type="text/javascript" src="/static/jquery/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" href="/static/jquery/jquery-ui/jquery-ui-1.11.2.custom/jquery-ui.structure.css">
     <script type="text/javascript" src="/static/jquery/jquery-ui/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
     <script type="text/javascript" src="/static/jquery/jquery-cookie/jquery.cookie.js"></script>
 
@@ -74,7 +77,7 @@
     <div class="global-login">
         <div class="g-layout" fullscreen-sensible>
             <div id="fullscreenButton" fullscreen-sensible>
-                <div class="img"></div>
+                <div class="img high-res-icon"></div>
                 <div class="text">Expand</div>
             </div>
 
@@ -107,16 +110,16 @@
                     <div id="toolbox">
                         <div class="toolbox-left">
                             <div id="saveButton" class="buttonWrapper" title="Save your program (@shortcut@)">
-                                <div class="img"></div>
+                                <div class="img high-res-icon"></div>
                                 <div class="text">Save</div>
                             </div>
                             <div id="saveAsButton" class="buttonWrapper">
-                                <div class="img"></div>
+                                <div class="img high-res-icon"></div>
                                 <div class="text">Save as</div>
                             </div>
                             <div class="buttonWrapper argumentsButtonWrapper">
                                 <div id="argumentsButton" class="active">
-                                    <div class="img"></div>
+                                    <div class="img high-res-icon"></div>
                                     <div class="arrow"></div>
                                     <div class="text">Arguments</div>
                                 </div>
@@ -130,14 +133,14 @@
                                 </select>
 
                                 <div id="runButton" title="Run file(@shortcut@) using run configuration">
-                                    <div class="img"></div>
+                                    <div class="img high-res-icon"></div>
                                     <div class="text">Run</div>
                                 </div>
                             </div>
                         </div>
                         <div class="toolbox-right">
                             <div id="java2kotlin" class="buttonWrapper">
-                                <div class="img" title="Convert your Java code to Kotlin"></div>
+                                <div class="img high-res-icon" title="Convert your Java code to Kotlin"></div>
                                 <div class="text">Convert from Java</div>
                             </div>
 
@@ -224,11 +227,6 @@
 <div id="popupForCanvas" title="Canvas example">
     <canvas id="mycanvas"></canvas>
 </div>
-
-<ul id="selectId">
-
-</ul>
-
 
 <script src="/static/js/common.js"></script>
 

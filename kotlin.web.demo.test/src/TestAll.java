@@ -16,6 +16,7 @@
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.test.completion.CompletionTest;
 import org.jetbrains.webdemo.test.examples.HighlightExamplesTest;
 import org.jetbrains.webdemo.test.examples.RunExamplesTest;
@@ -26,6 +27,7 @@ import org.jetbrains.webdemo.test.run.RunTest;
 public class TestAll extends TestCase {
 
     public static TestSuite suite() {
+        ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
         TestSuite suite = new TestSuite(
                 HighlightingTest.class,
                 CompletionTest.class,

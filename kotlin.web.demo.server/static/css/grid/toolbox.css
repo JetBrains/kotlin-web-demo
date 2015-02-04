@@ -67,21 +67,23 @@
     height: 16px;
     width: 17px;
     margin: 1px auto;
-    background: url("/static/images/icons.png") -0 -39px;
+    background: url("/static/images/icons.png") -1px -39px;
 }
 
 #saveButton .img {
-    height: 14px;
-    width: 14px;
+    height: 12px;
+    width: 12px;
     margin: 2px auto;
-    background: url("/static/images/icons.png") -20px -59px;
+    background: url("/static/images/icons.png") -21px -59px;
 }
 
 #saveAsButton .img {
     height: 15px;
-    width: 15px;
-    margin: 1px auto;
-    background: url("/static/images/icons.png") -20px -73px;
+    width: 16px;
+    position: relative;
+    top: 1px;
+    margin: 0 auto;
+    background: url("/static/images/icons.png") -19px -73px;
 }
 
 .argumentsButtonWrapper {
@@ -109,10 +111,10 @@
 
 #argumentsButton .img {
     display: inline-block;
-    width: 15px;
-    height: 14px;
-    margin: 2px auto;
-    background: url("/static/images/icons.png") no-repeat -0 -58px;
+    width: 13px;
+    height: 11px;
+    margin: 3px auto;
+    background: url("/static/images/icons.png") no-repeat -2px -60px;
 }
 
 #argumentsButton .arrow {
@@ -120,7 +122,7 @@
     width: 4px;
     height: 7px;
     margin: auto auto 5px 5px;
-    background: url("/static/images/icons.png") no-repeat -9px -74px;
+    background: url("/static/images/icons.png") no-repeat -58px -58px;
 }
 
 #argumentsButton.active .arrow {
@@ -128,28 +130,27 @@
     width: 7px;
     height: 4px;
     margin: auto auto 5px 4px;
-    background: url("/static/images/icons.png") no-repeat -0px -74px;
+    background: url("/static/images/icons.png") no-repeat -58px -66px;
 }
 
 #runMode {
-    display: inline-block;
-    float: left;
     font-size: 12px;
-    margin-top: 2px;
-    padding: 2px;
 }
 
 #runButton {
-    display: inline-block;
-    cursor: pointer;
     padding-left: 15px;
+    vertical-align: baseline;
 }
 
 #runButton .img {
-    height: 14px;
-    width: 14px;
+    height: 13px;
+    width: 11px;
     margin: 2px auto;
-    background: url("/static/images/icons.png") no-repeat -40px -59px;
+    background: url("/static/images/icons.png") no-repeat -41px -59px;
+}
+
+#runButton .ui-button-text{
+    line-height: 1;
 }
 
 .help {
@@ -160,16 +161,16 @@
 }
 
 .ui-selectmenu-button {
+    float: left;
     text-align: left;
     outline: none;
-    cursor: pointer;
     border: 1px solid #969696;
-    float: left;
     background-color: #f9f9f9;
+    bottom: 2px;
     padding: 4px;
-    margin-top: 4px;
     font-size: 12px;
     border-radius: 3px;
+    margin-top: 4px;
 }
 
 .ui-selectmenu-menu {
@@ -197,15 +198,27 @@
     z-index: 100;
 }
 
-.selectmenu-arrow-icon {
+.ui-selectmenu-button span.ui-icon.selectmenu-arrow-icon {
+    position: static;
     width: 7px;
     height: 4px;
     float: right;
     margin-top: 3px;
-    background: url("/static/images/icons.png") -0px -74px;
+    background: url("/static/images/icons.png") -58px -66px;
+}
+
+.ui-selectmenu-button span.ui-selectmenu-text{
+    padding: 0;
+    line-height: 1;
+    display: inline;
+}
+
+.ui-menu .ui-menu-item{
+    padding: 2px;
 }
 
 .ui-selectmenu-menu .ui-state-focus {
+    margin: 0;
     background-color: #eeeeee;
 }
 

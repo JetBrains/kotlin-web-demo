@@ -29,7 +29,7 @@ var File = (function () {
                 }
             },
             save: function () {
-                if (project.getType() == ProjectType.USER_PROJECT) {
+                if (project.getType() == ProjectType.USER_PROJECT && modifiable) {
                     save()
                 }
             },
@@ -48,23 +48,23 @@ var File = (function () {
             onFileSaved: function () {
             },
             compareContent: function () {
-                if (text == originalText) {
-                    modified = false;
-                    instance.onUnmodified();
-                } else {
-                    modified = true;
-                    instance.onModified();
-                }
+                modified = !(text == originalText);
+                $(modifyListeners).each(function(ind, listener){
+                    listener(modified);
+                });
             },
             isModified: function () {
                 return modified;
             },
-            onModified: function () {
-            },
-            onUnmodified: function () {
+            onModified: function (listener) {
+                modifyListeners.push(listener);
             },
             deleteThis: function () {
-                project.deleteFile(publicId);
+                if(modifiable) {
+                    project.deleteFile(publicId);
+                } else{
+                    project.deleteUnmodifiableFile(name);
+                }
                 instance.onDeleted();
             },
             onDeleted: function () {
@@ -116,6 +116,9 @@ var File = (function () {
             },
             getProject: function () {
                 return project;
+            },
+            getType: function(){
+                return type;
             }
         };
 
@@ -124,11 +127,12 @@ var File = (function () {
         var text = "";
         var modifiable = true;
         var errors = [];
-        var type = "Kotlin";
+        var type = File.TYPE.KOTLIN_FILE;
         var publicId = "";
         var changesHistory = null;
         var modified = false;
         var revertible = true;
+        var modifyListeners = [];
 
         function save() {
             fileProvider.saveFile(instance, function () {
@@ -156,9 +160,9 @@ var File = (function () {
                 originalText = data.originalText == null ? text : data.originalText;
                 modifiable = data.modifiable;
                 publicId = data.publicId;
-                type = data.type;
+                type = data.hasOwnProperty("type") ? data.type : type;
                 changesHistory = null;
-                revertible = content.hasOwnProperty("revertible") ? content.revertible : true;
+                revertible = data.hasOwnProperty("revertible") ? data.revertible : true;
             }
         }
 
@@ -179,6 +183,11 @@ var File = (function () {
 
     File.fromLocalStorage = function (project, publicId) {
         return new File(project, JSON.parse(localStorage.getItem(publicId)));
+    };
+
+    File.TYPE = {
+        KOTLIN_FILE: "KOTLIN_FILE",
+        KOTLIN_TEST_FILE: "KOTLIN_TEST_FILE"
     };
 
     return File;

@@ -20,6 +20,8 @@ package org.jetbrains.webdemo.examplesLoader;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.intellij.openapi.application.Application;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
@@ -131,23 +133,41 @@ public class Project {
         }
 
         help = objectNode.get("help").textValue();
-        Iterator<JsonNode> it = objectNode.get("files").elements();
-        while (it.hasNext()) {
-            JsonNode fileDescriptor = it.next();
-
-            @NotNull String fileName = fileDescriptor.get("filename").textValue();
-            boolean modifiable = fileDescriptor.get("modifiable").asBoolean();
-            if (!modifiable) {
-                readOnlyFileNames.add(fileName);
+        ArrayNode fileDescriptors = (ArrayNode) objectNode.get("files");
+        for (JsonNode fileDescriptor : fileDescriptors) {
+            if(ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES &&
+                    fileDescriptor.has("skipInTestVersion") &&
+                    fileDescriptor.get("skipInTestVersion").asBoolean()){
+                continue;
             }
-            String fileContent;
-            Path path = Paths.get(exampleFolderPath + File.separator + fileName);
-            fileContent = new String(Files.readAllBytes(path)).replaceAll("\r\n", "\n");
-
-            String filePublicId = "folder=" + parent + "&project=" + name + "&file=" + fileName;
-            ProjectFile file = new ProjectFile(fileName, fileContent, modifiable, filePublicId);
+            ProjectFile file = deserializeProjectFile(parent, exampleFolderPath, fileDescriptor);
+            if(!ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES && file.getType().equals(ProjectFile.Type.SOLUTION_FILE)) {
+                continue;
+            }
             files.add(file);
         }
+    }
+
+    private ProjectFile deserializeProjectFile(String parent, String exampleFolderPath, JsonNode fileDescriptor) throws IOException {
+        @NotNull String fileName = fileDescriptor.get("filename").textValue();
+        boolean modifiable = fileDescriptor.get("modifiable").asBoolean();
+        if (!modifiable) {
+            readOnlyFileNames.add(fileName);
+        }
+        String fileContent;
+        Path path = Paths.get(exampleFolderPath + File.separator + fileName);
+        fileContent = new String(Files.readAllBytes(path)).replaceAll("\r\n", "\n");
+
+        String filePublicId = "folder=" + parent + "&project=" + name + "&file=" + fileName;
+        ProjectFile.Type fileType = null;
+        if(!fileDescriptor.has("type")){
+            fileType = ProjectFile.Type.KOTLIN_FILE;
+        } else if(fileDescriptor.get("type").asText().equals("kotlin-test")){
+            fileType = ProjectFile.Type.KOTLIN_TEST_FILE;
+        } else if(fileDescriptor.get("type").asText().equals("solution")){
+            fileType = ProjectFile.Type.SOLUTION_FILE;
+        }
+        return new ProjectFile(fileName, fileContent, modifiable, filePublicId, fileType);
     }
 
     @JsonIgnore

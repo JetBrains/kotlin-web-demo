@@ -353,7 +353,7 @@ public class JavaRunner {
         builder.add("-Djava.security.manager");
         builder.add("-Djava.security.policy=" + ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
         builder.add("-classpath");
-        String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB + File.pathSeparator +
+        String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar" + File.pathSeparator +
                 ApplicationSettings.CLASS_PATH + File.separator + "Executors.jar");
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
             builder.add(classpath +
@@ -361,7 +361,7 @@ public class JavaRunner {
                             File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-databind.jar" +
                             File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-core.jar" +
                             File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-annotations.jar" +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "kotlin-compiler.jar"
+                            File.pathSeparator + ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-compiler.jar"
             );
             builder.add("org.jetbrains.webdemo.executors.JunitExecutor");
             builder.add(pathToRootOut);
