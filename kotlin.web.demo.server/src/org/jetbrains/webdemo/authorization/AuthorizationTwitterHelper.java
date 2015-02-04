@@ -30,7 +30,7 @@ import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
 public class AuthorizationTwitterHelper extends AuthorizationHelper {
-    private static final String PROTECTED_RESOURCE_URL = "http://api.twitter.com/1.1/account/verify_credentials.json";
+    private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
     private static OAuthService twitterService;
     private static Token requestToken;
     private final String TYPE = "twitter";
@@ -38,7 +38,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
     public String authorize() {
         try {
             twitterService = new ServiceBuilder()
-                    .provider(TwitterApi.class)
+                    .provider(TwitterApi.SSL.class)
                     .apiKey(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.SECRET)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "twitter"))
