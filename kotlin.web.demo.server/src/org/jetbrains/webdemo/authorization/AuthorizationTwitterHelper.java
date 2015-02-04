@@ -36,7 +36,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
 
     private static OAuthService twitterService;
     private static Token requestToken;
-    private static final String PROTECTED_RESOURCE_URL = "http://api.twitter.com/1.1/account/verify_credentials.json";
+    private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
 
     public String authorize() {
         try {
