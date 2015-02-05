@@ -5,14 +5,14 @@ fun parseInt(str : String) : Int? {
   try{
     return  Integer.parseInt(str)
   } catch (e: NumberFormatException) {
-    println("One of argument isn't Int")
+    println("Some argument isn't an Int")
   }
   return null
 }
 
 fun main(args : Array<String>) {
   if (args.size < 2) {
-    println("No number supplied");
+    println("Expecting two numbers");
   } else {
     val x = parseInt(args[0])
     val y = parseInt(args[1])
@@ -21,7 +21,7 @@ fun main(args : Array<String>) {
     if (x != null && y != null) {
       print(x * y) // Now we can
     } else {
-      println("One of arguments is null")
+      println("Some argument is null")
     }
   }
 }
