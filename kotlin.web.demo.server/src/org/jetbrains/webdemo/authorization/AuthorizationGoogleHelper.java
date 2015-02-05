@@ -42,8 +42,8 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
         try {
             googleService = new ServiceBuilder()
                     .provider(GoogleApi.class)
-                    .apiKey("anonymous")
-                    .apiSecret("anonymous")
+                    .apiKey(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY)
+                    .apiSecret(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.SECRET)
                     .scope(SCOPE)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "google"))
                     .build();

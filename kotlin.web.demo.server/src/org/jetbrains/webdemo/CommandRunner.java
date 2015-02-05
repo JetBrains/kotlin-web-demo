@@ -43,6 +43,18 @@ public class CommandRunner {
             ApplicationSettings.AUTH_REDIRECT = value;
         } else if (setting.equals("is_test_version")) {
             ApplicationSettings.IS_TEST_VERSION = value;
+        } else if (setting.equals("google_key")) {
+            ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY = value;
+        } else if (setting.equals("google_secret")) {
+            ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.SECRET = value;
+        } else if (setting.equals("twitter_key")) {
+            ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.KEY = value;
+        } else if (setting.equals("twitter_secret")) {
+            ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.SECRET = value;
+        } else if (setting.equals("facebook_key")) {
+            ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.KEY = value;
+        } else if (setting.equals("facebook_secret")) {
+            ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.SECRET = value;
         } else {
             ErrorWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
         }

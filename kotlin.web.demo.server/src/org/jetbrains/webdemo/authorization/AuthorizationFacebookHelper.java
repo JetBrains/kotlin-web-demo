@@ -39,8 +39,8 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
         try {
             facebookService = new ServiceBuilder()
                     .provider(FacebookApi.class)
-                    .apiKey("281097941954775")
-                    .apiSecret("c834e3f743a0ea79d8d289b252b9bdb3")
+                    .apiKey(ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.KEY)
+                    .apiSecret(ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.SECRET)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "facebook"))
                     .build();
             return facebookService.getAuthorizationUrl(EMPTY_TOKEN);
