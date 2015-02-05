@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.jet.j2k.J2kPackage;
+import org.jetbrains.kotlin.j2k.J2kPackage;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;

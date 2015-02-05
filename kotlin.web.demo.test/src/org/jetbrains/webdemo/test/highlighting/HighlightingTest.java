@@ -16,8 +16,7 @@
 
 package org.jetbrains.webdemo.test.highlighting;
 
-import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.k2js.facade.K2JSTranslator;
+import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.JsConverter;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;

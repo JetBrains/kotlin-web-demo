@@ -20,17 +20,17 @@ import com.google.common.base.Predicates;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.jet.analyzer.AnalysisResult;
-import org.jetbrains.jet.cli.jvm.compiler.CliLightClassGenerationSupport;
-import org.jetbrains.jet.codegen.ClassBuilderFactories;
-import org.jetbrains.jet.codegen.state.GenerationState;
-import org.jetbrains.jet.context.ContextPackage;
-import org.jetbrains.jet.lang.descriptors.impl.ModuleDescriptorImpl;
-import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.BindingTrace;
-import org.jetbrains.jet.lang.resolve.java.TopDownAnalyzerFacadeForJVM;
-import org.jetbrains.jet.lang.types.lang.KotlinBuiltIns;
+import org.jetbrains.kotlin.analyzer.AnalysisResult;
+import org.jetbrains.kotlin.builtins.KotlinBuiltIns;
+import org.jetbrains.kotlin.cli.jvm.compiler.CliLightClassGenerationSupport;
+import org.jetbrains.kotlin.codegen.ClassBuilderFactories;
+import org.jetbrains.kotlin.codegen.state.GenerationState;
+import org.jetbrains.kotlin.context.ContextPackage;
+import org.jetbrains.kotlin.descriptors.impl.ModuleDescriptorImpl;
+import org.jetbrains.kotlin.psi.JetFile;
+import org.jetbrains.kotlin.resolve.BindingContext;
+import org.jetbrains.kotlin.resolve.BindingTrace;
+import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
 
 import java.util.Collections;
 

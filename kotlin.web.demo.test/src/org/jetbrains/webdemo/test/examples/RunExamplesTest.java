@@ -18,7 +18,7 @@ package org.jetbrains.webdemo.test.examples;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.responseHelpers.JsConverter;

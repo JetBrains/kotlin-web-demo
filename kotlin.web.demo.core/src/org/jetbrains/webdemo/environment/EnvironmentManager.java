@@ -18,7 +18,7 @@ import com.intellij.util.cls.ClsFormatException;
 import com.intellij.util.indexing.FileContent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
 
 public abstract class EnvironmentManager {
 

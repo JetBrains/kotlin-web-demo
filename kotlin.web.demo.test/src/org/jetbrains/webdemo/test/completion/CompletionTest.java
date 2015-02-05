@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.test.completion;
 
-import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -51,7 +51,7 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$all$type$in$constructor() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"class\",\"name\":\"StrictMath\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"String\",\"tail\":\" (kotlin)\"},{\"icon\":\"class\",\"name\":\"StringBuffer\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringBuilder\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringCoding\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringIndexOutOfBoundsException\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringValue\",\"tail\":\" (java.lang)\"}]";
+        String expectedResult = "[{\"icon\":\"class\",\"name\":\"StrictMath\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"String\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"String\",\"tail\":\" (kotlin)\"},{\"icon\":\"class\",\"name\":\"StringBuffer\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringBuilder\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringCoding\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringIndexOutOfBoundsException\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringValue\",\"tail\":\" (java.lang)\"}]";
         compareResult(12, 28, expectedResult, "java");
         compareResult(12, 28, expectedResult, "js");
     }
@@ -63,13 +63,13 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$js$a() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"package\",\"name\":\"annotation\",\"tail\":\"package java.lang.annotation\"},{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"name\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
+        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"name\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
 
         compareResult(2, 3, expectedResult, "js");
     }
 
     public void test$kt$a() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"package\",\"name\":\"annotation\",\"tail\":\"package java.lang.annotation\"},{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"name\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
+        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"name\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
         compareResult(2, 3, expectedResult, "java");
     }
 

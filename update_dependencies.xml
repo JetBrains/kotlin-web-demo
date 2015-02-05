@@ -69,7 +69,7 @@
         <sequential>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/lib/kotlin-plugin.jar" dest="${unzipped.kotlin.plugin}/j2k">
                 <patternset>
-                    <include name="org/jetbrains/jet/j2k/**/*.class"/>
+                    <include name="org/jetbrains/kotlin/j2k/**/*.class"/>
                 </patternset>
             </unzip>
 
@@ -85,7 +85,7 @@
                     <attribute name="Implementation-Title" value="Java to Kotlin Converter"/>
                     <attribute name="Implementation-Version" value="${version}"/>
 
-                    <attribute name="Main-Class" value="org.jetbrains.jet.j2k.JavaToKotlinTranslator"/>
+                    <attribute name="Main-Class" value="org.jetbrains.kotlin.j2k.JavaToKotlinTranslator"/>
                 </manifest>
             </jar>
             <delete dir="${unzipped.kotlin.plugin}/j2k"/>
@@ -149,7 +149,7 @@
              dest="${dependencies.dir}/build.txt"/>
         <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
         <condition property="isLastVersion">
-            <equals arg1="${version}" arg2="0.7.111" />
+            <equals arg1="${version}" arg2="0.10.709" />
         </condition>
     </target>
 

@@ -18,7 +18,7 @@ package org.jetbrains.webdemo.test;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import junit.framework.TestCase;
-import org.jetbrains.jet.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.environment.EnvironmentManager;
 import org.jetbrains.webdemo.environment.EnvironmentManagerForServer;

@@ -23,23 +23,24 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import kotlin.Function1;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.jet.lang.descriptors.*;
-import org.jetbrains.jet.lang.descriptors.impl.LocalVariableDescriptor;
-import org.jetbrains.jet.lang.descriptors.impl.TypeParameterDescriptorImpl;
-import org.jetbrains.jet.lang.psi.JetExpression;
-import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.psi.JetQualifiedExpression;
-import org.jetbrains.jet.lang.psi.JetSimpleNameExpression;
-import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.DescriptorUtils;
-import org.jetbrains.jet.lang.resolve.name.Name;
-import org.jetbrains.jet.lang.resolve.scopes.DescriptorKindFilter;
-import org.jetbrains.jet.lang.resolve.scopes.JetScope;
-import org.jetbrains.jet.lang.types.JetType;
-import org.jetbrains.jet.plugin.codeInsight.ReferenceVariantsHelper;
-import org.jetbrains.jet.plugin.util.IdeDescriptorRenderers;
-import org.jetbrains.jet.renderer.DescriptorRenderer;
-import org.jetbrains.jet.renderer.DescriptorRendererBuilder;
+import org.jetbrains.kotlin.descriptors.*;
+import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor;
+import org.jetbrains.kotlin.descriptors.impl.TypeParameterDescriptorImpl;
+import org.jetbrains.kotlin.name.Name;
+import org.jetbrains.kotlin.psi.JetExpression;
+import org.jetbrains.kotlin.psi.JetFile;
+import org.jetbrains.kotlin.psi.JetQualifiedExpression;
+import org.jetbrains.kotlin.psi.JetSimpleNameExpression;
+import org.jetbrains.kotlin.renderer.NameShortness;
+import org.jetbrains.kotlin.resolve.BindingContext;
+import org.jetbrains.kotlin.resolve.DescriptorUtils;
+import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter;
+import org.jetbrains.kotlin.resolve.scopes.JetScope;
+import org.jetbrains.kotlin.types.JetType;
+import org.jetbrains.kotlin.idea.codeInsight.ReferenceVariantsHelper;
+import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers;
+import org.jetbrains.kotlin.renderer.DescriptorRenderer;
+import org.jetbrains.kotlin.renderer.DescriptorRendererBuilder;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.ResolveUtils;
@@ -54,7 +55,7 @@ import java.util.*;
 
 public class JsonResponseForCompletion {
     private static final DescriptorRenderer RENDERER = new DescriptorRendererBuilder()
-            .setShortNames(true)
+            .setNameShortness(NameShortness.SHORT)
             .setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES)
             .setWithoutFunctionParameterNames(true)
             .setRenderDefaultValues(false)

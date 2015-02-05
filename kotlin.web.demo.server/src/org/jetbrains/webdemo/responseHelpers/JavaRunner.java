@@ -16,12 +16,12 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
-import org.jetbrains.jet.OutputFile;
-import org.jetbrains.jet.lang.psi.JetFile;
-import org.jetbrains.jet.lang.resolve.BindingContext;
-import org.jetbrains.jet.lang.resolve.java.PackageClassUtils;
-import org.jetbrains.jet.lang.resolve.name.FqName;
-import org.jetbrains.jet.plugin.MainFunctionDetector;
+import org.jetbrains.kotlin.backend.common.output.OutputFile;
+import org.jetbrains.kotlin.idea.MainFunctionDetector;
+import org.jetbrains.kotlin.load.kotlin.PackageClassUtils;
+import org.jetbrains.kotlin.name.FqName;
+import org.jetbrains.kotlin.psi.JetFile;
+import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
