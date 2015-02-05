@@ -86,10 +86,10 @@ public class KotlinHttpServlet extends HttpServlet {
             CommandRunner.setServerSettingFromTomcatConfig("auth_redirect", (String) envCtx.lookup("auth_redirect"));
             CommandRunner.setServerSettingFromTomcatConfig("google_key", (String) envCtx.lookup("google_key"));
             CommandRunner.setServerSettingFromTomcatConfig("google_secret", (String) envCtx.lookup("google_secret"));
-            CommandRunner.setServerSettingFromTomcatConfig("twitter-key", (String) envCtx.lookup("twitter_key"));
+            CommandRunner.setServerSettingFromTomcatConfig("twitter_key", (String) envCtx.lookup("twitter_key"));
             CommandRunner.setServerSettingFromTomcatConfig("twitter_secret", (String) envCtx.lookup("twitter_secret"));
-            CommandRunner.setServerSettingFromTomcatConfig("facebook-key", (String) envCtx.lookup("facebook_key"));
-            CommandRunner.setServerSettingFromTomcatConfig("facebook-secret", (String) envCtx.lookup("facebook_secret"));
+            CommandRunner.setServerSettingFromTomcatConfig("facebook_key", (String) envCtx.lookup("facebook_key"));
+            CommandRunner.setServerSettingFromTomcatConfig("facebook_secret", (String) envCtx.lookup("facebook_secret"));
 
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("is_test_version", (String) envCtx.lookup("is_test_version"));
