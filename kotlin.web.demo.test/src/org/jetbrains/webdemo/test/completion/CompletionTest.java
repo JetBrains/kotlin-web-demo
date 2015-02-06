@@ -55,7 +55,7 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$all$type$in$constructor() throws IOException {
-        String expectedResult = "[{\"icon\":\"class\",\"text\":\"StrictMath\",\"displayText\":\"StrictMath\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"String\",\"displayText\":\"String\",\"tail\":\" (kotlin)\"},{\"icon\":\"class\",\"text\":\"StringBuffer\",\"displayText\":\"StringBuffer\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"StringBuilder\",\"displayText\":\"StringBuilder\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"StringCoding\",\"displayText\":\"StringCoding\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"StringIndexOutOfBoundsException\",\"displayText\":\"StringIndexOutOfBoundsException\",\"tail\":\" (java.lang)\"}]";
+        String expectedResult = "[{\"icon\":\"class\",\"text\":\"StrictMath\",\"displayText\":\"StrictMath\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"String\",\"displayText\":\"String\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"String\",\"displayText\":\"String\",\"tail\":\" (kotlin)\"},{\"icon\":\"class\",\"text\":\"StringBuffer\",\"displayText\":\"StringBuffer\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"StringBuilder\",\"displayText\":\"StringBuilder\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"StringCoding\",\"displayText\":\"StringCoding\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"text\":\"StringIndexOutOfBoundsException\",\"displayText\":\"StringIndexOutOfBoundsException\",\"tail\":\" (java.lang)\"}]";
         compareResult(12, 28, expectedResult, "java");
         compareResult(12, 28, expectedResult, "js");
     }

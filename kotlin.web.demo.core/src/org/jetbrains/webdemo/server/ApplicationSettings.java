@@ -34,7 +34,7 @@ public class ApplicationSettings {
     public static String HELP_FOR_WORDS = "helpWords.xml";
     public static String KOTLIN_LIBS_DIR = "";
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
-    public static String KOTLIN_VERSION = "0.10.445";
+    public static String KOTLIN_VERSION = "0.10.709";
     public static boolean LOAD_TEST_VERSION_OF_EXAMPLES = false;
     public static OauthCredentials GOOGLE_OAUTH_CREDENTIALS = new OauthCredentials();
     public static OauthCredentials FACEBOOK_OAUTH_CREDENTIALS = new OauthCredentials();
