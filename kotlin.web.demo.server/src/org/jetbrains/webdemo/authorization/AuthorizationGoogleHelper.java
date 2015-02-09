@@ -59,7 +59,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
     public UserInfo verify(String url) {
         UserInfo userInfo = null;
         try {
-            url = ResponseUtils.substringAfter(url, "code==");
+            url = ResponseUtils.substringAfter(url, "code=");
             Verifier verifier = new Verifier(url);
             Token accessToken = googleService.getAccessToken(EMPTY_TOKEN, verifier);
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
