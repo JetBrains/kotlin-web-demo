@@ -1,0 +1,35 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="WebDemoBackend">
+    <output-path>$PROJECT_DIR$/out/production</output-path>
+    <root id="archive" name="WebDemoBackend.war">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="kotlin.web.demo.backend" />
+          <element id="module-output" name="kotlin.web.demo.server" />
+          <element id="module-output" name="kotlin.web.demo.core" />
+          <element id="module-output" name="idea.pacth.server" />
+          <element id="artifact" artifact-name="Executors" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="commons-lang" />
+          <element id="library" level="project" name="scribe" />
+          <element id="library" level="project" name="log4j" />
+          <element id="library" level="project" name="kotlin-runtime" />
+          <element id="library" level="project" name="commons-codec" />
+          <element id="library" level="project" name="kotlin-compiler" />
+          <element id="library" level="project" name="kotlin-j2kConverter" />
+          <element id="library" level="project" name="jackson" />
+          <element id="library" level="project" name="kotlin-plugin" />
+          <element id="file-copy" path="$APPLICATION_HOME_DIR$/lib/annotations.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar" />
+          <element id="library" level="project" name="junit" />
+        </element>
+      </element>
+      <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/web" />
+      <element id="directory" name="js">
+        <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.core/resources/js" />
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.executors/executors.policy.template" />
+    </root>
+  </artifact>
+</component>

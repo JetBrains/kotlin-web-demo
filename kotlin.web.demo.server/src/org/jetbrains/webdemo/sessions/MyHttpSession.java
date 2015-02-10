@@ -32,7 +32,9 @@ import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
-import org.jetbrains.webdemo.responseHelpers.*;
+import org.jetbrains.webdemo.responseHelpers.JavaToKotlinConverter;
+import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,9 +43,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.*;
 
 public class MyHttpSession {
     @NonNls
@@ -77,9 +80,17 @@ public class MyHttpSession {
             ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
             switch (parameters.get("type")[0]) {
+                case ("highlight"):
+                    forwardHighlightRequest();
+                    break;
                 case ("run"):
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
-                    sendExecutorResult();
+                    forwardRunRequest();
+                    break;
+                case ("complete"):
+                    forwadrCompleteRequest();
+                    break;
+                case ("convertToKotlin"):
+                    forwardConvertResult();
                     break;
                 case ("loadHeaders"):
                     ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
@@ -93,16 +104,9 @@ public class MyHttpSession {
                 case ("loadExampleFile"):
                     sendExampleFileContent();
                     break;
-                case ("highlight"):
-                    sendHighlightingResult();
-                    break;
                 case ("writeLog"):
                     sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
                     sendWriteLogResult();
-                    break;
-                case ("convertToKotlin"):
-                    sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
-                    sendConversationResult();
                     break;
                 case ("deleteProject"):
                     MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), parameters.get("publicId")[0]);
@@ -137,11 +141,6 @@ public class MyHttpSession {
                 case ("renameProject"):
                     sendRenameProjectResult();
                     break;
-                case ("complete"):
-                    sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
-                    sendCompletionResult();
-                    break;
                 case ("loadProjectInfoByFileId"):
                     sendLoadProjectInfoByFileIdResult();
                     break;
@@ -161,6 +160,128 @@ public class MyHttpSession {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
             }
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void forwardConvertResult() {
+        sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
+        Map<String, String > postParameters = new HashMap<>();
+        postParameters.put("text", request.getParameter("text"));
+        forwardRequestToBackend(request, response, postParameters);
+    }
+
+    private void forwadrCompleteRequest() {
+        sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+        try {
+            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            sessionInfo.setRunConfiguration(project.confType);
+            if (project.originUrl != null) {
+                addUnmodifiableDataToExample(project, project.originUrl);
+            }
+            Map<String, String > postParameters = new HashMap<>();
+            postParameters.put("project", objectMapper.writeValueAsString(project));
+            postParameters.put("filename", request.getParameter("filename"));
+            postParameters.put("line", request.getParameter("line"));
+            postParameters.put("ch", request.getParameter("ch"));
+            forwardRequestToBackend(request, response, postParameters);
+        } catch (IOException e) {
+            writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (NullPointerException e) {
+            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    private void forwardRunRequest() {
+        sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+        try {
+            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            sessionInfo.setRunConfiguration(project.confType);
+            if (project.originUrl != null) {
+                addUnmodifiableDataToExample(project, project.originUrl);
+            }
+            Map<String, String > postParameters = new HashMap<>();
+            postParameters.put("project", objectMapper.writeValueAsString(project));
+            forwardRequestToBackend(request, response, postParameters);
+        } catch (IOException e) {
+            writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (NullPointerException e) {
+            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    private void forwardHighlightRequest() {
+        sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
+        try {
+            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            sessionInfo.setRunConfiguration(project.confType);
+            if (project.originUrl != null) {
+                addUnmodifiableDataToExample(project, project.originUrl);
+            }
+            Map<String, String > postParameters = new HashMap<>();
+            postParameters.put("project", objectMapper.writeValueAsString(project));
+            forwardRequestToBackend(request, response, postParameters);
+        } catch (IOException e) {
+            writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (NullPointerException e) {
+            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    private void forwardRequestToBackend(HttpServletRequest request, HttpServletResponse response, Map<String, String> postParameters) {
+        final boolean hasoutbody = (request.getMethod().equals("POST"));
+
+        try {
+            final URL url = new URL("http://" + ApplicationSettings.BACKEND_REDIRECT + "/"
+                    + (request.getQueryString() != null ? "?" + request.getQueryString() : ""));
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            final Enumeration<String> headers = request.getHeaderNames();
+            while (headers.hasMoreElements()) {
+                final String header = headers.nextElement();
+                final Enumeration<String> values = request.getHeaders(header);
+                while (values.hasMoreElements()) {
+                    final String value = values.nextElement();
+                    conn.addRequestProperty(header, value);
+                }
+            }
+
+            conn.setRequestMethod("POST");
+
+            //conn.setFollowRedirects(false);  // throws AccessDenied exception
+            conn.setUseCaches(false);
+            conn.setDoOutput(hasoutbody);
+
+            try(OutputStream requestBody = conn.getOutputStream()) {
+                boolean first = true;
+                for(String key : postParameters.keySet()){
+                    if(first) {
+                        first = false;
+                    } else {
+                        requestBody.write('&');
+                    }
+                    requestBody.write(URLEncoder.encode(key, "UTF8").getBytes());
+                    requestBody.write('=');
+                    requestBody.write(URLEncoder.encode(postParameters.get(key), "UTF8").getBytes());
+                }
+            }
+
+            response.setStatus(conn.getResponseCode());
+            for (int i = 0; ; ++i) {
+                final String header = conn.getHeaderFieldKey(i);
+                if (header == null) break;
+                final String value = conn.getHeaderField(i);
+                response.setHeader(header, value);
+            }
+
+            byte [] buffer = new byte[1024];
+            while (true) {
+                final int read = conn.getInputStream().read(buffer);
+                if (read <= 0) break;
+                response.getOutputStream().write(buffer, 0, read);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // pass
         }
     }
 
@@ -402,32 +523,6 @@ public class MyHttpSession {
         }
     }
 
-    private void sendExecutorResult() {
-        try {
-
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
-            if (project.originUrl != null) {
-                addUnmodifiableDataToExample(project, project.originUrl);
-            }
-            List<PsiFile> psiFiles = createProjectPsiFiles(project);
-
-            sessionInfo.setRunConfiguration(project.confType);
-            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
-
-                CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, sessionInfo, project.args);
-                writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
-            } else {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
-                writeResponse(new JsConverter(sessionInfo).getResult(psiFiles, project.args), HttpServletResponse.SC_OK);
-            }
-        } catch (IOException e) {
-            writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
-        } catch (NullPointerException e) {
-            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
-        }
-    }
-
     private void sendExampleContent() {
         try {
             Project example = ExamplesList.getInstance().getExample(parameters.get("publicId")[0]);
@@ -463,26 +558,6 @@ public class MyHttpSession {
 
             JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(psiFiles, sessionInfo, fileName, line, ch);
             writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);
-        } catch (IOException e) {
-            writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
-        } catch (NullPointerException e) {
-            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
-        }
-    }
-
-    public void sendHighlightingResult() {
-        sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
-        try {
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
-            sessionInfo.setRunConfiguration(project.confType);
-            if (project.originUrl != null) {
-                addUnmodifiableDataToExample(project, project.originUrl);
-            }
-            List<PsiFile> psiFiles = createProjectPsiFiles(project);
-            JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, currentProject);
-            String response = responseForHighlighting.getResult();
-            response = response.replaceAll("\\n", "");
-            writeResponse(response, HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
         } catch (NullPointerException e) {

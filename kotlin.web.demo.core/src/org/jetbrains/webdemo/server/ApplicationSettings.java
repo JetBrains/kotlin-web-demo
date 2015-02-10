@@ -23,6 +23,7 @@ public class ApplicationSettings {
     public static String WEBAPP_ROOT_DIRECTORY = "";
     public static String CLASS_PATH = "";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
+    public static String BACKEND_REDIRECT = "";
     public static int TIMEOUT_FOR_EXECUTION = 5000;
     public static String IS_TEST_VERSION = "true";
     public static String OUTPUT_DIRECTORY = "out";
@@ -39,6 +40,7 @@ public class ApplicationSettings {
     public static OauthCredentials GOOGLE_OAUTH_CREDENTIALS = new OauthCredentials();
     public static OauthCredentials FACEBOOK_OAUTH_CREDENTIALS = new OauthCredentials();
     public static OauthCredentials TWITTER_OAUTH_CREDENTIALS = new OauthCredentials();
+
 
     private ApplicationSettings() {
 

@@ -39,7 +39,9 @@ public class CommandRunner {
             System.setProperty("kotlin.web.demo.log4j", value);
         } else if (setting.equals("auth_redirect")) {
             ApplicationSettings.AUTH_REDIRECT = value;
-        } else if (setting.equals("is_test_version")) {
+        } else if (setting.equals("backend_redirect")){
+            ApplicationSettings.BACKEND_REDIRECT = value;
+        }else if (setting.equals("is_test_version")) {
             ApplicationSettings.IS_TEST_VERSION = value;
         } else if (setting.equals("google_key")) {
             ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY = value;
