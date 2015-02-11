@@ -17,30 +17,20 @@
 package org.jetbrains.webdemo.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.database.DatabaseOperationException;
-import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
+import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
+import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
+import org.jetbrains.webdemo.backend.responseHelpers.JsConverter;
 import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;
-import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
 import org.jetbrains.webdemo.responseHelpers.*;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.responseHelpers;
+package org.jetbrains.webdemo.backend.responseHelpers;
 
 import com.intellij.psi.PsiFile;
 import org.jetbrains.kotlin.psi.JetFile;

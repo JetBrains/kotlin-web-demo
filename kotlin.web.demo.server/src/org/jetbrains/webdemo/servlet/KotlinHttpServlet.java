@@ -57,29 +57,18 @@ public class KotlinHttpServlet extends HttpServlet {
         }
 
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
-        Initializer.INITIALIZER = ServerInitializer.getInstance();
+//        Initializer.INITIALIZER = ServerInitializer.getInstance();
 
         try {
-            if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
-                ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-                new File(ApplicationSettings.LOGS_DIRECTORY).mkdirs();
-                new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdirs();
-                ExamplesList.getInstance();
-                HelpLoader.getInstance();
-                Statistics.getInstance();
-                MySqlConnector.getInstance();
-            } else {
-                ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
-            }
+            ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
+            new File(ApplicationSettings.LOGS_DIRECTORY).mkdirs();
+            new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdirs();
+            ExamplesList.getInstance();
+            HelpLoader.getInstance();
+            Statistics.getInstance();
+            MySqlConnector.getInstance();
         } catch (Throwable e) {
             ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
-            System.exit(1);
-        }
-
-        try {
-            ServerInitializer.getInstance().initializeExecutorsPolicyFile();
-        } catch (Throwable e) {
-            ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of executors policy file failed, server didn't start", e);
             System.exit(1);
         }
     }

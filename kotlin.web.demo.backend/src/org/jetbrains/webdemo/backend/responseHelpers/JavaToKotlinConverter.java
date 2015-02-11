@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.responseHelpers;
+package org.jetbrains.webdemo.backend.responseHelpers;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.j2k.J2kPackage;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.ServerInitializer;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 public class JavaToKotlinConverter {

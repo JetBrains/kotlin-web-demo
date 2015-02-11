@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo.test.j2kconverter;
 
-import org.jetbrains.webdemo.responseHelpers.JavaToKotlinConverter;
+import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;

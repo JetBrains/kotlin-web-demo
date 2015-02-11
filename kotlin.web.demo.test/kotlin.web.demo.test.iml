@@ -18,5 +18,6 @@
     <orderEntry type="module" module-name="kotlin.web.demo.server" scope="TEST" />
     <orderEntry type="library" name="jackson" level="project" />
     <orderEntry type="module" module-name="kotlin.web.demo.executors" />
+    <orderEntry type="module" module-name="kotlin.web.demo.backend" />
   </component>
 </module>

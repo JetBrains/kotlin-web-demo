@@ -32,7 +32,6 @@ import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
-import org.jetbrains.webdemo.responseHelpers.JavaToKotlinConverter;
 import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -362,10 +361,6 @@ public class MyHttpSession {
         } catch (DatabaseOperationException e) {
             writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
-    }
-
-    private void sendConversationResult() {
-        writeResponse(new JavaToKotlinConverter(sessionInfo).getResult(parameters.get("text")[0]), HttpServletResponse.SC_OK);
     }
 
     private void sendWriteLogResult() {

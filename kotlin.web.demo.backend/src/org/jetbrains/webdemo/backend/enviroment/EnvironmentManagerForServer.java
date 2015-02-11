@@ -1,4 +1,4 @@
-package org.jetbrains.webdemo.environment;
+package org.jetbrains.webdemo.backend.enviroment;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.resolve.diagnostics.DiagnosticsWithSuppression;
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.environment.EnvironmentManager;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
