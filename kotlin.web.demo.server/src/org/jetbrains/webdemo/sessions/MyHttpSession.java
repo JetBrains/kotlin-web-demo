@@ -24,7 +24,9 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.ErrorWriterOnServer;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
@@ -32,7 +34,6 @@ import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
-import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
@@ -45,7 +46,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MyHttpSession {
     @NonNls
@@ -526,37 +530,6 @@ public class MyHttpSession {
             writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (NullPointerException e) {
             writeResponse("Can't find example", HttpServletResponse.SC_BAD_REQUEST);
-        }
-    }
-
-    private List<PsiFile> createProjectPsiFiles(Project example) {
-        List<PsiFile> result = new ArrayList<>();
-        currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
-        for (ProjectFile file : example.files) {
-            result.add(JetPsiFactoryUtil.createFile(currentProject, file.getName(), file.getText()));
-        }
-        return result;
-    }
-
-    public void sendCompletionResult() {
-        try {
-            String fileName = parameters.get("filename")[0];
-            int line = Integer.parseInt(parameters.get("line")[0]);
-            int ch = Integer.parseInt(parameters.get("ch")[0]);
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
-            if (project.originUrl != null) {
-                addUnmodifiableDataToExample(project, project.originUrl);
-            }
-
-            List<PsiFile> psiFiles = createProjectPsiFiles(project);
-            sessionInfo.setRunConfiguration(project.confType);
-
-            JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(psiFiles, sessionInfo, fileName, line, ch);
-            writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);
-        } catch (IOException e) {
-            writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
-        } catch (NullPointerException e) {
-            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 

@@ -23,8 +23,7 @@ import org.jetbrains.kotlin.resolve.diagnostics.DiagnosticsWithSuppression;
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.environment.EnvironmentManager;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.backend.BackendSettings;
 
 import java.io.File;
 import java.net.URL;
@@ -39,14 +38,14 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
     private static File initializeKotlinRuntime() {
         final File unpackedRuntimePath = getUnpackedRuntimePath();
         if (unpackedRuntimePath != null) {
-            ApplicationSettings.KOTLIN_LIBS_DIR = unpackedRuntimePath.getParentFile().getAbsolutePath();
-            ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIBS_DIR);
+            BackendSettings.KOTLIN_LIBS_DIR = unpackedRuntimePath.getParentFile().getAbsolutePath();
+            ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + BackendSettings.KOTLIN_LIBS_DIR);
             return unpackedRuntimePath;
         } else {
             final File runtimeJarPath = getRuntimeJarPath();
             if (runtimeJarPath != null && runtimeJarPath.exists()) {
-                ApplicationSettings.KOTLIN_LIBS_DIR = runtimeJarPath.getParentFile().getAbsolutePath();
-                ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIBS_DIR);
+                BackendSettings.KOTLIN_LIBS_DIR = runtimeJarPath.getParentFile().getAbsolutePath();
+                ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + BackendSettings.KOTLIN_LIBS_DIR);
                 return runtimeJarPath;
             }
         }
@@ -84,9 +83,9 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
             }
         });
 
-        ApplicationSettings.JAVA_HOME = files.iterator().next().getParentFile().getParentFile().getParentFile().getAbsolutePath();
+        BackendSettings.JAVA_HOME = files.iterator().next().getParentFile().getParentFile().getParentFile().getAbsolutePath();
 
-        File junit = new File(ApplicationSettings.LIBS_DIR + File.separator + "junit.jar");
+        File junit = new File(BackendSettings.LIBS_DIR + File.separator + "junit.jar");
 
         if (junit.exists()) {
             classpath.add(junit);

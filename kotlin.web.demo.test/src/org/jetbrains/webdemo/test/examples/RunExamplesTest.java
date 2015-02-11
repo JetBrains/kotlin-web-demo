@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.intellij.psi.PsiFile;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jetbrains.webdemo.JetPsiFactoryUtil;
+import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.examplesLoader.Project;
 import org.jetbrains.webdemo.examplesLoader.ProjectFile;

@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.backend;
 
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -40,9 +39,9 @@ public class BackendHttpServlet extends HttpServlet {
         super.init(config);
         System.setProperty("java.awt.headless", "true");
 
-        ApplicationSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
-        ApplicationSettings.CLASS_PATH = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes";
-        ApplicationSettings.LIBS_DIR = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib";
+        BackendSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
+        BackendSettings.CLASS_PATH = BackendSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes";
+        BackendSettings.LIBS_DIR = BackendSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib";
 
         if (!loadTomcatParameters()) {
             ErrorWriter.writeErrorToConsole("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
@@ -55,8 +54,8 @@ public class BackendHttpServlet extends HttpServlet {
         try {
             if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-                new File(ApplicationSettings.LOGS_DIRECTORY).mkdirs();
-                new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdirs();
+                new File(BackendSettings.LOGS_DIRECTORY).mkdirs();
+                new File(BackendSettings.STATISTICS_DIRECTORY).mkdirs();
                 Statistics.getInstance();
             } else {
                 ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
@@ -92,12 +91,12 @@ public class BackendHttpServlet extends HttpServlet {
                 CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
             } catch (NamingException e) {
                 String executable = isWindows() ? "java.exe" : "java";
-                CommandRunner.setServerSettingFromTomcatConfig("java_execute", ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + executable);
+                CommandRunner.setServerSettingFromTomcatConfig("java_execute", BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + executable);
             }
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", (String) envCtx.lookup("app_output_dir"));
             } catch (NamingException e) {
-                File rootFolder = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY);
+                File rootFolder = new File(BackendSettings.WEBAPP_ROOT_DIRECTORY);
                 String appHome = rootFolder.getParentFile().getParentFile().getParent();
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", appHome);
             }

@@ -17,10 +17,8 @@
 package org.jetbrains.webdemo.backend;
 
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.Initializer;
-import org.jetbrains.webdemo.environment.EnvironmentManager;
+import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManagerForServer;
-import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,10 +66,10 @@ public class ServerInitializer extends Initializer {
     }
 
     public void initializeExecutorsPolicyFile() throws IOException {
-        Path templateFilePath = Paths.get(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
+        Path templateFilePath = Paths.get(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));
-        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", ApplicationSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"));
-        try (PrintWriter policyFile = new PrintWriter(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
+        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", BackendSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"));
+        try (PrintWriter policyFile = new PrintWriter(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
             policyFile.write(policyFileContent);
         }
     }

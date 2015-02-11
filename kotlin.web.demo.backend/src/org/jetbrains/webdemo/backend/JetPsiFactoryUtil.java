@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo;
+package org.jetbrains.webdemo.backend;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.CharsetToolkit;

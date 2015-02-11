@@ -25,8 +25,8 @@
     <orderEntry type="library" name="jackson" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="catalina" level="project" />
     <orderEntry type="library" name="kotlin-plugin" level="project" />
-    <orderEntry type="module" module-name="kotlin.web.demo.server" />
     <orderEntry type="library" name="kotlin-runtime" level="project" />
     <orderEntry type="library" name="kotlin-j2kConverter" level="project" />
+    <orderEntry type="module" module-name="kotlin.web.demo.server" />
   </component>
 </module>

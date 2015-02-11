@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo;
+package org.jetbrains.webdemo.backend;
 
 import com.google.common.base.Predicates;
 import com.intellij.openapi.project.Project;

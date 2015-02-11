@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.webdemo.JetPsiFactoryUtil;
+import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.backend.responseHelpers.JsConverter;
 import org.jetbrains.webdemo.session.SessionInfo;

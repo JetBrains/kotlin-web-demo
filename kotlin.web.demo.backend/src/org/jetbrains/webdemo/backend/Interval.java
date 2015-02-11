@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo;
+package org.jetbrains.webdemo.backend;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intellij.openapi.editor.Document;
 
 public class Interval {

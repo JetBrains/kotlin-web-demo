@@ -18,23 +18,16 @@ package org.jetbrains.webdemo.server;
 
 public class ApplicationSettings {
     public static final String DATABASE_VERSION = "1.0";
-    public static String JAVA_HOME = null;
-    public static String JAVA_EXECUTE = "";
     public static String WEBAPP_ROOT_DIRECTORY = "";
-    public static String CLASS_PATH = "";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
     public static String BACKEND_REDIRECT = "";
-    public static int TIMEOUT_FOR_EXECUTION = 5000;
     public static String IS_TEST_VERSION = "true";
     public static String OUTPUT_DIRECTORY = "out";
     public static String EXAMPLES_DIRECTORY = "examples";
     public static String HELP_DIRECTORY = "help";
     public static String LOGS_DIRECTORY = "logs";
     public static String STATISTICS_DIRECTORY = "statistics";
-    public static String LIBS_DIR = "";
     public static String HELP_FOR_WORDS = "helpWords.xml";
-    public static String KOTLIN_LIBS_DIR = "";
-    public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
     public static String KOTLIN_VERSION = "0.10.709";
     public static boolean LOAD_TEST_VERSION_OF_EXAMPLES = false;
     public static OauthCredentials GOOGLE_OAUTH_CREDENTIALS = new OauthCredentials();

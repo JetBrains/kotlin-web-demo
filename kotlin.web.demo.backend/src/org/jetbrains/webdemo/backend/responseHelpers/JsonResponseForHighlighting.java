@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.responseHelpers;
+package org.jetbrains.webdemo.backend.responseHelpers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.webdemo.Interval;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
-import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
-import org.jetbrains.webdemo.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
+import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
+import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.IOException;
@@ -56,7 +52,7 @@ public class JsonResponseForHighlighting {
         try {
             errorDescriptors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
-            return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE
+            return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE
                      , e.getStackTraceString());
         }
         try {

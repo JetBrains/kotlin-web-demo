@@ -17,8 +17,8 @@
 package org.jetbrains.webdemo.test.highlighting;
 
 import com.intellij.psi.PsiFile;
-import org.jetbrains.webdemo.JetPsiFactoryUtil;
-import org.jetbrains.webdemo.responseHelpers.JsonResponseForHighlighting;
+import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
+import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;

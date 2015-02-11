@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo;
+package org.jetbrains.webdemo.backend;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.encoding.EncodingRegistry;
 import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
-import org.jetbrains.webdemo.environment.EnvironmentManager;
+import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 
 public abstract class Initializer {
 

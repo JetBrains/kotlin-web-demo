@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.errorsDescriptors;
+package org.jetbrains.webdemo.backend.errorsDescriptors;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.kotlin.diagnostics.Severity;
-import org.jetbrains.webdemo.Interval;
+import org.jetbrains.webdemo.backend.Interval;
 
 public class ErrorDescriptor {
 

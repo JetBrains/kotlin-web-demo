@@ -30,12 +30,12 @@ import org.jetbrains.kotlin.diagnostics.Severity;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
-import org.jetbrains.webdemo.ResolveUtils;
+import org.jetbrains.webdemo.backend.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.errorsDescriptors.ErrorAnalyzer;
-import org.jetbrains.webdemo.errorsDescriptors.ErrorDescriptor;
-import org.jetbrains.webdemo.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
+import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
+import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;
@@ -67,7 +67,7 @@ public class CompileAndRunExecutor {
             errors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
 //            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
-            return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
+            return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
         }
 
         if (errors.isEmpty() || isOnlyWarnings(errors)) {
@@ -85,7 +85,7 @@ public class CompileAndRunExecutor {
                 });
             } catch (Throwable e) {
 //                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
-                return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
+                return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
             ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                     "COMPILE correctNamespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
@@ -96,7 +96,7 @@ public class CompileAndRunExecutor {
 
             sessionInfo.getTimeManager().saveCurrentTime();
             List<OutputFile> files = factory.asList();
-            File outputDir = new File(ApplicationSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + new Random().nextInt());
+            File outputDir = new File(BackendSettings.OUTPUT_DIRECTORY + File.separator + "tmp" + new Random().nextInt());
             boolean isOutputExists = true;
             if (!outputDir.exists()) {
                 isOutputExists = outputDir.mkdirs();

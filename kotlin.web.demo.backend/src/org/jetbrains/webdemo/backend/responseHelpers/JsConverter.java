@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.backend.responseHelpers;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.webdemo.translator.WebDemoTranslatorFacade;
+import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
 import java.util.ArrayList;
 import java.util.List;

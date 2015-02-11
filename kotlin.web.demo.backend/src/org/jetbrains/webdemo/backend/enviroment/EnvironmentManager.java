@@ -1,4 +1,4 @@
-package org.jetbrains.webdemo.environment;
+package org.jetbrains.webdemo.backend.enviroment;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.extensions.Extensions;

@@ -18,10 +18,9 @@ package org.jetbrains.webdemo.test.completion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.webdemo.JetPsiFactoryUtil;
-import org.jetbrains.webdemo.responseHelpers.JsonResponseForCompletion;
+import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
+import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;

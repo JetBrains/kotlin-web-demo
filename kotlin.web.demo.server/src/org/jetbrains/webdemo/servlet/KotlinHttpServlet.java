@@ -46,8 +46,6 @@ public class KotlinHttpServlet extends HttpServlet {
         System.setProperty("java.awt.headless", "true");
 
         ApplicationSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
-        ApplicationSettings.CLASS_PATH = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes";
-        ApplicationSettings.LIBS_DIR = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib";
         ApplicationSettings.EXAMPLES_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "examples";
         ApplicationSettings.HELP_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY;
 
@@ -83,23 +81,20 @@ public class KotlinHttpServlet extends HttpServlet {
             initCtx = new InitialContext();
             NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
             try {
-                CommandRunner.setServerSettingFromTomcatConfig("java_home", (String) envCtx.lookup("java_home"));
-            } catch (NamingException e) {
-                CommandRunner.setServerSettingFromTomcatConfig("java_home", System.getenv("JAVA_HOME"));
-            }
-            try {
-                CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
-            } catch (NamingException e) {
-                String executable = isWindows() ? "java.exe" : "java";
-                CommandRunner.setServerSettingFromTomcatConfig("java_execute", ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + executable);
-            }
-            try {
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", (String) envCtx.lookup("app_output_dir"));
             } catch (NamingException e) {
                 File rootFolder = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY);
                 String appHome = rootFolder.getParentFile().getParentFile().getParent();
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", appHome);
             }
+
+            try {
+                CommandRunner.setServerSettingFromTomcatConfig("is_test_version", (String) envCtx.lookup("is_test_version"));
+            } catch (NameNotFoundException e) {
+                //Absent is_test_version variable in context.xml
+                CommandRunner.setServerSettingFromTomcatConfig("is_test_version", "false");
+            }
+
             CommandRunner.setServerSettingFromTomcatConfig("auth_redirect", (String) envCtx.lookup("auth_redirect"));
             CommandRunner.setServerSettingFromTomcatConfig("backend_redirect", (String) envCtx.lookup("backend_redirect"));
             CommandRunner.setServerSettingFromTomcatConfig("google_key", (String) envCtx.lookup("google_key"));
@@ -109,17 +104,6 @@ public class KotlinHttpServlet extends HttpServlet {
             CommandRunner.setServerSettingFromTomcatConfig("facebook_key", (String) envCtx.lookup("facebook_key"));
             CommandRunner.setServerSettingFromTomcatConfig("facebook_secret", (String) envCtx.lookup("facebook_secret"));
 
-            try {
-                CommandRunner.setServerSettingFromTomcatConfig("is_test_version", (String) envCtx.lookup("is_test_version"));
-            } catch (NameNotFoundException e) {
-                //Absent is_test_version variable in context.xml
-                CommandRunner.setServerSettingFromTomcatConfig("is_test_version", "false");
-            }
-            try {
-                CommandRunner.setServerSettingFromTomcatConfig("timeout", (String) envCtx.lookup("timeout"));
-            } catch (NameNotFoundException e) {
-                //Absent timeout variable in context.xml
-            }
 
             return true;
         } catch (Throwable e) {

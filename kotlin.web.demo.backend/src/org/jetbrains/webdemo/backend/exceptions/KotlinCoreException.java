@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.exceptions;
+package org.jetbrains.webdemo.backend.exceptions;
 
 import org.jetbrains.webdemo.ResponseUtils;
 

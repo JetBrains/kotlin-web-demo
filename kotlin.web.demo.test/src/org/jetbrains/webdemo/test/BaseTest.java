@@ -20,8 +20,10 @@ import com.intellij.openapi.util.Disposer;
 import junit.framework.TestCase;
 import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.backend.ServerInitializer;
-import org.jetbrains.webdemo.environment.EnvironmentManager;
+import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManagerForServer;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
@@ -58,11 +60,11 @@ public class BaseTest extends TestCase {
         Initializer.INITIALIZER = ServerInitializer.getInstance();
         ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
 
-        ApplicationSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
-        ApplicationSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
+        BackendSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
+        BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
         ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
-        ApplicationSettings.JAVA_EXECUTE = ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
-        ApplicationSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
+        BackendSettings.JAVA_EXECUTE = BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
+        BackendSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
 
         createManager();
         initializePolicyFile();
@@ -80,11 +82,11 @@ public class BaseTest extends TestCase {
     }
 
     protected void initializePolicyFile() throws IOException {
-        Path templateFilePath = Paths.get(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
+        Path templateFilePath = Paths.get(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));
-        String policyFileContent = templateFileContent.replaceAll("@CLASS_PATH@", ApplicationSettings.CLASS_PATH.replaceAll("\\\\", "/"));
-        policyFileContent = policyFileContent.replaceAll("@LIBS_DIR@", ApplicationSettings.LIBS_DIR.replaceAll("\\\\", "/"));
-        try (PrintWriter policyFile = new PrintWriter(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
+        String policyFileContent = templateFileContent.replaceAll("@CLASS_PATH@", BackendSettings.CLASS_PATH.replaceAll("\\\\", "/"));
+        policyFileContent = policyFileContent.replaceAll("@LIBS_DIR@", BackendSettings.LIBS_DIR.replaceAll("\\\\", "/"));
+        try (PrintWriter policyFile = new PrintWriter(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
             policyFile.write(policyFileContent);
         }
     }

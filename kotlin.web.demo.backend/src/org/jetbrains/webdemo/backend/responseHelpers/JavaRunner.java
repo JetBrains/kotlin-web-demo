@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.*;
@@ -82,9 +82,9 @@ public class JavaRunner {
                 finalProcess.destroy();
                 ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "Timeout exception."));
-                errStream.append("Program was terminated after " + ApplicationSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
+                errStream.append("Program was terminated after " + BackendSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
             }
-        }, ApplicationSettings.TIMEOUT_FOR_EXECUTION);
+        }, BackendSettings.TIMEOUT_FOR_EXECUTION);
 
         final BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
         final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
@@ -153,7 +153,7 @@ public class JavaRunner {
                 outStream.length() > 0 &&
                 outStream.indexOf("An error report file with more information is saved as:") != -1) {
             outStream.delete(0, outStream.length());
-            errStream.append(ApplicationSettings.KOTLIN_ERROR_MESSAGE);
+            errStream.append(BackendSettings.KOTLIN_ERROR_MESSAGE);
             String linkForLog = getLinkForLog(outStream.toString());
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
                     sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
@@ -181,7 +181,7 @@ public class JavaRunner {
 
                 ObjectNode jsonObject = jsonArray.addObject();
                 jsonObject.put("type", "err");
-                jsonObject.put("text", ApplicationSettings.KOTLIN_ERROR_MESSAGE);
+                jsonObject.put("text", BackendSettings.KOTLIN_ERROR_MESSAGE);
                 errObject.put("type", "out");
             } else {
                 ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
@@ -348,28 +348,28 @@ public class JavaRunner {
         } else {
             builder = new ArrayList<>(argsArray.size() + 5);
         }
-        builder.add(ApplicationSettings.JAVA_EXECUTE);
+        builder.add(BackendSettings.JAVA_EXECUTE);
         builder.add("-ea");
         builder.add("-Djava.security.manager");
-        builder.add("-Djava.security.policy=" + ApplicationSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
+        builder.add("-Djava.security.policy=" + BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
         builder.add("-classpath");
-        String classpath = (pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar" + File.pathSeparator +
-                ApplicationSettings.CLASS_PATH + File.separator + "Executors.jar");
+        String classpath = (pathToRootOut + File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar" + File.pathSeparator +
+                BackendSettings.CLASS_PATH + File.separator + "Executors.jar");
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
             builder.add(classpath +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "junit.jar" +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-databind.jar" +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-core.jar" +
-                            File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-annotations.jar" +
-                            File.pathSeparator + ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-compiler.jar"
+                            File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "junit.jar" +
+                            File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "jackson-databind.jar" +
+                            File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "jackson-core.jar" +
+                            File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "jackson-annotations.jar" +
+                            File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-compiler.jar"
             );
             builder.add("org.jetbrains.webdemo.executors.JunitExecutor");
             builder.add(pathToRootOut);
         } else {
             builder.add(classpath +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-databind.jar" +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-core.jar" +
-                    File.pathSeparator + ApplicationSettings.LIBS_DIR + File.separator + "jackson-annotations.jar");
+                    File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "jackson-databind.jar" +
+                    File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "jackson-core.jar" +
+                    File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "jackson-annotations.jar");
             builder.add("org.jetbrains.webdemo.executors.JavaExecutor");
             builder.add(findMainClass());
             if (!arguments.isEmpty()) {
