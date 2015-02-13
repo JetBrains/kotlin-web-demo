@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -41,12 +40,7 @@ public class ServerHandler {
     public void handle(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
         if (request.getQueryString() != null && request.getQueryString().equals("test")) {
-            try (PrintWriter out = response.getWriter()) {
-                out.write("ok");
-            } catch (Throwable e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        "TEST", request.getHeader("Origin"), "null");
-            }
+            response.setStatus(HealthChecker.getInstance().getStatus());
         } else if (!ServerResponseUtils.isOriginAccepted(request)) {
             ErrorWriter.ERROR_WRITER.writeInfo(request.getHeader("Origin") + " try to connect to server");
         } else {
