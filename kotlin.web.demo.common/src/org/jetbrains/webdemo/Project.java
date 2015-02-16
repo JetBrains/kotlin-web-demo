@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.examplesLoader;
+package org.jetbrains.webdemo;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.intellij.openapi.application.Application;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,23 +28,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Project {
     public String originUrl;
-    @NotNull
     public String name;
-    @NotNull
     public String parent;
-    @NotNull
     public String args = "";
-    @NotNull
     public String confType = "java";
 
-    @NotNull
     public String help = "";
-    @NotNull
     public List<ProjectFile> files;
     public List<String> readOnlyFileNames = new ArrayList<>();
     private String expectedOutput;
@@ -59,10 +49,10 @@ public class Project {
 
     }
 
-    public Project(@NotNull String name,
-                   @NotNull String parent,
-                   @NotNull String args,
-                   @NotNull String confType) {
+    public Project( String name,
+                    String parent,
+                    String args,
+                    String confType) {
         this.name = name;
         this.parent = parent;
         this.args = args;
@@ -80,10 +70,10 @@ public class Project {
      * @param confType  - Project run configuration
      * @param originUrl - Project origin URL
      */
-    public Project(@NotNull String name,
-                   @NotNull String parent,
-                   @NotNull String args,
-                   @NotNull String confType,
+    public Project( String name,
+                    String parent,
+                    String args,
+                    String confType,
                    String originUrl,
                    List<String> readOnlyFileNames) {
         this.name = name;
@@ -93,15 +83,6 @@ public class Project {
         this.originUrl = originUrl;
         this.files = new ArrayList<>();
         this.readOnlyFileNames = readOnlyFileNames;
-
-        if (originUrl != null) {
-            Project storedExample = ExamplesList.getInstance().getExample(originUrl);
-            for (ProjectFile file : storedExample.files) {
-                if (!file.isModifiable() && readOnlyFileNames.contains(file.getName())) {
-                    files.add(file);
-                }
-            }
-        }
     }
 
     /**
@@ -111,14 +92,14 @@ public class Project {
      * @param exampleFolderName - Name of example folder
      * @throws IOException - if example folder has no manifest file, if example files do not exists, or some other problem with IO.
      */
-    public Project(@NotNull String parent, @NotNull String exampleFolderName) throws IOException {
+    public Project( String parent,  String exampleFolderName, String examplesDirectory, boolean loadTestVersion) throws IOException {
         this.files = new ArrayList<>();
         this.parent = parent;
 
         originUrl = "folder=" + parent.replaceAll(" ", "%20") + "&project=" + exampleFolderName.replaceAll(" ", "%20");
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String exampleFolderPath = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + parent + File.separator + exampleFolderName + File.separator;
+        String exampleFolderPath = examplesDirectory + File.separator + parent + File.separator + exampleFolderName + File.separator;
         File manifest = new File(exampleFolderPath + "manifest.json");
         JsonNode objectNode = objectMapper.readTree(manifest);
 
@@ -135,13 +116,13 @@ public class Project {
         help = objectNode.get("help").textValue();
         ArrayNode fileDescriptors = (ArrayNode) objectNode.get("files");
         for (JsonNode fileDescriptor : fileDescriptors) {
-            if(ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES &&
+            if(loadTestVersion &&
                     fileDescriptor.has("skipInTestVersion") &&
                     fileDescriptor.get("skipInTestVersion").asBoolean()){
                 continue;
             }
             ProjectFile file = deserializeProjectFile(parent, exampleFolderPath, fileDescriptor);
-            if(!ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES && file.getType().equals(ProjectFile.Type.SOLUTION_FILE)) {
+            if(!loadTestVersion && file.getType().equals(ProjectFile.Type.SOLUTION_FILE)) {
                 continue;
             }
             files.add(file);
@@ -149,7 +130,7 @@ public class Project {
     }
 
     private ProjectFile deserializeProjectFile(String parent, String exampleFolderPath, JsonNode fileDescriptor) throws IOException {
-        @NotNull String fileName = fileDescriptor.get("filename").textValue();
+        String fileName = fileDescriptor.get("filename").textValue();
         boolean modifiable = fileDescriptor.get("modifiable").asBoolean();
         if (!modifiable) {
             readOnlyFileNames.add(fileName);

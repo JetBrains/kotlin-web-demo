@@ -35,8 +35,8 @@ import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.backend.SessionInfo;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;
 import java.util.Arrays;

@@ -48,15 +48,13 @@ public class BackendHttpServlet extends HttpServlet {
             System.exit(1);
         }
 
-        ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
+        ErrorWriter.getInstance();
         Initializer.INITIALIZER = ServerInitializer.getInstance();
 
         try {
             if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-                new File(BackendSettings.LOGS_DIRECTORY).mkdirs();
-                new File(BackendSettings.STATISTICS_DIRECTORY).mkdirs();
-                Statistics.getInstance();
+                new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
                 HealthChecker.getInstance();
             } else {
                 ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");

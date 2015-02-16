@@ -5,10 +5,9 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="kotlin.web.demo.backend" />
-          <element id="module-output" name="kotlin.web.demo.server" />
-          <element id="module-output" name="kotlin.web.demo.core" />
           <element id="module-output" name="idea.pacth.server" />
           <element id="artifact" artifact-name="Executors" />
+          <element id="module-output" name="kotlin.web.demo.common" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="commons-lang" />
@@ -20,7 +19,6 @@
           <element id="library" level="project" name="kotlin-j2kConverter" />
           <element id="library" level="project" name="jackson" />
           <element id="library" level="project" name="kotlin-plugin" />
-          <element id="file-copy" path="$APPLICATION_HOME_DIR$/lib/annotations.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar" />
           <element id="library" level="project" name="junit" />
         </element>

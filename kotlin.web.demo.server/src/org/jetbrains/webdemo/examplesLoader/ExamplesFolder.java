@@ -19,7 +19,9 @@ package org.jetbrains.webdemo.examplesLoader;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.CommonSettings;
+import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.ApplicationSettings;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public class ExamplesFolder {
         path = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName;
         for (String exampleName : exampleNames) {
             try {
-                Project example = new Project(folderName, exampleName);
+                Project example = new Project(folderName, exampleName, ApplicationSettings.EXAMPLES_DIRECTORY, CommonSettings.IS_TEST_VERSION);
                 example.parent = folderName;
                 examplesOrder.add(example.name);
                 examples.put(exampleName, example);

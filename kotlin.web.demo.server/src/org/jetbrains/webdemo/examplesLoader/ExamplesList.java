@@ -17,8 +17,10 @@
 package org.jetbrains.webdemo.examplesLoader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.ApplicationSettings;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -47,6 +49,17 @@ public class ExamplesList {
 
     public static ExamplesList getInstance() {
         return EXAMPLES_LIST;
+    }
+
+    public void addUnmodifiableFilesToProject(Project project){
+        if (project.originUrl != null) {
+            Project storedExample = ExamplesList.getInstance().getExample(project.originUrl);
+            for (ProjectFile file : storedExample.files) {
+                if (!file.isModifiable() && project.readOnlyFileNames.contains(file.getName())) {
+                    project.files.add(file);
+                }
+            }
+        }
     }
 
     public Project getExample(String url) {

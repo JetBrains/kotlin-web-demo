@@ -27,10 +27,9 @@ import org.jetbrains.kotlin.name.FqName;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.backend.SessionInfo;
 
 import java.io.*;
 import java.util.*;
@@ -80,7 +79,7 @@ public class JavaRunner {
             public void run() {
                 isTimeoutException = true;
                 finalProcess.destroy();
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+                ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "Timeout exception."));
                 errStream.append("Program was terminated after " + BackendSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
             }
@@ -142,7 +141,7 @@ public class JavaRunner {
             }
         }
 
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+        ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                 sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
                         + " timeout=" + isTimeoutException
                         + " commandString=" + Arrays.toString(commandString)));
@@ -184,7 +183,7 @@ public class JavaRunner {
                 jsonObject.put("text", BackendSettings.KOTLIN_ERROR_MESSAGE);
                 errObject.put("type", "out");
             } else {
-                ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+                ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "error while excecution: " + errStream));
                 errObject.put("type", "err");
             }
@@ -310,7 +309,7 @@ public class JavaRunner {
             if (file.list().length == 0) {
                 if (file.exists()) {
                     file.delete();
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                             sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                 }
             } else {
@@ -325,7 +324,7 @@ public class JavaRunner {
                 if (file.list().length == 0) {
                     if (file.exists()) {
                         file.delete();
-                        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+                        ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                                 sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                     }
                 }
@@ -333,7 +332,7 @@ public class JavaRunner {
         } else {
             if (file.exists()) {
                 file.delete();
-                ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+                ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                         sessionInfo.getId(), "File is deleted : " + file.getAbsolutePath()));
             }
         }

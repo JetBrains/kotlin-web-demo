@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo;
 
-import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import java.io.File;
 
@@ -27,16 +26,15 @@ public class CommandRunner {
         if (value.isEmpty()) {
 
         } else if (setting.equals("app_output_dir")) {
-            ApplicationSettings.OUTPUT_DIRECTORY = value + File.separator + "out";
             ApplicationSettings.STATISTICS_DIRECTORY = value + File.separator + "statistics";
-            ApplicationSettings.LOGS_DIRECTORY = value + File.separator + "logs";
+            CommonSettings.LOGS_DIRECTORY = value + File.separator + "logs";
             System.setProperty("kotlin.web.demo.log4j", value);
         } else if (setting.equals("auth_redirect")) {
             ApplicationSettings.AUTH_REDIRECT = value;
         } else if (setting.equals("backend_redirect")){
             ApplicationSettings.BACKEND_REDIRECT = value;
         }else if (setting.equals("is_test_version")) {
-            ApplicationSettings.IS_TEST_VERSION = value;
+            CommonSettings.IS_TEST_VERSION = Boolean.parseBoolean(value);
         } else if (setting.equals("google_key")) {
             ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY = value;
         } else if (setting.equals("google_secret")) {

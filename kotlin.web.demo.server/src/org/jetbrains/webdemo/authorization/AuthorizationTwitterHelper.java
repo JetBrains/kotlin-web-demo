@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.scribe.builder.ServiceBuilder;

@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.backend;
 
+import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 
 import java.io.File;
@@ -33,12 +34,12 @@ public class CommandRunner {
         } else if (setting.equals("timeout")) {
             BackendSettings.TIMEOUT_FOR_EXECUTION = Integer.parseInt(value);
         } else if (setting.equals("app_output_dir")) {
+            //TODO fully separate application settings and backend settings
             BackendSettings.OUTPUT_DIRECTORY = value + File.separator + "out";
-            BackendSettings.STATISTICS_DIRECTORY = value + File.separator + "statistics";
-            BackendSettings.LOGS_DIRECTORY = value + File.separator + "logs";
+            CommonSettings.LOGS_DIRECTORY = value + File.separator + "logs";
             System.setProperty("kotlin.web.demo.log4j", value);
         } else if (setting.equals("is_test_version")) {
-            BackendSettings.IS_TEST_VERSION = Boolean.parseBoolean(value);
+            CommonSettings.IS_TEST_VERSION = Boolean.parseBoolean(value);
         } else {
             ErrorWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
         }

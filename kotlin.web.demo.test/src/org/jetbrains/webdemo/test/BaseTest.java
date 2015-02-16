@@ -27,7 +27,7 @@ import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManagerForServer;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;

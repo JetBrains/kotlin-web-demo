@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.Statistics;
 import org.jetbrains.webdemo.authorization.AuthorizationFacebookHelper;
@@ -31,7 +30,7 @@ import org.jetbrains.webdemo.authorization.AuthorizationTwitterHelper;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.log.LogDownloader;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.jetbrains.webdemo.sessions.MyHttpSession;
@@ -60,7 +59,7 @@ public class ServerHandler {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         "TEST", request.getHeader("Origin"), "null");
             }
-        } else if (!ServerResponseUtils.isOriginAccepted(request)) {
+        } else if (!ResponseUtils.isOriginAccepted(request)) {
             ErrorWriter.ERROR_WRITER.writeInfo(request.getHeader("Origin") + " try to connect to server");
         } else {
             SessionInfo sessionInfo;
@@ -87,24 +86,24 @@ public class ServerHandler {
                         sendAuthorizationResult(request, response, parameters, sessionInfo);
                         break;
                     case ("updateStatistics"):
-                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
+                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         sendListLogs(request, response, parameters.get("type")[0].equals("updateStatistics"), sessionInfo);
                         break;
                     case ("showUserInfo"):
-                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
+                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                         sendUserInfoForStatistics(request, response);
                         break;
                     case ("sortExceptions"):
-                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
+                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
                         sendSortedExceptions(request, response, parameters);
                         break;
                     case ("downloadLog"):
-                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + param);
+                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + param);
                         sendLog(request, response, parameters);
                         break;
                     case ("loadHelpForWords"):
-                        ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
+                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
                         sendHelpContentForWords(request, response);
                         break;
                     case ("logout"): {
@@ -133,7 +132,7 @@ public class ServerHandler {
                 //Do not stop server
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         "UNKNOWN", "unknown", param);
-                ServerResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                ResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -318,8 +317,8 @@ public class ServerHandler {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getOriginUrl(), info.getId());
         }
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
-        ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
+        ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
+        ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
         writeResponse(request, response, "OK", HttpServletResponse.SC_OK);
     }
 
@@ -327,7 +326,7 @@ public class ServerHandler {
     //Send Response
     private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) {
         try {
-            ServerResponseUtils.writeResponse(request, response, responseBody, errorCode);
+            ResponseUtils.writeResponse(request, response, responseBody, errorCode);
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", request.getHeader("Origin"), "null");

@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.examplesLoader;
+package org.jetbrains.webdemo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.intellij.psi.PsiFile;
 
 /**
  * Created by Semyon.Atamas on 8/11/2014.
@@ -31,8 +30,6 @@ public class ProjectFile {
     private String text;
     private String name;
     private Type type;
-
-    private PsiFile psiFile;
 
     /**
      * This constructor is used to deserialize project file from user request. Jackson calls it wia
@@ -59,8 +56,6 @@ public class ProjectFile {
         this.modifiable = modifiable;
         this.publicId = publicId;
         this.type = type;
-//        psiFile = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), name, content);
-//        type = psiFile.getFileType().getDescription();
     }
 
     public Boolean isModifiable() {

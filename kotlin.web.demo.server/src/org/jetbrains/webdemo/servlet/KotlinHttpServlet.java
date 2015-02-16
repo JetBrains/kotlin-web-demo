@@ -22,7 +22,7 @@ import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.ApplicationSettings;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -47,19 +47,19 @@ public class KotlinHttpServlet extends HttpServlet {
 
         ApplicationSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
         ApplicationSettings.EXAMPLES_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "examples";
-        ApplicationSettings.HELP_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY;
+        CommonSettings.HELP_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY;
 
         if (!loadTomcatParameters()) {
             ErrorWriter.writeErrorToConsole("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
             System.exit(1);
         }
 
-        ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
+        ErrorWriter.ERROR_WRITER = ErrorWriter.getInstance();
 //        Initializer.INITIALIZER = ServerInitializer.getInstance();
 
         try {
             ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
-            new File(ApplicationSettings.LOGS_DIRECTORY).mkdirs();
+            new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
             new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdirs();
             ExamplesList.getInstance();
             HelpLoader.getInstance();

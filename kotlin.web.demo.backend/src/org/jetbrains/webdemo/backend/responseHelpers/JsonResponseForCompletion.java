@@ -49,8 +49,8 @@ import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.backend.SessionInfo;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
 import java.util.*;

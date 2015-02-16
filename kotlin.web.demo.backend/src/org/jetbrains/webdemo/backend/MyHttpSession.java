@@ -18,12 +18,11 @@ package org.jetbrains.webdemo.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.ProjectFile;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.responseHelpers.*;
-import org.jetbrains.webdemo.examplesLoader.Project;
-import org.jetbrains.webdemo.examplesLoader.ProjectFile;
-import org.jetbrains.webdemo.handlers.ServerResponseUtils;
-import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,11 +51,11 @@ public class MyHttpSession {
             this.response = response;
             String param = request.getRequestURI() + "?" + request.getQueryString();
 
-            ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
+            ErrorWriter.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
             switch (parameters.get("type")[0]) {
                 case ("run"):
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendExecutorResult();
                     break;
                 case ("highlight"):
@@ -68,7 +67,7 @@ public class MyHttpSession {
                     break;
                 case ("complete"):
                     sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendCompletionResult();
                     break;
             }
@@ -155,8 +154,8 @@ public class MyHttpSession {
     //Send Response
     private void writeResponse(String responseBody, int errorCode) {
         try {
-            ServerResponseUtils.writeResponse(request, response, responseBody, errorCode);
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+            ResponseUtils.writeResponse(request, response, responseBody, errorCode);
+            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                     sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString()));
         } catch (IOException e) {
             //This is an exception we can't send data to client

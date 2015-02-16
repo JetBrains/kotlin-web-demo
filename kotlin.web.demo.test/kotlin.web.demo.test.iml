@@ -14,10 +14,10 @@
     <orderEntry type="library" name="kotlin-runtime" level="project" />
     <orderEntry type="library" name="dartc" level="project" />
     <orderEntry type="library" name="kotlin-compiler" level="project" />
-    <orderEntry type="module" module-name="kotlin.web.demo.core" scope="TEST" />
     <orderEntry type="module" module-name="kotlin.web.demo.server" scope="TEST" />
     <orderEntry type="library" name="jackson" level="project" />
     <orderEntry type="module" module-name="kotlin.web.demo.executors" />
     <orderEntry type="module" module-name="kotlin.web.demo.backend" />
+    <orderEntry type="module" module-name="kotlin.web.demo.common" />
   </component>
 </module>

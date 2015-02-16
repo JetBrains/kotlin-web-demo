@@ -22,10 +22,10 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.backend.SessionInfo;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.IOException;
 import java.util.List;

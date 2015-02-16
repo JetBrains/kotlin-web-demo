@@ -32,8 +32,8 @@ import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.Interval;
 import org.jetbrains.webdemo.backend.ResolveUtils;
+import org.jetbrains.webdemo.backend.SessionInfo;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
 import java.util.*;
@@ -68,7 +68,7 @@ public class ErrorAnalyzer {
             }
 
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFiles);
+//            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFiles);
             throw new KotlinCoreException(e);
         }
 //        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),

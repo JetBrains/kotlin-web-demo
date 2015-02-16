@@ -17,11 +17,8 @@
 package org.jetbrains.webdemo.log;
 
 import com.intellij.openapi.util.io.FileUtil;
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.session.SessionInfo;
-import org.jetbrains.webdemo.Statistics;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +28,7 @@ import java.util.Comparator;
 
 public class LogDownloader {
     public String download(String name) {
-        File log = new File(ApplicationSettings.LOGS_DIRECTORY + File.separator + name);
+        File log = new File(CommonSettings.LOGS_DIRECTORY + File.separator + name);
 
         if (log.exists()) {
             try {
@@ -76,7 +73,7 @@ public class LogDownloader {
                 }
             }
         }
-        File logDir = new File(ApplicationSettings.LOGS_DIRECTORY);
+        File logDir = new File(CommonSettings.LOGS_DIRECTORY);
         if ((logDir.exists()) && (logDir.isDirectory())) {
             File[] files = logDir.listFiles();
             Arrays.sort(files, new Comparator<File>() {

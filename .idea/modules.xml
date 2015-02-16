@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/idea.pacth.server/idea.pacth.server.iml" filepath="$PROJECT_DIR$/idea.pacth.server/idea.pacth.server.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.core/kotlin.web.demo.core.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.core/kotlin.web.demo.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.common/kotlin.web.demo.common.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.common/kotlin.web.demo.common.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.executors/kotlin.web.demo.executors.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.executors/kotlin.web.demo.executors.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" />

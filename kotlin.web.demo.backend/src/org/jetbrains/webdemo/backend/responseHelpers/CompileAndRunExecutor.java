@@ -29,14 +29,13 @@ import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.diagnostics.Severity;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.backend.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.backend.SessionInfo;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,7 +86,7 @@ public class CompileAndRunExecutor {
 //                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
                 return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
+            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                     "COMPILE correctNamespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
             StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
@@ -119,7 +118,7 @@ public class CompileAndRunExecutor {
                 }
 
             }
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
+            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                     "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
             ArrayNode jsonArray = new ArrayNode(JsonNodeFactory.instance);

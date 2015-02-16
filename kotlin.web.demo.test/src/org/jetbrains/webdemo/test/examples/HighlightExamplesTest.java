@@ -25,8 +25,8 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
-import org.jetbrains.webdemo.examplesLoader.Project;
-import org.jetbrains.webdemo.examplesLoader.ProjectFile;
+import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForHighlighting;
 import org.jetbrains.webdemo.test.BaseTest;
 

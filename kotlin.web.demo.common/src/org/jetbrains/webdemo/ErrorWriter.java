@@ -16,17 +16,22 @@
 
 package org.jetbrains.webdemo;
 
-import com.intellij.psi.PsiFile;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import com.intellij.diagnostic.errordialog.Attachment;
+import com.intellij.errorreport.bean.ErrorBean;
+import com.intellij.errorreport.itn.ITNProxy;
+import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public abstract class ErrorWriter {
-
-    public static ErrorWriter ERROR_WRITER;
+public class ErrorWriter {
+    public static final Logger LOG_FOR_EXCEPTIONS = Logger.getLogger("exceptionLogger");
+    public static final Logger LOG_FOR_INFO = Logger.getLogger("infoLogger");
+    public static ErrorWriter ERROR_WRITER = new ErrorWriter();
 
     public static void writeErrorToConsole(String message) {
         System.err.println(message);
@@ -49,7 +54,7 @@ public abstract class ErrorWriter {
         StringBuilder builder = new StringBuilder();
         builder.append("\n<error>");
         builder.append("\n<version>");
-        builder.append(ApplicationSettings.KOTLIN_VERSION);
+        builder.append(CommonSettings.KOTLIN_VERSION);
         builder.append("</version>");
         builder.append("\n<type>");
         builder.append(ResponseUtils.escapeString(typeOfRequest));
@@ -71,7 +76,7 @@ public abstract class ErrorWriter {
         builder.append("\n</error>");
         return builder.toString();
     }
-    
+
     public static List<String> parseException(String text) {
         ArrayList<String> list = new ArrayList<String>();
         //0
@@ -86,7 +91,7 @@ public abstract class ErrorWriter {
         //3
         str = ResponseUtils.substringBetween(text, "<stack>", "</stack>");
         list.add(str);
-         //4
+        //4
         str = ResponseUtils.substringBetween(text, "<moreinfo>", "</moreinfo>");
         list.add(str);
 
@@ -97,7 +102,7 @@ public abstract class ErrorWriter {
         StringBuilder builder = new StringBuilder();
         builder.append("\n<error>");
         builder.append("\n<version>");
-        builder.append(ApplicationSettings.KOTLIN_VERSION);
+        builder.append(CommonSettings.KOTLIN_VERSION);
         builder.append("</version>");
         builder.append("\n<type>");
         builder.append(ResponseUtils.escapeString(typeOfRequest));
@@ -144,14 +149,81 @@ public abstract class ErrorWriter {
         return builder.toString();
     }
 
-    public abstract void writeException(String message);
+    private ErrorWriter() {
 
-    public abstract void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, String description);
+    }
 
-    public abstract void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, List<PsiFile> files);
-    
-    public abstract void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String originUrl, String description);
+    public static ErrorWriter getInstance() {
+        return ERROR_WRITER;
+    }
 
-    public abstract void writeInfo(String message);
+    public void writeException(String moreInfo) {
 
+        LOG_FOR_EXCEPTIONS.error(moreInfo);
+    }
+
+    public void writeInfo(String message) {
+        LOG_FOR_INFO.info(message);
+    }
+
+    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, String description) {
+        ErrorBean bean = new ErrorBean(e, type);
+        bean.setPluginName("Kotlin Web Demo Beta");
+        bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
+        if (CommonSettings.IS_TEST_VERSION) {
+            sendViaITNProxy(bean);
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, description));
+        } else {
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, description));
+        }
+    }
+
+//    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, List<PsiFile> files) {
+//        ErrorBean bean = new ErrorBean(e, type);
+//        bean.setPluginName("Kotlin Web Demo Beta");
+//        List<Attachment> attachments = new ArrayList<>();
+//        StringBuilder description = new StringBuilder();
+//        for (PsiFile file : files) {
+//            attachments.add(new Attachment(file.getName(), file.getText()));
+//            description.append(file.getName()).append(":\n");
+//            description.append(file.getText());
+//        }
+//        bean.setAttachments(attachments);
+//        if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
+//            sendViaITNProxy(bean);
+//            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, description.toString()));
+//        } else {
+//            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, description.toString()));
+//        }
+//    }
+
+    public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String originUrl, String description) {
+        ErrorBean bean = new ErrorBean(message, stackTrace, type);
+        bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
+        bean.setPluginName("Kotlin Web Demo Beta");
+
+        if (CommonSettings.IS_TEST_VERSION) {
+            sendViaITNProxy(bean);
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, message, stackTrace, description));
+        } else {
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, message, stackTrace, description));
+        }
+    }
+
+    private void sendViaITNProxy(ErrorBean error) {
+        String login = "idea_anonymous";
+        String password = "guest";
+        try {
+            String result = ITNProxy.postNewThread(login, password, error, String.valueOf(System.currentTimeMillis()), CommonSettings.KOTLIN_VERSION);
+            if ("unauthorized".equals(result) || result.startsWith("update ") || result.startsWith("message ")) {
+                LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EA", result, "", ""));
+                LOG_FOR_EXCEPTIONS.error(getExceptionForLog(error.getLastAction(), error.getMessage(), "", error.getDescription()));
+            } else {
+                LOG_FOR_INFO.info("Submitted to Exception Analyzer: " + result);
+            }
+        } catch (IOException e1) {
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog("SEND_TO_EXCEPTION_ANALYZER", e1, "", login));
+        }
+
+    }
 }

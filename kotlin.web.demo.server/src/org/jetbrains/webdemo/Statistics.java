@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.*;
@@ -595,7 +594,7 @@ public class Statistics {
     private File generateValidXmlFileForExceptions(File file) {
         File ex;
         try {
-            ex = new File(ApplicationSettings.OUTPUT_DIRECTORY + File.separator + "tmp.log" + new Random().nextInt());
+            ex = new File(ApplicationSettings.STATISTICS_DIRECTORY + File.separator + "tmp.log" + new Random().nextInt());
             ex.createNewFile();
             if (!ex.exists()) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new FileNotFoundException("Cannot create tmp file"),

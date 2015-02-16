@@ -16,18 +16,18 @@
 
 package org.jetbrains.webdemo;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.webdemo.session.SessionInfo;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class ResponseUtils {
     public static String escapeString(String string) {
@@ -213,7 +213,6 @@ public class ResponseUtils {
         return builder.toString();
     }
 
-    @Nullable
     public static Document getXmlDocument(File file) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
@@ -223,41 +222,15 @@ public class ResponseUtils {
             document = dBuilder.parse(file);
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
+                    "ANALYZE_LOG", "unknown", file.getAbsolutePath());
             return null;
         } catch (ParserConfigurationException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
+                    "ANALYZE_LOG", "unknown", file.getAbsolutePath());
             return null;
         } catch (SAXException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", file.getAbsolutePath());
-            return null;
-        }
-        document.getDocumentElement().normalize();
-        return document;
-    }
-
-    @Nullable
-    public static Document getXmlDocument(InputStream is) {
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder;
-        Document document;
-        try {
-            dBuilder = dbFactory.newDocumentBuilder();
-
-            document = dBuilder.parse(is);
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", "");
-            return null;
-        } catch (ParserConfigurationException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", "");
-            return null;
-        } catch (SAXException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), "unknown", "");
+                    "ANALYZE_LOG", "unknown", file.getAbsolutePath());
             return null;
         }
         document.getDocumentElement().normalize();
@@ -280,8 +253,7 @@ public class ResponseUtils {
         return ResponseUtils.substringBefore(url, "&name").replaceAll("%20", " ");
     }
 
-    @NotNull
-    public static String[] splitArguments(@NotNull String arguments) {
+    public static String[] splitArguments(String arguments) {
         boolean inQuotes = false;
         ArrayList<String> arrayList = new ArrayList<String>();
         int firstChar = 0;
@@ -321,4 +293,50 @@ public class ResponseUtils {
         return result;
     }
 
+
+    private static final List<String> URLS = new ArrayList<String>();
+
+    static {
+        URLS.add("http://unit-304.labs.intellij.net:8080");
+        URLS.add("http://local.hadihariri.com:4000");
+        URLS.add("http://hhariri.github.io/tests");
+        URLS.add("http://hhariri.github.io");
+        URLS.add("http://kotlin-demo.jetbrains.com");
+        URLS.add("http://jetbrains.github.io/kotlin-web-site");
+        URLS.add("http://jetbrains.github.io/kotlin-fiddler");
+        URLS.add("http://jetbrains.github.io");
+    }
+
+    public static boolean isOriginAccepted(HttpServletRequest request) {
+        String originHeader = request.getHeader("origin");
+        //TODO send origin headers
+        if (originHeader == null) {
+            return true;
+        }
+        if (URLS.contains(originHeader)) {
+            return true;
+        }
+
+        String originWithoutHttp = ResponseUtils.substringAfterReturnAll(originHeader, "http://");
+        return originWithoutHttp.equals(request.getHeader("host"));
+    }
+
+    public static void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) throws IOException {
+        try (PrintWriter writer = response.getWriter()) {
+            addHeadersToResponse(request, response);
+            response.setStatus(errorCode);
+            writer.write(responseBody);
+        }
+    }
+
+    public static void addHeadersToResponse(HttpServletRequest request, HttpServletResponse response) {
+        if (isOriginAccepted(request)) {
+            response.addHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+            response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+            response.addHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type");
+            response.addHeader("Access-Control-Allow-Credentials", "true");
+        }
+        response.addHeader("Cache-Control", "no-cache");
+        response.setCharacterEncoding("UTF-8");
+    }
 }

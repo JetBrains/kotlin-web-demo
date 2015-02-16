@@ -25,16 +25,15 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ErrorWriterOnServer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
-import org.jetbrains.webdemo.examplesLoader.Project;
-import org.jetbrains.webdemo.examplesLoader.ProjectFile;
+import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +57,6 @@ public class MyHttpSession {
     private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
     private final SessionInfo sessionInfo;
     private final Map<String, String[]> parameters;
-    protected com.intellij.openapi.project.Project currentProject;
     protected PsiFile currentPsiFile;
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -80,7 +78,7 @@ public class MyHttpSession {
             this.response = response;
             String param = request.getRequestURI() + "?" + request.getQueryString();
 
-            ErrorWriterOnServer.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
+            ErrorWriter.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
             switch (parameters.get("type")[0]) {
                 case ("highlight"):
@@ -96,12 +94,12 @@ public class MyHttpSession {
                     forwardConvertResult();
                     break;
                 case ("loadHeaders"):
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
+                    ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
                     sendExamplesList(request, response);
                     break;
                 case ("loadExample"):
                     sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendExampleContent();
                     break;
                 case ("loadExampleFile"):
@@ -151,7 +149,7 @@ public class MyHttpSession {
                     sendExistenceCheckResult();
                     break;
                 default:
-                    ErrorWriterOnServer.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + param);
+                    ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + param);
                     sendResourceFile(request, response);
                     break;
             }
@@ -370,7 +368,7 @@ public class MyHttpSession {
     private void sendWriteLogResult() {
         String type = parameters.get("args")[0];
         if (type.equals("info")) {
-            ErrorWriterOnServer.LOG_FOR_INFO.info(parameters.get("text")[0]);
+            ErrorWriter.LOG_FOR_INFO.info(parameters.get("text")[0]);
         } else if (type.equals("errorInKotlin")) {
             String tmp = parameters.get("text")[0];
             tmp = unescapeXml(unescapeXml(tmp));
@@ -554,8 +552,8 @@ public class MyHttpSession {
     //Send Response
     private void writeResponse(String responseBody, int errorCode) {
         try {
-            ServerResponseUtils.writeResponse(request, response, responseBody, errorCode);
-            ErrorWriterOnServer.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+            ResponseUtils.writeResponse(request, response, responseBody, errorCode);
+            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                     sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString()));
         } catch (IOException e) {
             //This is an exception we can't send data to client
@@ -578,7 +576,7 @@ public class MyHttpSession {
     private void sendResourceFile(HttpServletRequest request, HttpServletResponse response) {
         String path = request.getRequestURI() + "?" + request.getQueryString();
         path = ResponseUtils.substringAfterReturnAll(path, "resources");
-        ErrorWriterOnServer.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "-1", "Resource doesn't downloaded from nginx: " + path));
+        ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "-1", "Resource doesn't downloaded from nginx: " + path));
         if (path.equals("")) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Empty path to resource"),
@@ -643,7 +641,7 @@ public class MyHttpSession {
 
     private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) {
         try {
-            ServerResponseUtils.writeResponse(request, response, responseBody, errorCode);
+            ResponseUtils.writeResponse(request, response, responseBody, errorCode);
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", request.getHeader("Origin"), "null");

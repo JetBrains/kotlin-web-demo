@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.j2k.J2kPackage;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.backend.SessionInfo;
 
 public class JavaToKotlinConverter {
     private final SessionInfo info;

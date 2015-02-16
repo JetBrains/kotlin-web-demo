@@ -16,7 +16,7 @@
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.test.completion.CompletionTest;
 import org.jetbrains.webdemo.test.examples.HighlightExamplesTest;
 import org.jetbrains.webdemo.test.examples.RunExamplesTest;

@@ -19,9 +19,10 @@ package org.jetbrains.webdemo.help;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.server.ApplicationSettings;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.w3c.dom.*;
 
@@ -109,7 +110,7 @@ public class HelpLoader {
     private void generateHelpForWords() {
         resultWords = new ArrayNode(JsonNodeFactory.instance);
         try {
-            File file = new File(ApplicationSettings.HELP_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_WORDS);
+            File file = new File(CommonSettings.HELP_DIRECTORY + File.separator + ApplicationSettings.HELP_FOR_WORDS);
             Document doc = ResponseUtils.getXmlDocument(file);
             if (doc == null) {
                 return;

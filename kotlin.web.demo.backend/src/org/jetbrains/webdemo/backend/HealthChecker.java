@@ -18,13 +18,10 @@ package org.jetbrains.webdemo.backend;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
-import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
