@@ -54,9 +54,9 @@
             </unzip>
             <copy file="${unzipped.kotlin.plugin}/Kotlin/kotlinc/build.txt" todir="${dependencies.dir}"/>
 
-            <delete dir="kotlin.web.demo.core/resources/js" failonerror="false"/>
+            <delete dir="kotlin.web.demo.common/resources/js" failonerror="false"/>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
-                   dest="kotlin.web.demo.core/resources/js"/>
+                   dest="kotlin.web.demo.common/resources/js"/>
 
             <delete dir="kotlin.web.demo.test/resources/js" failonerror="false"/>
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
@@ -107,7 +107,7 @@
             <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
             <echo message="${version}"/>
             <!-- kotlin.version and web.demo.version - from teamcity -->
-            <replaceregexp file="kotlin.web.demo.core/src/org/jetbrains/webdemo/server/ApplicationSettings.java"
+            <replaceregexp file="kotlin.web.demo.common/src/org/jetbrains/webdemo/CommonSettings.java"
                            match="KOTLIN_VERSION = &#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
                            replace="KOTLIN_VERSION = &#34;${version}&#34;"
                            byline="true"/>
