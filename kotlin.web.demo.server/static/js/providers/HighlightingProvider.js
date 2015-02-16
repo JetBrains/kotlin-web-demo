@@ -66,7 +66,11 @@ var HighlightingProvider = (function () {
                 error: function (jqXHR, textStatus, errorThrown) {
                     try {
                         isLoadingHighlighting = false;
-                        onFail(textStatus + " : " + errorThrown);
+                        if(jqXHR.responseText != null && jqXHR.responseText != ""){
+                            onFail(jqXHR.responseText);
+                        } else {
+                            onFail(textStatus + " : " + errorThrown);
+                        }
                     } catch (e) {
                         console.log(e)
                     }

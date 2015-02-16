@@ -69,7 +69,11 @@ var CompletionProvider = (function () {
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         isLoadingCompletion = false;
-                        instance.onFail(textStatus + " : " + errorThrown);
+                        if(jqXHR.responseText != null && jqXHR.responseText != ""){
+                            instance.onFail(jqXHR.responseText);
+                        } else {
+                            instance.onFail(textStatus + " : " + errorThrown);
+                        }
                     }
                 });
             }

@@ -24,16 +24,12 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
-import org.jetbrains.webdemo.Project;
-import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.handlers.ServerResponseUtils;
-import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -166,7 +162,7 @@ public class MyHttpSession {
 
     private void forwardConvertResult() {
         sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
-        Map<String, String > postParameters = new HashMap<>();
+        Map<String, String> postParameters = new HashMap<>();
         postParameters.put("text", request.getParameter("text"));
         forwardRequestToBackend(request, response, postParameters);
     }
@@ -179,7 +175,7 @@ public class MyHttpSession {
             if (project.originUrl != null) {
                 addUnmodifiableDataToExample(project, project.originUrl);
             }
-            Map<String, String > postParameters = new HashMap<>();
+            Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(project));
             postParameters.put("filename", request.getParameter("filename"));
             postParameters.put("line", request.getParameter("line"));
@@ -200,7 +196,7 @@ public class MyHttpSession {
             if (project.originUrl != null) {
                 addUnmodifiableDataToExample(project, project.originUrl);
             }
-            Map<String, String > postParameters = new HashMap<>();
+            Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(project));
             forwardRequestToBackend(request, response, postParameters);
         } catch (IOException e) {
@@ -218,7 +214,7 @@ public class MyHttpSession {
             if (project.originUrl != null) {
                 addUnmodifiableDataToExample(project, project.originUrl);
             }
-            Map<String, String > postParameters = new HashMap<>();
+            Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(project));
             forwardRequestToBackend(request, response, postParameters);
         } catch (IOException e) {
@@ -252,10 +248,10 @@ public class MyHttpSession {
             conn.setUseCaches(false);
             conn.setDoOutput(hasoutbody);
 
-            try(OutputStream requestBody = conn.getOutputStream()) {
+            try (OutputStream requestBody = conn.getOutputStream()) {
                 boolean first = true;
-                for(String key : postParameters.keySet()){
-                    if(first) {
+                for (String key : postParameters.keySet()) {
+                    if (first) {
                         first = false;
                     } else {
                         requestBody.write('&');
@@ -274,15 +270,32 @@ public class MyHttpSession {
                 response.setHeader(header, value);
             }
 
-            byte [] buffer = new byte[1024];
-            while (true) {
-                final int read = conn.getInputStream().read(buffer);
-                if (read <= 0) break;
-                response.getOutputStream().write(buffer, 0, read);
+            if (conn.getResponseCode() != HttpServletResponse.SC_OK) {
+                response.getOutputStream().write("Can't send your request to backend server: ".getBytes());
+                String message;
+                switch (conn.getResponseCode()) {
+                    case HttpServletResponse.SC_NOT_FOUND:
+                        message = "backend server not found";
+                        break;
+                    case HttpServletResponse.SC_SERVICE_UNAVAILABLE:
+                        message = "backend server is temporary overloaded";
+                        break;
+                    default:
+                        message = "";
+                        break;
+                }
+                response.getOutputStream().write(message.getBytes());
+            } else {
+                byte[] buffer = new byte[1024];
+                while (true) {
+                    final int read = conn.getInputStream().read(buffer);
+                    if (read <= 0) break;
+                    response.getOutputStream().write(buffer, 0, read);
+                }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            // pass
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "FORWARD_REQUEST_TO_BACKEND", "", "Can't forward request to backend server");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

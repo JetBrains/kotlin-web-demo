@@ -66,7 +66,11 @@ var RunProvider = (function () {
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     try {
-                        onFail(textStatus + " : " + errorThrown);
+                        if(jqXHR.responseText != null && jqXHR.responseText != ""){
+                            onFail(jqXHR.responseText);
+                        } else {
+                            onFail(textStatus + " : " + errorThrown);
+                        }
                     } catch (e) {
                         console.log(e)
                     }
@@ -118,7 +122,11 @@ var RunProvider = (function () {
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     try {
-                        onFail(textStatus + " : " + errorThrown);
+                        if(jqXHR.responseText != null && jqXHR.responseText != ""){
+                            onFail(jqXHR.responseText);
+                        } else {
+                            onFail(textStatus + " : " + errorThrown);
+                        }
                     } catch (e) {
                         console.log(e)
                     }

@@ -52,7 +52,11 @@ var ConverterProvider = (function () {
                 data: {text: text},
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    onFail(textStatus + " : " + errorThrown);
+                    if(jqXHR.responseText != null && jqXHR.responseText != ""){
+                        onFail(jqXHR.responseText);
+                    } else {
+                        onFail(textStatus + " : " + errorThrown);
+                    }
                 }
             });
         }
