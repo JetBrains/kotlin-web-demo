@@ -23,12 +23,12 @@ import org.jetbrains.kotlin.j2k.J2kPackage;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.backend.SessionInfo;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 
 public class JavaToKotlinConverter {
-    private final SessionInfo info;
+    private final BackendSessionInfo info;
 
-    public JavaToKotlinConverter(SessionInfo info) {
+    public JavaToKotlinConverter(BackendSessionInfo info) {
         this.info = info;
     }
 
@@ -48,7 +48,7 @@ public class JavaToKotlinConverter {
             jsonObject.put("text", resultFormConverter);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN.name(), info.getOriginUrl(), code);
+                    BackendSessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN.name(), info.getOriginUrl(), code);
             return ResponseUtils.getErrorInJson(e.getMessage());
         } finally {
             Initializer.reinitializeJavaEnvironment();

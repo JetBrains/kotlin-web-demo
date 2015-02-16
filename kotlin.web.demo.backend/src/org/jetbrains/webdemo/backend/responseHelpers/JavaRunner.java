@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.backend.SessionInfo;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 
 import java.io.*;
 import java.util.*;
@@ -40,12 +40,12 @@ public class JavaRunner {
     private final List<OutputFile> files;
     private final ArrayNode jsonArray;
     private final JetFile currentFile;
-    private final SessionInfo sessionInfo;
+    private final BackendSessionInfo sessionInfo;
     int returnValue = 0;
     private String arguments;
     private volatile boolean isTimeoutException = false;
 
-    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, SessionInfo info) {
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, BackendSessionInfo info) {
         this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;
@@ -158,7 +158,7 @@ public class JavaRunner {
                     sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
         } else if (!isTimeoutException) {
             try {
-                if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
+                if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
                     ObjectNode output = jsonArray.addObject();
                     ArrayNode executorOutput = (ArrayNode) new ObjectMapper().readTree(outStream.toString());
                     output.put("testResults", executorOutput);
@@ -354,7 +354,7 @@ public class JavaRunner {
         builder.add("-classpath");
         String classpath = (pathToRootOut + File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar" + File.pathSeparator +
                 BackendSettings.CLASS_PATH + File.separator + "Executors.jar");
-        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
+        if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
             builder.add(classpath +
                             File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "junit.jar" +
                             File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "jackson-databind.jar" +

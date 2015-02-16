@@ -32,7 +32,7 @@ import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.backend.SessionInfo;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
@@ -48,11 +48,11 @@ public class CompileAndRunExecutor {
 
     private final List<PsiFile> currentPsiFiles;
 
-    private final SessionInfo sessionInfo;
+    private final BackendSessionInfo sessionInfo;
     private final String args;
     private final com.intellij.openapi.project.Project currentProject;
 
-    public CompileAndRunExecutor(List<PsiFile> currentPsiFiles, com.intellij.openapi.project.Project currentProject, SessionInfo info, String args) {
+    public CompileAndRunExecutor(List<PsiFile> currentPsiFiles, com.intellij.openapi.project.Project currentProject, BackendSessionInfo info, String args) {
         this.currentPsiFiles = currentPsiFiles;
         this.currentProject = currentProject;
         this.sessionInfo = info;

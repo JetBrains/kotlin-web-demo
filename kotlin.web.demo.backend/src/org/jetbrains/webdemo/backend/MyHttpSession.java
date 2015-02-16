@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MyHttpSession {
-    private final SessionInfo sessionInfo;
+    private final BackendSessionInfo sessionInfo;
     private final Map<String, String[]> parameters;
     protected com.intellij.openapi.project.Project currentProject;
     protected PsiFile currentPsiFile;
@@ -40,7 +40,7 @@ public class MyHttpSession {
     private HttpServletResponse response;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public MyHttpSession(SessionInfo info, Map<String, String[]> parameters) {
+    public MyHttpSession(BackendSessionInfo info, Map<String, String[]> parameters) {
         this.sessionInfo = info;
         this.parameters = parameters;
     }
@@ -55,19 +55,19 @@ public class MyHttpSession {
 
             switch (parameters.get("type")[0]) {
                 case ("run"):
-                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(BackendSessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendExecutorResult();
                     break;
                 case ("highlight"):
                     sendHighlightingResult();
                     break;
                 case ("convertToKotlin"):
-                    sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
+                    sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
                     sendConversationResult();
                     break;
                 case ("complete"):
-                    sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
-                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
+                    sessionInfo.setType(BackendSessionInfo.TypeOfRequest.COMPLETE);
+                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(BackendSessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendCompletionResult();
                     break;
             }
@@ -91,13 +91,13 @@ public class MyHttpSession {
             Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
             List<PsiFile> psiFiles = createProjectPsiFiles(project);
             sessionInfo.setRunConfiguration(project.confType);
-            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+            if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
+                sessionInfo.setType(BackendSessionInfo.TypeOfRequest.RUN);
 
                 CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, currentProject, sessionInfo, project.args);
                 writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
             } else {
-                sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
+                sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS);
                 writeResponse(new JsConverter(sessionInfo).getResult(psiFiles, project.args), HttpServletResponse.SC_OK);
             }
         } catch (IOException e) {
@@ -135,7 +135,7 @@ public class MyHttpSession {
     }
 
     public void sendHighlightingResult() {
-        sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
+        sessionInfo.setType(BackendSessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
             Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
             sessionInfo.setRunConfiguration(project.confType);

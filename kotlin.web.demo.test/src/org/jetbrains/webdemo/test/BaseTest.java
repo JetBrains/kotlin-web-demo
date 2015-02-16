@@ -58,7 +58,7 @@ public class BaseTest extends TestCase {
         String currentAbsolutePath = currentRelativePath.toAbsolutePath().toString();
 
         Initializer.INITIALIZER = ServerInitializer.getInstance();
-        ErrorWriter.ERROR_WRITER = ErrorWriterOnServer.getInstance();
+        ErrorWriter.ERROR_WRITER = ErrorWriter.getInstance();
 
         BackendSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
         BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";

@@ -19,6 +19,7 @@ package org.jetbrains.webdemo.test.completion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -76,7 +77,7 @@ public class CompletionTest extends BaseTest {
     }
 
     private void compareResult(int lineNo, int charNo, String expectedResult, String runConfiguration) throws IOException {
-        sessionInfo.setType(SessionInfo.TypeOfRequest.COMPLETE);
+        BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.COMPLETE);
         sessionInfo.setRunConfiguration(runConfiguration);
         PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), "completion/root.kt", TestUtils.getDataFromFile(TestUtils.TEST_SRC, "completion/root.kt"));
 

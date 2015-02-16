@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.intellij.psi.PsiFile;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.Project;
@@ -78,14 +79,14 @@ public class RunExamplesTest extends BaseTest {
 
     @Override
     protected void runTest() throws Throwable {
-        sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+        BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.RUN);
         sessionInfo.setRunConfiguration(runConfiguration);
         List<PsiFile> psiFiles = new ArrayList<>();
         for (ProjectFile file : project.files) {
             psiFiles.add(JetPsiFactoryUtil.createFile(getProject(), file.getName(), file.getText()));
         }
 
-        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
+        if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA)) {
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, getProject(), sessionInfo, project.args);
             ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
             for (JsonNode outputObject : actualResult) {
@@ -96,7 +97,7 @@ public class RunExamplesTest extends BaseTest {
                     assertTrue(outputObject.get("exception").isNull());
                 }
             }
-        } else if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
+        } else if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, getProject(), sessionInfo, project.args);
             ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
             for (JsonNode outputObject : actualResult){

@@ -18,16 +18,16 @@ package org.jetbrains.webdemo.backend.responseHelpers;
 
 import com.intellij.psi.PsiFile;
 import org.jetbrains.kotlin.psi.JetFile;
-import org.jetbrains.webdemo.backend.SessionInfo;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class JsConverter {
-    private final SessionInfo info;
+    private final BackendSessionInfo info;
 
-    public JsConverter(SessionInfo info) {
+    public JsConverter(BackendSessionInfo info) {
         this.info = info;
     }
 

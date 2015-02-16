@@ -21,19 +21,19 @@ import org.jetbrains.webdemo.TimeManager;
 /**
  * Created by Semyon.Atamas on 2/13/2015.
  */
-public class SessionInfo {
+public class BackendSessionInfo {
     private final TimeManager timeManager = new TimeManager();
     private String id;
     private TypeOfRequest type = TypeOfRequest.GET_RESOURCE;
     private RunConfiguration runConfiguration = RunConfiguration.JAVA;
     private String originUrl = null;
 
-    public SessionInfo(String sessionId, TypeOfRequest typeOfRequest) {
+    public BackendSessionInfo(String sessionId, TypeOfRequest typeOfRequest) {
         this.id = sessionId;
         this.type = typeOfRequest;
     }
 
-    public SessionInfo(String sessionId) {
+    public BackendSessionInfo(String sessionId) {
         this.id = sessionId;
     }
 

@@ -51,8 +51,8 @@ public class HealthChecker {
                         "  println(\"Hello, world!\")\n" +
                         "}"
                 );
-                SessionInfo sessionInfo = new SessionInfo("test");
-                sessionInfo.setRunConfiguration(SessionInfo.RunConfiguration.JAVA);
+                BackendSessionInfo sessionInfo = new BackendSessionInfo("test");
+                sessionInfo.setRunConfiguration(BackendSessionInfo.RunConfiguration.JAVA);
                 CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(helloWorldFile), currentProject, sessionInfo, "");
                 String result = responseForCompilation.getResult();
                 try {

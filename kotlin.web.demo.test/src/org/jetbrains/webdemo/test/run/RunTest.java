@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.backend.responseHelpers.JsConverter;
@@ -77,12 +78,11 @@ public class RunTest extends BaseTest {
     }
 
     private void checkException(String fileName, String args, String runConfiguration, String exceptionName) throws IOException {
-        sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+        BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.RUN);
         sessionInfo.setRunConfiguration(runConfiguration);
 
         if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
             PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
-            sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
 
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(currentPsiFile), currentPsiFile.getProject(), sessionInfo, args);
             ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
@@ -102,12 +102,12 @@ public class RunTest extends BaseTest {
     }
 
     private void compareResult(String fileName, String args, String expectedResult, String runConfiguration) throws IOException {
-        sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+        BackendSessionInfo sessionInfo = new BackendSessionInfo("test");
         sessionInfo.setRunConfiguration(runConfiguration);
 
-        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
+        if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA)) {
             PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
-            sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
+            sessionInfo.setType(BackendSessionInfo.TypeOfRequest.RUN);
 
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(currentPsiFile), currentPsiFile.getProject(), sessionInfo, args);
             ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
@@ -119,7 +119,7 @@ public class RunTest extends BaseTest {
                 }
             }
         } else {
-            sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_JS);
+            sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS);
             PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
             String actualResult = new JsConverter(sessionInfo).getResult(Collections.singletonList(currentPsiFile), args);
             assertEquals("wrong result", expectedResult, actualResult);

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.psi.PsiFile;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.Project;
@@ -81,6 +82,7 @@ public class HighlightExamplesTest extends BaseTest {
 
     @Override
     protected void runTest() throws Throwable {
+        BackendSessionInfo sessionInfo = new BackendSessionInfo("test");
         sessionInfo.setRunConfiguration(runConfiguration);
         List<PsiFile> psiFiles = new ArrayList<>();
         for (ProjectFile file : project.files) {

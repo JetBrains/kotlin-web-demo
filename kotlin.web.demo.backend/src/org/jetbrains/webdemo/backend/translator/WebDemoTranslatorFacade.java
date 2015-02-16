@@ -35,7 +35,7 @@ import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.backend.SessionInfo;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 
 import java.io.File;
@@ -56,7 +56,7 @@ public final class WebDemoTranslatorFacade {
 
     @SuppressWarnings("UnusedDeclaration")
     @Nullable
-    public static BindingContext analyzeProgramCode(@NotNull List<JetFile> files, SessionInfo sessionInfo) {
+    public static BindingContext analyzeProgramCode(@NotNull List<JetFile> files, BackendSessionInfo sessionInfo) {
         try {
             return TopDownAnalyzerFacadeForJS.analyzeFiles(files, new LibrarySourcesConfig(
                     Initializer.INITIALIZER.getEnvironment().getProject(),
@@ -67,14 +67,14 @@ public final class WebDemoTranslatorFacade {
                     false));
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
+                    BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
             return null;
         }
     }
 
     @SuppressWarnings("UnusedDeclaration")
     @NotNull
-    public static String translateProjectWithCallToMain(@NotNull List<JetFile> files, @NotNull String arguments, SessionInfo sessionInfo) {
+    public static String translateProjectWithCallToMain(@NotNull List<JetFile> files, @NotNull String arguments, BackendSessionInfo sessionInfo) {
         try {
             ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
             ObjectNode jsonObject = result.addObject();
@@ -91,7 +91,7 @@ public final class WebDemoTranslatorFacade {
             Initializer.reinitializeJavaEnvironment();
 
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
+                    BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
             KotlinCoreException ex = new KotlinCoreException(e);
             return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, ex.getStackTraceString());
         }
@@ -100,7 +100,7 @@ public final class WebDemoTranslatorFacade {
     @NotNull
     private static String doTranslate(@NotNull List<JetFile> files,
                                       @NotNull String arguments,
-                                      SessionInfo sessionInfo) throws TranslationException {
+                                      BackendSessionInfo sessionInfo) throws TranslationException {
         LibrarySourcesConfig config  = new LibrarySourcesConfig(
                 Initializer.INITIALIZER.getEnvironment().getProject(),
                 "moduleId",

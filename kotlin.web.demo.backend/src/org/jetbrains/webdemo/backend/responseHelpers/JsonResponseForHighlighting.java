@@ -22,7 +22,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.backend.SessionInfo;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
@@ -37,9 +37,9 @@ public class JsonResponseForHighlighting {
     private final Project currentProject;
     private final ObjectMapper objectMapper = new ObjectMapper();
     
-    private final SessionInfo sessionInfo;
+    private final BackendSessionInfo sessionInfo;
 
-    public JsonResponseForHighlighting(List<PsiFile> currentPsiFile, SessionInfo info, Project currentProject) {
+    public JsonResponseForHighlighting(List<PsiFile> currentPsiFile, BackendSessionInfo info, Project currentProject) {
         this.currentPsiFiles = currentPsiFile;
         this.sessionInfo = info;
         this.currentProject = currentProject;

@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.test.j2kconverter;
 
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
@@ -34,8 +35,7 @@ public class J2KConverterTest extends BaseTest {
     }
 
     private void compareResult(String fileName, String expectedResult) throws IOException {
-        sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
-
+        BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
         String actualResult = new JavaToKotlinConverter(sessionInfo).getResult(TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
         assertEquals("wrong result in " + fileName, expectedResult, actualResult);
     }

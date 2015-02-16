@@ -36,7 +36,7 @@ public class ServerHandler {
         } else if (!ResponseUtils.isOriginAccepted(request)) {
             ErrorWriter.ERROR_WRITER.writeInfo(request.getHeader("Origin") + " try to connect to server");
         } else {
-            SessionInfo sessionInfo;
+            BackendSessionInfo sessionInfo;
 
             String param = request.getRequestURI() + "?" + request.getQueryString();
             try {
@@ -54,8 +54,8 @@ public class ServerHandler {
     }
 
     @Nullable
-    private SessionInfo setSessionInfo(final HttpSession session, String originUrl) {
-        SessionInfo sessionInfo = new SessionInfo(session.getId());
+    private BackendSessionInfo setSessionInfo(final HttpSession session, String originUrl) {
+        BackendSessionInfo sessionInfo = new BackendSessionInfo(session.getId());
         sessionInfo.setOriginUrl(originUrl);
         return sessionInfo;
     }

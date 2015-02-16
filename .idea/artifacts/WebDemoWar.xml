@@ -24,12 +24,17 @@
           <element id="library" level="project" name="junit" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="kotlin.web.demo/web/Web" />
-      <element id="directory" name="static" />
+      <element id="directory" name="static">
+        <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.server/static" />
+      </element>
       <element id="directory" name="examples">
         <element id="dir-copy" path="$PROJECT_DIR$/examples" />
       </element>
       <element id="file-copy" path="$PROJECT_DIR$/help/helpWords.xml" />
+      <element id="directory" name="js">
+        <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.common/resources/js" />
+      </element>
+      <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.server/web" />
     </root>
   </artifact>
 </component>

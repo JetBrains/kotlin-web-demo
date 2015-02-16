@@ -29,10 +29,9 @@ import org.jetbrains.kotlin.diagnostics.Severity;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
-import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.Interval;
 import org.jetbrains.webdemo.backend.ResolveUtils;
-import org.jetbrains.webdemo.backend.SessionInfo;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
@@ -43,9 +42,9 @@ public class ErrorAnalyzer {
     //    private final Document currentDocument;
     private final Project currentProject;
 
-    private final SessionInfo sessionInfo;
+    private final BackendSessionInfo sessionInfo;
 
-    public ErrorAnalyzer(List<PsiFile> currentPsiFiles, SessionInfo info, Project currentProject) {
+    public ErrorAnalyzer(List<PsiFile> currentPsiFiles, BackendSessionInfo info, Project currentProject) {
         this.currentPsiFiles = currentPsiFiles;
         this.currentProject = currentProject;
 //        this.currentDocument = currentPsiFiles.getViewProvider().getDocument();
@@ -60,8 +59,8 @@ public class ErrorAnalyzer {
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
-            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA) ||
-                    sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
+            if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA) ||
+                    sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
                 bindingContext = ResolveUtils.getBindingContext(convertList(currentPsiFiles), currentProject);
             } else {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(convertList(currentPsiFiles), sessionInfo);

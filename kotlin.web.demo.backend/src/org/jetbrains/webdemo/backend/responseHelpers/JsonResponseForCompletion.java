@@ -49,7 +49,7 @@ import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.backend.SessionInfo;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
@@ -82,10 +82,10 @@ public class JsonResponseForCompletion {
     private PsiFile currentPsiFile;
     private Document currentDocument;
     private int caretPositionOffset;
-    private SessionInfo sessionInfo;
+    private BackendSessionInfo sessionInfo;
     private List<PsiFile> psiFiles;
 
-    public JsonResponseForCompletion(List<PsiFile> psiFiles, SessionInfo sessionInfo, String filename, int lineNumber, int charNumber) {
+    public JsonResponseForCompletion(List<PsiFile> psiFiles, BackendSessionInfo sessionInfo, String filename, int lineNumber, int charNumber) {
         this.lineNumber = lineNumber;
         this.charNumber = charNumber;
         this.psiFiles = psiFiles;
@@ -141,7 +141,7 @@ public class JsonResponseForCompletion {
             addExpressionAtCaret();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.COMPLETE.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText() + "  " + lineNumber + " " + charNumber);
+                    BackendSessionInfo.TypeOfRequest.COMPLETE.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText() + "  " + lineNumber + " " + charNumber);
             return "[]";
         }
         /* int i = 0;
@@ -152,7 +152,7 @@ public class JsonResponseForCompletion {
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
         try {
-            if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.CANVAS)) {
+            if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.CANVAS)) {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(convertList(psiFiles), sessionInfo);
             } else {
                 bindingContext = ResolveUtils.getBindingContext(convertList(psiFiles), currentProject);
@@ -302,7 +302,7 @@ public class JsonResponseForCompletion {
             } else {
                 if (currentPsiFile.getText().length() > 5) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot find an element to take a completion"),
-                            SessionInfo.TypeOfRequest.ANALYZE_LOG.name(), sessionInfo.getOriginUrl(),
+                            BackendSessionInfo.TypeOfRequest.ANALYZE_LOG.name(), sessionInfo.getOriginUrl(),
                             currentPsiFile.getText());
                 }
                 break;
