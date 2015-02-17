@@ -49,6 +49,7 @@ var AccordionView = (function () {
                         }
                         incompleteActionManager.checkTimepoint("headersLoaded");
                         $(element).accordion("refresh");
+                        $(myProgramsHeaderElement).unbind("click");
                         loadFirstItem();
                     }
                 )
@@ -166,6 +167,7 @@ var AccordionView = (function () {
         var selectedFileView = null;
 
         var myProgramsContentElement;
+        var myProgramsHeaderElement;
         var publicLinksContentElement;
         var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add");
         newProjectDialog.validate = instance.validateNewProjectName;
@@ -260,27 +262,27 @@ var AccordionView = (function () {
         }
 
         function addMyProjectsFolder() {
-            var myProg = document.createElement("h3");
-            myProg.className = "examples-folder-name";
-            myProg.innerHTML = "My programs";
-            myProg.id = escapeString("My programs");
-            element.appendChild(myProg);
+            myProgramsHeaderElement = document.createElement("h3");
+            myProgramsHeaderElement.className = "examples-folder-name";
+            myProgramsHeaderElement.innerHTML = "My programs";
+            myProgramsHeaderElement.id = escapeString("My programs");
+            element.appendChild(myProgramsHeaderElement);
 
             myProgramsContentElement = document.createElement("div");
             myProgramsContentElement.id = "My_Programs_content";
             element.appendChild(myProgramsContentElement);
 
             if (!loginView.isLoggedIn()) {
-                myProg.style.color = "rgba(0,0,0,0.5)";
+                myProgramsHeaderElement.style.color = "rgba(0,0,0,0.5)";
                 var login_link = document.createElement("span");
                 login_link.id = "login-link";
                 login_link.className = "login-link";
                 login_link.innerHTML = "(please log in)";
-                login_link.onclick = function (event) {
+                myProgramsHeaderElement.onclick = function (event) {
                     $("#login-dialog").dialog("open");
                     event.stopPropagation()
                 };
-                myProg.appendChild(login_link);
+                myProgramsHeaderElement.appendChild(login_link);
             } else {
                 var newProjectButton = document.createElement("div");
                 newProjectButton.className = "newProjectButton high-res-icon";
@@ -288,7 +290,7 @@ var AccordionView = (function () {
                     newProjectDialog.open(projectProvider.addNewProject, "Untitled");
                     e.stopPropagation();
                 };
-                myProg.appendChild(newProjectButton);
+                myProgramsHeaderElement.appendChild(newProjectButton);
             }
 
             return myProgramsContentElement;
