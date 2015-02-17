@@ -38,7 +38,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
     public String authorize() {
         try {
             twitterService = new ServiceBuilder()
-                    .provider(TwitterApi.SSL.class)
+                    .provider(TwitterApi.Authenticate.class)
                     .apiKey(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.SECRET)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "twitter"))
@@ -65,7 +65,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
             userInfo = new UserInfo();
             JsonNode obj = new ObjectMapper().readTree(response.getBody());
             String id = obj.get("id").toString();
-            String name = obj.has("name") ? obj.get("name").toString() : "";
+            String name = obj.has("name") ? obj.get("name").asText() : "";
             if (name != null && id != null) {
                 userInfo.login(name, id, TYPE);
             }

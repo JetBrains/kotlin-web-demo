@@ -63,7 +63,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
 
             JsonNode object = new ObjectMapper().readTree(response.getBody());
             userInfo = new UserInfo();
-            userInfo.login(object.get("name").textValue(), object.get("id").textValue(), TYPE);
+            userInfo.login(object.get("name").textValue(), object.get("id").asText(), TYPE);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "facebook: " + oauthVerifier);
         }

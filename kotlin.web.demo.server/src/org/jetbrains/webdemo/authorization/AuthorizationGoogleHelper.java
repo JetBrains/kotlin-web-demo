@@ -64,8 +64,8 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             Response response = request.send();
             userInfo = new UserInfo();
             JsonNode object = new ObjectMapper().readTree(response.getBody()) ;
-            String firstName = object.has("given_name") ? object.get("given_name").textValue() : "";
-            String lastName = object.has("family_name") ? object.get("family_name").textValue() : "";
+            String firstName = object.has("given_name") ? object.get("given_name").asText() : "";
+            String lastName = object.has("family_name") ? object.get("family_name").asText() : "";
             String id = object.get("id").textValue();
 
             userInfo.login(firstName + " " + lastName, id, TYPE);
