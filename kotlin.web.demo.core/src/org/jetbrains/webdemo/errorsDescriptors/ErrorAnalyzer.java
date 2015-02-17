@@ -40,7 +40,6 @@ import java.util.*;
 
 public class ErrorAnalyzer {
     private final List<PsiFile> currentPsiFiles;
-    //    private final Document currentDocument;
     private final Project currentProject;
 
     private final SessionInfo sessionInfo;
@@ -48,7 +47,6 @@ public class ErrorAnalyzer {
     public ErrorAnalyzer(List<PsiFile> currentPsiFiles, SessionInfo info, Project currentProject) {
         this.currentPsiFiles = currentPsiFiles;
         this.currentProject = currentProject;
-//        this.currentDocument = currentPsiFiles.getViewProvider().getDocument();
         this.sessionInfo = info;
     }
 
@@ -71,9 +69,6 @@ public class ErrorAnalyzer {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFiles);
             throw new KotlinCoreException(e);
         }
-//        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
-//                "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
-//        ErrorWriter.ERROR_WRITER.writeInfo(info);
         if (bindingContext != null) {
             getErrorsFromBindingContext(bindingContext, errors);
         }
@@ -95,17 +90,13 @@ public class ErrorAnalyzer {
                 }
                 if (diagnostic.getSeverity() != Severity.INFO) {
                     Iterator<TextRange> textRangeIterator = diagnostic.getTextRanges().iterator();
-                    if (textRangeIterator == null) {
-//                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator is null",
-//                                diagnostic.getTextRanges() + " " + render,
-//                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
-                        continue;
-                    }
-
                     if (!textRangeIterator.hasNext()) {
-                        /*ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range for diagnostic is empty.",
-                                "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() + "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render,
-                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());*/
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                                new NoSuchElementException( "Text range for diagnostic is empty. \n" +
+                                "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() + "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render),
+                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(),
+                                sessionInfo.getOriginUrl(),
+                                currentPsiFiles);
                         continue;
                     }
                     TextRange firstRange = textRangeIterator.next();
@@ -119,8 +110,8 @@ public class ErrorAnalyzer {
                 }
             }
         } catch (Throwable e) {
-//            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-//                    SessionInfo.TypeOfRequest.HIGHLIGHT.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.HIGHLIGHT.name(), sessionInfo.getOriginUrl(), currentPsiFiles);
         }
 
         for (String key : errors.keySet())
