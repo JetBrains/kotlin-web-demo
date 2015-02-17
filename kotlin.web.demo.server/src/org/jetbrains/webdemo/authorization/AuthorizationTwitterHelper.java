@@ -38,7 +38,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
     public String authorize() {
         try {
             twitterService = new ServiceBuilder()
-                    .provider(TwitterApi.SSL.class)
+                    .provider(TwitterApi.Authenticate.class)
                     .apiKey(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.SECRET)
                     .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "twitter"))
