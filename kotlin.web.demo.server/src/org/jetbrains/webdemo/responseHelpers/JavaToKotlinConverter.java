@@ -52,7 +52,7 @@ public class JavaToKotlinConverter {
                     SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN.name(), info.getOriginUrl(), code);
             return ResponseUtils.getErrorInJson(e.getMessage());
         } finally {
-            Initializer.reinitializeJavaEnvironment();
+            ServerInitializer.reinitializeJavaEnvironment();
         }
 
         return result.toString();

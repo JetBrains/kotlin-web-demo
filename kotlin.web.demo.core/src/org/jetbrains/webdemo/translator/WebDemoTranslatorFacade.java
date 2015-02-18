@@ -79,21 +79,16 @@ public final class WebDemoTranslatorFacade {
             ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
             ObjectNode jsonObject = result.addObject();
             jsonObject.put("text", doTranslate(files, arguments, sessionInfo));
-
-            Initializer.reinitializeJavaEnvironment();
-
             return result.toString();
-
         } catch (MainFunctionNotFoundException te) {
-            Initializer.reinitializeJavaEnvironment();
             return ResponseUtils.getErrorInJson(te.getMessage());
         } catch (Throwable e) {
-            Initializer.reinitializeJavaEnvironment();
-
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
             KotlinCoreException ex = new KotlinCoreException(e);
             return ResponseUtils.getErrorWithStackTraceInJson(ApplicationSettings.KOTLIN_ERROR_MESSAGE, ex.getStackTraceString());
+        } finally {
+            Initializer.reinitializeJavaEnvironment();
         }
     }
 
