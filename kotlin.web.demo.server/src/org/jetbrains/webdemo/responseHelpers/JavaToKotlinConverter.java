@@ -21,15 +21,12 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.kotlin.j2k.J2kPackage;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.ServerInitializer;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -45,7 +42,7 @@ public class JavaToKotlinConverter {
     public static void init(){
         try {
             URL[] urls = {
-                    new File(ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-plugin.jar").toURI().toURL(),
+                    new File(ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "j2k.jar").toURI().toURL(),
                     new File(ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-compiler.jar").toURI().toURL(),
                     new File(ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar").toURI().toURL()
             };

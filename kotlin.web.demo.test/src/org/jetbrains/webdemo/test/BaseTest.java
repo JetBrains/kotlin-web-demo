@@ -24,6 +24,7 @@ import org.jetbrains.webdemo.environment.EnvironmentManager;
 import org.jetbrains.webdemo.environment.EnvironmentManagerForServer;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
+import org.jetbrains.webdemo.responseHelpers.JavaToKotlinConverter;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
@@ -62,6 +63,7 @@ public class BaseTest extends TestCase {
         ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
         ApplicationSettings.JAVA_EXECUTE = ApplicationSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
         ApplicationSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
+        JavaToKotlinConverter.init();
 
         createManager();
         initializePolicyFile();
