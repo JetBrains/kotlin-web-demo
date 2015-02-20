@@ -49,7 +49,9 @@ var AccordionView = (function () {
                         }
                         incompleteActionManager.checkTimepoint("headersLoaded");
                         $(element).accordion("refresh");
-                        $(myProgramsHeaderElement).unbind("click");
+                        if(!loginView.isLoggedIn()) {
+                            $(myProgramsHeaderElement).unbind("click");
+                        }
                         loadFirstItem();
                     }
                 )

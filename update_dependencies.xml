@@ -85,7 +85,7 @@
 
             <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
 
-            <jar jarfile="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/tools/j2k.jar">
+            <jar jarfile="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/j2k.jar">
                 <fileset dir="${unzipped.kotlin.plugin}/j2k"/>
 
                 <manifest>

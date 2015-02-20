@@ -103,7 +103,7 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
     }
 
     @NotNull
-    public JetCoreEnvironment createEnvironment() {
+    protected JetCoreEnvironment createEnvironment() {
         K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
         CompilerConfiguration configuration = new CompilerConfiguration();
         configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));

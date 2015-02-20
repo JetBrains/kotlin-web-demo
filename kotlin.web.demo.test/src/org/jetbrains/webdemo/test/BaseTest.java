@@ -20,11 +20,13 @@ import com.intellij.openapi.util.Disposer;
 import junit.framework.TestCase;
 import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.backend.ServerInitializer;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManagerForServer;
+import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.ApplicationSettings;
@@ -65,6 +67,7 @@ public class BaseTest extends TestCase {
         ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
         BackendSettings.JAVA_EXECUTE = BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
         BackendSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
+        JavaToKotlinConverter.init();
 
         createManager();
         initializePolicyFile();

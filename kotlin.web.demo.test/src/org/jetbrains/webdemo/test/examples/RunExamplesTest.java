@@ -92,7 +92,7 @@ public class RunExamplesTest extends BaseTest {
             for (JsonNode outputObject : actualResult) {
                 if (outputObject.get("type").asText().equals("out")) {
                     if (project.getExpectedOutput() != null) {
-                        assertEquals(project.getExpectedOutput().replaceAll("</br>", System.lineSeparator()), getStdOut(outputObject.get("text").asText()));
+                        assertEquals(unifyLineSeparators(project.getExpectedOutput()), getStdOut(outputObject.get("text").asText()));
                     }
                     assertTrue(outputObject.get("exception").isNull());
                 }
@@ -118,7 +118,11 @@ public class RunExamplesTest extends BaseTest {
         while (matcher.find()) {
             builder.append(matcher.group(1));
         }
-        return builder.toString().replaceAll("</br>", System.lineSeparator());
+        return unifyLineSeparators(builder.toString());
+    }
+
+    private String unifyLineSeparators(String text) {
+        return text.replaceAll("\\r\\n", "</br>").replaceAll("\\n", "</br>").replaceAll("</br>", System.lineSeparator());
     }
 }
 

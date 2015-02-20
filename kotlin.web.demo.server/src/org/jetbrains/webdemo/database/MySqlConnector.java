@@ -209,18 +209,22 @@ public class MySqlConnector {
     }
 
     public boolean addNewUser(UserInfo userInfo) {
-        if (!findUser(userInfo)) {
-            try (PreparedStatement st = connection.prepareStatement("INSERT INTO users (client_id, provider, username) VALUES (?, ?, ?)")) {
+        PreparedStatement st = null;
+        try {
+            if (!findUser(userInfo)) {
+                st = connection.prepareStatement("INSERT INTO users (client_id, provider, username) VALUES (?, ?, ?)");
                 st.setString(1, userInfo.getId());
                 st.setString(2, userInfo.getType());
                 st.setString(3, userInfo.getName());
                 st.executeUpdate();
                 return true;
-            } catch (Throwable e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
-                        userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             }
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
+        } finally {
+            closeStatement(st);
         }
         return false;
     }
@@ -235,9 +239,9 @@ public class MySqlConnector {
         }
     }
 
-    public boolean findUser(UserInfo userInfo) {
+    public boolean findUser(UserInfo userInfo) throws DatabaseOperationException {
+        checkConnection();
         try (PreparedStatement st = connection.prepareStatement("SELECT users.id FROM users WHERE (users.client_id = ? AND users.provider=?)")) {
-            checkConnection();
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
             try (ResultSet rs = st.executeQuery()) {
@@ -591,7 +595,7 @@ public class MySqlConnector {
             st.setString(2, userInfo.getType());
             st.setString(3, publicId);
             int rowsDeleted = st.executeUpdate();
-            if(rowsDeleted != 1){
+            if (rowsDeleted != 1) {
                 DatabaseOperationException e = new DatabaseOperationException(rowsDeleted + " files were deleted");
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
@@ -695,7 +699,7 @@ public class MySqlConnector {
             st.setString(1, userId + "");
             st.setString(2, publicId);
             int rowsDeleted = st.executeUpdate();
-            if(rowsDeleted != 1){
+            if (rowsDeleted != 1) {
                 DatabaseOperationException e = new DatabaseOperationException(rowsDeleted + " projects were deleted");
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),

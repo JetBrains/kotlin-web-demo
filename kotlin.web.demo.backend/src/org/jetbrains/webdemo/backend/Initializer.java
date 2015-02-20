@@ -28,9 +28,12 @@ public abstract class Initializer {
     public abstract EnvironmentManager getEnvironmentManager();
 
     public static void reinitializeJavaEnvironment() {
-        ApplicationManager.setApplication(INITIALIZER.getEnvironmentManager().getEnvironment().getApplication(),
-                INITIALIZER.getEnvironmentManager().getRegistry(), EncodingRegistry.ourInstanceGetter,
-                INITIALIZER.getEnvironmentManager().getDisposable());
+        ApplicationManager.setApplication(
+                INITIALIZER.getEnvironmentManager().getEnvironment().getApplication(),
+                INITIALIZER.getEnvironmentManager().getRegistry(),
+                EncodingRegistry.ourInstanceGetter,
+                INITIALIZER.getEnvironmentManager().getDisposable()
+        );
     }
 
 

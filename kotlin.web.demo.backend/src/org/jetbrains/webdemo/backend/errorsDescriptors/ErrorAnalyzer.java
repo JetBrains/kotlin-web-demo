@@ -47,7 +47,6 @@ public class ErrorAnalyzer {
     public ErrorAnalyzer(List<PsiFile> currentPsiFiles, BackendSessionInfo info, Project currentProject) {
         this.currentPsiFiles = currentPsiFiles;
         this.currentProject = currentProject;
-//        this.currentDocument = currentPsiFiles.getViewProvider().getDocument();
         this.sessionInfo = info;
     }
 
@@ -70,9 +69,6 @@ public class ErrorAnalyzer {
 //            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFiles);
             throw new KotlinCoreException(e);
         }
-//        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
-//                "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
-//        ErrorWriter.ERROR_WRITER.writeInfo(info);
         if (bindingContext != null) {
             getErrorsFromBindingContext(bindingContext, errors);
         }
@@ -94,13 +90,6 @@ public class ErrorAnalyzer {
                 }
                 if (diagnostic.getSeverity() != Severity.INFO) {
                     Iterator<TextRange> textRangeIterator = diagnostic.getTextRanges().iterator();
-                    if (textRangeIterator == null) {
-//                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range iterator is null",
-//                                diagnostic.getTextRanges() + " " + render,
-//                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
-                        continue;
-                    }
-
                     if (!textRangeIterator.hasNext()) {
                         /*ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range for diagnostic is empty.",
                                 "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() + "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render,
