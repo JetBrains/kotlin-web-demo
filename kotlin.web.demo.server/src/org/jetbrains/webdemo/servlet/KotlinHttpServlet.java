@@ -22,6 +22,7 @@ import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
+import org.jetbrains.webdemo.responseHelpers.JavaToKotlinConverter;
 import org.jetbrains.webdemo.server.ApplicationSettings;
 
 import javax.naming.InitialContext;
@@ -67,6 +68,7 @@ public class KotlinHttpServlet extends HttpServlet {
                 ExamplesList.getInstance();
                 HelpLoader.getInstance();
                 Statistics.getInstance();
+                JavaToKotlinConverter.init();
                 MySqlConnector.getInstance();
             } else {
                 ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");

@@ -38,13 +38,6 @@ public class ServerInitializer extends Initializer {
         return initializer;
     }
 
-    public static void reinitializeJavaEnvironment() {
-        EnvironmentManagerForServer environmentManager = new EnvironmentManagerForServer();
-        environmentManager.createEnvironment();
-        ServerInitializer.setEnvironmentManager(environmentManager);
-        Initializer.reinitializeJavaEnvironment();
-    }
-
     public boolean initJavaCoreEnvironment() {
         try {
             environmentManager.getEnvironment();

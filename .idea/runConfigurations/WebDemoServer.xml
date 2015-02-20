@@ -70,6 +70,7 @@
       </SHUTDOWN>
     </ConfigurationWrapper>
     <method>
+      <option name="Make" enabled="true" />
       <option name="BuildArtifacts" enabled="true">
         <artifact name="WebDemoWar" />
       </option>

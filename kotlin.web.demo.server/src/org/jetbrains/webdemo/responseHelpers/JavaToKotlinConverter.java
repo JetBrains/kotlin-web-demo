@@ -24,10 +24,38 @@ import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.ServerInitializer;
+import org.jetbrains.webdemo.server.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
+
+import java.io.File;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 public class JavaToKotlinConverter {
     private final SessionInfo info;
+    /**
+     * Main method of java2kotlin converter. This method will change Extensions
+     * during the call, and it's not thread-safe to reinitialize them after it.
+     * That's why this method is loaded with a different class loader wia reflection/
+     */
+    private static Method translateToKotlin;
+
+    public static void init(){
+        try {
+            URL[] urls = {
+                    new File(ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-plugin.jar").toURI().toURL(),
+                    new File(ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-compiler.jar").toURI().toURL(),
+                    new File(ApplicationSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar").toURI().toURL()
+            };
+            URLClassLoader classLoader = new URLClassLoader(urls);
+            translateToKotlin = classLoader.loadClass(J2kPackage.class.getName()).getMethod("translateToKotlin", String.class);
+            assert(translateToKotlin.invoke(null, "class A").equals("class A"));
+        } catch (Throwable e) {
+            ErrorWriter.writeExceptionToConsole("Couldn't initialize Java2Kotlin converter", e);
+        }
+    }
 
     public JavaToKotlinConverter(SessionInfo info) {
         this.info = info;
@@ -39,7 +67,7 @@ public class JavaToKotlinConverter {
         try {
             String resultFormConverter;
             try {
-                resultFormConverter = J2kPackage.translateToKotlin(code);
+                resultFormConverter = (String) translateToKotlin.invoke(null, code);
             } catch (Exception e) {
                 return ResponseUtils.getErrorInJson("EXCEPTION: " + e.getMessage());
             }
@@ -51,8 +79,6 @@ public class JavaToKotlinConverter {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN.name(), info.getOriginUrl(), code);
             return ResponseUtils.getErrorInJson(e.getMessage());
-        } finally {
-            ServerInitializer.reinitializeJavaEnvironment();
         }
 
         return result.toString();
