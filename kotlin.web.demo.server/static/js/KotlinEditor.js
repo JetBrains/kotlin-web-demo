@@ -246,7 +246,7 @@ var KotlinEditor = (function () {
                 "Ctrl-Space": function (mirror) {
                     CodeMirror.commands.autocomplete(mirror, CodeMirror.hint.kotlin, {async: true})
                 },
-                "Shift-Tab": false,
+                "Shift-Tab": "indentLess",
                 "Ctrl-Alt-L": "indentAuto",
                 "Ctrl-/": "toggleComment"
             },
