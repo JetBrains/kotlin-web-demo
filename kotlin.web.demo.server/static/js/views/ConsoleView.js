@@ -62,7 +62,7 @@ var ConsoleView = (function () {
             tabs.tabs();
         }
 
-        function prepareTab(){
+        function prepareTab() {
             element.innerHTML = "";
             var consoleOutputElement = document.createElement("div");
             element.appendChild(consoleOutputElement);
@@ -74,15 +74,17 @@ var ConsoleView = (function () {
         }
 
         function setOutput(data) {
-            for(var i = 0 ;  i < data.length; ++i){
-                if(data[i].type == "out"){
+            for (var i = 0; i < data.length; ++i) {
+                if (data[i] instanceof Error) {
+                    consoleOutputView.err.println(data[i].stack);
+                } else if (data[i].type == "out") {
                     consoleOutputView.printMarkedTextToConsole(data[i].text);
-                    if(data[i].exception != null){
+                    if (data[i].exception != null) {
                         consoleOutputView.printException(data[i].exception);
                     }
                 } else if (data[i].type == "jsOut") {
                     consoleOutputView.out.print(data[i].text);
-                } else if(data[i].type == "err"){
+                } else if (data[i].type == "err") {
                     var message = data[i].text;
                     if (message == "") {
                         consoleOutputView.err.println("Unknown exception.");
@@ -93,7 +95,7 @@ var ConsoleView = (function () {
                     }
                 } else if (data[i].type == "toggle-info" || data[i].type == "info" || data[i].type == "generatedJSCode") {
                     generatedCodeView.setOutput(data[i]);
-                } else{
+                } else {
                     throw "Unknown data type";
                 }
             }
