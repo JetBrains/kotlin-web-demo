@@ -26,6 +26,8 @@ import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -35,12 +37,12 @@ import java.util.concurrent.TimeUnit;
  */
 public class HealthChecker {
     private static HealthChecker instance = new HealthChecker();
-    private ScheduledExecutorService periodicHealthChecker;
-    private int status = HttpServletResponse.SC_OK;
+    private Timer timer;
+    private int status = HttpServletResponse.SC_SERVICE_UNAVAILABLE;
 
     private HealthChecker(){
-        periodicHealthChecker = new ScheduledThreadPoolExecutor(0);
-        periodicHealthChecker.scheduleAtFixedRate(new Runnable() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Project currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
@@ -48,8 +50,8 @@ public class HealthChecker {
                         currentProject,
                         "HelloWorld.kt",
                         "fun main(args : Array<String>) {\n" +
-                        "  println(\"Hello, world!\")\n" +
-                        "}"
+                                "  println(\"Hello, world!\")\n" +
+                                "}"
                 );
                 BackendSessionInfo sessionInfo = new BackendSessionInfo("test");
                 sessionInfo.setRunConfiguration(BackendSessionInfo.RunConfiguration.JAVA);
@@ -57,11 +59,11 @@ public class HealthChecker {
                 String result = responseForCompilation.getResult();
                 try {
                     ArrayNode resultNodes = (ArrayNode) new ObjectMapper().readTree(result);
-                    for(JsonNode resultNode : resultNodes){
-                        if(resultNode.get("type").asText().equals("out")){
-                            if(resultNode.get("text").asText().equals("&amp;lt;outStream&amp;gt;Hello, world!\r\n&amp;lt;/outStream&amp;gt;") && resultNode.get("exception").isNull()){
+                    for (JsonNode resultNode : resultNodes) {
+                        if (resultNode.get("type").asText().equals("out")) {
+                            if (resultNode.get("text").asText().equals("&amp;lt;outStream&amp;gt;Hello, world!" + System.lineSeparator() + "&amp;lt;/outStream&amp;gt;") && resultNode.get("exception").isNull()) {
                                 status = HttpServletResponse.SC_OK;
-                            } else{
+                            } else {
                                 status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
                             }
                         }
@@ -70,7 +72,7 @@ public class HealthChecker {
                     e.printStackTrace();
                 }
             }
-        }, 0, 30, TimeUnit.SECONDS);
+        }, 0, 60000);
     }
 
     public static HealthChecker getInstance(){
