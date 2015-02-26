@@ -59,7 +59,7 @@ public final class WebDemoTranslatorFacade {
     public static BindingContext analyzeProgramCode(@NotNull List<JetFile> files, BackendSessionInfo sessionInfo) {
         try {
             return TopDownAnalyzerFacadeForJS.analyzeFiles(files, new LibrarySourcesConfig(
-                    Initializer.INITIALIZER.getEnvironment().getProject(),
+                    Initializer.getInstance().getEnvironment().getProject(),
                     "moduleId",
                     LIBRARY_FILES,
                     EcmaVersion.defaultVersion(),
@@ -97,7 +97,7 @@ public final class WebDemoTranslatorFacade {
                                       @NotNull String arguments,
                                       BackendSessionInfo sessionInfo) throws TranslationException {
         LibrarySourcesConfig config  = new LibrarySourcesConfig(
-                Initializer.INITIALIZER.getEnvironment().getProject(),
+                Initializer.getInstance().getEnvironment().getProject(),
                 "moduleId",
                 LIBRARY_FILES,
                 EcmaVersion.defaultVersion(),

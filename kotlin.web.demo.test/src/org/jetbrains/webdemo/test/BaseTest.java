@@ -23,7 +23,6 @@ import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
-import org.jetbrains.webdemo.backend.ServerInitializer;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
@@ -57,7 +56,7 @@ public class BaseTest extends TestCase {
         Path currentRelativePath = Paths.get("");
         String currentAbsolutePath = currentRelativePath.toAbsolutePath().toString();
 
-        Initializer.INITIALIZER = ServerInitializer.getInstance();
+        Initializer.getInstance();
         ErrorWriter.ERROR_WRITER = ErrorWriter.getInstance();
 
         BackendSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
@@ -76,7 +75,7 @@ public class BaseTest extends TestCase {
 
     protected JetCoreEnvironment createManager() {
         myEnvironmentManager.getEnvironment();
-        ServerInitializer.setEnvironmentManager(myEnvironmentManager);
+        Initializer.setEnvironmentManager(myEnvironmentManager);
 
         return myEnvironmentManager.getEnvironment();
     }

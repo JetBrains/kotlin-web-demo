@@ -45,7 +45,7 @@ public class HealthChecker {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Project currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
+                Project currentProject = Initializer.getInstance().getEnvironment().getProject();
                 PsiFile helloWorldFile = JetPsiFactoryUtil.createFile(
                         currentProject,
                         "HelloWorld.kt",

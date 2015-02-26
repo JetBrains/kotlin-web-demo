@@ -19,13 +19,42 @@ package org.jetbrains.webdemo.backend;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.encoding.EncodingRegistry;
 import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 
-public abstract class Initializer {
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-    public static Initializer INITIALIZER;
+public class Initializer {
+    private static EnvironmentManager environmentManager = new EnvironmentManager();
+    private static Initializer INITIALIZER = new Initializer();
 
-    public abstract EnvironmentManager getEnvironmentManager();
+    public static Initializer getInstance(){
+        return INITIALIZER;
+    }
+
+    public EnvironmentManager getEnvironmentManager(){
+        return environmentManager;
+    }
+
+    public static void setEnvironmentManager(EnvironmentManager newEnvironmentManager) {
+        environmentManager = newEnvironmentManager;
+    }
+
+    public boolean initJavaCoreEnvironment() {
+        try {
+            environmentManager.getEnvironment();
+        } catch (Throwable e) {
+            ErrorWriter.writeExceptionToConsole("Impossible to init jetCoreEnvironment", e);
+            return false;
+        }
+
+        return true;
+    }
 
     public static void reinitializeJavaEnvironment() {
         ApplicationManager.setApplication(
@@ -34,6 +63,15 @@ public abstract class Initializer {
                 EncodingRegistry.ourInstanceGetter,
                 INITIALIZER.getEnvironmentManager().getDisposable()
         );
+    }
+
+    public void initializeExecutorsPolicyFile() throws IOException {
+        Path templateFilePath = Paths.get(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
+        String templateFileContent = new String(Files.readAllBytes(templateFilePath));
+        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", BackendSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"));
+        try (PrintWriter policyFile = new PrintWriter(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
+            policyFile.write(policyFileContent);
+        }
     }
 
 

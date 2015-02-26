@@ -50,11 +50,11 @@ public class BackendHttpServlet extends HttpServlet {
         }
 
         ErrorWriter.getInstance();
-        Initializer.INITIALIZER = ServerInitializer.getInstance();
+        Initializer.getInstance();
         JavaToKotlinConverter.init();
 
         try {
-            if (ServerInitializer.getInstance().initJavaCoreEnvironment()) {
+            if (Initializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
                 new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
                 HealthChecker.getInstance();
@@ -67,7 +67,7 @@ public class BackendHttpServlet extends HttpServlet {
         }
 
         try {
-            ServerInitializer.getInstance().initializeExecutorsPolicyFile();
+            Initializer.getInstance().initializeExecutorsPolicyFile();
         } catch (Throwable e) {
             ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of executors policy file failed, server didn't start", e);
             System.exit(1);

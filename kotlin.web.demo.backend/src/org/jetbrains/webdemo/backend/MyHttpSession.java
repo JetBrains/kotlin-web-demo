@@ -107,7 +107,7 @@ public class MyHttpSession {
 
     private List<PsiFile> createProjectPsiFiles(Project example) {
         List<PsiFile> result = new ArrayList<>();
-        currentProject = Initializer.INITIALIZER.getEnvironment().getProject();
+        currentProject = Initializer.getInstance().getEnvironment().getProject();
         for (ProjectFile file : example.files) {
             result.add(JetPsiFactoryUtil.createFile(currentProject, file.getName(), file.getText()));
         }
