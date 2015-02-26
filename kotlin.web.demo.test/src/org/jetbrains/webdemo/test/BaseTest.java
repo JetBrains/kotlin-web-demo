@@ -19,17 +19,15 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import junit.framework.TestCase;
 import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
-import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.backend.BackendSessionInfo;
+import org.jetbrains.webdemo.ApplicationSettings;
+import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.backend.ServerInitializer;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
-import org.jetbrains.webdemo.backend.enviroment.EnvironmentManagerForServer;
 import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
 import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import java.io.File;
@@ -42,7 +40,7 @@ import java.nio.file.Paths;
 public class BaseTest extends TestCase {
 
     protected SessionInfo sessionInfo = new SessionInfo("test");
-    protected EnvironmentManager myEnvironmentManager = new EnvironmentManagerForServer();
+    protected EnvironmentManager myEnvironmentManager = new EnvironmentManager();
 
     public BaseTest(String name) {
         super(name);

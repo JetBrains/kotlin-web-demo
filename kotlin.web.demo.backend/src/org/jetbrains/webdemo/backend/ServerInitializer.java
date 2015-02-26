@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.backend;
 
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
-import org.jetbrains.webdemo.backend.enviroment.EnvironmentManagerForServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +28,7 @@ import java.nio.file.Paths;
 
 public class ServerInitializer extends Initializer {
     private static ServerInitializer initializer = new ServerInitializer();
-    private static EnvironmentManager environmentManager = new EnvironmentManagerForServer();
+    private static EnvironmentManager environmentManager = new EnvironmentManager();
 
     private ServerInitializer() {
     }
