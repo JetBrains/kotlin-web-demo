@@ -6,19 +6,19 @@
             For loop iterates through anything that provides an iterator. The syntax is as follows:
             <pre>for (item in collection)</pre>
             <pre>  print(item)</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Forloop">More
+            <a href="http://kotlinlang.org/docs/reference/control-flow.html#for-loops">More
                 info
             </a>
         </text>
     </keyword>
     <keyword>
-        <name>namespace</name>
+        <name>package</name>
         <text>
-            A source file may start with a header namespace declaration (see <a
-                href="http://confluence.jetbrains.net/display/Kotlin/Grammar#Grammar-namespaceHeader">the grammar</a>):
-            <pre>namespace foo.bar</pre>
+            A source file may start with a package declaration(see <a
+                href="http://kotlinlang.org/docs/reference/grammar.html">the grammar</a>):
+            <pre>package foo.bar</pre>
             <pre>// ...</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Namespaces">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/packages.html">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -31,7 +31,7 @@
             expressions and
             <b>object</b>
             declarations.
-            <br/><a href="http://confluence.jetbrains.net/display/Kotlin/Object+expressions+and+Declarations">More info</a>
+            <br/><a href="http://kotlinlang.org/docs/reference/object-declarations.html">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -48,7 +48,7 @@
             <pre>do {</pre>
             <pre>  val y = retrieveData()</pre>
             <pre>} while(y != null)<i>// y is visible here!</i></pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Whileanddo..whileloops">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/control-flow.html#while-loops">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -61,7 +61,7 @@
             <pre>    print("x != (1 || 2)")</pre>
             <pre>  }</pre>
             <pre>}</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Whenexpression">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/control-flow.html#when-expression">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -71,7 +71,7 @@
             <pre>  fun Int.foo()</pre>
             <pre>    val a = this@A</pre>
             <pre>...</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/This+expressions#Thisexpressions-Qualified">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/this-expressions.html">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -83,8 +83,8 @@
             <pre><i>// no initializer provided</i></pre>
             <pre>val c : Int </pre>
             <pre>c = 1 // definite assignment</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+syntax+walk-through#Basicsyntaxwalk-through-Definealocalvariable">More info</a>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Properties+And+Fields">See also</a>
+            <a href="http://kotlinlang.org/docs/reference/basic-syntax.html#defining-local-variables">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/properties.html">See also</a>
         </text>
     </keyword>
     <keyword>
@@ -92,8 +92,8 @@
         <text>Mutable variable:
         <pre>var x = 5 // Type inferred</pre>
         <pre>x += 1</pre>
-        <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+syntax+walk-through#Basicsyntaxwalk-through-Definealocalvariable">More info</a>
-        <a href="http://confluence.jetbrains.net/display/Kotlin/Properties+And+Fields">See also</a>
+        <a href="http://kotlinlang.org/docs/reference/basic-syntax.html#defining-local-variables">More info</a>
+        <a href="http://kotlinlang.org/docs/reference/properties.html">See also</a>
         </text>
     </keyword>
     <keyword>
@@ -102,7 +102,7 @@
             <pre>fun sum(a : Int, b : Int) : Int {</pre>
             <pre>  return a + b</pre>
             <pre>}</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+syntax+walk-through#Basicsyntaxwalk-through-Defineafunction">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/basic-syntax.html#defining-functions">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -111,7 +111,7 @@
             <pre>if (obj is String) {</pre>
             <pre>  print(obj.length)</pre>
             <pre>}</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/typecasts.html">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -120,7 +120,7 @@
             For loop iterates through anything that provides an iterator. The syntax is as follows:
             <pre>for (item in collection)</pre>
             <pre>  print(item)</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Forloop">More
+            <a href="http://kotlinlang.org/docs/reference/control-flow.html#for-loops">More
                 info
             </a>
         </text>
@@ -134,7 +134,7 @@
             <pre>  max = a</pre>
             <pre>else </pre>
             <pre>  max = b</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/control-flow.html#if-expression">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -143,7 +143,7 @@
             By default, <b>vararg</b> creates an array, but this behavior can be customized by providing arguments to the annotation.
             <pre>fun asList&lt;T&gt;(vararg ts : T) : List&lt;T&gt; {</pre>
             <pre>...</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Functions#Functions-Varargs">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/functions.html#variable-number-of-arguments-varargs">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -151,7 +151,7 @@
         <text>You can add an inline annotation for a function:
             <pre>inline fun lock&lt;T&gt;(lock : Lock, body : fun() : T) : T {</pre>
             <pre>...</pre>
-            <a href="http://confluence.jetbrains.net/display/Kotlin/Functions#Functions-Inlinefunctions">More info</a>
+            <a href="http://kotlinlang.org/docs/reference/inline-functions.html">More info</a>
         </text>
     </keyword>
 </help>

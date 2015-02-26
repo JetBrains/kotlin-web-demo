@@ -95,16 +95,20 @@ var RunProvider = (function () {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
                                 var dataJs;
+                                var output;
                                 try {
                                     dataJs = eval(data[0].text);
+                                    output = [
+                                        {"text": safe_tags_replace(dataJs), "type": "jsOut"},
+                                        {"text": data[0].text, "type": "generatedJSCode"}
+                                    ];
                                 } catch (e) {
-                                    onFail(e);
-                                    return;
+                                    output = [
+                                        e,
+                                        {"text": data[0].text, "type": "generatedJSCode"}
+                                    ];
                                 }
-                                var output = [
-                                    {"text": safe_tags_replace(dataJs), "type": "jsOut"},
-                                    {"text": data[0].text, "type": "generatedJSCode"}
-                                ];
+
                                 onSuccess(output);
                             } else {
                                 onFail(data);
