@@ -33,16 +33,14 @@ import java.util.Map;
 
 public class MyHttpSession {
     private final BackendSessionInfo sessionInfo;
-    private final Map<String, String[]> parameters;
     protected com.intellij.openapi.project.Project currentProject;
     protected PsiFile currentPsiFile;
     private HttpServletRequest request;
     private HttpServletResponse response;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public MyHttpSession(BackendSessionInfo info, Map<String, String[]> parameters) {
+    public MyHttpSession(BackendSessionInfo info) {
         this.sessionInfo = info;
-        this.parameters = parameters;
     }
 
     public void handle(final HttpServletRequest request, final HttpServletResponse response) {
@@ -53,7 +51,7 @@ public class MyHttpSession {
 
             ErrorWriter.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
-            switch (parameters.get("type")[0]) {
+            switch (request.getParameter("type")) {
                 case ("run"):
                     ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(BackendSessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendExecutorResult();
@@ -83,12 +81,12 @@ public class MyHttpSession {
     }
 
     private void sendConversationResult() {
-        writeResponse(new JavaToKotlinConverter(sessionInfo).getResult(parameters.get("text")[0]), HttpServletResponse.SC_OK);
+        writeResponse(new JavaToKotlinConverter(sessionInfo).getResult(request.getParameter("text")), HttpServletResponse.SC_OK);
     }
 
     private void sendExecutorResult() {
         try {
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
             List<PsiFile> psiFiles = createProjectPsiFiles(project);
             sessionInfo.setRunConfiguration(project.confType);
             if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
@@ -118,10 +116,10 @@ public class MyHttpSession {
 
     public void sendCompletionResult() {
         try {
-            String fileName = parameters.get("filename")[0];
-            int line = Integer.parseInt(parameters.get("line")[0]);
-            int ch = Integer.parseInt(parameters.get("ch")[0]);
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            String fileName = request.getParameter("filename");
+            int line = Integer.parseInt(request.getParameter("line"));
+            int ch = Integer.parseInt(request.getParameter("ch"));
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
             List<PsiFile> psiFiles = createProjectPsiFiles(project);
             sessionInfo.setRunConfiguration(project.confType);
 
@@ -137,7 +135,7 @@ public class MyHttpSession {
     public void sendHighlightingResult() {
         sessionInfo.setType(BackendSessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(project.confType);
             List<PsiFile> psiFiles = createProjectPsiFiles(project);
             JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, currentProject);

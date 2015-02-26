@@ -52,15 +52,13 @@ public class MyHttpSession {
     @NonNls
     private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
     private final SessionInfo sessionInfo;
-    private final Map<String, String[]> parameters;
     protected PsiFile currentPsiFile;
     private HttpServletRequest request;
     private HttpServletResponse response;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public MyHttpSession(SessionInfo info, Map<String, String[]> parameters) {
+    public MyHttpSession(SessionInfo info) {
         this.sessionInfo = info;
-        this.parameters = parameters;
     }
 
     public static String unescapeXml(@Nullable final String text) {
@@ -76,7 +74,7 @@ public class MyHttpSession {
 
             ErrorWriter.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
-            switch (parameters.get("type")[0]) {
+            switch (request.getParameter("type")) {
                 case ("highlight"):
                     forwardHighlightRequest();
                     break;
@@ -106,7 +104,7 @@ public class MyHttpSession {
                     sendWriteLogResult();
                     break;
                 case ("deleteProject"):
-                    MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), parameters.get("publicId")[0]);
+                    MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), request.getParameter("publicId"));
                     break;
                 case ("loadProject"):
                     sendLoadProjectResult();
@@ -170,7 +168,7 @@ public class MyHttpSession {
     private void forwadrCompleteRequest() {
         sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
         try {
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(project.confType);
             if (project.originUrl != null) {
                 addUnmodifiableDataToExample(project, project.originUrl);
@@ -191,7 +189,7 @@ public class MyHttpSession {
     private void forwardRunRequest() {
         sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
         try {
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(project.confType);
             if (project.originUrl != null) {
                 addUnmodifiableDataToExample(project, project.originUrl);
@@ -209,7 +207,7 @@ public class MyHttpSession {
     private void forwardHighlightRequest() {
         sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(project.confType);
             if (project.originUrl != null) {
                 addUnmodifiableDataToExample(project, project.originUrl);
@@ -302,7 +300,7 @@ public class MyHttpSession {
     private void sendFileExistenceResult() {
         try {
             ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
-            if (MySqlConnector.getInstance().getFile(parameters.get("publicId")[0]) != null) {
+            if (MySqlConnector.getInstance().getFile(request.getParameter("publicId")) != null) {
                 response.put("exists", true);
             } else {
                 response.put("exists", false);
@@ -317,7 +315,7 @@ public class MyHttpSession {
 
     private void sendProjectFileContent() {
         try {
-            ProjectFile file = MySqlConnector.getInstance().getFile(parameters.get("publicId")[0]);
+            ProjectFile file = MySqlConnector.getInstance().getFile(request.getParameter("publicId"));
             if (file != null) {
                 writeResponse(objectMapper.writeValueAsString(file), HttpServletResponse.SC_OK);
             } else {
@@ -334,7 +332,7 @@ public class MyHttpSession {
 
     private void sendExampleFileContent() {
         try {
-            ProjectFile file = ExamplesList.getInstance().getExampleFile(parameters.get("publicId")[0]);
+            ProjectFile file = ExamplesList.getInstance().getExampleFile(request.getParameter("publicId"));
             writeResponse(objectMapper.writeValueAsString(file), HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -345,7 +343,7 @@ public class MyHttpSession {
 
     private void sendExistenceCheckResult() {
         try {
-            String id = parameters.get("publicId")[0];
+            String id = request.getParameter("publicId");
             ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
             response.put("exists", MySqlConnector.getInstance().isProjectExists(id));
             writeResponse(response.toString(), HttpServletResponse.SC_OK);
@@ -359,11 +357,11 @@ public class MyHttpSession {
     private void sendLoadProjectInfoByFileIdResult() {
         try {
             String response;
-            if (parameters.get("project_id") == null) {
-                String publicId = parameters.get("publicId")[0];
+            if (request.getParameter("project_id") == null) {
+                String publicId = request.getParameter("publicId");
                 response = MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), publicId, null);
             } else {
-                String project_id = parameters.get("project_id")[0];
+                String project_id = request.getParameter("project_id");
                 response = MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), null, project_id);
             }
             if (response != null) {
@@ -379,16 +377,16 @@ public class MyHttpSession {
     }
 
     private void sendWriteLogResult() {
-        String type = parameters.get("args")[0];
+        String type = request.getParameter("args");
         if (type.equals("info")) {
-            ErrorWriter.LOG_FOR_INFO.info(parameters.get("text")[0]);
+            ErrorWriter.LOG_FOR_INFO.info(request.getParameter("text"));
         } else if (type.equals("errorInKotlin")) {
-            String tmp = parameters.get("text")[0];
+            String tmp = request.getParameter("text");
             tmp = unescapeXml(unescapeXml(tmp));
             List<String> list = ErrorWriter.parseException(tmp);
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown", list.get(4));
         } else {
-            String tmp = parameters.get("text")[0];
+            String tmp = request.getParameter("text");
             List<String> list = ErrorWriter.parseException(tmp);
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown", list.get(4));
         }
@@ -397,8 +395,8 @@ public class MyHttpSession {
 
     private void sendAddFileResult() {
         try {
-            String projectPublicId = parameters.get("publicId")[0];
-            String fileName = parameters.get("filename")[0];
+            String projectPublicId = request.getParameter("publicId");
+            String fileName = request.getParameter("filename");
             String id = MySqlConnector.getInstance().addFileToProject(sessionInfo.getUserInfo(), projectPublicId, fileName);
             writeResponse(id, HttpServletResponse.SC_OK);
         } catch (NullPointerException e) {
@@ -409,12 +407,12 @@ public class MyHttpSession {
     }
 
     private void sendAddProjectResult() {
-        String[] content = parameters.get("content");
         try {
+            String content = request.getParameter("content");
             if (content != null) {
                 try {
-                    Project project = objectMapper.readValue(content[0], Project.class);
-                    project.name = parameters.get("args")[0]; //when user calls save as we must change project name
+                    Project project = objectMapper.readValue(content, Project.class);
+                    project.name = request.getParameter("args"); //when user calls save as we must change project name
                     project.parent = "My Programs"; //to show that it is user project, not example
                     String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), project);
                     ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
@@ -425,7 +423,7 @@ public class MyHttpSession {
                     writeResponse("Can't parse file", HttpServletResponse.SC_BAD_REQUEST);
                 }
             } else {
-                String publicIds = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), parameters.get("args")[0]);
+                String publicIds = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), request.getParameter("args"));
                 writeResponse(publicIds, HttpServletResponse.SC_OK);
             }
         } catch (NullPointerException e) {
@@ -437,8 +435,8 @@ public class MyHttpSession {
 
     private void sendRenameFileResult() {
         try {
-            String publicId = parameters.get("publicId")[0];
-            String newName = parameters.get("newName")[0];
+            String publicId = request.getParameter("publicId");
+            String newName = request.getParameter("newName");
             newName = newName.endsWith(".kt") ? newName : newName + ".kt";
             MySqlConnector.getInstance().renameFile(sessionInfo.getUserInfo(), publicId, newName);
             writeResponse("ok", HttpServletResponse.SC_OK);
@@ -470,13 +468,13 @@ public class MyHttpSession {
 
     private void sendDeleteFileResult() {
         try {
-            boolean modifiable = Boolean.parseBoolean(parameters.get("modifiable")[0]);
+            boolean modifiable = Boolean.parseBoolean(request.getParameter("modifiable"));
             if (modifiable) {
-                String publicId = parameters.get("fileId")[0];
+                String publicId = request.getParameter("fileId");
                 MySqlConnector.getInstance().deleteFile(sessionInfo.getUserInfo(), publicId);
             } else {
-                String fileName = parameters.get("fileName")[0];
-                String projectId = parameters.get("projectId")[0];
+                String fileName = request.getParameter("fileName");
+                String projectId = request.getParameter("projectId");
                 MySqlConnector.getInstance().deleteUnmodifiableFile(sessionInfo.getUserInfo(), fileName, projectId);
             }
             writeResponse(HttpServletResponse.SC_OK);
@@ -490,7 +488,7 @@ public class MyHttpSession {
     private void sendLoadProjectResult() {
         try {
             String result;
-            String id = parameters.get("publicId")[0];
+            String id = request.getParameter("publicId");
             result = MySqlConnector.getInstance().getProjectContent(id);
             if (result != null) {
                 writeResponse(result, HttpServletResponse.SC_OK);
@@ -506,8 +504,8 @@ public class MyHttpSession {
 
     private void sendSaveProjectResult() {
         try {
-            Project project = objectMapper.readValue(parameters.get("project")[0], Project.class);
-            String publicId = parameters.get("publicId")[0];
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
+            String publicId = request.getParameter("publicId");
             MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), publicId, project);
             writeResponse("ок", HttpServletResponse.SC_OK);
         } catch (IOException e) {
@@ -521,7 +519,7 @@ public class MyHttpSession {
 
     private void sendSaveFileResult() {
         try {
-            ProjectFile file = objectMapper.readValue(parameters.get("file")[0], ProjectFile.class);
+            ProjectFile file = objectMapper.readValue(request.getParameter("file"), ProjectFile.class);
             MySqlConnector.getInstance().saveFile(sessionInfo.getUserInfo(), file);
             writeResponse("ok", HttpServletResponse.SC_OK);
         } catch (IOException e) {
@@ -535,7 +533,7 @@ public class MyHttpSession {
 
     private void sendExampleContent() {
         try {
-            Project example = ExamplesList.getInstance().getExample(parameters.get("publicId")[0]);
+            Project example = ExamplesList.getInstance().getExample(request.getParameter("publicId"));
             writeResponse(objectMapper.writeValueAsString(example), HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -546,8 +544,8 @@ public class MyHttpSession {
 
     public void sendRenameProjectResult() {
         try {
-            String publicId = parameters.get("publicId")[0];
-            String newName = parameters.get("newName")[0];
+            String publicId = request.getParameter("publicId");
+            String newName = request.getParameter("newName");
             MySqlConnector.getInstance().renameProject(sessionInfo.getUserInfo(), publicId, newName);
             writeResponse(HttpServletResponse.SC_OK);
         } catch (DatabaseOperationException e) {

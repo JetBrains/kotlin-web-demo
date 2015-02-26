@@ -45,7 +45,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Calendar;
-import java.util.Map;
 
 public class ServerHandler {
 
@@ -63,11 +62,8 @@ public class ServerHandler {
             ErrorWriter.ERROR_WRITER.writeInfo(request.getHeader("Origin") + " try to connect to server");
         } else {
             SessionInfo sessionInfo;
-
-            String param = request.getRequestURI() + "?" + request.getQueryString();
             try {
-                Map<String, String[]> parameters = request.getParameterMap();
-                switch (parameters.get("type")[0]) {
+                switch (request.getParameter("type")) {
                     case ("sendUserData"):
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         MySqlConnector.getInstance().findUser(sessionInfo.getUserInfo());
@@ -75,20 +71,20 @@ public class ServerHandler {
                         break;
                     case ("getSessionId"):
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sendSessionId(request, response, sessionInfo, param);
+                        sendSessionId(request, response, sessionInfo);
                         break;
                     case ("getUserName"):
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sendUserName(request, response, sessionInfo, param);
+                        sendUserName(request, response, sessionInfo);
                         break;
                     case ("authorization"):
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sendAuthorizationResult(request, response, parameters, sessionInfo);
+                        sendAuthorizationResult(request, response, sessionInfo);
                         break;
                     case ("updateStatistics"):
                         ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sendListLogs(request, response, parameters.get("type")[0].equals("updateStatistics"), sessionInfo);
+                        sendListLogs(request, response, request.getParameter("type").equals("updateStatistics"), sessionInfo);
                         break;
                     case ("showUserInfo"):
                         ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
@@ -96,11 +92,11 @@ public class ServerHandler {
                         break;
                     case ("sortExceptions"):
                         ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
-                        sendSortedExceptions(request, response, parameters);
+                        sendSortedExceptions(request, response);
                         break;
                     case ("downloadLog"):
-                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + param);
-                        sendLog(request, response, parameters);
+                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + request.getRequestURI() + "?" + request.getQueryString());
+                        sendLog(request, response);
                         break;
                     case ("loadHelpForWords"):
                         ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
@@ -119,25 +115,25 @@ public class ServerHandler {
                         break;
                     }
                     default: {
-                        if (!parameters.get("type")[0].equals("writeLog")) {
+                        if (!request.getParameter("type").equals("writeLog")) {
                             sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         } else {
                             sessionInfo = new SessionInfo(request.getSession().getId());
                         }
-                        MyHttpSession session = new MyHttpSession(sessionInfo, parameters);
+                        MyHttpSession session = new MyHttpSession(sessionInfo);
                         session.handle(request, response);
                     }
                 }
             } catch (Throwable e) {
                 //Do not stop server
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        "UNKNOWN", "unknown", param);
+                        "UNKNOWN", "unknown", request.getRequestURI() + "?" + request.getQueryString());
                 ResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
     }
 
-    private void sendSessionId(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
+    private void sendSessionId(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
         try {
             String id = sessionInfo.getId();
             ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
@@ -149,11 +145,11 @@ public class ServerHandler {
             writeResponse(request, response, array.toString(), HttpServletResponse.SC_OK);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    "UNKNOWN", sessionInfo.getOriginUrl(), param);
+                    "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "?" + request.getQueryString());
         }
     }
 
-    private void sendUserName(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo, String param) {
+    private void sendUserName(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
         try {
             ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
             if (sessionInfo.getUserInfo().isLogin()) {
@@ -166,29 +162,30 @@ public class ServerHandler {
             writeResponse(request, response, responseBody.toString(), HttpServletResponse.SC_OK);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    "UNKNOWN", sessionInfo.getOriginUrl(), param);
+                    "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "?" + request.getQueryString());
         }
     }
 
-    private void sendAuthorizationResult(HttpServletRequest request, HttpServletResponse response, Map<String, String[]> parameters, SessionInfo sessionInfo) {
-        if (parameters.get("args")[0].equals("logout")) {
+    private void sendAuthorizationResult(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
+        if (request.getParameter("args").equals("logout")) {
             sessionInfo.getUserInfo().logout();
             request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
         } else {
             AuthorizationHelper helper;
-            if (parameters.get("args")[0].equals("twitter")) {
+            if (request.getParameter("args").equals("twitter")) {
                 helper = new AuthorizationTwitterHelper();
-            } else if (parameters.get("args")[0].equals("google")) {
+            } else if (request.getParameter("args").equals("google")) {
                 helper = new AuthorizationGoogleHelper();
             } else {
                 helper = new AuthorizationFacebookHelper();
             }
-            if (parameters.containsKey("oauth_verifier") || parameters.containsKey("code")) {
+            if (request.getParameter("oauth_verifier") != null ||
+                    request.getParameter("code") != null) {
                 UserInfo info;
-                if (parameters.containsKey("oauth_verifier")) {
-                    info = helper.verify(parameters.get("oauth_verifier")[0]);
+                if (request.getParameter("oauth_verifier") != null) {
+                    info = helper.verify(request.getParameter("oauth_verifier"));
                 } else {
-                    info = helper.verify(parameters.get("code")[0]);
+                    info = helper.verify(request.getParameter("code"));
                 }
                 if (info != null) {
                     sessionInfo.setUserInfo(info);
@@ -201,7 +198,7 @@ public class ServerHandler {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                             "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
                 }
-            } else if (parameters.containsKey("denied")) {
+            } else if (request.getParameter("denied") != null) {
                 try {
                     response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
                 } catch (IOException e) {
@@ -224,12 +221,12 @@ public class ServerHandler {
         writeResponse(request, response, Statistics.getInstance().showMap(), HttpServletResponse.SC_OK);
     }
 
-    private void sendSortedExceptions(final HttpServletRequest request, final HttpServletResponse response, Map<String, String[]> parameters) {
-        if (parameters.get("args")[0].contains("download")) {
+    private void sendSortedExceptions(final HttpServletRequest request, final HttpServletResponse response) {
+        if (request.getParameter("args").contains("download")) {
             response.addHeader("Content-type", "application/x-download");
         }
-        String from = ResponseUtils.substringBetween(parameters.get("args")[0], "from=", "&to=");
-        String to = ResponseUtils.substringAfter(parameters.get("args")[0], "&to=");
+        String from = ResponseUtils.substringBetween(request.getParameter("args"), "from=", "&to=");
+        String to = ResponseUtils.substringAfter(request.getParameter("args"), "&to=");
 
         writeResponse(request, response, new LogDownloader().getSortedExceptions(from, to), 200);
     }
@@ -255,15 +252,15 @@ public class ServerHandler {
         writeResponse(request, response, HelpLoader.getInstance().getHelpForWords(), 200);
     }
 
-    private void sendLog(final HttpServletRequest request, final HttpServletResponse response, Map<String, String[]> parameters) {
+    private void sendLog(final HttpServletRequest request, final HttpServletResponse response) {
         String path;
-        if (parameters.get("args")[0].contains("&download")) {
+        if (request.getParameter("args").contains("&download")) {
             response.addHeader("Content-type", "application/x-download");
         }
-        if (parameters.get("args")[0].contains("&view")) {
-            path = ResponseUtils.substringBefore(parameters.get("args")[0], "&view");
+        if (request.getParameter("args").contains("&view")) {
+            path = ResponseUtils.substringBefore(request.getParameter("args"), "&view");
         } else {
-            path = ResponseUtils.substringBefore(parameters.get("args")[0], "&download");
+            path = ResponseUtils.substringBefore(request.getParameter("args"), "&download");
         }
         path = path.replaceAll("%5C", "/");
         writeResponse(request, response, new LogDownloader().download(path), 200);

@@ -37,17 +37,14 @@ public class ServerHandler {
             ErrorWriter.ERROR_WRITER.writeInfo(request.getHeader("Origin") + " try to connect to server");
         } else {
             BackendSessionInfo sessionInfo;
-
-            String param = request.getRequestURI() + "?" + request.getQueryString();
             try {
-                Map<String, String[]> parameters = request.getParameterMap();
                 sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                MyHttpSession session = new MyHttpSession(sessionInfo, parameters);
+                MyHttpSession session = new MyHttpSession(sessionInfo);
                 session.handle(request, response);
             } catch (Throwable e) {
                 //Do not stop server
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        "UNKNOWN", "unknown", param);
+                        "UNKNOWN", "unknown", request.getRequestURI() + "?" + request.getQueryString());
                 ResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
