@@ -95,11 +95,7 @@ public class ServerHandler {
                         break;
                     }
                     default: {
-                        if (!request.getParameter("type").equals("writeLog")) {
-                            sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        } else {
-                            sessionInfo = new SessionInfo(request.getSession().getId());
-                        }
+                        sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         MyHttpSession session = new MyHttpSession(sessionInfo);
                         session.handle(request, response);
                     }

@@ -47,10 +47,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MyHttpSession {
-    @NonNls
-    private static final String[] REPLACES_REFS = {"&lt;", "&gt;", "&amp;", "&#39;", "&quot;"};
-    @NonNls
-    private static final String[] REPLACES_DISP = {"<", ">", "&", "'", "\""};
     private final SessionInfo sessionInfo;
     protected PsiFile currentPsiFile;
     private HttpServletRequest request;
@@ -59,11 +55,6 @@ public class MyHttpSession {
 
     public MyHttpSession(SessionInfo info) {
         this.sessionInfo = info;
-    }
-
-    public static String unescapeXml(@Nullable final String text) {
-        if (text == null) return null;
-        return StringUtil.replace(text, REPLACES_REFS, REPLACES_DISP);
     }
 
     public void handle(final HttpServletRequest request, final HttpServletResponse response) {
@@ -98,10 +89,6 @@ public class MyHttpSession {
                     break;
                 case ("loadExampleFile"):
                     sendExampleFileContent();
-                    break;
-                case ("writeLog"):
-                    sessionInfo.setType(SessionInfo.TypeOfRequest.WRITE_LOG);
-                    sendWriteLogResult();
                     break;
                 case ("deleteProject"):
                     MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), request.getParameter("publicId"));
@@ -374,23 +361,6 @@ public class MyHttpSession {
         } catch (DatabaseOperationException e) {
             writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
-    }
-
-    private void sendWriteLogResult() {
-        String type = request.getParameter("args");
-        if (type.equals("info")) {
-            ErrorWriter.LOG_FOR_INFO.info(request.getParameter("text"));
-        } else if (type.equals("errorInKotlin")) {
-            String tmp = request.getParameter("text");
-            tmp = unescapeXml(unescapeXml(tmp));
-            List<String> list = ErrorWriter.parseException(tmp);
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown", list.get(4));
-        } else {
-            String tmp = request.getParameter("text");
-            List<String> list = ErrorWriter.parseException(tmp);
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(list.get(2), list.get(3), list.get(1), "unknown", list.get(4));
-        }
-        writeResponse("Data sent", HttpServletResponse.SC_OK);
     }
 
     private void sendAddFileResult() {
