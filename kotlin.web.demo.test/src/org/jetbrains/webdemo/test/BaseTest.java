@@ -74,7 +74,6 @@ public class BaseTest extends TestCase {
 
         ExamplesList.getInstance();
         HelpLoader.getInstance();
-        Statistics.getInstance();
     }
 
     protected JetCoreEnvironment createManager() {

@@ -20,17 +20,15 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.Statistics;
 import org.jetbrains.webdemo.authorization.AuthorizationFacebookHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationGoogleHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationTwitterHelper;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.log.LogDownloader;
-import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.jetbrains.webdemo.sessions.MyHttpSession;
@@ -44,7 +42,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Calendar;
 
 public class ServerHandler {
 
@@ -80,23 +77,6 @@ public class ServerHandler {
                     case ("authorization"):
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         sendAuthorizationResult(request, response, sessionInfo);
-                        break;
-                    case ("updateStatistics"):
-                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                        sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sendListLogs(request, response, request.getParameter("type").equals("updateStatistics"), sessionInfo);
-                        break;
-                    case ("showUserInfo"):
-                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_LOGS_LIST.name());
-                        sendUserInfoForStatistics(request, response);
-                        break;
-                    case ("sortExceptions"):
-                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name());
-                        sendSortedExceptions(request, response);
-                        break;
-                    case ("downloadLog"):
-                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name() + " " + request.getRequestURI() + "?" + request.getQueryString());
-                        sendLog(request, response);
                         break;
                     case ("loadHelpForWords"):
                         ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
@@ -217,25 +197,8 @@ public class ServerHandler {
         }
     }
 
-    private void sendUserInfoForStatistics(HttpServletRequest request, final HttpServletResponse response) {
-        writeResponse(request, response, Statistics.getInstance().showMap(), HttpServletResponse.SC_OK);
-    }
-
-    private void sendSortedExceptions(final HttpServletRequest request, final HttpServletResponse response) {
-        if (request.getParameter("args").contains("download")) {
-            response.addHeader("Content-type", "application/x-download");
-        }
-        String from = ResponseUtils.substringBetween(request.getParameter("args"), "from=", "&to=");
-        String to = ResponseUtils.substringAfter(request.getParameter("args"), "&to=");
-
-        writeResponse(request, response, new LogDownloader().getSortedExceptions(from, to), 200);
-    }
-
     @Nullable
     private SessionInfo setSessionInfo(final HttpSession session, String originUrl) {
-        if (session.isNew()) {
-            Statistics.incNumberOfUsers();
-        }
         SessionInfo sessionInfo = new SessionInfo(session.getId());
         UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
 
@@ -250,47 +213,6 @@ public class ServerHandler {
 
     private void sendHelpContentForWords(HttpServletRequest request, final HttpServletResponse response) {
         writeResponse(request, response, HelpLoader.getInstance().getHelpForWords(), 200);
-    }
-
-    private void sendLog(final HttpServletRequest request, final HttpServletResponse response) {
-        String path;
-        if (request.getParameter("args").contains("&download")) {
-            response.addHeader("Content-type", "application/x-download");
-        }
-        if (request.getParameter("args").contains("&view")) {
-            path = ResponseUtils.substringBefore(request.getParameter("args"), "&view");
-        } else {
-            path = ResponseUtils.substringBefore(request.getParameter("args"), "&download");
-        }
-        path = path.replaceAll("%5C", "/");
-        writeResponse(request, response, new LogDownloader().download(path), 200);
-    }
-
-    private void sendListLogs(final HttpServletRequest request, final HttpServletResponse response, boolean updateStatistics, SessionInfo sessionInfo) {
-        String responseStr = null;
-        InputStream is = null;
-        try {
-            is = ServerHandler.class.getResourceAsStream("/logs.html");
-            responseStr = ResponseUtils.readData(is, true);
-
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.GET_LOGS_LIST.name(), sessionInfo.getOriginUrl(), "Exception until downloading logs.html");
-            writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
-            return;
-        } finally {
-            ServerResponseUtils.close(is);
-        }
-
-        String links = new LogDownloader().getFilesLinks();
-        responseStr = responseStr.replace("$LINKSTOLOGFILES$", links);
-        responseStr = responseStr.replace("$CURRENTDATE$", ResponseUtils.getDate(Calendar.getInstance()));
-
-        if (updateStatistics) {
-            Statistics.getInstance().updateStatistics(true);
-        }
-        responseStr = Statistics.getInstance().writeStatistics(responseStr);
-        writeResponse(request, response, responseStr, 200);
     }
 
 

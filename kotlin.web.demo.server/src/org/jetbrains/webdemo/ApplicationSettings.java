@@ -21,7 +21,6 @@ public class ApplicationSettings {
     public static String WEBAPP_ROOT_DIRECTORY = "";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
     public static String BACKEND_REDIRECT = "";
-    public static String STATISTICS_DIRECTORY = "statistics";
     public static String EXAMPLES_DIRECTORY = "examples";
     public static String HELP_FOR_WORDS = "helpWords.xml";
     public static boolean LOAD_TEST_VERSION_OF_EXAMPLES = false;

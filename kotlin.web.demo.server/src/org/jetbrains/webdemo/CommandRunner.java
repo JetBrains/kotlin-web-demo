@@ -26,7 +26,6 @@ public class CommandRunner {
         if (value.isEmpty()) {
 
         } else if (setting.equals("app_output_dir")) {
-            ApplicationSettings.STATISTICS_DIRECTORY = value + File.separator + "statistics";
             CommonSettings.LOGS_DIRECTORY = value + File.separator + "logs";
             System.setProperty("kotlin.web.demo.log4j", value);
         } else if (setting.equals("auth_redirect")) {

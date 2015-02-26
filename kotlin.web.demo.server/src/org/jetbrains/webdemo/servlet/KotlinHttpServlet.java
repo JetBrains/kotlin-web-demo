@@ -60,10 +60,8 @@ public class KotlinHttpServlet extends HttpServlet {
         try {
             ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
             new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
-            new File(ApplicationSettings.STATISTICS_DIRECTORY).mkdirs();
             ExamplesList.getInstance();
             HelpLoader.getInstance();
-            Statistics.getInstance();
             MySqlConnector.getInstance();
         } catch (Throwable e) {
             ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
