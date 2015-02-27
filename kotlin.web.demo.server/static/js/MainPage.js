@@ -528,17 +528,6 @@ function getSessionIdSuccess(data) {
     if (data[0] != null && data[0] != '') {
         sessionId = data[0];
     }
-
-    var info = "browser: " + navigator.appName + " " + navigator.appVersion;
-    info += " " + "system: " + navigator.platform;
-
-    $.ajax({
-        url: generateAjaxUrl("sendUserData"),
-        context: document.body,
-        type: "POST",
-        data: {text: info},
-        timeout: 5000
-    });
 }
 
 

@@ -49,6 +49,7 @@ public class BackendHttpServlet extends HttpServlet {
             System.exit(1);
         }
 
+        LogWriter.init();
         ErrorWriter.getInstance();
         Initializer.getInstance();
         JavaToKotlinConverter.init();

@@ -20,10 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
@@ -48,7 +45,7 @@ import java.util.Map;
 
 public class MyHttpSession {
     private final SessionInfo sessionInfo;
-    protected PsiFile currentPsiFile;
+    private Project currentProject;
     private HttpServletRequest request;
     private HttpServletResponse response;
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -61,9 +58,6 @@ public class MyHttpSession {
         try {
             this.request = request;
             this.response = response;
-            String param = request.getRequestURI() + "?" + request.getQueryString();
-
-            ErrorWriter.LOG_FOR_INFO.info("request: " + param + " ip: " + sessionInfo.getId());
 
             switch (request.getParameter("type")) {
                 case ("highlight"):
@@ -79,12 +73,9 @@ public class MyHttpSession {
                     forwardConvertResult();
                     break;
                 case ("loadHeaders"):
-                    ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_EXAMPLES_LIST.name());
-                    sendExamplesList(request, response);
+                    sendExamplesList();
                     break;
                 case ("loadExample"):
-                    sessionInfo.setType(SessionInfo.TypeOfRequest.LOAD_EXAMPLE);
-                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), sessionInfo.getId(), sessionInfo.getType()));
                     sendExampleContent();
                     break;
                 case ("loadExampleFile"):
@@ -130,14 +121,13 @@ public class MyHttpSession {
                     sendExistenceCheckResult();
                     break;
                 default:
-                    ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_RESOURCE.name() + " " + param);
-                    sendResourceFile(request, response);
+                    sendResourceFile();
                     break;
             }
         } catch (Throwable e) {
             e.printStackTrace();
-            if (sessionInfo != null && sessionInfo.getType() != null && currentPsiFile != null && currentPsiFile.getText() != null) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+            if (sessionInfo != null && sessionInfo.getType() != null && currentProject != null) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), JsonUtils.toJson(currentProject));
             } else {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
             }
@@ -149,23 +139,23 @@ public class MyHttpSession {
         sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
         Map<String, String> postParameters = new HashMap<>();
         postParameters.put("text", request.getParameter("text"));
-        forwardRequestToBackend(request, response, postParameters);
+        forwardRequestToBackend(request, postParameters);
     }
 
     private void forwadrCompleteRequest() {
         sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
         try {
-            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
-            sessionInfo.setRunConfiguration(project.confType);
-            if (project.originUrl != null) {
-                addUnmodifiableDataToExample(project, project.originUrl);
+            currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
+            sessionInfo.setRunConfiguration(currentProject.confType);
+            if (currentProject.originUrl != null) {
+                addUnmodifiableDataToExample(currentProject, currentProject.originUrl);
             }
             Map<String, String> postParameters = new HashMap<>();
-            postParameters.put("project", objectMapper.writeValueAsString(project));
+            postParameters.put("project", objectMapper.writeValueAsString(currentProject));
             postParameters.put("filename", request.getParameter("filename"));
             postParameters.put("line", request.getParameter("line"));
             postParameters.put("ch", request.getParameter("ch"));
-            forwardRequestToBackend(request, response, postParameters);
+            forwardRequestToBackend(request, postParameters);
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
         } catch (NullPointerException e) {
@@ -176,14 +166,14 @@ public class MyHttpSession {
     private void forwardRunRequest() {
         sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
         try {
-            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
-            sessionInfo.setRunConfiguration(project.confType);
-            if (project.originUrl != null) {
-                addUnmodifiableDataToExample(project, project.originUrl);
+            currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
+            sessionInfo.setRunConfiguration(currentProject.confType);
+            if (currentProject.originUrl != null) {
+                addUnmodifiableDataToExample(currentProject, currentProject.originUrl);
             }
             Map<String, String> postParameters = new HashMap<>();
-            postParameters.put("project", objectMapper.writeValueAsString(project));
-            forwardRequestToBackend(request, response, postParameters);
+            postParameters.put("project", objectMapper.writeValueAsString(currentProject));
+            forwardRequestToBackend(request, postParameters);
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
         } catch (NullPointerException e) {
@@ -194,14 +184,14 @@ public class MyHttpSession {
     private void forwardHighlightRequest() {
         sessionInfo.setType(SessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
-            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
-            sessionInfo.setRunConfiguration(project.confType);
-            if (project.originUrl != null) {
-                addUnmodifiableDataToExample(project, project.originUrl);
+            currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
+            sessionInfo.setRunConfiguration(currentProject.confType);
+            if (currentProject.originUrl != null) {
+                addUnmodifiableDataToExample(currentProject, currentProject.originUrl);
             }
             Map<String, String> postParameters = new HashMap<>();
-            postParameters.put("project", objectMapper.writeValueAsString(project));
-            forwardRequestToBackend(request, response, postParameters);
+            postParameters.put("project", objectMapper.writeValueAsString(currentProject));
+            forwardRequestToBackend(request, postParameters);
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
         } catch (NullPointerException e) {
@@ -209,7 +199,7 @@ public class MyHttpSession {
         }
     }
 
-    private void forwardRequestToBackend(HttpServletRequest request, HttpServletResponse response, Map<String, String> postParameters) {
+    private void forwardRequestToBackend(HttpServletRequest request, Map<String, String> postParameters) {
         final boolean hasoutbody = (request.getMethod().equals("POST"));
 
         try {
@@ -247,40 +237,31 @@ public class MyHttpSession {
                 }
             }
 
-            response.setStatus(conn.getResponseCode());
-            for (int i = 0; ; ++i) {
-                final String header = conn.getHeaderFieldKey(i);
-                if (header == null) break;
-                final String value = conn.getHeaderField(i);
-                response.setHeader(header, value);
-            }
-
+            StringBuilder responseBody = new StringBuilder();
             if (conn.getResponseCode() != HttpServletResponse.SC_OK) {
-                response.getOutputStream().write("Can't send your request to backend server: ".getBytes());
-                String message;
+                responseBody.append("Can't send your request to Kotlin compile server: ");
                 switch (conn.getResponseCode()) {
                     case HttpServletResponse.SC_NOT_FOUND:
-                        message = "backend server not found";
+                        responseBody.append("Kotlin compile server not found");
                         break;
                     case HttpServletResponse.SC_SERVICE_UNAVAILABLE:
-                        message = "backend server is temporary overloaded";
+                        responseBody.append("Kotlin compile server is temporary overloaded");
                         break;
                     default:
-                        message = "";
                         break;
                 }
-                response.getOutputStream().write(message.getBytes());
             } else {
                 byte[] buffer = new byte[1024];
                 while (true) {
                     final int read = conn.getInputStream().read(buffer);
                     if (read <= 0) break;
-                    response.getOutputStream().write(buffer, 0, read);
+                    responseBody.append(new String(buffer, 0, read));
                 }
             }
+            writeResponse(responseBody.toString(), conn.getResponseCode());
         } catch (Exception e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "FORWARD_REQUEST_TO_BACKEND", "", "Can't forward request to backend server");
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "FORWARD_REQUEST_TO_BACKEND", "", "Can't forward request to Kotlin compile server");
+            writeResponse("Can't send your request to Kotlin compile server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -381,10 +362,10 @@ public class MyHttpSession {
             String content = request.getParameter("content");
             if (content != null) {
                 try {
-                    Project project = objectMapper.readValue(content, Project.class);
-                    project.name = request.getParameter("args"); //when user calls save as we must change project name
-                    project.parent = "My Programs"; //to show that it is user project, not example
-                    String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), project);
+                    currentProject = objectMapper.readValue(content, Project.class);
+                    currentProject.name = request.getParameter("args"); //when user calls save as we must change project name
+                    currentProject.parent = "My Programs"; //to show that it is user project, not example
+                    String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), currentProject);
                     ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
                     result.put("publicId", publicId);
                     result.put("content", MySqlConnector.getInstance().getProjectContent(publicId));
@@ -417,7 +398,7 @@ public class MyHttpSession {
         }
     }
 
-    private void sendExamplesList(HttpServletRequest request, final HttpServletResponse response) {
+    private void sendExamplesList() {
         try {
             ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
 
@@ -430,7 +411,7 @@ public class MyHttpSession {
             if (sessionInfo.getUserInfo().isLogin()) {
                 responseBody.put("My programs", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo()));
             }
-            writeResponse(request, response, responseBody.toString(), HttpServletResponse.SC_OK);
+            writeResponse(responseBody.toString(), HttpServletResponse.SC_OK);
         } catch (DatabaseOperationException e) {
             writeResponse(e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
@@ -474,9 +455,9 @@ public class MyHttpSession {
 
     private void sendSaveProjectResult() {
         try {
-            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
+            currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             String publicId = request.getParameter("publicId");
-            MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), publicId, project);
+            MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), publicId, currentProject);
             writeResponse("ок", HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't parse file", HttpServletResponse.SC_BAD_REQUEST);
@@ -534,11 +515,13 @@ public class MyHttpSession {
     private void writeResponse(String responseBody, int errorCode) {
         try {
             ResponseUtils.writeResponse(request, response, responseBody, errorCode);
-            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                    sessionInfo.getId(), "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString()));
+            LogWriter.logRequestInfo(
+                    sessionInfo.getId(),
+                    sessionInfo.getType(),
+                    "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString());
         } catch (IOException e) {
             //This is an exception we can't send data to client
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), JsonUtils.toJson(currentProject));
         }
     }
 
@@ -554,7 +537,7 @@ public class MyHttpSession {
     }
 
 
-    private void sendResourceFile(HttpServletRequest request, HttpServletResponse response) {
+    private void sendResourceFile() {
         String path = request.getRequestURI() + "?" + request.getQueryString();
         path = ResponseUtils.substringAfterReturnAll(path, "resources");
         ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "-1", "Resource doesn't downloaded from nginx: " + path));
@@ -562,10 +545,10 @@ public class MyHttpSession {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Empty path to resource"),
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), path);
-            writeResponse(request, response, "Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
+            writeResponse( "Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
             return;
         } else if (path.startsWith("/messages/")) {
-            writeResponse(request, response, "", HttpServletResponse.SC_OK);
+            writeResponse("", HttpServletResponse.SC_OK);
             return;
         } else if (path.equals("/") || path.equals("/index.html")) {
             path = "/index.html";
@@ -577,12 +560,12 @@ public class MyHttpSession {
             } catch (FileNotFoundException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), "index.html not found");
-                writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
+                writeResponse("Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
                 return;
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), "index.html not found");
-                writeResponse(request, response, "Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
+                writeResponse("Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
                 return;
             } finally {
                 ServerResponseUtils.close(is);
@@ -607,7 +590,7 @@ public class MyHttpSession {
                         new UnsupportedOperationException("Broken path to resource"),
                         SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
             }
-            writeResponse(request, response, ("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
+            writeResponse(("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
@@ -616,16 +599,8 @@ public class MyHttpSession {
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
-            writeResponse(request, response, "Could not load the resource from the server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            writeResponse("Could not load the resource from the server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
-    private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) {
-        try {
-            ResponseUtils.writeResponse(request, response, responseBody, errorCode);
-        } catch (IOException e) {
-            //This is an exception we can't send data to client
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", request.getHeader("Origin"), "null");
-        }
-    }
 }

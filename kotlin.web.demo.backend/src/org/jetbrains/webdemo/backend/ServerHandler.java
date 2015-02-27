@@ -33,8 +33,6 @@ public class ServerHandler {
 
         if (request.getQueryString() != null && request.getQueryString().equals("test")) {
             response.setStatus(HealthChecker.getInstance().getStatus());
-        } else if (!ResponseUtils.isOriginAccepted(request)) {
-            ErrorWriter.ERROR_WRITER.writeInfo(request.getHeader("Origin") + " try to connect to server");
         } else {
             BackendSessionInfo sessionInfo;
             try {

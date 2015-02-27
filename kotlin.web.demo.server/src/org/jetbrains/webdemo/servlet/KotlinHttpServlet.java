@@ -60,6 +60,7 @@ public class KotlinHttpServlet extends HttpServlet {
         try {
             ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
             new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
+            LogWriter.init();
             ExamplesList.getInstance();
             HelpLoader.getInstance();
             MySqlConnector.getInstance();
