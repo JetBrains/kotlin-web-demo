@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
@@ -553,9 +552,7 @@ public class MyHttpSession {
         } else if (path.equals("/") || path.equals("/index.html")) {
             path = "/index.html";
             StringBuilder responseStr = new StringBuilder();
-            InputStream is = null;
-            try {
-                is = ServerHandler.class.getResourceAsStream(path);
+            try (InputStream is = ServerHandler.class.getResourceAsStream(path)){
                 responseStr.append(ResponseUtils.readData(is, true));
             } catch (FileNotFoundException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -567,18 +564,12 @@ public class MyHttpSession {
                         SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), "index.html not found");
                 writeResponse("Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
                 return;
-            } finally {
-                ServerResponseUtils.close(is);
             }
 
-            OutputStream os = null;
-            try {
-                os = response.getOutputStream();
+            try (OutputStream os = response.getOutputStream()){
                 os.write(responseStr.toString().getBytes());
             } catch (IOException e) {
                 //This is an exception we can't send data to client
-            } finally {
-                ServerResponseUtils.close(os);
             }
             return;
         }
