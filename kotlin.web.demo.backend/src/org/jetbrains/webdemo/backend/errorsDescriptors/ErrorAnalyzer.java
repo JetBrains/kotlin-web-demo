@@ -29,7 +29,8 @@ import org.jetbrains.kotlin.diagnostics.Severity;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
-import org.jetbrains.webdemo.backend.Interval;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.backend.BackendUtils;
 import org.jetbrains.webdemo.backend.ResolveUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
@@ -66,7 +67,7 @@ public class ErrorAnalyzer {
             }
 
         } catch (Throwable e) {
-//            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFiles);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), BackendUtils.getPsiFilesContent(currentPsiFiles));
             throw new KotlinCoreException(e);
         }
         if (bindingContext != null) {
@@ -91,9 +92,11 @@ public class ErrorAnalyzer {
                 if (diagnostic.getSeverity() != Severity.INFO) {
                     Iterator<TextRange> textRangeIterator = diagnostic.getTextRanges().iterator();
                     if (!textRangeIterator.hasNext()) {
-                        /*ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("Text range for diagnostic is empty.",
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                                "Text range for diagnostic is empty.",
                                 "diagnostic.getTextRanges(): " + diagnostic.getTextRanges() + "\nDefaultErrorMessages.RENDERER.render(diagnostic): " + render,
-                                SessionInfo.TypeOfRequest.HIGHLIGHT.name(), currentPsiFile.getText());*/
+                                BackendSessionInfo.TypeOfRequest.HIGHLIGHT.name(),
+                                BackendUtils.getPsiFilesContent(currentPsiFiles));
                         continue;
                     }
                     TextRange firstRange = textRangeIterator.next();
@@ -107,8 +110,8 @@ public class ErrorAnalyzer {
                 }
             }
         } catch (Throwable e) {
-//            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-//                    SessionInfo.TypeOfRequest.HIGHLIGHT.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    BackendSessionInfo.TypeOfRequest.HIGHLIGHT.name(), sessionInfo.getOriginUrl(), BackendUtils.getPsiFilesContent(currentPsiFiles));
         }
 
         for (String key : errors.keySet())

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.backend;
+package org.jetbrains.webdemo.backend.errorsDescriptors;
 
 import com.intellij.openapi.editor.Document;
 

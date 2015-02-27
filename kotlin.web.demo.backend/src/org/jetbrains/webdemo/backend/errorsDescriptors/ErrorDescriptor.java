@@ -17,7 +17,6 @@
 package org.jetbrains.webdemo.backend.errorsDescriptors;
 
 import org.jetbrains.kotlin.diagnostics.Severity;
-import org.jetbrains.webdemo.backend.Interval;
 
 public class ErrorDescriptor {
 

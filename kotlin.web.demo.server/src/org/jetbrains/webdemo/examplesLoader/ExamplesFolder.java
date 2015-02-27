@@ -48,7 +48,7 @@ public class ExamplesFolder {
         path = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName;
         for (String exampleName : exampleNames) {
             try {
-                Project example = new Project(folderName, exampleName, ApplicationSettings.EXAMPLES_DIRECTORY, CommonSettings.IS_TEST_VERSION);
+                Project example = new Project(folderName, exampleName, ApplicationSettings.EXAMPLES_DIRECTORY, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES);
                 example.parent = folderName;
                 examplesOrder.add(example.name);
                 examples.put(exampleName, example);

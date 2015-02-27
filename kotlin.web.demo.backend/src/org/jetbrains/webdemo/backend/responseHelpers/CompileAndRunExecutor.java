@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.diagnostics.Severity;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.backend.BackendUtils;
 import org.jetbrains.webdemo.backend.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
@@ -65,7 +66,7 @@ public class CompileAndRunExecutor {
         try {
             errors = analyzer.getAllErrors();
         } catch (KotlinCoreException e) {
-//            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), BackendUtils.getPsiFilesContent(currentPsiFiles));
             return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
         }
 
@@ -83,7 +84,7 @@ public class CompileAndRunExecutor {
                     }
                 });
             } catch (Throwable e) {
-//                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), BackendUtils.getPsiFilesContent(currentPsiFiles));
                 return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
             ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
@@ -107,13 +108,13 @@ public class CompileAndRunExecutor {
                         FileUtil.writeToFile(target, file.asByteArray());
                         stringBuilder.append(file.getRelativePath()).append(ResponseUtils.addNewLine());
                     } catch (IOException e) {
-//                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-//                                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                                sessionInfo.getType(), sessionInfo.getOriginUrl(), BackendUtils.getPsiFilesContent(currentPsiFiles));
                         return ResponseUtils.getErrorInJson("Cannot get a result.");
                     }
                 } else {
-//                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot create output directory for files"),
-//                            SessionInfo.TypeOfRequest.DOWNLOAD_LOG.name(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(new UnsupportedOperationException("Cannot create output directory for files"),
+                            sessionInfo.getType(), sessionInfo.getOriginUrl(), BackendUtils.getPsiFilesContent(currentPsiFiles));
                     return ResponseUtils.getErrorInJson("Error on server: cannot run your program.");
                 }
 

@@ -27,6 +27,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class ErrorWriter {
     public static final Logger LOG_FOR_EXCEPTIONS = Logger.getLogger("exceptionLogger");
@@ -170,7 +171,7 @@ public class ErrorWriter {
         ErrorBean bean = new ErrorBean(e, type);
         bean.setPluginName("Kotlin Web Demo Beta");
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
-        if (CommonSettings.IS_TEST_VERSION) {
+        if (!CommonSettings.IS_TEST_VERSION) {
             sendViaITNProxy(bean);
             LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, description));
         } else {
@@ -178,31 +179,50 @@ public class ErrorWriter {
         }
     }
 
-//    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, List<PsiFile> files) {
-//        ErrorBean bean = new ErrorBean(e, type);
-//        bean.setPluginName("Kotlin Web Demo Beta");
-//        List<Attachment> attachments = new ArrayList<>();
-//        StringBuilder description = new StringBuilder();
-//        for (PsiFile file : files) {
-//            attachments.add(new Attachment(file.getName(), file.getText()));
-//            description.append(file.getName()).append(":\n");
-//            description.append(file.getText());
-//        }
-//        bean.setAttachments(attachments);
-//        if (ApplicationSettings.IS_TEST_VERSION.equals("false")) {
-//            sendViaITNProxy(bean);
-//            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, description.toString()));
-//        } else {
-//            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, description.toString()));
-//        }
-//    }
+    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, Map<String, String> files) {
+        ErrorBean bean = new ErrorBean(e, type);
+        bean.setPluginName("Kotlin Web Demo Beta");
+        List<Attachment> attachments = new ArrayList<>();
+        StringBuilder description = new StringBuilder();
+        for (String fileName : files.keySet()) {
+            attachments.add(new Attachment(fileName, files.get(fileName)));
+            description.append(fileName).append(":\n");
+            description.append(files.get(fileName));
+        }
+        bean.setAttachments(attachments);
+        if (!CommonSettings.IS_TEST_VERSION) {
+            sendViaITNProxy(bean);
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, description.toString()));
+        } else {
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, description.toString()));
+        }
+    }
+
+    public void writeExceptionToExceptionAnalyzer(String message, String type, String originUrl, Map<String, String> files) {
+        ErrorBean bean = new ErrorBean(message, "", type);
+        bean.setPluginName("Kotlin Web Demo Beta");
+        List<Attachment> attachments = new ArrayList<>();
+        StringBuilder description = new StringBuilder();
+        for (String fileName : files.keySet()) {
+            attachments.add(new Attachment(fileName, files.get(fileName)));
+            description.append(fileName).append(":\n");
+            description.append(files.get(fileName));
+        }
+        bean.setAttachments(attachments);
+        if (!CommonSettings.IS_TEST_VERSION) {
+            sendViaITNProxy(bean);
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, message, originUrl, description.toString()));
+        } else {
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, message, originUrl, description.toString()));
+        }
+    }
 
     public void writeExceptionToExceptionAnalyzer(String message, String stackTrace, String type, String originUrl, String description) {
         ErrorBean bean = new ErrorBean(message, stackTrace, type);
         bean.setAttachments(Collections.singletonList(new Attachment("Example.kt", description)));
         bean.setPluginName("Kotlin Web Demo Beta");
 
-        if (CommonSettings.IS_TEST_VERSION) {
+        if (!CommonSettings.IS_TEST_VERSION) {
             sendViaITNProxy(bean);
             LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, message, stackTrace, description));
         } else {
