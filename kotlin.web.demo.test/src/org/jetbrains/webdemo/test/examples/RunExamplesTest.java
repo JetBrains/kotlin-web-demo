@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,14 +99,19 @@ public class RunExamplesTest extends BaseTest {
         } else if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JUNIT)) {
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, getProject(), sessionInfo, project.args);
             ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
+            boolean isAnyOutput = false;
             for (JsonNode outputObject : actualResult){
                 if(outputObject.get("type").asText().equals("out")) {
-                    for (JsonNode testResult : outputObject.get("testResults")){
+                    isAnyOutput = true;
+                    ArrayNode testResults = (ArrayNode) outputObject.get("testResults");
+                    assertTrue("No test results", testResults.size() > 0);
+                    for (JsonNode testResult : testResults) {
                         String message = testResult.get("className").asText() + "." + testResult.get("methodName").asText() + " status:" + testResult.get("status").asText();
                         assertEquals(message, "OK", testResult.get("status").asText());
                     }
                 }
             }
+            assertTrue("No program output", isAnyOutput);
         }
     }
 
