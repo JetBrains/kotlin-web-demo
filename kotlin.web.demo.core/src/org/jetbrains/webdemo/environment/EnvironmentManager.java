@@ -1,24 +1,29 @@
+/*
+ * Copyright 2000-2015 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.jetbrains.webdemo.environment;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Getter;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.SingleRootFileViewProvider;
 import com.intellij.psi.compiled.ClassFileDecompilers;
-import com.intellij.psi.compiled.ClsStubBuilder;
-import com.intellij.psi.stubs.PsiFileStub;
-import com.intellij.util.cls.ClsFormatException;
-import com.intellij.util.indexing.FileContent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.idea.decompiler.JetClassFileDecompiler;
 
 public abstract class EnvironmentManager {
 
@@ -40,7 +45,7 @@ public abstract class EnvironmentManager {
 
             Extensions.getRootArea()
                     .getExtensionPoint(ClassFileDecompilers.EP_NAME)
-                    .registerExtension(new WebDemoClassFileDecompilers());
+                    .registerExtension(new JetClassFileDecompiler());
 
             //throw new IllegalStateException("Environment should be initialized before");
         }
@@ -55,60 +60,4 @@ public abstract class EnvironmentManager {
         return registry;
     }
 
-    private static class WebDemoClassFileDecompilers extends ClassFileDecompilers.Full {
-
-        private final ClsStubBuilder stubBuilder = new ClsStubBuilder() {
-            @Override
-            public int getStubVersion() {
-                return 0;
-            }
-
-            @Nullable
-            @Override
-            public PsiFileStub<?> buildFileStub(@NotNull FileContent fileContent) throws ClsFormatException {
-                return null;
-            }
-        };
-
-        @Override
-        public boolean accepts(@NotNull VirtualFile virtualFile) {
-            return virtualFile.getPath().contains("kotlin-runtime.jar");
-        }
-
-        @NotNull
-        @Override
-        public ClsStubBuilder getStubBuilder() {
-            return stubBuilder;
-        }
-
-        @NotNull
-        @Override
-        public FileViewProvider createFileViewProvider(@NotNull VirtualFile virtualFile, @NotNull PsiManager psiManager, boolean physical) {
-            return new WebDemoClassFileViewProvider(psiManager, virtualFile, physical);
-        }
-
-        private static class WebDemoClassFileViewProvider extends SingleRootFileViewProvider {
-            public WebDemoClassFileViewProvider(@NotNull PsiManager manager, @NotNull VirtualFile virtualFile, boolean eventSystemEnabled) {
-                super(manager, virtualFile, eventSystemEnabled);
-            }
-
-            @NotNull
-            @Override
-            public CharSequence getContents() {
-                return "";
-            }
-
-            @Nullable
-            @Override
-            protected PsiFile createFile(@NotNull Project project, @NotNull VirtualFile file, @NotNull FileType fileType) {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public SingleRootFileViewProvider createCopy(@NotNull VirtualFile copy) {
-                return new WebDemoClassFileViewProvider(getManager(), copy, false);
-            }
-        }
-    }
 }
