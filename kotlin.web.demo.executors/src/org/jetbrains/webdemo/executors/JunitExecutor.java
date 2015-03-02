@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,10 @@ package org.jetbrains.webdemo.executors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.Request;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
@@ -43,16 +45,12 @@ public class JunitExecutor {
             jUnitCore.addListener(new MyRunListener());
             List<Class> classes = getAllClassesFromTheDir(new File(args[0]));
             for (Class cl : classes) {
-                if (cl.getConstructors().length == 1 && cl.getConstructors()[0].getParameterTypes().length == 0) {
-                    try {
-                        String classFileName = cl.getName().replace('.', '/') + ".class";
-                        InputStream stream = cl.getClassLoader().getResourceAsStream(classFileName);
-                        testClass = MethodsFinder.readMethodPositions(stream, classFileName);
-                        jUnitCore.run(cl);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
+                Request request = Request.aClass(cl);
+                if(request.getRunner() instanceof ErrorReportingRunner) continue;
+                String classFileName = cl.getName().replace('.', '/') + ".class";
+                InputStream stream = cl.getClassLoader().getResourceAsStream(classFileName);
+                testClass = MethodsFinder.readMethodPositions(stream, classFileName);
+                jUnitCore.run(request);
             }
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
