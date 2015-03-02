@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -267,7 +267,11 @@ var accordion = (function () {
 
     accordion.onSelectFile = function (previousFile, currentFile) {
         if (previousFile != null)
-            previousFile.save();
+            if (previousFile.getType() != ProjectType.USER_PROJECT) {
+                previousFile.getProject().save();
+            } else {
+                previousFile.save();
+            }
 
         if (currentFile.getProjectType() == ProjectType.EXAMPLE) {
             history.replaceState("", "", "?" + currentFile.getPublicId());
