@@ -61,11 +61,6 @@ public class ServerHandler {
             SessionInfo sessionInfo;
             try {
                 switch (request.getParameter("type")) {
-                    case ("sendUserData"):
-                        sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        MySqlConnector.getInstance().findUser(sessionInfo.getUserInfo());
-                        sendUserInformation(request, response, sessionInfo);
-                        break;
                     case ("getSessionId"):
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         sendSessionId(request, response, sessionInfo);
@@ -79,7 +74,6 @@ public class ServerHandler {
                         sendAuthorizationResult(request, response, sessionInfo);
                         break;
                     case ("loadHelpForWords"):
-                        ErrorWriter.LOG_FOR_INFO.info(SessionInfo.TypeOfRequest.GET_HELP_FOR_WORDS.name());
                         sendHelpContentForWords(request, response);
                         break;
                     case ("logout"): {
@@ -209,32 +203,6 @@ public class ServerHandler {
 
     private void sendHelpContentForWords(HttpServletRequest request, final HttpServletResponse response) {
         writeResponse(request, response, HelpLoader.getInstance().getHelpForWords(), 200);
-    }
-
-
-    private void sendUserInformation(final HttpServletRequest request, final HttpServletResponse response, SessionInfo info) {
-        StringBuilder reqResponse = new StringBuilder();
-        InputStream is = null;
-        try {
-            is = request.getInputStream();
-            reqResponse.append(ResponseUtils.readData(is));
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getOriginUrl(), info.getId());
-            writeResponse(request, response, "Cannot read data from file", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        } finally {
-            ServerResponseUtils.close(is);
-        }
-        try {
-            reqResponse = new StringBuilder(URLDecoder.decode(reqResponse.toString(), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getOriginUrl(), info.getId());
-        }
-        ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLog(SessionInfo.TypeOfRequest.INC_NUMBER_OF_REQUESTS.name(), info.getId(), SessionInfo.TypeOfRequest.SEND_USER_DATA.name()));
-        ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.SEND_USER_DATA.name(), info.getId(), ResponseUtils.substringAfter(reqResponse.toString(), "text=")));
-        writeResponse(request, response, "OK", HttpServletResponse.SC_OK);
     }
 
 

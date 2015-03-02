@@ -24,6 +24,14 @@
             <param name="ConversionPattern" value="%d{MM/dd/yyyy hh:mm:ss} (%F %L) [%p] %m%n"/>
         </layout>
     </appender>
+
+    <appender name="accessLoggerAppender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${kotlin.web.demo.log4j}/logs/access.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{MM/dd/yyyy hh:mm:ss} (%F %L) [%p] %m%n"/>
+        </layout>
+    </appender>
+
     <logger name="exceptionLogger">
         <level value="INFO"/>
         <appender-ref ref="exceptionLoggerAppender"/>
@@ -31,5 +39,10 @@
     <logger name="infoLogger">
         <level value="INFO"/>
         <appender-ref ref="infoLoggerAppender"/>
+    </logger>
+
+    <logger name="accessLogger">
+        <level value="INFO"/>
+        <appender-ref ref="accessLoggerAppender"/>
     </logger>
 </log4j:configuration>
