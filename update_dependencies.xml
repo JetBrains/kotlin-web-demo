@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2000-2012 JetBrains s.r.o.
+  ~ Copyright 2000-2015 JetBrains s.r.o.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -64,6 +64,8 @@
 
             <copy file="${dependencies.dir}/kotlin-compiler.jar"
                   todir="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib"/>
+            <copy file="${dependencies.dir}/kotlin-compiler-sources.jar"
+                  todir="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib"/>
 
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
                    dest="${unzipped.kotlin.plugin}/jslib"/>
@@ -127,6 +129,8 @@
              dest="${dependencies.dir}/kotlin-plugin.zip" usetimestamp="true"/>
         <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/internal/kotlin-compiler-before-shrink.jar"
              dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>
+        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-compiler-sources.jar"
+             dest="${dependencies.dir}/kotlin-compiler-sources.jar" usetimestamp="true"/>
     </target>
 
     <target name="update_to_latest_version" unless="kotlin.build">
@@ -134,6 +138,8 @@
              usetimestamp="true"/>
         <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
              dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>
+        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-compiler-sources.jar"
+             dest="${dependencies.dir}/kotlin-compiler-sources.jar" usetimestamp="true"/>
     </target>
 
     <macrodef name="set_kotlin_version_internal">
