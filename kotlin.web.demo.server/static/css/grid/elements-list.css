@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -218,6 +218,13 @@
 
 .icon.kotlin {
     background: url("/static/images/icons.png") no-repeat -0px -111px;
+}
+
+.icon.java.unmodifiable {
+    width: 23px;
+    height: 16px;
+    margin-left: -10px;
+    background: url("/static/images/icons.png") no-repeat -78px -109px;
 }
 
 .icon.kotlin.unmodifiable {

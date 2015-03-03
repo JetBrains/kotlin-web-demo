@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,11 @@ var KotlinEditor = (function () {
             },
             open: function (file) {
                 document.getElementById("workspace-overlay").style.display = "none";
+                if (file.getType() != File.TYPE.JAVA_FILE) {
+                    my_editor.setOption("mode", "text/kotlin")
+                } else {
+                    my_editor.setOption("mode", "text/x-java")
+                }
 
                 if (openedFile == null) {
                     openedFile = file;
@@ -199,8 +204,8 @@ var KotlinEditor = (function () {
                             ch: token.end
                         }
                     };
-                    $(completionObjects.list).each(function(idx, element){
-                        element.render = function(element, self, data){
+                    $(completionObjects.list).each(function (idx, element) {
+                        element.render = function (element, self, data) {
                             var icon = document.createElement("div");
                             icon.className = "icon " + data.icon;
                             element.appendChild(icon);
@@ -215,7 +220,7 @@ var KotlinEditor = (function () {
                             tail.innerHTML = data.tail;
                             element.appendChild(tail);
                         };
-                        element.hint = function(cm, self, data){
+                        element.hint = function (cm, self, data) {
                             if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
                                 cm.replaceRange(data.text, {line: cur.line, ch: token.end}, {
                                     line: cur.line,
