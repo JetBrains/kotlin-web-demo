@@ -267,7 +267,7 @@ var accordion = (function () {
 
     accordion.onSelectFile = function (previousFile, currentFile) {
         if (previousFile != null)
-            if (previousFile.getType() != ProjectType.USER_PROJECT) {
+            if (previousFile.getProject().getType() != ProjectType.USER_PROJECT) {
                 previousFile.getProject().save();
             } else {
                 previousFile.save();
