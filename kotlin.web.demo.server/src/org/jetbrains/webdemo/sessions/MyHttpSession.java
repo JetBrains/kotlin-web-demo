@@ -36,9 +36,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MyHttpSession {
@@ -400,7 +400,7 @@ public class MyHttpSession {
         try {
             ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
 
-            List<String> orderedFolderNames = ExamplesList.getInstance().getOrderedFolderNames();
+            Collection<String> orderedFolderNames = ExamplesList.getInstance().getOrderedFolderNames();
             responseBody.put("orderedFolderNames", objectMapper.valueToTree(orderedFolderNames));
             for (String folderName : orderedFolderNames) {
                 responseBody.put(folderName, objectMapper.valueToTree(ExamplesList.getInstance().getFolder(folderName).getOrderedExampleNames()));
@@ -543,7 +543,7 @@ public class MyHttpSession {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Empty path to resource"),
                     SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), path);
-            writeResponse( "Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
+            writeResponse("Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
             return;
         } else if (path.startsWith("/messages/")) {
             writeResponse("", HttpServletResponse.SC_OK);
@@ -551,7 +551,7 @@ public class MyHttpSession {
         } else if (path.equals("/") || path.equals("/index.html")) {
             path = "/index.html";
             StringBuilder responseStr = new StringBuilder();
-            try (InputStream is = ServerHandler.class.getResourceAsStream(path)){
+            try (InputStream is = ServerHandler.class.getResourceAsStream(path)) {
                 responseStr.append(ResponseUtils.readData(is, true));
             } catch (FileNotFoundException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -565,7 +565,7 @@ public class MyHttpSession {
                 return;
             }
 
-            try (OutputStream os = response.getOutputStream()){
+            try (OutputStream os = response.getOutputStream()) {
                 os.write(responseStr.toString().getBytes());
             } catch (IOException e) {
                 //This is an exception we can't send data to client

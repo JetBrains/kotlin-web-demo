@@ -23,9 +23,8 @@ import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.Project;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -34,12 +33,12 @@ import java.util.Map;
 public class ExamplesFolder {
 
     public String name;
-    public List<String> examplesOrder = new ArrayList<>();
-    @JsonIgnore public Map<String, Project> examples = new HashMap<>();
+    @JsonIgnore
+    public Map<String, Project> examples = new LinkedHashMap<>();
     private String path;
 
-    public ExamplesFolder(String name){
-        this.name =name;
+    public ExamplesFolder(String name) {
+        this.name = name;
     }
 
     @JsonCreator
@@ -49,7 +48,6 @@ public class ExamplesFolder {
             try {
                 Project example = new Project(folderName, exampleName, ApplicationSettings.EXAMPLES_DIRECTORY, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES);
                 example.parent = folderName;
-                examplesOrder.add(example.name);
                 examples.put(exampleName, example);
             } catch (Exception e) {
                 System.err.println("Can't load example " + exampleName + ":\n" + e.getMessage());
@@ -57,7 +55,7 @@ public class ExamplesFolder {
         }
     }
 
-    public List<String> getOrderedExampleNames() {
-        return examplesOrder;
+    public Collection<String> getOrderedExampleNames() {
+        return examples.keySet();
     }
 }
