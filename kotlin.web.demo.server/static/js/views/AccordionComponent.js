@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ var AccordionView = (function () {
                 projects = {};
                 selectedProjectView = null;
                 selectedFileView = null;
-                headersProvider.getAllHeaders(function (orderedFolderNames, foldersContent) {
-                        for (var i = 0; i < orderedFolderNames.length; ++i) {
-                            var folderName = orderedFolderNames[i];
+                headersProvider.getAllHeaders(function (folders) {
+                        $(folders).each(function (ind, folder) {
+                            var folderName = folder.name;
 
                             var folderContentElement;
                             if (folderName == "My programs") {
@@ -42,11 +42,10 @@ var AccordionView = (function () {
                                 folderContentElement = addFolder(folderName)
                             }
 
-                            for (var j = 0; j < foldersContent[folderName].length; ++j) {
-                                var exampleHeader = foldersContent[folderName][j];
-                                addProject(folderContentElement, exampleHeader);
-                            }
-                        }
+                            $(folder.projects).each(function (ind, project) {
+                                addProject(folderContentElement, project);
+                            });
+                        });
                         incompleteActionManager.checkTimepoint("headersLoaded");
                         $(element).accordion("refresh");
                         if(!loginView.isLoggedIn()) {
@@ -54,8 +53,7 @@ var AccordionView = (function () {
                         }
                         loadFirstItem();
                     }
-                )
-                ;
+                );
             },
             addNewProject: function (name, publicId, fileId) {
                 addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT});

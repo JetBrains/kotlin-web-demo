@@ -28,7 +28,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ExamplesList {
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
@@ -80,14 +83,6 @@ public class ExamplesList {
             examples.addAll(folder.examples.values());
         }
         return examples;
-    }
-
-    public Collection<String> getOrderedFolderNames() {
-        return ExamplesFolder.ROOT_FOLDER.childFolders.keySet();
-    }
-
-    public ExamplesFolder getFolder(String name) {
-        return ExamplesFolder.ROOT_FOLDER.childFolders.get(name);
     }
 
     private ExamplesFolder loadFolder(String path) {

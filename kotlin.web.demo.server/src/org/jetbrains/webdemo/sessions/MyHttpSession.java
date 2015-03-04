@@ -17,12 +17,14 @@
 package org.jetbrains.webdemo.sessions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
+import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -36,7 +38,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -398,16 +399,20 @@ public class MyHttpSession {
 
     private void sendExamplesList() {
         try {
-            ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
+            ArrayNode responseBody = new ArrayNode(JsonNodeFactory.instance);
 
-            Collection<String> orderedFolderNames = ExamplesList.getInstance().getOrderedFolderNames();
-            responseBody.put("orderedFolderNames", objectMapper.valueToTree(orderedFolderNames));
-            for (String folderName : orderedFolderNames) {
-                responseBody.put(folderName, objectMapper.valueToTree(ExamplesList.getInstance().getFolder(folderName).getExamplesOrder()));
+            for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()) {
+                ObjectNode folderContent = responseBody.addObject();
+                folderContent.put("name", folder.name);
+                folderContent.put("examples", JsonUtils.getObjectMapper().valueToTree(folder.getExamplesOrder()));
             }
 
+            ObjectNode myProgramsContent = responseBody.addObject();
+            myProgramsContent.put("name", "My programs");
             if (sessionInfo.getUserInfo().isLogin()) {
-                responseBody.put("My programs", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo()));
+                myProgramsContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo()));
+            } else {
+                myProgramsContent.putArray("projects");
             }
             writeResponse(responseBody.toString(), HttpServletResponse.SC_OK);
         } catch (DatabaseOperationException e) {

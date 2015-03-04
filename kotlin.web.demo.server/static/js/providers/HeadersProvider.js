@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,44 +52,51 @@ var HeadersProvider = (function () {
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                var orderedFolderNames = data.orderedFolderNames;
-                                var foldersContent = {};
+                                var folders = [];
+                                $(data).each(function (ind, folder) {
+                                    var folderName = folder.name;
+                                    var projects = [];
 
-                                for (var i = 0; i < orderedFolderNames.length; ++i) {
-                                    foldersContent[orderedFolderNames[i]] = [];
-                                    var orderedExampleNames = data[orderedFolderNames[i]];
-
-                                    for (var j = 0; j < orderedExampleNames.length; ++j) {
-                                        foldersContent[orderedFolderNames[i]].push({
-                                            name: orderedExampleNames[j],
-                                            type: ProjectType.EXAMPLE,
-                                            publicId: createExampleId(orderedExampleNames[j], orderedFolderNames[i])
+                                    if (folderName != "My programs") {
+                                        $(folder.examples).each(function (ind, exampleName) {
+                                            projects.push({
+                                                name: exampleName,
+                                                type: ProjectType.EXAMPLE,
+                                                publicId: createExampleId(exampleName, folderName)
+                                            });
+                                        });
+                                    } else {
+                                        $(folder.projects).each(function (ind, project) {
+                                            projects.push({
+                                                name: project.name,
+                                                type: ProjectType.USER_PROJECT,
+                                                publicId: project.publicId
+                                            });
                                         });
                                     }
-                                }
 
-                                data.orderedFolderNames.push("My programs");
-                                data.orderedFolderNames.push("Public links");
+                                    folders.push({
+                                        name: folderName,
+                                        projects: projects
+                                    });
+                                });
 
-                                if (loginView.isLoggedIn()) {
-                                    foldersContent["My programs"] = data["My programs"];
-                                    for (var i = 0; i < foldersContent["My programs"].length; ++i) {
-                                        foldersContent["My programs"][i].type = ProjectType.USER_PROJECT;
-                                    }
-                                } else {
-                                    foldersContent["My programs"] = [];
-                                }
-
+                                var publicLinks;
                                 if (localStorage.getItem("publicLinks") != null) {
-                                    foldersContent["Public links"] = JSON.parse(localStorage.getItem("publicLinks")).sort(function (a, b) {
+                                    publicLinks = JSON.parse(localStorage.getItem("publicLinks")).sort(function (a, b) {
                                         return a.timeStamp - b.timeStamp;
                                     });
                                 } else {
-                                    foldersContent["Public links"] = [];
+                                    publicLinks = "";
                                 }
 
-                                callback(orderedFolderNames, foldersContent);
-                                instance.onHeadersLoaded(orderedFolderNames, foldersContent);
+                                folders.push({
+                                    name: "Public links",
+                                    projects: publicLinks
+                                });
+
+                                callback(folders);
+                                instance.onHeadersLoaded();
                             } else {
                                 instance.onFail(data, ActionStatusMessages.load_headers_fail);
                             }

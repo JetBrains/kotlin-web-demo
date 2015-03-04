@@ -40,4 +40,8 @@ public class ExamplesFolder {
     public Collection<String> getExamplesOrder() {
         return examples.keySet();
     }
+
+    public Collection<ExamplesFolder> getChildFolders() {
+        return childFolders.values();
+    }
 }
