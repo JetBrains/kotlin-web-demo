@@ -90,8 +90,8 @@ public class RunExamplesTest extends BaseTest {
             ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
             for (JsonNode outputObject : actualResult) {
                 if (outputObject.get("type").asText().equals("out")) {
-                    if (project.getExpectedOutput() != null) {
-                        assertEquals(unifyLineSeparators(project.getExpectedOutput()), getStdOut(outputObject.get("text").asText()));
+                    if (project.expectedOutput != null) {
+                        assertEquals(unifyLineSeparators(project.expectedOutput), getStdOut(outputObject.get("text").asText()));
                     }
                     assertTrue(outputObject.get("exception").isNull());
                 }

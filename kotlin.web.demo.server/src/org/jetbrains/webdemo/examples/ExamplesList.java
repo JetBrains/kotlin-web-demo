@@ -16,30 +16,28 @@
 
 package org.jetbrains.webdemo.examples;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.webdemo.ApplicationSettings;
-import org.jetbrains.webdemo.Project;
-import org.jetbrains.webdemo.ProjectFile;
-import org.jetbrains.webdemo.ResponseUtils;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.jetbrains.webdemo.*;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class ExamplesList {
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
 
-    private static StringBuilder response;
-    private static ObjectMapper objectMapper;
     private static Map<String, ExamplesFolder> exampleFolders;
 
     private ExamplesList() {
-        response = new StringBuilder();
         exampleFolders = new LinkedHashMap<>();
-        objectMapper = new ObjectMapper();
-        generateList();
+        loadAllFolders(ApplicationSettings.EXAMPLES_DIRECTORY);
     }
 
     public static ExamplesList getInstance() {
@@ -95,25 +93,108 @@ public class ExamplesList {
         return exampleFolders.get(name);
     }
 
-    private void generateList() {
-        File order = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + "order");
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(order));
-            while (reader.ready()) {
-                String folderName = reader.readLine();
-                File manifest = new File(ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName + File.separator + "manifest.json");
-                try {
-                    ExamplesFolder examplesFolder = objectMapper.readValue(manifest, ExamplesFolder.class);
-                    exampleFolders.put(folderName, examplesFolder);
-                } catch (Exception e) {
-                    System.err.println("Can't load folder " + folderName + ":\n" + e.getMessage());
-                    response.append("Can't load folder " + folderName + ":\n" + e.getMessage());
-                }
-
+    private void loadAllFolders(String path) {
+        File manifestFile = new File(path + File.separator + "manifest.json");
+        try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
+            ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
+            for (JsonNode node : manifest.get("folders")) {
+                String folderName = node.textValue();
+                exampleFolders.put(folderName, loadFolder(path + File.separator + folderName));
             }
         } catch (IOException e) {
-            System.err.println("Can't read order:\n" + e.getMessage());
-            response.append("Can't read order:\n" + e.getMessage());
+            System.err.println("Can't load examples: " + e.toString());
+        }
+    }
+
+    private ExamplesFolder loadFolder(String path) throws IOException {
+        File manifestFile = new File(path + File.separator + "manifest.json");
+        try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
+            ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
+            Map<String, Project> examples = new LinkedHashMap<>();
+            for (JsonNode node : manifest.get("examples")) {
+                String projectName = node.textValue();
+                examples.put(projectName, loadProject(path + File.separator + projectName, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES));
+            }
+            return new ExamplesFolder(path, examples);
+        } catch (IOException e) {
+            System.err.println("Can't load folder: " + e.toString());
+            return null;
+        }
+    }
+
+    private Project loadProject(String path, boolean loadTestVersion) throws IOException {
+        File manifestFile = new File(path + File.separator + "manifest.json");
+        try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
+            ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
+
+            String parent = new File(path).getParentFile().getName();
+            String name = new File(path).getName();
+            String originUrl = "folder=" + parent.replaceAll(" ", "%20") + "&project=" + name.replaceAll(" ", "%20");
+            String args = manifest.get("args").asText();
+            String runConfiguration = manifest.get("confType").asText();
+            String help = manifest.get("help").textValue();
+            String expectedOutput;
+            List<String> readOnlyFileNames = new ArrayList<>();
+            List<ProjectFile> files = new ArrayList<>();
+            if (manifest.has("expectedOutput")) {
+                expectedOutput = manifest.get("expectedOutput").asText();
+            } else if (manifest.has("expectedOutputFile")) {
+                Path expectedOutputFilePath = Paths.get(path + File.separator + manifest.get("expectedOutputFile").asText());
+                expectedOutput = new String(Files.readAllBytes(expectedOutputFilePath));
+            } else {
+                expectedOutput = null;
+            }
+
+
+            ArrayNode fileDescriptors = (ArrayNode) manifest.get("files");
+            for (JsonNode fileDescriptor : fileDescriptors) {
+
+                if (loadTestVersion &&
+                        fileDescriptor.has("skipInTestVersion") &&
+                        fileDescriptor.get("skipInTestVersion").asBoolean()) {
+                    continue;
+                }
+
+                ProjectFile file = loadProjectFile(path, originUrl, fileDescriptor);
+                if (!loadTestVersion && file.getType().equals(ProjectFile.Type.SOLUTION_FILE)) {
+                    continue;
+                }
+                if (!file.isModifiable()) {
+                    readOnlyFileNames.add(file.getName());
+                }
+
+                files.add(file);
+            }
+
+            return new Project(name, parent, args, runConfiguration, originUrl, expectedOutput, help, files, readOnlyFileNames);
+        } catch (IOException e) {
+            System.err.println("Can't load project: " + e.toString());
+            return null;
+        }
+    }
+
+
+    private ProjectFile loadProjectFile(String path, String projectUrl, JsonNode fileDescriptor) throws IOException {
+        try {
+            String fileName = fileDescriptor.get("filename").textValue();
+            boolean modifiable = fileDescriptor.get("modifiable").asBoolean();
+            File file = new File(path + File.separator + fileName);
+            String fileContent = new String(Files.readAllBytes(file.toPath())).replaceAll("\r\n", "\n");
+            String filePublicId = (projectUrl + "&file=" + fileName).replaceAll(" ", "%20");
+            ProjectFile.Type fileType = null;
+            if (!fileDescriptor.has("type")) {
+                fileType = ProjectFile.Type.KOTLIN_FILE;
+            } else if (fileDescriptor.get("type").asText().equals("kotlin-test")) {
+                fileType = ProjectFile.Type.KOTLIN_TEST_FILE;
+            } else if (fileDescriptor.get("type").asText().equals("solution")) {
+                fileType = ProjectFile.Type.SOLUTION_FILE;
+            } else if (fileDescriptor.get("type").asText().equals("java")) {
+                fileType = ProjectFile.Type.JAVA_FILE;
+            }
+            return new ProjectFile(fileName, fileContent, modifiable, filePublicId, fileType);
+        } catch (IOException e) {
+            System.err.println("Can't load file: " + e.toString());
+            return null;
         }
     }
 

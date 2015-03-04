@@ -34,4 +34,8 @@ public class JsonUtils {
         }
         return "";
     }
+
+    public static ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
 }

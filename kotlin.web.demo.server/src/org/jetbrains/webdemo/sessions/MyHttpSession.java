@@ -403,7 +403,7 @@ public class MyHttpSession {
             Collection<String> orderedFolderNames = ExamplesList.getInstance().getOrderedFolderNames();
             responseBody.put("orderedFolderNames", objectMapper.valueToTree(orderedFolderNames));
             for (String folderName : orderedFolderNames) {
-                responseBody.put(folderName, objectMapper.valueToTree(ExamplesList.getInstance().getFolder(folderName).getOrderedExampleNames()));
+                responseBody.put(folderName, objectMapper.valueToTree(ExamplesList.getInstance().getFolder(folderName).getExamplesOrder()));
             }
 
             if (sessionInfo.getUserInfo().isLogin()) {

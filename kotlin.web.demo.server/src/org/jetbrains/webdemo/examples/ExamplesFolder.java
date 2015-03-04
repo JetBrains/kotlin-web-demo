@@ -16,13 +16,8 @@
 
 package org.jetbrains.webdemo.examples;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.Project;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,29 +28,14 @@ import java.util.Map;
 public class ExamplesFolder {
 
     public String name;
-    @JsonIgnore
     public Map<String, Project> examples = new LinkedHashMap<>();
-    private String path;
 
-    public ExamplesFolder(String name) {
+    public ExamplesFolder(String name, Map<String, Project> examples) {
         this.name = name;
+        this.examples = examples;
     }
 
-    @JsonCreator
-    ExamplesFolder(@JsonProperty("folder") String folderName, @JsonProperty("examples") String[] exampleNames) {
-        path = ApplicationSettings.EXAMPLES_DIRECTORY + File.separator + folderName;
-        for (String exampleName : exampleNames) {
-            try {
-                Project example = new Project(folderName, exampleName, ApplicationSettings.EXAMPLES_DIRECTORY, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES);
-                example.parent = folderName;
-                examples.put(exampleName, example);
-            } catch (Exception e) {
-                System.err.println("Can't load example " + exampleName + ":\n" + e.getMessage());
-            }
-        }
-    }
-
-    public Collection<String> getOrderedExampleNames() {
+    public Collection<String> getExamplesOrder() {
         return examples.keySet();
     }
 }
