@@ -27,7 +27,7 @@ import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
+import org.jetbrains.webdemo.examples.ExamplesList;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.Common;
 

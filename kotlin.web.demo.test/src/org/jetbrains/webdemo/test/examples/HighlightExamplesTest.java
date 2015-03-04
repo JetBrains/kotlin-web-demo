@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.psi.PsiFile;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jetbrains.webdemo.backend.BackendSessionInfo;
-import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
 import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ProjectFile;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
+import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForHighlighting;
+import org.jetbrains.webdemo.examples.ExamplesList;
 import org.jetbrains.webdemo.test.BaseTest;
 
 import java.util.ArrayList;

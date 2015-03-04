@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.naming.NamingContext;
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
-import org.jetbrains.webdemo.Project;
-import org.jetbrains.webdemo.ProjectFile;
-import org.jetbrains.webdemo.ApplicationSettings;
+import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.examples.ExamplesList;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 

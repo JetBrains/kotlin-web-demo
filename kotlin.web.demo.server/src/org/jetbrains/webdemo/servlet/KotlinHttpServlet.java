@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,9 @@ package org.jetbrains.webdemo.servlet;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
+import org.jetbrains.webdemo.examples.ExamplesList;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.ApplicationSettings;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;

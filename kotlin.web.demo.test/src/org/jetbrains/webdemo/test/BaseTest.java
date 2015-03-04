@@ -1,6 +1,5 @@
-package org.jetbrains.webdemo.test;
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +14,8 @@ package org.jetbrains.webdemo.test;
  * limitations under the License.
  */
 
+package org.jetbrains.webdemo.test;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import junit.framework.TestCase;
@@ -25,7 +26,7 @@ import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
-import org.jetbrains.webdemo.examplesLoader.ExamplesList;
+import org.jetbrains.webdemo.examples.ExamplesList;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.session.SessionInfo;
 
