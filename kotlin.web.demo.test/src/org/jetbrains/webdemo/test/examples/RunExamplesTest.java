@@ -27,7 +27,7 @@ import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
-import org.jetbrains.webdemo.examples.ExamplesList;
+import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.Common;
 
@@ -66,7 +66,7 @@ public class RunExamplesTest extends BaseTest {
         //jsExamples.add("HTML Builder.kt");
 
         TestSuite suite = new TestSuite(RunExamplesTest.class.getName());
-        for (Project project : ExamplesList.getInstance().getAllExamples()) {
+        for (Project project : ExamplesUtils.getAllExamples()) {
             suite.addTest(new RunExamplesTest(project));
             if (jsExamples.contains(project.name)) {
                 suite.addTest(new RunExamplesTest(project, "js"));

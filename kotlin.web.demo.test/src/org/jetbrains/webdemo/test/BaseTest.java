@@ -26,7 +26,7 @@ import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
-import org.jetbrains.webdemo.examples.ExamplesList;
+import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.session.SessionInfo;
 
@@ -70,7 +70,7 @@ public class BaseTest extends TestCase {
         createManager();
         initializePolicyFile();
 
-        ExamplesList.getInstance();
+        ExamplesLoader.loadAllExamples();
         HelpLoader.getInstance();
     }
 

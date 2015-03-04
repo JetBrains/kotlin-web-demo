@@ -19,7 +19,10 @@ package org.jetbrains.webdemo.examples;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.ApplicationSettings;
+import org.jetbrains.webdemo.JsonUtils;
+import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.ProjectFile;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -33,59 +36,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ExamplesList {
-    private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
+public class ExamplesLoader {
 
-    private ExamplesList() {
+    public static void loadAllExamples() {
         ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY);
     }
 
-    public static ExamplesList getInstance() {
-        return EXAMPLES_LIST;
-    }
-
-    public void addUnmodifiableFilesToProject(Project project) {
-        if (project.originUrl != null) {
-            Project storedExample = ExamplesList.getInstance().getExample(project.originUrl);
-            for (ProjectFile file : storedExample.files) {
-                if (!file.isModifiable() && project.readOnlyFileNames.contains(file.getName())) {
-                    project.files.add(file);
-                }
-            }
-        }
-    }
-
-    public Project getExample(String url) {
-        url = ResponseUtils.unEscapeURL(url);
-        String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
-        String exampleName = ResponseUtils.substringAfter(url, "&project=");
-        return ExamplesFolder.ROOT_FOLDER.childFolders.get(folderName).examples.get(exampleName);
-    }
-
-    public ProjectFile getExampleFile(String url) {
-        url = ResponseUtils.unEscapeURL(url);
-        String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
-        String exampleName = ResponseUtils.substringBetween(url, "&project=", "&file=");
-        String fileName = ResponseUtils.substringAfter(url, "&file=");
-
-        Project example = ExamplesFolder.ROOT_FOLDER.childFolders.get(folderName).examples.get(exampleName);
-        for (ProjectFile file : example.files) {
-            if (file.getName().equals(fileName)) {
-                return file;
-            }
-        }
-        throw new NullPointerException("File not found");
-    }
-
-    public List<Project> getAllExamples() {
-        List<Project> examples = new ArrayList<>();
-        for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.childFolders.values()) {
-            examples.addAll(folder.examples.values());
-        }
-        return examples;
-    }
-
-    private ExamplesFolder loadFolder(String path) {
+    private static ExamplesFolder loadFolder(String path) {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
@@ -114,7 +71,7 @@ public class ExamplesList {
         }
     }
 
-    private Project loadProject(String path, boolean loadTestVersion) throws IOException {
+    private static Project loadProject(String path, boolean loadTestVersion) throws IOException {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
@@ -166,7 +123,7 @@ public class ExamplesList {
     }
 
 
-    private ProjectFile loadProjectFile(String path, String projectUrl, JsonNode fileDescriptor) throws IOException {
+    private static ProjectFile loadProjectFile(String path, String projectUrl, JsonNode fileDescriptor) throws IOException {
         try {
             String fileName = fileDescriptor.get("filename").textValue();
             boolean modifiable = fileDescriptor.get("modifiable").asBoolean();

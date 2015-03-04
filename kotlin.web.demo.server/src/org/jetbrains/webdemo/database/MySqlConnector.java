@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.examples.ExamplesList;
+import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 
@@ -524,7 +524,7 @@ public class MySqlConnector {
                         rs.getString("origin"),
                         readOnlyFileNames
                 );
-                ExamplesList.getInstance().addUnmodifiableFilesToProject(project);
+                ExamplesUtils.addUnmodifiableFilesToProject(project);
 
                 st = connection.prepareStatement("SELECT * FROM files WHERE project_id = ?");
                 st.setString(1, rs.getInt("id") + "");

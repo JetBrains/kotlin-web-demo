@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.servlet;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
-import org.jetbrains.webdemo.examples.ExamplesList;
+import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
 
@@ -60,7 +60,7 @@ public class KotlinHttpServlet extends HttpServlet {
             ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
             new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
             LogWriter.init();
-            ExamplesList.getInstance();
+            ExamplesLoader.loadAllExamples();
             HelpLoader.getInstance();
             MySqlConnector.getInstance();
         } catch (Throwable e) {

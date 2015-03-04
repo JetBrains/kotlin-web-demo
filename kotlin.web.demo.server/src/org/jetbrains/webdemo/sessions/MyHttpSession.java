@@ -25,7 +25,7 @@ import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examples.ExamplesFolder;
-import org.jetbrains.webdemo.examples.ExamplesList;
+import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.session.SessionInfo;
 
@@ -146,9 +146,7 @@ public class MyHttpSession {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(currentProject.confType);
-            if (currentProject.originUrl != null) {
-                addUnmodifiableDataToExample(currentProject, currentProject.originUrl);
-            }
+            ExamplesUtils.addUnmodifiableFilesToProject(currentProject);
             Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(currentProject));
             postParameters.put("filename", request.getParameter("filename"));
@@ -167,9 +165,7 @@ public class MyHttpSession {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(currentProject.confType);
-            if (currentProject.originUrl != null) {
-                addUnmodifiableDataToExample(currentProject, currentProject.originUrl);
-            }
+            ExamplesUtils.addUnmodifiableFilesToProject(currentProject);
             Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(currentProject));
             forwardRequestToBackend(request, postParameters);
@@ -185,9 +181,7 @@ public class MyHttpSession {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(currentProject.confType);
-            if (currentProject.originUrl != null) {
-                addUnmodifiableDataToExample(currentProject, currentProject.originUrl);
-            }
+            ExamplesUtils.addUnmodifiableFilesToProject(currentProject);
             Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(currentProject));
             forwardRequestToBackend(request, postParameters);
@@ -299,7 +293,7 @@ public class MyHttpSession {
 
     private void sendExampleFileContent() {
         try {
-            ProjectFile file = ExamplesList.getInstance().getExampleFile(request.getParameter("publicId"));
+            ProjectFile file = ExamplesUtils.getExampleFile(request.getParameter("publicId"));
             writeResponse(objectMapper.writeValueAsString(file), HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -487,7 +481,7 @@ public class MyHttpSession {
 
     private void sendExampleContent() {
         try {
-            Project example = ExamplesList.getInstance().getExample(request.getParameter("publicId"));
+            Project example = ExamplesUtils.getExample(request.getParameter("publicId"));
             writeResponse(objectMapper.writeValueAsString(example), HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -526,17 +520,6 @@ public class MyHttpSession {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), JsonUtils.toJson(currentProject));
         }
-    }
-
-
-    private Project addUnmodifiableDataToExample(Project project, String originUrl) {
-        Project storedExample = ExamplesList.getInstance().getExample(originUrl);
-        for (ProjectFile file : storedExample.files) {
-            if (!file.isModifiable() && project.readOnlyFileNames.contains(file.getName())) {
-                project.files.add(file);
-            }
-        }
-        return project;
     }
 
 
