@@ -19,20 +19,22 @@ package org.jetbrains.webdemo.examples;
 import org.jetbrains.webdemo.Project;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Created by Semyon.Atamas on 8/11/2014.
  */
 public class ExamplesFolder {
+    public static ExamplesFolder ROOT_FOLDER;
 
     public String name;
-    public Map<String, Project> examples = new LinkedHashMap<>();
+    public Map<String, Project> examples;
+    public Map<String, ExamplesFolder> childFolders;
 
-    public ExamplesFolder(String name, Map<String, Project> examples) {
+    public ExamplesFolder(String name, Map<String, Project> examples, Map<String, ExamplesFolder> childFolders) {
         this.name = name;
         this.examples = examples;
+        this.childFolders = childFolders;
     }
 
     public Collection<String> getExamplesOrder() {

@@ -33,11 +33,8 @@ import java.util.*;
 public class ExamplesList {
     private static final ExamplesList EXAMPLES_LIST = new ExamplesList();
 
-    private static Map<String, ExamplesFolder> exampleFolders;
-
     private ExamplesList() {
-        exampleFolders = new LinkedHashMap<>();
-        loadAllFolders(ApplicationSettings.EXAMPLES_DIRECTORY);
+        ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY);
     }
 
     public static ExamplesList getInstance() {
@@ -59,7 +56,7 @@ public class ExamplesList {
         url = ResponseUtils.unEscapeURL(url);
         String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
         String exampleName = ResponseUtils.substringAfter(url, "&project=");
-        return exampleFolders.get(folderName).examples.get(exampleName);
+        return ExamplesFolder.ROOT_FOLDER.childFolders.get(folderName).examples.get(exampleName);
     }
 
     public ProjectFile getExampleFile(String url) {
@@ -68,7 +65,7 @@ public class ExamplesList {
         String exampleName = ResponseUtils.substringBetween(url, "&project=", "&file=");
         String fileName = ResponseUtils.substringAfter(url, "&file=");
 
-        Project example = exampleFolders.get(folderName).examples.get(exampleName);
+        Project example = ExamplesFolder.ROOT_FOLDER.childFolders.get(folderName).examples.get(exampleName);
         for (ProjectFile file : example.files) {
             if (file.getName().equals(fileName)) {
                 return file;
@@ -79,43 +76,43 @@ public class ExamplesList {
 
     public List<Project> getAllExamples() {
         List<Project> examples = new ArrayList<>();
-        for (ExamplesFolder folder : exampleFolders.values()) {
+        for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.childFolders.values()) {
             examples.addAll(folder.examples.values());
         }
         return examples;
     }
 
     public Collection<String> getOrderedFolderNames() {
-        return exampleFolders.keySet();
+        return ExamplesFolder.ROOT_FOLDER.childFolders.keySet();
     }
 
     public ExamplesFolder getFolder(String name) {
-        return exampleFolders.get(name);
+        return ExamplesFolder.ROOT_FOLDER.childFolders.get(name);
     }
 
-    private void loadAllFolders(String path) {
+    private ExamplesFolder loadFolder(String path) {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
-            for (JsonNode node : manifest.get("folders")) {
-                String folderName = node.textValue();
-                exampleFolders.put(folderName, loadFolder(path + File.separator + folderName));
-            }
-        } catch (IOException e) {
-            System.err.println("Can't load examples: " + e.toString());
-        }
-    }
-
-    private ExamplesFolder loadFolder(String path) throws IOException {
-        File manifestFile = new File(path + File.separator + "manifest.json");
-        try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
-            ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
+            String name = new File(path).getName();
             Map<String, Project> examples = new LinkedHashMap<>();
-            for (JsonNode node : manifest.get("examples")) {
-                String projectName = node.textValue();
-                examples.put(projectName, loadProject(path + File.separator + projectName, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES));
+            Map<String, ExamplesFolder> childFolders = new LinkedHashMap<>();
+
+            if (manifest.has("folders")) {
+                for (JsonNode node : manifest.get("folders")) {
+                    String folderName = node.textValue();
+                    childFolders.put(folderName, loadFolder(path + File.separator + folderName));
+                }
             }
-            return new ExamplesFolder(path, examples);
+
+            if (manifest.has("examples")) {
+                for (JsonNode node : manifest.get("examples")) {
+                    String projectName = node.textValue();
+                    examples.put(projectName, loadProject(path + File.separator + projectName, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES));
+                }
+            }
+
+            return new ExamplesFolder(name, examples, childFolders);
         } catch (IOException e) {
             System.err.println("Can't load folder: " + e.toString());
             return null;
