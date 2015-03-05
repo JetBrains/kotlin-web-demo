@@ -395,13 +395,12 @@ public class MyHttpSession {
             ArrayNode responseBody = new ArrayNode(JsonNodeFactory.instance);
 
             for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()) {
-                ObjectNode folderContent = responseBody.addObject();
-                folderContent.put("name", folder.getName());
-                folderContent.put("examples", JsonUtils.getObjectMapper().valueToTree(folder.getExamplesOrder()));
+                addFolderContent(responseBody, folder);
             }
 
             ObjectNode myProgramsContent = responseBody.addObject();
             myProgramsContent.put("name", "My programs");
+            myProgramsContent.putArray("childFolders");
             if (sessionInfo.getUserInfo().isLogin()) {
                 myProgramsContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo()));
             } else {
@@ -410,6 +409,18 @@ public class MyHttpSession {
             writeResponse(responseBody.toString(), HttpServletResponse.SC_OK);
         } catch (DatabaseOperationException e) {
             writeResponse(e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    private void addFolderContent(ArrayNode arrayNode, ExamplesFolder folder) {
+        ObjectNode folderContent = arrayNode.addObject();
+        folderContent.put("name", folder.getName());
+        folderContent.put("examples", JsonUtils.getObjectMapper().valueToTree(folder.getExamplesOrder()));
+        ArrayNode childFolders = folderContent.putArray("childFolders");
+
+        for (ExamplesFolder childFolder : folder.getChildFolders()) {
+            addFolderContent(childFolders, childFolder);
         }
     }
 

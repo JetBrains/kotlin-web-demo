@@ -43,6 +43,35 @@ var HeadersProvider = (function () {
             }
         };
 
+        function addHeaderInfo(folder) {
+            var folderName = folder.name;
+            var projects = [];
+
+            if (folderName != "My programs") {
+                $(folder.examples).each(function (ind, exampleName) {
+                    projects.push({
+                        name: exampleName,
+                        type: ProjectType.EXAMPLE,
+                        publicId: createExampleId(exampleName, folderName)
+                    });
+                });
+            } else {
+                $(folder.projects).each(function (ind, project) {
+                    projects.push({
+                        name: project.name,
+                        type: ProjectType.USER_PROJECT,
+                        publicId: project.publicId
+                    });
+                });
+            }
+
+            return {
+                name: folderName,
+                childFolders: $.map(folder.childFolders, addHeaderInfo),
+                projects: projects
+            };
+        }
+
         function getAllHeaders(callback) {
             blockContent();
             $.ajax({
@@ -52,34 +81,7 @@ var HeadersProvider = (function () {
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                var folders = [];
-                                $(data).each(function (ind, folder) {
-                                    var folderName = folder.name;
-                                    var projects = [];
-
-                                    if (folderName != "My programs") {
-                                        $(folder.examples).each(function (ind, exampleName) {
-                                            projects.push({
-                                                name: exampleName,
-                                                type: ProjectType.EXAMPLE,
-                                                publicId: createExampleId(exampleName, folderName)
-                                            });
-                                        });
-                                    } else {
-                                        $(folder.projects).each(function (ind, project) {
-                                            projects.push({
-                                                name: project.name,
-                                                type: ProjectType.USER_PROJECT,
-                                                publicId: project.publicId
-                                            });
-                                        });
-                                    }
-
-                                    folders.push({
-                                        name: folderName,
-                                        projects: projects
-                                    });
-                                });
+                                var folders = $.map(data, addHeaderInfo);
 
                                 var publicLinks;
                                 if (localStorage.getItem("publicLinks") != null) {
@@ -92,6 +94,7 @@ var HeadersProvider = (function () {
 
                                 folders.push({
                                     name: "Public links",
+                                    childFolders: [],
                                     projects: publicLinks
                                 });
 
