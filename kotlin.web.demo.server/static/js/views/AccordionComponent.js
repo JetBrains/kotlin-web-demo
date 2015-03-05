@@ -31,20 +31,13 @@ var AccordionView = (function () {
                 selectedFileView = null;
                 headersProvider.getAllHeaders(function (folders) {
                         $(folders).each(function (ind, folder) {
-                            var folderName = folder.name;
-
-                            var folderContentElement;
-                            if (folderName == "My programs") {
-                                folderContentElement = addMyProjectsFolder();
-                            } else if (folderName == "Public links") {
-                                folderContentElement = publicLinksContentElement = addFolder("Public links");
+                            if (folder.name == "My programs") {
+                                addMyProjectsFolder(folder.projects);
+                            } else if (folder.name == "Public links") {
+                                publicLinksContentElement = addFolder(folder);
                             } else {
-                                folderContentElement = addFolder(folderName)
+                                addFolder(folder)
                             }
-
-                            $(folder.projects).each(function (ind, project) {
-                                addProject(folderContentElement, project);
-                            });
                         });
                         incompleteActionManager.checkTimepoint("headersLoaded");
                         $(element).accordion("refresh");
@@ -243,23 +236,26 @@ var AccordionView = (function () {
             projects[header.publicId] = projectView;
         }
 
-        function addFolder(name) {
-            var folder = document.createElement("h3");
-            folder.className = "examples-folder-name";
-            folder.id = escapeString(name);
-            element.appendChild(folder);
+        function addFolder(folder) {
+            var headerElement = document.createElement("h3");
+            headerElement.className = "examples-folder-name";
+            headerElement.id = escapeString(folder.name);
+            element.appendChild(headerElement);
 
             var folderDiv = document.createElement("div");
-            folderDiv.innerHTML = name;
+            folderDiv.innerHTML = folder.name;
             folderDiv.className = "folder-name-div";
-            folder.appendChild(folderDiv);
+            headerElement.appendChild(folderDiv);
 
             var cont = document.createElement("div");
             element.appendChild(cont);
-            return cont
+
+            $(folder.projects).each(function (ind, project) {
+                addProject(cont, project);
+            });
         }
 
-        function addMyProjectsFolder() {
+        function addMyProjectsFolder(projects) {
             myProgramsHeaderElement = document.createElement("h3");
             myProgramsHeaderElement.className = "examples-folder-name";
             myProgramsHeaderElement.innerHTML = "My programs";
@@ -291,7 +287,9 @@ var AccordionView = (function () {
                 myProgramsHeaderElement.appendChild(newProjectButton);
             }
 
-            return myProgramsContentElement;
+            $(projects).each(function (ind, project) {
+                addProject(myProgramsContentElement, project);
+            });
         }
 
         function selectProject(publicId) {
