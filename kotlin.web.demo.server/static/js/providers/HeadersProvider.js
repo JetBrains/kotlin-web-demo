@@ -43,33 +43,17 @@ var HeadersProvider = (function () {
             }
         };
 
-        function addHeaderInfo(folder) {
-            var folderName = folder.name;
-            var projects = [];
-
-            if (folderName != "My programs") {
-                $(folder.examples).each(function (ind, exampleName) {
-                    projects.push({
-                        name: exampleName,
-                        type: ProjectType.EXAMPLE,
-                        publicId: createExampleId(exampleName, folderName)
-                    });
+        function addHeaderInfo(ind, folder) {
+            if (folder.name != "My programs") {
+                $(folder.projects).each(function (ind, header) {
+                    header.type = ProjectType.EXAMPLE
                 });
             } else {
-                $(folder.projects).each(function (ind, project) {
-                    projects.push({
-                        name: project.name,
-                        type: ProjectType.USER_PROJECT,
-                        publicId: project.publicId
-                    });
+                $(folder.projects).each(function (ind, header) {
+                    header.type = ProjectType.USER_PROJECT
                 });
             }
-
-            return {
-                name: folderName,
-                childFolders: $.map(folder.childFolders, addHeaderInfo),
-                projects: projects
-            };
+            $(folder.childFolders).each(addHeaderInfo);
         }
 
         function getAllHeaders(callback) {
@@ -77,11 +61,11 @@ var HeadersProvider = (function () {
             $.ajax({
                 url: generateAjaxUrl("loadHeaders"),
                 context: document.body,
-                success: function (data) {
+                success: function (folders) {
                     try {
-                        if (checkDataForNull(data)) {
-                            if (checkDataForException(data)) {
-                                var folders = $.map(data, addHeaderInfo);
+                        if (checkDataForNull(folders)) {
+                            if (checkDataForException(folders)) {
+                                $(folders).each(addHeaderInfo);
 
                                 var publicLinks;
                                 if (localStorage.getItem("publicLinks") != null) {
@@ -101,7 +85,7 @@ var HeadersProvider = (function () {
                                 callback(folders);
                                 instance.onHeadersLoaded();
                             } else {
-                                instance.onFail(data, ActionStatusMessages.load_headers_fail);
+                                instance.onFail(folders, ActionStatusMessages.load_headers_fail);
                             }
                         } else {
                             instance.onFail("Incorrect data format.", ActionStatusMessages.load_headers_fail);

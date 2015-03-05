@@ -37,10 +37,6 @@ public class ExamplesFolder {
         this.childFolders = childFolders;
     }
 
-    public Collection<String> getExamplesOrder() {
-        return examples.keySet();
-    }
-
     public Collection<ExamplesFolder> getChildFolders() {
         return childFolders.values();
     }

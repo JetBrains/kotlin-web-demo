@@ -416,7 +416,12 @@ public class MyHttpSession {
     private void addFolderContent(ArrayNode arrayNode, ExamplesFolder folder) {
         ObjectNode folderContent = arrayNode.addObject();
         folderContent.put("name", folder.getName());
-        folderContent.put("examples", JsonUtils.getObjectMapper().valueToTree(folder.getExamplesOrder()));
+        ArrayNode exampleHeaders = folderContent.putArray("projects");
+        for (Project example : folder.getExamples()) {
+            ObjectNode exampleHeader = exampleHeaders.addObject();
+            exampleHeader.put("name", example.name);
+            exampleHeader.put("publicId", example.originUrl);
+        }
         ArrayNode childFolders = folderContent.putArray("childFolders");
 
         for (ExamplesFolder childFolder : folder.getChildFolders()) {

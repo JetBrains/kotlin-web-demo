@@ -37,7 +37,7 @@ public class ExamplesUtils {
     public static Project getExample(String[] path) {
         ExamplesFolder folder = ExamplesFolder.ROOT_FOLDER;
         for (int i = 0; i < path.length - 1; ++i) {
-            folder = ExamplesFolder.ROOT_FOLDER.getChildFolder(path[i]);
+            folder = folder.getChildFolder(path[i]);
         }
         return folder.getExample(path[path.length - 1]);
     }
