@@ -274,7 +274,8 @@ var accordion = (function () {
             }
 
         if (currentFile.getProjectType() == ProjectType.EXAMPLE) {
-            history.replaceState("", "", "?" + currentFile.getPublicId());
+            var url = "#" + currentFile.getPublicId();
+            history.replaceState("", "", url);
         } else {
             if (currentFile.isModifiable()) {
                 history.replaceState("", "", "?id=" + currentFile.getPublicId() + "&project_id=" + accordion.getSelectedProject().getPublicId());

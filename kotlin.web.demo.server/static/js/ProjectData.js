@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ var ProjectData = (function () {
             toJSON: function () {
                 return {
                     name: name,
-                    parent: parent,
                     args: args,
                     confType: confType,
                     originUrl: originUrl,
@@ -187,7 +186,6 @@ var ProjectData = (function () {
         var args = "";
         var confType = "java";
         var originUrl = null;
-        var parent = "My programs";
         var help = "";
         var modified = false;
         var revertible = true;
@@ -214,7 +212,6 @@ var ProjectData = (function () {
                     args: args,
                     confType: confType,
                     originUrl: originUrl,
-                    parent: parent,
                     help: help,
                     type: type,
                     publicId: publicId,
@@ -241,7 +238,6 @@ var ProjectData = (function () {
             args = content.args;
             name = content.name;
             confType = content.confType;
-            parent = content.parent;
             help = content.help;
             files = content.files;
             revertible = content.hasOwnProperty("revertible") ? content.revertible : true;
@@ -249,7 +245,7 @@ var ProjectData = (function () {
             instance.onContentLoaded(files);
         }
 
-        function onModified(){
+        function onModified() {
             modified = isModified();
             $(modifyListeners).each(function (ind, listener) {
                 listener(modified);

@@ -28,12 +28,13 @@ import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForHighlighting;
-import org.jetbrains.webdemo.examples.ExamplesUtils;
+import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.test.BaseTest;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class HighlightExamplesTest extends BaseTest {
 
@@ -69,12 +70,14 @@ public class HighlightExamplesTest extends BaseTest {
 
 
         TestSuite suite = new TestSuite(HighlightExamplesTest.class.getName());
-        for (Project project : ExamplesUtils.getAllExamples()) {
-            if (!project.parent.equals("Problems")) {
-                suite.addTest(new HighlightExamplesTest(project));
-            }
-            if (jsExamples.contains(project.name)) {
-                suite.addTest(new HighlightExamplesTest(project, "js"));
+        for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()) {
+            if (!Objects.equals(folder.getName(), "Problems")) {
+                for (Project project : folder.getExamples()) {
+                    suite.addTest(new HighlightExamplesTest(project));
+                    if (jsExamples.contains(project.name)) {
+                        suite.addTest(new HighlightExamplesTest(project, "js"));
+                    }
+                }
             }
         }
         return suite;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.jetbrains.webdemo.ApplicationSettings;
+import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.test.completion.CompletionTest;
 import org.jetbrains.webdemo.test.examples.HighlightExamplesTest;
 import org.jetbrains.webdemo.test.examples.RunExamplesTest;
@@ -28,6 +29,7 @@ public class TestAll extends TestCase {
 
     public static TestSuite suite() {
         ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
+        ExamplesLoader.loadAllExamples();
         TestSuite suite = new TestSuite(
                 HighlightingTest.class,
                 CompletionTest.class,

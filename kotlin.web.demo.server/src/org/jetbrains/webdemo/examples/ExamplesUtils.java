@@ -21,6 +21,7 @@ import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.ResponseUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,9 +30,16 @@ import java.util.List;
 public class ExamplesUtils {
     public static Project getExample(String url) {
         url = ResponseUtils.unEscapeURL(url);
-        String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
-        String exampleName = ResponseUtils.substringAfter(url, "&project=");
-        return ExamplesFolder.ROOT_FOLDER.childFolders.get(folderName).examples.get(exampleName);
+        String[] path = url.split("/");
+        return getExample(path);
+    }
+
+    public static Project getExample(String[] path) {
+        ExamplesFolder folder = ExamplesFolder.ROOT_FOLDER;
+        for (int i = 0; i < path.length - 1; ++i) {
+            folder = ExamplesFolder.ROOT_FOLDER.getChildFolder(path[i]);
+        }
+        return folder.getExample(path[path.length - 1]);
     }
 
     public static void addUnmodifiableFilesToProject(Project project) {
@@ -47,13 +55,11 @@ public class ExamplesUtils {
 
     public static ProjectFile getExampleFile(String url) {
         url = ResponseUtils.unEscapeURL(url);
-        String folderName = ResponseUtils.substringBetween(url, "folder=", "&project=");
-        String exampleName = ResponseUtils.substringBetween(url, "&project=", "&file=");
-        String fileName = ResponseUtils.substringAfter(url, "&file=");
+        String[] path = url.split("/");
 
-        Project example = ExamplesFolder.ROOT_FOLDER.childFolders.get(folderName).examples.get(exampleName);
+        Project example = getExample(Arrays.copyOfRange(path, 0, path.length - 1));
         for (ProjectFile file : example.files) {
-            if (file.getName().equals(fileName)) {
+            if (file.getName().equals(path[path.length - 1])) {
                 return file;
             }
         }
@@ -62,8 +68,8 @@ public class ExamplesUtils {
 
     public static List<Project> getAllExamples() {
         List<Project> examples = new ArrayList<>();
-        for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.childFolders.values()) {
-            examples.addAll(folder.examples.values());
+        for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()) {
+            examples.addAll(folder.getExamples());
         }
         return examples;
     }

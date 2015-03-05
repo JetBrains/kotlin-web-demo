@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -178,7 +178,7 @@ function getFolderNameByUrl(url) {
 }
 
 function createExampleId(name, folder) {
-    return "folder=" + replaceAll(folder, " ", "%20") + "&project=" + replaceAll(name, " ", "%20");
+    return replaceAll(folder, " ", "%20") + "/" + replaceAll(name, " ", "%20");
 }
 
 function createUserProjectUrl(id) {

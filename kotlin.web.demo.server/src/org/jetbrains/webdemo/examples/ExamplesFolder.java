@@ -27,9 +27,9 @@ import java.util.Map;
 public class ExamplesFolder {
     public static ExamplesFolder ROOT_FOLDER;
 
-    public String name;
-    public Map<String, Project> examples;
-    public Map<String, ExamplesFolder> childFolders;
+    private String name;
+    private Map<String, Project> examples;
+    private Map<String, ExamplesFolder> childFolders;
 
     public ExamplesFolder(String name, Map<String, Project> examples, Map<String, ExamplesFolder> childFolders) {
         this.name = name;
@@ -43,5 +43,21 @@ public class ExamplesFolder {
 
     public Collection<ExamplesFolder> getChildFolders() {
         return childFolders.values();
+    }
+
+    public ExamplesFolder getChildFolder(String name) {
+        return childFolders.get(name);
+    }
+
+    public Collection<Project> getExamples() {
+        return examples.values();
+    }
+
+    public Project getExample(String name) {
+        return examples.get(name);
+    }
+
+    public String getName() {
+        return name;
     }
 }

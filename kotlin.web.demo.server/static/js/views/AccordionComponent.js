@@ -173,14 +173,12 @@ var AccordionView = (function () {
         newProjectDialog.validate = instance.validateNewProjectName;
 
         function loadFirstItem() {
-
-            var folder = getParameterByName("folder");
-            var project = getParameterByName("project");
-            var file = getParameterByName("file");
+            var id = window.location.hash;
+            id = id.startsWith("#") ? id.substr(1) : id;
             var project_id = getParameterByName("project_id");
 
-            if (folder != "" && project != "" && file != "") {
-                selectProject(createExampleId(project, folder));
+            if (id != "" && id != "#") {
+                selectProject(id.substr(0, id.lastIndexOf("/")));
             } else if (project_id != "") {
                 if (localStorage.getItem(project_id) == null) {
                     var file_id = getParameterByName("id");

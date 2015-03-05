@@ -374,7 +374,7 @@ public class MySqlConnector {
 
     public String addProject(UserInfo userInfo, String name) throws DatabaseOperationException {
         try {
-            String projectId = addProject(userInfo, new Project(name, "My Programs", "", "java"));
+            String projectId = addProject(userInfo, new Project(name, "", "java"));
             String fileId = addFileToProject(userInfo, projectId, name);
 
             ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
@@ -518,7 +518,6 @@ public class MySqlConnector {
                 }
                 Project project = new Project(
                         unEscape(rs.getString("name")),
-                        "My Programs",
                         rs.getString("args"),
                         rs.getString("run_configuration"),
                         rs.getString("origin"),

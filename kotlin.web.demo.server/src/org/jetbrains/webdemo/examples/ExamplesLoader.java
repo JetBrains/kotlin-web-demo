@@ -39,10 +39,10 @@ import java.util.Map;
 public class ExamplesLoader {
 
     public static void loadAllExamples() {
-        ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY);
+        ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY, "");
     }
 
-    private static ExamplesFolder loadFolder(String path) {
+    private static ExamplesFolder loadFolder(String path, String url) {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
@@ -53,14 +53,14 @@ public class ExamplesLoader {
             if (manifest.has("folders")) {
                 for (JsonNode node : manifest.get("folders")) {
                     String folderName = node.textValue();
-                    childFolders.put(folderName, loadFolder(path + File.separator + folderName));
+                    childFolders.put(folderName, loadFolder(path + File.separator + folderName, url + folderName + "/"));
                 }
             }
 
             if (manifest.has("examples")) {
                 for (JsonNode node : manifest.get("examples")) {
                     String projectName = node.textValue();
-                    examples.put(projectName, loadProject(path + File.separator + projectName, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES));
+                    examples.put(projectName, loadProject(path + File.separator + projectName, url, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES));
                 }
             }
 
@@ -71,14 +71,13 @@ public class ExamplesLoader {
         }
     }
 
-    private static Project loadProject(String path, boolean loadTestVersion) throws IOException {
+    private static Project loadProject(String path, String parentUrl, boolean loadTestVersion) throws IOException {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
 
-            String parent = new File(path).getParentFile().getName();
             String name = new File(path).getName();
-            String originUrl = "folder=" + parent.replaceAll(" ", "%20") + "&project=" + name.replaceAll(" ", "%20");
+            String originUrl = parentUrl + name.replaceAll(" ", "%20");
             String args = manifest.get("args").asText();
             String runConfiguration = manifest.get("confType").asText();
             String help = manifest.get("help").textValue();
@@ -115,7 +114,7 @@ public class ExamplesLoader {
                 files.add(file);
             }
 
-            return new Project(name, parent, args, runConfiguration, originUrl, expectedOutput, help, files, readOnlyFileNames);
+            return new Project(name, args, runConfiguration, originUrl, expectedOutput, help, files, readOnlyFileNames);
         } catch (IOException e) {
             System.err.println("Can't load project: " + e.toString());
             return null;
@@ -129,7 +128,7 @@ public class ExamplesLoader {
             boolean modifiable = fileDescriptor.get("modifiable").asBoolean();
             File file = new File(path + File.separator + fileName);
             String fileContent = new String(Files.readAllBytes(file.toPath())).replaceAll("\r\n", "\n");
-            String filePublicId = (projectUrl + "&file=" + fileName).replaceAll(" ", "%20");
+            String filePublicId = (projectUrl + "/" + fileName).replaceAll(" ", "%20");
             ProjectFile.Type fileType = null;
             if (!fileDescriptor.has("type")) {
                 fileType = ProjectFile.Type.KOTLIN_FILE;

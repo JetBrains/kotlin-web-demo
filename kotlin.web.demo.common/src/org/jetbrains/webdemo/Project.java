@@ -23,7 +23,6 @@ import java.util.List;
 public class Project {
     public String originUrl;
     public String name;
-    public String parent;
     public String args = "";
     public String confType = "java";
 
@@ -40,11 +39,9 @@ public class Project {
     }
 
     public Project( String name,
-                    String parent,
                     String args,
                     String confType) {
         this.name = name;
-        this.parent = parent;
         this.args = args;
         this.confType = confType;
         this.originUrl = null;
@@ -52,13 +49,11 @@ public class Project {
     }
 
     public Project( String name,
-                    String parent,
                     String args,
                     String confType,
                    String originUrl,
                    List<String> readOnlyFileNames) {
         this.name = name;
-        this.parent = parent;
         this.args = args;
         this.confType = confType;
         this.originUrl = originUrl;
@@ -68,7 +63,6 @@ public class Project {
 
 
     public Project(String name,
-                   String parent,
                    String args,
                    String confType,
                    String originUrl,
@@ -77,7 +71,6 @@ public class Project {
                    List<ProjectFile> files,
                    List<String> readOnlyFileNames) {
         this.name = name;
-        this.parent = parent;
         this.args = args;
         this.confType = confType;
         this.originUrl = originUrl;

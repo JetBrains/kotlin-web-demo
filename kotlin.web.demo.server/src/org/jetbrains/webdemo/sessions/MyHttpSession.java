@@ -357,7 +357,6 @@ public class MyHttpSession {
                 try {
                     currentProject = objectMapper.readValue(content, Project.class);
                     currentProject.name = request.getParameter("args"); //when user calls save as we must change project name
-                    currentProject.parent = "My Programs"; //to show that it is user project, not example
                     String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), currentProject);
                     ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
                     result.put("publicId", publicId);
@@ -397,7 +396,7 @@ public class MyHttpSession {
 
             for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()) {
                 ObjectNode folderContent = responseBody.addObject();
-                folderContent.put("name", folder.name);
+                folderContent.put("name", folder.getName());
                 folderContent.put("examples", JsonUtils.getObjectMapper().valueToTree(folder.getExamplesOrder()));
             }
 
