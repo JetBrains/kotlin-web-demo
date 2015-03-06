@@ -160,11 +160,17 @@ var runProvider = (function () {
 
     function onSuccess(output) {
         run_button.button("option", "disabled", false);
-        if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
-            junitView.setOutput(output);
-        } else {
-            consoleView.setOutput(output);
-        }
+        $(output).each(function (ind, data) {
+            if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
+                generatedCodeView.setOutput(data);
+            } else {
+                if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
+                    junitView.setOutput(data);
+                } else {
+                    consoleView.setOutput(data);
+                }
+            }
+        });
         statusBarView.setStatus(ActionStatusMessages.run_java_ok);
     }
 

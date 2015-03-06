@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,18 +50,17 @@ var JUnitView = (function () {
                 wrapper.appendChild(statistic);
                 wrapper.appendChild(consoleElement);
 
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].type == "out") {
-                        if (data[i].testResults.length != 0) {
-                            createStatistics(data[i].testResults);
-                            createTestTree(data[i].testResults);
-                        } else {
-                            consoleView.writeException("No test method found");
-                        }
+                if (data.type == "out") {
+                    if (data.testResults.length != 0) {
+                        createStatistics(data.testResults);
+                        createTestTree(data.testResults);
                     } else {
-                        generatedCodeView.setOutput(data[i]);
+                        consoleView.writeException("No test method found");
                     }
+                } else {
+                    throw "Unknown data type";
                 }
+
                 $(consoleElement).height($(wrapper).height() - $(statistic).outerHeight(true));
             },
             clear: function () {
@@ -288,9 +287,9 @@ var JUnitView = (function () {
 
         if (status == Status.ERROR || status == Status.FAIL) {
             $(backgroundElement).addClass("fail");
-        } else if(status == Status.OK){
+        } else if (status == Status.OK) {
             $(backgroundElement).addClass("ok");
-        } else{
+        } else {
             throw "Bad status";
         }
     }

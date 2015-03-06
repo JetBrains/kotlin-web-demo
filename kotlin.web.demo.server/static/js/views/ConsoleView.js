@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,30 +74,26 @@ var ConsoleView = (function () {
         }
 
         function setOutput(data) {
-            for (var i = 0; i < data.length; ++i) {
-                if (data[i] instanceof Error) {
-                    consoleOutputView.err.println(data[i].stack);
-                } else if (data[i].type == "out") {
-                    consoleOutputView.printMarkedTextToConsole(data[i].text);
-                    if (data[i].exception != null) {
-                        consoleOutputView.printException(data[i].exception);
-                    }
-                } else if (data[i].type == "jsOut") {
-                    consoleOutputView.out.print(data[i].text);
-                } else if (data[i].type == "err") {
-                    var message = data[i].text;
-                    if (message == "") {
-                        consoleOutputView.err.println("Unknown exception.");
-                    } else if (message == "timeout : timeout") {
-                        consoleOutputView.err.println("Server didn't respond for 10 seconds.");
-                    } else {
-                        consoleOutputView.err.println(message)
-                    }
-                } else if (data[i].type == "toggle-info" || data[i].type == "info" || data[i].type == "generatedJSCode") {
-                    generatedCodeView.setOutput(data[i]);
-                } else {
-                    throw "Unknown data type";
+            if (data instanceof Error) {
+                consoleOutputView.err.println(data.stack);
+            } else if (data.type == "out") {
+                consoleOutputView.printMarkedTextToConsole(data.text);
+                if (data.exception != null) {
+                    consoleOutputView.printException(data.exception);
                 }
+            } else if (data.type == "jsOut") {
+                consoleOutputView.out.print(data.text);
+            } else if (data.type == "err") {
+                var message = data.text;
+                if (message == "") {
+                    consoleOutputView.err.println("Unknown exception.");
+                } else if (message == "timeout : timeout") {
+                    consoleOutputView.err.println("Server didn't respond for 10 seconds.");
+                } else {
+                    consoleOutputView.err.println(message)
+                }
+            } else {
+                throw "Unknown data type";
             }
         }
 
