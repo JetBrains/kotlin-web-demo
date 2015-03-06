@@ -123,8 +123,6 @@ canvas = document.getElementById("mycanvas");
 canvas.setAttribute("width", canvasDialog.dialog("option", "width") + "");
 canvas.setAttribute("height", (canvasDialog.dialog("option", "height") - 30) + "");
 
-//var runButton = new Button($("#run-button"), actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
-
 var helpDialogView = new HelpDialogView();
 var helpModelForWords = new HelpModel("Words");
 var helpViewForWords = new HelpView(helpModelForWords);
@@ -158,10 +156,15 @@ projectActionsView.registerStatus("localFile", "This is local version of project
 
 var runProvider = (function () {
 
-    function onSuccess(output) {
+    function onSuccess(output, project) {
         run_button.button("option", "disabled", false);
         $(output).each(function (ind, data) {
-            if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
+            if (data.type == "errors") {
+                project.setErrors(data.errors);
+                $("#result-tabs").tabs("option", "active", 0);
+                problemsView.addMessages();
+                editor.updateHighlighting();
+            } else if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
                 generatedCodeView.setOutput(data);
             } else {
                 if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
@@ -223,11 +226,11 @@ var highlightingProvider = (function () {
 
 var completionProvider = (function () {
     var completionProvider = new CompletionProvider();
-    completionProvider.onSuccess = function() {
+    completionProvider.onSuccess = function () {
         statusBarView.setStatus(ActionStatusMessages.get_completion_ok);
     };
 
-    completionProvider.onFail = function(error) {
+    completionProvider.onFail = function (error) {
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.get_completion_fail);
     };
@@ -384,25 +387,15 @@ editor.onCursorActivity = function (cursorPosition) {
 var run_button = $("#runButton")
     .button()
     .click(function () {
+        run_button.button("option", "disabled", true);
         consoleView.clear();
         junitView.clear();
-        blockContent();
+        generatedCodeView.clear();
         var localConfiguration = configurationManager.getConfiguration();
-        highlightingProvider.getHighlighting(accordion.getSelectedProject(), function (highlightingResult) {
-            var example = accordion.getSelectedProject();
-            example.setErrors(highlightingResult);
-            editor.updateHighlighting();
-            if (!example.hasErrors()) {
-                //Create canvas element before run it in browser
-                if (localConfiguration.type == Configuration.type.CANVAS) {
-                    canvasDialog.dialog("open");
-                }
-                runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject(), accordion.getSelectedProject());
-            } else {
-                unBlockContent();
-                $("#result-tabs").tabs("option", "active", 0);
-            }
-        });
+        if (localConfiguration.type == Configuration.type.CANVAS) {
+            canvasDialog.dialog("open");
+        }
+        runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject());
     });
 
 
@@ -439,7 +432,7 @@ var fileProvider = (function () {
     };
 
     fileProvider.onOriginalFileLoaded = function (data) {
-        if(accordion.getSelectedProject().getType() == ProjectType.PUBLIC_LINK) {
+        if (accordion.getSelectedProject().getType() == ProjectType.PUBLIC_LINK) {
             accordion.getSelectedProjectView().updateFileViewSafely(accordion.getSelectedFileView(), data.name);
         }
         editor.reloadFile();
@@ -724,7 +717,7 @@ $("#grid-bottom").resizable({
     resize: onOutputViewResized
 });
 
-function onOutputViewResized(){
+function onOutputViewResized() {
     $("#grid-bottom").css("top", "");
     $("#result-tabs").css("height", $("#grid-bottom").height() - $("#statusBarWrapper").outerHeight());
     $(".tab-space").css("height", $("#result-tabs").height() - $(".result-tabs-footer").outerHeight());

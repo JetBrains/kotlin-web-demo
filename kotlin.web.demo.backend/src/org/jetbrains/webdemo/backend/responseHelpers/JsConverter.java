@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,24 @@
 
 package org.jetbrains.webdemo.backend.responseHelpers;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.kotlin.psi.JetFile;
+import org.jetbrains.kotlin.diagnostics.Severity;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.JsonUtils;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
+import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.backend.BackendUtils;
+import org.jetbrains.webdemo.backend.Initializer;
+import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
+import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
+import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class JsConverter {
     private final BackendSessionInfo info;
@@ -31,15 +42,32 @@ public class JsConverter {
         this.info = info;
     }
 
-    public String getResult(List<PsiFile> files, String arguments) {
-        return WebDemoTranslatorFacade.translateProjectWithCallToMain(convertList(files), arguments, info);
+    public String getResult(List<PsiFile> files, BackendSessionInfo sessionInfo, String arguments) {
+        ErrorAnalyzer analyzer = new ErrorAnalyzer(files, sessionInfo, Initializer.getInstance().getEnvironment().getProject());
+        Map<String, List<ErrorDescriptor>> errors;
+        try {
+            errors = analyzer.getAllErrors();
+        } catch (KotlinCoreException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), BackendUtils.getPsiFilesContent(files));
+            return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
+        }
+
+        ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
+        response.put("errors", JsonUtils.getObjectMapper().valueToTree(errors));
+        if (isOnlyWarnings(errors)) {
+            response.put("code", WebDemoTranslatorFacade.translateProjectWithCallToMain((List) files, arguments, info));
+        }
+        return response.toString();
     }
 
-    private List<JetFile> convertList(List<PsiFile> list) {
-        List<JetFile> ans = new ArrayList<>();
-        for (PsiFile psiFile : list) {
-            ans.add((JetFile) psiFile);
+    private boolean isOnlyWarnings(Map<String, List<ErrorDescriptor>> map) {
+        for (String key : map.keySet()) {
+            for (ErrorDescriptor errorDescriptor : map.get(key)) {
+                if (errorDescriptor.getSeverity() == Severity.ERROR) {
+                    return false;
+                }
+            }
         }
-        return ans;
+        return true;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package org.jetbrains.webdemo.backend.translator;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.js.analyze.TopDownAnalyzerFacadeForJS;
@@ -32,10 +29,10 @@ import org.jetbrains.kotlin.js.facade.exceptions.TranslationException;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
+import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 
 import java.io.File;
@@ -76,10 +73,7 @@ public final class WebDemoTranslatorFacade {
     @NotNull
     public static String translateProjectWithCallToMain(@NotNull List<JetFile> files, @NotNull String arguments, BackendSessionInfo sessionInfo) {
         try {
-            ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
-            ObjectNode jsonObject = result.addObject();
-            jsonObject.put("text", doTranslate(files, arguments, sessionInfo));
-            return result.toString();
+            return doTranslate(files, arguments, sessionInfo);
         } catch (MainFunctionNotFoundException te) {
             return ResponseUtils.getErrorInJson(te.getMessage());
         } catch (Throwable e) {

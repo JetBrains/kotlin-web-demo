@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,7 +121,7 @@ public class RunTest extends BaseTest {
         } else {
             sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS);
             PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
-            String actualResult = new JsConverter(sessionInfo).getResult(Collections.singletonList(currentPsiFile), args);
+            String actualResult = new JsConverter(sessionInfo).getResult(Collections.singletonList(currentPsiFile), sessionInfo, args);
             assertEquals("wrong result", expectedResult, actualResult);
         }
     }

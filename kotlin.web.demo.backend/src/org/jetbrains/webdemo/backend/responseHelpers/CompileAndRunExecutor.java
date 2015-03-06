@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,12 @@ import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.diagnostics.Severity;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.JsonUtils;
+import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
+import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.BackendUtils;
 import org.jetbrains.webdemo.backend.ResolveUtils;
-import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
@@ -69,6 +70,11 @@ public class CompileAndRunExecutor {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), BackendUtils.getPsiFilesContent(currentPsiFiles));
             return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
         }
+
+        ArrayNode jsonArray = new ArrayNode(JsonNodeFactory.instance);
+        ObjectNode errorsJson = jsonArray.addObject();
+        errorsJson.put("type", "errors");
+        errorsJson.put("errors", JsonUtils.getObjectMapper().valueToTree(errors));
 
         if (errors.isEmpty() || isOnlyWarnings(errors)) {
 //            Project currentProject = currentPsiFile.getProject();
@@ -122,7 +128,6 @@ public class CompileAndRunExecutor {
             ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
                     "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
-            ArrayNode jsonArray = new ArrayNode(JsonNodeFactory.instance);
             ObjectNode jsonObject = jsonArray.addObject();
             jsonObject.put("type", "info");
             jsonObject.put("text", stringBuilder.toString());
@@ -130,11 +135,10 @@ public class CompileAndRunExecutor {
 
             JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, args, jsonArray, (JetFile) currentPsiFiles.get(0), sessionInfo);
 
-            return runner.getResult(outputDir.getAbsolutePath());
-
-        } else {
-            return ResponseUtils.getErrorInJson("There are errors in your code.");
+            runner.getResult(outputDir.getAbsolutePath());
         }
+
+        return jsonArray.toString();
     }
 
     private List<JetFile> convertList(List<PsiFile> list){

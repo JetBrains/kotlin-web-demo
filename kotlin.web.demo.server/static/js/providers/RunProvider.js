@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ var RunProvider = (function () {
     function RunProvider(onSuccess, onFail) {
 
         var instance = {
-            run: function (configuration, programText, example) {
-                run(configuration, programText, example);
+            run: function (configuration, project) {
+                run(configuration, project);
             }
         };
 
@@ -41,7 +41,6 @@ var RunProvider = (function () {
 
 
         function runJava(project) {
-            blockContent();
             $.ajax({
                 url: generateAjaxUrl("run"),
                 context: document.body,
@@ -49,7 +48,7 @@ var RunProvider = (function () {
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                onSuccess(data);
+                                onSuccess(data, project);
                             } else {
                                 onFail(data);
                             }
@@ -74,8 +73,7 @@ var RunProvider = (function () {
                     } catch (e) {
                         console.log(e)
                     }
-                },
-                complete: unBlockContent
+                }
             });
 
         }
@@ -86,7 +84,6 @@ var RunProvider = (function () {
         }
 
         function loadJsFromServer(project) {
-            blockContent();
             $.ajax({
                 url: generateAjaxUrl("run"),
                 context: document.body,
@@ -95,21 +92,19 @@ var RunProvider = (function () {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
                                 var dataJs;
-                                var output;
-                                try {
-                                    dataJs = eval(data[0].text);
-                                    output = [
-                                        {"text": safe_tags_replace(dataJs), "type": "jsOut"},
-                                        {"text": data[0].text, "type": "generatedJSCode"}
-                                    ];
-                                } catch (e) {
-                                    output = [
-                                        e,
-                                        {"text": data[0].text, "type": "generatedJSCode"}
-                                    ];
+                                var output = [{type: "errors", errors: data.errors}];
+                                if (data.hasOwnProperty("code")) {
+                                    output.push({"text": data.code, "type": "generatedJSCode"});
+                                    try {
+                                        dataJs = eval(data.code);
+                                        output.push({"text": safe_tags_replace(dataJs), "type": "jsOut"});
+
+                                    } catch (e) {
+                                        output.push({"type": "jsException", exception: e});
+                                    }
                                 }
 
-                                onSuccess(output);
+                                onSuccess(output, project);
                             } else {
                                 onFail(data);
                             }
@@ -134,8 +129,7 @@ var RunProvider = (function () {
                     } catch (e) {
                         console.log(e)
                     }
-                },
-                complete: unBlockContent
+                }
             });
         }
 

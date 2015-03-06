@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class MyHttpSession {
     private final BackendSessionInfo sessionInfo;
@@ -86,7 +85,7 @@ public class MyHttpSession {
                 writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
             } else {
                 sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS);
-                writeResponse(new JsConverter(sessionInfo).getResult(psiFiles, currentProject.args), HttpServletResponse.SC_OK);
+                writeResponse(new JsConverter(sessionInfo).getResult(psiFiles, sessionInfo, currentProject.args), HttpServletResponse.SC_OK);
             }
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
