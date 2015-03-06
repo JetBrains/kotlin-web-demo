@@ -77,7 +77,7 @@ public class ExamplesLoader {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
 
             String name = new File(path).getName();
-            String originUrl = parentUrl + name.replaceAll(" ", "%20");
+            String originUrl = (parentUrl + name).replaceAll(" ", "%20");
             String args = manifest.get("args").asText();
             String runConfiguration = manifest.get("confType").asText();
             String help = manifest.get("help").textValue();
