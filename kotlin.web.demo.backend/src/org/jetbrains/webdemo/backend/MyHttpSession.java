@@ -141,10 +141,17 @@ public class MyHttpSession {
     private void writeResponse(String responseBody, int errorCode) {
         try {
             ResponseUtils.writeResponse(request, response, responseBody, errorCode);
-            LogWriter.logBackendRequestInfo(
-                    sessionInfo.getType(),
-                    "runConf=" + currentProject.confType + " time=" + sessionInfo.getTimeManager().getMillisecondsFromStart()
-            );
+            if (currentProject != null) {
+                LogWriter.logBackendRequestInfo(
+                        sessionInfo.getType(),
+                        "runConf=" + currentProject.confType + " time=" + sessionInfo.getTimeManager().getMillisecondsFromStart()
+                );
+            } else {
+                LogWriter.logBackendRequestInfo(
+                        sessionInfo.getType(),
+                        "time=" + sessionInfo.getTimeManager().getMillisecondsFromStart()
+                );
+            }
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), JsonUtils.toJson(currentProject));
