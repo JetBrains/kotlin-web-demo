@@ -46,7 +46,7 @@ public class ExamplesUtils {
         if (project.originUrl != null) {
             Project storedExample = getExample(project.originUrl);
             for (ProjectFile file : storedExample.files) {
-                if (!file.isModifiable() && project.readOnlyFileNames.contains(file.getName())) {
+                if (!file.isModifiable() && project.readOnlyFileNames.contains(file.getName()) && !file.getType().equals(ProjectFile.Type.JAVA_FILE)) {
                     project.files.add(file);
                 }
             }
