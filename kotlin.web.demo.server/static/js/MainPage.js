@@ -178,6 +178,7 @@ var runProvider = (function () {
     }
 
     function onFail(error) {
+        run_button.button("option", "disabled", false);
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.run_java_fail);
     }
