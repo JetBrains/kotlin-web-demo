@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ public class CommandRunner {
             System.setProperty("kotlin.web.demo.log4j", value);
         } else if (setting.equals("auth_redirect")) {
             ApplicationSettings.AUTH_REDIRECT = value;
-        } else if (setting.equals("backend_redirect")){
-            ApplicationSettings.BACKEND_REDIRECT = value;
+        } else if (setting.equals("backend_url")) {
+            ApplicationSettings.BACKEND_URL = value;
         }else if (setting.equals("is_test_version")) {
             CommonSettings.IS_TEST_VERSION = Boolean.parseBoolean(value);
         } else if (setting.equals("google_key")) {

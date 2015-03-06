@@ -196,7 +196,7 @@ public class MyHttpSession {
         final boolean hasoutbody = (request.getMethod().equals("POST"));
 
         try {
-            final URL url = new URL("http://" + ApplicationSettings.BACKEND_REDIRECT + "/"
+            final URL url = new URL("http://" + ApplicationSettings.BACKEND_URL + "/"
                     + (request.getQueryString() != null ? "?" + request.getQueryString() : ""));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 

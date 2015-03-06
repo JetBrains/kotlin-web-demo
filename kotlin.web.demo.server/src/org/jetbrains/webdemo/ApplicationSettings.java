@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ public class ApplicationSettings {
     public static final String DATABASE_VERSION = "1.0";
     public static String WEBAPP_ROOT_DIRECTORY = "";
     public static String AUTH_REDIRECT = "kotlin-demo.jetbrains.com";
-    public static String BACKEND_REDIRECT = "";
+    public static String BACKEND_URL = "";
     public static String EXAMPLES_DIRECTORY = "examples";
     public static String HELP_FOR_WORDS = "helpWords.xml";
     public static boolean LOAD_TEST_VERSION_OF_EXAMPLES = false;
