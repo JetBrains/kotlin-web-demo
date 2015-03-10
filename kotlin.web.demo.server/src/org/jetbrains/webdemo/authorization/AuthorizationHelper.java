@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,8 @@ package org.jetbrains.webdemo.authorization;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.session.UserInfo;
 
-import java.util.Map;
-
 public abstract class AuthorizationHelper {
+    protected static final int TIMEOUT = 500;
     protected String type;
 
     public abstract String authorize();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.FacebookApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
+
+import java.util.concurrent.TimeUnit;
 
 public class AuthorizationFacebookHelper extends AuthorizationHelper {
     private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/me";
@@ -58,6 +60,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
             Verifier verifier = new Verifier(oauthVerifier);
             Token accessToken = facebookService.getAccessToken(EMPTY_TOKEN, verifier);
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
+            request.setConnectTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
             facebookService.signRequest(accessToken, request);
             Response response = request.send();
 
