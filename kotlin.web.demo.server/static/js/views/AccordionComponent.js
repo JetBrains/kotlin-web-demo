@@ -23,6 +23,8 @@
 
 var AccordionView = (function () {
     function AccordionView(/*Element*/element) {
+        var DEFAULT_PROJECT_ID = "Hello,%20world!/Simplest%20version";
+
         var instance = {
             loadAllContent: function () {
                 element.innerHTML = "";
@@ -41,7 +43,7 @@ var AccordionView = (function () {
                         });
                         incompleteActionManager.checkTimepoint("headersLoaded");
                         $(element).accordion("refresh");
-                        if(!loginView.isLoggedIn()) {
+                        if (!loginView.isLoggedIn()) {
                             $(myProgramsHeaderElement).unbind("click");
                         }
                         loadFirstItem();
@@ -100,7 +102,7 @@ var AccordionView = (function () {
                     return null;
                 }
             },
-            getSelectedFileView: function(){
+            getSelectedFileView: function () {
                 return selectedFileView;
             },
             selectFile: function (fileView) {
@@ -124,7 +126,7 @@ var AccordionView = (function () {
             },
             onSelectFile: function (previousFile, currentFile) {
             },
-            selectedFileDeleted: function(){
+            selectedFileDeleted: function () {
                 selectedFileView = null;
                 instance.onSelectedFileDeleted();
             },
@@ -135,11 +137,14 @@ var AccordionView = (function () {
             },
             onModifiedSelectedFile: function () {
             },
-            onProjectDeleted: function(){
+            onProjectDeleted: function () {
 
             },
             loadFirstItem: function () {
                 loadFirstItem();
+            },
+            selectProject: function (publicId) {
+                selectProject(publicId)
             }
         };
 
@@ -166,16 +171,20 @@ var AccordionView = (function () {
         newProjectDialog.validate = instance.validateNewProjectName;
 
         function loadFirstItem() {
-            var id = window.location.hash;
-            id = id.startsWith("#") ? id.substr(1) : id;
-            var project_id = getParameterByName("project_id");
+            var projectId = getProjectIdFromUrl();
+            if (projectId == null || projectId == "") {
+                if (localStorage.getItem("openedItemId") != null) {
+                    projectId = localStorage.getItem("openedItemId");
+                    localStorage.removeItem("openedItemId");
+                } else {
+                    projectId = DEFAULT_PROJECT_ID;
+                }
+            }
 
-            if (id != "" && id != "#") {
-                selectProject(id.substr(0, id.lastIndexOf("/")));
-            } else if (project_id != "") {
-                if (localStorage.getItem(project_id) == null) {
-                    var file_id = getParameterByName("id");
-                    headersProvider.getHeaderByFilePublicId(file_id, project_id, function (header) {
+            if (isUserProjectInUrl()) {
+                if (localStorage.getItem(projectId) == null) {
+                    var file_id = getFileIdFromUrl();
+                    headersProvider.getHeaderByFilePublicId(file_id, projectId, function (header) {
                         if (!(header.publicId in projects)) {
                             if (header.type == ProjectType.PUBLIC_LINK) {
                                 header.timeStamp = new Date().getTime();
@@ -187,19 +196,11 @@ var AccordionView = (function () {
                         selectProject(header.publicId);
                     });
                 } else {
-                    selectProject(project_id);
+                    selectProject(projectId);
                 }
-            } else {
-                var openedItemId = localStorage.getItem("openedItemId");
-                localStorage.removeItem("openedItemId");
-                if (openedItemId == null) {
-                    $(element).accordion('option', 'active', 0);
-                    element.childNodes[1].firstElementChild.click();
-                } else {
-                    selectProject(openedItemId);
-                }
+            } else if (projectId != "") {
+                selectProject(projectId);
             }
-            localStorage.removeItem("openedItemId");
         }
 
         function addProject(/*Element*/ folderContentElement, header) {
@@ -253,6 +254,7 @@ var AccordionView = (function () {
             $(folder.projects).each(function (ind, project) {
                 addProject(cont, project);
             });
+            return cont;
         }
 
         function addMyProjectsFolder(projects) {
@@ -293,7 +295,7 @@ var AccordionView = (function () {
         }
 
         function selectProject(publicId) {
-            if(selectedProjectView == null || selectedProjectView.getProjectData().getPublicId() != publicId) {
+            if (selectedProjectView == null || selectedProjectView.getProjectData().getPublicId() != publicId) {
                 if (selectedProjectView != null) {
                     $(selectedProjectView.getHeaderElement()).removeClass("selected");
                     $(selectedProjectView.getContentElement()).slideUp();

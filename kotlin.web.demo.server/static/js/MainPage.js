@@ -263,7 +263,9 @@ var accordion = (function () {
     accordion.onProjectSelected = function (project) {
         if (project.isEmpty()) {
             editor.closeFile();
-            history.replaceState("", "", "?project_id=" + project.getPublicId());
+            if (accordion.getSelectedProject().getPublicId() != getProjectIdFromUrl()) {
+                setState(userProjectPrefix + project.getPublicId(), project.getName());
+            }
         }
         consoleView.clear();
         junitView.clear();
@@ -276,23 +278,24 @@ var accordion = (function () {
     };
 
     accordion.onSelectFile = function (previousFile, currentFile) {
-        if (previousFile != null)
+        if (previousFile != null) {
             if (previousFile.getProject().getType() != ProjectType.USER_PROJECT) {
                 previousFile.getProject().save();
             } else {
                 previousFile.save();
             }
-
-        if (currentFile.getProjectType() == ProjectType.EXAMPLE) {
-            var url = "#" + currentFile.getPublicId();
-            history.replaceState("", "", url);
-        } else {
-            if (currentFile.isModifiable()) {
-                history.replaceState("", "", "?id=" + currentFile.getPublicId() + "&project_id=" + accordion.getSelectedProject().getPublicId());
-            } else {
-                history.replaceState("", "", "?file=" + currentFile.getName() + "&project_id=" + accordion.getSelectedProject().getPublicId());
-            }
         }
+
+        var url;
+        if (currentFile.getProjectType() == ProjectType.EXAMPLE) {
+            url = currentFile.getPublicId();
+        } else if (currentFile.isModifiable()) {
+            url = userProjectPrefix + accordion.getSelectedProject().getPublicId() + "/" + currentFile.getPublicId();
+        } else {
+            url = userProjectPrefix + accordion.getSelectedProject().getPublicId() + "/" + currentFile.getName();
+        }
+        ;
+        setState(url, currentFile.getProject().getName());
 
 
         editor.closeFile();
@@ -306,7 +309,7 @@ var accordion = (function () {
     };
 
     accordion.onProjectDeleted = function () {
-        history.replaceState("", "", "index.html");
+        clearState();
         statusBarView.setStatus(ActionStatusMessages.delete_program_ok);
     };
 
@@ -353,12 +356,21 @@ var accordion = (function () {
     };
 
     accordion.onSelectedFileDeleted = function () {
-        history.replaceState("", "", "?project_id=" + accordion.getSelectedProject().getPublicId());
+        var project = accordion.getSelectedProject()
+        setState(userProjectPrefix + project.getPublicId(), project.getName());
         editor.closeFile();
     };
 
     return accordion
 })();
+
+window.onpopstate = function () {
+    var projectId = getProjectIdFromUrl();
+    if (accordion.getSelectedProject().getPublicId() != projectId) {
+        accordion.selectProject(projectId);
+    }
+    accordion.getSelectedProjectView().selectFileFromUrl();
+};
 
 var timer;
 editor.onCursorActivity = function (cursorPosition) {
@@ -472,7 +484,7 @@ var headersProvider = (function () {
     headersProvider.onProjectHeaderNotFound = function () {
         statusBarView.setStatus(ActionStatusMessages.load_header_fail);
         window.alert("Can't find project, maybe it was removed by the user.");
-        history.replaceState("", "", "index.html");
+        clearState();
         accordion.loadFirstItem();
     };
 

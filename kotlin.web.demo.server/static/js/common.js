@@ -20,14 +20,14 @@ var KOTLIN_VERSION = "0.10.709";
 var WEB_DEMO_VERSION = "${web.demo.version}";
 
 String.prototype.endsWith = function (a) {
-    return-1 !== this.indexOf(a, this.length - a.length);
+    return -1 !== this.indexOf(a, this.length - a.length);
 };
 
 String.prototype.startsWith = function (a) {
     return 0 === this.indexOf(a);
 };
 
-String.prototype.capitalize = function() {
+String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
@@ -160,29 +160,48 @@ function copy(obejct) {
     return cp;
 }
 
-function getNameByUrl(url) {
-    var pos = url.indexOf("&name=");
-    if (pos != -1) {
-        return replaceAll(url.substring(pos + 6), "_", " ");
+var userProjectPrefix = "userProjects/";
 
+function isUserProjectInUrl() {
+    return location.hash.startsWith("#" + userProjectPrefix);
+}
+
+function getProjectIdFromUrl() {
+    var urlHash = escapeString(window.location.hash); //escaping for firefox
+    urlHash = urlHash.startsWith("#") ? urlHash.substr(1, urlHash.length) : urlHash;
+    if (urlHash.startsWith(userProjectPrefix)) {
+        urlHash = urlHash.substr(userProjectPrefix.length, urlHash.length);
+        return urlHash.split("/")[0];
     }
-    return "";
+    return urlHash.substr(0, urlHash.lastIndexOf("/"));
 }
 
-function getFolderNameByUrl(url) {
-    var pos = url.indexOf("&name=");
-    if (pos != -1) {
-        return url.substring(0, pos);
+function getFileIdFromUrl() {
+    var urlHash = escapeString(window.location.hash); //escaping for firefox
+    urlHash = urlHash.startsWith("#") ? urlHash.substr(1, urlHash.length) : urlHash;
+
+    if (urlHash.startsWith(userProjectPrefix)) {
+        urlHash = urlHash.substr(userProjectPrefix.length, urlHash.length);
+        return urlHash.split("/")[1];
+    } else {
+        return urlHash;
     }
-    return "";
 }
 
-function createExampleId(name, folder) {
-    return replaceAll(folder, " ", "%20") + "/" + replaceAll(name, " ", "%20");
+function clearState() {
+    history.replaceState("", "", "/index.html");
 }
 
-function createUserProjectUrl(id) {
-    return "project_" + id;
+function setState(hash, title) {
+    hash = hash.startsWith("#") ? hash : "#" + hash;
+    document.title = title;
+    if (location.hash != hash) {
+        if ((location.hash == "" || location.hash == "#") && location.search == "") {
+            history.replaceState("", title, hash);
+        } else {
+            history.pushState("", title, hash);
+        }
+    }
 }
 
 

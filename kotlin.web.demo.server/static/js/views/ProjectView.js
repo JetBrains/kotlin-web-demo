@@ -35,6 +35,12 @@ var ProjectView = (function () {
             setSelectedFileView: function (selectedFileView_) {
                 selectedFileView = selectedFileView_;
             },
+            selectFileFromUrl: function () {
+                selectedFileView = getFileFromUrl();
+                if (selectedFileView != null) {
+                    selectedFileView.fireSelectEvent();
+                }
+            },
             select: function () {
                 headerElement.className += " selected";
                 headerElement.parentNode.previousSibling.click();
@@ -74,13 +80,6 @@ var ProjectView = (function () {
             getFileViewByName: function (name) {
                 for (var fileId in fileViews) {
                     if (fileViews[fileId].getFile().getName() == name) {
-                        return fileViews[fileId];
-                    }
-                }
-            },
-            getFileViewById: function (id) {
-                for (var fileId in fileViews) {
-                    if (fileId == id) {
                         return fileViews[fileId];
                     }
                 }
@@ -149,17 +148,7 @@ var ProjectView = (function () {
                 }
 
                 if (files.length > 0) {
-                    try {
-                        var fileName = getParameterByName("file");
-                        if (fileName != null && fileName != "") {
-                            selectedFileView = instance.getFileViewByName(fileName);
-                        } else {
-                            var fileId = getParameterByName("id");
-                            selectedFileView = instance.getFileViewById(fileId);
-                        }
-                    } catch (e) {
-                        console.log(e)
-                    }
+                    selectedFileView = getFileFromUrl();
 
                     if (selectedFileView == null) {
                         selectedFileView = fileViews[files[0].getPublicId()];
@@ -170,6 +159,7 @@ var ProjectView = (function () {
                         instance.onSelected(instance);
                     }
                 } else if (accordion.getSelectedProject().getPublicId() == project.getPublicId()) {
+                    instance.onSelected(instance);
                     editor.closeFile();
                 }
             };
@@ -288,6 +278,15 @@ var ProjectView = (function () {
                 headerElement.appendChild(addFileImg);
             }
 
+        }
+
+        function getFileFromUrl() {
+            var fileId = getFileIdFromUrl();
+            if (fileViews.hasOwnProperty(fileId)) {
+                return fileViews[fileId]
+            } else {
+                return instance.getFileViewByName(getFileIdFromUrl());
+            }
         }
 
         function createFileView(file) {
