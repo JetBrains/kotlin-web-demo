@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,22 @@ package org.jetbrains.webdemo.authorization;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
+import java.util.concurrent.TimeUnit;
+
 public class AuthorizationGoogleHelper extends AuthorizationHelper {
     private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
     private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
-    private static OAuthService googleService;
     private static final Token EMPTY_TOKEN = null;
+    private static OAuthService googleService;
     private final String TYPE = "google";
 
     public String authorize() {
@@ -60,6 +62,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             Verifier verifier = new Verifier(oauthVerifier);
             Token accessToken = googleService.getAccessToken(EMPTY_TOKEN, verifier);
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
+            request.setConnectTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
             googleService.signRequest(accessToken, request);
             Response response = request.send();
             userInfo = new UserInfo();
