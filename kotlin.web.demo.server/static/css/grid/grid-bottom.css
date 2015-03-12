@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -334,6 +334,13 @@
     overflow: hidden;
     background-color: #e8e8e8;
     padding: 3px 3px 3px 7px;
+}
+
+.consoleOutput .link {
+    display: inline-block;
+    cursor: pointer;
+    color: #497bb7;
+    text-decoration: underline;
 }
 
 #unit-test-statistic span {

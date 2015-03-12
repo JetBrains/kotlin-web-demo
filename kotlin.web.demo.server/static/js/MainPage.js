@@ -67,13 +67,13 @@ consoleOutputView.writeTo(consoleOutputElement);
 consoleOutputView.makeReference = function (fileName, lineNo) {
     var fileView = accordion.getSelectedProjectView().getFileViewByName(fileName);
     if (fileView != null) {
-        var a = document.createElement("a");
+        var a = document.createElement("div");
+        a.className = "link";
         if (fileName != null) {
             a.innerHTML = fileName + ':' + lineNo;
         } else {
             a.innerHTML = "Unknown Source";
         }
-        a.href = "#";
         a.onclick = function () {
             fileView.fireSelectEvent();
             editor.setCursor(lineNo - 1, 0);
