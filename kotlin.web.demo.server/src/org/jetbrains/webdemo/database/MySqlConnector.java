@@ -73,7 +73,7 @@ public class MySqlConnector {
 
     private void checkConnection() throws DatabaseOperationException {
         try {
-            if (!connection.isValid(1000) && !connect()) {
+            if (!connection.isValid(1) && !connect()) {
                 throw new DatabaseOperationException("Can't connect to database");
             }
         } catch (SQLException e) {
