@@ -63,7 +63,7 @@ public class ResolveUtils {
         module.seal();
 
         return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegrationWithCustomContext(
-                project, ContextPackage.GlobalContext(), Collections.singleton(file), trace, Predicates.<PsiFile>alwaysTrue(), module, null, null);
+                project, ContextPackage.GlobalContext(), Collections.singleton(file), trace, module, null, null);
     }
 
     private ResolveUtils() {

@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.js.config.EcmaVersion;
 import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.facade.K2JSTranslator;
 import org.jetbrains.kotlin.js.facade.MainCallParameters;
-import org.jetbrains.kotlin.js.facade.Status;
 import org.jetbrains.kotlin.js.facade.exceptions.MainFunctionNotFoundException;
 import org.jetbrains.kotlin.js.facade.exceptions.TranslationException;
 import org.jetbrains.kotlin.psi.JetFile;
@@ -65,7 +64,7 @@ public final class WebDemoTranslatorFacade {
                     LIBRARY_FILES,
                     EcmaVersion.defaultVersion(),
                     false,
-                    true));
+                    true)).getBindingContext();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     SessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), file.getText());
@@ -116,14 +115,15 @@ public final class WebDemoTranslatorFacade {
                 true);
         K2JSTranslator translator = new K2JSTranslator(config);
         JetFile file = JetPsiFactoryUtil.createFile(Initializer.INITIALIZER.getEnvironment().getProject(), programText);
-        Status<String> status = translator.generateProgramCode(file, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString))));
-        if (status.isSuccess()) {
-            return new TranslationResult(K2JSTranslator.FLUSH_SYSTEM_OUT + status.getResult() + "\n" + K2JSTranslator.GET_SYSTEM_OUT, true);
+        org.jetbrains.kotlin.js.facade.TranslationResult result = translator.translate(Arrays.asList(file), MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(argumentsString))));
+        if (result instanceof org.jetbrains.kotlin.js.facade.TranslationResult.Success) {
+            org.jetbrains.kotlin.js.facade.TranslationResult.Success success = ((org.jetbrains.kotlin.js.facade.TranslationResult.Success) result);
+            return new TranslationResult(K2JSTranslator.FLUSH_SYSTEM_OUT + success.getCode() + "\n" + K2JSTranslator.GET_SYSTEM_OUT, true);
         }
         else {
             ArrayList<ErrorDescriptor> errorDescriptors = new ArrayList<ErrorDescriptor>();
             ErrorAnalyzer errorAnalyzer = new ErrorAnalyzer(file, sessionInfo);
-            errorAnalyzer.gerErrorsFromBindingContext(config.getTrace().getBindingContext(), errorDescriptors);
+            errorAnalyzer.gerErrorsFromBindingContext(config.getLibraryContext(), errorDescriptors);
 
             return new TranslationResult(JsonResponseForHighlighting.errorDescriptorsToString(errorDescriptors), false);
         }

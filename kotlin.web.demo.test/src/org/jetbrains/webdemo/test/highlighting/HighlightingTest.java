@@ -81,7 +81,7 @@ public class HighlightingTest extends BaseTest {
 
     public void test$errors$errorsFromBackendJava() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Property delegate must have a 'get(Example, kotlin.PropertyMetadataImpl)' method. None of the following functions is suitable: \\ninternal final fun get(thisRef: kotlin.Any?, prop: kotlin.String): kotlin.String defined in Delegate\\n\"," +
+        String expectedResult = "[{\"titleName\":\"Property delegate must have a 'get(Example, kotlin.PropertyMetadata)' method. None of the following functions is suitable: \\ninternal final fun get(thisRef: kotlin.Any?, prop: kotlin.String): kotlin.String defined in Delegate\\n\"," +
                 "\"className\":\"red_wavy_line\"," +
                 "\"severity\":\"ERROR\"," +
                 "\"y\":\"{line: 3, ch: 31}\"," +
@@ -96,11 +96,11 @@ public class HighlightingTest extends BaseTest {
 
     public void test$errors$errorsFromBackendJs() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "[{\"titleName\":\"Argument must be string literal\"," +
+        String expectedResult = "[{\"titleName\":\"Argument must be string constant\"," +
                 "\"className\":\"red_wavy_line\"," +
                 "\"severity\":\"ERROR\"," +
-                "\"y\":\"{line: 2, ch: 6}\"," +
-                "\"x\":\"{line: 2, ch: 4}\"}]";
+                "\"y\":\"{line: 3, ch: 17}\"," +
+                "\"x\":\"{line: 3, ch: 7}\"}]";
         compareResponseAndExpectedResult(fileName, expectedResult, "js");
     }
 
