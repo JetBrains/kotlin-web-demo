@@ -596,12 +596,6 @@ window.onbeforeunload = function () {
     accordion.getSelectedProject().save();
 
     localStorage.setItem("highlightOnTheFly", document.getElementById("on-the-fly-checkbox").checked);
-    var gridConfiguration = {
-        examplesWidth: $("#examples-list-resizer").width(),
-        gridBottomHeight: $("#grid-bottom").height(),
-        fullscreenMode: $("#fullscreenButton").hasClass("fullscreen")
-    };
-    localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
     //return null;
 };
 
@@ -679,27 +673,28 @@ function resizeArguments() {
     argumentsWidth -= ($("#arguments").outerWidth(true) - $("#arguments").width());
     $("#arguments").css("width", argumentsWidth - 20);
 }
-//
-//$("#examples-list-resizer").resizable({
-//    handles: "e",
-//    minWidth: 20,
-//    maxWidth: (function () {
-//        return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
-//    })(),
-//    start: function () {
-//        $(this).resizable({
-//            maxWidth: (function () {
-//                return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
-//            })()
-//        });
-//    },
-//    resize: onAccordionResized
-//});
-//
-//function onAccordionResized(){
-//    $("#workspace").css("margin-left", $("#examples-list-resizer").outerWidth());
-//    resizeArguments();
-//}
+
+$("#examples-list-resizer").resizable({
+    handles: "e",
+    maxWidth: (function () {
+        return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
+    })(),
+    minWidth: 17,
+    start: function () {
+        $(this).resizable({
+            maxWidth: (function () {
+                return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
+            })()
+        });
+    },
+    stop: updateGridConfigurationInLocalStorage,
+    resize: onAccordionResized
+});
+
+function onAccordionResized() {
+    $("#workspace").css("margin-left", $("#examples-list-resizer").outerWidth());
+    resizeArguments();
+}
 
 $("#on-the-fly-checkbox")
     .prop("checked", localStorage.getItem("highlightOnTheFly") == "true")
@@ -727,8 +722,18 @@ $("#grid-bottom").resizable({
             })()
         });
     },
+    stop: updateGridConfigurationInLocalStorage,
     resize: onOutputViewResized
 });
+
+function updateGridConfigurationInLocalStorage() {
+    var gridConfiguration = {
+        examplesWidth: $("#examples-list-resizer").width(),
+        gridBottomHeight: $("#grid-bottom").height(),
+        fullscreenMode: $("#fullscreenButton").hasClass("fullscreen")
+    };
+    localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
+}
 
 function onOutputViewResized() {
     $("#grid-bottom").css("top", "");
@@ -748,8 +753,8 @@ var gridConfiguration = localStorage.getItem("gridConfiguration");
 if (gridConfiguration != null) {
     gridConfiguration = JSON.parse(gridConfiguration);
     if (gridConfiguration.fullscreenMode) document.getElementById("fullscreenButton").click();
-    //$("#examples-list-resizer").width(gridConfiguration.examplesWidth);
-    //onAccordionResized();
+    $("#examples-list-resizer").width(gridConfiguration.examplesWidth);
+    onAccordionResized();
     $("#grid-bottom").height(gridConfiguration.gridBottomHeight);
     onOutputViewResized();
 }

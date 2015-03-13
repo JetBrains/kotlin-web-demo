@@ -132,6 +132,7 @@ var ProjectView = (function () {
 
             project.onRenamed = function (newName) {
                 nameSpan.innerHTML = newName;
+                nameSpan.title = nameSpan.innerHTML;
             };
 
             project.onContentLoaded = function () {
@@ -140,6 +141,7 @@ var ProjectView = (function () {
                 contentElement.innerHTML = "";
 
                 nameSpan.innerHTML = project.getName();
+                nameSpan.title = nameSpan.innerHTML;
 
                 for (var i = 0; i < files.length; ++i) {
                     var fileView;
@@ -211,20 +213,10 @@ var ProjectView = (function () {
 
         init();
         function init() {
-            var hoverTimer;
             headerElement.id = header.publicId;
-            $(headerElement).mouseenter(function () {
-                var element = this;
-                hoverTimer = setTimeout(function () {
-                    $(element).addClass('hover');
-                }, 500);
-            }).mouseleave(function () {
-                clearTimeout(hoverTimer);
-                $(this).removeClass('hover');
-            });
 
             $(contentElement).slideUp();
-            headerElement.className = "examples-project-name";
+            headerElement.className = "examples-project-name depth-1";
             var img = document.createElement("div");
             img.className = "img high-res-icon";
             headerElement.appendChild(img);
@@ -236,12 +228,37 @@ var ProjectView = (function () {
             nameSpan.className = "file-name-span";
             nameSpan.style.cursor = "pointer";
             nameSpan.innerHTML = header.name;
+            nameSpan.title = nameSpan.innerHTML;
             headerElement.appendChild(nameSpan);
+
+            var actionIconsElement = document.createElement("div");
+            actionIconsElement.className = "icons";
+            headerElement.appendChild(actionIconsElement);
 
             if (header.type != ProjectType.USER_PROJECT) {
                 if (localStorage.getItem(header.publicId) != null) {
                     $(headerElement).addClass("modified");
                 }
+            }
+
+
+            if (header.type == ProjectType.USER_PROJECT) {
+                var addFileImg = document.createElement("div");
+                addFileImg.className = "new-file-img high-res-icon";
+                addFileImg.onclick = function (event) {
+                    event.stopPropagation();
+                    newFileDialog.open(fileProvider.addNewFile.bind(null, project), "Untitled");
+                };
+                actionIconsElement.appendChild(addFileImg);
+
+                var renameImg = document.createElement("div");
+                renameImg.className = "rename-img";
+                renameImg.title = "Rename this file";
+                renameImg.onclick = function (event) {
+                    event.stopPropagation();
+                    renameProjectDialog.open(projectProvider.renameProject.bind(null, project), project.getName());
+                };
+                actionIconsElement.appendChild(renameImg);
             }
 
             if (header.type == ProjectType.USER_PROJECT || header.type == ProjectType.PUBLIC_LINK) {
@@ -254,30 +271,8 @@ var ProjectView = (function () {
                     }
                     event.stopPropagation();
                 };
-                headerElement.appendChild(deleteButton);
+                actionIconsElement.appendChild(deleteButton);
             }
-
-            if (header.type == ProjectType.USER_PROJECT) {
-                var renameImg = document.createElement("div");
-                renameImg.className = "rename-img";
-                renameImg.title = "Rename this file";
-                renameImg.onclick = function (event) {
-                    event.stopPropagation();
-                    renameProjectDialog.open(projectProvider.renameProject.bind(null, project), project.getName());
-                };
-                headerElement.appendChild(renameImg);
-
-                var addFileImg = document.createElement("div");
-                addFileImg.className = "new-file-button high-res-icon";
-                addFileImg.innerHTML = "Add new file";
-                addFileImg.style.cursor = "pointer";
-                addFileImg.onclick = function (event) {
-                    event.stopPropagation();
-                    newFileDialog.open(fileProvider.addNewFile.bind(null, project), "Untitled");
-                };
-                headerElement.appendChild(addFileImg);
-            }
-
         }
 
         function getFileFromUrl() {

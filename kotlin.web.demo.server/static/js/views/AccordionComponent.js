@@ -239,7 +239,7 @@ var AccordionView = (function () {
 
         function addFolder(folder) {
             var headerElement = document.createElement("h3");
-            headerElement.className = "examples-folder-name";
+            headerElement.className = "examples-folder-name depth-0";
             headerElement.id = escapeString(folder.name);
             element.appendChild(headerElement);
 
@@ -259,10 +259,16 @@ var AccordionView = (function () {
 
         function addMyProjectsFolder(projects) {
             myProgramsHeaderElement = document.createElement("h3");
-            myProgramsHeaderElement.className = "examples-folder-name";
-            myProgramsHeaderElement.innerHTML = "My programs";
+            myProgramsHeaderElement.className = "examples-folder-name depth-0";
             myProgramsHeaderElement.id = escapeString("My programs");
             element.appendChild(myProgramsHeaderElement);
+
+            var folderDiv = document.createElement("div");
+            folderDiv.innerHTML = "My programs";
+            folderDiv.className = "folder-name-div";
+            folderDiv.style.display = "inline-block";
+            myProgramsHeaderElement.appendChild(folderDiv);
+
 
             myProgramsContentElement = document.createElement("div");
             myProgramsContentElement.id = "My_Programs_content";

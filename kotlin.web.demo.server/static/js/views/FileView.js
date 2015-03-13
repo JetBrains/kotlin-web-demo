@@ -40,6 +40,7 @@ var FileView = (function () {
             },
             updateName: function(){
                 fileNameElement.innerHTML = file.getName();
+                fileNameElement.title = fileNameElement.innerHTML;
             },
             fireSelectEvent: function () {
                 projectView.setSelectedFileView(instance);
@@ -80,18 +81,7 @@ var FileView = (function () {
 
         init();
         function init() {
-            headerElement.className = "example-filename";
-
-            var hoverTimer;
-            $(headerElement).mouseenter(function () {
-                var element = this;
-                hoverTimer = setTimeout(function () {
-                    $(element).addClass('hover');
-                }, 500);
-            }).mouseleave(function () {
-                clearTimeout(hoverTimer);
-                $(this).removeClass('hover');
-            });
+            headerElement.className = "example-filename depth-2";
 
             var icon = document.createElement("div");
             $(icon).addClass("icon").addClass("high-res-icon");
@@ -116,12 +106,34 @@ var FileView = (function () {
             fileNameElement = document.createElement("div");
             fileNameElement.className = "example-filename-text";
             fileNameElement.innerHTML = file.getName();
+            fileNameElement.title = fileNameElement.innerHTML;
             headerElement.appendChild(fileNameElement);
             if(!file.isModifiable()){
                 $(headerElement).addClass("unmodifiable");
             }
 
+            var actionIconsElement = document.createElement("div");
+            actionIconsElement.className = "icons";
+            headerElement.appendChild(actionIconsElement);
+
             if (projectView.getType() == ProjectType.USER_PROJECT) {
+                if (file.isModifiable()) {
+                    var renameImg = document.createElement("div");
+                    renameImg.className = "rename-img high-res-icon";
+                    renameImg.title = "Rename file";
+                    renameImg.onclick = function (event) {
+                        var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), file.rename);
+                        file.onRenamed = function (newName) {
+                            fileNameElement.innerHTML = newName;
+                            fileNameElement.title = fileNameElement.innerHTML;
+                        };
+                        renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.getName()));
+                        event.stopPropagation();
+
+                    };
+                    actionIconsElement.appendChild(renameImg);
+                }
+
                 var deleteImg = document.createElement("div");
                 deleteImg.className = "delete-img high-res-icon";
                 deleteImg.title = "Delete this file";
@@ -131,23 +143,7 @@ var FileView = (function () {
                     }
                     event.stopPropagation();
                 };
-                headerElement.appendChild(deleteImg);
-
-                if (file.isModifiable()) {
-                    var renameImg = document.createElement("div");
-                    renameImg.className = "rename-img high-res-icon";
-                    renameImg.title = "Rename file";
-                    renameImg.onclick = function (event) {
-                        var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), file.rename);
-                        file.onRenamed = function (newName) {
-                            fileNameElement.innerHTML = newName;
-                        };
-                        renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.getName()));
-
-                        event.stopPropagation();
-                    };
-                    headerElement.appendChild(renameImg);
-                }
+                actionIconsElement.appendChild(deleteImg);
             }
 
             headerElement.onclick = instance.fireSelectEvent;

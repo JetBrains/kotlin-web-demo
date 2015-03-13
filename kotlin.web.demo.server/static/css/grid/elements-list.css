@@ -24,6 +24,7 @@
 .examples-list {
     max-height: 100%;
     overflow: auto;
+    overflow-x: hidden;
     width: 100%;
     line-height: 1;
 }
@@ -53,6 +54,7 @@
     margin: 0;
     padding: 6px 0 6px 6px;
     font-size: 14px;
+    line-height: 1;
 }
 
 #examples-list .ui-icon.examples-open-folder-icon {
@@ -66,14 +68,20 @@
 
 .folder-name-div {
     padding-left: 11px;
-    padding-top: 2px;
+    line-height: 1.2;
     padding-right: 10px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .file-name-span {
     font-size: 14px;
+    padding-left: 20px;
+    box-sizing: border-box;
+    max-width: 100%;
     display: inline-block;
-    max-width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 16px;
@@ -82,37 +90,67 @@
     word-wrap: break-word;
 }
 
-.examples-project-name.hover .file-name-span {
-    max-height: none;
-    white-space: normal;
-}
-
 .examples-project-name {
+    position: relative;
     cursor: pointer;
     display: block;
     color: #3164a0;
     background-color: #ffffff;
-    padding: 6px 6px 6px 25px;
+    padding: 6px 6px 6px;
+}
+
+#examples-list .depth-0 {
+    padding-left: 0;
+}
+
+#examples-list .depth-1 {
+    padding-left: 25px;
+}
+
+#examples-list .depth-2 {
+    padding-left: 50px;
+}
+
+#examples-list .depth-3 {
+    padding-left: 75px;
+}
+
+#examples-list .depth-4 {
+    padding-left: 100px;
+}
+
+#examples-list .depth-5 {
+    padding-left: 125px;
+}
+
+#examples-list .depth-6 {
+    padding-left: 150px;
+}
+
+#examples-list .depth-7 {
+    padding-left: 175px;
+}
+
+#examples-list .depth-8 {
+    padding-left: 200px;
 }
 
 .current-project-name {
     display: block;
     font-size: 14px;
-    padding: 6px 6px 6px 45px;
+    padding: 6px 6px 6px;
     color: #000000;
     background-color: #d8d8d8;
 }
 
 .examples-project-name .img {
-    display: inline-block;
-    float: left;
-    margin-right: 5px;
+    position: absolute;
     width: 15px;
     height: 13px;
     background: url("/static/images/icons.png") -53px -91px;
 }
 
-.examples-project-name.modified .img{
+.examples-project-name.modified .img {
     background: url("/static/images/icons.png") -69px -91px;
 }
 
@@ -120,49 +158,76 @@
     position: relative;
     left: auto;
     top: 3px;
-    margin-right: 6px;
+    margin-left: 6px;
     margin-top: 0;
     float: left;
 }
 
 .login-link {
+    display: inline-block;
+    position: relative;
     font-size: 14px;
-    padding-left: 6px;
+    bottom: 2px;
     color: #3164a0;
 }
 
-.rename-img {
+.example-filename:hover .icons,
+.examples-project-name:hover .icons {
+    display: inline-block;
+}
+
+.icons {
+    position: absolute;
     display: none;
+    background: inherit;
+    padding-left: 4px;
+    top: 0;
+    right: 0;
+}
+
+.new-file-img:hover {
+    opacity: 1.0;
+}
+
+.new-file-img {
+    opacity: 0.7;
+    float: left;
+    cursor: pointer;
+    height: 18px;
+    width: 16px;
+    margin-top: 6px;
+    margin-right: 4px;
+    background: url("/static/images/icons.png") no-repeat -65px -39px;
+}
+
+.rename-img:hover {
+    opacity: 1.0;
+}
+
+.rename-img {
+    opacity: 0.7;
+    float: left;
     cursor: pointer;
     height: 11px;
     width: 11px;
-    float: right;
-    margin-top: 2px;
+    margin-top: 8px;
     margin-right: 4px;
     background: url("/static/images/icons.png") no-repeat -85px -58px;
 }
 
+.delete-img:hover {
+    opacity: 1.0;
+}
+
 .delete-img {
-    display: none;
+    opacity: 0.9;
+    float: left;
     cursor: pointer;
     height: 7px;
     width: 6px;
-    float: right;
-    margin-top: 5px;
+    margin-top: 11px;
+    margin-right: 6px;
     background: url("/static/images/icons.png") no-repeat -20px -39px;
-}
-
-.examples-project-name:hover .rename-img,
-.examples-project-name:hover .delete-img,
-.example-filename:hover .rename-img,
-.example-filename:hover .delete-img{
-    display: block;
-    /*-webkit-transition-delay: 1ms;*/
-    /*transition-delay: 1ms;*/
-}
-
-.examples-project-name.selected:hover .new-file-button{
-    display: block;
 }
 
 .example-filename {
@@ -174,7 +239,7 @@
     font-size: 14px;
     position: relative;
     background-color: white;
-    padding: 6px 6px 6px 45px;
+    padding: 6px 6px 6px;
 }
 
 .example-filename.selected {
@@ -183,7 +248,9 @@
 }
 
 .example-filename-text {
-    max-width: 79%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding-left: 18px;
     word-wrap: break-word;
     display: inline-block;
     overflow: hidden;
@@ -198,9 +265,8 @@
 }
 
 .example-filename .icon {
-    top: 1px;
+    position: absolute;
     float: left;
-    margin-right: 3px;
     width: 13px;
     height: 16px;
     /*background: url("/static/images/icons.png") no-repeat -19px -92px;*/
@@ -210,11 +276,10 @@
     margin-top: 2px;
 }
 
-.example-filename.modified .icon{
+.example-filename.modified .icon {
     width: 15px;
     height: 18px;
 }
-
 
 .icon.kotlin {
     background: url("/static/images/icons.png") no-repeat -0px -111px;
@@ -234,22 +299,16 @@
     background: url("/static/images/icons.png") no-repeat -54px -109px;
 }
 
-.example-filename.modified .icon.kotlin{
+.example-filename.modified .icon.kotlin {
     background: url("/static/images/icons.png") no-repeat -14px -109px;
 }
 
-.icon.kotlin-test.unmodifiable{
+.icon.kotlin-test.unmodifiable {
     width: 23px;
     height: 19px;
     margin-left: -10px;
     background: url("/static/images/icons.png") no-repeat -30px -109px;
 }
-
-/*.example-filename.modified .fileIcon {*/
-    /*background: url("/static/images/icons.png") no-repeat -37px -92px;*/
-/*}*/
-
-
 
 .newProjectButton {
     float: right;
@@ -257,13 +316,4 @@
     height: 15px;
     margin-right: 3px;
     background: url("/static/images/icons.png") no-repeat -47px -39px;
-}
-
-.new-file-button {
-    display: none;
-    float: right;
-    width: 16px;
-    height: 18px;
-    margin-right: 4px;
-    background: url("/static/images/icons.png") no-repeat -65px -39px;
 }
