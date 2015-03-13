@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.responseHelpers;
 
+import kotlin.KotlinPackage;
 import org.jetbrains.kotlin.backend.common.output.OutputFile;
 import org.jetbrains.kotlin.idea.MainFunctionDetector;
 import org.jetbrains.kotlin.load.kotlin.PackageClassUtils;
@@ -55,6 +56,14 @@ public class JavaRunner {
 
     public String getResult(String pathToRootOut) {
         String[] commandString = generateCommandString(pathToRootOut);
+
+        if (ApplicationSettings.IS_TEST_VERSION.equals("true")) {
+            Map<String, String> mapCommandString = new HashMap<String, String>();
+            mapCommandString.put("type", "info");
+            mapCommandString.put("text", KotlinPackage.join(commandString, " ", "Run: ", "", 100, ""));
+            jsonArray.put(mapCommandString);
+        }
+
         Process process;
         sessionInfo.getTimeManager().saveCurrentTime();
         try {
@@ -339,19 +348,23 @@ public class JavaRunner {
 
         String[] builder;
         if (arguments.isEmpty()) {
-            builder = new String[5];
+            builder = new String[6];
         }
         else {
-            builder = new String[argsArray.length + 5];
+            builder = new String[argsArray.length + 6];
         }
         builder[0] = ApplicationSettings.JAVA_EXECUTE;
         builder[1] = "-classpath";
-        builder[2] = pathToRootOut + File.pathSeparator + ApplicationSettings.KOTLIN_LIB;
+        builder[2] = pathToRootOut + File.pathSeparator +
+                ApplicationSettings.KOTLIN_RUNTIME +
+                File.pathSeparator +
+                ApplicationSettings.KOTLIN_REFLECT;
         builder[3] = "-Djava.security.manager";
-        builder[4] = findMainClass();
+        builder[4] = "-Djava.security.policy=" + ApplicationSettings.POLICY_FILE;
+        builder[5] = findMainClass();
 
         if (!arguments.isEmpty()) {
-            System.arraycopy(argsArray, 0, builder, 5, argsArray.length);
+            System.arraycopy(argsArray, 0, builder, 6, argsArray.length);
         }
         return builder;
 

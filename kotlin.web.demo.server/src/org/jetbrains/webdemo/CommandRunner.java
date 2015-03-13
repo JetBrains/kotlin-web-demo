@@ -34,6 +34,7 @@ public class CommandRunner {
             ApplicationSettings.TIMEOUT_FOR_EXECUTION = value;
         } else if (setting.equals("app_home")) {
             ApplicationSettings.OUTPUT_DIRECTORY = value + File.separator + "out";
+            ApplicationSettings.POLICY_FILE = value + File.separator + "executors.policy";
             ApplicationSettings.STATISTICS_DIRECTORY = value + File.separator + "statistics";
             ApplicationSettings.LOGS_DIRECTORY = value + File.separator + "logs";
             ApplicationSettings.EXAMPLES_DIRECTORY = value + File.separator + "examples";

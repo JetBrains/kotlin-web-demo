@@ -33,7 +33,9 @@ public class ApplicationSettings {
     public static String HELP_FOR_EXAMPLES = "helpExamples.xml";
     public static String HELP_FOR_WORDS = "helpWords.xml";
 
-    public static String KOTLIN_LIB = "";
+    public static String KOTLIN_RUNTIME = "";
+    public static String KOTLIN_REFLECT = "";
+    public static String POLICY_FILE = "";
 
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
     public static String KOTLIN_VERSION = "0.7.396";

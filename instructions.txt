@@ -1,0 +1,7 @@
+1. executors.policy file
+   This file should be grant read permissions for kotlin-runtime.jar. It is needed for reflection
+   ex. Any::class.simpleName
+   because kotlin compiler use Class.getClassLoader().getResource() during initialisation of KotlinBuiltIns classes
+
+   template file is placed in <root>/executors.policy file
+   On server this file should be in <app_home>/executors.policy

@@ -32,7 +32,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class EnvironmentManagerForServer extends EnvironmentManager {
-    private static File KOTLIN_RUNTIME = initializeKotlinRuntime();
+
+    public EnvironmentManagerForServer() {
+        initializeKotlinRuntime();
+        initializeKotlinReflect();
+    }
 
     @NotNull
     public JetCoreEnvironment createEnvironment() {
@@ -55,18 +59,17 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
         return jetCoreEnvironment;
     }
 
-    @Nullable
-    private static File initializeKotlinRuntime() {
-        final File unpackedRuntimePath = getUnpackedRuntimePath();
+    private static File initializeKotlinReflect() {
+        final File unpackedRuntimePath = getUnpackedRuntimePath("kotlin/reflect/jvm/internal/KClassImpl.class");
         if (unpackedRuntimePath != null) {
-            ApplicationSettings.KOTLIN_LIB = unpackedRuntimePath.getAbsolutePath();
-            ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIB);
+            ApplicationSettings.KOTLIN_REFLECT = unpackedRuntimePath.getAbsolutePath();
+            ErrorWriter.writeInfoToConsole("Kotlin Reflection library founded at " + ApplicationSettings.KOTLIN_REFLECT);
             return unpackedRuntimePath;
         } else {
-            final File runtimeJarPath = getRuntimeJarPath();
+            final File runtimeJarPath = getRuntimeJarPath("kotlin/reflect/jvm/internal/KClassImpl.class");
             if (runtimeJarPath != null && runtimeJarPath.exists()) {
-                ApplicationSettings.KOTLIN_LIB = runtimeJarPath.getAbsolutePath();
-                ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_LIB);
+                ApplicationSettings.KOTLIN_REFLECT = runtimeJarPath.getAbsolutePath();
+                ErrorWriter.writeInfoToConsole("Kotlin Reflection library founded at " + ApplicationSettings.KOTLIN_REFLECT);
                 return runtimeJarPath;
             }
         }
@@ -74,8 +77,26 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
     }
 
     @Nullable
-    private static File getUnpackedRuntimePath() {
-        URL url = K2JVMCompiler.class.getClassLoader().getResource("jet/JetObject.class");
+    private static File initializeKotlinRuntime() {
+        final File unpackedRuntimePath = getUnpackedRuntimePath("kotlin/jvm/internal/Intrinsics.class");
+        if (unpackedRuntimePath != null) {
+            ApplicationSettings.KOTLIN_RUNTIME = unpackedRuntimePath.getAbsolutePath();
+            ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_RUNTIME);
+            return unpackedRuntimePath;
+        } else {
+            final File runtimeJarPath = getRuntimeJarPath("kotlin/jvm/internal/Intrinsics.class");
+            if (runtimeJarPath != null && runtimeJarPath.exists()) {
+                ApplicationSettings.KOTLIN_RUNTIME = runtimeJarPath.getAbsolutePath();
+                ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + ApplicationSettings.KOTLIN_RUNTIME);
+                return runtimeJarPath;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static File getUnpackedRuntimePath(String className) {
+        URL url = K2JVMCompiler.class.getClassLoader().getResource(className);
         if (url != null && url.getProtocol().equals("file")) {
             return new File(url.getPath()).getParentFile().getParentFile();
         }
@@ -83,8 +104,8 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
     }
 
     @Nullable
-    private static File getRuntimeJarPath() {
-        URL url = K2JVMCompiler.class.getClassLoader().getResource("kotlin/KotlinPackage.class");
+    private static File getRuntimeJarPath(String className) {
+        URL url = K2JVMCompiler.class.getClassLoader().getResource(className);
         if (url != null && url.getProtocol().equals("jar")) {
             String path = url.getPath();
             return new File(path.substring(path.indexOf(":") + 1, path.indexOf("!/")));
@@ -106,7 +127,8 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
 
         ApplicationSettings.JAVA_HOME = files.iterator().next().getParentFile().getParentFile().getParentFile().getAbsolutePath();
 
-        classpath.add(KOTLIN_RUNTIME);
+        classpath.add(new File(ApplicationSettings.KOTLIN_RUNTIME));
+        classpath.add(new File(ApplicationSettings.KOTLIN_REFLECT));
         if (arguments.classpath != null) {
             for (String element : Splitter.on(File.pathSeparatorChar).split(arguments.classpath)) {
                 classpath.add(new File(element));
