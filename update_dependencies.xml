@@ -16,7 +16,7 @@
 
 <project name="Update Dependencies" default="download_and_update">
 
-    <property name ="kotlin.build" value="389826"/>
+    <property name="kotlin.build" value="417802"/>
 
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
@@ -138,7 +138,7 @@
              usetimestamp="true"/>
         <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
              dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>
-        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-compiler-sources.jar"
+        <get src="${tc.plugin}/kotlin-compiler-sources.jar"
              dest="${dependencies.dir}/kotlin-compiler-sources.jar" usetimestamp="true"/>
     </target>
 

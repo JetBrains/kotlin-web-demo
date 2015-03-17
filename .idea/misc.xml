@@ -25,6 +25,10 @@
     <option name="LAST_EDITED_MODULE_NAME" />
     <option name="LAST_EDITED_TAB_NAME" />
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/kotlin.web.demo.executors/executors.policy.template" />
+    <file url="file://$PROJECT_DIR$/kotlin.web.demo.test/resources/executors.policy.template" />
+  </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>

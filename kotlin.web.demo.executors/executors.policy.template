@@ -26,6 +26,10 @@ grant codeBase "file:@WEBAPPS_ROOT@WEB-INF/lib/jackson-databind.jar"{
   permission java.lang.RuntimePermission "accessDeclaredMembers";
 };
 
+grant{
+  permission java.io.FilePermission "@KOTLIN_LIBS@/kotlin-runtime.jar", "read";
+};
+
 grant codeBase "file:@WEBAPPS_ROOT@WEB-INF/classes/Executors.jar"
 {
   permission java.lang.reflect.ReflectPermission "suppressAccessChecks";

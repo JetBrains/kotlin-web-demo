@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.js.config.EcmaVersion;
 import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.facade.K2JSTranslator;
 import org.jetbrains.kotlin.js.facade.MainCallParameters;
-import org.jetbrains.kotlin.js.facade.Status;
+import org.jetbrains.kotlin.js.facade.TranslationResult;
 import org.jetbrains.kotlin.js.facade.exceptions.MainFunctionNotFoundException;
 import org.jetbrains.kotlin.js.facade.exceptions.TranslationException;
 import org.jetbrains.kotlin.psi.JetFile;
@@ -61,7 +61,7 @@ public final class WebDemoTranslatorFacade {
                     LIBRARY_FILES,
                     EcmaVersion.defaultVersion(),
                     false,
-                    false));
+                    false)).getBindingContext();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
@@ -98,8 +98,12 @@ public final class WebDemoTranslatorFacade {
                 false,
                 false);
         K2JSTranslator translator = new K2JSTranslator(config);
-        Status<String> status = translator.generateProgramCode(files, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(arguments))));
-        return K2JSTranslator.FLUSH_SYSTEM_OUT + status.getResult() + "\n" + K2JSTranslator.GET_SYSTEM_OUT;
+        TranslationResult result = translator.translate(files, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(arguments))));
+        if (result instanceof org.jetbrains.kotlin.js.facade.TranslationResult.Success) {
+            org.jetbrains.kotlin.js.facade.TranslationResult.Success success = ((org.jetbrains.kotlin.js.facade.TranslationResult.Success) result);
+            return K2JSTranslator.FLUSH_SYSTEM_OUT + success.getCode() + "\n" + K2JSTranslator.GET_SYSTEM_OUT;
+        }
+        return "";
     }
 
 }

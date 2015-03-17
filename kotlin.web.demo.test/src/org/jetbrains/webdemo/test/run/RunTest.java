@@ -65,6 +65,12 @@ public class RunTest extends BaseTest {
         compareResult(fileName, "", expectedResult, "java");
     }
 
+    public void test$execution$Reflection() throws IOException, InterruptedException {
+        String expectedResult = "<outStream>Any</br>A</br>x</br></outStream>";
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        compareResult(fileName, "", expectedResult, "java");
+    }
+
     public void test$execution$FooErr() throws IOException, InterruptedException {
         String expectedResult = "<errStream>ERROR</br></errStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";

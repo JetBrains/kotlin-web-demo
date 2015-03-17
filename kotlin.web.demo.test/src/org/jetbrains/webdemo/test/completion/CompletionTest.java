@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForCompletion;
-import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
 
@@ -43,7 +42,7 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$all$variable() throws IOException {
-        String expectedResult = "[{\"icon\":\"property\",\"text\":\"stdin\",\"displayText\":\"stdin\",\"tail\":\"BufferedReader\"},{\"icon\":\"method\",\"text\":\"stream(\",\"displayText\":\"stream(() -> T?)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"text\":\"stream(\",\"displayText\":\"stream(T, (T) -> T?)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"text\":\"streamOf(\",\"displayText\":\"streamOf(Progression<T>)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"text\":\"streamOf(\",\"displayText\":\"streamOf(vararg T)\",\"tail\":\"Stream<T>\"},{\"icon\":\"property\",\"text\":\"str\",\"displayText\":\"str\",\"tail\":\"String\"}]";
+        String expectedResult = "[{\"icon\":\"property\",\"text\":\"stdin\",\"displayText\":\"stdin\",\"tail\":\"BufferedReader\"},{\"icon\":\"method\",\"text\":\"stream(\",\"displayText\":\"stream(() -> T?)\",\"tail\":\"Sequence<T>\"},{\"icon\":\"method\",\"text\":\"stream(\",\"displayText\":\"stream(T, (T) -> T?)\",\"tail\":\"Sequence<T>\"},{\"icon\":\"method\",\"text\":\"streamOf(\",\"displayText\":\"streamOf(Progression<T>)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"text\":\"streamOf(\",\"displayText\":\"streamOf(vararg T)\",\"tail\":\"Stream<T>\"},{\"icon\":\"property\",\"text\":\"str\",\"displayText\":\"str\",\"tail\":\"String\"}]";
         compareResult(14, 24, expectedResult, "java");
         compareResult(14, 24, expectedResult, "js");
     }

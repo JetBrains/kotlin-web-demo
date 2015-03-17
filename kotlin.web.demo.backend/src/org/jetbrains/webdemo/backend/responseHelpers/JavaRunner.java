@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
+import org.jetbrains.webdemo.backend.BackendSettings;
 
 import java.io.*;
 import java.util.*;
@@ -352,8 +352,10 @@ public class JavaRunner {
         builder.add("-Djava.security.manager");
         builder.add("-Djava.security.policy=" + BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
         builder.add("-classpath");
-        String classpath = (pathToRootOut + File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar" + File.pathSeparator +
-                BackendSettings.CLASS_PATH + File.separator + "Executors.jar");
+        String classpath = (pathToRootOut +
+                File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar" +
+                File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-reflect.jar" +
+                File.pathSeparator + BackendSettings.CLASS_PATH + File.separator + "Executors.jar");
         if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
             builder.add(classpath +
                             File.pathSeparator + BackendSettings.LIBS_DIR + File.separator + "junit.jar" +

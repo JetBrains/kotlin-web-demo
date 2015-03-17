@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.jetbrains.webdemo.backend;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.vfs.encoding.EncodingRegistry;
 import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
@@ -33,11 +32,19 @@ public class Initializer {
     private static EnvironmentManager environmentManager = new EnvironmentManager();
     private static Initializer INITIALIZER = new Initializer();
 
-    public static Initializer getInstance(){
+    public static Initializer getInstance() {
         return INITIALIZER;
     }
 
-    public EnvironmentManager getEnvironmentManager(){
+    public static void reinitializeJavaEnvironment() {
+        ApplicationManager.setApplication(
+                INITIALIZER.getEnvironmentManager().getEnvironment().getApplication(),
+                INITIALIZER.getEnvironmentManager().getRegistry(),
+                INITIALIZER.getEnvironmentManager().getDisposable()
+        );
+    }
+
+    public EnvironmentManager getEnvironmentManager() {
         return environmentManager;
     }
 
@@ -56,19 +63,11 @@ public class Initializer {
         return true;
     }
 
-    public static void reinitializeJavaEnvironment() {
-        ApplicationManager.setApplication(
-                INITIALIZER.getEnvironmentManager().getEnvironment().getApplication(),
-                INITIALIZER.getEnvironmentManager().getRegistry(),
-                EncodingRegistry.ourInstanceGetter,
-                INITIALIZER.getEnvironmentManager().getDisposable()
-        );
-    }
-
     public void initializeExecutorsPolicyFile() throws IOException {
         Path templateFilePath = Paths.get(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));
-        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", BackendSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"));
+        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", BackendSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"))
+                .replaceAll("@KOTLIN_LIBS@", BackendSettings.KOTLIN_LIBS_DIR.replaceAll("\\\\", "/"));
         try (PrintWriter policyFile = new PrintWriter(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
             policyFile.write(policyFileContent);
         }

@@ -27,6 +27,10 @@ permission java.lang.RuntimePermission "accessDeclaredMembers";
 }
 ;
 
+grant{
+  permission java.io.FilePermission "@KOTLIN_LIBS@/kotlin-runtime.jar", "read";
+};
+
 grant codeBase "file:@CLASS_PATH@/Executors.jar"
 {
 permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
