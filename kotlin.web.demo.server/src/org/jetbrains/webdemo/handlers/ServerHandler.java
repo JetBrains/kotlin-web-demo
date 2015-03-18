@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,10 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 public class ServerHandler {
@@ -151,22 +148,28 @@ public class ServerHandler {
             }
             if (request.getParameter("oauth_verifier") != null ||
                     request.getParameter("code") != null) {
-                UserInfo info;
-                if (request.getParameter("oauth_verifier") != null) {
-                    info = helper.verify(request.getParameter("oauth_verifier"));
-                } else {
-                    info = helper.verify(request.getParameter("code"));
-                }
-                if (info != null) {
-                    sessionInfo.setUserInfo(info);
-                    MySqlConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
-                    request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
-                }
                 try {
-                    response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
-                } catch (IOException e) {
+                    UserInfo info;
+                    if (request.getParameter("oauth_verifier") != null) {
+                        info = helper.verify(request.getParameter("oauth_verifier"));
+                    } else {
+                        info = helper.verify(request.getParameter("code"));
+                    }
+                    if (info != null) {
+                        sessionInfo.setUserInfo(info);
+                        MySqlConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
+                        request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
+                    }
+                } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
+                            "UNKNOWN", sessionInfo.getOriginUrl(), "Can't authorize user " + request.getQueryString());
+                } finally {
+                    try {
+                        response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
+                    } catch (IOException e) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                                "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
+                    }
                 }
             } else if (request.getParameter("denied") != null) {
                 try {
