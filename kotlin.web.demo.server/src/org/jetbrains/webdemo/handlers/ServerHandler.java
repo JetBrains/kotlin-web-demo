@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -185,22 +185,28 @@ public class ServerHandler {
                 helper = new AuthorizationFacebookHelper();
             }
             if (parameters.containsKey("oauth_verifier") || parameters.containsKey("code")) {
-                UserInfo info;
-                if (parameters.containsKey("oauth_verifier")) {
-                    info = helper.verify(parameters.get("oauth_verifier")[0]);
-                } else {
-                    info = helper.verify(parameters.get("code")[0]);
-                }
-                if (info != null) {
-                    sessionInfo.setUserInfo(info);
-                    MySqlConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
-                    request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
-                }
                 try {
-                    response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
-                } catch (IOException e) {
+                    UserInfo info;
+                    if (parameters.containsKey("oauth_verifier")) {
+                        info = helper.verify(parameters.get("oauth_verifier")[0]);
+                    } else {
+                        info = helper.verify(parameters.get("code")[0]);
+                    }
+                    if (info != null) {
+                        sessionInfo.setUserInfo(info);
+                        MySqlConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
+                        request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
+                    }
+                } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
+                            "UNKNOWN", sessionInfo.getOriginUrl(), "Can't authorize user " + request.getQueryString());
+                } finally {
+                    try {
+                        response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
+                    } catch (IOException e) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                                "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
+                    }
                 }
             } else if (parameters.containsKey("denied")) {
                 try {
