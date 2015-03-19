@@ -91,7 +91,7 @@ var RunProvider = (function () {
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                var output = [];
+                                var output = data.slice();
                                 $(data).each(function (ind, element) {
                                     if (element.type == "generatedJSCode") {
                                         try {
@@ -101,7 +101,6 @@ var RunProvider = (function () {
                                             output.push({"type": "jsException", exception: e});
                                         }
                                     }
-                                    output.push(element);
                                 });
                                 onSuccess(output, project);
                             } else {
