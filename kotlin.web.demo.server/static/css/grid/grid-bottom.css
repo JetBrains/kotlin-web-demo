@@ -256,7 +256,6 @@
 }
 
 #generated-code {
-    height: 180px;
     overflow: auto;
 }
 
@@ -268,7 +267,7 @@
     overflow: hidden;
     position: relative;
     white-space: normal;
-    padding: 0px;
+    padding: 0;
 }
 
 #test-tree-div {
