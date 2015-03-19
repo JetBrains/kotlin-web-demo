@@ -1,6 +1,6 @@
 fun main(args : Array<String>) {
   System.out?.println("Hello")
-  a
+  arg
   println("Hello")
   G
 
@@ -10,8 +10,11 @@ fun main(args : Array<String>) {
 
 }
 
-class Greeter(val str : String) {
+class Greeter(val cls : MyClass) {
   fun greet() {
-    println("Hello, ${str}");
+    println("Hello, ${cls}");
+    array(1, 2).withInde
   }
 }
+
+class MyClass

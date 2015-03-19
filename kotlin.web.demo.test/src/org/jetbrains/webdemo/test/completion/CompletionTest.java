@@ -39,7 +39,7 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$all$variable() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"property\",\"name\":\"stdin\",\"tail\":\"BufferedReader\"},{\"icon\":\"method\",\"name\":\"stream(() -> T?)\",\"tail\":\"Sequence<T>\"},{\"icon\":\"method\",\"name\":\"stream(T, (T) -> T?)\",\"tail\":\"Sequence<T>\"},{\"icon\":\"method\",\"name\":\"streamOf(Progression<T>)\",\"tail\":\"Stream<T>\"},{\"icon\":\"method\",\"name\":\"streamOf(vararg T)\",\"tail\":\"Stream<T>\"},{\"icon\":\"property\",\"name\":\"str\",\"tail\":\"String\"}]";
+        String expectedResult = "[{\"icon\":\"property\",\"name\":\"cls\",\"tail\":\"MyClass\"}]";
         compareResult(14, 24, expectedResult, "java");
         compareResult(14, 24, expectedResult, "js");
     }
@@ -51,26 +51,26 @@ public class CompletionTest extends BaseTest {
     }
 
     public void test$all$type$in$constructor() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"class\",\"name\":\"StrictMath\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"String\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"String\",\"tail\":\" (kotlin)\"},{\"icon\":\"class\",\"name\":\"StringBuffer\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringBuilder\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringCoding\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringIndexOutOfBoundsException\",\"tail\":\" (java.lang)\"},{\"icon\":\"class\",\"name\":\"StringValue\",\"tail\":\" (java.lang)\"}]";
+        String expectedResult = "[{\"icon\":\"class\",\"name\":\"MyClass\",\"tail\":\" (<root>)\"}]";
         compareResult(12, 28, expectedResult, "java");
         compareResult(12, 28, expectedResult, "js");
     }
 
-    public void test$java$println() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"method\",\"name\":\"print(Any?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Boolean)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Char)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(CharArray?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Double)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Float)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Int)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(Long)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"print(String?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"printf(Locale?, String, vararg Any?)\",\"tail\":\"PrintStream\"},{\"icon\":\"method\",\"name\":\"printf(String, vararg Any?)\",\"tail\":\"PrintStream\"},{\"icon\":\"method\",\"name\":\"println()\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Any?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Boolean)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Char)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(CharArray?)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Double)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Float)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Int)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(Long)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"println(String?)\",\"tail\":\"Unit\"}]";
+    public void test$java$stdlib() throws IOException, JSONException {
+        String expectedResult = "[{\"icon\":\"method\",\"name\":\"withIndex()\",\"tail\":\"Iterable<IndexedValue<Int>>\"}]";
 
-        compareResult(1, 15, expectedResult, "java");
+        compareResult(15, 24, expectedResult, "java");
     }
 
     public void test$js$a() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"name\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
+        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"}]";
 
-        compareResult(2, 3, expectedResult, "js");
+        compareResult(2, 5, expectedResult, "js");
     }
 
     public void test$kt$a() throws IOException, JSONException {
-        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"},{\"icon\":\"method\",\"name\":\"array(vararg T)\",\"tail\":\"Array<T>\"},{\"icon\":\"method\",\"name\":\"arrayList(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayListOf(vararg T)\",\"tail\":\"ArrayList<T>\"},{\"icon\":\"method\",\"name\":\"arrayOfNulls(Int)\",\"tail\":\"Array<T?>\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, () -> Any)\",\"tail\":\"Unit\"},{\"icon\":\"method\",\"name\":\"assert(Boolean, Any)\",\"tail\":\"Unit\"}]";
-        compareResult(2, 3, expectedResult, "java");
+        String expectedResult = "[{\"icon\":\"genericValue\",\"name\":\"args\",\"tail\":\"Array<String>\"}]";
+        compareResult(2, 5, expectedResult, "java");
     }
 
     private void compareResult(int lineNumber, int charNumber, String expectedResult, String runConfiguration) throws IOException, JSONException {
