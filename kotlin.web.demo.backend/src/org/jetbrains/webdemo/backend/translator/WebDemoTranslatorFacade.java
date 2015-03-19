@@ -124,7 +124,7 @@ public final class WebDemoTranslatorFacade {
             }
             ArrayList<ErrorDescriptor> errorDescriptors = new ArrayList<ErrorDescriptor>();
             ErrorAnalyzer errorAnalyzer = new ErrorAnalyzer((List) files, sessionInfo, currentProject);
-            errorAnalyzer.getErrorsFromBindingContext(config.getLibraryContext(), errors);
+            errorAnalyzer.getErrorsFromDiagnostics(result.getDiagnostics().all(), errors);
             return new MyTranslationResult(errors);
         }
     }

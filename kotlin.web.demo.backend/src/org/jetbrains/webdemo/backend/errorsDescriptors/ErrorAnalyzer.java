@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.BackendUtils;
 import org.jetbrains.webdemo.backend.ResolveUtils;
-import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
@@ -71,13 +71,12 @@ public class ErrorAnalyzer {
             throw new KotlinCoreException(e);
         }
         if (bindingContext != null) {
-            getErrorsFromBindingContext(bindingContext, errors);
+            getErrorsFromDiagnostics(bindingContext.getDiagnostics().all(), errors);
         }
         return errors;
     }
 
-    public void getErrorsFromBindingContext(BindingContext bindingContext, Map<String, List<ErrorDescriptor>> errors) {
-        Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics().all();
+    public void getErrorsFromDiagnostics(Collection<Diagnostic> diagnostics, Map<String, List<ErrorDescriptor>> errors) {
         try {
             for (Diagnostic diagnostic : diagnostics) {
                 //fix for errors in js library files

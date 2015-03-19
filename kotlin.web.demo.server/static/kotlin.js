@@ -361,6 +361,8 @@
   Kotlin.defineInlineFunction = function(startTag, fun, metadataArgs) {
     return fun;
   };
+  Kotlin.kotlinModuleMetadata = function (abiVersion, moduleName, data) {
+  };
 })(Kotlin);
 (function(Kotlin) {
   String.prototype.startsWith = function(s) {
