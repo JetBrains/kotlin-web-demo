@@ -37,6 +37,10 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
     private static OAuthService googleService;
     private final String TYPE = "google";
 
+    public AuthorizationGoogleHelper(String host) {
+        super(host);
+    }
+
     public String authorize() {
         try {
             googleService = new ServiceBuilder()
@@ -44,7 +48,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
                     .apiKey(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.SECRET)
                     .scope(SCOPE)
-                    .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "google"))
+                    .callback("http://" + host + ResponseUtils.generateRequestString("authorization", "google"))
                     .build();
 
             return googleService.getAuthorizationUrl(EMPTY_TOKEN);

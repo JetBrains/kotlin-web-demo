@@ -28,8 +28,6 @@ public class CommandRunner {
         } else if (setting.equals("app_output_dir")) {
             CommonSettings.LOGS_DIRECTORY = value + File.separator + "logs";
             System.setProperty("kotlin.web.demo.log4j", value);
-        } else if (setting.equals("auth_redirect")) {
-            ApplicationSettings.AUTH_REDIRECT = value;
         } else if (setting.equals("backend_url")) {
             ApplicationSettings.BACKEND_URL = value;
         }else if (setting.equals("is_test_version")) {

@@ -23,10 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.authorization.AuthorizationFacebookHelper;
-import org.jetbrains.webdemo.authorization.AuthorizationGoogleHelper;
 import org.jetbrains.webdemo.authorization.AuthorizationHelper;
-import org.jetbrains.webdemo.authorization.AuthorizationTwitterHelper;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -138,14 +135,10 @@ public class ServerHandler {
             sessionInfo.getUserInfo().logout();
             request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
         } else {
-            AuthorizationHelper helper;
-            if (request.getParameter("args").equals("twitter")) {
-                helper = new AuthorizationTwitterHelper();
-            } else if (request.getParameter("args").equals("google")) {
-                helper = new AuthorizationGoogleHelper();
-            } else {
-                helper = new AuthorizationFacebookHelper();
-            }
+            String host = request.getHeader("Host") != null ?
+                    request.getHeader("Host") :
+                    request.getServerName() + ":" + request.getServerPort();
+            AuthorizationHelper helper = AuthorizationHelper.getHelper(request.getParameter("args"), host);
             if (request.getParameter("oauth_verifier") != null ||
                     request.getParameter("code") != null) {
                 try {
@@ -165,18 +158,18 @@ public class ServerHandler {
                             "UNKNOWN", sessionInfo.getOriginUrl(), "Can't authorize user " + request.getQueryString());
                 } finally {
                     try {
-                        response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
+                        response.sendRedirect("http://" + host);
                     } catch (IOException e) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                                "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
+                                "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + host);
                     }
                 }
             } else if (request.getParameter("denied") != null) {
                 try {
-                    response.sendRedirect("http://" + ApplicationSettings.AUTH_REDIRECT);
+                    response.sendRedirect("http://" + host);
                 } catch (IOException e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + ApplicationSettings.AUTH_REDIRECT);
+                            "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + host);
                 }
             } else {
                 String verifyKey = helper.authorize();

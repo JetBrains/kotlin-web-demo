@@ -22,6 +22,24 @@ import org.jetbrains.webdemo.session.UserInfo;
 public abstract class AuthorizationHelper {
     protected static final int TIMEOUT = 500;
     protected String type;
+    protected String host;
+
+    public AuthorizationHelper(String host) {
+        this.host = host;
+    }
+
+    public static AuthorizationHelper getHelper(String type, String host) {
+        switch (type) {
+            case "twitter":
+                return new AuthorizationTwitterHelper(host);
+            case "google":
+                return new AuthorizationGoogleHelper(host);
+            case "facebook":
+                return new AuthorizationFacebookHelper(host);
+            default:
+                throw new IllegalArgumentException("Unknown authorization type");
+        }
+    }
 
     public abstract String authorize();
 

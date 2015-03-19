@@ -37,13 +37,17 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
     private static Token requestToken;
     private final String TYPE = "twitter";
 
+    public AuthorizationTwitterHelper(String host) {
+        super(host);
+    }
+
     public String authorize() {
         try {
             twitterService = new ServiceBuilder()
                     .provider(TwitterApi.Authenticate.class)
                     .apiKey(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.SECRET)
-                    .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "twitter"))
+                    .callback("http://" + host + ResponseUtils.generateRequestString("authorization", "twitter"))
                     .build();
             requestToken = twitterService.getRequestToken();
             return twitterService.getAuthorizationUrl(requestToken);

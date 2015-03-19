@@ -37,13 +37,17 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
     private static OAuthService facebookService;
     private final String TYPE = "facebook";
 
+    public AuthorizationFacebookHelper(String host) {
+        super(host);
+    }
+
     public String authorize() {
         try {
             facebookService = new ServiceBuilder()
                     .provider(FacebookApi.class)
                     .apiKey(ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.SECRET)
-                    .callback("http://" + ApplicationSettings.AUTH_REDIRECT + ResponseUtils.generateRequestString("authorization", "facebook"))
+                    .callback("http://" + host + ResponseUtils.generateRequestString("authorization", "facebook"))
                     .build();
             return facebookService.getAuthorizationUrl(EMPTY_TOKEN);
         } catch (Throwable e) {
