@@ -63,7 +63,7 @@ var File = (function () {
                 if(modifiable) {
                     project.deleteFile(publicId);
                 } else{
-                    project.deleteUnmodifiableFile(name);
+                    project.deleteUnmodifiableFile(name, publicId);
                 }
                 instance.onDeleted();
             },

@@ -51,7 +51,9 @@ var ProjectView = (function () {
                     if (selectedFileView != null) {
                         selectedFileView.fireSelectEvent();
                     } else {
-                        editor.closeFile();
+                        if (!project.isEmpty()) {
+                            selectFirstFile();
+                        }
                     }
                     instance.onSelected(instance);
                 }
@@ -187,16 +189,17 @@ var ProjectView = (function () {
             };
 
             project.onFileDeleted = function (publicId) {
-                if (selectedFileView.getFile().getPublicId() == publicId && project.getFiles().length > 0) {
-                    selectedFile = null;
+                if (selectedFileView.getFile().getPublicId() == publicId) {
+                    selectedFileView = null;
                 }
                 delete fileViews[publicId];
-
+                if (!project.isEmpty()) {
+                    selectFirstFile();
+                }
             };
 
             return project;
         })();
-        var selectedFile = null;
         var selectedFileView = null;
         var fileViews = {};
         var renameProjectDialog = new InputDialogView("Rename project", "Project name:", "Rename");
@@ -282,6 +285,11 @@ var ProjectView = (function () {
             } else {
                 return instance.getFileViewByName(getFileIdFromUrl());
             }
+        }
+
+        function selectFirstFile() {
+            selectedFileView = fileViews[project.getFiles()[0].getPublicId()];
+            selectedFileView.fireSelectEvent();
         }
 
         function createFileView(file) {

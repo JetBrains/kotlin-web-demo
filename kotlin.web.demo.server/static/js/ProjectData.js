@@ -107,9 +107,12 @@ var ProjectData = (function () {
                 });
                 instance.onFileDeleted(publicId);
             },
-            deleteUnmodifiableFile: function (name) {
+            deleteUnmodifiableFile: function (name, publicId) {
                 readOnlyFileNames = readOnlyFileNames.filter(function (element) {
                     return element != name;
+                });
+                files = files.filter(function (element) {
+                    return element.getPublicId() != publicId;
                 });
                 instance.onFileDeleted(publicId);
             },
