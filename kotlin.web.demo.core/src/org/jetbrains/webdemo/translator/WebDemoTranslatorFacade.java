@@ -123,7 +123,7 @@ public final class WebDemoTranslatorFacade {
         else {
             ArrayList<ErrorDescriptor> errorDescriptors = new ArrayList<ErrorDescriptor>();
             ErrorAnalyzer errorAnalyzer = new ErrorAnalyzer(file, sessionInfo);
-            errorAnalyzer.gerErrorsFromBindingContext(config.getLibraryContext(), errorDescriptors);
+            errorAnalyzer.processDiagnostics(result.getDiagnostics(), errorDescriptors);
 
             return new TranslationResult(JsonResponseForHighlighting.errorDescriptorsToString(errorDescriptors), false);
         }

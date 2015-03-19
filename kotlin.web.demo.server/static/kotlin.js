@@ -345,6 +345,8 @@
   Kotlin.defineInlineFunction = function(startTag, fun, metadataArgs) {
     return fun;
   };
+  Kotlin.kotlinModuleMetadata = function(abiVersion, moduleName, data) {
+  };
 })(Kotlin);
 (function(Kotlin) {
   String.prototype.startsWith = function(s) {
@@ -2484,38 +2486,38 @@
   }, "inlineEndTag.stdlib.kotlin.js.capitalize.capitalize_pdl1w0$"), decapitalize_pdl1w0$:Kotlin.defineInlineFunction("inlineStartTag.stdlib.kotlin.js.decapitalize.decapitalize_pdl1w0$", function($receiver) {
     return _.kotlin.isNotEmpty_pdl1w0$($receiver) ? $receiver.substring(0, 1).toLowerCase() + $receiver.substring(1) : $receiver;
   }, "inlineEndTag.stdlib.kotlin.js.decapitalize.decapitalize_pdl1w0$"), internal:Kotlin.definePackage(function() {
-    this.DoubleDefaultObject = Kotlin.createObject(function() {
+    this.DoubleCompanionObject = Kotlin.createObject(function() {
       return[Kotlin.modules["builtins"].kotlin.FloatingPointConstants];
     }, function() {
-      this.$POSITIVE_INFINITY_pvkniu$ = Number.POSITIVE_INFINITY;
-      this.$NEGATIVE_INFINITY_oos3ae$ = Number.NEGATIVE_INFINITY;
-      this.$NaN_niefk3$ = Number.NaN;
+      this.$POSITIVE_INFINITY_u879sx$ = Number.POSITIVE_INFINITY;
+      this.$NEGATIVE_INFINITY_kc5h0b$ = Number.NEGATIVE_INFINITY;
+      this.$NaN_u57cum$ = Number.NaN;
     }, {POSITIVE_INFINITY:{get:function() {
-      return this.$POSITIVE_INFINITY_pvkniu$;
+      return this.$POSITIVE_INFINITY_u879sx$;
     }}, NEGATIVE_INFINITY:{get:function() {
-      return this.$NEGATIVE_INFINITY_oos3ae$;
+      return this.$NEGATIVE_INFINITY_kc5h0b$;
     }}, NaN:{get:function() {
-      return this.$NaN_niefk3$;
+      return this.$NaN_u57cum$;
     }}});
-    this.FloatDefaultObject = Kotlin.createObject(function() {
+    this.FloatCompanionObject = Kotlin.createObject(function() {
       return[Kotlin.modules["builtins"].kotlin.FloatingPointConstants];
     }, function() {
-      this.$POSITIVE_INFINITY_xwwt6r$ = Number.POSITIVE_INFINITY;
-      this.$NEGATIVE_INFINITY_dg5i0v$ = Number.NEGATIVE_INFINITY;
-      this.$NaN_6j9fme$ = Number.NaN;
+      this.$POSITIVE_INFINITY_yu4kw8$ = Number.POSITIVE_INFINITY;
+      this.$NEGATIVE_INFINITY_fq85x0$ = Number.NEGATIVE_INFINITY;
+      this.$NaN_5p5oy3$ = Number.NaN;
     }, {POSITIVE_INFINITY:{get:function() {
-      return this.$POSITIVE_INFINITY_xwwt6r$;
+      return this.$POSITIVE_INFINITY_yu4kw8$;
     }}, NEGATIVE_INFINITY:{get:function() {
-      return this.$NEGATIVE_INFINITY_dg5i0v$;
+      return this.$NEGATIVE_INFINITY_fq85x0$;
     }}, NaN:{get:function() {
-      return this.$NaN_6j9fme$;
+      return this.$NaN_5p5oy3$;
     }}});
-    this.IntDefaultObject = Kotlin.createObject(null, null);
-    this.LongDefaultObject = Kotlin.createObject(null, null);
-    this.ShortDefaultObject = Kotlin.createObject(null, null);
-    this.ByteDefaultObject = Kotlin.createObject(null, null);
-    this.StringDefaultObject = Kotlin.createObject(null, null);
-    this.EnumDefaultObject = Kotlin.createObject(null, null);
+    this.IntCompanionObject = Kotlin.createObject(null, null);
+    this.LongCompanionObject = Kotlin.createObject(null, null);
+    this.ShortCompanionObject = Kotlin.createObject(null, null);
+    this.ByteCompanionObject = Kotlin.createObject(null, null);
+    this.StringCompanionObject = Kotlin.createObject(null, null);
+    this.EnumCompanionObject = Kotlin.createObject(null, null);
   }, {})}), synchronized_pzucw5$:Kotlin.defineInlineFunction("inlineStartTag.stdlib.kotlin.synchronized.synchronized_pzucw5$", function(lock, block) {
     var tmp$0;
     tmp$0 = block();

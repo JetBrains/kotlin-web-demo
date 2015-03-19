@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.diagnostics.Severity;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
+import org.jetbrains.kotlin.resolve.diagnostics.Diagnostics;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Interval;
 import org.jetbrains.webdemo.ResolveUtils;
@@ -70,13 +71,12 @@ public class ErrorAnalyzer {
                 "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
         ErrorWriter.ERROR_WRITER.writeInfo(info);
         if (bindingContext != null) {
-            gerErrorsFromBindingContext(bindingContext, errors);
+            processDiagnostics(bindingContext.getDiagnostics(), errors);
         }
         return errors;
     }
 
-    public void gerErrorsFromBindingContext(BindingContext bindingContext, List<ErrorDescriptor> errors) {
-        Collection<Diagnostic> diagnostics = bindingContext.getDiagnostics().all();
+    public void processDiagnostics(Diagnostics diagnostics, List<ErrorDescriptor> errors) {
         try {
             for (Diagnostic diagnostic : diagnostics) {
                 //fix for errors in js library files
@@ -124,25 +124,20 @@ public class ErrorAnalyzer {
             public int compare(ErrorDescriptor o1, ErrorDescriptor o2) {
                 if (o1.getInterval().startPoint.line > o2.getInterval().startPoint.line) {
                     return 1;
-                }
-                else if (o1.getInterval().startPoint.line < o2.getInterval().startPoint.line) {
+                } else if (o1.getInterval().startPoint.line < o2.getInterval().startPoint.line) {
                     return -1;
-                }
-                else if (o1.getInterval().startPoint.line == o2.getInterval().startPoint.line) {
+                } else if (o1.getInterval().startPoint.line == o2.getInterval().startPoint.line) {
                     if (o1.getInterval().startPoint.charNumber > o2.getInterval().startPoint.charNumber) {
                         return 1;
-                    }
-                    else if (o1.getInterval().startPoint.charNumber < o2.getInterval().startPoint.charNumber) {
+                    } else if (o1.getInterval().startPoint.charNumber < o2.getInterval().startPoint.charNumber) {
                         return -1;
-                    }
-                    else if (o1.getInterval().startPoint.charNumber == o2.getInterval().startPoint.charNumber) {
+                    } else if (o1.getInterval().startPoint.charNumber == o2.getInterval().startPoint.charNumber) {
                         return 0;
                     }
                 }
                 return -1;
             }
         });
-
     }
 
     private List<ErrorDescriptor> getErrorsByVisitor() {
