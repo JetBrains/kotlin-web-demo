@@ -48,6 +48,7 @@
 }
 
 #examples-list .ui-accordion-header {
+    background-color: #f7f7f7;
     -webkit-transform: translate3d(0, 0, 0); /*without this first item in accordion sometimes disappears if you are using mac. Deep magic*/
     outline: none;
     color: #3164a0;
@@ -171,6 +172,7 @@
     color: #3164a0;
 }
 
+.examples-folder-name:hover .icons,
 .example-filename:hover .icons,
 .examples-project-name:hover .icons {
     display: inline-block;
@@ -311,9 +313,9 @@
 }
 
 .newProjectButton {
-    float: right;
     width: 17px;
     height: 15px;
+    margin-top: 7px;
     margin-right: 3px;
     background: url("/static/images/icons.png") no-repeat -47px -39px;
 }

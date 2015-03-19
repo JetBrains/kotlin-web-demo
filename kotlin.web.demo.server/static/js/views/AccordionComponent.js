@@ -175,11 +175,11 @@ var AccordionView = (function () {
             if (projectId == null || projectId == "") {
                 if (localStorage.getItem("openedItemId") != null) {
                     projectId = localStorage.getItem("openedItemId");
-                    localStorage.removeItem("openedItemId");
                 } else {
                     projectId = DEFAULT_PROJECT_ID;
                 }
             }
+            localStorage.removeItem("openedItemId");
 
             if (isUserProjectInUrl()) {
                 if (localStorage.getItem(projectId) == null) {
@@ -266,7 +266,6 @@ var AccordionView = (function () {
             var folderDiv = document.createElement("div");
             folderDiv.innerHTML = "My programs";
             folderDiv.className = "folder-name-div";
-            folderDiv.style.display = "inline-block";
             myProgramsHeaderElement.appendChild(folderDiv);
 
 
@@ -275,6 +274,7 @@ var AccordionView = (function () {
             element.appendChild(myProgramsContentElement);
 
             if (!loginView.isLoggedIn()) {
+                folderDiv.style.display = "inline-block";
                 myProgramsHeaderElement.style.color = "rgba(0,0,0,0.5)";
                 var login_link = document.createElement("span");
                 login_link.id = "login-link";
@@ -286,13 +286,17 @@ var AccordionView = (function () {
                 };
                 myProgramsHeaderElement.appendChild(login_link);
             } else {
+                var actionIconsElement = document.createElement("div");
+                actionIconsElement.className = "icons";
+                myProgramsHeaderElement.appendChild(actionIconsElement);
+
                 var newProjectButton = document.createElement("div");
                 newProjectButton.className = "newProjectButton high-res-icon";
                 newProjectButton.onclick = function (e) {
                     newProjectDialog.open(projectProvider.addNewProject, "Untitled");
                     e.stopPropagation();
                 };
-                myProgramsHeaderElement.appendChild(newProjectButton);
+                actionIconsElement.appendChild(newProjectButton);
             }
 
             $(projects).each(function (ind, project) {

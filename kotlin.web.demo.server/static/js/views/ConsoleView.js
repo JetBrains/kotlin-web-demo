@@ -75,7 +75,11 @@ var ConsoleView = (function () {
 
         function setOutput(data) {
             if (data.type == "jsException") {
-                consoleOutputView.err.println(data.exception.stack);
+                if(data.exception.stack != null && data.exception.stack != "") {
+                    consoleOutputView.err.println(data.exception.stack);
+                } else{
+                    consoleOutputView.err.println("Unknown error");
+                }
             } else if (data.type == "out") {
                 consoleOutputView.printMarkedTextToConsole(data.text);
                 if (data.exception != null) {

@@ -666,6 +666,7 @@ document.getElementById("fullscreenButton").onclick = function () {
         editor.resize();
         resizeArguments();
     }
+    updateGridConfigurationInLocalStorage();
 };
 
 function resizeArguments() {
