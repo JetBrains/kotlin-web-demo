@@ -16,6 +16,10 @@
 
 package org.jetbrains.webdemo.backend.translator;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.js.analyze.TopDownAnalyzerFacadeForJS;
@@ -24,7 +28,6 @@ import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.facade.K2JSTranslator;
 import org.jetbrains.kotlin.js.facade.MainCallParameters;
 import org.jetbrains.kotlin.js.facade.TranslationResult;
-import org.jetbrains.kotlin.js.facade.exceptions.MainFunctionNotFoundException;
 import org.jetbrains.kotlin.js.facade.exceptions.TranslationException;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
@@ -33,11 +36,15 @@ import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
+import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
+import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
@@ -70,28 +77,37 @@ public final class WebDemoTranslatorFacade {
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    @NotNull
-    public static String translateProjectWithCallToMain(@NotNull List<JetFile> files, @NotNull String arguments, BackendSessionInfo sessionInfo) {
+    public static ObjectNode translateProjectWithCallToMain(@NotNull List<JetFile> files,
+                                                            @NotNull String arguments,
+                                                            BackendSessionInfo sessionInfo,
+                                                            Map<String, List<ErrorDescriptor>> errors) {
         try {
-            return doTranslate(files, arguments, sessionInfo);
-        } catch (MainFunctionNotFoundException te) {
-            return ResponseUtils.getErrorInJson(te.getMessage());
+            MyTranslationResult translationResult = doTranslate(files, arguments, sessionInfo, errors);
+            if (translationResult.success) {
+                ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
+                result.put("type", "generatedJSCode");
+                result.put("text", translationResult.jsCode);
+                return result;
+            } else {
+                return null;
+            }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
-            KotlinCoreException ex = new KotlinCoreException(e);
-            return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, ex.getStackTraceString());
+            throw new KotlinCoreException(e);
         } finally {
             Initializer.reinitializeJavaEnvironment();
         }
     }
 
     @NotNull
-    private static String doTranslate(@NotNull List<JetFile> files,
-                                      @NotNull String arguments,
-                                      BackendSessionInfo sessionInfo) throws TranslationException {
-        LibrarySourcesConfig config  = new LibrarySourcesConfig(
-                Initializer.getInstance().getEnvironment().getProject(),
+    private static MyTranslationResult doTranslate(@NotNull List<JetFile> files,
+                                                   @NotNull String arguments,
+                                                   BackendSessionInfo sessionInfo,
+                                                   Map<String, List<ErrorDescriptor>> errors) throws TranslationException {
+        Project currentProject = Initializer.getInstance().getEnvironment().getProject();
+        LibrarySourcesConfig config = new LibrarySourcesConfig(
+                currentProject,
                 "moduleId",
                 LIBRARY_FILES,
                 EcmaVersion.defaultVersion(),
@@ -101,9 +117,32 @@ public final class WebDemoTranslatorFacade {
         TranslationResult result = translator.translate(files, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(arguments))));
         if (result instanceof org.jetbrains.kotlin.js.facade.TranslationResult.Success) {
             org.jetbrains.kotlin.js.facade.TranslationResult.Success success = ((org.jetbrains.kotlin.js.facade.TranslationResult.Success) result);
-            return K2JSTranslator.FLUSH_SYSTEM_OUT + success.getCode() + "\n" + K2JSTranslator.GET_SYSTEM_OUT;
+            return new MyTranslationResult(K2JSTranslator.FLUSH_SYSTEM_OUT + success.getCode() + "\n" + K2JSTranslator.GET_SYSTEM_OUT);
+        } else {
+            for (PsiFile psiFile : files) {
+                errors.put(psiFile.getName(), new ArrayList<ErrorDescriptor>());
+            }
+            ArrayList<ErrorDescriptor> errorDescriptors = new ArrayList<ErrorDescriptor>();
+            ErrorAnalyzer errorAnalyzer = new ErrorAnalyzer((List) files, sessionInfo, currentProject);
+            errorAnalyzer.getErrorsFromBindingContext(config.getLibraryContext(), errors);
+            return new MyTranslationResult(errors);
         }
-        return "";
     }
 
+}
+
+class MyTranslationResult {
+    boolean success;
+    String jsCode;
+    Map<String, List<ErrorDescriptor>> errors;
+
+    MyTranslationResult(String jsCode) {
+        this.jsCode = jsCode;
+        success = true;
+    }
+
+    MyTranslationResult(Map<String, List<ErrorDescriptor>> errors) {
+        this.errors = errors;
+        success = false;
+    }
 }

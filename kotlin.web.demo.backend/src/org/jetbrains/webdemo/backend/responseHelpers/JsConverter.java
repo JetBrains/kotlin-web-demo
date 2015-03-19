@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.backend.responseHelpers;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.psi.PsiFile;
@@ -52,11 +53,22 @@ public class JsConverter {
             return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, e.getStackTraceString());
         }
 
-        ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
-        response.put("errors", JsonUtils.getObjectMapper().valueToTree(errors));
+        ArrayNode response = new ArrayNode(JsonNodeFactory.instance);
         if (isOnlyWarnings(errors)) {
-            response.put("code", WebDemoTranslatorFacade.translateProjectWithCallToMain((List) files, arguments, info));
+            try {
+                ObjectNode translationResult = WebDemoTranslatorFacade.translateProjectWithCallToMain((List) files, arguments, info, errors);
+                if (translationResult != null) {
+                    response.add(translationResult);
+                }
+            } catch (KotlinCoreException e) {
+                response.add(ResponseUtils.getErrorWithStackTraceAsJsonNode(BackendSettings.KOTLIN_ERROR_MESSAGE,
+                        e.getStackTraceString()));
+                return response.toString();
+            }
         }
+        ObjectNode errorsObject = response.addObject();
+        errorsObject.put("type", "errors");
+        errorsObject.put("errors", JsonUtils.getObjectMapper().valueToTree(errors));
         return response.toString();
     }
 

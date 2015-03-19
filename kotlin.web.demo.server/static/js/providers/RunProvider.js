@@ -91,19 +91,18 @@ var RunProvider = (function () {
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                var dataJs;
-                                var output = [{type: "errors", errors: data.errors}];
-                                if (data.hasOwnProperty("code")) {
-                                    output.push({"text": data.code, "type": "generatedJSCode"});
-                                    try {
-                                        dataJs = eval(data.code);
-                                        output.push({"text": safe_tags_replace(dataJs), "type": "jsOut"});
-
-                                    } catch (e) {
-                                        output.push({"type": "jsException", exception: e});
+                                var output = [];
+                                $(data).each(function (ind, element) {
+                                    if (element.type == "generatedJSCode") {
+                                        try {
+                                            var dataJs = eval(element.text);
+                                            output.push({"text": safe_tags_replace(dataJs), "type": "jsOut"});
+                                        } catch (e) {
+                                            output.push({"type": "jsException", exception: e});
+                                        }
                                     }
-                                }
-
+                                    output.push(element);
+                                });
                                 onSuccess(output, project);
                             } else {
                                 onFail(data);

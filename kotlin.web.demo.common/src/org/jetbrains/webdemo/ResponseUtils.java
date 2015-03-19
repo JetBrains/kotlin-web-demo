@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -30,6 +32,19 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ResponseUtils {
+    private static final List<String> URLS = new ArrayList<String>();
+
+    static {
+        URLS.add("http://unit-304.labs.intellij.net:8080");
+        URLS.add("http://local.hadihariri.com:4000");
+        URLS.add("http://hhariri.github.io/tests");
+        URLS.add("http://hhariri.github.io");
+        URLS.add("http://kotlin-demo.jetbrains.com");
+        URLS.add("http://jetbrains.github.io/kotlin-web-site");
+        URLS.add("http://jetbrains.github.io/kotlin-fiddler");
+        URLS.add("http://jetbrains.github.io");
+    }
+
     public static String escapeString(String string) {
         if (string != null && !string.isEmpty()) {
             if (string.contains("<")) {
@@ -79,7 +94,6 @@ public class ResponseUtils {
         }
         return str;
     }
-
 
     public static String substringBetween(String str, String before, String after) {
         int fPos = str.indexOf(before);
@@ -181,8 +195,23 @@ public class ResponseUtils {
         return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}]";
     }
 
+    public static ObjectNode getErrorAsJsonNode(String error) {
+        ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
+        result.put("type", "err");
+        result.put("exception", error);
+        return result;
+    }
+
     public static String getErrorWithStackTraceInJson(String error, String stackTrace) {
         return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}, {\"exception\":\"<outStream>" + stackTrace + "</outStream>\",\"type\":\"out\"}]";
+    }
+
+    public static ObjectNode getErrorWithStackTraceAsJsonNode(String error, String stackTrace) {
+        ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
+        result.put("type", "err");
+        result.put("exception", error);
+        result.put("stackTrace", stackTrace);
+        return result;
     }
 
     public static String getJsonString(String type, String text) {
@@ -291,20 +320,6 @@ public class ResponseUtils {
             j++;
         }
         return result;
-    }
-
-
-    private static final List<String> URLS = new ArrayList<String>();
-
-    static {
-        URLS.add("http://unit-304.labs.intellij.net:8080");
-        URLS.add("http://local.hadihariri.com:4000");
-        URLS.add("http://hhariri.github.io/tests");
-        URLS.add("http://hhariri.github.io");
-        URLS.add("http://kotlin-demo.jetbrains.com");
-        URLS.add("http://jetbrains.github.io/kotlin-web-site");
-        URLS.add("http://jetbrains.github.io/kotlin-fiddler");
-        URLS.add("http://jetbrains.github.io");
     }
 
     public static boolean isOriginAccepted(HttpServletRequest request) {

@@ -37,11 +37,14 @@ var ConsoleView = (function () {
                     while (data[i] != undefined) {
                         output.push({
                             "text": data[i].exception.replace(new RegExp("<br/>", "g"), "\n"),
+                            "stackTrace": data[i].stackTrace.replace(new RegExp("<br/>", "g"), "\n"),
                             "type": data[i].type
                         });
                         i++;
                     }
-                    setOutput(output);
+                    $(output).each(function (ind, element) {
+                        setOutput(element)
+                    });
                 } else if (data == undefined || data == null) {
                 } else {
                     if (data == "") {
@@ -94,7 +97,10 @@ var ConsoleView = (function () {
                 } else if (message == "timeout : timeout") {
                     consoleOutputView.err.println("Server didn't respond for 10 seconds.");
                 } else {
-                    consoleOutputView.err.println(message)
+                    consoleOutputView.err.println(message);
+                    if (data.stackTrace != null) {
+                        consoleOutputView.out.println(data.stackTrace);
+                    }
                 }
             } else {
                 throw "Unknown data type";
