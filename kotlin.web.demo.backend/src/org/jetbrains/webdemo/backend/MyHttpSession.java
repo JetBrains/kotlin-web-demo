@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 public class MyHttpSession {
     private final BackendSessionInfo sessionInfo;
@@ -91,6 +92,8 @@ public class MyHttpSession {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (TimeoutException e) {
+            writeResponse("Program was terminated after " + BackendSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.", HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
@@ -138,17 +141,19 @@ public class MyHttpSession {
     }
 
     //Send Response
-    private void writeResponse(String responseBody, int errorCode) {
+    private void writeResponse(String responseBody, int statusCode) {
         try {
-            ResponseUtils.writeResponse(request, response, responseBody, errorCode);
+            ResponseUtils.writeResponse(request, response, responseBody, statusCode);
             if (currentProject != null) {
                 LogWriter.logBackendRequestInfo(
                         sessionInfo.getType(),
+                        statusCode,
                         "runConf=" + currentProject.confType + " time=" + sessionInfo.getTimeManager().getMillisecondsFromStart()
                 );
             } else {
                 LogWriter.logBackendRequestInfo(
                         sessionInfo.getType(),
+                        statusCode,
                         "time=" + sessionInfo.getTimeManager().getMillisecondsFromStart()
                 );
             }

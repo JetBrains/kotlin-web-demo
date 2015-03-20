@@ -28,9 +28,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Semyon.Atamas on 2/13/2015.
@@ -56,8 +54,8 @@ public class HealthChecker {
                 BackendSessionInfo sessionInfo = new BackendSessionInfo("test");
                 sessionInfo.setRunConfiguration(BackendSessionInfo.RunConfiguration.JAVA);
                 CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(helloWorldFile), currentProject, sessionInfo, "");
-                String result = responseForCompilation.getResult();
                 try {
+                    String result = responseForCompilation.getResult();
                     ArrayNode resultNodes = (ArrayNode) new ObjectMapper().readTree(result);
                     for (JsonNode resultNode : resultNodes) {
                         if (resultNode.get("type").asText().equals("out")) {
@@ -70,6 +68,8 @@ public class HealthChecker {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (TimeoutException e) {
+                    status = HttpServletResponse.SC_SERVICE_UNAVAILABLE;
                 }
             }
         }, 0, 60000);

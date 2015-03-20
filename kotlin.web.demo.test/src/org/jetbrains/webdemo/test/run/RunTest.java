@@ -32,16 +32,17 @@ import org.jetbrains.webdemo.test.TestUtils;
 import java.io.IOException;
 import java.security.AccessControlException;
 import java.util.Collections;
+import java.util.concurrent.TimeoutException;
 
 public class RunTest extends BaseTest {
 
-    public void test$execution$FooOutErr() throws IOException, InterruptedException {
+    public void test$execution$FooOutErr() throws IOException, InterruptedException, TimeoutException {
         String expectedResult = "<outStream>Hello</br></outStream><errStream>ERROR</br></errStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
-    public void test$execution$ManyArgs() throws IOException, InterruptedException {
+    public void test$execution$ManyArgs() throws IOException, InterruptedException, TimeoutException {
         String expectedResult = "<outStream>a</br>b</br>c</br></outStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "a b c", expectedResult, "java");
@@ -59,31 +60,31 @@ public class RunTest extends BaseTest {
         //compareResult(fileName, "\"a \\\"Hello\\\" b\" c", expectedResult, "java");
     }
 
-    public void test$execution$FooOut() throws IOException, InterruptedException {
+    public void test$execution$FooOut() throws IOException, InterruptedException, TimeoutException {
         String expectedResult = "<outStream>Hello</br></outStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
-    public void test$execution$Reflection() throws IOException, InterruptedException {
+    public void test$execution$Reflection() throws IOException, InterruptedException, TimeoutException {
         String expectedResult = "<outStream>Any</br>A</br>x</br></outStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
-    public void test$execution$FooErr() throws IOException, InterruptedException {
+    public void test$execution$FooErr() throws IOException, InterruptedException, TimeoutException {
         String expectedResult = "<errStream>ERROR</br></errStream>";
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         compareResult(fileName, "", expectedResult, "java");
     }
 
     //Runtime.getRuntime().exec() Exception
-    public void test$errors$securityExecutionError() throws IOException, InterruptedException {
+    public void test$errors$securityExecutionError() throws IOException, InterruptedException, TimeoutException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         checkException(fileName, "", "java", AccessControlException.class.getName());
     }
 
-    private void checkException(String fileName, String args, String runConfiguration, String exceptionName) throws IOException {
+    private void checkException(String fileName, String args, String runConfiguration, String exceptionName) throws IOException, TimeoutException {
         BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.RUN);
         sessionInfo.setRunConfiguration(runConfiguration);
 
@@ -102,12 +103,12 @@ public class RunTest extends BaseTest {
 
 
     //Exception when read file from other directory
-    public void test$errors$securityFilePermissionError() throws IOException, InterruptedException {
+    public void test$errors$securityFilePermissionError() throws IOException, InterruptedException, TimeoutException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
         checkException(fileName, "", "java", AccessControlException.class.getName());
     }
 
-    private void compareResult(String fileName, String args, String expectedResult, String runConfiguration) throws IOException {
+    private void compareResult(String fileName, String args, String expectedResult, String runConfiguration) throws IOException, TimeoutException {
         BackendSessionInfo sessionInfo = new BackendSessionInfo("test");
         sessionInfo.setRunConfiguration(runConfiguration);
 

@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeoutException;
 
 public class CompileAndRunExecutor {
 
@@ -61,7 +62,7 @@ public class CompileAndRunExecutor {
         this.args = args;
     }
 
-    public String getResult() {
+    public String getResult() throws TimeoutException {
         ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFiles, sessionInfo, currentProject);
         Map<String,List<ErrorDescriptor>> errors;
         try {

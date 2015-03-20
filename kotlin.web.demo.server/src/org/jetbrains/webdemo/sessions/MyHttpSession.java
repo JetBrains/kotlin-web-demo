@@ -231,8 +231,7 @@ public class MyHttpSession {
             }
 
             StringBuilder responseBody = new StringBuilder();
-            if (conn.getResponseCode() != HttpServletResponse.SC_OK) {
-                responseBody.append("Can't send your request to Kotlin compile server: ");
+            if (conn.getResponseCode() >= 400) {
                 switch (conn.getResponseCode()) {
                     case HttpServletResponse.SC_NOT_FOUND:
                         responseBody.append("Kotlin compile server not found");
@@ -241,7 +240,12 @@ public class MyHttpSession {
                         responseBody.append("Kotlin compile server is temporary overloaded");
                         break;
                     default:
-                        break;
+                        byte[] buffer = new byte[1024];
+                        while (true) {
+                            final int read = conn.getErrorStream().read(buffer);
+                            if (read <= 0) break;
+                            responseBody.append(new String(buffer, 0, read));
+                        }
                 }
             } else {
                 byte[] buffer = new byte[1024];
@@ -524,20 +528,22 @@ public class MyHttpSession {
     }
 
     //Send Response
-    private void writeResponse(String responseBody, int errorCode) {
+    private void writeResponse(String responseBody, int statusCode) {
         try {
-            ResponseUtils.writeResponse(request, response, responseBody, errorCode);
+            ResponseUtils.writeResponse(request, response, responseBody, statusCode);
             if (currentProject != null) {
                 LogWriter.logRequestInfo(
                         sessionInfo.getId(),
                         sessionInfo.getType(),
+                        statusCode,
                         "runConf=" + currentProject.confType + " time=" + sessionInfo.getTimeManager().getMillisecondsFromStart()
                 );
             } else {
                 LogWriter.logRequestInfo(
                         sessionInfo.getId(),
                         sessionInfo.getType(),
-                        "ALL " + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString());
+                        statusCode,
+                        "time=" + sessionInfo.getTimeManager().getMillisecondsFromStart() + " request=" + request.getRequestURI() + "?" + request.getQueryString());
             }
         } catch (IOException e) {
             //This is an exception we can't send data to client

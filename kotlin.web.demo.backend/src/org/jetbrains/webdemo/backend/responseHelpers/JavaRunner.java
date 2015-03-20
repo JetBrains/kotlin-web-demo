@@ -33,6 +33,7 @@ import org.jetbrains.webdemo.backend.BackendSettings;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 public class JavaRunner {
 
@@ -54,149 +55,151 @@ public class JavaRunner {
         this.sessionInfo = info;
     }
 
-    public String getResult(String pathToRootOut) {
-        String[] commandString = generateCommandString(pathToRootOut);
-        Process process;
-        sessionInfo.getTimeManager().saveCurrentTime();
+    public String getResult(String pathToRootOut) throws TimeoutException {
         try {
-            process = Runtime.getRuntime().exec(commandString);
-            process.getOutputStream().close();
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), sessionInfo.getOriginUrl(), Arrays.toString(commandString));
-            StringWriter stackTrace = new StringWriter();
-            e.printStackTrace(new PrintWriter(stackTrace));
-            return ResponseUtils.getErrorWithStackTraceInJson("Impossible to run your program: IOException handled until execution", stackTrace.toString());
-        }
-
-        final StringBuilder errStream = new StringBuilder();
-        final StringBuilder outStream = new StringBuilder();
-
-        final Process finalProcess = process;
-        Timer timer = new Timer(true);
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                isTimeoutException = true;
-                finalProcess.destroy();
-                ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                        sessionInfo.getId(), "Timeout exception."));
-                errStream.append("Program was terminated after " + BackendSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
-            }
-        }, BackendSettings.TIMEOUT_FOR_EXECUTION);
-
-        final BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-        // Thread that reads std out and feeds the writer given in input
-        Thread stdReader = new Thread() {
-            @Override
-            public void run() {
-                String line;
-                try {
-                    while ((line = stdOut.readLine()) != null) {
-                        outStream.append(ResponseUtils.escapeString(line));
-                    }
-                } catch (Throwable e) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
-                }
-            }
-        };
-        stdReader.start(); // Starts now
-
-        // Thread that reads std err and feeds the writer given in input
-        new Thread() {
-            @Override
-            public void run() {
-                String line;
-                try {
-                    while ((line = stdErr.readLine()) != null) {
-                        errStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
-                    }
-                } catch (Throwable e) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
-                }
-            }
-        }.start(); // Starts now
-
-        int exitValue;
-        try {
-            exitValue = process.waitFor();
-            stdReader.join();
-        } catch (InterruptedException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
-            return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
-        } finally {
+            String[] commandString = generateCommandString(pathToRootOut);
+            Process process;
+            sessionInfo.getTimeManager().saveCurrentTime();
             try {
-                stdOut.close();
-                stdErr.close();
+                process = Runtime.getRuntime().exec(commandString);
+                process.getOutputStream().close();
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
-                //noinspection ReturnInsideFinallyBlock
-                return ResponseUtils.getErrorInJson("Couldn't close output stream after executing code");
+                        sessionInfo.getType(), sessionInfo.getOriginUrl(), Arrays.toString(commandString));
+                StringWriter stackTrace = new StringWriter();
+                e.printStackTrace(new PrintWriter(stackTrace));
+                return ResponseUtils.getErrorWithStackTraceInJson("Impossible to run your program: IOException handled until execution", stackTrace.toString());
             }
-        }
 
-        ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
-                        + " timeout=" + isTimeoutException
-                        + " commandString=" + Arrays.toString(commandString)));
+            final StringBuilder errStream = new StringBuilder();
+            final StringBuilder outStream = new StringBuilder();
 
-
-        if ((exitValue == 1) &&
-                !isTimeoutException &&
-                outStream.length() > 0 &&
-                outStream.indexOf("An error report file with more information is saved as:") != -1) {
-            outStream.delete(0, outStream.length());
-            errStream.append(BackendSettings.KOTLIN_ERROR_MESSAGE);
-            String linkForLog = getLinkForLog(outStream.toString());
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
-                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
-        } else if (!isTimeoutException) {
-            try {
-                if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
-                    ObjectNode output = jsonArray.addObject();
-                    ArrayNode executorOutput = (ArrayNode) new ObjectMapper().readTree(outStream.toString());
-                    output.put("testResults", executorOutput);
-                    output.put("type", "out");
-                } else {
-                    ObjectNode output = (ObjectNode) new ObjectMapper().readTree(outStream.toString());
-                    output.put("type", "out");
-                    jsonArray.add(output);
+            final Process finalProcess = process;
+            Timer timer = new Timer(true);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isTimeoutException = true;
+                    finalProcess.destroy();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            }, BackendSettings.TIMEOUT_FOR_EXECUTION);
+
+            final BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            final BufferedReader stdErr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+            // Thread that reads std out and feeds the writer given in input
+            Thread stdReader = new Thread() {
+                @Override
+                public void run() {
+                    String line;
+                    try {
+                        while ((line = stdOut.readLine()) != null) {
+                            outStream.append(ResponseUtils.escapeString(line));
+                        }
+                    } catch (Throwable e) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                    }
+                }
+            };
+            stdReader.start(); // Starts now
+
+            // Thread that reads std err and feeds the writer given in input
+            new Thread() {
+                @Override
+                public void run() {
+                    String line;
+                    try {
+                        while ((line = stdErr.readLine()) != null) {
+                            errStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
+                        }
+                    } catch (Throwable e) {
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                    }
+                }
+            }.start(); // Starts now
+
+            int exitValue;
+            try {
+                exitValue = process.waitFor();
+                stdReader.join();
+            } catch (InterruptedException e) {
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
+            } finally {
+                try {
+                    stdOut.close();
+                    stdErr.close();
+                } catch (IOException e) {
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                    //noinspection ReturnInsideFinallyBlock
+                    return ResponseUtils.getErrorInJson("Couldn't close output stream after executing code");
+                }
             }
-        }
 
-        if (errStream.length() > 0) {
-            ObjectNode errObject = new ObjectNode(JsonNodeFactory.instance);
-            if (isKotlinLibraryException(errStream.toString())) {
-                writeErrStreamToLog(errStream.toString().replace("\t", "    "));
+            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+                    sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
+                            + " timeout=" + isTimeoutException
+                            + " commandString=" + Arrays.toString(commandString)));
 
-                ObjectNode jsonObject = jsonArray.addObject();
-                jsonObject.put("type", "err");
-                jsonObject.put("text", BackendSettings.KOTLIN_ERROR_MESSAGE);
-                errObject.put("type", "out");
+
+            if (!isTimeoutException) {
+                if ((exitValue == 1) &&
+                        !isTimeoutException &&
+                        outStream.length() > 0 &&
+                        outStream.indexOf("An error report file with more information is saved as:") != -1) {
+                    outStream.delete(0, outStream.length());
+                    errStream.append(BackendSettings.KOTLIN_ERROR_MESSAGE);
+                    String linkForLog = getLinkForLog(outStream.toString());
+                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
+                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                } else if (!isTimeoutException) {
+                    try {
+                        if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
+                            ObjectNode output = jsonArray.addObject();
+                            ArrayNode executorOutput = (ArrayNode) new ObjectMapper().readTree(outStream.toString());
+                            output.put("testResults", executorOutput);
+                            output.put("type", "out");
+                        } else {
+                            ObjectNode output = (ObjectNode) new ObjectMapper().readTree(outStream.toString());
+                            output.put("type", "out");
+                            jsonArray.add(output);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (errStream.length() > 0) {
+                    ObjectNode errObject = new ObjectNode(JsonNodeFactory.instance);
+                    if (isKotlinLibraryException(errStream.toString())) {
+                        writeErrStreamToLog(errStream.toString().replace("\t", "    "));
+
+                        ObjectNode jsonObject = jsonArray.addObject();
+                        jsonObject.put("type", "err");
+                        jsonObject.put("text", BackendSettings.KOTLIN_ERROR_MESSAGE);
+                        errObject.put("type", "out");
+                    } else {
+                        ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+                                sessionInfo.getId(), "error while excecution: " + errStream));
+                        errObject.put("type", "err");
+                    }
+                    errObject.put("text", errStream.toString().replace("\t", "    "));
+                    jsonArray.add(errObject);
+                }
+                timer.cancel();
+                return jsonArray.toString();
             } else {
-                ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                        sessionInfo.getId(), "error while excecution: " + errStream));
-                errObject.put("type", "err");
+                throw new TimeoutException();
             }
-            errObject.put("text", errStream.toString().replace("\t", "    "));
-            jsonArray.add(errObject);
+        } finally {
+            for (OutputFile file : files) {
+                deleteFile(file.getRelativePath(), pathToRootOut);
+            }
         }
-
-        for (OutputFile file : files) {
-            deleteFile(file.getRelativePath(), pathToRootOut);
-        }
-
-        timer.cancel();
-        return jsonArray.toString();
     }
 
     private String getLinkForLog(String outStream) {
