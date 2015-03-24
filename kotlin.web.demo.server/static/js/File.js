@@ -155,14 +155,14 @@ var File = (function () {
 
         function setFileData(data) {
             if (data != null) {
+                publicId = data.publicId;
                 name = data.name;
                 text = data.text;
-                originalText = data.originalText == null ? text : data.originalText;
-                modifiable = data.modifiable;
-                publicId = data.publicId;
+                originalText = data.hasOwnProperty("originalText") ? data.originalText : text;
+                modifiable = data.hasOwnProperty("modifiable") ? data.modifiable : true;
                 type = data.hasOwnProperty("type") ? data.type : type;
-                changesHistory = null;
                 revertible = data.hasOwnProperty("revertible") ? data.revertible : true;
+                changesHistory = null;
             }
         }
 
