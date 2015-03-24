@@ -221,16 +221,18 @@ var KotlinEditor = (function () {
                             element.appendChild(tail);
                         };
                         element.hint = function (cm, self, data) {
+                            var from;
+                            var to = {line: cur.line, ch: token.end};
                             if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
-                                cm.replaceRange(data.text, {line: cur.line, ch: token.end}, {
-                                    line: cur.line,
-                                    ch: token.end
-                                });
+                                from = to;
+                                cm.replaceRange(data.text, from);
                             } else {
-                                cm.replaceRange(data.text, {line: cur.line, ch: token.start}, {
-                                    line: cur.line,
-                                    ch: token.end
-                                });
+                                from = {line: cur.line, ch: token.start};
+                                cm.replaceRange(data.text, from, to);
+                                if (data.text.endsWith('(')) {
+                                    cm.replaceRange(")", {line: cur.line, ch: token.start + data.text.length});
+                                    cm.execCommand("goCharLeft")
+                                }
                             }
                         };
                     });
