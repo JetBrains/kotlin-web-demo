@@ -188,56 +188,89 @@ var KotlinEditor = (function () {
 
         var highlighting = new HighlightingObject();
 
+        var storedCompletionProposalsList = null;
         function getCompletions(cm, callback, options) {
             var cur = cm.getCursor();
             var token = cm.getTokenAt(cur);
-            completionProvider.getCompletion(accordion.getSelectedProject(), openedFile.getName(),
-                cur, function (data) {
-                    var completionObjects = {
-                        list: data,
-                        from: {
-                            line: cur.line,
-                            ch: token.start
-                        },
-                        to: {
-                            line: cur.line,
-                            ch: token.end
+            var completion = {
+                from: {line: cur.line, ch: token.start},
+                to: {line: cur.line, ch: token.end},
+                list: []
+            };
+
+            //Fired when the completion is finished
+            CodeMirror.on(completion, "close", function () {
+                storedCompletionProposalsList = null;
+            });
+
+            if (storedCompletionProposalsList != null) {
+                var filteredCompletions;
+                if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
+                    filteredCompletions = storedCompletionProposalsList;
+                } else {
+                    filteredCompletions = [];
+                    $(storedCompletionProposalsList).each(function (ind, element) {
+                        if (element.text.startsWith(token.string)) {
+                            filteredCompletions.push(element);
                         }
-                    };
-                    $(completionObjects.list).each(function (idx, element) {
-                        element.render = function (element, self, data) {
-                            var icon = document.createElement("div");
-                            icon.className = "icon " + data.icon;
-                            element.appendChild(icon);
-
-                            var textSpan = document.createElement("div");
-                            textSpan.className = "name";
-                            textSpan.innerHTML = data.displayText;
-                            element.appendChild(textSpan);
-
-                            var tail = document.createElement("div");
-                            tail.className = "tail";
-                            tail.innerHTML = data.tail;
-                            element.appendChild(tail);
-                        };
-                        element.hint = function (cm, self, data) {
-                            var from;
-                            var to = {line: cur.line, ch: token.end};
-                            if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
-                                from = to;
-                                cm.replaceRange(data.text, from);
-                            } else {
-                                from = {line: cur.line, ch: token.start};
-                                cm.replaceRange(data.text, from, to);
-                                if (data.text.endsWith('(')) {
-                                    cm.replaceRange(")", {line: cur.line, ch: token.start + data.text.length});
-                                    cm.execCommand("goCharLeft")
-                                }
-                            }
-                        };
                     });
-                    callback(completionObjects)
-                })
+                }
+                completion.list = filteredCompletions;
+                callback(completion)
+            } else {
+                completionProvider.getCompletion(
+                    accordion.getSelectedProject(),
+                    openedFile.getName(),
+                    cur,
+                    function (data) {
+                        $(data).each(function (idx, element) {
+                            element.render = renderCompletion;
+                            element.hint = applyCompletion;
+                            completion.list.push(element)
+                        });
+
+                        //Fired before completion update. getCompletions will be called after
+                        //Stored list will be reused in getCompletion calls and deleted when completion is finished
+                        CodeMirror.on(completion, "update", function () {
+                            storedCompletionProposalsList = completion.list;
+                        });
+
+                        callback(completion)
+                    })
+            }
+
+            function renderCompletion(element, self, data) {
+                var icon = document.createElement("div");
+                icon.className = "icon " + data.icon;
+                element.appendChild(icon);
+
+                var textSpan = document.createElement("div");
+                textSpan.className = "name";
+                textSpan.innerHTML = data.displayText;
+                element.appendChild(textSpan);
+
+                var tail = document.createElement("div");
+                tail.className = "tail";
+                tail.innerHTML = data.tail;
+                element.appendChild(tail);
+            }
+
+            function applyCompletion(cm, self, data) {
+                var token = cm.getTokenAt(cm.getCursor());
+                var from;
+                var to = {line: cur.line, ch: token.end};
+                if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
+                    from = to;
+                    cm.replaceRange(data.text, from);
+                } else {
+                    from = {line: cur.line, ch: token.start};
+                    cm.replaceRange(data.text, from, to);
+                    if (data.text.endsWith('(')) {
+                        cm.replaceRange(")", {line: cur.line, ch: token.start + data.text.length});
+                        cm.execCommand("goCharLeft")
+                    }
+                }
+            }
         }
 
         CodeMirror.registerHelper("hint", "kotlin", getCompletions);
