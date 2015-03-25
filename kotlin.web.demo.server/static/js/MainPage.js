@@ -420,11 +420,14 @@ loginProvider.onLogin = function (data) {
     accordion.loadAllContent();
 };
 
-loginProvider.onLogout = function () {
+loginProvider.beforeLogout = function () {
     if (accordion.getSelectedFile() != null) {
         accordion.getSelectedFile().save();
     }
     accordion.getSelectedProject().save();
+};
+
+loginProvider.onLogout = function () {
     loginView.logout();
     statusBarView.setStatus(ActionStatusMessages.logout_ok);
     accordion.loadAllContent();

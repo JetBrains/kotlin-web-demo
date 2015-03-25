@@ -37,6 +37,9 @@ var LoginProvider = (function () {
             },
             onLogin: function (userName) {
             },
+            beforeLogout: function(){
+
+            },
             onLogout: function () {
             },
             onFail: function (status, statusBarMessage) {
@@ -49,6 +52,7 @@ var LoginProvider = (function () {
 
         function logout() {
             blockContent();
+            instance.beforeLogout();
             $.ajax({
                 url: generateAjaxUrl("logout"),
                 context: document.body,
