@@ -33,6 +33,7 @@
 }
 
 #login .img {
+    cursor: pointer;
     float: left;
     margin-left: 16px;
     position: relative;

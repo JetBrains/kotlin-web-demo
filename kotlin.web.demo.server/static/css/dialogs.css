@@ -95,6 +95,7 @@
 
 .login-with-colored {
     display: inline-block;
+    cursor: pointer;
     margin-left: 16px;
     position: relative;
     width: 22px;
