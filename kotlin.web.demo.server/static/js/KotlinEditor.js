@@ -287,13 +287,22 @@ var KotlinEditor = (function () {
                     CodeMirror.commands.autocomplete(mirror, CodeMirror.hint.kotlin, {async: true})
                 },
                 "Shift-Tab": "indentLess",
-                "Ctrl-Alt-L": "indentAuto",
                 "Ctrl-/": "toggleComment"
             },
             hintOptions: {async: true},
             gutters: ["errors-and-warnings-gutter"],
-            tabSize: 2
+            indentUnit: 4
         });
+
+        if (navigator.appVersion.indexOf("Mac") != -1) {
+            my_editor.setOption("extraKeys", {
+                "Cmd-Alt-L": "indentAuto"
+            })
+        } else {
+            my_editor.setOption("extraKeys", {
+                "Ctrl-Alt-L": "indentAuto"
+            })
+        }
 
 
         my_editor.on("change", function () {

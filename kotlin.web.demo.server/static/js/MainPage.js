@@ -28,7 +28,7 @@ actionManager.registerAction("org.jetbrains.web.demo.run",
     }));
 actionManager.registerAction("org.jetbrains.web.demo.reformat",
     new Shortcut(["Ctrl", "Alt", "L"], null), /*default*/
-    new Shortcut(["Ctrl", "Alt", "L"], null));
+    new Shortcut(["Cmd", "Alt", "L"], null));
 /*mac*/
 actionManager.registerAction("org.jetbrains.web.demo.autocomplete",
     new Shortcut(["Ctrl", "Space"], null));
