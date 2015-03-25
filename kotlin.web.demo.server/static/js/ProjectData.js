@@ -104,7 +104,7 @@ var ProjectData = (function () {
                 var file = new File(instance, {
                     "name": addKotlinExtension(name),
                     "publicId": publicId,
-                    text: "fun main(args : Array<String>) {\n\n}"
+                    text: "fun main(args: Array<String>) {\n\n}"
                 });
                 file.onModified(onModified);
                 files.push(file);
