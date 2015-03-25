@@ -44,30 +44,7 @@ var LoginProvider = (function () {
         };
 
         function login(type) {
-            blockContent();
-            $.ajax({
-                url: generateAjaxUrl("authorization"),
-                context: document.body,
-                success: function(data){
-                    try {
-                        onLoginSuccess(data);
-                    } catch (e) {
-                        console.log(e)
-                    }
-                },
-                dataType: "text",
-                type: "GET",
-                data: {args: type},
-                timeout: 10000,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    try {
-                        instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                },
-                complete: unBlockContent
-            });
+            document.location.href = generateAjaxUrl("authorization") + "&args=" + type;
         }
 
         function logout() {
@@ -124,10 +101,6 @@ var LoginProvider = (function () {
                 },
                 complete: unBlockContent
             });
-        }
-
-        function onLoginSuccess(data) {
-            document.location.href = data;
         }
 
         return instance;

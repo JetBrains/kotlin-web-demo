@@ -41,7 +41,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
         super(host);
     }
 
-    public String authorize() {
+    public String getAuthorizationUrl() {
         try {
             googleService = new ServiceBuilder()
                     .provider(Google2Api.class)

@@ -172,9 +172,8 @@ public class ServerHandler {
                             "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + host);
                 }
             } else {
-                String verifyKey = helper.authorize();
-                try (PrintWriter out = response.getWriter()) {
-                    out.write(verifyKey);
+                try {
+                    response.sendRedirect(helper.getAuthorizationUrl());
                 } catch (Throwable e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                             "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "/" + request.getQueryString());

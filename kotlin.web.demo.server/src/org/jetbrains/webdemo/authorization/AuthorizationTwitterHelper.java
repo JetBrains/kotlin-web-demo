@@ -41,7 +41,7 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
         super(host);
     }
 
-    public String authorize() {
+    public String getAuthorizationUrl() {
         try {
             twitterService = new ServiceBuilder()
                     .provider(TwitterApi.Authenticate.class)

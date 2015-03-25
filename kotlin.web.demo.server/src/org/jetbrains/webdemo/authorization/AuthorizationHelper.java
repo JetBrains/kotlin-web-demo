@@ -41,7 +41,7 @@ public abstract class AuthorizationHelper {
         }
     }
 
-    public abstract String authorize();
+    public abstract String getAuthorizationUrl();
 
     @Nullable
     public abstract UserInfo verify(String oauthVerifier);

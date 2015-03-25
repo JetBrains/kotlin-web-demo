@@ -41,7 +41,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
         super(host);
     }
 
-    public String authorize() {
+    public String getAuthorizationUrl() {
         try {
             facebookService = new ServiceBuilder()
                     .provider(FacebookApi.class)
