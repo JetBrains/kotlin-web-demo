@@ -88,14 +88,17 @@ public class RunExamplesTest extends BaseTest {
         if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA)) {
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, getProject(), sessionInfo, project.args);
             ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
+            boolean isAnyOutput = false;
             for (JsonNode outputObject : actualResult) {
                 if (outputObject.get("type").asText().equals("out")) {
+                    isAnyOutput = true;
                     if (project.expectedOutput != null) {
                         assertEquals(unifyLineSeparators(project.expectedOutput), getStdOut(outputObject.get("text").asText()));
                     }
                     assertTrue(outputObject.get("exception").isNull());
                 }
             }
+            assertTrue("No program output", isAnyOutput);
         } else if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
             CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, getProject(), sessionInfo, project.args);
             ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
