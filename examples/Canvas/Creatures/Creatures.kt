@@ -35,6 +35,7 @@ abstract class Shape() {
     abstract fun draw(state: CanvasState)
     // these two abstract methods defines that our shapes can be dragged
     abstract fun contains(mousePos: Vector): Boolean
+
     abstract var pos: Vector
 
     var selected: Boolean = false
@@ -74,9 +75,9 @@ class Logo(override var pos: Vector) : Shape() {
         size = imageSize * (state.size.x / imageSize.x) * relSize
         // getKotlinLogo() is a 'magic' function here defined only for purposes of demonstration but in fact it just find an element containing the logo
         state.context.drawImage(getImage("http://kotlin-demo.jetbrains.com/static/images/kotlinlogowobackground.png"), 0, 0,
-                                imageSize.x.toInt(), imageSize.y.toInt(),
-                                position.x.toInt(), position.y.toInt(),
-                                size.x.toInt(), size.y.toInt())
+                imageSize.x.toInt(), imageSize.y.toInt(),
+                position.x.toInt(), position.y.toInt(),
+                size.x.toInt(), size.y.toInt())
     }
 
     override fun draw(state: CanvasState) {
@@ -86,8 +87,7 @@ class Logo(override var pos: Vector) : Shape() {
             context.shadowed(shadowOffset, 0.2) {
                 drawLogo(state)
             }
-        }
-        else {
+        } else {
             drawLogo(state)
         }
     }
@@ -138,8 +138,7 @@ class Creature(override var pos: Vector, val state: CanvasState) : Shape() {
         val context = state.context
         if (!selected) {
             drawCreature(context)
-        }
-        else {
+        } else {
             drawCreatureWithShadow(context)
         }
     }
@@ -247,8 +246,8 @@ class CanvasState(val canvas: HTMLCanvasElement) {
         }
 
         window.setInterval({
-                               draw()
-                           }, interval)
+            draw()
+        }, interval)
     }
 
     fun mousePos(e: MouseEvent): Vector {
@@ -326,7 +325,7 @@ class Vector(val x: Double = 0.0, val y: Double = 0.0) {
     }
 
     fun isInRect(topLeft: Vector, size: Vector) = (x >= topLeft.x) && (x <= topLeft.x + size.x) &&
-    (y >= topLeft.y) && (y <= topLeft.y + size.y)
+            (y >= topLeft.y) && (y <= topLeft.y + size.y)
 
     val sqr: Double
         get() = x * x + y * y
@@ -341,8 +340,8 @@ fun main(args: Array<String>) {
         state.addShape(Creature(state.size * 0.25, state))
         state.addShape(Creature(state.size * 0.75, state))
         window.setTimeout({
-                              state.valid = false
-                          }, 1000)
+            state.valid = false
+        }, 1000)
     }
 }
 

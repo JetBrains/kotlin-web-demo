@@ -16,8 +16,8 @@
  */
 package pairless
 
-fun findPairless(a : IntArray) : Int {
-  // Write your solution here
-  return 0
+fun findPairless(a: IntArray): Int {
+    // Write your solution here
+    return 0
 }
 

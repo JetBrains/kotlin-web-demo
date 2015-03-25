@@ -1,19 +1,3 @@
-/*
- * Copyright 2000-2015 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package traffic
 
 import java.util.ArrayList
@@ -86,9 +70,9 @@ fun v(x: Double, y: Double) = Vector(x, y)
 class Image(val src: String, override var pos: Vector, var imageSize: Vector) : Shape() {
     override fun draw() {
         state.context.drawImage(getImage(src), 0, 0,
-                                imageSize.x.toInt(), imageSize.y.toInt(),
-                                pos.x.toInt(), pos.y.toInt(),
-                                imageSize.x.toInt(), imageSize.y.toInt())
+                imageSize.x.toInt(), imageSize.y.toInt(),
+                pos.x.toInt(), pos.y.toInt(),
+                imageSize.x.toInt(), imageSize.y.toInt())
     }
 
     fun contains(mousePos: Vector): Boolean = mousePos.isInRect(pos, imageSize)
@@ -102,39 +86,37 @@ class Button(val src: String, override var pos: Vector, var imageSize: Vector) :
         if (isMouseOver) {
             state.context.shadowed(v(-3.0, 3.0), 1.2) {
                 state.context.drawImage(getImage(src), 0, 0,
-                                        imageSize.x.toInt(), imageSize.y.toInt(),
-                                        pos.x.toInt(), pos.y.toInt(),
-                                        imageSize.x.toInt(), imageSize.y.toInt())
+                        imageSize.x.toInt(), imageSize.y.toInt(),
+                        pos.x.toInt(), pos.y.toInt(),
+                        imageSize.x.toInt(), imageSize.y.toInt())
             }
-        }
-        else if (isMouseDown) {
+        } else if (isMouseDown) {
             state.context.shadowed(v(-3.0, 3.0), 0.8) {
                 state.context.drawImage(getImage(src), 0, 0,
-                                        imageSize.x.toInt(), imageSize.y.toInt(),
-                                        pos.x.toInt(), pos.y.toInt(),
-                                        imageSize.x.toInt(), imageSize.y.toInt())
+                        imageSize.x.toInt(), imageSize.y.toInt(),
+                        pos.x.toInt(), pos.y.toInt(),
+                        imageSize.x.toInt(), imageSize.y.toInt())
             }
-        }
-        else {
+        } else {
             state.context.drawImage(getImage(src), 0, 0,
-                                    imageSize.x.toInt(), imageSize.y.toInt(),
-                                    pos.x.toInt(), pos.y.toInt(),
-                                    imageSize.x.toInt(), imageSize.y.toInt())
+                    imageSize.x.toInt(), imageSize.y.toInt(),
+                    pos.x.toInt(), pos.y.toInt(),
+                    imageSize.x.toInt(), imageSize.y.toInt())
         }
     }
 
     fun mouseClick() {
         isMouseDown = true
         window.setTimeout({
-                              isMouseDown = false
-                          }, 1000)
+            isMouseDown = false
+        }, 1000)
     }
 
     fun mouseOver() {
         isMouseOver = true
         window.setTimeout({
-                              isMouseOver = false
-                          }, 1000)
+            isMouseOver = false
+        }, 1000)
     }
 
 
@@ -234,9 +216,9 @@ class TrafficLight(override var pos: Vector, val direction: String, val startCol
         changeColorForward = false
         currentColor = "yellow"
         window.setTimeout({
-                              if (!isForceColorChange) timer.resetTimer() else isForceColorChange = false
-                              currentColor = "green"
-                          }, 3000)
+            if (!isForceColorChange) timer.resetTimer() else isForceColorChange = false
+            currentColor = "green"
+        }, 3000)
     }
 
 
@@ -244,12 +226,12 @@ class TrafficLight(override var pos: Vector, val direction: String, val startCol
         changeColorForward = true
         currentColor = "green_flash"
         window.setTimeout({
-                              currentColor = "yellow"
-                              window.setTimeout({
-                                                    if (!isForceColorChange) timer.resetTimer() else isForceColorChange = false
-                                                    currentColor = "red"
-                                                }, 1000)
-                          }, 2000)
+            currentColor = "yellow"
+            window.setTimeout({
+                if (!isForceColorChange) timer.resetTimer() else isForceColorChange = false
+                currentColor = "red"
+            }, 1000)
+        }, 2000)
     }
 
     fun canMove(): Boolean {
@@ -275,30 +257,26 @@ class TrafficLightItem(override var pos: Vector, val imageSrc: String) : Shape()
                 if (countOfFlash > 6) {
                     isFlashNow = false
                     countOfFlash = 0
-                }
-                else {
+                } else {
                     countOfFlash++
                 }
-            }
-            else {
+            } else {
                 state.context.drawImage(getImage(PATH_TO_IMAGES + "green_color.png"), 0, 0,
-                                        imageSize.x.toInt(), imageSize.y.toInt(),
-                                        pos.x.toInt(), pos.y.toInt(),
-                                        size.x.toInt(), size.y.toInt())
+                        imageSize.x.toInt(), imageSize.y.toInt(),
+                        pos.x.toInt(), pos.y.toInt(),
+                        size.x.toInt(), size.y.toInt())
                 if (countOfFlash > 6) {
                     isFlashNow = true
                     countOfFlash = 0
-                }
-                else {
+                } else {
                     countOfFlash++
                 }
             }
-        }
-        else {
+        } else {
             state.context.drawImage(getImage(imageSrc), 0, 0,
-                                    imageSize.x.toInt(), imageSize.y.toInt(),
-                                    pos.x.toInt(), pos.y.toInt(),
-                                    size.x.toInt(), size.y.toInt())
+                    imageSize.x.toInt(), imageSize.y.toInt(),
+                    pos.x.toInt(), pos.y.toInt(),
+                    size.x.toInt(), size.y.toInt())
         }
     }
 }
@@ -311,25 +289,22 @@ class Car(override var pos: Vector, val direction: String, val color: String) : 
     override fun draw() {
         if (direction == "up" || direction == "down") {
             state.context.drawImage(getImage(PATH_TO_IMAGES + color + "_car.png"), 0, 0,
-                                    imageSize.x.toInt(), imageSize.y.toInt(),
-                                    pos.x.toInt(), pos.y.toInt(),
-                                    imageSize.x.toInt(), imageSize.y.toInt())
+                    imageSize.x.toInt(), imageSize.y.toInt(),
+                    pos.x.toInt(), pos.y.toInt(),
+                    imageSize.x.toInt(), imageSize.y.toInt())
             if ((!isNearStopLine()) || (trafficLightUp.canMove() && isNearStopLine()) ) {
                 move()
-            }
-            else {
+            } else {
                 speed = getRandomArbitary(2, 10)
             }
-        }
-        else {
+        } else {
             state.context.drawImage(getImage(PATH_TO_IMAGES + color + "_car.png"), 0, 0,
-                                    imageSize.y.toInt(), imageSize.x.toInt(),
-                                    pos.x.toInt(), pos.y.toInt(),
-                                    imageSize.y.toInt(), imageSize.x.toInt())
+                    imageSize.y.toInt(), imageSize.x.toInt(),
+                    pos.x.toInt(), pos.y.toInt(),
+                    imageSize.y.toInt(), imageSize.x.toInt())
             if ((!isNearStopLine()) || (trafficLightLeft.canMove() && isNearStopLine()) ) {
                 move()
-            }
-            else {
+            } else {
                 speed = getRandomArbitary(2, 10)
             }
 
@@ -373,9 +348,9 @@ class Map(override var pos: Vector) : Shape() {
     override fun draw() {
         size = imageSize * relSize
         state.context.drawImage(getImage(PATH_TO_IMAGES + "crossroads.jpg"), 0, 0,
-                                imageSize.x.toInt(), imageSize.y.toInt(),
-                                pos.x.toInt(), pos.y.toInt(),
-                                size.x.toInt(), size.y.toInt())
+                imageSize.x.toInt(), imageSize.y.toInt(),
+                pos.x.toInt(), pos.y.toInt(),
+                size.x.toInt(), size.y.toInt())
     }
 }
 
@@ -434,15 +409,15 @@ class CanvasState(val canvas: HTMLCanvasElement) {
         }
 
         window.setInterval({
-                               draw()
-                           }, 1000 / 30)
+            draw()
+        }, 1000 / 30)
 
         window.setInterval({
-                               trafficLightUp.changeColor()
-                               trafficLightLeft.changeColor()
-                               trafficLightRight.changeColor()
-                               trafficLightDown.changeColor()
-                           }, 10000)
+            trafficLightUp.changeColor()
+            trafficLightLeft.changeColor()
+            trafficLightRight.changeColor()
+            trafficLightDown.changeColor()
+        }, 10000)
 
 
     }
@@ -509,7 +484,7 @@ class Vector(val x: Double = 0.0, val y: Double = 0.0) {
     }
 
     fun isInRect(topLeft: Vector, size: Vector) = (x >= topLeft.x) && (x <= topLeft.x + size.x) &&
-    (y >= topLeft.y) && (y <= topLeft.y + size.y)
+            (y >= topLeft.y) && (y <= topLeft.y + size.y)
 
     val sqr: Double
         get() = x * x + y * y

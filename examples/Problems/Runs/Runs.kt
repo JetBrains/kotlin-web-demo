@@ -12,9 +12,7 @@
  */
 package runs
 
-import java.util.*
-
-fun runs(a : IntArray) : Int {
-  // Write your solution here
-  return 0
+fun runs(a: IntArray): Int {
+    // Write your solution here
+    return 0
 }
