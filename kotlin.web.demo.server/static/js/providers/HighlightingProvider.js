@@ -40,7 +40,8 @@ var HighlightingProvider = (function () {
 
         function getHighlighting(project, successCallback, finallyCallback) {
             $.ajax({
-                url: generateAjaxUrl("highlight"),
+                //runConf is unused parameter. It's added to url for useful access logs
+                url: generateAjaxUrl("highlight", {runConf: project.getConfiguration()}),
                 context: document.body,
                 success: function (data) {
                     try {

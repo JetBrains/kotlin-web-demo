@@ -43,7 +43,8 @@ var CompletionProvider = (function () {
             if (!isLoadingCompletion) {
                 isLoadingCompletion = true;
                 $.ajax({
-                    url: generateAjaxUrl("complete"),
+                    //runConf is unused parameter. It's added to url for useful access logs
+                    url: generateAjaxUrl("complete", {runConf: project.getConfiguration()}),
                     context: document.body,
                     success: function (data) {
                         isLoadingCompletion = false;

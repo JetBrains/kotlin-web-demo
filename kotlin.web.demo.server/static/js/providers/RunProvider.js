@@ -42,7 +42,8 @@ var RunProvider = (function () {
 
         function runJava(project) {
             $.ajax({
-                url: generateAjaxUrl("run"),
+                //runConf is unused parameter. It's added to url for useful access logs
+                url: generateAjaxUrl("run", {runConf: project.getConfiguration()}),
                 context: document.body,
                 success: function (data) {
                     try {
@@ -85,7 +86,8 @@ var RunProvider = (function () {
 
         function loadJsFromServer(project) {
             $.ajax({
-                url: generateAjaxUrl("run"),
+                //runConf is unused parameter. It's added to url for useful access logs
+                url: generateAjaxUrl("run", {runConf: project.getConfiguration()}),
                 context: document.body,
                 success: function (data) {
                     try {

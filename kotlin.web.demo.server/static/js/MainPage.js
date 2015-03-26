@@ -527,9 +527,13 @@ $(".toggleShortcuts").click(function () {
 
 $("#help3").toggle(true);
 
-function generateAjaxUrl(type) {
+function generateAjaxUrl(type, parameters) {
     var url = [location.protocol, '//', location.host, "/"].join('');
-    return url + "kotlinServer?sessionId=" + sessionId + "&type=" + type;
+    url = url + "kotlinServer?sessionId=" + sessionId + "&type=" + type;
+    for(var parameterName in parameters){
+        url += "&" + parameterName + "=" + parameters[parameterName];
+    }
+    return url;
 }
 
 function setSessionId() {
