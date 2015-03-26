@@ -23,28 +23,41 @@
 
 var ConverterProvider = (function () {
 
-    function ConverterProvider(onSuccess, onFail) {
+    function ConverterProvider() {
 
         var instance = {
+            beforeConvert: function(){
+
+            },
+            onConvertFail: function(){
+
+            },
+            onConvertSuccess: function(){
+
+            },
+            onConvertComplete: function () {
+
+            },
             convert: function (text, callback) {
                 convert(text, callback);
             }
         };
 
         function convert(text, callback) {
+            instance.beforeConvert();
             $.ajax({
                 url: generateAjaxUrl("convertToKotlin"),
                 context: document.body,
                 success: function (data) {
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            onSuccess();
+                            instance.onConvertSuccess();
                             callback(data[0].text);
                         } else {
-                            onFail(data);
+                            instance.onConvertFail(data);
                         }
                     } else {
-                        onFail("Incorrect data format.");
+                        instance.onConvertFail("Incorrect data format.");
                     }
                 },
                 dataType: "json",
@@ -53,11 +66,12 @@ var ConverterProvider = (function () {
                 timeout: 10000,
                 error: function (jqXHR, textStatus, errorThrown) {
                     if(jqXHR.responseText != null && jqXHR.responseText != ""){
-                        onFail(jqXHR.responseText);
+                        instance.onConvertFail(jqXHR.responseText);
                     } else {
-                        onFail(textStatus + " : " + errorThrown);
+                        instance.onConvertFail(textStatus + " : " + errorThrown);
                     }
-                }
+                },
+                complete: instance.onConvertComplete
             });
         }
 

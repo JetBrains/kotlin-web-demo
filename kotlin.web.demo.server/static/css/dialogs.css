@@ -290,6 +290,11 @@
     background-color: #c8f2c8;
 }
 
+#myPopupForConverterFromJavaToKotlin .CodeMirror,
+#myPopupForConverterFromJavaToKotlin .CodeMirror-gutters{
+    height: 100%;
+}
+
 #myPopupForConverterFromJavaToKotlin>div{
     float: left;
     width: 50%;

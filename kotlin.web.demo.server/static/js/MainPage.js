@@ -189,20 +189,6 @@ var runProvider = (function () {
 var loginProvider = new LoginProvider();
 var loginView = new LoginView(loginProvider);
 
-var converterProvider = (function () {
-    function onSuccess() {
-        statusBarView.setStatus(ActionStatusMessages.convert_java_to_kotlin_ok);
-    }
-
-    function onFail(error) {
-        for (var i = 0; i < error.length; ++i) {
-            alert(error[i].exception);
-        }
-    }
-
-    return new ConverterProvider(onSuccess, onFail);
-})();
-
 var highlightingProvider = (function () {
     function onSuccess(data) {
         accordion.getSelectedProject().setErrors(data);
@@ -249,7 +235,7 @@ configurationManager.onFail = function (exception) {
     statusBarView.setMessage(ActionStatusMessages.change_configuration_fail);
 };
 
-var converterView = new ConverterView(converterProvider);
+var converterView = new ConverterView();
 document.getElementById("java2kotlin").onclick = converterView.open;
 
 var argumentsInput = document.getElementById("arguments");

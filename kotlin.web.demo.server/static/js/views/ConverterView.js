@@ -24,17 +24,12 @@
 
 var ConverterView = (function () {
 
-    function ConverterView(converterModel) {
+    function ConverterView() {
         var instance = {
-            open: function(){
+            open: function () {
                 $(popup).dialog("open");
-                var height = $(popup).height();
-                $(popup).find(".CodeMirror").height(height);
-                $(popup).find(".CodeMirror-scroll").height(height);
-                $(popup).find(".CodeMirror-gutter").height(height);
-                $(popup).find(".CodeMirror-gutters").height(height);
-                //javaEditor.refresh();
-                //kotlinEditor.refresh();
+                javaEditor.refresh();
+                kotlinEditor.refresh();
             }
         };
 
@@ -59,7 +54,6 @@ var ConverterView = (function () {
                 "Ctrl-/": "toggleComment"
             },
             mode: "text/x-java",
-            minHeight: "430px",
             tabSize: 4
         });
 
@@ -73,7 +67,6 @@ var ConverterView = (function () {
             styleActiveLine: true,
             readOnly: true,
             mode: "text/kotlin",
-            minHeight: "430px",
             tabSize: 4
         });
 
@@ -81,7 +74,7 @@ var ConverterView = (function () {
             if (event.keyCode == 27) { /*escape enter*/
                 $(this).dialog("close");
             } else if (event.keyCode == 13 && (event.ctrlKey || event.metaKey)) { /*enter*/
-                $(this).parent().find("button:eq(1)").trigger("click");
+                $(this).parent().find("button:eq(1):enabled").click();
             }
             event.stopPropagation();
         });
@@ -89,25 +82,21 @@ var ConverterView = (function () {
         $(popup).dialog({
             modal: true,
             autoOpen: false,
-            resizable: false,
+            resizable: true,
             width: 700,
             height: 700,
             resizeStop: function (event, ui) {
-                var height = popup.height();
-                $(popup).find(".CodeMirror").height(height);
-                $(popup).find(".CodeMirror-scroll").height(height);
-                $(popup).find(".CodeMirror-gutter").height(height);
-                $(popup).find(".CodeMirror-gutters").height(height);
-                //javaEditor.refresh();
-                //kotlinEditor.refresh();
+                javaEditor.refresh();
+                kotlinEditor.refresh();
             },
             buttons: [
-                { text: "Convert to Kotlin",
+                {
+                    text: "Convert to Kotlin",
                     click: function () {
-                        converterModel.convert(javaEditor.getValue(), function(text){
+                        converterProvider.convert(javaEditor.getValue(), function (text) {
                             kotlinEditor.setValue(text);
                             var last = kotlinEditor.lineCount();
-                            kotlinEditor.operation(function() {
+                            kotlinEditor.operation(function () {
                                 for (var i = 0; i < last; ++i) kotlinEditor.indentLine(i);
                             });
                         });
@@ -116,6 +105,25 @@ var ConverterView = (function () {
             ]
         });
 
+        var converterProvider = (function () {
+            var converterProvider = new ConverterProvider();
+
+            converterProvider.beforeConvert = function() {
+                $(popup).next().find(".ui-dialog-buttonset button").button("disable");
+            };
+
+            converterProvider.onConvertFail = function (error) {
+                for (var i = 0; i < error.length; ++i) {
+                    alert(error[i].exception);
+                }
+            };
+
+            converterProvider.onConvertComplete = function () {
+                $(popup).next().find(".ui-dialog-buttonset button").button("enable");
+            };
+
+            return converterProvider;
+        })();
 
         return instance;
     }

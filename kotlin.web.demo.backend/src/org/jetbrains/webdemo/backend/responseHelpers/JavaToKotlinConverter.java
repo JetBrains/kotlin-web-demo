@@ -40,7 +40,7 @@ public class JavaToKotlinConverter {
      */
     private static Method translateToKotlin;
 
-    public static void init(){
+    public static void init() {
         try {
             URL[] urls = {
                     new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "j2k.jar").toURI().toURL(),
@@ -49,34 +49,35 @@ public class JavaToKotlinConverter {
             };
             URLClassLoader classLoader = new URLClassLoader(urls);
             translateToKotlin = classLoader.loadClass(J2kPackage.class.getName()).getMethod("translateToKotlin", String.class);
-            assert(translateToKotlin.invoke(null, "class A").equals("class A"));
+            assert (translateToKotlin.invoke(null, "class A").equals("class A"));
         } catch (Throwable e) {
             ErrorWriter.writeExceptionToConsole("Couldn't initialize Java2Kotlin converter", e);
         }
     }
-    
+
     public JavaToKotlinConverter(BackendSessionInfo info) {
         this.info = info;
     }
 
     public String getResult(String code) {
         ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
-        ObjectNode jsonObject = result.addObject();
+
         try {
-            String resultFormConverter;
-            try {
-                resultFormConverter = (String) translateToKotlin.invoke(null, code);
-            } catch (Exception e) {
-                return ResponseUtils.getErrorInJson("EXCEPTION: " + e.getMessage());
-            }
+            String resultFormConverter = (String) translateToKotlin.invoke(null, code);
             if (resultFormConverter.isEmpty()) {
-                return ResponseUtils.getErrorInJson("EXCEPTION: generated code is empty.");
+                result.add(ResponseUtils.getErrorAsJsonNode("Generated code is empty."));
+            } else {
+                ObjectNode jsonObject = result.addObject();
+                jsonObject.put("text", resultFormConverter);
             }
-            jsonObject.put("text", resultFormConverter);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     BackendSessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN.name(), info.getOriginUrl(), code);
-            return ResponseUtils.getErrorInJson(e.getMessage());
+            if (e.getMessage() != null) {
+                result.add(ResponseUtils.getErrorAsJsonNode("EXCEPTION: " + e.getMessage()));
+            } else {
+                result.add(ResponseUtils.getErrorAsJsonNode("Unknown exception"));
+            }
         }
 
         return result.toString();
