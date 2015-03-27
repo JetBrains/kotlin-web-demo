@@ -435,7 +435,7 @@ var fileProvider = (function () {
 
     fileProvider.onOriginalFileLoaded = function (data) {
         if (accordion.getSelectedProject().getType() == ProjectType.PUBLIC_LINK) {
-            accordion.getSelectedProjectView().updateFileViewSafely(accordion.getSelectedFileView(), data.name);
+            accordion.getSelectedProjectView().updateFileViewSafely(accordion.getSelectedFileView(), unEscapeString(data.name));
         }
         editor.reloadFile();
     };
