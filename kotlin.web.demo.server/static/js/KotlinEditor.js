@@ -294,7 +294,9 @@ var KotlinEditor = (function () {
                     CodeMirror.commands.autocomplete(mirror, CodeMirror.hint.kotlin, {async: true})
                 },
                 "Shift-Tab": "indentLess",
-                "Ctrl-/": "toggleComment"
+                "Ctrl-/": "toggleComment",
+                "Cmd-[": false,
+                "Cmd-]": false
             })
         } else {
             my_editor.setOption("extraKeys", {
@@ -303,7 +305,9 @@ var KotlinEditor = (function () {
                     CodeMirror.commands.autocomplete(mirror, CodeMirror.hint.kotlin, {async: true})
                 },
                 "Shift-Tab": "indentLess",
-                "Ctrl-/": "toggleComment"
+                "Ctrl-/": "toggleComment",
+                "Ctrl-[": false,
+                "Ctrl-]": false
             })
         }
 
