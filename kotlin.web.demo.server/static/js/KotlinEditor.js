@@ -282,13 +282,6 @@ var KotlinEditor = (function () {
             mode: "text/kotlin",
             autoCloseBrackets: true,
             continueComments: true,
-            extraKeys: {
-                "Ctrl-Space": function (mirror) {
-                    CodeMirror.commands.autocomplete(mirror, CodeMirror.hint.kotlin, {async: true})
-                },
-                "Shift-Tab": "indentLess",
-                "Ctrl-/": "toggleComment"
-            },
             hintOptions: {async: true},
             gutters: ["errors-and-warnings-gutter"],
             indentUnit: 4
@@ -296,11 +289,21 @@ var KotlinEditor = (function () {
 
         if (navigator.appVersion.indexOf("Mac") != -1) {
             my_editor.setOption("extraKeys", {
-                "Cmd-Alt-L": "indentAuto"
+                "Cmd-Alt-L": "indentAuto",
+                "Ctrl-Space": function (mirror) {
+                    CodeMirror.commands.autocomplete(mirror, CodeMirror.hint.kotlin, {async: true})
+                },
+                "Shift-Tab": "indentLess",
+                "Ctrl-/": "toggleComment"
             })
         } else {
             my_editor.setOption("extraKeys", {
-                "Ctrl-Alt-L": "indentAuto"
+                "Ctrl-Alt-L": "indentAuto",
+                "Ctrl-Space": function (mirror) {
+                    CodeMirror.commands.autocomplete(mirror, CodeMirror.hint.kotlin, {async: true})
+                },
+                "Shift-Tab": "indentLess",
+                "Ctrl-/": "toggleComment"
             })
         }
 
