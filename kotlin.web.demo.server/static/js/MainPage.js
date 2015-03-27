@@ -155,13 +155,14 @@ projectActionsView.registerStatus("localFile", "This is your local version of th
 
 
 var runProvider = (function () {
-
-    function onSuccess(output, project) {
-        run_button.button("option", "disabled", false);
+    var runProvider = new RunProvider();
+    runProvider.onSuccess = function (output, project) {
+        if (project.getConfiguration() == Configuration.getStringFromType(Configuration.type.CANVAS)) {
+            canvasDialog.dialog("open");
+        }
         $(output).each(function (ind, data) {
             if (data.type == "errors") {
                 project.setErrors(data.errors);
-                $("#result-tabs").tabs("option", "active", 0);
                 problemsView.addMessages();
                 editor.updateHighlighting();
             } else if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
@@ -175,31 +176,48 @@ var runProvider = (function () {
             }
         });
         statusBarView.setStatus(ActionStatusMessages.run_java_ok);
-    }
+    };
 
-    function onFail(error) {
+    runProvider.onComplete = function () {
         run_button.button("option", "disabled", false);
+    };
+
+    runProvider.onErrorsFound = function (data, project) {
+        $(data).each(function (ind, data) {
+            if (data.type == "errors") {
+                project.setErrors(data.errors);
+                $("#result-tabs").tabs("option", "active", 0);
+                problemsView.addMessages();
+                editor.updateHighlighting();
+                statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [getNumberOfErrorsAndWarnings(data.errors)]);
+            }
+        });
+    };
+
+    runProvider.onFail = function (error) {
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.run_java_fail);
-    }
+    };
 
-    return new RunProvider(onSuccess, onFail);
+    return runProvider;
 })();
 
 var loginProvider = new LoginProvider();
 var loginView = new LoginView(loginProvider);
 
+function getNumberOfErrorsAndWarnings(data){
+    var noOfErrorsAndWarnings = 0;
+    for (var filename in data) {
+        noOfErrorsAndWarnings += data[filename].length
+    }
+    return noOfErrorsAndWarnings
+}
+
 var highlightingProvider = (function () {
     function onSuccess(data) {
         accordion.getSelectedProject().setErrors(data);
         problemsView.addMessages(data);
-
-        var noOfErrorsAndWarnings = 0;
-
-        for (var filename in data) {
-            noOfErrorsAndWarnings += data[filename].length
-        }
-        statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [noOfErrorsAndWarnings]);
+        statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [getNumberOfErrorsAndWarnings(data)]);
     }
 
     function onFail(error) {
@@ -390,10 +408,6 @@ var run_button = $("#runButton")
         consoleView.clear();
         junitView.clear();
         generatedCodeView.clear();
-        var localConfiguration = configurationManager.getConfiguration();
-        if (localConfiguration.type == Configuration.type.CANVAS) {
-            canvasDialog.dialog("open");
-        }
         runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject());
     });
 
@@ -516,7 +530,7 @@ $("#help3").toggle(true);
 function generateAjaxUrl(type, parameters) {
     var url = [location.protocol, '//', location.host, "/"].join('');
     url = url + "kotlinServer?sessionId=" + sessionId + "&type=" + type;
-    for(var parameterName in parameters){
+    for (var parameterName in parameters) {
         url += "&" + parameterName + "=" + parameters[parameterName];
     }
     return url;

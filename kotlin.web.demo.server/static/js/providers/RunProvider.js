@@ -23,9 +23,21 @@
 
 var RunProvider = (function () {
 
-    function RunProvider(onSuccess, onFail) {
+    function RunProvider(onFail) {
 
         var instance = {
+            onSuccess: function () {
+
+            },
+            onErrorsFound: function () {
+
+            },
+            onFail: function () {
+
+            },
+            onComplete: function(){
+
+            },
             run: function (configuration, project) {
                 run(configuration, project);
             }
@@ -39,6 +51,24 @@ var RunProvider = (function () {
             }
         }
 
+        function checkDataForErrors(data){
+            return data.some(function (element) {
+                if(element.type == "errors"){
+                    var containsErrors = false;
+                    for(var fileName in element.errors){
+                        if(element.errors[fileName].some(function(element){
+                                return element.severity == "ERROR";
+                            })){
+                            containsErrors = true;
+                        }
+                    }
+                    return !containsErrors
+                } else {
+                    return true;
+                }
+            })
+        }
+
 
         function runJava(project) {
             $.ajax({
@@ -49,12 +79,16 @@ var RunProvider = (function () {
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                onSuccess(data, project);
+                                if(checkDataForErrors(data)){
+                                    instance.onSuccess(data, project);
+                                } else {
+                                    instance.onErrorsFound(data, project);
+                                }
                             } else {
-                                onFail(data);
+                                instance.onFail(data);
                             }
                         } else {
-                            onFail("Incorrect data format.")
+                            instance.onFail("Incorrect data format.")
                         }
                     } catch (e) {
                         console.log(e);
@@ -64,12 +98,13 @@ var RunProvider = (function () {
                 type: "POST",
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
+                complete: instance.onComplete,
                 error: function (jqXHR, textStatus, errorThrown) {
                     try {
                         if(jqXHR.responseText != null && jqXHR.responseText != ""){
-                            onFail(jqXHR.responseText);
+                            instance.onFail(jqXHR.responseText);
                         } else {
-                            onFail(textStatus + " : " + errorThrown);
+                            instance.onFail(textStatus + " : " + errorThrown);
                         }
                     } catch (e) {
                         console.log(e)
@@ -93,23 +128,27 @@ var RunProvider = (function () {
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                var output = data.slice();
-                                $(data).each(function (ind, element) {
-                                    if (element.type == "generatedJSCode") {
-                                        try {
-                                            var dataJs = eval(element.text);
-                                            output.push({"text": safe_tags_replace(dataJs), "type": "jsOut"});
-                                        } catch (e) {
-                                            output.push({"type": "jsException", exception: e});
+                                if(checkDataForErrors(data)) {
+                                    var output = data.slice();
+                                    $(data).each(function (ind, element) {
+                                        if (element.type == "generatedJSCode") {
+                                            try {
+                                                var dataJs = eval(element.text);
+                                                output.push({"text": safe_tags_replace(dataJs), "type": "jsOut"});
+                                            } catch (e) {
+                                                output.push({"type": "jsException", exception: e});
+                                            }
                                         }
-                                    }
-                                });
-                                onSuccess(output, project);
+                                    });
+                                    instance.onSuccess(output, project);
+                                } else{
+                                    instance.onErrorsFound(data, project)
+                                }
                             } else {
-                                onFail(data);
+                                instance.onFail(data);
                             }
                         } else {
-                            onFail("Incorrect data format.");
+                            instance.onFail("Incorrect data format.");
                         }
                     } catch (e) {
                         console.log(e)
@@ -119,12 +158,13 @@ var RunProvider = (function () {
                 type: "POST",
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
+                complete: instance.onComplete,
                 error: function (jqXHR, textStatus, errorThrown) {
                     try {
                         if(jqXHR.responseText != null && jqXHR.responseText != ""){
-                            onFail(jqXHR.responseText);
+                            instance.onFail(jqXHR.responseText);
                         } else {
-                            onFail(textStatus + " : " + errorThrown);
+                            instance.onFail(textStatus + " : " + errorThrown);
                         }
                     } catch (e) {
                         console.log(e)
