@@ -193,6 +193,7 @@ function clearState() {
 }
 
 function setState(hash, title) {
+    hash = unEscapeString(hash);
     hash = hash.startsWith("#") ? hash : "#" + hash;
     document.title = title;
     if (location.hash != hash) {
