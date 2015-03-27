@@ -69,7 +69,7 @@ var FileView = (function () {
             headerElement.parentNode.removeChild(headerElement);
         };
 
-        var renameFileDialog = new InputDialogView("Rename file", "filename", "Rename");
+        var renameFileDialog = new InputDialogView("Rename file", "File name:", "Rename");
         renameFileDialog.validate = function (newName) {
             if (removeKotlinExtension(file.getName()) == newName) {
                 return {valid: true};

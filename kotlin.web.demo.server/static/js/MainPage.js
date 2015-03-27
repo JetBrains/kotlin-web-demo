@@ -128,7 +128,7 @@ var helpModelForWords = new HelpModel("Words");
 var helpViewForWords = new HelpView(helpModelForWords);
 helpViewForWords.hide();
 var projectActionsView = new ProjectActionsView(document.getElementById("editor-notifications"));
-projectActionsView.registerStatus("localVersion", "This is local version of project", [
+projectActionsView.registerStatus("localVersion", "This is your local version of this project", [
     {
         name: "Revert file",
         callback: function () {
@@ -144,7 +144,7 @@ projectActionsView.registerStatus("localVersion", "This is local version of proj
         }
     }
 ]);
-projectActionsView.registerStatus("localFile", "This is local version of project", [
+projectActionsView.registerStatus("localFile", "This is your local version of this projectK", [
     {
         name: "Revert project",
         callback: function () {
