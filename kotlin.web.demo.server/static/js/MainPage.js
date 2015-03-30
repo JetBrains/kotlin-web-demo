@@ -144,7 +144,7 @@ projectActionsView.registerStatus("localVersion", "This is your local version of
         }
     }
 ]);
-projectActionsView.registerStatus("localFile", "This is your local version of this projectK", [
+projectActionsView.registerStatus("localFile", "This is your local version of this project", [
     {
         name: "Revert project",
         callback: function () {
