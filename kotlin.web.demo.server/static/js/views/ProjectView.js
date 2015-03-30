@@ -211,7 +211,7 @@ var ProjectView = (function () {
         var fileViews = {};
         var renameProjectDialog = new InputDialogView("Rename project", "Project name:", "Rename");
         renameProjectDialog.validate = function (newName) {
-            if (header.name == newName) {
+            if (project.getName() == newName) {
                 return {valid: true};
             } else {
                 return accordion.validateNewProjectName(newName);
@@ -263,7 +263,7 @@ var ProjectView = (function () {
 
                 var renameImg = document.createElement("div");
                 renameImg.className = "rename-img";
-                renameImg.title = "Rename this file";
+                renameImg.title = "Rename this project";
                 renameImg.onclick = function (event) {
                     event.stopPropagation();
                     renameProjectDialog.open(projectProvider.renameProject.bind(null, project), project.getName());
