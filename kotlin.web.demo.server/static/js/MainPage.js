@@ -256,11 +256,6 @@ configurationManager.onFail = function (exception) {
 var converterView = new ConverterView();
 document.getElementById("java2kotlin-button").onclick = converterView.open;
 
-var argumentsInput = document.getElementById("arguments");
-argumentsInput.oninput = function () {
-    accordion.getSelectedProject().setArguments(argumentsInput.value);
-};
-
 var accordion = (function () {
     var accordion = new AccordionView(document.getElementById("examples-list"));
 
@@ -276,7 +271,7 @@ var accordion = (function () {
         generatedCodeView.clear();
         problemsView.addMessages();
         $("#result-tabs").tabs("option", "active", 0);
-        argumentsInput.value = project.getArgs();
+        argumentsInputElement.value = project.getArgs();
         configurationManager.updateConfiguration(project.getConfiguration());
         helpDialogView.updateProjectHelp(project.getHelp());
     };
@@ -367,6 +362,18 @@ var accordion = (function () {
 
     return accordion
 })();
+
+var resizableProjectTreeHolder = $("#examples-list-resizer");
+var accordionDisplayButton = document.getElementById("accordion-display-button");
+accordionDisplayButton.onclick = function () {
+    $(accordionDisplayButton).toggleClass("accordion-hidden");
+    if (resizableProjectTreeHolder.is(":visible")) {
+        resizableProjectTreeHolder.hide();
+    } else {
+        resizableProjectTreeHolder.show();
+    }
+    onAccordionResized();
+};
 
 window.onpopstate = function () {
     var projectId = getProjectIdFromUrl();
@@ -622,17 +629,19 @@ $("#runMode").selectmenu({
 });
 
 var argumentsButton = document.getElementById("argumentsButton");
-var argumentsWrapper = document.getElementById("argumentsWrapper");
+var argumentsInputElement = document.getElementById("arguments");
+argumentsInputElement.oninput = function () {
+    accordion.getSelectedProject().setArguments(argumentsInputElement.value);
+};
 
 argumentsButton.onclick = function () {
     if ($(argumentsButton).hasClass("active")) {
         $(argumentsButton).removeClass("active");
-        argumentsWrapper.style.display = "none";
+        $(argumentsInputElement).hide();
     } else {
         $(argumentsButton).addClass("active");
-        argumentsWrapper.style.display = "block";
+        $(argumentsInputElement).show()
     }
-    resizeArguments();
     editor.resize();
 };
 
@@ -642,8 +651,6 @@ document.getElementById("fullscreen-button").onclick = function () {
     var gridElement = document.getElementById("g-grid");
     var gridTopElement = document.getElementById("grid-top");
     if ($(this).hasClass("fullscreen")) {
-        var accordionWidth = $("#examples-list-resizer").outerWidth() / $(gridTopElement).width();
-
         $("[fullscreen-sensible]").removeClass("fullscreen");
         $(this).find(".text").html("Expand");
 
@@ -655,8 +662,11 @@ document.getElementById("fullscreen-button").onclick = function () {
         $(".tab-space").css("height", "");
 
         $("#examples-list-resizer").css("width", "");
-        $("#workspace").css("margin-left", "");
-        resizeArguments();
+        if(resizableProjectTreeHolder.is(":visible")) {
+            $("#workspace").css("margin-left", "");
+        } else{
+            $("#workspace").css("margin-left", 0);
+        }
         editor.resize();
     } else {
         $("[fullscreen-sensible]").addClass("fullscreen");
@@ -672,37 +682,40 @@ document.getElementById("fullscreen-button").onclick = function () {
         gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
         $(gridTopElement).css("height", gridTopHeight);
         editor.resize();
-        resizeArguments();
     }
+    updateProjectTreeMaxWidth();
     updateGridConfigurationInLocalStorage();
 };
 
-function resizeArguments() {
-    var argumentsWidth = $("#argumentsWrapper").width() - $("#argumentsWrapper").find(".text").outerWidth(true);
-    argumentsWidth -= ($("#arguments").outerWidth(true) - $("#arguments").width());
-    $("#arguments").css("width", argumentsWidth - 20);
-}
+var toolbox = document.getElementById("toolbox");
+toolbox.style.minWidth = (function(){
+    var childWidth = 0;
+    $(toolbox).children().each(function() {
+        childWidth = childWidth + $(this).outerWidth();
+    });
+    return (childWidth + 10) + "px";
+})();
 
-$("#examples-list-resizer").resizable({
+window.onresize = updateProjectTreeMaxWidth;
+
+$(resizableProjectTreeHolder).resizable({
     handles: "e",
-    maxWidth: (function () {
-        return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
-    })(),
     minWidth: 17,
-    start: function () {
-        $(this).resizable({
-            maxWidth: (function () {
-                return $("#grid-top").width() - $(".toolbox-left").outerWidth() - $(".toolbox-right").outerWidth() - 10;
-            })()
-        });
-    },
     stop: updateGridConfigurationInLocalStorage,
     resize: onAccordionResized
 });
 
+function updateProjectTreeMaxWidth(){
+    $(resizableProjectTreeHolder).resizable("option", "maxWidth", $("#grid-top").width() - parseInt(toolbox.style.minWidth));
+}
+updateProjectTreeMaxWidth();
+
 function onAccordionResized() {
-    $("#workspace").css("margin-left", $("#examples-list-resizer").outerWidth());
-    resizeArguments();
+    if ($(resizableProjectTreeHolder).is(":visible")) {
+        $("#workspace").css("margin-left", resizableProjectTreeHolder.outerWidth());
+    } else {
+        $("#workspace").css("margin-left", 0);
+    }
 }
 
 $("#on-the-fly-checkbox")
@@ -727,7 +740,7 @@ $("#grid-bottom").resizable({
 
         $(this).resizable({
             maxHeight: (function () {
-                return $("#g-grid").height() - $("#argumentsWrapper").outerHeight() - $("#toolbox").outerHeight();
+                return $("#g-grid").height() - $(argumentsInputElement).outerHeight() - $("#toolbox").outerHeight();
             })()
         });
     },

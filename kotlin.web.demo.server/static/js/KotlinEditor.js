@@ -28,7 +28,7 @@ var KotlinEditor = (function () {
             resize: function () {
                 var workspaceHeight = $("#workspace").height();
                 var toolBoxHeight = $("#toolbox").outerHeight();
-                var commandLineArgumentsHeight = $(argumentsWrapper).is(':visible') ? $(argumentsWrapper).outerHeight() : 0;
+                var commandLineArgumentsHeight = $(argumentsInputElement).is(':visible') ? $(argumentsInputElement).outerHeight() : 0;
                 var notificationsHeight = $("#editor-notifications").is(':visible') ? $("#editor-notifications").outerHeight() : 0;
                 var editorHeight = workspaceHeight - toolBoxHeight - commandLineArgumentsHeight - notificationsHeight;
                 $("#editorinput").find(".CodeMirror").css("height", editorHeight);

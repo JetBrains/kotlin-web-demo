@@ -22,7 +22,6 @@
     position: relative;
     margin-left: 25%;
     height: 100%;
-    border-left: 1px solid #969696;
 }
 
 .workspace:after {

@@ -21,41 +21,47 @@
     overflow: hidden;
 }
 
+#accordion-display-button{
+    float: left;
+    padding: 5px 6px 5px 5px;
+    margin-top: 6px;
+    background-color: #969696;
+    cursor: pointer;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+#accordion-display-button .arrow{
+    height: 11px;
+    width: 6px;
+    background: url("/static/images/icons.png") -14px 0;
+}
+
+#accordion-display-button.accordion-hidden .arrow{
+    background: url("/static/images/icons.png") -21px 0;
+}
+
 .toolbox-left {
     float: left;
+    padding-left: 5px;
     margin-bottom: -1px;
 }
 
 .toolbox-right {
     float: right;
+    padding-right: 5px;
 }
 
-/*Because arguments wrapper is very special it have no borders,
- that's why last child have left border. Definitely not the best solution, bit the easiest one*/
-.toolbox-left .buttonWrapper:last-child {
-    cursor: default;
-    border-left: 1px solid;
-    border-color: #cdcdcd;
-}
-
-.toolbox-right .buttonWrapper:first-child {
-    border-left: 1px solid;
-    border-color: #cdcdcd;
-}
-
-.toolbox-right .buttonWrapper:last-child {
-    border-right: 0;
+.toolbox-right .buttonWrapper {
+    top: 4px;
 }
 
 .buttonWrapper {
     display: inline-block;
     position: relative;
     cursor: pointer;
-    padding: 0 15px;
-    margin: 4px 0;
+    margin: 0 15px;
     text-align: center;
-    border-right: 1px solid;
-    border-color: #cdcdcd;
 }
 
 .buttonWrapper .text {
@@ -87,22 +93,28 @@
 }
 
 .argumentsButtonWrapper {
+    display: inline-block;
+    position: relative;
+    text-align: center;
     border: 0;
     padding: 0 15px;
     margin: 4px 0 -1px 0;
 }
 
+.argumentsButtonWrapper .text {
+    font-size: 12px;
+    color: #585858;
+}
+
 #argumentsButton {
+    cursor: pointer;
     padding: 0 10px 4px 10px;
     border: 1px solid transparent;
     border-bottom: 0;
 }
 
 #argumentsButton.active {
-    background: -webkit-linear-gradient(#ffffff, #f2f2f2);
-    background: -o-linear-gradient(#ffffff, #f2f2f2);
-    background: -moz-linear-gradient(#ffffff, #f2f2f2);
-    background: linear-gradient(#ffffff, #f2f2f2);
+    background: white;
     border: 1px solid #969696;
     border-bottom: 0;
     border-top-left-radius: 3px;
@@ -137,8 +149,49 @@
     font-size: 12px;
 }
 
+#runMode-button {
+    float: none;
+    outline: none;
+    top: 2px;
+    border: 1px solid #969696;
+    background-color: #f9f9f9;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 3px;
+    margin-bottom: 2px;
+}
+
+#runMode-button .ui-icon.selectmenu-arrow-icon {
+    position: static;
+    width: 7px;
+    height: 4px;
+    float: right;
+    margin-top: 3px;
+    background: url("/static/images/icons.png") -58px -66px;
+}
+
+#runMode-button .ui-selectmenu-text {
+    padding: 0;
+    line-height: 1;
+    display: inline;
+}
+
+#runMode-menu {
+    border: 1px solid #969696;
+    border-radius: 3px;
+    background-color: #ffffff;
+}
+
+#runMode-menu .ui-menu-item {
+    padding: 2px;
+}
+
+#runMode-menu .ui-menu-item.ui-state-focus {
+    margin: 0;
+    background-color: #eeeeee;
+}
+
 #runButton {
-    padding-left: 15px;
     vertical-align: baseline;
 }
 
@@ -149,102 +202,46 @@
     background: url("/static/images/icons.png") no-repeat -41px -59px;
 }
 
-#runButton .ui-button-text{
+#runButton .ui-button-text {
     line-height: 1;
 }
 
-.help {
-    margin: 1px auto;
-    font-size: 16px;
-    font-weight: bold;
-    color: #4c96bc;
-}
-
-.ui-selectmenu-button {
-    float: left;
-    text-align: left;
-    outline: none;
-    border: 1px solid #969696;
-    background-color: #f9f9f9;
-    bottom: 2px;
-    padding: 4px;
-    font-size: 12px;
-    border-radius: 3px;
-    margin-top: 4px;
-}
-
-.ui-selectmenu-menu {
-    cursor: pointer;
-    border: 1px solid #969696;
-    border-radius: 3px;
-    background-color: #ffffff;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: none;
-}
-
-.ui-menu-item {
-    padding: 2px;
-}
-
-.ui-selectmenu-open {
-    display: block;
-}
-
-.ui-front {
-    z-index: 100;
-}
-
-.ui-selectmenu-button span.ui-icon.selectmenu-arrow-icon {
-    position: static;
-    width: 7px;
-    height: 4px;
-    float: right;
-    margin-top: 3px;
-    background: url("/static/images/icons.png") -58px -66px;
-}
-
-.ui-selectmenu-button span.ui-selectmenu-text{
-    padding: 0;
-    line-height: 1;
-    display: inline;
-}
-
-.ui-menu .ui-menu-item{
-    padding: 2px;
-}
-
-.ui-selectmenu-menu .ui-state-focus {
-    margin: 0;
-    background-color: #eeeeee;
-}
-
-#argumentsWrapper {
+#arguments {
     margin-top: -1px;
-    border-top: 1px solid #969696;
+    font-size: 14px;
+    border: 0;
     border-bottom: 1px solid #969696;
-    height: 35px;
-    background-color: #f2f2f2;
-    display: block;
+    border-top: 1px solid #969696;
+    padding: 5px 10px 5px 10px;
+    outline: none;
+    box-sizing: border-box;
+    width: 100%;
 }
 
-#argumentsWrapper .text {
-    display: inline-block;
-    float: left;
-    margin-top: 9px;
-    padding-left: 4px;
-    padding-right: 4px;
-    font-size: 14px;
+input::-webkit-input-placeholder {
+    font-style: oblique;
+    color: #a3a3a3;
 }
 
-#argumentsWrapper input {
-    border: 1px solid #969696;
-    border-radius: 3px;
-    font-size: 14px;
-    padding: 2px 5px;
-    width: 65%;
-    margin: 4px;
+input:focus::-webkit-input-placeholder {
+    color: transparent;
+}
+
+
+input:-ms-input-placeholder{
+    font-style: oblique;
+    color: #a3a3a3;
+}
+
+input:focus:-ms-input-placeholder {
+    color: transparent;
+}
+
+input::-moz-placeholder {
+    font-style: oblique;
+    color: #a3a3a3;
+}
+
+input:focus::-moz-placeholder {
+    color: transparent;
 }

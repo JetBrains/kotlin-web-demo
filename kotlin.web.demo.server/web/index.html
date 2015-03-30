@@ -143,6 +143,9 @@
                         <span>No files are open</span>
                     </div>
                     <div id="toolbox">
+                        <div id="accordion-display-button">
+                            <div class="arrow"></div>
+                        </div>
                         <div class="toolbox-left">
                             <div id="saveButton" class="buttonWrapper" title="Save your program (@shortcut@)">
                                 <div class="img high-res-icon"></div>
@@ -152,7 +155,7 @@
                                 <div class="img high-res-icon"></div>
                                 <div class="text">Save as</div>
                             </div>
-                            <div class="buttonWrapper argumentsButtonWrapper">
+                            <div class="argumentsButtonWrapper">
                                 <div id="argumentsButton" class="active">
                                     <div class="img high-res-icon"></div>
                                     <div class="arrow"></div>
@@ -162,36 +165,22 @@
 
                         </div>
                         <div class="toolbox-right">
-                            <div class="buttonWrapper">
-                                <select id="runMode">
-                                    <option value="java">Java</option>
-                                    <option value="js">JavaScript</option>
-                                    <option value="canvas">JavaScript(Canvas)</option>
-                                    <option value="junit">JUnit</option>
-                                </select>
+                            <select id="runMode">
+                                <option value="java">Java</option>
+                                <option value="js">JavaScript</option>
+                                <option value="canvas">JavaScript(Canvas)</option>
+                                <option value="junit">JUnit</option>
+                            </select>
 
+                            <div class="buttonWrapper">
                                 <div id="runButton" title="Run file (@shortcut@) using run configuration">
                                     <div class="img high-res-icon"></div>
                                     <div class="text">Run</div>
                                 </div>
                             </div>
-                            <!--<div id="java2kotlin" class="buttonWrapper">-->
-                            <!--<div class="img high-res-icon" title="Convert your Java code to Kotlin"></div>-->
-                            <!--<div class="text">Convert from Java</div>-->
-                            <!--</div>-->
-
-                            <!--<div id="help" class="buttonWrapper">-->
-                                <!--<div class="help" title="Help">?</div>-->
-                                <!--<div class="text">Help</div>-->
-                            <!--</div>-->
                         </div>
                     </div>
-                    <div id="argumentsWrapper">
-                        <div class="text">
-                            Program arguments:
-                        </div>
-                        <label for="arguments"></label><input id="arguments" type="text">
-                    </div>
+                    <input id="arguments" type="text" placeholder="Program arguments">
                     <div id="editordiv">
                         <div id="editor-notifications"></div>
                         <div id="editorinput" tabindex="0">
