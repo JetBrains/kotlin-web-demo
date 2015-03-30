@@ -118,9 +118,9 @@ var InputDialogView = (function () {
             input.style.outlineColor = result.valid ? "" : "red";
             $(dialog).parent().find("button:eq(1)").button("option", "disabled", !result.valid);
             if (!result.valid && result.message != null) {
-                message.textContent = result.message;
+                message.innerHTML = result.message;
             } else {
-                message.textContent = "";
+                message.innerHTML = "";
             }
             input.focus();
         }

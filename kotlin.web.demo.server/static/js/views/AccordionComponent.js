@@ -74,6 +74,13 @@ var AccordionView = (function () {
                 return selectedProjectView;
             },
             validateNewProjectName: function (projectName) {
+                if(projectName == ""){
+                    return {valid: false, message: "Project name can't be empty"};
+                }
+                if(!(/^[a-zA-Z0-9,_\- ]+$/).test(projectName)){
+                    return {valid: false, message: "Project name can contain only the following characters:" +
+                    "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>"};
+                }
                 for (var url in projects) {
                     var project = projects[url].getProjectData();
                     if (project.getName() == projectName &&

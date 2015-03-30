@@ -87,6 +87,13 @@ var ProjectView = (function () {
                 }
             },
             validateNewFileName: function (fileName) {
+                if(fileName == ""){
+                    return {valid: false, message: "File name can't be empty"};
+                }
+                if(!(/^[a-zA-Z0-9,_\- ]+$/).test(fileName)){
+                    return {valid: false, message: "File name can contain only the following characters:" +
+                    "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>"};
+                }
                 fileName = addKotlinExtension(fileName);
                 for (var i in fileViews) {
                     if (fileViews[i].getHeaderText() == fileName) {
