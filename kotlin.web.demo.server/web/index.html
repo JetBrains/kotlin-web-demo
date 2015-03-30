@@ -69,6 +69,7 @@
 <div id="global-overlay">
     <div class="loading">
         <img src="/static/images/ajax-loader.gif">
+
         <div>Loading. Please wait.</div>
     </div>
 </div>
@@ -76,6 +77,7 @@
     <div id="global-header" class="global-header" fullscreen-sensible>
         <div class="g-layout">
             <a href="http://kotlinlang.org/" class="global-header-logo">Project Kotlin</a>
+
             <div class="webdemo-logo">Kotlin Web Demo</div>
             <div class="demo-icon"></div>
             <nav role="navigation" class="global-nav">
@@ -86,30 +88,45 @@
                 <div class="extra-nav download-button">
                     <a href="http://kotlinlang.org/#get-kotlin" class="get-kotlin-button">
                         Get Kotlin
-                        <span  id="kotlinlang-kotlin-version" class="version"></span>
+                        <span id="kotlinlang-kotlin-version" class="version"></span>
                     </a>
                 </div>
             </nav>
         </div>
     </div>
-    <div class="global-login">
+    <div class="global-toolbox">
         <div class="g-layout" fullscreen-sensible>
-            <div id="fullscreenButton" fullscreen-sensible>
-                <div class="img high-res-icon"></div>
-                <div class="text">Expand</div>
+            <div class="global-toolbox-left">
+                <div id="login">
+                    <span class="text">Log in:</span>
+
+                    <div id="login-with-facebook" class="img facebook">facebook</div>
+                    <div id="login-with-google" class="img google">google</div>
+                    <div id="login-with-twitter" class="img twitter">twitter</div>
+                </div>
+
+                <div id="logout">
+                    <div class="img"></div>
+                    <div id="username"></div>
+                    <div id="logout-button">Log out</div>
+                </div>
             </div>
 
-            <div id="login">
-                <span class="text">Log in:</span>
-                <div id="login-with-facebook" class="img facebook">facebook</div>
-                <div id="login-with-google" class="img google">google</div>
-                <div id="login-with-twitter" class="img twitter">twitter</div>
-            </div>
+            <div class="global-toolbox-right">
+                <div id="shortcuts-button" class="button">
+                    <div class="img high-res-icon"></div>
+                    <div class="text">Shortcuts</div>
+                </div>
 
-            <div id="userName">
-                <div class="img"></div>
-                <div id="userNameTitle"></div>
-                <div id="logout">Log out</div>
+                <div id="java2kotlin-button" class="button">
+                    <div class="img high-res-icon"></div>
+                    <div class="text">Convert from Java</div>
+                </div>
+
+                <div id="fullscreen-button" class="button" fullscreen-sensible>
+                    <div class="img high-res-icon"></div>
+                    <div class="text">Expand</div>
+                </div>
             </div>
         </div>
     </div>
@@ -142,6 +159,9 @@
                                     <div class="text">Arguments</div>
                                 </div>
                             </div>
+
+                        </div>
+                        <div class="toolbox-right">
                             <div class="buttonWrapper">
                                 <select id="runMode">
                                     <option value="java">Java</option>
@@ -155,17 +175,15 @@
                                     <div class="text">Run</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="toolbox-right">
-                            <div id="java2kotlin" class="buttonWrapper">
-                                <div class="img high-res-icon" title="Convert your Java code to Kotlin"></div>
-                                <div class="text">Convert from Java</div>
-                            </div>
+                            <!--<div id="java2kotlin" class="buttonWrapper">-->
+                            <!--<div class="img high-res-icon" title="Convert your Java code to Kotlin"></div>-->
+                            <!--<div class="text">Convert from Java</div>-->
+                            <!--</div>-->
 
-                            <div id="help" class="buttonWrapper">
-                                <div class="help" title="Help">?</div>
-                                <div class="text">Help</div>
-                            </div>
+                            <!--<div id="help" class="buttonWrapper">-->
+                                <!--<div class="help" title="Help">?</div>-->
+                                <!--<div class="text">Help</div>-->
+                            <!--</div>-->
                         </div>
                     </div>
                     <div id="argumentsWrapper">

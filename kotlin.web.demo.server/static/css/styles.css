@@ -21,7 +21,7 @@
 @import "kotlin-site-template/footer.css";
 @import "grid/codemirror-old.css";
 @import "grid/layout.css";
-@import "grid/login.css";
+@import "global-toolbox.css";
 @import "grid/grid-bottom.css";
 @import "grid/toolbox.css";
 @import "grid/grid-top.css";

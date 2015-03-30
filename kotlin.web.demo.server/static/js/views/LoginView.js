@@ -36,8 +36,8 @@ var LoginView = (function () {
             },
             logout: function () {
                 isLoggedIn = false;
-                $("#login").css("display", "block");
-                $("#userName").html("").css("display", "none");
+                $("#login").show();
+                $("#logout").hide();
             }
         };
 
@@ -75,15 +75,15 @@ var LoginView = (function () {
 
         function setUserName(userName, type) {
             if (userName != "") {
-                $("#login").css("display", "none");
-                $("#userName").css("display", "inline-block");
+                $("#login").hide();
+                $("#logout").show();
 
                 isLoggedIn = true;
                 userName = decodeURI(userName);
                 userName = replaceAll(userName, "\\+", " ");
 
-                $("#userNameTitle").text(userName);
-                $("#userName").find(".img").addClass(type);
+                $("#username").text(userName);
+                $("#logout").find(".img").addClass(type);
             }
         }
 

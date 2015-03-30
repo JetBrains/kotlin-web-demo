@@ -254,7 +254,7 @@ configurationManager.onFail = function (exception) {
 };
 
 var converterView = new ConverterView();
-document.getElementById("java2kotlin").onclick = converterView.open;
+document.getElementById("java2kotlin-button").onclick = converterView.open;
 
 var argumentsInput = document.getElementById("arguments");
 argumentsInput.oninput = function () {
@@ -615,7 +615,7 @@ var loginDialog = $("#login-dialog").dialog({
     autoOpen: false
 });
 
-document.getElementById("help").onclick = helpDialogView.open;
+document.getElementById("shortcuts-button").onclick = helpDialogView.open;
 
 $("#runMode").selectmenu({
     icons: {button: "selectmenu-arrow-icon"}
@@ -638,7 +638,7 @@ argumentsButton.onclick = function () {
 
 editor.resize();
 
-document.getElementById("fullscreenButton").onclick = function () {
+document.getElementById("fullscreen-button").onclick = function () {
     var gridElement = document.getElementById("g-grid");
     var gridTopElement = document.getElementById("grid-top");
     if ($(this).hasClass("fullscreen")) {
@@ -739,7 +739,7 @@ function updateGridConfigurationInLocalStorage() {
     var gridConfiguration = {
         examplesWidth: $("#examples-list-resizer").width(),
         gridBottomHeight: $("#grid-bottom").height(),
-        fullscreenMode: $("#fullscreenButton").hasClass("fullscreen")
+        fullscreenMode: $("#fullscreen-button").hasClass("fullscreen")
     };
     localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
 }
@@ -761,7 +761,7 @@ function onOutputViewResized() {
 var gridConfiguration = localStorage.getItem("gridConfiguration");
 if (gridConfiguration != null) {
     gridConfiguration = JSON.parse(gridConfiguration);
-    if (gridConfiguration.fullscreenMode) document.getElementById("fullscreenButton").click();
+    if (gridConfiguration.fullscreenMode) document.getElementById("fullscreen-button").click();
     $("#examples-list-resizer").width(gridConfiguration.examplesWidth);
     onAccordionResized();
     $("#grid-bottom").height(gridConfiguration.gridBottomHeight);

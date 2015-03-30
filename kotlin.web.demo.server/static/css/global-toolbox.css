@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-.global-login {
-    background: #dee1e4 center top;
+.global-toolbox {
     padding: 7px 0;
     overflow: hidden;
-    text-decoration: none;
+}
+
+.global-toolbox-left{
+    float: left;
+    margin-top: 4px;
 }
 
 #login {
-    float: right;
+    display: inline-block;
     position: relative;
     text-align: center;
     text-decoration: none;
@@ -54,55 +57,85 @@
     background: url("/static/images/icons.png") no-repeat -90px -75px;
 }
 
-#userName {
-    float: right;
+#logout {
+    /*float: right;*/
     display: none;
     overflow: hidden;
 }
 
-#userName .img {
+#logout .img {
     float: left;
-    margin-left: 16px;
     position: relative;
     width: 15px;
     height: 15px;
     font-size: 0;
 }
 
-#userNameTitle {
-    padding-right: 4px;
-    padding-left: 4px;
+#username {
+    padding-right: 10px;
+    padding-left: 8px;
     display: inline-block;
 }
 
-#logout {
+#logout-button {
     cursor: pointer;
     position: relative;
     display: inline-block;
-    padding-left: 6px;
+    padding-left: 12px;
     border-left: 1px solid #969696;
     color: #3164a0;
 }
 
-#fullscreenButton {
-    float: left;
-    cursor: pointer;
+.global-toolbox-right {
+    float: right;
 }
 
-#fullscreenButton .img {
+.global-toolbox-right .button {
+    display: inline-block;
+    cursor: pointer;
+    height: 24px;
+    border: 1px solid #c9c9c9;
+    border-radius: 4px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.global-toolbox-right .button .text {
+    position: relative;
+    top: 4px;
+    display: inline-block;
+    padding-left: 10px;
+    font-size: 12px;
+}
+
+.global-toolbox-right .button .img {
+    float: left;
     width: 12px;
     height: 12px;
-    float: left;
-    margin-top: 1px;
+    margin-top: 6px;
+}
+
+#fullscreen-button .img {
     background: url("/static/images/icons.png") no-repeat -1px -82px;
 }
 
-#fullscreenButton.fullscreen .img {
+#fullscreen-button.fullscreen .img {
     background: url("/static/images/icons.png") no-repeat -1px -95px;
 }
 
-#fullscreenButton .text {
-    float: left;
-    padding-left: 4px;
-    color: #3164a0;
+#java2kotlin-button .img {
+    height: 16px;
+    width: 17px;
+    margin-top: 4px;
+    background: url("/static/images/icons.png") -1px -39px;
+}
+
+#java2kotlin-button .text {
+    padding-left: 9px;
+}
+
+#shortcuts-button .img {
+    width: 13px;
+    height: 11px;
+    background: url("/static/images/icons.png") no-repeat 0 0;
 }
