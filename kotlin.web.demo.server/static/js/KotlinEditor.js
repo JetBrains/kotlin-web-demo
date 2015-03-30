@@ -47,6 +47,7 @@ var KotlinEditor = (function () {
                 return my_editor.getValue();
             },
             open: function (file) {
+                $(runButton).button("option", "disabled", false);
                 document.getElementById("workspace-overlay").style.display = "none";
                 if (file.getType() != File.TYPE.JAVA_FILE) {
                     my_editor.setOption("mode", "text/kotlin")
@@ -78,6 +79,7 @@ var KotlinEditor = (function () {
                 highlighting.removeStyles();
                 my_editor.clearHistory();
                 my_editor.setValue("");
+                $(runButton).button("option", "disabled", true);
                 document.getElementById("workspace-overlay").style.display = "block";
             },
             reloadFile: function () {

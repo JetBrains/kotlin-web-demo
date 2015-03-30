@@ -179,7 +179,7 @@ var runProvider = (function () {
     };
 
     runProvider.onComplete = function () {
-        run_button.button("option", "disabled", false);
+        $(runButton).button("option", "disabled", false);
     };
 
     runProvider.onErrorsFound = function (data, project) {
@@ -205,7 +205,7 @@ var runProvider = (function () {
 var loginProvider = new LoginProvider();
 var loginView = new LoginView(loginProvider);
 
-function getNumberOfErrorsAndWarnings(data){
+function getNumberOfErrorsAndWarnings(data) {
     var noOfErrorsAndWarnings = 0;
     for (var filename in data) {
         noOfErrorsAndWarnings += data[filename].length
@@ -401,10 +401,11 @@ editor.onCursorActivity = function (cursorPosition) {
 };
 
 
-var run_button = $("#runButton")
+var runButton = document.getElementById("runButton");
+$(runButton)
     .button()
     .click(function () {
-        run_button.button("option", "disabled", true);
+        $(runButton).button("option", "disabled", true);
         consoleView.clear();
         junitView.clear();
         generatedCodeView.clear();
@@ -502,7 +503,7 @@ var headersProvider = (function () {
 $(document).keydown(function (e) {
     var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
     if (shortcut.isPressed(e)) {
-        run_button.click();
+        runButton.click();
     } else {
         shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.save");
         if (shortcut.isPressed(e)) {
@@ -582,7 +583,7 @@ $("#saveAsButton").click(function () {
     }
 });
 
-run_button.attr("title", run_button.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName()));
+runButton.title = runButton.title.replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
 saveButton.attr("title", saveButton.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
 
 function loadShortcuts() {
