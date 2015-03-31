@@ -28,7 +28,7 @@
  */
 package bottles
 
-fun main(args : Array<String>) {
+fun main(args: Array<String>) {
   if (args.isEmpty) {
     printBottles(99)
   }
@@ -36,14 +36,14 @@ fun main(args : Array<String>) {
     try {
       printBottles(Integer.parseInt(args[0]))
     }
-    catch (e : NumberFormatException) {
+    catch (e: NumberFormatException) {
       System.err.println("You have passed '${args[0]}' as a number of bottles, " +
-                          "but it is not a valid integral number")
+                          "but it is not a valid integer number")
     }
   }
 }
 
-fun printBottles(bottleCount : Int) {
+fun printBottles(bottleCount: Int) {
   if (bottleCount <= 0) {
     println("No bottles - no song")
     return
@@ -62,7 +62,7 @@ fun printBottles(bottleCount : Int) {
           "Go to the store and buy some more, ${bottlesOfBeer(bottleCount)} on the wall.")
 }
 
-fun bottlesOfBeer(count : Int) : String =
+fun bottlesOfBeer(count: Int): String =
   when (count) {
            0 -> "no more bottles"
            1 -> "1 bottle"
@@ -74,7 +74,6 @@ fun bottlesOfBeer(count : Int) : String =
  */
 
 
-// From the std package
 // This is an extension property, i.e. a property that is defined for the
 // type Array<T>, but does not sit inside the class Array
-val <T> Array<T>.isEmpty : Boolean get() = size == 0
+val <T> Array<T>.isEmpty : Boolean get() = size() == 0

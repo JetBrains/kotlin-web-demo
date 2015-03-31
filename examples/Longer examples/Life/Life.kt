@@ -4,9 +4,6 @@
  */
 package life
 
-import java.util.Collections.*
-import java.util.*
-
 /*
  * A field where cells live. Effectively immutable
  */
@@ -19,13 +16,13 @@ class Field(
 ) {
   private val live : Array<Array<Boolean>> = Array(height) {i -> Array(width) {j -> init(i, j)}}
 
-  private fun liveCount(i : Int, j : Int)
+  private fun liveCount(i: Int, j: Int)
     = if (i in 0..height-1 &&
           j in 0..width-1 &&
           live[i][j]) 1 else 0
 
   // How many neighbors of (i, j) are alive?
-  fun liveNeighbors(i : Int, j : Int) =
+  fun liveNeighbors(i: Int, j: Int) =
     liveCount(i - 1, j - 1) +
     liveCount(i - 1, j) +
     liveCount(i - 1, j + 1) +
@@ -36,14 +33,14 @@ class Field(
     liveCount(i + 1, j + 1)
 
   // You can say field[i, j], and this function gets called
-  fun get(i : Int, j : Int) = live[i][j]
+  fun get(i: Int, j: Int) = live[i][j]
 }
 
 /**
  * This function takes the present state of the field
- * and return a new field representing the next moment of time
+ * and returns a new field representing the next moment of time
  */
-fun next(field : Field) : Field {
+fun next(field: Field) : Field {
   return Field(field.width, field.height) {i, j ->
     val n = field.liveNeighbors(i, j)
     if (field[i, j])
@@ -56,36 +53,36 @@ fun next(field : Field) : Field {
 }
 
 /** A few colony examples here */
-fun main(args : Array<String>) {
+fun main(args: Array<String>) {
   // Simplistic demo
-  printField("***", 3)
+  runGameOfLife("***", 3)
   // "Star burst"
-  printField("""
+  runGameOfLife("""
     __*__
     _***_
     __*__
   """, 10)
   // Stable colony
-  printField("""
+  runGameOfLife("""
     __*__
     _*_*_
     __*__
   """, 3)
   // Stable from the step 2
-  printField("""
+  runGameOfLife("""
     __**__
     __**__
     __**__
   """, 3)
   // Oscillating colony
-  printField("""
+  runGameOfLife("""
     __**__
     __**__
       __**__
       __**__
   """, 6)
   // A fancier oscillating colony
-  printField("""
+  runGameOfLife("""
     ---------------
     ---***---***---
     ---------------
@@ -106,8 +103,8 @@ fun main(args : Array<String>) {
 
 // UTILITIES
 
-fun printField(s : String, steps : Int) {
-  var field = makeField(s)
+fun runGameOfLife(fieldText: String, steps: Int) {
+  var field = makeField(fieldText)
   for (step in 1..steps) {
     println("Step: $step")
     for (i in 0..field.height-1) {
@@ -122,32 +119,7 @@ fun printField(s : String, steps : Int) {
 
 fun makeField(s : String) : Field {
   val lines = s.split("\n")
-  val w = max<String>(lines.toList(), comparator<String?> {o1, o2 ->
-          val l1 : Int = o1?.size ?: 0
-          val l2 = o2?.size ?: 0
-          l1 - l2
-  })
-  val data = Array(lines.size) {Array(w.size) {false}}
+  val longestLine = lines.toList().maxBy { it.length() } ?: ""
 
-  // workaround
-  for (i in data.indices) {
-    data[i] = Array(w.size) {false}
-    for (j in data[i].indices)
-      data[i][j] = false
-  }
-
-  for (line in lines.indices) {
-    for (x in lines[line].indices) {
-      val c = lines[line][x]
-      data[line][x] = c == '*'
-    }
-  }
-
-  return Field(w.size, lines.size) {i, j -> data[i][j]}
+  return Field(longestLine.length(), lines.size()) {i, j -> lines[i][j] == '*'}
 }
-
-
-
-// An excerpt from the Standard Library
-val String?.indices : IntRange get() = IntRange(0, this!!.size - 1)
-

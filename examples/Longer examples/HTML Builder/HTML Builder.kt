@@ -5,11 +5,9 @@
  * In this example we show how to describe an HTML page in Kotlin.
  *
  * See this page for details:
- * http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-style+builders
+ * http://kotlinlang.org/docs/reference/type-safe-builders.html
  */
 package html
-
-import java.util.*
 
 fun main(args: Array<String>) {
   val result =
@@ -64,8 +62,8 @@ class TextElement(val text: String): Element {
 }
 
 abstract class Tag(val name: String): Element {
-  val children: ArrayList<Element> = ArrayList<Element>()
-  val attributes = HashMap<String, String>()
+  val children = arrayListOf<Element>()
+  val attributes = hashMapOf<String, String>()
 
   protected fun initTag<T: Element>(tag: T, init: T.() -> Unit): T {
     tag.init()
@@ -128,9 +126,10 @@ class B(): BodyTag("b")
 class LI(): BodyTag("li")
 class P(): BodyTag("p")
 class H1(): BodyTag("h1")
+
 class A(): BodyTag("a") {
   public var href: String
-    get() = attributes["href"]!!
+    get() = attributes["href"]
     set(value) {
       attributes["href"] = value
     }

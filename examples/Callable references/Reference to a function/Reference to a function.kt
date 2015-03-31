@@ -1,4 +1,4 @@
-fun main(args : Array<String>) {
+fun main(args: Array<String>) {
   val numbers = listOf(1, 2, 3)
   println(numbers.filter(::isOdd))
 }

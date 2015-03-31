@@ -20,27 +20,29 @@
  */
 package maze
 
-import java.util.Collections.*
-import java.util.*
+/**
+ * Declare a point class.
+ */
+data class Point(val i: Int, val j: Int)
 
 /**
  * This function looks for a path from max.start to maze.end through
  * free space (a path does not go through walls). One can move only
- * straightly up, down, left or right, no diagonal moves allowed.
+ * straight up, down, left or right, no diagonal moves allowed.
  */
-fun findPath(maze : Maze) : MutableList<Pair<Int, Int>>? {
-  val previous = HashMap<Pair<Int, Int>, Pair<Int, Int>>()
+fun findPath(maze: Maze): List<Point>? {
+  val previous = hashMapOf<Point, Point>()
 
-  val queue = LinkedList<Pair<Int, Int>>()
-  val visited = HashSet<Pair<Int, Int>>()
+  val queue = linkedListOf<Point>()
+  val visited = hashSetOf<Point>()
 
   queue.offer(maze.start)
   visited.add(maze.start)
   while (!queue.isEmpty()) {
-    val cell = queue.poll()!!
+    val cell = queue.poll()
     if (cell == maze.end) break
 
-    for (newCell in maze.neighbors(cell.first, cell.second)) {
+    for (newCell in maze.neighbors(cell.i, cell.j)) {
       if (newCell in visited) continue
       previous.put(newCell, cell)
       queue.offer(newCell)
@@ -50,10 +52,10 @@ fun findPath(maze : Maze) : MutableList<Pair<Int, Int>>? {
 
   if (previous[maze.end] == null) return null
 
-  val path = ArrayList<Pair<Int, Int>>()
+  val path = arrayListOf<Point>()
   var current = previous[maze.end]
   while (current != maze.start) {
-    path.add(0, current!!)
+    path.add(0, current)
     current = previous[current]
   }
   return path
@@ -62,8 +64,8 @@ fun findPath(maze : Maze) : MutableList<Pair<Int, Int>>? {
 /**
  * Find neighbors of the (i, j) cell that are not walls
  */
-fun Maze.neighbors(i : Int, j : Int) : MutableList<Pair<Int, Int>> {
-  val result = ArrayList<Pair<Int, Int>>()
+fun Maze.neighbors(i: Int, j: Int): List<Point> {
+  val result = arrayListOf<Point>()
   addIfFree(i - 1, j, result)
   addIfFree(i, j - 1, result)
   addIfFree(i + 1, j, result)
@@ -71,12 +73,12 @@ fun Maze.neighbors(i : Int, j : Int) : MutableList<Pair<Int, Int>> {
   return result
 }
 
-fun Maze.addIfFree(i : Int, j : Int, result : MutableList<Pair<Int, Int>>) {
+fun Maze.addIfFree(i: Int, j: Int, result: MutableList<Point>) {
   if (i !in 0..height-1) return
   if (j !in 0..width-1) return
   if (walls[i][j]) return
 
-  result.add(Pair(i, j))
+  result.add(Point(i, j))
 }
 
 /**
@@ -88,26 +90,26 @@ class Maze(
     // Number of rows
     val height : Int,
     // true for a wall, false for free space
-    val walls : Array<out Array<out Boolean>>,
+    val walls : Array<BooleanArray>,
     // The starting point (must not be a wall)
-    val start : Pair<Int, Int>,
+    val start : Point,
     // The target point (must not be a wall)
-    val end : Pair<Int, Int>
+    val end : Point
 ) {
 }
 
 /** A few maze examples here */
 fun main(args : Array<String>) {
-  printMaze("I  $")
-  printMaze("I O $")
-  printMaze("""
+  wakThroughMaze("I  $")
+  wakThroughMaze("I O $")
+  wakThroughMaze("""
     O  $
     O
     O
     O
     O           I
   """)
-  printMaze("""
+  wakThroughMaze("""
     OOOOOOOOOOO
     O $       O
     OOOOOOO OOO
@@ -118,7 +120,7 @@ fun main(args : Array<String>) {
     O        OO
     OOOOOO   IO
   """)
-  printMaze("""
+  wakThroughMaze("""
     OOOOOOOOOOOOOOOOO
     O               O
     O$  O           O
@@ -133,14 +135,14 @@ fun main(args : Array<String>) {
 
 // UTILITIES
 
-fun printMaze(str : String) {
+fun wakThroughMaze(str: String) {
   val maze = makeMaze(str)
 
   println("Maze:")
   val path = findPath(maze)
   for (i in 0..maze.height - 1) {
     for (j in 0..maze.width - 1) {
-      val cell = Pair(i, j)
+      val cell = Point(i, j)
       print(
           if (maze.walls[i][j]) "O"
           else if (cell == maze.start) "I"
@@ -175,40 +177,24 @@ fun printMaze(str : String) {
  */
 fun makeMaze(s : String) : Maze {
   val lines = s.split("\n")
-  val w = max<String>(lines.toList(), comparator<String?> {o1, o2 ->
-    val l1 : Int = o1?.size ?: 0
-    val l2 = o2?.size ?: 0
-    l1 - l2
-  })
-  val data = Array<Array<Boolean>>(lines.size) {Array<Boolean>(w.size) {false}}
+  val longestLine = lines.toList().maxBy { it.length() } ?: ""
+  val data = Array(lines.size()) { BooleanArray(longestLine.length()) }
 
-  var start : Pair<Int, Int>? = null
-  var end : Pair<Int, Int>? = null
+  var start : Point? = null
+  var end : Point? = null
 
   for (line in lines.indices) {
     for (x in lines[line].indices) {
       val c = lines[line][x]
-      data[line][x] = c == 'O'
       when (c) {
-        'I' -> start = Pair(line, x)
-        '$' -> end = Pair(line, x)
-        else -> {}
+        'O' -> data[line][x] = true
+        'I' -> start = Point(line, x)
+        '$' -> end = Point(line, x)
       }
     }
   }
 
-  if (start == null) {
-    throw IllegalArgumentException("No starting point in the maze (should be indicated with 'I')")
-  }
-
-  if (end == null) {
-    throw IllegalArgumentException("No goal point in the maze (should be indicated with a '$' sign)")
-  }
-
-  return Maze(w.size, lines.size, data, start!!, end!!)
+  return Maze(longestLine.length(), lines.size(), data,
+      start ?: throw IllegalArgumentException("No starting point in the maze (should be indicated with 'I')"),
+      end ?: throw IllegalArgumentException("No goal point in the maze (should be indicated with a '$' sign)"))
 }
-
-
-// An excerpt from the Standard Library
-val String?.indices : IntRange get() = IntRange(0, this!!.size - 1)
-

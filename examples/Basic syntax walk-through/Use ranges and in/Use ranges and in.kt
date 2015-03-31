@@ -1,10 +1,8 @@
-import java.util.*;
-
-fun main(args : Array<String>) {
+fun main(args: Array<String>) {
   val x = Integer.parseInt(args[0])
   //Check if a number lies within a range:
   val y = 10
-  if (x in 1..y-1)
+  if (x in 1..y - 1)
     println("OK")
 
   //Iterate over a range:
@@ -13,12 +11,12 @@ fun main(args : Array<String>) {
 
   //Check if a number is out of range:
   println()
-  val array = ArrayList<String>();
+  val array = arrayListOf<String>()
   array.add("aaa")
   array.add("bbb")
   array.add("ccc")
 
-  if (x !in 0..array.size()-1)
+  if (x !in 0..array.size() - 1)
     println("Out: array has only ${array.size()} elements. x = ${x}")
 
   //Check if a collection contains an object:
@@ -30,5 +28,3 @@ fun main(args : Array<String>) {
   else
     println("No: array doesn't contains ddd")
 }
-
- 

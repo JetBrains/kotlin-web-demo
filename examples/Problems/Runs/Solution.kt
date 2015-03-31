@@ -16,8 +16,6 @@
 
 package runs
 
-import java.util.*
-
 fun runs(a : IntArray) : Int {
     if(a.isEmpty()) return 0
     var prev = a[0]
