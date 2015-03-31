@@ -363,18 +363,6 @@ var accordion = (function () {
     return accordion
 })();
 
-var resizableProjectTreeHolder = $("#examples-list-resizer");
-var accordionDisplayButton = document.getElementById("accordion-display-button");
-accordionDisplayButton.onclick = function () {
-    $(accordionDisplayButton).toggleClass("accordion-hidden");
-    if (resizableProjectTreeHolder.is(":visible")) {
-        resizableProjectTreeHolder.hide();
-    } else {
-        resizableProjectTreeHolder.show();
-    }
-    onAccordionResized();
-};
-
 window.onpopstate = function () {
     var projectId = getProjectIdFromUrl();
     if (accordion.getSelectedProject().getPublicId() != projectId) {
@@ -645,79 +633,6 @@ argumentsButton.onclick = function () {
     editor.resize();
 };
 
-editor.resize();
-
-document.getElementById("fullscreen-button").onclick = function () {
-    var gridElement = document.getElementById("g-grid");
-    var gridTopElement = document.getElementById("grid-top");
-    if ($(this).hasClass("fullscreen")) {
-        $("[fullscreen-sensible]").removeClass("fullscreen");
-        $(this).find(".text").html("Expand");
-
-        $(gridElement).css("height", "");
-        $(gridTopElement).css("height", "");
-
-        $("#grid-bottom").css("height", "");
-        $("#result-tabs").css("height", "");
-        $(".tab-space").css("height", "");
-
-        $("#examples-list-resizer").css("width", "");
-        if(resizableProjectTreeHolder.is(":visible")) {
-            $("#workspace").css("margin-left", "");
-        } else{
-            $("#workspace").css("margin-left", 0);
-        }
-        editor.resize();
-    } else {
-        $("[fullscreen-sensible]").addClass("fullscreen");
-        $(this).find(".text").html("Collapse");
-
-        var gridHeight;
-        gridHeight = $(".global-layout").height() - $(".global-login").outerHeight(true);
-        gridHeight -= ($(gridElement).outerHeight(true) - $(gridElement).height());
-        $(gridElement).css("height", gridHeight);
-
-        var gridTopHeight;
-        gridTopHeight = gridHeight - $("#statusBarWrapper").outerHeight(true) - $("#result-tabs").outerHeight();
-        gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
-        $(gridTopElement).css("height", gridTopHeight);
-        editor.resize();
-    }
-    updateProjectTreeMaxWidth();
-    updateGridConfigurationInLocalStorage();
-};
-
-var toolbox = document.getElementById("toolbox");
-toolbox.style.minWidth = (function(){
-    var childWidth = 0;
-    $(toolbox).children().each(function() {
-        childWidth = childWidth + $(this).outerWidth();
-    });
-    return (childWidth + 10) + "px";
-})();
-
-window.onresize = updateProjectTreeMaxWidth;
-
-$(resizableProjectTreeHolder).resizable({
-    handles: "e",
-    minWidth: 17,
-    stop: updateGridConfigurationInLocalStorage,
-    resize: onAccordionResized
-});
-
-function updateProjectTreeMaxWidth(){
-    $(resizableProjectTreeHolder).resizable("option", "maxWidth", $("#grid-top").width() - parseInt(toolbox.style.minWidth));
-}
-updateProjectTreeMaxWidth();
-
-function onAccordionResized() {
-    if ($(resizableProjectTreeHolder).is(":visible")) {
-        $("#workspace").css("margin-left", resizableProjectTreeHolder.outerWidth());
-    } else {
-        $("#workspace").css("margin-left", 0);
-    }
-}
-
 $("#on-the-fly-checkbox")
     .prop("checked", localStorage.getItem("highlightOnTheFly") == "true")
     .on("change", function () {
@@ -725,61 +640,6 @@ $("#on-the-fly-checkbox")
         editor.highlightOnTheFly(checkbox.checked);
     });
 editor.highlightOnTheFly(document.getElementById("on-the-fly-checkbox").checked);
-
-$("#grid-bottom").resizable({
-    handles: "n",
-    minHeight: (function () {
-        return $("#statusBarWrapper").outerHeight() + $(".result-tabs-footer").outerHeight();
-    })(),
-    start: function () {
-        $(this).resizable({
-            minHeight: (function () {
-                return $("#statusBarWrapper").outerHeight() + $(".result-tabs-footer").outerHeight();
-            })()
-        });
-
-        $(this).resizable({
-            maxHeight: (function () {
-                return $("#g-grid").height() - $(argumentsInputElement).outerHeight() - $("#toolbox").outerHeight();
-            })()
-        });
-    },
-    stop: updateGridConfigurationInLocalStorage,
-    resize: onOutputViewResized
-});
-
-function updateGridConfigurationInLocalStorage() {
-    var gridConfiguration = {
-        examplesWidth: $("#examples-list-resizer").width(),
-        gridBottomHeight: $("#grid-bottom").height(),
-        fullscreenMode: $("#fullscreen-button").hasClass("fullscreen")
-    };
-    localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
-}
-
-function onOutputViewResized() {
-    $("#grid-bottom").css("top", "");
-    $("#result-tabs").css("height", $("#grid-bottom").height() - $("#statusBarWrapper").outerHeight());
-    $(".tab-space").css("height", $("#result-tabs").height() - $(".result-tabs-footer").outerHeight());
-
-    var gridTopHeight;
-    var gridTopElement = document.getElementById("grid-top");
-    var gridHeight = $("#g-grid").height();
-    gridTopHeight = gridHeight - $("#grid-bottom").outerHeight(true);
-    gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
-    $(gridTopElement).css("height", gridTopHeight);
-    editor.resize();
-}
-
-var gridConfiguration = localStorage.getItem("gridConfiguration");
-if (gridConfiguration != null) {
-    gridConfiguration = JSON.parse(gridConfiguration);
-    if (gridConfiguration.fullscreenMode) document.getElementById("fullscreen-button").click();
-    $("#examples-list-resizer").width(gridConfiguration.examplesWidth);
-    onAccordionResized();
-    $("#grid-bottom").height(gridConfiguration.gridBottomHeight);
-    onOutputViewResized();
-}
 
 function setKotlinJsOutput() {
     Kotlin.out = new Kotlin.BufferedOutput();
