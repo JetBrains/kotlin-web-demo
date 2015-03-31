@@ -616,21 +616,9 @@ $("#runMode").selectmenu({
     icons: {button: "selectmenu-arrow-icon"}
 });
 
-var argumentsButton = document.getElementById("argumentsButton");
 var argumentsInputElement = document.getElementById("arguments");
 argumentsInputElement.oninput = function () {
     accordion.getSelectedProject().setArguments(argumentsInputElement.value);
-};
-
-argumentsButton.onclick = function () {
-    if ($(argumentsButton).hasClass("active")) {
-        $(argumentsButton).removeClass("active");
-        $(argumentsInputElement).hide();
-    } else {
-        $(argumentsButton).addClass("active");
-        $(argumentsInputElement).show()
-    }
-    editor.resize();
 };
 
 $("#on-the-fly-checkbox")

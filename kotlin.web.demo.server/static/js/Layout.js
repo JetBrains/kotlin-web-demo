@@ -19,25 +19,27 @@
  */
 
 var resizableProjectTreeHolder = document.getElementById("examples-list-resizer");
+var projectTreeDisplayButton = document.getElementById("accordion-display-button");
 var gridElement = document.getElementById("g-grid");
 var gridTopElement = document.getElementById("grid-top");
 var fullscreenButton = document.getElementById("fullscreen-button");
-var accordionDisplayButton = document.getElementById("accordion-display-button");
 var toolbox = document.getElementById("toolbox");
+var argumentsButton = document.getElementById("argumentsButton");
 
-accordionDisplayButton.onclick = function () {
-    $(accordionDisplayButton).toggleClass("accordion-hidden");
+projectTreeDisplayButton.onclick = function () {
+    $(projectTreeDisplayButton).toggleClass("accordion-hidden");
     if ($(resizableProjectTreeHolder).is(":visible")) {
         $(resizableProjectTreeHolder).hide();
     } else {
         $(resizableProjectTreeHolder).show();
     }
     onAccordionResized();
+    updateGridConfigurationInLocalStorage()
 };
 
-toolbox.style.minWidth = (function(){
+toolbox.style.minWidth = (function () {
     var childWidth = 0;
-    $(toolbox).children().each(function() {
+    $(toolbox).children().each(function () {
         childWidth = childWidth + $(this).outerWidth();
     });
     return (childWidth + 10) + "px";
@@ -57,9 +59,9 @@ fullscreenButton.onclick = function () {
         $(".tab-space").css("height", "");
 
         $("#examples-list-resizer").css("width", "");
-        if($(resizableProjectTreeHolder).is(":visible")) {
+        if ($(resizableProjectTreeHolder).is(":visible")) {
             $("#workspace").css("margin-left", "");
-        } else{
+        } else {
             $("#workspace").css("margin-left", 0);
         }
         editor.resize();
@@ -72,9 +74,9 @@ fullscreenButton.onclick = function () {
     updateGridConfigurationInLocalStorage();
 };
 
-window.onresize = function(){
+window.onresize = function () {
     updateProjectTreeMaxWidth();
-    if(isFullscreenMode()) {
+    if (isFullscreenMode()) {
         updateGridHeightFullscreen();
     }
 };
@@ -86,7 +88,7 @@ $(resizableProjectTreeHolder).resizable({
     resize: onAccordionResized
 });
 
-function updateProjectTreeMaxWidth(){
+function updateProjectTreeMaxWidth() {
     $(resizableProjectTreeHolder).resizable("option", "maxWidth", $("#grid-top").width() - parseInt(toolbox.style.minWidth));
 }
 updateProjectTreeMaxWidth();
@@ -121,6 +123,18 @@ $("#grid-bottom").resizable({
     resize: onOutputViewResized
 });
 
+argumentsButton.onclick = function () {
+    if ($(argumentsButton).hasClass("active")) {
+        $(argumentsButton).removeClass("active");
+        $(argumentsInputElement).hide();
+    } else {
+        $(argumentsButton).addClass("active");
+        $(argumentsInputElement).show()
+    }
+    editor.resize();
+    updateGridConfigurationInLocalStorage();
+};
+
 function onOutputViewResized() {
     $("#grid-bottom").css("top", "");
     $("#result-tabs").css("height", $("#grid-bottom").height() - $("#statusBarWrapper").outerHeight());
@@ -138,7 +152,9 @@ function onOutputViewResized() {
 var gridConfiguration = localStorage.getItem("gridConfiguration");
 if (gridConfiguration != null) {
     gridConfiguration = JSON.parse(gridConfiguration);
-    if (gridConfiguration.fullscreenMode) document.getElementById("fullscreen-button").click();
+    if (gridConfiguration.fullscreenMode) fullscreenButton.click();
+    if (!gridConfiguration.argumentsVisible) argumentsButton.click();
+    if (!gridConfiguration.projectTreeVisible) projectTreeDisplayButton.click();
     $("#examples-list-resizer").width(gridConfiguration.examplesWidth);
     onAccordionResized();
     $("#grid-bottom").height(gridConfiguration.gridBottomHeight);
@@ -147,14 +163,16 @@ if (gridConfiguration != null) {
 
 function updateGridConfigurationInLocalStorage() {
     var gridConfiguration = {
-        examplesWidth: $("#examples-list-resizer").width(),
+        examplesWidth: $(resizableProjectTreeHolder).width(),
         gridBottomHeight: $("#grid-bottom").height(),
-        fullscreenMode: $("#fullscreen-button").hasClass("fullscreen")
+        fullscreenMode: isFullscreenMode(),
+        argumentsVisible: $(argumentsInputElement).is(":visible"),
+        projectTreeVisible: $(resizableProjectTreeHolder).is(":visible")
     };
     localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
 }
 
-function updateGridHeightFullscreen(){
+function updateGridHeightFullscreen() {
     var gridHeight;
     gridHeight = $(".global-layout").height() - $(".global-toolbox").outerHeight(true);
     gridHeight -= ($(gridElement).outerHeight(true) - $(gridElement).height());
@@ -167,7 +185,7 @@ function updateGridHeightFullscreen(){
     editor.resize();
 }
 
-function isFullscreenMode(){
+function isFullscreenMode() {
     return $(fullscreenButton).hasClass("fullscreen");
 }
 
