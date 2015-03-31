@@ -8,13 +8,13 @@ package life
  * A field where cells live. Effectively immutable
  */
 class Field(
-  val width : Int,
-  val height : Int,
+  val width: Int,
+  val height: Int,
   // This function tells the constructor which cells are alive
   // if init(i, j) is true, the cell (i, j) is alive
-  init : (Int, Int) -> Boolean
+  init: (Int, Int) -> Boolean
 ) {
-  private val live : Array<Array<Boolean>> = Array(height) {i -> Array(width) {j -> init(i, j)}}
+  private val live: Array<Array<Boolean>> = Array(height) {i -> Array(width) {j -> init(i, j)}}
 
   private fun liveCount(i: Int, j: Int)
     = if (i in 0..height-1 &&
@@ -40,7 +40,7 @@ class Field(
  * This function takes the present state of the field
  * and returns a new field representing the next moment of time
  */
-fun next(field: Field) : Field {
+fun next(field: Field): Field {
   return Field(field.width, field.height) {i, j ->
     val n = field.liveNeighbors(i, j)
     if (field[i, j])
@@ -117,7 +117,7 @@ fun runGameOfLife(fieldText: String, steps: Int) {
   }
 }
 
-fun makeField(s : String) : Field {
+fun makeField(s: String): Field {
   val lines = s.split("\n")
   val longestLine = lines.toList().maxBy { it.length() } ?: ""
 

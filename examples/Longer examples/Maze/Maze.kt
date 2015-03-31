@@ -86,30 +86,29 @@ fun Maze.addIfFree(i: Int, j: Int, result: MutableList<Point>) {
  */
 class Maze(
     // Number or columns
-    val width : Int,
+    val width: Int,
     // Number of rows
-    val height : Int,
+    val height: Int,
     // true for a wall, false for free space
-    val walls : Array<BooleanArray>,
+    val walls: Array<BooleanArray>,
     // The starting point (must not be a wall)
-    val start : Point,
+    val start: Point,
     // The target point (must not be a wall)
-    val end : Point
-) {
-}
+    val end: Point
+)
 
 /** A few maze examples here */
-fun main(args : Array<String>) {
-  wakThroughMaze("I  $")
-  wakThroughMaze("I O $")
-  wakThroughMaze("""
+fun main(args: Array<String>) {
+  walkThroughMaze("I  $")
+  walkThroughMaze("I O $")
+  walkThroughMaze("""
     O  $
     O
     O
     O
     O           I
   """)
-  wakThroughMaze("""
+  walkThroughMaze("""
     OOOOOOOOOOO
     O $       O
     OOOOOOO OOO
@@ -120,7 +119,7 @@ fun main(args : Array<String>) {
     O        OO
     OOOOOO   IO
   """)
-  wakThroughMaze("""
+  walkThroughMaze("""
     OOOOOOOOOOOOOOOOO
     O               O
     O$  O           O
@@ -135,7 +134,7 @@ fun main(args : Array<String>) {
 
 // UTILITIES
 
-fun wakThroughMaze(str: String) {
+fun walkThroughMaze(str: String) {
   val maze = makeMaze(str)
 
   println("Maze:")
@@ -175,13 +174,13 @@ fun wakThroughMaze(str: String) {
  *    O               O
  *    OOOOOOOOOOOOOOOOO
  */
-fun makeMaze(s : String) : Maze {
+fun makeMaze(s: String): Maze {
   val lines = s.split("\n")
   val longestLine = lines.toList().maxBy { it.length() } ?: ""
   val data = Array(lines.size()) { BooleanArray(longestLine.length()) }
 
-  var start : Point? = null
-  var end : Point? = null
+  var start: Point? = null
+  var end: Point? = null
 
   for (line in lines.indices) {
     for (x in lines[line].indices) {

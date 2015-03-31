@@ -8,7 +8,7 @@
  */
 package palindrome
 
-fun isPalindrome(s : String) : Boolean {
+fun isPalindrome(s: String): Boolean {
   // Write your solution here
   return false
 }

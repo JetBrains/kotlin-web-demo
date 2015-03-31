@@ -12,7 +12,7 @@
  */
 package runs
 
-fun runs(a : IntArray) : Int {
+fun runs(a: IntArray): Int {
   // Write your solution here
   return 0
 }

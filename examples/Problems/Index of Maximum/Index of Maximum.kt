@@ -4,6 +4,6 @@
  */
 package maxindex
 
-fun indexOfMax(a : IntArray) : Int? {
+fun indexOfMax(a: IntArray): Int? {
   return 0
 }
