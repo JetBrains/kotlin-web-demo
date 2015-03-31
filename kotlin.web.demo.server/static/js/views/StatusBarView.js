@@ -34,7 +34,7 @@ var ActionStatusMessages = {
     get_highlighting_fail: "Can't get errors/warnings.",
     get_completion_ok: "Completion proposal list was loaded from server.",
     get_completion_fail: "Can't get completion proposal list from server.",
-    run_java_ok: "Compilation competed successfully.",
+    run_java_ok: "Compilation completed successfully.",
     run_java_fail: "Can't get program output.",
     run_js_ok: "Translation competed successfully.",
     run_js_fail: "Can't get translation result from server.",
