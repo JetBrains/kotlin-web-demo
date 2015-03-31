@@ -111,17 +111,17 @@
 
 #typeCheckingWrapper {
     margin-top: 10px;
+    margin-right: 4px;
     float: right;
 }
 
 #typeCheckingWrapper input {
     float: left;
+    margin-right: 4px;
 }
 
 #typeCheckingWrapper .text {
     display: inline-block;
-    padding-right: 4px;
-    padding-left: 4px;
     font-size: 12px;
     color: #222222;
 }
