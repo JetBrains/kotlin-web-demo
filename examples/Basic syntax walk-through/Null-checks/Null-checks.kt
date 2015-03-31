@@ -5,7 +5,7 @@ fun parseInt(str: String): Int? {
     try {
         return Integer.parseInt(str)
     } catch (e: NumberFormatException) {
-        println("One of argument isn't Int")
+        println("One of the arguments isn't Int")
     }
     return null
 }
@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
         if (x != null && y != null) {
             print(x * y) // Now we can
         } else {
-            println("One of arguments is null")
-        }
+            println("One of the arguments is null")
+    }
     }
 }

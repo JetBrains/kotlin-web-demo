@@ -36,7 +36,7 @@ fun main(args: Array<String>) {
             printBottles(Integer.parseInt(args[0]))
         } catch (e: NumberFormatException) {
             System.err.println("You have passed '${args[0]}' as a number of bottles, " +
-                    "but it is not a valid integral number")
+                    "but it is not a valid integer number")
         }
     }
 }
@@ -72,7 +72,6 @@ fun bottlesOfBeer(count: Int): String =
  */
 
 
-// From the std package
 // This is an extension property, i.e. a property that is defined for the
 // type Array<T>, but does not sit inside the class Array
-val <T> Array<T>.isEmpty: Boolean get() = size == 0
+val <T> Array<T>.isEmpty: Boolean get() = size() == 0

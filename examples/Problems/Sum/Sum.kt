@@ -1,5 +1,5 @@
 /*
- * Your task is to implement the sum() function so that it computes a sum of
+ * Your task is to implement the sum() function so that it computes the sum of
  * all elements in the given array a.
  */
 package sum

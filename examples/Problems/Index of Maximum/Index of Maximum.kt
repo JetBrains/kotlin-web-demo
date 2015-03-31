@@ -1,6 +1,6 @@
 /*
- * Your task is to implement the indexOfMax() function so that it computes returns
- * the greatest index of the greatest element in the array, or null if the array is empty
+ * Your task is to implement the indexOfMax() function so that it returns
+ * the index of the largest element in the array, or null if the array is empty.
  */
 package maxindex
 
