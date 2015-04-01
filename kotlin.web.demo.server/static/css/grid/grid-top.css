@@ -46,6 +46,19 @@
     background: #ffffd7; !important;
 }
 
+#editordiv{
+    box-sizing: border-box;
+    border-top: 1px solid #969696;
+}
+
+#editorinput {
+    height: 100%;
+}
+
+#editordiv .CodeMirror{
+    height: 100%;
+}
+
 #editordiv .CodeMirror-lines{
     padding: 0;
 }

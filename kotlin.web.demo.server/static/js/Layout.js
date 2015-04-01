@@ -64,7 +64,7 @@ fullscreenButton.onclick = function () {
         } else {
             $("#workspace").css("margin-left", 0);
         }
-        editor.resize();
+        updateEditorHeight();
     } else {
         $("[fullscreen-sensible]").addClass("fullscreen");
         $(this).find(".text").html("Collapse");
@@ -83,7 +83,7 @@ window.onresize = function () {
 
 $(resizableProjectTreeHolder).resizable({
     handles: "e",
-    minWidth: 17,
+    minWidth: 215,
     stop: updateGridConfigurationInLocalStorage,
     resize: onAccordionResized
 });
@@ -131,7 +131,7 @@ argumentsButton.onclick = function () {
         $(argumentsButton).addClass("active");
         $(argumentsInputElement).show()
     }
-    editor.resize();
+    updateEditorHeight();
     updateGridConfigurationInLocalStorage();
 };
 
@@ -146,7 +146,7 @@ function onOutputViewResized() {
     gridTopHeight = gridHeight - $("#grid-bottom").outerHeight(true);
     gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
     $(gridTopElement).css("height", gridTopHeight);
-    editor.resize();
+    updateEditorHeight();
 }
 
 var gridConfiguration = localStorage.getItem("gridConfiguration");
@@ -160,6 +160,7 @@ if (gridConfiguration != null) {
     $("#grid-bottom").height(gridConfiguration.gridBottomHeight);
     onOutputViewResized();
 }
+updateEditorHeight();
 
 function updateGridConfigurationInLocalStorage() {
     var gridConfiguration = {
@@ -172,6 +173,16 @@ function updateGridConfigurationInLocalStorage() {
     localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
 }
 
+function updateEditorHeight(){
+    var workspaceHeight = $(gridTopElement).height();
+    var toolBoxHeight = $(toolbox).outerHeight();
+    var commandLineArgumentsHeight = $(argumentsInputElement).is(':visible') ? $(argumentsInputElement).outerHeight() : 0;
+    var notificationsHeight = $("#editor-notifications").is(':visible') ? $("#editor-notifications").outerHeight() : 0;
+    var editorHeight = workspaceHeight - toolBoxHeight - commandLineArgumentsHeight - notificationsHeight;
+    document.getElementById("editordiv").style.height = editorHeight + "px";
+    editor.refresh()
+}
+
 function updateGridHeightFullscreen() {
     var gridHeight;
     gridHeight = $(".global-layout").height() - $(".global-toolbox").outerHeight(true);
@@ -182,11 +193,9 @@ function updateGridHeightFullscreen() {
     gridTopHeight = gridHeight - $("#statusBarWrapper").outerHeight(true) - $("#result-tabs").outerHeight();
     gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
     $(gridTopElement).css("height", gridTopHeight);
-    editor.resize();
+    updateEditorHeight()
 }
 
 function isFullscreenMode() {
     return $(fullscreenButton).hasClass("fullscreen");
 }
-
-editor.resize();

@@ -25,13 +25,7 @@ var KotlinEditor = (function () {
     function KotlinEditor() {
 
         var instance = {
-            resize: function () {
-                var workspaceHeight = $("#workspace").height();
-                var toolBoxHeight = $("#toolbox").outerHeight();
-                var commandLineArgumentsHeight = $(argumentsInputElement).is(':visible') ? $(argumentsInputElement).outerHeight() : 0;
-                var notificationsHeight = $("#editor-notifications").is(':visible') ? $("#editor-notifications").outerHeight() : 0;
-                var editorHeight = workspaceHeight - toolBoxHeight - commandLineArgumentsHeight - notificationsHeight;
-                $("#editorinput").find(".CodeMirror").css("height", editorHeight);
+            refresh: function () {
                 my_editor.refresh();
             },
             setCursor: function (lineNo, charNo) {
