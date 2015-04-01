@@ -39,7 +39,7 @@
     display: inline-block;
     width: 5px;
     height: 10px;
-    background: url("/static/images/icons.png") no-repeat -47px -92px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -550px;
     position: relative;
     top: 3px;
 }
@@ -64,7 +64,7 @@
     display: inline-block;
     width: 7px;
     height: 7px;
-    background: url("/static/images/icons.png") no-repeat -38px -92px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -600px;
     top: 6px;
     position: relative;
 }
@@ -146,15 +146,15 @@
     background-color: #d8d8d8;
 }
 
-.examples-project-name .img {
+.examples-project-name>.icon {
     position: absolute;
     width: 15px;
     height: 13px;
-    background: url("/static/images/icons.png") -53px -91px;
+    background: url("/static/images/icons_all_sprite.png") -50px -0px;
 }
 
-.examples-project-name.modified .img {
-    background: url("/static/images/icons.png") -69px -91px;
+.examples-project-name.modified>.icon {
+    background: url("/static/images/icons_all_sprite.png") -50px -50px;
 }
 
 #examples-list .ui-icon {
@@ -174,9 +174,13 @@
     color: #3164a0;
 }
 
-.examples-folder-name:hover .icons,
 .example-filename:hover .icons,
 .examples-project-name:hover .icons {
+    display: inline-block;
+}
+
+.examples-folder-name .icons{
+    margin-top: 0;
     display: inline-block;
 }
 
@@ -185,53 +189,48 @@
     display: none;
     background: inherit;
     padding-left: 4px;
+    margin-top: 8px;
     top: 0;
     right: 0;
 }
 
-.new-file-img:hover {
-    opacity: 1.0;
-}
-
-.new-file-img {
-    opacity: 0.7;
+.new-file.icon {
     float: left;
     cursor: pointer;
-    height: 18px;
-    width: 16px;
-    margin-top: 6px;
+    height: 13px;
+    width: 13px;
     margin-right: 4px;
-    background: url("/static/images/icons.png") no-repeat -65px -39px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -250px;
 }
 
-.rename-img:hover {
-    opacity: 1.0;
+.new-file.icon:hover{
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -300px;
 }
 
-.rename-img {
-    opacity: 0.7;
+.delete.icon {
     float: left;
     cursor: pointer;
-    height: 11px;
-    width: 11px;
-    margin-top: 8px;
-    margin-right: 4px;
-    background: url("/static/images/icons.png") no-repeat -85px -58px;
-}
-
-.delete-img:hover {
-    opacity: 1.0;
-}
-
-.delete-img {
-    opacity: 0.9;
-    float: left;
-    cursor: pointer;
-    height: 7px;
-    width: 6px;
-    margin-top: 11px;
+    height: 13px;
+    width: 13px;
     margin-right: 6px;
-    background: url("/static/images/icons.png") no-repeat -20px -39px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -350px;
+}
+
+.delete.icon:hover {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -400px;
+}
+
+.rename.icon {
+    float: left;
+    cursor: pointer;
+    height: 13px;
+    width: 13px;
+    margin-right: 4px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -450px;
+}
+
+.rename.icon:hover {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -500px;
 }
 
 .example-filename {
@@ -268,7 +267,7 @@
     white-space: normal;
 }
 
-.example-filename .icon {
+.example-filename>.icon {
     position: absolute;
     float: left;
     width: 13px;
@@ -280,44 +279,44 @@
     margin-top: 2px;
 }
 
-.example-filename.modified .icon {
+.example-filename.modified>.icon {
     width: 15px;
     height: 18px;
 }
 
 .icon.kotlin {
-    background: url("/static/images/icons.png") no-repeat -0px -111px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -300px;
 }
 
 .icon.java.unmodifiable {
     width: 23px;
     height: 16px;
     margin-left: -10px;
-    background: url("/static/images/icons.png") no-repeat -78px -109px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -800px;
 }
 
 .icon.kotlin.unmodifiable {
     width: 23px;
     height: 16px;
     margin-left: -10px;
-    background: url("/static/images/icons.png") no-repeat -54px -109px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -500px;
 }
 
-.example-filename.modified .icon.kotlin {
-    background: url("/static/images/icons.png") no-repeat -14px -109px;
+.example-filename.modified>.icon.kotlin {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -350px;
 }
 
 .icon.kotlin-test.unmodifiable {
     width: 23px;
     height: 19px;
     margin-left: -10px;
-    background: url("/static/images/icons.png") no-repeat -30px -109px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -550px;
 }
 
-.newProjectButton {
+.new-project.icon {
     width: 17px;
     height: 15px;
     margin-top: 7px;
     margin-right: 3px;
-    background: url("/static/images/icons.png") no-repeat -47px -39px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -200px;
 }

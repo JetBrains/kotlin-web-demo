@@ -228,7 +228,7 @@ var ProjectView = (function () {
             $(contentElement).slideUp();
             headerElement.className = "examples-project-name depth-1";
             var img = document.createElement("div");
-            img.className = "img high-res-icon";
+            img.className = "icon";
             headerElement.appendChild(img);
             headerElement.onclick = function () {
                 instance.onHeaderClick(header.publicId);
@@ -254,7 +254,7 @@ var ProjectView = (function () {
 
             if (header.type == ProjectType.USER_PROJECT) {
                 var addFileImg = document.createElement("div");
-                addFileImg.className = "new-file-img high-res-icon";
+                addFileImg.className = "new-file icon";
                 addFileImg.onclick = function (event) {
                     event.stopPropagation();
                     newFileDialog.open(fileProvider.addNewFile.bind(null, project), "Untitled");
@@ -262,7 +262,7 @@ var ProjectView = (function () {
                 actionIconsElement.appendChild(addFileImg);
 
                 var renameImg = document.createElement("div");
-                renameImg.className = "rename-img";
+                renameImg.className = "rename icon";
                 renameImg.title = "Rename this project";
                 renameImg.onclick = function (event) {
                     event.stopPropagation();
@@ -273,7 +273,7 @@ var ProjectView = (function () {
 
             if (header.type == ProjectType.USER_PROJECT || header.type == ProjectType.PUBLIC_LINK) {
                 var deleteButton = document.createElement("div");
-                deleteButton.className = "delete-img";
+                deleteButton.className = "delete icon";
                 deleteButton.title = "Delete this project";
                 deleteButton.onclick = function (event) {
                     if (confirm("Delete project " + header.name + "?")) {

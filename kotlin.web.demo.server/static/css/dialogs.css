@@ -42,7 +42,13 @@
     font-size: 0;
     height: 12px;
     width: 12px;
-    background: url("/static/images/icons.png") no-repeat -84px -40px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -300px;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .ui-dialog-titlebar .ui-dialog-titlebar-close {
+        background-image: url("/static/images/icons@2x.png");
+        background-size: 200px 900px;
+    }
 }
 
 .ui-dialog .ui-dialog-content {
@@ -93,7 +99,7 @@
     padding-top: 15px;
 }
 
-.login-with-colored {
+.login-icons .icon {
     display: inline-block;
     cursor: pointer;
     margin-left: 16px;
@@ -103,20 +109,20 @@
     font-size: 0;
 }
 
-.login-with-colored:first-child {
+.login-icons .icon:first-child {
     margin-left: 0;
 }
 
-.colored-facebook {
-    background: url("/static/images/icons.png") no-repeat 0 -16px;
+.facebook_23px {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px 0;
 }
 
-.colored-google {
-    background: url("/static/images/icons.png") no-repeat -42px -16px;
+.google_23px {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -50px;
 }
 
-.colored-twitter {
-    background: url("/static/images/icons.png") no-repeat -84px -16px;
+.twitter_23px {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -100px;
 }
 
 #input-dialog {

@@ -119,7 +119,7 @@ var FileView = (function () {
             if (projectView.getType() == ProjectType.USER_PROJECT) {
                 if (file.isModifiable()) {
                     var renameImg = document.createElement("div");
-                    renameImg.className = "rename-img high-res-icon";
+                    renameImg.className = "rename icon";
                     renameImg.title = "Rename file";
                     renameImg.onclick = function (event) {
                         var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), file.rename);
@@ -135,7 +135,7 @@ var FileView = (function () {
                 }
 
                 var deleteImg = document.createElement("div");
-                deleteImg.className = "delete-img high-res-icon";
+                deleteImg.className = "delete icon";
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
                     if (confirm("Delete file " + file.getName())) {

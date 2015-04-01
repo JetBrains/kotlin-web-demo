@@ -31,8 +31,8 @@
 @import "fullscreen.css";
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .high-res-icon {
-        background-image: url("/static/images/icons@2x.png");
-        background-size: 109px 129px;
+    .icon {
+        background-image: url("/static/images/icons_all_sprite@2x.png");
+        background-size: 200px 900px;
     }
 }

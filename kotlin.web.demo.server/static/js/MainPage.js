@@ -458,9 +458,11 @@ var projectProvider = (function () {
     var projectProvider = new ProjectProvider();
 
     projectProvider.onProjectLoaded = function (projectContent) {
+        statusBarView.setStatus(ActionStatusMessages.load_project_ok)
     };
 
     projectProvider.onFail = function () {
+        statusBarView.setStatus(ActionStatusMessages.load_project_fail)
     };
 
     projectProvider.onNewProjectAdded = function (name, projectId, fileId) {

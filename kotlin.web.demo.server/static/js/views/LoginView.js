@@ -83,7 +83,7 @@ var LoginView = (function () {
                 userName = replaceAll(userName, "\\+", " ");
 
                 $("#username").text(userName);
-                $("#logout").find(".img").addClass(type);
+                $("#logout").find(".icon").addClass(type);
             }
         }
 

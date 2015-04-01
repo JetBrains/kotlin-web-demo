@@ -31,14 +31,17 @@
     border-top-right-radius: 3px;
 }
 
-#accordion-display-button .arrow{
+#accordion-display-button .icon{
     height: 11px;
     width: 6px;
-    background: url("/static/images/icons.png") -14px 0;
+    background: url("/static/images/icons_all_sprite.png") -100px -600px;
 }
 
-#accordion-display-button.accordion-hidden .arrow{
-    background: url("/static/images/icons.png") -21px 0;
+#accordion-display-button.accordion-hidden .icon{
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
 }
 
 .toolbox-left {
@@ -69,27 +72,20 @@
     color: #585858;
 }
 
-#java2kotlin .img {
-    height: 16px;
-    width: 17px;
-    margin: 1px auto;
-    background: url("/static/images/icons.png") -1px -39px;
-}
-
-#saveButton .img {
+#saveButton .icon {
     height: 12px;
     width: 12px;
     margin: 2px auto;
-    background: url("/static/images/icons.png") -21px -59px;
+    background: url("/static/images/icons_all_sprite.png") -100px -50px;
 }
 
-#saveAsButton .img {
+#saveAsButton .icon {
     height: 15px;
     width: 16px;
     position: relative;
     top: 1px;
     margin: 0 auto;
-    background: url("/static/images/icons.png") -19px -73px;
+    background: url("/static/images/icons_all_sprite.png") -100px -150px;
 }
 
 .argumentsButtonWrapper {
@@ -121,28 +117,24 @@
     border-top-right-radius: 3px;
 }
 
-#argumentsButton .img {
+#argumentsButton .icon {
     display: inline-block;
     width: 13px;
     height: 11px;
     margin: 3px auto;
-    background: url("/static/images/icons.png") no-repeat -2px -60px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -250px;
 }
 
 #argumentsButton .arrow {
     display: inline-block;
-    width: 4px;
-    height: 7px;
+    width: 7px;
+    height: 4px;
     margin: auto auto 5px 5px;
-    background: url("/static/images/icons.png") no-repeat -58px -58px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -750px;
 }
 
 #argumentsButton.active .arrow {
-    display: inline-block;
-    width: 7px;
-    height: 4px;
-    margin: auto auto 5px 4px;
-    background: url("/static/images/icons.png") no-repeat -58px -66px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -700px;
 }
 
 #runMode {
@@ -167,7 +159,7 @@
     height: 4px;
     float: right;
     margin-top: 3px;
-    background: url("/static/images/icons.png") -58px -66px;
+    background: url("/static/images/icons_all_sprite.png") -100px -750px;
 }
 
 #runMode-button .ui-selectmenu-text {
@@ -195,11 +187,11 @@
     vertical-align: baseline;
 }
 
-#runButton .img {
+#runButton .icon {
     height: 13px;
     width: 11px;
     margin: 2px auto;
-    background: url("/static/images/icons.png") no-repeat -41px -59px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -350px;
 }
 
 #runButton .ui-button-text {
