@@ -28,6 +28,7 @@ var argumentsButton = document.getElementById("argumentsButton");
 
 projectTreeDisplayButton.onclick = function () {
     $(projectTreeDisplayButton).toggleClass("accordion-hidden");
+    $(toolbox).toggleClass("accordion-hidden");
     if ($(resizableProjectTreeHolder).is(":visible")) {
         $(resizableProjectTreeHolder).hide();
     } else {
