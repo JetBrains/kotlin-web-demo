@@ -1,3 +1,7 @@
+/**
+ * See http://kotlinlang.org/docs/reference/control-flow.html#when-expression
+ */
+
 fun main(args: Array<String>) {
     cases("Hello")
     cases(1)

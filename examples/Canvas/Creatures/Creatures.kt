@@ -1,6 +1,7 @@
-/*
-  In this example strange creatures are watching the kotlin logo. You can drag'n'drop them as well as the logo.
-  Doubleclick to add more creatures but be careful. They may be watching you!
+/**
+ * In this example strange creatures are watching the kotlin logo.
+ * You can drag'n'drop them as well as the logo. Doubleclick to add
+ * more creatures but be careful. They may be watching you!
 */
 package creatures
 

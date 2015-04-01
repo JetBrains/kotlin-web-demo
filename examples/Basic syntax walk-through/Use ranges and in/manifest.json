@@ -8,6 +8,5 @@
     ],
     "args": "4",
     "confType": "java",
-    "help": "Check if a number lies within a range.<br/>Check if a number is out of range.<br/>Check if a collection contains an object.<br/>See <a href=\"http://kotlinlang.org/docs/reference/ranges.html#ranges\">ranges</a>",
     "expectedOutput": "OK</br>1 2 3 4 5 </br>Out: array has only 3 elements. x = 4</br>Yes: array contains aaa</br>No: array doesn't contains ddd</br>"
 }

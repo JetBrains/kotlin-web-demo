@@ -137,26 +137,6 @@
     color: red;
 }
 
-#example-help {
-    border: 0 solid #969696;
-    padding: 10px 80px 10px 15px;
-    border-bottom-width: 1px;
-    line-height: 16px;
-    overflow: auto;
-}
-
-#example-help p {
-    padding: 4px;
-}
-
-#example-help a {
-    text-decoration: none;
-}
-
-#example-help a:focus {
-    outline: none;
-}
-
 #shortcuts-help {
     line-height: 16px;
     margin: 6px;

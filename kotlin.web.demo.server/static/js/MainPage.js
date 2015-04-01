@@ -123,7 +123,9 @@ canvas = document.getElementById("mycanvas");
 canvas.setAttribute("width", canvasDialog.dialog("option", "width") + "");
 canvas.setAttribute("height", (canvasDialog.dialog("option", "height") - 30) + "");
 
-var helpDialogView = new HelpDialogView();
+var shortcutsHelpDialog = new ShortcutsHelpView();
+document.getElementById("shortcuts-button").onclick = shortcutsHelpDialog.open;
+
 var helpModelForWords = new HelpModel("Words");
 var helpViewForWords = new HelpView(helpModelForWords);
 helpViewForWords.hide();
@@ -273,7 +275,6 @@ var accordion = (function () {
         $("#result-tabs").tabs("option", "active", 0);
         argumentsInputElement.value = project.getArgs();
         configurationManager.updateConfiguration(project.getConfiguration());
-        helpDialogView.updateProjectHelp(project.getHelp());
     };
 
     accordion.onSelectFile = function (previousFile, currentFile) {
@@ -582,10 +583,10 @@ runButton.title = runButton.title.replace("@shortcut@", actionManager.getShortcu
 saveButton.attr("title", saveButton.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
 
 function loadShortcuts() {
-    helpDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getKeyNames(), "Code completion");
-    helpDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.run").getKeyNames(), "Run program");
-    helpDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getKeyNames(), "Reformat selected fragment");
-    helpDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.save").getKeyNames(), "Save current project");
+    shortcutsHelpDialog.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getKeyNames(), "Code completion");
+    shortcutsHelpDialog.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.run").getKeyNames(), "Run program");
+    shortcutsHelpDialog.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getKeyNames(), "Reformat selected fragment");
+    shortcutsHelpDialog.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.save").getKeyNames(), "Save current project");
 }
 
 window.onbeforeunload = function () {
@@ -609,8 +610,6 @@ var loginDialog = $("#login-dialog").dialog({
     width: 300,
     autoOpen: false
 });
-
-document.getElementById("shortcuts-button").onclick = helpDialogView.open;
 
 $("#runMode").selectmenu({
     icons: {button: "selectmenu-arrow-icon"}

@@ -25,8 +25,6 @@ public class Project {
     public String name;
     public String args = "";
     public String confType = "java";
-
-    public String help = "";
     public List<ProjectFile> files;
     public List<String> readOnlyFileNames = new ArrayList<>();
     public String expectedOutput;
@@ -67,7 +65,6 @@ public class Project {
                    String confType,
                    String originUrl,
                    String expectedOutput,
-                   String help,
                    List<ProjectFile> files,
                    List<String> readOnlyFileNames) {
         this.name = name;
@@ -76,7 +73,6 @@ public class Project {
         this.originUrl = originUrl;
         this.files = files;
         this.expectedOutput = expectedOutput;
-        this.help = help;
         this.readOnlyFileNames = readOnlyFileNames;
     }
 }

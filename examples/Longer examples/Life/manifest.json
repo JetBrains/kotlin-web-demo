@@ -8,6 +8,5 @@
     ],
     "args": "",
     "confType": "java",
-    "help": "<p>This is a straightforward implementation of The Game of Life See <a href=\"http://en.wikipedia.org/wiki/Conway's_Game_of_Life\">Wikipedia</a></p>",
     "expectedOutputFile": "expected output.txt"
 }

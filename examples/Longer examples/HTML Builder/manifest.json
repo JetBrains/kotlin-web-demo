@@ -8,6 +8,5 @@
     ],
     "args": "",
     "confType": "java",
-    "help": " <p>This is an example of a <b>Type-Safe Groovy-style Builder</b>.<br/>Builders are good for declaratively describing data in your code.In this example we show how to describe an HTML page in Kotlin.See <a href='http://kotlinlang.org/docs/reference/type-safe-builders.html#a-type-safe-builder-example'>this page</a> for details.</p>",
     "expectedOutputFile": "expected output.txt"
 }

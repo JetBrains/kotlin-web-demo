@@ -8,6 +8,5 @@
     ],
     "args": "",
     "confType": "java",
-    "help": "<p>There's some new syntax: you can say <b>val 'property name': 'Type' by 'expression'</b>. The expression after by is the delegate, because get() and set() methods corresponding to the property will be delegated to it.  Property delegates don't have to implement any interface, but they have to provide methods named get() and set() to be called.</p>",
     "expectedOutput": "Example Class, thank you for delegating 'p' to me!</br>NEW has been assigned to p in Example Class</br>"
 }

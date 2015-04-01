@@ -8,6 +8,5 @@
     ],
     "args": "guest1",
     "confType": "java",
-    "help": "Here we have a <a href=\"http://kotlinlang.org/docs/reference/classes.html#classes\">class</a> with a <i>primary constructor</i> and a member function.<br/>Note that there's no <b>new</b> keyword used to create an object.",
     "expectedOutput": "Hello, guest1</br>"
 }

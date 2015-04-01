@@ -1,3 +1,7 @@
+/**
+ *  Kotlin Standart Library provide component functions for Map.Entry
+ */
+
 fun main(args: Array<String>) {
     val map = hashMapOf<String, Int>()
     map.put("one", 1)

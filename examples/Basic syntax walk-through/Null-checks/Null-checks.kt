@@ -1,3 +1,7 @@
+/**
+ * A reference must be explicitly marked as nullable to be able hold a null.
+ * See http://kotlinlang.org/docs/reference/null-safety.html#null-safety
+ */
 package multiplier
 
 // Return null if str does not hold a number

@@ -1,3 +1,10 @@
+/**
+ *  Data class gets component functions, one for each property declared
+ *  in the primary constructor, generated automatically, same for all the
+ *  other goodies common for data: toString(), equals(), hashCode() and copy().
+ *  See http://kotlinlang.org/docs/reference/data-classes.html#data-classes
+ */
+
 data class User(val name: String, val id: Int)
 
 fun getUser(): User {

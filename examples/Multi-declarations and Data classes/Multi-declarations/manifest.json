@@ -8,6 +8,5 @@
     ],
     "args": "",
     "confType": "java",
-    "help": "<p>In this example introduces a concept that we call <a href='http://kotlinlang.org/docs/reference/multi-declarations.html#multi-declarations'>mutli-declarations</a>. It creates multiple variable at once. Anything can be on the right-hand side of a mutli-declaration, as long as the required number of <b>component</b> functions can be called on it.</p>",
     "expectedOutput": "num = 1, name = one</br>"
 }

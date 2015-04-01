@@ -1,3 +1,10 @@
+/**
+ * Check if a number lies within a range.
+ * Check if a number is out of range.
+ * Check if a collection contains an object.
+ * See http://kotlinlang.org/docs/reference/ranges.html#ranges
+ */
+
 fun main(args: Array<String>) {
     val x = Integer.parseInt(args[0])
     //Check if a number lies within a range:

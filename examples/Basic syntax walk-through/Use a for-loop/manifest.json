@@ -8,6 +8,5 @@
     ],
     "args": "guest1 guest2 guest3",
     "confType": "java",
-    "help": "For loop iterates through anything that provides an iterator. See <a href=\"http://kotlinlang.org/docs/reference/control-flow.html#for-loops\">for-loop</a>.",
     "expectedOutput": "guest1</br>guest2</br>guest3</br></br>guest1</br>guest2</br>guest3</br>"
 }

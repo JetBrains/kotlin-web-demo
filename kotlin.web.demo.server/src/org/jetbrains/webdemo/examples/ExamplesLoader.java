@@ -80,7 +80,6 @@ public class ExamplesLoader {
             String originUrl = (parentUrl + name).replaceAll(" ", "%20");
             String args = manifest.get("args").asText();
             String runConfiguration = manifest.get("confType").asText();
-            String help = manifest.get("help").textValue();
             String expectedOutput;
             List<String> readOnlyFileNames = new ArrayList<>();
             List<ProjectFile> files = new ArrayList<>();
@@ -114,7 +113,7 @@ public class ExamplesLoader {
                 files.add(file);
             }
 
-            return new Project(name, args, runConfiguration, originUrl, expectedOutput, help, files, readOnlyFileNames);
+            return new Project(name, args, runConfiguration, originUrl, expectedOutput, files, readOnlyFileNames);
         } catch (IOException e) {
             System.err.println("Can't load project: " + e.toString());
             return null;

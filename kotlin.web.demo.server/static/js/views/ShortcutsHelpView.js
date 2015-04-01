@@ -19,48 +19,11 @@
  */
 
 
-var HelpDialogView = (function () {
-    var dialogElement = document.createElement("div");
-    dialogElement.title = "Help";
-
-    var exampleHelpElement = document.createElement("div");
-    exampleHelpElement.id = "example-help";
-    dialogElement.appendChild(exampleHelpElement);
-
-    var shortcutsHelpElement = document.createElement("div");
-    shortcutsHelpElement.id = "shortcuts-help";
-    dialogElement.appendChild(shortcutsHelpElement);
-
-    $(dialogElement).keydown(function (event) {
-        if (event.keyCode == 27 || event.keyCode == 13) { /*escape enter*/
-            $(this).dialog("close");
-        }
-        event.stopPropagation();
-    });
-
-    $(dialogElement).dialog(
-        {
-            resizable: false,
-            minWidth: 500,
-            autoOpen: false,
-            modal: true
-        }
-    );
-
-    function HelpDialogView() {
+var ShortcutsHelpView = (function () {
+    function ShortcutsHelpView() {
         var instance = {
             open: function () {
                 $(dialogElement).dialog("open");
-            },
-            updateProjectHelp: function (data) {
-                if (data != null && data != "") {
-                    exampleHelpElement.innerHTML = data;
-                    exampleHelpElement.style.padding = "";
-                    $(exampleHelpElement).find("a").attr("target", "_blank")
-                } else {
-                    exampleHelpElement.innerHTML = "";
-                    exampleHelpElement.style.padding = "0";
-                }
             },
             addShortcut: function (keyNames, description) {
                 var shortcutElement = document.createElement("tr");
@@ -99,5 +62,28 @@ var HelpDialogView = (function () {
         return instance;
     }
 
-    return HelpDialogView;
+    var dialogElement = document.createElement("div");
+    dialogElement.title = "Help";
+
+    var shortcutsHelpElement = document.createElement("div");
+    shortcutsHelpElement.id = "shortcuts-help";
+    dialogElement.appendChild(shortcutsHelpElement);
+
+    $(dialogElement).keydown(function (event) {
+        if (event.keyCode == 27 || event.keyCode == 13) { /*escape enter*/
+            $(this).dialog("close");
+        }
+        event.stopPropagation();
+    });
+
+    $(dialogElement).dialog(
+        {
+            resizable: false,
+            minWidth: 500,
+            autoOpen: false,
+            modal: true
+        }
+    );
+
+    return ShortcutsHelpView;
 })();

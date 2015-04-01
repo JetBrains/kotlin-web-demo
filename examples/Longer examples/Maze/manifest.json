@@ -8,6 +8,5 @@
     ],
     "args": "",
     "confType": "java",
-    "help": "<p>Find your way through a maze to get a prize :)</p>",
     "expectedOutputFile": "expected output.txt"
 }

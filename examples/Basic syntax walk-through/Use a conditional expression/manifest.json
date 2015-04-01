@@ -8,6 +8,5 @@
     ],
     "args": "10 20",
     "confType": "java",
-    "help": "<a href=\"http://kotlinlang.org/docs/reference/control-flow.html#if-expression\"><b>if</b></a> is an expression, i.e. it returns a value. Therefore there is not ternary operator (condition ? then : else), because ordinary <b>if</b> works fine in this role.",
     "expectedOutput": "20</br>"
 }

@@ -1,3 +1,9 @@
+/**
+ * Data class gets next functions, generated automatically:
+ * component functions, toString(), equals(), hashCode() and copy().
+ * See http://kotlinlang.org/docs/reference/data-classes.html#data-classes
+ */
+
 data class User(val name: String, val id: Int)
 
 fun main(args: Array<String>) {
