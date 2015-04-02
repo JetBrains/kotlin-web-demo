@@ -115,11 +115,11 @@ var RunProvider = (function () {
         }
 
         function runJs(project) {
-            Kotlin.modules = {stdlib: Kotlin.modules.stdlib, builtins: Kotlin.modules.builtins};
             loadJsFromServer(project);
         }
 
         function loadJsFromServer(project) {
+            var originalKotlinModules = Kotlin.modules;
             $.ajax({
                 //runConf is unused parameter. It's added to url for useful access logs
                 url: generateAjaxUrl("run", {runConf: project.getConfiguration()}),
@@ -133,7 +133,9 @@ var RunProvider = (function () {
                                     $(data).each(function (ind, element) {
                                         if (element.type == "generatedJSCode") {
                                             try {
+                                                Kotlin.modules = {stdlib: Kotlin.modules.stdlib, builtins: Kotlin.modules.builtins};
                                                 var dataJs = eval(element.text);
+                                                Kotlin.modules = originalKotlinModules;
                                                 output.push({"text": safe_tags_replace(dataJs), "type": "jsOut"});
                                             } catch (e) {
                                                 output.push({"type": "jsException", exception: e});
@@ -158,7 +160,10 @@ var RunProvider = (function () {
                 type: "POST",
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
-                complete: instance.onComplete,
+                complete: function () {
+                    Kotlin.modules = originalKotlinModules;
+                    instance.onComplete()
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     try {
                         if(jqXHR.responseText != null && jqXHR.responseText != ""){
