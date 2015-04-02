@@ -94,6 +94,8 @@ public class SessionInfo {
     }
 
     public enum TypeOfRequest {
+        DELETE_FILE,
+        DELETE_PROJECT,
         LOAD_ROOT,
         HIGHLIGHT,
         COMPLETE,

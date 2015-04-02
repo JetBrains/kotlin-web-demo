@@ -81,7 +81,7 @@ public class MyHttpSession {
                     sendExampleFileContent();
                     break;
                 case ("deleteProject"):
-                    MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), request.getParameter("publicId"));
+                    sendDeleteProjectResult(request);
                     break;
                 case ("loadProject"):
                     sendLoadProjectResult();
@@ -131,6 +131,18 @@ public class MyHttpSession {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
             }
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendDeleteProjectResult(HttpServletRequest request) {
+        try {
+            sessionInfo.setType(SessionInfo.TypeOfRequest.DELETE_PROJECT);
+            MySqlConnector.getInstance().deleteProject(sessionInfo.getUserInfo(), request.getParameter("publicId"));
+            writeResponse(HttpServletResponse.SC_OK);
+        } catch (NullPointerException e) {
+            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (DatabaseOperationException e) {
+            writeResponse(e.getMessage(), HttpServletResponse.SC_FORBIDDEN);
         }
     }
 
@@ -435,6 +447,7 @@ public class MyHttpSession {
 
     private void sendDeleteFileResult() {
         try {
+            sessionInfo.setType(SessionInfo.TypeOfRequest.DELETE_FILE);
             boolean modifiable = Boolean.parseBoolean(request.getParameter("modifiable"));
             if (modifiable) {
                 String publicId = request.getParameter("fileId");
@@ -524,7 +537,7 @@ public class MyHttpSession {
     }
 
     private void writeResponse(int errorCode) {
-        writeResponse("ok", errorCode);
+        writeResponse("", errorCode);
     }
 
     //Send Response

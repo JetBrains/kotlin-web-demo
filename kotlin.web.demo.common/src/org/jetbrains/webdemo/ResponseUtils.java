@@ -337,10 +337,12 @@ public class ResponseUtils {
     }
 
     public static void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) throws IOException {
-        try (PrintWriter writer = response.getWriter()) {
-            addHeadersToResponse(request, response);
-            response.setStatus(errorCode);
-            writer.write(responseBody);
+        addHeadersToResponse(request, response);
+        response.setStatus(errorCode);
+        if(!responseBody.equals("")) {
+            try (PrintWriter writer = response.getWriter()) {
+                writer.write(responseBody);
+            }
         }
     }
 
