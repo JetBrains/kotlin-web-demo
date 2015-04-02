@@ -142,6 +142,9 @@ var ProjectView = (function () {
             project.onRenamed = function (newName) {
                 nameSpan.innerHTML = newName;
                 nameSpan.title = nameSpan.innerHTML;
+                if(isSelected()){
+                    navBarView.onSelectedProjectRenamed(newName);
+                }
             };
 
             project.onContentLoaded = function () {

@@ -126,6 +126,9 @@ var FileView = (function () {
                         file.onRenamed = function (newName) {
                             fileNameElement.innerHTML = newName;
                             fileNameElement.title = fileNameElement.innerHTML;
+                            if(isSelected()){
+                                navBarView.onSelectedFileRenamed(newName);
+                            }
                         };
                         renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.getName()));
                         event.stopPropagation();

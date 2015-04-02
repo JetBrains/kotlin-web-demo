@@ -52,6 +52,16 @@ class NavBarView(private val navigationElement: HTMLDivElement) {
         navigationElement.removeChild(navigationElement.lastChild);
     }
 
+    fun onSelectedProjectRenamed(newName: String){
+        var navItem = navigationElement.childNodes.item(1) as HTMLDivElement
+        navItem.textContent = newName
+    }
+
+    fun onSelectedFileRenamed(newName: String){
+        var navItem = navigationElement.lastChild as HTMLDivElement
+        navItem.textContent = newName
+    }
+
     private fun createNavItem(name: String): HTMLDivElement {
         val navItem = document.createElement("div") as HTMLDivElement;
         navItem.className = "grid-nav-item";

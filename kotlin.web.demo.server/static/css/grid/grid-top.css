@@ -20,6 +20,7 @@
 
 #grid-nav{
     overflow: hidden;
+    white-space: nowrap;
     background: #d7d7d7;
     font-size: 14px;
     border-bottom: 1px solid #969696;
