@@ -79,17 +79,17 @@
 }
 
 .ERRORgutter {
-    height: 11px;
-    width: 11px;
-    margin-top: 3px;
-    background: url("/static/images/errors_and_warnings.png") no-repeat -14px 0 !important;
+    height: 12px;
+    width: 12px;
+    margin-top: 2px;
+    background: url("/static/images/errors_and_warnings.png") no-repeat 0 0 !important;
 }
 
 .WARNINGgutter {
-    height: 11px;
-    width: 11px;
-    margin-top: 3px;
-    background: url("/static/images/errors_and_warnings.png") no-repeat -14px -14px !important;
+    height: 12px;
+    width: 12px;
+    margin-top: 2px;
+    background: url("/static/images/errors_and_warnings.png") no-repeat 0 -14px !important;
 }
 
 .red_wavy_line {
