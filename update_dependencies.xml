@@ -15,9 +15,6 @@
   -->
 
 <project name="Update Dependencies" default="download_and_update">
-
-    <property name="kotlin.build" value="421253"/>
-
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
     <property name="zipped.kotlin.plugin.pattern" value="kotlin-plugin*.zip"/>
@@ -26,12 +23,11 @@
     <property name="teamcity.plugin.build" value="bt345"/>
 
     <property name="tc.plugin"
-              value="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/bootstrap.tcbuildtag"/>
+              value="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/try.kotlinlang.org.tcbuildtag"/>
 
     <target name="download_and_update">
         <delete dir="${dependencies.dir}" failonerror="false"/>
         <mkdir dir="${dependencies.dir}"/>
-        <antcall target="update_to_given_version"/>
         <antcall target="update_to_latest_version"/>
         <unzip_kotlin/>
         <set_kotlin_version/>
@@ -40,7 +36,6 @@
     <target name="download_and_update_internal">
         <delete dir="${dependencies.dir}" failonerror="false"/>
         <mkdir dir="${dependencies.dir}"/>
-        <antcall target="update_to_given_version"/>
         <antcall target="update_to_latest_version"/>
         <unzip_kotlin/>
         <set_kotlin_version_internal/>
@@ -124,16 +119,7 @@
         </sequential>
     </macrodef>
 
-    <target name="update_to_given_version" if="kotlin.build">
-        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-plugin-{build.number}.zip"
-             dest="${dependencies.dir}/kotlin-plugin.zip" usetimestamp="true"/>
-        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/internal/kotlin-compiler-before-shrink.jar"
-             dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>
-        <get src="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/${kotlin.build}:id/kotlin-compiler-sources.jar"
-             dest="${dependencies.dir}/kotlin-compiler-sources.jar" usetimestamp="true"/>
-    </target>
-
-    <target name="update_to_latest_version" unless="kotlin.build">
+    <target name="update_to_latest_version">
         <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"
              usetimestamp="true"/>
         <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
