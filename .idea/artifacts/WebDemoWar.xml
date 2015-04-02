@@ -26,6 +26,7 @@
       </element>
       <element id="directory" name="static">
         <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.server/static" />
+        <element id="module-output" name="kotlin.web.demo.frontend" />
       </element>
       <element id="directory" name="examples">
         <element id="dir-copy" path="$PROJECT_DIR$/examples" />

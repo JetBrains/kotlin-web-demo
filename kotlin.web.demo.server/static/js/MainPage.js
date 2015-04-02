@@ -258,6 +258,8 @@ configurationManager.onFail = function (exception) {
 var converterView = new ConverterView();
 document.getElementById("java2kotlin-button").onclick = converterView.open;
 
+var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].NavBarView(document.getElementById("grid-nav"));
+
 var accordion = (function () {
     var accordion = new AccordionView(document.getElementById("examples-list"));
 
@@ -267,6 +269,7 @@ var accordion = (function () {
             if (accordion.getSelectedProject().getPublicId() != getProjectIdFromUrl()) {
                 setState(userProjectPrefix + project.getPublicId(), project.getName());
             }
+            navBarView.onProjectSelected(project);
         }
         consoleView.clear();
         junitView.clear();
@@ -296,7 +299,7 @@ var accordion = (function () {
         }
         ;
         setState(url, currentFile.getProject().getName());
-
+        navBarView.onFileSelected(currentFile);
 
         editor.closeFile();
         editor.open(currentFile);
@@ -356,7 +359,8 @@ var accordion = (function () {
     };
 
     accordion.onSelectedFileDeleted = function () {
-        var project = accordion.getSelectedProject()
+        var project = accordion.getSelectedProject();
+        navBarView.onSelectedFileDeleted();
         setState(userProjectPrefix + project.getPublicId(), project.getName());
         editor.closeFile();
     };

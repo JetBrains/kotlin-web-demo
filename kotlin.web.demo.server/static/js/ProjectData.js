@@ -20,7 +20,7 @@
 
 var ProjectData = (function () {
 
-    function ProjectData(type, publicId, name) {
+    function ProjectData(type, publicId, name, parent) {
         var instance = {
             toJSON: function () {
                 return {
@@ -33,6 +33,9 @@ var ProjectData = (function () {
                         return file.isModifiable();
                     })
                 };
+            },
+            getParent: function(){
+                return parent;
             },
             isContentLoaded: function () {
                 return contentLoaded

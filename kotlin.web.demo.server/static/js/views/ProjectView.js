@@ -26,7 +26,7 @@ var ProjectType = {
 
 var ProjectView = (function () {
 
-    function ProjectView(header, /*Element*/ contentElement, /*Element*/ headerElement) {
+    function ProjectView(header, /*Element*/ contentElement, /*Element*/ headerElement, parent) {
 
         var instance = {
             getHeader: function () {
@@ -129,7 +129,7 @@ var ProjectView = (function () {
         var nameSpan;
         var project = (function () {
 
-            project = new ProjectData(header.type, header.publicId, header.name);
+            project = new ProjectData(header.type, header.publicId, header.name, parent);
 
             project.onModified(function (isProjectContentChanged) {
                 if (isProjectContentChanged) {

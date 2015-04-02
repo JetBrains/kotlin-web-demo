@@ -51,7 +51,7 @@ var AccordionView = (function () {
                 );
             },
             addNewProject: function (name, publicId, fileId) {
-                addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT});
+                addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT}, "My programs");
                 projects[publicId].getProjectData().setDefaultContent();
                 projects[publicId].getProjectData().addFileWithMain(name, fileId);
                 selectProject(publicId);
@@ -61,7 +61,7 @@ var AccordionView = (function () {
                     name: content.name,
                     publicId: publicId,
                     type: ProjectType.USER_PROJECT
-                });
+                }, "My programs");
                 projects[publicId].getProjectData().setContent(content);
                 selectProject(publicId);
             },
@@ -195,7 +195,7 @@ var AccordionView = (function () {
                         if (!(header.publicId in projects)) {
                             if (header.type == ProjectType.PUBLIC_LINK) {
                                 header.timeStamp = new Date().getTime();
-                                addProject(publicLinksContentElement, header);
+                                addProject(publicLinksContentElement, header, "Public links");
                             } else {
                                 throw "Project wasn't downloaded";
                             }
@@ -210,7 +210,7 @@ var AccordionView = (function () {
             }
         }
 
-        function addProject(/*Element*/ folderContentElement, header) {
+        function addProject(/*Element*/ folderContentElement, header, parent) {
             if (header.type == ProjectType.PUBLIC_LINK && projects[header.publicId] != null) {
                 return
             } else if (projects[header.publicId] != null) {
@@ -223,7 +223,7 @@ var AccordionView = (function () {
             folderContentElement.appendChild(projectContentElement);
 
 
-            var projectView = new ProjectView(header, projectContentElement, projectHeaderElement);
+            var projectView = new ProjectView(header, projectContentElement, projectHeaderElement, parent);
             projectView.onHeaderClick = selectProject;
             projectView.onDelete = function () {
                 if (selectedProjectView == projects[header.publicId]) {
@@ -259,7 +259,7 @@ var AccordionView = (function () {
             element.appendChild(cont);
 
             $(folder.projects).each(function (ind, project) {
-                addProject(cont, project);
+                addProject(cont, project, folder.name);
             });
             return cont;
         }
@@ -307,7 +307,7 @@ var AccordionView = (function () {
             }
 
             $(projects).each(function (ind, project) {
-                addProject(myProgramsContentElement, project);
+                addProject(myProgramsContentElement, project, "My programs");
             });
         }
 

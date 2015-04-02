@@ -142,9 +142,8 @@ function onOutputViewResized() {
     $(".tab-space").css("height", $("#result-tabs").height() - $(".result-tabs-footer").outerHeight());
 
     var gridTopHeight;
-    var gridTopElement = document.getElementById("grid-top");
     var gridHeight = $("#g-grid").height();
-    gridTopHeight = gridHeight - $("#grid-bottom").outerHeight(true);
+    gridTopHeight = gridHeight - $("#grid-bottom").outerHeight(true) - $("#grid-nav").outerHeight(true);
     gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
     $(gridTopElement).css("height", gridTopHeight);
     updateEditorHeight();
@@ -191,7 +190,7 @@ function updateGridHeightFullscreen() {
     $(gridElement).css("height", gridHeight);
 
     var gridTopHeight;
-    gridTopHeight = gridHeight - $("#statusBarWrapper").outerHeight(true) - $("#result-tabs").outerHeight();
+    gridTopHeight = gridHeight - $("#statusBarWrapper").outerHeight(true) - $("#result-tabs").outerHeight() - $("#grid-nav").outerHeight(true);
     gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
     $(gridTopElement).css("height", gridTopHeight);
     updateEditorHeight()

@@ -18,12 +18,7 @@
     background-color: #e8e8e8;
     line-height: 1;
     width: 100%;
-    border-top-right-radius: 4px;
     overflow: hidden;
-}
-
-#toolbox.accordion-hidden{
-    border-top-left-radius: 4px;
 }
 
 #accordion-display-button{
