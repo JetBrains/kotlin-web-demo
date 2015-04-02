@@ -179,6 +179,7 @@
     color: #3164a0;
 }
 
+.examples-folder-name.ui-state-active .icons,
 .example-filename:hover .icons,
 .examples-project-name:hover .icons {
     display: inline-block;
@@ -186,7 +187,6 @@
 
 .examples-folder-name .icons{
     margin-top: 0;
-    display: inline-block;
 }
 
 .icons {
