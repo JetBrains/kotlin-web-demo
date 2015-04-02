@@ -62,7 +62,7 @@ var LoginView = (function () {
             login("google");
         });
 
-        document.getElementById("logout").onclick = function (event) {
+        document.getElementById("logout-button").onclick = function (event) {
             model.logout();
             event.stopPropagation();
         };
