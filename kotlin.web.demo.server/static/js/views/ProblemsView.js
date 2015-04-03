@@ -53,23 +53,23 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         var projectData = accordion.getSelectedProject();
         for (var i = 0; i < projectData.getFiles().length; i++) {
             var file = projectData.getFiles()[i];
-            if (file.getErrors().length > 0) {
-                var fileId = file.getName().replace(/ /g, "%20") + "_problems";
+            if (file.errors.length > 0) {
+                var fileId = file.name.replace(/ /g, "%20") + "_problems";
                 var fileProblemsNode = {
                     children: [],
-                    name: file.getName(),
+                    name: file.name,
                     icon: "kotlin-file-icon",
                     id: fileId
                 };
 
-                for (var j = 0; j < file.getErrors().length; j++) {
-                    var error = file.getErrors()[j];
+                for (var j = 0; j < file.errors.length; j++) {
+                    var error = file.errors[j];
                     var errorNode = {
                         children: [],
                         name: error.severity.toLowerCase().capitalize() + ":(" + (error.interval.start.line + 1) + ", " + error.interval.start.ch + ") " + unEscapeString(error.message),
                         icon: error.severity,
                         id: fileId + "_" + error.severity + "_" + error.interval.start.line + "_" + error.interval.start.ch,
-                        filename: file.getName(),
+                        filename: file.name,
                         line: error.interval.start.line,
                         ch: error.interval.start.ch
                     };

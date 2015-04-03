@@ -73,7 +73,7 @@ var ProjectView = (function () {
                         addKotlinExtension(removeKotlinExtension(newName) + "'")
                     );
                 }
-                fileView.getFile().rename(newName);
+                fileView.getFile().name = newName;
                 fileView.updateName();
             },
             getType: function () {
@@ -81,7 +81,7 @@ var ProjectView = (function () {
             },
             getFileViewByName: function (name) {
                 for (var fileId in fileViews) {
-                    if (fileViews[fileId].getFile().getName() == name) {
+                    if (fileViews[fileId].getFile().name == name) {
                         return fileViews[fileId];
                     }
                 }
@@ -158,14 +158,14 @@ var ProjectView = (function () {
                 for (var i = 0; i < files.length; ++i) {
                     var fileView;
                     fileView = createFileView(files[i]);
-                    fileViews[files[i].getPublicId()] = fileView;
+                    fileViews[files[i].id] = fileView;
                 }
 
                 if (files.length > 0) {
                     selectedFileView = getFileFromUrl();
 
                     if (selectedFileView == null) {
-                        selectedFileView = fileViews[files[0].getPublicId()];
+                        selectedFileView = fileViews[files[0].id];
                     }
 
                     if (accordion.getSelectedProject().getPublicId() == project.getPublicId()) {
@@ -191,7 +191,7 @@ var ProjectView = (function () {
 
             project.onFileAdded = function (file) {
                 var fileView = createFileView(file);
-                fileViews[file.getPublicId()] = fileView;
+                fileViews[file.id] = fileView;
                 selectedFileView = fileView;
                 if (isSelected()) {
                     fileView.fireSelectEvent();
@@ -199,7 +199,8 @@ var ProjectView = (function () {
             };
 
             project.onFileDeleted = function (publicId) {
-                if (selectedFileView.getFile().getPublicId() == publicId) {
+                if (selectedFileView.getFile().id == publicId) {
+                    accordion.selectedFileDeleted();
                     selectedFileView = null;
                 }
                 delete fileViews[publicId];
@@ -298,7 +299,7 @@ var ProjectView = (function () {
         }
 
         function selectFirstFile() {
-            selectedFileView = fileViews[project.getFiles()[0].getPublicId()];
+            selectedFileView = fileViews[project.getFiles()[0].id];
             selectedFileView.fireSelectEvent();
         }
 

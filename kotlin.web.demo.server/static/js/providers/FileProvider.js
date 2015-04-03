@@ -76,7 +76,7 @@ var FileProvider = (function () {
         }
 
         function loadOriginalFile(file, onSuccess, onNotFound) {
-            if (file.getProjectType() == ProjectType.EXAMPLE) {
+            if (file.project.getType() == ProjectType.EXAMPLE) {
                 blockContent();
                 $.ajax({
                     url: generateAjaxUrl("loadExampleFile"),
@@ -91,7 +91,7 @@ var FileProvider = (function () {
                     },
                     type: "POST",
                     timeout: 10000,
-                    data: {publicId: file.getPublicId()},
+                    data: {publicId: file.id},
                     dataType: "json",
                     error: function (jqXHR, textStatus, errorThrown) {
                         try {
@@ -102,7 +102,7 @@ var FileProvider = (function () {
                     },
                     complete: unBlockContent
                 })
-            } else if (file.getProjectType() == ProjectType.PUBLIC_LINK) {
+            } else if (file.project.getType() == ProjectType.PUBLIC_LINK) {
                 blockContent();
                 $.ajax({
                     url: generateAjaxUrl("loadProjectFile"),
@@ -117,7 +117,7 @@ var FileProvider = (function () {
                     },
                     type: "POST",
                     timeout: 10000,
-                    data: {publicId: file.getPublicId()},
+                    data: {publicId: file.id},
                     dataType: "json",
                     statusCode: {
                         404: onNotFound
@@ -192,16 +192,16 @@ var FileProvider = (function () {
 
         function deleteFile(file, callback) {
             var data;
-            if (file.isModifiable()) {
+            if (file.isModifiable) {
                 data = {
-                    fileId: file.getPublicId(),
+                    fileId: file.id,
                     modifiable: true
                 }
             } else {
                 data = {
-                    fileName: file.getName(),
+                    fileName: file.name,
                     modifiable: false,
-                    projectId: file.getProject().getPublicId()
+                    projectId: file.project.getPublicId()
                 }
             }
             blockContent();

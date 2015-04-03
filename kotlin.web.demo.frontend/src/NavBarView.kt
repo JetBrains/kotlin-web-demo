@@ -21,13 +21,6 @@ import kotlin.js.dom.html.document
  * Created by Semyon.Atamas on 3/31/2015.
  */
 
-
-native
-trait File {
-    fun getName(): String;
-    fun getProject(): Project
-}
-
 native
 trait Project{
     fun getName(): String
@@ -37,9 +30,9 @@ trait Project{
 class NavBarView(private val navigationElement: HTMLDivElement) {
     fun onFileSelected(file: File) {
         navigationElement.innerHTML = "";
-        navigationElement.appendChild(createNavItem(file.getProject().getParent()));
-        navigationElement.appendChild(createNavItem(file.getProject().getName()));
-        navigationElement.appendChild(createNavItem(file.getName()));
+        navigationElement.appendChild(createNavItem(file.project.getParent()));
+        navigationElement.appendChild(createNavItem(file.project.getName()));
+        navigationElement.appendChild(createNavItem(file.name));
     }
 
     fun onProjectSelected(project: Project){

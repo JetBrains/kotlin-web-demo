@@ -30,7 +30,7 @@ var ProjectData = (function () {
                     originUrl: originUrl,
                     readOnlyFileNames: readOnlyFileNames,
                     files: files.filter(function (file) {
-                        return file.isModifiable();
+                        return file.isModifiable;
                     })
                 };
             },
@@ -48,7 +48,7 @@ var ProjectData = (function () {
             },
             hasErrors: function () {
                 for (var i = 0; i < files.length; i++) {
-                    var errors = files[i].getErrors();
+                    var errors = files[i].errors;
                     for (var j = 0; j < errors.length; j++) {
                         if (errors[j].severity == "ERROR") {
                             return true;
@@ -69,7 +69,8 @@ var ProjectData = (function () {
                     var content = JSON.parse(localStorage.getItem(publicId));
                     localStorage.removeItem(publicId);
                     for (var i = 0; i < content.files.length; ++i) {
-                        content.files[i] = File.fromLocalStorage(instance, content.files[i]);
+                        var fileContent = JSON.parse(localStorage.getItem(content.files[i]));
+                        content.files[i] = Kotlin.modules["kotlin.web.demo.frontend"].File.object.fromJSON(instance, fileContent);
                         content.files[i].onModified(onModified);
                     }
                     onContentLoaded(content)
@@ -79,7 +80,7 @@ var ProjectData = (function () {
                         type,
                         function (content) {
                             for (var i = 0; i < content.files.length; ++i) {
-                                content.files[i] = new File(instance, content.files[i]);
+                                content.files[i] = Kotlin.modules["kotlin.web.demo.frontend"].File.object.fromJSON(instance, content.files[i]);
                                 content.files[i].onModified(onModified);
                             }
                             onContentLoaded(content);
@@ -97,18 +98,19 @@ var ProjectData = (function () {
 
             },
             addEmptyFile: function (name, publicId) {
-                var file = File.EmptyFile(instance, name, publicId);
+                var file = new Kotlin.modules["kotlin.web.demo.frontend"].File(instance, name, publicId);
                 file.onModified(onModified);
                 files.push(file);
                 instance.onFileAdded(file);
                 return file
             },
             addFileWithMain: function (name, publicId) {
-                var file = new File(instance, {
-                    "name": addKotlinExtension(name),
-                    "publicId": publicId,
-                    text: "fun main(args: Array<String>) {\n\n}"
-                });
+                var file = new Kotlin.modules["kotlin.web.demo.frontend"].File(
+                    instance,
+                    name,
+                    publicId,
+                    "fun main(args: Array<String>) {\n\n}"
+                );
                 file.onModified(onModified);
                 files.push(file);
                 instance.onFileAdded(file);
@@ -116,20 +118,16 @@ var ProjectData = (function () {
             },
             onFileAdded: function () {
             },
-            deleteFile: function (publicId) {
+            deleteFile: function (file) {
+                if(!file.isModifible){
+                    readOnlyFileNames = readOnlyFileNames.filter(function (element) {
+                        return element != file.name;
+                    });
+                }
                 files = files.filter(function (element) {
-                    return element.getPublicId() != publicId;
+                    return element != file;
                 });
-                instance.onFileDeleted(publicId);
-            },
-            deleteUnmodifiableFile: function (name, publicId) {
-                readOnlyFileNames = readOnlyFileNames.filter(function (element) {
-                    return element != name;
-                });
-                files = files.filter(function (element) {
-                    return element.getPublicId() != publicId;
-                });
-                instance.onFileDeleted(publicId);
+                instance.onFileDeleted(file.id);
             },
             onFileDeleted: function (publicId) {
 
@@ -137,7 +135,8 @@ var ProjectData = (function () {
             setContent: function (content) {
                 if (!contentLoaded) {
                     for (var i = 0; i < content.files.length; ++i) {
-                        content.files[i] = new File(instance, content.files[i]);
+                        content.files[i] =
+                            new Kotlin.modules["kotlin.web.demo.frontend"].File.object.fromJSON(instance, content.files[i]);
                     }
                     onContentLoaded(content);
                     contentLoaded = true;
@@ -182,7 +181,7 @@ var ProjectData = (function () {
             },
             setErrors: function (errors) {
                 for (var i = 0; i < files.length; i++) {
-                    files[i].setErrors(errors[files[i].getName()]);
+                    files[i].errors = errors[files[i].name];
                 }
             },
             isEmpty: function () {
@@ -222,7 +221,7 @@ var ProjectData = (function () {
                 var fileIDs = [];
                 for (var i = 0; i < files.length; ++i) {
                     files[i].dumpToLocalStorage();
-                    fileIDs.push(files[i].getPublicId());
+                    fileIDs.push(files[i].id);
                 }
                 localStorage.setItem(publicId, JSON.stringify({
                     name: name,
@@ -243,7 +242,7 @@ var ProjectData = (function () {
 
         function isModified() {
             for (var i = 0; i < files.length; ++i) {
-                if (files[i].isModified()) {
+                if (files[i].isModified) {
                     return true;
                 }
             }
@@ -261,6 +260,7 @@ var ProjectData = (function () {
             revertible = content.hasOwnProperty("revertible") ? content.revertible : true;
             readOnlyFileNames = content.readOnlyFileNames;
             instance.onContentLoaded(files);
+            onModified();
         }
 
         function onModified() {

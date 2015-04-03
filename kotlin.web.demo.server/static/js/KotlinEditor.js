@@ -43,7 +43,7 @@ var KotlinEditor = (function () {
             open: function (file) {
                 $(runButton).button("option", "disabled", false);
                 document.getElementById("workspace-overlay").style.display = "none";
-                if (file.getType() != File.TYPE.JAVA_FILE) {
+                if (file.type != FileType.JAVA_FILE) {
                     my_editor.setOption("mode", "text/kotlin")
                 } else {
                     my_editor.setOption("mode", "text/x-java")
@@ -52,14 +52,14 @@ var KotlinEditor = (function () {
                 if (openedFile == null) {
                     openedFile = file;
                     highlighting.removeStyles();
-                    if (!openedFile.isModifiable()) {
+                    if (!openedFile.isModifiable) {
                         my_editor.setOption("readOnly", true);
                     } else {
                         my_editor.setOption("readOnly", false);
                     }
                     my_editor.focus();
-                    my_editor.setValue(openedFile.getText());
-                    openedFile.getChangesHistory() != null ? my_editor.setHistory(openedFile.getChangesHistory()) : my_editor.clearHistory();
+                    my_editor.setValue(openedFile.text);
+                    openedFile.changesHistory != null ? my_editor.setHistory(openedFile.changesHistory) : my_editor.clearHistory();
                     highlighting.updateHighlighting();
                 } else {
                     throw("Previous file wasn't closed");
@@ -67,7 +67,7 @@ var KotlinEditor = (function () {
             },
             closeFile: function () {
                 if (openedFile != null) {
-                    openedFile.setChangesHistory(my_editor.getHistory());
+                    openedFile.changesHistory = my_editor.getHistory();
                     openedFile = null;
                 }
                 highlighting.removeStyles();
@@ -79,8 +79,8 @@ var KotlinEditor = (function () {
             reloadFile: function () {
                 if (openedFile != null) {
                     my_editor.focus();
-                    my_editor.setValue(openedFile.getText());
-                    openedFile.getChangesHistory() != null ? my_editor.setHistory(openedFile.getChangesHistory()) : my_editor.clearHistory();
+                    my_editor.setValue(openedFile.text);
+                    openedFile.changesHistory != null ? my_editor.setHistory(openedFile.changesHistory) : my_editor.clearHistory();
                     highlighting.updateHighlighting();
                 }
             },
@@ -148,8 +148,8 @@ var KotlinEditor = (function () {
 
                 function updateHighlighting() {
                     instance.removeStyles();
-                    for (var i = 0; i < openedFile.getErrors().length; i++) {
-                        var error = openedFile.getErrors()[i];
+                    for (var i = 0; i < openedFile.errors.length; i++) {
+                        var error = openedFile.errors[i];
                         var interval = error.interval;
                         var title = unEscapeString(error.message);
                         var severity = error.severity;
@@ -216,7 +216,7 @@ var KotlinEditor = (function () {
             } else {
                 completionProvider.getCompletion(
                     accordion.getSelectedProject(),
-                    openedFile.getName(),
+                    openedFile.name,
                     cur,
                     function (data) {
                         $(data).each(function (idx, element) {
@@ -311,7 +311,7 @@ var KotlinEditor = (function () {
         my_editor.on("change", function () {
             highlighting.removeStyles();
             if (openedFile != null) {
-                openedFile.setText(my_editor.getValue());
+                openedFile.text = my_editor.getValue();
                 if (timer) {
                     clearTimeout(timer);
                     timer = setTimeout(getHighlighting, timerIntervalForNonPrinting);

@@ -134,8 +134,19 @@ projectActionsView.registerStatus("localVersion", "This is your local version of
     {
         name: "Revert file",
         callback: function () {
-            if (accordion.getSelectedFile() != null) {
-                accordion.getSelectedFile().loadOriginal();
+            var file = accordion.getSelectedFile();
+            if (file != null) {
+                fileProvider.loadOriginalFile(
+                    file,
+                    function(content){
+                        file.text = file.originalText = content.text;
+                        file.changesHistory = null;
+                    },
+                    function () {
+                        window.alert("Can't find file origin, maybe it was removed by a user");
+                        projectActionsView.setStatus("localFile");
+                        file.isRevertible = false;
+                    });
             }
         }
     },
@@ -282,28 +293,28 @@ var accordion = (function () {
 
     accordion.onSelectFile = function (previousFile, currentFile) {
         if (previousFile != null) {
-            if (previousFile.getProject().getType() != ProjectType.USER_PROJECT) {
-                previousFile.getProject().save();
+            if (previousFile.project.getType() != ProjectType.USER_PROJECT) {
+                previousFile.project.save();
             } else {
                 previousFile.save();
             }
         }
 
         var url;
-        if (currentFile.getProjectType() == ProjectType.EXAMPLE) {
-            url = currentFile.getPublicId();
-        } else if (currentFile.isModifiable()) {
-            url = userProjectPrefix + accordion.getSelectedProject().getPublicId() + "/" + currentFile.getPublicId();
+        if (currentFile.project.getType() == ProjectType.EXAMPLE) {
+            url = currentFile.id;
+        } else if (currentFile.isModifiable) {
+            url = userProjectPrefix + accordion.getSelectedProject().getPublicId() + "/" + currentFile.id;
         } else {
-            url = userProjectPrefix + accordion.getSelectedProject().getPublicId() + "/" + currentFile.getName();
+            url = userProjectPrefix + accordion.getSelectedProject().getPublicId() + "/" + currentFile.name;
         }
         ;
-        setState(url, currentFile.getProject().getName());
+        setState(url, currentFile.project.getName());
         navBarView.onFileSelected(currentFile);
 
         editor.closeFile();
         editor.open(currentFile);
-        currentFile.compareContent();
+        //currentFile.compareContent();
     };
 
     accordion.onFail = function (exception, actionCode) {
@@ -321,18 +332,18 @@ var accordion = (function () {
     };
 
     accordion.onModifiedSelectedFile = function (file) {
-        if (file.getProjectType() == ProjectType.EXAMPLE) {
+        if (file.project.getType() == ProjectType.EXAMPLE) {
             projectActionsView.setStatus("localVersion");
-        } else if (file.getProjectType() == ProjectType.PUBLIC_LINK) {
-            if (file.getProject().isRevertible()) {
+        } else if (file.project.getType() == ProjectType.PUBLIC_LINK) {
+            if (file.project.isRevertible()) {
                 var onProjectExist = function () {
-                    if (file.isRevertible()) {
+                    if (file.isRevertible) {
                         fileProvider.checkFileExistence(
-                            file.getPublicId(),
+                            file.id,
                             projectActionsView.setStatus.bind(null, "localVersion"),
                             function () {
                                 projectActionsView.setStatus.bind(null, "localFile");
-                                file.makeNotRevertible();
+                                file.isRevertible = false;
                             }
                         )
                     } else {
@@ -341,10 +352,10 @@ var accordion = (function () {
                 };
                 var onProjectNotExist = function () {
                     projectActionsView.setStatus("default");
-                    file.getProject().makeNotRevertible();
+                    file.project.makeNotRevertible();
                 };
                 projectProvider.checkIfProjectExists(
-                    file.getProject().getPublicId(),
+                    file.project.getPublicId(),
                     onProjectExist,
                     onProjectNotExist
                 );

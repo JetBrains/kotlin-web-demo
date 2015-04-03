@@ -18,6 +18,11 @@
  * Created by Semyon.Atamas on 9/25/2014.
  */
 
+FileType = {
+    KOTLIN_FILE: "KOTLIN_FILE",
+    KOTLIN_TEST_FILE: "KOTLIN_TEST_FILE",
+    JAVA_FILE: "JAVA_FILE"
+};
 
 var FileView = (function () {
 
@@ -39,7 +44,7 @@ var FileView = (function () {
                 return fileNameElement.innerHTML;
             },
             updateName: function(){
-                fileNameElement.innerHTML = file.getName();
+                fileNameElement.innerHTML = file.name;
                 fileNameElement.title = fileNameElement.innerHTML;
             },
             fireSelectEvent: function () {
@@ -62,16 +67,10 @@ var FileView = (function () {
                 }
             }
         });
-        file.onDeleted = function () {
-            if (isSelected()) {
-                accordion.selectedFileDeleted();
-            }
-            headerElement.parentNode.removeChild(headerElement);
-        };
 
         var renameFileDialog = new InputDialogView("Rename file", "File name:", "Rename");
         renameFileDialog.validate = function (newName) {
-            if (removeKotlinExtension(file.getName()) == newName) {
+            if (removeKotlinExtension(file.name) == newName) {
                 return {valid: true};
             } else {
                 return projectView.validateNewFileName(newName);
@@ -85,19 +84,19 @@ var FileView = (function () {
 
             var icon = document.createElement("div");
             $(icon).addClass("icon").addClass("high-res-icon");
-            switch (file.getType()){
-                case File.TYPE.KOTLIN_FILE:
+            switch (file.type){
+                case FileType.KOTLIN_FILE:
                     $(icon).addClass("kotlin");
                     break;
-                case File.TYPE.KOTLIN_TEST_FILE:
+                case FileType.KOTLIN_TEST_FILE:
                     $(icon).addClass("kotlin-test");
                     break;
-                case File.TYPE.JAVA_FILE:
+                case FileType.JAVA_FILE:
                     $(icon).addClass("java");
                     break;
             }
 
-            if (!file.isModifiable()) {
+            if (!file.isModifiable) {
                 $(icon).addClass("unmodifiable")
             }
             headerElement.appendChild(icon);
@@ -105,10 +104,10 @@ var FileView = (function () {
 
             fileNameElement = document.createElement("div");
             fileNameElement.className = "example-filename-text";
-            fileNameElement.innerHTML = file.getName();
+            fileNameElement.innerHTML = file.name;
             fileNameElement.title = fileNameElement.innerHTML;
             headerElement.appendChild(fileNameElement);
-            if(!file.isModifiable()){
+            if(!file.isModifiable){
                 $(headerElement).addClass("unmodifiable");
             }
 
@@ -117,12 +116,14 @@ var FileView = (function () {
             headerElement.appendChild(actionIconsElement);
 
             if (projectView.getType() == ProjectType.USER_PROJECT) {
-                if (file.isModifiable()) {
+                if (file.isModifiable) {
                     var renameImg = document.createElement("div");
                     renameImg.className = "rename icon";
                     renameImg.title = "Rename file";
                     renameImg.onclick = function (event) {
-                        var renameFileFunction = fileProvider.renameFile.bind(null, file.getPublicId(), file.rename);
+                        var renameFileFunction = fileProvider.renameFile.bind(null, file.id, function(newName){
+                            file.name = newName;
+                        });
                         file.onRenamed = function (newName) {
                             fileNameElement.innerHTML = newName;
                             fileNameElement.title = fileNameElement.innerHTML;
@@ -130,7 +131,7 @@ var FileView = (function () {
                                 navBarView.onSelectedFileRenamed(newName);
                             }
                         };
-                        renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.getName()));
+                        renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.name));
                         event.stopPropagation();
 
                     };
@@ -141,8 +142,11 @@ var FileView = (function () {
                 deleteImg.className = "delete icon";
                 deleteImg.title = "Delete this file";
                 deleteImg.onclick = function (event) {
-                    if (confirm("Delete file " + file.getName())) {
-                        fileProvider.deleteFile(file, file.deleteThis);
+                    if (confirm("Delete file " + file.name)) {
+                        fileProvider.deleteFile(file, function () {
+                            file.project.deleteFile(file);
+                            headerElement.parentNode.removeChild(headerElement);
+                        });
                     }
                     event.stopPropagation();
                 };
