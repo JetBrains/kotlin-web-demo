@@ -593,7 +593,9 @@ $("#saveAsButton").click(function () {
         }), accordion.getSelectedProject().getName());
     } else {
         incompleteActionManager.incomplete("save");
-        loginDialog.dialog("open");
+        loginView.openLoginDialog(function(){
+            incompleteActionManager.cancel("save");
+        });
     }
 });
 
@@ -620,14 +622,6 @@ window.onbeforeunload = function () {
     localStorage.setItem("highlightOnTheFly", document.getElementById("on-the-fly-checkbox").checked);
     //return null;
 };
-
-
-var loginDialog = $("#login-dialog").dialog({
-    modal: "true",
-    resizable: false,
-    width: 300,
-    autoOpen: false
-});
 
 $("#runMode").selectmenu({
     icons: {button: "selectmenu-arrow-icon"}

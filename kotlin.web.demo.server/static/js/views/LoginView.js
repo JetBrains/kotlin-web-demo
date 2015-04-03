@@ -38,8 +38,23 @@ var LoginView = (function () {
                 isLoggedIn = false;
                 $("#login").show();
                 $("#logout").hide();
+            },
+            openLoginDialog: function(onClose){
+                if(onClose != null) {
+                    $(loginDialog).on("dialogclose", onClose)
+                } else{
+                    $(loginDialog).unbind("dialogclose")
+                }
+                $(loginDialog).dialog("open");
             }
         };
+
+        var loginDialog = $("#login-dialog").dialog({
+            modal: "true",
+            resizable: false,
+            width: 300,
+            autoOpen: false
+        });
 
         $("#login-with-twitter").click(function () {
             login("twitter");

@@ -36,6 +36,12 @@ var IncompleteActionManager = (function () {
                     throw "Action not registered";
                 }
             },
+            cancel: function(id){
+                var index = incompleteActions.indexOf(id);
+                if (index > -1) {
+                    incompleteActions.splice(index, 1);
+                }
+            },
             checkTimepoint: function (timePoint) {
                 timePoint = "on" + timePoint.capitalize();
                 for (var i = 0; i < incompleteActions.length; ++i) {

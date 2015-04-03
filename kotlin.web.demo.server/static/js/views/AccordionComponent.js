@@ -288,7 +288,7 @@ var AccordionView = (function () {
                 login_link.className = "login-link";
                 login_link.innerHTML = "(please log in)";
                 myProgramsHeaderElement.onclick = function (event) {
-                    $("#login-dialog").dialog("open");
+                    loginView.openLoginDialog();
                     event.stopPropagation()
                 };
                 myProgramsHeaderElement.appendChild(login_link);
