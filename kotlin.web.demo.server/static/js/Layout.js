@@ -65,7 +65,7 @@ fullscreenButton.onclick = function () {
         } else {
             $("#workspace").css("margin-left", 0);
         }
-        updateEditorHeight();
+        updateEditorHeightAndRefreshEditor();
     } else {
         $("[fullscreen-sensible]").addClass("fullscreen");
         $(this).find(".text").html("Collapse");
@@ -132,7 +132,7 @@ argumentsButton.onclick = function () {
         $(argumentsButton).addClass("active");
         $(argumentsInputElement).show()
     }
-    updateEditorHeight();
+    updateEditorHeightAndRefreshEditor();
     updateGridConfigurationInLocalStorage();
 };
 
@@ -146,7 +146,7 @@ function onOutputViewResized() {
     gridTopHeight = gridHeight - $("#grid-bottom").outerHeight(true) - $("#grid-nav").outerHeight(true);
     gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
     $(gridTopElement).css("height", gridTopHeight);
-    updateEditorHeight();
+    updateEditorHeightAndRefreshEditor();
 }
 
 var gridConfiguration = localStorage.getItem("gridConfiguration");
@@ -160,7 +160,7 @@ if (gridConfiguration != null) {
     $("#grid-bottom").height(gridConfiguration.gridBottomHeight);
     onOutputViewResized();
 }
-updateEditorHeight();
+updateEditorHeightAndRefreshEditor();
 
 function updateGridConfigurationInLocalStorage() {
     var gridConfiguration = {
@@ -173,6 +173,7 @@ function updateGridConfigurationInLocalStorage() {
     localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration));
 }
 
+//Calling codemirror refresh from codemirror callback can lead to strange results
 function updateEditorHeight(){
     var workspaceHeight = $(gridTopElement).height();
     var toolBoxHeight = $(toolbox).outerHeight();
@@ -180,6 +181,10 @@ function updateEditorHeight(){
     var notificationsHeight = $("#editor-notifications").is(':visible') ? $("#editor-notifications").outerHeight() : 0;
     var editorHeight = workspaceHeight - toolBoxHeight - commandLineArgumentsHeight - notificationsHeight;
     document.getElementById("editordiv").style.height = editorHeight + "px";
+}
+
+function updateEditorHeightAndRefreshEditor(){
+    updateEditorHeight();
     editor.refresh()
 }
 
@@ -193,7 +198,7 @@ function updateGridHeightFullscreen() {
     gridTopHeight = gridHeight - $("#statusBarWrapper").outerHeight(true) - $("#result-tabs").outerHeight() - $("#grid-nav").outerHeight(true);
     gridTopHeight -= ($(gridTopElement).outerHeight(true) - $(gridTopElement).height());
     $(gridTopElement).css("height", gridTopHeight);
-    updateEditorHeight()
+    updateEditorHeightAndRefreshEditor()
 }
 
 function isFullscreenMode() {
