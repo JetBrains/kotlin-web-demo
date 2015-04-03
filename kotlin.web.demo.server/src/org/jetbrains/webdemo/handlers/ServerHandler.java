@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.handlers;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.Nullable;
@@ -55,9 +54,9 @@ public class ServerHandler {
             SessionInfo sessionInfo;
             try {
                 switch (request.getParameter("type")) {
-                    case ("getSessionId"):
+                    case ("getSessionInfo"):
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sendSessionId(request, response, sessionInfo);
+                        sendSessionInfo(request, response, sessionInfo);
                         break;
                     case ("getUserName"):
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
@@ -97,16 +96,13 @@ public class ServerHandler {
         }
     }
 
-    private void sendSessionId(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
+    private void sendSessionInfo(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
         try {
             String id = sessionInfo.getId();
-            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
-            array.add(id);
-            if (sessionInfo.getUserInfo().isLogin()) {
-                array.add(URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
-            }
-
-            writeResponse(request, response, array.toString(), HttpServletResponse.SC_OK);
+            ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
+            responseBody.put("id", id);
+            responseBody.put("isLoggedIn", sessionInfo.getUserInfo().isLogin());
+            writeResponse(request, response, responseBody.toString(), HttpServletResponse.SC_OK);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "?" + request.getQueryString());

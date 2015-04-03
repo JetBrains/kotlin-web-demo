@@ -539,23 +539,24 @@ function generateAjaxUrl(type, parameters) {
     return url;
 }
 
-function setSessionId() {
+function getSessionInfo(callback) {
     $.ajax({
-        url: generateAjaxUrl("getSessionId"),
+        url: generateAjaxUrl("getSessionInfo"),
         context: document.body,
         type: "GET",
-        dataType: "json",
         timeout: 10000,
-        success: getSessionIdSuccess
+        dataType: "json",
+        success: callback
     });
 }
 
-function getSessionIdSuccess(data) {
-    data = eval(data);
-    if (data[0] != null && data[0] != '') {
-        sessionId = data[0];
-    }
-}
+window.onfocus = function(){
+    getSessionInfo(function(data){
+        if(sessionId != data.id || data.isLoggedIn != loginView.isLoggedIn()){
+            location.reload();
+        }
+    })
+};
 
 
 var saveButton = $("#saveButton").click(function () {
@@ -677,7 +678,9 @@ function unBlockContent() {
     document.getElementById("global-overlay").style.display = "none";
 }
 
-setSessionId();
+getSessionInfo(function(data){
+    sessionId = data.id;
+});
 loadShortcuts();
 setKotlinJsOutput();
 setKotlinVersion();
