@@ -21,7 +21,7 @@ import kotlin.js.dom.html5.localStorage
  */
 
 class File(
-        val project: dynamic,
+        val project: Project,
         name: String,
         val id: String,
         text: String = "",

@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
+import org.w3c.dom.Element
+import kotlin.js.dom.html.HTMLDivElement
+
 /**
  * Created by Semyon.Atamas on 4/3/2015.
  */
 
+native("$")
+fun jq(element: Element): dynamic
 
 native
 trait Error {
@@ -48,3 +53,27 @@ trait FileProvider {
 
 native
 val fileProvider: FileProvider = noImpl
+
+native
+trait Project {
+    fun getType(): ProjectType
+    fun getName(): String
+    fun getParent(): FolderView
+}
+
+native
+trait ProjectView{
+    fun getProjectData(): Project
+}
+
+native
+val loginView: dynamic = noImpl
+
+native
+class InputDialogView(title: String, inputText: String, buttonText: String) {
+    var validate: (String) -> ValidationResult
+    var open: (callback: (String) -> Unit, defaultValue: String) -> Unit
+}
+
+native
+fun HTMLDivElement.click()

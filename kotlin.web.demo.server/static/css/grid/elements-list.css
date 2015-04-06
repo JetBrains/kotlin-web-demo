@@ -21,7 +21,6 @@
     height: 100%;
     width: 240px;
     float: left;
-    background-color: #f7f7f7;
 }
 
 .examples-list {
@@ -51,7 +50,6 @@
 }
 
 #examples-list .ui-accordion-header {
-    background-color: #f7f7f7;
     -webkit-transform: translate3d(0, 0, 0); /*without this first item in accordion sometimes disappears if you are using mac. Deep magic*/
     outline: none;
     color: #3164a0;
@@ -74,8 +72,21 @@
     position: relative;
 }
 
-.folder-name-div {
-    padding-left: 11px;
+.folder-header[depth="0"]{
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.folder-header[depth="0"].ui-state-active{
+    border-bottom: 0;
+}
+
+.folder-header[depth="0"] + .ui-widget-content{
+    background-color: #f3f5f8;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.folder-header .text {
+    padding-left: 7px;
     line-height: 1.2;
     padding-right: 10px;
     max-width: 100%;
@@ -103,44 +114,28 @@
     cursor: pointer;
     display: block;
     color: #3164a0;
-    background-color: #ffffff;
-    padding: 6px 6px 6px;
+    /*background-color: #ffffff;*/
+    padding: 6px 6px 6px 10px;
 }
 
-#examples-list .depth-0 {
-    padding-left: 0;
+#examples-list [depth="0"] {
+    padding-left: 6px;
 }
 
-#examples-list .depth-1 {
-    padding-left: 25px;
+#examples-list [depth="1"] {
+    padding-left: 21px;
 }
 
-#examples-list .depth-2 {
-    padding-left: 50px;
+#examples-list [depth="2"] {
+    padding-left: 36px;
 }
 
-#examples-list .depth-3 {
-    padding-left: 75px;
+#examples-list [depth="3"] {
+    padding-left: 51px;
 }
 
-#examples-list .depth-4 {
-    padding-left: 100px;
-}
-
-#examples-list .depth-5 {
-    padding-left: 125px;
-}
-
-#examples-list .depth-6 {
-    padding-left: 150px;
-}
-
-#examples-list .depth-7 {
-    padding-left: 175px;
-}
-
-#examples-list .depth-8 {
-    padding-left: 200px;
+#examples-list [depth="4"] {
+    padding-left: 66px;
 }
 
 .current-project-name {
@@ -166,7 +161,6 @@
     position: relative;
     left: auto;
     top: 3px;
-    margin-left: 6px;
     margin-top: 0;
     float: left;
 }
@@ -179,13 +173,13 @@
     color: #3164a0;
 }
 
-.examples-folder-name.ui-state-active .icons,
+.folder-header.ui-state-active .icons,
 .example-filename:hover .icons,
 .examples-project-name:hover .icons {
     display: inline-block;
 }
 
-.examples-folder-name .icons{
+.folder-header .icons{
     margin-top: 0;
 }
 
@@ -252,13 +246,13 @@
 
 .example-filename.selected {
     color: #000000;
-    background-color: #d8d8d8;
+    background-color: #c1dcff;
 }
 
 .example-filename-text {
     max-width: 100%;
     box-sizing: border-box;
-    padding-left: 18px;
+    padding-left: 24px;
     word-wrap: break-word;
     display: inline-block;
     overflow: hidden;
@@ -277,7 +271,7 @@
     float: left;
     width: 13px;
     height: 16px;
-    /*background: url("/static/images/icons.png") no-repeat -19px -92px;*/
+    margin-left: 6px;
 }
 
 .example-filename.modified .example-filename-text {

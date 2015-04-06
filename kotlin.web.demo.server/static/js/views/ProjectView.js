@@ -42,8 +42,8 @@ var ProjectView = (function () {
                 }
             },
             select: function () {
+                parent.select();
                 headerElement.className += " selected";
-                headerElement.parentNode.previousSibling.click();
                 $(contentElement).slideDown();
                 if (!project.isContentLoaded()) {
                     project.loadContent(false);
@@ -115,6 +115,9 @@ var ProjectView = (function () {
             getProjectData: function () {
                 return project;
             },
+            getDepth: function(){
+                return depth;
+            },
             onHeaderClick: function (publicId) {
 
             },
@@ -127,6 +130,7 @@ var ProjectView = (function () {
         };
 
         var nameSpan;
+        var depth =  parseInt(parent.headerElement.getAttribute("depth")) + 1;
         var project = (function () {
 
             project = new ProjectData(header.type, header.publicId, header.name, parent);
@@ -230,7 +234,8 @@ var ProjectView = (function () {
             headerElement.id = header.publicId;
 
             $(contentElement).slideUp();
-            headerElement.className = "examples-project-name depth-1";
+            headerElement.className = "examples-project-name";
+            headerElement.setAttribute("depth", depth.toString());
             var img = document.createElement("div");
             img.className = "icon";
             headerElement.appendChild(img);

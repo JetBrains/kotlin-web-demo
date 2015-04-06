@@ -416,6 +416,7 @@ public class MyHttpSession {
 
             ObjectNode myProgramsContent = responseBody.addObject();
             myProgramsContent.put("name", "My programs");
+            myProgramsContent.put("id", "My%20programs");
             myProgramsContent.putArray("childFolders");
             if (sessionInfo.getUserInfo().isLogin()) {
                 myProgramsContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo()));
@@ -432,6 +433,7 @@ public class MyHttpSession {
     private void addFolderContent(ArrayNode arrayNode, ExamplesFolder folder) {
         ObjectNode folderContent = arrayNode.addObject();
         folderContent.put("name", folder.getName());
+        folderContent.put("id", folder.getId());
         ArrayNode exampleHeaders = folderContent.putArray("projects");
         for (Project example : folder.getExamples()) {
             ObjectNode exampleHeader = exampleHeaders.addObject();

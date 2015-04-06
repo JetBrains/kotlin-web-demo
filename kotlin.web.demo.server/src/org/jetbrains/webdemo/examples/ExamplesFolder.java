@@ -26,13 +26,17 @@ import java.util.Map;
  */
 public class ExamplesFolder {
     public static ExamplesFolder ROOT_FOLDER;
-
+    private String id;
     private String name;
     private Map<String, Project> examples;
     private Map<String, ExamplesFolder> childFolders;
 
-    public ExamplesFolder(String name, Map<String, Project> examples, Map<String, ExamplesFolder> childFolders) {
+    public ExamplesFolder(String name,
+                          String id,
+                          Map<String, Project> examples,
+                          Map<String, ExamplesFolder> childFolders) {
         this.name = name;
+        this.id = id;
         this.examples = examples;
         this.childFolders = childFolders;
     }
@@ -55,5 +59,9 @@ public class ExamplesFolder {
 
     public String getName() {
         return name;
+    }
+
+    public String getId(){
+        return id;
     }
 }

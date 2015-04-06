@@ -23,7 +23,7 @@
 
 var AccordionView = (function () {
     function AccordionView(/*Element*/element) {
-        var DEFAULT_PROJECT_ID = "Hello,%20world!/Simplest%20version";
+        var DEFAULT_PROJECT_ID = "Examples/Hello,%20world!/Simplest%20version";
 
         var instance = {
             loadAllContent: function () {
@@ -32,36 +32,46 @@ var AccordionView = (function () {
                 selectedProjectView = null;
                 selectedFileView = null;
                 headersProvider.getAllHeaders(function (folders) {
-                        $(folders).each(function (ind, folder) {
-                            if (folder.name == "My programs") {
-                                addMyProjectsFolder(folder.projects);
-                            } else if (folder.name == "Public links") {
-                                publicLinksContentElement = addFolder(folder);
+                        $(folders).each(function (ind, folderContent) {
+                            if (folderContent.name == "My programs") {
+                                myProgramsFolder = new Kotlin
+                                    .modules["kotlin.web.demo.frontend"]
+                                    .MyProgramsFolderView(element, folderContent, null, addProject);
+                            } else if (folderContent.name == "Public links") {
+                                publicLinksFolder = new Kotlin
+                                    .modules["kotlin.web.demo.frontend"]
+                                    .FolderView(element, folderContent, null, addProject);
                             } else {
-                                addFolder(folder)
+                                new Kotlin
+                                    .modules["kotlin.web.demo.frontend"]
+                                    .FolderView(element, folderContent, null, addProject);
                             }
                         });
                         incompleteActionManager.checkTimepoint("headersLoaded");
                         $(element).accordion("refresh");
                         if (!loginView.isLoggedIn()) {
-                            $(myProgramsHeaderElement).unbind("click");
+                            $(myProgramsFolder.headerElement).unbind("click");
                         }
                         loadFirstItem();
                     }
                 );
             },
             addNewProject: function (name, publicId, fileId) {
-                addProject(myProgramsContentElement, {name: name, publicId: publicId, type: ProjectType.USER_PROJECT}, "My programs");
+                addProject(myProgramsFolder.contentElement, {
+                    name: name,
+                    publicId: publicId,
+                    type: ProjectType.USER_PROJECT
+                }, myProgramsFolder);
                 projects[publicId].getProjectData().setDefaultContent();
                 projects[publicId].getProjectData().addFileWithMain(name, fileId);
                 selectProject(publicId);
             },
             addNewProjectWithContent: function (publicId, content) {
-                addProject(myProgramsContentElement, {
+                addProject(myProgramsFolder.contentElement, {
                     name: content.name,
                     publicId: publicId,
                     type: ProjectType.USER_PROJECT
-                }, "My programs");
+                }, myProgramsFolder);
                 projects[publicId].getProjectData().setContent(content);
                 selectProject(publicId);
             },
@@ -73,22 +83,8 @@ var AccordionView = (function () {
             getSelectedProjectView: function () {
                 return selectedProjectView;
             },
-            validateNewProjectName: function (projectName) {
-                if(projectName == ""){
-                    return {valid: false, message: "Project name can't be empty"};
-                }
-                if(!(/^[a-zA-Z0-9,_\- ]+$/).test(projectName)){
-                    return {valid: false, message: "Project name can contain only the following characters:" +
-                    "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>"};
-                }
-                for (var url in projects) {
-                    var project = projects[url].getProjectData();
-                    if (project.getName() == projectName &&
-                        project.getType() == ProjectType.USER_PROJECT) {
-                        return {valid: false, message: "Project with that name already exists"};
-                    }
-                }
-                return {valid: true};
+            validateNewProjectName: function (name) {
+                return myProgramsFolder.validateNewProjectName(name)
             },
             onBeforeUnload: function () {
                 var publicLinks = [];
@@ -152,6 +148,9 @@ var AccordionView = (function () {
             },
             selectProject: function (publicId) {
                 selectProject(publicId)
+            },
+            getProjectView: function (publicId) {
+                return projects[publicId];
             }
         };
 
@@ -170,12 +169,8 @@ var AccordionView = (function () {
         var projects = {};
         var selectedProjectView = null;
         var selectedFileView = null;
-
-        var myProgramsContentElement;
-        var myProgramsHeaderElement;
-        var publicLinksContentElement;
-        var newProjectDialog = new InputDialogView("Add new project", "Project name:", "Add");
-        newProjectDialog.validate = instance.validateNewProjectName;
+        var myProgramsFolder;
+        var publicLinksFolder;
 
         function loadFirstItem() {
             var projectId = getProjectIdFromUrl();
@@ -195,7 +190,7 @@ var AccordionView = (function () {
                         if (!(header.publicId in projects)) {
                             if (header.type == ProjectType.PUBLIC_LINK) {
                                 header.timeStamp = new Date().getTime();
-                                addProject(publicLinksContentElement, header, "Public links");
+                                addProject(publicLinksFolder.contentElement, header, publicLinksFolder);
                             } else {
                                 throw "Project wasn't downloaded";
                             }
@@ -242,73 +237,8 @@ var AccordionView = (function () {
             };
 
             projects[header.publicId] = projectView;
-        }
 
-        function addFolder(folder) {
-            var headerElement = document.createElement("h3");
-            headerElement.className = "examples-folder-name depth-0";
-            headerElement.id = escapeString(folder.name);
-            element.appendChild(headerElement);
-
-            var folderDiv = document.createElement("div");
-            folderDiv.innerHTML = folder.name;
-            folderDiv.className = "folder-name-div";
-            headerElement.appendChild(folderDiv);
-
-            var cont = document.createElement("div");
-            element.appendChild(cont);
-
-            $(folder.projects).each(function (ind, project) {
-                addProject(cont, project, folder.name);
-            });
-            return cont;
-        }
-
-        function addMyProjectsFolder(projects) {
-            myProgramsHeaderElement = document.createElement("h3");
-            myProgramsHeaderElement.className = "examples-folder-name depth-0";
-            myProgramsHeaderElement.id = escapeString("My programs");
-            element.appendChild(myProgramsHeaderElement);
-
-            var folderDiv = document.createElement("div");
-            folderDiv.innerHTML = "My programs";
-            folderDiv.className = "folder-name-div";
-            myProgramsHeaderElement.appendChild(folderDiv);
-
-
-            myProgramsContentElement = document.createElement("div");
-            myProgramsContentElement.id = "My_Programs_content";
-            element.appendChild(myProgramsContentElement);
-
-            if (!loginView.isLoggedIn()) {
-                folderDiv.style.display = "inline-block";
-                myProgramsHeaderElement.style.color = "rgba(0,0,0,0.5)";
-                var login_link = document.createElement("span");
-                login_link.id = "login-link";
-                login_link.className = "login-link";
-                login_link.innerHTML = "(please log in)";
-                myProgramsHeaderElement.onclick = function (event) {
-                    loginView.openLoginDialog();
-                    event.stopPropagation()
-                };
-                myProgramsHeaderElement.appendChild(login_link);
-            } else {
-                var actionIconsElement = document.createElement("div");
-                actionIconsElement.className = "icons";
-                myProgramsHeaderElement.appendChild(actionIconsElement);
-
-                var newProjectButton = document.createElement("div");
-                newProjectButton.className = "new-project icon";
-                newProjectButton.onclick = function (e) {
-                    newProjectDialog.open(projectProvider.addNewProject, "Untitled");
-                    e.stopPropagation();
-                };
-                actionIconsElement.appendChild(newProjectButton);
-            }
-
-            $(projects).each(function (ind, project) {
-                addProject(myProgramsContentElement, project, "My programs");
-            });
+            return projectView;
         }
 
         function selectProject(publicId) {

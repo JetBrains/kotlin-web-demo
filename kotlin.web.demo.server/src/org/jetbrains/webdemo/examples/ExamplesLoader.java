@@ -64,7 +64,7 @@ public class ExamplesLoader {
                 }
             }
 
-            return new ExamplesFolder(name, examples, childFolders);
+            return new ExamplesFolder(name, url, examples, childFolders);
         } catch (IOException e) {
             System.err.println("Can't load folder: " + e.toString());
             return null;

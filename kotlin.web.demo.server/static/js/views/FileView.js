@@ -80,7 +80,8 @@ var FileView = (function () {
 
         init();
         function init() {
-            headerElement.className = "example-filename depth-2";
+            headerElement.className = "example-filename";
+            headerElement.setAttribute("depth", projectView.getDepth() + 1);
 
             var icon = document.createElement("div");
             $(icon).addClass("icon").addClass("high-res-icon");

@@ -21,24 +21,16 @@ import kotlin.js.dom.html.document
  * Created by Semyon.Atamas on 3/31/2015.
  */
 
-native
-trait Project{
-    fun getName(): String
-    fun getParent(): String
-}
-
 class NavBarView(private val navigationElement: HTMLDivElement) {
     fun onFileSelected(file: File) {
         navigationElement.innerHTML = "";
-        navigationElement.appendChild(createNavItem(file.project.getParent()));
-        navigationElement.appendChild(createNavItem(file.project.getName()));
         navigationElement.appendChild(createNavItem(file.name));
+        createNavItem(file.project);
     }
 
     fun onProjectSelected(project: Project){
         navigationElement.innerHTML = "";
-        navigationElement.appendChild(createNavItem(project.getParent()));
-        navigationElement.appendChild(createNavItem(project.getName()));
+        createNavItem(project);
     }
 
     fun onSelectedFileDeleted(){
@@ -53,6 +45,15 @@ class NavBarView(private val navigationElement: HTMLDivElement) {
     fun onSelectedFileRenamed(newName: String){
         var navItem = navigationElement.lastChild as HTMLDivElement
         navItem.textContent = newName
+    }
+
+    private fun createNavItem(project: Project){
+        navigationElement.insertBefore(createNavItem(project.getName()), navigationElement.firstChild)
+        var folder: FolderView? = project.getParent()
+        while (folder != null){
+            navigationElement.insertBefore(createNavItem(folder!!.name), navigationElement.firstChild)
+            folder = folder!!.parent
+        }
     }
 
     private fun createNavItem(name: String): HTMLDivElement {
