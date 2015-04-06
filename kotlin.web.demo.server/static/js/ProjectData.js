@@ -71,7 +71,7 @@ var ProjectData = (function () {
                     for (var i = 0; i < content.files.length; ++i) {
                         var fileContent = JSON.parse(localStorage.getItem(content.files[i]));
                         content.files[i] = Kotlin.modules["kotlin.web.demo.frontend"].File.object.fromJSON(instance, fileContent);
-                        content.files[i].onModified(onModified);
+                        content.files[i].listenableIsModified.addModifyListener(onModified);
                     }
                     onContentLoaded(content)
                 } else {
@@ -81,7 +81,7 @@ var ProjectData = (function () {
                         function (content) {
                             for (var i = 0; i < content.files.length; ++i) {
                                 content.files[i] = Kotlin.modules["kotlin.web.demo.frontend"].File.object.fromJSON(instance, content.files[i]);
-                                content.files[i].onModified(onModified);
+                                content.files[i].listenableIsModified.addModifyListener(onModified);
                             }
                             onContentLoaded(content);
                         },
@@ -99,7 +99,7 @@ var ProjectData = (function () {
             },
             addEmptyFile: function (name, publicId) {
                 var file = new Kotlin.modules["kotlin.web.demo.frontend"].File(instance, name, publicId);
-                file.onModified(onModified);
+                file.listenableIsModified.addModifyListener(onModified);
                 files.push(file);
                 instance.onFileAdded(file);
                 return file
@@ -111,7 +111,7 @@ var ProjectData = (function () {
                     publicId,
                     "fun main(args: Array<String>) {\n\n}"
                 );
-                file.onModified(onModified);
+                file.listenableIsModified.addModifyListener(onModified);
                 files.push(file);
                 instance.onFileAdded(file);
                 return file

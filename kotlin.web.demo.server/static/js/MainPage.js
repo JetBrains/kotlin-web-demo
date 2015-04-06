@@ -310,7 +310,7 @@ var accordion = (function () {
         }
         ;
         setState(url, currentFile.project.getName());
-        navBarView.onFileSelected(currentFile);
+        navBarView.onFileSelected(previousFile, currentFile);
 
         editor.closeFile();
         editor.open(currentFile);

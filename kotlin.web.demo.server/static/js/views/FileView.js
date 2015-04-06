@@ -54,8 +54,8 @@ var FileView = (function () {
         };
 
         var fileNameElement;
-        file.onModified(function (isFileContentChanged) {
-            if(isFileContentChanged) {
+        file.listenableIsModified.addModifyListener(function (e) {
+            if(e.newValue) {
                 $(headerElement).addClass("modified");
                 if (isSelected()) {
                     accordion.onModifiedSelectedFile(file);
@@ -123,15 +123,12 @@ var FileView = (function () {
                     renameImg.title = "Rename file";
                     renameImg.onclick = function (event) {
                         var renameFileFunction = fileProvider.renameFile.bind(null, file.id, function(newName){
-                            file.name = newName;
+                            file.name = addKotlinExtension(newName);
                         });
-                        file.onRenamed = function (newName) {
-                            fileNameElement.innerHTML = newName;
+                        file.listenableName.addModifyListener(function (e) {
+                            fileNameElement.innerHTML = e.newValue;
                             fileNameElement.title = fileNameElement.innerHTML;
-                            if(isSelected()){
-                                navBarView.onSelectedFileRenamed(newName);
-                            }
-                        };
+                        });
                         renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.name));
                         event.stopPropagation();
 

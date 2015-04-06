@@ -22,10 +22,16 @@ import kotlin.js.dom.html.document
  */
 
 class NavBarView(private val navigationElement: HTMLDivElement) {
-    fun onFileSelected(file: File) {
+    fun onFileSelected(oldFile: File?, newFile: File) {
         navigationElement.innerHTML = "";
-        navigationElement.appendChild(createNavItem(file.name));
-        createNavItem(file.project);
+        val navItem = createNavItem(newFile.name);
+        navigationElement.appendChild(navItem);
+        createNavItem(newFile.project)
+
+        oldFile?.listenableName?.removeNotifyListener("navBarListener");
+        newFile.listenableName.addModifyListener("navBarListener", { e ->
+            navItem.textContent = e.newValue
+        })
     }
 
     fun onProjectSelected(project: Project){
@@ -38,12 +44,8 @@ class NavBarView(private val navigationElement: HTMLDivElement) {
     }
 
     fun onSelectedProjectRenamed(newName: String){
+        //TODO
         var navItem = navigationElement.childNodes.item(1) as HTMLDivElement
-        navItem.textContent = newName
-    }
-
-    fun onSelectedFileRenamed(newName: String){
-        var navItem = navigationElement.lastChild as HTMLDivElement
         navItem.textContent = newName
     }
 

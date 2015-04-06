@@ -15,6 +15,7 @@
  */
 
 import kotlin.js.dom.html5.localStorage
+import kotlin.properties.Delegates
 
 /**
  * Created by Semyon.Atamas on 4/2/2015.
@@ -33,22 +34,11 @@ class File(
     var errors = array<Error>()
     var changesHistory: dynamic = null;
 
-    var onRenamed: ((newName: String) -> Unit)? = null
-    var name: String = name
-        set(value) {
-            $name = if (value.endsWith(".kt")) value else value + ".kt"
-            onRenamed?.invoke(name)
-        }
+    val listenableName = VarListener<String>();
+    var name: String by Listenable(name, listenableName)
 
-    val modifiedCallbacks = arrayListOf<(Boolean) -> Unit>()
-    fun onModified(callback: (Boolean) -> Unit) = modifiedCallbacks.add(callback)
-    var isModified: Boolean = false
-        private set(value) {
-            if ($isModified != value) {
-                $isModified = value
-                modifiedCallbacks.forEach { it(value) }
-            }
-        }
+    val listenableIsModified = VarListener<Boolean>()
+    var isModified: Boolean by Listenable(false, listenableIsModified)
 
     var text: String = text
         set(newText: String) {
@@ -72,7 +62,8 @@ class File(
 
     //TODO following functions from file to some other class
     fun save() {
-        if (project.getType() == ProjectType.USER_PROJECT && isModifiable) {
+        //TODO replace === with == (when == will work correctly)
+        if (project.getType() === ProjectType.USER_PROJECT && isModifiable) {
             fileProvider.saveFile(this, {
                 originalText = text
                 isModified = text != originalText
@@ -81,7 +72,8 @@ class File(
     }
 
     fun dumpToLocalStorage() {
-        if (project.getType() != ProjectType.USER_PROJECT) {
+        //TODO replace !== with != (when != will work correctly)
+        if (project.getType() !== ProjectType.USER_PROJECT) {
             //TODO don't save editor info
             val result = js("({})")
             result.name = name
