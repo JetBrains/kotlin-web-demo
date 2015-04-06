@@ -22,6 +22,7 @@ import org.jetbrains.webdemo.ResponseUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,10 +67,11 @@ public class ExamplesUtils {
         throw new NullPointerException("File not found");
     }
 
-    public static List<Project> getAllExamples() {
+    public static List<Project> getAllExamples(ExamplesFolder folder) {
         List<Project> examples = new ArrayList<>();
-        for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()) {
-            examples.addAll(folder.getExamples());
+        examples.addAll(folder.getExamples());
+        for (ExamplesFolder childFolder : folder.getChildFolders()) {
+            examples.addAll(getAllExamples(childFolder));
         }
         return examples;
     }
