@@ -112,7 +112,7 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         nodeElement.appendChild(nodeElementHeader);
 
         var img = document.createElement("div");
-        img.className = "img " + node.icon;
+        img.className = "icon " + node.icon.toLowerCase();
         nodeElementHeader.appendChild(img);
 
         var text = document.createElement("div");

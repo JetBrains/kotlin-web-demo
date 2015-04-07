@@ -239,22 +239,22 @@
     outline: none;
 }
 
-.tree-node .img.ERROR {
+.tree-node .error.icon {
     float: left;
     height: 12px;
     width: 12px;
     position: relative;
     margin-right: 4px;
-    background: url("/static/images/errors_and_warnings.png") no-repeat 0 0;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -700px;
 }
 
-.tree-node .img.WARNING {
+.tree-node .warning.icon {
     float: left;
     height: 12px;
     width: 12px;
     position: relative;
     margin-right: 4px;
-    background: url("/static/images/errors_and_warnings.png") no-repeat 0 -14px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -750px;
 }
 
 #console, #generated-code {
@@ -460,9 +460,11 @@ li[aria-expanded="true"] > .tree-node-header .toggle-arrow {
 
 .kotlin-file-icon {
     position: relative;
-    top: 2px;
-    display: inline-block;
-    width: 14px;
     height: 14px;
+    width: 14px;
+    margin-left: 4px;
+    margin-right: 4px;
+    display: inline-block;
+    top: 2px;
     background: url("/static/images/kotlin_file.png");
 }

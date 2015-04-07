@@ -144,7 +144,7 @@
 }
 
 .errors-and-warnings-gutter {
-    width: 11px;
+    width: 14px;
     margin-left: 2px;
 }
 
@@ -152,14 +152,26 @@
     height: 12px;
     width: 12px;
     margin-top: 2px;
-    background: url("/static/images/errors_and_warnings.png") no-repeat 0 0 !important;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -700px;
 }
 
 .WARNINGgutter {
     height: 12px;
     width: 12px;
     margin-top: 2px;
-    background: url("/static/images/errors_and_warnings.png") no-repeat 0 -14px !important;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -750px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .ERRORgutter {
+        background-image: url("/static/images/icons_all_sprite@2x.png");
+        background-size: 200px 900px;
+    }
+
+    .WARNINGgutter{
+        background-image: url("/static/images/icons_all_sprite@2x.png");
+        background-size: 200px 900px;
+    }
 }
 
 .red_wavy_line {
