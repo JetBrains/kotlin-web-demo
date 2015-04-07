@@ -229,6 +229,8 @@
 }
 
 #problems-tree .file-problems-header .text {
+    display: inline-block;
+    padding-left: 0;
     top: auto;
     bottom: 1px;
 }
