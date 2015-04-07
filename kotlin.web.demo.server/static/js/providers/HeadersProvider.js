@@ -73,7 +73,7 @@ var HeadersProvider = (function () {
                                         return a.timeStamp - b.timeStamp;
                                     });
                                 } else {
-                                    publicLinks = "";
+                                    publicLinks = [];
                                 }
 
                                 folders.push({
@@ -101,7 +101,7 @@ var HeadersProvider = (function () {
                     try {
                         instance.onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_headers_fail);
                     } catch (e) {
-                        console.log(e)
+                        console.err(e)
                     }
                 },
                 complete: unBlockContent
