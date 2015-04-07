@@ -116,10 +116,10 @@ var AccordionView = (function () {
 
                         var previousFile = null;
                         if (previousFileView != null) {
-                            $(previousFileView.getHeaderElement()).removeClass("selected");
+                            $(previousFileView.getWrapper()).removeClass("selected");
                             previousFile = previousFileView.getFile();
                         }
-                        $(selectedFileView.getHeaderElement()).addClass("selected");
+                        $(selectedFileView.getWrapper()).addClass("selected");
 
                         instance.onSelectFile(previousFile, selectedFileView.getFile());
                     } else {

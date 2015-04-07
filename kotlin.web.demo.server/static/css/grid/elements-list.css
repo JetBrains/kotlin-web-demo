@@ -174,7 +174,7 @@
 }
 
 .folder-header.ui-state-active .icons,
-.example-filename:hover .icons,
+.file-header:hover .icons,
 .examples-project-name:hover .icons {
     display: inline-block;
 }
@@ -232,27 +232,29 @@
     background: url("/static/images/icons_all_sprite.png") no-repeat -50px -500px;
 }
 
-.example-filename {
-    overflow: hidden;
-    cursor: pointer;
-    display: block;
+.file-header-wrapper{
     color: #3164a0;
-    line-height: 16px;
-    font-size: 14px;
-    position: relative;
     background-color: white;
-    padding: 6px 6px 6px;
 }
 
-.example-filename.selected {
+.file-header-wrapper.selected {
     color: #000000;
     background-color: #c1dcff;
 }
 
-.example-filename-text {
+.file-header {
+    cursor: pointer;
+    line-height: 16px;
+    font-size: 14px;
+    position: relative;
+    background-color: inherit;
+    padding: 6px;
+}
+
+.file-header .text {
     max-width: 100%;
     box-sizing: border-box;
-    padding-left: 24px;
+    padding-left: 18px;
     word-wrap: break-word;
     display: inline-block;
     overflow: hidden;
@@ -261,24 +263,23 @@
     white-space: nowrap;
 }
 
-.example-filename.hover .example-filename-text {
+.file-header.hover .text {
     max-height: none;
     white-space: normal;
 }
 
-.example-filename>.icon {
+.file-header>.icon {
     position: absolute;
     float: left;
     width: 13px;
     height: 16px;
-    margin-left: 6px;
 }
 
-.example-filename.modified .example-filename-text {
+.file-header.modified .text {
     margin-top: 2px;
 }
 
-.example-filename.modified>.icon {
+.file-header.modified>.icon {
     width: 15px;
     height: 18px;
 }
@@ -301,7 +302,7 @@
     background: url("/static/images/icons_all_sprite.png") no-repeat -0px -500px;
 }
 
-.example-filename.modified>.icon.kotlin {
+.file-header.modified>.icon.kotlin {
     background: url("/static/images/icons_all_sprite.png") no-repeat -0px -350px;
 }
 

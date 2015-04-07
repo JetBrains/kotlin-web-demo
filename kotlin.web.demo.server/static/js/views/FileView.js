@@ -26,7 +26,7 @@ FileType = {
 
 var FileView = (function () {
 
-    function FileView(projectView, headerElement, file) {
+    function FileView(projectView, parentNode, file) {
 
         var instance = {
             onSelect: function () {
@@ -39,6 +39,10 @@ var FileView = (function () {
             },
             getHeaderElement: function () {
                 return headerElement;
+            },
+            //TODO remove this function
+            getWrapper: function (){
+                return wrapper;
             },
             getHeaderText: function(){
                 return fileNameElement.innerHTML;
@@ -53,6 +57,8 @@ var FileView = (function () {
             }
         };
 
+        var wrapper;
+        var headerElement;
         var fileNameElement;
         file.listenableIsModified.addModifyListener(function (e) {
             if(e.newValue) {
@@ -80,8 +86,14 @@ var FileView = (function () {
 
         init();
         function init() {
-            headerElement.className = "example-filename";
-            headerElement.setAttribute("depth", projectView.getDepth() + 1);
+            wrapper = document.createElement("div");
+            wrapper.className = "file-header-wrapper";
+            wrapper.setAttribute("depth", projectView.getDepth() + 1);
+            parentNode.appendChild(wrapper);
+
+            headerElement = document.createElement("div");
+            headerElement.className = "file-header";
+            wrapper.appendChild(headerElement);
 
             var icon = document.createElement("div");
             $(icon).addClass("icon").addClass("high-res-icon");
@@ -104,7 +116,7 @@ var FileView = (function () {
 
 
             fileNameElement = document.createElement("div");
-            fileNameElement.className = "example-filename-text";
+            fileNameElement.className = "text";
             fileNameElement.innerHTML = file.name;
             fileNameElement.title = fileNameElement.innerHTML;
             headerElement.appendChild(fileNameElement);
