@@ -44,7 +44,7 @@
     top: 3px;
 }
 
-#examples-list .ui-state-active {
+#examples-list .ui-accordion-header.ui-state-active {
     cursor: default;
     color: #000000;
 }
@@ -116,6 +116,10 @@
     color: #3164a0;
     background: inherit;
     padding: 6px 6px 6px 10px;
+}
+
+.examples-project-name.selected{
+    color: black;
 }
 
 #examples-list [depth="0"] {

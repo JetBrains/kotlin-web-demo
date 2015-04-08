@@ -224,7 +224,7 @@
     padding-left: 20px;
     top: 1px;
     line-height: 1.1;
-    white-space: normal;
+    white-space: pre-wrap;
     word-break: break-all;
 }
 
@@ -297,22 +297,6 @@
     display: block;
     white-space: pre;
 }
-
-/*.status-bar-rect-ok, .status-bar-rect-fail {*/
-
-/*display: inline-block;*/
-/*width: 6px;*/
-/*border-radius: 1px;*/
-/*margin-right: 1px;*/
-/*}*/
-
-/*.status-bar-rect-fail {*/
-/*background: url("/static/images/icons.png") no-repeat -76px 0;*/
-/*}*/
-
-/*.status-bar-rect-ok {*/
-/*background: url("/static/images/icons.png") no-repeat -82px 0;*/
-/*}*/
 
 #tests-status-bar {
     float: right;
