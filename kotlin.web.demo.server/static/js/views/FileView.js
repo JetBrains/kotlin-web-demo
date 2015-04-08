@@ -63,14 +63,11 @@ var FileView = (function () {
         file.listenableIsModified.addModifyListener(function (e) {
             if(e.newValue) {
                 $(headerElement).addClass("modified");
-                if (isSelected()) {
-                    accordion.onModifiedSelectedFile(file);
-                }
             } else {
                 $(headerElement).removeClass("modified");
-                if (isSelected()) {
-                    accordion.onUnmodifiedSelectedFile(file);
-                }
+            }
+            if (isSelected()) {
+                accordion.onModifiedSelectedFile(file);
             }
         });
 

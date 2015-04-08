@@ -61,6 +61,7 @@ var KotlinEditor = (function () {
                     my_editor.setValue(openedFile.text);
                     openedFile.changesHistory != null ? my_editor.setHistory(openedFile.changesHistory) : my_editor.clearHistory();
                     highlighting.updateHighlighting();
+                    accordion.onModifiedSelectedFile(file);
                 } else {
                     throw("Previous file wasn't closed");
                 }

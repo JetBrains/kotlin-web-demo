@@ -332,41 +332,41 @@ var accordion = (function () {
     };
 
     accordion.onModifiedSelectedFile = function (file) {
-        if (file.project.getType() == ProjectType.EXAMPLE) {
-            projectActionsView.setStatus("localVersion");
-        } else if (file.project.getType() == ProjectType.PUBLIC_LINK) {
-            if (file.project.isRevertible()) {
-                var onProjectExist = function () {
-                    if (file.isRevertible) {
-                        fileProvider.checkFileExistence(
-                            file.id,
-                            projectActionsView.setStatus.bind(null, "localVersion"),
-                            function () {
-                                projectActionsView.setStatus.bind(null, "localFile");
-                                file.isRevertible = false;
-                            }
-                        )
-                    } else {
-                        projectActionsView.setStatus("localFile");
-                    }
-                };
-                var onProjectNotExist = function () {
+        if(file.isModified) {
+            if (file.project.getType() == ProjectType.EXAMPLE) {
+                projectActionsView.setStatus("localVersion");
+            } else if (file.project.getType() == ProjectType.PUBLIC_LINK) {
+                if (file.project.isRevertible()) {
+                    var onProjectExist = function () {
+                        if (file.isRevertible) {
+                            fileProvider.checkFileExistence(
+                                file.id,
+                                projectActionsView.setStatus.bind(null, "localVersion"),
+                                function () {
+                                    projectActionsView.setStatus.bind(null, "localFile");
+                                    file.isRevertible = false;
+                                }
+                            )
+                        } else {
+                            projectActionsView.setStatus("localFile");
+                        }
+                    };
+                    var onProjectNotExist = function () {
+                        projectActionsView.setStatus("default");
+                        file.project.makeNotRevertible();
+                    };
+                    projectProvider.checkIfProjectExists(
+                        file.project.getPublicId(),
+                        onProjectExist,
+                        onProjectNotExist
+                    );
+                } else {
                     projectActionsView.setStatus("default");
-                    file.project.makeNotRevertible();
-                };
-                projectProvider.checkIfProjectExists(
-                    file.project.getPublicId(),
-                    onProjectExist,
-                    onProjectNotExist
-                );
-            } else {
-                projectActionsView.setStatus("default");
+                }
             }
+        } else{
+            projectActionsView.setStatus("default");
         }
-    };
-
-    accordion.onUnmodifiedSelectedFile = function () {
-        projectActionsView.setStatus("default");
     };
 
     accordion.onSelectedFileDeleted = function () {
