@@ -223,7 +223,6 @@
     display: block;
     padding-left: 20px;
     top: 1px;
-    line-height: 1.1;
     white-space: pre-wrap;
     word-break: break-all;
 }
@@ -233,6 +232,7 @@
     padding-left: 0;
     top: auto;
     bottom: 1px;
+    padding-bottom: 0;
 }
 
 #problems-tree li {
@@ -245,6 +245,7 @@
     width: 12px;
     position: relative;
     margin-right: 4px;
+    top: 1px;
     background: url("/static/images/icons_all_sprite.png") no-repeat -50px -700px;
 }
 
@@ -254,6 +255,7 @@
     width: 12px;
     position: relative;
     margin-right: 4px;
+    top: 1px;
     background: url("/static/images/icons_all_sprite.png") no-repeat -50px -750px;
 }
 
@@ -440,6 +442,7 @@ li[aria-expanded="true"] > .tree-node-header .toggle-arrow {
     display: inline-block;
     position: relative;
     bottom: 1px;
+    padding-bottom: 2px;
 }
 
 .kotlin-file-icon {
