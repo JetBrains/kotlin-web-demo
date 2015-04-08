@@ -318,6 +318,7 @@
 }
 
 .new-project.icon {
+    cursor: pointer;
     width: 17px;
     height: 15px;
     margin-top: 7px;
