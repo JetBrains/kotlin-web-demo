@@ -39,7 +39,7 @@ import java.util.Map;
 public class ExamplesLoader {
 
     public static void loadAllExamples() {
-        ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY, "");
+        ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY, "/");
     }
 
     private static ExamplesFolder loadFolder(String path, String url) {

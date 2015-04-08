@@ -160,7 +160,7 @@ function copy(obejct) {
     return cp;
 }
 
-var userProjectPrefix = "userProjects/";
+var userProjectPrefix = "/UserProjects/";
 
 function isUserProjectInUrl() {
     return location.hash.startsWith("#" + userProjectPrefix);

@@ -23,7 +23,7 @@
 
 var AccordionView = (function () {
     function AccordionView(/*Element*/element) {
-        var DEFAULT_PROJECT_ID = "Examples/Hello,%20world!/Simplest%20version";
+        var DEFAULT_PROJECT_ID = "/Examples/Hello,%20world!/Simplest%20version";
 
         var instance = {
             loadAllContent: function () {
