@@ -159,6 +159,8 @@ var JUnitView = (function () {
                     children: [],
                     name: data[i].methodName,
                     icon: data[i].status.toLowerCase(),
+                    sourceFileName: data[i].sourceFileName,
+                    methodPosition: data[i].methodPosition,
                     id: data[i].className + '.' + data[i].methodName
                 };
                 classNode.children.push(testNode);
@@ -167,8 +169,8 @@ var JUnitView = (function () {
                     classNode.icon = "error";
                     rootNode.icon = "error";
                 } else if (data[i].status == Status.FAIL && rootNode.icon != "error") {
-                    classNode.icon = "failed";
-                    rootNode.icon = "failed";
+                    classNode.icon = "fail";
+                    rootNode.icon = "fail";
                 }
             }
         }

@@ -46,3 +46,7 @@
 .global-footer.fullscreen {
     display: none;
 }
+
+.global-toolbox-left.fullscreen {
+    padding-left: 15px;
+}
