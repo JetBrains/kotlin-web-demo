@@ -29,7 +29,7 @@ val context: CanvasContext
     }
 
 
-val PATH_TO_IMAGES = "http://kotlin-demo.jetbrains.com/static/images/canvas/"
+val PATH_TO_IMAGES = "http://try.kotlinlang.org/static/images/canvas/"
 
 
 var _state: CanvasState? = null
