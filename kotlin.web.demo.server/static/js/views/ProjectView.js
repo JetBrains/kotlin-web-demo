@@ -90,6 +90,9 @@ var ProjectView = (function () {
                 if(fileName == ""){
                     return {valid: false, message: "File name can't be empty"};
                 }
+                if(fileName.length >= 95){
+                    return {valid: false, message: "File name is too long"}
+                }
                 if(!(/^[a-zA-Z0-9,_\- ]+$/).test(fileName)){
                     return {valid: false, message: "File name can contain only the following characters:" +
                     "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>"};

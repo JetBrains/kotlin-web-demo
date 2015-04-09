@@ -121,6 +121,8 @@ class MyProgramsFolderView(parentNode: HTMLDivElement,
     fun validateNewProjectName(name: String): ValidationResult {
         if (name == "")
             return ValidationResult(false, "Project name can't be empty");
+        if (name.length() >= 95)
+            return ValidationResult(false, "Project name is too long");
         if (!name.matches("^[a-zA-Z0-9,_\\- ]+$"))
             return ValidationResult(false, "Project name can contain only the following characters:" +
                     "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>")
