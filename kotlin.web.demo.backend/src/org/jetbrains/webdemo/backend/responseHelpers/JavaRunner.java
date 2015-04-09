@@ -185,21 +185,22 @@ public class JavaRunner {
                 }
 
                 if (errStream.length() > 0) {
-                    ObjectNode errObject = new ObjectNode(JsonNodeFactory.instance);
+
                     if (isKotlinLibraryException(errStream.toString())) {
                         writeErrStreamToLog(errStream.toString().replace("\t", "    "));
 
                         ObjectNode jsonObject = jsonArray.addObject();
                         jsonObject.put("type", "err");
                         jsonObject.put("text", BackendSettings.KOTLIN_ERROR_MESSAGE);
-                        errObject.put("type", "out");
                     } else {
+                        ObjectNode errObject = new ObjectNode(JsonNodeFactory.instance);
+                        errObject.put("type", "err");
+                        errObject.put("text", errStream.toString().replace("\t", "    "));
+                        jsonArray.add(errObject);
                         ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
                                 sessionInfo.getId(), "error while excecution: " + errStream));
-                        errObject.put("type", "err");
                     }
-                    errObject.put("text", errStream.toString().replace("\t", "    "));
-                    jsonArray.add(errObject);
+
                 }
                 timer.cancel();
                 return jsonArray.toString();
