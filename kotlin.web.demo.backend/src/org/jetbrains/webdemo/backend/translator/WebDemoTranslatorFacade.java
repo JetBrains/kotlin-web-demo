@@ -112,7 +112,7 @@ public final class WebDemoTranslatorFacade {
                 LIBRARY_FILES,
                 EcmaVersion.defaultVersion(),
                 false,
-                false);
+                true);
         K2JSTranslator translator = new K2JSTranslator(config);
         TranslationResult result = translator.translate(files, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(arguments))));
         if (result instanceof org.jetbrains.kotlin.js.facade.TranslationResult.Success) {
