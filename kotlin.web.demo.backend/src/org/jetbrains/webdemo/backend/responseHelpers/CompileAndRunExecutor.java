@@ -62,7 +62,7 @@ public class CompileAndRunExecutor {
         this.args = args;
     }
 
-    public String getResult() throws TimeoutException {
+    public String getResult() throws Exception {
         ErrorAnalyzer analyzer = new ErrorAnalyzer(currentPsiFiles, sessionInfo, currentProject);
         Map<String,List<ErrorDescriptor>> errors;
         try {

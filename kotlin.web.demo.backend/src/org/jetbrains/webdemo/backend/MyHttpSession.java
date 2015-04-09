@@ -92,8 +92,8 @@ public class MyHttpSession {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
-        } catch (TimeoutException e) {
-            writeResponse("Program was terminated after " + BackendSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (Exception e){
+            writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 

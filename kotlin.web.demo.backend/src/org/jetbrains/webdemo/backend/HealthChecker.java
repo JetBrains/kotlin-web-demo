@@ -68,7 +68,7 @@ public class HealthChecker {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                } catch (TimeoutException e) {
+                } catch (Exception e) {
                     status = HttpServletResponse.SC_SERVICE_UNAVAILABLE;
                 }
             }

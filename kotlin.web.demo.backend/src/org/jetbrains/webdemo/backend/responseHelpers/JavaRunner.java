@@ -55,7 +55,7 @@ public class JavaRunner {
         this.sessionInfo = info;
     }
 
-    public String getResult(String pathToRootOut) throws TimeoutException {
+    public String getResult(String pathToRootOut) throws Exception {
         try {
             String[] commandString = generateCommandString(pathToRootOut);
             Process process;
@@ -157,19 +157,23 @@ public class JavaRunner {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
                             sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
                 } else if (!isTimeoutException) {
-                    try {
-                        if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
-                            ObjectNode output = jsonArray.addObject();
-                            ArrayNode executorOutput = (ArrayNode) new ObjectMapper().readTree(outStream.toString());
-                            output.put("testResults", executorOutput);
-                            output.put("type", "out");
-                        } else {
-                            ObjectNode output = (ObjectNode) new ObjectMapper().readTree(outStream.toString());
-                            output.put("type", "out");
-                            jsonArray.add(output);
+                    if (outStream.length() > BackendSettings.MAX_OUTPUT_SIZE * 1024) {
+                        throw new Exception("Your program produces too much output.");
+                    } else {
+                        try {
+                            if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
+                                ObjectNode output = jsonArray.addObject();
+                                ArrayNode executorOutput = (ArrayNode) new ObjectMapper().readTree(outStream.toString());
+                                output.put("testResults", executorOutput);
+                                output.put("type", "out");
+                            } else {
+                                ObjectNode output = (ObjectNode) new ObjectMapper().readTree(outStream.toString());
+                                output.put("type", "out");
+                                jsonArray.add(output);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
                 }
 
@@ -193,7 +197,8 @@ public class JavaRunner {
                 timer.cancel();
                 return jsonArray.toString();
             } else {
-                throw new TimeoutException();
+                throw new TimeoutException(
+                        "Program was terminated after " + BackendSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
             }
         } finally {
             for (OutputFile file : files) {
@@ -259,41 +264,6 @@ public class JavaRunner {
             return true;
         }
         return false;
-    }
-
-    private void readStream(StringBuilder errStream, BufferedReader stdError) throws IOException {
-        String tmp;
-        while (!isTimeoutException && ((tmp = stdError.readLine()) != null)) {
-            errStream.append(ResponseUtils.escapeString(tmp));
-            errStream.append(ResponseUtils.addNewLine());
-        }
-    }
-
-    private int tryReadStreams(StringBuilder errStream, StringBuilder outStream, InputStream isOut, InputStream isErr) {
-        StringWriter stringWriter = new StringWriter();
-        int lengthOut = 0;
-        int lengthErr = 0;
-        byte[] tmp = new byte[20];
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            if ((lengthOut = isOut.read(tmp)) >= 0) {
-                out.write(tmp, 0, lengthOut);
-                stringWriter.write(new String(tmp));
-                outStream.append(stringWriter.toString());
-            } else if (lengthOut == -1) {
-                returnValue--;
-            }
-            if ((lengthErr = isErr.read(tmp)) >= 0) {
-                out.write(tmp, 0, lengthErr);
-                errStream.append(new String(tmp));
-            } else if (lengthErr == -1) {
-                returnValue--;
-            }
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
-        }
-        return returnValue;
     }
 
     private void deleteFile(String path, String pathToRootOut) {
