@@ -329,6 +329,7 @@ public class JavaRunner {
         }
         builder.add(BackendSettings.JAVA_EXECUTE);
         builder.add("-ea");
+        builder.add("-Xmx32m");
         builder.add("-Djava.security.manager");
         builder.add("-Djava.security.policy=" + BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
         builder.add("-classpath");
