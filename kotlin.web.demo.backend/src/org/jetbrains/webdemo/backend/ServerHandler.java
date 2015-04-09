@@ -32,7 +32,7 @@ public class ServerHandler {
     public void handle(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
         if (request.getQueryString() != null && request.getQueryString().equals("test")) {
-            response.setStatus(HealthChecker.getInstance().getStatus());
+            response.setStatus(HttpServletResponse.SC_OK);
         } else {
             BackendSessionInfo sessionInfo;
             try {

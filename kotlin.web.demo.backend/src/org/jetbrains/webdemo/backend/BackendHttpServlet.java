@@ -58,7 +58,6 @@ public class BackendHttpServlet extends HttpServlet {
             if (Initializer.getInstance().initJavaCoreEnvironment()) {
                 ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
                 new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
-                HealthChecker.getInstance();
             } else {
                 ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
             }
