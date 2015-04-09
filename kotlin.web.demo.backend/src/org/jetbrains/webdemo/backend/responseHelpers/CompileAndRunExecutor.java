@@ -94,8 +94,8 @@ public class CompileAndRunExecutor {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), BackendUtils.getPsiFilesContent(currentPsiFiles));
                 return ResponseUtils.getErrorWithStackTraceInJson(BackendSettings.KOTLIN_ERROR_MESSAGE, new KotlinCoreException(e).getStackTraceString());
             }
-            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
-                    "COMPILE correctNamespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
+//            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
+//                    "COMPILE correctNamespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
             StringBuilder stringBuilder = new StringBuilder("Generated classfiles: ");
             stringBuilder.append(ResponseUtils.addNewLine());
@@ -126,8 +126,8 @@ public class CompileAndRunExecutor {
                 }
 
             }
-            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
-                    "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
+//            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(),
+//                    "Write files on disk " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()));
 
             ObjectNode jsonObject = jsonArray.addObject();
             jsonObject.put("type", "info");

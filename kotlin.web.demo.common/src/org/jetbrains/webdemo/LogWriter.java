@@ -31,9 +31,4 @@ public class LogWriter {
     public static void logRequestInfo(String sessionId, String requestType, int status, String otherParameters) {
         ACCESS_LOGGER.info("frontend sessionId=" + sessionId + " requestType=" + requestType + " status=" + status + " " + otherParameters);
     }
-
-    public static void logBackendRequestInfo(String requestType, int status, String otherParameters) {
-        ACCESS_LOGGER.info("" +
-                "backend requestType=" + requestType + " status=" + status + " " + otherParameters);
-    }
 }

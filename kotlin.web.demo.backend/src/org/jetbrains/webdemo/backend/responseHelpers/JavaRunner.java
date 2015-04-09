@@ -147,10 +147,10 @@ public class JavaRunner {
                 }
             }
 
-            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                    sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
-                            + " timeout=" + isTimeoutException
-                            + " commandString=" + Arrays.toString(commandString)));
+//            ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+//                    sessionInfo.getId(), "RunUserProgram " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime()
+//                            + " timeout=" + isTimeoutException
+//                            + " commandString=" + Arrays.toString(commandString)));
 
 
             if (!isTimeoutException) {
@@ -197,8 +197,8 @@ public class JavaRunner {
                         errObject.put("type", "err");
                         errObject.put("text", errStream.toString().replace("\t", "    "));
                         jsonArray.add(errObject);
-                        ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                                sessionInfo.getId(), "error while excecution: " + errStream));
+//                        ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+//                                sessionInfo.getId(), "error while excecution: " + errStream));
                     }
 
                 }
@@ -290,8 +290,8 @@ public class JavaRunner {
             if (file.list().length == 0) {
                 if (file.exists()) {
                     file.delete();
-                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                            sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
+//                    ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+//                            sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                 }
             } else {
                 //list all the directory contents
@@ -305,16 +305,16 @@ public class JavaRunner {
                 if (file.list().length == 0) {
                     if (file.exists()) {
                         file.delete();
-                        ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                                sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
+//                        ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+//                                sessionInfo.getId(), "Directory is deleted : " + file.getAbsolutePath()));
                     }
                 }
             }
         } else {
             if (file.exists()) {
                 file.delete();
-                ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
-                        sessionInfo.getId(), "File is deleted : " + file.getAbsolutePath()));
+//                ErrorWriter.LOG_FOR_INFO.info(ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(),
+//                        sessionInfo.getId(), "File is deleted : " + file.getAbsolutePath()));
             }
         }
     }

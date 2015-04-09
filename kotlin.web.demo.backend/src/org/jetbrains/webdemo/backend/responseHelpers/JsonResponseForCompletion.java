@@ -162,8 +162,8 @@ public class JsonResponseForCompletion {
             return ResponseUtils.getErrorInJson(BackendSettings.KOTLIN_ERROR_MESSAGE
                     + ResponseUtils.addNewLine() + new KotlinCoreException(e).getStackTraceString());
         }
-        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
-        ErrorWriter.ERROR_WRITER.writeInfo(info);
+//        String info = ErrorWriter.getInfoForLogWoIp(sessionInfo.getType(), sessionInfo.getId(), "ANALYZE namespaces " + sessionInfo.getTimeManager().getMillisecondsFromSavedTime() + " size: " + currentPsiFile.getTextLength());
+//        ErrorWriter.ERROR_WRITER.writeInfo(info);
 
         if (bindingContext == null) {
             return "[]";

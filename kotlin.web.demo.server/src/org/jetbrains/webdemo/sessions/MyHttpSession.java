@@ -570,7 +570,7 @@ public class MyHttpSession {
     private void sendResourceFile() {
         String path = request.getRequestURI() + "?" + request.getQueryString();
         path = ResponseUtils.substringAfterReturnAll(path, "resources");
-        ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "-1", "Resource doesn't downloaded from nginx: " + path));
+//        ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "-1", "Resource doesn't downloaded from nginx: " + path));
         if (path.equals("")) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
                     new UnsupportedOperationException("Empty path to resource"),
