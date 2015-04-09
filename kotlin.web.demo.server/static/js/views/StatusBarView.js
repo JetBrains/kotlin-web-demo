@@ -36,7 +36,7 @@ var ActionStatusMessages = {
     get_completion_fail: "Can't get completion proposal list from server",
     run_java_ok: "Compilation completed successfully",
     run_java_fail: "Can't get program output",
-    run_js_ok: "Translation competed successfully",
+    run_js_ok: "Translation completed successfully",
     run_js_fail: "Can't get translation result from server",
     login_ok: "Log in successful",
     login_fail: "Log in fail",
