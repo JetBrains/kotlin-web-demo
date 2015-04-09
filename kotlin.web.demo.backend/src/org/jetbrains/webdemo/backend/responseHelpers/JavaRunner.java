@@ -57,9 +57,9 @@ public class JavaRunner {
     }
 
     public String getResult(String pathToRootOut) throws Exception {
+        Process process = null;
         try {
             String[] commandString = generateCommandString(pathToRootOut);
-            Process process;
             sessionInfo.getTimeManager().saveCurrentTime();
             try {
                 process = Runtime.getRuntime().exec(commandString);
@@ -94,7 +94,8 @@ public class JavaRunner {
                 public void run() {
                     String line;
                     try {
-                        while ((line = stdOut.readLine()) != null) {
+                        while (!isTimeoutException &&
+                                (line = stdOut.readLine()) != null) {
                             outStream.append(ResponseUtils.escapeString(line));
                             if(outStream.length() > BackendSettings.MAX_OUTPUT_SIZE){
                                 outputIsTooLong = true;
@@ -115,7 +116,8 @@ public class JavaRunner {
                 public void run() {
                     String line;
                     try {
-                        while ((line = stdErr.readLine()) != null) {
+                        while (!isTimeoutException &&
+                                (line = stdErr.readLine()) != null) {
                             errStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
                         }
                     } catch (Throwable e) {
@@ -128,8 +130,8 @@ public class JavaRunner {
 
             int exitValue;
             try {
-                stdReader.join();
-                stdErrReader.join();
+                stdReader.join(10000);
+                stdErrReader.join(10000);
                 exitValue = process.waitFor();
             } catch (InterruptedException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -211,6 +213,9 @@ public class JavaRunner {
         } finally {
             for (OutputFile file : files) {
                 deleteFile(file.getRelativePath(), pathToRootOut);
+            }
+            if(process != null){
+                process.destroy();
             }
         }
     }
