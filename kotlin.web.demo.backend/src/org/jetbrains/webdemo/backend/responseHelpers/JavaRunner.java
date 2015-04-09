@@ -45,6 +45,7 @@ public class JavaRunner {
     int returnValue = 0;
     private String arguments;
     private volatile boolean isTimeoutException = false;
+    private volatile boolean outputIsTooLong = false;
 
     public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, BackendSessionInfo info) {
         this.bindingContext = bindingContext;
@@ -95,6 +96,10 @@ public class JavaRunner {
                     try {
                         while ((line = stdOut.readLine()) != null) {
                             outStream.append(ResponseUtils.escapeString(line));
+                            if(outStream.length() > BackendSettings.MAX_OUTPUT_SIZE){
+                                outputIsTooLong = true;
+                                finalProcess.destroy();
+                            }
                         }
                     } catch (Throwable e) {
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
@@ -105,7 +110,7 @@ public class JavaRunner {
             stdReader.start(); // Starts now
 
             // Thread that reads std err and feeds the writer given in input
-            new Thread() {
+            Thread stdErrReader = new Thread() {
                 @Override
                 public void run() {
                     String line;
@@ -118,12 +123,14 @@ public class JavaRunner {
                                 sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
                     }
                 }
-            }.start(); // Starts now
+            };
+            stdErrReader.start(); // Starts now
 
             int exitValue;
             try {
-                exitValue = process.waitFor();
                 stdReader.join();
+                stdErrReader.join();
+                exitValue = process.waitFor();
             } catch (InterruptedException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
@@ -157,7 +164,7 @@ public class JavaRunner {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
                             sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
                 } else if (!isTimeoutException) {
-                    if (outStream.length() > BackendSettings.MAX_OUTPUT_SIZE * 1024) {
+                    if (outputIsTooLong) {
                         throw new Exception("Your program produces too much output.");
                     } else {
                         try {

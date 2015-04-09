@@ -29,7 +29,7 @@ public class BackendSettings {
     public static String KOTLIN_LIBS_DIR = "";
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
     public static int TIMEOUT_FOR_EXECUTION = 5000; //seconds
-    public static int MAX_OUTPUT_SIZE = 100; //kilobytes
+    public static int MAX_OUTPUT_SIZE = 100 * 1024;
 
     public static String OUTPUT_DIRECTORY = "out";
 }
