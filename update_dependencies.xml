@@ -34,7 +34,7 @@
     </target>
 
     <target name="TeamCityBuild">
-        <delete dir="${dependencies.dir}" failonerror="false"/>
+        <move file="dependencies/kotlin-compiler-before-shrink.jar" tofile="dependencies/kotlin-compiler.jar"/>
         <unzip_kotlin/>
         <set_kotlin_version/>
     </target>
@@ -66,7 +66,7 @@
             <copy file="${dependencies.dir}/kotlin-compiler.jar"
                   todir="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib"/>
             <copy file="${dependencies.dir}/kotlin-compiler-sources.jar"
-                  todir="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib"/>
+                  todir="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib" failonerror="false"/>
 
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
                    dest="${unzipped.kotlin.plugin}/jslib"/>
