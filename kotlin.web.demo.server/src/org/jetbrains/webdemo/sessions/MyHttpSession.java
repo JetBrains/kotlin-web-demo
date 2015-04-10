@@ -252,11 +252,13 @@ public class MyHttpSession {
                         responseBody.append("Kotlin compile server is temporary overloaded");
                         break;
                     default:
-                        byte[] buffer = new byte[1024];
-                        while (true) {
-                            final int read = conn.getErrorStream().read(buffer);
-                            if (read <= 0) break;
-                            responseBody.append(new String(buffer, 0, read));
+                        if(conn.getErrorStream() != null) {
+                            byte[] buffer = new byte[1024];
+                            while (true) {
+                                final int read = conn.getErrorStream().read(buffer);
+                                if (read <= 0) break;
+                                responseBody.append(new String(buffer, 0, read));
+                            }
                         }
                 }
             } else {
