@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 public class JavaRunner {
+    private static Timer timer = new Timer(true);
 
     private final BindingContext bindingContext;
     private final List<OutputFile> files;
@@ -76,7 +77,6 @@ public class JavaRunner {
             final StringBuilder outStream = new StringBuilder();
 
             final Process finalProcess = process;
-            Timer timer = new Timer(true);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -204,7 +204,6 @@ public class JavaRunner {
                     }
 
                 }
-                timer.cancel();
                 return jsonArray.toString();
             } else {
                 throw new TimeoutException(
