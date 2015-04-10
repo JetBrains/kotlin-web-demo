@@ -33,6 +33,12 @@
         <set_kotlin_version/>
     </target>
 
+    <target name="TeamCityBuild">
+        <delete dir="${dependencies.dir}" failonerror="false"/>
+        <unzip_kotlin/>
+        <set_kotlin_version/>
+    </target>
+
     <target name="download_and_update_internal">
         <delete dir="${dependencies.dir}" failonerror="false"/>
         <mkdir dir="${dependencies.dir}"/>
