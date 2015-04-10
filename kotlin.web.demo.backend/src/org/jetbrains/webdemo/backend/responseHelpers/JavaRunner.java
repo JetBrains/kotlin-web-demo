@@ -103,8 +103,11 @@ public class JavaRunner {
                             }
                         }
                     } catch (Throwable e) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                        //Stream closes after timeout, and stdOut.readLine can produce "Stream closed exception"
+                        if(!isTimeoutException) {
+                            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                        }
                     }
                 }
             };
@@ -121,8 +124,10 @@ public class JavaRunner {
                             errStream.append(ResponseUtils.escapeString(line)).append(ResponseUtils.addNewLine());
                         }
                     } catch (Throwable e) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                        if(!isTimeoutException) {
+                            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                        }
                     }
                 }
             };
