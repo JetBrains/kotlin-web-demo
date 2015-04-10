@@ -155,7 +155,7 @@
     position: relative;
     top: 0;
     float: left;
-    width: 44px;
+    width: 129px;
     height: 43px;
     background: url("/static/images/logos-sprite.png") no-repeat;
     font-size: 0;
@@ -165,43 +165,6 @@
     .global-header-logo {
         background-image: url("/static/images/logos-sprite@2x.png");
         background-size: 150px 100px;
-    }
-}
-
-.webdemo-logo {
-    position: relative;
-    top: 0;
-    float: left;
-    width: 80px;
-    height: 43px;
-    background: url("/static/images/logos-sprite.png") -57px -0 no-repeat;
-    font-size: 0;
-    text-decoration: none;
-    margin-left: 15px;
-    margin-right: -10px;}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .webdemo-logo {
-        background-image: url("/static/images/logos-sprite@2x.png");
-        background-size: 150px 100px;
-    }
-}
-
-
-
-.demo-icon{
-    background: url("/static/images/beta_ribbon.png") no-repeat;
-    width: 104px;
-    height: 37px;
-    float: left;
-    bottom: 24px;
-    position: relative;
-}
-
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .demo-icon {
-        background-image: url("/static/images/beta_ribbon@2x.png");
-        background-size: 104px 37px;
     }
 }
 
