@@ -161,6 +161,7 @@ var FileView = (function () {
             } else if (file.isRevertible) {
                 var revertIcon = document.createElement("div");
                 revertIcon.className = "revert icon";
+                revertIcon.title = "Revert this file";
                 actionIconsElement.appendChild(revertIcon);
 
                 revertIcon.onclick = function () {

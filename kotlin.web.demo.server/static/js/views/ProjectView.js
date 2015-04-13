@@ -256,25 +256,6 @@ var ProjectView = (function () {
             actionIconsElement.className = "icons";
             headerElement.appendChild(actionIconsElement);
 
-            if (header.type != ProjectType.USER_PROJECT) {
-                if (localStorage.getItem(header.publicId) != null) {
-                    $(headerElement).addClass("modified");
-                }
-
-                var revertIcon = document.createElement("div");
-                revertIcon.className = "revert icon";
-                actionIconsElement.appendChild(revertIcon);
-
-                revertIcon.onclick = function () {
-                    project.loadOriginal();
-                };
-
-                project.onNotRevertible = function(){
-                    revertIcon.parentNode.removeChild(revertIcon);
-                }
-            }
-
-
             if (header.type == ProjectType.USER_PROJECT) {
                 var addFileImg = document.createElement("div");
                 addFileImg.className = "new-file icon";
@@ -305,6 +286,25 @@ var ProjectView = (function () {
                     event.stopPropagation();
                 };
                 actionIconsElement.appendChild(deleteButton);
+            }
+
+            if (header.type != ProjectType.USER_PROJECT) {
+                if (localStorage.getItem(header.publicId) != null) {
+                    $(headerElement).addClass("modified");
+                }
+
+                var revertIcon = document.createElement("div");
+                revertIcon.className = "revert icon";
+                revertIcon.title = "Revert this project";
+                actionIconsElement.appendChild(revertIcon);
+
+                revertIcon.onclick = function () {
+                    project.loadOriginal();
+                };
+
+                project.onNotRevertible = function(){
+                    revertIcon.parentNode.removeChild(revertIcon);
+                }
             }
         }
 
