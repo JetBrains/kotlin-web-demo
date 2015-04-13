@@ -107,7 +107,7 @@ var ProjectData = (function () {
             addFileWithMain: function (name, publicId) {
                 var file = new Kotlin.modules["kotlin.web.demo.frontend"].File(
                     instance,
-                    name,
+                    addKotlinExtension(name),
                     publicId,
                     "fun main(args: Array<String>) {\n\n}"
                 );
