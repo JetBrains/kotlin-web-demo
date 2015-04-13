@@ -132,4 +132,13 @@ class MyProgramsFolderView(parentNode: HTMLDivElement,
             }
         return ValidationResult(true);
     }
+
+    fun addNewProject(project: ProjectView){
+        projects.add(project)
+    }
+
+    //TODO replace with more global function removeChild
+    fun removeProject(project: ProjectView){
+        projects.remove(project)
+    }
 }

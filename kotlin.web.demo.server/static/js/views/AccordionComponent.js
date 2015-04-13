@@ -57,21 +57,21 @@ var AccordionView = (function () {
                 );
             },
             addNewProject: function (name, publicId, fileId) {
-                addProject(myProgramsFolder.contentElement, {
+                myProgramsFolder.addNewProject(addProject(myProgramsFolder.contentElement, {
                     name: name,
                     publicId: publicId,
                     type: ProjectType.USER_PROJECT
-                }, myProgramsFolder);
+                }, myProgramsFolder));
                 projects[publicId].getProjectData().setDefaultContent();
                 projects[publicId].getProjectData().addFileWithMain(name, fileId);
                 selectProject(publicId);
             },
             addNewProjectWithContent: function (publicId, content) {
-                addProject(myProgramsFolder.contentElement, {
+                myProgramsFolder.addNewProject(addProject(myProgramsFolder.contentElement, {
                     name: content.name,
                     publicId: publicId,
                     type: ProjectType.USER_PROJECT
-                }, myProgramsFolder);
+                }, myProgramsFolder));
                 projects[publicId].getProjectData().setContent(content);
                 selectProject(publicId);
             },
