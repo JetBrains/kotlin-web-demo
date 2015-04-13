@@ -190,8 +190,12 @@ var ProjectData = (function () {
             isRevertible: function () {
                 return revertible;
             },
+            onNotRevertible: function(){
+
+            },
             makeNotRevertible: function () {
-                revertible = false
+                revertible = false;
+                instance.onNotRevertible()
             },
             onModified: function (listener) {
                 modifyListeners.push(listener);

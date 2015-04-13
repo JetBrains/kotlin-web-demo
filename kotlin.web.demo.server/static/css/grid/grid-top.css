@@ -152,14 +152,14 @@
     height: 12px;
     width: 12px;
     margin-top: 2px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -700px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -500px;
 }
 
 .WARNINGgutter {
     height: 12px;
     width: 12px;
     margin-top: 2px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -750px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -600px;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {

@@ -129,42 +129,6 @@ document.getElementById("shortcuts-button").onclick = shortcutsHelpDialog.open;
 var helpModelForWords = new HelpModel("Words");
 var helpViewForWords = new HelpView(helpModelForWords);
 helpViewForWords.hide();
-var projectActionsView = new ProjectActionsView(document.getElementById("editor-notifications"));
-projectActionsView.registerStatus("localVersion", "This is your local version of this project", [
-    {
-        name: "Revert file",
-        callback: function () {
-            var file = accordion.getSelectedFile();
-            if (file != null) {
-                fileProvider.loadOriginalFile(
-                    file,
-                    function(content){
-                        file.text = file.originalText = content.text;
-                        file.changesHistory = null;
-                    },
-                    function () {
-                        window.alert("Can't find file origin, maybe it was removed by a user");
-                        projectActionsView.setStatus("localFile");
-                        file.isRevertible = false;
-                    });
-            }
-        }
-    },
-    {
-        name: "Revert project",
-        callback: function () {
-            accordion.getSelectedProject().loadOriginal();
-        }
-    }
-]);
-projectActionsView.registerStatus("localFile", "This is your local version of this project", [
-    {
-        name: "Revert project",
-        callback: function () {
-            accordion.getSelectedProject().loadOriginal();
-        }
-    }
-]);
 
 
 var runProvider = (function () {
@@ -332,40 +296,27 @@ var accordion = (function () {
     };
 
     accordion.onModifiedSelectedFile = function (file) {
-        if(file.isModified) {
-            if (file.project.getType() == ProjectType.EXAMPLE) {
-                projectActionsView.setStatus("localVersion");
-            } else if (file.project.getType() == ProjectType.PUBLIC_LINK) {
-                if (file.project.isRevertible()) {
-                    var onProjectExist = function () {
-                        if (file.isRevertible) {
-                            fileProvider.checkFileExistence(
-                                file.id,
-                                projectActionsView.setStatus.bind(null, "localVersion"),
-                                function () {
-                                    projectActionsView.setStatus.bind(null, "localFile");
-                                    file.isRevertible = false;
-                                }
-                            )
-                        } else {
-                            projectActionsView.setStatus("localFile");
+        if (file.isModified &&
+            file.project.getType() == ProjectType.PUBLIC_LINK &&
+            file.project.isRevertible()) {
+            var onProjectExist = function () {
+                if (file.isRevertible) {
+                    fileProvider.checkFileExistence(
+                        file.id,
+                        function () {
+                            file.isRevertible = false;
                         }
-                    };
-                    var onProjectNotExist = function () {
-                        projectActionsView.setStatus("default");
-                        file.project.makeNotRevertible();
-                    };
-                    projectProvider.checkIfProjectExists(
-                        file.project.getPublicId(),
-                        onProjectExist,
-                        onProjectNotExist
-                    );
-                } else {
-                    projectActionsView.setStatus("default");
+                    )
                 }
-            }
-        } else{
-            projectActionsView.setStatus("default");
+            };
+            var onProjectNotExist = function () {
+                file.project.makeNotRevertible();
+            };
+            projectProvider.checkIfProjectExists(
+                file.project.getPublicId(),
+                onProjectExist,
+                onProjectNotExist
+            );
         }
     };
 
@@ -381,10 +332,14 @@ var accordion = (function () {
 
 window.onpopstate = function () {
     var projectId = getProjectIdFromUrl();
-    if (accordion.getSelectedProject().getPublicId() != projectId) {
-        accordion.selectProject(projectId);
+    if (accordion.getProjectView(projectId) == null) {
+        location.reload();
+    } else {
+        if (accordion.getSelectedProject().getPublicId() != projectId) {
+            accordion.selectProject(projectId);
+        }
+        accordion.getSelectedProjectView().selectFileFromUrl();
     }
-    accordion.getSelectedProjectView().selectFileFromUrl();
 };
 
 var timer;

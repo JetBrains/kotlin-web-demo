@@ -246,7 +246,7 @@
     position: relative;
     margin-right: 4px;
     top: 1px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -700px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -500px;
 }
 
 .tree-node .warning.icon {
@@ -256,7 +256,7 @@
     position: relative;
     margin-right: 4px;
     top: 1px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -750px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -600px;
 }
 
 #console, #generated-code {
@@ -360,9 +360,9 @@
 
 .tree-node .img {
     position: relative;
-    top: 1px;
-    height: 14px;
-    width: 14px;
+    top: 2px;
+    height: 12px;
+    width: 12px;
     margin-left: 4px;
     margin-right: 4px;
     display: inline-block;
@@ -404,15 +404,15 @@ li[aria-expanded="false"] > ul {
 }
 
 .tree-node-header .img.ok {
-    background: url("/static/images/testTabIcons.png") no-repeat -15px -9px;
-}
-
-.tree-node-header .img.fail {
-    background: url("/static/images/testTabIcons.png") no-repeat 0 -9px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -450px;
 }
 
 .tree-node-header .img.error {
-    background: url("/static/images/testTabIcons.png") no-repeat 0 -24px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -500px;
+}
+
+.tree-node-header .img.fail {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -550px;
 }
 
 .tree-node-header .toggle-arrow {
@@ -441,7 +441,6 @@ li[aria-expanded="true"] > .tree-node-header .toggle-arrow {
     user-select: none;
     display: inline-block;
     position: relative;
-    bottom: 1px;
     padding-bottom: 2px;
 }
 

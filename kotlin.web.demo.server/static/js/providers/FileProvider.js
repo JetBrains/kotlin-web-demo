@@ -33,8 +33,8 @@ var FileProvider = (function () {
             loadOriginalFile: function (file, onSuccess, onNotFound) {
                 loadOriginalFile(file, onSuccess, onNotFound);
             },
-            checkFileExistence: function (publicId, onExists, onNotExists) {
-                checkFileExistence(publicId, onExists, onNotExists);
+            checkFileExistence: function (publicId, onNotExists) {
+                checkFileExistence(publicId, onNotExists);
             },
             onNewFileAdded: function () {
             },
@@ -50,7 +50,7 @@ var FileProvider = (function () {
             }
         };
 
-        function checkFileExistence(publicId, onExists, onNotExists) {
+        function checkFileExistence(publicId, onNotExists) {
             $.ajax({
                 url: generateAjaxUrl("checkFileExistence"),
                 type: "POST",
@@ -58,9 +58,7 @@ var FileProvider = (function () {
                 data: {publicId: publicId},
                 dataType: "json",
                 success: function (data) {
-                    if (data.exists) {
-                        onExists();
-                    } else {
+                    if (!data.exists) {
                         onNotExists();
                     }
                 },

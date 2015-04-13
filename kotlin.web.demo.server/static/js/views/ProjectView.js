@@ -188,7 +188,6 @@ var ProjectView = (function () {
             project.onContentNotFound = function () {
                 if (project.getType() == ProjectType.PUBLIC_LINK) {
                     window.alert("Can't find project origin, maybe it was removed by the user.");
-                    projectActionsView.setStatus("default");
                     project.makeNotRevertible();
                     if (!project.isContentLoaded()) {
                         onDelete();
@@ -261,6 +260,18 @@ var ProjectView = (function () {
                 if (localStorage.getItem(header.publicId) != null) {
                     $(headerElement).addClass("modified");
                 }
+
+                var revertIcon = document.createElement("div");
+                revertIcon.className = "revert icon";
+                actionIconsElement.appendChild(revertIcon);
+
+                revertIcon.onclick = function () {
+                    project.loadOriginal();
+                };
+
+                project.onNotRevertible = function(){
+                    revertIcon.parentNode.removeChild(revertIcon);
+                }
             }
 
 
@@ -312,9 +323,7 @@ var ProjectView = (function () {
         }
 
         function createFileView(file) {
-            var fileHeader = document.createElement("div");
-            contentElement.appendChild(fileHeader);
-            return new FileView(instance, fileHeader, file);
+            return new FileView(instance, contentElement, file);
         }
 
         function isSelected() {

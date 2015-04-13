@@ -78,6 +78,7 @@ var HeadersProvider = (function () {
 
                                 folders.push({
                                     name: "Public links",
+                                    id: "PublicLinks",
                                     childFolders: [],
                                     projects: publicLinks
                                 });

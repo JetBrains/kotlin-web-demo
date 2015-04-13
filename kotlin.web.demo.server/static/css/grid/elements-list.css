@@ -178,10 +178,14 @@
     color: #3164a0;
 }
 
-.folder-header.ui-state-active .icons,
-.file-header:hover .icons,
-.examples-project-name:hover .icons {
+.folder-header.ui-state-active .icons .icon,
+.file-header:hover .icons .icon,
+.examples-project-name:hover .icons .icon{
     display: inline-block;
+}
+
+.icons .icon{
+    display: none;
 }
 
 .folder-header .icons{
@@ -190,7 +194,7 @@
 
 .icons {
     position: absolute;
-    display: none;
+    display: inline-block;
     background: inherit;
     padding-left: 4px;
     margin-top: 8px;
@@ -209,6 +213,22 @@
 
 .new-file.icon:hover{
     background: url("/static/images/icons_all_sprite.png") no-repeat -50px -300px;
+}
+
+.selected.modified .revert.icon {
+    position: relative;
+    display: inline-block;
+    float: left;
+    cursor: pointer;
+    height: 11px;
+    width: 10px;
+    top: 1px;
+    margin-right: 4px;
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -350px;
+}
+
+.selected.modified .revert.icon:hover {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -400px;
 }
 
 .delete.icon {
@@ -246,6 +266,7 @@
     background-color: #c1dcff;
 }
 
+
 .file-header {
     cursor: pointer;
     line-height: 16px;
@@ -279,11 +300,9 @@
     height: 16px;
 }
 
-.file-header.modified .text {
-    margin-top: 2px;
-}
-
 .file-header.modified>.icon {
+    margin-top: -2px;
+    margin-left: -2px;
     width: 15px;
     height: 18px;
 }

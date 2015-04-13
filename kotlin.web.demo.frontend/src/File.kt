@@ -29,7 +29,7 @@ class File(
         var originalText: String = text,
         val isModifiable: Boolean = true,
         val type: FileType = FileType.KOTLIN_FILE,
-        var isRevertible: Boolean = true
+        isRevertible: Boolean = true
 ) {
     var errors = array<Error>()
     var changesHistory: dynamic = null;
@@ -39,6 +39,9 @@ class File(
 
     val listenableIsModified = VarListener<Boolean>()
     var isModified: Boolean by Listenable(false, listenableIsModified)
+
+    val listenableIsRevertible = VarListener<Boolean>()
+    var isRevertible: Boolean by Listenable(isRevertible, listenableIsRevertible)
 
     var text: String = text
         set(newText: String) {

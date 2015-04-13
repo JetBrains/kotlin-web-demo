@@ -158,6 +158,28 @@ var FileView = (function () {
                     event.stopPropagation();
                 };
                 actionIconsElement.appendChild(deleteImg);
+            } else if (file.isRevertible) {
+                var revertIcon = document.createElement("div");
+                revertIcon.className = "revert icon";
+                actionIconsElement.appendChild(revertIcon);
+
+                revertIcon.onclick = function () {
+                    fileProvider.loadOriginalFile(
+                        file,
+                        function (content) {
+                            file.text = file.originalText = content.text;
+                            file.changesHistory = null;
+                        },
+                        function () {
+                            window.alert("Can't find file origin, maybe it was removed by a user");
+                            file.isRevertible = false;
+                        }
+                    );
+                };
+
+                file.listenableIsRevertible.addModifyListener( function(){
+                    revertIcon.parentNode.removeChild(revertIcon);
+                })
             }
 
             headerElement.onclick = instance.fireSelectEvent;
