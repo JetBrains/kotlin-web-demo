@@ -28,10 +28,10 @@ import com.intellij.psi.compiled.ClassFileDecompilers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
-import org.jetbrains.kotlin.cli.jvm.JVMConfigurationKeys;
 import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.idea.decompiler.JetClassFileDecompiler;
@@ -44,6 +44,9 @@ import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
+
+import static org.jetbrains.kotlin.cli.jvm.config.ConfigPackage.addJvmClasspathRoot;
+import static org.jetbrains.kotlin.cli.jvm.config.ConfigPackage.addJvmClasspathRoots;
 
 import java.io.File;
 import java.net.URL;
@@ -156,7 +159,7 @@ public class EnvironmentManager {
     private KotlinCoreEnvironment createEnvironment() {
         K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
         CompilerConfiguration configuration = new CompilerConfiguration();
-        configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
+        addJvmClasspathRoots(configuration, getClasspath(arguments));
         configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
 
         configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
