@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Enumeration;
@@ -223,8 +224,8 @@ public class MyHttpSession {
             }
 
             conn.setRequestMethod("POST");
-
-            //conn.setFollowRedirects(false);  // throws AccessDenied exception
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
             conn.setUseCaches(false);
             conn.setDoOutput(hasoutbody);
 
@@ -244,6 +245,19 @@ public class MyHttpSession {
 
             StringBuilder responseBody = new StringBuilder();
             if (conn.getResponseCode() >= 400) {
+                StringBuilder serverMessage = new StringBuilder();
+                try (InputStream errorStream = conn.getErrorStream()) {
+                    if (errorStream != null) {
+                        byte[] buffer = new byte[1024];
+                        while (true) {
+                            final int read = errorStream.read(buffer);
+                            if (read <= 0) break;
+                            serverMessage.append(new String(buffer, 0, read));
+                        }
+                    }
+                }
+
+
                 switch (conn.getResponseCode()) {
                     case HttpServletResponse.SC_NOT_FOUND:
                         responseBody.append("Kotlin compile server not found");
@@ -252,24 +266,24 @@ public class MyHttpSession {
                         responseBody.append("Kotlin compile server is temporary overloaded");
                         break;
                     default:
-                        if(conn.getErrorStream() != null) {
-                            byte[] buffer = new byte[1024];
-                            while (true) {
-                                final int read = conn.getErrorStream().read(buffer);
-                                if (read <= 0) break;
-                                responseBody.append(new String(buffer, 0, read));
-                            }
-                        }
+                        responseBody = serverMessage;
+                        break;
                 }
             } else {
-                byte[] buffer = new byte[1024];
-                while (true) {
-                    final int read = conn.getInputStream().read(buffer);
-                    if (read <= 0) break;
-                    responseBody.append(new String(buffer, 0, read));
+                try (InputStream inputStream = conn.getInputStream()) {
+                    if (inputStream != null) {
+                        byte[] buffer = new byte[1024];
+                        while (true) {
+                            final int read = inputStream.read(buffer);
+                            if (read <= 0) break;
+                            responseBody.append(new String(buffer, 0, read));
+                        }
+                    }
                 }
             }
             writeResponse(responseBody.toString(), conn.getResponseCode());
+        } catch (SocketTimeoutException e) {
+            writeResponse("Compile server connection timeout", HttpServletResponse.SC_GATEWAY_TIMEOUT);
         } catch (Exception e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "FORWARD_REQUEST_TO_BACKEND", "", "Can't forward request to Kotlin compile server");
             writeResponse("Can't send your request to Kotlin compile server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
