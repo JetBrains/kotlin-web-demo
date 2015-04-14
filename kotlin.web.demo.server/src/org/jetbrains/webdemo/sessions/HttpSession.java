@@ -74,12 +74,12 @@ public class HttpSession {
             } else if (parameters.compareType("convertToKotlin")) {
                 sessionInfo.setType(SessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
                 sendConversationResult();
-            } else if (parameters.compareType("saveProgram")) {
-                sendSaveProgramResult();
+//            } else if (parameters.compareType("saveProgram")) {
+//                sendSaveProgramResult();
             } else if (parameters.compareType("loadProgram")) {
                 sendLoadProgramResult();
-            } else if (parameters.compareType("deleteProgram")) {
-                sendDeleteProgramResult();
+//            } else if (parameters.compareType("deleteProgram")) {
+//                sendDeleteProgramResult();
             } else if (parameters.compareType("generatePublicLink")) {
                 sendGeneratePublicLinkResult();
             } else if (parameters.compareType("complete")) {

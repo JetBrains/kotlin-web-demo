@@ -61,35 +61,6 @@ var ProgramsView = (function () {
 
         };
 
-
-        $("#saveDialog").dialog({
-            modal:"true",
-            width:300,
-            height:120,
-            autoOpen:false,
-            buttons:[
-                { text:"Save",
-                    click:function () {
-                        saveAsProgram();
-                    }
-                },
-                { text:"Cancel",
-                    click:function () {
-                        $(this).dialog("close");
-                    }
-                }
-            ],
-            open:function () {
-                setTimeout(function () {
-                    $("#programName").focus();
-                }, 200);
-            }
-        });
-
-        $("#saveDialog form").submit(function () {
-            saveAsProgram();
-        });
-
         $("#showInfoAboutLoginDialog").dialog({
             modal:"true",
             width:300,
@@ -173,17 +144,9 @@ var ProgramsView = (function () {
                 var saveImg = document.createElement("img");
                 saveImg.src = "/static/icons/save1.png";
                 saveImg.id = "saveProgram";
-                //todo
-                var isMac = false;
-                if (!isMac) {
-                    saveImg.title = "Save current program (Ctrl + S)";
-                } else {
-                    saveImg.title = "Save current program (Cmd + S)";
-                }
                 var saveAsImg = document.createElement("img");
                 saveAsImg.src = "/static/icons/saveAs1.png";
                 saveAsImg.id = "saveAsProgram";
-                saveAsImg.title = "Save current program as ...";
                 innerDiv.appendChild(saveAsImg);
                 innerDiv.appendChild(saveImg);
             } else {
@@ -243,10 +206,10 @@ var ProgramsView = (function () {
             tdDelete.style.width = "16px";
             var deleteImg = document.createElement("img");
             deleteImg.src = "/static/icons/delete.png";
-            deleteImg.title = "Delete this program";
+            deleteImg.style.opacity = 0.5;
             deleteImg.onclick = function () {
-                //in table get td with a element - id of a
-                deleteProgram(this.parentNode.parentNode.childNodes[1].childNodes[0].id);
+                $(welcomeDialog).dialog("open")
+                $(welcomeDialog).dialog("ope")
             };
             tdDelete.appendChild(deleteImg);
             var tdLink = document.createElement("td");
@@ -319,7 +282,6 @@ var ProgramsView = (function () {
 
         function saveAsProgram() {
             if (ProgramsView.isLoggedIn()) {
-                $("#saveDialog").dialog("close");
                 var programName = $("#programName").val();
                 $("#programName").val("");
                 model.saveProgram(programName, Configuration.getStringFromType(configuration.type));

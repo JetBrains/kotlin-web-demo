@@ -56,13 +56,6 @@ actionManager.registerAction("org.jetbrains.web.demo.reformat",
     new Shortcut("Cmd+Alt+L", null)); /*mac*/
 actionManager.registerAction("org.jetbrains.web.demo.autocomplete",
     new Shortcut("Ctrl+Space", null));
-actionManager.registerAction("org.jetbrains.web.demo.save",
-    new Shortcut("Ctrl+S", function (e) {
-        return e.keyCode == 83 && e.ctrlKey;
-    }), new Shortcut("Cmd+S", function (e) {
-        return e.keyCode == 83 && e.metaKey;
-    }));
-
 
 var editor = new KotlinEditor();
 
@@ -98,7 +91,6 @@ editor.setCompletionDecorator(completion);
 
 ConfirmDialog.isEditorContentChanged = editor.isEditorContentChanged;
 ConfirmDialog.isLoggedIn = loginView.isLoggedIn;
-ConfirmDialog.saveProgram = accordion.saveProgram;
 
 refreshButton.onClick = function () {
     refreshButton.setEnabled(false);
@@ -271,13 +263,7 @@ $(document).keydown(function (e) {
     var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
     if (shortcut.isPressed(e)) {
         runButton.click();
-    } else {
-        shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.save");
-        if (shortcut.isPressed(e)) {
-            accordion.saveProgram();
-        }
     }
-
 });
 
 var isShortcutsShow = true;
@@ -300,7 +286,6 @@ function loadShortcuts() {
     text = text.replace("@shortcut-autocomplete@", actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getName());
     text = text.replace("@shortcut-run@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
     text = text.replace("@shortcut-reformat@", actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getName());
-    text = text.replace("@shortcut-save@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName());
     $("#help3").html(text);
 }
 
@@ -359,6 +344,18 @@ $("#popupForCanvas").dialog({
     close:function () {
         canvasPopup.hide();
         //$("#popupForCanvas").html("");
+    }
+});
+
+var welcomeDialog = document.getElementById("new-demo-welcome-dialog");
+$(welcomeDialog).dialog({
+    autoOpen: false,
+    resizable: false,
+    modal: true,
+    buttons: {
+        "Close": function () {
+            $(this).dialog("close");
+        }
     }
 });
 

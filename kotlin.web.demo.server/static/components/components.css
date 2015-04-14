@@ -1039,7 +1039,7 @@ td#removeallguttersTd {
 
 #saveProgram, #saveAsProgram {
     display: inline-block;
-    /**display:inline;*/
+    opacity: 0.5;
     float: right;
     padding-right: 6px;
     padding-top: 3px;
@@ -1297,5 +1297,26 @@ div#convertToKotlin {
     display: none;
 }*/
 
+.new-demo-link{
+    padding: 0 6px;
+    font-size: 16px;
+    color: white;
+    background-color: #ea9800;
+    display: block;
+    text-decoration: none;
+    text-align: center;
+}
 
 
+.new-demo-link span{
+    opacity: 0.87;
+}
+
+.new-demo-link a{
+    color: white;
+    opacity: 0.87;
+}
+
+.new-demo-link a:hover{
+    opacity: 1;
+}

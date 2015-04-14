@@ -117,11 +117,11 @@ var AccordionView = (function () {
             }).find('#tools img').click(function (ev) {
                     ev.preventDefault();
                     if (this.id == "saveProgram") {
-                        programsView.saveProgram();
+                        $(welcomeDialog).dialog("open");
                     } else if (this.id == "saveAsProgram") {
-                        $("#saveDialog").dialog("open");
+                        $(welcomeDialog).dialog("open");
                     } else if (this.id == "showInfoAboutLogin") {
-                        $("#showInfoAboutLoginDialog").dialog("open");
+                        $(welcomeDialog).dialog("open");
                     }
                 });
         }

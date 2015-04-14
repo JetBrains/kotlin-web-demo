@@ -51,20 +51,11 @@ var ConfirmDialog = (function () {
     ConfirmDialog.isLoggedIn = function () {
         return false;
     };
-    ConfirmDialog.saveProgram = function () {
-
-    };
 
     function showConfirmDialog(fun) {
         if (ConfirmDialog.isEditorContentChanged()) {
             $("#confirmDialog").dialog({
                 buttons:[
-                    { text:"Save changes",
-                        click:function () {
-                            ConfirmDialog.saveProgram();
-                            closeConfirmDialog();
-                        }
-                    },
                     { text:"Discard changes",
                         click:function () {
                             closeConfirmDialog();
@@ -80,9 +71,6 @@ var ConfirmDialog = (function () {
             });
 
             $("#confirmDialog").dialog("open");
-            if (!ConfirmDialog.isLoggedIn()) {
-                $(":button:contains('Save changes')").attr("disabled", "disabled").addClass("ui-state-disabled");
-            }
         } else {
             fun();
         }
