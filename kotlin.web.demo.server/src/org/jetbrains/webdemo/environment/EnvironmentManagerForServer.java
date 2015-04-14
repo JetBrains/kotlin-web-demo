@@ -9,10 +9,10 @@ import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
-import org.jetbrains.kotlin.cli.jvm.JVMConfigurationKeys;
 import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
-import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
@@ -31,6 +31,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static org.jetbrains.kotlin.cli.jvm.config.ConfigPackage.addJvmClasspathRoots;
+
 public class EnvironmentManagerForServer extends EnvironmentManager {
 
     public EnvironmentManagerForServer() {
@@ -39,10 +41,10 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
     }
 
     @NotNull
-    public JetCoreEnvironment createEnvironment() {
+    public KotlinCoreEnvironment createEnvironment() {
         K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
         CompilerConfiguration configuration = new CompilerConfiguration();
-        configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
+        addJvmClasspathRoots(configuration, getClasspath(arguments));
         configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
 
         configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
@@ -50,13 +52,13 @@ public class EnvironmentManagerForServer extends EnvironmentManager {
         configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
 
-        JetCoreEnvironment jetCoreEnvironment = JetCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
+        KotlinCoreEnvironment environment = KotlinCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
         Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJvm());
         Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJs());
         Extensions.getRootArea().getExtensionPoint(DiagnosticsWithSuppression.SuppressStringProvider.EP_NAME).registerExtension(new SuppressNoBodyErrorsForNativeDeclarations());
         Extensions.getRootArea().getExtensionPoint(DiagnosticsWithSuppression.SuppressStringProvider.EP_NAME).registerExtension(new SuppressUnusedParameterForJsNative());
         registry = FileTypeRegistry.ourInstanceGetter;
-        return jetCoreEnvironment;
+        return environment;
     }
 
     private static File initializeKotlinReflect() {

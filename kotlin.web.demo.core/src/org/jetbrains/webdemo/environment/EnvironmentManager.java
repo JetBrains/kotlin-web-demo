@@ -18,12 +18,12 @@ import com.intellij.util.cls.ClsFormatException;
 import com.intellij.util.indexing.FileContent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 
 public abstract class EnvironmentManager {
 
     protected Getter<FileTypeRegistry> registry;
-    protected JetCoreEnvironment environment;
+    protected KotlinCoreEnvironment environment;
     protected Disposable disposable = new Disposable() {
         @Override
         public void dispose() {
@@ -31,10 +31,10 @@ public abstract class EnvironmentManager {
     };
 
     @NotNull
-    protected abstract JetCoreEnvironment createEnvironment();
+    protected abstract KotlinCoreEnvironment createEnvironment();
 
     @NotNull
-    public JetCoreEnvironment getEnvironment() {
+    public KotlinCoreEnvironment getEnvironment() {
         if (environment == null) {
             environment = createEnvironment();
 

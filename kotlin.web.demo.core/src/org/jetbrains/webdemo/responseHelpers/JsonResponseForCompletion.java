@@ -57,7 +57,7 @@ public class JsonResponseForCompletion {
     private static final DescriptorRenderer RENDERER = new DescriptorRendererBuilder()
             .setNameShortness(NameShortness.SHORT)
             .setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES)
-            .setWithoutFunctionParameterNames(true)
+            .setParameterNameRenderingPolicy(DescriptorRenderer.ParameterNameRenderingPolicy.NONE)
             .setRenderDefaultValues(false)
             .build();
 

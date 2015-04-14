@@ -35,7 +35,7 @@ public class ServerInitializer extends Initializer {
         try {
             environmentManager.getEnvironment();
         } catch (Throwable e) {
-            ErrorWriter.writeExceptionToConsole("Impossible to init jetCoreEnvironment", e);
+            ErrorWriter.writeExceptionToConsole("Impossible to init KotlinCoreEnvironment", e);
             return false;
         }
 

@@ -18,7 +18,7 @@ package org.jetbrains.webdemo.test;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import junit.framework.TestCase;
-import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.environment.EnvironmentManager;
 import org.jetbrains.webdemo.environment.EnvironmentManagerForServer;
@@ -62,7 +62,7 @@ public class BaseTest extends TestCase {
         Statistics.getInstance();
     }
 
-    protected JetCoreEnvironment createManager() {
+    protected KotlinCoreEnvironment createManager() {
         myEnvironmentManager.getEnvironment();
         ServerInitializer.setEnvironmentManager(myEnvironmentManager);
 
