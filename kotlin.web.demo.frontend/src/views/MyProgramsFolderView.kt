@@ -14,71 +14,11 @@
  * limitations under the License.
  */
 
-import kotlin.dom.createElement
-import kotlin.js.dom.html.Event
+package views
+
 import kotlin.js.dom.html.HTMLDivElement
 import kotlin.js.dom.html.document
-
-/**
- * Created by Semyon.Atamas on 4/6/2015.
- */
-
-//TODO remove addProject function
-open class FolderView(parentNode: HTMLDivElement,
-                      content: dynamic,
-                      val parent: FolderView?,
-                      val addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) {
-    val depth: Int = if (parent == null) 0 else parent.depth + 1;
-    val name = content.name: String
-    val projects = arrayListOf<ProjectView>()
-    val childFolders = arrayListOf<FolderView>()
-    val headerElement = document.createElement("div") as HTMLDivElement
-    val contentElement = document.createElement("div") as HTMLDivElement
-    protected val folderNameElement: HTMLDivElement = document.createElement("div") as HTMLDivElement;
-
-    init {
-        headerElement.className = "folder-header";
-        headerElement.setAttribute("depth", depth.toString())
-        headerElement.id = content.id
-        parentNode.appendChild(headerElement);
-
-        folderNameElement.textContent = name
-        folderNameElement.className = "text"
-        headerElement.appendChild(folderNameElement)
-
-        parentNode.appendChild(contentElement)
-
-        for (projectHeader in content.projects) {
-            projects.add(addProject(contentElement, projectHeader, this))
-        }
-
-        for (folderContent in content.childFolders) {
-            childFolders.add(FolderView(contentElement, folderContent, this, addProject))
-        }
-
-        if (!childFolders.isEmpty()) {
-            jq(contentElement).accordion(object {
-                val heightStyle = "content"
-                val navigation = true
-                val active = 0
-                val icons = object {
-                    val activeHeader = "examples-open-folder-icon"
-                    val header = "examples-closed-folder-icon"
-                }
-            });
-        }
-    }
-
-    fun select(){
-        parent?.select()
-        headerElement.click()
-    }
-}
-
-native
-val projectProvider: dynamic = noImpl
-
-data class ValidationResult(val valid: Boolean, val message: String = "")
+import projectProvider
 
 class MyProgramsFolderView(parentNode: HTMLDivElement,
                            content: dynamic,

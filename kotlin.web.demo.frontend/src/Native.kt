@@ -15,6 +15,7 @@
  */
 
 import org.w3c.dom.Element
+import views.FolderView
 import kotlin.js.dom.html.HTMLDivElement
 
 /**
@@ -62,18 +63,7 @@ trait Project {
 }
 
 native
-trait ProjectView{
-    fun getProjectData(): Project
-}
-
-native
-val loginView: dynamic = noImpl
-
-native
-class InputDialogView(title: String, inputText: String, buttonText: String) {
-    var validate: (String) -> ValidationResult
-    var open: (callback: (String) -> Unit, defaultValue: String) -> Unit
-}
-
-native
 fun HTMLDivElement.click()
+
+native
+val projectProvider: dynamic = noImpl

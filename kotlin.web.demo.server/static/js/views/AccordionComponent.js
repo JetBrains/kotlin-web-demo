@@ -36,14 +36,17 @@ var AccordionView = (function () {
                             if (folderContent.name == "My programs") {
                                 myProgramsFolder = new Kotlin
                                     .modules["kotlin.web.demo.frontend"]
+                                    .views
                                     .MyProgramsFolderView(element, folderContent, null, addProject);
                             } else if (folderContent.name == "Public links") {
                                 publicLinksFolder = new Kotlin
                                     .modules["kotlin.web.demo.frontend"]
+                                    .views
                                     .FolderView(element, folderContent, null, addProject);
                             } else {
                                 new Kotlin
                                     .modules["kotlin.web.demo.frontend"]
+                                    .views
                                     .FolderView(element, folderContent, null, addProject);
                             }
                         });

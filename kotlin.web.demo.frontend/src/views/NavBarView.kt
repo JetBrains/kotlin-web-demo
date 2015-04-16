@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
+package views
+
 import kotlin.js.dom.html.HTMLDivElement
 import kotlin.js.dom.html.document
+import File
+import Project
 
 /**
  * Created by Semyon.Atamas on 3/31/2015.

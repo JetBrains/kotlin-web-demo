@@ -233,7 +233,7 @@ configurationManager.onFail = function (exception) {
 var converterView = new ConverterView();
 document.getElementById("java2kotlin-button").onclick = converterView.open;
 
-var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].NavBarView(document.getElementById("grid-nav"));
+var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].views.NavBarView(document.getElementById("grid-nav"));
 
 var accordion = (function () {
     var accordion = new AccordionView(document.getElementById("examples-list"));
