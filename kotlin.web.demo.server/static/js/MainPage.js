@@ -333,7 +333,7 @@ var accordion = (function () {
 window.onpopstate = function () {
     var projectId = getProjectIdFromUrl();
     if (accordion.getProjectView(projectId) == null) {
-        location.reload();
+        accordion.loadFirstItem()
     } else {
         if (accordion.getSelectedProject().getPublicId() != projectId) {
             accordion.selectProject(projectId);
