@@ -139,6 +139,7 @@ argumentsButton.onclick = function () {
 function onOutputViewResized() {
     $("#grid-bottom").css("top", "");
     $("#result-tabs").css("height", $("#grid-bottom").height() - $("#statusBarWrapper").outerHeight());
+    $("#test-wrapper").find(".consoleOutput").css("height", $("#program-output").height() - $("#unit-test-statistic").outerHeight(true));
     $(".tab-space").css("height", $("#result-tabs").height() - $(".result-tabs-footer").outerHeight());
 
     var gridTopHeight;
