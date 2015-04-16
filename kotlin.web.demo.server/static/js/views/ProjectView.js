@@ -331,7 +331,8 @@ var ProjectView = (function () {
         }
 
         function onDelete() {
-            parent.removeProject(instance);
+            if(project.getType() == ProjectType.USER_PROJECT)
+                parent.removeProject(instance);
             headerElement.parentNode.removeChild(headerElement);
             contentElement.parentNode.removeChild(contentElement);
             instance.onDelete();
