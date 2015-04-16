@@ -239,21 +239,17 @@
     outline: none;
 }
 
-.tree-node .error.icon {
+#problems-tree .tree-node .error.icon {
     float: left;
-    height: 12px;
-    width: 12px;
-    position: relative;
     margin-right: 4px;
+    margin-left: 0;
     top: 1px;
     background: url("/static/images/icons_all_sprite.png") no-repeat -150px -500px;
 }
 
-.tree-node .warning.icon {
+#problems-tree .tree-node .warning.icon {
     float: left;
-    height: 12px;
-    width: 12px;
-    position: relative;
+    margin-left: 0;
     margin-right: 4px;
     top: 1px;
     background: url("/static/images/icons_all_sprite.png") no-repeat -150px -600px;
@@ -358,7 +354,7 @@
     padding-left: 30px;
 }
 
-.tree-node .img {
+.tree-node .icon {
     position: relative;
     top: 2px;
     height: 12px;
@@ -403,15 +399,15 @@ li[aria-expanded="false"] > ul {
     position: relative;
 }
 
-.tree-node-header .img.ok {
+.tree-node-header .icon.ok {
     background: url("/static/images/icons_all_sprite.png") no-repeat -150px -450px;
 }
 
-.tree-node-header .img.error {
+.tree-node-header .icon.error {
     background: url("/static/images/icons_all_sprite.png") no-repeat -150px -500px;
 }
 
-.tree-node-header .img.fail {
+.tree-node-header .icon.fail {
     background: url("/static/images/icons_all_sprite.png") no-repeat -150px -550px;
 }
 

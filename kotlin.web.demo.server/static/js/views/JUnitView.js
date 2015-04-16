@@ -231,7 +231,7 @@ var JUnitView = (function () {
         nodeElement.appendChild(nodeElementHeader);
 
         var img = document.createElement("div");
-        img.className = "img " + node.icon;
+        img.className = "icon " + node.icon;
         nodeElementHeader.appendChild(img);
 
         var text = document.createElement("div");
