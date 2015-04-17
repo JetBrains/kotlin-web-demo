@@ -50,7 +50,7 @@ fullscreenButton.onclick = function () {
 
     if (isFullscreenMode()) {
         $("[fullscreen-sensible]").removeClass("fullscreen");
-        $(this).find(".text").html("Expand");
+        $(this).find(".text").html("Fullscreen");
 
         $(gridElement).css("height", "");
         $(gridTopElement).css("height", "");
@@ -68,7 +68,7 @@ fullscreenButton.onclick = function () {
         updateEditorHeightAndRefreshEditor();
     } else {
         $("[fullscreen-sensible]").addClass("fullscreen");
-        $(this).find(".text").html("Collapse");
+        $(this).find(".text").html("Exit fullscreen");
         updateGridHeightFullscreen();
     }
     updateProjectTreeMaxWidth();
