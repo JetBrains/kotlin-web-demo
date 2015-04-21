@@ -64,9 +64,9 @@ abstract class Shape() {
 val Kotlin = Logo(v(250.0, 75.0))
 
 class Logo(override var pos: Vector) : Shape() {
-    val relSize: Double = 0.25
+    val relSize: Double = 0.15
     val shadowOffset = v(-3.0, 3.0)
-    val imageSize = v(377.0, 393.0)
+    val imageSize = v(200.0, 200.0)
     var size: Vector = imageSize * relSize
     // get-only properties like this saves you lots of typing and are very expressive
     val position: Vector
