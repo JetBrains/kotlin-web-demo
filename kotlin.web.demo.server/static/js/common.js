@@ -195,7 +195,7 @@ function clearState() {
 function setState(hash, title) {
     hash = unEscapeString(hash);
     hash = hash.startsWith("#") ? hash : "#" + hash;
-    document.title = title;
+    document.title = title + " | Try Kotlin";
     if (location.hash != hash) {
         if ((location.hash == "" || location.hash == "#") && location.search == "") {
             history.replaceState("", title, hash);
