@@ -35,6 +35,7 @@ var ConsoleView = (function () {
                     var i = 0;
                     var output = [];
                     while (data[i] != undefined) {
+                        data[i].stackTrace = data[i].stackTrace != null ? data[i].stackTrace : "";
                         output.push({
                             "text": data[i].exception.replace(new RegExp("<br/>", "g"), "\n"),
                             "stackTrace": data[i].stackTrace.replace(new RegExp("<br/>", "g"), "\n"),
