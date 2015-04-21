@@ -86,16 +86,6 @@ var ConfigurationComponent = (function () {
             fireChangeEvent();
         });
 
-        $("#on-the-fly-checkbox").on("change", function () {
-            var checkbox = document.getElementById("on-the-fly-checkbox");
-            if (checkbox.checked == true) {
-                configuration = new Configuration(Configuration.mode.SERVER, configuration.type);
-            } else {
-                configuration = new Configuration(Configuration.mode.ONRUN, configuration.type);
-            }
-            fireChangeEvent();
-        });
-
         function fireChangeEvent() {
             if (configuration.mode.name != null && configuration.type.runner != null && configuration.type.dependencies != null) {
                 instance.onChange(configuration);

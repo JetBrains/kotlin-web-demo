@@ -109,8 +109,12 @@ var KotlinEditor = (function () {
             cursorCoords: function () {
                 return my_editor.cursorCoords();
             },
-            updateHighlighting: function () {
+            setHighlighting: function() {
                 highlighting.updateHighlighting()
+            },
+            updateHighlighting: getHighlighting,
+            removeHighlighting: function () {
+                highlighting.removeStyles()
             },
             /**
              * For the debug purposes.

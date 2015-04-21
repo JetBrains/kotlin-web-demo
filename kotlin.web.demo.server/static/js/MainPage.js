@@ -132,7 +132,7 @@ var runProvider = (function () {
             if (data.type == "errors") {
                 project.setErrors(data.errors);
                 problemsView.addMessages();
-                editor.updateHighlighting();
+                editor.setHighlighting();
             } else if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
                 generatedCodeView.setOutput(data);
             } else {
@@ -156,7 +156,7 @@ var runProvider = (function () {
                 project.setErrors(data.errors);
                 $("#result-tabs").tabs("option", "active", 0);
                 problemsView.addMessages();
-                editor.updateHighlighting();
+                editor.setHighlighting();
                 statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [getNumberOfErrorsAndWarnings(data.errors)]);
             }
         });
@@ -214,6 +214,9 @@ var completionProvider = (function () {
 
 configurationManager.onChange = function (configuration) {
     accordion.getSelectedProject().setConfiguration(Configuration.getStringFromType(configuration.type));
+    editor.removeHighlighting();
+    problemsView.clear();
+    editor.updateHighlighting()
 };
 
 configurationManager.onFail = function (exception) {
@@ -583,6 +586,7 @@ $("#on-the-fly-checkbox")
     .on("change", function () {
         var checkbox = document.getElementById("on-the-fly-checkbox");
         editor.highlightOnTheFly(checkbox.checked);
+        editor.updateHighlighting();
     });
 editor.highlightOnTheFly(document.getElementById("on-the-fly-checkbox").checked);
 
