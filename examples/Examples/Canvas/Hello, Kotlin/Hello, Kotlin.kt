@@ -3,15 +3,19 @@
 */
 package hello
 
-import kotlin.js.dom.html.window
+import kotlin.js.dom.html.*
 import kotlin.js.dom.html5.*
 import jquery.*
 
-val canvas: HTMLCanvasElement
-    get() {
-        return window.document.getElementsByTagName("canvas").item(0) as HTMLCanvasElement
-    }
-
+val canvas = initalizeCanvas()
+fun initalizeCanvas(): HTMLCanvasElement{
+    val canvas = document.createElement("canvas") as HTMLCanvasElement
+    val context = canvas.getContext("2d")!!
+    context.canvas.width  = window.innerWidth;
+    context.canvas.height = window.innerHeight;
+    document.body.appendChild(canvas)
+    return canvas
+}
 val context: CanvasContext
     get() {
         return canvas.getContext("2d")!!

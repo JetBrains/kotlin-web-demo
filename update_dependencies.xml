@@ -20,10 +20,10 @@
     <property name="zipped.kotlin.plugin.pattern" value="kotlin-plugin*.zip"/>
 
     <property name="teamcity" value="https://teamcity.jetbrains.com"/>
-    <property name="teamcity.plugin.build" value="bt345"/>
+    <property name="locator" value="buildType:bt345,tags:try.kotlinlang.org,branch:default:any"/>
 
     <property name="tc.plugin"
-              value="${teamcity}/guestAuth/repository/download/${teamcity.plugin.build}/try.kotlinlang.org.tcbuildtag"/>
+              value="${teamcity}/guestAuth/app/rest/builds/${locator}/artifacts/content"/>
 
     <target name="download_and_update">
         <delete dir="${dependencies.dir}" failonerror="false"/>
@@ -70,6 +70,8 @@
 
             <unzip src="${unzipped.kotlin.plugin}/Kotlin/kotlinc/lib/kotlin-jslib.jar"
                    dest="${unzipped.kotlin.plugin}/jslib"/>
+            <copy file="${unzipped.kotlin.plugin}/jslib/kotlin.js"
+                  todir="kotlin.web.demo.frontend/static"/>
             <delete dir="${unzipped.kotlin.plugin}/jslib"/>
 
             <j2kConverter/>
@@ -124,7 +126,10 @@
     </macrodef>
 
     <target name="update_to_latest_version">
-        <get src="${tc.plugin}/kotlin-plugin-{build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"
+        <loadresource property="build.number">
+            <url url="${teamcity}/guestAuth/app/rest/builds/${locator}/number"/>
+        </loadresource>
+        <get src="${tc.plugin}/kotlin-plugin-${build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"
              usetimestamp="true"/>
         <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
              dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>

@@ -296,6 +296,8 @@
     background-color: #99ccff;
 }
 
-#mycanvas {
-    padding: 5px;
+#iframePopup iframe {
+    border: 0;
+    width: 100%;
+    height: 100%;
 }

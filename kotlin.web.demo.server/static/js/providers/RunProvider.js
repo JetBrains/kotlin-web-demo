@@ -119,10 +119,10 @@ var RunProvider = (function () {
         }
 
         function loadJsFromServer(project) {
-            var originalKotlinModules = Kotlin.modules;
+            var runConfiguration = project.getConfiguration();
             $.ajax({
                 //runConf is unused parameter. It's added to url for useful access logs
-                url: generateAjaxUrl("run", {runConf: project.getConfiguration()}),
+                url: generateAjaxUrl("run", {runConf: runConfiguration}),
                 context: document.body,
                 success: function (data) {
                     try {
@@ -133,12 +133,24 @@ var RunProvider = (function () {
                                     $(data).each(function (ind, element) {
                                         if (element.type == "generatedJSCode") {
                                             try {
-                                                Kotlin.modules = {stdlib: Kotlin.modules.stdlib, builtins: Kotlin.modules.builtins};
-                                                var dataJs = eval(element.text);
-                                                Kotlin.modules = originalKotlinModules;
-                                                output.push({"text": safe_tags_replace(dataJs), "type": "jsOut"});
+                                                //Placed here because of firefox bug
+                                                //(error modifying context of canvas in invisible iframe)
+                                                if (runConfiguration ==
+                                                    Configuration.getStringFromType(Configuration.type.CANVAS)) {
+                                                    canvasDialog.dialog("open");
+                                                }
+                                                iframe.contentWindow.Kotlin.modules = {
+                                                    stdlib: iframe.contentWindow.Kotlin .modules.stdlib,
+                                                    builtins: iframe.contentWindow.Kotlin .modules.builtins
+                                                };
+                                                var out =  iframe.contentWindow.eval(element.text);
+                                                output.push({"text": safe_tags_replace(out), "type": "jsOut"});
                                             } catch (e) {
                                                 output.push({"type": "jsException", exception: e});
+                                            } finally {
+                                                if(runConfiguration == "js"){
+                                                    clearIframe();
+                                                }
                                             }
                                         }
                                     });
@@ -161,7 +173,6 @@ var RunProvider = (function () {
                 data: {project: JSON.stringify(project)},
                 timeout: 10000,
                 complete: function () {
-                    Kotlin.modules = originalKotlinModules;
                     instance.onComplete()
                 },
                 error: function (jqXHR, textStatus, errorThrown) {

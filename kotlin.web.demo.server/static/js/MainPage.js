@@ -102,26 +102,20 @@ problemsView.setCursor = function (filename, line, ch) {
     editor.focus();
 };
 
-var canvas;
-canvasDialog = $("#popupForCanvas").dialog({
+var canvasDialog = $("#iframePopup").dialog({
     width: 640,
     height: 360,
     resizable: false,
     autoOpen: false,
     modal: true,
-    open: function () {
-        $(canvas).width(canvasDialog.width() - 10);
-        $(canvas).height(canvasDialog.height() - 10);
-    },
-    close: function () {
-        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-        window.clearAllIntervals();
-    }
+    close: clearIframe
 });
 
-canvas = document.getElementById("mycanvas");
-canvas.setAttribute("width", canvasDialog.dialog("option", "width") + "");
-canvas.setAttribute("height", (canvasDialog.dialog("option", "height") - 30) + "");
+var iframe = document.getElementById("k2js-iframe");
+
+function clearIframe(){
+    iframe.contentWindow.location.reload();
+}
 
 var shortcutsHelpDialog = new ShortcutsHelpView();
 document.getElementById("shortcuts-button").onclick = shortcutsHelpDialog.open;
@@ -134,9 +128,6 @@ helpViewForWords.hide();
 var runProvider = (function () {
     var runProvider = new RunProvider();
     runProvider.onSuccess = function (output, project) {
-        if (project.getConfiguration() == Configuration.getStringFromType(Configuration.type.CANVAS)) {
-            canvasDialog.dialog("open");
-        }
         $(output).each(function (ind, data) {
             if (data.type == "errors") {
                 project.setErrors(data.errors);
@@ -595,10 +586,6 @@ $("#on-the-fly-checkbox")
     });
 editor.highlightOnTheFly(document.getElementById("on-the-fly-checkbox").checked);
 
-function setKotlinJsOutput() {
-    Kotlin.out = new Kotlin.BufferedOutput();
-}
-
 function setKotlinVersion() {
     $.ajax("http://kotlinlang.org/latest_release_version.txt", {
         type: "GET",
@@ -642,6 +629,5 @@ getSessionInfo(function(data){
     sessionId = data.id;
 });
 loadShortcuts();
-setKotlinJsOutput();
 setKotlinVersion();
 

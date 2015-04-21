@@ -7,12 +7,8 @@ package creatures
 
 import java.util.ArrayList
 import jquery.*
-import kotlin.js.dom.html.window
-import kotlin.js.dom.html.HTMLElement
-import kotlin.js.dom.html.HTMLImageElement
-import kotlin.js.dom.html5.CanvasContext
-import kotlin.js.dom.html5.CanvasGradient
-import kotlin.js.dom.html5.HTMLCanvasElement
+import kotlin.js.dom.html.*
+import kotlin.js.dom.html5.*
 
 
 fun getImage(path: String): HTMLImageElement {
@@ -21,10 +17,15 @@ fun getImage(path: String): HTMLImageElement {
     return image
 }
 
-val canvas: HTMLCanvasElement
-    get() {
-        return window.document.getElementsByTagName("canvas").item(0) as HTMLCanvasElement
-    }
+val canvas = initalizeCanvas()
+fun initalizeCanvas(): HTMLCanvasElement{
+    val canvas = document.createElement("canvas") as HTMLCanvasElement
+    val context = canvas.getContext("2d")!!
+    context.canvas.width  = window.innerWidth;
+    context.canvas.height = window.innerHeight;
+    document.body.appendChild(canvas)
+    return canvas
+}
 
 val context: CanvasContext
     get() {
