@@ -440,13 +440,8 @@ li[aria-expanded="true"] > .tree-node-header .toggle-arrow {
     padding-bottom: 2px;
 }
 
-.kotlin-file-icon {
-    position: relative;
+.tree-node .kotlin-file-icon {
     height: 14px;
     width: 14px;
-    margin-left: 4px;
-    margin-right: 4px;
-    display: inline-block;
-    top: 2px;
     background: url("/static/images/kotlin_file.png");
 }
