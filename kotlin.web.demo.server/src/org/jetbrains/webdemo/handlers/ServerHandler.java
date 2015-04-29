@@ -22,8 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.authorization.AuthorizationHelper;
-import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
@@ -62,21 +60,9 @@ public class ServerHandler {
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         sendUserName(request, response, sessionInfo);
                         break;
-                    case ("authorization"):
-                        sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sendAuthorizationResult(request, response, sessionInfo);
-                        break;
                     case ("loadHelpForWords"):
                         sendHelpContentForWords(request, response);
                         break;
-                    case ("logout"): {
-                        HttpSession session = request.getSession();
-                        if (session != null) {
-                            session.invalidate();
-                        }
-                        writeResponse(request, response, "ok", HttpServletResponse.SC_OK);
-                        break;
-                    }
                     case ("google_key"): {
                         writeResponse(request, response, ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY, HttpServletResponse.SC_OK);
                         break;
@@ -123,58 +109,6 @@ public class ServerHandler {
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "?" + request.getQueryString());
-        }
-    }
-
-    private void sendAuthorizationResult(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
-        if (request.getParameter("args").equals("logout")) {
-            sessionInfo.getUserInfo().logout();
-            request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
-        } else {
-            String host = request.getHeader("Host") != null ?
-                    request.getHeader("Host") :
-                    request.getServerName() + ":" + request.getServerPort();
-            AuthorizationHelper helper = AuthorizationHelper.getHelper(request.getParameter("args"), host);
-            if (request.getParameter("oauth_verifier") != null ||
-                    request.getParameter("code") != null) {
-                try {
-                    UserInfo info;
-                    if (request.getParameter("oauth_verifier") != null) {
-                        info = helper.verify(request.getParameter("oauth_verifier"));
-                    } else {
-                        info = helper.verify(request.getParameter("code"));
-                    }
-                    if (info != null) {
-                        sessionInfo.setUserInfo(info);
-                        MySqlConnector.getInstance().addNewUser(sessionInfo.getUserInfo());
-                        request.getSession().setAttribute("userInfo", sessionInfo.getUserInfo());
-                    }
-                } catch (Throwable e) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", sessionInfo.getOriginUrl(), "Can't authorize user " + request.getQueryString());
-                } finally {
-                    try {
-                        response.sendRedirect("http://" + host);
-                    } catch (IOException e) {
-                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                                "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + host);
-                    }
-                }
-            } else if (request.getParameter("denied") != null) {
-                try {
-                    response.sendRedirect("http://" + host);
-                } catch (IOException e) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", sessionInfo.getOriginUrl(), "cannot redirect to http://" + host);
-                }
-            } else {
-                try {
-                    response.sendRedirect(helper.getAuthorizationUrl());
-                } catch (Throwable e) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "/" + request.getQueryString());
-                }
-            }
         }
     }
 

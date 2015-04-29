@@ -51,30 +51,15 @@ var LoginView = (function () {
 
         var loginDialog = $("#login-dialog").dialog({
             modal: "true",
+            draggable: false,
             resizable: false,
-            width: 300,
-            autoOpen: false
+            width: 350,
+            autoOpen: false,
+            dialogClass: "login-dialog"
         });
 
-        $("#login-with-twitter").click(function () {
-            login("twitter");
-        });
-        $("#login-with-twitter-colored").click(function () {
-            login("twitter");
-        });
-
-        $("#login-with-facebook").click(function () {
-            login("facebook");
-        });
-        $("#login-with-facebook-colored").click(function () {
-            login("facebook");
-        });
-
-        $("#login-with-google").click(function () {
-            login("google");
-        });
-        $("#login-with-google-colored").click(function () {
-            login("google");
+        $(".login-icons").children().click(function(){
+            login(this.getAttribute("login-type"));
         });
 
         document.getElementById("logout-button").onclick = function (event) {

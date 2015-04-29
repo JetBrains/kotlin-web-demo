@@ -47,14 +47,14 @@ var LoginProvider = (function () {
         };
 
         function login(type) {
-            document.location.href = generateAjaxUrl("authorization") + "&args=" + type;
+            document.location.href = location.protocol + "//" + location.host + "/login/" + type;
         }
 
         function logout() {
             blockContent();
             instance.beforeLogout();
             $.ajax({
-                url: generateAjaxUrl("logout"),
+                url: location.protocol + "//" + location.host + "/logout",
                 context: document.body,
                 success: function (data) {
                     try {

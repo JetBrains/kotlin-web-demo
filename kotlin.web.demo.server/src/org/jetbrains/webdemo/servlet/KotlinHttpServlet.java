@@ -94,14 +94,6 @@ public class KotlinHttpServlet extends HttpServlet {
             }
 
             CommandRunner.setServerSettingFromTomcatConfig("backend_url", (String) envCtx.lookup("backend_url"));
-            CommandRunner.setServerSettingFromTomcatConfig("google_key", (String) envCtx.lookup("google_key"));
-            CommandRunner.setServerSettingFromTomcatConfig("google_secret", (String) envCtx.lookup("google_secret"));
-            CommandRunner.setServerSettingFromTomcatConfig("twitter_key", (String) envCtx.lookup("twitter_key"));
-            CommandRunner.setServerSettingFromTomcatConfig("twitter_secret", (String) envCtx.lookup("twitter_secret"));
-            CommandRunner.setServerSettingFromTomcatConfig("facebook_key", (String) envCtx.lookup("facebook_key"));
-            CommandRunner.setServerSettingFromTomcatConfig("facebook_secret", (String) envCtx.lookup("facebook_secret"));
-
-
             return true;
         } catch (Throwable e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

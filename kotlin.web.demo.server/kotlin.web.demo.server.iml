@@ -28,5 +28,6 @@
     <orderEntry type="library" name="jackson" level="project" />
     <orderEntry type="module" module-name="kotlin.web.demo.common" />
     <orderEntry type="library" name="kotlin-compiler" level="project" />
+    <orderEntry type="library" name="jwt" level="project" />
   </component>
 </module>

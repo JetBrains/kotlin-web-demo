@@ -18,10 +18,10 @@ package org.jetbrains.webdemo.authorization;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.scribe.builder.ServiceBuilder;
@@ -48,7 +48,7 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
                     .apiKey(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.SECRET)
                     .scope(SCOPE)
-                    .callback("http://" + host + ResponseUtils.generateRequestString("authorization", "google"))
+                    .callback(getCallbackUrl())
                     .build();
 
             return googleService.getAuthorizationUrl(EMPTY_TOKEN);
@@ -81,6 +81,12 @@ public class AuthorizationGoogleHelper extends AuthorizationHelper {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "google: " + oauthVerifier);
         }
         return userInfo;
+    }
+
+    @NotNull
+    @Override
+    protected String getType() {
+        return "google";
     }
 
 }

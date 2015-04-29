@@ -16,8 +16,13 @@
 
 package org.jetbrains.webdemo.authorization;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.session.UserInfo;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public abstract class AuthorizationHelper {
     protected static final int TIMEOUT = 500;
@@ -36,6 +41,10 @@ public abstract class AuthorizationHelper {
                 return new AuthorizationGoogleHelper(host);
             case "facebook":
                 return new AuthorizationFacebookHelper(host);
+            case "github":
+                return new AuthorizationGithubHelper(host);
+            case "jba":
+                return new AuthorizationJetAccountHelper(host);
             default:
                 throw new IllegalArgumentException("Unknown authorization type");
         }
@@ -45,4 +54,11 @@ public abstract class AuthorizationHelper {
 
     @Nullable
     public abstract UserInfo verify(String oauthVerifier);
+
+    protected String getCallbackUrl() {
+        return "http://" + host + "/verify/" + getType();
+    }
+
+    @NotNull
+    protected abstract String getType();
 }

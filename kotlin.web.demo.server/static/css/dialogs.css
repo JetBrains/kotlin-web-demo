@@ -93,24 +93,22 @@
     opacity: 0.5;
 }
 
-#login-dialog {
+.login-dialog {
     text-align: center;
-    line-height: 30px;
-    padding-top: 15px;
+    line-height: 20px;
 }
 
-.login-icons .icon {
-    display: inline-block;
-    cursor: pointer;
-    margin-left: 16px;
-    position: relative;
-    width: 22px;
-    height: 22px;
-    font-size: 0;
+.login-dialog .ui-dialog-content{
+    padding-top: 10px;
+    padding-bottom: 35px;
 }
 
-.login-icons .icon:first-child {
-    margin-left: 0;
+.login-dialog .login-icons {
+    padding-top: 10px;
+}
+
+.login-dialog .ui-dialog-titlebar{
+    background-color: white;
 }
 
 .facebook_23px {

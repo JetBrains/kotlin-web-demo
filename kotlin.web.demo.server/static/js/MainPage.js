@@ -389,9 +389,12 @@ loginProvider.beforeLogout = function () {
 };
 
 loginProvider.onLogout = function () {
-    loginView.logout();
-    statusBarView.setStatus(ActionStatusMessages.logout_ok);
-    accordion.loadAllContent();
+    getSessionInfo(function(data){
+        sessionId = data.id;
+        loginView.logout();
+        statusBarView.setStatus(ActionStatusMessages.logout_ok);
+        accordion.loadAllContent();
+    });
 };
 
 loginProvider.onFail = function (exception, actionCode) {

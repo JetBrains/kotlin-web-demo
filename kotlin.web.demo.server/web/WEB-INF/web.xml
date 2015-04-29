@@ -14,11 +14,21 @@
         <servlet-class>org.jetbrains.webdemo.servlet.KotlinHttpServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>AuthorizationServlet</servlet-name>
+        <servlet-class>org.jetbrains.webdemo.servlet.AuthorizationServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>KotlinHttpServlet</servlet-name>
         <url-pattern>/kotlinServer</url-pattern>
-        <url-pattern>/logs</url-pattern>
+    </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>AuthorizationServlet</servlet-name>
+        <url-pattern>/login/*</url-pattern>
+        <url-pattern>/verify/*</url-pattern>
+        <url-pattern>/logout/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

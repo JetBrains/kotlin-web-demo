@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="jwt">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/nimbus-jose-jwt-3.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/json-smart-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -23,9 +23,11 @@ public class ApplicationSettings {
     public static String EXAMPLES_DIRECTORY = "examples";
     public static String HELP_FOR_WORDS = "helpWords.xml";
     public static boolean LOAD_TEST_VERSION_OF_EXAMPLES = false;
+    public static OauthCredentials GITHUB_OAUTH_CREDENTIALS = new OauthCredentials();
     public static OauthCredentials GOOGLE_OAUTH_CREDENTIALS = new OauthCredentials();
     public static OauthCredentials FACEBOOK_OAUTH_CREDENTIALS = new OauthCredentials();
     public static OauthCredentials TWITTER_OAUTH_CREDENTIALS = new OauthCredentials();
+    public static OauthCredentials JET_ACCOUNT_CREDENTIALS = new OauthCredentials();
 
 
     private ApplicationSettings() {

@@ -44,6 +44,12 @@ public class CommandRunner {
             ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.KEY = value;
         } else if (setting.equals("facebook_secret")) {
             ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.SECRET = value;
+        } else if (setting.equals("github_key")) {
+            ApplicationSettings.GITHUB_OAUTH_CREDENTIALS.KEY = value;
+        } else if (setting.equals("github_secret")) {
+            ApplicationSettings.GITHUB_OAUTH_CREDENTIALS.SECRET = value;
+        } else if (setting.equals("jba_secret")) {
+            ApplicationSettings.JET_ACCOUNT_CREDENTIALS.SECRET = value;
         } else {
             ErrorWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
         }

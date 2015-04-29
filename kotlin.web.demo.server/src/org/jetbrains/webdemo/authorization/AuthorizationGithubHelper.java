@@ -25,59 +25,57 @@ import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
 import java.util.concurrent.TimeUnit;
 
-public class AuthorizationTwitterHelper extends AuthorizationHelper {
-    private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
-    private static OAuthService twitterService;
-    private static Token requestToken;
-    private final String TYPE = "twitter";
+/**
+ * Created by Semyon.Atamas on 4/22/2015.
+ */
+public class AuthorizationGithubHelper extends AuthorizationHelper {
+    private static final String PROTECTED_RESOURCE_URL = "https://api.github.com/user";
+    private static final Token EMPTY_TOKEN = null;
+    private static OAuthService githubService;
+    private final String TYPE = "github";
 
-    public AuthorizationTwitterHelper(String host) {
+    public AuthorizationGithubHelper(String host) {
         super(host);
     }
 
+    @Override
     public String getAuthorizationUrl() {
         try {
-            twitterService = new ServiceBuilder()
-                    .provider(TwitterApi.Authenticate.class)
-                    .apiKey(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.KEY)
-                    .apiSecret(ApplicationSettings.TWITTER_OAUTH_CREDENTIALS.SECRET)
+            githubService = new ServiceBuilder()
+                    .provider(GithubApi.class)
+                    .apiKey(ApplicationSettings.GITHUB_OAUTH_CREDENTIALS.KEY)
+                    .apiSecret(ApplicationSettings.GITHUB_OAUTH_CREDENTIALS.SECRET)
                     .callback(getCallbackUrl())
                     .build();
-            requestToken = twitterService.getRequestToken();
-            return twitterService.getAuthorizationUrl(requestToken);
+            return githubService.getAuthorizationUrl(EMPTY_TOKEN);
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "twitter");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "github");
         }
         return "";
     }
 
-    @Override
     @Nullable
+    @Override
     public UserInfo verify(String oauthVerifier) {
         UserInfo userInfo = null;
         try {
             Verifier verifier = new Verifier(oauthVerifier);
-            Token accessToken = twitterService.getAccessToken(requestToken, verifier);
+            Token accessToken = githubService.getAccessToken(EMPTY_TOKEN, verifier);
             OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
             request.setConnectTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
-            twitterService.signRequest(accessToken, request); // the access token from step 4
+            githubService.signRequest(accessToken, request);
             Response response = request.send();
 
+            JsonNode object = new ObjectMapper().readTree(response.getBody());
             userInfo = new UserInfo();
-            JsonNode obj = new ObjectMapper().readTree(response.getBody());
-            String id = obj.get("id").toString();
-            String name = obj.has("name") ? obj.get("name").asText() : "";
-            if (name != null && id != null) {
-                userInfo.login(name, id, TYPE);
-            }
+            userInfo.login(object.get("name").textValue(), object.get("id").asText(), TYPE);
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "twitter");
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "github: " + oauthVerifier);
         }
         return userInfo;
     }
@@ -85,6 +83,6 @@ public class AuthorizationTwitterHelper extends AuthorizationHelper {
     @NotNull
     @Override
     protected String getType() {
-        return "twitter";
+        return "github";
     }
 }

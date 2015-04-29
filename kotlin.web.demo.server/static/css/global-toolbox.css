@@ -21,7 +21,6 @@
 
 .global-toolbox-left{
     float: left;
-    margin-top: 4px;
 }
 
 #login {
@@ -35,26 +34,38 @@
     float: left;
 }
 
-#login .icon {
+.login-icons .icon{
+    display: inline-block;
     cursor: pointer;
-    float: left;
-    margin-left: 16px;
     position: relative;
-    width: 15px;
-    height: 15px;
+    margin-left: 16px;
+    height: 20px;
+    width: 22px;
     font-size: 0;
 }
 
-.facebook {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -150px;
+.login-icons .icon:first-child{
+    margin-left: 0;
 }
 
-.google {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -200px;
+.icon.facebook {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -0px;
 }
 
-.twitter {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -250px;
+.icon.google {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -50px;
+}
+
+.icon.twitter {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -100px;
+}
+
+.icon.github {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -150px;
+}
+
+.icon.jba {
+    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -200px;
 }
 
 #logout {
@@ -66,12 +77,18 @@
 #logout .icon {
     float: left;
     position: relative;
-    width: 15px;
-    height: 15px;
+    width: 22px;
+    height: 20px;
     font-size: 0;
 }
 
+#logout .icon.jba {
+    height: 16px;
+    margin-top: 2px;
+}
+
 #username {
+    padding-top: 3px;
     padding-right: 10px;
     padding-left: 8px;
     display: inline-block;

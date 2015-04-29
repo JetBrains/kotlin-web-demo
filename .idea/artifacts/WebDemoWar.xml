@@ -22,6 +22,7 @@
           <element id="library" level="project" name="jackson" />
           <element id="library" level="project" name="kotlin-plugin" />
           <element id="library" level="project" name="junit" />
+          <element id="library" level="project" name="jwt" />
         </element>
       </element>
       <element id="directory" name="static">
