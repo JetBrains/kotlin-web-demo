@@ -91,6 +91,10 @@ consoleOutputView.makeReference = function (fileName, lineNo) {
     }
 };
 
+$(document).on("click", ".ui-widget-overlay", (function(){
+    $(".ui-dialog-titlebar-close").trigger('click');
+}));
+
 var generatedCodeView = new GeneratedCodeView(document.getElementById("generated-code"));
 var consoleView = new ConsoleView(document.getElementById("program-output"), $("#result-tabs"));
 var junitView = new JUnitView(document.getElementById("program-output"), $("#result-tabs"));
