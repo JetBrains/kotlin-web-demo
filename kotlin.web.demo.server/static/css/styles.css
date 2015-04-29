@@ -33,6 +33,6 @@
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .icon {
         background-image: url("/static/images/icons_all_sprite@2x.png");
-        background-size: 200px 900px;
+        background-size: 250px 900px;
     }
 }
