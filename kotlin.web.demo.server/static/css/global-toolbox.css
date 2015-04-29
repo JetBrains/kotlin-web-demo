@@ -65,6 +65,7 @@
 }
 
 .icon.jba {
+    top: 4px;
     background: url("/static/images/icons_all_sprite.png") no-repeat -200px -200px;
 }
 
@@ -84,7 +85,7 @@
 
 #logout .icon.jba {
     height: 16px;
-    margin-top: 2px;
+    top: 2px;
 }
 
 #username {
