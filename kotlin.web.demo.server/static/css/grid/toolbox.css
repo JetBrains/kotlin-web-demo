@@ -141,9 +141,9 @@
 }
 
 #runMode-button {
-    float: none;
+    float: left;
     outline: none;
-    top: 2px;
+    top: 4px;
     border: 1px solid #969696;
     background-color: #f9f9f9;
     padding: 4px;
