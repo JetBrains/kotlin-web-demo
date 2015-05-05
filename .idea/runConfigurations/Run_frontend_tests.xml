@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run frontend tests" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="$PROJECT_DIR$/kotlin.web.demo.frontend/test_env/nodejs/node" path-to-js-file="kotlin.web.demo.frontend/test_env/node_modules/karma/bin/karma" application-parameters="start kotlin.web.demo.frontend/test_env/karma.conf.js" working-dir="$PROJECT_DIR$">
+    <method />
+  </configuration>
+</component>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="install_node" default="install">
+    <property name="node_version" value="0.12.2"/>
+    <property name="npm_version" value="2.9.0"/>
+    <property name="installation_directory" location="nodejs"/>
+
+    <condition property="is_windows">
+        <os family="windows"/>
+    </condition>
+
+    <target name="install">
+        <mkdir dir="${installation_directory}"/>
+        <antcall target="install_windows"/>
+    </target>
+
+    <target name="install_windows" if="is_windows">
+        <get src="http://nodejs.org/dist/v${node_version}/node.exe" dest="${installation_directory}/node.exe"
+             usetimestamp="true"/>
+        <get src="https://codeload.github.com/npm/npm/zip/v${npm_version}" dest="${installation_directory}/npm.zip"
+             usetimestamp="true"/>
+        <unzip src="${installation_directory}/npm.zip" dest="${installation_directory}/node_modules/"/>
+        <delete dir="${installation_directory}/node_modules/npm" failonerror="false"/>
+        <move file="${installation_directory}/node_modules/npm-${npm_version}"
+                tofile="${installation_directory}/node_modules/npm"/>
+        <delete file="${installation_directory}/npm.zip"/>
+        <copy file="${installation_directory}/node_modules/npm/bin/npm.cmd" todir="${installation_directory}"/>
+        <exec executable="${installation_directory}/npm.cmd">
+            <arg line="install"/>
+            <env key="PATH" path="${installation_directory}"/>
+        </exec>
+    </target>
+</project>

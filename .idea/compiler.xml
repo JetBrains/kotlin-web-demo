@@ -20,7 +20,6 @@
       <entry name="?*.ico" />
       <entry name="?*.jar" />
       <entry name="?*.xml" />
-      <entry name="?*.kt" />
     </wildcardResourcePatterns>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="false">
@@ -29,4 +28,3 @@
     </annotationProcessing>
   </component>
 </project>
-
