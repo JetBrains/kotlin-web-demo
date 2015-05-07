@@ -2,18 +2,55 @@
 <project name="install_node" default="install">
     <property name="node_version" value="0.12.2"/>
     <property name="npm_version" value="2.9.0"/>
+    <property name="dependencies_directory" location="../../dependencies"/>
     <property name="installation_directory" location="nodejs"/>
 
     <condition property="is_windows">
         <os family="windows"/>
     </condition>
 
-    <target name="install">
-        <mkdir dir="${installation_directory}"/>
-        <antcall target="install_windows"/>
+    <condition property="is_linux">
+        <os family="unix"/>
+    </condition>
+
+    <target name="install" depends="install_windows, install_linux"/>
+
+    <target name="install_linux" if="is_linux">
+        <get src="http://nodejs.org/dist/v${node_version}/node-v${node_version}-linux-x86.tar.gz"
+             dest="${dependencies_directory}/node.tar.gz"
+             usetimestamp="true"/>
+
+        <delete dir="nodejs"/>
+        <mkdir dir="nodejs"/>
+
+        <gunzip src="${dependencies_directory}/node.tar.gz"
+                dest="${dependencies_directory}/node.tar"/>
+        <untar src="${dependencies_directory}/node.tar" dest="${installation_directory}">
+            <patternset>
+                <include name="node-v${node_version}-linux-x86/bin/node"/>
+                <include name="node-v${node_version}-linux-x86/lib/**"/>
+            </patternset>
+            <mapper>
+                <globmapper from="node-v${node_version}-linux-x86/bin/*" to="*"/>
+                <globmapper from="node-v${node_version}-linux-x86/lib/*" to="*"/>
+            </mapper>
+        </untar>
+
+        <property name="npm" location="${installation_directory}/npm"/>
+        <copy file="${installation_directory}/node_modules/npm/bin/npm" todir="${installation_directory}"/>
+
+        <chmod file="${installation_directory}/node" perm="777"/>
+        <chmod file="${npm}" perm="777"/>
+
+        <property environment="env"/>
+        <exec executable="${npm}">
+            <arg line="install"/>
+            <env key="PATH" path="${env.PATH}:${installation_directory}"/>
+        </exec>
     </target>
 
     <target name="install_windows" if="is_windows">
+        <mkdir dir="${installation_directory}"/>
         <get src="http://nodejs.org/dist/v${node_version}/node.exe" dest="${installation_directory}/node.exe"
              usetimestamp="true"/>
         <get src="https://codeload.github.com/npm/npm/zip/v${npm_version}" dest="${installation_directory}/npm.zip"
