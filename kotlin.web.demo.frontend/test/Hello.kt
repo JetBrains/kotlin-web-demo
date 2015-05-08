@@ -23,6 +23,6 @@ import kotlin.test.assertEquals
 
 public class HelloTest {
     Test fun helloTest(): Unit {
-        assertEquals("hello", "Hello")
+        assertEquals("hello", "hello")
     }
 }
