@@ -16,7 +16,9 @@
 
 package org.jetbrains.webdemo.session;
 
-public class UserInfo {
+import java.io.Serializable;
+
+public class UserInfo implements Serializable {
     private String name = "";
     private String id = "";
     private String type = "";
