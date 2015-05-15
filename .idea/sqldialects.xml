@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/kotlin.web.demo.server/resources/db_schema.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/kotlin.web.demo.server/resources/sessions_db_schema.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/database/MySqlConnector.java" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/kotlin.web.demo.server/src/org/jetbrains/webdemo/database/db_schema.sql" dialect="MySQL" />
   </component>
 </project>
