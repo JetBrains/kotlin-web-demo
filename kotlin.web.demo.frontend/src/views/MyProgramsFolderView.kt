@@ -16,9 +16,9 @@
 
 package views
 
-import kotlin.js.dom.html.HTMLDivElement
-import kotlin.js.dom.html.document
+import org.w3c.dom.HTMLDivElement
 import projectProvider
+import kotlin.browser.document
 
 class MyProgramsFolderView(parentNode: HTMLDivElement,
                            content: dynamic,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import kotlin.js.dom.html5.localStorage
+import kotlin.browser.localStorage
 import kotlin.properties.Delegates
 
 /**
@@ -31,7 +31,7 @@ class File(
         val type: FileType = FileType.KOTLIN_FILE,
         isRevertible: Boolean = true
 ) {
-    var errors = array<Error>()
+    var errors = arrayOf<Error>()
     var changesHistory: dynamic = null;
 
     val listenableName = VarListener<String>();

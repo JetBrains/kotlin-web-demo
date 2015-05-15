@@ -16,7 +16,6 @@
 
 import org.w3c.dom.Element
 import views.FolderView
-import kotlin.js.dom.html.HTMLDivElement
 
 /**
  * Created by Semyon.Atamas on 4/3/2015.
@@ -61,9 +60,6 @@ trait Project {
     fun getName(): String
     fun getParent(): FolderView
 }
-
-native
-fun HTMLDivElement.click()
 
 native
 val projectProvider: dynamic = noImpl

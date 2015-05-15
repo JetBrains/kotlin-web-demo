@@ -16,10 +16,9 @@
 
 package views
 
-import click
-import kotlin.js.dom.html.HTMLDivElement
-import kotlin.js.dom.html.document
 import jq
+import org.w3c.dom.HTMLDivElement
+import kotlin.browser.document
 
 /**
  * Created by Semyon.Atamas on 4/6/2015.
@@ -31,7 +30,7 @@ open class FolderView(parentNode: HTMLDivElement,
                       val parent: FolderView?,
                       val addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) {
     val depth: Int = if (parent == null) 0 else parent.depth + 1;
-    val name = content.name: String
+    val name: String = content.name
     val projects = arrayListOf<ProjectView>()
     val childFolders = arrayListOf<FolderView>()
     val headerElement = document.createElement("div") as HTMLDivElement

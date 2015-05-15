@@ -16,10 +16,11 @@
 
 package views
 
-import kotlin.js.dom.html.HTMLDivElement
-import kotlin.js.dom.html.document
 import File
 import Project
+import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.Node
+import kotlin.browser.document
 
 /**
  * Created by Semyon.Atamas on 3/31/2015.
@@ -44,7 +45,7 @@ class NavBarView(private val navigationElement: HTMLDivElement) {
     }
 
     fun onSelectedFileDeleted(){
-        navigationElement.removeChild(navigationElement.lastChild);
+        navigationElement.removeChild(navigationElement.lastChild as Node);
     }
 
     fun onSelectedProjectRenamed(newName: String){
@@ -57,8 +58,8 @@ class NavBarView(private val navigationElement: HTMLDivElement) {
         navigationElement.insertBefore(createNavItem(project.getName()), navigationElement.firstChild)
         var folder: FolderView? = project.getParent()
         while (folder != null){
-            navigationElement.insertBefore(createNavItem(folder!!.name), navigationElement.firstChild)
-            folder = folder!!.parent
+            navigationElement.insertBefore(createNavItem(folder.name), navigationElement.firstChild)
+            folder = folder.parent
         }
     }
 
