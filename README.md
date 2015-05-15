@@ -9,7 +9,7 @@ Try Kotlin is deployed by [Tomcat](https://tomcat.apache.org/). You can setup To
 If you are installing tomcat manually, you need to download [ConnectorJ](http://dev.mysql.com/downloads/connector/j/) lib 
 and copy jar file to tomcat libraries.
 
-You need MySql database to launch Try Kotlin, schema can be found at kotlin.web.demo.server/resources/db_schema.sql
+You need MySql database to launch Try Kotlin, schema can be found [here](https://github.com/JetBrains/kotlin-web-demo/blob/new-design-beta/kotlin.web.demo.server/resources/db_schema.sql)
 
 ##Building
 Try Kotlin is IDEA project. 
