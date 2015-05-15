@@ -6,7 +6,7 @@
     <property name="tomcat.home" value="apache-tomcat"/>
 
     <target name="downloadTomcat" depends="tomcat.check" unless="tomcat.exists">
-        <property name="tomcat.version" value="7.0.57"/>
+        <property name="tomcat.version" value="7.0.62"/>
         <property name="tomcatMirror" value="http://apache-mirror.rbc.ru"/>
         <property name="tomcatMirrorPath" value="pub/apache/tomcat/tomcat-7/v${tomcat.version}/bin"/>
         <property name="tomcatName" value="apache-tomcat-${tomcat.version}"/>
