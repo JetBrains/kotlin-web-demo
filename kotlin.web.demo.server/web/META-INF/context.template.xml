@@ -1,0 +1,32 @@
+<Context>
+    <!-- REQUIRED-->
+    <Environment name="backend_url" value="localhost:8080/backend" type="java.lang.String" override="false"/>
+    
+    <!-- Authorization keys, leave blank to launch app without authorization -->
+    <Environment name="google_key" value="" type="java.lang.String" override="false"/>
+    <Environment name="google_secret" value="" type="java.lang.String" override="false"/>
+
+    <Environment name="twitter_key" value="" type="java.lang.String" override="false"/>
+    <Environment name="twitter_secret" value="" type="java.lang.String" override="false"/>
+
+    <Environment name="facebook_key" value="" type="java.lang.String" override="false"/>
+    <Environment name="facebook_secret" value="" type="java.lang.String" override="false"/>
+
+    <Environment name="github_key" value="" type="java.lang.String" override="false"/>
+    <Environment name="github_secret" value="" type="java.lang.String" override="false"/>
+
+    <Environment name="jba_secret" value="" type="java.lang.String" override="false"/>
+
+    <!-- Database parameters -->
+    <Resource name="jdbc/kotlin" auth="Container" type="javax.sql.DataSource"
+              username="USERNAME"
+              password="PASSWORD"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://URL:PORT/DBNAME"
+              factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory"
+            />
+    
+    <!-- OPTIONAL -->
+    <Environment name="app_home" value="C:\\development\\kotlin-web-demo\" type="java.lang.String" override="false"/>
+    <Environment name="is_test_version" value="true" type="java.lang.String" override="false"/>
+</Context>
