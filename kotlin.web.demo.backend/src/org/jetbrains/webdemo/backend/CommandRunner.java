@@ -17,16 +17,15 @@
 package org.jetbrains.webdemo.backend;
 
 import org.jetbrains.webdemo.CommonSettings;
-import org.jetbrains.webdemo.ErrorWriter;
 
 import java.io.File;
 
 public class CommandRunner {
 
     public static void setServerSettingFromTomcatConfig(String setting, String value) {
-        ErrorWriter.writeInfoToConsole("Loaded from config file: " + setting + " " + value);
+        System.out.println("Loaded from config file: " + setting + " " + value);
         if (value.isEmpty()) {
-
+            System.err.println("Empty value for setting: " + setting);
         } else if (setting.equals("java_home")) {
             BackendSettings.JAVA_HOME = value;
         } else if (setting.equals("java_execute")) {
@@ -34,14 +33,13 @@ public class CommandRunner {
         } else if (setting.equals("timeout")) {
             BackendSettings.TIMEOUT_FOR_EXECUTION = Integer.parseInt(value);
         } else if (setting.equals("app_output_dir")) {
-            //TODO fully separate application settings and backend settings
             BackendSettings.OUTPUT_DIRECTORY = value + File.separator + "out";
             CommonSettings.LOGS_DIRECTORY = value + File.separator + "logs";
             System.setProperty("kotlin.web.demo.log4j", value);
         } else if (setting.equals("is_test_version")) {
             CommonSettings.IS_TEST_VERSION = Boolean.parseBoolean(value);
         } else {
-            ErrorWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
+            System.err.println("Incorrect setting in config.properties file: " + setting);
         }
 
     }

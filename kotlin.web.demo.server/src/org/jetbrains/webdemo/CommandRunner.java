@@ -22,9 +22,9 @@ import java.io.File;
 public class CommandRunner {
 
     public static void setServerSettingFromTomcatConfig(String setting, String value) {
-        ErrorWriter.writeInfoToConsole("Loaded from config file: " + setting + " " + value);
+        System.out.println("Loaded from config file: " + setting + " " + value);
         if (value.isEmpty()) {
-
+            System.err.println("Empty value for setting: " + setting);
         } else if (setting.equals("app_output_dir")) {
             CommonSettings.LOGS_DIRECTORY = value + File.separator + "logs";
             System.setProperty("kotlin.web.demo.log4j", value);
@@ -51,7 +51,7 @@ public class CommandRunner {
         } else if (setting.equals("jba_secret")) {
             ApplicationSettings.JET_ACCOUNT_CREDENTIALS.SECRET = value;
         } else {
-            ErrorWriter.writeErrorToConsole("Incorrect setting in config.properties file: " + setting);
+            System.err.println("Incorrect setting in config.properties file: " + setting);
         }
 
     }
