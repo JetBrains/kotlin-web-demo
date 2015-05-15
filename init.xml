@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="init" default="all">
-
-    <import file="update_dependencies.xml"/>
-
     <property name="tomcat.home" value="apache-tomcat"/>
 
     <target name="downloadTomcat" depends="tomcat.check" unless="tomcat.exists">
@@ -43,6 +40,5 @@
             <available file="${tomcat.home}" type="dir"/>
         </condition>
     </target>
-
-    <target name="all" depends="downloadTomcat, download_and_update"/>
+    <target name="all" depends="downloadTomcat"/>
 </project>
