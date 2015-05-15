@@ -19,6 +19,8 @@ package views
 import jq
 import org.w3c.dom.HTMLDivElement
 import kotlin.browser.document
+import html4k.js.*
+import html4k.dom.*
 
 /**
  * Created by Semyon.Atamas on 4/6/2015.
@@ -33,22 +35,19 @@ open class FolderView(parentNode: HTMLDivElement,
     val name: String = content.name
     val projects = arrayListOf<ProjectView>()
     val childFolders = arrayListOf<FolderView>()
-    val headerElement = document.createElement("div") as HTMLDivElement
-    val contentElement = document.createElement("div") as HTMLDivElement
-    protected val folderNameElement: HTMLDivElement = document.createElement("div") as HTMLDivElement;
+
+    val headerElement = parentNode.append.div {
+        classes = setOf("folder-header")
+        attributes.put("depth", depth.toString())
+        id = content.id
+    }
+    protected val folderNameElement: HTMLDivElement = headerElement.append.div {
+        + name
+        classes = setOf("text")
+    }
+    val contentElement = parentNode.append.div{}
 
     init {
-        headerElement.className = "folder-header";
-        headerElement.setAttribute("depth", depth.toString())
-        headerElement.id = content.id
-        parentNode.appendChild(headerElement);
-
-        folderNameElement.textContent = name
-        folderNameElement.className = "text"
-        headerElement.appendChild(folderNameElement)
-
-        parentNode.appendChild(contentElement)
-
         for (projectHeader in content.projects) {
             projects.add(addProject(contentElement, projectHeader, this))
         }

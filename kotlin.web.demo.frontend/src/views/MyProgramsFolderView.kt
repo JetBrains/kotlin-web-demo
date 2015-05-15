@@ -19,6 +19,9 @@ package views
 import org.w3c.dom.HTMLDivElement
 import projectProvider
 import kotlin.browser.document
+import html4k.*
+import html4k.dom.*
+import html4k.js.*
 
 class MyProgramsFolderView(parentNode: HTMLDivElement,
                            content: dynamic,
@@ -34,27 +37,26 @@ class MyProgramsFolderView(parentNode: HTMLDivElement,
 
     init {
         if (!loginView.isLoggedIn()) {
-            folderNameElement.style.setProperty("display", "inline-block", "");
-            headerElement.style.setProperty("color", "rgba(0,0,0,0.5)", "");
-            var login_link: HTMLDivElement = document.createElement("div") as HTMLDivElement;
-            login_link.id = "login-link";
-            login_link.className = "login-link";
-            login_link.innerHTML = "(please log in)";
+            folderNameElement.style.display = "inline-block";
+            headerElement.style.color = "rgba(0,0,0,0.5)";
             headerElement.onclick = {
                 loginView.openLoginDialog();
             };
-            headerElement.appendChild(login_link);
+            headerElement.append.div{
+                + "(please log in)"
+                id = "login-link"
+                classes = setOf("login-link")
+            }
         } else {
-            var actionIconsElement = document.createElement("div") as HTMLDivElement;
-            actionIconsElement.className = "icons";
-            headerElement.appendChild(actionIconsElement);
-
-            var newProjectButton = document.createElement("div") as HTMLDivElement;
-            newProjectButton.className = "new-project icon";
-            newProjectButton.onclick = {
-                newProjectDialog.open(projectProvider.addNewProject, "Untitled");
-            };
-            actionIconsElement.appendChild(newProjectButton);
+            headerElement.append.div {
+                classes = setOf("icons")
+                div {
+                    classes = setOf("new-project", "icon")
+                    onClickFunction = {
+                        newProjectDialog.open(projectProvider.addNewProject, "Untitled");
+                    }
+                }
+            }
         }
     }
 
