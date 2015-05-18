@@ -14,12 +14,30 @@
  * limitations under the License.
  */
 
+import jquery.JQuery
 import org.w3c.dom.Element
+import org.w3c.dom.events.Event
 import views.FolderView
 
 /**
  * Created by Semyon.Atamas on 4/3/2015.
  */
+
+native
+interface Error {
+fun JQuery.hide()
+
+native
+fun JQuery.show()
+
+native
+fun JQuery.children(): JQuery
+
+native
+fun JQuery.unbind(s: String)
+
+native
+fun JQuery.on(s: String, onClose: (Event) -> Unit)
 
 native
 interface Error {
@@ -60,3 +78,13 @@ interface Project {
 
 native
 val projectProvider: dynamic = noImpl
+
+native
+trait LoginModel{
+    fun login(type: String)
+    fun logout()
+    fun getUserName()
+}
+
+native
+fun decodeURI(uri:String): String

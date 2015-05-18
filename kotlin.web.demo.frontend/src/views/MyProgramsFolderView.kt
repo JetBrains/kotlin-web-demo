@@ -36,7 +36,7 @@ class MyProgramsFolderView(parentNode: HTMLDivElement,
     })()
 
     init {
-        if (!loginView.isLoggedIn()) {
+        if (!loginView.isLoggedIn) {
             folderNameElement.style.display = "inline-block";
             headerElement.style.color = "rgba(0,0,0,0.5)";
             headerElement.onclick = {

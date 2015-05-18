@@ -52,7 +52,7 @@ var AccordionView = (function () {
                         });
                         incompleteActionManager.checkTimepoint("headersLoaded");
                         $(element).accordion("refresh");
-                        if (!loginView.isLoggedIn()) {
+                        if (!loginView.isLoggedIn) {
                             $(myProgramsFolder.headerElement).unbind("click");
                         }
                         loadFirstItem();

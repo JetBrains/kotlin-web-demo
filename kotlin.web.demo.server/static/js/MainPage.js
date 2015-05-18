@@ -47,7 +47,7 @@ incompleteActionManager.registerAction("save", "onHeadersLoaded",
     function () {
         var content = JSON.parse(localStorage.getItem("contentToSave"));
         localStorage.removeItem("contentToSave");
-        if (content != null && loginView.isLoggedIn()) {
+        if (content != null && loginView.isLoggedIn) {
             saveProjectDialog.open(projectProvider.forkProject.bind(null, content, function (data) {
                 accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
             }), content.name);
@@ -175,7 +175,7 @@ var runProvider = (function () {
 })();
 
 var loginProvider = new LoginProvider();
-var loginView = new LoginView(loginProvider);
+var loginView = new Kotlin.modules["kotlin.web.demo.frontend"].views.LoginView(loginProvider);
 
 function getNumberOfErrorsAndWarnings(data) {
     var noOfErrorsAndWarnings = 0;
@@ -519,7 +519,7 @@ function getSessionInfo(callback) {
 
 window.onfocus = function(){
     getSessionInfo(function(data){
-        if(sessionId != data.id || data.isLoggedIn != loginView.isLoggedIn()){
+        if(sessionId != data.id || data.isLoggedIn != loginView.isLoggedIn){
             location.reload();
         }
     })
@@ -542,7 +542,7 @@ var saveProjectDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.Inp
 saveProjectDialog.validate = accordion.validateNewProjectName;
 
 $("#saveAsButton").click(function () {
-    if (loginView.isLoggedIn()) {
+    if (loginView.isLoggedIn) {
         saveProjectDialog.open(projectProvider.forkProject.bind(null, accordion.getSelectedProject(), function (data) {
             accordion.getSelectedProject().loadOriginal();
             accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));

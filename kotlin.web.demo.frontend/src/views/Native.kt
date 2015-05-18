@@ -46,4 +46,4 @@ interface ProjectView{
 }
 
 native
-val loginView: dynamic = noImpl
+val loginView: LoginView = noImpl
