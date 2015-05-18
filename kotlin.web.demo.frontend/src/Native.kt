@@ -88,3 +88,15 @@ trait LoginModel{
 
 native
 fun decodeURI(uri:String): String
+
+native
+var CodeMirror: dynamic = noImpl
+
+native
+trait ConverterProvider {
+    var onConvertComplete: () -> Unit
+    var onConvertFail: (dynamic) -> Unit
+    var beforeConvert: () -> Unit
+    fun convert(text: String, callback: (String)->Unit): Unit
+
+}

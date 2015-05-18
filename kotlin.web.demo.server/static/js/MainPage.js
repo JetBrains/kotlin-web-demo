@@ -228,8 +228,8 @@ configurationManager.onFail = function (exception) {
     statusBarView.setMessage(ActionStatusMessages.change_configuration_fail);
 };
 
-var converterView = new ConverterView();
-document.getElementById("java2kotlin-button").onclick = converterView.open;
+var converterView = new Kotlin.modules["kotlin.web.demo.frontend"].views.ConverterView(new ConverterProvider());
+document.getElementById("java2kotlin-button").onclick = function(){converterView.open()};
 
 var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].views.NavBarView(document.getElementById("grid-nav"));
 
