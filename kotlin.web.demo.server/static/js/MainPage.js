@@ -121,8 +121,8 @@ function clearIframe(){
     iframe.contentWindow.location.reload();
 }
 
-var shortcutsHelpDialog = new ShortcutsHelpView();
-document.getElementById("shortcuts-button").onclick = shortcutsHelpDialog.open;
+var shortcutsHelpDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.ShortcutsHelpView();
+document.getElementById("shortcuts-button").onclick = function(){shortcutsHelpDialog.open()};
 
 var helpModelForWords = new HelpModel("Words");
 var helpViewForWords = new HelpView(helpModelForWords);
