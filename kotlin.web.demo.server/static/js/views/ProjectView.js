@@ -73,7 +73,7 @@ var ProjectView = (function () {
                         addKotlinExtension(removeKotlinExtension(newName) + "'")
                     );
                 }
-                fileView.getFile().name = newName;
+                fileView.file.name = newName;
                 fileView.updateName();
             },
             getType: function () {
@@ -81,7 +81,7 @@ var ProjectView = (function () {
             },
             getFileViewByName: function (name) {
                 for (var fileId in fileViews) {
-                    if (fileViews[fileId].getFile().name == name) {
+                    if (fileViews[fileId].file.name == name) {
                         return fileViews[fileId];
                     }
                 }
@@ -205,7 +205,7 @@ var ProjectView = (function () {
             };
 
             project.onFileDeleted = function (publicId) {
-                if (selectedFileView.getFile().id == publicId) {
+                if (selectedFileView.file.id == publicId) {
                     accordion.selectedFileDeleted();
                     selectedFileView = null;
                 }
@@ -323,7 +323,7 @@ var ProjectView = (function () {
         }
 
         function createFileView(file) {
-            return new FileView(instance, contentElement, file);
+            return new Kotlin.modules["kotlin.web.demo.frontend"].views.FileView(instance, contentElement, file);
         }
 
         function isSelected() {

@@ -16,6 +16,7 @@
 
 package views
 import Project
+import ProjectType
 import jquery.JQuery
 import org.w3c.dom.events.KeyboardEvent
 
@@ -46,7 +47,14 @@ public fun JQuery.button(mode : String, param : String, value : Any?) : JQuery =
 native
 interface ProjectView{
     fun getProjectData(): Project
+    fun getDepth(): Int
+    fun setSelectedFileView(fileView: FileView)
+    fun validateNewFileName(newName: String): ValidationResult
+    fun getType(): ProjectType
 }
+
+native
+val accordion: dynamic = noImpl
 
 native
 val loginView: LoginView = noImpl

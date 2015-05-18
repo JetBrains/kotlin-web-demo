@@ -103,7 +103,7 @@ var AccordionView = (function () {
             },
             getSelectedFile: function () {
                 if (selectedFileView != null) {
-                    return selectedFileView.getFile();
+                    return selectedFileView.file;
                 } else {
                     return null;
                 }
@@ -113,20 +113,20 @@ var AccordionView = (function () {
             },
             selectFile: function (fileView) {
                 if (!(selectedFileView == fileView)) {
-                    if (selectedProjectView == fileView.getProjectView()) {
+                    if (selectedProjectView == fileView.projectView) {
                         var previousFileView = selectedFileView;
                         selectedFileView = fileView;
 
                         var previousFile = null;
                         if (previousFileView != null) {
-                            $(previousFileView.getWrapper()).removeClass("selected");
-                            $(previousFileView.getHeaderElement()).removeClass("selected");
-                            previousFile = previousFileView.getFile();
+                            $(previousFileView.wrapper).removeClass("selected");
+                            $(previousFileView.headerElement).removeClass("selected");
+                            previousFile = previousFileView.file;
                         }
-                        $(selectedFileView.getWrapper()).addClass("selected");
-                        $(selectedFileView.getHeaderElement()).addClass("selected");
+                        $(selectedFileView.wrapper).addClass("selected");
+                        $(selectedFileView.headerElement).addClass("selected");
 
-                        instance.onSelectFile(previousFile, selectedFileView.getFile());
+                        instance.onSelectFile(previousFile, selectedFileView.file);
                     } else {
                         throw "You can't select file from project, that isn't selected";
                     }
@@ -249,7 +249,7 @@ var AccordionView = (function () {
         function selectProject(publicId) {
             if (selectedProjectView == null || selectedProjectView.getProjectData().getPublicId() != publicId) {
                 if (selectedProjectView != null) {
-                    $(selectedProjectView.getHeaderElement()).removeClass("selected");
+                    $(selectedProjectView.headerElement).removeClass("selected");
                     $(selectedProjectView.getContentElement()).slideUp();
                 }
                 selectedProjectView = projects[publicId];
