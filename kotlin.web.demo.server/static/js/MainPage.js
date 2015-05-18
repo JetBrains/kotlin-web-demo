@@ -125,7 +125,7 @@ var shortcutsHelpDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.S
 document.getElementById("shortcuts-button").onclick = function(){shortcutsHelpDialog.open()};
 
 var helpModelForWords = new HelpModel("Words");
-var helpViewForWords = new HelpView(helpModelForWords);
+var helpViewForWords = new Kotlin.modules["kotlin.web.demo.frontend"].views.HelpView(helpModelForWords);
 helpViewForWords.hide();
 
 
