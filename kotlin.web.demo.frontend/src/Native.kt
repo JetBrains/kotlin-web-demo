@@ -21,9 +21,6 @@ import views.FolderView
  * Created by Semyon.Atamas on 4/3/2015.
  */
 
-native("$")
-fun jq(element: Element): dynamic
-
 native
 interface Error {
     val className: String

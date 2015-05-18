@@ -16,7 +16,7 @@
 
 package views
 
-import jq
+import jquery.jq
 import org.w3c.dom.HTMLDivElement
 import kotlin.browser.document
 import html4k.js.*
@@ -57,15 +57,15 @@ open class FolderView(parentNode: HTMLDivElement,
         }
 
         if (!childFolders.isEmpty()) {
-            jq(contentElement).accordion(object {
-                val heightStyle = "content"
-                val navigation = true
-                val active = 0
-                val icons = object {
-                    val activeHeader = "examples-open-folder-icon"
-                    val header = "examples-closed-folder-icon"
-                }
-            });
+            jq(contentElement).accordion(json(
+                    "heightStyle" to "content",
+                    "navigation" to true,
+                    "active" to 0,
+                    "icons" to json (
+                            "activeHeader" to "examples-open-folder-icon",
+                            "header" to "examples-closed-folder-icon"
+                    )
+            ));
         }
     }
 
@@ -74,3 +74,5 @@ open class FolderView(parentNode: HTMLDivElement,
         headerElement.click()
     }
 }
+
+

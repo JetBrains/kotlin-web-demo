@@ -219,7 +219,7 @@ var ProjectView = (function () {
         })();
         var selectedFileView = null;
         var fileViews = {};
-        var renameProjectDialog = new InputDialogView("Rename project", "Project name:", "Rename");
+        var renameProjectDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.InputDialogView("Rename project", "Project name:", "Rename");
         renameProjectDialog.validate = function (newName) {
             if (project.getName() == newName) {
                 return {valid: true};
@@ -227,7 +227,7 @@ var ProjectView = (function () {
                 return accordion.validateNewProjectName(newName);
             }
         };
-        var newFileDialog = new InputDialogView("Add new file", "File name:", "Add");
+        var newFileDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.InputDialogView("Add new file", "File name:", "Add");
         newFileDialog.validate = instance.validateNewFileName;
 
 

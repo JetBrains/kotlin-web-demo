@@ -538,7 +538,7 @@ var saveButton = $("#saveButton").click(function () {
 });
 
 
-var saveProjectDialog = new InputDialogView("Save project", "Project name:", "Save");
+var saveProjectDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.InputDialogView("Save project", "Project name:", "Save");
 saveProjectDialog.validate = accordion.validateNewProjectName;
 
 $("#saveAsButton").click(function () {

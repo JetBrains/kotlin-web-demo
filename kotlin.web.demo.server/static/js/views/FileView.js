@@ -71,7 +71,7 @@ var FileView = (function () {
             }
         });
 
-        var renameFileDialog = new InputDialogView("Rename file", "File name:", "Rename");
+        var renameFileDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.InputDialogView("Rename file", "File name:", "Rename");
         renameFileDialog.validate = function (newName) {
             if (removeKotlinExtension(file.name) == newName) {
                 return {valid: true};

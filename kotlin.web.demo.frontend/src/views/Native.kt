@@ -16,6 +16,8 @@
 
 package views
 import Project
+import jquery.JQuery
+import org.w3c.dom.events.KeyboardEvent
 
 /**
  * Created by Semyon.Atamas on 4/16/2015.
@@ -24,10 +26,19 @@ import Project
 data class ValidationResult(val valid: Boolean, val message: String = "")
 
 native
-class InputDialogView(title: String, inputText: String, buttonText: String) {
-    var validate: (String) -> ValidationResult
-    var open: (callback: (String) -> Unit, defaultValue: String) -> Unit
-}
+fun JQuery.keydown(callback: (KeyboardEvent) -> Unit)
+
+native
+fun JQuery.find(selector: String): JQuery
+
+native
+fun JQuery.trigger(action: String)
+
+native
+fun JQuery.accordion(params: Json): JQuery
+
+native
+public fun JQuery.button(mode : String, param : String, value : Any?) : JQuery = noImpl
 
 native
 interface ProjectView{
