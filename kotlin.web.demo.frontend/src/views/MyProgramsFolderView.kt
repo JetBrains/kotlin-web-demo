@@ -22,6 +22,7 @@ import kotlin.browser.document
 import html4k.*
 import html4k.dom.*
 import html4k.js.*
+import views.dialogs.InputDialogView
 
 class MyProgramsFolderView(parentNode: HTMLDivElement,
                            content: dynamic,
@@ -29,11 +30,6 @@ class MyProgramsFolderView(parentNode: HTMLDivElement,
                            addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) :
         FolderView(parentNode, content, parent, addProject) {
 
-    val newProjectDialog = ({
-        val value = InputDialogView("Add new project", "Project name:", "Add")
-        value.validate = { name -> validateNewProjectName(name) }
-        value
-    })()
 
     init {
         if (!loginView.isLoggedIn) {
@@ -53,7 +49,14 @@ class MyProgramsFolderView(parentNode: HTMLDivElement,
                 div {
                     classes = setOf("new-project", "icon")
                     onClickFunction = {
-                        newProjectDialog.open(projectProvider.addNewProject, "Untitled");
+                        InputDialogView.open(
+                                title = "Add new project",
+                                inputLabel = "Project name:",
+                                okButtonCaption = "Add",
+                                defaultValue = "Untitled",
+                                validate = { name -> validateNewProjectName(name) },
+                                callback = projectProvider.addNewProject
+                        );
                     }
                 }
             }

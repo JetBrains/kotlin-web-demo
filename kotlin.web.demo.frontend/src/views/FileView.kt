@@ -27,6 +27,7 @@ import kotlin.dom.removeClass
 import FileType
 import addKotlinExtension
 import fileProvider
+import views.dialogs.InputDialogView
 import kotlin.browser.document
 import kotlin.browser.window
 
@@ -64,19 +65,6 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
         +file.name
         title = file.name
         classes = setOf("text")
-    }
-
-    var renameFileDialog = initRenameFileDialog();
-    private fun initRenameFileDialog(): InputDialogView {
-        var dialog = InputDialogView("Rename file", "File name:", "Rename")
-        dialog.validate = { newName ->
-            if (removeKotlinExtension(file.name) == newName) {
-                ValidationResult(true);
-            } else {
-                projectView.validateNewFileName(newName);
-            }
-        };
-        return dialog;
     }
 
     init {
@@ -122,12 +110,24 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                             fileNameElement.innerHTML = e.newValue;
                             fileNameElement.title = fileNameElement.innerHTML;
                         });
-                        val renameFileFunction = { newName: String ->
-                            fileProvider.renameFile(file.id, { newName: String ->
-                                file.name = addKotlinExtension(newName);
-                            }, newName);
-                        }
-                        renameFileDialog.open(renameFileFunction, removeKotlinExtension(file.name));
+                        InputDialogView.open(
+                                title = "Rename file",
+                                inputLabel = "File name:",
+                                okButtonCaption = "Rename",
+                                defaultValue = removeKotlinExtension(file.name),
+                                validate = { newName ->
+                                    if (removeKotlinExtension(file.name) == newName) {
+                                        ValidationResult(true);
+                                    } else {
+                                        projectView.validateNewFileName(newName);
+                                    }
+                                },
+                                callback = { newName: String ->
+                                    fileProvider.renameFile(file.id, { newName: String ->
+                                        file.name = addKotlinExtension(newName);
+                                    }, newName);
+                                }
+                        );
                         event.stopPropagation();
                     }
                 }

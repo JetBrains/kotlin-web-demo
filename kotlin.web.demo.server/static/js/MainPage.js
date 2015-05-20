@@ -48,9 +48,12 @@ incompleteActionManager.registerAction("save", "onHeadersLoaded",
         var content = JSON.parse(localStorage.getItem("contentToSave"));
         localStorage.removeItem("contentToSave");
         if (content != null && loginView.isLoggedIn) {
-            saveProjectDialog.open(projectProvider.forkProject.bind(null, content, function (data) {
-                accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
-            }), content.name);
+            openSaveProjectDialog(
+                content.name,
+                projectProvider.forkProject.bind(null, content, function (data) {
+                    accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
+                })
+            );
         }
     });
 
@@ -539,15 +542,26 @@ var saveButton = $("#saveButton").click(function () {
 });
 
 
-var saveProjectDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.InputDialogView("Save project", "Project name:", "Save");
-saveProjectDialog.validate = accordion.validateNewProjectName;
+function openSaveProjectDialog(defaultValue, callback) {
+    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.InputDialogView.open(
+        "Save project",
+        "Project name:",
+        "Save",
+        defaultValue,
+        accordion.validateNewProjectName,
+        callback
+    )
+}
 
 $("#saveAsButton").click(function () {
     if (loginView.isLoggedIn) {
-        saveProjectDialog.open(projectProvider.forkProject.bind(null, accordion.getSelectedProject(), function (data) {
-            accordion.getSelectedProject().loadOriginal();
-            accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
-        }), accordion.getSelectedProject().getName());
+        openSaveProjectDialog(
+            accordion.getSelectedProject().getName(),
+            projectProvider.forkProject.bind(null, accordion.getSelectedProject(), function (data) {
+                accordion.getSelectedProject().loadOriginal();
+                accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
+            })
+        );
     } else {
         incompleteActionManager.incomplete("save");
         loginView.openLoginDialog(function(){

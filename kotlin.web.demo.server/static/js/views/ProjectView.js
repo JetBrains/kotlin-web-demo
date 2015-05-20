@@ -219,16 +219,7 @@ var ProjectView = (function () {
         })();
         var selectedFileView = null;
         var fileViews = {};
-        var renameProjectDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.InputDialogView("Rename project", "Project name:", "Rename");
-        renameProjectDialog.validate = function (newName) {
-            if (project.getName() == newName) {
-                return {valid: true};
-            } else {
-                return accordion.validateNewProjectName(newName);
-            }
-        };
-        var newFileDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.InputDialogView("Add new file", "File name:", "Add");
-        newFileDialog.validate = instance.validateNewFileName;
+
 
 
         init();
@@ -261,7 +252,14 @@ var ProjectView = (function () {
                 addFileImg.className = "new-file icon";
                 addFileImg.onclick = function (event) {
                     event.stopPropagation();
-                    newFileDialog.open(fileProvider.addNewFile.bind(null, project), "Untitled");
+                    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.InputDialogView.open(
+                        "Add new file",
+                        "File name:",
+                        "Add",
+                        "Untitled",
+                        instance.validateNewFileName,
+                        fileProvider.addNewFile.bind(null, project)
+                    );
                 };
                 actionIconsElement.appendChild(addFileImg);
 
@@ -270,7 +268,21 @@ var ProjectView = (function () {
                 renameImg.title = "Rename this project";
                 renameImg.onclick = function (event) {
                     event.stopPropagation();
-                    renameProjectDialog.open(projectProvider.renameProject.bind(null, project), project.getName());
+                    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.InputDialogView.open(
+                        "Rename project",
+                        "Project name:",
+                        "Rename",
+                        project.getName(),
+                        function (newName) {
+                            if (project.getName() == newName) {
+                                return {valid: true};
+                            } else {
+                                return accordion.validateNewProjectName(newName);
+                            }
+                        },
+                        projectProvider.renameProject.bind(null, project)
+
+                    );
                 };
                 actionIconsElement.appendChild(renameImg);
             }
