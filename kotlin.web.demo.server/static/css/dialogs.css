@@ -155,13 +155,16 @@
     line-height: 25px;
 }
 
-.shortcutKeyCombination {
+.shortcutKeyCombinationWrapper {
     overflow: hidden;
     padding: 3px;
 }
 
-.shortcutKeyName {
+.shortcutKeyCombination{
     float: right;
+}
+
+.shortcutKeyName {
     display: inline-block;
     border: 1px solid #bcbcbc;
     border-bottom-width: 2px;
@@ -171,10 +174,13 @@
 }
 
 .shortcutSeparator {
-    float: right;
     display: inline-block;
     padding-left: 1px;
     padding-right: 1px;
+}
+
+.shortcutSeparator:last-child{
+    display: none;
 }
 
 .shortcutDescription {

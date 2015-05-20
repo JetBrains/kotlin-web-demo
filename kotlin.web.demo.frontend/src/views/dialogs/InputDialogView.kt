@@ -50,24 +50,25 @@ object InputDialogView {
         classes = setOf("input-dialog-error-message");
     }
 
-    init {
-        jq(dialogElement).dialog(json(
-                "resizable" to false,
-                "modal" to true,
-                "width" to 380,
-                "autoOpen" to false,
-                "open" to {
-                    inputElement.select()
-                }
-        ))
+    private val dialog = Dialog(
+            dialogElement,
+            resizable = false,
+            modal = true,
+            width = 380,
+            autoOpen = false,
+            onOpen = { event, ui ->
+                inputElement.select()
+            }
+    )
 
+    init {
         jq(dialogElement).keydown({ event ->
             when (event.keyCode) {
                 KeyCode.ENTER.code -> {
                     val okButton = getDialogButton(dialogElement, 1)
                     okButton.trigger("click");
                 }
-                KeyCode.ESCAPE.code -> close();
+                KeyCode.ESCAPE.code -> dialog.close();
             }
             event.stopPropagation();
         });
@@ -91,10 +92,6 @@ object InputDialogView {
         return verifiedDefaultValue
     }
 
-    fun close() {
-        jq(dialogElement).dialog("close");
-    }
-
     fun open(
             title: String,
             inputLabel: String,
@@ -103,32 +100,33 @@ object InputDialogView {
             validate: (String) -> ValidationResult,
             callback: (String) -> Unit
     ) {
+
         inputElement.oninput = {
             processValidationResult(validate(inputElement.value));
         };
         inputElement.value = getVerifiedDefaultValue(defaultValue, validate);
         inputElement.select();
 
-        jq(dialogElement).dialog("option", "title", title);
         inputLabelElement.textContent = inputLabel;
-        jq(dialogElement).dialog("option", "buttons", arrayOf(
-                json(
-                        "text" to okButtonCaption,
-                        "click" to { event: Event ->
+
+        dialog.title = title;
+        dialog.buttons = arrayOf(
+                Button(
+                        text = okButtonCaption,
+                        click = { event: Event ->
                             event.stopPropagation()
                             callback(inputElement.value);
-                            close()
+                            dialog.close()
                         }
                 ),
-                json(
-                        "text" to "Cancel",
-                        "click" to { event: Event ->
+                Button(
+                        text = "Cancel",
+                        click = { event: Event ->
                             event.stopPropagation()
-                            close()
+                            dialog.close()
                         }
                 )
         )
-        );
-        jq(dialogElement).dialog("open");
+        dialog.open()
     }
 }

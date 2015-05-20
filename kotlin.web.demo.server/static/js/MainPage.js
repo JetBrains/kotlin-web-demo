@@ -124,8 +124,9 @@ function clearIframe(){
     iframe.contentWindow.location.reload();
 }
 
-var shortcutsHelpDialog = new Kotlin.modules["kotlin.web.demo.frontend"].views.ShortcutsHelpView();
-document.getElementById("shortcuts-button").onclick = function(){shortcutsHelpDialog.open()};
+
+document.getElementById("shortcuts-button").onclick = function(){
+    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.open()};
 
 var helpModelForWords = new HelpModel("Words");
 var helpViewForWords = new Kotlin.modules["kotlin.web.demo.frontend"].views.HelpView(helpModelForWords);
@@ -574,10 +575,10 @@ runButton.title = runButton.title.replace("@shortcut@", actionManager.getShortcu
 saveButton.attr("title", saveButton.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
 
 function loadShortcuts() {
-    shortcutsHelpDialog.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getKeyNames(), "Code completion");
-    shortcutsHelpDialog.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.run").getKeyNames(), "Run program");
-    shortcutsHelpDialog.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getKeyNames(), "Reformat selected fragment");
-    shortcutsHelpDialog.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.save").getKeyNames(), "Save current project");
+    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getKeyNames(), "Code completion");
+    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.run").getKeyNames(), "Run program");
+    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getKeyNames(), "Reformat selected fragment");
+    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.save").getKeyNames(), "Save current project");
 }
 
 window.onbeforeunload = function () {
