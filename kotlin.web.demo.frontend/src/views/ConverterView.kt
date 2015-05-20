@@ -16,13 +16,13 @@
 
 package views
 
-import ConverterProvider
 import CodeMirror
 import jquery.jq
 import jquery.ui.dialog
 import kotlin.browser.document
 import html4k.js.*
 import html4k.dom.*
+import providers.ConverterProvider
 import kotlin.browser.window
 
 

@@ -98,14 +98,6 @@ native
 var CodeMirror: dynamic = noImpl
 
 native
-interface ConverterProvider {
-    var onConvertComplete: () -> Unit
-    var onConvertFail: (dynamic) -> Unit
-    var beforeConvert: () -> Unit
-    fun convert(text: String, callback: (String)->Unit): Unit
-}
-
-native
 fun removeKotlinExtension(name: String): String
 
 native
