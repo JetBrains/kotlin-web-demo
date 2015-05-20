@@ -202,7 +202,7 @@ var highlightingProvider = (function () {
 })();
 
 var completionProvider = (function () {
-    var completionProvider = new CompletionProvider();
+    var completionProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.CompletionProvider();
     completionProvider.onSuccess = function () {
         statusBarView.setStatus(ActionStatusMessages.get_completion_ok);
     };
@@ -641,4 +641,10 @@ getSessionInfo(function(data){
 });
 loadShortcuts();
 setKotlinVersion();
+
+FileType = {
+    KOTLIN_FILE: "KOTLIN_FILE",
+    KOTLIN_TEST_FILE: "KOTLIN_TEST_FILE",
+    JAVA_FILE: "JAVA_FILE"
+};
 

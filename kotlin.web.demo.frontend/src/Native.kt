@@ -78,6 +78,7 @@ interface Project {
     fun getName(): String
     fun getParent(): FolderView
     fun deleteFile(file: File)
+    fun getConfiguration(): dynamic
 }
 
 native
@@ -109,3 +110,17 @@ fun removeKotlinExtension(name: String): String
 
 native
 fun addKotlinExtension(name: String): String
+
+native
+fun generateAjaxUrl(type: String, parameters: Json): String
+
+native
+fun checkDataForNull(data: dynamic): Boolean
+
+native
+fun checkDataForException(data: dynamic): Boolean
+
+native("$")
+object JQuery{
+    fun ajax(params: Json)
+}
