@@ -9,7 +9,7 @@ try.kotl.in is running on [Tomcat](https://tomcat.apache.org/). You can setup To
 If you are installing tomcat manually, you need to download [ConnectorJ](http://dev.mysql.com/downloads/connector/j/) lib 
 and copy jar file to tomcat libraries.
 
-You need MySql database to launch try.kotl.in, schema can be found [here](https://github.com/JetBrains/kotlin-web-demo/blob/new-design-beta/kotlin.web.demo.server/resources/db_schema.sql)
+You need MySql database to launch try.kotl.in, schema can be found [here](kotlin.web.demo.server/resources/db_schema.sql)
 
 ##Building
 try.kotl.in is IDEA project. 
@@ -30,8 +30,8 @@ try.kotl.in consists of two war artifacts:
 You need to pass some environment variables to application using tomcat context.xml. Use the following templates to 
 create context files: 
 
- - [context for frontend](https://github.com/JetBrains/kotlin-web-demo/blob/new-design-beta/kotlin.web.demo.server/web/META-INF/context.template.xml)
- - [context for backend](https://github.com/JetBrains/kotlin-web-demo/blob/new-design-beta/kotlin.web.demo.backend/web/META-INF/context.template.xml)
+ - [context for frontend](kotlin.web.demo.server/web/META-INF/context.template.xml)
+ - [context for backend](kotlin.web.demo.backend/web/META-INF/context.template.xml)
 
 context.xml files should be placed near the associated templates.
 
