@@ -16,7 +16,6 @@
 
 package views.dialogs
 
-import KeyCode
 import html4k.*
 import html4k.dom.*
 import html4k.js.*
@@ -24,6 +23,7 @@ import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.KeyboardEvent
+import utils.KeyCode
 import views.keydown
 import kotlin.browser.document
 
@@ -47,7 +47,7 @@ object ShortcutsDialogView {
     init {
         jq(dialogElement).keydown({ event ->
             when (event.keyCode) {
-                KeyCode.ENTER.code, KeyCode.ESCAPE.code -> jq(dialogElement).dialog("close");
+                KeyCode.ENTER.code -> jq(dialogElement).dialog("close");
             }
             event.stopPropagation();
         }) ;

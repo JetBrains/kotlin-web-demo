@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+package utils
+
 enum class KeyCode (val code: Int){
     ENTER(13),
     ESCAPE(27)

@@ -21,6 +21,8 @@ import jquery.ui.dialog
 import org.w3c.dom.HTMLElement
 import kotlin.properties.ReadWriteProperty
 import org.w3c.dom.events.Event
+import utils.KeyCode
+import views.keydown
 
 /**
  * Created by Semyon.Atamas on 5/20/2015.
@@ -34,10 +36,19 @@ class Dialog(
         modal: Boolean = false,
         minWidth: Int = 150,
         width: Int = 300,
+        height: Int? = null,
         buttons: Array<Button> = arrayOf<Button>(),
-        onOpen: ((dynamic, dynamic) -> Unit)? = null
+        onOpen: ((dynamic, dynamic) -> Unit)? = null,
+        resizeStop: (() -> Unit)? = null
 ) {
     init {
+        jq(dialogElement).keydown { event ->
+            if (event.keyCode == KeyCode.ESCAPE.code) {
+                jq(dialogElement).dialog("close");
+            }
+            event.stopPropagation();
+        }
+
         jq(dialogElement).dialog(json(
                 "resizable" to resizable,
                 "modal" to modal,
@@ -45,7 +56,9 @@ class Dialog(
                 "autoOpen" to autoOpen,
                 "open" to onOpen,
                 "minWidth" to minWidth,
-                "buttons" to buttons
+                "buttons" to buttons,
+                "height" to (height ?: "auto"),
+                "resizeStop" to resizeStop
         ))
     }
 
@@ -54,6 +67,7 @@ class Dialog(
     var resizable by DialogProperty(resizable)
     var minWidth by DialogProperty(minWidth)
     var modal by DialogProperty(modal)
+    var height by DialogProperty(height)
     var width by DialogProperty(width)
     var buttons by DialogProperty(buttons)
 

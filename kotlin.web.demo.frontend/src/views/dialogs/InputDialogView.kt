@@ -16,7 +16,6 @@
 
 package views.dialogs
 
-import KeyCode
 import html4k.js.*
 import html4k.InputType
 import html4k.dom.append
@@ -28,6 +27,7 @@ import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event
+import utils.KeyCode
 import views.*
 import kotlin.browser.document
 
@@ -68,7 +68,6 @@ object InputDialogView {
                     val okButton = getDialogButton(dialogElement, 1)
                     okButton.trigger("click");
                 }
-                KeyCode.ESCAPE.code -> dialog.close();
             }
             event.stopPropagation();
         });

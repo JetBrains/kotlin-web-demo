@@ -232,7 +232,7 @@ configurationManager.onFail = function (exception) {
     statusBarView.setMessage(ActionStatusMessages.change_configuration_fail);
 };
 
-var converterView = new Kotlin.modules["kotlin.web.demo.frontend"].views.ConverterView(new
+var converterView = new Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ConverterView(new
     Kotlin.modules["kotlin.web.demo.frontend"].providers.ConverterProvider());
 document.getElementById("java2kotlin-button").onclick = function(){converterView.open()};
 

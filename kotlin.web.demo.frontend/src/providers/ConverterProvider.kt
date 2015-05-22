@@ -16,50 +16,46 @@
 
 package providers
 
-import JQuery
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
+import utils.DataType
+import utils.RequestType
+import utils.ajax
 import kotlin.browser.document
 
 /**
  * Created by Semyon.Atamas on 5/20/2015.
  */
-class ConverterProvider() {
-    var beforeConvert = {}
-    var onConvertFail: (dynamic) -> Unit = {}
-    var onConvertSuccess = {}
-    var onConvertComplete = {}
 
-    fun convert(text: String, callback: (String) -> Unit) {
-        beforeConvert();
-        JQuery.ajax(json(
-                "url" to generateAjaxUrl("convertToKotlin", json()),
-                "context" to document.body,
-                "success" to { data: dynamic ->
+
+class ConverterProvider(){
+    fun convert(text: String, onSuccess: (String) -> Unit, onFail: (dynamic) -> Unit, onComplete: () -> Unit) {
+        ajax(
+                url = generateAjaxUrl("convertToKotlin", json()),
+                success = { data: dynamic ->
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            onConvertSuccess();
-                            callback(data[0].text);
+                            onSuccess(data[0].text);
                         } else {
-                            onConvertFail(data);
+                            onFail(data);
                         }
                     } else {
-                        onConvertFail("Incorrect data format.");
+                        onFail("Incorrect data format.");
                     }
                 },
-                "dataType" to "json",
-                "type" to "POST",
-                "data" to json("text" to text),
-                "timeout" to 10000,
-                "error" to  { jqXHR: dynamic, textStatus: String, errorThrown: String ->
+                dataType = DataType.JSON,
+                type = RequestType.POST,
+                data = json("text" to text),
+                timeout = 10000,
+                error = { jqXHR: dynamic, textStatus: String, errorThrown: String ->
                     if (jqXHR.responseText != null && jqXHR.responseText != "") {
-                        onConvertFail(jqXHR.responseText);
+                        onFail(jqXHR.responseText);
                     } else {
-                        onConvertFail(textStatus + " : " + errorThrown);
+                        onFail(textStatus + " : " + errorThrown);
                     }
                 },
-                "complete" to onConvertComplete
-        ));
+                complete = onComplete
+        );
     }
 }
