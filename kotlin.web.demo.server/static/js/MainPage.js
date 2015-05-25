@@ -178,7 +178,34 @@ var runProvider = (function () {
     return runProvider;
 })();
 
-var loginProvider = new LoginProvider();
+var loginProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.LoginProvider(
+    function () {
+        if (accordion.getSelectedFile() != null) {
+            accordion.getSelectedFile().save();
+        }
+        accordion.getSelectedProject().save();
+    },
+    function () {
+        getSessionInfo(function (data) {
+            sessionId = data.id;
+            loginView.logout();
+            statusBarView.setStatus(ActionStatusMessages.logout_ok);
+            accordion.loadAllContent();
+        });
+    },
+    function (data) {
+        if (data.isLoggedIn) {
+            loginView.setUserName(data.userName, data.type);
+            statusBarView.setStatus(ActionStatusMessages.login_ok);
+        }
+        accordion.loadAllContent();
+    },
+    function (exception, actionCode) {
+        consoleView.writeException(exception);
+        statusBarView.setMessage(actionCode);
+    }
+);
+
 var loginView = new Kotlin.modules["kotlin.web.demo.frontend"].views.LoginView(loginProvider);
 
 function getNumberOfErrorsAndWarnings(data) {
@@ -382,34 +409,7 @@ $(runButton)
     });
 
 
-loginProvider.onLogin = function (data) {
-    if (data.isLoggedIn) {
-        loginView.setUserName(data.userName, data.type);
-        statusBarView.setStatus(ActionStatusMessages.login_ok);
-    }
-    accordion.loadAllContent();
-};
 
-loginProvider.beforeLogout = function () {
-    if (accordion.getSelectedFile() != null) {
-        accordion.getSelectedFile().save();
-    }
-    accordion.getSelectedProject().save();
-};
-
-loginProvider.onLogout = function () {
-    getSessionInfo(function(data){
-        sessionId = data.id;
-        loginView.logout();
-        statusBarView.setStatus(ActionStatusMessages.logout_ok);
-        accordion.loadAllContent();
-    });
-};
-
-loginProvider.onFail = function (exception, actionCode) {
-    consoleView.writeException(exception);
-    statusBarView.setMessage(actionCode);
-};
 
 var fileProvider = (function () {
     var fileProvider = new FileProvider();

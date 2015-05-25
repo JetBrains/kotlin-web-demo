@@ -16,7 +16,24 @@
 
 package utils
 
+import org.w3c.dom.Location
+
 enum class KeyCode (val code: Int){
     ENTER(13),
     ESCAPE(27)
 }
+
+native
+val Location.protocol: String
+
+native
+val Location.host: String
+
+native
+fun blockContent()
+
+native
+fun unBlockContent()
+
+native
+val ActionStatusMessages: dynamic = noImpl

@@ -23,14 +23,22 @@ private object JQuery{
     fun ajax(params: Json)
 }
 
-public fun ajax(url: String, success: (dynamic) -> Unit, dataType: DataType, type: RequestType, data: Json,
-                timeout: Int, error: (dynamic, String, String) -> Unit, complete: () -> Unit) {
+public fun ajax(
+        url: String,
+        success: (dynamic) -> Unit,
+        dataType: DataType,
+        type: RequestType,
+        data: Json? = null,
+        timeout: Int,
+        error: (dynamic, String, String) -> Unit,
+        complete: () -> Unit = {}
+){
     JQuery.ajax(json(
             "url" to url,
             "success" to success,
             "dataType" to dataType.name().toLowerCase(),
             "type" to type.name().toLowerCase(),
-            "data" to data,
+            "data" to (data ?: undefined),
             "timeout" to timeout,
             "error" to error,
             "complete" to complete
@@ -38,6 +46,7 @@ public fun ajax(url: String, success: (dynamic) -> Unit, dataType: DataType, typ
 }
 
 public enum class DataType() {
+    TEXT,
     JSON
 }
 
