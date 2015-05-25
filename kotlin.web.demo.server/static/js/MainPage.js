@@ -216,21 +216,18 @@ function getNumberOfErrorsAndWarnings(data) {
     return noOfErrorsAndWarnings
 }
 
-var highlightingProvider = (function () {
-    function onSuccess(data) {
+var highlightingProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.HighlightingProvider(
+    function(data) {
         accordion.getSelectedProject().setErrors(data);
         problemsView.addMessages(data);
         statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [getNumberOfErrorsAndWarnings(data)]);
-    }
-
-    function onFail(error) {
+    },
+    function(error) {
         unBlockContent();
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.get_highlighting_fail);
     }
-
-    return new HighlightingProvider(onSuccess, onFail)
-})();
+);
 
 var completionProvider = (function () {
     var completionProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.CompletionProvider();
