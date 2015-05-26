@@ -99,7 +99,9 @@ $(document).on("click", ".ui-widget-overlay", (function(){
 }));
 
 var generatedCodeView = new GeneratedCodeView(document.getElementById("generated-code"));
-var consoleView = new ConsoleView(document.getElementById("program-output"), $("#result-tabs"));
+$("#result-tabs").tabs();
+
+var consoleView = new Kotlin.modules["kotlin.web.demo.frontend"].views.ConsoleView(document.getElementById("program-output"), $("#result-tabs"));
 var junitView = new JUnitView(document.getElementById("program-output"), $("#result-tabs"));
 var problemsView = new ProblemsView(document.getElementById("problems"), $("#result-tabs"));
 

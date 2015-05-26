@@ -58,3 +58,6 @@ val accordion: dynamic = noImpl
 
 native
 val loginView: LoginView = noImpl
+
+native
+val consoleOutputView: dynamic
