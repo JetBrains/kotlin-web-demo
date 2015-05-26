@@ -16,7 +16,9 @@
 
 package utils
 
+import org.w3c.dom.HTMLIFrameElement
 import org.w3c.dom.Location
+import views.dialogs.Dialog
 
 enum class KeyCode (val code: Int){
     ENTER(13),
@@ -37,3 +39,24 @@ fun unBlockContent()
 
 native
 val ActionStatusMessages: dynamic = noImpl
+
+native
+val canvasDialog: dynamic
+
+native
+val Configuration: dynamic
+
+native
+val ConfigurationType: dynamic
+
+native
+val iframe: dynamic
+
+native
+val Object: dynamic
+
+native
+fun clearIframe()
+
+native
+fun safe_tags_replace(string: String): String

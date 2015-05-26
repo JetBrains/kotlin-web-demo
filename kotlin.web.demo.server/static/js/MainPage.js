@@ -133,10 +133,10 @@ var helpViewForWords = new Kotlin.modules["kotlin.web.demo.frontend"].views.Help
 helpViewForWords.hide();
 
 
-var runProvider = (function () {
-    var runProvider = new RunProvider();
-    runProvider.onSuccess = function (output, project) {
-        $(output).each(function (ind, data) {
+var runProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.RunProvider(
+    function (output, project) {
+        //TODO remove hack with array
+        $(output.array).each(function (ind, data) {
             if (data.type == "errors") {
                 project.setErrors(data.errors);
                 problemsView.addMessages();
@@ -152,31 +152,27 @@ var runProvider = (function () {
             }
         });
         statusBarView.setStatus(ActionStatusMessages.run_java_ok);
-    };
-
-    runProvider.onComplete = function () {
-        $(runButton).button("option", "disabled", false);
-    };
-
-    runProvider.onErrorsFound = function (data, project) {
+    },
+    function (data, project) {
         $(data).each(function (ind, data) {
             if (data.type == "errors") {
                 project.setErrors(data.errors);
                 $("#result-tabs").tabs("option", "active", 0);
                 problemsView.addMessages();
                 editor.setHighlighting();
-                statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [getNumberOfErrorsAndWarnings(data.errors)]);
+                statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok,
+                    [getNumberOfErrorsAndWarnings(data.errors)]);
             }
         });
-    };
-
-    runProvider.onFail = function (error) {
+    },
+    function () {
+        $(runButton).button("option", "disabled", false);
+    },
+    function (error) {
         consoleView.writeException(error);
         statusBarView.setStatus(ActionStatusMessages.run_java_fail);
-    };
-
-    return runProvider;
-})();
+    }
+);
 
 var loginProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.LoginProvider(
     function () {
