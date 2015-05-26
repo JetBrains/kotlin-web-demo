@@ -407,24 +407,17 @@ $(runButton)
 
 
 
-var fileProvider = (function () {
-    var fileProvider = new FileProvider();
+var fileProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.FileProvider(
+    function(){
 
-    fileProvider.onFileRenamed = function () {
-    };
-
-    fileProvider.onRenameFileFailed = function () {
-    };
-
-    fileProvider.onOriginalFileLoaded = function (data) {
+    },
+    function (data) {
         if (accordion.getSelectedProject().getType() == ProjectType.PUBLIC_LINK) {
             accordion.getSelectedProjectView().updateFileViewSafely(accordion.getSelectedFileView(), unEscapeString(data.name));
         }
         editor.reloadFile();
-    };
-
-    return fileProvider;
-})();
+    }
+);
 
 var projectProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.ProjectProvider(
     function () {

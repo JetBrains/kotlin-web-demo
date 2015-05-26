@@ -17,6 +17,7 @@
 import jquery.JQuery
 import org.w3c.dom.Element
 import org.w3c.dom.events.Event
+import providers.FileProvider
 import providers.ProjectProvider
 import views.FolderView
 
@@ -62,15 +63,6 @@ enum class ProjectType {
 }
 
 native
-interface FileProvider {
-    fun saveFile(file: File, callback: () -> Unit)
-    fun renameFile(publicId: String, callback: (String) -> Unit, newName: String)
-    fun deleteFile(file: File, callback: () -> Unit)
-
-    fun loadOriginalFile(file: File, onSuccess: (dynamic) -> Unit, onNotFound: () -> Unit)
-}
-
-native
 val fileProvider: FileProvider = noImpl
 
 native
@@ -82,6 +74,7 @@ interface Project {
     fun getConfiguration(): dynamic
     fun rename(newName: String)
     fun getPublicId(): String
+    fun addEmptyFile(filename: String, publicId: String)
 }
 
 native
