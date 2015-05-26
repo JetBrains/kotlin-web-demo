@@ -55,7 +55,7 @@ class MyProgramsFolderView(parentNode: HTMLDivElement,
                                 okButtonCaption = "Add",
                                 defaultValue = "Untitled",
                                 validate = { name -> validateNewProjectName(name) },
-                                callback = projectProvider.addNewProject
+                                callback = { name -> projectProvider.addNewProject(name)}
                         );
                     }
                 }

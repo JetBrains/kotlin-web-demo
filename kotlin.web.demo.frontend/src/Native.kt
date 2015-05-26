@@ -17,6 +17,7 @@
 import jquery.JQuery
 import org.w3c.dom.Element
 import org.w3c.dom.events.Event
+import providers.ProjectProvider
 import views.FolderView
 
 /**
@@ -79,10 +80,12 @@ interface Project {
     fun getParent(): FolderView
     fun deleteFile(file: File)
     fun getConfiguration(): dynamic
+    fun rename(newName: String)
+    fun getPublicId(): String
 }
 
 native
-val projectProvider: dynamic = noImpl
+val projectProvider: ProjectProvider = noImpl
 
 native
 interface LoginModel{
@@ -111,6 +114,9 @@ fun checkDataForNull(data: dynamic): Boolean
 
 native
 fun checkDataForException(data: dynamic): Boolean
+
+native
+val statusBarView: dynamic
 
 native("$")
 object JQuery{

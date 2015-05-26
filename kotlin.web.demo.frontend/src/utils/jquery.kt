@@ -31,17 +31,19 @@ public fun ajax(
         data: Json? = null,
         timeout: Int,
         error: (dynamic, String, String) -> Unit,
-        complete: () -> Unit = {}
+        complete: () -> Unit = {},
+        statusCode: Json? = null
 ){
     JQuery.ajax(json(
             "url" to url,
             "success" to success,
-            "dataType" to dataType.name().toLowerCase(),
+            "dataType" to dataType,
             "type" to type.name().toLowerCase(),
             "data" to (data ?: undefined),
             "timeout" to timeout,
             "error" to error,
-            "complete" to complete
+            "complete" to complete,
+            "statusCode" to (statusCode ?: undefined)
     ))
 }
 

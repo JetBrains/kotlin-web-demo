@@ -136,7 +136,10 @@ helpViewForWords.hide();
 var runProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.RunProvider(
     function (output, project) {
         //TODO remove hack with array
-        $(output.array).each(function (ind, data) {
+        if(project.getConfiguration() == "js" ||
+        project.getConfiguration() == "canvas")
+            output = output.array;
+        $(output).each(function (ind, data) {
             if (data.type == "errors") {
                 project.setErrors(data.errors);
                 problemsView.addMessages();
@@ -423,23 +426,17 @@ var fileProvider = (function () {
     return fileProvider;
 })();
 
-var projectProvider = (function () {
-    var projectProvider = new ProjectProvider();
-
-    projectProvider.onProjectLoaded = function (projectContent) {
+var projectProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.ProjectProvider(
+    function () {
         statusBarView.setStatus(ActionStatusMessages.load_project_ok)
-    };
-
-    projectProvider.onFail = function () {
-        statusBarView.setStatus(ActionStatusMessages.load_project_fail)
-    };
-
-    projectProvider.onNewProjectAdded = function (name, projectId, fileId) {
+    },
+    function (name, projectId, fileId) {
         accordion.addNewProject(name, projectId, fileId, null);
-    };
-
-    return projectProvider;
-})();
+    },
+    function () {
+        statusBarView.setStatus(ActionStatusMessages.load_project_fail)
+    }
+);
 
 var headersProvider = (function () {
     var headersProvider = new HeadersProvider();
