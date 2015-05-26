@@ -122,7 +122,7 @@ class FileProvider(
                 url = generateAjaxUrl("addFile", json()),
                 success = { publicId ->
                     try {
-                        project.addEmptyFile(filename, publicId);
+                        project.addEmptyFile(filenameWithExtension, publicId);
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -130,7 +130,7 @@ class FileProvider(
                 dataType = DataType.TEXT,
                 type = RequestType.POST,
                 timeout = 10000,
-                data = json("publicId" to project.getPublicId(), "filename" to filename),
+                data = json("publicId" to project.getPublicId(), "filename" to filenameWithExtension),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
                         onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);

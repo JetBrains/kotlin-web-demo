@@ -417,7 +417,7 @@ var fileProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.File
         }
         editor.reloadFile();
     }
-);
+)
 
 var projectProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.ProjectProvider(
     function () {
@@ -431,31 +431,24 @@ var projectProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.P
     }
 );
 
-var headersProvider = (function () {
-    var headersProvider = new HeadersProvider();
-
-    headersProvider.onHeadersLoaded = function () {
+var headersProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.HeadersProvider(
+    function (message) {
+        statusBarView.setStatus(ActionStatusMessages.load_header_fail);
+        console.log(message);
+    },
+    function () {
         statusBarView.setStatus(ActionStatusMessages.load_headers_ok);
-    };
-
-    headersProvider.onProjectHeaderLoaded = function () {
+    },
+    function () {
         statusBarView.setStatus(ActionStatusMessages.load_header_ok);
-    };
-
-    headersProvider.onProjectHeaderNotFound = function () {
+    },
+    function () {
         statusBarView.setStatus(ActionStatusMessages.load_header_fail);
         window.alert("Can't find project, maybe it was removed by the user.");
         clearState();
         accordion.loadFirstItem();
-    };
-
-    headersProvider.onFail = function (message) {
-        statusBarView.setStatus(ActionStatusMessages.load_header_fail);
-        console.log(message);
-    };
-
-    return headersProvider;
-})();
+    }
+)
 
 $(document).keydown(function (e) {
     var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
