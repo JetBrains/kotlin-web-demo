@@ -123,8 +123,8 @@ public class HelpLoader {
 
                     Element element = (Element) node;
                     ObjectNode jsonObject = resultWords.addObject();
-                    jsonObject.put("name", getTagValue("name", element));
-                    jsonObject.put("text", getTagValueWithInnerTags("text", element));
+                    jsonObject.put("word", getTagValue("name", element));
+                    jsonObject.put("help", getTagValueWithInnerTags("text", element));
                 }
             }
         } catch (Exception e) {

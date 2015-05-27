@@ -116,7 +116,7 @@ problemsView.setCursor = function (filename, line, ch) {
 document.getElementById("shortcuts-button").onclick = function(){
     Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.open()};
 
-var helpModelForWords = new HelpModel("Words");
+var helpModelForWords = new Kotlin.modules["kotlin.web.demo.frontend"].providers.HelpProvider();
 var helpViewForWords = new Kotlin.modules["kotlin.web.demo.frontend"].views.HelpView(helpModelForWords);
 helpViewForWords.hide();
 

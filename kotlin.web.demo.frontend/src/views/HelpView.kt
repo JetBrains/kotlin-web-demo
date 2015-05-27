@@ -20,15 +20,13 @@ import kotlin.browser.document
 import html4k.*
 import html4k.js.*
 import html4k.dom.*
+import providers.HelpProvider
 
 /**
  * Created by Semyon.Atamas on 5/18/2015.
  */
 
-class HelpView(private val model: dynamic) {
-    init {
-        model.loadAllHelpElements();
-    }
+class HelpView(private val model: HelpProvider) {
 
     fun setPosition(pos: dynamic) {
         element.style.left = pos.left + 2 + "px";
@@ -36,7 +34,7 @@ class HelpView(private val model: dynamic) {
     }
 
     fun update(name: String) {
-        var text = model.getHelpElement(name);
+        var text = model.getHelpForWord(name);
         if (text != null) {
             setText(text);
         } else {
