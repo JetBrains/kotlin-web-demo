@@ -111,21 +111,6 @@ problemsView.setCursor = function (filename, line, ch) {
     editor.focus();
 };
 
-var canvasDialog = $("#iframePopup").dialog({
-    width: 640,
-    height: 360,
-    resizable: false,
-    autoOpen: false,
-    modal: true,
-    close: clearIframe
-});
-
-var iframe = document.getElementById("k2js-iframe");
-
-function clearIframe(){
-    iframe.contentWindow.location.reload();
-}
-
 
 document.getElementById("shortcuts-button").onclick = function(){
     Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.open()};
@@ -256,10 +241,6 @@ configurationManager.onFail = function (exception) {
     consoleView.writeException(exception);
     statusBarView.setMessage(ActionStatusMessages.change_configuration_fail);
 };
-
-var converterView = new Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ConverterView(new
-    Kotlin.modules["kotlin.web.demo.frontend"].providers.ConverterProvider());
-document.getElementById("java2kotlin-button").onclick = function(){converterView.open()};
 
 var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].views.NavBarView(document.getElementById("grid-nav"));
 

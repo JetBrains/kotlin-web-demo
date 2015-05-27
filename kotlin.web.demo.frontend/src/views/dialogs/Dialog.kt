@@ -39,6 +39,7 @@ class Dialog(
         height: Int? = null,
         buttons: Array<Button> = arrayOf<Button>(),
         onOpen: ((dynamic, dynamic) -> Unit)? = null,
+        onClose: (() -> Unit)? = null,
         resizeStop: (() -> Unit)? = null
 ) {
     init {
@@ -55,6 +56,7 @@ class Dialog(
                 "width" to width,
                 "autoOpen" to autoOpen,
                 "open" to onOpen,
+                "close" to onClose,
                 "minWidth" to minWidth,
                 "buttons" to buttons,
                 "height" to (height ?: "auto"),

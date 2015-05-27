@@ -16,43 +16,7 @@
 
 package utils
 
-import org.w3c.dom.HTMLIFrameElement
-import org.w3c.dom.Location
-import views.dialogs.Dialog
-import kotlin.browser.document
-
-enum class KeyCode (val code: Int){
-    ENTER(13),
-    ESCAPE(27)
-}
+import org.w3c.dom.Window
 
 native
-val Location.protocol: String
-
-native
-val Location.host: String
-
-native
-fun blockContent()
-
-native
-fun unBlockContent()
-
-native
-val ActionStatusMessages: dynamic = noImpl
-
-native
-val Configuration: dynamic
-
-native
-val ConfigurationType: dynamic
-
-native
-val Object: dynamic
-
-fun HTMLIFrameElement.clear(){
-    this.contentWindow!!.location.reload();
-}
-
-native
-fun safe_tags_replace(string: String): String
+fun Window.eval(code: String): dynamic

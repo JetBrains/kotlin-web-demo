@@ -17,6 +17,7 @@
 package providers
 
 import Project
+import application.app
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
@@ -115,15 +116,15 @@ class RunProvider(
                                             //(error modifying context of canvas in invisible iframe)
                                             if (runConfiguration ==
                                                     Configuration.getStringFromType(Configuration.type.CANVAS)) {
-                                                canvasDialog.dialog("open");
+                                                app.iframeDialog.open();
                                             }
-                                            var out = iframe.contentWindow.eval(element.text);
+                                            var out: String = app.iframe.contentWindow!!.eval(element.text);
                                             output.add(json("text" to safe_tags_replace(out), "type" to "jsOut"));
                                         } catch (e: Throwable) {
                                             output.add(json("type" to "jsException", "exception" to e));
                                         } finally {
                                             if (runConfiguration == "js") {
-                                                clearIframe();
+                                                app.iframe.clear()
                                             }
                                         }
                                     }
