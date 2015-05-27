@@ -98,7 +98,8 @@ $(document).on("click", ".ui-widget-overlay", (function(){
     $(".ui-dialog-titlebar-close").trigger('click');
 }));
 
-var generatedCodeView = new GeneratedCodeView(document.getElementById("generated-code"));
+var generatedCodeView = new Kotlin.modules["kotlin.web.demo.frontend"].views.
+    GeneratedCodeView(document.getElementById("generated-code"));
 $("#result-tabs").tabs();
 
 var consoleView = new Kotlin.modules["kotlin.web.demo.frontend"].views.ConsoleView(document.getElementById("program-output"), $("#result-tabs"));

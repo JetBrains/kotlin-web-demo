@@ -20,3 +20,6 @@ import org.w3c.dom.Window
 
 native
 fun Window.eval(code: String): dynamic
+
+native
+fun unEscapeString(s: String): String
