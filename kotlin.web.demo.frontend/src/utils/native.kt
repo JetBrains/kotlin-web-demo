@@ -17,9 +17,25 @@
 package utils
 
 import org.w3c.dom.Window
+import jquery.JQuery
+
+native("$")
+val jquery: JQuery
 
 native
 fun Window.eval(code: String): dynamic
 
 native
+public fun JQuery.slideDown()
+
+native
+public fun JQuery.ajax(parameters: Json)
+
+native
 fun unEscapeString(s: String): String
+
+native
+fun getFileIdFromUrl(): String
+
+native
+val editor: dynamic

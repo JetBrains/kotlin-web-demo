@@ -396,9 +396,7 @@ var fileProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.File
 
     },
     function (data) {
-        if (accordion.getSelectedProject().getType() == ProjectType.PUBLIC_LINK) {
-            accordion.getSelectedProjectView().updateFileViewSafely(accordion.getSelectedFileView(), unEscapeString(data.name));
-        }
+
         editor.reloadFile();
     }
 )

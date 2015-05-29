@@ -27,6 +27,7 @@ import kotlin.dom.removeClass
 import FileType
 import addKotlinExtension
 import fileProvider
+import utils.unEscapeString
 import views.dialogs.InputDialogView
 import kotlin.browser.document
 import kotlin.browser.window
@@ -37,7 +38,7 @@ import kotlin.browser.window
 
 class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: File) {
     var onSelect: (() -> Unit)? = null
-    private val depth = projectView.getDepth() + 1
+    private val depth = projectView.depth + 1
     val wrapper = parentNode.append.div {
         classes = setOf("file-header-wrapper")
         attributes.set("depth", depth.toString())
@@ -47,7 +48,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
     }
 
     fun fireSelectEvent() {
-        projectView.setSelectedFileView(this);
+        projectView.selectedFileView = this;
         accordion.selectFile(this);
     }
 
@@ -79,6 +80,11 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
             }
         });
 
+        file.listenableName.addModifyListener({ e ->
+            fileNameElement.innerHTML = e.newValue;
+            fileNameElement.title = fileNameElement.innerHTML;
+        });
+
         var icon = headerElement.append.div {
             classes = setOf("icon")
         }
@@ -100,16 +106,12 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
             classes = setOf("icons")
         }
 
-        if (projectView.getType() === ProjectType.USER_PROJECT) {
+        if (projectView.project.getType() === ProjectType.USER_PROJECT) {
             if (file.isModifiable) {
                 actionIconsElement.append.div {
                     classes = setOf ("rename", "icon")
                     title = "Rename file"
                     onClickFunction = { event ->
-                        file.listenableName.addModifyListener({ e ->
-                            fileNameElement.innerHTML = e.newValue;
-                            fileNameElement.title = fileNameElement.innerHTML;
-                        });
                         InputDialogView.open(
                                 title = "Rename file",
                                 inputLabel = "File name:",
@@ -156,6 +158,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                             { content: dynamic ->
                                 file.text = content.text;
                                 file.originalText = content.text;
+                                file.name = unEscapeString(content.name);
                                 file.changesHistory = null;
                             },
                             {

@@ -18,9 +18,6 @@ package providers
 
 import checkDataForNull
 import generateAjaxUrl
-import utils.DataType
-import utils.RequestType
-import utils.ajax
 
 class HelpProvider(
         private val onFail: (String, String)->Unit

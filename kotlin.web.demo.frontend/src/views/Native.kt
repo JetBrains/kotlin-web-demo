@@ -45,13 +45,7 @@ native
 public fun JQuery.button(mode : String, param : String, value : Any?) : JQuery = noImpl
 
 native
-interface ProjectView{
-    fun getProjectData(): Project
-    fun getDepth(): Int
-    fun setSelectedFileView(fileView: FileView)
-    fun validateNewFileName(newName: String): ValidationResult
-    fun getType(): ProjectType
-}
+val navBarView: dynamic
 
 native
 val accordion: dynamic = noImpl

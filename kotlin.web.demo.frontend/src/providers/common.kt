@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package utils
+package providers
 
-import kotlin.browser.window
+import jquery.JQuery
+import jquery.jq
+import utils.ajax
+import utils.jquery
 
-native("$")
-private object JQuery{
-    fun ajax(params: Json)
-}
 
 public fun ajax(
         url: String,
@@ -34,7 +33,7 @@ public fun ajax(
         complete: () -> Unit = {},
         statusCode: Json? = null
 ){
-    JQuery.ajax(json(
+    jquery.ajax(json(
             "url" to url,
             "success" to success,
             "dataType" to dataType,

@@ -65,8 +65,15 @@ enum class ProjectType {
 native
 val fileProvider: FileProvider = noImpl
 
-native
-interface Project {
+native("ProjectData")
+class Project(type: ProjectType, publicId: String, name: String, parent: FolderView) {
+    var onFileDeleted: (String)-> Unit
+    var onFileAdded: (File)-> Unit
+    var onContentNotFound: () -> Unit
+    var onContentLoaded: () -> Unit
+    var onRenamed: (String) -> Unit
+    var onNotRevertible: () -> Unit
+    var onModified: (Boolean) -> Unit
     fun getType(): ProjectType
     fun getName(): String
     fun getParent(): FolderView
@@ -75,6 +82,12 @@ interface Project {
     fun rename(newName: String)
     fun getPublicId(): String
     fun addEmptyFile(filename: String, publicId: String)
+    fun loadOriginal()
+    fun getFiles(): Array<File>
+    fun makeNotRevertible()
+    fun isContentLoaded(): Boolean
+    fun isEmpty(): Boolean
+    fun loadContent(fromServer: Boolean)
 }
 
 native
@@ -110,8 +123,3 @@ fun checkDataForException(data: dynamic): Boolean
 
 native
 val statusBarView: dynamic
-
-native("$")
-object JQuery{
-    fun ajax(params: Json)
-}

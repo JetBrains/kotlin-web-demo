@@ -19,8 +19,10 @@ import Project
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
+import jquery.JQuery
 import kotlin.browser.document
-import JQuery
+import utils.ajax
+import utils.jquery
 
 /**
  * Created by Semyon.Atamas on 5/20/2015.
@@ -40,7 +42,7 @@ class CompletionProvider() {
     fun getCompletion(project: Project, filename: String, cursor: dynamic, callback:(dynamic) -> Unit) {
         if (!isLoadingCompletion) {
             isLoadingCompletion = true;
-            JQuery.ajax(json(
+            jquery.ajax(json(
                 //runConf is unused parameter. It's added to url for useful access logs
                 "url" to generateAjaxUrl("complete", json( "runConf" to project.getConfiguration() )),
                 "context" to document.body,

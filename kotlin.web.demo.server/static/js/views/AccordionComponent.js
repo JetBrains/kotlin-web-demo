@@ -65,8 +65,8 @@ var AccordionView = (function () {
                     publicId: publicId,
                     type: ProjectType.USER_PROJECT
                 }, myProgramsFolder));
-                projects[publicId].getProjectData().setDefaultContent();
-                projects[publicId].getProjectData().addFileWithMain(name, fileId);
+                projects[publicId].project.setDefaultContent();
+                projects[publicId].project.addFileWithMain(name, fileId);
                 selectProject(publicId);
             },
             addNewProjectWithContent: function (publicId, content) {
@@ -75,13 +75,13 @@ var AccordionView = (function () {
                     publicId: publicId,
                     type: ProjectType.USER_PROJECT
                 }, myProgramsFolder));
-                projects[publicId].getProjectData().setContent(content);
+                projects[publicId].project.setContent(content);
                 selectProject(publicId);
             },
             onLogout: function () {
             },
             getSelectedProject: function () {
-                return selectedProjectView.getProjectData();
+                return selectedProjectView.project;
             },
             getSelectedProjectView: function () {
                 return selectedProjectView;
@@ -92,8 +92,8 @@ var AccordionView = (function () {
             onBeforeUnload: function () {
                 var publicLinks = [];
                 for (var id in projects) {
-                    if (projects[id].getType() == ProjectType.PUBLIC_LINK) {
-                        publicLinks.push(projects[id].getHeader());
+                    if (projects[id].project.getType() == ProjectType.PUBLIC_LINK) {
+                        publicLinks.push(projects[id].header);
                     }
                 }
                 localStorage.setItem("publicLinks", JSON.stringify(publicLinks))
@@ -223,34 +223,41 @@ var AccordionView = (function () {
             folderContentElement.appendChild(projectContentElement);
 
 
-            var projectView = new ProjectView(header, projectContentElement, projectHeaderElement, parent);
-            projectView.onHeaderClick = selectProject;
-            projectView.onDelete = function () {
-                if (selectedProjectView == projects[header.publicId]) {
-                    history.replaceState("", "", "index.html");
-                    selectedProjectView = null;
-                    selectedFileView = null;
-                    loadFirstItem();
+            var projectView = new Kotlin.modules["kotlin.web.demo.frontend"].views
+                .ProjectView(
+                header,
+                projectContentElement,
+                projectHeaderElement,
+                parent,
+                function () {
+                    if (selectedProjectView == projects[header.publicId]) {
+                        history.replaceState("", "", "index.html");
+                        selectedProjectView = null;
+                        selectedFileView = null;
+                        loadFirstItem();
+                    }
+                    delete projects[header.publicId];
+                },
+                function(publicId){
+                    selectProject(publicId)
+                },
+                function (projectView) {
+                    if (projectView.project.isEmpty()) {
+                        selectedFileView = null;
+                    }
+                    instance.onProjectSelected(projectView.project);
                 }
-                delete projects[header.publicId];
-            };
-            projectView.onSelected = function () {
-                if (projectView.getProjectData().isEmpty()) {
-                    selectedFileView = null;
-                }
-                instance.onProjectSelected(this.getProjectData());
-            };
-
+            );
             projects[header.publicId] = projectView;
 
             return projectView;
         }
 
         function selectProject(publicId) {
-            if (selectedProjectView == null || selectedProjectView.getProjectData().getPublicId() != publicId) {
+            if (selectedProjectView == null || selectedProjectView.project.getPublicId() != publicId) {
                 if (selectedProjectView != null) {
                     $(selectedProjectView.headerElement).removeClass("selected");
-                    $(selectedProjectView.getContentElement()).slideUp();
+                    $(selectedProjectView.contentElement).slideUp();
                 }
                 selectedProjectView = projects[publicId];
                 selectedProjectView.select();

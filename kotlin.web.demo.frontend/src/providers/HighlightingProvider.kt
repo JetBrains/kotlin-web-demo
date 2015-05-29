@@ -20,9 +20,6 @@ import Project
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
-import utils.DataType
-import utils.RequestType
-import utils.ajax
 
 class HighlightingProvider(
         private val onSuccess: (dynamic) -> Unit,

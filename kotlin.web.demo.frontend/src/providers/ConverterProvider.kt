@@ -19,8 +19,6 @@ package providers
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
-import utils.DataType
-import utils.RequestType
 import utils.ajax
 import kotlin.browser.document
 
