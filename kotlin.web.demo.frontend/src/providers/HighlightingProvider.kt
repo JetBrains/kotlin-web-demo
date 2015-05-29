@@ -16,10 +16,10 @@
 
 package providers
 
-import Project
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
+import model.Project
 
 class HighlightingProvider(
         private val onSuccess: (dynamic) -> Unit,
@@ -29,7 +29,7 @@ class HighlightingProvider(
     fun getHighlighting(project: Project, callback: (dynamic) -> Unit, finallyCallback: (() -> Unit)?) {
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
-                url = generateAjaxUrl("highlight", json("runConf" to project.getConfiguration())),
+                url = generateAjaxUrl("highlight", json("runConf" to project.confType)),
                 success = { data ->
                     try {
                         if (checkDataForNull(data)) {

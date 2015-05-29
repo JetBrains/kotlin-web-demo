@@ -17,14 +17,10 @@
 package views
 
 import File
-import Project
+import model.Project
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.Node
 import kotlin.browser.document
-
-/**
- * Created by Semyon.Atamas on 3/31/2015.
- */
 
 class NavBarView(private val navigationElement: HTMLDivElement) {
     fun onFileSelected(oldFile: File?, newFile: File) {
@@ -55,8 +51,8 @@ class NavBarView(private val navigationElement: HTMLDivElement) {
     }
 
     private fun createNavItem(project: Project){
-        navigationElement.insertBefore(createNavItem(project.getName()), navigationElement.firstChild)
-        var folder: FolderView? = project.getParent()
+        navigationElement.insertBefore(createNavItem(project.name), navigationElement.firstChild)
+        var folder: FolderView? = project.parent
         while (folder != null){
             navigationElement.insertBefore(createNavItem(folder.name), navigationElement.firstChild)
             folder = folder.parent

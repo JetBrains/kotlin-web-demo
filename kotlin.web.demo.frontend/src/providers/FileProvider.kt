@@ -17,10 +17,10 @@
 package providers
 
 import File
-import Project
 import ProjectType
 import addKotlinExtension
 import generateAjaxUrl
+import model.Project
 import utils.*
 
 class FileProvider(
@@ -51,7 +51,7 @@ class FileProvider(
     }
 
     fun loadOriginalFile(file: File, onSuccess: (dynamic) -> Unit, onNotFound: () -> Unit) {
-        when (file.project.getType()) {
+        when (file.project.type) {
             ProjectType.EXAMPLE -> {
                 blockContent();
                 ajax(
@@ -130,7 +130,7 @@ class FileProvider(
                 dataType = DataType.TEXT,
                 type = RequestType.POST,
                 timeout = 10000,
-                data = json("publicId" to project.getPublicId(), "filename" to filenameWithExtension),
+                data = json("publicId" to project.publicId, "filename" to filenameWithExtension),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
                         onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
@@ -181,7 +181,7 @@ class FileProvider(
             json(
                     "fileName" to file.name,
                     "modifiable" to false,
-                    "projectId" to file.project.getPublicId()
+                    "projectId" to file.project.publicId
             )
         }
         blockContent();

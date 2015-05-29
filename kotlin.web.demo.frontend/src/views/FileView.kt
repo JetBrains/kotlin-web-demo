@@ -32,10 +32,6 @@ import views.dialogs.InputDialogView
 import kotlin.browser.document
 import kotlin.browser.window
 
-/**
- * Created by Semyon.Atamas on 5/18/2015.
- */
-
 class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: File) {
     var onSelect: (() -> Unit)? = null
     private val depth = projectView.depth + 1
@@ -106,7 +102,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
             classes = setOf("icons")
         }
 
-        if (projectView.project.getType() === ProjectType.USER_PROJECT) {
+        if (projectView.project.type === ProjectType.USER_PROJECT) {
             if (file.isModifiable) {
                 actionIconsElement.append.div {
                     classes = setOf ("rename", "icon")

@@ -16,13 +16,13 @@
 
 package providers
 
-import Project
 import application.app
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
 import utils.*
 import java.util.*
+import model.Project
 
 class RunProvider(
         private val onSuccess: (dynamic, Project) -> Unit,
@@ -59,7 +59,7 @@ class RunProvider(
     private fun runJava(project: Project) {
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
-                url = generateAjaxUrl("run", json("runConf" to project.getConfiguration())),
+                url = generateAjaxUrl("run", json("runConf" to project.confType)),
                 success = { data ->
                     try {
                         if (checkDataForNull(data)) {
@@ -100,7 +100,7 @@ class RunProvider(
     }
 
     fun loadJsFromServer(project: Project) {
-        var runConfiguration = project.getConfiguration();
+        var runConfiguration = project.confType;
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("run", json("runConf" to runConfiguration)),

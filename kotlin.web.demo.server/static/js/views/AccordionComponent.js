@@ -92,7 +92,7 @@ var AccordionView = (function () {
             onBeforeUnload: function () {
                 var publicLinks = [];
                 for (var id in projects) {
-                    if (projects[id].project.getType() == ProjectType.PUBLIC_LINK) {
+                    if (projects[id].project.type == ProjectType.PUBLIC_LINK) {
                         publicLinks.push(projects[id].header);
                     }
                 }
@@ -242,7 +242,7 @@ var AccordionView = (function () {
                     selectProject(publicId)
                 },
                 function (projectView) {
-                    if (projectView.project.isEmpty()) {
+                    if (projectView.project.files.isEmpty()) {
                         selectedFileView = null;
                     }
                     instance.onProjectSelected(projectView.project);
@@ -254,7 +254,7 @@ var AccordionView = (function () {
         }
 
         function selectProject(publicId) {
-            if (selectedProjectView == null || selectedProjectView.project.getPublicId() != publicId) {
+            if (selectedProjectView == null || selectedProjectView.project.publicId != publicId) {
                 if (selectedProjectView != null) {
                     $(selectedProjectView.headerElement).removeClass("selected");
                     $(selectedProjectView.contentElement).slideUp();

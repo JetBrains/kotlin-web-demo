@@ -16,11 +16,11 @@
 
 package providers
 
-import Project
 import ProjectType
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
+import model.Project
 import statusBarView
 import utils.*
 
@@ -53,14 +53,14 @@ class ProjectProvider(
                 url = generateAjaxUrl("renameProject", json()),
                 success = {
                     try {
-                        project.rename(newName);
+                        project.name = newName;
                     } catch (e: Throwable) {
                         console.log(e);
                     }
                 },
                 type = RequestType.POST,
                 dataType = DataType.TEXT,
-                data = json("publicId" to project.getPublicId(), "newName" to newName),
+                data = json("publicId" to project.publicId, "newName" to newName),
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {

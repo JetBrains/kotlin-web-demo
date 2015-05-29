@@ -23,9 +23,9 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLSpanElement
 import views.dialogs.InputDialogView
 import kotlin.browser.document
-import Project
 import File
 import addKotlinExtension
+import model.Project
 import projectProvider
 import utils.editor
 import utils.getFileIdFromUrl
@@ -100,9 +100,9 @@ class ProjectView(
                         "Rename project",
                         "Project name:",
                         "Rename",
-                        project.getName(),
+                        project.name,
                         { newName ->
-                            if (project.getName() == newName) {
+                            if (project.name == newName) {
                                 ValidationResult(valid = true);
                             } else {
                                 accordion.validateNewProjectName(newName);
@@ -141,8 +141,9 @@ class ProjectView(
                 project.loadOriginal();
             };
 
-            project.onNotRevertible = {
-                revertIcon.parentNode!!.removeChild(revertIcon);
+            project.revertibleListener.addModifyListener { event ->
+                if(!event.newValue)
+                    revertIcon.parentNode!!.removeChild(revertIcon);
             }
         }
     }
@@ -171,75 +172,76 @@ class ProjectView(
     }
 
     fun initProject(): Project {
-        val project = Project(header.type, header.publicId, header.name, parent);
+        val project = Project(
+                header.type,
+                header.publicId,
+                header.name,
+                parent,
+                onFileAdded = { file: File ->
+                    var fileView = createFileView(file);
+                    fileViews[file.id] = fileView;
+                    selectedFileView = fileView;
+                    if (isSelected()) {
+                        fileView.fireSelectEvent();
+                    }
+                },
+                onFileDeleted = { publicId ->
+                    if (selectedFileView!!.file.id == publicId) {
+                        accordion.selectedFileDeleted();
+                        selectedFileView = null;
+                    }
+                    fileViews.remove(publicId);
+                    if (!project.files.isEmpty()) {
+                        selectFirstFile();
+                    }
+                },
+                onContentLoaded = { files ->
+                    contentElement.innerHTML = "";
 
-        project.onModified = { isProjectContentChanged ->
-            if (isProjectContentChanged) {
+                    nameSpan.innerHTML = project.name;
+                    nameSpan.title = nameSpan.innerHTML;
+
+                    for (file in files) {
+                        fileViews[file.id] = createFileView(file);
+                    }
+
+                    if (!files.isEmpty()) {
+                        selectedFileView = getFileFromUrl() ?: fileViews[files[0].id];
+
+                        if (accordion.getSelectedProject().publicId == project.publicId) {
+                            selectedFileView!!.fireSelectEvent();
+                            onSelected(this);
+                        }
+                    } else if (accordion.getSelectedProject().publicId == project.publicId) {
+                        onSelected(this);
+                        editor.closeFile();
+                    }
+                },
+                onContentNotFound = {
+                    if (project.type === ProjectType.PUBLIC_LINK) {
+                        window.alert("Can't find project origin, maybe it was removed by the user.");
+                        project.revertible = false;
+                        if (!project.contentLoaded) {
+                            delete();
+                        }
+                    }
+                }
+        )
+
+        project.modifiedListener.addModifyListener { event ->
+            if (event.newValue) {
                 headerElement.addClass("modified");
             } else {
                 headerElement.removeClass("modified");
             }
         }
 
-        project.onRenamed = { newName ->
+        project.nameListener.addModifyListener { event ->
+            val newName = event.newValue
             nameSpan.innerHTML = newName;
             nameSpan.title = nameSpan.innerHTML;
             if (isSelected()) {
                 navBarView.onSelectedProjectRenamed(newName);
-            }
-        };
-
-        project.onContentLoaded = {
-            var files = project.getFiles();
-            contentElement.innerHTML = "";
-
-            nameSpan.innerHTML = project.getName();
-            nameSpan.title = nameSpan.innerHTML;
-
-            for (file in files) {
-                fileViews[file.id] = createFileView(file);
-            }
-
-            if (!files.isEmpty()) {
-                selectedFileView = getFileFromUrl() ?: fileViews[files[0].id];
-
-                if (accordion.getSelectedProject().getPublicId() == project.getPublicId()) {
-                    selectedFileView!!.fireSelectEvent();
-                    onSelected(this);
-                }
-            } else if (accordion.getSelectedProject().getPublicId() == project.getPublicId()) {
-                onSelected(this);
-                editor.closeFile();
-            }
-        };
-
-        project.onContentNotFound = {
-            if (project.getType() === ProjectType.PUBLIC_LINK) {
-                window.alert("Can't find project origin, maybe it was removed by the user.");
-                project.makeNotRevertible();
-                if (!project.isContentLoaded()) {
-                    delete();
-                }
-            }
-        };
-
-        project.onFileAdded = { file: File ->
-            var fileView = createFileView(file);
-            fileViews[file.id] = fileView;
-            selectedFileView = fileView;
-            if (isSelected()) {
-                fileView.fireSelectEvent();
-            }
-        };
-
-        project.onFileDeleted = { publicId ->
-            if (selectedFileView!!.file.id == publicId) {
-                accordion.selectedFileDeleted();
-                selectedFileView = null;
-            }
-            fileViews.remove(publicId);
-            if (!project.isEmpty()) {
-                selectFirstFile();
             }
         };
         return project
@@ -249,13 +251,13 @@ class ProjectView(
         parent.select();
         headerElement.className += " selected";
         jq(contentElement).slideDown();
-        if (!project.isContentLoaded()) {
+        if (!project.contentLoaded) {
             project.loadContent(false);
         } else {
             if (selectedFileView != null) {
                 selectedFileView!!.fireSelectEvent();
             } else {
-                if (!project.isEmpty()) {
+                if (!project.files.isEmpty()) {
                     selectFirstFile();
                 }
             }
@@ -268,7 +270,7 @@ class ProjectView(
     private fun getFileFromUrl() = fileViews.get(getFileIdFromUrl())
 
     fun selectFirstFile() {
-        selectedFileView = fileViews[project.getFiles()[0].id];
+        selectedFileView = fileViews[project.files[0].id];
         selectedFileView!!.fireSelectEvent();
     }
 

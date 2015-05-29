@@ -50,9 +50,10 @@ var ProblemsView = function (element, /*Nullable*/ tabs) {
         treeElement.id = "problems-tree";
         element.appendChild(treeElement);
 
-        var projectData = accordion.getSelectedProject();
-        for (var i = 0; i < projectData.getFiles().length; i++) {
-            var file = projectData.getFiles()[i];
+        var project = accordion.getSelectedProject();
+        var files = project.files.array;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
             if (file.errors.length > 0) {
                 var fileId = file.name.replace(/ /g, "%20") + "_problems";
                 var fileProblemsNode = {

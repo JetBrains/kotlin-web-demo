@@ -15,18 +15,15 @@
  */
 
 package providers
-import Project
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
 import jquery.JQuery
+import model.Project
 import kotlin.browser.document
 import utils.ajax
 import utils.jquery
 
-/**
- * Created by Semyon.Atamas on 5/20/2015.
- */
 class CompletionProvider() {
 
     var onSuccess: (dynamic) -> Unit = {
@@ -44,7 +41,7 @@ class CompletionProvider() {
             isLoadingCompletion = true;
             jquery.ajax(json(
                 //runConf is unused parameter. It's added to url for useful access logs
-                "url" to generateAjaxUrl("complete", json( "runConf" to project.getConfiguration() )),
+                "url" to generateAjaxUrl("complete", json( "runConf" to project.confType )),
                 "context" to document.body,
                 "success" to { data: dynamic ->
                     isLoadingCompletion = false;

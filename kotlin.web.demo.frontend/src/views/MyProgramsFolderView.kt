@@ -72,7 +72,7 @@ class MyProgramsFolderView(parentNode: HTMLDivElement,
             return ValidationResult(false, "Project name can contain only the following characters:" +
                     "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>")
         for (projectView in projects)
-            if (projectView.project.getName() == name) {
+            if (projectView.project.name == name) {
                 return ValidationResult(false, "Project with that name already exists");
             }
         return ValidationResult(true);

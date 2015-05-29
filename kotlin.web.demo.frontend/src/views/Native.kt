@@ -15,14 +15,11 @@
  */
 
 package views
-import Project
+import File
 import ProjectType
 import jquery.JQuery
+import model.Project
 import org.w3c.dom.events.KeyboardEvent
-
-/**
- * Created by Semyon.Atamas on 4/16/2015.
- */
 
 data class ValidationResult(val valid: Boolean, val message: String = "")
 
@@ -48,7 +45,17 @@ native
 val navBarView: dynamic
 
 native
-val accordion: dynamic = noImpl
+class Accordion(){
+    fun selectFile(fileView: FileView)
+    fun onModifiedSelectedFile(file: File)
+    fun getSelectedFile(): File
+    fun validateNewProjectName(newName: String): ValidationResult
+    fun selectedFileDeleted()
+    fun getSelectedProject(): Project
+}
+
+native
+val accordion: Accordion = noImpl
 
 native
 val loginView: LoginView = noImpl
