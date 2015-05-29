@@ -20,18 +20,37 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.intellij.codeInsight.ContainerProvider;
+import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.codeInsight.runner.JavaMainMethodProvider;
+import com.intellij.core.CoreApplicationEnvironment;
+import com.intellij.mock.MockProject;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.extensions.Extensions;
+import com.intellij.openapi.extensions.ExtensionsArea;
+import com.intellij.openapi.fileTypes.ContentBasedFileSubstitutor;
+import com.intellij.openapi.fileTypes.FileTypeExtensionPoint;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.openapi.util.Getter;
+import com.intellij.psi.FileContextProvider;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementFinder;
+import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.compiled.ClassFileDecompilers;
+import com.intellij.psi.impl.PsiTreeChangePreprocessor;
+import com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy;
+import com.intellij.psi.impl.compiled.ClsStubBuilderFactory;
+import com.intellij.psi.meta.MetaDataContributor;
+import com.intellij.psi.stubs.BinaryFileStubBuilders;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
-import org.jetbrains.kotlin.cli.jvm.JVMConfigurationKeys;
 import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
-import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.config.ConfigPackage;
+import org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.idea.decompiler.JetClassFileDecompiler;
@@ -54,7 +73,7 @@ import java.util.List;
 public class EnvironmentManager {
     private static File KOTLIN_RUNTIME = initializeKotlinRuntime();
     private Getter<FileTypeRegistry> registry;
-    private JetCoreEnvironment environment;
+    private KotlinCoreEnvironment environment;
     private Disposable disposable = new Disposable() {
         @Override
         public void dispose() {
@@ -131,7 +150,7 @@ public class EnvironmentManager {
     }
 
     @NotNull
-    public JetCoreEnvironment getEnvironment() {
+    public KotlinCoreEnvironment getEnvironment() {
         if (environment == null) {
             environment = createEnvironment();
 
@@ -153,10 +172,11 @@ public class EnvironmentManager {
     }
 
     @NotNull
-    private JetCoreEnvironment createEnvironment() {
+    private KotlinCoreEnvironment createEnvironment() {
         K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
         CompilerConfiguration configuration = new CompilerConfiguration();
-        configuration.addAll(JVMConfigurationKeys.CLASSPATH_KEY, getClasspath(arguments));
+
+        ConfigPackage.addJvmClasspathRoots(configuration, getClasspath(arguments));
         configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
 
         configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
@@ -164,14 +184,51 @@ public class EnvironmentManager {
         configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
 
-        JetCoreEnvironment jetCoreEnvironment = JetCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
+        KotlinCoreEnvironment environment = KotlinCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
+        ((MockProject) environment.getProject()).registerService(NullableNotNullManager.class, new NullableNotNullManager() {
+            @Override
+            public boolean isNullable(@NotNull PsiModifierListOwner owner, boolean checkBases) {
+                return false;
+            }
+
+            @Override
+            public boolean isNotNull(@NotNull PsiModifierListOwner owner, boolean checkBases) {
+                return true;
+            }
+
+            @Override
+            protected boolean hasHardcodedContracts(PsiElement element) {
+                return false;
+            }
+        });
+
+
         Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJvm());
         Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJs());
         Extensions.getRootArea().getExtensionPoint(DiagnosticsWithSuppression.SuppressStringProvider.EP_NAME).registerExtension(new SuppressNoBodyErrorsForNativeDeclarations());
         Extensions.getRootArea().getExtensionPoint(DiagnosticsWithSuppression.SuppressStringProvider.EP_NAME).registerExtension(new SuppressUnusedParameterForJsNative());
+
+        registerExtensionPoints(Extensions.getRootArea());
+
         registry = FileTypeRegistry.ourInstanceGetter;
-        return jetCoreEnvironment;
+        return environment;
     }
+
+    private void registerExtensionPoints(ExtensionsArea area) {
+        CoreApplicationEnvironment.registerExtensionPoint(area, ContentBasedFileSubstitutor.EP_NAME, ContentBasedFileSubstitutor.class);
+        CoreApplicationEnvironment.registerExtensionPoint(area, BinaryFileStubBuilders.EP_NAME, FileTypeExtensionPoint.class);
+        CoreApplicationEnvironment.registerExtensionPoint(area, FileContextProvider.EP_NAME, FileContextProvider.class);
+
+        CoreApplicationEnvironment.registerExtensionPoint(area, MetaDataContributor.EP_NAME, MetaDataContributor.class);
+        CoreApplicationEnvironment.registerExtensionPoint(area, ClsStubBuilderFactory.EP_NAME, ClsStubBuilderFactory.class);
+        CoreApplicationEnvironment.registerExtensionPoint(area, PsiAugmentProvider.EP_NAME, PsiAugmentProvider.class);
+        CoreApplicationEnvironment.registerExtensionPoint(area, JavaMainMethodProvider.EP_NAME, JavaMainMethodProvider.class);
+
+        CoreApplicationEnvironment.registerExtensionPoint(area, ContainerProvider.EP_NAME, ContainerProvider.class);
+        CoreApplicationEnvironment.registerExtensionPoint(area, ClsCustomNavigationPolicy.EP_NAME, ClsCustomNavigationPolicy.class);
+        CoreApplicationEnvironment.registerExtensionPoint(area, ClassFileDecompilers.EP_NAME, ClassFileDecompilers.Decompiler.class);
+    }
+
 
     @NotNull
     private List<File> getAnnotationsPath() {

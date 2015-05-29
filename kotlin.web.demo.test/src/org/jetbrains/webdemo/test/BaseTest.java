@@ -19,13 +19,12 @@ package org.jetbrains.webdemo.test;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import junit.framework.TestCase;
-import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
-import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
 import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -65,7 +64,6 @@ public class BaseTest extends TestCase {
         ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
         BackendSettings.JAVA_EXECUTE = BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
         BackendSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
-        JavaToKotlinConverter.init();
 
         createManager();
         initializePolicyFile();
@@ -74,7 +72,7 @@ public class BaseTest extends TestCase {
         HelpLoader.getInstance();
     }
 
-    protected JetCoreEnvironment createManager() {
+    protected KotlinCoreEnvironment createManager() {
         myEnvironmentManager.getEnvironment();
         Initializer.setEnvironmentManager(myEnvironmentManager);
 

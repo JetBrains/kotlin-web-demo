@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 public class MyHttpSession {
     private final BackendSessionInfo sessionInfo;
@@ -71,7 +70,8 @@ public class MyHttpSession {
     }
 
     private void sendConversationResult() {
-        writeResponse(new JavaToKotlinConverter(sessionInfo).getResult(request.getParameter("text")), HttpServletResponse.SC_OK);
+        writeResponse(new WebDemoJavaToKotlinConverter(sessionInfo).getResult(request.getParameter("text"),
+                Initializer.getInstance().getEnvironment().getProject()), HttpServletResponse.SC_OK);
     }
 
     private void sendExecutorResult() {

@@ -3,31 +3,33 @@
 */
 package hello
 
-import kotlin.js.dom.html.*
-import kotlin.js.dom.html5.*
 import jquery.*
+import org.w3c.dom.CanvasRenderingContext2D
+import org.w3c.dom.HTMLCanvasElement
+import kotlin.browser.document
+import kotlin.browser.window
 
-val canvas = initalizeCanvas()
-fun initalizeCanvas(): HTMLCanvasElement{
+val canvas = initializeCanvas()
+fun initializeCanvas(): HTMLCanvasElement {
     val canvas = document.createElement("canvas") as HTMLCanvasElement
-    val context = canvas.getContext("2d")!!
-    context.canvas.width  = window.innerWidth;
-    context.canvas.height = window.innerHeight;
-    document.body.appendChild(canvas)
+    val context = canvas.getContext("2d") as CanvasRenderingContext2D
+    context.canvas.width  = window.get("innerWidth");
+    context.canvas.height = window.get("innerHeight");
+    document.body!!.appendChild(canvas)
     return canvas
 }
-val context: CanvasContext
+val context: CanvasRenderingContext2D
     get() {
-        return canvas.getContext("2d")!!
+        return canvas.getContext("2d") as CanvasRenderingContext2D
     }
 
 
-val width: Double
+val width: Int
     get() {
         return canvas.width
     }
 
-val height: Double
+val height: Int
     get() {
         return canvas.height
     }
@@ -52,7 +54,7 @@ class HelloKotlin() {
     init {
         context.font = "bold ${textHeightInPixels}px Georgia, serif"
     }
-    val textWidthInPixels = context.measureText(message)!!.width
+    val textWidthInPixels = context.measureText(message).width
 
     fun draw() {
         context.save()
@@ -63,7 +65,7 @@ class HelloKotlin() {
         context.shadowOffsetX = -4.0
         context.shadowOffsetY = 4.0
         context.fillStyle = "rgb(242,160,110)"
-        context.fillText(message, absX.toInt(), absY.toInt())
+        context.fillText(message, absX, absY)
         context.restore()
     }
 
@@ -90,7 +92,7 @@ class HelloKotlin() {
 fun renderBackground() {
     context.save()
     context.fillStyle = "#5C7EED"
-    context.fillRect(0, 0, width, height)
+    context.fillRect(0.0, 0.0, width.toDouble(), height.toDouble())
     context.restore()
 }
 

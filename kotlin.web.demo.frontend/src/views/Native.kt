@@ -30,7 +30,7 @@ class InputDialogView(title: String, inputText: String, buttonText: String) {
 }
 
 native
-trait ProjectView{
+interface ProjectView{
     fun getProjectData(): Project
 }
 

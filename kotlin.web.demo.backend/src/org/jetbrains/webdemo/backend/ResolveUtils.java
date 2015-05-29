@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.CliLightClassGenerationSupport;
 import org.jetbrains.kotlin.codegen.ClassBuilderFactories;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.context.ContextPackage;
+import org.jetbrains.kotlin.context.ModuleContext;
 import org.jetbrains.kotlin.descriptors.impl.ModuleDescriptorImpl;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
@@ -55,13 +56,10 @@ public class ResolveUtils {
 
     private static AnalysisResult analyzeFile(@NotNull List<JetFile> files, Project project) {
 
+        ModuleContext moduleContext = TopDownAnalyzerFacadeForJVM.createContextWithSealedModule(project);
+
         BindingTrace trace = new CliLightClassGenerationSupport.CliBindingTrace();
 
-        ModuleDescriptorImpl module = TopDownAnalyzerFacadeForJVM.createJavaModule("<module>");
-        module.addDependencyOnModule(module);
-        module.addDependencyOnModule(KotlinBuiltIns.getInstance().getBuiltInsModule());
-        module.seal();
-        return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegrationWithCustomContext(
-                project, ContextPackage.GlobalContext(), files, trace, module, null, null);
+        return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegrationWithCustomContext(moduleContext, files, trace, null, null);
     }
 }

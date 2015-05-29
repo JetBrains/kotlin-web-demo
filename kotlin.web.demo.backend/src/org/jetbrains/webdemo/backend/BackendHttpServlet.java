@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.backend;
 
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.backend.responseHelpers.JavaToKotlinConverter;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -52,7 +51,6 @@ public class BackendHttpServlet extends HttpServlet {
         LogWriter.init();
         ErrorWriter.getInstance();
         Initializer.getInstance();
-        JavaToKotlinConverter.init();
 
         try {
             if (Initializer.getInstance().initJavaCoreEnvironment()) {

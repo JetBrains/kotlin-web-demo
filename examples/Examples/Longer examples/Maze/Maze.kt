@@ -176,7 +176,7 @@ fun walkThroughMaze(str: String) {
  *    OOOOOOOOOOOOOOOOO
  */
 fun makeMaze(s: String): Maze {
-    val lines = s.split("\n")
+    val lines = s.splitBy("\n")
     val longestLine = lines.toList().maxBy { it.length() } ?: ""
     val data = Array(lines.size()) { BooleanArray(longestLine.length()) }
 

@@ -59,7 +59,7 @@ public class JsonResponseForCompletion {
     private static final DescriptorRenderer RENDERER = new DescriptorRendererBuilder()
             .setNameShortness(NameShortness.SHORT)
             .setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES)
-            .setWithoutFunctionParameterNames(true)
+            .setParameterNameRenderingPolicy(DescriptorRenderer.ParameterNameRenderingPolicy.NONE)
             .setRenderDefaultValues(false)
             .build();
 
@@ -189,7 +189,7 @@ public class JsonResponseForCompletion {
                     JetQualifiedExpression qualifiedExpression = (JetQualifiedExpression) parent;
                     JetExpression receiverExpression = qualifiedExpression.getReceiverExpression();
 
-                    final JetType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE, receiverExpression);
+                    final JetType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, receiverExpression).getType();
                     resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, receiverExpression);
 
                     if (expressionType != null && resolutionScope != null) {

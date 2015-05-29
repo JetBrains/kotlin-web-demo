@@ -23,7 +23,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.js.analyze.TopDownAnalyzerFacadeForJS;
-import org.jetbrains.kotlin.js.config.EcmaVersion;
+import org.jetbrains.kotlin.js.config.Config;
 import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.facade.K2JSTranslator;
 import org.jetbrains.kotlin.js.facade.MainCallParameters;
@@ -41,16 +41,13 @@ import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
 
     public static final String JS_LIB_ROOT = new File(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "js").getAbsolutePath();
-    private static final List<String> LIBRARY_FILES = Arrays.asList("@stdlib", JS_LIB_ROOT);
+    private static final List<String> LIBRARY_FILES = Collections.singletonList(JS_LIB_ROOT);
 
     @SuppressWarnings("FieldCanBeLocal")
     private static String EXCEPTION = "exception=";
@@ -62,13 +59,11 @@ public final class WebDemoTranslatorFacade {
     @Nullable
     public static BindingContext analyzeProgramCode(@NotNull List<JetFile> files, BackendSessionInfo sessionInfo) {
         try {
-            return TopDownAnalyzerFacadeForJS.analyzeFiles(files, new LibrarySourcesConfig(
+            return TopDownAnalyzerFacadeForJS.analyzeFiles(files, new LibrarySourcesConfig.Builder(
                     Initializer.getInstance().getEnvironment().getProject(),
                     "moduleId",
-                    LIBRARY_FILES,
-                    EcmaVersion.defaultVersion(),
-                    false,
-                    false)).getBindingContext();
+                    LIBRARY_FILES
+            ).build()).getBindingContext();
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                     BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
@@ -106,13 +101,11 @@ public final class WebDemoTranslatorFacade {
                                                    BackendSessionInfo sessionInfo,
                                                    Map<String, List<ErrorDescriptor>> errors) throws TranslationException {
         Project currentProject = Initializer.getInstance().getEnvironment().getProject();
-        LibrarySourcesConfig config = new LibrarySourcesConfig(
+        Config config = new LibrarySourcesConfig.Builder(
                 currentProject,
                 "moduleId",
-                LIBRARY_FILES,
-                EcmaVersion.defaultVersion(),
-                false,
-                true);
+                LIBRARY_FILES
+        ).build();
         K2JSTranslator translator = new K2JSTranslator(config);
         TranslationResult result = translator.translate(files, MainCallParameters.mainWithArguments(Arrays.asList(ResponseUtils.splitArguments(arguments))));
         if (result instanceof org.jetbrains.kotlin.js.facade.TranslationResult.Success) {

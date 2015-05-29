@@ -5,9 +5,13 @@
 package traffic
 
 import java.util.ArrayList
-import kotlin.js.dom.html5.*
-import kotlin.js.dom.html.*
 import jquery.*
+import org.w3c.dom.CanvasRenderingContext2D
+import org.w3c.dom.HTMLCanvasElement
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLImageElement
+import kotlin.browser.document
+import kotlin.browser.window
 
 fun getImage(path: String): HTMLImageElement {
     val image = window.document.createElement("img") as HTMLImageElement
@@ -16,18 +20,18 @@ fun getImage(path: String): HTMLImageElement {
 }
 
 val canvas = initalizeCanvas()
-fun initalizeCanvas(): HTMLCanvasElement{
+fun initalizeCanvas(): HTMLCanvasElement {
     val canvas = document.createElement("canvas") as HTMLCanvasElement
-    val context = canvas.getContext("2d")!!
-    context.canvas.width  = window.innerWidth;
-    context.canvas.height = window.innerHeight;
-    document.body.appendChild(canvas)
+    val context = canvas.getContext("2d") as CanvasRenderingContext2D
+    context.canvas.width = window.innerWidth.toInt();
+    context.canvas.height = window.innerHeight.toInt();
+    document.body!!.appendChild(canvas)
     return canvas
 }
 
-val context: CanvasContext
+val context: CanvasRenderingContext2D
     get() {
-        return canvas.getContext("2d")!!
+        return canvas.getContext("2d") as CanvasRenderingContext2D
     }
 
 
@@ -75,10 +79,10 @@ fun v(x: Double, y: Double) = Vector(x, y)
 
 class Image(val src: String, override var pos: Vector, var imageSize: Vector) : Shape() {
     override fun draw() {
-        state.context.drawImage(getImage(src), 0, 0,
-                imageSize.x.toInt(), imageSize.y.toInt(),
-                pos.x.toInt(), pos.y.toInt(),
-                imageSize.x.toInt(), imageSize.y.toInt())
+        state.context.drawImage(getImage(src), 0.0, 0.0,
+                imageSize.x, imageSize.y,
+                pos.x, pos.y,
+                imageSize.x, imageSize.y)
     }
 
     fun contains(mousePos: Vector): Boolean = mousePos.isInRect(pos, imageSize)
@@ -91,23 +95,23 @@ class Button(val src: String, override var pos: Vector, var imageSize: Vector) :
     override fun draw() {
         if (isMouseOver) {
             state.context.shadowed(v(-3.0, 3.0), 1.2) {
-                state.context.drawImage(getImage(src), 0, 0,
-                        imageSize.x.toInt(), imageSize.y.toInt(),
-                        pos.x.toInt(), pos.y.toInt(),
-                        imageSize.x.toInt(), imageSize.y.toInt())
+                state.context.drawImage(getImage(src), 0.0, 0.0,
+                        imageSize.x, imageSize.y,
+                        pos.x, pos.y,
+                        imageSize.x, imageSize.y)
             }
         } else if (isMouseDown) {
             state.context.shadowed(v(-3.0, 3.0), 0.8) {
-                state.context.drawImage(getImage(src), 0, 0,
-                        imageSize.x.toInt(), imageSize.y.toInt(),
-                        pos.x.toInt(), pos.y.toInt(),
-                        imageSize.x.toInt(), imageSize.y.toInt())
+                state.context.drawImage(getImage(src), 0.0, 0.0,
+                        imageSize.x, imageSize.y,
+                        pos.x, pos.y,
+                        imageSize.x, imageSize.y)
             }
         } else {
-            state.context.drawImage(getImage(src), 0, 0,
-                    imageSize.x.toInt(), imageSize.y.toInt(),
-                    pos.x.toInt(), pos.y.toInt(),
-                    imageSize.x.toInt(), imageSize.y.toInt())
+            state.context.drawImage(getImage(src), 0.0, 0.0,
+                    imageSize.x, imageSize.y,
+                    pos.x, pos.y,
+                    imageSize.x, imageSize.y)
         }
     }
 
@@ -115,6 +119,7 @@ class Button(val src: String, override var pos: Vector, var imageSize: Vector) :
         isMouseDown = true
         window.setTimeout({
             isMouseDown = false
+            Unit
         }, 1000)
     }
 
@@ -122,6 +127,7 @@ class Button(val src: String, override var pos: Vector, var imageSize: Vector) :
         isMouseOver = true
         window.setTimeout({
             isMouseOver = false
+            Unit
         }, 1000)
     }
 
@@ -134,13 +140,13 @@ class Border() : Shape() {
 
     override fun draw() {
         state.context.fillStyle = colors.white
-        state.context.fillRect(2, 4, 10, 292)
-        state.context.fillRect(330, 4, 370, 292)
-        state.context.fillRect(2, 2, 330, 10)
-        state.context.fillRect(4, 265, 340, 380)
+        state.context.fillRect(2.0, 4.0, 10.0, 292.0)
+        state.context.fillRect(330.0, 4.0, 370.0, 292.0)
+        state.context.fillRect(2.0, 2.0, 330.0, 10.0)
+        state.context.fillRect(4.0, 265.0, 340.0, 380.0)
         state.context.strokeStyle = colors.black
         state.context.lineWidth = 4.0
-        state.context.strokeRect(0, 0, state.width.toInt(), state.height.toInt())
+        state.context.strokeRect(0.0, 0.0, state.width.toDouble(), state.height.toDouble())
     }
 
 }
@@ -154,7 +160,7 @@ class Timer(override var pos: Vector) : Shape() {
         timeLeftForChangeColor = ("" + (timerLength - (Date().getTime() - timeStartLastChangeColor) / 1000)).get(0)
         state.context.font = "bold 9px Arial, serif"
         state.context.fillStyle = colors.black
-        state.context.fillText("" + timeLeftForChangeColor, pos.x.toInt(), pos.y.toInt())
+        state.context.fillText("" + timeLeftForChangeColor, pos.x, pos.y)
     }
 
     fun resetTimer() {
@@ -224,6 +230,7 @@ class TrafficLight(override var pos: Vector, val direction: String, val startCol
         window.setTimeout({
             if (!isForceColorChange) timer.resetTimer() else isForceColorChange = false
             currentColor = "green"
+            Unit
         }, 3000)
     }
 
@@ -236,6 +243,7 @@ class TrafficLight(override var pos: Vector, val direction: String, val startCol
             window.setTimeout({
                 if (!isForceColorChange) timer.resetTimer() else isForceColorChange = false
                 currentColor = "red"
+                Unit
             }, 1000)
         }, 2000)
     }
@@ -267,10 +275,10 @@ class TrafficLightItem(override var pos: Vector, val imageSrc: String) : Shape()
                     countOfFlash++
                 }
             } else {
-                state.context.drawImage(getImage(PATH_TO_IMAGES + "green_color.png"), 0, 0,
-                        imageSize.x.toInt(), imageSize.y.toInt(),
-                        pos.x.toInt(), pos.y.toInt(),
-                        size.x.toInt(), size.y.toInt())
+                state.context.drawImage(getImage(PATH_TO_IMAGES + "green_color.png"), 0.0, 0.0,
+                        imageSize.x, imageSize.y,
+                        pos.x, pos.y,
+                        size.x, size.y)
                 if (countOfFlash > 6) {
                     isFlashNow = true
                     countOfFlash = 0
@@ -279,10 +287,10 @@ class TrafficLightItem(override var pos: Vector, val imageSrc: String) : Shape()
                 }
             }
         } else {
-            state.context.drawImage(getImage(imageSrc), 0, 0,
-                    imageSize.x.toInt(), imageSize.y.toInt(),
-                    pos.x.toInt(), pos.y.toInt(),
-                    size.x.toInt(), size.y.toInt())
+            state.context.drawImage(getImage(imageSrc), 0.0, 0.0,
+                    imageSize.x, imageSize.y,
+                    pos.x, pos.y,
+                    size.x, size.y)
         }
     }
 }
@@ -294,20 +302,20 @@ class Car(override var pos: Vector, val direction: String, val color: String) : 
 
     override fun draw() {
         if (direction == "up" || direction == "down") {
-            state.context.drawImage(getImage(PATH_TO_IMAGES + color + "_car.png"), 0, 0,
-                    imageSize.x.toInt(), imageSize.y.toInt(),
-                    pos.x.toInt(), pos.y.toInt(),
-                    imageSize.x.toInt(), imageSize.y.toInt())
+            state.context.drawImage(getImage(PATH_TO_IMAGES + color + "_car.png"), 0.0, 0.0,
+                    imageSize.x, imageSize.y,
+                    pos.x, pos.y,
+                    imageSize.x, imageSize.y)
             if ((!isNearStopLine()) || (trafficLightUp.canMove() && isNearStopLine()) ) {
                 move()
             } else {
                 speed = getRandomArbitary(2, 10)
             }
         } else {
-            state.context.drawImage(getImage(PATH_TO_IMAGES + color + "_car.png"), 0, 0,
-                    imageSize.y.toInt(), imageSize.x.toInt(),
-                    pos.x.toInt(), pos.y.toInt(),
-                    imageSize.y.toInt(), imageSize.x.toInt())
+            state.context.drawImage(getImage(PATH_TO_IMAGES + color + "_car.png"), 0.0, 0.0,
+                    imageSize.y, imageSize.x,
+                    pos.x, pos.y,
+                    imageSize.y, imageSize.x)
             if ((!isNearStopLine()) || (trafficLightLeft.canMove() && isNearStopLine()) ) {
                 move()
             } else {
@@ -353,10 +361,10 @@ class Map(override var pos: Vector) : Shape() {
 
     override fun draw() {
         size = imageSize * relSize
-        state.context.drawImage(getImage(PATH_TO_IMAGES + "crossroads.jpg"), 0, 0,
-                imageSize.x.toInt(), imageSize.y.toInt(),
-                pos.x.toInt(), pos.y.toInt(),
-                size.x.toInt(), size.y.toInt())
+        state.context.drawImage(getImage(PATH_TO_IMAGES + "crossroads.jpg"), 0.0, 0.0,
+                imageSize.x, imageSize.y,
+                pos.x, pos.y,
+                size.x, size.y)
     }
 }
 
@@ -369,7 +377,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
     var height = canvas.height
 
     val size: Vector
-        get() = v(width, height)
+        get() = v(width.toDouble(), height.toDouble())
 
     fun addShape(shape: Shape) {
         shapes.add(shape)
@@ -378,7 +386,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
     init {
         jq(canvas).click {
             val mousePos = mousePos(it)
-            @shapeLoop for (shape in shapes) {
+            shapeLoop@ for (shape in shapes) {
                 if (shape is Button && mousePos in shape) {
                     val name = shape.src
                     shape.mouseClick()
@@ -433,9 +441,9 @@ class CanvasState(val canvas: HTMLCanvasElement) {
         var offset = Vector()
         var element: HTMLElement? = canvas
         while (element != null) {
-            val el: HTMLElement = element!!
+            val el: HTMLElement = element
             offset += Vector(el.offsetLeft, el.offsetTop)
-            element = el.offsetParent
+            element = el.offsetParent as HTMLElement?
         }
         return Vector(e.pageX, e.pageY) - offset
     }
@@ -449,7 +457,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
 
     fun clear() {
         context.fillStyle = colors.white
-        context.fillRect(0, 0, width.toInt(), height.toInt())
+        context.fillRect(0.0, 0.0, width.toDouble(), height.toDouble())
     }
 }
 
@@ -458,7 +466,7 @@ abstract class Shape() {
     abstract fun draw()
 
     // a couple of helper extension methods we'll be using in the derived classes
-    fun CanvasContext.shadowed(shadowOffset: Vector, alpha: Double, render: CanvasContext.() -> Unit) {
+    fun CanvasRenderingContext2D.shadowed(shadowOffset: Vector, alpha: Double, render: CanvasRenderingContext2D.() -> Unit) {
         save()
         shadowColor = "rgba(100, 100, 100, $alpha)"
         shadowBlur = 5.0
@@ -468,7 +476,7 @@ abstract class Shape() {
         restore()
     }
 
-    fun CanvasContext.fillPath(constructPath: CanvasContext.() -> Unit) {
+    fun CanvasRenderingContext2D.fillPath(constructPath: CanvasRenderingContext2D.() -> Unit) {
         beginPath()
         constructPath()
         closePath()

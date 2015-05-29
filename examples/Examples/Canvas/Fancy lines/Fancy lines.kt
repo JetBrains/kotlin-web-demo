@@ -6,9 +6,12 @@ Note that only a subset of the api is supported for now.
 
 package fancylines
 
-import kotlin.js.dom.html.*
-import kotlin.js.dom.html5.*
+
 import jquery.*
+import org.w3c.dom.CanvasRenderingContext2D
+import org.w3c.dom.HTMLCanvasElement
+import kotlin.browser.document
+import kotlin.browser.window
 
 fun main(args: Array<String>) {
     jq {
@@ -17,17 +20,17 @@ fun main(args: Array<String>) {
 }
 
 val canvas = initalizeCanvas()
-fun initalizeCanvas(): HTMLCanvasElement{
+fun initalizeCanvas(): HTMLCanvasElement {
     val canvas = document.createElement("canvas") as HTMLCanvasElement
-    val context = canvas.getContext("2d")!!
-    context.canvas.width  = window.innerWidth;
-    context.canvas.height = window.innerHeight;
-    document.body.appendChild(canvas)
+    val context = canvas.getContext("2d") as CanvasRenderingContext2D
+    context.canvas.width  = window.innerWidth.toInt();
+    context.canvas.height = window.innerHeight.toInt();
+    document.body!!.appendChild(canvas)
     return canvas
 }
 
 class FancyLines() {
-    val context = canvas.getContext("2d")!!
+    val context = canvas.getContext("2d") as CanvasRenderingContext2D
     val height = canvas.height
     val width = canvas.width
     var x = width * Math.random()
@@ -40,7 +43,7 @@ class FancyLines() {
         context.beginPath();
 
         context.lineWidth = 20.0 * Math.random();
-        context.moveTo(x.toInt(), y.toInt());
+        context.moveTo(x, y);
 
         x = width * Math.random();
         y = height * Math.random();
@@ -62,7 +65,7 @@ class FancyLines() {
 
     fun blank() {
         context.fillStyle = "rgba(255,255,1,0.1)";
-        context.fillRect(0, 0, width, height);
+        context.fillRect(0.0, 0.0, width.toDouble(), height.toDouble());
     }
 
     fun run() {

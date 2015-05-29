@@ -19,51 +19,38 @@ package org.jetbrains.webdemo.backend.responseHelpers;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.jetbrains.kotlin.j2k.J2kPackage;
+import com.intellij.lang.java.JavaLanguage;
+import com.intellij.openapi.progress.EmptyProgressIndicator;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import org.jetbrains.kotlin.j2k.*;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.util.Collections;
 
-public class JavaToKotlinConverter {
+public class WebDemoJavaToKotlinConverter {
     private final BackendSessionInfo info;
-    /**
-     * Main method of java2kotlin converter. This method will change Extensions
-     * during the call, and it's not thread-safe to reinitialize them after it.
-     * That's why this method is loaded with a different class loader wia reflection/
-     */
-    private static Method translateToKotlin;
 
-    public static void init() {
-        try {
-            URL[] urls = {
-                    new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "j2k.jar").toURI().toURL(),
-                    new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-compiler.jar").toURI().toURL(),
-                    new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar").toURI().toURL()
-            };
-            URLClassLoader classLoader = new URLClassLoader(urls);
-            translateToKotlin = classLoader.loadClass(J2kPackage.class.getName()).getMethod("translateToKotlin", String.class);
-            assert (translateToKotlin.invoke(null, "class A").equals("class A"));
-        } catch (Throwable e) {
-            ErrorWriter.writeExceptionToConsole("Couldn't initialize Java2Kotlin converter", e);
-        }
-    }
-
-    public JavaToKotlinConverter(BackendSessionInfo info) {
+    public WebDemoJavaToKotlinConverter(BackendSessionInfo info) {
         this.info = info;
     }
 
-    public String getResult(String code) {
+    public String getResult(String code, Project project) {
         ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
 
         try {
-            String resultFormConverter = (String) translateToKotlin.invoke(null, code);
+            JavaToKotlinConverter converter = new JavaToKotlinConverter(
+                    project,
+                    ConverterSettings.defaultSettings,
+                    EmptyReferenceSearcher.INSTANCE$,
+                    EmptyResolverForConverter.INSTANCE$);
+            PsiFile javaFile = PsiFileFactory.getInstance(project).createFileFromText("test.java", JavaLanguage.INSTANCE, code);
+            String resultFormConverter = JavaToKotlinTranslator.INSTANCE$.prettify(
+                    converter.elementsToKotlin(Collections.singletonList(javaFile))
+                            .getResults().iterator().next().getText());
             if (resultFormConverter.isEmpty()) {
                 result.add(ResponseUtils.getErrorAsJsonNode("Generated code is empty."));
             } else {

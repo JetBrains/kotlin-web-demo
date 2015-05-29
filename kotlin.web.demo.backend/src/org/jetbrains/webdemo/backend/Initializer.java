@@ -17,7 +17,7 @@
 package org.jetbrains.webdemo.backend;
 
 import com.intellij.openapi.application.ApplicationManager;
-import org.jetbrains.kotlin.cli.jvm.compiler.JetCoreEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 
@@ -74,7 +74,7 @@ public class Initializer {
     }
 
 
-    public JetCoreEnvironment getEnvironment() {
+    public KotlinCoreEnvironment getEnvironment() {
         return getEnvironmentManager().getEnvironment();
     }
 }
