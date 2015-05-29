@@ -19,8 +19,8 @@ package model
 import Error
 import ProjectType
 import model.File
-import VarListener
-import Listenable
+import utils.VarListener
+import utils.Listenable
 import addKotlinExtension
 import projectProvider
 import views.FolderView
