@@ -16,7 +16,7 @@
 
 package views
 
-import File
+import model.File
 import model.Project
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.Node

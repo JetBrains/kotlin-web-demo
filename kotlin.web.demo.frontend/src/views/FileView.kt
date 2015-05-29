@@ -16,7 +16,7 @@
 
 package views
 
-import File
+import model.File
 import ProjectType
 import html4k.js.*
 import html4k.dom.*

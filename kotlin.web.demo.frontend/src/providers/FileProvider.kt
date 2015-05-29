@@ -16,7 +16,7 @@
 
 package providers
 
-import File
+import model.File
 import ProjectType
 import addKotlinExtension
 import generateAjaxUrl

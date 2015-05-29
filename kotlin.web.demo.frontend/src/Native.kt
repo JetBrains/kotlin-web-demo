@@ -68,7 +68,7 @@ val fileProvider: FileProvider = noImpl
 //native("ProjectData")
 //class Project(type: ProjectType, publicId: String, name: String, parent: FolderView) {
 //    var onFileDeleted: (String)-> Unit
-//    var onFileAdded: (File)-> Unit
+//    var onFileAdded: (model.model.File)-> Unit
 //    var onContentNotFound: () -> Unit
 //    var onContentLoaded: () -> Unit
 //    var onRenamed: (String) -> Unit
@@ -77,13 +77,13 @@ val fileProvider: FileProvider = noImpl
 //    fun getType(): ProjectType
 //    fun getName(): String
 //    fun getParent(): FolderView
-//    fun deleteFile(file: File)
+//    fun deleteFile(file: model.model.File)
 //    fun getConfiguration(): dynamic
 //    fun rename(newName: String)
 //    fun getPublicId(): String
 //    fun addEmptyFile(filename: String, publicId: String)
 //    fun loadOriginal()
-//    fun getFiles(): Array<File>
+//    fun getFiles(): Array<model.model.File>
 //    fun makeNotRevertible()
 //    fun isContentLoaded(): Boolean
 //    fun isEmpty(): Boolean

@@ -15,7 +15,7 @@
  */
 
 package views
-import File
+import model.File
 import ProjectType
 import jquery.JQuery
 import model.Project

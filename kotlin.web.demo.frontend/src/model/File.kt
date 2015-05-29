@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
+package model
+
 import model.Project
 import kotlin.browser.localStorage
 import kotlin.properties.Delegates
+import FileType
+import Error
+import VarListener
+import Listenable
+import ProjectType
+import fileProvider
 
 class File(
         val project: Project,

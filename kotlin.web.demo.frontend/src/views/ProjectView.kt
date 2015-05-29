@@ -23,7 +23,7 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLSpanElement
 import views.dialogs.InputDialogView
 import kotlin.browser.document
-import File
+import model.File
 import addKotlinExtension
 import model.Project
 import projectProvider

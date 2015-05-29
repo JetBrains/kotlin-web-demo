@@ -18,7 +18,7 @@ package model
 
 import Error
 import ProjectType
-import File
+import model.File
 import VarListener
 import Listenable
 import addKotlinExtension
@@ -117,7 +117,7 @@ class Project(
         modified = isModified()
     }
 
-    fun addEmptyFile(name: String, publicId: String): File{
+    fun addEmptyFile(name: String, publicId: String): File {
         var file = File(this, name, publicId);
         file.listenableIsModified.addModifyListener {onModified()};
         files.add(file);
@@ -127,10 +127,10 @@ class Project(
 
     fun addFileWithMain(name: String, publicId: String): File {
         var file = File(
-        this,
-        addKotlinExtension(name),
-        publicId,
-        "fun main(args: Array<String>) {\n\n}"
+                this,
+                addKotlinExtension(name),
+                publicId,
+                "fun main(args: Array<String>) {\n\n}"
         );
         file.listenableIsModified.addModifyListener {onModified()};
         files.add(file);
