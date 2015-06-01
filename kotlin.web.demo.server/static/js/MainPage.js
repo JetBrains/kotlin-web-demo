@@ -40,6 +40,11 @@ incompleteActionManager.registerAction("save", "onHeadersLoaded",
 
 var editor = new KotlinEditor();
 
+/**
+ * @const
+ */
+var statusBarView = new StatusBarView(document.getElementById("statusBar"));
+
 $(document).on("click", ".ui-widget-overlay", (function(){
     $(".ui-dialog-titlebar-close").trigger('click');
 }));
@@ -79,20 +84,20 @@ var loginProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.Log
         getSessionInfo(function (data) {
             sessionId = data.id;
             loginView.logout();
-            //statusBarView.setStatus(ActionStatusMessages.logout_ok);
+            statusBarView.setStatus(ActionStatusMessages.logout_ok);
             accordion.loadAllContent();
         });
     },
     function (data) {
         if (data.isLoggedIn) {
             loginView.setUserName(data.userName, data.type);
-            //statusBarView.setStatus(ActionStatusMessages.login_ok);
+            statusBarView.setStatus(ActionStatusMessages.login_ok);
         }
         accordion.loadAllContent();
     },
     function (exception, actionCode) {
         consoleView.writeException(exception);
-        //statusBarView.setMessage(actionCode);
+        statusBarView.setMessage(actionCode);
     }
 );
 
@@ -116,6 +121,7 @@ configurationManager.onChange = function (configuration) {
 
 configurationManager.onFail = function (exception) {
     consoleView.writeException(exception);
+    statusBarView.setMessage(ActionStatusMessages.change_configuration_fail);
 };
 
 var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].views.NavBarView(document.getElementById("grid-nav"));
@@ -137,6 +143,11 @@ window.onpopstate = function () {
 var timer;
 editor.onCursorActivity = function (cursorPosition) {
     helpViewForWords.hide();
+    var messageForLineAtCursor = editor.getMessageForLineAtCursor(cursorPosition);
+    //Save previous message if current is empty
+    if (messageForLineAtCursor != "") {
+        statusBarView.setMessage(messageForLineAtCursor);
+    }
 
     var pos = editor.cursorCoords();
     helpViewForWords.setPosition(pos);
