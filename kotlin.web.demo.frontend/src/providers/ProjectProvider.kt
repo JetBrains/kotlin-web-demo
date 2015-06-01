@@ -21,15 +21,15 @@ import checkDataForNull
 import generateAjaxUrl
 import model.Project
 import model.ProjectType
-import statusBarView
 import utils.ActionStatusMessages
 import utils.blockContent
 import utils.unBlockContent
+import views.ActionStatusMessage
 
 class ProjectProvider(
         private val onProjectLoaded: (dynamic) -> Unit,
         private val onNewProjectAdded: (String, String, String) -> Unit,
-        private val onFail: (String, String) -> Unit
+        private val onFail: (String, ActionStatusMessage) -> Unit
 ) {
     fun loadProject(publicId: String, type: ProjectType, callback: (dynamic) -> Unit, onNotFound: () -> Unit) {
         if (type == ProjectType.EXAMPLE) {
@@ -67,7 +67,7 @@ class ProjectProvider(
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
                         unBlockContent();
-                        onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.rename_project_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -129,7 +129,7 @@ class ProjectProvider(
                 dataType = DataType.JSON,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.add_project_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -240,7 +240,7 @@ class ProjectProvider(
                 data = json("publicId" to publicId),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, statusBarView.statusMessages.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.delete_program_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }

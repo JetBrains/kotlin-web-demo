@@ -20,13 +20,13 @@ import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
 import model.ProjectType
-import utils.ActionStatusMessages
 import utils.blockContent
 import utils.unBlockContent
+import views.ActionStatusMessage
 import kotlin.browser.localStorage
 
 class HeadersProvider(
-        private val onFail: (String, String) -> Unit,
+        private val onFail: (String, ActionStatusMessage) -> Unit,
         private val onHeadersLoaded: () -> Unit,
         private val onProjectHeaderLoaded: (dynamic) -> Unit,
         private val onProjectHeaderNotFound: () -> Unit
@@ -67,10 +67,10 @@ class HeadersProvider(
                                 callback(folders);
                                 onHeadersLoaded();
                             } else {
-                                onFail(folders, ActionStatusMessages.load_headers_fail);
+                                onFail(folders, ActionStatusMessage.load_headers_fail);
                             }
                         } else {
-                            onFail("Incorrect data format.", ActionStatusMessages.load_headers_fail);
+                            onFail("Incorrect data format.", ActionStatusMessage.load_headers_fail);
                         }
                     } catch (e: Throwable) {
                         console.log(e);
@@ -81,7 +81,7 @@ class HeadersProvider(
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_headers_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_headers_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -114,7 +114,7 @@ class HeadersProvider(
                 ),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, "");
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.get_header_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }

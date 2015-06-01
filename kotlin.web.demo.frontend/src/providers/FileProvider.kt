@@ -24,9 +24,10 @@ import model.ProjectType
 import utils.ActionStatusMessages
 import utils.blockContent
 import utils.unBlockContent
+import views.ActionStatusMessage
 
 class FileProvider(
-        private val onFail: (String, String) -> Unit,
+        private val onFail: (String, ActionStatusMessage) -> Unit,
         private val onOriginalFileLoaded: (dynamic) -> Unit
 ) {
     fun checkFileExistence(publicId: String, onNotExists: () -> Unit) {
@@ -43,7 +44,7 @@ class FileProvider(
                 },
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
                     } catch (e: Throwable) {
                         console.log(e);
                     }
@@ -73,7 +74,7 @@ class FileProvider(
                         dataType = DataType.JSON,
                         error = { jqXHR, textStatus, errorThrown ->
                             try {
-                                onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                                onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
                             } catch (e: Throwable) {
                                 console.log(e)
                             }
@@ -103,7 +104,7 @@ class FileProvider(
                         ),
                         error = { jqXHR, textStatus, errorThrown ->
                             try {
-                                onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                                onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
                             } catch (e: Throwable) {
                                 console.log(e)
                             }
@@ -135,7 +136,7 @@ class FileProvider(
                 data = json("publicId" to project.publicId, "filename" to filenameWithExtension),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
                     } catch (e: Throwable) {
                         unBlockContent();
                     }
@@ -164,7 +165,7 @@ class FileProvider(
                 ),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus, errorThrown);
+                        onFail(textStatus, ActionStatusMessage.rename_file_fail);
                     } catch (e: Throwable) {
                         console.log(e);
                     }
@@ -202,7 +203,7 @@ class FileProvider(
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.delete_file_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -228,7 +229,7 @@ class FileProvider(
                 data = json("file" to JSON.stringify(file)),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }

@@ -19,6 +19,7 @@ import org.w3c.dom.events.Event
 import providers.FileProvider
 import providers.HeadersProvider
 import providers.ProjectProvider
+import views.StatusBarView
 
 /**
  * Created by Semyon.Atamas on 4/3/2015.
@@ -83,6 +84,3 @@ fun checkDataForNull(data: dynamic): Boolean
 
 native
 fun checkDataForException(data: dynamic): Boolean
-
-native
-val statusBarView: dynamic

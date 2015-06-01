@@ -25,15 +25,12 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
 import projectProvider
 import providers.*
-import statusBarView
 import utils.*
-import views.AccordionView
+import views.*
 import views.buttons.Button
 import views.dialogs.ConverterView
 import views.dialogs.Dialog
 import views.dialogs.ShortcutsDialogView
-import views.navBarView
-import views.tabs
 import kotlin.browser.document
 import kotlin.browser.window
 
@@ -149,7 +146,7 @@ class Application {
                         }
                     }
                 }
-                statusBarView.setStatus(ActionStatusMessages.run_java_ok);
+                statusBarView.setStatus(ActionStatusMessage.run_java_ok);
             },
             onErrorsFound = { data, project ->
                 data.forEach { data ->
@@ -158,8 +155,8 @@ class Application {
                         jq("#result-tabs").tabs("option", "active", 0);
                         problemsView.addMessages();
                         editor.setHighlighting();
-                        statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok,
-                                arrayOf(getNumberOfErrorsAndWarnings(data.errors)));
+                        statusBarView.setStatus(ActionStatusMessage.get_highlighting_ok,
+                                getNumberOfErrorsAndWarnings(data.errors).toString());
                     }
                 }
             },
@@ -168,7 +165,7 @@ class Application {
             },
             onFail = { error ->
                 consoleView.writeException(error);
-                statusBarView.setStatus(ActionStatusMessages.run_java_fail);
+                statusBarView.setStatus(ActionStatusMessage.run_java_fail);
             }
     )
     val runButtonElement = document.getElementById("runButton") as HTMLElement
@@ -204,13 +201,13 @@ class Application {
                 console.log(message);
             },
             onHeadersLoaded = {
-                statusBarView.setStatus(ActionStatusMessages.load_headers_ok);
+                statusBarView.setStatus(ActionStatusMessage.load_headers_ok);
             },
             onProjectHeaderLoaded = {
-                statusBarView.setStatus(ActionStatusMessages.load_header_ok);
+                statusBarView.setStatus(ActionStatusMessage.load_header_ok);
             },
             onProjectHeaderNotFound = {
-                statusBarView.setStatus(ActionStatusMessages.load_header_fail);
+                statusBarView.setStatus(ActionStatusMessage.load_header_fail);
                 window.alert("Can't find project, maybe it was removed by the user.");
                 clearState();
                 accordion.loadFirstItem();
@@ -219,7 +216,7 @@ class Application {
 
     val projectProvider = ProjectProvider(
             onProjectLoaded = {
-                statusBarView.setStatus(ActionStatusMessages.load_project_ok)
+                statusBarView.setStatus(ActionStatusMessage.load_project_ok)
             },
             onNewProjectAdded = { name, projectId, fileId ->
                 accordion.addNewProject(name, projectId, fileId);
@@ -232,11 +229,11 @@ class Application {
 
     val completionProvider = CompletionProvider(
             onSuccess = {
-                statusBarView.setStatus(ActionStatusMessages.get_completion_ok);
+                statusBarView.setStatus(ActionStatusMessage.get_completion_ok);
             },
             onFail = { error ->
                 consoleView.writeException(error);
-                statusBarView.setStatus(ActionStatusMessages.get_completion_fail);
+                statusBarView.setStatus(ActionStatusMessage.get_completion_fail);
             }
     );
 
@@ -244,16 +241,19 @@ class Application {
             { data ->
                 accordion.selectedProjectView!!.project.setErrors(data);
                 problemsView.addMessages(data);
-                statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, arrayOf(getNumberOfErrorsAndWarnings(data)));
+                statusBarView.setStatus(ActionStatusMessage.get_highlighting_ok,
+                        getNumberOfErrorsAndWarnings(data).toString());
             },
             { error, status ->
                 unBlockContent();
                 consoleView.writeException(error);
-                statusBarView.setStatus(ActionStatusMessages.get_highlighting_fail);
+                statusBarView.setStatus(ActionStatusMessage.get_highlighting_fail);
             }
     )
 
     private val saveButton = document.getElementById("saveButton") as HTMLElement
+
+    val statusBarView = StatusBarView(document.getElementById("statusBar") as HTMLElement)
 
     init {
         initButtons()
