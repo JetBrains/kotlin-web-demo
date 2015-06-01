@@ -22,6 +22,9 @@ import views.dialogs.Dialog
 import kotlin.browser.document
 
 enum class KeyCode (val code: Int){
+    S(83),
+    R(82),
+    F9(120),
     ENTER(13),
     ESCAPE(27)
 }

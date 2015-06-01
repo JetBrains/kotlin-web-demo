@@ -23,27 +23,7 @@ var ProjectType = {
 };
 
 var configurationManager = new ConfigurationComponent();
-var actionManager = new ActionManager();
 var differenceDialog = new DifferenceDialogView();
-
-actionManager.registerAction("org.jetbrains.web.demo.run",
-    new Shortcut(["Ctrl", "F9"], function (e) {
-        return e.keyCode == 120 && e.ctrlKey;
-    }), new Shortcut(["Ctrl", "R"], function (e) {
-        return e.keyCode == 82 && e.ctrlKey;
-    }));
-actionManager.registerAction("org.jetbrains.web.demo.reformat",
-    new Shortcut(["Ctrl", "Alt", "L"], null), /*default*/
-    new Shortcut(["Cmd", "Alt", "L"], null));
-/*mac*/
-actionManager.registerAction("org.jetbrains.web.demo.autocomplete",
-    new Shortcut(["Ctrl", "Space"], null));
-actionManager.registerAction("org.jetbrains.web.demo.save",
-    new Shortcut(["Ctrl", "S"], function (e) {
-        return e.keyCode == 83 && e.ctrlKey;
-    }), new Shortcut(["Cmd", "S"], function (e) {
-        return e.keyCode == 83 && e.metaKey;
-    }));
 
 var incompleteActionManager = new IncompleteActionManager();
 incompleteActionManager.registerAction("save", "onHeadersLoaded",
@@ -438,18 +418,18 @@ var headersProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.H
     }
 )
 
-$(document).keydown(function (e) {
-    var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
-    if (shortcut.isPressed(e)) {
-        runButton.click();
-    } else {
-        shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.save");
-        if (shortcut.isPressed(e)) {
-            saveButton.click();
-        }
-    }
-
-});
+//$(document).keydown(function (e) {
+//    var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
+//    if (shortcut.isPressed(e)) {
+//        runButton.click();
+//    } else {
+//        shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.save");
+//        if (shortcut.isPressed(e)) {
+//            saveButton.click();
+//        }
+//    }
+//
+//});
 
 var isShortcutsShow = true;
 $(".toggleShortcuts").click(function () {
@@ -535,16 +515,6 @@ $("#saveAsButton").click(function () {
     }
 });
 
-runButton.title = runButton.title.replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.run").getName());
-saveButton.attr("title", saveButton.attr("title").replace("@shortcut@", actionManager.getShortcutByName("org.jetbrains.web.demo.save").getName()));
-
-function loadShortcuts() {
-    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.autocomplete").getKeyNames(), "Code completion");
-    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.run").getKeyNames(), "Run program");
-    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.reformat").getKeyNames(), "Reformat selected fragment");
-    Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.addShortcut(actionManager.getShortcutByName("org.jetbrains.web.demo.save").getKeyNames(), "Save current project");
-}
-
 window.onbeforeunload = function () {
     accordion.onBeforeUnload();
     incompleteActionManager.onBeforeUnload();
@@ -619,7 +589,6 @@ function unBlockContent() {
 getSessionInfo(function(data){
     sessionId = data.id;
 });
-loadShortcuts();
 setKotlinVersion();
 
 FileType = {
@@ -627,4 +596,3 @@ FileType = {
     KOTLIN_TEST_FILE: "KOTLIN_TEST_FILE",
     JAVA_FILE: "JAVA_FILE"
 };
-
