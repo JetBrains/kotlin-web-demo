@@ -19,7 +19,6 @@ package views
 import FileType
 import addKotlinExtension
 import application.app
-import fileProvider
 import html4k.dom.append
 import html4k.dom.create
 import html4k.js.div
@@ -124,7 +123,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                                     }
                                 },
                                 callback = { newName: String ->
-                                    fileProvider.renameFile(file.id, { newName: String ->
+                                    app.fileProvider.renameFile(file.id, { newName: String ->
                                         file.name = addKotlinExtension(newName);
                                     }, newName);
                                 }
@@ -139,7 +138,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                 classes = setOf("delete", "icon")
                 onClickFunction = { event ->
                     if (window.confirm("Delete file " + file.name)) {
-                        fileProvider.deleteFile(file, {
+                        app.fileProvider.deleteFile(file, {
                             file.project.deleteFile(file);
                             headerElement.parentNode!!.removeChild(headerElement);
                         });
@@ -152,7 +151,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                 classes = setOf("revert", "icon")
                 title = "Revert this file"
                 onClickFunction = {
-                    fileProvider.loadOriginalFile(
+                    app.fileProvider.loadOriginalFile(
                             file,
                             { content: dynamic ->
                                 file.text = content.text;

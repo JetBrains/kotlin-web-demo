@@ -23,16 +23,10 @@ import utils.ajax
 import utils.jquery
 import kotlin.browser.document
 
-class CompletionProvider() {
-
-    var onSuccess: (dynamic) -> Unit = {
-
-    }
-    var onFail: (dynamic) -> Unit = {
-
-    }
-
-
+class CompletionProvider(
+        var onSuccess: () -> Unit,
+        var onFail: (dynamic) -> Unit)
+{
     private var isLoadingCompletion = false;
 
     fun getCompletion(project: Project, filename: String, cursor: dynamic, callback:(dynamic) -> Unit) {

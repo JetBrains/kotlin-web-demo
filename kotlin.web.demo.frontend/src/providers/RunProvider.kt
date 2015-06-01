@@ -20,11 +20,12 @@ import application.app
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
+import html4k.BODY
 import model.Project
 import utils.*
 
 class RunProvider(
-        private val onSuccess: (dynamic, Project) -> Unit,
+        private val onSuccess: (List<dynamic>, Project) -> Unit,
         private val onErrorsFound: (dynamic, Project) -> Unit,
         private val onComplete: () -> Unit,
         private val onFail: (String) -> Unit
@@ -59,17 +60,13 @@ class RunProvider(
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("run", json("runConf" to project.confType)),
-                success = { data ->
+                success = { data: Array<dynamic> ->
                     try {
                         if (checkDataForNull(data)) {
-                            if (checkDataForException(data)) {
-                                if (checkDataForErrors(data)) {
-                                    onSuccess(data, project);
-                                } else {
-                                    onErrorsFound(data, project);
-                                }
+                            if (checkDataForErrors(data)) {
+                                onSuccess(data.toArrayList(), project);
                             } else {
-                                onFail(data);
+                                onErrorsFound(data, project);
                             }
                         } else {
                             onFail("Incorrect data format.")

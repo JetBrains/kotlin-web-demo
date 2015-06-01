@@ -53,38 +53,6 @@ enum class FileType {
     KOTLIN_TEST_FILE,
     JAVA_FILE
 }
-
-native
-val fileProvider: FileProvider = noImpl
-
-native
-val headersProvider: HeadersProvider = noImpl
-
-//native("ProjectData")
-//class Project(type: ProjectType, publicId: String, name: String, parent: FolderView) {
-//    var onFileDeleted: (String)-> Unit
-//    var onFileAdded: (model.model.File)-> Unit
-//    var onContentNotFound: () -> Unit
-//    var onContentLoaded: () -> Unit
-//    var onRenamed: (String) -> Unit
-//    var onNotRevertible: () -> Unit
-//    var onModified: (Boolean) -> Unit
-//    fun getType(): ProjectType
-//    fun getName(): String
-//    fun getParent(): FolderView
-//    fun deleteFile(file: model.model.File)
-//    fun getConfiguration(): dynamic
-//    fun rename(newName: String)
-//    fun getPublicId(): String
-//    fun addEmptyFile(filename: String, publicId: String)
-//    fun loadOriginal()
-//    fun getFiles(): Array<model.model.File>
-//    fun makeNotRevertible()
-//    fun isContentLoaded(): Boolean
-//    fun isEmpty(): Boolean
-//    fun loadContent(fromServer: Boolean)
-//}
-
 native
 val projectProvider: ProjectProvider = noImpl
 

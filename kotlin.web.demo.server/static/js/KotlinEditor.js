@@ -219,7 +219,7 @@ var KotlinEditor = (function () {
                 completion.list = filteredCompletions;
                 callback(completion)
             } else {
-                completionProvider.getCompletion(
+                app.completionProvider.getCompletion(
                     accordion.selectedProjectView.project,
                     openedFile.name,
                     cur,
@@ -341,7 +341,7 @@ var KotlinEditor = (function () {
             if (highlightOnTheFly && openedFile != null && !isLoadingHighlighting) {
                 isLoadingHighlighting = true;
                 var example = accordion.selectedProjectView.project;
-                highlightingProvider.getHighlighting(example, highlighting.updateHighlighting, function () {
+                app.highlightingProvider.getHighlighting(example, highlighting.updateHighlighting, function () {
                     isLoadingHighlighting = false
                 });
             }

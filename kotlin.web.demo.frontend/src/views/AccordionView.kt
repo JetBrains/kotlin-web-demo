@@ -16,7 +16,7 @@
 
 package views
 
-import headersProvider
+import application.app
 import jquery.jq
 import model.File
 import model.Project
@@ -75,7 +75,7 @@ class AccordionView(
         projectViews.clear()
         selectedProjectView = null;
         selectedFileView = null;
-        headersProvider.getAllHeaders { folders ->
+        app.headersProvider.getAllHeaders { folders ->
             folders.forEach { folderContent ->
                 if (folderContent.name == "My programs") {
                     myProgramsFolder = MyProgramsFolderView(element, folderContent, null, { folderContentElement, header, parent ->
@@ -155,7 +155,7 @@ class AccordionView(
         }
     }
 
-    private fun loadFirstItem() {
+    fun loadFirstItem() {
         var projectId = getProjectIdFromUrl();
         if (projectId == null || projectId == "") {
             if (localStorage.getItem("openedItemId") != null) {
@@ -169,7 +169,7 @@ class AccordionView(
         if (isUserProjectInUrl()) {
             if (localStorage.getItem(projectId) == null) {
                 var file_id = getFileIdFromUrl();
-                headersProvider.getHeaderByFilePublicId(file_id, projectId, { header ->
+                app.headersProvider.getHeaderByFilePublicId(file_id, projectId, { header ->
                     if (header.publicId !in projectViews.keySet()) {
                         if (header.type == ProjectType.PUBLIC_LINK) {
                             addProject(publicLinksFolder.contentElement, header, publicLinksFolder);

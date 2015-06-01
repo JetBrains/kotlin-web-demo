@@ -16,7 +16,6 @@
 
 package application
 
-import fileProvider
 import jquery.jq
 import model.ProjectType
 import org.w3c.dom.HTMLDivElement
@@ -25,15 +24,18 @@ import org.w3c.dom.HTMLIFrameElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
 import projectProvider
-import providers.ConverterProvider
+import providers.*
+import statusBarView
 import utils.*
 import views.AccordionView
+import views.buttons.Button
 import views.dialogs.ConverterView
 import views.dialogs.Dialog
 import views.dialogs.ShortcutsDialogView
 import views.navBarView
 import views.tabs
 import kotlin.browser.document
+import kotlin.browser.window
 
 class Application {
     val actionManager = ActionManager(
@@ -130,6 +132,48 @@ class Application {
             }
     )
 
+    private val runProvider = RunProvider(
+            onSuccess = { output, project ->
+                output.forEach { data ->
+                    if (data.type == "errors") {
+                        project.setErrors(data.errors);
+                        problemsView.addMessages();
+                        editor.setHighlighting();
+                    } else if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
+                        generatedCodeView.setOutput(data);
+                    } else {
+                        if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
+                            junitView.setOutput(data);
+                        } else {
+                            consoleView.setOutput(data);
+                        }
+                    }
+                }
+                statusBarView.setStatus(ActionStatusMessages.run_java_ok);
+            },
+            onErrorsFound = { data, project ->
+                data.forEach { data ->
+                    if (data.type == "errors") {
+                        project.setErrors(data.errors);
+                        jq("#result-tabs").tabs("option", "active", 0);
+                        problemsView.addMessages();
+                        editor.setHighlighting();
+                        statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok,
+                                arrayOf(getNumberOfErrorsAndWarnings(data.errors)));
+                    }
+                }
+            },
+            onComplete = {
+                runButton.disabled = false
+            },
+            onFail = { error ->
+                consoleView.writeException(error);
+                statusBarView.setStatus(ActionStatusMessages.run_java_fail);
+            }
+    )
+    val runButtonElement = document.getElementById("runButton") as HTMLElement
+    private val runButton = Button(runButtonElement)
+
     private val converterProvider = ConverterProvider()
     private val converterView = ConverterView(converterProvider)
 
@@ -144,6 +188,71 @@ class Application {
             onClose = {iframe.clear()}
     )
 
+    val fileProvider = FileProvider(
+            { error, status ->
+                consoleView.writeException(error);
+                statusBarView.setStatus(status);
+            },
+            {
+                editor.reloadFile();
+            }
+    )
+
+    val headersProvider = HeadersProvider(
+            onFail = { message, status ->
+                statusBarView.setStatus(status);
+                console.log(message);
+            },
+            onHeadersLoaded = {
+                statusBarView.setStatus(ActionStatusMessages.load_headers_ok);
+            },
+            onProjectHeaderLoaded = {
+                statusBarView.setStatus(ActionStatusMessages.load_header_ok);
+            },
+            onProjectHeaderNotFound = {
+                statusBarView.setStatus(ActionStatusMessages.load_header_fail);
+                window.alert("Can't find project, maybe it was removed by the user.");
+                clearState();
+                accordion.loadFirstItem();
+            }
+    );
+
+    val projectProvider = ProjectProvider(
+            onProjectLoaded = {
+                statusBarView.setStatus(ActionStatusMessages.load_project_ok)
+            },
+            onNewProjectAdded = { name, projectId, fileId ->
+                accordion.addNewProject(name, projectId, fileId);
+            },
+            onFail = { message, status ->
+                statusBarView.setStatus(status)
+                console.log(message)
+            }
+    )
+
+    val completionProvider = CompletionProvider(
+            onSuccess = {
+                statusBarView.setStatus(ActionStatusMessages.get_completion_ok);
+            },
+            onFail = { error ->
+                consoleView.writeException(error);
+                statusBarView.setStatus(ActionStatusMessages.get_completion_fail);
+            }
+    );
+
+    val highlightingProvider = HighlightingProvider(
+            { data ->
+                accordion.selectedProjectView!!.project.setErrors(data);
+                problemsView.addMessages(data);
+                statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, arrayOf(getNumberOfErrorsAndWarnings(data)));
+            },
+            { error, status ->
+                unBlockContent();
+                consoleView.writeException(error);
+                statusBarView.setStatus(ActionStatusMessages.get_highlighting_fail);
+            }
+    )
+
     private val saveButton = document.getElementById("saveButton") as HTMLElement
 
     init {
@@ -152,7 +261,7 @@ class Application {
         document.onkeydown = { e ->
             var shortcut = actionManager.getShortcut("org.jetbrains.web.demo.run");
             if (shortcut.isPressed(e as KeyboardEvent)) {
-                runButton.click();
+                runButtonElement.click();
             } else {
                 shortcut = actionManager.getShortcut("org.jetbrains.web.demo.save");
                 if (shortcut.isPressed(e)) {
@@ -171,7 +280,14 @@ class Application {
     fun initButtons() {
         val converterButton = document.getElementById("java2kotlin-button") as HTMLElement
         converterButton.onclick = { converterView.open() };
-        runButton.title = runButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.run").name)
+        runButtonElement.onclick = {
+            runButton.disabled = true
+            consoleView.clear();
+            junitView.clear();
+            generatedCodeView.clear();
+            runProvider.run(configurationManager.getConfiguration(), accordion.selectedProjectView!!.project);
+        };
+        runButtonElement.title = runButtonElement.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.run").name)
 
         saveButton.title = saveButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.save").name)
         saveButton.onclick = {
@@ -184,9 +300,6 @@ class Application {
         }
     }
 }
-
-native
-val runButton: HTMLElement = noImpl
 
 native
 fun setState(hash: String, title: String)
@@ -211,3 +324,8 @@ val configurationManager: dynamic = noImpl
 
 native
 val argumentsInputElement: HTMLInputElement = noImpl
+
+native
+fun getNumberOfErrorsAndWarnings(data: dynamic): Int
+
+native fun clearState()

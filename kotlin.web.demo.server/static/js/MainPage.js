@@ -103,51 +103,6 @@ var helpModelForWords = new Kotlin.modules["kotlin.web.demo.frontend"].providers
 var helpViewForWords = new Kotlin.modules["kotlin.web.demo.frontend"].views.HelpView(helpModelForWords);
 helpViewForWords.hide();
 
-
-var runProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.RunProvider(
-    function (output, project) {
-        //TODO remove hack with array
-        if(project.confType == "js" ||
-        project.confType == "canvas")
-            output = output.array;
-        $(output).each(function (ind, data) {
-            if (data.type == "errors") {
-                project.setErrors(data.errors);
-                problemsView.addMessages();
-                editor.setHighlighting();
-            } else if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
-                generatedCodeView.setOutput(data);
-            } else {
-                if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
-                    junitView.setOutput(data);
-                } else {
-                    consoleView.setOutput(data);
-                }
-            }
-        });
-        statusBarView.setStatus(ActionStatusMessages.run_java_ok);
-    },
-    function (data, project) {
-        $(data).each(function (ind, data) {
-            if (data.type == "errors") {
-                project.setErrors(data.errors);
-                $("#result-tabs").tabs("option", "active", 0);
-                problemsView.addMessages();
-                editor.setHighlighting();
-                statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok,
-                    [getNumberOfErrorsAndWarnings(data.errors)]);
-            }
-        });
-    },
-    function () {
-        $(runButton).button("option", "disabled", false);
-    },
-    function (error) {
-        consoleView.writeException(error);
-        statusBarView.setStatus(ActionStatusMessages.run_java_fail);
-    }
-);
-
 var loginProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.LoginProvider(
     function () {
         if (accordion.selectedFileView != null) {
@@ -185,33 +140,6 @@ function getNumberOfErrorsAndWarnings(data) {
     }
     return noOfErrorsAndWarnings
 }
-
-var highlightingProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.HighlightingProvider(
-    function(data) {
-        accordion.selectedProjectView.project.setErrors(data);
-        problemsView.addMessages(data);
-        statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [getNumberOfErrorsAndWarnings(data)]);
-    },
-    function(error) {
-        unBlockContent();
-        consoleView.writeException(error);
-        statusBarView.setStatus(ActionStatusMessages.get_highlighting_fail);
-    }
-);
-
-var completionProvider = (function () {
-    var completionProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.CompletionProvider();
-    completionProvider.onSuccess = function () {
-        statusBarView.setStatus(ActionStatusMessages.get_completion_ok);
-    };
-
-    completionProvider.onFail = function (error) {
-        consoleView.writeException(error);
-        statusBarView.setStatus(ActionStatusMessages.get_completion_fail);
-    };
-
-    return completionProvider;
-})();
 
 
 configurationManager.onChange = function (configuration) {
@@ -267,75 +195,10 @@ editor.onCursorActivity = function (cursorPosition) {
 };
 
 
-var runButton = document.getElementById("runButton");
-$(runButton)
-    .button()
-    .click(function () {
-        $(runButton).button("option", "disabled", true);
-        consoleView.clear();
-        junitView.clear();
-        generatedCodeView.clear();
-        runProvider.run(configurationManager.getConfiguration(), accordion.selectedProjectView.project);
-    });
+var runButton = app.runButtonElement
 
+var projectProvider = app.projectProvider
 
-
-
-var fileProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.FileProvider(
-    function(){
-
-    },
-    function (data) {
-
-        editor.reloadFile();
-    }
-)
-
-var projectProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.ProjectProvider(
-    function () {
-        statusBarView.setStatus(ActionStatusMessages.load_project_ok)
-    },
-    function (name, projectId, fileId) {
-        accordion.addNewProject(name, projectId, fileId, null);
-    },
-    function () {
-        statusBarView.setStatus(ActionStatusMessages.load_project_fail)
-    }
-);
-
-var headersProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.HeadersProvider(
-    function (message) {
-        statusBarView.setStatus(ActionStatusMessages.load_header_fail);
-        console.log(message);
-    },
-    function () {
-        statusBarView.setStatus(ActionStatusMessages.load_headers_ok);
-    },
-    function () {
-        statusBarView.setStatus(ActionStatusMessages.load_header_ok);
-    },
-    function () {
-        statusBarView.setStatus(ActionStatusMessages.load_header_fail);
-        window.alert("Can't find project, maybe it was removed by the user.");
-        clearState();
-        accordion.loadFirstItem();
-    }
-)
-
-var isShortcutsShow = true;
-$(".toggleShortcuts").click(function () {
-    $("#help3").toggle();
-    if (isShortcutsShow) {
-        isShortcutsShow = false;
-        document.getElementById("toggleShortcutsButton").src = "/static/images/toogleShortcutsOpen.png";
-    } else {
-        isShortcutsShow = true;
-        document.getElementById("toggleShortcutsButton").src = "/static/images/toogleShortcuts.png";
-
-    }
-});
-
-$("#help3").toggle(true);
 
 function generateAjaxUrl(type, parameters) {
     var url = [location.protocol, '//', location.host, "/"].join('');
@@ -436,17 +299,6 @@ function setKotlinVersion() {
         }
     });
     document.getElementById("webdemo-kotlin-version").innerHTML = KOTLIN_VERSION;
-}
-
-function getKey() {
-    $.ajax({
-        url: generateAjaxUrl("google_key"),
-        type: "GET",
-        timeout: 1000,
-        success: function (data) {
-            console.log(data);
-        }
-    });
 }
 
 var blockTimer;

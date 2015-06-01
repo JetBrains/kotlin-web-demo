@@ -18,7 +18,6 @@ package views
 
 import addKotlinExtension
 import application.app
-import fileProvider
 import jquery.jq
 import model.File
 import model.Project
@@ -86,7 +85,7 @@ class ProjectView(
                         "Add",
                         "Untitled",
                         { name -> validateNewFileName(name) },
-                        { name -> fileProvider.addNewFile(this.project, name) }
+                        { name -> app.fileProvider.addNewFile(this.project, name) }
                 );
             };
             actionIconsElement.appendChild(addFileImg);
