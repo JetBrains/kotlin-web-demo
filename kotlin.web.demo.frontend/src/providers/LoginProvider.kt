@@ -18,9 +18,9 @@ package providers
 
 import checkDataForNull
 import generateAjaxUrl
-import jquery.jq
-import utils.*
-import kotlin.browser.document
+import utils.ActionStatusMessages
+import utils.blockContent
+import utils.unBlockContent
 import kotlin.browser.window
 
 /**

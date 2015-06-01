@@ -16,11 +16,10 @@
 
 package views
 
+import html4k.dom.append
+import html4k.js.div
 import jquery.jq
 import org.w3c.dom.HTMLDivElement
-import kotlin.browser.document
-import html4k.js.*
-import html4k.dom.*
 import org.w3c.dom.HTMLElement
 
 /**

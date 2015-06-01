@@ -17,18 +17,16 @@
 package views.dialogs
 
 import CodeMirror
+import html4k.dom.append
+import html4k.js.div
+import html4k.js.textArea
 import jquery.jq
-import jquery.ui.dialog
-import kotlin.browser.document
-import html4k.js.*
-import html4k.dom.*
 import providers.ConverterProvider
 import utils.KeyCode
 import views.button
-import views.dialogs.Dialog
-import views.dialogs.getDialogButton
 import views.find
 import views.keydown
+import kotlin.browser.document
 import kotlin.browser.window
 
 

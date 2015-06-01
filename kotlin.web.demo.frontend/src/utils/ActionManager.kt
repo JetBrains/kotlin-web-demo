@@ -16,7 +16,6 @@
 
 package utils
 
-import java.util.*
 import kotlin.browser.window
 
 public class ActionManager(

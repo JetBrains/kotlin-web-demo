@@ -18,10 +18,6 @@ package views.buttons
 
 import jquery.jq
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.events.Event
-import utils.KeyCode
-import views.dialogs.Dialog
-import views.keydown
 import kotlin.properties.ReadWriteProperty
 
 class Button(

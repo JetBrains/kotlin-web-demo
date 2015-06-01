@@ -16,11 +16,10 @@
 
 package views
 
-import kotlin.browser.document
-import html4k.*
-import html4k.js.*
-import html4k.dom.*
+import html4k.dom.append
+import html4k.js.div
 import providers.HelpProvider
+import kotlin.browser.document
 
 /**
  * Created by Semyon.Atamas on 5/18/2015.

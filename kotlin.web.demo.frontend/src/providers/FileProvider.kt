@@ -16,12 +16,14 @@
 
 package providers
 
-import model.File
-import ProjectType
 import addKotlinExtension
 import generateAjaxUrl
+import model.File
 import model.Project
-import utils.*
+import model.ProjectType
+import utils.ActionStatusMessages
+import utils.blockContent
+import utils.unBlockContent
 
 class FileProvider(
         private val onFail: (String, String) -> Unit,

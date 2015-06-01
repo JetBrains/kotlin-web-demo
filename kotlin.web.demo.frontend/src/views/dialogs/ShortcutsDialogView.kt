@@ -16,13 +16,15 @@
 
 package views.dialogs
 
-import html4k.*
-import html4k.dom.*
-import html4k.js.*
+import html4k.div
+import html4k.dom.append
+import html4k.dom.create
+import html4k.js.div
+import html4k.js.td
+import html4k.js.tr
 import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.events.KeyboardEvent
 import utils.KeyCode
 import views.keydown
 import kotlin.browser.document

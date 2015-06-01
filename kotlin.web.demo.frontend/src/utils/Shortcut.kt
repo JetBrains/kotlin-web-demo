@@ -16,7 +16,6 @@
 
 package utils
 
-import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 
 public class Shortcut(val shortcutKeyNames: Array<String>, private val isShortcutPressed: (KeyboardEvent) -> Boolean) {

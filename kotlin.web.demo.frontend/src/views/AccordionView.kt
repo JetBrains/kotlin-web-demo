@@ -18,21 +18,21 @@ package views
 
 import headersProvider
 import jquery.jq
+import model.File
+import model.Project
+import model.ProjectType
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import unbind
 import utils.getFileIdFromUrl
 import utils.getProjectIdFromUrl
+import utils.incompleteActionManager
 import utils.isUserProjectInUrl
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
 import kotlin.dom.removeClass
 import kotlin.properties.Delegates
-import ProjectType
-import model.File
-import model.Project
-import utils.incompleteActionManager
 
 class AccordionView(
         private val element: HTMLElement,

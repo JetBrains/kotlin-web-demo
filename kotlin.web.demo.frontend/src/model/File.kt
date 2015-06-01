@@ -16,15 +16,12 @@
 
 package model
 
-import model.Project
-import kotlin.browser.localStorage
-import kotlin.properties.Delegates
-import FileType
 import Error
-import utils.VarListener
-import utils.Listenable
-import ProjectType
+import FileType
 import fileProvider
+import utils.Listenable
+import utils.VarListener
+import kotlin.browser.localStorage
 
 class File(
         val project: Project,
@@ -70,8 +67,7 @@ class File(
 
     //TODO following functions from file to some other class
     fun save() {
-        //TODO replace === with == (when == will work correctly)
-        if (project.type === ProjectType.USER_PROJECT && isModifiable) {
+        if (project.type == ProjectType.USER_PROJECT && isModifiable) {
             fileProvider.saveFile(this, {
                 originalText = text
                 isModified = text != originalText
@@ -80,8 +76,7 @@ class File(
     }
 
     fun dumpToLocalStorage() {
-        //TODO replace !== with != (when != will work correctly)
-        if (project.type !== ProjectType.USER_PROJECT) {
+        if (project.type != ProjectType.USER_PROJECT) {
             //TODO don't save editor info
             val result = js("({})")
             result.name = name

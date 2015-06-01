@@ -20,9 +20,8 @@ import application.app
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
-import utils.*
-import java.util.*
 import model.Project
+import utils.*
 
 class RunProvider(
         private val onSuccess: (dynamic, Project) -> Unit,

@@ -16,13 +16,15 @@
 
 package providers
 
-import ProjectType
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
 import model.Project
+import model.ProjectType
 import statusBarView
-import utils.*
+import utils.ActionStatusMessages
+import utils.blockContent
+import utils.unBlockContent
 
 class ProjectProvider(
         private val onProjectLoaded: (dynamic) -> Unit,
@@ -30,7 +32,7 @@ class ProjectProvider(
         private val onFail: (String, String) -> Unit
 ) {
     fun loadProject(publicId: String, type: ProjectType, callback: (dynamic) -> Unit, onNotFound: () -> Unit) {
-        if (type === ProjectType.EXAMPLE) {
+        if (type == ProjectType.EXAMPLE) {
             loadExample(publicId, callback);
         } else {
             loadProject(publicId, callback, onNotFound);
@@ -38,9 +40,9 @@ class ProjectProvider(
     }
 
     fun deleteProject(id: String, type: ProjectType, callback: () -> Unit) {
-        if (type === ProjectType.USER_PROJECT) {
+        if (type == ProjectType.USER_PROJECT) {
             deleteProject(id, callback);
-        } else if (type === ProjectType.PUBLIC_LINK) {
+        } else if (type == ProjectType.PUBLIC_LINK) {
             callback();
         } else {
             throw Exception("Can't delete this project");

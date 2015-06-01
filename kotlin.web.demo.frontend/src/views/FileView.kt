@@ -16,22 +16,24 @@
 
 package views
 
-import model.File
-import ProjectType
-import html4k.js.*
-import html4k.dom.*
-import org.w3c.dom.HTMLElement
-import removeKotlinExtension
-import kotlin.dom.addClass
-import kotlin.dom.removeClass
 import FileType
 import addKotlinExtension
 import application.app
 import fileProvider
+import html4k.dom.append
+import html4k.dom.create
+import html4k.js.div
+import html4k.js.onClickFunction
+import model.File
+import model.ProjectType
+import org.w3c.dom.HTMLElement
+import removeKotlinExtension
 import utils.unEscapeString
 import views.dialogs.InputDialogView
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.dom.addClass
+import kotlin.dom.removeClass
 
 class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: File) {
     var onSelect: (() -> Unit)? = null
@@ -103,7 +105,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
             classes = setOf("icons")
         }
 
-        if (projectView.project.type === ProjectType.USER_PROJECT) {
+        if (projectView.project.type == ProjectType.USER_PROJECT) {
             if (file.isModifiable) {
                 actionIconsElement.append.div {
                     classes = setOf ("rename", "icon")

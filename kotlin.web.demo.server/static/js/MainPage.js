@@ -18,12 +18,6 @@ var sessionId = -1;
 
 var app = Kotlin.modules["kotlin.web.demo.frontend"].application.app;
 
-var ProjectType = {
-    EXAMPLE: "EXAMPLE",
-    USER_PROJECT: "USER_PROJECT",
-    PUBLIC_LINK: "PUBLIC_LINK"
-};
-
 var configurationManager = new ConfigurationComponent();
 var differenceDialog = new DifferenceDialogView();
 
@@ -369,19 +363,6 @@ window.onfocus = function(){
         }
     })
 };
-
-
-var saveButton = $("#saveButton").click(function () {
-    if (accordion.selectedProjectView.project.type == ProjectType.USER_PROJECT) {
-        accordion.selectedProjectView.project.save();
-        if (accordion.selectedFileView != null) {
-            accordion.selectedFileview.file.save();
-        }
-    } else {
-        $("#saveAsButton").click()
-    }
-});
-
 
 function openSaveProjectDialog(defaultValue, callback) {
     Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.InputDialogView.open(

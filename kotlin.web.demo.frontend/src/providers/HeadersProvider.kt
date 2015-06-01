@@ -19,8 +19,10 @@ package providers
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
-import ProjectType
-import utils.*
+import model.ProjectType
+import utils.ActionStatusMessages
+import utils.blockContent
+import utils.unBlockContent
 import kotlin.browser.localStorage
 
 class HeadersProvider(

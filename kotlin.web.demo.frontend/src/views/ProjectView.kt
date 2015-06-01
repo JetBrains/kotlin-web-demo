@@ -16,25 +16,24 @@
 
 package views
 
-import ProjectType
-import fileProvider
-import jquery.jq
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLSpanElement
-import views.dialogs.InputDialogView
-import kotlin.browser.document
-import model.File
 import addKotlinExtension
 import application.app
+import fileProvider
+import jquery.jq
+import model.File
 import model.Project
+import model.ProjectType
+import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLSpanElement
 import projectProvider
 import utils.editor
 import utils.getFileIdFromUrl
 import utils.slideDown
+import views.dialogs.InputDialogView
+import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
 import kotlin.dom.addClass
-import kotlin.dom.eventHandler
 import kotlin.dom.removeClass
 
 class ProjectView(
@@ -76,7 +75,7 @@ class ProjectView(
         actionIconsElement.className = "icons";
         headerElement.appendChild(actionIconsElement);
 
-        if (header.type === ProjectType.USER_PROJECT) {
+        if (header.type == ProjectType.USER_PROJECT) {
             var addFileImg = document.createElement("div") as HTMLDivElement;
             addFileImg.className = "new-file icon";
             addFileImg.onclick = { event ->
@@ -115,7 +114,7 @@ class ProjectView(
             actionIconsElement.appendChild(renameImg);
         }
 
-        if (header.type === ProjectType.USER_PROJECT || header.type === ProjectType.PUBLIC_LINK) {
+        if (header.type == ProjectType.USER_PROJECT || header.type == ProjectType.PUBLIC_LINK) {
             var deleteButton = document.createElement("div") as HTMLDivElement;
             deleteButton.className = "delete icon";
             deleteButton.title = "Delete this project";
@@ -128,7 +127,7 @@ class ProjectView(
             actionIconsElement.appendChild(deleteButton);
         }
 
-        if (header.type !== ProjectType.USER_PROJECT) {
+        if (header.type != ProjectType.USER_PROJECT) {
             if (localStorage.getItem(header.publicId) != null) {
                 headerElement.addClass("modified");
             }
@@ -219,7 +218,7 @@ class ProjectView(
                     }
                 },
                 onContentNotFound = {
-                    if (project.type === ProjectType.PUBLIC_LINK) {
+                    if (project.type == ProjectType.PUBLIC_LINK) {
                         window.alert("Can't find project origin, maybe it was removed by the user.");
                         project.revertible = false;
                         if (!project.contentLoaded) {

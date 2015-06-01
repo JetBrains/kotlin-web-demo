@@ -15,12 +15,10 @@
  */
 
 import jquery.JQuery
-import org.w3c.dom.Element
 import org.w3c.dom.events.Event
 import providers.FileProvider
 import providers.HeadersProvider
 import providers.ProjectProvider
-import views.FolderView
 
 /**
  * Created by Semyon.Atamas on 4/3/2015.
@@ -54,13 +52,6 @@ enum class FileType {
     KOTLIN_FILE,
     KOTLIN_TEST_FILE,
     JAVA_FILE
-}
-
-native
-enum class ProjectType {
-    EXAMPLE,
-    USER_PROJECT,
-    PUBLIC_LINK
 }
 
 native

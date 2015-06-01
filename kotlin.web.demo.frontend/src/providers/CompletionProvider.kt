@@ -18,11 +18,10 @@ package providers
 import checkDataForException
 import checkDataForNull
 import generateAjaxUrl
-import jquery.JQuery
 import model.Project
-import kotlin.browser.document
 import utils.ajax
 import utils.jquery
+import kotlin.browser.document
 
 class CompletionProvider() {
 

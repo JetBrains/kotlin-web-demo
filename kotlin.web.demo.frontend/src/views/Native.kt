@@ -15,10 +15,7 @@
  */
 
 package views
-import model.File
-import ProjectType
 import jquery.JQuery
-import model.Project
 import org.w3c.dom.events.KeyboardEvent
 
 data class ValidationResult(val valid: Boolean, val message: String = "")

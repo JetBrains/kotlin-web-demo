@@ -19,10 +19,10 @@ package views.dialogs
 import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLElement
-import kotlin.properties.ReadWriteProperty
 import org.w3c.dom.events.Event
 import utils.KeyCode
 import views.keydown
+import kotlin.properties.ReadWriteProperty
 
 /**
  * Created by Semyon.Atamas on 5/20/2015.

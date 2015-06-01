@@ -16,7 +16,6 @@
 
 package views.dialogs
 
-import html4k.js.*
 import html4k.InputType
 import html4k.dom.append
 import html4k.dom.create
@@ -24,11 +23,13 @@ import html4k.js.div
 import html4k.js.input
 import html4k.js.span
 import jquery.jq
-import jquery.ui.dialog
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event
 import utils.KeyCode
-import views.*
+import views.ValidationResult
+import views.button
+import views.keydown
+import views.trigger
 import kotlin.browser.document
 
 

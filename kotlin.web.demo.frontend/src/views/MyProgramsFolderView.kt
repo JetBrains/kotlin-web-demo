@@ -16,13 +16,13 @@
 
 package views
 
+import html4k.div
+import html4k.dom.append
+import html4k.js.div
+import html4k.js.onClickFunction
 import org.w3c.dom.HTMLDivElement
-import projectProvider
-import kotlin.browser.document
-import html4k.*
-import html4k.dom.*
-import html4k.js.*
 import org.w3c.dom.HTMLElement
+import projectProvider
 import views.dialogs.InputDialogView
 
 class MyProgramsFolderView(parentNode: HTMLElement,

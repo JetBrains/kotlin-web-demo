@@ -16,26 +16,24 @@
 
 package application
 
+import fileProvider
 import jquery.jq
+import model.ProjectType
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
 import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
+import projectProvider
 import providers.ConverterProvider
 import utils.*
 import views.AccordionView
-import views.accordion
 import views.dialogs.ConverterView
 import views.dialogs.Dialog
 import views.dialogs.ShortcutsDialogView
 import views.navBarView
 import views.tabs
 import kotlin.browser.document
-import ProjectType
-import fileProvider
-import projectProvider
 
 class Application {
     val actionManager = ActionManager(
@@ -81,7 +79,7 @@ class Application {
             },
             onSelectFile = { previousFile, currentFile ->
                 if (previousFile != null) {
-                    if (previousFile.project.type !== ProjectType.USER_PROJECT) {
+                    if (previousFile.project.type != ProjectType.USER_PROJECT) {
                         previousFile.project.save();
                     } else {
                         previousFile.save();
@@ -89,7 +87,7 @@ class Application {
                 }
 
                 var url =
-                        if (currentFile.project.type === ProjectType.EXAMPLE) {
+                        if (currentFile.project.type == ProjectType.EXAMPLE) {
                             currentFile.id;
                         } else if (currentFile.isModifiable) {
                             userProjectPrefix + accordion.selectedProjectView!!.project.publicId + "/" + currentFile.id;
@@ -146,6 +144,8 @@ class Application {
             onClose = {iframe.clear()}
     )
 
+    private val saveButton = document.getElementById("saveButton") as HTMLElement
+
     init {
         initButtons()
 
@@ -172,15 +172,21 @@ class Application {
         val converterButton = document.getElementById("java2kotlin-button") as HTMLElement
         converterButton.onclick = { converterView.open() };
         runButton.title = runButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.run").name)
+
         saveButton.title = saveButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.save").name)
+        saveButton.onclick = {
+            if (accordion.selectedProjectView!!.project.type == ProjectType.USER_PROJECT) {
+                accordion.selectedProjectView!!.project.save();
+                accordion.selectedFileView?.file?.save();
+            } else {
+                jq("#saveAsButton").click()
+            }
+        }
     }
 }
 
 native
 val runButton: HTMLElement = noImpl
-
-native
-val saveButton: HTMLElement = noImpl
 
 native
 fun setState(hash: String, title: String)

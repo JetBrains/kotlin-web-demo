@@ -16,8 +16,8 @@
 
 package utils
 
-import org.w3c.dom.Window
 import jquery.JQuery
+import org.w3c.dom.Window
 
 native("$")
 val jquery: JQuery

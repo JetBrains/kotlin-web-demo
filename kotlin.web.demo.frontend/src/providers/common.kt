@@ -16,8 +16,6 @@
 
 package providers
 
-import jquery.JQuery
-import jquery.jq
 import utils.ajax
 import utils.jquery
 

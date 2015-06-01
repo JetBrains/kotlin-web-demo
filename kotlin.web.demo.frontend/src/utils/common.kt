@@ -18,8 +18,6 @@ package utils
 
 import org.w3c.dom.HTMLIFrameElement
 import org.w3c.dom.Location
-import views.dialogs.Dialog
-import kotlin.browser.document
 
 enum class KeyCode (val code: Int){
     S(83),
