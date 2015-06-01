@@ -288,7 +288,7 @@ class ProjectView(
         return app.accordion.selectedProjectView!!.project === project;
     }
 
-    fun getFileViewByName(name: String) = fileViews.values().first {
+    fun getFileViewByName(name: String) = fileViews.values().firstOrNull {
         it.file.name == name
     }
 }
