@@ -53,6 +53,8 @@ class HeadersProvider(
                                     arrayOf<dynamic>();
                                 }
 
+                                //TODO remove user project public links
+
                                 folders.push(json(
                                         "name" to "Public links",
                                         "id" to "PublicLinks",

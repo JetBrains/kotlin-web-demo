@@ -18,6 +18,7 @@ import jquery.JQuery
 import org.w3c.dom.Element
 import org.w3c.dom.events.Event
 import providers.FileProvider
+import providers.HeadersProvider
 import providers.ProjectProvider
 import views.FolderView
 
@@ -64,6 +65,9 @@ enum class ProjectType {
 
 native
 val fileProvider: FileProvider = noImpl
+
+native
+val headersProvider: HeadersProvider = noImpl
 
 //native("ProjectData")
 //class Project(type: ProjectType, publicId: String, name: String, parent: FolderView) {

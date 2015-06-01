@@ -174,7 +174,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
     }
 
     private fun isSelected(): Boolean {
-        return accordion.getSelectedFile() == file;
+        return accordion.selectedFileView == this;
     }
 
 

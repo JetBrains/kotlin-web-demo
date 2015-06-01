@@ -22,9 +22,10 @@ import kotlin.browser.document
 import html4k.*
 import html4k.dom.*
 import html4k.js.*
+import org.w3c.dom.HTMLElement
 import views.dialogs.InputDialogView
 
-class MyProgramsFolderView(parentNode: HTMLDivElement,
+class MyProgramsFolderView(parentNode: HTMLElement,
                            content: dynamic,
                            parent: FolderView?,
                            addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) :

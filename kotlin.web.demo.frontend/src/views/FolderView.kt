@@ -21,13 +21,14 @@ import org.w3c.dom.HTMLDivElement
 import kotlin.browser.document
 import html4k.js.*
 import html4k.dom.*
+import org.w3c.dom.HTMLElement
 
 /**
  * Created by Semyon.Atamas on 4/6/2015.
  */
 
 //TODO remove addProject function
-open class FolderView(parentNode: HTMLDivElement,
+open class FolderView(parentNode: HTMLElement,
                       content: dynamic,
                       val parent: FolderView?,
                       val addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) {

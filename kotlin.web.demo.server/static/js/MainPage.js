@@ -28,7 +28,7 @@ var differenceDialog = new DifferenceDialogView();
 var incompleteActionManager = new IncompleteActionManager();
 incompleteActionManager.registerAction("save", "onHeadersLoaded",
     function () {
-        localStorage.setItem("contentToSave", JSON.stringify(accordion.getSelectedProject()));
+        localStorage.setItem("contentToSave", JSON.stringify(accordion.selectedProjectView.project));
     },
     function () {
         var content = JSON.parse(localStorage.getItem("contentToSave"));
@@ -54,7 +54,7 @@ var consoleOutputView = new ConsoleOutputView(document.getElementById(console));
 var consoleOutputElement = document.createElement("div");
 consoleOutputView.writeTo(consoleOutputElement);
 consoleOutputView.makeReference = function (fileName, lineNo) {
-    var fileView = accordion.getSelectedProjectView().getFileViewByName(fileName);
+    var fileView = accordion.selectedProjectView.getFileViewByName(fileName);
     if (fileView != null) {
         var a = document.createElement("div");
         a.className = "link";
@@ -93,7 +93,7 @@ var junitView = new JUnitView(document.getElementById("program-output"), $("#res
 var problemsView = new ProblemsView(document.getElementById("problems"), $("#result-tabs"));
 
 problemsView.setCursor = function (filename, line, ch) {
-    accordion.getSelectedProjectView().getFileViewByName(filename).fireSelectEvent();
+    accordion.selectedProjectView.getFileViewByName(filename).fireSelectEvent();
     editor.setCursor(line, ch);
     editor.focus();
 };
@@ -153,10 +153,10 @@ var runProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.RunPr
 
 var loginProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.LoginProvider(
     function () {
-        if (accordion.getSelectedFile() != null) {
-            accordion.getSelectedFile().save();
+        if (accordion.selectedFileView != null) {
+            accordion.selectedFileView.file.save();
         }
-        accordion.getSelectedProject().save();
+        accordion.selectedProjectView.project.save();
     },
     function () {
         getSessionInfo(function (data) {
@@ -191,7 +191,7 @@ function getNumberOfErrorsAndWarnings(data) {
 
 var highlightingProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.HighlightingProvider(
     function(data) {
-        accordion.getSelectedProject().setErrors(data);
+        accordion.selectedProjectView.project.setErrors(data);
         problemsView.addMessages(data);
         statusBarView.setStatus(ActionStatusMessages.get_highlighting_ok, [getNumberOfErrorsAndWarnings(data)]);
     },
@@ -218,7 +218,7 @@ var completionProvider = (function () {
 
 
 configurationManager.onChange = function (configuration) {
-    accordion.getSelectedProject().confType = Configuration.getStringFromType(configuration.type);
+    accordion.selectedProjectView.project.confType = Configuration.getStringFromType(configuration.type);
     editor.removeHighlighting();
     problemsView.clear();
     editor.updateHighlighting()
@@ -231,13 +231,12 @@ configurationManager.onFail = function (exception) {
 
 var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].views.NavBarView(document.getElementById("grid-nav"));
 
-var accordion = (function () {
-    var accordion = new AccordionView(document.getElementById("examples-list"));
-
-    accordion.onProjectSelected = function (project) {
+var accordion = new Kotlin.modules["kotlin.web.demo.frontend"].views.AccordionView(
+    document.getElementById("examples-list"),
+    function (project) {
         if (project.files.isEmpty()) {
             editor.closeFile();
-            if (accordion.getSelectedProject().publicId != getProjectIdFromUrl()) {
+            if (accordion.selectedProjectView.project.publicId != getProjectIdFromUrl()) {
                 setState(userProjectPrefix + project.publicId, project.name);
             }
             navBarView.onProjectSelected(project);
@@ -249,9 +248,8 @@ var accordion = (function () {
         $("#result-tabs").tabs("option", "active", 0);
         argumentsInputElement.value = project.args;
         configurationManager.updateConfiguration(project.confType);
-    };
-
-    accordion.onSelectFile = function (previousFile, currentFile) {
+    },
+    function (previousFile, currentFile) {
         if (previousFile != null) {
             if (previousFile.project.type != ProjectType.USER_PROJECT) {
                 previousFile.project.save();
@@ -264,9 +262,9 @@ var accordion = (function () {
         if (currentFile.project.type == ProjectType.EXAMPLE) {
             url = currentFile.id;
         } else if (currentFile.isModifiable) {
-            url = userProjectPrefix + accordion.getSelectedProject().publicId + "/" + currentFile.id;
+            url = userProjectPrefix + accordion.selectedProjectView.project.publicId + "/" + currentFile.id;
         } else {
-            url = userProjectPrefix + accordion.getSelectedProject().publicId + "/" + currentFile.name;
+            url = userProjectPrefix + accordion.selectedProjectView.project.publicId + "/" + currentFile.name;
         }
         ;
         setState(url, currentFile.project.name);
@@ -275,23 +273,8 @@ var accordion = (function () {
         editor.closeFile();
         editor.open(currentFile);
         //currentFile.compareContent();
-    };
-
-    accordion.onFail = function (exception, actionCode) {
-        consoleView.writeException(exception);
-        statusBarView.setMessage(actionCode);
-    };
-
-    accordion.onProjectDeleted = function () {
-        clearState();
-        statusBarView.setStatus(ActionStatusMessages.delete_program_ok);
-    };
-
-    accordion.onSaveProgram = function () {
-        statusBarView.setStatus(ActionStatusMessages.save_program_ok);
-    };
-
-    accordion.onModifiedSelectedFile = function (file) {
+    },
+    function (file) {
         if (file.isModified &&
             file.project.type == ProjectType.PUBLIC_LINK &&
             file.project.revertible) {
@@ -314,27 +297,24 @@ var accordion = (function () {
                 onProjectNotExist
             );
         }
-    };
-
-    accordion.onSelectedFileDeleted = function () {
-        var project = accordion.getSelectedProject();
+    },
+    function () {
+        var project = accordion.selectedProjectView.project;
         navBarView.onSelectedFileDeleted();
         setState(userProjectPrefix + project.publicId, project.name);
         editor.closeFile();
-    };
-
-    return accordion
-})();
+    }
+)
 
 window.onpopstate = function () {
     var projectId = getProjectIdFromUrl();
-    if (accordion.getProjectView(projectId) == null) {
+    if (accordion.getProjectViewById(projectId) == null) {
         accordion.loadFirstItem()
     } else {
-        if (accordion.getSelectedProject().publicId != projectId) {
+        if (accordion.selectedProjectView.project.publicId != projectId) {
             accordion.selectProject(projectId);
         }
-        accordion.getSelectedProjectView().selectFileFromUrl();
+        accordion.selectedProjectView.selectFileFromUrl();
     }
 };
 
@@ -371,7 +351,7 @@ $(runButton)
         consoleView.clear();
         junitView.clear();
         generatedCodeView.clear();
-        runProvider.run(configurationManager.getConfiguration(), accordion.getSelectedProject());
+        runProvider.run(configurationManager.getConfiguration(), accordion.selectedProjectView.project);
     });
 
 
@@ -418,19 +398,6 @@ var headersProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.H
     }
 )
 
-//$(document).keydown(function (e) {
-//    var shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.run");
-//    if (shortcut.isPressed(e)) {
-//        runButton.click();
-//    } else {
-//        shortcut = actionManager.getShortcutByName("org.jetbrains.web.demo.save");
-//        if (shortcut.isPressed(e)) {
-//            saveButton.click();
-//        }
-//    }
-//
-//});
-
 var isShortcutsShow = true;
 $(".toggleShortcuts").click(function () {
     $("#help3").toggle();
@@ -476,10 +443,10 @@ window.onfocus = function(){
 
 
 var saveButton = $("#saveButton").click(function () {
-    if (accordion.getSelectedProject().type == ProjectType.USER_PROJECT) {
-        accordion.getSelectedProject().save();
-        if (accordion.getSelectedFile() != null) {
-            accordion.getSelectedFile().save();
+    if (accordion.selectedProjectView.project.type == ProjectType.USER_PROJECT) {
+        accordion.selectedProjectView.project.save();
+        if (accordion.selectedFileView != null) {
+            accordion.selectedFileview.file.save();
         }
     } else {
         $("#saveAsButton").click()
@@ -493,7 +460,9 @@ function openSaveProjectDialog(defaultValue, callback) {
         "Project name:",
         "Save",
         defaultValue,
-        accordion.validateNewProjectName,
+        function(){
+            accordion.validateNewProjectName()
+        },
         callback
     )
 }
@@ -501,9 +470,9 @@ function openSaveProjectDialog(defaultValue, callback) {
 $("#saveAsButton").click(function () {
     if (loginView.isLoggedIn) {
         openSaveProjectDialog(
-            accordion.getSelectedProject().name,
-            projectProvider.forkProject.bind(null, accordion.getSelectedProject(), function (data) {
-                accordion.getSelectedProject().loadOriginal();
+            accordion.selectedProjectView.project.name,
+            projectProvider.forkProject.bind(null, accordion.selectedProjectView.project, function (data) {
+                accordion.selectedProjectView.project.loadOriginal();
                 accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
             })
         );
@@ -518,12 +487,12 @@ $("#saveAsButton").click(function () {
 window.onbeforeunload = function () {
     accordion.onBeforeUnload();
     incompleteActionManager.onBeforeUnload();
-    localStorage.setItem("openedItemId", accordion.getSelectedProject().publicId);
+    localStorage.setItem("openedItemId", accordion.selectedProjectView.project.publicId);
 
-    if (accordion.getSelectedFile() != null) {
-        accordion.getSelectedFile().save();
+    if (accordion.selectedFileView != null) {
+        accordion.selectedFileView.file.save();
     }
-    accordion.getSelectedProject().save();
+    accordion.selectedProjectView.project.save();
 
     localStorage.setItem("highlightOnTheFly", document.getElementById("on-the-fly-checkbox").checked);
     //return null;
@@ -535,7 +504,7 @@ $("#runMode").selectmenu({
 
 var argumentsInputElement = document.getElementById("arguments");
 argumentsInputElement.oninput = function () {
-    accordion.getSelectedProject().args = argumentsInputElement.value;
+    accordion.selectedProjectView.project.args = argumentsInputElement.value;
 };
 
 $("#on-the-fly-checkbox")

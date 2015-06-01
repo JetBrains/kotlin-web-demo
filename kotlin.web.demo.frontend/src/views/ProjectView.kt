@@ -208,11 +208,11 @@ class ProjectView(
                     if (!files.isEmpty()) {
                         selectedFileView = getFileFromUrl() ?: fileViews[files[0].id];
 
-                        if (accordion.getSelectedProject().publicId == project.publicId) {
+                        if (accordion.selectedProjectView!!.project === project) {
                             selectedFileView!!.fireSelectEvent();
                             onSelected(this);
                         }
-                    } else if (accordion.getSelectedProject().publicId == project.publicId) {
+                    } else if (accordion.selectedProjectView!!.project === project) {
                         onSelected(this);
                         editor.closeFile();
                     }
@@ -285,7 +285,7 @@ class ProjectView(
     private fun createFileView(file: File) = FileView(this, contentElement, file);
 
     private fun isSelected(): Boolean {
-        return accordion.getSelectedProject() === project;
+        return accordion.selectedProjectView!!.project === project;
     }
 
     fun getFileViewByName(name: String) = fileViews.values().first {

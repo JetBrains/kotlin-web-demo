@@ -251,7 +251,7 @@ var JUnitView = (function () {
             nodeElement.appendChild(childrenNode);
         } else {
             nodeElementHeader.ondblclick = function () {
-                accordion.getSelectedProjectView().getFileViewByName(node.sourceFileName).fireSelectEvent();
+                accordion.selectedProjectView.getFileViewByName(node.sourceFileName).fireSelectEvent();
                 editor.setCursor(node.methodPosition - 1, 0);
                 editor.focus();
             }

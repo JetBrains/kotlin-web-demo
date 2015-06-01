@@ -36,6 +36,9 @@ native
 fun JQuery.accordion(params: Json): JQuery
 
 native
+fun JQuery.accordion(command: String): JQuery
+
+native
 public fun JQuery.button(command : String) : JQuery = noImpl
 
 native
@@ -45,17 +48,7 @@ native
 val navBarView: dynamic
 
 native
-class Accordion(){
-    fun selectFile(fileView: FileView)
-    fun onModifiedSelectedFile(file: File)
-    fun getSelectedFile(): File
-    fun validateNewProjectName(newName: String): ValidationResult
-    fun selectedFileDeleted()
-    fun getSelectedProject(): Project
-}
-
-native
-val accordion: Accordion = noImpl
+val accordion: AccordionView = noImpl
 
 native
 val loginView: LoginView = noImpl
