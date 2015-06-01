@@ -16,6 +16,8 @@
 
 var sessionId = -1;
 
+var app = Kotlin.modules["kotlin.web.demo.frontend"].application.app;
+
 var ProjectType = {
     EXAMPLE: "EXAMPLE",
     USER_PROJECT: "USER_PROJECT",
@@ -231,80 +233,7 @@ configurationManager.onFail = function (exception) {
 
 var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].views.NavBarView(document.getElementById("grid-nav"));
 
-var accordion = new Kotlin.modules["kotlin.web.demo.frontend"].views.AccordionView(
-    document.getElementById("examples-list"),
-    function (project) {
-        if (project.files.isEmpty()) {
-            editor.closeFile();
-            if (accordion.selectedProjectView.project.publicId != getProjectIdFromUrl()) {
-                setState(userProjectPrefix + project.publicId, project.name);
-            }
-            navBarView.onProjectSelected(project);
-        }
-        consoleView.clear();
-        junitView.clear();
-        generatedCodeView.clear();
-        problemsView.addMessages();
-        $("#result-tabs").tabs("option", "active", 0);
-        argumentsInputElement.value = project.args;
-        configurationManager.updateConfiguration(project.confType);
-    },
-    function (previousFile, currentFile) {
-        if (previousFile != null) {
-            if (previousFile.project.type != ProjectType.USER_PROJECT) {
-                previousFile.project.save();
-            } else {
-                previousFile.save();
-            }
-        }
-
-        var url;
-        if (currentFile.project.type == ProjectType.EXAMPLE) {
-            url = currentFile.id;
-        } else if (currentFile.isModifiable) {
-            url = userProjectPrefix + accordion.selectedProjectView.project.publicId + "/" + currentFile.id;
-        } else {
-            url = userProjectPrefix + accordion.selectedProjectView.project.publicId + "/" + currentFile.name;
-        }
-        ;
-        setState(url, currentFile.project.name);
-        navBarView.onFileSelected(previousFile, currentFile);
-
-        editor.closeFile();
-        editor.open(currentFile);
-        //currentFile.compareContent();
-    },
-    function (file) {
-        if (file.isModified &&
-            file.project.type == ProjectType.PUBLIC_LINK &&
-            file.project.revertible) {
-            var onProjectExist = function () {
-                if (file.isRevertible) {
-                    fileProvider.checkFileExistence(
-                        file.id,
-                        function () {
-                            file.isRevertible = false;
-                        }
-                    )
-                }
-            };
-            var onProjectNotExist = function () {
-                file.project.revertible = false;
-            };
-            projectProvider.checkIfProjectExists(
-                file.project.publicId,
-                onProjectExist,
-                onProjectNotExist
-            );
-        }
-    },
-    function () {
-        var project = accordion.selectedProjectView.project;
-        navBarView.onSelectedFileDeleted();
-        setState(userProjectPrefix + project.publicId, project.name);
-        editor.closeFile();
-    }
-)
+var accordion = app.accordion;
 
 window.onpopstate = function () {
     var projectId = getProjectIdFromUrl();

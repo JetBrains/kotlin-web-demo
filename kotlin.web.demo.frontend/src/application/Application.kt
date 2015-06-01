@@ -16,19 +16,26 @@
 
 package application
 
+import jquery.jq
+import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
+import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import providers.ConverterProvider
-import utils.clear
-import utils.ActionManager
-import utils.KeyCode
-import utils.Shortcut
+import utils.*
+import views.AccordionView
+import views.accordion
 import views.dialogs.ConverterView
 import views.dialogs.Dialog
 import views.dialogs.ShortcutsDialogView
+import views.navBarView
+import views.tabs
 import kotlin.browser.document
+import ProjectType
+import fileProvider
+import projectProvider
 
 class Application {
     val actionManager = ActionManager(
@@ -54,6 +61,76 @@ class Application {
             )
     )
 
+    val accordion: AccordionView = AccordionView(
+            document.getElementById("examples-list") as HTMLDivElement,
+            onProjectSelected = { project ->
+                if (project.files.isEmpty()) {
+                    editor.closeFile();
+                    if (accordion.selectedProjectView!!.project.publicId != getProjectIdFromUrl()) {
+                        setState(userProjectPrefix + project.publicId, project.name);
+                    }
+                    navBarView.onProjectSelected(project);
+                }
+                consoleView.clear();
+                junitView.clear();
+                generatedCodeView.clear();
+                problemsView.addMessages();
+                jq("#result-tabs").tabs("option", "active", 0);
+                argumentsInputElement.value = project.args;
+                configurationManager.updateConfiguration(project.confType);
+            },
+            onSelectFile = { previousFile, currentFile ->
+                if (previousFile != null) {
+                    if (previousFile.project.type !== ProjectType.USER_PROJECT) {
+                        previousFile.project.save();
+                    } else {
+                        previousFile.save();
+                    }
+                }
+
+                var url =
+                        if (currentFile.project.type === ProjectType.EXAMPLE) {
+                            currentFile.id;
+                        } else if (currentFile.isModifiable) {
+                            userProjectPrefix + accordion.selectedProjectView!!.project.publicId + "/" + currentFile.id;
+                        } else {
+                            userProjectPrefix + accordion.selectedProjectView!!.project.publicId + "/" + currentFile.name;
+                        }
+                setState(url, currentFile.project.name);
+                navBarView.onFileSelected(previousFile, currentFile);
+
+                editor.closeFile();
+                editor.open(currentFile);
+            },
+            onModifiedSelectedFile = { file ->
+                if (file.isModified &&
+                        file.project.type == ProjectType.PUBLIC_LINK &&
+                        file.project.revertible) {
+                    projectProvider.checkIfProjectExists(
+                            file.project.publicId,
+                            onExists = {
+                                if (file.isRevertible) {
+                                    fileProvider.checkFileExistence(
+                                            file.id,
+                                            {
+                                                file.isRevertible = false;
+                                            }
+                                    )
+                                }
+                            },
+                            onNotExists = {
+                                file.project.revertible = false;
+                            }
+                    );
+                }
+            },
+            onSelectedFileDeleted = {
+                var project = accordion.selectedProjectView!!.project;
+                navBarView.onSelectedFileDeleted();
+                setState(userProjectPrefix + project.publicId, project.name);
+                editor.closeFile();
+            }
+    )
 
     private val converterProvider = ConverterProvider()
     private val converterView = ConverterView(converterProvider)
@@ -104,3 +181,27 @@ val runButton: HTMLElement = noImpl
 
 native
 val saveButton: HTMLElement = noImpl
+
+native
+fun setState(hash: String, title: String)
+
+native
+val userProjectPrefix: String
+
+native
+val consoleView: dynamic = noImpl
+
+native
+val junitView: dynamic = noImpl
+
+native
+val generatedCodeView: dynamic = noImpl
+
+native
+val problemsView: dynamic = noImpl
+
+native
+val configurationManager: dynamic = noImpl
+
+native
+val argumentsInputElement: HTMLInputElement = noImpl

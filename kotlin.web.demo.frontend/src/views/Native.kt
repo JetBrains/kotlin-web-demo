@@ -45,10 +45,10 @@ native
 public fun JQuery.button(mode : String, param : String, value : Any?) : JQuery = noImpl
 
 native
-val navBarView: dynamic
+public fun JQuery.tabs(mode : String, param : String, value : Any?) : JQuery = noImpl
 
 native
-val accordion: AccordionView = noImpl
+val navBarView: dynamic
 
 native
 val loginView: LoginView = noImpl

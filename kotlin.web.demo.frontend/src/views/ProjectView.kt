@@ -25,6 +25,7 @@ import views.dialogs.InputDialogView
 import kotlin.browser.document
 import model.File
 import addKotlinExtension
+import application.app
 import model.Project
 import projectProvider
 import utils.editor
@@ -105,7 +106,7 @@ class ProjectView(
                             if (project.name == newName) {
                                 ValidationResult(valid = true);
                             } else {
-                                accordion.validateNewProjectName(newName);
+                                app.accordion.validateNewProjectName(newName);
                             }
                         },
                         { newName -> projectProvider.renameProject(project, newName) }
@@ -187,7 +188,7 @@ class ProjectView(
                 },
                 onFileDeleted = { publicId ->
                     if (selectedFileView!!.file.id == publicId) {
-                        accordion.selectedFileDeleted();
+                        app.accordion.selectedFileDeleted();
                         selectedFileView = null;
                     }
                     fileViews.remove(publicId);
@@ -208,11 +209,11 @@ class ProjectView(
                     if (!files.isEmpty()) {
                         selectedFileView = getFileFromUrl() ?: fileViews[files[0].id];
 
-                        if (accordion.selectedProjectView!!.project === project) {
+                        if (app.accordion.selectedProjectView!!.project === project) {
                             selectedFileView!!.fireSelectEvent();
                             onSelected(this);
                         }
-                    } else if (accordion.selectedProjectView!!.project === project) {
+                    } else if (app.accordion.selectedProjectView!!.project === project) {
                         onSelected(this);
                         editor.closeFile();
                     }
@@ -285,7 +286,7 @@ class ProjectView(
     private fun createFileView(file: File) = FileView(this, contentElement, file);
 
     private fun isSelected(): Boolean {
-        return accordion.selectedProjectView!!.project === project;
+        return app.accordion.selectedProjectView!!.project === project;
     }
 
     fun getFileViewByName(name: String) = fileViews.values().first {

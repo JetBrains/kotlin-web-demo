@@ -26,6 +26,7 @@ import kotlin.dom.addClass
 import kotlin.dom.removeClass
 import FileType
 import addKotlinExtension
+import application.app
 import fileProvider
 import utils.unEscapeString
 import views.dialogs.InputDialogView
@@ -45,7 +46,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
 
     fun fireSelectEvent() {
         projectView.selectedFileView = this;
-        accordion.selectFile(this);
+        app.accordion.selectFile(this);
     }
 
     //TODO remove getHeaderText and updateName
@@ -72,7 +73,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                 headerElement.removeClass("modified");
             }
             if (isSelected()) {
-                accordion.onModifiedSelectedFile(file);
+                app.accordion.onModifiedSelectedFile(file);
             }
         });
 
@@ -174,7 +175,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
     }
 
     private fun isSelected(): Boolean {
-        return accordion.selectedFileView == this;
+        return app.accordion.selectedFileView == this;
     }
 
 
