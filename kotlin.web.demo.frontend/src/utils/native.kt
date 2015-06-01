@@ -32,6 +32,12 @@ native
 public fun JQuery.ajax(parameters: Json)
 
 native
+public fun JQuery.height(height: Int)
+
+native
+public fun JQuery.outerHeight(includeMargin: Boolean): Number
+
+native
 fun unEscapeString(s: String): String
 
 native

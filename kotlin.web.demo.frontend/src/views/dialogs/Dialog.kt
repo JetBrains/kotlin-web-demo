@@ -37,6 +37,7 @@ class Dialog(
         minWidth: Int = 150,
         width: Int = 300,
         height: Int? = null,
+        minHeight: Int = 150,
         buttons: Array<Button> = arrayOf<Button>(),
         onOpen: ((dynamic, dynamic) -> Unit)? = null,
         onClose: (() -> Unit)? = null,
@@ -60,6 +61,7 @@ class Dialog(
                 "minWidth" to minWidth,
                 "buttons" to buttons,
                 "height" to (height ?: "auto"),
+                "minHeight" to minHeight,
                 "resizeStop" to resizeStop
         ))
     }
@@ -70,8 +72,10 @@ class Dialog(
     var minWidth by DialogProperty(minWidth)
     var modal by DialogProperty(modal)
     var height by DialogProperty(height)
+    var minHeight by DialogProperty(minHeight)
     var width by DialogProperty(width)
     var buttons by DialogProperty(buttons)
+
 
     fun open() {
         jquery.jq(dialogElement).dialog("open");

@@ -19,7 +19,6 @@ var sessionId = -1;
 var app = Kotlin.modules["kotlin.web.demo.frontend"].application.app;
 
 var configurationManager = new ConfigurationComponent();
-var differenceDialog = new DifferenceDialogView();
 
 var incompleteActionManager = new IncompleteActionManager();
 incompleteActionManager.registerAction("save", "onHeadersLoaded",

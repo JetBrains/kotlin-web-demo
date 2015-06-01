@@ -323,7 +323,7 @@ var JUnitView = (function () {
         var a = document.createElement("a");
         a.textContent = "<click to see a difference>";
         a.onclick = function (event) {
-            differenceDialog.open(expected, actual);
+            Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.DifferenceDialog.open(expected, actual);
             event.stopPropagation();
         };
         return a;
