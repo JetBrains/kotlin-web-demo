@@ -43,7 +43,7 @@ class LoginView(val loginModel: LoginModel) {
 
             isLoggedIn = true;
             var decodedUserName = decodeURI(userName);
-            decodedUserName = decodedUserName.replace("\\+", " ");
+            decodedUserName = decodedUserName.replace("+", " ");
 
             jq("#username").text(decodedUserName);
             jq("#logout").find(".icon").addClass(type);
