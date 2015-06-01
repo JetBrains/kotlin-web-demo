@@ -19,6 +19,9 @@ package views
 import org.w3c.dom.HTMLDivElement
 import kotlin.browser.document
 import kotlin.text.js.RegExp
+import html4k.*
+import html4k.js.*
+import html4k.dom.*
 
 class ConsoleView(
         private val element: HTMLDivElement,
@@ -29,7 +32,7 @@ class ConsoleView(
     }
 
     fun writeException(data: dynamic) {
-        prepareTab();
+        val outputView = prepareTab();
         if (data != undefined && data[0] != undefined && data[0].exception != undefined) {
             var output = arrayListOf<dynamic>();
             for (exception in data) {
@@ -46,40 +49,40 @@ class ConsoleView(
         } else if (data == undefined || data == null) {
         } else {
             if (data == "") {
-                consoleOutputView.err.println("Unknown exception.");
+                outputView.printErrorLine("Unknown exception.");
             } else if (data == "timeout : timeout") {
-                consoleOutputView.err.println("Server didn't respond for 10 seconds.");
+                outputView.printErrorLine("Server didn't respond for 10 seconds.");
             } else {
-                consoleOutputView.err.println(data)
+                outputView.printErrorLine(data)
             }
         }
     }
 
     fun setOutput(data: dynamic) {
-        prepareTab()
+        val outputView = prepareTab()
         if (data.type == "jsException") {
             if (data.exception.stack != null && data.exception.stack != "") {
-                consoleOutputView.err.println(data.exception.stack);
+                outputView.printErrorLine(data.exception.stack);
             } else {
-                consoleOutputView.err.println("Unknown error");
+                outputView.printErrorLine("Unknown error");
             }
         } else if (data.type == "out") {
-            consoleOutputView.printMarkedTextToConsole(data.text);
+            outputView.printMarkedText(data.text);
             if (data.exception != null) {
-                consoleOutputView.printException(data.exception);
+                outputView.printException(data.exception);
             }
         } else if (data.type == "jsOut") {
-            consoleOutputView.out.print(data.text);
+            outputView.print(data.text);
         } else if (data.type == "err") {
             var message = data.text;
             if (message == "") {
-                consoleOutputView.err.println("Unknown exception.");
+                outputView.printErrorLine("Unknown exception.");
             } else if (message == "timeout : timeout") {
-                consoleOutputView.err.println("Server didn't respond for 10 seconds.");
+                outputView.printErrorLine("Server didn't respond for 10 seconds.");
             } else {
-                consoleOutputView.err.println(message);
+                outputView.printErrorLine(message);
                 if (data.stackTrace != null) {
-                    consoleOutputView.out.println(data.stackTrace);
+                    outputView.println(data.stackTrace);
                 }
             }
         } else {
@@ -87,12 +90,11 @@ class ConsoleView(
         }
     }
 
-    private fun prepareTab() {
+    private fun prepareTab(): OutputView {
         element.innerHTML = "";
-        var consoleOutputElement = document.createElement("div");
-        element.appendChild(consoleOutputElement);
-        consoleOutputView.writeTo(consoleOutputElement);
-        consoleOutputElement.className = "consoleOutput";
         tabs?.tabs("option", "active", 1)
+        return OutputView(element.append.div {
+            classes = setOf("consoleOutput")
+        })
     }
 }

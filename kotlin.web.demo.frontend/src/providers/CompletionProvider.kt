@@ -24,7 +24,7 @@ import utils.jquery
 import kotlin.browser.document
 
 class CompletionProvider(
-        var onSuccess: () -> Unit,
+        var onSuccess: (dynamic) -> Unit,
         var onFail: (dynamic) -> Unit)
 {
     private var isLoadingCompletion = false;

@@ -45,36 +45,6 @@ var editor = new KotlinEditor();
  */
 var statusBarView = new StatusBarView(document.getElementById("statusBar"));
 
-var consoleOutputView = new ConsoleOutputView(document.getElementById(console));
-var consoleOutputElement = document.createElement("div");
-consoleOutputView.writeTo(consoleOutputElement);
-consoleOutputView.makeReference = function (fileName, lineNo) {
-    var fileView = accordion.selectedProjectView.getFileViewByName(fileName);
-    if (fileView != null) {
-        var a = document.createElement("div");
-        a.className = "link";
-        if (fileName != null) {
-            a.innerHTML = fileName + ':' + lineNo;
-        } else {
-            a.innerHTML = "Unknown Source";
-        }
-        a.onclick = function () {
-            fileView.fireSelectEvent();
-            editor.setCursor(lineNo - 1, 0);
-            editor.focus();
-        };
-        return a;
-    } else {
-        var span = document.createElement("span");
-        if (fileName != null) {
-            span.innerHTML = fileName + ':' + lineNo;
-        } else {
-            span.innerHTML = "Unknown Source";
-        }
-        return span;
-    }
-};
-
 $(document).on("click", ".ui-widget-overlay", (function(){
     $(".ui-dialog-titlebar-close").trigger('click');
 }));

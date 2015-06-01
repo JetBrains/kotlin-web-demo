@@ -59,7 +59,7 @@ object ShortcutsDialogView {
         dialog.open()
     }
 
-    fun addShortcut(keyNames: Array<String>, description: String) {
+    fun addShortcut(keyNames: Array<out String>, description: String) {
         val shortcutElement = shortcutsHelpElement.append.tr {}
         shortcutElement.appendChild(createKeyCombinationElement(keyNames))
         shortcutElement.append.td {
@@ -70,7 +70,7 @@ object ShortcutsDialogView {
         }
     }
 
-    private fun createKeyCombinationElement(keyNames: Array<String>): HTMLElement{
+    private fun createKeyCombinationElement(keyNames: Array<out String>): HTMLElement{
         val wrapper = document.create.td {
             classes = setOf("shortcutKeyCombinationWrapper")
         }

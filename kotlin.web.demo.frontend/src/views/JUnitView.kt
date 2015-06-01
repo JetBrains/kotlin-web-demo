@@ -72,9 +72,9 @@ class JUnitView(
         statisticText = document.createElement("span");
         statistic!!.appendChild(statisticText);
 
-        var consoleElement = document.createElement("div");
+        var consoleElement = document.createElement("div") as HTMLDivElement;
         consoleElement.className = "consoleOutput";
-        consoleOutputView.writeTo(consoleElement);
+        val outputView = OutputView(consoleElement);
 
         var wrapper = document.createElement("div");
         wrapper.id = "test-wrapper";
@@ -85,7 +85,7 @@ class JUnitView(
         if (data.type == "out") {
             if (data.testResults.length != 0) {
                 createStatistics(data.testResults);
-                createTestTree(data.testResults);
+                createTestTree(data.testResults, outputView);
             } else {
                 consoleView.writeException("No test method found");
             }
@@ -110,7 +110,7 @@ class JUnitView(
         return firstPackage.slice(0..j - 1);
     }
 
-    fun createTestTree(data: Array<dynamic>) {
+    fun createTestTree(data: Array<dynamic>, outputView: OutputView) {
         var testsData = hashMapOf<String, dynamic>();
         for (testResult in data) {
             testsData[testResult.className + '.' + testResult.methodName] = json(
@@ -199,31 +199,31 @@ class JUnitView(
         tree.id = "test-tree";
         displayTreeNode(rootNode, tree);
 
-        fun printTestOutput(element: HTMLElement) {
+        fun printTestOutput(element: HTMLElement, outputView: OutputView) {
             if (jq(element).hasClass("at-no-children")) {
                 var testData = testsData[element.id];
-                consoleOutputView.printMarkedTextToConsole(testsData[element.id].output);
+                outputView.printMarkedText(testsData[element.id].output);
                 if (testData.exception != null) {
                     try {
                         var parsedMessage = parseAssertionErrorMessage(unEscapeString(testData.exception.message));
-                        consoleOutputView.err.println(testData.exception.fullName + ":" + parsedMessage.assertionMessage);
-                        consoleOutputView.err.println("");
-                        consoleOutputView.out.print("Expected: ");
-                        consoleOutputView.err.println(parsedMessage.expected);
-                        consoleOutputView.out.print("Actual: ");
-                        consoleOutputView.err.println(parsedMessage.actual);
-                        consoleOutputView.err.print("    ");
-                        consoleOutputView.addElement(makeDifferenceReference(parsedMessage.expected, parsedMessage.actual));
-                        consoleOutputView.out.println("");
-                        consoleOutputView.out.println("");
-                        consoleOutputView.printExceptionBody(testData.exception);
+                        outputView.printErrorLine(testData.exception.fullName + ":" + parsedMessage.assertionMessage);
+                        outputView.printErrorLine("");
+                        outputView.print("Expected: ");
+                        outputView.printErrorLine(parsedMessage.expected);
+                        outputView.print("Actual: ");
+                        outputView.printErrorLine(parsedMessage.actual);
+                        outputView.printError("    ");
+                        outputView.element.appendChild(makeDifferenceReference(parsedMessage.expected, parsedMessage.actual));
+                        outputView.println("");
+                        outputView.println("");
+                        outputView.printExceptionBody(testData.exception);
                     } catch (exception: Throwable) {
-                        consoleOutputView.printException(testData.exception);
+                        outputView.printException(testData.exception);
                     }
                 }
             } else {
                 jq(element).children("ul").children("li").toArray().forEach { elem ->
-                    printTestOutput(elem)
+                    printTestOutput(elem, outputView)
                 }
             }
         }
@@ -232,8 +232,8 @@ class JUnitView(
                 "toggleSelector" to ".tree-node-header .toggle-arrow",
                 "treeItemLabelSelector" to ".tree-node-header .text",
                 "onFocus" to { element: Array<dynamic> ->
-                    consoleOutputView.clear();
-                    printTestOutput(element[0]);
+                    outputView.element.innerHTML = "";
+                    printTestOutput(element[0], outputView);
                 }
         ));
         jq(tree).find("li[aria-expanded]").attr("aria-expanded", "true");
