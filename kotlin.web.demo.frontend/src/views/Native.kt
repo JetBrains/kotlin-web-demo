@@ -45,6 +45,9 @@ native
 public fun JQuery.tabs(mode : String, param : String, value : Any?) : JQuery = noImpl
 
 native
+public fun JQuery.a11yTree(parameters: Json) : JQuery = noImpl
+
+native
 val navBarView: dynamic
 
 native

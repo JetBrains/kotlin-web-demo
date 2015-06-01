@@ -17,6 +17,7 @@
 package utils
 
 import jquery.JQuery
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.Window
 
 native("$")
@@ -36,6 +37,9 @@ public fun JQuery.height(height: Int)
 
 native
 public fun JQuery.outerHeight(includeMargin: Boolean): Number
+
+native
+public fun JQuery.toArray(): Array<HTMLElement>
 
 native
 fun unEscapeString(s: String): String

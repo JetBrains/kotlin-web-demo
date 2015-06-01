@@ -27,6 +27,12 @@ enum class KeyCode (val code: Int){
     ESCAPE(27)
 }
 
+fun parseBoolean(value: String) = when (value) {
+    "true" -> true
+    "false" -> false
+    else -> throw IllegalArgumentException("Value don't represent boolean")
+}
+
 native
 val Location.protocol: String
 
