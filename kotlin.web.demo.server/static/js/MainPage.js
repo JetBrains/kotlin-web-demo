@@ -84,7 +84,7 @@ var generatedCodeView = new Kotlin.modules["kotlin.web.demo.frontend"].views.
 $("#result-tabs").tabs();
 
 var consoleView = new Kotlin.modules["kotlin.web.demo.frontend"].views.ConsoleView(document.getElementById("program-output"), $("#result-tabs"));
-var junitView = new JUnitView(document.getElementById("program-output"), $("#result-tabs"));
+var junitView = new Kotlin.modules["kotlin.web.demo.frontend"].views.JUnitView(document.getElementById("program-output"), $("#result-tabs"));
 var problemsView = new Kotlin.modules["kotlin.web.demo.frontend"].views.ProblemsView(
     document.getElementById("problems"),
     $("#result-tabs"),

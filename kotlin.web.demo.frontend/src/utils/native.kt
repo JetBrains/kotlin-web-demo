@@ -36,6 +36,9 @@ native
 public fun JQuery.height(height: Int)
 
 native
+public fun JQuery.children(selector: String): JQuery
+
+native
 public fun JQuery.outerHeight(includeMargin: Boolean): Number
 
 native
