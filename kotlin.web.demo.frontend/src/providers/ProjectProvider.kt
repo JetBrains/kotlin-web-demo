@@ -18,7 +18,6 @@ package providers
 
 import model.Project
 import model.ProjectType
-import utils.ActionStatusMessages
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
@@ -84,10 +83,10 @@ class ProjectProvider(
                                 onProjectLoaded(data);
                                 callback(data);
                             } else {
-                                onFail(data, ActionStatusMessages.load_example_fail);
+                                onFail(data, ActionStatusMessage.load_project_fail);
                             }
                         } else {
-                            onFail("Incorrect data format.", ActionStatusMessages.load_example_fail);
+                            onFail("Incorrect data format.", ActionStatusMessage.load_project_fail);
                         }
                     } catch (e: Throwable) {
                         console.log(e)
@@ -99,7 +98,7 @@ class ProjectProvider(
                 data = json("publicId" to publicId),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_example_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_project_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -146,10 +145,10 @@ class ProjectProvider(
                                 onProjectLoaded(data);
                                 callback(data)
                             } else {
-                                onFail(data, ActionStatusMessages.load_program_fail);
+                                onFail(data, ActionStatusMessage.load_project_fail);
                             }
                         } else {
-                            onFail("Incorrect data format.", ActionStatusMessages.load_program_fail);
+                            onFail("Incorrect data format.", ActionStatusMessage.load_project_fail);
                         }
                     } catch (e: Throwable) {
                         console.log(e)
@@ -164,7 +163,7 @@ class ProjectProvider(
                 ),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.load_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_project_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -190,7 +189,7 @@ class ProjectProvider(
                 data = json("content" to JSON.stringify(content), "args" to name),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -214,7 +213,7 @@ class ProjectProvider(
                 data = json("publicId" to publicId),
                 dataType = DataType.JSON,
                 error = { jqXHR, textStatus, errorThrown ->
-                    onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                    onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
                 }
         )
     }
@@ -263,7 +262,7 @@ class ProjectProvider(
                 dataType = DataType.TEXT,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
                     } catch (e: Throwable) {
                         console.log(e);
                     }

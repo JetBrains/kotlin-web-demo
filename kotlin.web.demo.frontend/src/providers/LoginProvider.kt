@@ -16,9 +16,9 @@
 
 package providers
 
-import utils.ActionStatusMessages
 import utils.blockContent
 import utils.unBlockContent
+import views.ActionStatusMessage
 import kotlin.browser.window
 
 /**
@@ -29,7 +29,7 @@ class LoginProvider(
         private val beforeLogout: () -> Unit,
         private val onLogout: (dynamic) -> Unit,
         private val onLogin: (dynamic) -> Unit,
-        private val onFail: (String, String) -> Unit
+        private val onFail: (String, ActionStatusMessage) -> Unit
 ) {
 
     fun login(type: String) {
@@ -53,7 +53,7 @@ class LoginProvider(
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.login_fail);
                     } catch (e: Throwable) {
                         console.log(e);
                     }
@@ -71,7 +71,7 @@ class LoginProvider(
                         if (checkDataForNull(data)) {
                             onLogin(data);
                         } else {
-                            onFail("Username is null.", ActionStatusMessages.login_fail);
+                            onFail("Username is null.", ActionStatusMessage.login_fail);
                         }
                     } catch (e: Throwable) {
                         console.log(e);
@@ -82,7 +82,7 @@ class LoginProvider(
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessages.login_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.login_fail);
                     } catch (e: Throwable) {
                         console.log(e)
                     }

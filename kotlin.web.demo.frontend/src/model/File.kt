@@ -16,8 +16,8 @@
 
 package model
 
-import Error
 import application.Application
+import utils.Error
 import utils.Listenable
 import utils.VarListener
 import kotlin.browser.localStorage

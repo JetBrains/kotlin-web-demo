@@ -128,20 +128,23 @@ val Location.protocol: String
 native
 val Location.host: String
 
-native
-fun blockContent()
+private var blockTimer: Int = 0;
+fun blockContent() {
+    window.clearTimeout(blockTimer);
+    var overlay = document.getElementById("global-overlay") as HTMLElement;
+    overlay.style.display = "block";
+    overlay.style.visibility = "hidden";
+    overlay.focus();
+    blockTimer = window.setTimeout({
+        overlay.style.visibility = "initial";
+        Unit
+    }, 250);
+}
 
-native
-fun unBlockContent()
-
-native
-val ActionStatusMessages: dynamic = noImpl
-
-native
-val Configuration: dynamic
-
-native
-val ConfigurationType: dynamic
+fun unBlockContent() {
+    window.clearTimeout(blockTimer);
+    (document.getElementById("global-overlay") as HTMLElement).style.display = "none";
+}
 
 native
 val Object: dynamic
@@ -149,6 +152,3 @@ val Object: dynamic
 fun HTMLIFrameElement.clear(){
     this.contentWindow!!.location.reload();
 }
-
-native
-fun safe_tags_replace(string: String): String

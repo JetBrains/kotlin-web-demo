@@ -16,8 +16,8 @@
 
 package model
 
-import Error
-import projectProvider
+import application.Application
+import utils.Error
 import utils.Listenable
 import utils.VarListener
 import utils.addKotlinExtension
@@ -48,7 +48,7 @@ class Project(
 
     fun save() {
         when (type) {
-            ProjectType.USER_PROJECT -> projectProvider.saveProject(this, publicId, { onModified() })
+            ProjectType.USER_PROJECT -> Application.projectProvider.saveProject(this, publicId, { onModified() })
             else -> {
                 if (isModified()) {
                     var fileIDs = arrayListOf<String>();
@@ -93,7 +93,7 @@ class Project(
             content.files = files
             contentLoaded(content)
         } else {
-            projectProvider.loadProject(
+            Application.projectProvider.loadProject(
                     publicId,
                     type,
                     { content ->

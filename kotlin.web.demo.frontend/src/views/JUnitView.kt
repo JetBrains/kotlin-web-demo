@@ -17,7 +17,6 @@
 package views
 
 import application.Application
-import application.consoleView
 import jquery.JQuery
 import jquery.jq
 import org.w3c.dom.HTMLDivElement
@@ -84,7 +83,7 @@ class JUnitView(
                 createStatistics(data.testResults);
                 createTestTree(data.testResults, outputView);
             } else {
-                consoleView.writeException("No test method found");
+                Application.consoleView.writeException("No test method found");
             }
         } else {
             throw Exception("Unknown data type");

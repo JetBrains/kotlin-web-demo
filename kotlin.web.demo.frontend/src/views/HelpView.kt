@@ -48,6 +48,7 @@ class HelpView(private val model: HelpProvider) {
 
     var element = document.body!!.append.div {
         classes = setOf("words-help")
+        style = "display: none"
     }
 
     var textElement = element.append.div {

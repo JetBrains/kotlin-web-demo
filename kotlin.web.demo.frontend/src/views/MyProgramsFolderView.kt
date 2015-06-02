@@ -16,13 +16,13 @@
 
 package views
 
+import application.Application
 import html4k.div
 import html4k.dom.append
 import html4k.js.div
 import html4k.js.onClickFunction
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import projectProvider
 import views.dialogs.InputDialogView
 
 class MyProgramsFolderView(parentNode: HTMLElement,
@@ -33,11 +33,11 @@ class MyProgramsFolderView(parentNode: HTMLElement,
 
 
     init {
-        if (!loginView.isLoggedIn) {
+        if (!Application.loginView.isLoggedIn) {
             folderNameElement.style.display = "inline-block";
             headerElement.style.color = "rgba(0,0,0,0.5)";
             headerElement.onclick = {
-                loginView.openLoginDialog();
+                Application.loginView.openLoginDialog();
             };
             headerElement.append.div{
                 + "(please log in)"
@@ -56,7 +56,7 @@ class MyProgramsFolderView(parentNode: HTMLElement,
                                 okButtonCaption = "Add",
                                 defaultValue = "Untitled",
                                 validate = { name -> validateNewProjectName(name) },
-                                callback = { name -> projectProvider.addNewProject(name)}
+                                callback = { name -> Application.projectProvider.addNewProject(name)}
                         );
                     }
                 }

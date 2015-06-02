@@ -19,6 +19,9 @@ package providers
 import application.Application
 import model.Project
 import utils.*
+import views.Configuration
+import views.ConfigurationType
+import views.ConfigurationTypeRunner
 
 class RunProvider(
         private val onSuccess: (List<dynamic>, Project) -> Unit,
@@ -26,8 +29,8 @@ class RunProvider(
         private val onComplete: () -> Unit,
         private val onFail: (String) -> Unit
 ) {
-    fun run(configuration: dynamic, project: Project) {
-        if (configuration.type.runner == ConfigurationType.runner.JAVA) {
+    fun run(configuration: Configuration, project: Project) {
+        if (configuration.type.runner == ConfigurationTypeRunner.JAVA) {
             runJava(project);
         } else {
             loadJsFromServer(project);
@@ -107,11 +110,11 @@ class RunProvider(
                                             //Placed here because of firefox bug
                                             //(error modifying context of canvas in invisible iframe)
                                             if (runConfiguration ==
-                                                    Configuration.getStringFromType(Configuration.type.CANVAS)) {
+                                                    ConfigurationType.CANVAS.name().toLowerCase()) {
                                                 Application.iframeDialog.open();
                                             }
                                             var out: String = Application.iframe.contentWindow!!.eval(element.text);
-                                            output.add(json("text" to safe_tags_replace(out), "type" to "jsOut"));
+                                            output.add(json("text" to unEscapeString(out), "type" to "jsOut"));
                                         } catch (e: Throwable) {
                                             output.add(json("type" to "jsException", "exception" to e));
                                         } finally {

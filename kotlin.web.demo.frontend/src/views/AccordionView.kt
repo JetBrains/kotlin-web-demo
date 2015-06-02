@@ -89,7 +89,7 @@ class AccordionView(
             }
             IncompleteActionManager.checkTimepoint("headersLoaded");
             jq(element).accordion("refresh");
-            if (!loginView.isLoggedIn) {
+            if (!Application.loginView.isLoggedIn) {
                 jq(myProgramsFolder.headerElement).unbind("click");
             }
             loadFirstItem();

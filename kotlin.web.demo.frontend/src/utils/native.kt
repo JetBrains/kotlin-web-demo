@@ -17,6 +17,7 @@
 package utils
 
 import jquery.JQuery
+import org.w3c.dom.Document
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.Window
 import org.w3c.dom.events.Event
@@ -79,3 +80,36 @@ fun JQuery.resizable(parameters: Json)
 
 native
 fun JQuery.resizable(mode : String, param : String, value : Any?)
+
+native
+fun JQuery.selectmenu(parameters: Json)
+
+native
+fun JQuery.selectmenu(command: String)
+
+native
+fun JQuery.tabs()
+
+native("val")
+fun JQuery.value(): String
+
+native("val")
+fun JQuery.value(s: String)
+
+native("$")
+native
+fun jq(document: Document): JQuery
+
+native
+fun JQuery.on(action: String, selector: String, callback: (event: Event) -> Unit)
+
+native
+fun decodeURI(uri:String): String
+
+native
+interface Error {
+    val className: String
+    val interval: dynamic
+    val message: String
+    val severity: String
+}

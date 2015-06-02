@@ -16,17 +16,69 @@
 
 package application
 
+import jquery.jq
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
+import utils.IncompleteActionManager
+import utils.parseBoolean
+import utils.selectmenu
+import views.dialogs.InputDialogView
+import views.dialogs.ShortcutsDialogView
 import kotlin.browser.document
+import kotlin.browser.localStorage
 
 
 private object Elements{
-    val argumentsInputElement = document.getElementById("arguments") as HTMLInputElement;
+    val argumentsInputElement = document.getElementById("arguments") as HTMLInputElement
+    val shortcutsButton = document.getElementById("shortcuts-button") as HTMLElement
+    val onTheFlyCheckbox = document.getElementById("on-the-fly-checkbox") as HTMLInputElement
+    val saveAsButton = document.getElementById("saveAsButton") as HTMLElement
+    val runMode = document.getElementById("runMode") as HTMLElement
 
-    init {
+    fun init() {
         argumentsInputElement.oninput = {
             Application.accordion.selectedProjectView!!.project.args = argumentsInputElement.value;
             Unit
         };
+
+        shortcutsButton.onclick = {
+            ShortcutsDialogView.open()
+        };
+
+        onTheFlyCheckbox.checked = parseBoolean(localStorage.getItem("highlightOnTheFly") ?: "false")
+        onTheFlyCheckbox.onchange = {
+            Application.editor.highlightOnTheFly = onTheFlyCheckbox.checked;
+            Application.editor.updateHighlighting();
+        }
+
+        jq(runMode).selectmenu(json(
+            "icons" to json( "button" to "selectmenu-arrow-icon" )
+        ));
+
+
+        saveAsButton.onclick = {
+            if (Application.loginView.isLoggedIn) {
+                InputDialogView.open(
+                        "Save project",
+                        "Project name:",
+                        "Save",
+                        Application.accordion.selectedProjectView!!.project.name,
+                        { name ->
+                            Application.accordion.validateNewProjectName(name)
+                        },
+                        { name ->
+                            Application.projectProvider.forkProject(Application.accordion.selectedProjectView!!.project, { data ->
+                                Application.accordion.selectedProjectView!!.project.loadOriginal();
+                                Application.accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
+                            }, name)
+                        }
+                )
+            } else {
+                IncompleteActionManager.incomplete("save");
+                Application.loginView.openLoginDialog({
+                    IncompleteActionManager.cancel("save");
+                });
+            }
+        }
     }
 }

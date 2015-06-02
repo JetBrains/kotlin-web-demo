@@ -16,12 +16,11 @@
 
 package views
 
-import LoginModel
-import decodeURI
 import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event
+import providers.LoginProvider
 import utils.*
 import kotlin.browser.document
 
@@ -29,7 +28,7 @@ import kotlin.browser.document
  * Created by Semyon.Atamas on 5/18/2015.
  */
 
-class LoginView(val loginModel: LoginModel) {
+class LoginView(val loginModel: LoginProvider) {
     var isLoggedIn = false;
 
     fun setUserName(userName: String, type: String) {

@@ -23,7 +23,6 @@ import model.Project
 import model.ProjectType
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLSpanElement
-import projectProvider
 import utils.addKotlinExtension
 import utils.getFileIdFromUrl
 import utils.slideDown
@@ -106,7 +105,7 @@ class ProjectView(
                                 Application.accordion.validateNewProjectName(newName);
                             }
                         },
-                        { newName -> projectProvider.renameProject(project, newName) }
+                        { newName -> Application.projectProvider.renameProject(project, newName) }
                 );
             };
             actionIconsElement.appendChild(renameImg);
@@ -118,7 +117,7 @@ class ProjectView(
             deleteButton.title = "Delete this project";
             deleteButton.onclick = { event ->
                 if (window.confirm("Delete project " + header.name + "?")) {
-                    projectProvider.deleteProject(header.publicId, header.type, {delete()});
+                    Application.projectProvider.deleteProject(header.publicId, header.type, {delete()});
                 }
                 event.stopPropagation();
             };
@@ -239,7 +238,7 @@ class ProjectView(
             nameSpan.innerHTML = newName;
             nameSpan.title = nameSpan.innerHTML;
             if (isSelected()) {
-                navBarView.onSelectedProjectRenamed(newName);
+                Application.navBarView.onSelectedProjectRenamed(newName);
             }
         };
         return project

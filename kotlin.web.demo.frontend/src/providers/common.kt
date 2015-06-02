@@ -32,7 +32,7 @@ public fun ajax(
         type: RequestType,
         data: Json? = null,
         timeout: Int,
-        error: (dynamic, String, String) -> Unit,
+        error: (dynamic, String, String) -> Unit = {jqXHR, textStatus, errorThrown ->},
         complete: () -> Unit = {},
         statusCode: Json? = null
 ){

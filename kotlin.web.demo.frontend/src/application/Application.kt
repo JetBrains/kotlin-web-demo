@@ -140,7 +140,7 @@ object Application {
                     } else if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
                         generatedCodeView.setOutput(data);
                     } else {
-                        if (configurationManager.getConfiguration().type == Configuration.type.JUNIT) {
+                        if (configurationManager.getConfiguration().type == ConfigurationType.JUNIT) {
                             junitView.setOutput(data);
                         } else {
                             consoleView.setOutput(data);
@@ -241,7 +241,7 @@ object Application {
     val highlightingProvider = HighlightingProvider(
             { data ->
                 accordion.selectedProjectView!!.project.setErrors(data);
-                problemsView.addMessages(data);
+                problemsView.addMessages();
                 statusBarView.setStatus(ActionStatusMessage.get_highlighting_ok,
                         getNumberOfErrorsAndWarnings(data).toString());
             },
@@ -276,8 +276,125 @@ object Application {
             }
     );
 
-    init {
+    val loginProvider: LoginProvider = LoginProvider(
+            {
+                if (accordion.selectedFileView != null) {
+                    accordion.selectedFileView!!.file.save();
+                }
+                accordion.selectedProjectView!!.project.save();
+            },
+            {
+                getSessionInfo({ data ->
+                    sessionId = data.id;
+                    loginView.logout();
+                    statusBarView.setStatus(ActionStatusMessage.logout_ok);
+                    accordion.loadAllContent();
+                });
+            },
+            { data ->
+                if (data.isLoggedIn) {
+                    loginView.setUserName(data.userName, data.type);
+                    statusBarView.setStatus(ActionStatusMessage.login_ok);
+                }
+                accordion.loadAllContent();
+            },
+            { exception, actionCode ->
+                consoleView.writeException(exception);
+                statusBarView.setStatus(actionCode);
+            }
+    );
+    var loginView = LoginView(loginProvider);
+
+    var navBarView = NavBarView(document.getElementById("grid-nav") as HTMLDivElement);
+
+
+    private fun setKotlinVersion() {
+        ajax(
+                url = "http://kotlinlang.org/latest_release_version.txt",
+                type = RequestType.GET,
+                dataType = DataType.TEXT,
+                timeout = 1000,
+                success = { kotlinVersion ->
+                    (document.getElementById("kotlinlang-kotlin-version") as HTMLElement).innerHTML = "(" + kotlinVersion + ")";
+                }
+        );
+        ajax(
+                url = "build.txt",
+                type = RequestType.GET,
+                dataType = DataType.TEXT,
+                timeout = 1000,
+                success = { kotlinVersion ->
+                    (document.getElementById("webdemo-kotlin-version") as HTMLElement).innerHTML = kotlinVersion;
+                }
+        );
+    }
+
+    fun getSessionInfo(callback: (dynamic) -> Unit) {
+        ajax(
+                url = "kotlinServer?sessionId=" + sessionId + "&type=getSessionInfo",
+                type = RequestType.GET,
+                dataType = DataType.JSON,
+                timeout = 10000,
+                success = callback
+        );
+    }
+
+
+    val generatedCodeView = GeneratedCodeView(document.getElementById("generated-code") as HTMLElement);
+
+
+    val consoleView = ConsoleView(document.getElementById("program-output") as HTMLDivElement, jq("#result-tabs"));
+    val junitView = JUnitView(document.getElementById("program-output") as HTMLDivElement, jq("#result-tabs"));
+    val problemsView = ProblemsView(
+            document.getElementById("problems") as HTMLDivElement,
+            jq("#result-tabs"),
+            { filename, line, ch ->
+                accordion.selectedProjectView!!.getFileViewByName(filename)!!.fireSelectEvent();
+                editor.setCursor(line, ch);
+                editor.focus();
+            }
+    );
+
+    val configurationManager = ConfigurationManager({ configuration ->
+        accordion.selectedProjectView!!.project.confType = configuration.type.name().toLowerCase();
+        editor.removeHighlighting();
+        problemsView.clear();
+        editor.updateHighlighting()
+    });
+
+    private fun getNumberOfErrorsAndWarnings(data: dynamic): Int {
+        var noOfErrorsAndWarnings = 0;
+        for (filename in Object.keys(data)) {
+            noOfErrorsAndWarnings += (data[filename].length as Int)
+        }
+        return noOfErrorsAndWarnings
+    }
+
+    fun init() {
+        jq("#result-tabs").tabs();
         initButtons()
+        setKotlinVersion();
+        window.onfocus = {
+            getSessionInfo({ data ->
+                if (sessionId != data.id || data.isLoggedIn != loginView.isLoggedIn) {
+                    window.location.reload();
+                }
+            })
+        };
+
+        window.onbeforeunload = {
+            accordion.onBeforeUnload();
+            IncompleteActionManager.onBeforeUnload();
+            localStorage.setItem("openedItemId", accordion.selectedProjectView!!.project.publicId);
+
+            if (accordion.selectedFileView != null) {
+                accordion.selectedFileView!!.file.save();
+            }
+            accordion.selectedProjectView!!.project.save();
+
+            localStorage.setItem("highlightOnTheFly", Elements.onTheFlyCheckbox.checked.toString());
+            null
+        };
 
         document.onkeydown = { e ->
             var shortcut = actionManager.getShortcut("org.jetbrains.web.demo.run");
@@ -336,6 +453,15 @@ object Application {
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.run").shortcutKeyNames, "Run program");
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.reformat").shortcutKeyNames, "Reformat selected fragment");
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.save").shortcutKeyNames, "Save current project");
+        editor.highlightOnTheFly = Elements.onTheFlyCheckbox.checked
+        getSessionInfo({ data ->
+            sessionId = data.id;
+        });
+
+
+        jq(document).on("click", ".ui-widget-overlay", {
+            jq(".ui-dialog-titlebar-close").trigger("click");
+        });
     }
 
     fun initButtons() {
@@ -360,25 +486,4 @@ object Application {
             }
         }
     }
-
-    fun init() {
-    }
 }
-
-native
-val consoleView: dynamic = noImpl
-
-native
-val junitView: dynamic = noImpl
-
-native
-val generatedCodeView: dynamic = noImpl
-
-native
-val problemsView: dynamic = noImpl
-
-native
-val configurationManager: dynamic = noImpl
-
-native
-fun getNumberOfErrorsAndWarnings(data: dynamic): Int
