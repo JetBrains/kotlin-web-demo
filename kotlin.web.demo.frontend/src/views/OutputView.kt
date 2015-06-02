@@ -17,13 +17,10 @@
 package views
 
 import application.makeReference
+import html4k.dom.append
+import html4k.js.span
 import org.w3c.dom.HTMLElement
-import html4k.*
-import html4k.js.*
-import html4k.dom.*
-import org.w3c.dom.HTMLLinkElement
 import utils.unEscapeString
-import kotlin.browser.document
 
 
 class OutputView(val element: HTMLElement) {

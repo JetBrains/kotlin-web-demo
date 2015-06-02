@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
+String.prototype.endsWith = function (a) {
+    return -1 !== this.indexOf(a, this.length - a.length);
+};
+
+String.prototype.startsWith = function (a) {
+    return 0 === this.indexOf(a);
+};
+
+String.prototype.capitalize = function () {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 var sessionId = -1;
 
 var app = Kotlin.modules["kotlin.web.demo.frontend"].application.app;

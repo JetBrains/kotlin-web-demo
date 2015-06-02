@@ -17,10 +17,7 @@
 package providers
 
 import application.app
-import checkDataForException
-import checkDataForNull
 import generateAjaxUrl
-import html4k.BODY
 import model.Project
 import utils.*
 

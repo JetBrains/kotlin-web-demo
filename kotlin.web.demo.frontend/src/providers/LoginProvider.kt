@@ -16,7 +16,6 @@
 
 package providers
 
-import checkDataForNull
 import generateAjaxUrl
 import utils.ActionStatusMessages
 import utils.blockContent

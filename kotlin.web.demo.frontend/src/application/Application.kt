@@ -23,7 +23,6 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
-import projectProvider
 import providers.*
 import utils.*
 import views.*

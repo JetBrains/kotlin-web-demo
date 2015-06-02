@@ -16,13 +16,11 @@
 
 package views
 
-import model.FileType
 import CodeMirror
 import application.app
-import html4k.InputType
 import jquery.jq
 import model.File
-import org.junit.Test
+import model.FileType
 import org.w3c.dom.HTMLElement
 import utils.unEscapeString
 import kotlin.browser.document

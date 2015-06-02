@@ -16,10 +16,7 @@
 
 import jquery.JQuery
 import org.w3c.dom.events.Event
-import providers.FileProvider
-import providers.HeadersProvider
 import providers.ProjectProvider
-import views.StatusBarView
 
 /**
  * Created by Semyon.Atamas on 4/3/2015.
@@ -69,9 +66,6 @@ fun removeKotlinExtension(name: String): String
 
 native
 fun generateAjaxUrl(type: String, parameters: Json): String
-
-native
-fun checkDataForNull(data: dynamic): Boolean
 
 native
 fun checkDataForException(data: dynamic): Boolean

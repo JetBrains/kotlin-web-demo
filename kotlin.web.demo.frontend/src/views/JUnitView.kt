@@ -18,9 +18,6 @@ package views
 
 import application.app
 import application.consoleView
-import children
-import html4k.dom.create
-import html4k.js.div
 import jquery.JQuery
 import jquery.jq
 import org.w3c.dom.HTMLDivElement

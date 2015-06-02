@@ -18,7 +18,6 @@ package views
 
 import CodeMirror
 import org.w3c.dom.HTMLElement
-import utils.safe_tags_replace
 import utils.unEscapeString
 import kotlin.browser.document
 

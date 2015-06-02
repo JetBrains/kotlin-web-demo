@@ -16,12 +16,10 @@
 
 package views
 
+import html4k.dom.append
+import html4k.js.div
 import org.w3c.dom.HTMLDivElement
-import kotlin.browser.document
 import kotlin.text.js.RegExp
-import html4k.*
-import html4k.js.*
-import html4k.dom.*
 
 class ConsoleView(
         private val element: HTMLDivElement,

@@ -19,6 +19,11 @@ package providers
 import utils.ajax
 import utils.jquery
 
+fun checkDataForNull(data: dynamic): Boolean = data != null
+
+fun checkDataForException(data: dynamic): Boolean {
+    return !(data[0] != null && data[0] != undefined && data[0].exception != undefined);
+}
 
 public fun ajax(
         url: String,

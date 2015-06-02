@@ -16,7 +16,6 @@
 
 package providers
 
-import checkDataForNull
 import generateAjaxUrl
 
 class HelpProvider(

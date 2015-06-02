@@ -17,7 +17,6 @@
 package providers
 
 import checkDataForException
-import checkDataForNull
 import generateAjaxUrl
 import model.Project
 import model.ProjectType

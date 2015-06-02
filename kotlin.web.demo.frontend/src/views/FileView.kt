@@ -16,13 +16,13 @@
 
 package views
 
-import model.FileType
 import application.app
 import html4k.dom.append
 import html4k.dom.create
 import html4k.js.div
 import html4k.js.onClickFunction
 import model.File
+import model.FileType
 import model.ProjectType
 import org.w3c.dom.HTMLElement
 import removeKotlinExtension
