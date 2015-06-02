@@ -40,11 +40,6 @@ incompleteActionManager.registerAction("save", "onHeadersLoaded",
 
 var editor = new KotlinEditor();
 
-/**
- * @const
- */
-var statusBarView = new StatusBarView(document.getElementById("statusBar"));
-
 $(document).on("click", ".ui-widget-overlay", (function(){
     $(".ui-dialog-titlebar-close").trigger('click');
 }));
@@ -127,18 +122,6 @@ configurationManager.onFail = function (exception) {
 var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].views.NavBarView(document.getElementById("grid-nav"));
 
 var accordion = app.accordion;
-
-window.onpopstate = function () {
-    var projectId = getProjectIdFromUrl();
-    if (accordion.getProjectViewById(projectId) == null) {
-        accordion.loadFirstItem()
-    } else {
-        if (accordion.selectedProjectView.project.publicId != projectId) {
-            accordion.selectProject(projectId);
-        }
-        accordion.selectedProjectView.selectFileFromUrl();
-    }
-};
 
 var timer;
 editor.onCursorActivity = function (cursorPosition) {

@@ -17,7 +17,6 @@
 package views
 
 import FileType
-import addKotlinExtension
 import application.app
 import html4k.dom.append
 import html4k.dom.create
@@ -27,6 +26,7 @@ import model.File
 import model.ProjectType
 import org.w3c.dom.HTMLElement
 import removeKotlinExtension
+import utils.addKotlinExtension
 import utils.unEscapeString
 import views.dialogs.InputDialogView
 import kotlin.browser.document

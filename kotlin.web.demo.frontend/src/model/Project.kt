@@ -17,10 +17,10 @@
 package model
 
 import Error
-import addKotlinExtension
 import projectProvider
 import utils.Listenable
 import utils.VarListener
+import utils.addKotlinExtension
 import views.FolderView
 import java.util.ArrayList
 import kotlin.browser.localStorage

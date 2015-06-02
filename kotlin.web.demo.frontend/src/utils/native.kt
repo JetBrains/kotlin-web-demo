@@ -48,13 +48,4 @@ native
 fun unEscapeString(s: String): String
 
 native
-fun getFileIdFromUrl(): String
-
-native
 val editor: dynamic
-
-native
-fun getProjectIdFromUrl(): String?
-
-native
-fun isUserProjectInUrl(): Boolean

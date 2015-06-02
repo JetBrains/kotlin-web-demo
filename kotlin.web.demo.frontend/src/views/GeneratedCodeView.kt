@@ -33,13 +33,13 @@ class GeneratedCodeView(private val element: HTMLElement) {
         var generatedCode = document.createElement("p");
         if (data.type == "toggle-info") {
             generatedCode.className = "consoleViewInfo";
-            generatedCode.innerHTML = safe_tags_replace(data.text);
+            generatedCode.innerHTML = unEscapeString(data.text);
         } else if (data.type == "info") {
             generatedCode.className = "consoleViewInfo";
             generatedCode.innerHTML = unEscapeString(data.text);
         } else if (data.type == "generatedJSCode") {
             generatedCode.className = "cm-s-default";
-            generatedCode.innerHTML = safe_tags_replace(data.text);
+            generatedCode.innerHTML = unEscapeString(data.text);
             CodeMirror.runMode(data.text, "javascript", generatedCode);
         }
         element.appendChild(generatedCode);

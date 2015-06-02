@@ -270,6 +270,18 @@ class Application {
             }
         }
 
+        window.onpopstate = {
+            var projectId = getProjectIdFromUrl();
+            if (accordion.getProjectViewById(projectId) == null) {
+                accordion.loadFirstItem()
+            } else {
+                if (accordion.selectedProjectView!!.project.publicId != projectId) {
+                    accordion.selectProject(projectId);
+                }
+                accordion.selectedProjectView!!.selectFileFromUrl();
+            }
+        };
+
         //TODO
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.autocomplete").shortcutKeyNames, "Code completion");
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.run").shortcutKeyNames, "Run program");
@@ -302,12 +314,6 @@ class Application {
 }
 
 native
-fun setState(hash: String, title: String)
-
-native
-val userProjectPrefix: String
-
-native
 val consoleView: dynamic = noImpl
 
 native
@@ -327,5 +333,3 @@ val argumentsInputElement: HTMLInputElement = noImpl
 
 native
 fun getNumberOfErrorsAndWarnings(data: dynamic): Int
-
-native fun clearState()

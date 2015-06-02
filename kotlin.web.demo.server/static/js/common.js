@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-var BEFORE_EXIT = "The changes you made to the program will be lost when you change an example. Do you want to leave the page?";
-
-var KOTLIN_VERSION = "0.12.200";
-var WEB_DEMO_VERSION = "${web.demo.version}";
+var KOTLIN_VERSION = "0.12.66";
 
 String.prototype.endsWith = function (a) {
     return -1 !== this.indexOf(a, this.length - a.length);
@@ -29,34 +26,6 @@ String.prototype.startsWith = function (a) {
 
 String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
-}
-
-function addKotlinExtension(filename) {
-    return filename.endsWith(".kt") ? filename : filename + ".kt";
-}
-
-function removeKotlinExtension(filename) {
-    return filename.endsWith(".kt") ? filename.substring(0, filename.length - ".kt".length) : filename;
-}
-
-function forEachInArrayWithArgs(arr, data, f) {
-    var i = 0;
-    while (arr[i] != undefined) {
-        f(data, arr[i]);
-        i++;
-    }
-}
-
-function forEachInArray(arr, f) {
-    var i = 0;
-    while (arr[i] != undefined) {
-        f(arr[i]);
-        i++;
-    }
-}
-
-function compareNumbers(a, b) {
-    return a - b;
 }
 
 var tagsToReplace = {
@@ -73,42 +42,6 @@ function unEscapeString(str) {
     return str;
 }
 
-function escapeString(str) {
-    for (var tag in tagsToReplace) {
-        str = str.replace(new RegExp(tag, "g"), tagsToReplace[tag]);
-    }
-    return str;
-}
-
-function replaceTag(tag) {
-    return tagsToReplace[tag] || tag;
-}
-
-function safe_tags_replace(str) {
-    try {
-        return str.replace(/[&<>]/g, replaceTag);
-    } catch (e) {
-        return str;
-    }
-
-}
-
-function replaceAll(str, replaced, replacement) {
-    try {
-        return str.replace(new RegExp(replaced, 'g'), replacement)
-    } catch (e) {
-        return str;
-    }
-}
-
-function getFirstConfiguration(confStr) {
-    var pos = confStr.indexOf(" ");
-    if (pos >= 0) {
-        return confStr.substring(0, pos);
-    }
-    return confStr;
-}
-
 function checkDataForNull(data) {
     return !(data == null || data == undefined);
 
@@ -120,146 +53,3 @@ function checkDataForException(data) {
 
 }
 
-function random() {
-    return Math.floor((Math.random() * 100) + 1);
-}
-
-function checkIfThereAreErrorsInHighlightingResult(highlightingResult) {
-    var i = 0;
-    while (highlightingResult[i] != undefined) {
-        var severity = highlightingResult[i].severity;
-        if (severity == "ERROR") {
-            return true;
-        }
-        i++;
-    }
-    return false;
-}
-
-function copy(obejct) {
-    var cp;
-
-    if (null == obejct || "object" != typeof obejct) return obejct;
-
-    if (obejct instanceof Array) {
-        cp = [];
-        for (var i = 0, len = obejct.length; i < len; i++) {
-            cp[i] = copy(obejct[i]);
-        }
-        return cp;
-    }
-
-    if (obejct instanceof Object) {
-        cp = {};
-        for (var attr in obejct) {
-            if (obejct.hasOwnProperty(attr)) cp[attr] = copy(obejct[attr]);
-        }
-        return cp;
-    }
-
-    return cp;
-}
-
-var userProjectPrefix = "/UserProjects/";
-
-function isUserProjectInUrl() {
-    return location.hash.startsWith("#" + userProjectPrefix);
-}
-
-function getProjectIdFromUrl() {
-    var urlHash = escapeString(window.location.hash); //escaping for firefox
-    urlHash = urlHash.startsWith("#") ? urlHash.substr(1, urlHash.length) : urlHash;
-    if (urlHash.startsWith(userProjectPrefix)) {
-        urlHash = urlHash.substr(userProjectPrefix.length, urlHash.length);
-        return urlHash.split("/")[0];
-    }
-    return urlHash.substr(0, urlHash.lastIndexOf("/"));
-}
-
-function getFileIdFromUrl() {
-    var urlHash = escapeString(window.location.hash); //escaping for firefox
-    urlHash = urlHash.startsWith("#") ? urlHash.substr(1, urlHash.length) : urlHash;
-
-    if (urlHash.startsWith(userProjectPrefix)) {
-        urlHash = urlHash.substr(userProjectPrefix.length, urlHash.length);
-        return urlHash.split("/")[1];
-    } else {
-        return urlHash;
-    }
-}
-
-function clearState() {
-    history.replaceState("", "", "/index.html");
-}
-
-function setState(hash, title) {
-    hash = unEscapeString(hash);
-    hash = hash.startsWith("#") ? hash : "#" + hash;
-    document.title = title + " | Try Kotlin";
-    if (location.hash != hash) {
-        if ((location.hash == "" || location.hash == "#") && location.search == "") {
-            history.replaceState("", title, hash);
-        } else {
-            history.pushState("", title, hash);
-        }
-    }
-}
-
-
-//Intervals: clear interval for canvas
-
-//window.timeoutList = new Array();
-window.intervalList = new Array();
-
-//window.oldSetTimeout = window.setTimeout;
-window.oldSetInterval = window.setInterval;
-//window.oldClearTimeout = window.clearTimeout;
-window.oldClearInterval = window.clearInterval;
-
-/*window.setTimeout = function(code, delay) {
- var retval = window.oldSetTimeout(code, delay);
- window.timeoutList.push(retval);
- return retval;
- };
- window.clearTimeout = function(id) {
- var ind = window.timeoutList.indexOf(id);
- if(ind >= 0) {
- window.timeoutList.splice(ind, 1);
- }
- var retval = window.oldClearTimeout(id);
- return retval;
- };*/
-
-window.setInterval = function (code, delay) {
-    var retval = window.oldSetInterval(code, delay);
-    window.intervalList.push(retval);
-    return retval;
-};
-window.clearInterval = function (id) {
-    var ind = window.intervalList.indexOf(id);
-    if (ind >= 0) {
-        window.intervalList.splice(ind, 1);
-    }
-    var retval = window.oldClearInterval(id);
-    return retval;
-};
-/*window.clearAllTimeouts = function() {
- for(var i in window.timeoutList) {
- window.oldClearTimeout(window.timeoutList[i]);
- }
- window.timeoutList = new Array();
- };*/
-window.clearAllIntervals = function () {
-    for (var i in window.intervalList) {
-        window.oldClearInterval(window.intervalList[i]);
-    }
-    window.intervalList = new Array();
-};
-
-
-function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}

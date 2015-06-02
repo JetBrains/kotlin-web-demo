@@ -74,9 +74,6 @@ native
 fun removeKotlinExtension(name: String): String
 
 native
-fun addKotlinExtension(name: String): String
-
-native
 fun generateAjaxUrl(type: String, parameters: Json): String
 
 native

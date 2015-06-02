@@ -16,7 +16,6 @@
 
 package views
 
-import addKotlinExtension
 import application.app
 import jquery.jq
 import model.File
@@ -25,6 +24,7 @@ import model.ProjectType
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLSpanElement
 import projectProvider
+import utils.addKotlinExtension
 import utils.editor
 import utils.getFileIdFromUrl
 import utils.slideDown

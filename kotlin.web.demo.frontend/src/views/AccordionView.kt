@@ -230,7 +230,7 @@ class AccordionView(
         return projectView;
     }
 
-    private fun selectProject(publicId: String) {
+    fun selectProject(publicId: String) {
         if (selectedProjectView == null || selectedProjectView!!.project.publicId != publicId) {
             if (selectedProjectView != null) {
                 selectedProjectView!!.headerElement.removeClass("selected");

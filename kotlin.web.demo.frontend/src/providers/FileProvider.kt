@@ -16,12 +16,11 @@
 
 package providers
 
-import addKotlinExtension
 import generateAjaxUrl
 import model.File
 import model.Project
 import model.ProjectType
-import utils.ActionStatusMessages
+import utils.addKotlinExtension
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
