@@ -17,7 +17,6 @@
 package model
 
 import Error
-import FileType
 import application.app
 import utils.Listenable
 import utils.VarListener
@@ -30,7 +29,7 @@ class File(
         text: String = "",
         var originalText: String = text,
         val isModifiable: Boolean = true,
-        val type: FileType = FileType.KOTLIN_FILE,
+        val type: String = FileType.KOTLIN_FILE.name(),
         isRevertible: Boolean = true
 ) {
     var errors = arrayOf<Error>()
@@ -93,4 +92,10 @@ class File(
     fun loadOriginal(){
 
     }
+}
+
+enum class FileType {
+    KOTLIN_FILE,
+    KOTLIN_TEST_FILE,
+    JAVA_FILE
 }

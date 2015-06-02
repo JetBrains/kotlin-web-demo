@@ -19,6 +19,7 @@ package utils
 import jquery.JQuery
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.Window
+import views.Editor
 
 native("$")
 val jquery: JQuery
@@ -45,7 +46,4 @@ native
 public fun JQuery.toArray(): Array<HTMLElement>
 
 native
-fun unEscapeString(s: String): String
-
-native
-val editor: dynamic
+val editor: Editor

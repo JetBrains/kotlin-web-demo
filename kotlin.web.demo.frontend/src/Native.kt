@@ -49,12 +49,6 @@ interface Error {
 }
 
 native
-enum class FileType {
-    KOTLIN_FILE,
-    KOTLIN_TEST_FILE,
-    JAVA_FILE
-}
-native
 val projectProvider: ProjectProvider = noImpl
 
 native

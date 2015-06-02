@@ -38,7 +38,30 @@ incompleteActionManager.registerAction("save", "onHeadersLoaded",
         }
     });
 
-var editor = new KotlinEditor();
+var editor = new Kotlin.modules["kotlin.web.demo.frontend"].views.Editor(
+    function (cursorPosition) {
+        helpViewForWords.hide();
+        var messageForLineAtCursor = editor.getMessageForLineAtCursor(cursorPosition);
+        //Save previous message if current is empty
+        if (messageForLineAtCursor != "") {
+            statusBarView.setMessage(messageForLineAtCursor);
+        }
+
+        var pos = editor.cursorCoords();
+        helpViewForWords.setPosition(pos);
+
+        if (timer) {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
+            }, 1000);
+        } else {
+            timer = setTimeout(function () {
+                helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
+            }, 1000);
+        }
+    }
+);
 
 $(document).on("click", ".ui-widget-overlay", (function(){
     $(".ui-dialog-titlebar-close").trigger('click');
@@ -124,30 +147,6 @@ var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].views.NavBarView
 var accordion = app.accordion;
 
 var timer;
-editor.onCursorActivity = function (cursorPosition) {
-    helpViewForWords.hide();
-    var messageForLineAtCursor = editor.getMessageForLineAtCursor(cursorPosition);
-    //Save previous message if current is empty
-    if (messageForLineAtCursor != "") {
-        statusBarView.setMessage(messageForLineAtCursor);
-    }
-
-    var pos = editor.cursorCoords();
-    helpViewForWords.setPosition(pos);
-
-    if (timer) {
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
-        }, 1000);
-    } else {
-        timer = setTimeout(function () {
-            helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
-        }, 1000);
-    }
-};
-
-
 var runButton = app.runButtonElement
 
 var projectProvider = app.projectProvider
@@ -238,10 +237,10 @@ $("#on-the-fly-checkbox")
     .prop("checked", localStorage.getItem("highlightOnTheFly") == "true")
     .on("change", function () {
         var checkbox = document.getElementById("on-the-fly-checkbox");
-        editor.highlightOnTheFly(checkbox.checked);
+        editor.highlightOnTheFly = checkbox.checked;
         editor.updateHighlighting();
     });
-editor.highlightOnTheFly(document.getElementById("on-the-fly-checkbox").checked);
+editor.highlightOnTheFly = document.getElementById("on-the-fly-checkbox").checked;
 
 function setKotlinVersion() {
     $.ajax("http://kotlinlang.org/latest_release_version.txt", {
@@ -275,9 +274,3 @@ getSessionInfo(function(data){
     sessionId = data.id;
 });
 setKotlinVersion();
-
-FileType = {
-    KOTLIN_FILE: "KOTLIN_FILE",
-    KOTLIN_TEST_FILE: "KOTLIN_TEST_FILE",
-    JAVA_FILE: "JAVA_FILE"
-};

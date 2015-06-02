@@ -28,20 +28,6 @@ String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-var tagsToReplace = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    ' ': '%20'
-};
-
-function unEscapeString(str) {
-    for (var tag in tagsToReplace) {
-        str = str.replace(new RegExp(tagsToReplace[tag], "g"), tag);
-    }
-    return str;
-}
-
 function checkDataForNull(data) {
     return !(data == null || data == undefined);
 

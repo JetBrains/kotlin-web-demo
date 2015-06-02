@@ -41,12 +41,21 @@ fun removeKotlinExtension(filename: String): String = if (filename.endsWith(".kt
 
 private val tagsToReplace = hashMapOf(
     "&" to "&amp;",
-    "<" to "&lt;",
-    ">" to "&gt;",
+    "<" to "&amp;lt;",
+    ">" to "&amp;gt;",
     " " to "%20"
 );
 
 var userProjectPrefix = "/UserProjects/"
+
+
+fun unEscapeString(s: String): String {
+    var unEscapedString = s
+    for (tagEntry in tagsToReplace) {
+        unEscapedString = unEscapedString.replace(tagEntry.getValue(), tagEntry.getKey());
+    }
+    return unEscapedString;
+}
 
 fun escapeString(s: String): String {
     var escapedString = s
