@@ -42,6 +42,3 @@ interface LoginModel{
 
 native
 fun decodeURI(uri:String): String
-
-native
-var CodeMirror: dynamic = noImpl

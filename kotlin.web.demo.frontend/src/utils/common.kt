@@ -146,9 +146,6 @@ val ConfigurationType: dynamic
 native
 val Object: dynamic
 
-native
-val incompleteActionManager: dynamic = noImpl
-
 fun HTMLIFrameElement.clear(){
     this.contentWindow!!.location.reload();
 }

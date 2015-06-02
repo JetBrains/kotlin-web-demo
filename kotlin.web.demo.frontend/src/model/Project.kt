@@ -161,12 +161,12 @@ class Project(
     fun setContent(content: dynamic) {
         if (!contentLoaded) {
             val files = arrayListOf<File>()
-            for (fileId in content.files) {
-                val file = File.fromJSON(this, content.file)
+            for (fileContent in content.files) {
+                val file = File.fromJSON(this, fileContent)
                 files.add(file)
                 file.listenableIsModified.addModifyListener { onModified() }
             }
-            onContentLoaded(content);
+            onContentLoaded(files);
             contentLoaded = true;
         } else {
             throw Exception("Content was already loaded");

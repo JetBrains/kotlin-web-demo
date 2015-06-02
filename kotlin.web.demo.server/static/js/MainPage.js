@@ -32,23 +32,7 @@ var app = Kotlin.modules["kotlin.web.demo.frontend"].application.Application;
 
 var configurationManager = new ConfigurationComponent();
 
-var incompleteActionManager = new IncompleteActionManager();
-incompleteActionManager.registerAction("save", "onHeadersLoaded",
-    function () {
-        localStorage.setItem("contentToSave", JSON.stringify(accordion.selectedProjectView.project));
-    },
-    function () {
-        var content = JSON.parse(localStorage.getItem("contentToSave"));
-        localStorage.removeItem("contentToSave");
-        if (content != null && loginView.isLoggedIn) {
-            openSaveProjectDialog(
-                content.name,
-                projectProvider.forkProject.bind(null, content, function (data) {
-                    accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
-                })
-            );
-        }
-    });
+var incompleteActionManager = Kotlin.modules["kotlin.web.demo.frontend"].utils.IncompleteActionManager
 
 var editor = app.editor;
 
@@ -90,20 +74,20 @@ var loginProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.Log
         getSessionInfo(function (data) {
             sessionId = data.id;
             loginView.logout();
-            statusBarView.setStatus(ActionStatusMessages.logout_ok);
+            //statusBarView.setStatus(ActionStatusMessages.logout_ok);
             accordion.loadAllContent();
         });
     },
     function (data) {
         if (data.isLoggedIn) {
             loginView.setUserName(data.userName, data.type);
-            statusBarView.setStatus(ActionStatusMessages.login_ok);
+            //statusBarView.setStatus(ActionStatusMessages.login_ok);
         }
         accordion.loadAllContent();
     },
     function (exception, actionCode) {
         consoleView.writeException(exception);
-        statusBarView.setMessage(actionCode);
+        //statusBarView.setMessage(actionCode);
     }
 );
 

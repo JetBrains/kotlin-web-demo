@@ -16,13 +16,13 @@
 
 package views.dialogs
 
-import CodeMirror
 import html4k.dom.append
 import html4k.js.div
 import html4k.js.textArea
 import jquery.jq
 import providers.ConverterProvider
 import utils.KeyCode
+import views.CodeMirror
 import views.button
 import views.find
 import views.keydown

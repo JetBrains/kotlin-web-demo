@@ -52,3 +52,6 @@ val navBarView: dynamic
 
 native
 val loginView: LoginView = noImpl
+
+native
+val CodeMirror: dynamic = noImpl

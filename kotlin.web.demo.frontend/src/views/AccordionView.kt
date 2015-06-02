@@ -23,11 +23,7 @@ import model.Project
 import model.ProjectType
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import utils.unbind
-import utils.getFileIdFromUrl
-import utils.getProjectIdFromUrl
-import utils.incompleteActionManager
-import utils.isUserProjectInUrl
+import utils.*
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
@@ -91,7 +87,7 @@ class AccordionView(
                     });
                 }
             }
-            incompleteActionManager.checkTimepoint("headersLoaded");
+            IncompleteActionManager.checkTimepoint("headersLoaded");
             jq(element).accordion("refresh");
             if (!loginView.isLoggedIn) {
                 jq(myProgramsFolder.headerElement).unbind("click");

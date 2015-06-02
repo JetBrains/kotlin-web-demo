@@ -29,8 +29,10 @@ import views.*
 import views.buttons.Button
 import views.dialogs.ConverterView
 import views.dialogs.Dialog
+import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import kotlin.browser.document
+import kotlin.browser.localStorage
 import kotlin.browser.window
 
 object Application {
@@ -300,6 +302,34 @@ object Application {
                 accordion.selectedProjectView!!.selectFileFromUrl();
             }
         };
+
+        IncompleteActionManager.registerAction(
+                "save",
+                "onHeadersLoaded",
+                {
+                    localStorage.setItem("contentToSave", JSON.stringify(accordion.selectedProjectView!!.project));
+                },
+                {
+                    var content = JSON.parse<dynamic>(localStorage.getItem("contentToSave")!!);
+                    localStorage.removeItem("contentToSave");
+                    if (content != null && loginView.isLoggedIn) {
+                        InputDialogView.open(
+                                "Save project",
+                                "Project name:",
+                                "Save",
+                                content.name,
+                                { name ->
+                                    accordion.validateNewProjectName(name)
+                                },
+                                { name ->
+                                    projectProvider.forkProject(content, { data ->
+                                        accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
+                                    }, name)
+                                }
+                        )
+                    }
+                }
+        );
 
         //TODO
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.autocomplete").shortcutKeyNames, "Code completion");

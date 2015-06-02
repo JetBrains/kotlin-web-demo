@@ -16,7 +16,6 @@
 
 package views
 
-import CodeMirror
 import application.Application
 import jquery.jq
 import model.File
