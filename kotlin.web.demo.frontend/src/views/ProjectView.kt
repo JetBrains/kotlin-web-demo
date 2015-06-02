@@ -16,7 +16,7 @@
 
 package views
 
-import application.app
+import application.Application
 import jquery.jq
 import model.File
 import model.Project
@@ -25,7 +25,6 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLSpanElement
 import projectProvider
 import utils.addKotlinExtension
-import utils.editor
 import utils.getFileIdFromUrl
 import utils.slideDown
 import views.dialogs.InputDialogView
@@ -85,7 +84,7 @@ class ProjectView(
                         "Add",
                         "Untitled",
                         { name -> validateNewFileName(name) },
-                        { name -> app.fileProvider.addNewFile(this.project, name) }
+                        { name -> Application.fileProvider.addNewFile(this.project, name) }
                 );
             };
             actionIconsElement.appendChild(addFileImg);
@@ -104,7 +103,7 @@ class ProjectView(
                             if (project.name == newName) {
                                 ValidationResult(valid = true);
                             } else {
-                                app.accordion.validateNewProjectName(newName);
+                                Application.accordion.validateNewProjectName(newName);
                             }
                         },
                         { newName -> projectProvider.renameProject(project, newName) }
@@ -186,7 +185,7 @@ class ProjectView(
                 },
                 onFileDeleted = { publicId ->
                     if (selectedFileView!!.file.id == publicId) {
-                        app.accordion.selectedFileDeleted();
+                        Application.accordion.selectedFileDeleted();
                         selectedFileView = null;
                     }
                     fileViews.remove(publicId);
@@ -207,13 +206,13 @@ class ProjectView(
                     if (!files.isEmpty()) {
                         selectedFileView = getFileFromUrl() ?: fileViews[files[0].id];
 
-                        if (app.accordion.selectedProjectView!!.project === project) {
+                        if (Application.accordion.selectedProjectView!!.project === project) {
                             selectedFileView!!.fireSelectEvent();
                             onSelected(this);
                         }
-                    } else if (app.accordion.selectedProjectView!!.project === project) {
+                    } else if (Application.accordion.selectedProjectView!!.project === project) {
                         onSelected(this);
-                        editor.closeFile();
+                        Application.editor.closeFile();
                     }
                 },
                 onContentNotFound = {
@@ -284,7 +283,7 @@ class ProjectView(
     private fun createFileView(file: File) = FileView(this, contentElement, file);
 
     private fun isSelected(): Boolean {
-        return app.accordion.selectedProjectView!!.project === project;
+        return Application.accordion.selectedProjectView!!.project === project;
     }
 
     fun getFileViewByName(name: String) = fileViews.values().firstOrNull {

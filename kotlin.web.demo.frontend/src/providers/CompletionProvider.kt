@@ -15,8 +15,6 @@
  */
 
 package providers
-import checkDataForException
-import generateAjaxUrl
 import model.Project
 import utils.ajax
 import utils.jquery
@@ -33,7 +31,7 @@ class CompletionProvider(
             isLoadingCompletion = true;
             jquery.ajax(json(
                 //runConf is unused parameter. It's added to url for useful access logs
-                "url" to generateAjaxUrl("complete", json( "runConf" to project.confType )),
+                "url" to generateAjaxUrl("complete", hashMapOf("runConf" to project.confType)),
                 "context" to document.body,
                 "success" to { data: dynamic ->
                     isLoadingCompletion = false;

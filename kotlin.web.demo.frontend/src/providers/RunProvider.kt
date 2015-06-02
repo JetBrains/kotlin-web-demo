@@ -16,8 +16,7 @@
 
 package providers
 
-import application.app
-import generateAjaxUrl
+import application.Application
 import model.Project
 import utils.*
 
@@ -56,7 +55,7 @@ class RunProvider(
     private fun runJava(project: Project) {
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
-                url = generateAjaxUrl("run", json("runConf" to project.confType)),
+                url = generateAjaxUrl("run", hashMapOf("runConf" to project.confType)),
                 success = { data: Array<dynamic> ->
                     try {
                         if (checkDataForNull(data)) {
@@ -96,7 +95,7 @@ class RunProvider(
         var runConfiguration = project.confType;
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
-                url = generateAjaxUrl("run", json("runConf" to runConfiguration)),
+                url = generateAjaxUrl("run", hashMapOf("runConf" to runConfiguration)),
                 success = { data: Array<dynamic> ->
                     try {
                         if (checkDataForNull(data)) {
@@ -109,15 +108,15 @@ class RunProvider(
                                             //(error modifying context of canvas in invisible iframe)
                                             if (runConfiguration ==
                                                     Configuration.getStringFromType(Configuration.type.CANVAS)) {
-                                                app.iframeDialog.open();
+                                                Application.iframeDialog.open();
                                             }
-                                            var out: String = app.iframe.contentWindow!!.eval(element.text);
+                                            var out: String = Application.iframe.contentWindow!!.eval(element.text);
                                             output.add(json("text" to safe_tags_replace(out), "type" to "jsOut"));
                                         } catch (e: Throwable) {
                                             output.add(json("type" to "jsException", "exception" to e));
                                         } finally {
                                             if (runConfiguration == "js") {
-                                                app.iframe.clear()
+                                                Application.iframe.clear()
                                             }
                                         }
                                     }

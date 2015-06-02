@@ -16,10 +16,15 @@
 
 package utils
 
+import jquery.jq
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
 import org.w3c.dom.Location
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.dom.addClass
+import kotlin.dom.hasClass
+import kotlin.dom.removeClass
 
 enum class KeyCode (val code: Int){
     S(83),
@@ -103,6 +108,16 @@ fun setState(hash: String, title: String) {
 fun clearState() {
     window.history.replaceState("", "", "/index.html");
 }
+
+fun HTMLElement.toggleClass(className: String) {
+    if (this.hasClass(className)) {
+        this.removeClass(className)
+    } else {
+        this.addClass(className)
+    }
+}
+
+fun HTMLElement.isVisible() = jq(this).isCheck(":visible")
 
 
 fun isUserProjectInUrl() = window.location.hash.startsWith("#" + userProjectPrefix);

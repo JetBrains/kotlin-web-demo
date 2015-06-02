@@ -28,7 +28,7 @@ String.prototype.capitalize = function () {
 
 var sessionId = -1;
 
-var app = Kotlin.modules["kotlin.web.demo.frontend"].application.app;
+var app = Kotlin.modules["kotlin.web.demo.frontend"].application.Application;
 
 var configurationManager = new ConfigurationComponent();
 
@@ -50,30 +50,7 @@ incompleteActionManager.registerAction("save", "onHeadersLoaded",
         }
     });
 
-var editor = new Kotlin.modules["kotlin.web.demo.frontend"].views.Editor(
-    function (cursorPosition) {
-        helpViewForWords.hide();
-        var messageForLineAtCursor = editor.getMessageForLineAtCursor(cursorPosition);
-        //Save previous message if current is empty
-        if (messageForLineAtCursor != "") {
-            statusBarView.setMessage(messageForLineAtCursor);
-        }
-
-        var pos = editor.cursorCoords();
-        helpViewForWords.setPosition(pos);
-
-        if (timer) {
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
-            }, 1000);
-        } else {
-            timer = setTimeout(function () {
-                helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
-            }, 1000);
-        }
-    }
-);
+var editor = app.editor;
 
 $(document).on("click", ".ui-widget-overlay", (function(){
     $(".ui-dialog-titlebar-close").trigger('click');
@@ -99,8 +76,7 @@ var problemsView = new Kotlin.modules["kotlin.web.demo.frontend"].views.Problems
 document.getElementById("shortcuts-button").onclick = function(){
     Kotlin.modules["kotlin.web.demo.frontend"].views.dialogs.ShortcutsDialogView.open()};
 
-var helpModelForWords = new Kotlin.modules["kotlin.web.demo.frontend"].providers.HelpProvider();
-var helpViewForWords = new Kotlin.modules["kotlin.web.demo.frontend"].views.HelpView(helpModelForWords);
+var helpViewForWords = app.helpViewForWords;
 helpViewForWords.hide();
 
 var loginProvider = new Kotlin.modules["kotlin.web.demo.frontend"].providers.LoginProvider(
@@ -157,25 +133,13 @@ configurationManager.onFail = function (exception) {
 var navBarView = new Kotlin.modules["kotlin.web.demo.frontend"].views.NavBarView(document.getElementById("grid-nav"));
 
 var accordion = app.accordion;
-
-var timer;
 var runButton = app.runButtonElement
 
 var projectProvider = app.projectProvider
 
-
-function generateAjaxUrl(type, parameters) {
-    var url = [location.protocol, '//', location.host, "/"].join('');
-    url = url + "kotlinServer?sessionId=" + sessionId + "&type=" + type;
-    for (var parameterName in parameters) {
-        url += "&" + parameterName + "=" + parameters[parameterName];
-    }
-    return url;
-}
-
 function getSessionInfo(callback) {
     $.ajax({
-        url: generateAjaxUrl("getSessionInfo"),
+        url: "kotlinServer?sessionId=" + sessionId + "&type=getSessionInfo",
         context: document.body,
         type: "GET",
         timeout: 10000,
@@ -241,9 +205,7 @@ $("#runMode").selectmenu({
 });
 
 var argumentsInputElement = document.getElementById("arguments");
-argumentsInputElement.oninput = function () {
-    accordion.selectedProjectView.project.args = argumentsInputElement.value;
-};
+
 
 $("#on-the-fly-checkbox")
     .prop("checked", localStorage.getItem("highlightOnTheFly") == "true")

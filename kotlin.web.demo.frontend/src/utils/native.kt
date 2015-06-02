@@ -19,6 +19,7 @@ package utils
 import jquery.JQuery
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.Window
+import org.w3c.dom.events.Event
 import views.Editor
 
 native("$")
@@ -37,13 +38,44 @@ native
 public fun JQuery.height(height: Int)
 
 native
+public fun JQuery.width(width: Int)
+
+native
 public fun JQuery.children(selector: String): JQuery
 
 native
-public fun JQuery.outerHeight(includeMargin: Boolean): Number
+public fun JQuery.outerHeight(includeMargin: Boolean = false): Int
+
+native
+public fun JQuery.outerWidth(includeMargin: Boolean = false): Int
 
 native
 public fun JQuery.toArray(): Array<HTMLElement>
 
+native("is")
+public fun JQuery.isCheck(s: String): Boolean
+
+
 native
-val editor: Editor
+fun JQuery.hide()
+
+native
+fun JQuery.show()
+
+native
+fun JQuery.children(): JQuery
+
+native
+fun JQuery.unbind(s: String)
+
+native
+fun JQuery.on(s: String, onClose: (Event) -> Unit)
+
+native
+fun JQuery.css(key: String, value: dynamic)
+
+native
+fun JQuery.resizable(parameters: Json)
+
+native
+fun JQuery.resizable(mode : String, param : String, value : Any?)

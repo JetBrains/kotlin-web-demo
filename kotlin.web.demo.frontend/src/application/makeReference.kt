@@ -19,12 +19,11 @@ package application
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLLinkElement
 import org.w3c.dom.HTMLSpanElement
-import utils.editor
 import kotlin.browser.document
 
 
 fun makeReference(fileName: String?, lineNo: Int): HTMLElement {
-    val selectedProjectView = app.accordion.selectedProjectView!!
+    val selectedProjectView = Application.accordion.selectedProjectView!!
     if (fileName != null &&
             selectedProjectView.getFileViewByName(fileName) != null) {
         var fileView = selectedProjectView.getFileViewByName(fileName);
@@ -33,8 +32,8 @@ fun makeReference(fileName: String?, lineNo: Int): HTMLElement {
         a.innerHTML = fileName + ':' + lineNo;
         a.onclick = {
             fileView!!.fireSelectEvent();
-            editor.setCursor(lineNo - 1, 0);
-            editor.focus();
+            Application.editor.setCursor(lineNo - 1, 0);
+            Application.editor.focus();
         };
         return a;
     } else {

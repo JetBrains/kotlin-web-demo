@@ -16,28 +16,28 @@
 
 package providers
 
-import generateAjaxUrl
+import views.ActionStatusMessage
 
 class HelpProvider(
-        private val onFail: (String, String)->Unit
+        private val onFail: (String, ActionStatusMessage)->Unit
 ) {
     private var helpElements : Array<HelpElement>? = null
 
     private fun loadAllHelpElements() {
         ajax(
-                url = generateAjaxUrl("loadHelpForWords", json()),
+                url = generateAjaxUrl("loadHelpForWords"),
                 success = { data: Array<HelpElement> ->
                     if (checkDataForNull(data)) {
                         helpElements = data
                     } else {
-                        onFail("Incorrect data format.", "");
+                        onFail("Incorrect data format.", ActionStatusMessage.load_help_for_words_fail);
                     }
                 },
                 dataType = DataType.JSON,
                 type = RequestType.GET,
                 timeout = 30000,
                 error = { jqXHR, textStatus, errorThrown ->
-                    onFail(textStatus + " : " + errorThrown, "");
+                    onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_help_for_words_fail);
                 }
         );
     }

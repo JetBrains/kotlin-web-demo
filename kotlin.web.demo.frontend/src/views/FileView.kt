@@ -16,7 +16,7 @@
 
 package views
 
-import application.app
+import application.Application
 import html4k.dom.append
 import html4k.dom.create
 import html4k.js.div
@@ -25,8 +25,8 @@ import model.File
 import model.FileType
 import model.ProjectType
 import org.w3c.dom.HTMLElement
-import removeKotlinExtension
 import utils.addKotlinExtension
+import utils.removeKotlinExtension
 import utils.unEscapeString
 import views.dialogs.InputDialogView
 import kotlin.browser.document
@@ -47,7 +47,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
 
     fun fireSelectEvent() {
         projectView.selectedFileView = this;
-        app.accordion.selectFile(this);
+        Application.accordion.selectFile(this);
     }
 
     //TODO remove getHeaderText and updateName
@@ -74,7 +74,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                 headerElement.removeClass("modified");
             }
             if (isSelected()) {
-                app.accordion.onModifiedSelectedFile(file);
+                Application.accordion.onModifiedSelectedFile(file);
             }
         });
 
@@ -123,7 +123,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                                     }
                                 },
                                 callback = { newName: String ->
-                                    app.fileProvider.renameFile(file.id, { newName: String ->
+                                    Application.fileProvider.renameFile(file.id, { newName: String ->
                                         file.name = addKotlinExtension(newName);
                                     }, newName);
                                 }
@@ -138,7 +138,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                 classes = setOf("delete", "icon")
                 onClickFunction = { event ->
                     if (window.confirm("Delete file " + file.name)) {
-                        app.fileProvider.deleteFile(file, {
+                        Application.fileProvider.deleteFile(file, {
                             file.project.deleteFile(file);
                             headerElement.parentNode!!.removeChild(headerElement);
                         });
@@ -151,7 +151,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                 classes = setOf("revert", "icon")
                 title = "Revert this file"
                 onClickFunction = {
-                    app.fileProvider.loadOriginalFile(
+                    Application.fileProvider.loadOriginalFile(
                             file,
                             { content: dynamic ->
                                 file.text = content.text;
@@ -176,7 +176,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
     }
 
     private fun isSelected(): Boolean {
-        return app.accordion.selectedFileView == this;
+        return Application.accordion.selectedFileView == this;
     }
 
 

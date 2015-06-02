@@ -16,7 +16,6 @@
 
 package providers
 
-import generateAjaxUrl
 import model.File
 import model.Project
 import model.ProjectType
@@ -31,7 +30,7 @@ class FileProvider(
 ) {
     fun checkFileExistence(publicId: String, onNotExists: () -> Unit) {
         ajax(
-                url = generateAjaxUrl("checkFileExistence", json()),
+                url = generateAjaxUrl("checkFileExistence"),
                 type = RequestType.POST,
                 timeout = 10000,
                 data = json("publicId" to publicId),
@@ -57,7 +56,7 @@ class FileProvider(
             ProjectType.EXAMPLE -> {
                 blockContent();
                 ajax(
-                        url = generateAjaxUrl("loadExampleFile", json()),
+                        url = generateAjaxUrl("loadExampleFile"),
                         success = { data ->
                             try {
                                 unBlockContent();
@@ -84,7 +83,7 @@ class FileProvider(
             ProjectType.PUBLIC_LINK -> {
                 blockContent();
                 ajax(
-                        url = generateAjaxUrl("loadProjectFile", json()),
+                        url = generateAjaxUrl("loadProjectFile"),
                         success = { data ->
                             try {
                                 unBlockContent();
@@ -121,7 +120,7 @@ class FileProvider(
         blockContent();
         val filenameWithExtension = addKotlinExtension(filename);
         ajax(
-                url = generateAjaxUrl("addFile", json()),
+                url = generateAjaxUrl("addFile"),
                 success = { publicId ->
                     try {
                         project.addEmptyFile(filenameWithExtension, publicId);
@@ -147,7 +146,7 @@ class FileProvider(
     fun renameFile(publicId: String, callback: (String) -> Unit, newName: String) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("renameFile", json()),
+                url = generateAjaxUrl("renameFile"),
                 success = {
                     try {
                         callback(newName);
@@ -188,7 +187,7 @@ class FileProvider(
         }
         blockContent();
         ajax(
-                url = generateAjaxUrl("deleteFile", json()),
+                url = generateAjaxUrl("deleteFile"),
                 success = {
                     try {
                         callback();
@@ -214,7 +213,7 @@ class FileProvider(
     public fun saveFile(file: File, callback: () -> Unit) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("saveFile", json()),
+                url = generateAjaxUrl("saveFile"),
                 type = RequestType.POST,
                 timeout = 10000,
                 dataType = DataType.TEXT,

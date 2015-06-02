@@ -16,9 +16,6 @@
 
 package providers
 
-import checkDataForException
-import generateAjaxUrl
-
 /**
  * Created by Semyon.Atamas on 5/20/2015.
  */
@@ -27,7 +24,7 @@ import generateAjaxUrl
 class ConverterProvider(){
     fun convert(text: String, onSuccess: (String) -> Unit, onFail: (dynamic) -> Unit, onComplete: () -> Unit) {
         ajax(
-                url = generateAjaxUrl("convertToKotlin", json()),
+                url = generateAjaxUrl("convertToKotlin"),
                 success = { data: dynamic ->
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {

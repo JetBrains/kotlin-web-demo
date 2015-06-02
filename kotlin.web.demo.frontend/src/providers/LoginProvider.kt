@@ -16,7 +16,6 @@
 
 package providers
 
-import generateAjaxUrl
 import utils.ActionStatusMessages
 import utils.blockContent
 import utils.unBlockContent
@@ -66,7 +65,7 @@ class LoginProvider(
     fun getUserName() {
         blockContent();
         ajax(
-                url = generateAjaxUrl("getUserName", json()),
+                url = generateAjaxUrl("getUserName"),
                 success = { data ->
                     try {
                         if (checkDataForNull(data)) {

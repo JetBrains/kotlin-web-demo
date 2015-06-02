@@ -16,8 +16,6 @@
 
 package providers
 
-import checkDataForException
-import generateAjaxUrl
 import model.Project
 import model.ProjectType
 import utils.ActionStatusMessages
@@ -51,7 +49,7 @@ class ProjectProvider(
     fun renameProject(project: Project, newName: String) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("renameProject", json()),
+                url = generateAjaxUrl("renameProject"),
                 success = {
                     try {
                         project.name = newName;
@@ -78,7 +76,7 @@ class ProjectProvider(
     private fun loadExample(publicId: String, callback: (dynamic) -> Unit) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("loadExample", json()),
+                url = generateAjaxUrl("loadExample"),
                 success = { data ->
                     try {
                         if (checkDataForNull(data)) {
@@ -113,7 +111,7 @@ class ProjectProvider(
     fun addNewProject(name: String) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("addProject", json()),
+                url = generateAjaxUrl("addProject"),
                 success = { data ->
                     try {
                         onNewProjectAdded(name, data.projectId, data.fileId);
@@ -140,7 +138,7 @@ class ProjectProvider(
     private fun loadProject(publicId: String, callback: (dynamic) -> Unit, onNotFound: () -> Unit) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("loadProject", json()),
+                url = generateAjaxUrl("loadProject"),
                 success = { data ->
                     try {
                         if (checkDataForNull(data)) {
@@ -178,7 +176,7 @@ class ProjectProvider(
     fun forkProject(content: dynamic, callback: (dynamic) -> Unit, name: String) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("addProject", json()),
+                url = generateAjaxUrl("addProject"),
                 success = { data ->
                     try {
                         callback(data);
@@ -203,7 +201,7 @@ class ProjectProvider(
 
     fun checkIfProjectExists(publicId: String, onExists: () -> Unit, onNotExists: () -> Unit) {
         ajax(
-                url = generateAjaxUrl("checkIfProjectExists", json()),
+                url = generateAjaxUrl("checkIfProjectExists"),
                 success = { data ->
                     if (data.exists == true) {
                         onExists()
@@ -225,7 +223,7 @@ class ProjectProvider(
     private fun deleteProject(publicId: String, callback: () -> Unit) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("deleteProject", json()),
+                url = generateAjaxUrl("deleteProject"),
                 success = {
                     try {
                         callback();
@@ -251,7 +249,7 @@ class ProjectProvider(
     fun saveProject(project: Project, publicId: String, callback: () -> Unit) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("saveProject", json()),
+                url = generateAjaxUrl("saveProject"),
                 success = {
                     try {
                         callback();

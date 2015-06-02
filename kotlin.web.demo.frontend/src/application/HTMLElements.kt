@@ -14,34 +14,19 @@
  * limitations under the License.
  */
 
-import jquery.JQuery
-import org.w3c.dom.events.Event
-import providers.ProjectProvider
+package application
 
-/**
- * Created by Semyon.Atamas on 4/3/2015.
- */
+import org.w3c.dom.HTMLInputElement
+import kotlin.browser.document
 
-native
-interface Error {
-    val className: String
-    val interval: dynamic
-    val message: String
-    val severity: String
+
+private object Elements{
+    val argumentsInputElement = document.getElementById("arguments") as HTMLInputElement;
+
+    init {
+        argumentsInputElement.oninput = {
+            Application.accordion.selectedProjectView!!.project.args = argumentsInputElement.value;
+            Unit
+        };
+    }
 }
-
-native
-val projectProvider: ProjectProvider = noImpl
-
-native
-interface LoginModel{
-    fun login(type: String)
-    fun logout()
-    fun getUserName()
-}
-
-native
-fun decodeURI(uri:String): String
-
-native
-var CodeMirror: dynamic = noImpl

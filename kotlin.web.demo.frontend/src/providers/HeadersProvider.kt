@@ -16,8 +16,6 @@
 
 package providers
 
-import checkDataForException
-import generateAjaxUrl
 import model.ProjectType
 import utils.blockContent
 import utils.unBlockContent
@@ -41,7 +39,7 @@ class HeadersProvider(
     fun getAllHeaders(callback: (dynamic) -> Unit) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("loadHeaders", json()),
+                url = generateAjaxUrl("loadHeaders"),
                 success = { folders ->
                     try {
                         if (checkDataForNull(folders)) {
@@ -92,7 +90,7 @@ class HeadersProvider(
     fun getHeaderByFilePublicId(publicId: String, project_id: String, /*Function*/callback: (dynamic) -> Unit) {
         blockContent();
         ajax(
-                url = generateAjaxUrl("loadProjectInfoByFileId", json()),
+                url = generateAjaxUrl("loadProjectInfoByFileId"),
                 success = { data ->
                     try {
                         callback(data);

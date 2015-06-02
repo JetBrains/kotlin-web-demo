@@ -16,7 +16,7 @@
 
 package views
 
-import application.app
+import application.Application
 import jquery.JQuery
 import jquery.jq
 import org.w3c.dom.HTMLElement
@@ -52,7 +52,7 @@ class ProblemsView(
         treeElement.id = "problems-tree";
         element.appendChild(treeElement);
 
-        var project = app.accordion.selectedProjectView!!.project;
+        var project = Application.accordion.selectedProjectView!!.project;
         for (file in project.files) {
             if (!file.errors.isEmpty()) {
                 var fileId = file.name.replace(" ", "%20") + "_problems";

@@ -16,14 +16,14 @@
 
 package views
 
-import application.app
+import application.Application
 import jquery.jq
 import model.File
 import model.Project
 import model.ProjectType
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import unbind
+import utils.unbind
 import utils.getFileIdFromUrl
 import utils.getProjectIdFromUrl
 import utils.incompleteActionManager
@@ -75,7 +75,7 @@ class AccordionView(
         projectViews.clear()
         selectedProjectView = null;
         selectedFileView = null;
-        app.headersProvider.getAllHeaders { folders ->
+        Application.headersProvider.getAllHeaders { folders ->
             folders.forEach { folderContent ->
                 if (folderContent.name == "My programs") {
                     myProgramsFolder = MyProgramsFolderView(element, folderContent, null, { folderContentElement, header, parent ->
@@ -169,7 +169,7 @@ class AccordionView(
         if (isUserProjectInUrl()) {
             if (localStorage.getItem(projectId) == null) {
                 var file_id = getFileIdFromUrl();
-                app.headersProvider.getHeaderByFilePublicId(file_id, projectId, { header ->
+                Application.headersProvider.getHeaderByFilePublicId(file_id, projectId, { header ->
                     if (header.publicId !in projectViews.keySet()) {
                         if (header.type == ProjectType.PUBLIC_LINK) {
                             addProject(publicLinksFolder.contentElement, header, publicLinksFolder);

@@ -17,7 +17,7 @@
 package views
 
 import CodeMirror
-import application.app
+import application.Application
 import jquery.jq
 import model.File
 import model.FileType
@@ -107,7 +107,7 @@ class Editor(
         return my_editor.getValue();
     }
     fun open(file: File) {
-        jq(app.runButtonElement).button("option", "disabled", false);
+        jq(Application.runButtonElement).button("option", "disabled", false);
         (document.getElementById("workspace-overlay") as HTMLElement).style.display = "none";
         if (file.type != FileType.JAVA_FILE.name()) {
             my_editor.setOption("mode", "text/kotlin")
@@ -127,7 +127,7 @@ class Editor(
             my_editor.setValue(openedFile!!.text);
             if(openedFile!!.changesHistory != null) my_editor.setHistory(openedFile!!.changesHistory) else my_editor.clearHistory();
             updateHighlighting();
-            app.accordion.onModifiedSelectedFile(file);
+            Application.accordion.onModifiedSelectedFile(file);
         } else {
             throw Exception("Previous file wasn't closed");
         }
@@ -140,7 +140,7 @@ class Editor(
         removeStyles();
         my_editor.clearHistory();
         my_editor.setValue("");
-        jq(app.runButtonElement).button("option", "disabled", true);
+        jq(Application.runButtonElement).button("option", "disabled", true);
         (document.getElementById("workspace-overlay") as HTMLElement).style.display = "block";
     }
     fun reloadFile () {
@@ -218,8 +218,8 @@ class Editor(
             completion.list = filteredCompletions;
             callback(completion)
         } else {
-            app.completionProvider.getCompletion(
-                    app.accordion.selectedProjectView!!.project,
+            Application.completionProvider.getCompletion(
+                    Application.accordion.selectedProjectView!!.project,
                     openedFile!!.name,
                     cur,
                     { data ->
@@ -317,8 +317,8 @@ class Editor(
     private fun getHighlighting() {
         if (highlightOnTheFly && openedFile != null && !isLoadingHighlighting) {
             isLoadingHighlighting = true;
-            var example = app.accordion.selectedProjectView!!.project;
-            app.highlightingProvider.getHighlighting(example, { setHighlighting() }, { isLoadingHighlighting = false });
+            var example = Application.accordion.selectedProjectView!!.project;
+            Application.highlightingProvider.getHighlighting(example, { setHighlighting() }, { isLoadingHighlighting = false });
         }
     }
 

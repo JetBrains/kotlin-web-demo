@@ -16,7 +16,7 @@
 
 package views
 
-import application.app
+import application.Application
 import application.consoleView
 import jquery.JQuery
 import jquery.jq
@@ -268,9 +268,9 @@ class JUnitView(
             nodeElement.appendChild(childrenNode);
         } else {
             nodeElementHeader.ondblclick = {
-                app.accordion.selectedProjectView!!.getFileViewByName(node.sourceFileName)!!.fireSelectEvent();
-                editor.setCursor(node.methodPosition - 1, 0);
-                editor.focus();
+                Application.accordion.selectedProjectView!!.getFileViewByName(node.sourceFileName)!!.fireSelectEvent();
+                Application.editor.setCursor(node.methodPosition - 1, 0);
+                Application.editor.focus();
             }
         }
     }

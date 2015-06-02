@@ -16,7 +16,7 @@
 
 package application
 
-val app = Application()
-
 fun main(args: Array<String>){
+    Application.init()
+    Layout.init()
 }

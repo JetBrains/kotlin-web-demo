@@ -17,7 +17,7 @@
 package model
 
 import Error
-import application.app
+import application.Application
 import utils.Listenable
 import utils.VarListener
 import kotlin.browser.localStorage
@@ -67,7 +67,7 @@ class File(
     //TODO following functions from file to some other class
     fun save() {
         if (project.type == ProjectType.USER_PROJECT && isModifiable) {
-           app.fileProvider.saveFile(this, {
+           Application.fileProvider.saveFile(this, {
                 originalText = text
                 isModified = text != originalText
             });

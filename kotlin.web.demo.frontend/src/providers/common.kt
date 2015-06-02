@@ -58,3 +58,13 @@ public enum class RequestType() {
     GET,
     POST
 }
+
+fun generateAjaxUrl(type: String, parameters: Map<String, String> = emptyMap()): String {
+    var url = "kotlinServer?sessionId=" + sessionId + "&type=" + type;
+    for (entry in parameters) {
+        url += "&" + entry.getKey() + "=" + entry.getValue();
+    }
+    return url;
+}
+
+var sessionId = "-1"

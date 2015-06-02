@@ -33,7 +33,7 @@ import views.dialogs.ShortcutsDialogView
 import kotlin.browser.document
 import kotlin.browser.window
 
-class Application {
+object Application {
     val actionManager = ActionManager(
             hashMapOf(
                     "org.jetbrains.web.demo.run" to Shortcut(arrayOf("Ctrl", "F9"), { event ->
@@ -72,7 +72,7 @@ class Application {
                 generatedCodeView.clear();
                 problemsView.addMessages();
                 jq("#result-tabs").tabs("option", "active", 0);
-                argumentsInputElement.value = project.args;
+                Elements.argumentsInputElement.value = project.args;
                 configurationManager.updateConfiguration(project.confType);
             },
             onSelectFile = { previousFile, currentFile ->
@@ -254,6 +254,26 @@ class Application {
 
     val statusBarView = StatusBarView(document.getElementById("statusBar") as HTMLElement)
 
+    val helpProvider = HelpProvider({ error, status ->
+        consoleView.writeException(error);
+        statusBarView.setStatus(status);
+    });
+    val helpViewForWords = HelpView(helpProvider);
+
+    var timeoutId: Int = 0
+    val editor: Editor = Editor(
+            { cursorPosition ->
+                helpViewForWords.hide();
+                var pos = editor.cursorCoords();
+                helpViewForWords.setPosition(pos);
+
+                window.clearTimeout(timeoutId);
+                timeoutId = window.setTimeout({
+                    helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
+                }, 1000);
+            }
+    );
+
     init {
         initButtons()
 
@@ -310,6 +330,9 @@ class Application {
             }
         }
     }
+
+    fun init() {
+    }
 }
 
 native
@@ -326,9 +349,6 @@ val problemsView: dynamic = noImpl
 
 native
 val configurationManager: dynamic = noImpl
-
-native
-val argumentsInputElement: HTMLInputElement = noImpl
 
 native
 fun getNumberOfErrorsAndWarnings(data: dynamic): Int
