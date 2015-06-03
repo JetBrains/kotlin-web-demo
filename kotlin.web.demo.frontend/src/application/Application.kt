@@ -35,6 +35,7 @@ import views.dialogs.ConverterView
 import utils.jquery.ui.Dialog
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
+import views.editor.Editor
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
@@ -236,9 +237,9 @@ object Application {
             onSuccess = {
                 statusBarView.setStatus(ActionStatusMessage.get_completion_ok);
             },
-            onFail = { error ->
+            onFail = { error, status ->
                 consoleView.writeException(error);
-                statusBarView.setStatus(ActionStatusMessage.get_completion_fail);
+                statusBarView.setStatus(status);
             }
     );
 

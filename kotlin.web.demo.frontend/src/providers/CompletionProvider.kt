@@ -16,53 +16,53 @@
 
 package providers
 import model.Project
+import utils.editor.Position
 import utils.jquery.JQuery
+import views.ActionStatusMessage
+import views.editor.CompletionProposal
 import kotlin.browser.document
 
 class CompletionProvider(
-        var onSuccess: (dynamic) -> Unit,
-        var onFail: (dynamic) -> Unit)
+        var onSuccess: () -> Unit,
+        var onFail: (error: String, status: ActionStatusMessage) -> Unit
+)
 {
     private var isLoadingCompletion = false;
 
-    fun getCompletion(project: Project, filename: String, cursor: dynamic, callback:(dynamic) -> Unit) {
+    fun getCompletion(
+            project: Project,
+            filename: String,
+            cursor: Position,
+            callback: (Array<CompletionProposal>) -> Unit
+    ) {
         if (!isLoadingCompletion) {
             isLoadingCompletion = true;
-            JQuery.ajax(json(
-                //runConf is unused parameter. It's added to url for useful access logs
-                "url" to generateAjaxUrl("complete", hashMapOf("runConf" to project.confType)),
-                "context" to document.body,
-                "success" to { data: dynamic ->
-                    isLoadingCompletion = false;
-                    if (checkDataForNull(data)) {
-                        if (checkDataForException(data)) {
-                            onSuccess(data);
-                            callback(data);
+            ajax(
+                    url = generateAjaxUrl(REQUEST_TYPE.COMPLETE, hashMapOf("runConf" to project.confType)),
+                    dataType = DataType.JSON,
+                    timeout = 10000,
+                    type = HTMLRequestType.POST,
+                    data = json(
+                            "project" to JSON.stringify(project),
+                            "filename" to filename,
+                            "line" to cursor.line,
+                            "ch" to cursor.ch
+                    ),
+                    success = { completionProposals: Array<CompletionProposal> ->
+                        isLoadingCompletion = false;
+                        onSuccess();
+                        callback(completionProposals);
+                    },
+                    error =  { jqXHR: dynamic, textStatus: String, errorThrown: String ->
+                        isLoadingCompletion = false;
+                        if (jqXHR.responseText != null && jqXHR.responseText != "") {
+                            onFail(jqXHR.responseText, ActionStatusMessage.get_completion_fail);
                         } else {
-                            onFail(data);
+                            onFail(textStatus + " : " + errorThrown, ActionStatusMessage.get_completion_fail);
                         }
-                    } else {
-                        onFail("Incorrect data format.");
                     }
-                },
-                "dataType" to "json",
-                "timeout" to 10000,
-                "type" to "POST",
-                "data" to json(
-                    "project" to JSON.stringify(project),
-                    "filename" to filename,
-                    "line" to cursor.line,
-                    "ch" to cursor.ch
-                ),
-                "error" to  { jqXHR: dynamic, textStatus: String, errorThrown: String ->
-                    isLoadingCompletion = false;
-                    if (jqXHR.responseText != null && jqXHR.responseText != "") {
-                        onFail(jqXHR.responseText);
-                    } else {
-                        onFail(textStatus + " : " + errorThrown);
-                    }
-                }
-            ));
+            )
         }
     }
 }
+

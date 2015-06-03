@@ -66,4 +66,8 @@ fun generateAjaxUrl(type: String, parameters: Map<String, String> = emptyMap()):
     return url;
 }
 
+fun generateAjaxUrl(type: REQUEST_TYPE, parameters: Map<String, String> = emptyMap()): String{
+    return generateAjaxUrl(type.value, parameters)
+}
+
 var sessionId = "-1"

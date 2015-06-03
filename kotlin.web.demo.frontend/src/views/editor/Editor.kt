@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.editor
 
 import application.Application
 import jquery.jq
@@ -22,8 +22,11 @@ import model.File
 import model.FileType
 import org.w3c.dom.HTMLElement
 import utils.codemirror.CodeMirror
+import utils.editor.CodeMirror
+import utils.editor.Position
 import utils.jquery.ui.button
 import utils.unEscapeString
+import views.editor.Completion
 import kotlin.browser.document
 import kotlin.browser.window
 
@@ -188,86 +191,46 @@ class Editor(
         my_editor.setValue(text);
     }
 
-    var storedCompletionProposalsList: dynamic = null;
-    private fun getCompletions(cm: dynamic, callback: dynamic, options: dynamic) {
+    private var storedCompletionsList: Array<Completion>? = null;
+    private fun getCompletions(cm: CodeMirror, callback: (Hint) -> Unit, options: dynamic) {
         var cur = cm.getCursor();
         var token = cm.getTokenAt(cur);
-        var completion: dynamic = json(
-                "from" to json("line" to cur.line, "ch" to token.start),
-                "to" to json("line" to cur.line, "ch" to token.end),
-                "list" to arrayOf<dynamic>()
+        var hint = Hint(
+                Position(cur.line, token.start),
+                Position(cur.line, token.end),
+                arrayOf<Completion>()
         );
 
         //Fired when the completion is finished
-        CodeMirror.on(completion, "close", {
-            storedCompletionProposalsList = null;
+        CodeMirror.on(hint, "close", {
+            storedCompletionsList = null;
             Unit
         });
 
-        if (storedCompletionProposalsList != null) {
-            var filteredCompletions: dynamic = null;
-            if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
-                filteredCompletions = storedCompletionProposalsList;
-            } else {
-                filteredCompletions = arrayOf<dynamic>();
-                storedCompletionProposalsList.forEach({ element ->
-                    if (element.text.startsWith(token.string)) {
-                        filteredCompletions.push(element);
+        if (storedCompletionsList != null) {
+            hint.list =
+                    if ((token.string == ".") || (token.string == " ") || (token.string == "(")) {
+                        storedCompletionsList!!;
+                    } else {
+                        storedCompletionsList!!.filter { it.text.startsWith(token.string) }.toTypedArray()
                     }
-                });
-            }
-            completion.list = filteredCompletions;
-            callback(completion)
+            callback(hint)
         } else {
             Application.completionProvider.getCompletion(
                     Application.accordion.selectedProjectView!!.project,
                     openedFile!!.name,
                     cur,
-                    { data ->
-                        data.forEach { element ->
-                            element.render = { element: dynamic, self: dynamic, data: dynamic ->
-                                var icon = document.createElement("div");
-                                icon.className = "icon " + data.icon;
-                                element.appendChild(icon);
-
-                                var textSpan = document.createElement("div");
-                                textSpan.className = "name";
-                                textSpan.innerHTML = data.displayText;
-                                element.appendChild(textSpan);
-
-                                var tail = document.createElement("div");
-                                tail.className = "tail";
-                                tail.innerHTML = data.tail;
-                                element.appendChild(tail);
-                            }
-                            element.hint = { cm: dynamic, self: dynamic, data: dynamic ->
-                                val token = cm.getTokenAt(cm.getCursor());
-                                var from: dynamic = null;
-                                var to: dynamic = json("line" to cur.line, "ch" to token.end);
-                                if ((token.string == '.') || (token.string == ' ') || (token.string == '(')) {
-                                    from = to;
-                                    cm.replaceRange(data.text, from);
-                                } else {
-                                    from = json("line" to cur.line, "ch" to token.start);
-                                    cm.replaceRange(data.text, from, to);
-                                    if (data.text.endsWith('(')) {
-                                        cm.replaceRange(")", json("line" to cur.line, "ch" to token.start + data.text.length));
-                                        cm.execCommand("goCharLeft")
-                                    }
-                                }
-                            };
-                            completion.list.push(element)
-                        }
-
+                    { completionProposals ->
+                        hint.list = completionProposals.map { Completion(it) }.toTypedArray()
                         //Fired before completion update. getCompletions will be called after
                         //Stored list will be reused in getCompletion calls and deleted when completion is finished
-                        CodeMirror.on(completion, "update", {
-                            storedCompletionProposalsList = completion.list;
+                        CodeMirror.on(hint, "update", {
+                            storedCompletionsList = hint.list;
                             Unit
                         });
-
-                        callback(completion)
-                    })
+                        callback(hint)
+                    }
+            )
         }
 
 
