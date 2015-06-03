@@ -17,28 +17,23 @@
 package providers
 
 import model.Project
+import views.editor.Error
+import utils.Object
 
 class HighlightingProvider(
         private val onSuccess: (dynamic) -> Unit,
         private val onFail: (String, String) -> Unit
 ) {
 
-    fun getHighlighting(project: Project, callback: (dynamic) -> Unit, finallyCallback: (() -> Unit)?) {
+    fun getHighlighting(project: Project, callback: (Map<String, Array<Error>>) -> Unit, finallyCallback: (() -> Unit)?) {
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("highlight", hashMapOf("runConf" to project.confType)),
                 success = { data ->
                     try {
-                        if (checkDataForNull(data)) {
-                            if (checkDataForException(data)) {
-                                onSuccess(data);
-                                callback(data);
-                            } else {
-                                onFail(data, "");
-                            }
-                        } else {
-                            onFail("Incorrect data format.", "");
-                        }
+                        val errors = getErrorsMapFromObject(data, project)
+                        onSuccess(data);
+                        callback(errors);
                     } catch (e: Throwable) {
                         console.log(e);
                     }

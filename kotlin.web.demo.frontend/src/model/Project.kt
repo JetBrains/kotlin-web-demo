@@ -17,7 +17,7 @@
 package model
 
 import application.Application
-import utils.Error
+import views.editor.Error
 import utils.Listenable
 import utils.VarListener
 import utils.addKotlinExtension
@@ -173,11 +173,11 @@ class Project(
         }
     }
 
-    fun setErrors (errors: Json) {
-        for (file in files) {
-            file.errors = errors.get (file.name) as Array<Error>;
-        }
-    }
+//    fun setErrors (errors: Json) {
+//        for (file in files) {
+//            file.errors = errors.get (file.name) as Array<Error>;
+//        }
+//    }
 
     fun setDefaultContent() {
         if (!contentLoaded) {
@@ -188,12 +188,6 @@ class Project(
     }
 
     private fun isModified() = files.any { it.isModified }
-
-    fun hasErrors() = files.any { file ->
-        file.errors.any { error ->
-            error.severity == "ERROR"
-        }
-    }
 
     var files = arrayListOf<File>();
     val nameListener = VarListener<String>()

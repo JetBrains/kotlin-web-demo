@@ -21,8 +21,8 @@ import kotlin.browser.document
 import html4k.*
 import html4k.js.*
 import html4k.dom.*
-import utils.editor.CodeMirror
-import utils.editor.Position
+import utils.codemirror.CodeMirror
+import utils.codemirror.Position
 
 data class Hint(val from: Position, val to: Position, var list: Array<Completion>)
 

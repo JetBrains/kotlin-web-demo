@@ -21,19 +21,26 @@ import jquery.jq
 import model.File
 import model.FileType
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLTextAreaElement
 import utils.codemirror.CodeMirror
-import utils.editor.CodeMirror
-import utils.editor.Position
+import utils.codemirror.Position
 import utils.jquery.ui.button
 import utils.unEscapeString
 import views.editor.Completion
 import kotlin.browser.document
 import kotlin.browser.window
+import html4k.*
+import html4k.js.*
+import html4k.dom.*
+import views.editor.Error
+import utils.Object
+import kotlin.browser
 
 class Editor(
         private val onCursorActivity: (dynamic) -> Unit
 ) {
-    val my_editor = CodeMirror.fromTextArea(document.getElementById("code"), json(
+    val my_editor = CodeMirror.fromTextArea(document.getElementById("code") as HTMLTextAreaElement, json(
             "lineNumbers" to true,
             "styleActiveLine" to true,
             "matchBrackets" to true,
@@ -45,9 +52,10 @@ class Editor(
             "indentUnit" to 4
     ));
     var openedFile: File? = null
-    private var timerIntervalForNonPrinting = 300;
+    private val timerIntervalForNonPrinting = 300;
     var highlightOnTheFly = false;
     var arrayClasses = arrayListOf<dynamic>();
+    private val documents = hashMapOf<String, CodeMirror.Doc>()
 
     init {
         var timeoutId: Int? = null;
@@ -107,88 +115,60 @@ class Editor(
     fun focus() {
         my_editor.focus()
     }
-    fun getText() {
+
+    fun getText(): String {
         return my_editor.getValue();
     }
     fun open(file: File) {
-        jq(Application.runButtonElement).button("option", "disabled", false);
+        Application.runButton.disabled = false;
         (document.getElementById("workspace-overlay") as HTMLElement).style.display = "none";
-        if (file.type != FileType.JAVA_FILE.name()) {
-            my_editor.setOption("mode", "text/kotlin")
-        } else {
-            my_editor.setOption("mode", "text/x-java")
-        }
 
+        file.project.files.forEach { createDocIfNotExist(it) }
+        val relatedDocument = documents.get(file.id)!!
         if (openedFile == null) {
             openedFile = file;
             removeStyles();
-            if (!openedFile!!.isModifiable) {
-                my_editor.setOption("readOnly", true);
-            } else {
-                my_editor.setOption("readOnly", false);
-            }
+            my_editor.setOption("readOnly", !openedFile!!.isModifiable);
             my_editor.focus();
-            my_editor.setValue(openedFile!!.text);
-            if(openedFile!!.changesHistory != null) my_editor.setHistory(openedFile!!.changesHistory) else my_editor.clearHistory();
-            updateHighlighting();
+            my_editor.swapDoc(relatedDocument);
             Application.accordion.onModifiedSelectedFile(file);
         } else {
             throw Exception("Previous file wasn't closed");
         }
     }
     fun closeFile () {
-        if (openedFile != null) {
-            openedFile!!.changesHistory = my_editor.getHistory();
-            openedFile = null;
-        }
+        my_editor.swapDoc(CodeMirror.Doc(""))
+        openedFile = null;
         removeStyles();
-        my_editor.clearHistory();
-        my_editor.setValue("");
-        jq(Application.runButtonElement).button("option", "disabled", true);
+        Application.runButton.disabled = true;
         (document.getElementById("workspace-overlay") as HTMLElement).style.display = "block";
     }
     fun reloadFile () {
         if (openedFile != null) {
             my_editor.focus();
             my_editor.setValue(openedFile!!.text);
-            if(openedFile!!.changesHistory != null) my_editor.setHistory(openedFile!!.changesHistory) else my_editor.clearHistory();
             updateHighlighting();
         }
     }
-    fun getWordAtCursor (cursorPosition: dynamic): String {
-        var word = my_editor.getTokenAt(cursorPosition).string;
-        if (word != null) {
-            return word;
-        }
-        return "";
-    }
-    fun getMessageForLineAtCursor (cursorPosition: dynamic): String {
-        var message = "";
-        var lineNumber = cursorPosition.line;
-        var text = my_editor.lineInfo(lineNumber).markerText;
-        if (text != null) {
-            text = text.substring(text.indexOf("title=\"") + 7);
-            text = text.substring(0, text.indexOf("\""));
-            if (text.length > 90) text = text.substring(0, 90) + "...";
-            message = "line " + (lineNumber + 1) + " - " + text;
-        }
-        return message;
-    }
 
-    fun cursorCoords() {
-        return my_editor.cursorCoords();
-    }
+    fun getWordAtCursor(cursorPosition: dynamic) = my_editor.getTokenAt(cursorPosition).string;
+
+    fun cursorCoords() = my_editor.cursorCoords()
 
     fun updateHighlighting(){
         getHighlighting()
     }
 
-    fun removeHighlighting() {
-        removeStyles()
-    }
-
-    fun setValue (text: String) {
-        my_editor.setValue(text);
+    private fun createDocIfNotExist(file: File) {
+        if (documents.get(file.id) == null) {
+            val type = if (file.type != FileType.JAVA_FILE.name()) {
+                "text/kotlin"
+            } else {
+                "text/x-java"
+            }
+            documents.put(file.id, CodeMirror.Doc(file.text, type))
+            getHighlighting()
+        }
     }
 
     private var storedCompletionsList: Array<Completion>? = null;
@@ -236,43 +216,42 @@ class Editor(
 
     }
 
-    private fun createGutterElement(severity: dynamic, title: String): HTMLElement {
-        var element = document.createElement("div") as HTMLElement;
-        element.className = severity + "gutter";
-        element.title = title;
-        return element;
-    }
-
-    fun setHighlighting() {
+    public fun setHighlighting(errors: Map<String, Array<Error>>) {
         removeStyles();
-        for (error in openedFile!!.errors) {
-            var interval = error.interval;
-            var title = unEscapeString(error.message);
-            var severity = error.severity;
+        for (fileId in errors.keySet()) {
+            val relatedDocument = documents.get(fileId)!!
+            for (error in errors[fileId]) {
+                var interval = error.interval;
+                var errorMessage = unEscapeString(error.message);
+                var severity = error.severity;
 
-            arrayClasses.add(my_editor.markText(interval.start, interval.end, json(
-                    "className" to error.className,
-                    "title" to title
-            )));
+                arrayClasses.add(relatedDocument.markText(interval.start, interval.end, json(
+                        "className" to error.className,
+                        "title" to errorMessage
+                )));
 
-            if ((my_editor.lineInfo(interval.start.line) != null) && (my_editor.lineInfo(interval.start.line).gutterMarkers == null)) {
-                my_editor.setGutterMarker(interval.start.line, "errors-and-warnings-gutter", createGutterElement(severity, title));
-            } else {
-                var gutter = my_editor.lineInfo(interval.start.line).gutterMarkers["errors-and-warnings-gutter"];
-                gutter.title += "\n" + title;
-                if (gutter.className.indexOf("ERRORgutter") == -1) {
-                    gutter.className = severity + "gutter";
+                if ((my_editor.lineInfo(interval.start.line) != null) && (my_editor.lineInfo(interval.start.line).gutterMarkers == null)) {
+                    my_editor.setGutterMarker(interval.start.line, "errors-and-warnings-gutter", document.create.div {
+                        classes = setOf(severity + "gutter")
+                        title = errorMessage
+                    });
+                } else {
+                    var gutter: HTMLElement = my_editor.lineInfo(interval.start.line).gutterMarkers["errors-and-warnings-gutter"];
+                    gutter.title += "\n" + errorMessage;
+                    if (gutter.className.indexOf("ERRORgutter") == -1) {
+                        gutter.className = severity + "gutter";
+                    }
                 }
-            }
 
-            var el = document.getElementById(interval.start.line + "_" + interval.start.ch);
-            if (el != null) {
-                el.setAttribute("title", title);
+                var el = document.getElementById(interval.start.line + "_" + interval.start.ch);
+                if (el != null) {
+                    el.setAttribute("title", errorMessage);
+                }
             }
         }
     }
 
-    private fun removeStyles() {
+    fun removeStyles() {
         arrayClasses.forEach { it.clear() }
         my_editor.clearGutter("errors-and-warnings-gutter");
     }
@@ -282,9 +261,8 @@ class Editor(
         if (highlightOnTheFly && openedFile != null && !isLoadingHighlighting) {
             isLoadingHighlighting = true;
             var example = Application.accordion.selectedProjectView!!.project;
-            Application.highlightingProvider.getHighlighting(example, { setHighlighting() }, { isLoadingHighlighting = false });
+            Application.highlightingProvider.getHighlighting(example, { data -> setHighlighting(data) }, { isLoadingHighlighting = false });
         }
     }
 
 }
-

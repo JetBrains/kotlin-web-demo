@@ -17,7 +17,7 @@
 package model
 
 import application.Application
-import utils.Error
+import views.editor.Error
 import utils.Listenable
 import utils.VarListener
 import kotlin.browser.localStorage
@@ -32,9 +32,6 @@ class File(
         val type: String = FileType.KOTLIN_FILE.name(),
         isRevertible: Boolean = true
 ) {
-    var errors = arrayOf<Error>()
-    var changesHistory: dynamic = null;
-
     val listenableName = VarListener<String>();
     var name: String by Listenable(name, listenableName)
 

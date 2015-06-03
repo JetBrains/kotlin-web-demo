@@ -16,7 +16,7 @@
 
 package providers
 import model.Project
-import utils.editor.Position
+import utils.codemirror.Position
 import utils.jquery.JQuery
 import views.ActionStatusMessage
 import views.editor.CompletionProposal

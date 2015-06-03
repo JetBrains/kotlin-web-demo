@@ -153,11 +153,3 @@ fun Window.eval(code: String): dynamic
 
 native
 fun decodeURI(uri:String): String
-
-native
-interface Error {
-    val className: String
-    val interval: dynamic
-    val message: String
-    val severity: String
-}

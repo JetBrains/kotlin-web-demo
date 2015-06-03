@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package utils.editor
-
+package views.editor
 
 native
-class CodeMirror() {
-    fun getCursor(): Position
-    fun getTokenAt(pos: Position): Token
-    fun replaceRange(replacement: String, from: Position, to: Position = from, origin: String? = null)
-    fun execCommand(s: String)
+interface Error {
+    val className: String
+    val interval: dynamic
+    val message: String
+    val severity: String
 }
-
-data class Position(val line: Int, val ch: Int)
-
-data class Token(val start: Int, val end: Int, val string: String, val type: String?, val state: dynamic)

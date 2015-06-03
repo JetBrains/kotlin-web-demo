@@ -17,6 +17,7 @@
 package views
 
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLParagraphElement
 import utils.codemirror.CodeMirror
 import utils.unEscapeString
 import kotlin.browser.document
@@ -29,7 +30,7 @@ class GeneratedCodeView(private val element: HTMLElement) {
 
     fun setOutput(data: dynamic) {
         element.innerHTML = "";
-        var generatedCode = document.createElement("p");
+        var generatedCode = document.createElement("p") as HTMLParagraphElement;
         if (data.type == "toggle-info") {
             generatedCode.className = "consoleViewInfo";
             generatedCode.innerHTML = unEscapeString(data.text);

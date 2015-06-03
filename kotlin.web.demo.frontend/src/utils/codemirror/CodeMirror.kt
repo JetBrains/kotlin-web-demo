@@ -16,6 +16,49 @@
 
 package utils.codemirror
 
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLTextAreaElement
 
 native
-val CodeMirror: dynamic = noImpl
+class CodeMirror() {
+    companion object CodeMirror {
+        val hint: dynamic
+        val commands: dynamic
+        fun runMode(text: String, mode: String, outputElement: HTMLElement)
+        fun fromTextArea(textArea: HTMLTextAreaElement, json: Json): utils.codemirror.CodeMirror
+        fun registerHelper(type: String, name: String, value: Any)
+        fun on(obj: Any, action: String, callback: () -> Unit)
+    }
+    class Doc(text: String, mode: String = "", firstLineNumber: Int = 1){
+        fun markText(start: Position, end: Position, json: Json): Any
+    }
+
+    fun getCursor(): Position
+    fun getTokenAt(pos: Position): Token
+    fun replaceRange(replacement: String, from: Position, to: Position = from, origin: String? = null)
+    fun execCommand(s: String)
+    fun on(action: String, callback: (utils.codemirror.CodeMirror) -> Unit)
+    fun getValue(): String
+    fun setOption(name: String, value: Any)
+    fun refresh()
+    fun setCursor(lineNo: Int, charNo: Int)
+    fun focus()
+    fun setValue(text: String)
+    fun setHistory(history: dynamic)
+    fun getHistory(): dynamic
+    fun clearHistory()
+    fun cursorCoords(): dynamic
+    fun clearGutter(gutter: String)
+    fun markText(start: Position, end: Position, json: Json): Any
+    fun setGutterMarker(line: Int, gutter: String, element: HTMLElement)
+    fun lineInfo(line: Int): dynamic
+    fun lineCount(): Int
+    fun indentLine(lineNo: Int)
+    fun operation(function: () -> Unit)
+
+    fun swapDoc(document: Doc)
+}
+
+data class Position(val line: Int, val ch: Int)
+
+data class Token(val start: Int, val end: Int, val string: String, val type: String?, val state: dynamic)

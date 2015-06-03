@@ -16,6 +16,10 @@
 
 package providers
 
+import model.File
+import model.Project
+import views.editor.Error
+import utils.Object
 import utils.jquery.JQuery
 
 fun checkDataForNull(data: dynamic): Boolean = data != null
@@ -68,6 +72,14 @@ fun generateAjaxUrl(type: String, parameters: Map<String, String> = emptyMap()):
 
 fun generateAjaxUrl(type: REQUEST_TYPE, parameters: Map<String, String> = emptyMap()): String{
     return generateAjaxUrl(type.value, parameters)
+}
+
+fun getErrorsMapFromObject(obj: dynamic, project: Project): Map<String, Array<Error>> {
+    val errors = hashMapOf<String, Array<Error>>()
+    for (fileName in Object.keys(obj)) {
+        errors.put(project.files.first { it.name == fileName }.id, obj[fileName])
+    }
+    return errors
 }
 
 var sessionId = "-1"

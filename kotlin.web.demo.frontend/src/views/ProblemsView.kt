@@ -23,18 +23,15 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLLIElement
 import org.w3c.dom.HTMLUListElement
 import org.w3c.dom.events.KeyboardEvent
-import utils.KeyCode
-import utils.a11yTree
+import utils.*
 import utils.jquery.find
-import utils.parseBoolean
 import utils.jquery.toArray
-import utils.unEscapeString
+import views.editor.Error
 import kotlin.browser.document
 
 
 class ProblemsView(
         private val element: HTMLElement,
-        tabs: JQuery,
         private val setCursor: (String, Int, Int) -> Unit
 ) {
 
@@ -42,7 +39,7 @@ class ProblemsView(
         element.innerHTML = "";
     }
 
-    fun addMessages() {
+    fun addMessages(errors: dynamic) {
         var fileNodes = jq("#problems-tree").find(">li").toArray();
         var expandedStatus = hashMapOf<String, Boolean>();
         for (fileNode in fileNodes) {
@@ -54,24 +51,25 @@ class ProblemsView(
         treeElement.id = "problems-tree";
         element.appendChild(treeElement);
 
-        var project = Application.accordion.selectedProjectView!!.project;
-        for (file in project.files) {
-            if (!file.errors.isEmpty()) {
-                var fileId = file.name.replace(" ", "%20") + "_problems";
+        val filenames = Object.keys(errors)
+        for (fileName in filenames) {
+            val fileErrors: Array<Error> = errors[fileName]
+            if (!fileErrors.isEmpty()) {
+                var fileId = fileName.replace(" ", "%20") + "_problems";
                 var fileProblemsNode: dynamic = json(
                         "children" to arrayOf<dynamic>(),
-                        "name" to file.name,
+                        "name" to fileName,
                         "icon" to "kotlin-file-icon",
                         "id" to fileId
                 );
 
-                for (error in file.errors) {
+                for (error in fileErrors) {
                     var errorNode = json(
                             "children" to arrayOf<dynamic>(),
                             "name" to error.severity.toLowerCase().capitalize() + ":(" + (error.interval.start.line + 1) + ", " + error.interval.start.ch + ") " + unEscapeString(error.message),
                             "icon" to error.severity,
                             "id" to fileId + "_" + error.severity + "_" + error.interval.start.line + "_" + error.interval.start.ch,
-                            "filename" to file.name,
+                            "filename" to fileName,
                             "line" to error.interval.start.line,
                             "ch" to error.interval.start.ch
                     );

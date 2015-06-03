@@ -158,7 +158,6 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                                 file.text = content.text;
                                 file.originalText = content.text;
                                 file.name = unEscapeString(content.name);
-                                file.changesHistory = null;
                             },
                             {
                                 window.alert("Can't find file origin, maybe it was removed by a user");

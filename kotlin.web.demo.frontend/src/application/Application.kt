@@ -77,7 +77,7 @@ object Application {
                 consoleView.clear();
                 junitView.clear();
                 generatedCodeView.clear();
-                problemsView.addMessages();
+                problemsView.clear();
                 jq("#result-tabs").tabs("option", "active", 0);
                 Elements.argumentsInputElement.value = project.args;
                 configurationManager.updateConfiguration(project.confType);
@@ -139,9 +139,8 @@ object Application {
             onSuccess = { output, project ->
                 output.forEach { data ->
                     if (data.type == "errors") {
-                        project.setErrors(data.errors);
-                        problemsView.addMessages();
-                        editor.setHighlighting();
+                        problemsView.addMessages(data.errors);
+                        editor.setHighlighting(getErrorsMapFromObject(data.errors, project));
                     } else if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
                         generatedCodeView.setOutput(data);
                     } else {
@@ -157,10 +156,9 @@ object Application {
             onErrorsFound = { data, project ->
                 data.forEach { data ->
                     if (data.type == "errors") {
-                        project.setErrors(data.errors);
                         jq("#result-tabs").tabs("option", "active", 0);
-                        problemsView.addMessages();
-                        editor.setHighlighting();
+                        problemsView.addMessages(data.errors);
+                        editor.setHighlighting(getErrorsMapFromObject(data.errors, project));
                         statusBarView.setStatus(ActionStatusMessage.get_highlighting_ok,
                                 getNumberOfErrorsAndWarnings(data.errors).toString());
                     }
@@ -174,8 +172,8 @@ object Application {
                 statusBarView.setStatus(ActionStatusMessage.run_java_fail);
             }
     )
-    val runButtonElement = document.getElementById("runButton") as HTMLElement
-    private val runButton = Button(runButtonElement)
+    private val runButtonElement = document.getElementById("runButton") as HTMLElement
+    val runButton = Button(runButtonElement)
 
     private val converterProvider = ConverterProvider()
     private val converterView = ConverterView(converterProvider)
@@ -245,8 +243,7 @@ object Application {
 
     val highlightingProvider = HighlightingProvider(
             { data ->
-                accordion.selectedProjectView!!.project.setErrors(data);
-                problemsView.addMessages();
+                problemsView.addMessages(data)
                 statusBarView.setStatus(ActionStatusMessage.get_highlighting_ok,
                         getNumberOfErrorsAndWarnings(data).toString());
             },
@@ -350,19 +347,15 @@ object Application {
 
     val consoleView = ConsoleView(document.getElementById("program-output") as HTMLDivElement, jq("#result-tabs"));
     val junitView = JUnitView(document.getElementById("program-output") as HTMLDivElement, jq("#result-tabs"));
-    val problemsView = ProblemsView(
-            document.getElementById("problems") as HTMLDivElement,
-            jq("#result-tabs"),
-            { filename, line, ch ->
-                accordion.selectedProjectView!!.getFileViewByName(filename)!!.fireSelectEvent();
-                editor.setCursor(line, ch);
-                editor.focus();
-            }
-    );
+    val problemsView = ProblemsView(document.getElementById("problems") as HTMLDivElement) { filename, line, ch ->
+        accordion.selectedProjectView!!.getFileViewByName(filename)!!.fireSelectEvent();
+        editor.setCursor(line, ch);
+        editor.focus();
+    };
 
     val configurationManager = ConfigurationManager({ configuration ->
         accordion.selectedProjectView!!.project.confType = configuration.type.name().toLowerCase();
-        editor.removeHighlighting();
+        editor.removeStyles();
         problemsView.clear();
         editor.updateHighlighting()
     });
