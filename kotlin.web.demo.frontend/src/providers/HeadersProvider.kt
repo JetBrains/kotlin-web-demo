@@ -74,7 +74,7 @@ class HeadersProvider(
                     }
                 },
                 dataType = DataType.JSON,
-                type = RequestType.GET,
+                type = HTMLRequestType.GET,
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
@@ -99,7 +99,7 @@ class HeadersProvider(
                         console.log(e)
                     }
                 },
-                type = RequestType.GET,
+                type = HTMLRequestType.GET,
                 timeout = 10000,
                 dataType = DataType.JSON,
                 data = json(

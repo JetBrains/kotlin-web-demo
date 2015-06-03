@@ -315,7 +315,7 @@ object Application {
     private fun setKotlinVersion() {
         ajax(
                 url = "http://kotlinlang.org/latest_release_version.txt",
-                type = RequestType.GET,
+                type = HTMLRequestType.GET,
                 dataType = DataType.TEXT,
                 timeout = 1000,
                 success = { kotlinVersion ->
@@ -324,7 +324,7 @@ object Application {
         );
         ajax(
                 url = "build.txt",
-                type = RequestType.GET,
+                type = HTMLRequestType.GET,
                 dataType = DataType.TEXT,
                 timeout = 1000,
                 success = { kotlinVersion ->
@@ -336,7 +336,7 @@ object Application {
     fun getSessionInfo(callback: (dynamic) -> Unit) {
         ajax(
                 url = "kotlinServer?sessionId=" + sessionId + "&type=getSessionInfo",
-                type = RequestType.GET,
+                type = HTMLRequestType.GET,
                 dataType = DataType.JSON,
                 timeout = 10000,
                 success = callback

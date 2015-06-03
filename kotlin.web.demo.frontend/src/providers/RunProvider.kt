@@ -75,7 +75,7 @@ class RunProvider(
                     }
                 },
                 dataType = DataType.JSON,
-                type = RequestType.POST,
+                type = HTMLRequestType.POST,
                 data = json ("project" to JSON.stringify(project)),
                 timeout = 10000,
                 complete = { onComplete() },
@@ -137,7 +137,7 @@ class RunProvider(
                     }
                 },
                 dataType = DataType.JSON,
-                type = RequestType.POST,
+                type = HTMLRequestType.POST,
                 data = json("project" to JSON.stringify(project)),
                 timeout = 10000,
                 complete = {

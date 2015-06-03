@@ -28,7 +28,7 @@ public fun ajax(
         url: String,
         success: (dynamic) -> Unit,
         dataType: DataType,
-        type: RequestType,
+        type: HTMLRequestType,
         data: Json? = null,
         timeout: Int,
         error: (dynamic, String, String) -> Unit = {jqXHR, textStatus, errorThrown ->},
@@ -53,7 +53,7 @@ public enum class DataType() {
     JSON
 }
 
-public enum class RequestType() {
+public enum class HTMLRequestType() {
     GET,
     POST
 }
