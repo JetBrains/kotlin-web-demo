@@ -18,9 +18,9 @@ package views
 
 import jquery.JQuery
 import jquery.jq
-import utils.on
-import utils.selectmenu
-import utils.value
+import utils.jquery.on
+import utils.jquery.ui.selectmenu
+import utils.jquery.value
 import kotlin.browser.document
 
 enum class ConfigurationTypeRunner {

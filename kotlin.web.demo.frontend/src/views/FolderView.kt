@@ -21,6 +21,7 @@ import html4k.js.div
 import jquery.jq
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
+import utils.jquery.ui.accordion
 
 /**
  * Created by Semyon.Atamas on 4/6/2015.

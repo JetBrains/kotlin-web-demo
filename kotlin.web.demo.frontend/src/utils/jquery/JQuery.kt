@@ -14,26 +14,22 @@
  * limitations under the License.
  */
 
-package utils
+package utils.jquery
 
 import jquery.JQuery
 import org.w3c.dom.Document
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.Window
 import org.w3c.dom.events.Event
-import views.Editor
+import org.w3c.dom.events.KeyboardEvent
+
 
 native("$")
-val jquery: JQuery
-
-native
-fun Window.eval(code: String): dynamic
+object JQuery {
+    fun ajax(parameters: Json)
+}
 
 native
 public fun JQuery.slideDown()
-
-native
-public fun JQuery.ajax(parameters: Json)
 
 native
 public fun JQuery.height(height: Int)
@@ -56,7 +52,6 @@ public fun JQuery.toArray(): Array<HTMLElement>
 native("is")
 public fun JQuery.isCheck(s: String): Boolean
 
-
 native
 fun JQuery.hide()
 
@@ -75,21 +70,6 @@ fun JQuery.on(s: String, onClose: (Event) -> Unit)
 native
 fun JQuery.css(key: String, value: dynamic)
 
-native
-fun JQuery.resizable(parameters: Json)
-
-native
-fun JQuery.resizable(mode : String, param : String, value : Any?)
-
-native
-fun JQuery.selectmenu(parameters: Json)
-
-native
-fun JQuery.selectmenu(command: String)
-
-native
-fun JQuery.tabs()
-
 native("val")
 fun JQuery.value(): String
 
@@ -104,12 +84,10 @@ native
 fun JQuery.on(action: String, selector: String, callback: (event: Event) -> Unit)
 
 native
-fun decodeURI(uri:String): String
+fun JQuery.keydown(callback: (KeyboardEvent) -> Unit)
 
 native
-interface Error {
-    val className: String
-    val interval: dynamic
-    val message: String
-    val severity: String
-}
+fun JQuery.find(selector: String): JQuery
+
+native
+fun JQuery.trigger(action: String)

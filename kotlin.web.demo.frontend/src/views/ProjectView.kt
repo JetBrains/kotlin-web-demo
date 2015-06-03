@@ -25,8 +25,9 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLSpanElement
 import utils.addKotlinExtension
 import utils.getFileIdFromUrl
-import utils.slideDown
+import utils.jquery.slideDown
 import views.dialogs.InputDialogView
+import views.dialogs.ValidationResult
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window

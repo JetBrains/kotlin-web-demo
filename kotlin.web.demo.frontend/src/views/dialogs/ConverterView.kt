@@ -22,10 +22,12 @@ import html4k.js.textArea
 import jquery.jq
 import providers.ConverterProvider
 import utils.KeyCode
-import views.CodeMirror
-import views.button
-import views.find
-import views.keydown
+import utils.jquery.ui.Dialog
+import utils.jquery.ui.DialogButton
+import utils.codemirror.CodeMirror
+import utils.jquery.ui.button
+import utils.jquery.find
+import utils.jquery.keydown
 import kotlin.browser.document
 import kotlin.browser.window
 
@@ -84,7 +86,7 @@ class ConverterView(converterProvider: ConverterProvider) {
                 javaEditor.refresh();
                 kotlinEditor.refresh();
             },
-            buttons = arrayOf(Button(
+            buttons = arrayOf(DialogButton(
                     text = "Convert to Kotlin",
                     click = {
                         getDialogButton(dialogElement, 1).button("disable");

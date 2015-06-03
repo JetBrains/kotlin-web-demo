@@ -19,7 +19,9 @@ package application
 import jquery.jq
 import org.w3c.dom.HTMLElement
 import utils.*
-import views.find
+import utils.jquery.*
+import utils.jquery.ui.resizable
+import utils.jquery.find
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window

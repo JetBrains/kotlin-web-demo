@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views.dialogs
+package utils.jquery.ui
 
 import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import utils.KeyCode
-import views.keydown
+import utils.jquery.keydown
 import kotlin.properties.ReadWriteProperty
 
 /**
@@ -38,7 +38,7 @@ class Dialog(
         width: Int = 300,
         height: Int? = null,
         minHeight: Int = 150,
-        buttons: Array<Button> = arrayOf<Button>(),
+        buttons: Array<DialogButton> = arrayOf<DialogButton>(),
         onOpen: ((dynamic, dynamic) -> Unit)? = null,
         onClose: (() -> Unit)? = null,
         resizeStop: (() -> Unit)? = null
@@ -78,15 +78,15 @@ class Dialog(
 
 
     fun open() {
-        jquery.jq(dialogElement).dialog("open");
+        jq(dialogElement).dialog("open");
     }
 
     fun close() {
-        jquery.jq(dialogElement).dialog("close");
+        jq(dialogElement).dialog("close");
     }
 }
 
-class Button(val text: String, val click: (Event)->Unit)
+class DialogButton(val text: String, val click: (Event)->Unit)
 
 class DialogProperty<T>(initialValue: T) : ReadWriteProperty<Any?, T> {
     private var value: T = initialValue

@@ -26,10 +26,12 @@ import jquery.jq
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event
 import utils.KeyCode
-import views.ValidationResult
-import views.button
-import views.keydown
-import views.trigger
+import utils.jquery.ui.Dialog
+import utils.jquery.ui.DialogButton
+import views.dialogs.ValidationResult
+import utils.jquery.ui.button
+import utils.jquery.keydown
+import utils.jquery.trigger
 import kotlin.browser.document
 
 
@@ -111,7 +113,7 @@ object InputDialogView {
 
         dialog.title = title;
         dialog.buttons = arrayOf(
-                Button(
+                DialogButton(
                         text = okButtonCaption,
                         click = { event: Event ->
                             event.stopPropagation()
@@ -119,7 +121,7 @@ object InputDialogView {
                             dialog.close()
                         }
                 ),
-                Button(
+                DialogButton(
                         text = "Cancel",
                         click = { event: Event ->
                             event.stopPropagation()
@@ -130,3 +132,5 @@ object InputDialogView {
         dialog.open()
     }
 }
+
+data class ValidationResult(val valid: Boolean, val message: String = "")

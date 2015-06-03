@@ -14,20 +14,31 @@
  * limitations under the License.
  */
 
-package views
+package utils.jquery.ui
+
 import jquery.JQuery
-import org.w3c.dom.events.KeyboardEvent
 
-data class ValidationResult(val valid: Boolean, val message: String = "")
 
 native
-fun JQuery.keydown(callback: (KeyboardEvent) -> Unit)
+fun JQuery.resizable(parameters: Json)
 
 native
-fun JQuery.find(selector: String): JQuery
+fun JQuery.resizable(mode : String, param : String, value : Any?)
 
 native
-fun JQuery.trigger(action: String)
+fun JQuery.selectmenu(parameters: Json)
+
+native
+fun JQuery.selectmenu(command: String)
+
+native
+fun JQuery.tabs()
+
+native
+public fun JQuery.button(command : String) : JQuery = noImpl
+
+native
+public fun JQuery.button(parameters : Json) : JQuery = noImpl
 
 native
 fun JQuery.accordion(params: Json): JQuery
@@ -36,16 +47,7 @@ native
 fun JQuery.accordion(command: String): JQuery
 
 native
-public fun JQuery.button(command : String) : JQuery = noImpl
-
-native
 public fun JQuery.button(mode : String, param : String, value : Any?) : JQuery = noImpl
 
 native
 public fun JQuery.tabs(mode : String, param : String, value : Any?) : JQuery = noImpl
-
-native
-public fun JQuery.a11yTree(parameters: Json) : JQuery = noImpl
-
-native
-val CodeMirror: dynamic = noImpl

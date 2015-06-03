@@ -26,7 +26,8 @@ import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLElement
 import utils.KeyCode
-import views.keydown
+import utils.jquery.ui.Dialog
+import utils.jquery.keydown
 import kotlin.browser.document
 
 object ShortcutsDialogView {

@@ -20,6 +20,8 @@ import jquery.jq
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
 import org.w3c.dom.Location
+import org.w3c.dom.Window
+import utils.jquery.isCheck
 import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.dom.addClass
@@ -119,14 +121,7 @@ fun HTMLElement.toggleClass(className: String) {
 
 fun HTMLElement.isVisible() = jq(this).isCheck(":visible")
 
-
 fun isUserProjectInUrl() = window.location.hash.startsWith("#" + userProjectPrefix);
-
-native
-val Location.protocol: String
-
-native
-val Location.host: String
 
 private var blockTimer: Int = 0;
 fun blockContent() {
@@ -146,9 +141,23 @@ fun unBlockContent() {
     (document.getElementById("global-overlay") as HTMLElement).style.display = "none";
 }
 
+fun HTMLIFrameElement.clear(){
+    this.contentWindow!!.location.reload();
+}
+
 native
 val Object: dynamic
 
-fun HTMLIFrameElement.clear(){
-    this.contentWindow!!.location.reload();
+native
+fun Window.eval(code: String): dynamic
+
+native
+fun decodeURI(uri:String): String
+
+native
+interface Error {
+    val className: String
+    val interval: dynamic
+    val message: String
+    val severity: String
 }

@@ -16,8 +16,7 @@
 
 package providers
 
-import utils.ajax
-import utils.jquery
+import utils.jquery.JQuery
 
 fun checkDataForNull(data: dynamic): Boolean = data != null
 
@@ -36,7 +35,7 @@ public fun ajax(
         complete: () -> Unit = {},
         statusCode: Json? = null
 ){
-    jquery.ajax(json(
+    JQuery.ajax(json(
             "url" to url,
             "success" to success,
             "dataType" to dataType,

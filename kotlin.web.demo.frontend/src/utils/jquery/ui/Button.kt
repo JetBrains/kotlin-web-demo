@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package views.buttons
+package utils.jquery.ui
 
 import jquery.jq
 import org.w3c.dom.HTMLElement
+import utils.jquery.ui.button
 import kotlin.properties.ReadWriteProperty
 
 class Button(

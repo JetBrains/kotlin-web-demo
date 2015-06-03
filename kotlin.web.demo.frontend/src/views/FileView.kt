@@ -29,6 +29,7 @@ import utils.addKotlinExtension
 import utils.removeKotlinExtension
 import utils.unEscapeString
 import views.dialogs.InputDialogView
+import views.dialogs.ValidationResult
 import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.dom.addClass

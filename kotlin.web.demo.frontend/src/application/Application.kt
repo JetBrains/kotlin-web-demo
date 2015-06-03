@@ -25,10 +25,14 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
 import providers.*
 import utils.*
+import utils.jquery
+import utils.jquery.on
+import utils.jquery.trigger
+import utils.jquery.ui.tabs
 import views.*
-import views.buttons.Button
+import utils.jquery.ui.Button
 import views.dialogs.ConverterView
-import views.dialogs.Dialog
+import utils.jquery.ui.Dialog
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import kotlin.browser.document
@@ -183,7 +187,7 @@ object Application {
             resizable = false,
             autoOpen = false,
             modal = true,
-            onClose = {iframe.clear()}
+            onClose = { iframe.clear() }
     )
 
     val fileProvider = FileProvider(
@@ -459,7 +463,7 @@ object Application {
         });
 
 
-        jq(document).on("click", ".ui-widget-overlay", {
+        jquery.jq(document).on("click", ".ui-widget-overlay", {
             jq(".ui-dialog-titlebar-close").trigger("click");
         });
     }

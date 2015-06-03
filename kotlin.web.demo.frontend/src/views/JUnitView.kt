@@ -24,6 +24,8 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLLinkElement
 import org.w3c.dom.HTMLUListElement
 import utils.*
+import utils.jquery.*
+import utils.jquery.ui.tabs
 import views.dialogs.DifferenceDialog
 import kotlin.browser.document
 import kotlin.dom.addClass

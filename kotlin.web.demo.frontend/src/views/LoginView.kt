@@ -22,6 +22,7 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event
 import providers.LoginProvider
 import utils.*
+import utils.jquery.*
 import kotlin.browser.document
 
 /**

@@ -21,7 +21,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
 import utils.IncompleteActionManager
 import utils.parseBoolean
-import utils.selectmenu
+import utils.jquery.ui.selectmenu
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import kotlin.browser.document

@@ -24,6 +24,8 @@ import model.ProjectType
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.*
+import utils.jquery.ui.accordion
+import utils.jquery.unbind
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window

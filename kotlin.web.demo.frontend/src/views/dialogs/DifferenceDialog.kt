@@ -23,9 +23,10 @@ import jquery.ui.dialog
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.KeyCode
-import utils.height
-import utils.outerHeight
-import views.keydown
+import utils.jquery.height
+import utils.jquery.outerHeight
+import utils.jquery.ui.Dialog
+import utils.jquery.keydown
 import kotlin.browser.document
 import kotlin.dom.addClass
 

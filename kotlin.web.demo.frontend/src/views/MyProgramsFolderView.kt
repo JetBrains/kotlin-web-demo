@@ -24,6 +24,7 @@ import html4k.js.onClickFunction
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import views.dialogs.InputDialogView
+import views.dialogs.ValidationResult
 
 class MyProgramsFolderView(parentNode: HTMLElement,
                            content: dynamic,
