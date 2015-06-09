@@ -36,6 +36,7 @@ import utils.jquery.ui.Dialog
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import views.editor.Editor
+import views.tabs.ProblemsView
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
@@ -139,7 +140,7 @@ object Application {
             onSuccess = { output, project ->
                 output.forEach { data ->
                     if (data.type == "errors") {
-                        problemsView.addMessages(data.errors);
+                        problemsView.addMessages(getErrorsMapFromObject(data.errors, project));
                         editor.setHighlighting(getErrorsMapFromObject(data.errors, project));
                     } else if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
                         generatedCodeView.setOutput(data);
@@ -157,7 +158,7 @@ object Application {
                 data.forEach { data ->
                     if (data.type == "errors") {
                         jq("#result-tabs").tabs("option", "active", 0);
-                        problemsView.addMessages(data.errors);
+                        problemsView.addMessages(getErrorsMapFromObject(data.errors, project));
                         editor.setHighlighting(getErrorsMapFromObject(data.errors, project));
                         statusBarView.setStatus(ActionStatusMessage.get_highlighting_ok,
                                 getNumberOfErrorsAndWarnings(data.errors).toString());

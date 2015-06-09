@@ -16,10 +16,14 @@
 
 package views.editor
 
+import utils.codemirror.Position
+
 native
 interface Error {
     val className: String
-    val interval: dynamic
+    val interval: Interval
     val message: String
     val severity: String
 }
+
+data class Interval(val start: Position, val end: Position)

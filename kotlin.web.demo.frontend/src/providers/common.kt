@@ -74,10 +74,10 @@ fun generateAjaxUrl(type: REQUEST_TYPE, parameters: Map<String, String> = emptyM
     return generateAjaxUrl(type.value, parameters)
 }
 
-fun getErrorsMapFromObject(obj: dynamic, project: Project): Map<String, Array<Error>> {
-    val errors = hashMapOf<String, Array<Error>>()
+fun getErrorsMapFromObject(obj: dynamic, project: Project): Map<File, Array<Error>> {
+    val errors = hashMapOf<File, Array<Error>>()
     for (fileName in Object.keys(obj)) {
-        errors.put(project.files.first { it.name == fileName }.id, obj[fileName])
+        errors.put(project.files.first { it.name == fileName }, obj[fileName])
     }
     return errors
 }

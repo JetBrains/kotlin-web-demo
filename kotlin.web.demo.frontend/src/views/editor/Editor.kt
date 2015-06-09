@@ -55,7 +55,7 @@ class Editor(
     private val timerIntervalForNonPrinting = 300;
     var highlightOnTheFly = false;
     var arrayClasses = arrayListOf<dynamic>();
-    private val documents = hashMapOf<String, CodeMirror.Doc>()
+    private val documents = hashMapOf<File, CodeMirror.Doc>()
 
     init {
         var timeoutId: Int? = null;
@@ -124,7 +124,7 @@ class Editor(
         (document.getElementById("workspace-overlay") as HTMLElement).style.display = "none";
 
         file.project.files.forEach { createDocIfNotExist(it) }
-        val relatedDocument = documents.get(file.id)!!
+        val relatedDocument = documents.get(file)!!
         if (openedFile == null) {
             openedFile = file;
             removeStyles();
@@ -160,13 +160,13 @@ class Editor(
     }
 
     private fun createDocIfNotExist(file: File) {
-        if (documents.get(file.id) == null) {
+        if (documents.get(file) == null) {
             val type = if (file.type != FileType.JAVA_FILE.name()) {
                 "text/kotlin"
             } else {
                 "text/x-java"
             }
-            documents.put(file.id, CodeMirror.Doc(file.text, type))
+            documents.put(file, CodeMirror.Doc(file.text, type))
             getHighlighting()
         }
     }
@@ -216,11 +216,11 @@ class Editor(
 
     }
 
-    public fun setHighlighting(errors: Map<String, Array<Error>>) {
+    public fun setHighlighting(errors: Map<File, Array<Error>>) {
         removeStyles();
-        for (fileId in errors.keySet()) {
-            val relatedDocument = documents.get(fileId)!!
-            for (error in errors[fileId]) {
+        for (file in errors.keySet()) {
+            val relatedDocument = documents.get(file)!!
+            for (error in errors[file]) {
                 var interval = error.interval;
                 var errorMessage = unEscapeString(error.message);
                 var severity = error.severity;
