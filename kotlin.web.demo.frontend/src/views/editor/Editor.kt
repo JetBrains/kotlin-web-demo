@@ -33,12 +33,13 @@ import kotlin.browser.window
 import html4k.*
 import html4k.js.*
 import html4k.dom.*
+import providers.HelpProvider
 import views.editor.Error
 import utils.Object
 import kotlin.browser
 
 class Editor(
-        private val onCursorActivity: (dynamic) -> Unit
+        private val helpProvider: HelpProvider
 ) {
     val my_editor = CodeMirror.fromTextArea(document.getElementById("code") as HTMLTextAreaElement, json(
             "lineNumbers" to true,
@@ -73,9 +74,22 @@ class Editor(
 
         });
 
+        var helpTimeout = 0
         my_editor.on("cursorActivity", { codemirror ->
-            onCursorActivity(codemirror.getCursor());
+            val cursorPosition = codemirror.getCursor()
+            HelpViewForWords.hide();
+            val pos = codemirror.cursorCoords();
+            val help = helpProvider.getHelpForWord(codemirror.getTokenAt(cursorPosition).string)
+
+            window.clearTimeout(helpTimeout);
+            if(help != null){
+                helpTimeout = window.setTimeout({
+                    HelpViewForWords.show(help, pos)
+                }, 1000);
+            }
         });
+
+        my_editor.on("blur", {HelpViewForWords.hide()})
 
         CodeMirror.registerHelper("hint", "kotlin", { cm: dynamic, callback: dynamic, options: dynamic ->
             getCompletions(cm, callback, options)
@@ -150,10 +164,6 @@ class Editor(
             updateHighlighting();
         }
     }
-
-    fun getWordAtCursor(cursorPosition: dynamic) = my_editor.getTokenAt(cursorPosition).string;
-
-    fun cursorCoords() = my_editor.cursorCoords()
 
     fun updateHighlighting(){
         getHighlighting()

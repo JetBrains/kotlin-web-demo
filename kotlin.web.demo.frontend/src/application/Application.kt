@@ -21,22 +21,20 @@ import model.ProjectType
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
-import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.KeyboardEvent
 import providers.*
 import utils.*
 import utils.jquery
 import utils.jquery.on
 import utils.jquery.trigger
+import utils.jquery.ui.Button
+import utils.jquery.ui.Dialog
 import utils.jquery.ui.tabs
 import views.*
-import utils.jquery.ui.Button
 import views.dialogs.ConverterView
-import utils.jquery.ui.Dialog
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import views.editor.Editor
-import views.editor.HelpView
 import views.tabs.ConsoleView
 import views.tabs.GeneratedCodeView
 import views.tabs.JUnitView
@@ -268,21 +266,8 @@ object Application {
         consoleView.writeException(error);
         statusBarView.setStatus(status);
     });
-    val helpViewForWords = HelpView(helpProvider);
 
-    var timeoutId: Int = 0
-    val editor: Editor = Editor(
-            { cursorPosition ->
-                helpViewForWords.hide();
-                var pos = editor.cursorCoords();
-                helpViewForWords.setPosition(pos);
-
-                window.clearTimeout(timeoutId);
-                timeoutId = window.setTimeout({
-                    helpViewForWords.update(editor.getWordAtCursor(cursorPosition))
-                }, 1000);
-            }
-    );
+    val editor: Editor = Editor(helpProvider);
 
     val loginProvider: LoginProvider = LoginProvider(
             {

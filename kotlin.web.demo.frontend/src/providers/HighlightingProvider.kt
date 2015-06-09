@@ -22,7 +22,7 @@ import views.editor.Error
 import utils.Object
 
 class HighlightingProvider(
-        private val onSuccess: (dynamic) -> Unit,
+        private val onSuccess: (Map<File, Array<Error>>) -> Unit,
         private val onFail: (String, String) -> Unit
 ) {
 
@@ -40,23 +40,23 @@ class HighlightingProvider(
                     }
                 },
                 dataType = DataType.JSON,
-        type = HTMLRequestType.POST,
-        data = json( "project" to JSON.stringify(project) ),
-        timeout = 10000,
-        error = { jqXHR, textStatus, errorThrown ->
-            try {
-                if (jqXHR.responseText != null && jqXHR.responseText != "") {
-                    onFail(jqXHR.responseText, "");
-                } else {
-                    onFail(textStatus + " : " + errorThrown, "");
+                type = HTMLRequestType.POST,
+                data = json("project" to JSON.stringify(project)),
+                timeout = 10000,
+                error = { jqXHR, textStatus, errorThrown ->
+                    try {
+                        if (jqXHR.responseText != null && jqXHR.responseText != "") {
+                            onFail(jqXHR.responseText, "");
+                        } else {
+                            onFail(textStatus + " : " + errorThrown, "");
+                        }
+                    } catch (e: Throwable) {
+                        console.log(e)
+                    }
+                },
+                complete = {
+                    finallyCallback?.invoke()
                 }
-            } catch (e: Throwable) {
-                console.log(e)
-            }
-        },
-        complete = {
-            finallyCallback?.invoke()
-        }
         )
     }
 }

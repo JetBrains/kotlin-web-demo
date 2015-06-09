@@ -36,6 +36,8 @@ enum class KeyCode (val code: Int){
     ESCAPE(27)
 }
 
+data class ElementPosition(val left: Int, val top: Int)
+
 fun parseBoolean(value: String) = when (value) {
     "true" -> true
     "false" -> false

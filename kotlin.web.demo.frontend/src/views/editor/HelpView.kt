@@ -19,47 +19,31 @@ package views.editor
 import html4k.dom.append
 import html4k.js.div
 import providers.HelpProvider
+import utils.ElementPosition
 import kotlin.browser.document
 
 /**
  * Created by Semyon.Atamas on 5/18/2015.
  */
 
-class HelpView(private val model: HelpProvider) {
-
-    fun setPosition(pos: dynamic) {
-        element.style.left = pos.left + 2 + "px";
-        element.style.top = pos.top + 15 + "px";
-    }
-
-    fun update(name: String) {
-        var text = model.getHelpForWord(name);
-        if (text != null) {
-            setText(text);
-        } else {
-            hide();
-        }
-    }
-
-    fun hide() {
-        element.style.display = "none"
-    }
-
-
-    var element = document.body!!.append.div {
+private object HelpViewForWords{
+    private val element = document.body!!.append.div {
         classes = setOf("words-help")
         style = "display: none"
     }
 
-    var textElement = element.append.div {
+    private val textElement = element.append.div {
         classes = setOf("text")
     }
 
-    fun setText(text: String?) {
+    public fun show(text: String, pos: ElementPosition) {
+        element.style.left = (pos.left + 2).toString() + "px";
+        element.style.top = (pos.top + 15).toString() + "px";
         element.style.display = "block";
-        if (text != null) {
-            textElement.innerHTML = text;
-        }
+        textElement.innerHTML = text;
     }
 
+    public fun hide() {
+        element.style.display = "none"
+    }
 }
