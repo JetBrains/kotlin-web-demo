@@ -85,10 +85,6 @@ class File(
             localStorage.set(id, JSON.stringify(result));
         }
     }
-
-    fun loadOriginal(){
-
-    }
 }
 
 enum class FileType {

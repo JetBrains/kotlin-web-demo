@@ -37,7 +37,6 @@ import kotlin.dom.addClass
 import kotlin.dom.removeClass
 
 class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: File) {
-    var onSelect: (() -> Unit)? = null
     private val depth = projectView.depth + 1
     val wrapper = parentNode.append.div {
         classes = setOf("file-header-wrapper")
@@ -50,16 +49,6 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
     fun fireSelectEvent() {
         projectView.selectedFileView = this;
         Application.accordion.selectFile(this);
-    }
-
-    //TODO remove getHeaderText and updateName
-    fun getHeaderText(): String{
-        return fileNameElement.innerHTML;
-    }
-
-    fun updateName(){
-        fileNameElement.innerHTML = file.name;
-        fileNameElement.title = fileNameElement.innerHTML;
     }
 
     val fileNameElement = document.create.div {
