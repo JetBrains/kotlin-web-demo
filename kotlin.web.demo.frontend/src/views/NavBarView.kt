@@ -20,6 +20,7 @@ import model.File
 import model.Project
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.Node
+import views.tree.FolderView
 import kotlin.browser.document
 
 class NavBarView(private val navigationElement: HTMLDivElement) {

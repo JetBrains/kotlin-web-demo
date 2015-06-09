@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tabs
 
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLParagraphElement

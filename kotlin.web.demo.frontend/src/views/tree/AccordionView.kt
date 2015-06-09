@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tree
 
 import application.Application
 import jquery.jq
@@ -26,6 +26,7 @@ import org.w3c.dom.HTMLElement
 import utils.*
 import utils.jquery.ui.accordion
 import utils.jquery.unbind
+import views.*
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tree
 
 import html4k.dom.append
 import html4k.js.div
@@ -22,6 +22,7 @@ import jquery.jq
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.jquery.ui.accordion
+import views.tree.ProjectView
 
 /**
  * Created by Semyon.Atamas on 4/6/2015.

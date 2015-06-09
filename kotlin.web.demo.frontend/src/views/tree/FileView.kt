@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tree
 
 import application.Application
 import html4k.dom.append
@@ -28,6 +28,7 @@ import org.w3c.dom.HTMLElement
 import utils.addKotlinExtension
 import utils.removeKotlinExtension
 import utils.unEscapeString
+import views.tree.ProjectView
 import views.dialogs.InputDialogView
 import views.dialogs.ValidationResult
 import kotlin.browser.document

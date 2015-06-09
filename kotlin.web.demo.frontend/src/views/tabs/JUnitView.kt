@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tabs
 
 import application.Application
 import jquery.JQuery
@@ -26,6 +26,7 @@ import org.w3c.dom.HTMLUListElement
 import utils.*
 import utils.jquery.*
 import utils.jquery.ui.tabs
+import views.tabs.OutputView
 import views.dialogs.DifferenceDialog
 import kotlin.browser.document
 import kotlin.dom.addClass

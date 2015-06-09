@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tree
 
 import application.Application
 import jquery.jq
@@ -26,8 +26,11 @@ import org.w3c.dom.HTMLSpanElement
 import utils.addKotlinExtension
 import utils.getFileIdFromUrl
 import utils.jquery.slideDown
+import views.tree.MyProgramsFolderView
 import views.dialogs.InputDialogView
 import views.dialogs.ValidationResult
+import views.tree.FileView
+import views.tree.FolderView
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window

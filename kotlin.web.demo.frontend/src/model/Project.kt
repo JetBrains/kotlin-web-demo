@@ -21,7 +21,7 @@ import views.editor.Error
 import utils.Listenable
 import utils.VarListener
 import utils.addKotlinExtension
-import views.FolderView
+import views.tree.FolderView
 import java.util.ArrayList
 import kotlin.browser.localStorage
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tree
 
 import application.Application
 import html4k.div
@@ -25,6 +25,8 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import views.dialogs.InputDialogView
 import views.dialogs.ValidationResult
+import views.tree.FolderView
+import views.tree.ProjectView
 
 class MyProgramsFolderView(parentNode: HTMLElement,
                            content: dynamic,
@@ -57,7 +59,7 @@ class MyProgramsFolderView(parentNode: HTMLElement,
                                 okButtonCaption = "Add",
                                 defaultValue = "Untitled",
                                 validate = { name -> validateNewProjectName(name) },
-                                callback = { name -> Application.projectProvider.addNewProject(name)}
+                                callback = { name -> Application.projectProvider.addNewProject(name) }
                         );
                     }
                 }

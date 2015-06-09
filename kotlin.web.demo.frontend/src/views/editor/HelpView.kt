@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.editor
 
 import html4k.dom.append
 import html4k.js.div

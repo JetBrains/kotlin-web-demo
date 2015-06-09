@@ -36,7 +36,12 @@ import utils.jquery.ui.Dialog
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import views.editor.Editor
+import views.editor.HelpView
+import views.tabs.ConsoleView
+import views.tabs.GeneratedCodeView
+import views.tabs.JUnitView
 import views.tabs.ProblemsView
+import views.tree.AccordionView
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window

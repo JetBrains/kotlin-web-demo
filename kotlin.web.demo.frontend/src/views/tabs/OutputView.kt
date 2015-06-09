@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tabs
 
 import application.makeReference
 import html4k.dom.append

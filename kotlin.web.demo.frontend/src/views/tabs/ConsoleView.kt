@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package views
+package views.tabs
 
 import html4k.dom.append
 import html4k.js.div
 import org.w3c.dom.HTMLDivElement
+import views.tabs.OutputView
 import kotlin.text.js.RegExp
 
 class ConsoleView(
