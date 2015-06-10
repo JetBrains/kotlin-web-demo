@@ -44,7 +44,7 @@ class RunProvider(
                 for (fileName in Object.keys(element.errors)) {
                     var fileErrorsAndWarnings: Array<dynamic> = element.errors[fileName]
                     containsErrors = fileErrorsAndWarnings.any({
-                        element.severity == "ERROR"
+                        it.severity == "ERROR"
                     })
                 }
                 containsErrors

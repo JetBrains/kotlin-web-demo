@@ -44,9 +44,9 @@ fun parseBoolean(value: String) = when (value) {
     else -> throw IllegalArgumentException("Value don't represent boolean")
 }
 
-fun addKotlinExtension(filename: String): String = filename.removeSuffix(".kt")
+fun addKotlinExtension(filename: String): String = if (filename.endsWith(".kt")) filename else filename + ".kt"
 
-fun removeKotlinExtension(filename: String): String = if (filename.endsWith(".kt")) filename.substring(0, filename.size - ".kt".size) else filename
+fun removeKotlinExtension(filename: String): String = filename.removeSuffix(".kt")
 
 private val tagsToReplace = hashMapOf(
     "&" to "&amp;",

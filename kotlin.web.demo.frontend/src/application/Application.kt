@@ -17,6 +17,7 @@
 package application
 
 import jquery.jq
+import model.File
 import model.ProjectType
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
@@ -34,6 +35,7 @@ import views.*
 import views.dialogs.ConverterView
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
+import views.editor.Diagnostic
 import views.editor.Editor
 import views.tabs.ConsoleView
 import views.tabs.GeneratedCodeView
@@ -351,12 +353,8 @@ object Application {
         editor.updateHighlighting()
     })
 
-    private fun getNumberOfErrorsAndWarnings(data: dynamic): Int {
-        var noOfErrorsAndWarnings = 0
-        for (filename in Object.keys(data)) {
-            noOfErrorsAndWarnings += (data[filename].length as Int)
-        }
-        return noOfErrorsAndWarnings
+    private fun getNumberOfErrorsAndWarnings(diagnostics: Map<File, Array<Diagnostic>>): Int {
+        return diagnostics.values().fold(0, { noOfDiagnostics, diagnostics -> noOfDiagnostics + diagnostics.size() })
     }
 
     fun init() {
