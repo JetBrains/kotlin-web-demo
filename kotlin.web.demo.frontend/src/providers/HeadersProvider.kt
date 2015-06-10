@@ -20,12 +20,13 @@ import model.ProjectType
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
+import views.tree.ProjectHeader
 import kotlin.browser.localStorage
 
 class HeadersProvider(
         private val onFail: (String, ActionStatusMessage) -> Unit,
         private val onHeadersLoaded: () -> Unit,
-        private val onProjectHeaderLoaded: (dynamic) -> Unit,
+        private val onProjectHeaderLoaded: () -> Unit,
         private val onProjectHeaderNotFound: () -> Unit
 ) {
     fun addHeaderInfo(folder: dynamic) {
@@ -47,9 +48,10 @@ class HeadersProvider(
                                 folders.forEach({folder -> addHeaderInfo(folder)})
 
                                 var publicLinks = if (localStorage.getItem("publicLinks") != null) {
-                                    JSON.parse<Array<dynamic>>(localStorage.getItem("publicLinks")!!)
+                                    val parsedArray = JSON.parse<Array<dynamic>>(localStorage.getItem("publicLinks")!!)
+                                    parsedArray.map { ProjectHeader(it.name, it.publicId, ProjectType.PUBLIC_LINK) }
                                 } else {
-                                    arrayOf<dynamic>()
+                                    emptyList()
                                 }
 
                                 //TODO remove user project public links
@@ -69,8 +71,8 @@ class HeadersProvider(
                         } else {
                             onFail("Incorrect data format.", ActionStatusMessage.load_headers_fail)
                         }
-                    } catch (e: Throwable) {
-                        console.log(e)
+                    } finally {
+                        unBlockContent()
                     }
                 },
                 dataType = DataType.JSON,
@@ -79,22 +81,21 @@ class HeadersProvider(
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
                         onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_headers_fail)
-                    } catch (e: Throwable) {
-                        console.log(e)
+                    } finally {
+                        unBlockContent()
                     }
-                },
-                complete = ::unBlockContent
+                }
         )
     }
 
-    fun getHeaderByFilePublicId(publicId: String, project_id: String, /*Function*/callback: (dynamic) -> Unit) {
+    fun getHeaderByFilePublicId(publicId: String, project_id: String, callback: (ProjectHeader) -> Unit) {
         blockContent()
         ajax(
                 url = generateAjaxUrl("loadProjectInfoByFileId"),
                 success = { data ->
                     try {
-                        callback(data)
-                        onProjectHeaderLoaded(data)
+                        callback(ProjectHeader(data.name, data.publicId, ProjectType.PUBLIC_LINK))
+                        onProjectHeaderLoaded()
                     } catch (e: Throwable) {
                         console.log(e)
                     }

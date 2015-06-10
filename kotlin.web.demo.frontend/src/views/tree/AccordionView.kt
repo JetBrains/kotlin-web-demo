@@ -121,12 +121,7 @@ class AccordionView(
     }
 
     fun onBeforeUnload() {
-        var publicLinks = arrayListOf<ProjectHeader>()
-        for (projectView in projectViews.values()) {
-            if (projectView.project.type == ProjectType.PUBLIC_LINK) {
-                publicLinks.add(projectView.header)
-            }
-        }
+        var publicLinks = publicLinksFolder.projects.map { it.header }
         localStorage.setItem("publicLinks", JSON.stringify(publicLinks.toTypedArray()))
     }
 
@@ -168,16 +163,14 @@ class AccordionView(
         if (isUserProjectInUrl()) {
             if (localStorage.getItem(projectId) == null) {
                 var file_id = getFileIdFromUrl()
-                Application.headersProvider.getHeaderByFilePublicId(file_id, projectId, { header ->
-                    if (header.publicId !in projectViews.keySet()) {
-                        if (header.type == ProjectType.PUBLIC_LINK) {
-                            addProject(publicLinksFolder.contentElement, header, publicLinksFolder)
-                        } else {
-                            throw Exception("Project wasn't downloaded")
-                        }
-                    }
-                    selectProject(header.publicId)
-                })
+                if (projectId !in projectViews.keySet()) {
+                    Application.headersProvider.getHeaderByFilePublicId(file_id, projectId, { header ->
+                        addProject(publicLinksFolder.contentElement, header, publicLinksFolder)
+                        selectProject(projectId)
+                    })
+                } else {
+                    selectProject(projectId)
+                }
             } else {
                 selectProject(projectId)
             }

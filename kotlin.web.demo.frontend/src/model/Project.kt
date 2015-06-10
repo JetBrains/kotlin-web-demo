@@ -207,5 +207,9 @@ class Project(
 enum class ProjectType {
     EXAMPLE,
     USER_PROJECT,
-    PUBLIC_LINK
+    PUBLIC_LINK;
+
+    fun toJSON(): String{
+        return name()
+    }
 }
