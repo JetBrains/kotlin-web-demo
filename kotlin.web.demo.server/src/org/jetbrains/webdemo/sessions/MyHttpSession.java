@@ -114,8 +114,8 @@ public class MyHttpSession {
                 case ("renameProject"):
                     sendRenameProjectResult();
                     break;
-                case ("loadProjectInfoByFileId"):
-                    sendLoadProjectInfoByFileIdResult();
+                case ("loadProjectName"):
+                    sendLoadProjectNameResult();
                     break;
                 case ("checkIfProjectExists"):
                     sendExistenceCheckResult();
@@ -347,16 +347,10 @@ public class MyHttpSession {
         }
     }
 
-    private void sendLoadProjectInfoByFileIdResult() {
+    private void sendLoadProjectNameResult() {
         try {
-            String response;
-            if (request.getParameter("project_id") == null) {
-                String publicId = request.getParameter("publicId");
-                response = MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), publicId, null);
-            } else {
-                String project_id = request.getParameter("project_id");
-                response = MySqlConnector.getInstance().getProjectHeaderInfoByPublicId(sessionInfo.getUserInfo(), null, project_id);
-            }
+            String project_id = request.getParameter("project_id");
+            String response = MySqlConnector.getInstance().getProjectNameById(project_id);
             if (response != null) {
                 writeResponse(response, HttpServletResponse.SC_OK);
             } else {

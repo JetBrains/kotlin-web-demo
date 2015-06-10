@@ -18,5 +18,6 @@ package providers
 
 
 enum class REQUEST_TYPE(val value: String){
+    LOAD_PROJECT_NAME("loadProjectName"),
     COMPLETE("complete")
 }

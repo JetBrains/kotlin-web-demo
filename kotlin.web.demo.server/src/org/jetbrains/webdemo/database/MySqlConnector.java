@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.naming.NamingContext;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -781,38 +782,20 @@ public class MySqlConnector {
         }
     }
 
-    public String getProjectHeaderInfoByPublicId(UserInfo userInfo, String fileId, String projectId) throws DatabaseOperationException {
+    @Nullable
+    public String getProjectNameById(String projectId) throws DatabaseOperationException {
         checkConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            if (projectId == null) {
-                st = connection.prepareStatement("SELECT users.client_id, users.provider, projects.public_id, projects.name FROM files JOIN " +
-                        "projects ON files.project_id = projects.id JOIN " +
-                        "users ON projects.owner_id = users.id WHERE" +
-                        " files.public_id = ?");
-                st.setString(1, fileId);
-            } else {
-                st = connection.prepareStatement("SELECT users.client_id, users.provider, projects.public_id, projects.name FROM projects JOIN " +
-                        "users ON projects.owner_id = users.id WHERE " +
-                        "projects.public_id = ?");
-                st.setString(1, projectId);
-            }
+            st = connection.prepareStatement(
+                    "SELECT projects.name FROM projects WHERE " +
+                    "projects.public_id = ?"
+            );
+            st.setString(1, projectId);
             rs = st.executeQuery();
             if (rs.next()) {
-                boolean isUserProject = rs.getString("client_id").equals(userInfo.getId()) && rs.getString("provider").equals(userInfo.getType());
-
-                ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
-                response.put("name", unEscape(rs.getString("name")));
-                response.put("publicId", rs.getString("public_id"));
-                if (isUserProject) {
-                    response.put("type", "USER_PROJECT");
-                } else {
-                    response.put("type", "PUBLIC_LINK");
-                }
-
-
-                return objectMapper.writeValueAsString(response);
+                return unEscape(rs.getString("name"));
             } else {
                 return null;
             }

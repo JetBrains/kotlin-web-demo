@@ -162,9 +162,8 @@ class AccordionView(
 
         if (isUserProjectInUrl()) {
             if (localStorage.getItem(projectId) == null) {
-                var file_id = getFileIdFromUrl()
                 if (projectId !in projectViews.keySet()) {
-                    Application.headersProvider.getHeaderByFilePublicId(file_id, projectId, { header ->
+                    Application.headersProvider.getProjectHeaderById( projectId, { header ->
                         addProject(publicLinksFolder.contentElement, header, publicLinksFolder)
                         selectProject(projectId)
                     })

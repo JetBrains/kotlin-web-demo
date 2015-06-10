@@ -88,13 +88,13 @@ class HeadersProvider(
         )
     }
 
-    fun getHeaderByFilePublicId(publicId: String, project_id: String, callback: (ProjectHeader) -> Unit) {
+    fun getProjectHeaderById(id: String, callback: (ProjectHeader) -> Unit) {
         blockContent()
         ajax(
-                url = generateAjaxUrl("loadProjectInfoByFileId"),
-                success = { data ->
+                url = generateAjaxUrl(REQUEST_TYPE.LOAD_PROJECT_NAME),
+                success = { name ->
                     try {
-                        callback(ProjectHeader(data.name, data.publicId, ProjectType.PUBLIC_LINK))
+                        callback(ProjectHeader(name, id, ProjectType.PUBLIC_LINK))
                         onProjectHeaderLoaded()
                     } catch (e: Throwable) {
                         console.log(e)
@@ -102,10 +102,9 @@ class HeadersProvider(
                 },
                 type = HTMLRequestType.GET,
                 timeout = 10000,
-                dataType = DataType.JSON,
+                dataType = DataType.TEXT,
                 data = json(
-                        "publicId" to publicId,
-                        "project_id" to project_id
+                        "project_id" to id
                 ),
                 statusCode = json(
                         "404" to onProjectHeaderNotFound

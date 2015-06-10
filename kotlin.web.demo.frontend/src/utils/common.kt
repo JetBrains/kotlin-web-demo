@@ -84,13 +84,13 @@ fun getProjectIdFromUrl(): String {
     return urlHash.substring(0, urlHash.lastIndexOf("/"))
 }
 
-fun getFileIdFromUrl(): String {
+fun getFileIdFromUrl(): String? {
     var urlHash = escapeString(window.location.hash) //escaping for firefox
     urlHash = urlHash.removePrefix("#")
 
     if (urlHash.startsWith(userProjectPrefix)) {
-        urlHash = urlHash.removePrefix(userProjectPrefix)
-        return urlHash.splitBy("/")[1]
+        val path = urlHash.removePrefix(userProjectPrefix).splitBy("/")
+        return if (path.size() > 1) path[1] else null
     } else {
         return urlHash
     }
