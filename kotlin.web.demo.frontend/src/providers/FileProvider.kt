@@ -31,7 +31,7 @@ class FileProvider(
     fun checkFileExistence(publicId: String, onNotExists: () -> Unit) {
         ajax(
                 url = generateAjaxUrl("checkFileExistence"),
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 timeout = 10000,
                 data = json("publicId" to publicId),
                 dataType = DataType.JSON,
@@ -66,7 +66,7 @@ class FileProvider(
                                 console.log(e)
                             }
                         },
-                        type = HTMLRequestType.POST,
+                        type = HTTPRequestType.POST,
                         timeout = 10000,
                         data = json("publicId" to file.id),
                         dataType = DataType.JSON,
@@ -93,7 +93,7 @@ class FileProvider(
                                 console.log(e)
                             }
                         },
-                        type = HTMLRequestType.POST,
+                        type = HTTPRequestType.POST,
                         timeout = 10000,
                         data = json("publicId" to file.id),
                         dataType = DataType.JSON,
@@ -129,7 +129,7 @@ class FileProvider(
                     }
                 },
                 dataType = DataType.TEXT,
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 timeout = 10000,
                 data = json("publicId" to project.publicId, "filename" to filenameWithExtension),
                 error = { jqXHR, textStatus, errorThrown ->
@@ -155,7 +155,7 @@ class FileProvider(
                     }
                 },
                 dataType = DataType.TEXT,
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 timeout = 10000,
                 data = json(
                         "publicId" to publicId,
@@ -195,7 +195,7 @@ class FileProvider(
                         console.log(e)
                     }
                 },
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 data = data,
                 dataType = DataType.TEXT,
                 timeout = 10000,
@@ -214,7 +214,7 @@ class FileProvider(
         blockContent()
         ajax(
                 url = generateAjaxUrl("saveFile"),
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 timeout = 10000,
                 dataType = DataType.TEXT,
                 success = {

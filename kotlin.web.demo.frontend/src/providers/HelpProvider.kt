@@ -34,7 +34,7 @@ class HelpProvider(
                     }
                 },
                 dataType = DataType.JSON,
-                type = HTMLRequestType.GET,
+                type = HTTPRequestType.GET,
                 timeout = 30000,
                 error = { jqXHR, textStatus, errorThrown ->
                     onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_help_for_words_fail)

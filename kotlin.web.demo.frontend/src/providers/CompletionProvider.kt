@@ -38,7 +38,7 @@ class CompletionProvider(
         ajax(url = generateAjaxUrl(REQUEST_TYPE.COMPLETE, hashMapOf("runConf" to project.confType)),
                 dataType = DataType.JSON,
                 timeout = 10000,
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 data = json(
                         "project" to JSON.stringify(project),
                         "filename" to filename,

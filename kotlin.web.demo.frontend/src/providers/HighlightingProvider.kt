@@ -39,7 +39,7 @@ class HighlightingProvider(
                     }
                 },
                 dataType = DataType.JSON,
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 data = json("project" to JSON.stringify(project)),
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->

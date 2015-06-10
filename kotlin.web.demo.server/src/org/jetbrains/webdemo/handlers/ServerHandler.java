@@ -63,6 +63,18 @@ public class ServerHandler {
                     case ("loadHelpForWords"):
                         sendHelpContentForWords(request, response);
                         break;
+                    case ("error"):
+                        String message = request.getParameter("message");
+                        String url = request.getParameter("url");
+                        String stackTrace = request.getParameter("stackTrace");
+                        ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
+                                message,
+                                stackTrace,
+                                "FRONTEND_ERROR",
+                                url,
+                                ""
+                        );
+                        break;
                     case ("google_key"): {
                         writeResponse(request, response, ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY, HttpServletResponse.SC_OK);
                         break;

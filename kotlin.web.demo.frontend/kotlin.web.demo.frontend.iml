@@ -14,8 +14,8 @@
     <orderEntry type="module-library">
       <library name="&lt;Kotlin JavaScript library&gt;">
         <CLASSES>
-          <root url="kotlin-js-meta://C:/Users/Semyon.Atamas/.IntelliJIdea14/config/plugins/Kotlin/kotlinc/lib/kotlin-jslib.jar!/" />
-          <root url="kotlin-js-meta://C:/development/kotlin-web-demo/kotlin.web.demo.frontend/lib/html4k.jar!/" />
+          <root url="kotlin-js-meta:///home/atamas/.IntelliJIdea14/config/plugins/Kotlin/kotlinc/lib/kotlin-jslib.jar!/" />
+          <root url="kotlin-js-meta:///home/atamas/work/kotlin-web-demo/kotlin.web.demo.frontend/lib/html4k.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>

@@ -153,5 +153,8 @@ val Object: dynamic
 native
 fun Window.eval(code: String): dynamic
 
+native("onerror")
+var Window.onError: (String, String, Int, Int, dynamic) -> Unit
+
 native
 fun decodeURI(uri:String): String

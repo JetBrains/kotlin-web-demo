@@ -18,6 +18,7 @@ package providers
 
 import model.File
 import model.Project
+import org.w3c.fetch.Request
 import utils.Object
 import utils.jquery.JQuery
 import views.editor.Diagnostic
@@ -31,11 +32,11 @@ fun checkDataForException(data: dynamic): Boolean {
 //TODO add defaults and move generate urls into fun
 public fun ajax(
         url: String,
-        success: (dynamic) -> Unit,
+        success: (dynamic) -> Unit = {},
         dataType: DataType,
-        type: HTMLRequestType,
+        type: HTTPRequestType,
         data: Json? = null,
-        timeout: Int,
+        timeout: Int = 10000,
         error: (dynamic, String, String) -> Unit = {jqXHR, textStatus, errorThrown ->},
         complete: () -> Unit = {},
         statusCode: Json? = null
@@ -53,12 +54,25 @@ public fun ajax(
     ))
 }
 
+fun submitErrorReport(message: String, url: String, stackTrace: String){
+    ajax(
+            url = generateAjaxUrl(REQUEST_TYPE.ERROR),
+            dataType = DataType.JSON,
+            type = HTTPRequestType.POST,
+            data = json(
+                    "message" to message,
+                    "url" to url,
+                    "stackTrace" to stackTrace
+            )
+    )
+}
+
 public enum class DataType() {
     TEXT,
     JSON
 }
 
-public enum class HTMLRequestType() {
+public enum class HTTPRequestType() {
     GET,
     POST
 }

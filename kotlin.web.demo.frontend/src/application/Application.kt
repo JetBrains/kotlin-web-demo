@@ -307,7 +307,7 @@ object Application {
     private fun setKotlinVersion() {
         ajax(
                 url = "http://kotlinlang.org/latest_release_version.txt",
-                type = HTMLRequestType.GET,
+                type = HTTPRequestType.GET,
                 dataType = DataType.TEXT,
                 timeout = 1000,
                 success = { kotlinVersion ->
@@ -316,7 +316,7 @@ object Application {
         )
         ajax(
                 url = "build.txt",
-                type = HTMLRequestType.GET,
+                type = HTTPRequestType.GET,
                 dataType = DataType.TEXT,
                 timeout = 1000,
                 success = { kotlinVersion ->
@@ -328,7 +328,7 @@ object Application {
     fun getSessionInfo(callback: (dynamic) -> Unit) {
         ajax(
                 url = "kotlinServer?sessionId=" + sessionId + "&type=getSessionInfo",
-                type = HTMLRequestType.GET,
+                type = HTTPRequestType.GET,
                 dataType = DataType.JSON,
                 timeout = 10000,
                 success = callback
@@ -362,6 +362,11 @@ object Application {
         jq("#result-tabs").tabs()
         initButtons()
         setKotlinVersion()
+
+        window.onError = { message, url, line, ch, error ->
+            submitErrorReport(message, url, error.stack)
+        }
+
         window.onfocus = {
             getSessionInfo({ data ->
                 if (sessionId != data.id || data.isLoggedIn != loginView.isLoggedIn) {

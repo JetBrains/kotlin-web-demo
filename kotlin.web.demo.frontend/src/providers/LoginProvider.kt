@@ -45,7 +45,7 @@ class LoginProvider(
                     }
                 },
                 dataType = DataType.TEXT,
-                type = HTMLRequestType.GET,
+                type = HTTPRequestType.GET,
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
@@ -74,7 +74,7 @@ class LoginProvider(
                     }
                 },
                 dataType = DataType.JSON,
-                type = HTMLRequestType.GET,
+                type = HTTPRequestType.GET,
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {

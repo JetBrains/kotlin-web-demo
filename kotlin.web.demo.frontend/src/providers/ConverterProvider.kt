@@ -32,7 +32,7 @@ class ConverterProvider(){
                     }
                 },
                 dataType = DataType.JSON,
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 data = json("text" to text),
                 timeout = 10000,
                 error = { jqXHR: dynamic, textStatus: String, errorThrown: String ->

@@ -56,7 +56,7 @@ class ProjectProvider(
                         console.log(e)
                     }
                 },
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 dataType = DataType.TEXT,
                 data = json("publicId" to project.publicId, "newName" to newName),
                 timeout = 10000,
@@ -93,7 +93,7 @@ class ProjectProvider(
                     }
                 },
                 dataType = DataType.JSON,
-                type = HTMLRequestType.GET,
+                type = HTTPRequestType.GET,
                 timeout = 10000,
                 data = json("publicId" to publicId),
                 error = { jqXHR, textStatus, errorThrown ->
@@ -119,7 +119,7 @@ class ProjectProvider(
                         console.log(e)
                     }
                 },
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 timeout = 10000,
                 data = json("args" to name),
                 dataType = DataType.JSON,
@@ -156,7 +156,7 @@ class ProjectProvider(
                 },
                 dataType = DataType.JSON,
                 data = json("publicId" to publicId),
-                type = HTMLRequestType.GET,
+                type = HTTPRequestType.GET,
                 timeout = 10000,
                 statusCode = json(
                         "404" to onNotFound
@@ -183,7 +183,7 @@ class ProjectProvider(
                         console.log(e)
                     }
                 },
-                type = HTMLRequestType.GET,
+                type = HTTPRequestType.GET,
                 timeout = 10000,
                 dataType = DataType.JSON,
                 data = json("content" to JSON.stringify(content), "args" to name),
@@ -208,7 +208,7 @@ class ProjectProvider(
                         onNotExists()
                     }
                 },
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 timeout = 10000,
                 data = json("publicId" to publicId),
                 dataType = DataType.JSON,
@@ -230,7 +230,7 @@ class ProjectProvider(
                         console.log(e)
                     }
                 },
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 timeout = 10000,
                 dataType = DataType.TEXT,
                 data = json("publicId" to publicId),
@@ -256,7 +256,7 @@ class ProjectProvider(
                         console.log(e)
                     }
                 },
-                type = HTMLRequestType.POST,
+                type = HTTPRequestType.POST,
                 timeout = 10000,
                 data = json("project" to JSON.stringify(project), "publicId" to publicId),
                 dataType = DataType.TEXT,
