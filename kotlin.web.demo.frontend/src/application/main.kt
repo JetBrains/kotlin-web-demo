@@ -16,6 +16,9 @@
 
 package application
 
+import application.elements.Elements
+import application.layout.Layout
+
 fun main(args: Array<String>){
     //Initializations of objects WARN: order(#KT-4754)
     Elements.init()

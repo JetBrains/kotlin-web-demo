@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package application
+package application.elements
 
+import application.Application
 import jquery.jq
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
@@ -28,7 +29,7 @@ import kotlin.browser.document
 import kotlin.browser.localStorage
 
 
-private object Elements{
+internal object Elements{
     val argumentsInputElement = document.getElementById("arguments") as HTMLInputElement
     val shortcutsButton = document.getElementById("shortcuts-button") as HTMLElement
     val onTheFlyCheckbox = document.getElementById("on-the-fly-checkbox") as HTMLInputElement

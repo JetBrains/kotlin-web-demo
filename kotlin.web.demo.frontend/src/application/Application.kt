@@ -16,6 +16,7 @@
 
 package application
 
+import application.elements.Elements
 import jquery.jq
 import model.File
 import model.ProjectType

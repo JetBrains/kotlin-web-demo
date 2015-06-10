@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package application
+package application.layout
 
+import application.Application
+import application.elements.Elements
 import jquery.jq
 import org.w3c.dom.HTMLElement
 import utils.*
