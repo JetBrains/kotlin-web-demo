@@ -52,6 +52,7 @@ class Editor(
     var highlightOnTheFly = false
     var arrayClasses = arrayListOf<dynamic>()
     private val documents = hashMapOf<File, CodeMirror.Doc>()
+    private var storedCompletionsList: List<CompletionView>? = null
 
     init {
         var timeoutId: Int? = null
@@ -86,6 +87,10 @@ class Editor(
             window.clearTimeout(helpTimeout)
             HelpViewForWords.hide()
         })
+
+        codeMirror.on("endCompletion") {
+            storedCompletionsList = null
+        }
 
         CodeMirror.registerHelper("hint", "kotlin", { cm: dynamic, callback: dynamic, options: dynamic ->
             getCompletions(cm, callback, options)
@@ -174,7 +179,6 @@ class Editor(
         }
     }
 
-    private var storedCompletionsList: List<CompletionView>? = null
     private fun getCompletions(cm: CodeMirror, callback: (Hint) -> Unit, options: dynamic) {
         val cur = cm.getCursor()
         val token = cm.getTokenAt(cur)
@@ -185,11 +189,6 @@ class Editor(
                     Position(cur.line, token.end),
                     completions.toTypedArray()
             )
-
-            //Fired when the completion is finished
-            CodeMirror.on(hint, "close") {
-                storedCompletionsList = null
-            }
 
             callback(hint)
         }
