@@ -162,7 +162,7 @@ class ProjectView(
         }
         val fileNameWithExtension = addKotlinExtension(fileName)
         for (fileView in fileViews.values()) {
-            if (fileView.file.name == fileName) {
+            if (fileView.file.name == fileNameWithExtension) {
                 return ValidationResult(
                         false,
                         "File with this name already exists in the project"
