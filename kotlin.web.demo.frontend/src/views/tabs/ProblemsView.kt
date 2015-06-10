@@ -16,22 +16,25 @@
 
 package views.tabs
 
-import application.Application
-import jquery.JQuery
+import html4k.div
+import html4k.dom.append
+import html4k.js.li
+import html4k.js.onDoubleClickFunction
+import html4k.js.onKeyUpFunction
+import html4k.js.ul
 import jquery.jq
+import model.File
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLLIElement
-import org.w3c.dom.HTMLUListElement
+import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
-import utils.*
+import utils.KeyCode
+import utils.a11yTree
 import utils.jquery.find
 import utils.jquery.toArray
-import views.editor.Error
+import utils.parseBoolean
+import utils.unEscapeString
+import views.editor.Diagnostic
 import kotlin.browser.document
-import html4k.*
-import html4k.js.*
-import html4k.dom.*
-import model.File
 
 
 class ProblemsView(
@@ -40,22 +43,22 @@ class ProblemsView(
 ) {
 
     fun clear() {
-        element.innerHTML = "";
+        element.innerHTML = ""
     }
 
-    fun addMessages(errorMap: Map<File, Array<Error>>) {
-        var fileNodes = jq("#problems-tree").find(">li").toArray();
-        var collapsedNodes = arrayListOf<String>()
+    fun addMessages(errorMap: Map<File, Array<Diagnostic>>) {
+        val fileNodes = jq("#problems-tree").find(">li").toArray()
+        val collapsedNodes = arrayListOf<String>()
         for (fileNode in fileNodes) {
             val expanded = parseBoolean(fileNode.getAttribute("aria-expanded")!!)
             if (!expanded) collapsedNodes.add(fileNode.id)
         }
 
-        element.innerHTML = "";
-        var treeElement = element.append.ul { id = "problems-tree" }
+        element.innerHTML = ""
+        val treeElement = element.append.ul { id = "problems-tree" }
 
-        for ( (file, errors) in errorMap) {
-            if (errors.isNotEmpty()) renderFileNode(file, errors, treeElement);
+        for ((file, errors) in errorMap) {
+            if (errors.isNotEmpty()) renderFileNode(file, errors, treeElement)
         }
 
         jq(treeElement).a11yTree(json(
@@ -63,19 +66,19 @@ class ProblemsView(
                 "treeItemLabelSelector" to ".tree-node-header .text",
                 "onFocus" to { item: dynamic ->
                     if (jq(document.activeElement!!).hasClass("tree-node")) {
-                        item.focus();
+                        item.focus()
                     }
                 }
-        ));
+        ))
 
-        jq("#problems-tree").find("li[aria-expanded]").attr("aria-expanded", "true");
+        jq("#problems-tree").find("li[aria-expanded]").attr("aria-expanded", "true")
         for (id in collapsedNodes) {
-            document.getElementById(id)!!.setAttribute("aria-expanded", "false");
+            document.getElementById(id)!!.setAttribute("aria-expanded", "false")
         }
     }
 
-    private fun renderFileNode(file: File, errors: Array<Error>, parentElement: HTMLElement) {
-        var nodeElement = parentElement.append.li {
+    private fun renderFileNode(file: File, errors: Array<Diagnostic>, parentElement: HTMLElement) {
+        val nodeElement = parentElement.append.li {
             classes = setOf("tree-node")
             id = file.id + "_problems"
             tabIndex = "-1"
@@ -95,30 +98,27 @@ class ProblemsView(
         }
     }
 
-    private fun renderErrorNode(file: File, error: Error, parentElement: HTMLElement) = parentElement.append.li {
+    private fun renderErrorNode(file: File, diagnostic: Diagnostic, parentElement: HTMLElement) = parentElement.append.li {
         classes = setOf("tree-node")
         tabIndex = "-1"
         div {
             classes = setOf("tree-node-header")
-            div { classes = setOf("icon " + error.severity.toLowerCase()) }
+            val severity = diagnostic.severity.toLowerCase()
+            div { classes = setOf("icon", severity) }
             div {
-                +(error.severity.toLowerCase().capitalize() +
-                        ":(" + (error.interval.start.line + 1) + ", " + error.interval.start.ch + ") " +
-                        unEscapeString(error.message))
+                +(severity.capitalize() +
+                        ":(" + (diagnostic.interval.start.line + 1) + ", " + diagnostic.interval.start.ch + ") " +
+                        unEscapeString(diagnostic.message))
                 classes = setOf("text")
             }
         }
         onDoubleClickFunction = {
-            setCursor(file.name, error.interval.start.line, error.interval.start.ch);
-        };
-        onKeyUpFunction = { event ->
-            if (event is KeyboardEvent) {
-                if (event.keyCode == KeyCode.ENTER.code) {
-                    setCursor(file.name, error.interval.start.line, error.interval.start.ch);
-                    event.stopPropagation();
-                }
-            }
-        };
+            setCursor(file.name, diagnostic.interval.start.line, diagnostic.interval.start.ch)
+        }
+        onKeyUpFunction = fun(event: Event) {
+            if (event !is KeyboardEvent || event.keyCode != KeyCode.ENTER.code) return
+            setCursor(file.name, diagnostic.interval.start.line, diagnostic.interval.start.ch)
+        }
     }
 }
 

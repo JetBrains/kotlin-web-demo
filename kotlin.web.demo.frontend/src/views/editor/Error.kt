@@ -19,7 +19,7 @@ package views.editor
 import utils.codemirror.Position
 
 native
-interface Error {
+interface Diagnostic {
     val className: String
     val interval: Interval
     val message: String

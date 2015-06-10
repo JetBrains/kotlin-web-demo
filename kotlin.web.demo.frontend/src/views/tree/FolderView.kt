@@ -24,16 +24,12 @@ import org.w3c.dom.HTMLElement
 import utils.jquery.ui.accordion
 import views.tree.ProjectView
 
-/**
- * Created by Semyon.Atamas on 4/6/2015.
- */
-
 //TODO remove addProject function
 open class FolderView(parentNode: HTMLElement,
                       content: dynamic,
                       val parent: FolderView?,
                       val addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) {
-    val depth: Int = if (parent == null) 0 else parent.depth + 1;
+    val depth: Int = if (parent == null) 0 else parent.depth + 1
     val name: String = content.name
     val projects = arrayListOf<ProjectView>()
     val childFolders = arrayListOf<FolderView>()
@@ -67,7 +63,7 @@ open class FolderView(parentNode: HTMLElement,
                             "activeHeader" to "examples-open-folder-icon",
                             "header" to "examples-closed-folder-icon"
                     )
-            ));
+            ))
         }
     }
 

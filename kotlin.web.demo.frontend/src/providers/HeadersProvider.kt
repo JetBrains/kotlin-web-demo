@@ -33,23 +33,23 @@ class HeadersProvider(
             project.type = if (folder.name == "My programs") ProjectType.USER_PROJECT else ProjectType.EXAMPLE
             Unit
         }
-        folder.childFolders.forEach({folder -> addHeaderInfo(folder)});
+        folder.childFolders.forEach({folder -> addHeaderInfo(folder)})
     }
 
     fun getAllHeaders(callback: (dynamic) -> Unit) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("loadHeaders"),
                 success = { folders ->
                     try {
                         if (checkDataForNull(folders)) {
                             if (checkDataForException(folders)) {
-                                folders.forEach({folder -> addHeaderInfo(folder)});
+                                folders.forEach({folder -> addHeaderInfo(folder)})
 
                                 var publicLinks = if (localStorage.getItem("publicLinks") != null) {
-                                    JSON.parse<Array<dynamic>>(localStorage.getItem("publicLinks")!!);
+                                    JSON.parse<Array<dynamic>>(localStorage.getItem("publicLinks")!!)
                                 } else {
-                                    arrayOf<dynamic>();
+                                    arrayOf<dynamic>()
                                 }
 
                                 //TODO remove user project public links
@@ -59,18 +59,18 @@ class HeadersProvider(
                                         "id" to "PublicLinks",
                                         "childFolders" to arrayOf<dynamic>(),
                                         "projects" to publicLinks
-                                ));
+                                ))
 
-                                callback(folders);
-                                onHeadersLoaded();
+                                callback(folders)
+                                onHeadersLoaded()
                             } else {
-                                onFail(folders, ActionStatusMessage.load_headers_fail);
+                                onFail(folders, ActionStatusMessage.load_headers_fail)
                             }
                         } else {
-                            onFail("Incorrect data format.", ActionStatusMessage.load_headers_fail);
+                            onFail("Incorrect data format.", ActionStatusMessage.load_headers_fail)
                         }
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 dataType = DataType.JSON,
@@ -78,23 +78,23 @@ class HeadersProvider(
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_headers_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_headers_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
                 },
                 complete = ::unBlockContent
-        );
+        )
     }
 
     fun getHeaderByFilePublicId(publicId: String, project_id: String, /*Function*/callback: (dynamic) -> Unit) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("loadProjectInfoByFileId"),
                 success = { data ->
                     try {
-                        callback(data);
-                        onProjectHeaderLoaded(data);
+                        callback(data)
+                        onProjectHeaderLoaded(data)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -111,7 +111,7 @@ class HeadersProvider(
                 ),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.get_header_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.get_header_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }

@@ -61,4 +61,20 @@ class CodeMirror() {
 
 data class Position(val line: Int, val ch: Int)
 
-data class Token(val start: Int, val end: Int, val string: String, val type: String?, val state: dynamic)
+native interface Token {
+    val start: Int
+    val end: Int
+    val string: String
+    val type: String?
+    val state: dynamic
+}
+
+data class Hint(val from: Position, val to: Position, var list: Array<CompletionView>)
+
+
+native interface CompletionView{
+    val text: String
+    val displayText: String
+    fun render(element: HTMLElement, self: dynamic, data: dynamic);
+    fun hint(cm: CodeMirror, self: dynamic, data: dynamic)
+}

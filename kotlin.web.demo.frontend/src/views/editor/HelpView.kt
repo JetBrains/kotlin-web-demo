@@ -22,10 +22,6 @@ import providers.HelpProvider
 import utils.ElementPosition
 import kotlin.browser.document
 
-/**
- * Created by Semyon.Atamas on 5/18/2015.
- */
-
 private object HelpViewForWords{
     private val element = document.body!!.append.div {
         classes = setOf("words-help")
@@ -37,10 +33,10 @@ private object HelpViewForWords{
     }
 
     public fun show(text: String, pos: ElementPosition) {
-        element.style.left = (pos.left + 2).toString() + "px";
-        element.style.top = (pos.top + 15).toString() + "px";
-        element.style.display = "block";
-        textElement.innerHTML = text;
+        element.style.left = (pos.left + 2).toString() + "px"
+        element.style.top = (pos.top + 15).toString() + "px"
+        element.style.display = "block"
+        textElement.innerHTML = text
     }
 
     public fun hide() {

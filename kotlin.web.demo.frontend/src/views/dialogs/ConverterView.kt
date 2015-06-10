@@ -31,17 +31,12 @@ import utils.jquery.keydown
 import kotlin.browser.document
 import kotlin.browser.window
 
-
-/**
- * Created by Semyon.Atamas on 5/18/2015.
- */
-
 class ConverterView(converterProvider: ConverterProvider) {
 
     fun open() {
         dialog.open()
-        javaEditor.refresh();
-        kotlinEditor.refresh();
+        javaEditor.refresh()
+        kotlinEditor.refresh()
     }
 
     private val dialogElement = document.body!!.append.div {
@@ -49,7 +44,7 @@ class ConverterView(converterProvider: ConverterProvider) {
         title = "Convert your java code to kotlin"
     }
 
-    private val leftHalf = dialogElement.append.div {};
+    private val leftHalf = dialogElement.append.div {}
     private val javaEditor = CodeMirror.fromTextArea(leftHalf.append.textArea {}, json(
             "lineNumbers" to true,
             "styleActiveLine" to true,
@@ -63,9 +58,9 @@ class ConverterView(converterProvider: ConverterProvider) {
             ),
             "mode" to "text/x-java",
             "tabSize" to 4
-    ));
+    ))
 
-    private val rightHalf = dialogElement.append.div {};
+    private val rightHalf = dialogElement.append.div {}
     private val kotlinEditor = CodeMirror.fromTextArea(rightHalf.append.textArea {}, json(
             "lineNumbers" to true,
             "matchBrackets" to true,
@@ -73,7 +68,7 @@ class ConverterView(converterProvider: ConverterProvider) {
             "readOnly" to true,
             "mode" to "text/kotlin",
             "tabSize" to 4
-    ));
+    ))
 
     private val dialog = Dialog(
             dialogElement,
@@ -83,32 +78,32 @@ class ConverterView(converterProvider: ConverterProvider) {
             width = 700,
             height = 700,
             resizeStop = {
-                javaEditor.refresh();
-                kotlinEditor.refresh();
+                javaEditor.refresh()
+                kotlinEditor.refresh()
             },
             buttons = arrayOf(DialogButton(
                     text = "Convert to Kotlin",
                     click = {
-                        getDialogButton(dialogElement, 1).button("disable");
+                        getDialogButton(dialogElement, 1).button("disable")
                         converterProvider.convert(
                                 javaEditor.getValue(),
                                 onSuccess = { text ->
-                                    kotlinEditor.setValue(text);
-                                    var lineCount: Int = kotlinEditor.lineCount();
+                                    kotlinEditor.setValue(text)
+                                    var lineCount: Int = kotlinEditor.lineCount()
                                     kotlinEditor.operation({
-                                        for (i in 0..lineCount) kotlinEditor.indentLine(i);
-                                    });
+                                        for (i in 0..lineCount) kotlinEditor.indentLine(i)
+                                    })
                                 },
                                 onFail = { errors ->
                                     for (error in errors) {
                                         // todo
-                                        window.alert(error.exception);
+                                        window.alert(error.exception)
                                     }
                                 },
                                 onComplete = {
-                                    getDialogButton(dialogElement, 1).button("enable");
+                                    getDialogButton(dialogElement, 1).button("enable")
                                 }
-                        );
+                        )
                     }
             ))
     )
@@ -117,9 +112,9 @@ class ConverterView(converterProvider: ConverterProvider) {
     init {
         jq(dialogElement).keydown({ event ->
             if (event.keyCode == KeyCode.ENTER.code && (event.ctrlKey || event.metaKey)) {
-                jq(dialogElement).parent().find("button:eq(1):enabled").click();
+                jq(dialogElement).parent().find("button:eq(1):enabled").click()
             }
-            event.stopPropagation();
-        });
+            event.stopPropagation()
+        })
     }
 }

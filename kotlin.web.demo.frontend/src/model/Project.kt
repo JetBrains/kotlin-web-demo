@@ -17,7 +17,6 @@
 package model
 
 import application.Application
-import views.editor.Error
 import utils.Listenable
 import utils.VarListener
 import utils.addKotlinExtension
@@ -42,8 +41,8 @@ class Project(
                 "confType" to confType,
                 "originUrl" to originUrl,
                 "readOnlyFileNames" to readOnlyFileNames,
-                "files" to files.filter { it.isModifiable; }
-        );
+                "files" to files.filter { it.isModifiable }
+        )
     }
 
     fun save() {
@@ -51,10 +50,10 @@ class Project(
             ProjectType.USER_PROJECT -> Application.projectProvider.saveProject(this, publicId, { onModified() })
             else -> {
                 if (isModified()) {
-                    var fileIDs = arrayListOf<String>();
+                    var fileIDs = arrayListOf<String>()
                     for (file in files) {
-                        file.dumpToLocalStorage();
-                        fileIDs.add(file.id);
+                        file.dumpToLocalStorage()
+                        fileIDs.add(file.id)
                     }
                     localStorage.setItem(publicId, JSON.stringify(json(
                             "name" to name,
@@ -67,9 +66,9 @@ class Project(
                             "publicId" to publicId,
                             "revertible" to revertible,
                             "readOnlyFileNames" to readOnlyFileNames
-                    )));
+                    )))
                 } else {
-                    localStorage.removeItem(publicId);
+                    localStorage.removeItem(publicId)
                 }
             }
         }
@@ -81,14 +80,14 @@ class Project(
 
     fun loadContent(fromServer: Boolean) {
         if (localStorage.getItem(publicId) != null && !fromServer) {
-            var content: dynamic = JSON.parse(localStorage.getItem(publicId)!!);
-            localStorage.removeItem(publicId);
+            var content: dynamic = JSON.parse(localStorage.getItem(publicId)!!)
+            localStorage.removeItem(publicId)
             val files = arrayListOf<File>()
             for (fileId in content.files) {
-                val fileContent: dynamic = JSON.parse(localStorage.getItem(fileId)!!);
+                val fileContent: dynamic = JSON.parse(localStorage.getItem(fileId)!!)
                 val file = File.fromJSON(this, fileContent)
                 file.listenableIsModified.addModifyListener({ onModified() })
-                files.add(file);
+                files.add(file)
             }
             content.files = files
             contentLoaded(content)
@@ -99,12 +98,12 @@ class Project(
                     { content ->
                         val files = arrayListOf<File>()
                         for (fileContent in content.files) {
-                            val file = File.fromJSON(this, fileContent);
+                            val file = File.fromJSON(this, fileContent)
                             file.listenableIsModified.addModifyListener { onModified() }
                             files.add(file)
                         }
                         content.files = files
-                        contentLoaded(content);
+                        contentLoaded(content)
                     },
                     onContentNotFound
             )
@@ -116,10 +115,10 @@ class Project(
     }
 
     fun addEmptyFile(name: String, publicId: String): File {
-        var file = File(this, name, publicId);
-        file.listenableIsModified.addModifyListener {onModified()};
-        files.add(file);
-        onFileAdded(file);
+        var file = File(this, name, publicId)
+        file.listenableIsModified.addModifyListener {onModified()}
+        files.add(file)
+        onFileAdded(file)
         return file
     }
 
@@ -129,33 +128,33 @@ class Project(
                 addKotlinExtension(name),
                 publicId,
                 "fun main(args: Array<String>) {\n\n}"
-        );
-        file.listenableIsModified.addModifyListener {onModified()};
-        files.add(file);
-        onFileAdded(file);
+        )
+        file.listenableIsModified.addModifyListener {onModified()}
+        files.add(file)
+        onFileAdded(file)
         return file
     }
 
     fun deleteFile (file: File) {
         if(!file.isModifiable){
-            readOnlyFileNames = readOnlyFileNames.filter { it != file.name; }.toTypedArray()
+            readOnlyFileNames = readOnlyFileNames.filter { it != file.name }.toTypedArray()
         }
-        files.remove(file);
-        onFileDeleted(file.id);
+        files.remove(file)
+        onFileDeleted(file.id)
     }
 
     private fun contentLoaded(content: dynamic) {
-        contentLoaded = true;
-        originUrl = content.originUrl;
-        args = content.args;
-        name = content.name;
-        confType = content.confType;
-        help = content.help;
-        files = content.files;
-        revertible = if (content.hasOwnProperty("revertible")) content.revertible else true;
-        readOnlyFileNames = content.readOnlyFileNames;
-        onContentLoaded(files);
-        onModified();
+        contentLoaded = true
+        originUrl = content.originUrl
+        args = content.args
+        name = content.name
+        confType = content.confType
+        help = content.help
+        files = content.files
+        revertible = if (content.hasOwnProperty("revertible")) content.revertible else true
+        readOnlyFileNames = content.readOnlyFileNames
+        onContentLoaded(files)
+        onModified()
     }
 
     fun setContent(content: dynamic) {
@@ -166,42 +165,42 @@ class Project(
                 files.add(file)
                 file.listenableIsModified.addModifyListener { onModified() }
             }
-            onContentLoaded(files);
-            contentLoaded = true;
+            onContentLoaded(files)
+            contentLoaded = true
         } else {
-            throw Exception("Content was already loaded");
+            throw Exception("Content was already loaded")
         }
     }
 
 //    fun setErrors (errors: Json) {
 //        for (file in files) {
-//            file.errors = errors.get (file.name) as Array<Error>;
+//            file.errors = errors.get (file.name) as Array<Error>
 //        }
 //    }
 
     fun setDefaultContent() {
         if (!contentLoaded) {
-            contentLoaded = true;
+            contentLoaded = true
         } else {
-            throw Exception("Content was already loaded");
+            throw Exception("Content was already loaded")
         }
     }
 
     private fun isModified() = files.any { it.isModified }
 
-    var files = arrayListOf<File>();
+    var files = arrayListOf<File>()
     val nameListener = VarListener<String>()
-    var name by Listenable(name, nameListener);
-    var contentLoaded = false;
-    var args = "";
-    var confType = "java";
-    var originUrl = null;
-    var help = "";
+    var name by Listenable(name, nameListener)
+    var contentLoaded = false
+    var args = ""
+    var confType = "java"
+    var originUrl = null
+    var help = ""
     val modifiedListener = VarListener<Boolean>()
     var modified by Listenable(false, modifiedListener)
     val revertibleListener = VarListener<Boolean>()
-    var revertible by Listenable(true, revertibleListener);
-    var readOnlyFileNames = arrayOf<String>();
+    var revertible by Listenable(true, revertibleListener)
+    var readOnlyFileNames = arrayOf<String>()
 }
 
 

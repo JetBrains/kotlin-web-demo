@@ -16,53 +16,50 @@
 
 package views.editor
 
+import html4k.dom.append
+import html4k.js.div
 import org.w3c.dom.HTMLElement
-import kotlin.browser.document
-import html4k.*
-import html4k.js.*
-import html4k.dom.*
+import providers.CompletionProposal
 import utils.codemirror.CodeMirror
+import utils.codemirror.CompletionView
 import utils.codemirror.Position
 
-data class Hint(val from: Position, val to: Position, var list: Array<Completion>)
+internal class CustomizedCompletionView(private val proposal: CompletionProposal): CompletionView {
+    override val text = proposal.text
+    override val displayText = proposal.displayText
 
-class Completion(private val proposal: CompletionProposal) {
-    val text = proposal.text
-    val displayText = proposal.displayText
-
-    fun render(element: HTMLElement, self: dynamic, data: dynamic) = element.append {
-        div {
-            classes = setOf("icon", proposal.icon)
-        }
-        div {
-            +displayText
-            classes = setOf("name")
-        }
-        div {
-            +proposal.tail
-            classes = setOf("tail")
+    override fun render(element: HTMLElement, self: dynamic, data: dynamic) {
+        element.append {
+            div {
+                classes = setOf("icon", proposal.icon)
+            }
+            div {
+                +displayText
+                classes = setOf("name")
+            }
+            div {
+                +proposal.tail
+                classes = setOf("tail")
+            }
         }
     }
 
-    fun hint(cm: CodeMirror, self: dynamic, data: dynamic){
+    override fun hint(cm: CodeMirror, self: dynamic, data: dynamic) {
         var cur = cm.getCursor()
         val token = cm.getTokenAt(cm.getCursor())
-        val replacement: String = data.text
 
         val from = Position(cur.line, token.start)
         var to = Position(cur.line, token.end)
 
         if ((token.string == ".") || (token.string == " ") || (token.string == "(")) {
             //Insert string
-            cm.replaceRange(replacement, to, to);
+            cm.replaceRange(text, to)
         } else {
-            cm.replaceRange(replacement, from, to);
-            if (data.text.endsWith('(')) {
-                cm.replaceRange(")", Position(cur.line, token.start + replacement.length()));
+            cm.replaceRange(text, from, to)
+            if (text.endsWith('(')) {
+                cm.replaceRange(")", Position(cur.line, token.start + text.length()))
                 cm.execCommand("goCharLeft")
             }
         }
-    };
+    }
 }
-
-public data class CompletionProposal(val icon: String, val text: String, val displayText: String, val tail: String)

@@ -21,10 +21,6 @@ import utils.unBlockContent
 import views.ActionStatusMessage
 import kotlin.browser.window
 
-/**
- * Created by Semyon.Atamas on 5/25/2015.
- */
-
 class LoginProvider(
         private val beforeLogout: () -> Unit,
         private val onLogout: (dynamic) -> Unit,
@@ -37,13 +33,13 @@ class LoginProvider(
     }
 
     fun logout() {
-        blockContent();
-        beforeLogout();
+        blockContent()
+        beforeLogout()
         ajax(
                 url = window.location.protocol + "//" + window.location.host + "/logout",
                 success = { data ->
                     try {
-                        onLogout(data);
+                        onLogout(data)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -53,9 +49,9 @@ class LoginProvider(
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.login_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.login_fail)
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 complete = ::unBlockContent
@@ -63,18 +59,18 @@ class LoginProvider(
     }
 
     fun getUserName() {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("getUserName"),
                 success = { data ->
                     try {
                         if (checkDataForNull(data)) {
-                            onLogin(data);
+                            onLogin(data)
                         } else {
-                            onFail("Username is null.", ActionStatusMessage.login_fail);
+                            onFail("Username is null.", ActionStatusMessage.login_fail)
                         }
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 dataType = DataType.JSON,
@@ -82,12 +78,12 @@ class LoginProvider(
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.login_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.login_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
                 },
                 complete = ::unBlockContent
-        );
+        )
     }
 }

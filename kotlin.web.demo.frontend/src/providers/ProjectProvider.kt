@@ -29,31 +29,31 @@ class ProjectProvider(
 ) {
     fun loadProject(publicId: String, type: ProjectType, callback: (dynamic) -> Unit, onNotFound: () -> Unit) {
         if (type == ProjectType.EXAMPLE) {
-            loadExample(publicId, callback);
+            loadExample(publicId, callback)
         } else {
-            loadProject(publicId, callback, onNotFound);
+            loadProject(publicId, callback, onNotFound)
         }
     }
 
     fun deleteProject(id: String, type: ProjectType, callback: () -> Unit) {
         if (type == ProjectType.USER_PROJECT) {
-            deleteProject(id, callback);
+            deleteProject(id, callback)
         } else if (type == ProjectType.PUBLIC_LINK) {
-            callback();
+            callback()
         } else {
-            throw Exception("Can't delete this project");
+            throw Exception("Can't delete this project")
         }
     }
 
     fun renameProject(project: Project, newName: String) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("renameProject"),
                 success = {
                     try {
-                        project.name = newName;
+                        project.name = newName
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 type = HTMLRequestType.POST,
@@ -62,8 +62,8 @@ class ProjectProvider(
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        unBlockContent();
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.rename_project_fail);
+                        unBlockContent()
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.rename_project_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -73,20 +73,20 @@ class ProjectProvider(
     }
 
     private fun loadExample(publicId: String, callback: (dynamic) -> Unit) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("loadExample"),
                 success = { data ->
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                onProjectLoaded(data);
-                                callback(data);
+                                onProjectLoaded(data)
+                                callback(data)
                             } else {
-                                onFail(data, ActionStatusMessage.load_project_fail);
+                                onFail(data, ActionStatusMessage.load_project_fail)
                             }
                         } else {
-                            onFail("Incorrect data format.", ActionStatusMessage.load_project_fail);
+                            onFail("Incorrect data format.", ActionStatusMessage.load_project_fail)
                         }
                     } catch (e: Throwable) {
                         console.log(e)
@@ -98,25 +98,25 @@ class ProjectProvider(
                 data = json("publicId" to publicId),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_project_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_project_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
                 },
                 complete = ::unBlockContent
-        );
+        )
     }
 
     fun addNewProject(name: String) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("addProject"),
                 success = { data ->
                     try {
-                        onNewProjectAdded(name, data.projectId, data.fileId);
+                        onNewProjectAdded(name, data.projectId, data.fileId)
                         console.log("haha")
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 type = HTMLRequestType.POST,
@@ -125,7 +125,7 @@ class ProjectProvider(
                 dataType = DataType.JSON,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.add_project_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.add_project_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -135,20 +135,20 @@ class ProjectProvider(
     }
 
     private fun loadProject(publicId: String, callback: (dynamic) -> Unit, onNotFound: () -> Unit) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("loadProject"),
                 success = { data ->
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                onProjectLoaded(data);
+                                onProjectLoaded(data)
                                 callback(data)
                             } else {
-                                onFail(data, ActionStatusMessage.load_project_fail);
+                                onFail(data, ActionStatusMessage.load_project_fail)
                             }
                         } else {
-                            onFail("Incorrect data format.", ActionStatusMessage.load_project_fail);
+                            onFail("Incorrect data format.", ActionStatusMessage.load_project_fail)
                         }
                     } catch (e: Throwable) {
                         console.log(e)
@@ -163,7 +163,7 @@ class ProjectProvider(
                 ),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_project_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_project_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -173,14 +173,14 @@ class ProjectProvider(
     }
 
     fun forkProject(content: dynamic, callback: (dynamic) -> Unit, name: String) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("addProject"),
                 success = { data ->
                     try {
-                        callback(data);
+                        callback(data)
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 type = HTMLRequestType.GET,
@@ -189,7 +189,7 @@ class ProjectProvider(
                 data = json("content" to JSON.stringify(content), "args" to name),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -205,7 +205,7 @@ class ProjectProvider(
                     if (data.exists == true) {
                         onExists()
                     } else {
-                        onNotExists();
+                        onNotExists()
                     }
                 },
                 type = HTMLRequestType.POST,
@@ -213,19 +213,19 @@ class ProjectProvider(
                 data = json("publicId" to publicId),
                 dataType = DataType.JSON,
                 error = { jqXHR, textStatus, errorThrown ->
-                    onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
+                    onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
                 }
         )
     }
 
 
     private fun deleteProject(publicId: String, callback: () -> Unit) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("deleteProject"),
                 success = {
                     try {
-                        callback();
+                        callback()
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -236,7 +236,7 @@ class ProjectProvider(
                 data = json("publicId" to publicId),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.delete_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.delete_program_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -246,14 +246,14 @@ class ProjectProvider(
     }
 
     fun saveProject(project: Project, publicId: String, callback: () -> Unit) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("saveProject"),
                 success = {
                     try {
-                        callback();
+                        callback()
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 type = HTMLRequestType.POST,
@@ -262,9 +262,9 @@ class ProjectProvider(
                 dataType = DataType.TEXT,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 complete = ::unBlockContent

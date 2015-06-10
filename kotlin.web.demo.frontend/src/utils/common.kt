@@ -46,14 +46,14 @@ fun parseBoolean(value: String) = when (value) {
 
 fun addKotlinExtension(filename: String): String = filename.removeSuffix(".kt")
 
-fun removeKotlinExtension(filename: String): String = if (filename.endsWith(".kt")) filename.substring(0, filename.size - ".kt".size) else filename;
+fun removeKotlinExtension(filename: String): String = if (filename.endsWith(".kt")) filename.substring(0, filename.size - ".kt".size) else filename
 
 private val tagsToReplace = hashMapOf(
     "&" to "&amp;",
     "<" to "&amp;lt;",
     ">" to "&amp;gt;",
     " " to "%20"
-);
+)
 
 var userProjectPrefix = "/UserProjects/"
 
@@ -61,56 +61,56 @@ var userProjectPrefix = "/UserProjects/"
 fun unEscapeString(s: String): String {
     var unEscapedString = s
     for (tagEntry in tagsToReplace) {
-        unEscapedString = unEscapedString.replace(tagEntry.getValue(), tagEntry.getKey());
+        unEscapedString = unEscapedString.replace(tagEntry.getValue(), tagEntry.getKey())
     }
-    return unEscapedString;
+    return unEscapedString
 }
 
 fun escapeString(s: String): String {
     var escapedString = s
     for (tagEntry in tagsToReplace) {
-        escapedString = escapedString.replace(tagEntry.getKey(), tagEntry.getValue());
+        escapedString = escapedString.replace(tagEntry.getKey(), tagEntry.getValue())
     }
-    return escapedString;
+    return escapedString
 }
 
 fun getProjectIdFromUrl(): String {
-    var urlHash = escapeString(window.location.hash); //escaping for firefox
+    var urlHash = escapeString(window.location.hash) //escaping for firefox
     urlHash = urlHash.removePrefix("#")
     if (urlHash.startsWith(userProjectPrefix)) {
-        urlHash = urlHash.removePrefix(userProjectPrefix);
-        return urlHash.splitBy("/")[0];
+        urlHash = urlHash.removePrefix(userProjectPrefix)
+        return urlHash.splitBy("/")[0]
     }
-    return urlHash.substring(0, urlHash.lastIndexOf("/"));
+    return urlHash.substring(0, urlHash.lastIndexOf("/"))
 }
 
 fun getFileIdFromUrl(): String {
-    var urlHash = escapeString(window.location.hash); //escaping for firefox
+    var urlHash = escapeString(window.location.hash) //escaping for firefox
     urlHash = urlHash.removePrefix("#")
 
     if (urlHash.startsWith(userProjectPrefix)) {
-        urlHash = urlHash.removePrefix(userProjectPrefix);
-        return urlHash.splitBy("/")[1];
+        urlHash = urlHash.removePrefix(userProjectPrefix)
+        return urlHash.splitBy("/")[1]
     } else {
-        return urlHash;
+        return urlHash
     }
 }
 
 fun setState(hash: String, title: String) {
-    var unescapedHash = unEscapeString(hash);
-    unescapedHash = if(unescapedHash.startsWith("#")) unescapedHash else "#" + unescapedHash;
-    document.title = title + " | Try Kotlin";
+    var unescapedHash = unEscapeString(hash)
+    unescapedHash = if(unescapedHash.startsWith("#")) unescapedHash else "#" + unescapedHash
+    document.title = title + " | Try Kotlin"
     if (window.location.hash != unescapedHash) {
         if ((window.location.hash == "" || window.location.hash == "#") && window.location.search == "") {
-            window.history.replaceState("", title, unescapedHash);
+            window.history.replaceState("", title, unescapedHash)
         } else {
-            window.history.pushState("", title, unescapedHash);
+            window.history.pushState("", title, unescapedHash)
         }
     }
 }
 
 fun clearState() {
-    window.history.replaceState("", "", "/index.html");
+    window.history.replaceState("", "", "/index.html")
 }
 
 fun HTMLElement.toggleClass(className: String) {
@@ -123,28 +123,28 @@ fun HTMLElement.toggleClass(className: String) {
 
 fun HTMLElement.isVisible() = jq(this).isCheck(":visible")
 
-fun isUserProjectInUrl() = window.location.hash.startsWith("#" + userProjectPrefix);
+fun isUserProjectInUrl() = window.location.hash.startsWith("#" + userProjectPrefix)
 
-private var blockTimer: Int = 0;
+private var blockTimer: Int = 0
 fun blockContent() {
-    window.clearTimeout(blockTimer);
-    var overlay = document.getElementById("global-overlay") as HTMLElement;
-    overlay.style.display = "block";
-    overlay.style.visibility = "hidden";
-    overlay.focus();
+    window.clearTimeout(blockTimer)
+    var overlay = document.getElementById("global-overlay") as HTMLElement
+    overlay.style.display = "block"
+    overlay.style.visibility = "hidden"
+    overlay.focus()
     blockTimer = window.setTimeout({
-        overlay.style.visibility = "initial";
+        overlay.style.visibility = "initial"
         Unit
-    }, 250);
+    }, 250)
 }
 
 fun unBlockContent() {
-    window.clearTimeout(blockTimer);
-    (document.getElementById("global-overlay") as HTMLElement).style.display = "none";
+    window.clearTimeout(blockTimer)
+    (document.getElementById("global-overlay") as HTMLElement).style.display = "none"
 }
 
 fun HTMLIFrameElement.clear(){
-    this.contentWindow!!.location.reload();
+    this.contentWindow!!.location.reload()
 }
 
 native

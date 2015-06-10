@@ -37,11 +37,11 @@ class MyProgramsFolderView(parentNode: HTMLElement,
 
     init {
         if (!Application.loginView.isLoggedIn) {
-            folderNameElement.style.display = "inline-block";
-            headerElement.style.color = "rgba(0,0,0,0.5)";
+            folderNameElement.style.display = "inline-block"
+            headerElement.style.color = "rgba(0,0,0,0.5)"
             headerElement.onclick = {
-                Application.loginView.openLoginDialog();
-            };
+                Application.loginView.openLoginDialog()
+            }
             headerElement.append.div{
                 + "(please log in)"
                 id = "login-link"
@@ -60,7 +60,7 @@ class MyProgramsFolderView(parentNode: HTMLElement,
                                 defaultValue = "Untitled",
                                 validate = { name -> validateNewProjectName(name) },
                                 callback = { name -> Application.projectProvider.addNewProject(name) }
-                        );
+                        )
                     }
                 }
             }
@@ -69,17 +69,17 @@ class MyProgramsFolderView(parentNode: HTMLElement,
 
     fun validateNewProjectName(name: String): ValidationResult {
         if (name == "")
-            return ValidationResult(false, "Project name can't be empty");
+            return ValidationResult(false, "Project name can't be empty")
         if (name.length() >= 95)
-            return ValidationResult(false, "Project name is too long");
+            return ValidationResult(false, "Project name is too long")
         if (!name.matches("^[a-zA-Z0-9,_\\- ]+$"))
             return ValidationResult(false, "Project name can contain only the following characters:" +
                     "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>")
         for (projectView in projects)
             if (projectView.project.name == name) {
-                return ValidationResult(false, "Project with that name already exists");
+                return ValidationResult(false, "Project with that name already exists")
             }
-        return ValidationResult(true);
+        return ValidationResult(true)
     }
 
     fun addNewProject(project: ProjectView){

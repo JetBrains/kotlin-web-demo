@@ -17,17 +17,14 @@
 package providers
 import model.Project
 import utils.codemirror.Position
-import utils.jquery.JQuery
 import views.ActionStatusMessage
-import views.editor.CompletionProposal
-import kotlin.browser.document
 
 class CompletionProvider(
         var onSuccess: () -> Unit,
         var onFail: (error: String, status: ActionStatusMessage) -> Unit
 )
 {
-    private var isLoadingCompletion = false;
+    private var isLoadingCompletion = false
 
     fun getCompletion(
             project: Project,
@@ -35,34 +32,36 @@ class CompletionProvider(
             cursor: Position,
             callback: (Array<CompletionProposal>) -> Unit
     ) {
-        if (!isLoadingCompletion) {
-            isLoadingCompletion = true;
-            ajax(
-                    url = generateAjaxUrl(REQUEST_TYPE.COMPLETE, hashMapOf("runConf" to project.confType)),
-                    dataType = DataType.JSON,
-                    timeout = 10000,
-                    type = HTMLRequestType.POST,
-                    data = json(
-                            "project" to JSON.stringify(project),
-                            "filename" to filename,
-                            "line" to cursor.line,
-                            "ch" to cursor.ch
-                    ),
-                    success = { completionProposals: Array<CompletionProposal> ->
-                        isLoadingCompletion = false;
-                        onSuccess();
-                        callback(completionProposals);
-                    },
-                    error =  { jqXHR: dynamic, textStatus: String, errorThrown: String ->
-                        isLoadingCompletion = false;
-                        if (jqXHR.responseText != null && jqXHR.responseText != "") {
-                            onFail(jqXHR.responseText, ActionStatusMessage.get_completion_fail);
-                        } else {
-                            onFail(textStatus + " : " + errorThrown, ActionStatusMessage.get_completion_fail);
-                        }
+        if (isLoadingCompletion) return
+
+        isLoadingCompletion = true
+        ajax(url = generateAjaxUrl(REQUEST_TYPE.COMPLETE, hashMapOf("runConf" to project.confType)),
+                dataType = DataType.JSON,
+                timeout = 10000,
+                type = HTMLRequestType.POST,
+                data = json(
+                        "project" to JSON.stringify(project),
+                        "filename" to filename,
+                        "line" to cursor.line,
+                        "ch" to cursor.ch
+                ),
+                success = { completionProposals: Array<CompletionProposal> ->
+                    isLoadingCompletion = false
+                    onSuccess()
+                    callback(completionProposals)
+                },
+                error =  { jqXHR: dynamic, textStatus: String, errorThrown: String ->
+                    isLoadingCompletion = false
+                    if (jqXHR.responseText != null && jqXHR.responseText != "") {
+                        onFail(jqXHR.responseText, ActionStatusMessage.get_completion_fail)
+                    } else {
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.get_completion_fail)
                     }
-            )
-        }
+                }
+        )
     }
 }
+
+
+public data class CompletionProposal(val icon: String, val text: String, val displayText: String, val tail: String)
 

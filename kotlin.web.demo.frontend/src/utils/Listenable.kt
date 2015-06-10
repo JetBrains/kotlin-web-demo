@@ -19,10 +19,6 @@ package utils
 import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
 
-/**
- * Created by Semyon.Atamas on 4/6/2015.
- */
-
 data class ChangeEvent<T>(
         val oldValue: T,
         val newValue: T
@@ -65,7 +61,7 @@ class VarListener<T> {
     }
 
     fun addModifyListener(name: String, callback: (ChangeEvent<T>) -> Unit) {
-        namedListeners.put(name, callback);
+        namedListeners.put(name, callback)
         allListeners.add(callback)
     }
 

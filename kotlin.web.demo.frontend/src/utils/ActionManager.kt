@@ -23,15 +23,10 @@ public class ActionManager(
         private val macActionShortcutMap: Map<String, Shortcut>
 ) {
 
-    private val NEVER_PRESSED_SHORTCUT = Shortcut(arrayOf(""), { false; });
+    private val NEVER_PRESSED_SHORTCUT = Shortcut(arrayOf(""), { false })
 
     val shortcutMap = if (window.navigator.appVersion.indexOf("Mac") != -1) macActionShortcutMap else defaultActionShortcutMap
 
     fun getShortcut(id: String): Shortcut =
             shortcutMap.get(id) ?: NEVER_PRESSED_SHORTCUT
-
-//    fun registerAction(actionName: String, defaultShortcut: Shortcut, macShortcut: Shortcut?) {
-//        macActionShortcutMap.put(actionName, macShortcut ?: defaultShortcut);
-//        defaultActionShortcutMap.put(actionName, defaultShortcut);
-//    }
 }

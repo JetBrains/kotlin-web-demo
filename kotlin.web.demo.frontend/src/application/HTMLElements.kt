@@ -37,23 +37,23 @@ private object Elements{
 
     fun init() {
         argumentsInputElement.oninput = {
-            Application.accordion.selectedProjectView!!.project.args = argumentsInputElement.value;
+            Application.accordion.selectedProjectView!!.project.args = argumentsInputElement.value
             Unit
-        };
+        }
 
         shortcutsButton.onclick = {
             ShortcutsDialogView.open()
-        };
+        }
 
         onTheFlyCheckbox.checked = parseBoolean(localStorage.getItem("highlightOnTheFly") ?: "false")
         onTheFlyCheckbox.onchange = {
-            Application.editor.highlightOnTheFly = onTheFlyCheckbox.checked;
-            Application.editor.updateHighlighting();
+            Application.editor.highlightOnTheFly = onTheFlyCheckbox.checked
+            Application.editor.updateHighlighting()
         }
 
         jq(runMode).selectmenu(json(
             "icons" to json( "button" to "selectmenu-arrow-icon" )
-        ));
+        ))
 
 
         saveAsButton.onclick = {
@@ -68,16 +68,16 @@ private object Elements{
                         },
                         { name ->
                             Application.projectProvider.forkProject(Application.accordion.selectedProjectView!!.project, { data ->
-                                Application.accordion.selectedProjectView!!.project.loadOriginal();
-                                Application.accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content));
+                                Application.accordion.selectedProjectView!!.project.loadOriginal()
+                                Application.accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content))
                             }, name)
                         }
                 )
             } else {
-                IncompleteActionManager.incomplete("save");
+                IncompleteActionManager.incomplete("save")
                 Application.loginView.openLoginDialog({
-                    IncompleteActionManager.cancel("save");
-                });
+                    IncompleteActionManager.cancel("save")
+                })
             }
         }
     }

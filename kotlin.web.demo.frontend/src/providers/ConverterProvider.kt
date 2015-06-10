@@ -16,11 +16,6 @@
 
 package providers
 
-/**
- * Created by Semyon.Atamas on 5/20/2015.
- */
-
-
 class ConverterProvider(){
     fun convert(text: String, onSuccess: (String) -> Unit, onFail: (dynamic) -> Unit, onComplete: () -> Unit) {
         ajax(
@@ -28,12 +23,12 @@ class ConverterProvider(){
                 success = { data: dynamic ->
                     if (checkDataForNull(data)) {
                         if (checkDataForException(data)) {
-                            onSuccess(data[0].text);
+                            onSuccess(data[0].text)
                         } else {
-                            onFail(data);
+                            onFail(data)
                         }
                     } else {
-                        onFail("Incorrect data format.");
+                        onFail("Incorrect data format.")
                     }
                 },
                 dataType = DataType.JSON,
@@ -42,12 +37,12 @@ class ConverterProvider(){
                 timeout = 10000,
                 error = { jqXHR: dynamic, textStatus: String, errorThrown: String ->
                     if (jqXHR.responseText != null && jqXHR.responseText != "") {
-                        onFail(jqXHR.responseText);
+                        onFail(jqXHR.responseText)
                     } else {
-                        onFail(textStatus + " : " + errorThrown);
+                        onFail(textStatus + " : " + errorThrown)
                     }
                 },
                 complete = onComplete
-        );
+        )
     }
 }

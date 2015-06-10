@@ -40,7 +40,7 @@ class AccordionView(
         val onModifiedSelectedFile: (File) -> Unit,
         private val onSelectedFileDeleted: () -> Unit
 ) {
-    private val DEFAULT_PROJECT_ID = "/Examples/Hello,%20world!/Simplest%20version";
+    private val DEFAULT_PROJECT_ID = "/Examples/Hello,%20world!/Simplest%20version"
     private val projectViews = hashMapOf<String, ProjectView>()
     public var selectedProjectView: ProjectView? = null
         private set
@@ -50,7 +50,7 @@ class AccordionView(
     private var publicLinksFolder: FolderView by Delegates.notNull()
 
     init {
-        element.innerHTML = "";
+        element.innerHTML = ""
         jq(element).accordion(json(
                 "heightStyle" to "content",
                 "navigation" to true,
@@ -59,43 +59,43 @@ class AccordionView(
                         "activeHeader" to "examples-open-folder-icon",
                         "header" to "examples-closed-folder-icon"
                 )
-        ));
+        ))
     }
 
     fun getProjectViewById(id: String) = projectViews[id]
 
     fun selectedFileDeleted () {
-        selectedFileView = null;
-        onSelectedFileDeleted();
+        selectedFileView = null
+        onSelectedFileDeleted()
     }
 
     fun loadAllContent() {
-        element.innerHTML = "";
+        element.innerHTML = ""
         projectViews.clear()
-        selectedProjectView = null;
-        selectedFileView = null;
+        selectedProjectView = null
+        selectedFileView = null
         Application.headersProvider.getAllHeaders { folders ->
             folders.forEach { folderContent ->
                 if (folderContent.name == "My programs") {
                     myProgramsFolder = MyProgramsFolderView(element, folderContent, null, { folderContentElement, header, parent ->
                         addProject(folderContentElement, header, parent)
-                    });
+                    })
                 } else if (folderContent.name == "Public links") {
                     publicLinksFolder = FolderView(element, folderContent, null, { folderContentElement, header, parent ->
                         addProject(folderContentElement, header, parent)
-                    });
+                    })
                 } else {
                     FolderView(element, folderContent, null, { folderContentElement, header, parent ->
                         addProject(folderContentElement, header, parent)
-                    });
+                    })
                 }
             }
-            IncompleteActionManager.checkTimepoint("headersLoaded");
-            jq(element).accordion("refresh");
+            IncompleteActionManager.checkTimepoint("headersLoaded")
+            jq(element).accordion("refresh")
             if (!Application.loginView.isLoggedIn) {
-                jq(myProgramsFolder.headerElement).unbind("click");
+                jq(myProgramsFolder.headerElement).unbind("click")
             }
-            loadFirstItem();
+            loadFirstItem()
         }
     }
 
@@ -104,10 +104,10 @@ class AccordionView(
                 name,
                 publicId,
                 ProjectType.USER_PROJECT
-        ), myProgramsFolder));
-        projectViews[publicId]!!.project.setDefaultContent();
-        projectViews[publicId]!!.project.addFileWithMain(name, fileId);
-        selectProject(publicId);
+        ), myProgramsFolder))
+        projectViews[publicId]!!.project.setDefaultContent()
+        projectViews[publicId]!!.project.addFileWithMain(name, fileId)
+        selectProject(publicId)
     }
 
     fun addNewProjectWithContent(publicId: String, content: dynamic) {
@@ -115,16 +115,16 @@ class AccordionView(
                 content.name,
                 publicId,
                 ProjectType.USER_PROJECT
-        ), myProgramsFolder));
-        projectViews[publicId]!!.project.setContent(content);
-        selectProject(publicId);
+        ), myProgramsFolder))
+        projectViews[publicId]!!.project.setContent(content)
+        selectProject(publicId)
     }
 
     fun onBeforeUnload() {
-        var publicLinks = arrayListOf<ProjectHeader>();
+        var publicLinks = arrayListOf<ProjectHeader>()
         for (projectView in projectViews.values()) {
             if (projectView.project.type == ProjectType.PUBLIC_LINK) {
-                publicLinks.add(projectView.header);
+                publicLinks.add(projectView.header)
             }
         }
         localStorage.setItem("publicLinks", JSON.stringify(publicLinks.toTypedArray()))
@@ -135,54 +135,54 @@ class AccordionView(
     fun selectFile(fileView: FileView) {
         if (selectedFileView !== fileView) {
             if (selectedProjectView == fileView.projectView) {
-                var previousFileView = selectedFileView;
-                selectedFileView = fileView;
+                var previousFileView = selectedFileView
+                selectedFileView = fileView
 
-                var previousFile: File? = null;
+                var previousFile: File? = null
                 if (previousFileView != null) {
-                    jq(previousFileView.wrapper).removeClass("selected");
-                    jq(previousFileView.headerElement).removeClass("selected");
-                    previousFile = previousFileView.file;
+                    jq(previousFileView.wrapper).removeClass("selected")
+                    jq(previousFileView.headerElement).removeClass("selected")
+                    previousFile = previousFileView.file
                 }
-                jq(fileView.wrapper).addClass("selected");
-                jq(fileView.headerElement).addClass("selected");
+                jq(fileView.wrapper).addClass("selected")
+                jq(fileView.headerElement).addClass("selected")
 
-                onSelectFile(previousFile, fileView.file);
+                onSelectFile(previousFile, fileView.file)
             } else {
-                throw Exception("You can't select file from project, that isn't selected");
+                throw Exception("You can't select file from project, that isn't selected")
             }
         }
     }
 
     fun loadFirstItem() {
-        var projectId = getProjectIdFromUrl();
+        var projectId = getProjectIdFromUrl()
         if (projectId == null || projectId == "") {
             if (localStorage.getItem("openedItemId") != null) {
-                projectId = localStorage.getItem("openedItemId")!!;
+                projectId = localStorage.getItem("openedItemId")!!
             } else {
-                projectId = DEFAULT_PROJECT_ID;
+                projectId = DEFAULT_PROJECT_ID
             }
         }
-        localStorage.removeItem("openedItemId");
+        localStorage.removeItem("openedItemId")
 
         if (isUserProjectInUrl()) {
             if (localStorage.getItem(projectId) == null) {
-                var file_id = getFileIdFromUrl();
+                var file_id = getFileIdFromUrl()
                 Application.headersProvider.getHeaderByFilePublicId(file_id, projectId, { header ->
                     if (header.publicId !in projectViews.keySet()) {
                         if (header.type == ProjectType.PUBLIC_LINK) {
-                            addProject(publicLinksFolder.contentElement, header, publicLinksFolder);
+                            addProject(publicLinksFolder.contentElement, header, publicLinksFolder)
                         } else {
-                            throw Exception("Project wasn't downloaded");
+                            throw Exception("Project wasn't downloaded")
                         }
                     }
-                    selectProject(header.publicId);
-                });
+                    selectProject(header.publicId)
+                })
             } else {
-                selectProject(projectId);
+                selectProject(projectId)
             }
         } else if (projectId != "") {
-            selectProject(projectId);
+            selectProject(projectId)
         }
     }
 
@@ -191,13 +191,13 @@ class AccordionView(
         //        if (header.type == ProjectType.PUBLIC_LINK && projects[header.publicId] != null) {
         //            return
         //        } else if (projects[header.publicId] != null) {
-        //            throw("Duplicate project id");
+        //            throw("Duplicate project id")
         //        }
-        var projectHeaderElement = document.createElement("div") as HTMLDivElement;
-        var projectContentElement = document.createElement("div") as HTMLDivElement;;
+        var projectHeaderElement = document.createElement("div") as HTMLDivElement
+        var projectContentElement = document.createElement("div") as HTMLDivElement
 
-        folderContentElement.appendChild(projectHeaderElement);
-        folderContentElement.appendChild(projectContentElement);
+        folderContentElement.appendChild(projectHeaderElement)
+        folderContentElement.appendChild(projectContentElement)
 
 
         var projectView = ProjectView(
@@ -207,36 +207,36 @@ class AccordionView(
                 parent,
                 onDelete = {
                     if (selectedProjectView === projectViews[header.publicId]) {
-                        window.history.replaceState("", "", "index.html");
-                        selectedProjectView = null;
-                        selectedFileView = null;
-                        loadFirstItem();
+                        window.history.replaceState("", "", "index.html")
+                        selectedProjectView = null
+                        selectedFileView = null
+                        loadFirstItem()
                     }
-                    projectViews.remove(header.publicId);
+                    projectViews.remove(header.publicId)
                 },
                 onHeaderClick = { publicId ->
                     selectProject(publicId)
                 },
                 onSelected = { projectView ->
                     if (projectView.project.files.isEmpty()) {
-                        selectedFileView = null;
+                        selectedFileView = null
                     }
-                    onProjectSelected(projectView.project);
+                    onProjectSelected(projectView.project)
                 }
-        );
-        projectViews.set(header.publicId, projectView);
+        )
+        projectViews.set(header.publicId, projectView)
 
-        return projectView;
+        return projectView
     }
 
     fun selectProject(publicId: String) {
         if (selectedProjectView == null || selectedProjectView!!.project.publicId != publicId) {
             if (selectedProjectView != null) {
-                selectedProjectView!!.headerElement.removeClass("selected");
-                jq(selectedProjectView!!.contentElement).slideUp();
+                selectedProjectView!!.headerElement.removeClass("selected")
+                jq(selectedProjectView!!.contentElement).slideUp()
             }
-            selectedProjectView = projectViews[publicId];
-            selectedProjectView!!.select();
+            selectedProjectView = projectViews[publicId]
+            selectedProjectView!!.select()
         }
     }
 

@@ -31,9 +31,9 @@ class RunProvider(
 ) {
     fun run(configuration: Configuration, project: Project) {
         if (configuration.type.runner == ConfigurationTypeRunner.JAVA) {
-            runJava(project);
+            runJava(project)
         } else {
-            loadJsFromServer(project);
+            loadJsFromServer(project)
         }
     }
 
@@ -42,17 +42,17 @@ class RunProvider(
             if (element.type == "errors") {
                 var containsErrors = false
                 for (fileName in Object.keys(element.errors)) {
-                    var fileErrorsAndWarnings: Array<dynamic> = element.errors[fileName];
+                    var fileErrorsAndWarnings: Array<dynamic> = element.errors[fileName]
                     containsErrors = fileErrorsAndWarnings.any({
-                        element.severity == "ERROR";
+                        element.severity == "ERROR"
                     })
                 }
                 containsErrors
             } else {
-                false;
+                false
             }
         }
-        return !hasErrors;
+        return !hasErrors
     }
 
     private fun runJava(project: Project) {
@@ -63,15 +63,15 @@ class RunProvider(
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForErrors(data)) {
-                                onSuccess(data.toArrayList(), project);
+                                onSuccess(data.toArrayList(), project)
                             } else {
-                                onErrorsFound(data, project);
+                                onErrorsFound(data, project)
                             }
                         } else {
                             onFail("Incorrect data format.")
                         }
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 dataType = DataType.JSON,
@@ -82,20 +82,20 @@ class RunProvider(
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
                         if (jqXHR.responseText != null && jqXHR.responseText != "") {
-                            onFail(jqXHR.responseText);
+                            onFail(jqXHR.responseText)
                         } else {
-                            onFail(textStatus + " : " + errorThrown);
+                            onFail(textStatus + " : " + errorThrown)
                         }
                     } catch (e: Throwable) {
                         console.log(e)
                     }
                 }
-        );
+        )
 
     }
 
     fun loadJsFromServer(project: Project) {
-        var runConfiguration = project.confType;
+        var runConfiguration = project.confType
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("run", hashMapOf("runConf" to runConfiguration)),
@@ -103,7 +103,7 @@ class RunProvider(
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForErrors(data)) {
-                                var output = arrayListOf<dynamic>();
+                                var output = arrayListOf<dynamic>()
                                 for (element in data) {
                                     if (element.type == "generatedJSCode") {
                                         try {
@@ -111,12 +111,12 @@ class RunProvider(
                                             //(error modifying context of canvas in invisible iframe)
                                             if (runConfiguration ==
                                                     ConfigurationType.CANVAS.name().toLowerCase()) {
-                                                Application.iframeDialog.open();
+                                                Application.iframeDialog.open()
                                             }
-                                            var out: String = Application.iframe.contentWindow!!.eval(element.text);
-                                            output.add(json("text" to unEscapeString(out), "type" to "jsOut"));
+                                            var out: String = Application.iframe.contentWindow!!.eval(element.text)
+                                            output.add(json("text" to unEscapeString(out), "type" to "jsOut"))
                                         } catch (e: Throwable) {
-                                            output.add(json("type" to "jsException", "exception" to e));
+                                            output.add(json("type" to "jsException", "exception" to e))
                                         } finally {
                                             if (runConfiguration == "js") {
                                                 Application.iframe.clear()
@@ -125,12 +125,12 @@ class RunProvider(
                                     }
                                     output.add(element)
                                 }
-                                onSuccess(output, project);
+                                onSuccess(output, project)
                             } else {
                                 onErrorsFound(data, project)
                             }
                         } else {
-                            onFail("Incorrect data format.");
+                            onFail("Incorrect data format.")
                         }
                     } catch (e: Throwable) {
                         console.log(e)
@@ -146,14 +146,14 @@ class RunProvider(
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
                         if (jqXHR.responseText != null && jqXHR.responseText != "") {
-                            onFail(jqXHR.responseText);
+                            onFail(jqXHR.responseText)
                         } else {
-                            onFail(textStatus + " : " + errorThrown);
+                            onFail(textStatus + " : " + errorThrown)
                         }
                     } catch (e: Throwable) {
                         console.log(e)
                     }
                 }
-        );
+        )
     }
 }

@@ -26,49 +26,49 @@ import kotlin.browser.document
 enum class ConfigurationTypeRunner {
     JAVA,
     JS
-};
+}
 
 enum class ConfigurationTypeDependencies {
     STANDARD,
     CANVAS,
     JUNIT
-};
+}
 
 enum class ConfigurationMode {
     SERVER,
     ONRUN
-};
+}
 
 enum class ConfigurationType(val runner: ConfigurationTypeRunner, val dependencies: ConfigurationTypeDependencies) {
     JAVA(ConfigurationTypeRunner.JAVA, ConfigurationTypeDependencies.STANDARD),
     JS(ConfigurationTypeRunner.JS, ConfigurationTypeDependencies.STANDARD),
     CANVAS(ConfigurationTypeRunner.JS, ConfigurationTypeDependencies.CANVAS),
     JUNIT(ConfigurationTypeRunner.JAVA, ConfigurationTypeDependencies.JUNIT)
-};
+}
 
 data class Configuration(val mode: ConfigurationMode, val type: ConfigurationType)
 
 class ConfigurationManager(private val onChange: (Configuration) -> Unit) {
-    var configuration = Configuration(ConfigurationMode.ONRUN, ConfigurationType.JAVA);
+    var configuration = Configuration(ConfigurationMode.ONRUN, ConfigurationType.JAVA)
 
     fun getConfiguration(): Configuration {
-        return configuration;
+        return configuration
     }
 
     fun getType(): String {
-        return configuration.type.name();
+        return configuration.type.name()
     }
 
     fun updateConfiguration(type: String) {
-        configuration = Configuration(configuration.mode, getTypeFromString(type));
+        configuration = Configuration(configuration.mode, getTypeFromString(type))
         jq("#runMode").value(type)
-        jq("#runMode").selectmenu("refresh");
+        jq("#runMode").selectmenu("refresh")
         if (jq("#runMode").value() == "java" || jq("#runMode").value() == "junit") {
-            document.getElementById("generated-code-link")!!.innerHTML = "Generated classfiles";
+            document.getElementById("generated-code-link")!!.innerHTML = "Generated classfiles"
         } else {
-            document.getElementById("generated-code-link")!!.innerHTML = "Generated JavaScript code";
+            document.getElementById("generated-code-link")!!.innerHTML = "Generated JavaScript code"
         }
-        fireChangeEvent();
+        fireChangeEvent()
     }
 
     fun getTypeFromString(type: String) = when (type) {
@@ -80,20 +80,20 @@ class ConfigurationManager(private val onChange: (Configuration) -> Unit) {
     }
 
     fun fireChangeEvent() {
-        onChange(configuration);
+        onChange(configuration)
     }
 
     init {
         jq("#runMode").on("selectmenuchange", {
-            var confType = jq("#runMode").value();
+            var confType = jq("#runMode").value()
             if (confType == "java" || jq("#runMode").value() == "junit") {
-                document.getElementById("generated-code-link")!!.innerHTML = "Generated classfiles";
+                document.getElementById("generated-code-link")!!.innerHTML = "Generated classfiles"
             } else {
-                document.getElementById("generated-code-link")!!.innerHTML = "Generated JavaScript code";
+                document.getElementById("generated-code-link")!!.innerHTML = "Generated JavaScript code"
             }
-            configuration = Configuration(configuration.mode, getTypeFromString(confType));
-            fireChangeEvent();
-        }) ;
+            configuration = Configuration(configuration.mode, getTypeFromString(confType))
+            fireChangeEvent()
+        })
 
     }
 }

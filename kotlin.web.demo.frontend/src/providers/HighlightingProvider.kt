@@ -18,25 +18,24 @@ package providers
 
 import model.File
 import model.Project
-import views.editor.Error
-import utils.Object
+import views.editor.Diagnostic
 
 class HighlightingProvider(
-        private val onSuccess: (Map<File, Array<Error>>) -> Unit,
+        private val onSuccess: (Map<File, Array<Diagnostic>>) -> Unit,
         private val onFail: (String, String) -> Unit
 ) {
 
-    fun getHighlighting(project: Project, callback: (Map<File, Array<Error>>) -> Unit, finallyCallback: (() -> Unit)?) {
+    fun getHighlighting(project: Project, callback: (Map<File, Array<Diagnostic>>) -> Unit, finallyCallback: (() -> Unit)?) {
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("highlight", hashMapOf("runConf" to project.confType)),
                 success = { data ->
                     try {
                         val errors = getErrorsMapFromObject(data, project)
-                        onSuccess(errors);
-                        callback(errors);
+                        onSuccess(errors)
+                        callback(errors)
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 dataType = DataType.JSON,
@@ -46,9 +45,9 @@ class HighlightingProvider(
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
                         if (jqXHR.responseText != null && jqXHR.responseText != "") {
-                            onFail(jqXHR.responseText, "");
+                            onFail(jqXHR.responseText, "")
                         } else {
-                            onFail(textStatus + " : " + errorThrown, "");
+                            onFail(textStatus + " : " + errorThrown, "")
                         }
                     } catch (e: Throwable) {
                         console.log(e)

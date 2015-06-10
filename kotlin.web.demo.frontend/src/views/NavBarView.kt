@@ -25,24 +25,24 @@ import kotlin.browser.document
 
 class NavBarView(private val navigationElement: HTMLDivElement) {
     fun onFileSelected(oldFile: File?, newFile: File) {
-        navigationElement.innerHTML = "";
-        val navItem = createNavItem(newFile.name);
-        navigationElement.appendChild(navItem);
+        navigationElement.innerHTML = ""
+        val navItem = createNavItem(newFile.name)
+        navigationElement.appendChild(navItem)
         createNavItem(newFile.project)
 
-        oldFile?.listenableName?.removeNotifyListener("navBarListener");
+        oldFile?.listenableName?.removeNotifyListener("navBarListener")
         newFile.listenableName.addModifyListener("navBarListener", { e ->
             navItem.textContent = e.newValue
         })
     }
 
     fun onProjectSelected(project: Project){
-        navigationElement.innerHTML = "";
-        createNavItem(project);
+        navigationElement.innerHTML = ""
+        createNavItem(project)
     }
 
     fun onSelectedFileDeleted(){
-        navigationElement.removeChild(navigationElement.lastChild as Node);
+        navigationElement.removeChild(navigationElement.lastChild as Node)
     }
 
     fun onSelectedProjectRenamed(newName: String){
@@ -61,9 +61,9 @@ class NavBarView(private val navigationElement: HTMLDivElement) {
     }
 
     private fun createNavItem(name: String): HTMLDivElement {
-        val navItem = document.createElement("div") as HTMLDivElement;
-        navItem.className = "grid-nav-item";
-        navItem.textContent = name;
+        val navItem = document.createElement("div") as HTMLDivElement
+        navItem.className = "grid-nav-item"
+        navItem.textContent = name
         return navItem
     }
 }

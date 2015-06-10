@@ -17,7 +17,6 @@
 package model
 
 import application.Application
-import views.editor.Error
 import utils.Listenable
 import utils.VarListener
 import kotlin.browser.localStorage
@@ -32,7 +31,7 @@ class File(
         val type: String = FileType.KOTLIN_FILE.name(),
         isRevertible: Boolean = true
 ) {
-    val listenableName = VarListener<String>();
+    val listenableName = VarListener<String>()
     var name: String by Listenable(name, listenableName)
 
     val listenableIsModified = VarListener<Boolean>()
@@ -67,7 +66,7 @@ class File(
            Application.fileProvider.saveFile(this, {
                 originalText = text
                 isModified = text != originalText
-            });
+            })
         }
     }
 
@@ -82,7 +81,7 @@ class File(
             result.modifiable = isModifiable
             result.type = type
             result.revertible = isRevertible
-            localStorage.set(id, JSON.stringify(result));
+            localStorage.set(id, JSON.stringify(result))
         }
     }
 }

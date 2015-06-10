@@ -47,8 +47,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
     }
 
     fun fireSelectEvent() {
-        projectView.selectedFileView = this;
-        Application.accordion.selectFile(this);
+        Application.accordion.selectFile(this)
     }
 
     val fileNameElement = document.create.div {
@@ -60,32 +59,32 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
     init {
         file.listenableIsModified.addModifyListener({ e ->
             if (e.newValue) {
-                headerElement.addClass("modified");
+                headerElement.addClass("modified")
             } else {
-                headerElement.removeClass("modified");
+                headerElement.removeClass("modified")
             }
             if (isSelected()) {
-                Application.accordion.onModifiedSelectedFile(file);
+                Application.accordion.onModifiedSelectedFile(file)
             }
-        });
+        })
 
         file.listenableName.addModifyListener({ e ->
-            fileNameElement.innerHTML = e.newValue;
-            fileNameElement.title = fileNameElement.innerHTML;
-        });
+            fileNameElement.innerHTML = e.newValue
+            fileNameElement.title = fileNameElement.innerHTML
+        })
 
         var icon = headerElement.append.div {
             classes = setOf("icon")
         }
 
         when (file.type) {
-            FileType.KOTLIN_FILE.name() -> icon.addClass("kotlin");
-            FileType.KOTLIN_TEST_FILE.name() -> icon.addClass("kotlin-test");
-            FileType.JAVA_FILE.name() -> icon.addClass("java");
+            FileType.KOTLIN_FILE.name() -> icon.addClass("kotlin")
+            FileType.KOTLIN_TEST_FILE.name() -> icon.addClass("kotlin-test")
+            FileType.JAVA_FILE.name() -> icon.addClass("java")
         }
 
         if (!file.isModifiable) {
-            headerElement.addClass("unmodifiable");
+            headerElement.addClass("unmodifiable")
             icon.addClass("unmodifiable")
         }
 
@@ -108,18 +107,18 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                                 defaultValue = removeKotlinExtension(file.name),
                                 validate = { newName ->
                                     if (removeKotlinExtension(file.name) == newName) {
-                                        ValidationResult(true);
+                                        ValidationResult(true)
                                     } else {
-                                        projectView.validateNewFileName(newName);
+                                        projectView.validateNewFileName(newName)
                                     }
                                 },
                                 callback = { newName: String ->
                                     Application.fileProvider.renameFile(file.id, { newName: String ->
-                                        file.name = addKotlinExtension(newName);
-                                    }, newName);
+                                        file.name = addKotlinExtension(newName)
+                                    }, newName)
                                 }
-                        );
-                        event.stopPropagation();
+                        )
+                        event.stopPropagation()
                     }
                 }
             }
@@ -130,11 +129,11 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                 onClickFunction = { event ->
                     if (window.confirm("Delete file " + file.name)) {
                         Application.fileProvider.deleteFile(file, {
-                            file.project.deleteFile(file);
-                            headerElement.parentNode!!.removeChild(headerElement);
-                        });
+                            file.project.deleteFile(file)
+                            headerElement.parentNode!!.removeChild(headerElement)
+                        })
                     }
-                    event.stopPropagation();
+                    event.stopPropagation()
                 }
             }
         } else if (file.isRevertible) {
@@ -145,28 +144,28 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                     Application.fileProvider.loadOriginalFile(
                             file,
                             { content: dynamic ->
-                                file.text = content.text;
-                                file.originalText = content.text;
-                                file.name = unEscapeString(content.name);
+                                file.text = content.text
+                                file.originalText = content.text
+                                file.name = unEscapeString(content.name)
                             },
                             {
-                                window.alert("Can't find file origin, maybe it was removed by a user");
-                                file.isRevertible = false;
+                                window.alert("Can't find file origin, maybe it was removed by a user")
+                                file.isRevertible = false
                             }
-                    );
+                    )
                 }
             }
 
             file.listenableIsRevertible.addModifyListener({
-                revertIcon.parentNode!!.removeChild(revertIcon);
+                revertIcon.parentNode!!.removeChild(revertIcon)
             })
         }
 
-        headerElement.onclick = {fireSelectEvent()};
+        headerElement.onclick = {fireSelectEvent()}
     }
 
-    private fun isSelected(): Boolean {
-        return Application.accordion.selectedFileView == this;
+    fun isSelected(): Boolean {
+        return Application.accordion.selectedFileView == this
     }
 
 

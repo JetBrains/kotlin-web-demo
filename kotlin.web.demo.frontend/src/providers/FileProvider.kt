@@ -37,14 +37,14 @@ class FileProvider(
                 dataType = DataType.JSON,
                 success = { data ->
                     if (!data.exists) {
-                        onNotExists();
+                        onNotExists()
                     }
                 },
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 complete = ::unBlockContent
@@ -54,16 +54,16 @@ class FileProvider(
     fun loadOriginalFile(file: File, onSuccess: (dynamic) -> Unit, onNotFound: () -> Unit) {
         when (file.project.type) {
             ProjectType.EXAMPLE -> {
-                blockContent();
+                blockContent()
                 ajax(
                         url = generateAjaxUrl("loadExampleFile"),
                         success = { data ->
                             try {
-                                unBlockContent();
-                                onSuccess(data);
-                                onOriginalFileLoaded(data);
+                                unBlockContent()
+                                onSuccess(data)
+                                onOriginalFileLoaded(data)
                             } catch (e: Throwable) {
-                                console.log(e);
+                                console.log(e)
                             }
                         },
                         type = HTMLRequestType.POST,
@@ -72,7 +72,7 @@ class FileProvider(
                         dataType = DataType.JSON,
                         error = { jqXHR, textStatus, errorThrown ->
                             try {
-                                onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
+                                onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
                             } catch (e: Throwable) {
                                 console.log(e)
                             }
@@ -81,16 +81,16 @@ class FileProvider(
                 )
             }
             ProjectType.PUBLIC_LINK -> {
-                blockContent();
+                blockContent()
                 ajax(
                         url = generateAjaxUrl("loadProjectFile"),
                         success = { data ->
                             try {
-                                unBlockContent();
-                                onSuccess(data);
-                                onOriginalFileLoaded(data);
+                                unBlockContent()
+                                onSuccess(data)
+                                onOriginalFileLoaded(data)
                             } catch (e: Throwable) {
-                                console.log(e);
+                                console.log(e)
                             }
                         },
                         type = HTMLRequestType.POST,
@@ -102,7 +102,7 @@ class FileProvider(
                         ),
                         error = { jqXHR, textStatus, errorThrown ->
                             try {
-                                onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
+                                onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
                             } catch (e: Throwable) {
                                 console.log(e)
                             }
@@ -111,19 +111,19 @@ class FileProvider(
                 )
             }
             else -> {
-                throw Exception("User files can't be reloaded from server.");
+                throw Exception("User files can't be reloaded from server.")
             }
         }
     }
 
     fun addNewFile(project: Project, filename: String) {
-        blockContent();
-        val filenameWithExtension = addKotlinExtension(filename);
+        blockContent()
+        val filenameWithExtension = addKotlinExtension(filename)
         ajax(
                 url = generateAjaxUrl("addFile"),
                 success = { publicId ->
                     try {
-                        project.addEmptyFile(filenameWithExtension, publicId);
+                        project.addEmptyFile(filenameWithExtension, publicId)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -134,9 +134,9 @@ class FileProvider(
                 data = json("publicId" to project.publicId, "filename" to filenameWithExtension),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
                     } catch (e: Throwable) {
-                        unBlockContent();
+                        unBlockContent()
                     }
                 },
                 complete = ::unBlockContent
@@ -144,12 +144,12 @@ class FileProvider(
     }
 
     fun renameFile(publicId: String, callback: (String) -> Unit, newName: String) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("renameFile"),
                 success = {
                     try {
-                        callback(newName);
+                        callback(newName)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -163,9 +163,9 @@ class FileProvider(
                 ),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus, ActionStatusMessage.rename_file_fail);
+                        onFail(textStatus, ActionStatusMessage.rename_file_fail)
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 complete = ::unBlockContent
@@ -185,14 +185,14 @@ class FileProvider(
                     "projectId" to file.project.publicId
             )
         }
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("deleteFile"),
                 success = {
                     try {
-                        callback();
+                        callback()
                     } catch (e: Throwable) {
-                        console.log(e);
+                        console.log(e)
                     }
                 },
                 type = HTMLRequestType.POST,
@@ -201,17 +201,17 @@ class FileProvider(
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.delete_file_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.delete_file_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }
                 },
                 complete = ::unBlockContent
-        );
+        )
     }
 
     public fun saveFile(file: File, callback: () -> Unit) {
-        blockContent();
+        blockContent()
         ajax(
                 url = generateAjaxUrl("saveFile"),
                 type = HTMLRequestType.POST,
@@ -219,7 +219,7 @@ class FileProvider(
                 dataType = DataType.TEXT,
                 success = {
                     try {
-                        callback();
+                        callback()
                     } catch (e: Throwable) {
                         console.log(e)
                     }
@@ -227,7 +227,7 @@ class FileProvider(
                 data = json("file" to JSON.stringify(file)),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail);
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
                     } catch (e: Throwable) {
                         console.log(e)
                     }

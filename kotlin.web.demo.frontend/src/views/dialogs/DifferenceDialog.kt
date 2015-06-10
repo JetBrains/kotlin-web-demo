@@ -40,14 +40,14 @@ object  difflib {
 
 object DifferenceDialog{
     fun open(baseText: String, newText: String) {
-        leftLineElements.clear();
-        rightLineElements.clear();
-        var baseTextLines = baseText.splitBy("</br>");
-        var newTextLines = newText.splitBy("</br>");
-        var sequenceMatcher = difflib.SequenceMatcher(baseTextLines.toTypedArray(), newTextLines.toTypedArray());
-        createDialogContent(baseTextLines, newTextLines, sequenceMatcher.get_opcodes());
-        jq(dialogElement).dialog("open");
-        jq(differenceElement).height(jq(dialogElement).height().toInt() - jq(colorsHelp).outerHeight(true).toInt());
+        leftLineElements.clear()
+        rightLineElements.clear()
+        var baseTextLines = baseText.splitBy("</br>")
+        var newTextLines = newText.splitBy("</br>")
+        var sequenceMatcher = difflib.SequenceMatcher(baseTextLines.toTypedArray(), newTextLines.toTypedArray())
+        createDialogContent(baseTextLines, newTextLines, sequenceMatcher.get_opcodes())
+        jq(dialogElement).dialog("open")
+        jq(differenceElement).height(jq(dialogElement).height().toInt() - jq(colorsHelp).outerHeight(true).toInt())
     }
 
     val leftLineElements = arrayListOf<HTMLElement>()
@@ -75,85 +75,85 @@ object DifferenceDialog{
     )
 
     init {
-        createColorHelp("delete");
-        createColorHelp("replace");
-        createColorHelp("insert");
+        createColorHelp("delete")
+        createColorHelp("replace")
+        createColorHelp("insert")
 
         jq(dialogElement).keydown({ event ->
             if (event.keyCode == KeyCode.ENTER.code) {
                 dialog.close()
             }
-            event.stopPropagation();
-        });
+            event.stopPropagation()
+        })
     }
 
     fun createDialogContent(expectedLines: List<String>, actualLines: List<String>, opCodes: Array<dynamic>){
-        differenceElement.innerHTML = "";
-        differenceElement.className = "difference-dialog-content";
-        differenceElement.appendChild(createDifferenceElement(expectedLines, opCodes, false));
-        differenceElement.appendChild(createDifferenceElement(actualLines, opCodes, true));
+        differenceElement.innerHTML = ""
+        differenceElement.className = "difference-dialog-content"
+        differenceElement.appendChild(createDifferenceElement(expectedLines, opCodes, false))
+        differenceElement.appendChild(createDifferenceElement(actualLines, opCodes, true))
     }
 
     fun createDifferenceElement(lines: List<String>, opCodes: Array<dynamic>, isRightElement: Boolean): HTMLDivElement{
-        var element = document.createElement("div") as HTMLDivElement;
-        element.className = "diff";
-        var glutter = createGlutterElement();
-        element.appendChild(glutter);
+        var element = document.createElement("div") as HTMLDivElement
+        element.className = "diff"
+        var glutter = createGlutterElement()
+        element.appendChild(glutter)
 
-        var outputElement = document.createElement("div");
-        outputElement.className = "diff-output";
-        element.appendChild(outputElement);
+        var outputElement = document.createElement("div")
+        outputElement.className = "diff-output"
+        element.appendChild(outputElement)
 
-        var lineElements = if(isRightElement) rightLineElements else leftLineElements;
+        var lineElements = if(isRightElement) rightLineElements else leftLineElements
         for(i in 0..lines.size() - 1){
-            var lineNumber = document.createElement("div");
-            lineNumber.className = "diff-lineNumber";
-            lineNumber.innerHTML = i.toString() + "";
-            glutter.appendChild(lineNumber);
+            var lineNumber = document.createElement("div")
+            lineNumber.className = "diff-lineNumber"
+            lineNumber.innerHTML = i.toString() + ""
+            glutter.appendChild(lineNumber)
 
-            var line = document.createElement("div") as HTMLDivElement;
-            line.className = "diff-line";
-            line.innerHTML = lines[i];
-            outputElement.appendChild(line);
+            var line = document.createElement("div") as HTMLDivElement
+            line.className = "diff-line"
+            line.innerHTML = lines[i]
+            outputElement.appendChild(line)
 
-            lineElements.add(line);
+            lineElements.add(line)
         }
 
         for(i in 0..opCodes.size() - 1){
-            var code = opCodes[i];
-            var change = code[0];
-            var b = (code[1] as Number).toInt();
-            var be = (code[2] as Number).toInt();
-            var n = (code[3] as Number).toInt();
-            var ne = (code[4] as Number).toInt();
+            var code = opCodes[i]
+            var change = code[0]
+            var b = (code[1] as Number).toInt()
+            var be = (code[2] as Number).toInt()
+            var n = (code[3] as Number).toInt()
+            var ne = (code[4] as Number).toInt()
 
             if(!isRightElement) {
                 for (j in b..be - 1) {
-                    lineElements[j].addClass(change + "-color");
+                    lineElements[j].addClass(change + "-color")
                 }
             } else{
                 for (j in n..ne - 1) {
-                    lineElements[j].addClass(change + "-color");
+                    lineElements[j].addClass(change + "-color")
                 }
             }
         }
-        return element;
+        return element
     }
 
     fun createGlutterElement(): HTMLDivElement{
-        var glutterElement = document.createElement("div") as HTMLDivElement;
-        glutterElement.className = "diff-glutters";
-        return glutterElement;
+        var glutterElement = document.createElement("div") as HTMLDivElement
+        glutterElement.className = "diff-glutters"
+        return glutterElement
     }
 
     fun createColorHelp(name: String) {
-        var insertColor = document.createElement("div");
-        insertColor.className = "color-help " + name + "-color";
-        colorsHelp.appendChild(insertColor);
+        var insertColor = document.createElement("div")
+        insertColor.className = "color-help " + name + "-color"
+        colorsHelp.appendChild(insertColor)
 
-        var insertText = document.createElement("span");
-        insertText.className = "text";
-        insertText.innerHTML = if (name.endsWith("e")) name + "d" else name + "ed";
+        var insertText = document.createElement("span")
+        insertText.className = "text"
+        insertText.innerHTML = if (name.endsWith("e")) name + "d" else name + "ed"
         colorsHelp.appendChild(insertText)
     }
 }

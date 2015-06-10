@@ -20,10 +20,6 @@ import jquery.JQuery
 import org.w3c.dom.HTMLElement
 import utils.jquery.find
 
-/**
- * Created by Semyon.Atamas on 5/20/2015.
- */
-
 fun getDialogButton(dialogElement: HTMLElement, number: Int): JQuery{
     return jquery.jq(dialogElement).parent().find("button:eq(${number})")
 }

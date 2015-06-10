@@ -52,7 +52,7 @@ class OutputView(val element: HTMLElement) {
                 .replace("<outStream>", "<span class=\"standard-output\">")
                 .replace("</outStream>", "</span>")
                 .replace("<errStream>", "<span class=\"error-output\">")
-                .replace("</errStream>", "</span>");
+                .replace("</errStream>", "</span>")
     }
 
     fun printException(exception: dynamic) {
@@ -64,36 +64,36 @@ class OutputView(val element: HTMLElement) {
                     "Exception in thread \"main\" " + exception.fullName
                 }
         )
-        printExceptionBody(exception);
+        printExceptionBody(exception)
     }
 
     fun printExceptionBody(exception: dynamic) {
-        printStackTrace(exception.stackTrace);
-        printExceptionCause(exception);
-        printErrorLine();
+        printStackTrace(exception.stackTrace)
+        printExceptionCause(exception)
+        printErrorLine()
     }
 
     private fun printStackTrace(stackTrace: Array<dynamic>){
         for (stackTraceElement in stackTrace) {
             if (stackTraceElement.className.startsWith("sun.reflect")) {
-                break;
+                break
             }
-            printError("    at " + stackTraceElement.className + '.' + stackTraceElement.methodName + '(');
-            element.appendChild(makeReference(stackTraceElement.fileName, stackTraceElement.lineNumber));
-            printErrorLine(")");
+            printError("    at " + stackTraceElement.className + '.' + stackTraceElement.methodName + '(')
+            element.appendChild(makeReference(stackTraceElement.fileName, stackTraceElement.lineNumber))
+            printErrorLine(")")
         }
     }
 
     private fun printExceptionCause(exception: dynamic){
         if(exception.cause != null) {
-            var cause = exception.cause;
+            var cause = exception.cause
             if(cause.message != null) {
-                printErrorLine("Caused by: " + cause.fullName + ": " + unEscapeString(cause.message) + '\n');
+                printErrorLine("Caused by: " + cause.fullName + ": " + unEscapeString(cause.message) + '\n')
             } else{
-                printErrorLine("Caused by: " + cause.fullName + '\n');
+                printErrorLine("Caused by: " + cause.fullName + '\n')
             }
-            printStackTrace(cause.stackTrace);
-            printExceptionCause(cause);
+            printStackTrace(cause.stackTrace)
+            printExceptionCause(cause)
         }
     }
 }

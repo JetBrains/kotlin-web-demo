@@ -26,23 +26,23 @@ fun makeReference(fileName: String?, lineNo: Int): HTMLElement {
     val selectedProjectView = Application.accordion.selectedProjectView!!
     if (fileName != null &&
             selectedProjectView.getFileViewByName(fileName) != null) {
-        var fileView = selectedProjectView.getFileViewByName(fileName);
-        var a = document.createElement("div") as HTMLLinkElement;
-        a.className = "link";
-        a.innerHTML = fileName + ':' + lineNo;
+        var fileView = selectedProjectView.getFileViewByName(fileName)
+        var a = document.createElement("div") as HTMLLinkElement
+        a.className = "link"
+        a.innerHTML = fileName + ':' + lineNo
         a.onclick = {
-            fileView!!.fireSelectEvent();
-            Application.editor.setCursor(lineNo - 1, 0);
-            Application.editor.focus();
-        };
-        return a;
-    } else {
-        var span = document.createElement("span") as HTMLSpanElement;
-        if (fileName != null) {
-            span.innerHTML = fileName + ':' + lineNo;
-        } else {
-            span.innerHTML = "Unknown Source";
+            fileView!!.fireSelectEvent()
+            Application.editor.setCursor(lineNo - 1, 0)
+            Application.editor.focus()
         }
-        return span;
+        return a
+    } else {
+        var span = document.createElement("span") as HTMLSpanElement
+        if (fileName != null) {
+            span.innerHTML = fileName + ':' + lineNo
+        } else {
+            span.innerHTML = "Unknown Source"
+        }
+        return span
     }
 }

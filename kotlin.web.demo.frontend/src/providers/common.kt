@@ -18,16 +18,17 @@ package providers
 
 import model.File
 import model.Project
-import views.editor.Error
 import utils.Object
 import utils.jquery.JQuery
+import views.editor.Diagnostic
 
 fun checkDataForNull(data: dynamic): Boolean = data != null
 
 fun checkDataForException(data: dynamic): Boolean {
-    return !(data[0] != null && data[0] != undefined && data[0].exception != undefined);
+    return !(data[0] != null && data[0] != undefined && data[0].exception != undefined)
 }
 
+//TODO add defaults and move generate urls into fun
 public fun ajax(
         url: String,
         success: (dynamic) -> Unit,
@@ -63,19 +64,19 @@ public enum class HTMLRequestType() {
 }
 
 fun generateAjaxUrl(type: String, parameters: Map<String, String> = emptyMap()): String {
-    var url = "kotlinServer?sessionId=" + sessionId + "&type=" + type;
+    var url = "kotlinServer?sessionId=" + sessionId + "&type=" + type
     for (entry in parameters) {
-        url += "&" + entry.getKey() + "=" + entry.getValue();
+        url += "&" + entry.getKey() + "=" + entry.getValue()
     }
-    return url;
+    return url
 }
 
 fun generateAjaxUrl(type: REQUEST_TYPE, parameters: Map<String, String> = emptyMap()): String{
     return generateAjaxUrl(type.value, parameters)
 }
 
-fun getErrorsMapFromObject(obj: dynamic, project: Project): Map<File, Array<Error>> {
-    val errors = hashMapOf<File, Array<Error>>()
+fun getErrorsMapFromObject(obj: dynamic, project: Project): Map<File, Array<Diagnostic>> {
+    val errors = hashMapOf<File, Array<Diagnostic>>()
     for (fileName in Object.keys(obj)) {
         errors.put(project.files.first { it.name == fileName }, obj[fileName])
     }

@@ -50,10 +50,10 @@ object ShortcutsDialogView {
     init {
         jq(dialogElement).keydown({ event ->
             when (event.keyCode) {
-                KeyCode.ENTER.code -> jq(dialogElement).dialog("close");
+                KeyCode.ENTER.code -> jq(dialogElement).dialog("close")
             }
-            event.stopPropagation();
-        }) ;
+            event.stopPropagation()
+        })
     }
 
     fun open() {

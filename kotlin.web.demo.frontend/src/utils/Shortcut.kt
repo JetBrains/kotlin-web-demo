@@ -21,8 +21,8 @@ import org.w3c.dom.events.KeyboardEvent
 public class Shortcut(val shortcutKeyNames: Array<String>, private val isShortcutPressed: (KeyboardEvent) -> Boolean) {
     fun isPressed(e: KeyboardEvent): Boolean {
         if (isShortcutPressed(e)) {
-            e.preventDefault();
-            return true;
+            e.preventDefault()
+            return true
         } else {
             return false
         }

@@ -50,7 +50,7 @@ object InputDialogView {
     }
 
     private val errorMessageElement = dialogElement.append.div {
-        classes = setOf("input-dialog-error-message");
+        classes = setOf("input-dialog-error-message")
     }
 
     private val dialog = Dialog(
@@ -69,27 +69,27 @@ object InputDialogView {
             when (event.keyCode) {
                 KeyCode.ENTER.code -> {
                     val okButton = getDialogButton(dialogElement, 1)
-                    okButton.trigger("click");
+                    okButton.trigger("click")
                 }
             }
-            event.stopPropagation();
-        });
+            event.stopPropagation()
+        })
     }
 
     private fun processValidationResult(result: ValidationResult) {
         val okButton = getDialogButton(dialogElement, 1)
-        okButton.button("option", "disabled", !result.valid);
+        okButton.button("option", "disabled", !result.valid)
         errorMessageElement.innerHTML = if (result.valid) "" else result.message
-        inputElement.style.outlineColor = if (result.valid) "" else "red";
-        inputElement.focus();
+        inputElement.style.outlineColor = if (result.valid) "" else "red"
+        inputElement.focus()
     }
 
     private fun getVerifiedDefaultValue(defaultValue: String, validate: (String) -> ValidationResult): String {
-        var verifiedDefaultValue = defaultValue;
-        var i = 1;
+        var verifiedDefaultValue = defaultValue
+        var i = 1
         while (!validate(verifiedDefaultValue).valid) {
-            verifiedDefaultValue = defaultValue + i;
-            ++i;
+            verifiedDefaultValue = defaultValue + i
+            ++i
         }
         return verifiedDefaultValue
     }
@@ -104,20 +104,20 @@ object InputDialogView {
     ) {
 
         inputElement.oninput = {
-            processValidationResult(validate(inputElement.value));
-        };
-        inputElement.value = getVerifiedDefaultValue(defaultValue, validate);
-        inputElement.select();
+            processValidationResult(validate(inputElement.value))
+        }
+        inputElement.value = getVerifiedDefaultValue(defaultValue, validate)
+        inputElement.select()
 
-        inputLabelElement.textContent = inputLabel;
+        inputLabelElement.textContent = inputLabel
 
-        dialog.title = title;
+        dialog.title = title
         dialog.buttons = arrayOf(
                 DialogButton(
                         text = okButtonCaption,
                         click = { event: Event ->
                             event.stopPropagation()
-                            callback(inputElement.value);
+                            callback(inputElement.value)
                             dialog.close()
                         }
                 ),

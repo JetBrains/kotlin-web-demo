@@ -25,35 +25,31 @@ import utils.*
 import utils.jquery.*
 import kotlin.browser.document
 
-/**
- * Created by Semyon.Atamas on 5/18/2015.
- */
-
 class LoginView(val loginModel: LoginProvider) {
-    var isLoggedIn = false;
+    var isLoggedIn = false
 
     fun setUserName(userName: String, type: String) {
         if (userName != "") {
-            jq("#login").hide();
-            jq("#logout").show();
+            jq("#login").hide()
+            jq("#logout").show()
 
-            isLoggedIn = true;
-            var decodedUserName = decodeURI(userName);
-            decodedUserName = decodedUserName.replace("+", " ");
+            isLoggedIn = true
+            var decodedUserName = decodeURI(userName)
+            decodedUserName = decodedUserName.replace("+", " ")
 
-            jq("#username").text(decodedUserName);
-            jq("#logout").find(".icon").addClass(type);
+            jq("#username").text(decodedUserName)
+            jq("#logout").find(".icon").addClass(type)
         }
     }
 
     fun logout() {
         isLoggedIn = false
-        jq("#login").show();
-        jq("#logout").hide();
+        jq("#login").show()
+        jq("#logout").hide()
     }
 
     fun login(param: String) {
-        loginModel.login(param);
+        loginModel.login(param)
     }
 
     fun openLoginDialog(onClose: ((Event) -> Unit)? = null) {
@@ -62,7 +58,7 @@ class LoginView(val loginModel: LoginProvider) {
         } else {
             jq(loginDialog).unbind("dialogclose")
         }
-        jq(loginDialog).dialog("open");
+        jq(loginDialog).dialog("open")
     }
 
     var loginDialog = jq("#login-dialog").dialog(json(
@@ -72,19 +68,19 @@ class LoginView(val loginModel: LoginProvider) {
             "width" to 350,
             "autoOpen" to false,
             "dialogClass" to "login-dialog"
-    ));
+    ))
 
     init {
 
         jq(".login-icons").children().click({
-            login(this.getAttribute("login-type") as String);
-        }) ;
+            login(this.getAttribute("login-type") as String)
+        })
 
         (document.getElementById("logout-button") as HTMLDivElement).onclick = { event ->
-            loginModel.logout() ;
-            event.stopPropagation() ;
-        };
-        loginModel.getUserName() ;
+            loginModel.logout()
+            event.stopPropagation()
+        }
+        loginModel.getUserName()
     }
 
 }

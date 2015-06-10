@@ -53,34 +53,34 @@ class ProjectView(
     var selectedFileView: FileView? = null
 
     init {
-        headerElement.id = header.publicId;
+        headerElement.id = header.publicId
 
-        jq(contentElement).slideUp();
-        headerElement.className = "examples-project-name";
-        headerElement.setAttribute("depth", depth.toString());
-        var img = document.createElement("div");
-        img.className = "icon";
-        headerElement.appendChild(img);
+        jq(contentElement).slideUp()
+        headerElement.className = "examples-project-name"
+        headerElement.setAttribute("depth", depth.toString())
+        var img = document.createElement("div")
+        img.className = "icon"
+        headerElement.appendChild(img)
         headerElement.onclick = {
-            onHeaderClick(header.publicId);
-        };
+            onHeaderClick(header.publicId)
+        }
 
-        nameSpan = document.createElement("span") as HTMLSpanElement;
-        nameSpan.className = "file-name-span";
-        nameSpan.style.cursor = "pointer";
-        nameSpan.innerHTML = header.name;
-        nameSpan.title = nameSpan.innerHTML;
-        headerElement.appendChild(nameSpan);
+        nameSpan = document.createElement("span") as HTMLSpanElement
+        nameSpan.className = "file-name-span"
+        nameSpan.style.cursor = "pointer"
+        nameSpan.innerHTML = header.name
+        nameSpan.title = nameSpan.innerHTML
+        headerElement.appendChild(nameSpan)
 
-        var actionIconsElement = document.createElement("div");
-        actionIconsElement.className = "icons";
-        headerElement.appendChild(actionIconsElement);
+        var actionIconsElement = document.createElement("div")
+        actionIconsElement.className = "icons"
+        headerElement.appendChild(actionIconsElement)
 
         if (header.type == ProjectType.USER_PROJECT) {
-            var addFileImg = document.createElement("div") as HTMLDivElement;
-            addFileImg.className = "new-file icon";
+            var addFileImg = document.createElement("div") as HTMLDivElement
+            addFileImg.className = "new-file icon"
             addFileImg.onclick = { event ->
-                event.stopPropagation();
+                event.stopPropagation()
                 InputDialogView.open(
                         "Add new file",
                         "File name:",
@@ -88,15 +88,15 @@ class ProjectView(
                         "Untitled",
                         { name -> validateNewFileName(name) },
                         { name -> Application.fileProvider.addNewFile(this.project, name) }
-                );
-            };
-            actionIconsElement.appendChild(addFileImg);
+                )
+            }
+            actionIconsElement.appendChild(addFileImg)
 
-            var renameImg = document.createElement("div") as HTMLDivElement;
-            renameImg.className = "rename icon";
-            renameImg.title = "Rename this project";
+            var renameImg = document.createElement("div") as HTMLDivElement
+            renameImg.className = "rename icon"
+            renameImg.title = "Rename this project"
             renameImg.onclick = { event ->
-                event.stopPropagation();
+                event.stopPropagation()
                 InputDialogView.open(
                         "Rename project",
                         "Project name:",
@@ -104,72 +104,72 @@ class ProjectView(
                         project.name,
                         { newName ->
                             if (project.name == newName) {
-                                ValidationResult(valid = true);
+                                ValidationResult(valid = true)
                             } else {
-                                Application.accordion.validateNewProjectName(newName);
+                                Application.accordion.validateNewProjectName(newName)
                             }
                         },
                         { newName -> Application.projectProvider.renameProject(project, newName) }
-                );
-            };
-            actionIconsElement.appendChild(renameImg);
+                )
+            }
+            actionIconsElement.appendChild(renameImg)
         }
 
         if (header.type == ProjectType.USER_PROJECT || header.type == ProjectType.PUBLIC_LINK) {
-            var deleteButton = document.createElement("div") as HTMLDivElement;
-            deleteButton.className = "delete icon";
-            deleteButton.title = "Delete this project";
+            var deleteButton = document.createElement("div") as HTMLDivElement
+            deleteButton.className = "delete icon"
+            deleteButton.title = "Delete this project"
             deleteButton.onclick = { event ->
                 if (window.confirm("Delete project " + header.name + "?")) {
-                    Application.projectProvider.deleteProject(header.publicId, header.type, {delete()});
+                    Application.projectProvider.deleteProject(header.publicId, header.type, {delete()})
                 }
-                event.stopPropagation();
-            };
-            actionIconsElement.appendChild(deleteButton);
+                event.stopPropagation()
+            }
+            actionIconsElement.appendChild(deleteButton)
         }
 
         if (header.type != ProjectType.USER_PROJECT) {
             if (localStorage.getItem(header.publicId) != null) {
-                headerElement.addClass("modified");
+                headerElement.addClass("modified")
             }
 
-            var revertIcon = document.createElement("div") as HTMLDivElement;
-            revertIcon.className = "revert icon";
-            revertIcon.title = "Revert this project";
-            actionIconsElement.appendChild(revertIcon);
+            var revertIcon = document.createElement("div") as HTMLDivElement
+            revertIcon.className = "revert icon"
+            revertIcon.title = "Revert this project"
+            actionIconsElement.appendChild(revertIcon)
 
             revertIcon.onclick = {
-                project.loadOriginal();
-            };
+                project.loadOriginal()
+            }
 
             project.revertibleListener.addModifyListener { event ->
                 if(!event.newValue)
-                    revertIcon.parentNode!!.removeChild(revertIcon);
+                    revertIcon.parentNode!!.removeChild(revertIcon)
             }
         }
     }
 
     fun validateNewFileName(fileName: String): ValidationResult {
         if (fileName == "") {
-            return ValidationResult(false, "File name can't be empty");
+            return ValidationResult(false, "File name can't be empty")
         }
         if (fileName.size >= 95) {
             return ValidationResult(false, "File name is too long")
         }
         if (!fileName.matches("^[a-zA-Z0-9,_\\- ]+$")) {
             return ValidationResult(false, "File name can contain only the following characters:" +
-                    "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>");
+                    "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>")
         }
-        val fileNameWithExtension = addKotlinExtension(fileName);
+        val fileNameWithExtension = addKotlinExtension(fileName)
         for (fileView in fileViews.values()) {
             if (fileView.file.name == fileName) {
                 return ValidationResult(
                         false,
                         "File with this name already exists in the project"
-                );
+                )
             }
         }
-        return ValidationResult(true);
+        return ValidationResult(true)
     }
 
     fun initProject(): Project {
@@ -179,51 +179,50 @@ class ProjectView(
                 header.name,
                 parent,
                 onFileAdded = { file: File ->
-                    var fileView = createFileView(file);
-                    fileViews[file.id] = fileView;
-                    selectedFileView = fileView;
+                    var fileView = createFileView(file)
+                    fileViews[file.id] = fileView
                     if (isSelected()) {
-                        fileView.fireSelectEvent();
+                        fileView.fireSelectEvent()
                     }
                 },
                 onFileDeleted = { publicId ->
-                    if (selectedFileView!!.file.id == publicId) {
-                        Application.accordion.selectedFileDeleted();
-                        selectedFileView = null;
+                    val fileView = fileViews.get(publicId)!!
+                    if (fileView.isSelected()) {
+                        Application.accordion.selectedFileDeleted()
                     }
-                    fileViews.remove(publicId);
+                    fileViews.remove(publicId)
                     if (!project.files.isEmpty()) {
-                        selectFirstFile();
+                        selectFirstFile()
                     }
                 },
                 onContentLoaded = { files ->
-                    contentElement.innerHTML = "";
+                    contentElement.innerHTML = ""
 
-                    nameSpan.innerHTML = project.name;
-                    nameSpan.title = nameSpan.innerHTML;
+                    nameSpan.innerHTML = project.name
+                    nameSpan.title = nameSpan.innerHTML
 
                     for (file in files) {
-                        fileViews[file.id] = createFileView(file);
+                        fileViews[file.id] = createFileView(file)
                     }
 
                     if (!files.isEmpty()) {
-                        selectedFileView = getFileFromUrl() ?: fileViews[files[0].id];
+                        val selectedFileView = getFileFromUrl() ?: fileViews[files[0].id]
 
                         if (Application.accordion.selectedProjectView!!.project === project) {
-                            selectedFileView!!.fireSelectEvent();
-                            onSelected(this);
+                            selectedFileView!!.fireSelectEvent()
+                            onSelected(this)
                         }
                     } else if (Application.accordion.selectedProjectView!!.project === project) {
-                        onSelected(this);
-                        Application.editor.closeFile();
+                        onSelected(this)
+                        Application.editor.closeFile()
                     }
                 },
                 onContentNotFound = {
                     if (project.type == ProjectType.PUBLIC_LINK) {
-                        window.alert("Can't find project origin, maybe it was removed by the user.");
-                        project.revertible = false;
+                        window.alert("Can't find project origin, maybe it was removed by the user.")
+                        project.revertible = false
                         if (!project.contentLoaded) {
-                            delete();
+                            delete()
                         }
                     }
                 }
@@ -231,38 +230,34 @@ class ProjectView(
 
         project.modifiedListener.addModifyListener { event ->
             if (event.newValue) {
-                headerElement.addClass("modified");
+                headerElement.addClass("modified")
             } else {
-                headerElement.removeClass("modified");
+                headerElement.removeClass("modified")
             }
         }
 
         project.nameListener.addModifyListener { event ->
             val newName = event.newValue
-            nameSpan.innerHTML = newName;
-            nameSpan.title = nameSpan.innerHTML;
+            nameSpan.innerHTML = newName
+            nameSpan.title = nameSpan.innerHTML
             if (isSelected()) {
-                Application.navBarView.onSelectedProjectRenamed(newName);
+                Application.navBarView.onSelectedProjectRenamed(newName)
             }
-        };
+        }
         return project
     }
 
     fun select() {
-        parent.select();
-        headerElement.className += " selected";
-        jq(contentElement).slideDown();
+        parent.select()
+        headerElement.className += " selected"
+        jq(contentElement).slideDown()
         if (!project.contentLoaded) {
-            project.loadContent(false);
+            project.loadContent(false)
         } else {
-            if (selectedFileView != null) {
-                selectedFileView!!.fireSelectEvent();
-            } else {
-                if (!project.files.isEmpty()) {
-                    selectFirstFile();
-                }
+            if (!project.files.isEmpty()) {
+                selectFirstFile()
             }
-            onSelected(this);
+            onSelected(this)
         }
     }
 
@@ -271,22 +266,21 @@ class ProjectView(
     private fun getFileFromUrl() = fileViews.get(getFileIdFromUrl())
 
     fun selectFirstFile() {
-        selectedFileView = fileViews[project.files[0].id];
-        selectedFileView!!.fireSelectEvent();
+        fileViews[project.files[0].id]!!.fireSelectEvent()
     }
 
     fun delete(){
         if(parent is MyProgramsFolderView)
-            parent.removeProject(this);
-        headerElement.parentNode!!.removeChild(headerElement);
-        contentElement.parentNode!!.removeChild(contentElement);
-        onDelete();
+            parent.removeProject(this)
+        headerElement.parentNode!!.removeChild(headerElement)
+        contentElement.parentNode!!.removeChild(contentElement)
+        onDelete()
     }
 
-    private fun createFileView(file: File) = FileView(this, contentElement, file);
+    private fun createFileView(file: File) = FileView(this, contentElement, file)
 
     private fun isSelected(): Boolean {
-        return Application.accordion.selectedProjectView!!.project === project;
+        return Application.accordion.selectedProjectView!!.project === project
     }
 
     fun getFileViewByName(name: String) = fileViews.values().firstOrNull {

@@ -35,21 +35,21 @@ object IncompleteActionManager {
 
     fun incomplete(id: String) {
         if (id in actions.keySet()) {
-            incompleteActions.add(id);
-            actions[id].onRegistered();
+            incompleteActions.add(id)
+            actions[id].onRegistered()
         } else {
-            throw Exception("Action not registered");
+            throw Exception("Action not registered")
         }
     }
 
     fun cancel(id: String) {
-        incompleteActions.remove(id);
+        incompleteActions.remove(id)
     }
 
     fun checkTimepoint(timePoint: String) {
         for (incompleteAction in incompleteActions) {
             if (actions[incompleteAction].timePoint == "on" + timePoint.capitalize()) {
-                actions[incompleteAction].callback();
+                actions[incompleteAction].callback()
             }
         }
         //TODO
@@ -60,10 +60,10 @@ object IncompleteActionManager {
         localStorage.setItem("incompleteActions", JSON.stringify(incompleteActions))
     }
 
-    var actions = hashMapOf<String, dynamic>();
-    var incompleteActions = JSON.parse<Array<String>>(localStorage.getItem("incompleteActions") ?: "[]").toArrayList();
+    var actions = hashMapOf<String, dynamic>()
+    var incompleteActions = JSON.parse<Array<String>>(localStorage.getItem("incompleteActions") ?: "[]").toArrayList()
 
     init {
-        localStorage.removeItem("incompleteActions");
+        localStorage.removeItem("incompleteActions")
     }
 }

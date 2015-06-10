@@ -24,10 +24,6 @@ import utils.KeyCode
 import utils.jquery.keydown
 import kotlin.properties.ReadWriteProperty
 
-/**
- * Created by Semyon.Atamas on 5/20/2015.
- */
-
 class Dialog(
         val dialogElement: HTMLElement,
         title: String? = null,
@@ -46,9 +42,9 @@ class Dialog(
     init {
         jq(dialogElement).keydown { event ->
             if (event.keyCode == KeyCode.ESCAPE.code) {
-                jq(dialogElement).dialog("close");
+                jq(dialogElement).dialog("close")
             }
-            event.stopPropagation();
+            event.stopPropagation()
         }
 
         jq(dialogElement).dialog(json(
@@ -78,11 +74,11 @@ class Dialog(
 
 
     fun open() {
-        jq(dialogElement).dialog("open");
+        jq(dialogElement).dialog("open")
     }
 
     fun close() {
-        jq(dialogElement).dialog("close");
+        jq(dialogElement).dialog("close")
     }
 }
 

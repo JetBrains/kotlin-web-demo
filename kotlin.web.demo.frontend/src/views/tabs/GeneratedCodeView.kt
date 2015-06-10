@@ -25,23 +25,23 @@ import kotlin.browser.document
 class GeneratedCodeView(private val element: HTMLElement) {
 
     fun clear(){
-        element.innerHTML = "";
+        element.innerHTML = ""
     }
 
     fun setOutput(data: dynamic) {
-        element.innerHTML = "";
-        var generatedCode = document.createElement("p") as HTMLParagraphElement;
+        element.innerHTML = ""
+        var generatedCode = document.createElement("p") as HTMLParagraphElement
         if (data.type == "toggle-info") {
-            generatedCode.className = "consoleViewInfo";
-            generatedCode.innerHTML = unEscapeString(data.text);
+            generatedCode.className = "consoleViewInfo"
+            generatedCode.innerHTML = unEscapeString(data.text)
         } else if (data.type == "info") {
-            generatedCode.className = "consoleViewInfo";
-            generatedCode.innerHTML = unEscapeString(data.text);
+            generatedCode.className = "consoleViewInfo"
+            generatedCode.innerHTML = unEscapeString(data.text)
         } else if (data.type == "generatedJSCode") {
-            generatedCode.className = "cm-s-default";
-            generatedCode.innerHTML = unEscapeString(data.text);
-            CodeMirror.runMode(data.text, "javascript", generatedCode);
+            generatedCode.className = "cm-s-default"
+            generatedCode.innerHTML = unEscapeString(data.text)
+            CodeMirror.runMode(data.text, "javascript", generatedCode)
         }
-        element.appendChild(generatedCode);
+        element.appendChild(generatedCode)
     }
 }

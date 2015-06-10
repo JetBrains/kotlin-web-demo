@@ -30,16 +30,16 @@ class HelpProvider(
                     if (checkDataForNull(data)) {
                         helpElements = data
                     } else {
-                        onFail("Incorrect data format.", ActionStatusMessage.load_help_for_words_fail);
+                        onFail("Incorrect data format.", ActionStatusMessage.load_help_for_words_fail)
                     }
                 },
                 dataType = DataType.JSON,
                 type = HTMLRequestType.GET,
                 timeout = 30000,
                 error = { jqXHR, textStatus, errorThrown ->
-                    onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_help_for_words_fail);
+                    onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_help_for_words_fail)
                 }
-        );
+        )
     }
 
     init {

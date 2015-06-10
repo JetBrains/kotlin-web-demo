@@ -31,11 +31,11 @@ class ConsoleView(
     }
 
     fun writeException(data: dynamic) {
-        val outputView = prepareTab();
+        val outputView = prepareTab()
         if (data != undefined && data[0] != undefined && data[0].exception != undefined) {
-            var output = arrayListOf<dynamic>();
+            var output = arrayListOf<dynamic>()
             for (exception in data) {
-                exception.stackTrace = (exception.stackTrace ?: "");
+                exception.stackTrace = (exception.stackTrace ?: "")
                 output.add(json(
                         "text" to exception.exception.replace(RegExp("<br/>", "g"), "\n"),
                         "stackTrace" to exception.stackTrace.replace(RegExp("<br/>", "g"), "\n"),
@@ -44,13 +44,13 @@ class ConsoleView(
             }
             output.forEach { element ->
                 setOutput(element)
-            };
+            }
         } else if (data == undefined || data == null) {
         } else {
             if (data == "") {
-                outputView.printErrorLine("Unknown exception.");
+                outputView.printErrorLine("Unknown exception.")
             } else if (data == "timeout : timeout") {
-                outputView.printErrorLine("Server didn't respond for 10 seconds.");
+                outputView.printErrorLine("Server didn't respond for 10 seconds.")
             } else {
                 outputView.printErrorLine(data)
             }
@@ -61,36 +61,36 @@ class ConsoleView(
         val outputView = prepareTab()
         if (data.type == "jsException") {
             if (data.exception.stack != null && data.exception.stack != "") {
-                outputView.printErrorLine(data.exception.stack);
+                outputView.printErrorLine(data.exception.stack)
             } else {
-                outputView.printErrorLine("Unknown error");
+                outputView.printErrorLine("Unknown error")
             }
         } else if (data.type == "out") {
-            outputView.printMarkedText(data.text);
+            outputView.printMarkedText(data.text)
             if (data.exception != null) {
-                outputView.printException(data.exception);
+                outputView.printException(data.exception)
             }
         } else if (data.type == "jsOut") {
-            outputView.print(data.text);
+            outputView.print(data.text)
         } else if (data.type == "err") {
-            var message = data.text;
+            var message = data.text
             if (message == "") {
-                outputView.printErrorLine("Unknown exception.");
+                outputView.printErrorLine("Unknown exception.")
             } else if (message == "timeout : timeout") {
-                outputView.printErrorLine("Server didn't respond for 10 seconds.");
+                outputView.printErrorLine("Server didn't respond for 10 seconds.")
             } else {
-                outputView.printErrorLine(message);
+                outputView.printErrorLine(message)
                 if (data.stackTrace != null) {
-                    outputView.println(data.stackTrace);
+                    outputView.println(data.stackTrace)
                 }
             }
         } else {
-            throw Exception("Unknown data type");
+            throw Exception("Unknown data type")
         }
     }
 
     private fun prepareTab(): OutputView {
-        element.innerHTML = "";
+        element.innerHTML = ""
         tabs?.tabs("option", "active", 1)
         return OutputView(element.append.div {
             classes = setOf("consoleOutput")

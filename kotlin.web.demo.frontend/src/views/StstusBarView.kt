@@ -23,7 +23,7 @@ class StatusBarView(private val element: HTMLElement){
     fun setStatus(statusMessage: ActionStatusMessage, vararg parameters: String){
         var message = statusMessage.message
         parameters.forEach { message = message.replaceFirst("@parameter@", it) }
-        element.innerHTML = message;
+        element.innerHTML = message
     }
 }
 
