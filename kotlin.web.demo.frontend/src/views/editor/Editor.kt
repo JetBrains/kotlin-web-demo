@@ -230,6 +230,8 @@ class Editor(
                         "title" to errorMessage
                 )))
 
+                if(relatedDocument.getEditor() !== codeMirror) continue
+
                 if ((codeMirror.lineInfo(interval.start.line) != null) && (codeMirror.lineInfo(interval.start.line).gutterMarkers == null)) {
                     codeMirror.setGutterMarker(interval.start.line, "errors-and-warnings-gutter", document.create.div {
                         classes = setOf(severity + "gutter")
@@ -242,8 +244,6 @@ class Editor(
                         gutter.className = severity + "gutter"
                     }
                 }
-
-                document.getElementById(interval.start.line.toString() + "_" + interval.start.ch)?.setAttribute("title", errorMessage)
             }
         }
     }

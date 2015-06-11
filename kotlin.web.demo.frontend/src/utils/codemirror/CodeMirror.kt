@@ -31,6 +31,7 @@ class CodeMirror() {
     }
     class Doc(text: String, mode: String = "", firstLineNumber: Int = 1){
         fun markText(start: Position, end: Position, json: Json): Any
+        fun getEditor(): utils.codemirror.CodeMirror
     }
 
     fun getCursor(): Position
