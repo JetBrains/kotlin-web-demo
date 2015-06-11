@@ -26,6 +26,7 @@ import org.w3c.dom.events.KeyboardEvent
 native("$")
 object JQuery {
     fun ajax(parameters: Json)
+    fun parseHTML(html: String): Array<HTMLElement>
 }
 
 native

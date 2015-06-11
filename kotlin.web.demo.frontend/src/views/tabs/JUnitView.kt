@@ -17,17 +17,18 @@
 package views.tabs
 
 import application.Application
+import html4k.dom.*
+import html4k.js.*
+import html4k.*
 import jquery.JQuery
 import jquery.jq
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLLinkElement
-import org.w3c.dom.HTMLUListElement
+import org.w3c.dom.*
 import utils.*
 import utils.jquery.*
 import utils.jquery.ui.tabs
 import views.tabs.OutputView
 import views.dialogs.DifferenceDialog
+import java.util.*
 import kotlin.browser.document
 import kotlin.dom.addClass
 import kotlin.text.Regex
@@ -36,8 +37,8 @@ class JUnitView(
         private val element: HTMLElement,
         private val tabs: JQuery
 ) {
-    var statistic: HTMLElement? = null
-    var statisticText: dynamic = null
+    //    var statistic: HTMLElement? = null
+    //    var statisticText: dynamic = null
     var navTree: dynamic = null
 
     fun setOutput(data: dynamic) {
@@ -47,11 +48,7 @@ class JUnitView(
         navTree = document.createElement("div")
         navTree.id = "test-tree-div"
         element.appendChild(navTree)
-        statistic = document.createElement("div") as HTMLElement
-        statistic!!.id = "unit-test-statistic"
 
-        statisticText = document.createElement("span")
-        statistic!!.appendChild(statisticText)
 
         var consoleElement = document.createElement("div") as HTMLDivElement
         consoleElement.className = "consoleOutput"
@@ -60,7 +57,8 @@ class JUnitView(
         var wrapper = document.createElement("div")
         wrapper.id = "test-wrapper"
         element.appendChild(wrapper)
-        wrapper.appendChild(statistic!!)
+        val statistic = createStatistics(data.testResults)
+        wrapper.appendChild(statistic)
         wrapper.appendChild(consoleElement)
 
         if (data.type == "out") {
@@ -73,7 +71,7 @@ class JUnitView(
         } else {
             throw Exception("Unknown data type")
         }
-        jq(consoleElement).height(jq(wrapper).height().toInt() - jq(statistic!!).outerHeight(true).toInt())
+        jq(consoleElement).height(jq(wrapper).height().toInt() - jq(statistic).outerHeight(true).toInt())
     }
 
     fun clear() {
@@ -180,9 +178,9 @@ class JUnitView(
         tree.id = "test-tree"
         displayTreeNode(rootNode, tree)
 
-        fun printTestOutput(element: HTMLElement, outputView: OutputView) {
+        fun printTestOutput(element: HTMLElement) {
             if (jq(element).hasClass("at-no-children")) {
-                var testData = testsData[element.id]
+                val testData = testsData[element.id]
                 outputView.printMarkedText(testsData[element.id].output)
                 if (testData.exception != null) {
                     try {
@@ -194,7 +192,7 @@ class JUnitView(
                         outputView.print("Actual: ")
                         outputView.printErrorLine(parsedMessage.actual)
                         outputView.printError("    ")
-                        outputView.element.appendChild(makeDifferenceReference(parsedMessage.expected, parsedMessage.actual))
+                        outputView.element.appendChild(createDifferenceReference(parsedMessage.expected, parsedMessage.actual))
                         outputView.println("")
                         outputView.println("")
                         outputView.printExceptionBody(testData.exception)
@@ -203,8 +201,8 @@ class JUnitView(
                     }
                 }
             } else {
-                jq(element).children("ul").children("li").toArray().forEach { elem ->
-                    printTestOutput(elem, outputView)
+                jq(element).children("ul").children("li").toArray().forEach {
+                    printTestOutput(it)
                 }
             }
         }
@@ -214,7 +212,7 @@ class JUnitView(
                 "treeItemLabelSelector" to ".tree-node-header .text",
                 "onFocus" to { element: Array<dynamic> ->
                     outputView.element.innerHTML = ""
-                    printTestOutput(element[0], outputView)
+                    printTestOutput(element[0])
                 }
         ))
         jq(tree).find("li[aria-expanded]").attr("aria-expanded", "true")
@@ -259,43 +257,7 @@ class JUnitView(
         }
     }
 
-    fun createStatistics(data: dynamic) {
-        var totalTime = 0.0
-        var noOfFailedTest = 0
-        var status = Status.OK
-        for (testInfo in data) {
-            totalTime += (testInfo.executionTime as Double) / 1000.0
-            if (testInfo.status == Status.FAIL || testInfo.status == Status.ERROR) {
-                ++noOfFailedTest
-                status = Status.ERROR
-            }
-        }
-        displayStatistic(data.length, noOfFailedTest, totalTime, status)
-    }
 
-    fun displayStatistic(testsNumber: Int, testsFailed: Int, time: dynamic, status: Status) {
-        if (testsFailed == 0) {
-            statisticText.innerHTML = "All tests passed in " + time.toFixed(3) + "s"
-        } else {
-            statisticText.innerHTML = "Failed: " + testsFailed + " of " + testsNumber + " (in " + time.toFixed(3) + "s)"
-        }
-
-        var testsStatusElement = document.createElement("div")
-        testsStatusElement.id = "tests-status-bar"
-        statistic!!.appendChild(testsStatusElement)
-
-        var backgroundElement = document.createElement("div")
-        backgroundElement.className = "background"
-        testsStatusElement.appendChild(backgroundElement)
-
-        if (status == Status.ERROR || status == Status.FAIL) {
-            backgroundElement.addClass("fail")
-        } else if (status == Status.OK) {
-            backgroundElement.addClass("ok")
-        } else {
-            throw Exception("Bad status")
-        }
-    }
 
     fun getClassNameWithoutAPackage(fullClassName: String): String {
         var path = fullClassName.split('.')
@@ -321,19 +283,48 @@ class JUnitView(
         return null
     }
 
-    fun makeDifferenceReference(expected: String, actual: String): HTMLLinkElement {
-        var a = document.createElement("a") as HTMLLinkElement
-        a.textContent = "<click to see a difference>"
-        a.onclick = { event ->
+    fun createStatistics(data: Array<TestResult>): HTMLDivElement {
+        val totalTime = data.fold (0.0) { time, testResult -> time + testResult.executionTime / 1000.0 }
+        val noOfFailedTest = data.count { it.status != Status.OK.name() }
+        val status = if (noOfFailedTest > 0) Status.FAIL else Status.OK
+        val message = if (noOfFailedTest == 0) {
+            "All tests passed in ${totalTime.toFixed(3)}s"
+        } else {
+            "Failed: ${noOfFailedTest} of ${data.size()} in ${totalTime.toFixed(3)}s"
+        }
+        return document.create.div {
+            id = "unit-test-statistic"
+            span {
+                +message
+            }
+            div {
+                id = "tests-status-bar"
+                div("background ${status.name().toLowerCase()}")
+            }
+        }
+    }
+
+    fun createDifferenceReference(expected: String, actual: String): HTMLDivElement = document.create.div {
+        +"<click to see a difference>"
+        classes = setOf("link")
+        onClickFunction = { event ->
             DifferenceDialog.open(expected, actual)
             event.stopPropagation()
         }
-        return a
     }
 }
 
-enum class Status(value: String) {
-    OK("OK"),
-    FAIL("FAIL"),
-    ERROR("ERROR")
+enum class Status() {
+    OK,
+    FAIL,
+    ERROR
 }
+
+native
+interface TestResult {
+    val status: String
+    val executionTime: Double
+}
+
+native
+fun Double.toFixed(noOfDigits: Int): Double

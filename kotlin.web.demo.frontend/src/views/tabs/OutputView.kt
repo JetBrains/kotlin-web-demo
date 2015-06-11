@@ -21,6 +21,7 @@ import html4k.dom.append
 import html4k.js.span
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLSpanElement
+import utils.jquery.JQuery
 import utils.unEscapeString
 
 
@@ -47,11 +48,13 @@ class OutputView(val element: HTMLElement) {
     }
 
     fun printMarkedText(text: String) {
-        element.innerHTML += unEscapeString(text)
+        val spanElements = JQuery.parseHTML(unEscapeString(text)
                 .replace("<outStream>", "<span class=\"standard-output\">")
                 .replace("</outStream>", "</span>")
                 .replace("<errStream>", "<span class=\"error-output\">")
                 .replace("</errStream>", "</span>")
+        )
+        spanElements.forEach { element.appendChild(it) }
     }
 
     fun printException(exception: dynamic) {
