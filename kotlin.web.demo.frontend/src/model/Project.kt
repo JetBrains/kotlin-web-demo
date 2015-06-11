@@ -40,8 +40,8 @@ class Project(
                 "args" to args,
                 "confType" to confType,
                 "originUrl" to originUrl,
-                "readOnlyFileNames" to readOnlyFileNames,
-                "files" to files.filter { it.isModifiable }
+                "files" to files.filter { it.isModifiable },
+                "readOnlyFileNames" to files.filter { !it.isModifiable }.map { it.name }
         )
     }
 
@@ -61,11 +61,9 @@ class Project(
                             "args" to args,
                             "confType" to confType,
                             "originUrl" to originUrl,
-                            "help" to help,
                             "type" to type,
                             "publicId" to publicId,
-                            "revertible" to revertible,
-                            "readOnlyFileNames" to readOnlyFileNames
+                            "revertible" to revertible
                     )))
                 } else {
                     localStorage.removeItem(publicId)
@@ -136,9 +134,6 @@ class Project(
     }
 
     fun deleteFile (file: File) {
-        if(!file.isModifiable){
-            readOnlyFileNames = readOnlyFileNames.filter { it != file.name }.toTypedArray()
-        }
         files.remove(file)
         onFileDeleted(file.id)
     }
@@ -149,10 +144,8 @@ class Project(
         args = content.args
         name = content.name
         confType = content.confType
-        help = content.help
         files = content.files
         revertible = if (content.hasOwnProperty("revertible")) content.revertible else true
-        readOnlyFileNames = content.readOnlyFileNames
         onContentLoaded(files)
         onModified()
     }
@@ -196,12 +189,10 @@ class Project(
     var args = ""
     var confType = "java"
     var originUrl = null
-    var help = ""
     val modifiedListener = VarListener<Boolean>()
     var modified by Listenable(false, modifiedListener)
     val revertibleListener = VarListener<Boolean>()
     var revertible by Listenable(true, revertibleListener)
-    var readOnlyFileNames = arrayOf<String>()
 }
 
 
