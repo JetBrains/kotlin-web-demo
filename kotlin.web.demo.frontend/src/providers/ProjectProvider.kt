@@ -172,7 +172,7 @@ class ProjectProvider(
         )
     }
 
-    fun forkProject(content: dynamic, callback: (dynamic) -> Unit, name: String) {
+    fun forkProject(content: Project, callback: (dynamic) -> Unit, name: String) {
         blockContent()
         ajax(
                 url = generateAjaxUrl("addProject"),

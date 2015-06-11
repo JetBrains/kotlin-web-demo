@@ -165,7 +165,8 @@ class Project(
                 files.add(file)
                 file.listenableIsModified.addModifyListener { onModified() }
             }
-            onContentLoaded(files)
+            content.files = files
+            contentLoaded(content)
             contentLoaded = true
         } else {
             throw Exception("Content was already loaded")
