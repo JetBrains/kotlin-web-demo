@@ -55,35 +55,10 @@ class File(
     }
 
     companion object {
-
         fun fromJSON(project: dynamic, obj: dynamic) =
                 File(project, obj.name, obj.publicId, obj.text, obj.originalText, obj.modifiable, obj.type, obj.revertible)
     }
 
-    //TODO following functions from file to some other class
-    fun save() {
-        if (project.type == ProjectType.USER_PROJECT && isModifiable) {
-           Application.fileProvider.saveFile(this, {
-                originalText = text
-                isModified = text != originalText
-            })
-        }
-    }
-
-    fun dumpToLocalStorage() {
-        if (project.type != ProjectType.USER_PROJECT) {
-            //TODO don't save editor info
-            val result = js("({})")
-            result.name = name
-            result.originalText = originalText
-            result.text = text
-            result.publicId = id
-            result.modifiable = isModifiable
-            result.type = type
-            result.revertible = isRevertible
-            localStorage.set(id, JSON.stringify(result))
-        }
-    }
 }
 
 enum class FileType {

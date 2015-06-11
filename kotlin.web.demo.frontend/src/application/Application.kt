@@ -94,7 +94,7 @@ object Application {
                     if (previousFile.project.type != ProjectType.USER_PROJECT) {
                         previousFile.project.save()
                     } else {
-                        previousFile.save()
+                        Application.fileProvider.saveFile(previousFile)
                     }
                 }
 
@@ -203,6 +203,10 @@ object Application {
             },
             {
                 editor.reloadFile()
+            },
+            { file ->
+                file.originalText = file.text
+                file.isModified = file.text != file.originalText
             }
     )
 
@@ -274,9 +278,7 @@ object Application {
 
     val loginProvider: LoginProvider = LoginProvider(
             {
-                if (accordion.selectedFileView != null) {
-                    accordion.selectedFileView!!.file.save()
-                }
+                accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
                 accordion.selectedProjectView!!.project.save()
             },
             {
@@ -380,9 +382,7 @@ object Application {
             IncompleteActionManager.onBeforeUnload()
             localStorage.setItem("openedItemId", accordion.selectedProjectView!!.project.publicId)
 
-            if (accordion.selectedFileView != null) {
-                accordion.selectedFileView!!.file.save()
-            }
+            accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
             accordion.selectedProjectView!!.project.save()
 
             localStorage.setItem("highlightOnTheFly", Elements.onTheFlyCheckbox.checked.toString())
@@ -473,7 +473,7 @@ object Application {
         saveButton.onclick = {
             if (accordion.selectedProjectView!!.project.type == ProjectType.USER_PROJECT) {
                 accordion.selectedProjectView!!.project.save()
-                accordion.selectedFileView?.file?.save()
+                accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
             } else {
                 jq("#saveAsButton").click()
             }

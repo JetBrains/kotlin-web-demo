@@ -23,10 +23,12 @@ import utils.addKotlinExtension
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
+import kotlin.browser.localStorage
 
 class FileProvider(
         private val onFail: (String, ActionStatusMessage) -> Unit,
-        private val onOriginalFileLoaded: (dynamic) -> Unit
+        private val onOriginalFileLoaded: (dynamic) -> Unit,
+        private val onFileSaved: (file: File) -> Unit
 ) {
     fun checkFileExistence(publicId: String, onNotExists: () -> Unit) {
         ajax(
@@ -210,30 +212,44 @@ class FileProvider(
         )
     }
 
-    public fun saveFile(file: File, callback: () -> Unit) {
-        blockContent()
-        ajax(
-                url = generateAjaxUrl("saveFile"),
-                type = HTTPRequestType.POST,
-                timeout = 10000,
-                dataType = DataType.TEXT,
-                success = {
-                    try {
-                        callback()
-                    } catch (e: Throwable) {
-                        console.log(e)
-                    }
-                },
-                data = json("file" to JSON.stringify(file)),
-                error = { jqXHR, textStatus, errorThrown ->
-                    try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
-                    } catch (e: Throwable) {
-                        console.log(e)
-                    }
-                },
-                complete = ::unBlockContent
-        )
+    public fun saveFile(file: File) {
+        if (!file.isModified) return
+
+        if (file.project.type == ProjectType.USER_PROJECT) {
+            blockContent()
+            ajax(
+                    url = generateAjaxUrl("saveFile"),
+                    type = HTTPRequestType.POST,
+                    timeout = 10000,
+                    dataType = DataType.TEXT,
+                    success = {
+                        try {
+                            onFileSaved(file)
+                        } catch (e: Throwable) {
+                            console.log(e)
+                        }
+                    },
+                    data = json("file" to JSON.stringify(file)),
+                    error = { jqXHR, textStatus, errorThrown ->
+                        try {
+                            onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
+                        } catch (e: Throwable) {
+                            console.log(e)
+                        }
+                    },
+                    complete = ::unBlockContent
+            )
+        } else {
+            localStorage.set(file.id, JSON.stringify(json(
+                    "name" to file.name,
+                    "originalText" to file.originalText,
+                    "text" to file.text,
+                    "publicId" to file.id,
+                    "modifiable" to file.isModifiable,
+                    "type" to file.type,
+                    "revertible" to file.isRevertible
+            )))
+        }
     }
 }
 

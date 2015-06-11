@@ -52,7 +52,7 @@ class Project(
                 if (isModified()) {
                     var fileIDs = arrayListOf<String>()
                     for (file in files) {
-                        file.dumpToLocalStorage()
+                        Application.fileProvider.saveFile(file)
                         fileIDs.add(file.id)
                     }
                     localStorage.setItem(publicId, JSON.stringify(json(
