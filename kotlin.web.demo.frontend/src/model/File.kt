@@ -35,7 +35,7 @@ class File(
     var name: String by Listenable(name, listenableName)
 
     val listenableIsModified = VarListener<Boolean>()
-    var isModified: Boolean by Listenable(false, listenableIsModified)
+    var isModified: Boolean by Listenable(originalText != text, listenableIsModified)
 
     val listenableIsRevertible = VarListener<Boolean>()
     var isRevertible: Boolean by Listenable(isRevertible, listenableIsRevertible)

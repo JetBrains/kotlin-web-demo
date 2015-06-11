@@ -16,22 +16,44 @@
 
 package providers
 
+import model.File
 import model.Project
 import model.ProjectType
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
+import kotlin.browser.localStorage
 
 class ProjectProvider(
-        private val onProjectLoaded: (dynamic) -> Unit,
+        private val onProjectLoaded: () -> Unit,
         private val onNewProjectAdded: (String, String, String) -> Unit,
         private val onFail: (String, ActionStatusMessage) -> Unit
 ) {
-    fun loadProject(publicId: String, type: ProjectType, callback: (dynamic) -> Unit, onNotFound: () -> Unit) {
-        if (type == ProjectType.EXAMPLE) {
-            loadExample(publicId, callback)
+
+    fun loadProject(
+            publicId: String,
+            type: ProjectType,
+            ignoreCache: Boolean = false,
+            callback: (dynamic) -> Unit,
+            onNotFound: () -> Unit
+    ) {
+        if (localStorage.getItem(publicId) != null && !ignoreCache) {
+            val content: dynamic = JSON.parse(localStorage.getItem(publicId)!!)
+            localStorage.removeItem(publicId)
+            val files = arrayListOf<File>()
+            for (fileId in content.files) {
+                val fileContent: dynamic = JSON.parse(localStorage.getItem(fileId)!!)
+                files.add(fileContent)
+            }
+            content.files = files
+            callback(content)
+            onProjectLoaded()
         } else {
-            loadProject(publicId, callback, onNotFound)
+            if (type == ProjectType.EXAMPLE) {
+                loadExample(publicId, callback)
+            } else {
+                loadProject(publicId, callback, onNotFound)
+            }
         }
     }
 
@@ -80,7 +102,7 @@ class ProjectProvider(
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                onProjectLoaded(data)
+                                onProjectLoaded()
                                 callback(data)
                             } else {
                                 onFail(data, ActionStatusMessage.load_project_fail)
@@ -142,7 +164,7 @@ class ProjectProvider(
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForException(data)) {
-                                onProjectLoaded(data)
+                                onProjectLoaded()
                                 callback(data)
                             } else {
                                 onFail(data, ActionStatusMessage.load_project_fail)

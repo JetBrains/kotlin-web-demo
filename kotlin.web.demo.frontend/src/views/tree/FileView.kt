@@ -57,6 +57,9 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
     }
 
     init {
+        if(file.isModified)
+            headerElement.addClass("modified")
+
         file.listenableIsModified.addModifyListener({ e ->
             if (e.newValue) {
                 headerElement.addClass("modified")

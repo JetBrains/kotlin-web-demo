@@ -76,36 +76,23 @@ class Project(
         loadContent(true)
     }
 
-    fun loadContent(fromServer: Boolean) {
-        if (localStorage.getItem(publicId) != null && !fromServer) {
-            var content: dynamic = JSON.parse(localStorage.getItem(publicId)!!)
-            localStorage.removeItem(publicId)
-            val files = arrayListOf<File>()
-            for (fileId in content.files) {
-                val fileContent: dynamic = JSON.parse(localStorage.getItem(fileId)!!)
-                val file = File.fromJSON(this, fileContent)
-                file.listenableIsModified.addModifyListener({ onModified() })
-                files.add(file)
-            }
-            content.files = files
-            contentLoaded(content)
-        } else {
-            Application.projectProvider.loadProject(
-                    publicId,
-                    type,
-                    { content ->
-                        val files = arrayListOf<File>()
-                        for (fileContent in content.files) {
-                            val file = File.fromJSON(this, fileContent)
-                            file.listenableIsModified.addModifyListener { onModified() }
-                            files.add(file)
-                        }
-                        content.files = files
-                        contentLoaded(content)
-                    },
-                    onContentNotFound
-            )
-        }
+    fun loadContent(ignoreCache: Boolean) {
+        Application.projectProvider.loadProject(
+                publicId,
+                type,
+                ignoreCache,
+                { content ->
+                    val files = arrayListOf<File>()
+                    for (fileContent in content.files) {
+                        val file = File.fromJSON(this, fileContent)
+                        file.listenableIsModified.addModifyListener { onModified() }
+                        files.add(file)
+                    }
+                    content.files = files
+                    contentLoaded(content)
+                },
+                onContentNotFound
+        )
     }
 
     fun onModified() {
@@ -165,12 +152,6 @@ class Project(
             throw Exception("Content was already loaded")
         }
     }
-
-//    fun setErrors (errors: Json) {
-//        for (file in files) {
-//            file.errors = errors.get (file.name) as Array<Error>
-//        }
-//    }
 
     fun setDefaultContent() {
         if (!contentLoaded) {
