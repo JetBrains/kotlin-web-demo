@@ -17,8 +17,8 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.JsonUtils;
 import org.jetbrains.webdemo.Project;
@@ -39,28 +39,41 @@ import java.util.Map;
 public class ExamplesLoader {
 
     public static void loadAllExamples() {
-        ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY, "/");
+        ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY, "/", new ArrayList<ObjectNode>());
     }
 
-    private static ExamplesFolder loadFolder(String path, String url) {
+    private static ExamplesFolder loadFolder(String path, String url, List<ObjectNode> parentCommonFiles) {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
             String name = new File(path).getName();
             Map<String, Project> examples = new LinkedHashMap<>();
             Map<String, ExamplesFolder> childFolders = new LinkedHashMap<>();
+            List<ObjectNode> commonFiles = new ArrayList<>();
+            commonFiles.addAll(parentCommonFiles);
+
+            if(manifest.has("files")){
+                for ( JsonNode node: manifest.get("files")) {
+                    ObjectNode fileManifest = (ObjectNode) node;
+                    fileManifest.put("path", path + File.separator + fileManifest.get("filename").asText());
+                    commonFiles.add(fileManifest);
+                }
+            }
 
             if (manifest.has("folders")) {
                 for (JsonNode node : manifest.get("folders")) {
                     String folderName = node.textValue();
-                    childFolders.put(folderName, loadFolder(path + File.separator + folderName, url + folderName + "/"));
+                    childFolders.put(folderName,
+                            loadFolder(path + File.separator + folderName, url + folderName + "/", commonFiles));
                 }
             }
 
             if (manifest.has("examples")) {
                 for (JsonNode node : manifest.get("examples")) {
                     String projectName = node.textValue();
-                    examples.put(projectName, loadProject(path + File.separator + projectName, url, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES));
+                    String projectPath = path + File.separator + projectName;
+                    examples.put(projectName,
+                            loadProject(projectPath, url, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES, commonFiles));
                 }
             }
 
@@ -71,7 +84,8 @@ public class ExamplesLoader {
         }
     }
 
-    private static Project loadProject(String path, String parentUrl, boolean loadTestVersion) throws IOException {
+    private static Project loadProject(
+            String path, String parentUrl, boolean loadTestVersion, List<ObjectNode> commonFilesManifests) throws IOException {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
@@ -93,8 +107,9 @@ public class ExamplesLoader {
             }
 
 
-            ArrayNode fileDescriptors = (ArrayNode) manifest.get("files");
-            for (JsonNode fileDescriptor : fileDescriptors) {
+            List<JsonNode> fileManifests = Lists.newArrayList(manifest.get("files"));
+            fileManifests.addAll(commonFilesManifests);
+            for (JsonNode fileDescriptor : fileManifests) {
 
                 if (loadTestVersion &&
                         fileDescriptor.has("skipInTestVersion") &&
@@ -102,7 +117,10 @@ public class ExamplesLoader {
                     continue;
                 }
 
-                ProjectFile file = loadProjectFile(path, originUrl, fileDescriptor);
+                String filePath = fileDescriptor.has("path") ?
+                        fileDescriptor.get("path").asText() :
+                        path + File.separator + fileDescriptor.get("filename").textValue();
+                ProjectFile file = loadProjectFile(filePath, originUrl, fileDescriptor);
                 if (!loadTestVersion && file.getType().equals(ProjectFile.Type.SOLUTION_FILE)) {
                     continue;
                 }
@@ -121,21 +139,21 @@ public class ExamplesLoader {
     }
 
 
-    private static ProjectFile loadProjectFile(String path, String projectUrl, JsonNode fileDescriptor) throws IOException {
+    private static ProjectFile loadProjectFile(String path, String projectUrl, JsonNode fileManifest) throws IOException {
         try {
-            String fileName = fileDescriptor.get("filename").textValue();
-            boolean modifiable = fileDescriptor.get("modifiable").asBoolean();
-            File file = new File(path + File.separator + fileName);
+            String fileName = fileManifest.get("filename").textValue();
+            boolean modifiable = fileManifest.get("modifiable").asBoolean();
+            File file = new File(path);
             String fileContent = new String(Files.readAllBytes(file.toPath())).replaceAll("\r\n", "\n");
             String filePublicId = (projectUrl + "/" + fileName).replaceAll(" ", "%20");
             ProjectFile.Type fileType = null;
-            if (!fileDescriptor.has("type")) {
+            if (!fileManifest.has("type")) {
                 fileType = ProjectFile.Type.KOTLIN_FILE;
-            } else if (fileDescriptor.get("type").asText().equals("kotlin-test")) {
+            } else if (fileManifest.get("type").asText().equals("kotlin-test")) {
                 fileType = ProjectFile.Type.KOTLIN_TEST_FILE;
-            } else if (fileDescriptor.get("type").asText().equals("solution")) {
+            } else if (fileManifest.get("type").asText().equals("solution")) {
                 fileType = ProjectFile.Type.SOLUTION_FILE;
-            } else if (fileDescriptor.get("type").asText().equals("java")) {
+            } else if (fileManifest.get("type").asText().equals("java")) {
                 fileType = ProjectFile.Type.JAVA_FILE;
             }
             return new ProjectFile(fileName, fileContent, modifiable, filePublicId, fileType);
