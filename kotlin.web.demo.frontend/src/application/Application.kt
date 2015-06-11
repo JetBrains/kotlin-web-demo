@@ -167,7 +167,7 @@ object Application {
                         problemsView.addMessages(getErrorsMapFromObject(data.errors, project))
                         editor.showDiagnostics(getErrorsMapFromObject(data.errors, project))
                         statusBarView.setStatus(ActionStatusMessage.get_highlighting_ok,
-                                getNumberOfErrorsAndWarnings(data.errors).toString())
+                                getNumberOfErrorsAndWarnings(getErrorsMapFromObject(data.errors, project)).toString())
                     }
                 }
             },
