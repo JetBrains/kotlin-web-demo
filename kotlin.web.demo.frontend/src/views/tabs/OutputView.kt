@@ -20,6 +20,7 @@ import application.makeReference
 import html4k.dom.append
 import html4k.js.span
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLSpanElement
 import utils.unEscapeString
 
 
@@ -36,11 +37,9 @@ class OutputView(val element: HTMLElement) {
         print(s + '\n')
     }
 
-    public fun printError(s: String) {
-        element.append.span {
+    public fun printError(s: String): HTMLSpanElement = element.append.span {
             +s.replace("</br>", "\n")
             classes = setOf("error-output")
-        }
     }
 
     public fun printErrorLine(s: String = "") {
@@ -78,7 +77,7 @@ class OutputView(val element: HTMLElement) {
             if (stackTraceElement.className.startsWith("sun.reflect")) {
                 break
             }
-            printError("    at " + stackTraceElement.className + '.' + stackTraceElement.methodName + '(')
+            val element = printError("    at " + stackTraceElement.className + '.' + stackTraceElement.methodName + '(')
             element.appendChild(makeReference(stackTraceElement.fileName, stackTraceElement.lineNumber))
             printErrorLine(")")
         }
