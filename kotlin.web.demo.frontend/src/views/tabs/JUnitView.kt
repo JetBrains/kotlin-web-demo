@@ -31,21 +31,19 @@ import views.dialogs.DifferenceDialog
 import java.util.*
 import kotlin.browser.document
 import kotlin.dom.addClass
+import kotlin.dom.hasClass
 import kotlin.text.Regex
 
 class JUnitView(
         private val element: HTMLElement,
         private val tabs: JQuery
 ) {
-    //    var statistic: HTMLElement? = null
-    //    var statisticText: dynamic = null
-    var navTree: dynamic = null
 
     fun setOutput(data: dynamic) {
         element.innerHTML = ""
 
         tabs.tabs("option", "active", 1)
-        navTree = document.createElement("div")
+        val navTree = document.createElement("div")
         navTree.id = "test-tree-div"
         element.appendChild(navTree)
 
@@ -64,7 +62,7 @@ class JUnitView(
         if (data.type == "out") {
             if (data.testResults.length != 0) {
                 createStatistics(data.testResults)
-                createTestTree(data.testResults, outputView)
+                navTree.appendChild(createTestTree(data.testResults, outputView))
             } else {
                 Application.consoleView.writeException("No test method found")
             }
@@ -89,7 +87,7 @@ class JUnitView(
         return firstPackage.slice(0..j - 1)
     }
 
-    fun createTestTree(data: Array<dynamic>, outputView: OutputView) {
+    fun createTestTree(data: Array<dynamic>, outputView: OutputView): HTMLElement {
         var testsData = hashMapOf<String, dynamic>()
         for (testResult in data) {
             testsData[testResult.className + '.' + testResult.methodName] = json(
@@ -179,13 +177,13 @@ class JUnitView(
         displayTreeNode(rootNode, tree)
 
         fun printTestOutput(element: HTMLElement) {
-            if (jq(element).hasClass("at-no-children")) {
+            if (element.hasClass("at-no-children")) {
                 val testData = testsData[element.id]
                 outputView.printMarkedText(testsData[element.id].output)
                 if (testData.exception != null) {
-                    try {
-                        var parsedMessage = parseAssertionErrorMessage(unEscapeString(testData.exception.message))
-                        outputView.printErrorLine(testData.exception.fullName + ":" + parsedMessage.assertionMessage)
+                    val parsedMessage = parseAssertionErrorMessage(unEscapeString(testData.exception.message))
+                    if(parsedMessage != null){
+                        outputView.printErrorLine(testData.exception.fullName + ":" + parsedMessage.message)
                         outputView.printErrorLine("")
                         outputView.print("Expected: ")
                         outputView.printErrorLine(parsedMessage.expected)
@@ -196,7 +194,7 @@ class JUnitView(
                         outputView.println("")
                         outputView.println("")
                         outputView.printExceptionBody(testData.exception)
-                    } catch (exception: Throwable) {
+                    } else {
                         outputView.printException(testData.exception)
                     }
                 }
@@ -216,7 +214,7 @@ class JUnitView(
                 }
         ))
         jq(tree).find("li[aria-expanded]").attr("aria-expanded", "true")
-        navTree.appendChild(tree)
+        return tree
     }
 
     fun displayTreeNode(node: dynamic, parentElement: HTMLElement) {
@@ -259,24 +257,20 @@ class JUnitView(
 
 
 
-    fun getClassNameWithoutAPackage(fullClassName: String): String {
-        var path = fullClassName.split('.')
-        return path.last()
-    }
+    fun getClassNameWithoutAPackage(fullClassName: String): String = fullClassName.split('.').last()
 
-    fun parseAssertionErrorMessage(message: String): dynamic {
-        val message = message.replace("\n", "</br>")
+    fun parseAssertionErrorMessage(message: String): ParsedAssertionMessage? {
         var possibleRegExps = arrayOf(
                 Regex("(.*)\\.\\s*Expected\\s*<(.*)>\\s*actual\\s*<(.*)>"),
                 Regex("(. *)expected:\\s*<(.*)>\\s*but was:\\s*<(.*)>")
         )
         for (regExp in  possibleRegExps) {
-            var regExpExecResult = regExp.match(message)
+            var regExpExecResult = regExp.match(message.replace("\n", "</br>"))
             if (regExpExecResult != null) {
-                return json(
-                    "assertionMessage" to regExpExecResult.groups[1]!!.value,
-                    "expected" to regExpExecResult.groups[2]!!.value,
-                    "actual" to regExpExecResult.groups[3]!!.value
+                return ParsedAssertionMessage(
+                    regExpExecResult.groups[1]!!.value,
+                    regExpExecResult.groups[2]!!.value,
+                    regExpExecResult.groups[3]!!.value
                 )
             }
         }
@@ -319,6 +313,12 @@ enum class Status() {
     FAIL,
     ERROR
 }
+
+data class ParsedAssertionMessage(
+        val message: String,
+        val expected: String,
+        val actual: String
+)
 
 native
 interface TestResult {

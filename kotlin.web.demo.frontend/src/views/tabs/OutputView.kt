@@ -54,7 +54,7 @@ class OutputView(val element: HTMLElement) {
                 .replace("<errStream>", "<span class=\"error-output\">")
                 .replace("</errStream>", "</span>")
         )
-        spanElements.forEach { element.appendChild(it) }
+        spanElements?.forEach { element.appendChild(it) }
     }
 
     fun printException(exception: dynamic) {
