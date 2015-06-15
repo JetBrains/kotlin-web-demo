@@ -17,10 +17,10 @@
 package views
 
 import model.File
+import model.Folder
 import model.Project
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.Node
-import views.tree.FolderView
 import kotlin.browser.document
 
 class NavBarView(private val navigationElement: HTMLDivElement) {
@@ -53,7 +53,7 @@ class NavBarView(private val navigationElement: HTMLDivElement) {
 
     private fun createNavItem(project: Project){
         navigationElement.insertBefore(createNavItem(project.name), navigationElement.firstChild)
-        var folder: FolderView? = project.parent
+        var folder: Folder? = project.parent
         while (folder != null){
             navigationElement.insertBefore(createNavItem(folder.name), navigationElement.firstChild)
             folder = folder.parent

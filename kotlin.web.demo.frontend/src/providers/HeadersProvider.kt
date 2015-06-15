@@ -16,6 +16,7 @@
 
 package providers
 
+import model.Folder
 import model.ProjectType
 import utils.blockContent
 import utils.unBlockContent
@@ -29,48 +30,44 @@ class HeadersProvider(
         private val onProjectHeaderLoaded: () -> Unit,
         private val onProjectHeaderNotFound: () -> Unit
 ) {
-    fun addHeaderInfo(folder: dynamic) {
-        folder.projects.forEach { project: dynamic ->
-            project.type = if (folder.name == "My programs") ProjectType.USER_PROJECT else ProjectType.EXAMPLE
-            Unit
-        }
-        folder.childFolders.forEach({folder -> addHeaderInfo(folder)})
+    fun createFolder(content: FolderContent): Folder {
+        val type = if (content.name == "My programs") ProjectType.USER_PROJECT else ProjectType.EXAMPLE
+        val projects = content.projects.map { it -> ProjectHeader(it.name, it.publicId, type) }
+        val childFolders = content.childFolders.map {  createFolder(it) }
+        val folder = Folder(content.name, content.id, projects, childFolders)
+        return folder
     }
 
-    fun getAllHeaders(callback: (dynamic) -> Unit) {
+    fun createPublicLinksFolder(userProjectIds: List<String>): Folder {
+        val publicLinks = if (localStorage.getItem("publicLinks") != null) {
+            val parsedArray = JSON.parse<Array<ProjectInfo>>(localStorage.getItem("publicLinks")!!)
+            parsedArray
+                    .map { ProjectHeader(it.name, it.publicId, ProjectType.PUBLIC_LINK) }
+                    .filter { it.publicId !in userProjectIds }
+        } else {
+            emptyList()
+        }
+
+        return Folder(
+                "Public links",
+                "PublicLinks",
+                publicLinks,
+                emptyList()
+        )
+    }
+
+    fun getAllHeaders(callback: (List<Folder>) -> Unit) {
         blockContent()
         ajax(
                 url = generateAjaxUrl("loadHeaders"),
-                success = { folders ->
+                success = { foldersContent: Array<FolderContent> ->
                     try {
-                        if (checkDataForNull(folders)) {
-                            if (checkDataForException(folders)) {
-                                folders.forEach({folder -> addHeaderInfo(folder)})
-
-                                var publicLinks = if (localStorage.getItem("publicLinks") != null) {
-                                    val parsedArray = JSON.parse<Array<dynamic>>(localStorage.getItem("publicLinks")!!)
-                                    parsedArray.map { ProjectHeader(it.name, it.publicId, ProjectType.PUBLIC_LINK) }
-                                } else {
-                                    emptyList()
-                                }
-
-                                //TODO remove user project public links
-
-                                folders.push(json(
-                                        "name" to "Public links",
-                                        "id" to "PublicLinks",
-                                        "childFolders" to arrayOf<dynamic>(),
-                                        "projects" to publicLinks
-                                ))
-
-                                callback(folders)
-                                onHeadersLoaded()
-                            } else {
-                                onFail(folders, ActionStatusMessage.load_headers_fail)
-                            }
-                        } else {
-                            onFail("Incorrect data format.", ActionStatusMessage.load_headers_fail)
-                        }
+                        val folders = arrayListOf<Folder>()
+                        foldersContent.mapTo(folders, { createFolder(it) })
+                        val myProgramsFolder = folders.first { it.name == "My programs" }
+                        folders.add(createPublicLinksFolder(myProgramsFolder.projects.map { it.publicId }))
+                        callback(folders)
+                        onHeadersLoaded()
                     } finally {
                         unBlockContent()
                     }
@@ -119,4 +116,17 @@ class HeadersProvider(
                 complete = ::unBlockContent
         )
     }
+}
+
+native
+interface FolderContent {
+    val name: String
+    val id: String
+    val projects: Array<ProjectInfo>
+    val childFolders: Array<FolderContent>
+}
+
+interface ProjectInfo {
+    val name: String
+    val publicId: String
 }

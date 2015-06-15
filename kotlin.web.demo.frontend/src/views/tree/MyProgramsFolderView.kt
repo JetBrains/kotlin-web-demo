@@ -21,6 +21,7 @@ import html4k.div
 import html4k.dom.append
 import html4k.js.div
 import html4k.js.onClickFunction
+import model.Folder
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import views.dialogs.InputDialogView
@@ -29,7 +30,7 @@ import views.tree.FolderView
 import views.tree.ProjectView
 
 class MyProgramsFolderView(parentNode: HTMLElement,
-                           content: dynamic,
+                           content: Folder,
                            parent: FolderView?,
                            addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) :
         FolderView(parentNode, content, parent, addProject) {

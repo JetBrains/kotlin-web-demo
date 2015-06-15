@@ -20,7 +20,6 @@ import application.Application
 import utils.Listenable
 import utils.VarListener
 import utils.addKotlinExtension
-import views.tree.FolderView
 import java.util.ArrayList
 import kotlin.browser.localStorage
 
@@ -28,7 +27,7 @@ class Project(
         val type: ProjectType,
         val id: String,
         name: String,
-        val parent: FolderView,
+        val parent: Folder,
         private val onFileAdded: (File) -> Unit,
         private val onFileDeleted: (String) -> Unit,
         private val onContentLoaded: (ArrayList<File>) -> Unit,

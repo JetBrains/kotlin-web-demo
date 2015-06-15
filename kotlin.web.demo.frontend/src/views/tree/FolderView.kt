@@ -19,6 +19,7 @@ package views.tree
 import html4k.dom.append
 import html4k.js.div
 import jquery.jq
+import model.Folder
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.jquery.ui.accordion
@@ -26,11 +27,10 @@ import views.tree.ProjectView
 
 //TODO remove addProject function
 open class FolderView(parentNode: HTMLElement,
-                      content: dynamic,
+                      val content: Folder,
                       val parent: FolderView?,
                       val addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) {
     val depth: Int = if (parent == null) 0 else parent.depth + 1
-    val name: String = content.name
     val projects = arrayListOf<ProjectView>()
     val childFolders = arrayListOf<FolderView>()
 
@@ -40,7 +40,7 @@ open class FolderView(parentNode: HTMLElement,
         id = content.id
     }
     protected val folderNameElement: HTMLDivElement = headerElement.append.div {
-        + name
+        + content.name
         classes = setOf("text")
     }
     val contentElement = parentNode.append.div{}

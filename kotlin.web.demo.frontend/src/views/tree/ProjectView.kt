@@ -177,7 +177,7 @@ class ProjectView(
                 header.type,
                 header.publicId,
                 header.name,
-                parent,
+                parent.content,
                 onFileAdded = { file: File ->
                     var fileView = createFileView(file)
                     fileViews[file.id] = fileView

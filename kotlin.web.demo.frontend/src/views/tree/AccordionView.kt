@@ -75,17 +75,17 @@ class AccordionView(
         selectedProjectView = null
         selectedFileView = null
         Application.headersProvider.getAllHeaders { folders ->
-            folders.forEach { folderContent ->
-                if (folderContent.name == "My programs") {
-                    myProgramsFolder = MyProgramsFolderView(element, folderContent, null, { folderContentElement, header, parent ->
+            folders.forEach { folder ->
+                if (folder.name == "My programs") {
+                    myProgramsFolder = MyProgramsFolderView(element, folder, null, { folderContentElement, header, parent ->
                         addProject(folderContentElement, header, parent)
                     })
-                } else if (folderContent.name == "Public links") {
-                    publicLinksFolder = FolderView(element, folderContent, null, { folderContentElement, header, parent ->
+                } else if (folder.name == "Public links") {
+                    publicLinksFolder = FolderView(element, folder, null, { folderContentElement, header, parent ->
                         addProject(folderContentElement, header, parent)
                     })
                 } else {
-                    FolderView(element, folderContent, null, { folderContentElement, header, parent ->
+                    FolderView(element, folder, null, { folderContentElement, header, parent ->
                         addProject(folderContentElement, header, parent)
                     })
                 }
