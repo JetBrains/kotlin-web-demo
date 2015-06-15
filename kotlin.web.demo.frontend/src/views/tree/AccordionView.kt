@@ -62,7 +62,7 @@ class AccordionView(
         ))
     }
 
-    fun getProjectViewById(id: String) = projectViews[id]
+    fun getProjectViewById(id: String) = projectViews[id]!!
 
     fun selectedFileDeleted () {
         selectedFileView = null
@@ -84,6 +84,10 @@ class AccordionView(
                     publicLinksFolder = FolderView(element, folder, null, { folderContentElement, header, parent ->
                         addProject(folderContentElement, header, parent)
                     })
+                } else if (folder.name == "Workshop") {
+                    publicLinksFolder = FolderViewWithProgress(element, folder, null, { folderContentElement, header, parent ->
+                        addProject(folderContentElement, header, parent)
+                    }, true)
                 } else {
                     FolderView(element, folder, null, { folderContentElement, header, parent ->
                         addProject(folderContentElement, header, parent)

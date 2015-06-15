@@ -23,6 +23,7 @@ import model.File
 import model.FileType
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
+import org.w3c.dom.events.Event
 import providers.HelpProvider
 import utils.codemirror.CodeMirror
 import utils.codemirror.CompletionView
@@ -261,5 +262,8 @@ class Editor(
             Application.highlightingProvider.getHighlighting(example, { data -> showDiagnostics(data) }, { isLoadingHighlighting = false })
         }
     }
+
+    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit) = codeMirror.openDialog(template, callback, options)
+
 
 }

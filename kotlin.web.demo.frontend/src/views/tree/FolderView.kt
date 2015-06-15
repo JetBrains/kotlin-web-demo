@@ -24,6 +24,7 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.jquery.ui.accordion
 import views.tree.ProjectView
+import kotlin.dom.addClass
 
 //TODO remove addProject function
 open class FolderView(parentNode: HTMLElement,
@@ -39,21 +40,20 @@ open class FolderView(parentNode: HTMLElement,
         attributes.put("depth", depth.toString())
         id = content.id
     }
+
     protected val folderNameElement: HTMLDivElement = headerElement.append.div {
         + content.name
         classes = setOf("text")
     }
+
     val contentElement = parentNode.append.div{}
 
     init {
+        contentElement.addClass("progress-folder-content")
         for (projectHeader in content.projects) {
             projects.add(addProject(contentElement, projectHeader, this))
         }
-
-        for (folderContent in content.childFolders) {
-            childFolders.add(FolderView(contentElement, folderContent, this, addProject))
-        }
-
+        initializeChildFolders()
         if (!childFolders.isEmpty()) {
             jq(contentElement).accordion(json(
                     "heightStyle" to "content",
@@ -67,7 +67,12 @@ open class FolderView(parentNode: HTMLElement,
         }
     }
 
-    fun select(){
+    protected open fun initializeChildFolders(): List<FolderView> = content.childFolders.mapTo(childFolders, {
+        FolderView(contentElement, it, this, addProject)
+    })
+
+
+    fun select() {
         parent?.select()
         headerElement.click()
     }

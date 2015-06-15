@@ -18,6 +18,7 @@ package utils.codemirror
 
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
+import org.w3c.dom.events.Event
 
 native
 class CodeMirror() {
@@ -56,8 +57,8 @@ class CodeMirror() {
     fun lineCount(): Int
     fun indentLine(lineNo: Int)
     fun operation(function: () -> Unit)
-
     fun swapDoc(document: Doc)
+    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit)
 }
 
 data class Position(val line: Int, val ch: Int)

@@ -41,7 +41,7 @@ class ProjectView(
         val header: ProjectHeader,
         val contentElement: HTMLDivElement,
         val headerElement: HTMLDivElement,
-        private val parent: FolderView,
+        val parent: FolderView,
         private val onDelete: () -> Unit,
         private val onHeaderClick: (String) -> Unit,
         private val onSelected: (ProjectView) -> Unit

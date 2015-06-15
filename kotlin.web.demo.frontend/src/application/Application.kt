@@ -43,6 +43,7 @@ import views.tabs.GeneratedCodeView
 import views.tabs.JUnitView
 import views.tabs.ProblemsView
 import views.tree.AccordionView
+import views.tree.FolderViewWithProgress
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
@@ -152,6 +153,10 @@ object Application {
                         generatedCodeView.setOutput(data)
                     } else {
                         if (configurationManager.getConfiguration().type == ConfigurationType.JUNIT) {
+                            val projectView = accordion.getProjectViewById(project.id)
+                            if(projectView.parent is FolderViewWithProgress){
+                                projectView.parent.processRunResult(project, data.testResults);
+                            }
                             junitView.setOutput(data)
                         } else {
                             consoleView.setOutput(data)

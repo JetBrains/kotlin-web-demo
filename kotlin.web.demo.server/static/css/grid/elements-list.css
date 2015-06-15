@@ -231,6 +231,18 @@
     background: url("/static/images/icons_all_sprite.png") no-repeat -150px -400px;
 }
 
+.progress-folder-content .examples-project-name.modified > .icon {
+    width: 18px;
+    height: 15px;
+    background: url("/static/images/icons_all_sprite.png") -50px -150px;
+}
+
+.progress-folder-content .examples-project-name.completed > .icon {
+    width: 18px;
+    height: 15px;
+    background: url("/static/images/icons_all_sprite.png") -50px -100px;
+}
+
 .delete.icon {
     float: left;
     cursor: pointer;
@@ -343,4 +355,21 @@
     margin-top: 7px;
     margin-right: 3px;
     background: url("/static/images/icons_all_sprite.png") no-repeat -50px -200px;
+}
+
+.progressbar {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background: #b1e2be;
+    position: absolute;
+}
+
+.counter {
+    position: absolute;
+    color: black;
+    right: 10px;
+    top: 7px;
 }
