@@ -47,7 +47,7 @@ public class ExamplesLoader {
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
             String name = new File(path).getName();
-            Map<String, Project> examples = new LinkedHashMap<>();
+            Map<String, Example> examples = new LinkedHashMap<>();
             Map<String, ExamplesFolder> childFolders = new LinkedHashMap<>();
             List<ObjectNode> commonFiles = new ArrayList<>();
             commonFiles.addAll(parentCommonFiles);
@@ -84,19 +84,20 @@ public class ExamplesLoader {
         }
     }
 
-    private static Project loadProject(
+    private static Example loadProject(
             String path, String parentUrl, boolean loadTestVersion, List<ObjectNode> commonFilesManifests) throws IOException {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
 
             String name = new File(path).getName();
-            String originUrl = (parentUrl + name).replaceAll(" ", "%20");
+            String id = (parentUrl + name).replaceAll(" ", "%20");
             String args = manifest.get("args").asText();
             String runConfiguration = manifest.get("confType").asText();
             String expectedOutput;
             List<String> readOnlyFileNames = new ArrayList<>();
             List<ProjectFile> files = new ArrayList<>();
+            List<ProjectFile> hiddenFiles = new ArrayList<>();
             if (manifest.has("expectedOutput")) {
                 expectedOutput = manifest.get("expectedOutput").asText();
             } else if (manifest.has("expectedOutputFile")) {
@@ -120,7 +121,7 @@ public class ExamplesLoader {
                 String filePath = fileDescriptor.has("path") ?
                         fileDescriptor.get("path").asText() :
                         path + File.separator + fileDescriptor.get("filename").textValue();
-                ProjectFile file = loadProjectFile(filePath, originUrl, fileDescriptor);
+                ExampleFile file = loadProjectFile(filePath, id, fileDescriptor);
                 if (!loadTestVersion && file.getType().equals(ProjectFile.Type.SOLUTION_FILE)) {
                     continue;
                 }
@@ -128,10 +129,14 @@ public class ExamplesLoader {
                     readOnlyFileNames.add(file.getName());
                 }
 
-                files.add(file);
+                if (file.isHidden()) {
+                    hiddenFiles.add(file);
+                } else {
+                    files.add(file);
+                }
             }
 
-            return new Project(name, args, runConfiguration, originUrl, expectedOutput, files, readOnlyFileNames);
+            return new Example(id, name, args, runConfiguration, id, expectedOutput, files, hiddenFiles, readOnlyFileNames);
         } catch (IOException e) {
             System.err.println("Can't load project: " + e.toString());
             return null;
@@ -139,10 +144,11 @@ public class ExamplesLoader {
     }
 
 
-    private static ProjectFile loadProjectFile(String path, String projectUrl, JsonNode fileManifest) throws IOException {
+    private static ExampleFile loadProjectFile(String path, String projectUrl, JsonNode fileManifest) throws IOException {
         try {
             String fileName = fileManifest.get("filename").textValue();
             boolean modifiable = fileManifest.get("modifiable").asBoolean();
+            boolean hidden = fileManifest.has("hidden") ? fileManifest.get("hidden").asBoolean() : false;
             File file = new File(path);
             String fileContent = new String(Files.readAllBytes(file.toPath())).replaceAll("\r\n", "\n");
             String filePublicId = (projectUrl + "/" + fileName).replaceAll(" ", "%20");
@@ -156,7 +162,7 @@ public class ExamplesLoader {
             } else if (fileManifest.get("type").asText().equals("java")) {
                 fileType = ProjectFile.Type.JAVA_FILE;
             }
-            return new ProjectFile(fileName, fileContent, modifiable, filePublicId, fileType);
+            return new ExampleFile(fileName, fileContent, filePublicId, fileType, modifiable, hidden);
         } catch (IOException e) {
             System.err.println("Can't load file: " + e.toString());
             return null;

@@ -133,7 +133,7 @@ class FileProvider(
                 dataType = DataType.TEXT,
                 type = HTTPRequestType.POST,
                 timeout = 10000,
-                data = json("publicId" to project.publicId, "filename" to filenameWithExtension),
+                data = json("publicId" to project.id, "filename" to filenameWithExtension),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
                         onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
@@ -184,7 +184,7 @@ class FileProvider(
             json(
                     "fileName" to file.name,
                     "modifiable" to false,
-                    "projectId" to file.project.publicId
+                    "projectId" to file.project.id
             )
         }
         blockContent()

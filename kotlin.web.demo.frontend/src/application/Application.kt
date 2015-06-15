@@ -76,8 +76,8 @@ object Application {
             onProjectSelected = { project ->
                 if (project.files.isEmpty()) {
                     editor.closeFile()
-                    if (accordion.selectedProjectView!!.project.publicId != getProjectIdFromUrl()) {
-                        setState(userProjectPrefix + project.publicId, project.name)
+                    if (accordion.selectedProjectView!!.project.id != getProjectIdFromUrl()) {
+                        setState(userProjectPrefix + project.id, project.name)
                     }
                     navBarView.onProjectSelected(project)
                 }
@@ -102,9 +102,9 @@ object Application {
                         if (currentFile.project.type == ProjectType.EXAMPLE) {
                             currentFile.id
                         } else if (currentFile.isModifiable) {
-                            userProjectPrefix + accordion.selectedProjectView!!.project.publicId + "/" + currentFile.id
+                            userProjectPrefix + accordion.selectedProjectView!!.project.id + "/" + currentFile.id
                         } else {
-                            userProjectPrefix + accordion.selectedProjectView!!.project.publicId + "/" + currentFile.name
+                            userProjectPrefix + accordion.selectedProjectView!!.project.id + "/" + currentFile.name
                         }
                 setState(url, currentFile.project.name)
                 navBarView.onFileSelected(previousFile, currentFile)
@@ -117,7 +117,7 @@ object Application {
                         file.project.type == ProjectType.PUBLIC_LINK &&
                         file.project.revertible) {
                     projectProvider.checkIfProjectExists(
-                            file.project.publicId,
+                            file.project.id,
                             onExists = {
                                 if (file.isRevertible) {
                                     fileProvider.checkFileExistence(
@@ -137,7 +137,7 @@ object Application {
             onSelectedFileDeleted = {
                 var project = accordion.selectedProjectView!!.project
                 navBarView.onSelectedFileDeleted()
-                setState(userProjectPrefix + project.publicId, project.name)
+                setState(userProjectPrefix + project.id, project.name)
                 editor.closeFile()
             }
     )
@@ -380,7 +380,7 @@ object Application {
         window.onbeforeunload = {
             accordion.onBeforeUnload()
             IncompleteActionManager.onBeforeUnload()
-            localStorage.setItem("openedItemId", accordion.selectedProjectView!!.project.publicId)
+            localStorage.setItem("openedItemId", accordion.selectedProjectView!!.project.id)
 
             accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
             accordion.selectedProjectView!!.project.save()
@@ -406,7 +406,7 @@ object Application {
             if (accordion.getProjectViewById(projectId) == null) {
                 accordion.loadFirstItem()
             } else {
-                if (accordion.selectedProjectView!!.project.publicId != projectId) {
+                if (accordion.selectedProjectView!!.project.id != projectId) {
                     accordion.selectProject(projectId)
                 }
                 accordion.selectedProjectView!!.selectFileFromUrl()

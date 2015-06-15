@@ -222,7 +222,7 @@ class AccordionView(
     }
 
     fun selectProject(publicId: String) {
-        if (selectedProjectView == null || selectedProjectView!!.project.publicId != publicId) {
+        if (selectedProjectView == null || selectedProjectView!!.project.id != publicId) {
             if (selectedProjectView != null) {
                 selectedProjectView!!.headerElement.removeClass("selected")
                 jq(selectedProjectView!!.contentElement).slideUp()

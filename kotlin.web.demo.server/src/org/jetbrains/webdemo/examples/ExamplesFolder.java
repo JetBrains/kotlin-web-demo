@@ -28,12 +28,12 @@ public class ExamplesFolder {
     public static ExamplesFolder ROOT_FOLDER;
     private String id;
     private String name;
-    private Map<String, Project> examples;
+    private Map<String, Example> examples;
     private Map<String, ExamplesFolder> childFolders;
 
     public ExamplesFolder(String name,
                           String id,
-                          Map<String, Project> examples,
+                          Map<String, Example> examples,
                           Map<String, ExamplesFolder> childFolders) {
         this.name = name;
         this.id = id;
@@ -49,11 +49,11 @@ public class ExamplesFolder {
         return childFolders.get(name);
     }
 
-    public Collection<Project> getExamples() {
+    public Collection<Example> getExamples() {
         return examples.values();
     }
 
-    public Project getExample(String name) {
+    public Example getExample(String name) {
         return examples.get(name);
     }
 

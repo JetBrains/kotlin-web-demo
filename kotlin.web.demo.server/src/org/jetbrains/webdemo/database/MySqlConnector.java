@@ -500,14 +500,14 @@ public class MySqlConnector {
     }
 
 
-    public String getProjectContent(String publicId) throws DatabaseOperationException {
+    public String getProjectContent(String id) throws DatabaseOperationException {
         checkConnection();
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
             st = connection.prepareStatement(
                     "SELECT * FROM projects WHERE projects.public_id = ?");
-            st.setString(1, publicId);
+            st.setString(1, id);
             rs = st.executeQuery();
 
             if (rs.next()) {
@@ -518,6 +518,7 @@ public class MySqlConnector {
                     readOnlyFileNames = objectMapper.readValue(rs.getString("read_only_files"), List.class);
                 }
                 Project project = new Project(
+                        id,
                         unEscape(rs.getString("name")),
                         rs.getString("args"),
                         rs.getString("run_configuration"),
@@ -538,7 +539,7 @@ public class MySqlConnector {
                 return null;
             }
         } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", publicId);
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", id);
             return ResponseUtils.getErrorInJson("Unknown error while loading your project");
         } finally {
             closeStatementAndResultSet(st, rs);

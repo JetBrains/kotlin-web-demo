@@ -26,7 +26,7 @@ import kotlin.browser.localStorage
 
 class Project(
         val type: ProjectType,
-        val publicId: String,
+        val id: String,
         name: String,
         val parent: FolderView,
         private val onFileAdded: (File) -> Unit,
@@ -36,6 +36,7 @@ class Project(
 ) {
     fun toJSON(): Json {
         return json(
+                "id" to id,
                 "name" to name,
                 "args" to args,
                 "confType" to confType,
@@ -47,7 +48,7 @@ class Project(
 
     fun save() {
         when (type) {
-            ProjectType.USER_PROJECT -> Application.projectProvider.saveProject(this, publicId, { onModified() })
+            ProjectType.USER_PROJECT -> Application.projectProvider.saveProject(this, id, { onModified() })
             else -> {
                 if (isModified()) {
                     var fileIDs = arrayListOf<String>()
@@ -55,18 +56,18 @@ class Project(
                         Application.fileProvider.saveFile(file)
                         fileIDs.add(file.id)
                     }
-                    localStorage.setItem(publicId, JSON.stringify(json(
+                    localStorage.setItem(id, JSON.stringify(json(
                             "name" to name,
                             "files" to fileIDs.toTypedArray(),
                             "args" to args,
                             "confType" to confType,
                             "originUrl" to originUrl,
                             "type" to type,
-                            "publicId" to publicId,
+                            "publicId" to id,
                             "revertible" to revertible
                     )))
                 } else {
-                    localStorage.removeItem(publicId)
+                    localStorage.removeItem(id)
                 }
             }
         }
@@ -78,7 +79,7 @@ class Project(
 
     fun loadContent(ignoreCache: Boolean) {
         Application.projectProvider.loadProject(
-                publicId,
+                id,
                 type,
                 ignoreCache,
                 { content ->

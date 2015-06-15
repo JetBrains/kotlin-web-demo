@@ -29,13 +29,13 @@ import java.util.List;
  * Created by Semyon.Atamas on 3/4/2015.
  */
 public class ExamplesUtils {
-    public static Project getExample(String url) {
+    public static Example getExample(String url) {
         url = ResponseUtils.unEscapeURL(url);
         String[] path = url.split("/");
         return getExample(path);
     }
 
-    public static Project getExample(String[] path) {
+    public static Example getExample(String[] path) {
         ExamplesFolder folder = ExamplesFolder.ROOT_FOLDER;
         for (int i = 1; i < path.length - 1; ++i) {
             folder = folder.getChildFolder(path[i]);
@@ -51,6 +51,13 @@ public class ExamplesUtils {
                     project.files.add(file);
                 }
             }
+        }
+    }
+
+    public static void addHiddenFilesToProject(Project project) {
+        if (project.id != null) {
+            Example storedExample = getExample(project.id);
+            project.files.addAll(storedExample.getHiddenFiles());
         }
     }
 

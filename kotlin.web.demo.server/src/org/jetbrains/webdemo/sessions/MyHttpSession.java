@@ -67,7 +67,7 @@ public class MyHttpSession {
                     forwardRunRequest();
                     break;
                 case ("complete"):
-                    forwadrCompleteRequest();
+                    forwardCompleteRequest();
                     break;
                 case ("convertToKotlin"):
                     forwardConvertResult();
@@ -154,12 +154,13 @@ public class MyHttpSession {
         forwardRequestToBackend(request, postParameters);
     }
 
-    private void forwadrCompleteRequest() {
+    private void forwardCompleteRequest() {
         sessionInfo.setType(SessionInfo.TypeOfRequest.RUN);
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(currentProject.confType);
             ExamplesUtils.addUnmodifiableFilesToProject(currentProject);
+            ExamplesUtils.addHiddenFilesToProject(currentProject);
             Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(currentProject));
             postParameters.put("filename", request.getParameter("filename"));
@@ -178,6 +179,7 @@ public class MyHttpSession {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(currentProject.confType);
+            ExamplesUtils.addHiddenFilesToProject(currentProject);
             ExamplesUtils.addUnmodifiableFilesToProject(currentProject);
             Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(currentProject));
@@ -194,6 +196,7 @@ public class MyHttpSession {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             sessionInfo.setRunConfiguration(currentProject.confType);
+            ExamplesUtils.addHiddenFilesToProject(currentProject);
             ExamplesUtils.addUnmodifiableFilesToProject(currentProject);
             Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(currentProject));
@@ -383,6 +386,7 @@ public class MyHttpSession {
                 try {
                     currentProject = objectMapper.readValue(content, Project.class);
                     currentProject.name = request.getParameter("args"); //when user calls save as we must change project name
+                    ExamplesUtils.addHiddenFilesToProject(currentProject);
                     String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), currentProject);
                     ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
                     result.put("publicId", publicId);

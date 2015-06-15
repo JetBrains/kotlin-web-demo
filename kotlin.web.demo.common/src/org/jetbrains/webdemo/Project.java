@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
+    public String id;
     public String originUrl;
     public String name;
     public String args = "";
@@ -36,9 +37,11 @@ public class Project {
 
     }
 
-    public Project( String name,
-                    String args,
-                    String confType) {
+    public Project(
+            String name,
+            String args,
+            String confType
+    ) {
         this.name = name;
         this.args = args;
         this.confType = confType;
@@ -46,11 +49,15 @@ public class Project {
         this.files = new ArrayList<>();
     }
 
-    public Project( String name,
-                    String args,
-                    String confType,
-                   String originUrl,
-                   List<String> readOnlyFileNames) {
+    public Project(
+            String id,
+            String name,
+            String args,
+            String confType,
+            String originUrl,
+            List<String> readOnlyFileNames
+    ) {
+        this.id = id;
         this.name = name;
         this.args = args;
         this.confType = confType;
@@ -60,13 +67,17 @@ public class Project {
     }
 
 
-    public Project(String name,
-                   String args,
-                   String confType,
-                   String originUrl,
-                   String expectedOutput,
-                   List<ProjectFile> files,
-                   List<String> readOnlyFileNames) {
+    public Project(
+            String id,
+            String name,
+            String args,
+            String confType,
+            String originUrl,
+            String expectedOutput,
+            List<ProjectFile> files,
+            List<String> readOnlyFileNames
+    ) {
+        this.id = id;
         this.name = name;
         this.args = args;
         this.confType = confType;

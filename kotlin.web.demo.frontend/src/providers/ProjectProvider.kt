@@ -80,7 +80,7 @@ class ProjectProvider(
                 },
                 type = HTTPRequestType.POST,
                 dataType = DataType.TEXT,
-                data = json("publicId" to project.publicId, "newName" to newName),
+                data = json("publicId" to project.id, "newName" to newName),
                 timeout = 10000,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
