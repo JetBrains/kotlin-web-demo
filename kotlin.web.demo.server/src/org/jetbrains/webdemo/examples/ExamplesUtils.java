@@ -55,7 +55,8 @@ public class ExamplesUtils {
     }
 
     public static void addHiddenFilesToProject(Project project) {
-        if (project.id != null) {
+        if (project.originUrl != null &&
+                project.originUrl.equals(project.id)) {
             Example storedExample = getExample(project.id);
             project.files.addAll(storedExample.getHiddenFiles());
         }
