@@ -178,8 +178,8 @@ object Layout {
 
     private fun updateGridConfigurationInLocalStorage() {
         var gridConfiguration = json(
-                "examplesWidth" to jq(resizableProjectTreeHolder).width(),
-                "gridBottomHeight" to jq("#grid-bottom").height(),
+                "examplesWidth" to jq(resizableProjectTreeHolder).width().toInt(),
+                "gridBottomHeight" to jq("#grid-bottom").height().toInt(),
                 "fullscreenMode" to isFullscreenMode(),
                 "argumentsVisible" to Elements.argumentsInputElement.isVisible(),
                 "projectTreeVisible" to resizableProjectTreeHolder.isVisible()
