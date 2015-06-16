@@ -68,7 +68,7 @@ public class ServerHandler {
                         String url = request.getParameter("url");
                         String stackTrace = request.getParameter("stackTrace");
                         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                                message,
+                                message + "\nAt: " + url,
                                 stackTrace,
                                 "FRONTEND_ERROR",
                                 url,

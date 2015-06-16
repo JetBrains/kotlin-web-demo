@@ -366,7 +366,7 @@ object Application {
         setKotlinVersion()
 
         window.onError = { message, url, line, ch, error ->
-            submitErrorReport(message, url, error.stack)
+            submitErrorReport(message, url + " $line:$ch", error.stack)
         }
 
         window.onfocus = {
