@@ -65,6 +65,7 @@ class Project(
                             "publicId" to id,
                             "revertible" to revertible
                     )))
+                    files.forEach { Application.fileProvider.saveFile(it) }
                 } else {
                     localStorage.removeItem(id)
                 }
