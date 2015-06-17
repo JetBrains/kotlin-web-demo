@@ -16,6 +16,7 @@
 
 package providers
 
+import application.Application
 import model.File
 import model.Project
 import model.ProjectType
@@ -291,5 +292,26 @@ class ProjectProvider(
                 },
                 complete = ::unBlockContent
         )
+    }
+
+    fun saveSolution(solution: Project, completed: Boolean) {
+        if (Application.loginView.isLoggedIn) {
+            blockContent()
+            ajax(
+                    url = generateAjaxUrl("saveSolution"),
+                    type = HTTPRequestType.POST,
+                    timeout = 10000,
+                    data = json("solution" to JSON.stringify(solution), "completed" to completed),
+                    dataType = DataType.TEXT,
+                    error = { jqXHR, textStatus, errorThrown ->
+                        try {
+                            onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
+                        } catch (e: Throwable) {
+                            console.log(e)
+                        }
+                    },
+                    complete = ::unBlockContent
+            )
+        }
     }
 }

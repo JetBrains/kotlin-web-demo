@@ -38,10 +38,7 @@ import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import views.editor.Diagnostic
 import views.editor.Editor
-import views.tabs.ConsoleView
-import views.tabs.GeneratedCodeView
-import views.tabs.JUnitView
-import views.tabs.ProblemsView
+import views.tabs.*
 import views.tree.AccordionView
 import views.tree.FolderViewWithProgress
 import kotlin.browser.document
@@ -153,9 +150,14 @@ object Application {
                         generatedCodeView.setOutput(data)
                     } else {
                         if (configurationManager.getConfiguration().type == ConfigurationType.JUNIT) {
-                            val projectView = accordion.getProjectViewById(project.id)
+                            val projectView = accordion.getProjectViewById(project.id)!!
                             if(projectView.parent is FolderViewWithProgress){
-                                projectView.parent.processRunResult(project, data.testResults);
+                                val testResults: Array<TestResult> = data.testResults
+                                val completed = testResults.all { it.status.equals("OK") }
+                                if(completed) {
+                                    projectProvider.saveSolution(project, completed)
+                                }
+                                projectView.parent.processRunResult(project, completed);
                             }
                             junitView.setOutput(data)
                         } else {

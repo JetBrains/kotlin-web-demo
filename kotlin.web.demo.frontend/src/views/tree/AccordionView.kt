@@ -62,7 +62,7 @@ class AccordionView(
         ))
     }
 
-    fun getProjectViewById(id: String) = projectViews[id]!!
+    fun getProjectViewById(id: String) = projectViews[id]
 
     fun selectedFileDeleted () {
         selectedFileView = null

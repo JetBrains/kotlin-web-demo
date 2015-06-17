@@ -120,6 +120,9 @@ public class MyHttpSession {
                 case ("checkIfProjectExists"):
                     sendExistenceCheckResult();
                     break;
+                case ("saveSolution"):
+                    sendSaveSolutionResult();
+                    break;
                 default:
                     sendResourceFile();
                     break;
@@ -290,6 +293,19 @@ public class MyHttpSession {
         } catch (Exception e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "FORWARD_REQUEST_TO_BACKEND", "", "Can't forward request to Kotlin compile server");
             writeResponse("Can't send your request to Kotlin compile server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendSaveSolutionResult() {
+        try {
+            boolean completed = Boolean.parseBoolean(request.getParameter("completed"));
+            Project solution = objectMapper.readValue(request.getParameter("solution"), Project.class);
+            solution.args = "";
+            MySqlConnector.getInstance().saveSolution(sessionInfo.getUserInfo(), solution, completed);
+        } catch (IOException e) {
+            writeResponse("Can't write response", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (DatabaseOperationException e) {
+            writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 

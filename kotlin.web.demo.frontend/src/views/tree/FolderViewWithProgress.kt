@@ -42,7 +42,7 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         get() {
             val storedArray = JSON.parse<Array<String>>(localStorage.get(id) ?: "[]")
             for (name in storedArray)
-                Application.accordion.getProjectViewById(name).headerElement.addClass("completed")
+                Application.accordion.getProjectViewById(name)!!.headerElement.addClass("completed")
             return storedArray.toSet()
         }
         set(value) {
@@ -62,10 +62,10 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         updateProgress()
     }
 
-    public fun processRunResult(project: Project, testResults: Array<TestResult>) {
+    public fun processRunResult(project: Project, completed: Boolean) {
         val publicId = project.id
         val projectView = projects.first { it.project == project }
-        if (testResults.all { it -> it.status.equals("OK") }) {
+        if (completed) {
             completedProjects = HashSet(completedProjects + (publicId))
             projectView.headerElement.addClass("completed")
             dialogCloseFun?.invoke()
