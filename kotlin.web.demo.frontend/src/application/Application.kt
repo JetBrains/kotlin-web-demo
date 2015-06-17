@@ -97,7 +97,8 @@ object Application {
                 }
 
                 var url =
-                        if (currentFile.project.type == ProjectType.EXAMPLE) {
+                        if (currentFile.project.type == ProjectType.EXAMPLE ||
+                                currentFile.project.type == ProjectType.TASK) {
                             currentFile.id
                         } else if (currentFile.isModifiable) {
                             userProjectPrefix + accordion.selectedProjectView!!.project.id + "/" + currentFile.id
@@ -478,9 +479,12 @@ object Application {
 
         saveButton.title = saveButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.save").name)
         saveButton.onclick = {
-            if (accordion.selectedProjectView!!.project.type == ProjectType.USER_PROJECT) {
+            val selectedProject = accordion.selectedProjectView!!.project
+            if (selectedProject.type == ProjectType.USER_PROJECT) {
                 accordion.selectedProjectView!!.project.save()
                 accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
+            } else if (selectedProject.type == ProjectType.TASK) {
+                projectProvider.saveSolution(selectedProject)
             } else {
                 jq("#saveAsButton").click()
             }

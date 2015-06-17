@@ -180,6 +180,7 @@ class Project(
 
 enum class ProjectType {
     EXAMPLE,
+    TASK,
     USER_PROJECT,
     PUBLIC_LINK;
 

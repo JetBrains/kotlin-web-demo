@@ -55,7 +55,7 @@ class FileProvider(
 
     fun loadOriginalFile(file: File, onSuccess: (dynamic) -> Unit, onNotFound: () -> Unit) {
         when (file.project.type) {
-            ProjectType.EXAMPLE -> {
+            ProjectType.EXAMPLE, ProjectType.TASK -> {
                 blockContent()
                 ajax(
                         url = generateAjaxUrl("loadExampleFile"),

@@ -30,10 +30,9 @@ class HeadersProvider(
         private val onProjectHeaderLoaded: () -> Unit,
         private val onProjectHeaderNotFound: () -> Unit
 ) {
-    fun createFolder(content: FolderContent): Folder {
-        val type = if (content.name == "My programs") ProjectType.USER_PROJECT else ProjectType.EXAMPLE
+    fun createFolder(content: FolderContent, type: ProjectType): Folder {
         val projects = content.projects.map { it -> ProjectHeader(it.name, it.publicId, type) }
-        val childFolders = content.childFolders.map {  createFolder(it) }
+        val childFolders = content.childFolders.map {  createFolder(it, type) }
         val folder = Folder(content.name, content.id, projects, childFolders)
         return folder
     }
@@ -63,7 +62,14 @@ class HeadersProvider(
                 success = { foldersContent: Array<FolderContent> ->
                     try {
                         val folders = arrayListOf<Folder>()
-                        foldersContent.mapTo(folders, { createFolder(it) })
+                        foldersContent.mapTo(folders, {
+                            val type = when (it.name){
+                                "My programs" -> ProjectType.USER_PROJECT
+                                "Workshop" -> ProjectType.TASK
+                                else  -> ProjectType.EXAMPLE
+                            }
+                            createFolder(it, type)
+                        })
                         val myProgramsFolder = folders.first { it.name == "My programs" }
                         folders.add(createPublicLinksFolder(myProgramsFolder.projects.map { it.publicId }))
                         callback(folders)

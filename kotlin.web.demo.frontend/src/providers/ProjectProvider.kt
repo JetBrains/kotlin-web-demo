@@ -50,7 +50,7 @@ class ProjectProvider(
             callback(content)
             onProjectLoaded()
         } else {
-            if (type == ProjectType.EXAMPLE) {
+            if (type == ProjectType.EXAMPLE || type == ProjectType.TASK) {
                 loadExample(publicId, callback)
             } else {
                 loadProject(publicId, callback, onNotFound)
@@ -294,7 +294,7 @@ class ProjectProvider(
         )
     }
 
-    fun saveSolution(solution: Project, completed: Boolean) {
+    fun saveSolution(solution: Project, completed: Boolean? = null) {
         if (Application.loginView.isLoggedIn) {
             blockContent()
             ajax(
