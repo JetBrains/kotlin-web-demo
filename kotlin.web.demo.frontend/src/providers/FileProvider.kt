@@ -213,9 +213,8 @@ class FileProvider(
     }
 
     public fun saveFile(file: File) {
-        if (!file.isModified) return
-
         if (file.project.type == ProjectType.USER_PROJECT) {
+            if (!file.isModified) return
             blockContent()
             ajax(
                     url = generateAjaxUrl("saveFile"),
