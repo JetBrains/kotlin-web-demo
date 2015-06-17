@@ -30,6 +30,8 @@ import org.jetbrains.webdemo.session.UserInfo;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,7 +45,7 @@ public class MySqlConnector {
     private Connection connection;
     private String databaseUrl;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private Random idGenerator = new Random();
+    private IdentifierGenerator idGenerator = new IdentifierGenerator();
 
     private MySqlConnector() {
         if (!connect() || !createTablesIfNecessary()) {
@@ -395,7 +397,7 @@ public class MySqlConnector {
         int userId = getUserId(userInfo);
         PreparedStatement st = null;
         try {
-            String publicId = userInfo.getId() + idGenerator.nextInt();
+            String publicId = idGenerator.nextProjectId();
 
             st = connection.prepareStatement("INSERT INTO projects (owner_id, name, args, run_configuration, origin, public_id, read_only_files) VALUES (?,?,?,?,?,?,?) ");
             st.setString(1, userId + "");
@@ -443,7 +445,7 @@ public class MySqlConnector {
         }
         fileName = escape(fileName.endsWith(".kt") ? fileName : fileName + ".kt");
         try (PreparedStatement st = connection.prepareStatement("INSERT INTO files (project_id, public_id, name, content) VALUES (?,?,?,?) ")) {
-            String publicId = userInfo.getId() + idGenerator.nextInt();
+            String publicId = idGenerator.nextFileId();
 
             st.setString(1, projectId + "");
             st.setString(2, publicId);
@@ -829,6 +831,54 @@ public class MySqlConnector {
             throw new DatabaseOperationException("Unknown exception", e);
         } finally {
             closeStatementAndResultSet(st, rs);
+        }
+    }
+
+    private final class IdentifierGenerator {
+        private SecureRandom random = new SecureRandom();
+
+        private String nextId() {
+            return new BigInteger(130, random).toString(32);
+        }
+
+        public String nextProjectId() throws SQLException {
+            while (true) {
+                String id = nextId();
+                PreparedStatement st = null;
+                ResultSet rs = null;
+                try {
+                    st = connection.prepareStatement(
+                            "SELECT COUNT(projects.public_id) FROM projects WHERE public_id = ?"
+                    );
+                    st.setString(1, id);
+                    rs = st.executeQuery();
+                    rs.next();
+                    int numberOfRows = rs.getInt(1);
+                    if(numberOfRows == 0) return id;
+                } finally {
+                    closeStatementAndResultSet(st, rs);
+                }
+            }
+        }
+
+        public String nextFileId() throws SQLException {
+            while (true) {
+                String id = nextId();
+                PreparedStatement st = null;
+                ResultSet rs = null;
+                try {
+                    st = connection.prepareStatement(
+                            "SELECT COUNT(files.public_id) FROM files WHERE public_id = ?"
+                    );
+                    st.setString(1, id);
+                    rs = st.executeQuery();
+                    rs.next();
+                    int numberOfRows = rs.getInt(1);
+                    if(numberOfRows == 0) return id;
+                } finally {
+                    closeStatementAndResultSet(st, rs);
+                }
+            }
         }
     }
 }
