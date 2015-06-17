@@ -49,7 +49,6 @@ open class FolderView(parentNode: HTMLElement,
     val contentElement = parentNode.append.div{}
 
     init {
-        contentElement.addClass("progress-folder-content")
         for (projectHeader in content.projects) {
             projects.add(addProject(contentElement, projectHeader, this))
         }

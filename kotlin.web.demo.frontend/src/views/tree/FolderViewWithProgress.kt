@@ -53,6 +53,7 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         }
 
     init {
+        contentElement.addClass("progress-folder-content")
         if (progressBar != null) {
             progressBar.className = "progressbar"
             headerElement.appendChild(progressBar)

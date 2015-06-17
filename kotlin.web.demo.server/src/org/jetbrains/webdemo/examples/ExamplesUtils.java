@@ -19,7 +19,11 @@ package org.jetbrains.webdemo.examples;
 import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.database.DatabaseOperationException;
+import org.jetbrains.webdemo.database.MySqlConnector;
+import org.jetbrains.webdemo.session.UserInfo;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,7 +39,35 @@ public class ExamplesUtils {
         return getExample(path);
     }
 
-    public static Example getExample(String[] path) {
+    public static Example getUserVersionOfExample(UserInfo userInfo, String url) throws DatabaseOperationException {
+        Example example = getExample(url);
+        Project userVersion = MySqlConnector.getInstance().getStoredSolution(userInfo, url);
+        if(userVersion == null) return example;
+
+        List<ProjectFile> userFiles = new ArrayList<ProjectFile>();
+        for(ProjectFile file : example.files){
+            ProjectFile resultFile = null;
+            for(ProjectFile userFile : userVersion.files){
+                if (userFile.getName().equals(file.getName())){
+                    resultFile = new UserFile(file, userFile.getText());
+                }
+            }
+            userFiles.add(resultFile);
+        }
+        return new Example(
+                example.id,
+                example.name,
+                example.args,
+                example.confType,
+                example.originUrl,
+                example.expectedOutput,
+                userFiles,
+                example.getHiddenFiles(),
+                example.readOnlyFileNames
+        );
+    }
+
+    private static Example getExample(String[] path) {
         ExamplesFolder folder = ExamplesFolder.ROOT_FOLDER;
         for (int i = 1; i < path.length - 1; ++i) {
             folder = folder.getChildFolder(path[i]);

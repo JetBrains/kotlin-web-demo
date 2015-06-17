@@ -241,8 +241,8 @@ class FileProvider(
         } else {
             localStorage.set(file.id, JSON.stringify(json(
                     "name" to file.name,
-                    "originalText" to file.originalText,
                     "text" to file.text,
+                    "userText" to file.userText,
                     "publicId" to file.id,
                     "modifiable" to file.isModifiable,
                     "type" to file.type,

@@ -147,8 +147,8 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                     Application.fileProvider.loadOriginalFile(
                             file,
                             { content: dynamic ->
+                                file.userText = content.text
                                 file.text = content.text
-                                file.originalText = content.text
                                 file.name = unEscapeString(content.name)
                             },
                             {

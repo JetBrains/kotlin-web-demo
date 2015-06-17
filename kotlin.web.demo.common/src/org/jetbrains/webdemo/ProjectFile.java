@@ -58,6 +58,14 @@ public class ProjectFile {
         this.type = type;
     }
 
+    public ProjectFile(ProjectFile other) {
+        this.name = other.name;
+        this.text = other.text;
+        this.modifiable = other.modifiable;
+        this.publicId = other.publicId;
+        this.type = other.type;
+    }
+
     public Boolean isModifiable() {
         return modifiable;
     }

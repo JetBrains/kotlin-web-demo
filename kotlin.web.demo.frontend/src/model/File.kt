@@ -25,8 +25,8 @@ class File(
         val project: Project,
         name: String,
         val id: String,
-        text: String = "",
-        var originalText: String = text,
+        var text: String = "",
+        userText: String = text,
         val isModifiable: Boolean = true,
         val type: String = FileType.KOTLIN_FILE.name(),
         isRevertible: Boolean = true
@@ -35,28 +35,28 @@ class File(
     var name: String by Listenable(name, listenableName)
 
     val listenableIsModified = VarListener<Boolean>()
-    var isModified: Boolean by Listenable(originalText != text, listenableIsModified)
+    var isModified: Boolean by Listenable(text != userText, listenableIsModified)
 
     val listenableIsRevertible = VarListener<Boolean>()
     var isRevertible: Boolean by Listenable(isRevertible, listenableIsRevertible)
 
-    var text: String = text
+    var userText: String = userText
         set(newText: String) {
-            isModified = newText != originalText
-            $text = newText
+            isModified = newText != text
+            $userText = newText
         }
 
     fun toJSON(): dynamic {
         val result = js("({})")
         result.name = name
-        result.text = text
+        result.text = userText
         result.publicId = id
         return result
     }
 
     companion object {
         fun fromJSON(project: dynamic, obj: dynamic) =
-                File(project, obj.name, obj.publicId, obj.text, obj.originalText, obj.modifiable, obj.type, obj.revertible)
+                File(project, obj.name, obj.publicId, obj.text, obj.userText, obj.modifiable, obj.type, obj.revertible)
     }
 
 }

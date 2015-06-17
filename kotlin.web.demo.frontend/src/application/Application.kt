@@ -212,8 +212,8 @@ object Application {
                 editor.reloadFile()
             },
             { file ->
-                file.originalText = file.text
-                file.isModified = file.text != file.originalText
+                file.text = file.userText
+                file.isModified = file.userText != file.text
             }
     )
 

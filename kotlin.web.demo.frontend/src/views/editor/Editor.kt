@@ -60,7 +60,7 @@ class Editor(
         codeMirror.on("change", {
             removeStyles()
             if (openedFile != null) {
-                openedFile!!.text = codeMirror.getValue()
+                openedFile!!.userText = codeMirror.getValue()
                 if (timeoutId != null) {
                     window.clearTimeout(timeoutId ?: 0)
                     timeoutId = window.setTimeout({ getHighlighting() }, timerIntervalForNonPrinting)
@@ -159,7 +159,7 @@ class Editor(
     fun reloadFile () {
         if (openedFile != null) {
             codeMirror.focus()
-            codeMirror.setValue(openedFile!!.text)
+            codeMirror.setValue(openedFile!!.userText)
             updateHighlighting()
         }
     }
@@ -175,7 +175,7 @@ class Editor(
             } else {
                 "text/x-java"
             }
-            documents.put(file, CodeMirror.Doc(file.text, type))
+            documents.put(file, CodeMirror.Doc(file.userText, type))
             getHighlighting()
         }
     }
