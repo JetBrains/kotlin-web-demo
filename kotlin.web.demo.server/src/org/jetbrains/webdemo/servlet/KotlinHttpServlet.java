@@ -19,6 +19,7 @@ package org.jetbrains.webdemo.servlet;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
+import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
@@ -33,6 +34,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class KotlinHttpServlet extends HttpServlet {
 
@@ -63,6 +66,14 @@ public class KotlinHttpServlet extends HttpServlet {
             ExamplesLoader.loadAllExamples();
             HelpLoader.getInstance();
             MySqlConnector.getInstance();
+
+            List<String> tasksIdentifiers = new ArrayList<>();
+            for(ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolder("Workshop").getChildFolders()){
+                for(Project example : folder.getExamples()){
+                    tasksIdentifiers.add(example.id);
+                }
+            }
+            MySqlConnector.getInstance().createTaskList(tasksIdentifiers);
         } catch (Throwable e) {
             ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
             System.exit(1);
