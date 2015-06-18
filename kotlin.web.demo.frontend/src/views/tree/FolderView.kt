@@ -28,7 +28,6 @@ import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.dom.addClass
 
-//TODO remove addProject function
 open class FolderView(parentNode: HTMLElement,
                       val content: Folder,
                       val parent: FolderView? = null,
