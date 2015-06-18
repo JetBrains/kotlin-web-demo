@@ -24,13 +24,19 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.jquery.ui.accordion
 import views.tree.ProjectView
+import kotlin.browser.document
+import kotlin.browser.window
 import kotlin.dom.addClass
 
 //TODO remove addProject function
 open class FolderView(parentNode: HTMLElement,
                       val content: Folder,
-                      val parent: FolderView?,
-                      val addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) {
+                      val parent: FolderView? = null,
+                      val onProjectDeleted: (ProjectView) -> Unit,
+                      val onProjectHeaderClick: (ProjectView) -> Unit,
+                      val onProjectSelected: (ProjectView) -> Unit,
+                      val onProjectCreated: (ProjectView) -> Unit
+) {
     val depth: Int = if (parent == null) 0 else parent.depth + 1
     val projects = arrayListOf<ProjectView>()
     val childFolders = arrayListOf<FolderView>()
@@ -50,7 +56,7 @@ open class FolderView(parentNode: HTMLElement,
 
     init {
         for (projectHeader in content.projects) {
-            projects.add(addProject(contentElement, projectHeader, this))
+            projects.add(createProject(projectHeader))
         }
         initializeChildFolders()
         if (!childFolders.isEmpty()) {
@@ -67,8 +73,22 @@ open class FolderView(parentNode: HTMLElement,
     }
 
     protected open fun initializeChildFolders(): List<FolderView> = content.childFolders.mapTo(childFolders, {
-        FolderView(contentElement, it, this, addProject)
+        FolderView(contentElement, it, this, onProjectDeleted, onProjectHeaderClick, onProjectSelected, onProjectCreated)
     })
+
+    public open fun createProject(header: ProjectHeader): ProjectView{
+        val projectView = ProjectView(
+                header,
+                contentElement.append.div {},
+                contentElement.append.div {},
+                this,
+                onProjectDeleted,
+                onProjectHeaderClick,
+                onProjectSelected
+        )
+        onProjectCreated(projectView)
+        return projectView
+    }
 
 
     fun select() {

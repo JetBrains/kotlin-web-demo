@@ -32,8 +32,11 @@ import views.tree.ProjectView
 class MyProgramsFolderView(parentNode: HTMLElement,
                            content: Folder,
                            parent: FolderView?,
-                           addProject: (HTMLDivElement, dynamic, FolderView) -> ProjectView) :
-        FolderView(parentNode, content, parent, addProject) {
+                           onProjectDeleted: (ProjectView) -> Unit,
+                           onProjectHeaderClick: (ProjectView) -> Unit,
+                           onProjectSelected: (ProjectView) -> Unit,
+                           onProjectCreated: (ProjectView) -> Unit) :
+        FolderView(parentNode, content, parent, onProjectDeleted, onProjectHeaderClick, onProjectSelected, onProjectCreated) {
 
 
     init {

@@ -35,7 +35,7 @@ import kotlin.properties.Delegates
 
 class AccordionView(
         private val element: HTMLElement,
-        private val onProjectSelected: (Project) -> Unit,
+        onProjectSelected: (Project) -> Unit,
         private val onSelectFile: (File?, File) -> Unit,
         val onModifiedSelectedFile: (File) -> Unit,
         private val onSelectedFileDeleted: () -> Unit
@@ -48,6 +48,26 @@ class AccordionView(
         private set
     private var myProgramsFolder: MyProgramsFolderView by Delegates.notNull()
     private var publicLinksFolder: FolderView by Delegates.notNull()
+
+    private val onProjectDeleted: (ProjectView) -> Unit = { projectView: ProjectView ->
+        projectViews.remove(projectView.project.id)
+        if (selectedProjectView === projectView) {
+            window.history.replaceState("", "", "/")
+            selectedProjectView = null
+            selectedFileView = null
+            loadFirstItem()
+        }
+    }
+    private val onProjectHeaderClick = { projectView: ProjectView ->
+        selectProject(projectView.project.id)
+    }
+    private val onProjectSelected = { projectView: ProjectView ->
+        if (projectView.project.files.isEmpty()) {
+            selectedFileView = null
+        }
+        onProjectSelected(projectView.project)
+    }
+    private val onProjectCreated: (ProjectView) -> Unit = { projectView: ProjectView -> projectViews.put(projectView.project.id, projectView) }
 
     init {
         element.innerHTML = ""
@@ -77,21 +97,46 @@ class AccordionView(
         Application.headersProvider.getAllHeaders { folders ->
             folders.forEach { folder ->
                 if (folder.name == "My programs") {
-                    myProgramsFolder = MyProgramsFolderView(element, folder, null, { folderContentElement, header, parent ->
-                        addProject(folderContentElement, header, parent)
-                    })
+                    myProgramsFolder = MyProgramsFolderView(
+                            parentNode = element,
+                            content = folder,
+                            parent = null,
+                            onProjectDeleted = onProjectDeleted,
+                            onProjectHeaderClick = onProjectHeaderClick,
+                            onProjectSelected = onProjectSelected,
+                            onProjectCreated = onProjectCreated
+                    );
                 } else if (folder.name == "Public links") {
-                    publicLinksFolder = FolderView(element, folder, null, { folderContentElement, header, parent ->
-                        addProject(folderContentElement, header, parent)
-                    })
+                    publicLinksFolder = FolderView(
+                            parentNode = element,
+                            content = folder,
+                            parent = null,
+                            onProjectDeleted = onProjectDeleted,
+                            onProjectHeaderClick = onProjectHeaderClick,
+                            onProjectSelected = onProjectSelected,
+                            onProjectCreated = onProjectCreated
+                    )
                 } else if (folder.name == "Workshop") {
-                    publicLinksFolder = FolderViewWithProgress(element, folder, null, { folderContentElement, header, parent ->
-                        addProject(folderContentElement, header, parent)
-                    }, true)
+                    publicLinksFolder = FolderViewWithProgress(
+                            parentNode = element,
+                            content = folder,
+                            parent = null,
+                            hasProgressBar = true,
+                            onProjectDeleted = onProjectDeleted,
+                            onProjectHeaderClick = onProjectHeaderClick,
+                            onProjectSelected = onProjectSelected,
+                            onProjectCreated = onProjectCreated
+                    )
                 } else {
-                    FolderView(element, folder, null, { folderContentElement, header, parent ->
-                        addProject(folderContentElement, header, parent)
-                    })
+                    FolderView(
+                            parentNode = element,
+                            content = folder,
+                            parent = null,
+                            onProjectDeleted = onProjectDeleted,
+                            onProjectHeaderClick = onProjectHeaderClick,
+                            onProjectSelected = onProjectSelected,
+                            onProjectCreated = onProjectCreated
+                    )
                 }
             }
             IncompleteActionManager.checkTimepoint("headersLoaded")
@@ -104,24 +149,24 @@ class AccordionView(
     }
 
     fun addNewProject(name: String, publicId: String, fileId: String) {
-        myProgramsFolder.addNewProject(addProject(myProgramsFolder.contentElement, ProjectHeader(
+        myProgramsFolder.createProject(ProjectHeader(
                 name,
                 publicId,
                 ProjectType.USER_PROJECT,
                 false
-        ), myProgramsFolder))
+        ))
         projectViews[publicId]!!.project.setDefaultContent()
         projectViews[publicId]!!.project.addFileWithMain(name, fileId)
         selectProject(publicId)
     }
 
     fun addNewProjectWithContent(publicId: String, content: dynamic) {
-        myProgramsFolder.addNewProject(addProject(myProgramsFolder.contentElement, ProjectHeader(
+        myProgramsFolder.createProject(ProjectHeader(
                 content.name,
                 publicId,
                 ProjectType.USER_PROJECT,
                 false
-        ), myProgramsFolder))
+        ))
         projectViews[publicId]!!.project.setContent(content)
         selectProject(publicId)
     }
@@ -170,7 +215,7 @@ class AccordionView(
             if (localStorage.getItem(projectId) == null) {
                 if (projectId !in projectViews.keySet()) {
                     Application.headersProvider.getProjectHeaderById( projectId, { header ->
-                        addProject(publicLinksFolder.contentElement, header, publicLinksFolder)
+                        publicLinksFolder.createProject(header)
                         selectProject(projectId)
                     })
                 } else {
@@ -182,49 +227,6 @@ class AccordionView(
         } else if (projectId != "") {
             selectProject(projectId)
         }
-    }
-
-
-    private fun addProject(folderContentElement: HTMLElement, header: ProjectHeader, parent: FolderView): ProjectView {
-        //        if (header.type == ProjectType.PUBLIC_LINK && projects[header.publicId] != null) {
-        //            return
-        //        } else if (projects[header.publicId] != null) {
-        //            throw("Duplicate project id")
-        //        }
-        var projectHeaderElement = document.createElement("div") as HTMLDivElement
-        var projectContentElement = document.createElement("div") as HTMLDivElement
-
-        folderContentElement.appendChild(projectHeaderElement)
-        folderContentElement.appendChild(projectContentElement)
-
-
-        var projectView = ProjectView(
-                header,
-                projectContentElement,
-                projectHeaderElement,
-                parent,
-                onDelete = {
-                    if (selectedProjectView === projectViews[header.publicId]) {
-                        window.history.replaceState("", "", "index.html")
-                        selectedProjectView = null
-                        selectedFileView = null
-                        loadFirstItem()
-                    }
-                    projectViews.remove(header.publicId)
-                },
-                onHeaderClick = { publicId ->
-                    selectProject(publicId)
-                },
-                onSelected = { projectView ->
-                    if (projectView.project.files.isEmpty()) {
-                        selectedFileView = null
-                    }
-                    onProjectSelected(projectView.project)
-                }
-        )
-        projectViews.set(header.publicId, projectView)
-
-        return projectView
     }
 
     fun selectProject(publicId: String) {

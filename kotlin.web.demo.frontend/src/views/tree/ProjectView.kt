@@ -35,11 +35,11 @@ import kotlin.dom.removeClass
 
 class ProjectView(
         val header: ProjectHeader,
-        val contentElement: HTMLDivElement,
         val headerElement: HTMLDivElement,
+        val contentElement: HTMLDivElement,
         val parent: FolderView,
-        private val onDelete: () -> Unit,
-        private val onHeaderClick: (String) -> Unit,
+        private val onDelete: (ProjectView) -> Unit,
+        private val onHeaderClick: (ProjectView) -> Unit,
         private val onSelected: (ProjectView) -> Unit
 ) {
     val depth = parent.depth + 1
@@ -58,7 +58,7 @@ class ProjectView(
         img.className = "icon"
         headerElement.appendChild(img)
         headerElement.onclick = {
-            onHeaderClick(header.publicId)
+            onHeaderClick(this)
         }
 
         nameSpan = document.createElement("span") as HTMLSpanElement
@@ -268,7 +268,7 @@ class ProjectView(
             parent.removeProject(this)
         headerElement.parentNode!!.removeChild(headerElement)
         contentElement.parentNode!!.removeChild(contentElement)
-        onDelete()
+        onDelete(this)
     }
 
     private fun createFileView(file: File) = FileView(this, contentElement, file)
