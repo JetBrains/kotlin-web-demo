@@ -38,7 +38,6 @@ class ProjectView(
         val headerElement: HTMLDivElement,
         val contentElement: HTMLDivElement,
         val parent: FolderView,
-        private val onDelete: (ProjectView) -> Unit,
         private val onHeaderClick: (ProjectView) -> Unit,
         private val onSelected: (ProjectView) -> Unit
 ) {
@@ -46,7 +45,6 @@ class ProjectView(
     var nameSpan: HTMLSpanElement
     var project: Project = initProject()
     val fileViews = hashMapOf<String, FileView>()
-    var selectedFileView: FileView? = null
 
     init {
         headerElement.id = header.publicId
@@ -117,7 +115,7 @@ class ProjectView(
             deleteButton.title = "Delete this project"
             deleteButton.onclick = { event ->
                 if (window.confirm("Delete project " + header.name + "?")) {
-                    Application.projectProvider.deleteProject(header.publicId, header.type, {delete()})
+                    Application.projectProvider.deleteProject(header.publicId, header.type, {parent.deleteProject(this)})
                 }
                 event.stopPropagation()
             }
@@ -216,7 +214,7 @@ class ProjectView(
                         window.alert("Can't find project origin, maybe it was removed by the user.")
                         project.revertible = false
                         if (!project.contentLoaded) {
-                            delete()
+                            parent.deleteProject(this)
                         }
                     }
                 }
@@ -261,14 +259,6 @@ class ProjectView(
 
     fun selectFirstFile() {
         fileViews[project.files[0].id]!!.fireSelectEvent()
-    }
-
-    fun delete(){
-        if(parent is MyProgramsFolderView)
-            parent.removeProject(this)
-        headerElement.parentNode!!.removeChild(headerElement)
-        contentElement.parentNode!!.removeChild(contentElement)
-        onDelete(this)
     }
 
     private fun createFileView(file: File) = FileView(this, contentElement, file)

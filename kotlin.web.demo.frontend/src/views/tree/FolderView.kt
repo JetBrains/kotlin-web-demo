@@ -82,12 +82,18 @@ open class FolderView(parentNode: HTMLElement,
                 contentElement.append.div {},
                 contentElement.append.div {},
                 this,
-                onProjectDeleted,
                 onProjectHeaderClick,
                 onProjectSelected
         )
         onProjectCreated(projectView)
         return projectView
+    }
+
+    fun deleteProject(projectView: ProjectView){
+        projects.remove(projectView)
+        contentElement.removeChild(projectView.headerElement)
+        contentElement.removeChild(projectView.contentElement)
+        onProjectDeleted(projectView)
     }
 
 
