@@ -137,7 +137,6 @@ class ProjectProvider(
                 success = { data ->
                     try {
                         onNewProjectAdded(name, data.projectId, data.fileId)
-                        console.log("haha")
                     } catch (e: Throwable) {
                         console.log(e)
                     }
