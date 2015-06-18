@@ -268,30 +268,52 @@ class ProjectProvider(
         )
     }
 
-    fun saveProject(project: Project, publicId: String, callback: () -> Unit) {
-        blockContent()
-        ajax(
-                url = generateAjaxUrl("saveProject"),
-                success = {
-                    try {
-                        callback()
-                    } catch (e: Throwable) {
-                        console.log(e)
-                    }
-                },
-                type = HTTPRequestType.POST,
-                timeout = 10000,
-                data = json("project" to JSON.stringify(project), "publicId" to publicId),
-                dataType = DataType.TEXT,
-                error = { jqXHR, textStatus, errorThrown ->
-                    try {
-                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
-                    } catch (e: Throwable) {
-                        console.log(e)
-                    }
-                },
-                complete = ::unBlockContent
-        )
+    fun saveProject(project: Project, callback: () -> Unit) {
+        if(project is UserProject) {
+            blockContent()
+            ajax(
+                    url = generateAjaxUrl("saveProject"),
+                    success = {
+                        try {
+                            callback()
+                        } catch (e: Throwable) {
+                            console.log(e)
+                        }
+                    },
+                    type = HTTPRequestType.POST,
+                    timeout = 10000,
+                    data = json("project" to JSON.stringify(project), "publicId" to project.id),
+                    dataType = DataType.TEXT,
+                    error = { jqXHR, textStatus, errorThrown ->
+                        try {
+                            onFail(textStatus + " : " + errorThrown, ActionStatusMessage.save_program_fail)
+                        } catch (e: Throwable) {
+                            console.log(e)
+                        }
+                    },
+                    complete = ::unBlockContent
+            )
+        } else {
+            if (project.modified) {
+                var fileIDs = arrayListOf<String>()
+                for (file in project.files) {
+                    Application.fileProvider.saveFile(file)
+                    fileIDs.add(file.id)
+                }
+                localStorage.setItem(project.id, JSON.stringify(json(
+                        "name" to project.name,
+                        "files" to fileIDs.toTypedArray(),
+                        "args" to project.args,
+                        "confType" to project.confType,
+                        "originUrl" to project.originUrl,
+                        "type" to project.type,
+                        "publicId" to project.id,
+                        "revertible" to project.revertible
+                )))
+            } else {
+                localStorage.removeItem(project.id)
+            }
+        }
     }
 
     fun saveSolution(solution: Project, completed: Boolean? = null) {

@@ -45,31 +45,7 @@ open class Project(
     }
 
     fun save() {
-        when (type) {
-            ProjectType.USER_PROJECT -> Application.projectProvider.saveProject(this, id, { onModified() })
-            else -> {
-                if (isModified()) {
-                    var fileIDs = arrayListOf<String>()
-                    for (file in files) {
-                        Application.fileProvider.saveFile(file)
-                        fileIDs.add(file.id)
-                    }
-                    localStorage.setItem(id, JSON.stringify(json(
-                            "name" to name,
-                            "files" to fileIDs.toTypedArray(),
-                            "args" to args,
-                            "confType" to confType,
-                            "originUrl" to originUrl,
-                            "type" to type,
-                            "publicId" to id,
-                            "revertible" to revertible
-                    )))
-                    files.forEach { Application.fileProvider.saveFile(it) }
-                } else {
-                    localStorage.removeItem(id)
-                }
-            }
-        }
+        Application.projectProvider.saveProject(this, { onModified() })
     }
 
     fun loadOriginal() {
