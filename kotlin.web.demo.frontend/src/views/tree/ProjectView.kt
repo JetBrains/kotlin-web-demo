@@ -81,7 +81,7 @@ class ProjectView(
                         "File name:",
                         "Add",
                         "Untitled",
-                        { name -> validateNewFileName(name) },
+                        { name -> project.validateNewFileName(name) },
                         { name -> Application.fileProvider.addNewFile(this.project, name) }
                 )
             }
@@ -140,29 +140,6 @@ class ProjectView(
                     revertIcon.parentNode!!.removeChild(revertIcon)
             }
         }
-    }
-
-    fun validateNewFileName(fileName: String): ValidationResult {
-        if (fileName == "") {
-            return ValidationResult(false, "File name can't be empty")
-        }
-        if (fileName.size >= 95) {
-            return ValidationResult(false, "File name is too long")
-        }
-        if (!fileName.matches("^[a-zA-Z0-9,_\\- ]+$")) {
-            return ValidationResult(false, "File name can contain only the following characters:" +
-                    "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>")
-        }
-        val fileNameWithExtension = addKotlinExtension(fileName)
-        for (fileView in fileViews.values()) {
-            if (fileView.file.name == fileNameWithExtension) {
-                return ValidationResult(
-                        false,
-                        "File with this name already exists in the project"
-                )
-            }
-        }
-        return ValidationResult(true)
     }
 
     fun initProject(): Project {

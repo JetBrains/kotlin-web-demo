@@ -24,6 +24,7 @@ import html4k.js.onClickFunction
 import model.File
 import model.FileType
 import model.ProjectType
+import model.UserProject
 import org.w3c.dom.HTMLElement
 import utils.addKotlinExtension
 import utils.removeKotlinExtension
@@ -97,7 +98,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
             classes = setOf("icons")
         }
 
-        if (projectView.project.type == ProjectType.USER_PROJECT) {
+        if (projectView.project is UserProject) {
             if (file.isModifiable) {
                 actionIconsElement.append.div {
                     classes = setOf ("rename", "icon")
@@ -112,7 +113,7 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                                     if (removeKotlinExtension(file.name) == newName) {
                                         ValidationResult(true)
                                     } else {
-                                        projectView.validateNewFileName(newName)
+                                        projectView.project.validateNewFileName(newName)
                                     }
                                 },
                                 callback = { newName: String ->
