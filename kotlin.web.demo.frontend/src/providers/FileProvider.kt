@@ -19,6 +19,7 @@ package providers
 import model.File
 import model.Project
 import model.ProjectType
+import model.UserProject
 import utils.addKotlinExtension
 import utils.blockContent
 import utils.unBlockContent
@@ -118,7 +119,7 @@ class FileProvider(
         }
     }
 
-    fun addNewFile(project: Project, filename: String) {
+    fun addNewFile(project: UserProject, filename: String) {
         blockContent()
         val filenameWithExtension = addKotlinExtension(filename)
         ajax(

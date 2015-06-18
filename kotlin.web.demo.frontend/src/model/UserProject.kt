@@ -18,6 +18,7 @@ package model
 
 import utils.Listenable
 import utils.VarListener
+import utils.addKotlinExtension
 import java.util.*
 
 
@@ -26,11 +27,33 @@ class UserProject(
         id: String,
         name: String,
         parent: Folder,
-        onFileAdded: (File) -> Unit,
         onFileDeleted: (String) -> Unit,
         onContentLoaded: (ArrayList<File>) -> Unit,
-        onContentNotFound: () -> Unit
-) : Project(type, id, name, parent, onFileAdded, onFileDeleted, onContentLoaded, onContentNotFound) {
+        onContentNotFound: () -> Unit,
+        val onFileAdded: (File) -> Unit
+) : Project(type, id, name, parent, onFileDeleted, onContentLoaded, onContentNotFound) {
     val nameListener = VarListener<String>()
     override var name by Listenable(name, nameListener)
+
+    fun addEmptyFile(name: String, publicId: String): File {
+        var file = File(this, name, publicId)
+        file.listenableIsModified.addModifyListener {onModified()}
+        files.add(file)
+        onFileAdded(file)
+        return file
+    }
+
+
+    fun addFileWithMain(name: String, publicId: String): File {
+        var file = File(
+                this,
+                addKotlinExtension(name),
+                publicId,
+                "fun main(args: Array<String>) {\n\n}"
+        )
+        file.listenableIsModified.addModifyListener {onModified()}
+        files.add(file)
+        onFileAdded(file)
+        return file
+    }
 }

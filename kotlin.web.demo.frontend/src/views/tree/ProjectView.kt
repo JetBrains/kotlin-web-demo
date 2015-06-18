@@ -221,7 +221,6 @@ class ProjectView(
                     header.publicId,
                     header.name,
                     parent.content,
-                    onFileAdded,
                     onFileDeleted,
                     onContentLoaded,
                     onContentNotFound
@@ -232,10 +231,10 @@ class ProjectView(
                     header.publicId,
                     header.name,
                     parent.content,
-                    onFileAdded,
                     onFileDeleted,
                     onContentLoaded,
-                    onContentNotFound
+                    onContentNotFound,
+                    onFileAdded
             )
             project.nameListener.addModifyListener { event ->
                 val newName = event.newValue

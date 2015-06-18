@@ -28,7 +28,6 @@ open class Project(
         val id: String,
         name: String,
         val parent: Folder,
-        private val onFileAdded: (File) -> Unit,
         private val onFileDeleted: (String) -> Unit,
         private val onContentLoaded: (ArrayList<File>) -> Unit,
         private val onContentNotFound: () -> Unit
@@ -98,27 +97,6 @@ open class Project(
 
     fun onModified() {
         modified = isModified()
-    }
-
-    fun addEmptyFile(name: String, publicId: String): File {
-        var file = File(this, name, publicId)
-        file.listenableIsModified.addModifyListener {onModified()}
-        files.add(file)
-        onFileAdded(file)
-        return file
-    }
-
-    fun addFileWithMain(name: String, publicId: String): File {
-        var file = File(
-                this,
-                addKotlinExtension(name),
-                publicId,
-                "fun main(args: Array<String>) {\n\n}"
-        )
-        file.listenableIsModified.addModifyListener {onModified()}
-        files.add(file)
-        onFileAdded(file)
-        return file
     }
 
     fun deleteFile (file: File) {

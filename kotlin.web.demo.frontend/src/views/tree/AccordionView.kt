@@ -21,6 +21,7 @@ import jquery.jq
 import model.File
 import model.Project
 import model.ProjectType
+import model.UserProject
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.*
@@ -156,7 +157,7 @@ class AccordionView(
                 false
         ))
         projectViews[publicId]!!.project.setDefaultContent()
-        projectViews[publicId]!!.project.addFileWithMain(name, fileId)
+        (projectViews[publicId]!!.project as UserProject).addFileWithMain(name, fileId)
         selectProject(publicId)
     }
 
