@@ -23,7 +23,7 @@ import utils.addKotlinExtension
 import java.util.ArrayList
 import kotlin.browser.localStorage
 
-class Project(
+open class Project(
         val type: ProjectType,
         val id: String,
         name: String,
@@ -130,7 +130,8 @@ class Project(
         contentLoaded = true
         originUrl = content.originUrl
         args = content.args
-        name = content.name
+        //TODO
+//        name = content.name
         confType = content.confType
         files = content.files
         revertible = if (content.hasOwnProperty("revertible")) content.revertible else true
@@ -165,8 +166,7 @@ class Project(
     private fun isModified() = files.any { it.isModified }
 
     var files = arrayListOf<File>()
-    val nameListener = VarListener<String>()
-    var name by Listenable(name, nameListener)
+    open val name = name
     var contentLoaded = false
     var args = ""
     var confType = "java"

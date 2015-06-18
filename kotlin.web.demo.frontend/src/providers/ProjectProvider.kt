@@ -20,6 +20,7 @@ import application.Application
 import model.File
 import model.Project
 import model.ProjectType
+import model.UserProject
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
@@ -68,7 +69,7 @@ class ProjectProvider(
         }
     }
 
-    fun renameProject(project: Project, newName: String) {
+    fun renameProject(project: UserProject, newName: String) {
         blockContent()
         ajax(
                 url = generateAjaxUrl("renameProject"),

@@ -21,6 +21,7 @@ import jquery.jq
 import model.File
 import model.Project
 import model.ProjectType
+import model.UserProject
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLSpanElement
 import utils.addKotlinExtension
@@ -43,7 +44,7 @@ class ProjectView(
 ) {
     val depth = parent.depth + 1
     var nameSpan: HTMLSpanElement
-    var project: Project = initProject()
+    val project: Project = initProject()
     val fileViews = hashMapOf<String, FileView>()
 
     init {
@@ -70,7 +71,7 @@ class ProjectView(
         actionIconsElement.className = "icons"
         headerElement.appendChild(actionIconsElement)
 
-        if (header.type == ProjectType.USER_PROJECT) {
+        if (project is UserProject) {
             var addFileImg = document.createElement("div") as HTMLDivElement
             addFileImg.className = "new-file icon"
             addFileImg.onclick = { event ->
@@ -165,60 +166,87 @@ class ProjectView(
     }
 
     fun initProject(): Project {
-        val project = Project(
-                header.type,
-                header.publicId,
-                header.name,
-                parent.content,
-                onFileAdded = { file: File ->
-                    var fileView = createFileView(file)
-                    fileViews[file.id] = fileView
-                    if (isSelected()) {
-                        fileView.fireSelectEvent()
-                    }
-                },
-                onFileDeleted = { publicId ->
-                    val fileView = fileViews.get(publicId)!!
-                    if (fileView.isSelected()) {
-                        Application.accordion.selectedFileDeleted()
-                    }
-                    fileViews.remove(publicId)
-                    if (!project.files.isEmpty()) {
-                        selectFirstFile()
-                    }
-                },
-                onContentLoaded = { files ->
-                    contentElement.innerHTML = ""
+        val onFileAdded = { file: File ->
+            var fileView = createFileView(file)
+            fileViews[file.id] = fileView
+            if (isSelected()) {
+                fileView.fireSelectEvent()
+            }
+        }
+        val onFileDeleted = { publicId: String ->
+            val fileView = fileViews.get(publicId)!!
+            if (fileView.isSelected()) {
+                Application.accordion.selectedFileDeleted()
+            }
+            fileViews.remove(publicId)
+            if (!project.files.isEmpty()) {
+                selectFirstFile()
+            }
+        }
+        val onContentLoaded = { files: List<File> ->
+            contentElement.innerHTML = ""
 
-                    nameSpan.innerHTML = project.name
-                    nameSpan.title = nameSpan.innerHTML
+            nameSpan.innerHTML = project.name
+            nameSpan.title = nameSpan.innerHTML
 
-                    for (file in files) {
-                        fileViews[file.id] = createFileView(file)
-                    }
+            for (file in files) {
+                fileViews[file.id] = createFileView(file)
+            }
 
-                    if (!files.isEmpty()) {
-                        val selectedFileView = getFileFromUrl() ?: fileViews[files[0].id]
+            if (!files.isEmpty()) {
+                val selectedFileView = getFileFromUrl() ?: fileViews[files[0].id]
 
-                        if (Application.accordion.selectedProjectView!!.project === project) {
-                            selectedFileView!!.fireSelectEvent()
-                            onSelected(this)
-                        }
-                    } else if (Application.accordion.selectedProjectView!!.project === project) {
-                        onSelected(this)
-                        Application.editor.closeFile()
-                    }
-                },
-                onContentNotFound = {
-                    if (project.type == ProjectType.PUBLIC_LINK) {
-                        window.alert("Can't find project origin, maybe it was removed by the user.")
-                        project.revertible = false
-                        if (!project.contentLoaded) {
-                            parent.deleteProject(this)
-                        }
-                    }
+                if (Application.accordion.selectedProjectView!!.project === project) {
+                    selectedFileView!!.fireSelectEvent()
+                    onSelected(this)
                 }
-        )
+            } else if (Application.accordion.selectedProjectView!!.project === project) {
+                onSelected(this)
+                Application.editor.closeFile()
+            }
+        }
+        val onContentNotFound = {
+            if (project.type == ProjectType.PUBLIC_LINK) {
+                window.alert("Can't find project origin, maybe it was removed by the user.")
+                project.revertible = false
+                if (!project.contentLoaded) {
+                    parent.deleteProject(this)
+                }
+            }
+        }
+
+        val project = if(header.type != ProjectType.USER_PROJECT) {
+            Project(
+                    header.type,
+                    header.publicId,
+                    header.name,
+                    parent.content,
+                    onFileAdded,
+                    onFileDeleted,
+                    onContentLoaded,
+                    onContentNotFound
+            )
+        } else {
+            val project = UserProject(
+                    header.type,
+                    header.publicId,
+                    header.name,
+                    parent.content,
+                    onFileAdded,
+                    onFileDeleted,
+                    onContentLoaded,
+                    onContentNotFound
+            )
+            project.nameListener.addModifyListener { event ->
+                val newName = event.newValue
+                nameSpan.innerHTML = newName
+                nameSpan.title = nameSpan.innerHTML
+                if (isSelected()) {
+                    Application.navBarView.onSelectedProjectRenamed(newName)
+                }
+            }
+            project
+        }
 
         project.modifiedListener.addModifyListener { event ->
             if (event.newValue) {
@@ -228,14 +256,7 @@ class ProjectView(
             }
         }
 
-        project.nameListener.addModifyListener { event ->
-            val newName = event.newValue
-            nameSpan.innerHTML = newName
-            nameSpan.title = nameSpan.innerHTML
-            if (isSelected()) {
-                Application.navBarView.onSelectedProjectRenamed(newName)
-            }
-        }
+
         return project
     }
 
