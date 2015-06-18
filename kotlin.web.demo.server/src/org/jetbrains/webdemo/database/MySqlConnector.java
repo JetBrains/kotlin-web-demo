@@ -154,6 +154,31 @@ public class MySqlConnector {
         }
     }
 
+    public void saveFile(String projectId, ProjectFile file) throws DatabaseOperationException {
+        checkConnection();
+        try (PreparedStatement st = connection.prepareStatement("UPDATE files JOIN projects " +
+                "ON projects.id = files.project_id SET " +
+                "files.content = ? WHERE " +
+                "files.name = ? AND " +
+                "projects.public_id = ?")) {
+            st.setString(1, file.getText());
+            st.setString(2, file.getName());
+            st.setString(3, projectId);
+            int rowsUpdated = st.executeUpdate();
+            if (rowsUpdated != 1) {
+                DatabaseOperationException e = new DatabaseOperationException(rowsUpdated + " files were updated");
+                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                        SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(),
+                        "unknown",
+                        "project_id " + projectId + ", fileId " + file.getPublicId());
+                throw e;
+            }
+        } catch (SQLException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", "Save file");
+            throw new DatabaseOperationException("Unknown exception", e);
+        }
+    }
+
     private String escape(String str) {
         return str.replaceAll(" ", "%20");
     }
@@ -763,6 +788,11 @@ public class MySqlConnector {
         String solutionId = getSolutionId(userInfo, solution.id);
         if (solutionId == null) {
             addProject(userInfo, solution, solution.id, completed);
+        } else {
+            for (ProjectFile file : solution.files) {
+                saveFile(solutionId, file);
+            }
+            saveProject(userInfo, solutionId, solution);
         }
     }
 
