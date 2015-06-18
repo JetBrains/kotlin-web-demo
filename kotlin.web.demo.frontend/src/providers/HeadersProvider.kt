@@ -31,7 +31,10 @@ class HeadersProvider(
         private val onProjectHeaderNotFound: () -> Unit
 ) {
     fun createFolder(content: FolderContent, type: ProjectType): Folder {
-        val projects = content.projects.map { it -> ProjectHeader(it.name, it.publicId, type) }
+        val projects = content.projects.map {
+            val modified = it.modified || localStorage.getItem(it.publicId) != null
+            ProjectHeader(it.name, it.publicId, type, modified)
+        }
         val childFolders = content.childFolders.map {  createFolder(it, type) }
         val folder = Folder(content.name, content.id, projects, childFolders)
         return folder
@@ -41,7 +44,10 @@ class HeadersProvider(
         val publicLinks = if (localStorage.getItem("publicLinks") != null) {
             val parsedArray = JSON.parse<Array<ProjectInfo>>(localStorage.getItem("publicLinks")!!)
             parsedArray
-                    .map { ProjectHeader(it.name, it.publicId, ProjectType.PUBLIC_LINK) }
+                    .map {
+                        val modified = localStorage.getItem(it.publicId) != null
+                        ProjectHeader(it.name, it.publicId, ProjectType.PUBLIC_LINK, modified)
+                    }
                     .filter { it.publicId !in userProjectIds }
         } else {
             emptyList()
@@ -97,7 +103,7 @@ class HeadersProvider(
                 url = generateAjaxUrl(REQUEST_TYPE.LOAD_PROJECT_NAME),
                 success = { name ->
                     try {
-                        callback(ProjectHeader(name, id, ProjectType.PUBLIC_LINK))
+                        callback(ProjectHeader(name, id, ProjectType.PUBLIC_LINK, false))
                         onProjectHeaderLoaded()
                     } catch (e: Throwable) {
                         console.log(e)
@@ -132,7 +138,10 @@ interface FolderContent {
     val childFolders: Array<FolderContent>
 }
 
+native
 interface ProjectInfo {
     val name: String
     val publicId: String
+    val modified: Boolean
 }
+

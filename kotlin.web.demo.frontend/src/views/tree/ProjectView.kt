@@ -26,13 +26,9 @@ import org.w3c.dom.HTMLSpanElement
 import utils.addKotlinExtension
 import utils.getFileIdFromUrl
 import utils.jquery.slideDown
-import views.tree.MyProgramsFolderView
 import views.dialogs.InputDialogView
 import views.dialogs.ValidationResult
-import views.tree.FileView
-import views.tree.FolderView
 import kotlin.browser.document
-import kotlin.browser.localStorage
 import kotlin.browser.window
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
@@ -129,9 +125,7 @@ class ProjectView(
         }
 
         if (header.type != ProjectType.USER_PROJECT) {
-            if (localStorage.getItem(header.publicId) != null) {
-                headerElement.addClass("modified")
-            }
+            if (header.modified) headerElement.addClass("modified")
 
             var revertIcon = document.createElement("div") as HTMLDivElement
             revertIcon.className = "revert icon"
@@ -289,4 +283,4 @@ class ProjectView(
 }
 
 data
-class ProjectHeader(val name: String, val publicId: String, val type: ProjectType)
+class ProjectHeader(val name: String, val publicId: String, val type: ProjectType, val modified: Boolean)

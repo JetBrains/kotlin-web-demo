@@ -107,7 +107,8 @@ class AccordionView(
         myProgramsFolder.addNewProject(addProject(myProgramsFolder.contentElement, ProjectHeader(
                 name,
                 publicId,
-                ProjectType.USER_PROJECT
+                ProjectType.USER_PROJECT,
+                false
         ), myProgramsFolder))
         projectViews[publicId]!!.project.setDefaultContent()
         projectViews[publicId]!!.project.addFileWithMain(name, fileId)
@@ -118,7 +119,8 @@ class AccordionView(
         myProgramsFolder.addNewProject(addProject(myProgramsFolder.contentElement, ProjectHeader(
                 content.name,
                 publicId,
-                ProjectType.USER_PROJECT
+                ProjectType.USER_PROJECT,
+                false
         ), myProgramsFolder))
         projectViews[publicId]!!.project.setContent(content)
         selectProject(publicId)

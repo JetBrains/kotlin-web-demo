@@ -33,8 +33,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MySqlConnector {
     private static final MySqlConnector connector = new MySqlConnector();
@@ -404,6 +403,7 @@ public class MySqlConnector {
                 ObjectNode object = new ObjectNode(JsonNodeFactory.instance);
                 object.put("name", unEscape(rs.getString("name")));
                 object.put("publicId", rs.getString("public_id"));
+                object.put("modified", false);
                 projects.add(object);
             }
 
@@ -509,8 +509,8 @@ public class MySqlConnector {
         try (
                 Connection connection = dataSource.getConnection();
                 PreparedStatement st = connection.prepareStatement("DELETE files.* FROM files JOIN" +
-                " projects ON files.project_id = projects.id JOIN " +
-                " users ON projects.owner_id = users.id WHERE " +
+                        " projects ON files.project_id = projects.id JOIN " +
+                        " users ON projects.owner_id = users.id WHERE " +
                         " users.client_id = ? AND users.provider  = ? AND files.public_id = ?")
         ) {
             st.setString(1, userInfo.getId());
@@ -731,6 +731,38 @@ public class MySqlConnector {
                 return null;
             }
         } catch (Exception e) {
+            throw new DatabaseOperationException("Unknown exception", e);
+        } finally {
+            closeStatementAndResultSet(st, rs);
+        }
+    }
+
+    public Map<String, Boolean> getUserTaskStatuses(UserInfo userInfo) throws DatabaseOperationException {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try (Connection connection = dataSource.getConnection()){
+            Map<String, Boolean> result = new HashMap<>();
+            st = connection.prepareStatement(
+                    "SELECT koan_tasks.public_id, projects.type FROM koan_tasks JOIN " +
+                            "projects ON koan_tasks.id = projects.task_id JOIN " +
+                            "users ON users.id = projects.owner_id WHERE " +
+                            "users.provider = ? AND " +
+                            "users.client_id = ? AND " +
+                            "(projects.type = 'KOANS_TASK' OR " +
+                            "projects.type = 'INCOMPLETE_KOANS_TASK')"
+            );
+            st.setString(1, userInfo.getType());
+            st.setString(2, userInfo.getId());
+            rs = st.executeQuery();
+            while (rs.next()){
+                boolean completed = rs.getString("type").equals("KOANS_TASK");
+                result.put(rs.getString("public_id"), completed);
+            }
+            return result;
+        } catch (SQLException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "Get list of tasks",
+                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
             throw new DatabaseOperationException("Unknown exception", e);
         } finally {
             closeStatementAndResultSet(st, rs);

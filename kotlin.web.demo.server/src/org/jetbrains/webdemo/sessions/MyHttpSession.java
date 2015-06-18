@@ -440,9 +440,9 @@ public class MyHttpSession {
     private void sendExamplesList() {
         try {
             ArrayNode responseBody = new ArrayNode(JsonNodeFactory.instance);
-
+            Map<String, Boolean> taskStatuses = MySqlConnector.getInstance().getUserTaskStatuses(sessionInfo.getUserInfo());
             for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()) {
-                addFolderContent(responseBody, folder);
+                addFolderContent(responseBody, folder, taskStatuses);
             }
 
             ObjectNode myProgramsContent = responseBody.addObject();
@@ -461,7 +461,7 @@ public class MyHttpSession {
     }
 
 
-    private void addFolderContent(ArrayNode arrayNode, ExamplesFolder folder) {
+    private void addFolderContent(ArrayNode arrayNode, ExamplesFolder folder, Map<String, Boolean> taskStatuses) {
         ObjectNode folderContent = arrayNode.addObject();
         folderContent.put("name", folder.getName());
         folderContent.put("id", folder.getId());
@@ -469,12 +469,17 @@ public class MyHttpSession {
         for (Project example : folder.getExamples()) {
             ObjectNode exampleHeader = exampleHeaders.addObject();
             exampleHeader.put("name", example.name);
-            exampleHeader.put("publicId", example.originUrl);
+            exampleHeader.put("publicId", example.id);
+            if (taskStatuses.keySet().contains(example.id)) {
+                exampleHeader.put("modified", true);
+            } else {
+                exampleHeader.put("modified", false);
+            }
         }
         ArrayNode childFolders = folderContent.putArray("childFolders");
 
         for (ExamplesFolder childFolder : folder.getChildFolders()) {
-            addFolderContent(childFolders, childFolder);
+            addFolderContent(childFolders, childFolder, taskStatuses);
         }
     }
 
