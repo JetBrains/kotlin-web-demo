@@ -148,25 +148,25 @@ class AccordionView(
     }
 
     fun addNewProject(name: String, publicId: String, fileId: String) {
-        myProgramsFolder.createProject(ProjectHeader(
+        val projectView = myProgramsFolder.createProject(ProjectHeader(
                 name,
                 publicId,
                 ProjectType.USER_PROJECT,
                 false
         ))
-        projectViews[publicId]!!.project.setDefaultContent()
-        (projectViews[publicId]!!.project as UserProject).addFileWithMain(name, fileId)
+        projectView.project.setDefaultContent()
+        (projectView.project as UserProject).addFileWithMain(name, fileId)
         selectProject(publicId)
     }
 
     fun addNewProjectWithContent(publicId: String, content: dynamic) {
-        myProgramsFolder.createProject(ProjectHeader(
+        val projectView = myProgramsFolder.createProject(ProjectHeader(
                 content.name,
                 publicId,
                 ProjectType.USER_PROJECT,
                 false
         ))
-        projectViews[publicId]!!.project.setContent(content)
+        projectView.project.setContent(content)
         selectProject(publicId)
     }
 
@@ -217,7 +217,7 @@ class AccordionView(
 
         if (isUserProjectInUrl()) {
             if (localStorage.getItem(projectId) == null) {
-                if (projectId !in projectViews.keySet()) {
+                if (projectId !in myProgramsFolder.projects.map { it.project.id }) {
                     Application.headersProvider.getProjectHeaderById( projectId, { header ->
                         publicLinksFolder.createProject(header)
                         selectProject(projectId)
