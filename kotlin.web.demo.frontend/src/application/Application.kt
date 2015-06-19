@@ -146,7 +146,7 @@ object Application {
             onSelectedFileDeleted = {
                 var project = accordion.selectedProjectView!!.project
                 navBarView.onSelectedFileDeleted()
-                setState(userProjectPrefix + project.id, project.name)
+                replaceState(userProjectPrefix + project.id, project.name)
                 editor.closeFile()
             }
     )
@@ -161,7 +161,6 @@ object Application {
                         generatedCodeView.setOutput(data)
                     } else {
                         if (configurationManager.getConfiguration().type == ConfigurationType.JUNIT) {
-                            val projectView = accordion.getProjectViewById(project.id)!!
                             if(project is Task){
                                 val testResults: Array<TestResult> = data.testResults
                                 val completed = testResults.all { it.status.equals("OK") }
@@ -421,15 +420,8 @@ object Application {
         }
 
         window.onpopstate = {
-            var projectId = getProjectIdFromUrl()
-            if (accordion.getProjectViewById(projectId) == null) {
-                accordion.loadFirstItem()
-            } else {
-                if (accordion.selectedProjectView!!.project.id != projectId) {
-                    accordion.selectProject(projectId)
-                }
-                accordion.selectedProjectView!!.selectFileFromUrl()
-            }
+            accordion.loadFirstItem()
+            accordion.selectedProjectView!!.selectFileFromUrl()
         }
 
         IncompleteActionManager.registerAction(

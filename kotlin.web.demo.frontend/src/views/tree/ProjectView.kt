@@ -51,7 +51,7 @@ open class ProjectView(
         }
         fileViews.remove(publicId)
         if (!project.files.isEmpty()) {
-            selectFirstFile()
+            fileViews[project.files[0].id]!!.fireSelectEvent()
         }
     }
 
@@ -66,10 +66,8 @@ open class ProjectView(
         }
 
         if (!files.isEmpty()) {
-            val selectedFileView = getFileFromUrl() ?: fileViews[files[0].id]
-
             if (Application.accordion.selectedProjectView!!.project === project) {
-                selectedFileView!!.fireSelectEvent()
+                selectFileFromUrl()
                 onSelected(this)
             }
         } else if (Application.accordion.selectedProjectView!!.project === project) {
@@ -173,18 +171,19 @@ open class ProjectView(
             project.loadContent(false)
         } else {
             if (!project.files.isEmpty()) {
-                selectFirstFile()
+                selectFileFromUrl()
             }
             onSelected(this)
         }
     }
 
-    fun selectFileFromUrl() = getFileFromUrl()?.fireSelectEvent()
-
-    private fun getFileFromUrl() = fileViews.get(getFileIdFromUrl())
-
-    fun selectFirstFile() {
-        fileViews[project.files[0].id]!!.fireSelectEvent()
+    fun selectFileFromUrl() {
+        val fileFromUrl = fileViews.get(getFileIdFromUrl())
+        if(fileFromUrl != null) {
+            fileFromUrl.fireSelectEvent()
+        } else{
+            fileViews[project.files[0].id]!!.fireSelectEvent()
+        }
     }
 
     protected fun createFileView(file: File): FileView = FileView(this, contentElement, file)

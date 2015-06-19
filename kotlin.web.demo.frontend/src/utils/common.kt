@@ -109,6 +109,15 @@ fun setState(hash: String, title: String) {
     }
 }
 
+fun replaceState(hash: String, title: String) {
+    var unescapedHash = unEscapeString(hash)
+    unescapedHash = if(unescapedHash.startsWith("#")) unescapedHash else "#" + unescapedHash
+    document.title = title + " | Try Kotlin"
+    if (window.location.hash != unescapedHash) {
+        window.history.replaceState("", title, unescapedHash)
+    }
+}
+
 fun clearState() {
     window.history.replaceState("", "", "/index.html")
 }
