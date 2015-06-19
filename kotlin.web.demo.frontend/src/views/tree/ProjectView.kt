@@ -18,10 +18,6 @@ package views.tree
 
 import application.Application
 import jquery.jq
-import model.File
-import model.Project
-import model.ProjectType
-import model.UserProject
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLSpanElement
 import utils.addKotlinExtension
@@ -36,6 +32,7 @@ import kotlin.dom.removeClass
 import html4k.*
 import html4k.js.*
 import html4k.dom.*
+import model.*
 import org.w3c.dom.HTMLElement
 
 open class ProjectView(
@@ -144,15 +141,27 @@ open class ProjectView(
     }
 
     protected open fun initProject(header: ProjectHeader): Project {
-        val project = Project(
-                    header.type,
-                    header.publicId,
-                    header.name,
-                    parent.content,
-                    onFileDeleted,
-                    onContentLoaded,
-                    onContentNotFound
-        )
+        val project =
+                if (header.type == ProjectType.PUBLIC_LINK) {
+                    PublicLink(
+                            header.publicId,
+                            header.name,
+                            parent.content,
+                            onFileDeleted,
+                            onContentLoaded,
+                            onContentNotFound
+                    )
+                } else if (header.type == ProjectType.EXAMPLE) {
+                    Example(
+                            header.publicId,
+                            header.name,
+                            parent.content,
+                            onContentLoaded,
+                            onContentNotFound
+                    )
+                } else {
+                    throw Exception("Bad type")
+                }
         project.modifiedListener.addModifyListener { event ->
             if (event.newValue) {
                 headerElement.addClass("modified")

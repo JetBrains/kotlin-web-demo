@@ -19,11 +19,9 @@ package model
 import application.Application
 import utils.Listenable
 import utils.VarListener
-import utils.addKotlinExtension
 import java.util.ArrayList
-import kotlin.browser.localStorage
 
-open class Project(
+abstract class Project(
         val type: ProjectType,
         val id: String,
         name: String,
