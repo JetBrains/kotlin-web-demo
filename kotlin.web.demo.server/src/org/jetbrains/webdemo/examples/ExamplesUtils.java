@@ -29,9 +29,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Semyon.Atamas on 3/4/2015.
- */
 public class ExamplesUtils {
     public static Example getExample(String url) {
         url = ResponseUtils.unEscapeURL(url);
@@ -39,14 +36,18 @@ public class ExamplesUtils {
         return getExample(path);
     }
 
-    public static Example getUserVersionOfExample(UserInfo userInfo, String url) throws DatabaseOperationException {
+    public static Project getUserVersionOfExample(UserInfo userInfo, String url) throws DatabaseOperationException {
         Example example = getExample(url);
         Project userVersion = MySqlConnector.getInstance().getStoredSolution(userInfo, url);
-        if(userVersion == null) return example;
+        if(userVersion == null){
+            if(example.getPreviousExample() == null || !example.parent.isSequential()) return example;
+            else userVersion = MySqlConnector.getInstance().getStoredSolution(userInfo, example.getPreviousExample().id);
+            if(userVersion == null) return example;
+        }
 
         List<ProjectFile> userFiles = new ArrayList<ProjectFile>();
         for(ProjectFile file : example.files){
-            ProjectFile resultFile = null;
+            ProjectFile resultFile = file;
             for(ProjectFile userFile : userVersion.files){
                 if (userFile.getName().equals(file.getName())){
                     resultFile = new UserFile(file, userFile.getText());
@@ -54,7 +55,7 @@ public class ExamplesUtils {
             }
             userFiles.add(resultFile);
         }
-        return new Example(
+        return new Project(
                 example.id,
                 example.name,
                 example.args,
@@ -62,7 +63,6 @@ public class ExamplesUtils {
                 example.originUrl,
                 example.expectedOutput,
                 userFiles,
-                example.getHiddenFiles(),
                 example.readOnlyFileNames
         );
     }

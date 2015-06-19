@@ -16,8 +16,6 @@
 
 package org.jetbrains.webdemo.examples;
 
-import org.jetbrains.webdemo.Project;
-
 import java.util.Collection;
 import java.util.Map;
 
@@ -30,15 +28,21 @@ public class ExamplesFolder {
     private String name;
     private Map<String, Example> examples;
     private Map<String, ExamplesFolder> childFolders;
+    private Boolean sequential;
 
     public ExamplesFolder(String name,
                           String id,
+                          Boolean sequential,
                           Map<String, Example> examples,
                           Map<String, ExamplesFolder> childFolders) {
         this.name = name;
         this.id = id;
+        this.sequential = sequential;
         this.examples = examples;
         this.childFolders = childFolders;
+        for(Example example : examples.values()){
+            example.parent = this;
+        }
     }
 
     public Collection<ExamplesFolder> getChildFolders() {
@@ -63,5 +67,9 @@ public class ExamplesFolder {
 
     public String getId(){
         return id;
+    }
+
+    public Boolean isSequential() {
+        return sequential;
     }
 }

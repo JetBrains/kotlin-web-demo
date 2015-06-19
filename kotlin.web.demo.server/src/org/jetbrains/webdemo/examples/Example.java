@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ProjectFile;
 
@@ -25,6 +26,10 @@ import java.util.List;
 
 public class Example extends Project{
     private List<ProjectFile> hiddenFiles = new ArrayList<>();
+    @Nullable
+    private Example previousExample;
+    @JsonIgnore
+    public ExamplesFolder parent;
 
     public Example(
             String id,
@@ -35,15 +40,23 @@ public class Example extends Project{
             String expectedOutput,
             List<ProjectFile> files,
             List<ProjectFile> hiddenFiles,
-            List<String> readOnlyFileNames
+            List<String> readOnlyFileNames,
+            @Nullable Example previousExample
     ){
         super(id, name, args, confType, originUrl, expectedOutput, files, readOnlyFileNames);
         this.hiddenFiles = hiddenFiles;
+        this.previousExample = previousExample;
     }
 
     @JsonIgnore
     public List<ProjectFile> getHiddenFiles(){
         return hiddenFiles;
+    }
+
+    @Nullable
+    @JsonIgnore
+    public Example getPreviousExample() {
+        return previousExample;
     }
 
 }

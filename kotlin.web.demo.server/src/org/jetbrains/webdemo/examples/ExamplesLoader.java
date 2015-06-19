@@ -19,6 +19,7 @@ package org.jetbrains.webdemo.examples;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.JsonUtils;
 import org.jetbrains.webdemo.Project;
@@ -51,6 +52,7 @@ public class ExamplesLoader {
             Map<String, ExamplesFolder> childFolders = new LinkedHashMap<>();
             List<ObjectNode> commonFiles = new ArrayList<>();
             commonFiles.addAll(parentCommonFiles);
+            boolean sequential = manifest.has("sequential") ? manifest.get("sequential").asBoolean() : false;
 
             if(manifest.has("files")){
                 for ( JsonNode node: manifest.get("files")) {
@@ -69,15 +71,23 @@ public class ExamplesLoader {
             }
 
             if (manifest.has("examples")) {
+                Example previousExample = null;
                 for (JsonNode node : manifest.get("examples")) {
                     String projectName = node.textValue();
                     String projectPath = path + File.separator + projectName;
-                    examples.put(projectName,
-                            loadProject(projectPath, url, ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES, commonFiles));
+                    Example example = loadProject(
+                            projectPath,
+                            url,
+                            ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES,
+                            commonFiles,
+                            previousExample
+                    );
+                    previousExample = example;
+                    examples.put(projectName, example);
                 }
             }
 
-            return new ExamplesFolder(name, url, examples, childFolders);
+            return new ExamplesFolder(name, url, sequential, examples, childFolders);
         } catch (IOException e) {
             System.err.println("Can't load folder: " + e.toString());
             return null;
@@ -85,7 +95,12 @@ public class ExamplesLoader {
     }
 
     private static Example loadProject(
-            String path, String parentUrl, boolean loadTestVersion, List<ObjectNode> commonFilesManifests) throws IOException {
+            String path,
+            String parentUrl,
+            boolean loadTestVersion,
+            List<ObjectNode> commonFilesManifests,
+            @Nullable Example previousExample
+    ) throws IOException {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
@@ -136,7 +151,18 @@ public class ExamplesLoader {
                 }
             }
 
-            return new Example(id, name, args, runConfiguration, id, expectedOutput, files, hiddenFiles, readOnlyFileNames);
+            return new Example(
+                    id,
+                    name,
+                    args,
+                    runConfiguration,
+                    id,
+                    expectedOutput,
+                    files,
+                    hiddenFiles,
+                    readOnlyFileNames,
+                    previousExample
+            );
         } catch (IOException e) {
             System.err.println("Can't load project: " + e.toString());
             return null;
