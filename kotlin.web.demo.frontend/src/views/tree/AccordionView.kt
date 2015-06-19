@@ -173,7 +173,12 @@ class AccordionView(
     }
 
     fun onBeforeUnload() {
-        var publicLinks = publicLinksFolder.projects.map { it.header }
+        var publicLinks = publicLinksFolder.projects.map {
+            json(
+                    "name" to it.project.name,
+                    "publicId" to it.project.id
+            )
+        }
         localStorage.setItem("publicLinks", JSON.stringify(publicLinks.toTypedArray()))
     }
 

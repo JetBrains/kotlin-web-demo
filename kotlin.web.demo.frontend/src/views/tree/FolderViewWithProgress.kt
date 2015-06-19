@@ -17,7 +17,9 @@
 package views.tree
 
 import application.Application
+import model.Folder
 import model.Project
+import model.Task
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
@@ -29,7 +31,7 @@ import kotlin.dom.addClass
 
 
 class FolderViewWithProgress(parentNode: HTMLElement,
-                             content: dynamic,
+                             content: Folder,
                              parent: FolderView?,
                              hasProgressBar: Boolean = false,
                              onProjectDeleted: (ProjectView) -> Unit,
@@ -41,20 +43,6 @@ class FolderViewWithProgress(parentNode: HTMLElement,
     val progressBar = if (hasProgressBar) document.createElement("div") as HTMLDivElement else null
     val counter = document.createElement("div") as HTMLDivElement
 
-    var completedProjects: Set<String>
-        get() {
-            val storedArray = JSON.parse<Array<String>>(localStorage.get(id) ?: "[]")
-            for (name in storedArray)
-                Application.accordion.getProjectViewById(name)!!.headerElement.addClass("completed")
-            return storedArray.toSet()
-        }
-        set(value) {
-            localStorage.set(id, JSON.stringify(value.toTypedArray()))
-            updateProgress()
-            if (parent is FolderViewWithProgress)
-                parent.updateProgress()
-        }
-
     init {
         contentElement.addClass("progress-folder-content")
         if (progressBar != null) {
@@ -64,17 +52,6 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         headerElement.appendChild(counter)
         counter.className = "counter"
         updateProgress()
-    }
-
-    public fun processRunResult(project: Project, completed: Boolean) {
-        val publicId = project.id
-        val projectView = projects.first { it.project == project }
-        if (completed) {
-            completedProjects = HashSet(completedProjects + (publicId))
-            projectView.headerElement.addClass("completed")
-            dialogCloseFun?.invoke()
-            openDialog(projectView)
-        }
     }
 
     private var dialogCloseFun: (() -> Unit)? = null;
@@ -122,36 +99,54 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         return projects[ind + 1].project
     }
 
-    override protected fun initializeChildFolders(): List<FolderView> = content.childFolders.mapTo(childFolders) {
-        FolderViewWithProgress(contentElement, it, this, false, onProjectDeleted, onProjectHeaderClick, onProjectSelected, onProjectCreated)
+    override fun createProject(header: ProjectHeader): ProjectView {
+        if (header !is TaskHeader) throw Exception("Wrong header type")
+        val projectView = TaskView(
+                header,
+                this,
+                onProjectHeaderClick,
+                onProjectSelected,
+                { task ->
+                    updateProgress()
+                    (parent as FolderViewWithProgress).updateProgress()
+                    dialogCloseFun?.invoke()
+                    openDialog(task)
+                }
+        )
+        onProjectCreated(projectView)
+        return projectView
     }
 
+    override fun initializeChildFolders() = content.childFolders.mapTo(childFolders, {
+        FolderViewWithProgress(contentElement, it, this, false, onProjectDeleted, onProjectHeaderClick, onProjectSelected, onProjectCreated)
+    })
+
     private fun getNumberOfCompletedProjects(): Int {
-        return childFolders.fold(completedProjects.size(), { numberOfCompletedProjects, folder ->
+        return childFolders.fold(projects.filter { (it.project as Task).completed }.size()) { numberOfCompletedProjects, folder ->
             if (folder is FolderViewWithProgress)
                 numberOfCompletedProjects + folder.getNumberOfCompletedProjects()
             else
                 numberOfCompletedProjects
-        })
+        }
     }
 
 
     private fun getNumberOfProjects(): Int {
-        return childFolders.fold(projects.size(), { numberOfProjects, folder ->
+        return childFolders.fold(projects.size()) { numberOfProjects, folder ->
             if (folder is FolderViewWithProgress)
                 numberOfProjects + folder.getNumberOfProjects()
             else
                 numberOfProjects
-        })
+        }
     }
 
     private fun updateProgress() {
         val numberOfCompletedProjects = getNumberOfCompletedProjects()
         val totalNumberOfProjects = getNumberOfProjects()
         counter.textContent = getNumberOfCompletedProjects().toString() + "/" + getNumberOfProjects()
-        if (progressBar != null) {
+        progressBar?.let{
             val width = (numberOfCompletedProjects.toFloat() / totalNumberOfProjects * 100.0).toString() + "%"
-            progressBar.style.setProperty("width", width, "")
+            it.style.setProperty("width", width, "")
         }
     }
 

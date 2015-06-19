@@ -39,7 +39,7 @@ import html4k.dom.*
 import org.w3c.dom.HTMLElement
 
 open class ProjectView(
-        val header: ProjectHeader,
+        header: ProjectHeader,
         val parent: FolderView,
         private val onHeaderClick: (ProjectView) -> Unit,
         private val onSelected: (ProjectView) -> Unit
@@ -89,7 +89,7 @@ open class ProjectView(
     }
 
     val depth = parent.depth + 1
-    val project: Project = initProject()
+    val project: Project = initProject(header)
     val fileViews = hashMapOf<String, FileView>()
     val headerElement = parent.contentElement.append.div {
         id = header.publicId
@@ -145,7 +145,7 @@ open class ProjectView(
         }
     }
 
-    protected open fun initProject(): Project {
+    protected open fun initProject(header: ProjectHeader): Project {
         val project = Project(
                     header.type,
                     header.publicId,
@@ -199,5 +199,5 @@ open class ProjectView(
 
 }
 
-data
+open
 class ProjectHeader(val name: String, val publicId: String, val type: ProjectType, val modified: Boolean)

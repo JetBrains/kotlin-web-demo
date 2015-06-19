@@ -20,6 +20,7 @@ import application.elements.Elements
 import jquery.jq
 import model.File
 import model.ProjectType
+import model.Task
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
@@ -152,13 +153,13 @@ object Application {
                     } else {
                         if (configurationManager.getConfiguration().type == ConfigurationType.JUNIT) {
                             val projectView = accordion.getProjectViewById(project.id)!!
-                            if(projectView.parent is FolderViewWithProgress){
+                            if(project is Task){
                                 val testResults: Array<TestResult> = data.testResults
                                 val completed = testResults.all { it.status.equals("OK") }
                                 if(completed) {
                                     projectProvider.saveSolution(project, completed)
+                                    project.completed = true
                                 }
-                                projectView.parent.processRunResult(project, completed);
                             }
                             junitView.setOutput(data)
                         } else {

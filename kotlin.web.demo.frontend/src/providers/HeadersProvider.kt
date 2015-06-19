@@ -22,6 +22,7 @@ import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
 import views.tree.ProjectHeader
+import views.tree.TaskHeader
 import kotlin.browser.localStorage
 
 class HeadersProvider(
@@ -33,7 +34,11 @@ class HeadersProvider(
     fun createFolder(content: FolderContent, type: ProjectType): Folder {
         val projects = content.projects.map {
             val modified = it.modified || localStorage.getItem(it.publicId) != null
-            ProjectHeader(it.name, it.publicId, type, modified)
+            if(type == ProjectType.TASK){
+                TaskHeader(it.name, it.publicId, type, modified, false)
+            } else {
+                ProjectHeader(it.name, it.publicId, type, modified)
+            }
         }
         val childFolders = content.childFolders.map {  createFolder(it, type) }
         val folder = Folder(content.name, content.id, projects, childFolders)

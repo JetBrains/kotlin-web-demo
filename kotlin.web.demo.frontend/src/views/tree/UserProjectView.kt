@@ -76,9 +76,8 @@ public class UserProjectView(
         }
     }
 
-    override fun initProject(): Project {
+    override fun initProject(header: ProjectHeader): Project {
         val project = UserProject(
-                header.type,
                 header.publicId,
                 header.name,
                 parent.content,

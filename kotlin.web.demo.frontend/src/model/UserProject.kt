@@ -24,7 +24,6 @@ import java.util.*
 
 
 class UserProject(
-        type: ProjectType,
         id: String,
         name: String,
         parent: Folder,
@@ -32,7 +31,7 @@ class UserProject(
         onContentLoaded: (ArrayList<File>) -> Unit,
         onContentNotFound: () -> Unit,
         val onFileAdded: (File) -> Unit
-) : Project(type, id, name, parent, onFileDeleted, onContentLoaded, onContentNotFound) {
+) : Project(ProjectType.USER_PROJECT, id, name, parent, onFileDeleted, onContentLoaded, onContentNotFound) {
     val nameListener = VarListener<String>()
     override var name by Listenable(name, nameListener)
 
