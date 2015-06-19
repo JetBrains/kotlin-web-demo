@@ -471,6 +471,7 @@ public class MyHttpSession {
             exampleHeader.put("name", example.name);
             exampleHeader.put("publicId", example.id);
             if (taskStatuses.keySet().contains(example.id)) {
+                exampleHeader.put("completed", taskStatuses.get(example.id));
                 exampleHeader.put("modified", true);
             } else {
                 exampleHeader.put("modified", false);

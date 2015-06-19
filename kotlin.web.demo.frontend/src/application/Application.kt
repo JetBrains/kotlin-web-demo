@@ -70,6 +70,15 @@ object Application {
             )
     )
 
+    var completedProjects: Set<String>
+        get() {
+            val storedArray = JSON.parse<Array<String>>(localStorage.get("completedProjects") ?: "[]")
+            return storedArray.toSet()
+        }
+        set(value) {
+            localStorage.set("completedProjects", JSON.stringify(value.toTypedArray()))
+        }
+
     val accordion: AccordionView = AccordionView(
             document.getElementById("examples-list") as HTMLDivElement,
             onProjectSelected = { project ->
@@ -159,6 +168,7 @@ object Application {
                                 if(completed) {
                                     projectProvider.saveSolution(project, completed)
                                     project.completed = true
+                                    completedProjects = (completedProjects + project.id).toSet();
                                 }
                             }
                             junitView.setOutput(data)

@@ -34,8 +34,10 @@ class HeadersProvider(
     fun createFolder(content: FolderContent, type: ProjectType): Folder {
         val projects = content.projects.map {
             val modified = it.modified || localStorage.getItem(it.publicId) != null
+            val completedProjects = JSON.parse<Array<String>>(localStorage["completedProjects"] ?: "[]")
+            val completed = (it.completed ?: false) || (it.publicId in completedProjects)
             if(type == ProjectType.TASK){
-                TaskHeader(it.name, it.publicId, type, modified, false)
+                TaskHeader(it.name, it.publicId, type, modified, completed)
             } else {
                 ProjectHeader(it.name, it.publicId, type, modified)
             }
@@ -148,5 +150,6 @@ interface ProjectInfo {
     val name: String
     val publicId: String
     val modified: Boolean
+    val completed: Boolean?
 }
 
