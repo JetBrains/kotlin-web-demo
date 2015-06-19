@@ -33,81 +33,84 @@ import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
+import html4k.*
+import html4k.js.*
+import html4k.dom.*
+import org.w3c.dom.HTMLElement
 
-class ProjectView(
+open class ProjectView(
         val header: ProjectHeader,
-        val headerElement: HTMLDivElement,
-        val contentElement: HTMLDivElement,
         val parent: FolderView,
         private val onHeaderClick: (ProjectView) -> Unit,
         private val onSelected: (ProjectView) -> Unit
 ) {
-    val depth = parent.depth + 1
-    var nameSpan: HTMLSpanElement
-    val project: Project = initProject()
-    val fileViews = hashMapOf<String, FileView>()
+    protected val onFileDeleted: (String) -> Unit = { publicId: String ->
+        val fileView = fileViews.get(publicId)!!
+        if (fileView.isSelected()) {
+            Application.accordion.selectedFileDeleted()
+        }
+        fileViews.remove(publicId)
+        if (!project.files.isEmpty()) {
+            selectFirstFile()
+        }
+    }
 
-    init {
-        headerElement.id = header.publicId
+    protected val onContentLoaded: (List<File>)-> Unit = { files: List<File> ->
+        contentElement.innerHTML = ""
 
-        jq(contentElement).slideUp()
-        headerElement.className = "examples-project-name"
-        headerElement.setAttribute("depth", depth.toString())
-        var img = document.createElement("div")
-        img.className = "icon"
-        headerElement.appendChild(img)
-        headerElement.onclick = {
-            onHeaderClick(this)
+        nameSpan.innerHTML = project.name
+        nameSpan.title = nameSpan.innerHTML
+
+        for (file in files) {
+            fileViews[file.id] = createFileView(file)
         }
 
-        nameSpan = document.createElement("span") as HTMLSpanElement
-        nameSpan.className = "file-name-span"
-        nameSpan.style.cursor = "pointer"
-        nameSpan.innerHTML = header.name
-        nameSpan.title = nameSpan.innerHTML
-        headerElement.appendChild(nameSpan)
+        if (!files.isEmpty()) {
+            val selectedFileView = getFileFromUrl() ?: fileViews[files[0].id]
 
-        var actionIconsElement = document.createElement("div")
-        actionIconsElement.className = "icons"
-        headerElement.appendChild(actionIconsElement)
-
-        if (project is UserProject) {
-            var addFileImg = document.createElement("div") as HTMLDivElement
-            addFileImg.className = "new-file icon"
-            addFileImg.onclick = { event ->
-                event.stopPropagation()
-                InputDialogView.open(
-                        "Add new file",
-                        "File name:",
-                        "Add",
-                        "Untitled",
-                        { name -> project.validateNewFileName(name) },
-                        { name -> Application.fileProvider.addNewFile(this.project, name) }
-                )
+            if (Application.accordion.selectedProjectView!!.project === project) {
+                selectedFileView!!.fireSelectEvent()
+                onSelected(this)
             }
-            actionIconsElement.appendChild(addFileImg)
+        } else if (Application.accordion.selectedProjectView!!.project === project) {
+            onSelected(this)
+            Application.editor.closeFile()
+        }
+    }
 
-            var renameImg = document.createElement("div") as HTMLDivElement
-            renameImg.className = "rename icon"
-            renameImg.title = "Rename this project"
-            renameImg.onclick = { event ->
-                event.stopPropagation()
-                InputDialogView.open(
-                        "Rename project",
-                        "Project name:",
-                        "Rename",
-                        project.name,
-                        { newName ->
-                            if (project.name == newName) {
-                                ValidationResult(valid = true)
-                            } else {
-                                Application.accordion.validateNewProjectName(newName)
-                            }
-                        },
-                        { newName -> Application.projectProvider.renameProject(project, newName) }
-                )
+    protected val onContentNotFound: ()-> Unit = {
+        if (project.type == ProjectType.PUBLIC_LINK) {
+            window.alert("Can't find project origin, maybe it was removed by the user.")
+            project.revertible = false
+            if (!project.contentLoaded) {
+                parent.deleteProject(this)
             }
-            actionIconsElement.appendChild(renameImg)
+        }
+    }
+
+    val depth = parent.depth + 1
+    val project: Project = initProject()
+    val fileViews = hashMapOf<String, FileView>()
+    val headerElement = parent.contentElement.append.div {
+        id = header.publicId
+        classes = setOf("examples-project-name")
+        attributes.set("depth", depth.toString())
+        div("icon")
+    }
+    val contentElement = parent.contentElement.append.div()
+    val nameSpan = headerElement.append.span {
+        +header.name
+        title = header.name
+        classes = setOf("file-name-span")
+    }
+
+    val actionIconsElement = headerElement.append.div("icons")
+
+
+    init {
+        jq(contentElement).slideUp()
+        headerElement.onclick = {
+            onHeaderClick(this)
         }
 
         if (header.type == ProjectType.USER_PROJECT || header.type == ProjectType.PUBLIC_LINK) {
@@ -142,58 +145,8 @@ class ProjectView(
         }
     }
 
-    fun initProject(): Project {
-        val onFileAdded = { file: File ->
-            var fileView = createFileView(file)
-            fileViews[file.id] = fileView
-            if (isSelected()) {
-                fileView.fireSelectEvent()
-            }
-        }
-        val onFileDeleted = { publicId: String ->
-            val fileView = fileViews.get(publicId)!!
-            if (fileView.isSelected()) {
-                Application.accordion.selectedFileDeleted()
-            }
-            fileViews.remove(publicId)
-            if (!project.files.isEmpty()) {
-                selectFirstFile()
-            }
-        }
-        val onContentLoaded = { files: List<File> ->
-            contentElement.innerHTML = ""
-
-            nameSpan.innerHTML = project.name
-            nameSpan.title = nameSpan.innerHTML
-
-            for (file in files) {
-                fileViews[file.id] = createFileView(file)
-            }
-
-            if (!files.isEmpty()) {
-                val selectedFileView = getFileFromUrl() ?: fileViews[files[0].id]
-
-                if (Application.accordion.selectedProjectView!!.project === project) {
-                    selectedFileView!!.fireSelectEvent()
-                    onSelected(this)
-                }
-            } else if (Application.accordion.selectedProjectView!!.project === project) {
-                onSelected(this)
-                Application.editor.closeFile()
-            }
-        }
-        val onContentNotFound = {
-            if (project.type == ProjectType.PUBLIC_LINK) {
-                window.alert("Can't find project origin, maybe it was removed by the user.")
-                project.revertible = false
-                if (!project.contentLoaded) {
-                    parent.deleteProject(this)
-                }
-            }
-        }
-
-        val project = if(header.type != ProjectType.USER_PROJECT) {
-            Project(
+    protected open fun initProject(): Project {
+        val project = Project(
                     header.type,
                     header.publicId,
                     header.name,
@@ -201,29 +154,7 @@ class ProjectView(
                     onFileDeleted,
                     onContentLoaded,
                     onContentNotFound
-            )
-        } else {
-            val project = UserProject(
-                    header.type,
-                    header.publicId,
-                    header.name,
-                    parent.content,
-                    onFileDeleted,
-                    onContentLoaded,
-                    onContentNotFound,
-                    onFileAdded
-            )
-            project.nameListener.addModifyListener { event ->
-                val newName = event.newValue
-                nameSpan.innerHTML = newName
-                nameSpan.title = nameSpan.innerHTML
-                if (isSelected()) {
-                    Application.navBarView.onSelectedProjectRenamed(newName)
-                }
-            }
-            project
-        }
-
+        )
         project.modifiedListener.addModifyListener { event ->
             if (event.newValue) {
                 headerElement.addClass("modified")
@@ -231,8 +162,6 @@ class ProjectView(
                 headerElement.removeClass("modified")
             }
         }
-
-
         return project
     }
 
@@ -258,15 +187,16 @@ class ProjectView(
         fileViews[project.files[0].id]!!.fireSelectEvent()
     }
 
-    private fun createFileView(file: File) = FileView(this, contentElement, file)
+    protected fun createFileView(file: File): FileView = FileView(this, contentElement, file)
 
-    private fun isSelected(): Boolean {
-        return Application.accordion.selectedProjectView!!.project === project
+    protected  fun isSelected(): Boolean {
+        return Application.accordion.selectedProjectView === this
     }
 
     fun getFileViewByName(name: String) = fileViews.values().firstOrNull {
         it.file.name == name
     }
+
 }
 
 data

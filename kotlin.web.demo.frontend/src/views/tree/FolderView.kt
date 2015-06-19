@@ -78,8 +78,6 @@ open class FolderView(parentNode: HTMLElement,
     public open fun createProject(header: ProjectHeader): ProjectView{
         val projectView = ProjectView(
                 header,
-                contentElement.append.div {},
-                contentElement.append.div {},
                 this,
                 onProjectHeaderClick,
                 onProjectSelected

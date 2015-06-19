@@ -71,6 +71,17 @@ class MyProgramsFolderView(parentNode: HTMLElement,
         }
     }
 
+    override fun createProject(header: ProjectHeader): ProjectView{
+        val projectView = UserProjectView(
+                header,
+                this,
+                onProjectHeaderClick,
+                onProjectSelected
+        )
+        onProjectCreated(projectView)
+        return projectView
+    }
+
     fun validateNewProjectName(name: String): ValidationResult {
         if (name == "")
             return ValidationResult(false, "Project name can't be empty")
