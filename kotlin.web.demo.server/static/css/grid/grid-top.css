@@ -18,7 +18,7 @@
     height: 554px;
 }
 
-#grid-nav{
+#grid-nav {
     overflow: hidden;
     white-space: nowrap;
     background: #d7d7d7;
@@ -28,7 +28,7 @@
     border-top-left-radius: 4px;
 }
 
-.grid-nav-item{
+.grid-nav-item {
     cursor: default;
     display: inline-block;
     position: relative;
@@ -38,7 +38,7 @@
     margin-left: 8px;
 }
 
-.grid-nav-item:first-child{
+.grid-nav-item:first-child {
     margin-left: 0;
     padding-left: 10px;
 }
@@ -71,20 +71,20 @@
     border-left: 7px solid #a8a8a8;
 }
 
-.grid-nav-item:nth-last-child(2):before{
+.grid-nav-item:nth-last-child(2):before {
     background: none;
 }
 
-.grid-nav-item:last-child{
+.grid-nav-item:last-child {
     background: none;
     color: black;
 }
 
-.grid-nav-item:last-child:before{
+.grid-nav-item:last-child:before {
     display: none;
 }
 
-.grid-nav-item:last-child:after{
+.grid-nav-item:last-child:after {
     display: none;
 }
 
@@ -113,10 +113,11 @@
 }
 
 .CodeMirror-activeline-background {
-    background: #ffffd7; !important;
+    background: #ffffd7;
+!important;
 }
 
-#editordiv{
+#editordiv {
     position: relative;
     box-sizing: border-box;
     border-top: 1px solid #969696;
@@ -126,15 +127,15 @@
     height: 100%;
 }
 
-#editordiv .CodeMirror{
+#editordiv .CodeMirror {
     height: 100%;
 }
 
-#editordiv .CodeMirror-lines{
+#editordiv .CodeMirror-lines {
     padding: 0;
 }
 
-#editordiv span.CodeMirror-matchingbracket{
+#editordiv span.CodeMirror-matchingbracket {
     color: inherit;
     background-color: #99ccff;
 }
@@ -168,7 +169,7 @@
         background-size: 250px 900px;
     }
 
-    .WARNINGgutter{
+    .WARNINGgutter {
         background-image: url("/static/images/icons_all_sprite@2x.png");
         background-size: 250px 900px;
     }
@@ -244,7 +245,7 @@
     font-size: 14px;
 }
 
-.next-task-dialog .ok.icon{
+.next-task-dialog .ok.icon {
     display: inline-block;
     position: relative;
     width: 16px;
@@ -253,7 +254,7 @@
     background: url("/static/images/icons_all_sprite.png") -100px -650px;
 }
 
-.next-task-dialog .text{
+.next-task-dialog .text {
     cursor: default;
     display: inline-block;
     font-size: 14px;
@@ -261,7 +262,7 @@
     padding-right: 20px;
 }
 
-.next-task-dialog .next-task.button{
+.next-task-dialog .next-task.button {
     cursor: pointer;
     display: inline-block;
     background-color: #35b056;
@@ -273,7 +274,7 @@
     outline: none;
 }
 
-.next-task-dialog .close.icon{
+.next-task-dialog .close.icon {
     position: relative;
     float: right;
     width: 16px;
@@ -281,3 +282,66 @@
     top: 6px;
     background: url("/static/images/icons_all_sprite.png") -100px -550px;
 }
+
+.taskHelp {
+    background-color: white;
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-family: 'Open Sans';
+    border-bottom: 1px solid #969696;
+}
+
+.taskHelp {
+    font-size: 14px;
+}
+
+.taskHelp ul {
+    line-height: 24px;
+}
+
+.taskHelp ul {
+    margin-bottom: 15px;
+    margin-left: 30px;
+}
+
+.taskHelp h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.taskHelp p {
+    margin-bottom: 10px;
+}
+
+.taskHelp code{
+    font-family: "Consolas", monospace;
+}
+
+.taskHelp p > code {
+    background-color: #efefef;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.taskHelp pre code {
+    background-color: #f7f7f7;
+    margin-bottom: 10px;
+    padding: 5px 25px 5px 15px;
+    display: inline-block;
+    margin-right: 21px;
+}
+
+.taskWindow {
+    border-top: 1px solid #0000FF;
+    border-bottom: 1px solid #0000FF;
+}
+
+.taskWindow-start {
+    border-left: 1px solid #0000FF;
+}
+
+.taskWindow-end {
+    border-right: 1px solid #0000FF;
+}
+

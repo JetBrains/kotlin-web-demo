@@ -16,6 +16,7 @@
 
 package utils.codemirror
 
+import org.w3c.dom.HTMLCollection
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
@@ -29,6 +30,7 @@ class CodeMirror() {
         fun fromTextArea(textArea: HTMLTextAreaElement, json: Json): utils.codemirror.CodeMirror
         fun registerHelper(type: String, name: String, value: Any)
         fun on(obj: Any, action: String, callback: () -> Unit)
+        fun colorize(elements: HTMLCollection)
     }
     class Doc(text: String, mode: String = "", firstLineNumber: Int = 1){
         fun markText(start: Position, end: Position, json: Json): Any
@@ -59,6 +61,7 @@ class CodeMirror() {
     fun operation(function: () -> Unit)
     fun swapDoc(document: Doc)
     fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit)
+    fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json)
 }
 
 data class Position(val line: Int, val ch: Int)

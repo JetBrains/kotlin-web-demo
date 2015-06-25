@@ -23,6 +23,8 @@
           <element id="library" level="project" name="kotlin-plugin" />
           <element id="library" level="project" name="junit" />
           <element id="library" level="project" name="jwt" />
+          <element id="library" level="project" name="parboiled-core-1.1.7" />
+          <element id="library" level="project" name="pegdown" />
         </element>
       </element>
       <element id="directory" name="static">

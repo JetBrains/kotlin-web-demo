@@ -18,12 +18,18 @@ package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.collect.Lists;
+import com.intellij.openapi.extensions.Extensions;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.JsonUtils;
-import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ProjectFile;
+import org.pegdown.LinkRenderer;
+import org.pegdown.PegDownProcessor;
+import org.pegdown.ToHtmlSerializer;
+import org.pegdown.ast.CodeNode;
+import org.pegdown.ast.VerbatimNode;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -54,8 +60,8 @@ public class ExamplesLoader {
             commonFiles.addAll(parentCommonFiles);
             boolean sequential = manifest.has("sequential") ? manifest.get("sequential").asBoolean() : false;
 
-            if(manifest.has("files")){
-                for ( JsonNode node: manifest.get("files")) {
+            if (manifest.has("files")) {
+                for (JsonNode node : manifest.get("files")) {
                     ObjectNode fileManifest = (ObjectNode) node;
                     fileManifest.put("path", path + File.separator + fileManifest.get("filename").asText());
                     commonFiles.add(fileManifest);
@@ -107,7 +113,7 @@ public class ExamplesLoader {
 
             String name = new File(path).getName();
             String id = (parentUrl + name).replaceAll(" ", "%20");
-            String args = manifest.get("args").asText();
+            String args = manifest.has("args") ? manifest.get("args").asText() : "";
             String runConfiguration = manifest.get("confType").asText();
             String expectedOutput;
             List<String> readOnlyFileNames = new ArrayList<>();
@@ -121,9 +127,20 @@ public class ExamplesLoader {
             } else {
                 expectedOutput = null;
             }
+            String help = null;
+            File helpFile = new File(path + File.separator + "task.md");
+            if (helpFile.exists()) {
+                PegDownProcessor processor = new PegDownProcessor(org.pegdown.Extensions.FENCED_CODE_BLOCKS);
+                String helpInMarkdown = new String(Files.readAllBytes(helpFile.toPath()));
+                help = new GFMNodeSerializer().toHtml(processor.parseMarkdown(helpInMarkdown.toCharArray()));
+            }
 
+            List<TaskWindow> taskWindows = null;
+            if (manifest.has("taskWindows")) {
+                taskWindows = JsonUtils.getObjectMapper().readValue(manifest.get("taskWindows").toString(), TypeFactory.defaultInstance().constructCollectionType(List.class, TaskWindow.class));
+            }
 
-            List<JsonNode> fileManifests = Lists.newArrayList(manifest.get("files"));
+            List<JsonNode> fileManifests = manifest.has("files") ? Lists.newArrayList(manifest.get("files")) : new ArrayList<JsonNode>();
             fileManifests.addAll(commonFilesManifests);
             for (JsonNode fileDescriptor : fileManifests) {
 
@@ -150,6 +167,7 @@ public class ExamplesLoader {
                     files.add(file);
                 }
             }
+            loadDefaultFiles(path, id, files, loadTestVersion);
 
             return new Example(
                     id,
@@ -161,20 +179,54 @@ public class ExamplesLoader {
                     files,
                     hiddenFiles,
                     readOnlyFileNames,
-                    previousExample
-            );
+                    taskWindows,
+                    previousExample,
+                    help);
         } catch (IOException e) {
             System.err.println("Can't load project: " + e.toString());
             return null;
         }
     }
 
+    private static void loadDefaultFiles(
+            String folderPath, String projectId, List<ProjectFile> files, boolean loadTestVersion
+    ) throws IOException {
+        File solutionFile = new File(folderPath + File.separator + "Solution.kt");
+        File testFile = new File(folderPath + File.separator + "Test.kt");
+        File taskFile = new File(folderPath + File.separator + "Task.kt");
+
+        if (testFile.exists() && !isAlreadyLoaded(files, testFile.getName())) {
+            String testText = new String(Files.readAllBytes(testFile.toPath())).replaceAll("\r\n", "\n");
+            files.add(0, new TestFile(testText, projectId + "/" + testFile.getName()));
+        }
+
+        if (loadTestVersion) {
+            if (solutionFile.exists() && !isAlreadyLoaded(files, solutionFile.getName())) {
+                String solutionText = new String(Files.readAllBytes(solutionFile.toPath())).replaceAll("\r\n", "\n");
+                files.add(0, new SolutionFile(solutionText, projectId + "/" + solutionFile.getName()));
+            }
+        } else {
+            if (taskFile.exists() && !isAlreadyLoaded(files, taskFile.getName())) {
+                String taskText = new String(Files.readAllBytes(taskFile.toPath())).replaceAll("\r\n", "\n");
+                files.add(0, new TaskFile(taskText, projectId + "/" + taskFile.getName()));
+            }
+        }
+
+    }
+
+    private static boolean isAlreadyLoaded(List<ProjectFile> files, String name) {
+        for (ProjectFile file : files) {
+            if (file.getName().equals(name)) return true;
+        }
+        return false;
+    }
 
     private static ExampleFile loadProjectFile(String path, String projectUrl, JsonNode fileManifest) throws IOException {
         try {
             String fileName = fileManifest.get("filename").textValue();
             boolean modifiable = fileManifest.get("modifiable").asBoolean();
             boolean hidden = fileManifest.has("hidden") ? fileManifest.get("hidden").asBoolean() : false;
+            String confType = fileManifest.has("confType") ? fileManifest.get("confType").asText() : null;
             File file = new File(path);
             String fileContent = new String(Files.readAllBytes(file.toPath())).replaceAll("\r\n", "\n");
             String filePublicId = (projectUrl + "/" + fileName).replaceAll(" ", "%20");
@@ -188,11 +240,35 @@ public class ExamplesLoader {
             } else if (fileManifest.get("type").asText().equals("java")) {
                 fileType = ProjectFile.Type.JAVA_FILE;
             }
-            return new ExampleFile(fileName, fileContent, filePublicId, fileType, modifiable, hidden);
+            return new ExampleFile(fileName, fileContent, filePublicId, fileType, confType, modifiable, hidden);
         } catch (IOException e) {
             System.err.println("Can't load file: " + e.toString());
             return null;
         }
     }
+}
 
+class GFMNodeSerializer extends ToHtmlSerializer {
+    public GFMNodeSerializer() {
+        super(new LinkRenderer());
+    }
+
+    public void visit(VerbatimNode node) {
+        String codeMirrorType = "";
+        switch (node.getType()) {
+            case "kotlin":
+                codeMirrorType = "text/kotlin";
+                break;
+            case "java":
+                codeMirrorType = "text/x-java";
+                break;
+        }
+        if (!codeMirrorType.equals("")) {
+            printer.print("<pre><code data-lang=\"" + codeMirrorType + "\">");
+        } else {
+            printer.print("<pre><code>");
+        }
+        printer.printEncoded(node.getText());
+        printer.print("</code></pre>");
+    }
 }

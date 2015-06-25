@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="pegdown">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/asm-5.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/asm-analysis-5.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/asm-tree-5.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/asm-util-5.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/parboiled-core-1.1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/parboiled-java-1.1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/pegdown-1.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

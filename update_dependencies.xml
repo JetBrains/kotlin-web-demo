@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<project name="Update Dependencies" default="download_and_update">
+<project name="Update Dependencies" default="download_and_update" xmlns:ivy="antlib:org.apache.ivy.ant">
     <property name="dependencies.dir" value="dependencies"/>
     <property name="unzipped.kotlin.plugin" value="lib/kotlin-plugin"/>
     <property name="zipped.kotlin.plugin.pattern" value="kotlin-plugin*.zip"/>
@@ -25,26 +25,42 @@
     <property name="tc.plugin"
               value="${teamcity}/guestAuth/app/rest/builds/${locator}/artifacts/content"/>
 
-    <target name="download_and_update">
-        <delete dir="${dependencies.dir}" failonerror="false"/>
-        <mkdir dir="${dependencies.dir}"/>
+    <property name="ivy.install.version" value="2.0.0-beta1"/>
+    <property name="ivy.jar.dir" value="${basedir}/dependencies"/>
+    <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
+
+    <target name="download_and_update" depends="clear_dependencies_dir, resolve_ivy_dependencies">
         <antcall target="update_to_latest_version"/>
         <unzip_kotlin/>
         <set_kotlin_version/>
     </target>
 
-    <target name="TeamCityBuild">
+    <target name="TeamCityBuild" depends="clear_dependencies_dir, resolve_ivy_dependencies">
         <move file="dependencies/kotlin-compiler-before-shrink.jar" tofile="dependencies/kotlin-compiler.jar"/>
         <unzip_kotlin/>
         <set_kotlin_version/>
     </target>
 
-    <target name="download_and_update_internal">
+    <target name="clear_dependencies_dir">
         <delete dir="${dependencies.dir}" failonerror="false"/>
         <mkdir dir="${dependencies.dir}"/>
-        <antcall target="update_to_latest_version"/>
-        <unzip_kotlin/>
-        <set_kotlin_version_internal/>
+    </target>
+
+    <target name="download-ivy" unless="skip.download">
+        <mkdir dir="${ivy.jar.dir}"/>
+        <echo message="installing ivy..."/>
+        <get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true"/>
+    </target>
+
+    <target name="install-ivy" depends="download-ivy" description="--> install ivy">
+        <path id="ivy.lib.path">
+            <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+        </path>
+        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+    </target>
+
+    <target name="resolve_ivy_dependencies" depends="install-ivy">
+        <ivy:retrieve />
     </target>
 
     <macrodef name="unzip_kotlin">
@@ -127,38 +143,6 @@
              dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>
         <get src="${tc.plugin}/kotlin-compiler-sources.jar"
              dest="${dependencies.dir}/kotlin-compiler-sources.jar" usetimestamp="true"/>
-    </target>
-
-    <macrodef name="set_kotlin_version_internal">
-        <sequential>
-            <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
-            <echo message="${version}"/>
-            <replaceregexp file="update_dependencies.xml"
-                           match=" arg2=&#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
-                           replace=" arg2=&#34;${version}&#34;"
-                           byline="true"/>
-        </sequential>
-    </macrodef>
-
-    <target name="check_version" depends="check_version_true, check_version_false" if="isLastVersion"/>
-
-    <target name="check_version_true" depends="compare_version" if="isLastVersion">
-        <set_kotlin_version_internal/>
-    </target>
-
-    <target name="check_version_false" depends="compare_version" unless="isLastVersion">
-        <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
-        <echo message="FALSE - ${version}"/>
-        <antcall target="download_and_update_internal"/>
-    </target>
-
-    <target name="compare_version">
-        <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
-             dest="${dependencies.dir}/build.txt"/>
-        <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
-        <condition property="isLastVersion">
-            <equals arg1="${version}" arg2="0.7.111"/>
-        </condition>
     </target>
 
 </project>

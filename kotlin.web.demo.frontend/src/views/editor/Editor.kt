@@ -19,9 +19,12 @@ package views.editor
 import application.Application
 import html4k.dom.create
 import html4k.js.div
+import jquery.jq
 import model.File
 import model.FileType
+import model.Task
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLPreElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
 import providers.HelpProvider
@@ -29,6 +32,9 @@ import utils.codemirror.CodeMirror
 import utils.codemirror.CompletionView
 import utils.codemirror.Hint
 import utils.codemirror.Position
+import utils.jquery.children
+import utils.jquery.find
+import utils.jquery.toArray
 import utils.unEscapeString
 import java.util.*
 import kotlin.browser.document
@@ -144,6 +150,25 @@ class Editor(
             codeMirror.setOption("readOnly", !openedFile!!.isModifiable)
             codeMirror.focus()
             codeMirror.swapDoc(relatedDocument)
+            if(file.project is Task){
+                CodeMirror.colorize(file.project.help.getElementsByTagName("code"))
+                codeMirror.addLineWidget(0, file.project.help, json("above" to true, "noHScroll" to true))
+
+                for(taskWindow in file.project.taskWindows){
+                    codeMirror.markText(
+                            Position(taskWindow.line, taskWindow.start),
+                            Position(taskWindow.line, taskWindow.start + taskWindow.length),
+                            json(
+                                    "className" to "taskWindow",
+                                    "startStyle" to "taskWindow-start",
+                                    "endStyle" to "taskWindow-end",
+                                    "handleMouseEvents" to true,
+                                    "inclusiveLeft" to true,
+                                    "inclusiveRight" to true
+                            )
+                    )
+                }
+            }
             Application.accordion.onModifiedSelectedFile(file)
         } else {
             throw Exception("Previous file wasn't closed")

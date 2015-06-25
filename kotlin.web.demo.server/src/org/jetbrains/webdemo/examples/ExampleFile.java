@@ -17,18 +17,45 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ProjectFile;
 
 public class ExampleFile extends ProjectFile{
     private boolean hidden;
+    @Nullable
+    private String confType;
 
-    public ExampleFile(String name, String text, String id, Type type, boolean isModifiable, boolean isHidden){
+    public ExampleFile(String name, String text, String id, Type type, @Nullable String confType, boolean isModifiable, boolean isHidden){
         super(name, text, isModifiable, id, type);
         hidden = isHidden;
+        this.confType = confType;
     }
 
     @JsonIgnore
     public boolean isHidden(){
         return hidden;
+    }
+
+    @JsonIgnore @Nullable
+    public String getConfType() {
+        return confType;
+    }
+}
+
+class TaskFile extends ExampleFile{
+    public TaskFile(String text, String id) {
+        super("Task.kt", text, id, Type.KOTLIN_FILE, null, true, false);
+    }
+}
+
+class TestFile extends ExampleFile{
+    public TestFile(String text, String id) {
+        super("Test.kt", text, id, Type.KOTLIN_TEST_FILE, null, false, false);
+    }
+}
+
+class SolutionFile extends ExampleFile{
+    public SolutionFile(String text, String id) {
+        super("Solution.kt", text, id, Type.SOLUTION_FILE, null, false, false);
     }
 }

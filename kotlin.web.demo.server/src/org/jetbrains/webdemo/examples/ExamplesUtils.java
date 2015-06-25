@@ -79,18 +79,23 @@ public class ExamplesUtils {
         if (project.originUrl != null) {
             Project storedExample = getExample(project.originUrl);
             for (ProjectFile file : storedExample.files) {
-                if (!file.isModifiable() && project.readOnlyFileNames.contains(file.getName()) && !file.getType().equals(ProjectFile.Type.JAVA_FILE)) {
-                    project.files.add(file);
-                }
+                if (file.isModifiable()) continue;
+                if (!project.readOnlyFileNames.contains(file.getName())) continue;
+                String confType = ((ExampleFile) file).getConfType();
+                if (confType != null && !project.confType.equals(confType)) continue;
+                project.files.add(file);
             }
         }
     }
 
     public static void addHiddenFilesToProject(Project project) {
-        if (project.originUrl != null &&
-                project.originUrl.equals(project.id)) {
-            Example storedExample = getExample(project.id);
-            project.files.addAll(storedExample.getHiddenFiles());
+        if (project.originUrl == null) return;
+        if(!project.originUrl.equals(project.id)) return;
+        Example storedExample = getExample(project.id);
+        for(ProjectFile file : storedExample.getHiddenFiles()){
+            String confType = ((ExampleFile) file).getConfType();
+            if (confType != null && !project.confType.equals(confType)) continue;
+            project.files.add(file);
         }
     }
 
