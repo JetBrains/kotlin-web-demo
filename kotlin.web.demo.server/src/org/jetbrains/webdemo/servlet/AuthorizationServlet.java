@@ -20,6 +20,7 @@ import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.CommandRunner;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.authorization.AuthorizationHelper;
+import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.session.UserInfo;
 
@@ -76,7 +77,7 @@ public class AuthorizationServlet extends HttpServlet {
         response.sendRedirect(helper.getAuthorizationUrl());
     }
 
-    private void processVerifyRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void processVerifyRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, DatabaseOperationException {
         try {
             AuthorizationHelper helper = AuthorizationHelper.getHelper(getType(request), getHost(request));
             UserInfo userInfo = null;
