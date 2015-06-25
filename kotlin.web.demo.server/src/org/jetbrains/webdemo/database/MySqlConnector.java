@@ -154,8 +154,8 @@ public class MySqlConnector {
     }
 
     public void saveFile(String projectId, ProjectFile file) throws DatabaseOperationException {
-        checkConnection();
-        try (PreparedStatement st = connection.prepareStatement("UPDATE files JOIN projects " +
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement st = connection.prepareStatement("UPDATE files JOIN projects " +
                 "ON projects.id = files.project_id SET " +
                 "files.content = ? WHERE " +
                 "files.name = ? AND " +
