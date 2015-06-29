@@ -22,7 +22,10 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.naming.NamingContext;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.ProjectFile;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
@@ -73,10 +76,10 @@ public class MySqlConnector {
             st.setString(3, userInfo.getName());
             st.executeUpdate();
         } catch (SQLException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown",
-                    userInfo.getId() + " " + userInfo.getType() + " " + userInfo.getName());
-            throw new DatabaseOperationException("Can't add user", e);
+            throw new DatabaseOperationException(
+                    "Can't add user with id:" + userInfo.getId() + " type:" + userInfo.getType() + " name:" + userInfo.getName(),
+                    e
+            );
         }
     }
 
@@ -708,7 +711,7 @@ public class MySqlConnector {
                     rs = st.executeQuery();
                     rs.next();
                     int numberOfRows = rs.getInt(1);
-                    if(numberOfRows == 0) return id;
+                    if (numberOfRows == 0) return id;
                 } finally {
                     closeStatementAndResultSet(st, rs);
                 }
@@ -728,7 +731,7 @@ public class MySqlConnector {
                     rs = st.executeQuery();
                     rs.next();
                     int numberOfRows = rs.getInt(1);
-                    if(numberOfRows == 0) return id;
+                    if (numberOfRows == 0) return id;
                 } finally {
                     closeStatementAndResultSet(st, rs);
                 }

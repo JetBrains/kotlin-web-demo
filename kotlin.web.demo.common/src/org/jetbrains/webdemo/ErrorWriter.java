@@ -167,6 +167,17 @@ public class ErrorWriter {
         LOG_FOR_INFO.info(message);
     }
 
+    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl) {
+        ErrorBean bean = new ErrorBean(e, type);
+        bean.setPluginName("Kotlin Web Demo Beta");
+        if (!CommonSettings.IS_TEST_VERSION) {
+            sendViaITNProxy(bean);
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, ""));
+        } else {
+            LOG_FOR_EXCEPTIONS.error(getExceptionForLog(type, e, originUrl, ""));
+        }
+    }
+
     public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl, String description) {
         ErrorBean bean = new ErrorBean(e, type);
         bean.setPluginName("Kotlin Web Demo Beta");
