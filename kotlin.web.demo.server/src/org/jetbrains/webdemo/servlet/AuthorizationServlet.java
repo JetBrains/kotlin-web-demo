@@ -48,7 +48,7 @@ public class AuthorizationServlet extends HttpServlet {
             }
         } catch (Throwable e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            ErrorWriter.getInstance().writeExceptionToExceptionAnalyzer(e, "AUTHORIZATION", "", "");
+            ErrorWriter.getInstance().writeExceptionToExceptionAnalyzer(e, "AUTHORIZATION", "");
         }
     }
 
@@ -90,7 +90,7 @@ public class AuthorizationServlet extends HttpServlet {
                 userInfo = helper.verify(request.getParameter("jwt"));
             }
 
-            if(userInfo != null) {
+            if(userInfo != null && !userInfo.getType().equals("")) {
                 MySqlConnector.getInstance().addNewUser(userInfo);
                 request.getSession().setAttribute("userInfo", userInfo);
             }
