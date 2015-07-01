@@ -1,0 +1,23 @@
+{
+  "confType": "junit",
+  "taskWindows": [
+    {
+      "line": 8,
+      "start": 8,
+      "length": 34
+    },
+    {
+      "line": 12,
+      "start": 8,
+      "length": 34
+    }
+  ],
+  "files": [
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "MyDate.kt"
+    }
+  ]
+}

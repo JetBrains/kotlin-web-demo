@@ -1,0 +1,16 @@
+{
+  "sequential": false,
+  "examples": [
+    "Hello, world!",
+    "Java to Kotlin conversion",
+    "Default and named parameters",
+    "Lambdas",
+    "Strings",
+    "Nullable types",
+    "Smart casts",
+    "Data classes",
+    "Extension functions",
+    "Extensions on collections",
+    "Object expressions"
+  ]
+}

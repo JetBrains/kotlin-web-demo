@@ -1,0 +1,25 @@
+{
+  "confType": "junit",
+  "taskWindows": [
+    {
+      "line": 4,
+      "start": 51,
+      "length": 34
+    }
+  ],
+  "files": [
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "MyDate.kt"
+    },
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "DateUtil.kt",
+      "type": "kotlin-test"
+    }
+  ]
+}

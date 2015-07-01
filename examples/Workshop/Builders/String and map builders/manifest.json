@@ -1,0 +1,14 @@
+{
+  "name": "String and map builders",
+  "containsHelp": false,
+  "args": "",
+  "confType": "junit",
+  "help": "",
+  "taskWindows": [
+    {
+      "line": 3,
+      "start": 4,
+      "length": 34
+    }
+  ]
+}

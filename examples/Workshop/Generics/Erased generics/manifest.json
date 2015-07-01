@@ -1,0 +1,27 @@
+{
+  "name": "Erased generics",
+  "containsHelp": false,
+  "args": "",
+  "confType": "junit",
+  "files": [
+    {
+      "modifiable": true,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "Task.kt"
+    },
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "Test.kt",
+      "type": "kotlin-test"
+    },
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "Question.kt"
+    }
+  ]
+}

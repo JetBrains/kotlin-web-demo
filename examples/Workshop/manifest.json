@@ -1,0 +1,19 @@
+{
+  "sequential": false,
+  "folders": [
+    "Introduction",
+    "Conventions",
+    "Properties",
+    "Builders",
+    "Collections",
+    "Generics"
+  ],
+  "files": [
+    {
+      "modifiable": false,
+      "hidden": true,
+      "skipInTestVersion": false,
+      "filename": "kotlinUtil.kt"
+    }
+  ]
+}

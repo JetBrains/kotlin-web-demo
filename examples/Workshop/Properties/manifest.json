@@ -1,0 +1,9 @@
+{
+  "sequential": false,
+  "examples": [
+    "Properties",
+    "Lazy property",
+    "Delegates how it works",
+    "Delegates examples"
+  ]
+}

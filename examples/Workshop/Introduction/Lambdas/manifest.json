@@ -1,0 +1,14 @@
+{
+  "name": "Lambdas",
+  "containsHelp": false,
+  "args": "",
+  "confType": "junit",
+  "help": "",
+  "taskWindows": [
+    {
+      "line": 2,
+      "start": 57,
+      "length": 34
+    }
+  ]
+}

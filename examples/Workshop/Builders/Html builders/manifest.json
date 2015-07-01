@@ -1,0 +1,31 @@
+{
+  "confType": "junit",
+  "taskWindows": [
+    {
+      "line": 21,
+      "start": 12,
+      "length": 34
+    }
+  ],
+  "files": [
+    {
+      "modifiable": false,
+      "hidden": true,
+      "skipInTestVersion": true,
+      "confType": "canvas",
+      "filename": "main.kt"
+    },
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "data.kt"
+    },
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "html.kt"
+    }
+  ]
+}
