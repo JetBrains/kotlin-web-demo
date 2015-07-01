@@ -35,6 +35,8 @@ class CodeMirror() {
     class Doc(text: String, mode: String = "", firstLineNumber: Int = 1){
         fun markText(start: Position, end: Position, json: Json): Any
         fun getEditor(): utils.codemirror.CodeMirror
+        fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json)
+        fun setSelection(anchor: Position, head: Position)
     }
 
     fun getCursor(): Position
@@ -62,6 +64,7 @@ class CodeMirror() {
     fun swapDoc(document: Doc)
     fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit)
     fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json)
+    fun setSelection(anchor: Position, head: Position)
 }
 
 data class Position(val line: Int, val ch: Int)

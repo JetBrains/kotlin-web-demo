@@ -47,7 +47,7 @@ class Editor(
             "lineNumbers" to true,
             "styleActiveLine" to true,
             "matchBrackets" to true,
-            "mode" to "text/kotlin",
+            "mode" to "kotlin",
             "autoCloseBrackets" to true,
             "continueComments" to true,
             "hintOptions" to json("async" to true),
@@ -150,25 +150,7 @@ class Editor(
             codeMirror.setOption("readOnly", !openedFile!!.isModifiable)
             codeMirror.focus()
             codeMirror.swapDoc(relatedDocument)
-            if(file.project is Task){
-                CodeMirror.colorize(file.project.help.getElementsByTagName("code"))
-                codeMirror.addLineWidget(0, file.project.help, json("above" to true, "noHScroll" to true))
-
-                for(taskWindow in file.project.taskWindows){
-                    codeMirror.markText(
-                            Position(taskWindow.line, taskWindow.start),
-                            Position(taskWindow.line, taskWindow.start + taskWindow.length),
-                            json(
-                                    "className" to "taskWindow",
-                                    "startStyle" to "taskWindow-start",
-                                    "endStyle" to "taskWindow-end",
-                                    "handleMouseEvents" to true,
-                                    "inclusiveLeft" to true,
-                                    "inclusiveRight" to true
-                            )
-                    )
-                }
-            }
+            codeMirror.refresh()
             Application.accordion.onModifiedSelectedFile(file)
         } else {
             throw Exception("Previous file wasn't closed")
@@ -196,12 +178,39 @@ class Editor(
     private fun createDocIfNotExist(file: File) {
         if (documents.get(file) == null) {
             val type = if (file.type != FileType.JAVA_FILE.name()) {
-                "text/kotlin"
+                "kotlin"
             } else {
                 "text/x-java"
             }
-            documents.put(file, CodeMirror.Doc(file.userText, type))
+            val document = CodeMirror.Doc(file.userText, type);
+            documents.put(file, document);
             getHighlighting()
+
+
+            if (!(file.project is Task && file.name == "Task.kt")) return
+            CodeMirror.colorize(file.project.help.getElementsByTagName("code"))
+            document.addLineWidget(0, file.project.help, json("above" to true, "noHScroll" to true))
+
+            if (file.project.taskWindows.isEmpty()) return
+            val firstWindow = file.project.taskWindows.first()
+            document.setSelection(
+                    Position(firstWindow.line, firstWindow.start + firstWindow.length),
+                    Position(firstWindow.line, firstWindow.start)
+            )
+            for(taskWindow in file.project.taskWindows){
+                document.markText(
+                        Position(taskWindow.line, taskWindow.start),
+                        Position(taskWindow.line, taskWindow.start + taskWindow.length),
+                        json(
+                                "className" to "taskWindow",
+                                "startStyle" to "taskWindow-start",
+                                "endStyle" to "taskWindow-end",
+                                "handleMouseEvents" to true,
+                                "inclusiveLeft" to true,
+                                "inclusiveRight" to true
+                        )
+                )
+            }
         }
     }
 
@@ -265,7 +274,7 @@ class Editor(
                     })
                 } else {
                     val gutter: HTMLElement = codeMirror.lineInfo(interval.start.line).gutterMarkers["errors-and-warnings-gutter"]
-                    gutter.title += "\n" + errorMessage
+                    gutter.title += "\n$errorMessage"
                     if (gutter.className.indexOf("ERRORgutter") == -1) {
                         gutter.className = severity + "gutter"
                     }

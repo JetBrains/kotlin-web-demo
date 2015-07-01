@@ -1,0 +1,7 @@
+{
+  "name": "try.kotl.in",
+  "version": "1.0.0",
+  "dependencies": {
+    "codemirror": "5.4.0"
+  }
+}
