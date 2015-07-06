@@ -23,6 +23,7 @@ import jquery.jq
 import model.File
 import model.FileType
 import model.Task
+import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLPreElement
 import org.w3c.dom.HTMLTextAreaElement
@@ -32,6 +33,7 @@ import utils.codemirror.CodeMirror
 import utils.codemirror.CompletionView
 import utils.codemirror.Hint
 import utils.codemirror.Position
+import utils.jquery.JQuery
 import utils.jquery.children
 import utils.jquery.find
 import utils.jquery.toArray
@@ -182,23 +184,26 @@ class Editor(
             } else {
                 "text/x-java"
             }
-            val document = CodeMirror.Doc(file.userText, type);
-            documents.put(file, document);
+            val cmDocument = CodeMirror.Doc(file.userText, type);
+            documents.put(file, cmDocument);
             getHighlighting()
 
 
             if (!(file.project is Task && file.name == "Task.kt")) return
-            CodeMirror.colorize(file.project.help.getElementsByTagName("code"))
-            document.addLineWidget(0, file.project.help, json("above" to true, "noHScroll" to true))
+            val help = document.create.div("taskHelp")
+            val helpContent = JQuery.parseHTML(file.project.help)
+            helpContent?.forEach { help.appendChild(it) }
+            CodeMirror.colorize(help.getElementsByTagName("code"))
+            cmDocument.addLineWidget(0, help, json("above" to true, "noHScroll" to true))
 
-            if (file.project.taskWindows.isEmpty()) return
+            if (file.project.taskWindows.isEmpty() || file.isModified) return
             val firstWindow = file.project.taskWindows.first()
-            document.setSelection(
+            cmDocument.setSelection(
                     Position(firstWindow.line, firstWindow.start + firstWindow.length),
                     Position(firstWindow.line, firstWindow.start)
             )
             for(taskWindow in file.project.taskWindows){
-                document.markText(
+                cmDocument.markText(
                         Position(taskWindow.line, taskWindow.start),
                         Position(taskWindow.line, taskWindow.start + taskWindow.length),
                         json(

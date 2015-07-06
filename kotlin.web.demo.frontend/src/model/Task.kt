@@ -28,6 +28,7 @@ import utils.jquery.find
 import utils.jquery.toArray
 import java.util.ArrayList
 import kotlin.browser.document
+import kotlin.properties.Delegates
 
 
 public class Task(
@@ -44,11 +45,10 @@ public class Task(
 
     var taskWindows = emptyList<TaskWindow>()
 
-    var help: HTMLElement = document.create.div("taskHelp")
+    var help: String by Delegates.notNull()
 
     override fun contentLoaded(content: dynamic) {
-        val helpContent = JQuery.parseHTML(content.help)
-        helpContent?.forEach { help.appendChild(it) }
+        help = content.help
         if (content.taskWindows != null) this.taskWindows = (content.taskWindows as Array<TaskWindow>).toArrayList();
         super.contentLoaded(content);
     }

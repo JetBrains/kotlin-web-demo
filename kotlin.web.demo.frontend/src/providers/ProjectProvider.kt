@@ -17,10 +17,7 @@
 package providers
 
 import application.Application
-import model.File
-import model.Project
-import model.ProjectType
-import model.UserProject
+import model.*
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
@@ -300,16 +297,30 @@ class ProjectProvider(
                     Application.fileProvider.saveFile(file)
                     fileIDs.add(file.id)
                 }
-                localStorage.setItem(project.id, JSON.stringify(json(
-                        "name" to project.name,
-                        "files" to fileIDs.toTypedArray(),
-                        "args" to project.args,
-                        "confType" to project.confType,
-                        "originUrl" to project.originUrl,
-                        "type" to project.type,
-                        "publicId" to project.id,
-                        "revertible" to project.revertible
-                )))
+                if(project is Task){
+                    localStorage.setItem(project.id, JSON.stringify(json(
+                            "name" to project.name,
+                            "files" to fileIDs.toTypedArray(),
+                            "args" to project.args,
+                            "confType" to project.confType,
+                            "originUrl" to project.originUrl,
+                            "type" to project.type,
+                            "publicId" to project.id,
+                            "revertible" to project.revertible,
+                            "help" to project.help
+                    )))
+                } else{
+                    localStorage.setItem(project.id, JSON.stringify(json(
+                            "name" to project.name,
+                            "files" to fileIDs.toTypedArray(),
+                            "args" to project.args,
+                            "confType" to project.confType,
+                            "originUrl" to project.originUrl,
+                            "type" to project.type,
+                            "publicId" to project.id,
+                            "revertible" to project.revertible
+                    )))
+                }
             } else {
                 localStorage.removeItem(project.id)
             }

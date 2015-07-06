@@ -131,6 +131,10 @@
     height: 100%;
 }
 
+#editordiv .CodeMirror-scroll {
+    height: 100%;
+}
+
 #editordiv .CodeMirror-lines {
     padding: 0;
 }
@@ -281,6 +285,10 @@
     height: 16px;
     top: 6px;
     background: url("/static/images/icons_all_sprite.png") -100px -550px;
+}
+
+.CodeMirror-gutter-wrapper {
+    height: auto !important;
 }
 
 .taskHelp {
