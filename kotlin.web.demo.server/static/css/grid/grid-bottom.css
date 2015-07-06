@@ -355,7 +355,7 @@
 }
 
 .tree-node .icon {
-    position: relative;
+    float: left;
     top: 2px;
     height: 12px;
     width: 12px;
@@ -412,6 +412,7 @@ li[aria-expanded="false"] > ul {
 }
 
 .tree-node-header .toggle-arrow {
+    float: left;
     display: inline-block;
 }
 

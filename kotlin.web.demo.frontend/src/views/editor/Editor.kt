@@ -208,6 +208,7 @@ class Editor(
                         json(
                                 "className" to "taskWindow",
                                 "startStyle" to "taskWindow-start",
+                                "closeOnEnter" to true,
                                 "endStyle" to "taskWindow-end",
                                 "handleMouseEvents" to true,
                                 "inclusiveLeft" to true,

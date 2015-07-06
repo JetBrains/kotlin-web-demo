@@ -181,7 +181,12 @@ class JUnitView(
                 val testData = testsData[element.id]
                 outputView.printMarkedText(testsData[element.id].output)
                 if (testData.exception != null) {
-                    val parsedMessage = parseAssertionErrorMessage(unEscapeString(testData.exception.message))
+                    val parsedMessage =
+                            if (testData.exception.message != null) {
+                                parseAssertionErrorMessage(unEscapeString(testData.exception.message))
+                            } else {
+                                null
+                            }
                     if(parsedMessage != null){
                         outputView.printErrorLine(testData.exception.fullName + ":" + parsedMessage.message)
                         outputView.printErrorLine("")
@@ -190,7 +195,7 @@ class JUnitView(
                         outputView.print("Actual: ")
                         outputView.printErrorLine(parsedMessage.actual)
                         outputView.printError("    ")
-                        outputView.element.appendChild(createDifferenceReference(parsedMessage.expected, parsedMessage.actual))
+//                        outputView.element.appendChild(createDifferenceReference(parsedMessage.expected, parsedMessage.actual))
                         outputView.println("")
                         outputView.println("")
                         outputView.printExceptionBody(testData.exception)
@@ -262,7 +267,7 @@ class JUnitView(
     fun parseAssertionErrorMessage(message: String): ParsedAssertionMessage? {
         var possibleRegExps = arrayOf(
                 Regex("(.*)\\.\\s*Expected\\s*<(.*)>\\s*actual\\s*<(.*)>"),
-                Regex("(. *)expected:\\s*<(.*)>\\s*but was:\\s*<(.*)>")
+                Regex("(.*)\\s*expected:\\s*<(.*)>\\s*but was:\\s*<(.*)>")
         )
         for (regExp in  possibleRegExps) {
             var regExpExecResult = regExp.match(message.replace("\n", "</br>"))
