@@ -2,7 +2,7 @@ package vi_generics
 
 import org.junit.Test as test
 import util.questions.Answer.*
-import junit.framework.Assert
+import org.junit.Assert
 import vi_generics.generics.task27
 
 class _27_Erased_Generics {

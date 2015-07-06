@@ -1,6 +1,6 @@
 package vi_generics
 
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test as test
 import vi_generics.generics.partitionWordsAndLines
 import vi_generics.generics.partitionLettersAndOtherSymbols

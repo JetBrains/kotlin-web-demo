@@ -1,6 +1,6 @@
 package ii_conventions
 
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test as test
 import ii_conventions.TimeInterval.*
 

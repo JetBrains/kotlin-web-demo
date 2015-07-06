@@ -56,6 +56,8 @@ public class JunitExecutor {
                 ObjectMapper objectMapper = new ObjectMapper();
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Throwable.class, new ThrowableSerializer());
+                module.addSerializer(junit.framework.ComparisonFailure.class , new JunitFrameworkComparisonFailureSerializer());
+                module.addSerializer(org.junit.ComparisonFailure.class , new OrgJunitComparisonFailureSerializer());
                 objectMapper.registerModule(module);
                 System.setOut(standardOutput);
                 System.out.print(objectMapper.writeValueAsString(output));

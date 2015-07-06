@@ -1,7 +1,7 @@
 package iv_builders
 
 import org.junit.Test as test
-import junit.framework.Assert
+import org.junit.Assert
 import util.questions.Answer.*
 
 class _26_Builders_How_It_Works {

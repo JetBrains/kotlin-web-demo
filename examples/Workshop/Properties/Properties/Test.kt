@@ -1,6 +1,6 @@
 package iii_properties
 
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test as test
 
 class _18_Properties {

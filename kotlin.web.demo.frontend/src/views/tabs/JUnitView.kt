@@ -182,20 +182,27 @@ class JUnitView(
                 outputView.printMarkedText(testsData[element.id].output)
                 if (testData.exception != null) {
                     val parsedMessage =
-                            if (testData.exception.message != null) {
+                            if (testData.exception.fullName == "org.junit.ComparisonFailure" ||
+                                    testData.exception.fullName == "junit.framework.ComparisonFailure"
+                            ) {
+                                ParsedAssertionMessage(
+                                        parseAssertionErrorMessage(unEscapeString(testData.exception.message))?.message ?: "",
+                                        testData.exception.expected,
+                                        testData.exception.actual)
+                            } else if (testData.exception.message != null) {
                                 parseAssertionErrorMessage(unEscapeString(testData.exception.message))
                             } else {
                                 null
                             }
                     if(parsedMessage != null){
-                        outputView.printErrorLine(testData.exception.fullName + ":" + parsedMessage.message)
+                        outputView.printErrorLine(testData.exception.fullName + ": " + parsedMessage.message)
                         outputView.printErrorLine("")
                         outputView.print("Expected: ")
                         outputView.printErrorLine(parsedMessage.expected)
                         outputView.print("Actual: ")
                         outputView.printErrorLine(parsedMessage.actual)
                         outputView.printError("    ")
-//                        outputView.element.appendChild(createDifferenceReference(parsedMessage.expected, parsedMessage.actual))
+                        outputView.element.appendChild(createDifferenceReference(parsedMessage.expected, parsedMessage.actual))
                         outputView.println("")
                         outputView.println("")
                         outputView.printExceptionBody(testData.exception)
