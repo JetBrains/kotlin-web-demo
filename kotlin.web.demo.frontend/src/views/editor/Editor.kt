@@ -166,11 +166,10 @@ class Editor(
         (document.getElementById("workspace-overlay") as HTMLElement).style.display = "block"
     }
     fun reloadFile () {
-        if (openedFile != null) {
-            codeMirror.focus()
-            codeMirror.setValue(openedFile!!.userText)
-            updateHighlighting()
-        }
+        val openedFile = this.openedFile;
+        this.openedFile = null
+        documents.remove(openedFile);
+        if (openedFile != null) open(openedFile);
     }
 
     fun updateHighlighting(){
