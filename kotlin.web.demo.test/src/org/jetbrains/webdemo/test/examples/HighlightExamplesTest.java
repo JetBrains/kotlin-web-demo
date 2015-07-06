@@ -72,11 +72,9 @@ public class HighlightExamplesTest extends BaseTest {
 
         TestSuite suite = new TestSuite(HighlightExamplesTest.class.getName());
         for (Project project : ExamplesUtils.getAllExamples(ExamplesFolder.ROOT_FOLDER)) {
-            if(!project.confType.equals("junit")) {
-                suite.addTest(new HighlightExamplesTest(project));
-                if (jsExamples.contains(project.name)) {
-                    suite.addTest(new HighlightExamplesTest(project, "js"));
-                }
+            suite.addTest(new HighlightExamplesTest(project));
+            if (jsExamples.contains(project.name)) {
+                suite.addTest(new HighlightExamplesTest(project, "js"));
             }
         }
         return suite;
