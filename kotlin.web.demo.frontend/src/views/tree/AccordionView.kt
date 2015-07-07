@@ -116,7 +116,7 @@ class AccordionView(
                             onProjectCreated = onProjectCreated
                     )
                 } else if (folder.name == "Workshop") {
-                    publicLinksFolder = FolderViewWithProgress(
+                    FolderViewWithProgress(
                             parentNode = element,
                             content = folder,
                             parent = null,
