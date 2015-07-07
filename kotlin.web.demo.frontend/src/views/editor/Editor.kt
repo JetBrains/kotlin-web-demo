@@ -62,6 +62,7 @@ class Editor(
     var arrayClasses = arrayListOf<dynamic>()
     private val documents = hashMapOf<File, CodeMirror.Doc>()
     private var storedCompletionsList: List<CompletionView>? = null
+    private val dialogCloseFunctions = arrayListOf<dynamic>()
 
     init {
         var timeoutId: Int? = null
@@ -152,6 +153,10 @@ class Editor(
             codeMirror.setOption("readOnly", !openedFile!!.isModifiable)
             codeMirror.focus()
             codeMirror.swapDoc(relatedDocument)
+            for(closeFunction in dialogCloseFunctions){
+                closeFunction()
+            }
+            dialogCloseFunctions.clear()
             codeMirror.refresh()
             Application.accordion.onModifiedSelectedFile(file)
         } else {
@@ -192,6 +197,7 @@ class Editor(
             val help = document.create.div("taskHelp")
             val helpContent = JQuery.parseHTML(file.project.help)
             helpContent?.forEach { help.appendChild(it) }
+            jq(help).find("a").attr("target", "_blank")
             CodeMirror.colorize(help.getElementsByTagName("code"))
             cmDocument.addLineWidget(0, help, json("above" to true, "noHScroll" to true))
 
@@ -208,7 +214,7 @@ class Editor(
                         json(
                                 "className" to "taskWindow",
                                 "startStyle" to "taskWindow-start",
-                                "closeOnEnter" to true,
+                                "clearOnEnter" to true,
                                 "endStyle" to "taskWindow-end",
                                 "handleMouseEvents" to true,
                                 "inclusiveLeft" to true,
@@ -302,7 +308,11 @@ class Editor(
         }
     }
 
-    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit) = codeMirror.openDialog(template, callback, options)
+    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit){
+        val closeFunction = codeMirror.openDialog(template, callback, options)
+        dialogCloseFunctions.add(closeFunction)
+        return closeFunction;
+    }
 
 
 }

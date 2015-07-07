@@ -73,7 +73,9 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         button.innerHTML = "Start next task"
         dialogElement.appendChild(button)
         button.onclick = {
-            Application.accordion.selectProject(getNextProject(currentProjectView).id)
+            val nextTask = getNextTask(currentProjectView)
+            if(nextTask != null)
+            Application.accordion.selectProject(nextTask.id)
         }
 
         val close = document.createElement("div") as HTMLDivElement
@@ -94,9 +96,25 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         close.onclick = { Event -> dialogCloseFun?.invoke() }
     }
 
-    private fun getNextProject(projectView: ProjectView): Project {
-        val ind = projects.indexOf(projectView)
-        return projects[ind + 1].project
+    private fun getNextFolder(folderViewWithProgress: FolderViewWithProgress): FolderViewWithProgress? {
+        val index = childFolders.indexOf(folderViewWithProgress);
+        return childFolders.getOrNull(index + 1) as FolderViewWithProgress?;
+    }
+
+    private fun getNextTask(ind: Int): Project?{
+        val projectView = projects.getOrNull(ind + 1) as TaskView?
+        if (projectView == null) {
+            if(parent !is FolderViewWithProgress)return null;
+            val nextFolder = parent.getNextFolder(this);
+            return nextFolder?.getNextTask(-1);
+        } else {
+            if((projectView.project as Task).completed) return getNextTask(projectView);
+            return projectView.project;
+        }
+    }
+
+    private fun getNextTask(projectView: ProjectView): Project? {
+        return getNextTask(projects.indexOf(projectView));
     }
 
     override fun createProject(header: ProjectHeader): ProjectView {
