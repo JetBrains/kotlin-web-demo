@@ -1,0 +1,32 @@
+{
+    "name": "a11yTree",
+    "title": "jQuery.a11yTree",
+    "description": "A simple and accessible jquery tree plugin that's built from nested unordered lists. The plugin supports access via mouse, keyboard, and assistive technologies via ARIA roles and attributes",
+    "keywords": [
+        "tree",
+        "accessibility",
+        "a11y",
+        "ARIA",
+        "keyboard",
+        "navigation",
+        "lists",
+        "nested",
+        "WAI"
+    ],
+    "version": "1.2.6",
+    "author": {
+        "name": "Matt Long",
+        "email": "longmatthewh@gmail.com"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/longmatthewh/jquery-a11ytree/blob/master/license.md"
+        }
+    ],
+    "bugs": "https://github.com/longmatthewh/jquery-a11ytree/issues",
+    "homepage": "http://longmatthewh.github.io/a11yTree/",
+    "dependencies": {
+        "jquery": ">=1.11"
+    }
+}
