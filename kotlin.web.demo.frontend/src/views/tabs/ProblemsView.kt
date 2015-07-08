@@ -50,7 +50,7 @@ class ProblemsView(
         val fileNodes = jq("#problems-tree").find(">li").toArray()
         val collapsedNodes = arrayListOf<String>()
         for (fileNode in fileNodes) {
-            val expanded = parseBoolean(fileNode.getAttribute("aria-expanded")!!)
+            val expanded = parseBoolean(fileNode.getAttribute("aria-expanded"))
             if (!expanded) collapsedNodes.add(fileNode.id)
         }
 
