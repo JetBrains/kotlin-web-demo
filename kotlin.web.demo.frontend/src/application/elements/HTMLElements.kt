@@ -48,7 +48,7 @@ internal object Elements{
             ShortcutsDialogView.open()
         }
 
-        onTheFlyCheckbox.checked = parseBoolean(localStorage.getItem("highlightOnTheFly") ?: "false")
+        onTheFlyCheckbox.checked = parseBoolean(localStorage.getItem("highlightOnTheFly"))
         onTheFlyCheckbox.onchange = {
             Application.editor.highlightOnTheFly = onTheFlyCheckbox.checked
             Application.editor.updateHighlighting()

@@ -25,6 +25,7 @@ import model.UserProject
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
+import org.w3c.dom.StorageEvent
 import org.w3c.dom.events.KeyboardEvent
 import providers.*
 import utils.*
@@ -329,6 +330,7 @@ object Application {
             onLogout = {
                 getSessionInfo({ data ->
                     sessionId = data.id
+                    localStorage["isLoggedIn"] = "false";
                     loginView.logout()
                     statusBarView.setStatus(ActionStatusMessage.logout_ok)
                     accordion.loadAllContent()
@@ -339,6 +341,7 @@ object Application {
                     loginView.setUserName(data.userName, data.type)
                     statusBarView.setStatus(ActionStatusMessage.login_ok)
                 }
+                localStorage["isLoggedIn"] = data.isLoggedIn
                 accordion.loadAllContent()
             },
             onFail = { exception, actionCode ->
@@ -358,7 +361,7 @@ object Application {
                 dataType = DataType.TEXT,
                 timeout = 1000,
                 success = { kotlinVersion ->
-                    (document.getElementById("kotlinlang-kotlin-version") as HTMLElement).innerHTML = "(" + kotlinVersion + ")"
+                    (document.getElementById("kotlinlang-kotlin-version") as HTMLElement).innerHTML = "($kotlinVersion)"
                 }
         )
         ajax(
@@ -374,7 +377,7 @@ object Application {
 
     fun getSessionInfo(callback: (dynamic) -> Unit) {
         ajax(
-                url = "kotlinServer?sessionId=" + sessionId + "&type=getSessionInfo",
+                url = "kotlinServer?sessionId=$sessionId&type=getSessionInfo",
                 type = HTTPRequestType.GET,
                 dataType = DataType.JSON,
                 timeout = 10000,
@@ -411,15 +414,14 @@ object Application {
         setKotlinVersion()
 
         window.onError = { message, url, line, ch, error ->
-            submitErrorReport(message, url + " $line:$ch", error.stack)
+            submitErrorReport(message, "$url $line:$ch", error.stack)
         }
 
-        window.onfocus = {
-            getSessionInfo({ data ->
-                if (sessionId != data.id || data.isLoggedIn != loginView.isLoggedIn) {
-                    window.location.reload()
-                }
-            })
+        window.onstorage = { event ->
+            if(event is StorageEvent && event.key == "isLoggedIn"){
+                val isLoggedIn = parseBoolean(event.newValue);
+                if(loginView.isLoggedIn != isLoggedIn) window.location.reload()
+            }
         }
 
         window.onbeforeunload = {

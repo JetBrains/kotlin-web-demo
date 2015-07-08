@@ -38,10 +38,9 @@ enum class KeyCode (val code: Int){
 
 data class ElementPosition(val left: Int, val top: Int)
 
-fun parseBoolean(value: String) = when (value) {
+fun parseBoolean(value: String?) = when (value) {
     "true" -> true
-    "false" -> false
-    else -> throw IllegalArgumentException("Value don't represent boolean")
+    else -> false
 }
 
 fun addKotlinExtension(filename: String): String = if (filename.endsWith(".kt")) filename else filename + ".kt"
