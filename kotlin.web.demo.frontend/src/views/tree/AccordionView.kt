@@ -151,7 +151,7 @@ class AccordionView(
 
     fun loadFirstItem() {
         var projectId = getProjectIdFromUrl()
-        if (projectId == null || projectId == "") {
+        if (projectId == "") {
             if (localStorage.getItem("openedItemId") != null) {
                 projectId = localStorage.getItem("openedItemId")!!
             } else {
@@ -160,20 +160,14 @@ class AccordionView(
         }
         localStorage.removeItem("openedItemId")
 
-        if (isUserProjectInUrl()) {
-            if (localStorage.getItem(projectId) == null) {
-                if (projectId !in projectViews.keySet()) {
-                    Application.headersProvider.getProjectHeaderById( projectId, { header ->
-                        addProject(publicLinksFolder.contentElement, header, publicLinksFolder)
-                        selectProject(projectId)
-                    })
-                } else {
-                    selectProject(projectId)
-                }
-            } else {
+        if (isUserProjectInUrl() &&
+                projectId !in projectViews.keySet()) {
+            Application.headersProvider.getProjectHeaderById(projectId, { header ->
+                addProject(publicLinksFolder.contentElement, header, publicLinksFolder)
                 selectProject(projectId)
-            }
-        } else if (projectId != "") {
+            })
+        } else {
+            if (!projectViews.containsKey(projectId)) projectId = DEFAULT_PROJECT_ID
             selectProject(projectId)
         }
     }
