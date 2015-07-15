@@ -23,11 +23,16 @@ import model.Task
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
+import utils.jquery.circleProgress
+import utils.jquery.jq
 import views.tabs.TestResult
 import java.util.*
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.dom.addClass
+import html4k.*
+import html4k.js.*
+import html4k.dom.*
 
 
 class FolderViewWithProgress(parentNode: HTMLElement,
@@ -42,15 +47,28 @@ class FolderViewWithProgress(parentNode: HTMLElement,
     val id: String = content.id
     val progressBar = if (hasProgressBar) document.createElement("div") as HTMLDivElement else null
     val counter = document.createElement("div") as HTMLDivElement
+    var radialProgressBar = document.create.div("radial-progressbar")
 
     init {
         contentElement.addClass("progress-folder-content")
         if (progressBar != null) {
             progressBar.className = "progressbar"
             headerElement.appendChild(progressBar)
+            headerElement.appendChild(counter)
+            counter.className = "counter"
+        } else {
+            headerElement.appendChild(radialProgressBar)
+            headerElement.appendChild(radialProgressBar)
+            radialProgressBar.append.img(src="/static/images/ok.png")
+            jq(radialProgressBar).circleProgress(json(
+                    "size" to 18,
+                    "startAngle" to -Math.PI / 2,
+                    "thickness" to 9,
+                    "emptyFill" to "rgba(255, 255, 255, .7)",
+                    "animation" to false,
+                    "fill" to json("color" to "rgba(0, 0, 0, 0)")
+            ));
         }
-        headerElement.appendChild(counter)
-        counter.className = "counter"
         updateProgress()
     }
 
@@ -162,10 +180,12 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         val numberOfCompletedProjects = getNumberOfCompletedProjects()
         val totalNumberOfProjects = getNumberOfProjects()
         counter.textContent = getNumberOfCompletedProjects().toString() + "/" + getNumberOfProjects()
+        val value = numberOfCompletedProjects.toFloat() / totalNumberOfProjects
         progressBar?.let{
-            val width = (numberOfCompletedProjects.toFloat() / totalNumberOfProjects * 100.0).toString() + "%"
+            val width = (value * 100.0).toString() + "%"
             it.style.setProperty("width", width, "")
         }
+        jq(radialProgressBar).circleProgress(json("value" to value ));
     }
 
 }

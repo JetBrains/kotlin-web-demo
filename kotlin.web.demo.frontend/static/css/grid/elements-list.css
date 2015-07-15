@@ -373,3 +373,19 @@
     right: 10px;
     top: 7px;
 }
+
+
+.radial-progressbar {
+    height: 18px;
+    width: 18px;
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.radial-progressbar img {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    z-index: -1;
+}

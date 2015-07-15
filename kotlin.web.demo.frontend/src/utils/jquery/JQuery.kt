@@ -81,6 +81,13 @@ native("$")
 native
 fun jq(document: Document): JQuery
 
+native("$")
+native
+fun jq(element: HTMLElement): JQuery
+
+native
+fun JQuery.circleProgress(options: Json)
+
 native
 fun JQuery.on(action: String, selector: String, callback: (event: Event) -> Unit)
 
