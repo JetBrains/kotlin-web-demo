@@ -192,7 +192,7 @@ public class ResponseUtils {
     }
 
     public static String getErrorInJson(String error) {
-        return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}]";
+        return "[{\"text\":\"" + error + "\",\"type\":\"err\"}]";
     }
 
     public static ObjectNode getErrorAsJsonNode(String error) {
@@ -203,7 +203,7 @@ public class ResponseUtils {
     }
 
     public static String getErrorWithStackTraceInJson(String error, String stackTrace) {
-        return "[{\"exception\":\"" + error + "\",\"type\":\"err\"}, {\"exception\":\"<outStream>" + stackTrace + "</outStream>\",\"type\":\"out\"}]";
+        return "[{\"text\":\"" + error + "\",\"stackTrace\":\"" + stackTrace + "\",\"type\":\"err\"}]";
     }
 
     public static ObjectNode getErrorWithStackTraceAsJsonNode(String error, String stackTrace) {
@@ -212,34 +212,6 @@ public class ResponseUtils {
         result.put("exception", error);
         result.put("stackTrace", stackTrace);
         return result;
-    }
-
-    public static String getJsonString(String type, String text) {
-        return "[{\"type\":\"" + type + "\",\"text\":\"" + text + "\"}]";
-    }
-
-    public static String getJsonString(String type, String text, String args) {
-        return "[{\"type\":\"" + type + "\",\"text\":\"" + text + "\",\"args\":\"" + args + "\"}]";
-    }
-
-    public static String getDate(Calendar calendar) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(calendar.get(Calendar.MONTH) + 1);
-        builder.append("/");
-        builder.append(calendar.get(Calendar.DAY_OF_MONTH));
-        builder.append("/");
-        builder.append(calendar.get(Calendar.YEAR));
-        return builder.toString();
-    }
-
-    public static String getTime(Calendar calendar) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(calendar.get(Calendar.HOUR_OF_DAY));
-        builder.append(":");
-        builder.append(calendar.get(Calendar.MINUTE));
-        builder.append(":");
-        builder.append(calendar.get(Calendar.SECOND));
-        return builder.toString();
     }
 
     public static Document getXmlDocument(File file) {

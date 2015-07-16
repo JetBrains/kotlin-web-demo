@@ -29,7 +29,7 @@ class OutputView(val element: HTMLElement) {
 
     public fun print(s: String) {
         element.append.span {
-            +s.replace("</br>", "\n")
+            +s.replace("</br>", "\n").replace("<br/>", "\n")
             classes = setOf("standard-output")
         }
     }
@@ -39,7 +39,7 @@ class OutputView(val element: HTMLElement) {
     }
 
     public fun printError(s: String): HTMLSpanElement = element.append.span {
-            +s.replace("</br>", "\n")
+            +s.replace("</br>", "\n").replace("<br/>", "\n")
             classes = setOf("error-output")
     }
 
