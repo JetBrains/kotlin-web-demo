@@ -35,7 +35,7 @@
         <set_kotlin_version/>
     </target>
 
-    <target name="TeamCityBuild" depends="clear_dependencies_dir, resolve_ivy_dependencies">
+    <target name="TeamCityBuild" depends="resolve_ivy_dependencies">
         <move file="dependencies/kotlin-compiler-before-shrink.jar" tofile="dependencies/kotlin-compiler.jar"/>
         <unzip_kotlin/>
         <set_kotlin_version/>
