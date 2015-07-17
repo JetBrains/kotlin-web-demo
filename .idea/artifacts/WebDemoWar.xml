@@ -15,8 +15,6 @@
           <element id="library" level="project" name="kotlin-runtime" />
           <element id="library" level="project" name="dartc" />
           <element id="library" level="project" name="scribe" />
-          <element id="library" level="project" name="commons-lang" />
-          <element id="library" level="project" name="commons-codec" />
           <element id="library" level="project" name="kotlin-compiler" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar" />
           <element id="library" level="project" name="kotlin-j2kConverter" />

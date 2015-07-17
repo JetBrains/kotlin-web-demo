@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component name="ArtifactManager">
   <artifact type="war" name="WebDemoBackend">
     <output-path>$PROJECT_DIR$/out/production</output-path>
@@ -10,11 +11,9 @@
           <element id="module-output" name="kotlin.web.demo.common" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="commons-lang" />
           <element id="library" level="project" name="scribe" />
           <element id="library" level="project" name="log4j" />
           <element id="library" level="project" name="kotlin-runtime" />
-          <element id="library" level="project" name="commons-codec" />
           <element id="library" level="project" name="kotlin-compiler" />
           <element id="library" level="project" name="kotlin-j2kConverter" />
           <element id="library" level="project" name="jackson" />

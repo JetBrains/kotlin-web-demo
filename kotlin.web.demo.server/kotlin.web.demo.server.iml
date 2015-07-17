@@ -19,12 +19,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="commons-lang" level="project" />
     <orderEntry type="library" name="scribe" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="catalina" level="project" />
     <orderEntry type="library" name="log4j" level="project" />
     <orderEntry type="library" name="javax.servlet" level="project" />
-    <orderEntry type="library" name="commons-codec" level="project" />
     <orderEntry type="library" name="jackson" level="project" />
     <orderEntry type="module" module-name="kotlin.web.demo.common" />
     <orderEntry type="library" name="kotlin-compiler" level="project" />

@@ -19,7 +19,6 @@
 import com.google.common.io.Files;
 import com.thoughtworks.selenium.CommandProcessor;
 import junit.framework.TestCase;
-import org.apache.commons.lang.math.RandomUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -687,24 +686,6 @@ public class SeleniumTest extends TestCase {
         assertEquals(expectedResult, editorValue);
         alertWindow = driver.switchTo().alert();
         alertWindow.accept();
-    }
-
-    private void createProgram() {
-        WebElement element = driver.findElement(By.id("My_Programs"));
-        element.click();
-        element = driver.findElement(By.id("saveAsProgram"));
-        element.click();
-        element = driver.findElement(By.id("programName"));
-        final WebElement finalElement = element;
-        wait.until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return finalElement.isDisplayed();
-            }
-        });
-        String testName = "test" + RandomUtils.nextInt();
-        element.sendKeys(testName);
-        element = driver.findElement(By.xpath("//button[span[text()=\"Save\"]]"));
-        element.click();
     }
 
     @Override

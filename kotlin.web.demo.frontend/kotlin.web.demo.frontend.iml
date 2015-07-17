@@ -23,5 +23,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="kotlin.web.demo.frontend node_modules" level="project" />
   </component>
 </module>
