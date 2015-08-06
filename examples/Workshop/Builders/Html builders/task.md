@@ -1,9 +1,9 @@
-##Html builder
-Fill the table with proper values from products and color the table in
-a chess order (using `getTitleColor()` and `getCellColor()` functions).
+## Html builder
 
-Pass a color as an argument to functions 'tr', 'td'.
+_1._ Fill the table with proper values from the product list.
+The products are declared in [data.kt](/#/Workshop/Builders/Html%20builders/data.kt).
 
-You can run 'JavaScript(Canvas)' configuration to see the rendered table
+_2._ Color the table in a chess order (using getTitleColor() and getCellColor() functions above).
+Pass a color as an argument to the functions `tr`, `td`.
 
-If you are interested in html builders for Kotlin have a look at [html4k](https://github.com/cy6erGn0m/html4k)
+You can run 'JavaScript(Canvas)' configuration to see the rendered table.

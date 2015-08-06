@@ -1,11 +1,7 @@
-package iv_builders
+import Answer.*
 
-import util.questions.Answer
-import util.questions.Answer.*
+enum class Answer { a, b, c }
 
 val answers = linkedMapOf<Int, Answer?>(
-        1 to c,
-        2 to b,
-        3 to b,
-        4 to c
+        1 to c, 2 to b, 3 to b, 4 to c
 )

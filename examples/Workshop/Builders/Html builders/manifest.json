@@ -1,12 +1,5 @@
 {
   "confType": "junit",
-  "taskWindows": [
-    {
-      "line": 21,
-      "start": 12,
-      "length": 34
-    }
-  ],
   "files": [
     {
       "modifiable": false,

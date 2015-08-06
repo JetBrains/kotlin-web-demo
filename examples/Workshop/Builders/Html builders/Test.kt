@@ -1,12 +1,10 @@
-package iv_builders
-
 import org.junit.Assert
 import org.junit.Test as test
 
-class _25_Html_Builders {
+class TestHtmlBuilders {
     test fun productTableIsFilled() {
         val result = renderProductTable()
-        Assert.assertTrue("Product table should contain corresponding data", result.contains("cactus"))
+        Assert.assertTrue("Product table should contain the corresponding data", result.contains("cactus"))
     }
 
     test fun productTableIsColored() {

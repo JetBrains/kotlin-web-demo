@@ -1,5 +1,3 @@
-package iv_builders
-
 import kotlin.browser.document
 
 fun main(args: Array<String>){

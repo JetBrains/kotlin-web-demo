@@ -1,12 +1,15 @@
-package iv_builders
-
 import org.junit.Test as test
 import org.junit.Assert
-import util.questions.Answer.*
+import Answer.*
 
-class _26_Builders_How_It_Works {
+class TestBuildersHowItWorks {
     test fun testBuildersQuiz() {
-        val correctAnswers = linkedMapOf(1 to c, 2 to b, 3 to b, 4 to c)
-        Assert.assertEquals("Your answers are incorrect: ", correctAnswers, answers)
+        if (answers.values().toSet() == setOf(null)) {
+            Assert.fail("Please specify your answers!")
+        }
+        val correctAnswers = mapOf(22 - 20 to b, 1 + 3 to c, 11 - 8 to b, 79 - 78 to c)
+        if (correctAnswers != answers) {
+            Assert.fail("Your answers are incorrect!")
+        }
     }
 }

@@ -1,6 +1,6 @@
-##String and map builders
-[Extension function literals](http://kotlinlang.org/docs/reference/lambdas.html#extension-function-expressions)
-that were introduced in previous task can be very useful for creating builders of different kind. For example:
+## String and map builders
+
+Extension function literals are very useful for creating builders, e.g.:
 
 ```kotlin
 fun buildString(build: StringBuilder.() -> Unit): String {
@@ -20,6 +20,6 @@ val s = buildString {
 s == "Numbers: 123"
 ```
 
-Implement `buildMap()` so it would be the same type builder for map.
-
-Use function `hashMapOf()` to create a map.
+Add and implement the function 'buildMap' with one parameter (of type extension function) creating a new HashMap,
+building it and returning it as a result.
+The usage of this function is shown below.

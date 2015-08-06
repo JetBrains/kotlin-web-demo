@@ -1,10 +1,8 @@
-package iv_builders.examples
-
 import org.junit.Assert
 import org.junit.Test as test
 import java.util.HashMap
 
-class _24_The_Function_With {
+class TestTheFunctionWith {
     test fun testBuildString() {
         val s = buildString()
         val sb = StringBuilder()

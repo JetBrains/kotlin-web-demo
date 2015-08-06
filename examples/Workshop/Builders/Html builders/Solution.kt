@@ -1,8 +1,3 @@
-package iv_builders
-
-import iv_builders.data.getProducts
-import iv_builders.htmlLibrary.*
-
 fun renderProductTable(): String {
     return html {
         table {

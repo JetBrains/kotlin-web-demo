@@ -1,10 +1,8 @@
-package iv_builders.examples
-
-fun <T, R> with2(receiver: T, f: T.() -> R): R = receiver.f()
+fun <T, R> myWith(receiver: T, f: T.() -> R): R = receiver.f()
 
 fun buildString(): String {
     val stringBuilder = StringBuilder()
-    with2 (stringBuilder) {
+    myWith (stringBuilder) {
         append("Numbers: ")
         for (i in 1..10) {
             append(i)
@@ -15,7 +13,7 @@ fun buildString(): String {
 
 fun buildMap(): Map<Int, String> {
     val map = hashMapOf<Int, String>()
-    with2 (map) {
+    myWith (map) {
         put(0, "0")
         for (i in 1..10) {
             put(i, "$i")

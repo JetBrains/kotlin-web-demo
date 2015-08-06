@@ -1,5 +1,3 @@
-package iv_builders.htmlLibrary
-
 import java.util.ArrayList
 
 open class Tag(val name: String) {
