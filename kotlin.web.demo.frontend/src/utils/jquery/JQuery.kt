@@ -78,11 +78,9 @@ native("val")
 fun JQuery.value(s: String)
 
 native("$")
-native
 fun jq(document: Document): JQuery
 
 native("$")
-native
 fun jq(element: HTMLElement): JQuery
 
 native
