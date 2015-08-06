@@ -134,10 +134,10 @@
     </macrodef>
 
     <target name="update_to_latest_version">
-        <loadresource property="build.number">
+        <loadresource property="kotlin.build.number">
             <url url="${teamcity}/guestAuth/app/rest/builds/${locator}/number"/>
         </loadresource>
-        <get src="${tc.plugin}/kotlin-plugin-${build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"
+        <get src="${tc.plugin}/kotlin-plugin-${kotlin.build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"
              usetimestamp="true"/>
         <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
              dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>
