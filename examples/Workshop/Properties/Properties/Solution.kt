@@ -1,5 +1,3 @@
-package iii_properties
-
 class PropertyExample() {
     var counter = 0
     var propertyWithCounter: Int? = null
@@ -7,5 +5,4 @@ class PropertyExample() {
             $propertyWithCounter = v
             counter++
         }
-    fun getCountOfAssignements() = counter
 }

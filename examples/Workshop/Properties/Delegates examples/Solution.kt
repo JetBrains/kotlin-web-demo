@@ -1,5 +1,3 @@
-package iii_properties
-
 import kotlin.properties.Delegates
 
 class Commodity(data: MutableMap<String, Any?>) {

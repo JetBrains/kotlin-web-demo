@@ -1,5 +1,3 @@
-package iii_properties
-
 import java.util.Calendar
 
 data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int)
@@ -15,11 +13,3 @@ fun Long.toDate(): MyDate {
     c.setTimeInMillis(this)
     return MyDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE))
 }
-
-enum class TimeInterval {
-    DAY,
-    WEEK,
-    YEAR
-}
-
-class DateRange(public val start: MyDate, public val end: MyDate)

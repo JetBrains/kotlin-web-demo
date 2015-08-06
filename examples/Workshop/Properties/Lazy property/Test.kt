@@ -1,9 +1,7 @@
-package iii_properties
-
 import org.junit.Assert
 import org.junit.Test as test
 
-class _19_Lazy_Property {
+class TetLazyProperty {
     test fun testLazy() {
         var initialized = false
         val lazyProperty = LazyProperty({ initialized = true; 42 })

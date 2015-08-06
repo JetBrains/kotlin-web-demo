@@ -1,10 +1,8 @@
-package iii_properties
-
 import org.junit.Assert
 import org.junit.Test as test
 import java.util.HashMap
 
-class _20_Delegates_Examples {
+class TestDelegatesExamples {
     test fun testCommodity() {
         val data = hashMapOf<String, Any?>("description" to "snowboard", "price" to 349, "isAvailable" to true)
         val p = Commodity(data)
