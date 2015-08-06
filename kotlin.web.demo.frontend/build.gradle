@@ -1,0 +1,12 @@
+plugins {
+    id "com.moowork.node" version "0.10"
+}
+
+node {
+    download = true
+}
+
+task bower_install(type: NodeTask, dependsOn: npm_install) {
+    script = file('node_modules/bower/bin/bower')
+    args = ['install']
+}
