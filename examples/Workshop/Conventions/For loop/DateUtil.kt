@@ -1,7 +1,4 @@
-package ii_conventions
-
 import java.util.Calendar
-
 
 fun MyDate.nextDay() = addTimeIntervals(TimeInterval.DAY, 1)
 

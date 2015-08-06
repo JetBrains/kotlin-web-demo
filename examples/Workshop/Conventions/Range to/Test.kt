@@ -1,18 +1,14 @@
-package ii_conventions
-
 import org.junit.Assert
 import org.junit.Test as test
 import java.util.ArrayList
 
-val MyDate.s: String get() = "($year-$month-$dayOfMonth)"
+class TestRangeTo {
+    fun doTest(date: MyDate, first: MyDate, last: MyDate, shouldBeInRange: Boolean) {
+        val message = "${date} should${if (shouldBeInRange) "" else "n't"} be in range: ${first}..${last}"
+        Assert.assertEquals(message, shouldBeInRange, checkInRange(date, first, last))
+    }
 
-class _13_Range_To {
-    test fun testIterateOverDateRange() {
-        val actualDateRange = ArrayList<MyDate>()
-        for(date in getRange(MyDate(2014, 5, 1), MyDate(2014, 5, 2))) {
-            actualDateRange.add(date)
-        }
-        val expectedDateRange = arrayListOf(MyDate(2014, 5, 1), MyDate(2014, 5, 2))
-        Assert.assertEquals("Incorrect iteration", expectedDateRange, actualDateRange)
+    test fun testInRange() {
+        doTest(MyDate(2014, 3, 22), MyDate(2014, 1, 1), MyDate(2015, 1, 1), shouldBeInRange = true)
     }
 }

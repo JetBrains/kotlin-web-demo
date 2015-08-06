@@ -1,5 +1,3 @@
-package i_introduction._5_Nullable_Types
-
 fun sendMessageToClient(
         client: Client?, message: String?, mailer: Mailer
 ) {

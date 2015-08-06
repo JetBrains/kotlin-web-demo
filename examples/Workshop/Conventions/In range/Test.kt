@@ -1,13 +1,9 @@
-package ii_conventions
-
 import org.junit.Assert
 import org.junit.Test as test
 
-val MyDate.s: String get() = "($year-$month-$dayOfMonth)"
-
-class _14_In_Range {
+class TestInRange {
     fun doTest(date: MyDate, first: MyDate, last: MyDate, shouldBeInRange: Boolean) {
-        val message = "The date ${date.s} should${if (shouldBeInRange) "" else "n't"} be in range: ${first.s}..${last.s}"
+        val message = "${date} should${if (shouldBeInRange) "" else "n't"} be in ${DateRange(first, last)}"
         Assert.assertEquals(message, shouldBeInRange, checkInRange(date, first, last))
     }
 

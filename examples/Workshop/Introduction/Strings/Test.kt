@@ -1,11 +1,9 @@
-package i_introduction._4_String_Templates
-
 import kotlin.test.*
 import org.junit.Test as test
 import org.junit.Assert
 import java.util.regex.Pattern
 
-class _04_String_Templates() {
+class TestStringTemplates() {
     test fun match() {
         Assert.assertTrue(Pattern.compile(getPattern()).matcher("11 MAR 1952").find())
     }

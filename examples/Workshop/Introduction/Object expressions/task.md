@@ -1,8 +1,8 @@
-##Object expressions
-Sometimes we need to create an object of a slight modification of some class,
-without explicitly declaring a new subclass for it. In Kotlin
-[object expressions](http://kotlinlang.org/docs/reference/object-declarations.html#object-expressions)
-can be used in such cases.
+## Object expressions
 
-Add an object expression that extends MouseAdapter and counts the number of mouse clicks
-as an argument to the function `handleMouse()`.
+Read about [object expressions](http://kotlinlang.org/docs/reference/object-declarations.html)
+that play the same role in Kotlin as anonymous classes do in Java.
+
+Add an object expression that provides a comparator to sort a list in a descending order using java.util.Collections class.
+In Kotlin you use Kotlin library extensions instead of java.util.Collections,
+but this example is still a good demonstration of mixing Kotlin and Java code.

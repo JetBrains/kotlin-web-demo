@@ -1,8 +1,9 @@
-package ii_conventions
+data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int)
 
-fun addIndex(list: List<Int>): List<Int>{
-    val result = arrayListOf<Int>()
-    for((index, value) in list.withIndex())
-        result.add(value + index)
-    return result
+fun isLeapDay(date: MyDate): Boolean {
+
+    val (year, month, dayOfMonth) = date
+
+    // 29 February of a leap year
+    return year % 4 == 0 && month == 2 && dayOfMonth == 29
 }

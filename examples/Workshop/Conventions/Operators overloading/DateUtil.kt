@@ -1,15 +1,4 @@
-package ii_conventions
-
 import java.util.Calendar
-val MyDate.s: String get() = "($year-$month-$dayOfMonth)"
-
-fun MyDate.nextDay() = addTimeIntervals(TimeInterval.DAY, 1)
-
-enum class TimeInterval {
-    DAY,
-    WEEK,
-    YEAR
-}
 
 fun MyDate.addTimeIntervals(timeInterval: TimeInterval, number: Int): MyDate {
     val c = Calendar.getInstance()

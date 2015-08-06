@@ -1,13 +1,14 @@
-##In range
-Kotlin operator `in` compiles to function `contains()`.
+## In range
+
+In Kotlin `in` checks are translated to the corresponding `contains` calls:
 
 ```kotlin
-"a" in container
-// compiles to
-container.contains("a")
+val list = listOf("a", "b")
+"a" in list  // list.contains("a")
+"a" !in list // !list.contains("a")
 ```
 
-Implement function `DateRange.contains()` to make `in` operator work.
-
-Note that DateRange become an implementation of standard
-[Range interface](http://kotlinlang.org/docs/reference/ranges.html#common-interfaces-definition).
+Read about [ranges](http://kotlinlang.org/docs/reference/ranges.html).
+Make the class DateRange implement the standard
+[Range](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-range/index.html)
+interface to allow `in` checks with a range of dates.

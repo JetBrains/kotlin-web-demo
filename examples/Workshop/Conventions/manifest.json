@@ -1,9 +1,9 @@
 {
   "examples": [
     "Comparison",
-    "For loop",
-    "Range to",
     "In range",
+    "Range to",
+    "For loop",
     "Operators overloading",
     "Multi assignment",
     "Invoke"

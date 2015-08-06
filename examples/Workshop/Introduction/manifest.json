@@ -3,14 +3,16 @@
   "examples": [
     "Hello, world!",
     "Java to Kotlin conversion",
-    "Default and named parameters",
+    "Default arguments",
+    "Named arguments",
     "Lambdas",
     "Strings",
     "Nullable types",
-    "Smart casts",
     "Data classes",
+    "Smart casts",
     "Extension functions",
-    "Extensions on collections",
-    "Object expressions"
+    "Object expressions",
+    "SAM conversions",
+    "Extensions on collections"
   ]
 }

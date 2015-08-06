@@ -1,7 +1,8 @@
-##Range to
-Read about [ranges](http://kotlinlang.org/docs/reference/ranges.html#ranges) in Kotlin
-and implement function `MyDate.rangeTo()` so that we could create `DateRange` instance using the following syntax:
+## Range to
+
+Implement the function `MyDate.rangeTo()`.
+This allows you to create a range of dates using the following syntax:
 
 ```kotlin
-MyDate(2014, 5, 1)..MyDate(2014, 5, 2)
+MyDate(2015, 5, 11)..MyDate(2015, 5, 12)
 ```

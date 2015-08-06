@@ -1,5 +1,3 @@
-package i_introduction._1_Functions
-
 fun toJSON(collection:Collection<Int>):String {
     val sb = StringBuilder()
     sb.append("[")

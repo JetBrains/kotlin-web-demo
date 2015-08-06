@@ -1,9 +1,7 @@
-package ii_conventions
-
 import org.junit.Assert
 import org.junit.Test as test
 
-class _17_Invoke {
+class TestInvoke {
     test fun testInvokeTwice() = testInvokable(2, ::invokeTwice)
 
     private fun testInvokable(numberOfInvocations: Int, invokeSeveralTimes: (Invokable) -> Invokable) {

@@ -1,1 +1,3 @@
-{"name":"Object expressions","containsHelp":false,"args":"","confType":"junit","help":"","files":[{"modifiable":true,"hidden":false,"skipInTestVersion":false,"filename":"Task.kt"},{"modifiable":false,"hidden":false,"skipInTestVersion":false,"filename":"Test.kt","type":"kotlin-test"}]}
+{
+  "confType": "junit"
+}

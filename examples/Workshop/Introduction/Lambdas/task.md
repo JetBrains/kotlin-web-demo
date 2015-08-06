@@ -1,11 +1,9 @@
-##Lambdas
-Kotlin supports a lot of functional programming things like
-[higher-order functions](http://kotlinlang.org/docs/reference/lambdas.html#higher-order-functions)
-and
-[function literals](http://kotlinlang.org/docs/reference/lambdas.html#function-literals-and-function-expressions).
+## Lambdas
 
-For example, function [collection.any()](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/any.html)
-is a higher-order function, i.e. it takes a function value as an argument. This argument is an
-expression that is itself a function, i.e. a function literal.
+Kotlin supports a functional style of programming.
+Read about higher-order functions and function literals (lambdas) in Kotlin
+[here](http://kotlinlang.org/docs/reference/lambdas.html).
 
-Use this function to check if collection contains an even number.
+Pass a lambda to [any](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/any.html)
+function to check if the collection contains an even number.
+The function `any` gets a predicate as an argument and returns true if there is at least one element satisfying the predicate.

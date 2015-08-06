@@ -1,9 +1,9 @@
-package ii_conventions
-
 fun MyDate.rangeTo(other: MyDate) = DateRange(this, other)
 
-class DateRange(public val start: MyDate, public val end: MyDate): Iterable<MyDate>{
-    override fun iterator(): Iterator<MyDate> = DateIterator(this)
+class DateRange(override public val start: MyDate, override public val end: MyDate): Range<MyDate> {
+    override fun contains(item: MyDate): Boolean = start < item && item < end
 }
 
-fun getRange(start: MyDate, end: MyDate): DateRange = start..end
+fun checkInRange(date: MyDate, first: MyDate, last: MyDate): Boolean {
+    return date in first..last
+}

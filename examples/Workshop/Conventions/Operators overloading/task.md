@@ -1,10 +1,11 @@
-##Operators overloading
-From the previous task you already now how Kotlin compile operators `in`, `..`, `<`, `>`, e.t.c..
+## Operators overloading
 
-You can read more about operators [here](http://kotlinlang.org/docs/reference/operator-overloading.html).
+Implement a kind of date arithmetic, support adding years, weeks and days to a date.
+You could be able to write the code like this: `date + YEAR * 2 + WEEK * 3 + DAY * 15`.
 
-Implement a kind of date arithmetic, support adding years, weeks and days to a date by
-implementing function `MyDate.plus()`.
-
-Use class `TimeInterval` and utility function `MyDate.addTimeInterval()` from
+At first, add an extension function 'plus()' to MyDate, taking TimeInterval as an argument.
+Use an utility function `MyDate.addTimeInterval()` declared in
 [DateUtil.kt](http://localhost:8080/#/Workshop/Conventions/Operators%20overloading/DateUtil.kt)
+
+Then, try to support adding several time intervals to a date.
+You may need an extra class.

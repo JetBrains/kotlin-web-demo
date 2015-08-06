@@ -1,12 +1,10 @@
-package i_introduction._6_Smart_Casts
-
-fun print(e: Expr): String =
+fun eval(e: Expr): Int =
         when (e) {
-            is Num -> "${e.value}"
-            is Sum -> "${print(e.left)} + ${print(e.right)}"
+            is Num -> e.value
+            is Sum -> eval(e.left) + eval(e.right)
             else -> throw IllegalArgumentException("Unknown expression")
         }
 
-abstract class Expr
-class Num(val value: Int) : Expr()
-class Sum(val left: Expr, val right: Expr) : Expr()
+interface Expr
+class Num(val value: Int) : Expr
+class Sum(val left: Expr, val right: Expr) : Expr

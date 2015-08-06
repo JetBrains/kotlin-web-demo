@@ -4,20 +4,7 @@
   "args": "",
   "confType": "junit",
   "help": "",
-  "taskWindows": [
-    {
-      "line": 2,
-      "start": 54,
-      "length": 34
-    }
-  ],
   "files": [
-    {
-      "modifiable": false,
-      "hidden": false,
-      "skipInTestVersion": false,
-      "filename": "MyDate.kt"
-    },
     {
       "modifiable": false,
       "hidden": false,
