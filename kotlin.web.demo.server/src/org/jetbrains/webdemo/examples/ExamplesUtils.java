@@ -23,10 +23,8 @@ import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.session.UserInfo;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ExamplesUtils {
@@ -39,11 +37,7 @@ public class ExamplesUtils {
     public static Project getUserVersionOfExample(UserInfo userInfo, String url) throws DatabaseOperationException {
         Example example = getExample(url);
         Project userVersion = MySqlConnector.getInstance().getStoredSolution(userInfo, url);
-        if(userVersion == null){
-            if(example.getPreviousExample() == null || !example.parent.isSequential()) return example;
-            else userVersion = MySqlConnector.getInstance().getStoredSolution(userInfo, example.getPreviousExample().id);
-            if(userVersion == null) return example;
-        }
+        if(userVersion == null) return example;
 
         List<ProjectFile> userFiles = new ArrayList<ProjectFile>();
         for(ProjectFile file : example.files){
