@@ -23,7 +23,8 @@ open class Folder(
         val name: String,
         val id: String,
         val projects: List<ProjectHeader>,
-        val childFolders: List<Folder>
+        val childFolders: List<Folder>,
+        val isTaskFolder: Boolean
 ){
     var parent: Folder? = null
         private  set

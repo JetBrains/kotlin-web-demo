@@ -58,7 +58,7 @@ public class ExamplesLoader {
             Map<String, ExamplesFolder> childFolders = new LinkedHashMap<>();
             List<ObjectNode> commonFiles = new ArrayList<>();
             commonFiles.addAll(parentCommonFiles);
-            boolean sequential = manifest.has("sequential") ? manifest.get("sequential").asBoolean() : false;
+            boolean taskFolder = manifest.has("taskFolder") ? manifest.get("taskFolder").asBoolean() : false;
 
             if (manifest.has("files")) {
                 for (JsonNode node : manifest.get("files")) {
@@ -93,7 +93,7 @@ public class ExamplesLoader {
                 }
             }
 
-            return new ExamplesFolder(name, url, sequential, examples, childFolders);
+            return new ExamplesFolder(name, url, taskFolder, examples, childFolders);
         } catch (IOException e) {
             System.err.println("Can't load folder: " + e.toString());
             return null;

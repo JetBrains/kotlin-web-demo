@@ -68,7 +68,8 @@ public class KotlinHttpServlet extends HttpServlet {
             MySqlConnector.getInstance();
 
             List<String> tasksIdentifiers = new ArrayList<>();
-            for(ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolder("Workshop").getChildFolders()){
+            for(ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()){
+                if(!folder.isTaskFolder()) continue;
                 for(Project example : folder.getExamples()){
                     tasksIdentifiers.add(example.id);
                 }

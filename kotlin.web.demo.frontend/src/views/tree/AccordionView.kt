@@ -115,7 +115,7 @@ class AccordionView(
                             onProjectSelected = onProjectSelected,
                             onProjectCreated = onProjectCreated
                     )
-                } else if (folder.name == "Workshop") {
+                } else if (folder.isTaskFolder) {
                     FolderViewWithProgress(
                             parentNode = element,
                             content = folder,

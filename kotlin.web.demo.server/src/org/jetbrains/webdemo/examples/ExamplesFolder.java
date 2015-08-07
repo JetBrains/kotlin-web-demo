@@ -28,16 +28,16 @@ public class ExamplesFolder {
     private String name;
     private Map<String, Example> examples;
     private Map<String, ExamplesFolder> childFolders;
-    private Boolean sequential;
+    private Boolean taskFolder;
 
     public ExamplesFolder(String name,
                           String id,
-                          Boolean sequential,
+                          Boolean taskFolder,
                           Map<String, Example> examples,
                           Map<String, ExamplesFolder> childFolders) {
         this.name = name;
         this.id = id;
-        this.sequential = sequential;
+        this.taskFolder = taskFolder;
         this.examples = examples;
         this.childFolders = childFolders;
         for(Example example : examples.values()){
@@ -69,7 +69,7 @@ public class ExamplesFolder {
         return id;
     }
 
-    public Boolean isSequential() {
-        return sequential;
+    public Boolean isTaskFolder() {
+        return taskFolder;
     }
 }

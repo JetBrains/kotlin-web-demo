@@ -43,7 +43,7 @@ class HeadersProvider(
             }
         }
         val childFolders = content.childFolders.map {  createFolder(it, type) }
-        val folder = Folder(content.name, content.id, projects, childFolders)
+        val folder = Folder(content.name, content.id, projects, childFolders, content.isTaskFolder)
         return folder
     }
 
@@ -64,7 +64,8 @@ class HeadersProvider(
                 "Public links",
                 "PublicLinks",
                 publicLinks,
-                emptyList()
+                emptyList(),
+                false
         )
     }
 
@@ -76,9 +77,9 @@ class HeadersProvider(
                     try {
                         val folders = arrayListOf<Folder>()
                         foldersContent.mapTo(folders, {
-                            val type = when (it.name){
-                                "My programs" -> ProjectType.USER_PROJECT
-                                "Workshop" -> ProjectType.TASK
+                            val type = when {
+                                it.name == "My programs" -> ProjectType.USER_PROJECT
+                                it.isTaskFolder -> ProjectType.TASK
                                 else  -> ProjectType.EXAMPLE
                             }
                             createFolder(it, type)
@@ -143,6 +144,7 @@ interface FolderContent {
     val id: String
     val projects: Array<ProjectInfo>
     val childFolders: Array<FolderContent>
+    val isTaskFolder: Boolean
 }
 
 native
