@@ -1,15 +1,3 @@
 {
-  "confType": "junit",
-  "taskWindows": [
-    {
-      "line": 4,
-      "start": 60,
-      "length": 34
-    },
-    {
-      "line": 8,
-      "start": 68,
-      "length": 34
-    }
-  ]
+  "confType": "junit"
 }

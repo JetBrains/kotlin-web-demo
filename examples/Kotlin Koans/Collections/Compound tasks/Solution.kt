@@ -1,5 +1,3 @@
-package v_collections
-
 fun Customer.getMostExpensiveDeliveredProduct(): Product? {
     // Return the most expensive among delivered products
     // (use Order.isDelivered flag)

@@ -1,8 +1,7 @@
-##Group By
-Implement extension function `Shop.groupCustomersByCity()` using method
-[groupBy](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/group-by.html).
+## Group By
 
-`groupBy()` returns a map of the elements in original collection grouped by the result of given toKey function.
+Implement `Shop.groupCustomersByCity()` using
+[groupBy](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/group-by.html).
 
 ```kotlin
 val result = listOf("a", "b", "ba", "ccc", "ad").groupBy { it.length() }

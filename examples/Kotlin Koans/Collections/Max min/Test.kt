@@ -1,10 +1,7 @@
-package v_collections
-
 import org.junit.Assert
 import org.junit.Test as test
-import v_collections.data.*
 
-class E_Max_Min {
+class TestMaxMin {
     test fun testCustomerWithMaximumNumberOfOrders() {
         Assert.assertEquals(customers[reka], shop.getCustomerWithMaximumNumberOfOrders())
     }

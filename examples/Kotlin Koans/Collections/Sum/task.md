@@ -1,11 +1,8 @@
-##Sum
-Implement extension function `Customer.getTotalOrderPrice()` using method
+## Sum
+
+Implement `Customer.getTotalOrderPrice()` using
 [sum](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/sum.html) or
 [sumBy](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/sum-by.html).
-
-`sum()` returns the sum of all elements in the collection.
-
-`sumBy()` returns the sum of all values produced by transform function from elements in the collection.
 
 ```kotlin
 listOf(1, 5, 3).sum() == 9

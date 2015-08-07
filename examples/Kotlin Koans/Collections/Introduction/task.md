@@ -1,29 +1,14 @@
-##Introduction
-This part of koans was inspired by [GS Collections Kata](https://github.com/goldmansachs/gs-collections-kata).
+## Introduction
+
+This part was inspired by [GS Collections Kata](https://github.com/goldmansachs/gs-collections-kata).
 
 For easy java compatibility we don't introduce our own collections, but use standard Java ones.
-However there are two views on them: mutable and read-only.
+Read about [read-only and mutable views on Java collections](http://blog.jetbrains.com/kotlin/2012/09/kotlin-m3-is-out/#Collections).
 
-```kotlin
-fun useReadonlySet(set: Set<Int>) {
-    // doesn't compile:
-    //    set.add(1)
-}
-fun useMutableSet(set: MutableSet<Int>) {
-    set.add(1)
-}
-```
+In Kotlin standard library there are lots of extension functions that make the work with collections more convenient.
+For example, operations that transform a collection to another one, starting with 'to':
+[toSet](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/to-set.html) or
+[toList](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/to-list.html).
 
-There are a bunch of operations that help to transform a collection to another one, starting with 'to', for example:
-[toSet](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/to-set.html),
-[toList](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/to-list.html),
-[toMap](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/to-map.html).
-
-```kotlin
-fun example(list: List<Int>): Set<Int> {
-    list.toSet()
-}
-```
-
-Your first task is to implement extension function `Shop.getSetOfCustomers()` using method `toSet()`. Class `Shop`
-and all related classes can be found at [Shop.kt](/#/Kotlin%20Koans/Collections/Introduction/Shop.kt).
+Implement an extension function `Shop.getSetOfCustomers()`.
+The class `Shop` and all related classes can be found at [Shop.kt](/#/Kotlin%20Koans/Collections/Introduction/Shop.kt).

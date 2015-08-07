@@ -1,9 +1,6 @@
-##Partition
-Implement extension function `Shop.getCustomersWithMoreUndeliveredOrdersThanDelivered()` using method
-[partition](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/partition.html)
-
-`partition()` splits original collection into pair of collections, where first collection contains
-elements for which predicate yielded true, while second collection contains elements for which predicate yielded false.
+## Partition
+Implement `Shop.getCustomersWithMoreUndeliveredOrdersThanDelivered()` using
+[partition](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/partition.html).
 
 ```kotlin
 val numbers = listOf(1, 3, -4, 2, -11)

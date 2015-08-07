@@ -1,13 +1,8 @@
-package v_collections
-
 import org.junit.Assert
 import org.junit.Test as test
-import v_collections.data.*
 
-class A_Introduction {
+class TestIntroduction {
     test fun testSetOfCustomers(){
-        val setOfCustomers = shop.getSetOfCustomers()
-        Assert.assertTrue(setOfCustomers is Set<Customer>)
-        customers.values().forEach { Assert.assertTrue(it in setOfCustomers) }
+        Assert.assertEquals(shop.getSetOfCustomers(), customers.values().toSet())
     }
 }

@@ -1,8 +1,3 @@
-package v_collections.data
-
-import v_collections.*
-import v_collections.shopBuilders.*
-
 //products
 val idea = Product("IntelliJ IDEA Ultimate", 199.0)
 val reSharper = Product("ReSharper", 149.0)
@@ -32,33 +27,33 @@ val Budapest = City("Budapest")
 val Ankara = City("Ankara")
 val Tokyo = City("Tokyo")
 
-val shop = shop("test shop") {
-    customer(lucas, Canberra) {
-        order(reSharper)
-        order(reSharper, dotMemory, dotTrace)
-    }
-    customer(cooper, Canberra) {}
-    customer(nathan, Vancouver) {
-        order(rubyMine, webStorm)
-    }
-    customer(reka, Budapest) {
-        order(isDelivered = false, products = idea)
-        order(isDelivered = false, products = idea)
-        order(idea)
-    }
-    customer(bajram, Ankara) {
-        order(reSharper)
-    }
-    customer(asuka, Tokyo) {
-        order(idea)
-    }
-}
+fun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())
+fun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)
+fun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())
 
-val customers: Map<String, Customer> = shop.customers.fold(hashMapOf<String, Customer>(), {
-    map, customer ->
-    map[customer.name] = customer
-    map
-})
+val shop = shop("jb test shop",
+        customer(lucas, Canberra,
+                order(reSharper),
+                order(reSharper, dotMemory, dotTrace)
+        ),
+        customer(cooper, Canberra),
+        customer(nathan, Vancouver,
+                order(rubyMine, webStorm)
+        ),
+        customer(reka, Budapest,
+                order(idea, isDelivered = false),
+                order(idea, isDelivered = false),
+                order(idea)
+        ),
+        customer(bajram, Ankara,
+                order(reSharper)
+        ),
+        customer(asuka, Tokyo,
+                order(idea)
+        )
+)
+
+val customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()
 
 val orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)
 

@@ -1,7 +1,5 @@
-package v_collections
-
 // Return a customer who ordered maximum number of orders
-fun Shop.getCustomerWithMaximumNumberOfOrders(): Customer? = throw Exception("Not implemented")
+fun Shop.getCustomerWithMaximumNumberOfOrders(): Customer? = TODO()
 
 // Return the most expensive ordered product
-fun Customer.getMostExpensiveOrderedProduct(): Product? = throw Exception("Not implemented")
+fun Customer.getMostExpensiveOrderedProduct(): Product? = TODO()

@@ -1,3 +1,4 @@
-##Compound tasks
-Implement extensions functions `Customer.getMostExpensiveDeliveredProduct()` and
-`Shop.getNumberOfTimesProductWasOrdered()` using methods from the Kotlin standard library.
+## Compound tasks
+
+Implement `Customer.getMostExpensiveDeliveredProduct()` and
+`Shop.getNumberOfTimesProductWasOrdered()` using functions from the Kotlin standard library.

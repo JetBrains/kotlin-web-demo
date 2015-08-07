@@ -1,10 +1,7 @@
-package v_collections
-
 import org.junit.Assert
 import org.junit.Test as test
-import v_collections.data.*
 
-class C_All_Any_And_Other_Predicates {
+class TestAllAnyAndOtherPredicates {
 
     test fun testAllCustomersAreFromCity() {
         Assert.assertFalse(shop.checkAllCustomersAreFrom(Canberra))
