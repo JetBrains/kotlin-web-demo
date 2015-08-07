@@ -1,36 +1,10 @@
 ## Extension functions on collections
 
-Rewrite the following Java function to Kotlin.
+Kotlin code can be easily mixed with Java code.
+Thus in Kotlin we don't introduce our own collections, but use standard Java ones (slightly improved).
+Read about [read-only and mutable views on Java collections](http://blog.jetbrains.com/kotlin/2012/09/kotlin-m3-is-out/#Collections).
 
-```java
-public Collection<String> doSomethingStrangeWithCollection(
-        Collection<String> collection
-) {
-    Map<Integer, List<String>> groupsByLength = Maps.newHashMap();
-    for (String s : collection) {
-        List<String> strings = groupsByLength.get(s.length());
-        if (strings == null) {
-            strings = Lists.newArrayList();
-            groupsByLength.put(s.length(), strings);
-        }
-        strings.add(s);
-    }
-
-    int maximumSizeOfGroup = 0;
-    for (List<String> group : groupsByLength.values()) {
-        if (group.size() > maximumSizeOfGroup) {
-            maximumSizeOfGroup = group.size();
-        }
-    }
-
-    for (List<String> group : groupsByLength.values()) {
-        if (group.size() == maximumSizeOfGroup) {
-            return group;
-        }
-    }
-    return null;
-}
-```
-
-[Here](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/)
-you can find the documentation about the functions in Kotlin standard library.
+In [Kotlin standard library](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/)
+there are lots of extension functions that make the work with collections more convenient.
+Rewrite the previous example once more using an extension function
+[sortDescending](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/sort-descending.html).

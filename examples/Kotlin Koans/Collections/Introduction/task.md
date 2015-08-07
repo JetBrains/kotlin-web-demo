@@ -2,10 +2,8 @@
 
 This part was inspired by [GS Collections Kata](https://github.com/goldmansachs/gs-collections-kata).
 
-For easy java compatibility we don't introduce our own collections, but use standard Java ones.
-Read about [read-only and mutable views on Java collections](http://blog.jetbrains.com/kotlin/2012/09/kotlin-m3-is-out/#Collections).
-
-In Kotlin standard library there are lots of extension functions that make the work with collections more convenient.
+Default collections in Kotlin are Java collections,
+but there are lots of useful extension functions for them.
 For example, operations that transform a collection to another one, starting with 'to':
 [toSet](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/to-set.html) or
 [toList](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/to-list.html).

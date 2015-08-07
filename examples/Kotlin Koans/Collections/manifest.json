@@ -27,6 +27,7 @@
     "GroupBy",
     "Partition",
     "Fold",
-    "Compound tasks"
+    "Compound tasks",
+    "Get used to new style"
   ]
 }

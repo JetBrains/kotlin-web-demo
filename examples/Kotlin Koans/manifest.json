@@ -2,10 +2,10 @@
   "taskFolder": true,
   "folders": [
     "Introduction",
+    "Collections",
     "Conventions",
     "Properties",
     "Builders",
-    "Collections",
     "Generics"
   ],
   "files": [
