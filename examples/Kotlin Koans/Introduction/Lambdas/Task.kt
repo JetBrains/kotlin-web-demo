@@ -1,1 +1,1 @@
-fun containsEven(collection: Collection<Int>): Boolean = collection.any { TODO() }
+fun containsEven(collection: Collection<Int>): Boolean = collection.any { <taskWindow>TODO()</taskWindow> }

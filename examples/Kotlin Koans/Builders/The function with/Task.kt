@@ -1,4 +1,4 @@
-fun <T, R> myWith(receiver: T, f: T.() -> R): R = TODO()
+fun <T, R> myWith(receiver: T, f: T.() -> R): R = <taskWindow>TODO()</taskWindow>
 
 fun buildString(): String {
     val stringBuilder = StringBuilder()
