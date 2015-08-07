@@ -65,7 +65,7 @@ public class MySqlConnector {
         ResultSet rs = null;
         List<String> storedTasksIdentifiers = new ArrayList<String>();
         try (Connection connection = dataSource.getConnection()){
-            st = connection.prepareStatement("SELECT koan_tasks.public_id FROM koan_tasks");
+            st = connection.prepareStatement("SELECT koans_tasks.public_id FROM koans_tasks");
             rs = st.executeQuery();
             while (rs.next()){
                 storedTasksIdentifiers.add(rs.getString("public_id"));
@@ -73,7 +73,7 @@ public class MySqlConnector {
             for(String taskId : tasksIdentifiers){
                 if (storedTasksIdentifiers.contains(taskId)) continue;
                 try(PreparedStatement insertStatement = connection.prepareStatement(
-                        "INSERT koan_tasks (public_id) VALUES (?)"
+                        "INSERT koans_tasks (public_id) VALUES (?)"
                 )){
                     insertStatement.setString(1, taskId);
                     insertStatement.executeUpdate();
@@ -722,7 +722,7 @@ public class MySqlConnector {
         PreparedStatement st = null;
         ResultSet rs = null;
         try (Connection connection = dataSource.getConnection()){
-            st = connection.prepareStatement("SELECT koan_tasks.id FROM koan_tasks WHERE public_id = ?");
+            st = connection.prepareStatement("SELECT koans_tasks.id FROM koans_tasks WHERE public_id = ?");
             st.setString(1, taskPublicId);
             rs = st.executeQuery();
             if (rs.next()) {
@@ -743,8 +743,8 @@ public class MySqlConnector {
         try (Connection connection = dataSource.getConnection()){
             Map<String, Boolean> result = new HashMap<>();
             st = connection.prepareStatement(
-                    "SELECT koan_tasks.public_id, projects.type FROM koan_tasks JOIN " +
-                            "projects ON koan_tasks.id = projects.task_id JOIN " +
+                    "SELECT koans_tasks.public_id, projects.type FROM koans_tasks JOIN " +
+                            "projects ON koans_tasks.id = projects.task_id JOIN " +
                             "users ON users.id = projects.owner_id WHERE " +
                             "users.provider = ? AND " +
                             "users.client_id = ? AND " +
@@ -837,10 +837,10 @@ public class MySqlConnector {
             st = connection.prepareStatement(
                     "SELECT projects.public_id FROM projects JOIN " +
                             "users ON users.id = projects.owner_id JOIN " +
-                            "koan_tasks ON koan_tasks.id = projects.task_id WHERE " +
+                            "koans_tasks ON koans_tasks.id = projects.task_id WHERE " +
                             "users.provider = ? AND " +
                             "users.client_id = ? AND " +
-                            "koan_tasks.public_id = ?"
+                            "koans_tasks.public_id = ?"
             );
             st.setString(1, userInfo.getType());
             st.setString(2, userInfo.getId());
