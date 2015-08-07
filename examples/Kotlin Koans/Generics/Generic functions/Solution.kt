@@ -1,7 +1,4 @@
-package vi_generics.generics
-
-import java.util.ArrayList
-import java.util.HashSet
+import java.util.*
 
 fun <T, C: MutableCollection<T>> Collection<T>.partitionTo(first: C, second: C, predicate: (T) -> Boolean): Pair<C, C> {
     for (element in this) {
@@ -14,10 +11,16 @@ fun <T, C: MutableCollection<T>> Collection<T>.partitionTo(first: C, second: C, 
     return Pair(first, second)
 }
 
-fun List<String>.partitionWordsAndLines(): Pair<kotlin.List<kotlin.String>, kotlin.List<kotlin.String>> {
-    return partitionTo(ArrayList<String>(), ArrayList()) { s -> !s.contains(" ") }
+fun partitionWordsAndLines() {
+    val (words, lines) = listOf("a", "a b", "c", "d e").
+            partitionTo(ArrayList<String>(), ArrayList()) { s -> !s.contains(" ") }
+    words == listOf("a", "c")
+    lines == listOf("a b", "d e")
 }
 
-fun Set<Char>.partitionLettersAndOtherSymbols(): Pair<kotlin.Set<kotlin.Char>, kotlin.Set<kotlin.Char>> {
-    return partitionTo(HashSet<Char>(), HashSet()) { c -> c in 'a'..'z' || c in 'A'..'Z'}
+fun partitionLettersAndOtherSymbols() {
+    val (letters, other) = setOf('a', '%', 'r', '}').
+            partitionTo(HashSet<Char>(), HashSet()) { c -> c in 'a'..'z' || c in 'A'..'Z'}
+    letters == setOf('a', 'r')
+    other == setOf('%', '}')
 }
