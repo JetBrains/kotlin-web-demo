@@ -159,6 +159,7 @@ object Layout {
         } else {
             jq("#workspace").css("margin-left", 0)
         }
+        Application.editor.refresh()
     }
 
 
