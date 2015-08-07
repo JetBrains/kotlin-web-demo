@@ -1,5 +1,5 @@
 ##Introduction
-This part of workshop was inspired by [GS Collections Kata](https://github.com/goldmansachs/gs-collections-kata).
+This part of koans was inspired by [GS Collections Kata](https://github.com/goldmansachs/gs-collections-kata).
 
 For easy java compatibility we don't introduce our own collections, but use standard Java ones.
 However there are two views on them: mutable and read-only.
@@ -26,4 +26,4 @@ fun example(list: List<Int>): Set<Int> {
 ```
 
 Your first task is to implement extension function `Shop.getSetOfCustomers()` using method `toSet()`. Class `Shop`
-and all related classes can be found at [Shop.kt](/#/Workshop/Collections/Introduction/Shop.kt).
+and all related classes can be found at [Shop.kt](/#/Kotlin%20Koans/Collections/Introduction/Shop.kt).
