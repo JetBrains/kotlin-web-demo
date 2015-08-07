@@ -1,6 +1,9 @@
 {
   "name": "try.kotl.in",
   "version": "1.0.0",
+  "scripts" : {
+    "postinstall": "bower install"
+  },
   "dependencies": {
     "bower": "*"
   }

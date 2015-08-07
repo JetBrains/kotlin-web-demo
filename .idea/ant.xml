@@ -2,7 +2,7 @@
 <project version="4">
   <component name="AntConfiguration">
     <buildFile url="file://$PROJECT_DIR$/update_dependencies.xml" />
-    <buildFile url="file://$PROJECT_DIR$/init.xml" />
+    <buildFile url="file://$PROJECT_DIR$/install_tomact.xml" />
     <buildFile url="file://$PROJECT_DIR$/kotlin.web.demo.frontend/test_env/install_env.xml" />
   </component>
 </project>

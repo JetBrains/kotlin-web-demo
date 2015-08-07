@@ -5,9 +5,12 @@ We use [YouTrack](http://youtrack.jetbrains.com/issues/KT#) for bug reports and 
 [Click here to report an issue.](https://youtrack.jetbrains.com/newIssue?project=KT&clearDraft=true&c=Subsystems+Web+Site&c=subtask+of+KT-2555)
 
 ##Installation
-try.kotl.in is running on [Tomcat](https://tomcat.apache.org/). You can setup Tomcat locally using init.xml.
+try.kotl.in is running on [Tomcat](https://tomcat.apache.org/). You can setup Tomcat locally using install_tomcat.xml.
 If you are installing tomcat manually, you need to download [ConnectorJ](http://dev.mysql.com/downloads/connector/j/) lib 
 and copy jar file to tomcat libraries.
+
+try.kotl.in frontend part uses bower as a dependency manager. To fetch this dependencies you have to install
+ [node](https://nodejs.org/) and run `npm install` in kotlin.web.demo.frontend folder.
 
 You need MySql database to launch try.kotl.in, schema can be found [here](kotlin.web.demo.server/resources/db_schema.sql)
 
