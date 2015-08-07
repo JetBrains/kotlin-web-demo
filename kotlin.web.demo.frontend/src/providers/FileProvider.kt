@@ -247,7 +247,8 @@ class FileProvider(
                     "publicId" to file.id,
                     "modifiable" to file.isModifiable,
                     "type" to file.type,
-                    "revertible" to file.isRevertible
+                    "revertible" to file.isRevertible,
+                    "taskWindows" to file.taskWindows.toTypedArray()
             )))
         }
     }

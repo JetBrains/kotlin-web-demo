@@ -201,13 +201,13 @@ class Editor(
             CodeMirror.colorize(help.getElementsByTagName("code"))
             cmDocument.addLineWidget(0, help, json("above" to true, "noHScroll" to true))
 
-            if (file.project.taskWindows.isEmpty() || file.isModified) return
-            val firstWindow = file.project.taskWindows.first()
+            if (file.taskWindows.isEmpty() || file.isModified) return
+            val firstWindow = file.taskWindows.first()
             cmDocument.setSelection(
                     Position(firstWindow.line, firstWindow.start + firstWindow.length),
                     Position(firstWindow.line, firstWindow.start)
             )
-            for(taskWindow in file.project.taskWindows){
+            for(taskWindow in file.taskWindows){
                 cmDocument.markText(
                         Position(taskWindow.line, taskWindow.start),
                         Position(taskWindow.line, taskWindow.start + taskWindow.length),

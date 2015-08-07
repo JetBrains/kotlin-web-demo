@@ -17,17 +17,19 @@
 package org.jetbrains.webdemo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Semyon.Atamas on 8/11/2014.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProjectFile {
 
 
     private Boolean modifiable;
     private String publicId;
-    private String text;
+    protected String text;
     private String name;
     private Type type;
 

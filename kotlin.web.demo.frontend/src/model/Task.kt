@@ -43,13 +43,10 @@ public class Task(
     val completedListener =  VarListener<Boolean>()
     var completed by Listenable(completed, completedListener)
 
-    var taskWindows = emptyList<TaskWindow>()
-
     var help: String by Delegates.notNull()
 
     override fun contentLoaded(content: dynamic) {
         help = content.help
-        if (content.taskWindows != null) this.taskWindows = (content.taskWindows as Array<TaskWindow>).toArrayList();
         super.contentLoaded(content);
     }
 }

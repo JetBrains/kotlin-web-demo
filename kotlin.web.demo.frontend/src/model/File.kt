@@ -29,7 +29,8 @@ class File(
         userText: String = text,
         val isModifiable: Boolean = true,
         val type: String = FileType.KOTLIN_FILE.name(),
-        isRevertible: Boolean = true
+        isRevertible: Boolean = true,
+        val taskWindows: List<TaskWindow> = emptyList()
 ) {
     val listenableName = VarListener<String>()
     var name: String by Listenable(name, listenableName)
@@ -56,7 +57,17 @@ class File(
 
     companion object {
         fun fromJSON(project: dynamic, obj: dynamic) =
-                File(project, obj.name, obj.publicId, obj.text, obj.userText, obj.modifiable, obj.type, obj.revertible)
+                File(
+                        project,
+                        obj.name,
+                        obj.publicId,
+                        obj.text,
+                        obj.userText,
+                        obj.modifiable,
+                        obj.type,
+                        obj.revertible,
+                        (obj.taskWindows as Array<TaskWindow>).toArrayList()
+                )
     }
 
 }
