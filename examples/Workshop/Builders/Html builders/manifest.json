@@ -10,6 +10,11 @@
     },
     {
       "modifiable": false,
+      "confType": "junit",
+      "filename": "Test.kt"
+    },
+    {
+      "modifiable": false,
       "hidden": false,
       "skipInTestVersion": false,
       "filename": "data.kt"
