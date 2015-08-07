@@ -26,4 +26,4 @@ fun example(list: List<Int>): Set<Int> {
 ```
 
 Your first task is to implement extension function `Shop.getSetOfCustomers()` using method `toSet()`. Class `Shop`
-and all related classes can be found at [Shop.kt](http://localhost:8080/#/Workshop/Collections/Introduction/Shop.kt).
+and all related classes can be found at [Shop.kt](/#/Workshop/Collections/Introduction/Shop.kt).
