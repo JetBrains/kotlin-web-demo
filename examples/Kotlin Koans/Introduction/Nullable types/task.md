@@ -6,7 +6,9 @@ in Kotlin and rewrite the following Java code using only one `if`:
 
 ```java
 public void sendMessageToClient(
-    @Nullable Client client, @Nullable String message, @NotNull Mailer mailer
+    @Nullable Client client,
+    @Nullable String message,
+    @NotNull Mailer mailer
 ) {
     if (client == null || message == null) return;
 

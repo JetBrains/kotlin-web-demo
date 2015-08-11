@@ -1,5 +1,5 @@
-fun eval(e: Expr): Int =
-        when (e) {
+fun eval(expr: Expr): Int =
+        when (expr) {
             is Num -> <taskWindow>TODO()</taskWindow>
             is Sum -> <taskWindow>TODO()</taskWindow>
             else -> throw IllegalArgumentException("Unknown expression")
