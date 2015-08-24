@@ -22,14 +22,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.progress.EmptyProgressIndicator;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.*;
+import com.intellij.psi.tree.IElementType;
 import org.jetbrains.kotlin.j2k.*;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class WebDemoJavaToKotlinConverter {
     private final BackendSessionInfo info;
@@ -47,15 +49,42 @@ public class WebDemoJavaToKotlinConverter {
                     ConverterSettings.defaultSettings,
                     EmptyReferenceSearcher.INSTANCE$,
                     EmptyResolverForConverter.INSTANCE$);
+            PsiElementFactory instance = PsiElementFactory.SERVICE.getInstance(project);
+
+            List<PsiElement> inputElements = null;
             PsiFile javaFile = PsiFileFactory.getInstance(project).createFileFromText("test.java", JavaLanguage.INSTANCE, code);
-            String resultFormConverter = JavaToKotlinTranslator.INSTANCE$.prettify(
-                    converter.elementsToKotlin(Collections.singletonList(javaFile))
-                            .getResults().iterator().next().getText());
+
+            boolean classDefFound = false;
+            for (PsiElement element : javaFile.getChildren()) {
+                if (element instanceof PsiClass) {
+                    inputElements = Collections.<PsiElement>singletonList(javaFile);
+                    classDefFound = true;
+                }
+            }
+
+            if (!classDefFound) {
+                try {
+                    inputElements = Collections.<PsiElement>singletonList(instance.createMethodFromText(code, javaFile));
+                } catch (Exception e) {
+                    PsiCodeBlock codeBlock = instance.createCodeBlockFromText("{" + code + "}", javaFile);
+                    PsiElement[] childrenWithoutBraces = Arrays.copyOfRange(codeBlock.getChildren(), 1, codeBlock.getChildren().length - 1);
+                    inputElements = Arrays.asList(childrenWithoutBraces);
+                }
+            }
+
+            List<JavaToKotlinConverter.ElementResult> resultFormConverter = converter.elementsToKotlin(inputElements).getResults();
+            String textResult = "";
+            for (JavaToKotlinConverter.ElementResult it : resultFormConverter) {
+                if (it == null) continue;
+                textResult = textResult + it.getText() + "\n";
+            }
+            textResult = JavaToKotlinTranslator.INSTANCE$.prettify(textResult);
+
             if (resultFormConverter.isEmpty()) {
                 result.add(ResponseUtils.getErrorAsJsonNode("Generated code is empty."));
             } else {
                 ObjectNode jsonObject = result.addObject();
-                jsonObject.put("text", resultFormConverter);
+                jsonObject.put("text", textResult);
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
