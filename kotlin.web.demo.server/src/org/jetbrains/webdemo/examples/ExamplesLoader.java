@@ -18,17 +18,13 @@ package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.collect.Lists;
-import com.intellij.openapi.extensions.Extensions;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.JsonUtils;
 import org.jetbrains.webdemo.ProjectFile;
 import org.pegdown.LinkRenderer;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ToHtmlSerializer;
-import org.pegdown.ast.CodeNode;
 import org.pegdown.ast.VerbatimNode;
 
 import java.io.BufferedInputStream;
@@ -77,18 +73,15 @@ public class ExamplesLoader {
             }
 
             if (manifest.has("examples")) {
-                Example previousExample = null;
                 for (JsonNode node : manifest.get("examples")) {
                     String projectName = node.textValue();
                     String projectPath = path + File.separator + projectName;
-                    Example example = loadProject(
+                    Example example = loadExample(
                             projectPath,
                             url,
                             ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES,
-                            commonFiles,
-                            previousExample
+                            commonFiles
                     );
-                    previousExample = example;
                     examples.put(projectName, example);
                 }
             }
@@ -100,12 +93,11 @@ public class ExamplesLoader {
         }
     }
 
-    private static Example loadProject(
+    private static Example loadExample(
             String path,
             String parentUrl,
             boolean loadTestVersion,
-            List<ObjectNode> commonFilesManifests,
-            @Nullable Example previousExample
+            List<ObjectNode> commonFilesManifests
     ) throws IOException {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
@@ -135,11 +127,6 @@ public class ExamplesLoader {
                 help = new GFMNodeSerializer().toHtml(processor.parseMarkdown(helpInMarkdown.toCharArray()));
             }
 
-            List<TaskWindow> taskWindows = null;
-            if (manifest.has("taskWindows")) {
-                taskWindows = JsonUtils.getObjectMapper().readValue(manifest.get("taskWindows").toString(), TypeFactory.defaultInstance().constructCollectionType(List.class, TaskWindow.class));
-            }
-
             List<JsonNode> fileManifests = manifest.has("files") ? Lists.newArrayList(manifest.get("files")) : new ArrayList<JsonNode>();
             fileManifests.addAll(commonFilesManifests);
             for (JsonNode fileDescriptor : fileManifests) {
@@ -153,7 +140,7 @@ public class ExamplesLoader {
                 String filePath = fileDescriptor.has("path") ?
                         fileDescriptor.get("path").asText() :
                         path + File.separator + fileDescriptor.get("filename").textValue();
-                ExampleFile file = loadProjectFile(filePath, id, fileDescriptor);
+                ExampleFile file = loadExampleFile(filePath, id, fileDescriptor);
                 if (!loadTestVersion && file.getType().equals(ProjectFile.Type.SOLUTION_FILE)) {
                     continue;
                 }
@@ -179,8 +166,6 @@ public class ExamplesLoader {
                     files,
                     hiddenFiles,
                     readOnlyFileNames,
-                    taskWindows,
-                    previousExample,
                     help);
         } catch (IOException e) {
             System.err.println("Can't load project: " + e.toString());
@@ -221,7 +206,7 @@ public class ExamplesLoader {
         return false;
     }
 
-    private static ExampleFile loadProjectFile(String path, String projectUrl, JsonNode fileManifest) throws IOException {
+    private static ExampleFile loadExampleFile(String path, String projectUrl, JsonNode fileManifest) throws IOException {
         try {
             String fileName = fileManifest.get("filename").textValue();
             boolean modifiable = fileManifest.get("modifiable").asBoolean();

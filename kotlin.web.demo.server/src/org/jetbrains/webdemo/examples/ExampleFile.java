@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ProjectFile;
 
@@ -84,5 +85,29 @@ class TestFile extends ExampleFile {
 class SolutionFile extends ExampleFile {
     public SolutionFile(String text, String id) {
         super("Solution.kt", text, id, Type.SOLUTION_FILE, null, false, false);
+    }
+}
+
+class TaskWindow {
+    private int line;
+    private int start;
+    private int length;
+
+    public TaskWindow(int line, int start, int length) {
+        this.line = line;
+        this.start = start;
+        this.length = length;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getLength() {
+        return length;
     }
 }

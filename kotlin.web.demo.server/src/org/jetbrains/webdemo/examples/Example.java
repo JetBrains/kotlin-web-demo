@@ -27,9 +27,6 @@ import java.util.List;
 
 public class Example extends Project{
     private List<ProjectFile> hiddenFiles = new ArrayList<>();
-    private final List<TaskWindow> taskWindows;
-    @Nullable
-    private Example previousExample;
     @JsonIgnore
     public ExamplesFolder parent;
     private String help;
@@ -44,13 +41,9 @@ public class Example extends Project{
             List<ProjectFile> files,
             List<ProjectFile> hiddenFiles,
             List<String> readOnlyFileNames,
-            List<TaskWindow> taskWindows,
-            @Nullable Example previousExample,
             String help) {
         super(id, name, args, confType, originUrl, expectedOutput, files, readOnlyFileNames);
         this.hiddenFiles = hiddenFiles;
-        this.taskWindows = taskWindows;
-        this.previousExample = previousExample;
         this.help = help;
     }
 
@@ -59,41 +52,7 @@ public class Example extends Project{
         return hiddenFiles;
     }
 
-    @Nullable
-    @JsonIgnore
-    public Example getPreviousExample() {
-        return previousExample;
-    }
-
     public String getHelp() {
         return help;
-    }
-
-    public List<TaskWindow> getTaskWindows() {
-        return taskWindows;
-    }
-}
-
-class TaskWindow {
-    private int line;
-    private int start;
-    private int length;
-
-    public TaskWindow(@JsonProperty("line") int line, @JsonProperty("start") int start, @JsonProperty("length") int length) {
-        this.line = line;
-        this.start = start;
-        this.length = length;
-    }
-
-    public int getLine() {
-        return line;
-    }
-
-    public int getStart() {
-        return start;
-    }
-
-    public int getLength() {
-        return length;
     }
 }
