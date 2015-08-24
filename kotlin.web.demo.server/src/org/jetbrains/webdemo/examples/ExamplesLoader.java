@@ -239,13 +239,16 @@ class GFMNodeSerializer extends ToHtmlSerializer {
     }
 
     public void visit(VerbatimNode node) {
-        String codeMirrorType = "";
+        String codeMirrorType;
         switch (node.getType()) {
             case "kotlin":
                 codeMirrorType = "kotlin";
                 break;
             case "java":
                 codeMirrorType = "text/x-java";
+                break;
+            default:
+                codeMirrorType = "kotlin";
                 break;
         }
         if (!codeMirrorType.equals("")) {

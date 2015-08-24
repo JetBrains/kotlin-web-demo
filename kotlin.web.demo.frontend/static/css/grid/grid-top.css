@@ -334,6 +334,7 @@
 
 .taskHelp pre code {
     background-color: #f7f7f7;
+    white-space: pre-wrap;
     margin-bottom: 10px;
     padding: 5px 25px 5px 15px;
     display: inline-block;
