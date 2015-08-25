@@ -67,6 +67,11 @@
     text-align: center;
 }
 
+.buttonWrapper.disabled{
+    cursor: default;
+    opacity: 0.5;
+}
+
 .buttonWrapper .text {
     font-size: 12px;
     color: #585858;

@@ -30,6 +30,7 @@ class RunProvider(
         private val onFail: (String) -> Unit
 ) {
     fun run(configuration: Configuration, project: Project) {
+        if(project.files.isEmpty()) return;
         if (configuration.type.runner == ConfigurationTypeRunner.JAVA) {
             runJava(project)
         } else {

@@ -142,7 +142,6 @@ class Editor(
     }
 
     fun open(file: File) {
-        Application.runButton.disabled = false
         (document.getElementById("workspace-overlay") as HTMLElement).style.display = "none"
 
         file.project.files.forEach { createDocIfNotExist(it) }
@@ -167,7 +166,6 @@ class Editor(
         codeMirror.swapDoc(CodeMirror.Doc(""))
         openedFile = null
         removeStyles()
-        Application.runButton.disabled = true
         (document.getElementById("workspace-overlay") as HTMLElement).style.display = "block"
     }
     fun reloadFile () {

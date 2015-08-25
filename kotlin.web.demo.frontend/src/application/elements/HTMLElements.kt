@@ -35,6 +35,8 @@ internal object Elements{
     val onTheFlyCheckbox = document.getElementById("on-the-fly-checkbox") as HTMLInputElement
     val saveAsButton = document.getElementById("saveAsButton") as HTMLElement
     val runMode = document.getElementById("runMode") as HTMLElement
+    val runButton = document.getElementById("runButton") as HTMLElement
+    val saveButton = document.getElementById("saveButton") as HTMLElement
 
     fun init() {
         argumentsInputElement.oninput = {

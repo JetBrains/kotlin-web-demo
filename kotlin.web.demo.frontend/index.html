@@ -87,6 +87,7 @@
                     <a href="http://kotlinlang.org/docs/reference/" class="nav-item ">Learn</a>
                     <a href="http://kotlinlang.org/contribute.html" class="nav-item">Contribute</a>
                     <a class="nav-item is_active">Try Online</a>
+
                     <div class="extra-nav download-button">
                         <a href="http://kotlinlang.org/#get-kotlin" class="get-kotlin-button">
                             Get Kotlin
@@ -180,15 +181,15 @@
                                 <option value="junit">JUnit</option>
                             </select>
 
-                            <div class="buttonWrapper">
-                                <div id="runButton" title="Run file (@shortcut@) using run configuration">
-                                    <div class="icon"></div>
-                                    <div class="text">Run</div>
-                                </div>
+                            <div id="runButton" class="buttonWrapper"
+                                 title="Run file (@shortcut@) using run configuration">
+                                <div class="icon"></div>
+                                <div class="text">Run</div>
                             </div>
                         </div>
                     </div>
                     <input id="arguments" type="text" placeholder="Program arguments">
+
                     <div id="editordiv">
                         <div id="workspace-overlay">
                             <span>No files are open</span>
@@ -204,7 +205,8 @@
                 <div id="statusBarWrapper">
                     <div id="statusBar">Hello, world!</div>
                     <div id="typeCheckingWrapper">
-                        <label class="text" for="on-the-fly-checkbox"><input id="on-the-fly-checkbox" type="checkbox">On-the-fly type checking</label>
+                        <label class="text" for="on-the-fly-checkbox"><input id="on-the-fly-checkbox" type="checkbox">On-the-fly
+                            type checking</label>
                     </div>
                 </div>
                 <div id="result-tabs">

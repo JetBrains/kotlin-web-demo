@@ -21,6 +21,7 @@ import jquery.jq
 import model.File
 import model.ProjectType
 import model.Task
+import model.UserProject
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
@@ -30,7 +31,6 @@ import utils.*
 import utils.jquery
 import utils.jquery.on
 import utils.jquery.trigger
-import utils.jquery.ui.Button
 import utils.jquery.ui.Dialog
 import utils.jquery.ui.tabs
 import views.*
@@ -88,6 +88,12 @@ object Application {
                         setState(userProjectPrefix + project.id, project.name)
                     }
                     navBarView.onProjectSelected(project)
+                }
+                if(project is UserProject ||
+                        (project is Task && loginView.isLoggedIn)){
+                    saveButton.enable()
+                } else {
+                    saveButton.disable()
                 }
                 consoleView.clear()
                 junitView.clear()
@@ -161,10 +167,10 @@ object Application {
                         generatedCodeView.setOutput(data)
                     } else {
                         if (configurationManager.getConfiguration().type == ConfigurationType.JUNIT) {
-                            if(project is Task){
+                            if (project is Task) {
                                 val testResults: Array<TestResult> = data.testResults
                                 val completed = testResults.all { it.status.equals("OK") }
-                                if(completed) {
+                                if (completed) {
                                     projectProvider.saveSolution(project, completed)
                                     project.completed = true
                                     completedProjects = (completedProjects + project.id).toSet();
@@ -190,15 +196,38 @@ object Application {
                 }
             },
             onComplete = {
-                runButton.disabled = false
+                runButton.enable()
             },
             onFail = { error ->
                 consoleView.writeException(error)
                 statusBarView.setStatus(ActionStatusMessage.run_java_fail)
             }
     )
-    private val runButtonElement = document.getElementById("runButton") as HTMLElement
-    val runButton = Button(runButtonElement)
+
+    val runButton: Button = Button(
+            Elements.runButton,
+            onClick = {
+                runButton.disable()
+                consoleView.clear()
+                junitView.clear()
+                generatedCodeView.clear()
+                runProvider.run(configurationManager.getConfiguration(), accordion.selectedProjectView!!.project)
+            }
+    )
+
+    val saveButton: Button = Button(
+            Elements.saveButton,
+            onClick = {
+                val selectedProject = accordion.selectedProjectView!!.project
+                if (selectedProject is UserProject) {
+                    accordion.selectedProjectView!!.project.save()
+                    accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
+                } else if (selectedProject.type == ProjectType.TASK && loginView.isLoggedIn) {
+                    projectProvider.saveSolution(selectedProject)
+                }
+            },
+            disabled = true
+    )
 
     private val converterProvider = ConverterProvider()
     private val converterView = ConverterView(converterProvider)
@@ -283,8 +312,6 @@ object Application {
             }
     )
 
-    private val saveButton = document.getElementById("saveButton") as HTMLElement
-
     val statusBarView = StatusBarView(document.getElementById("statusBar") as HTMLElement)
 
     val helpProvider = HelpProvider({ error, status ->
@@ -295,11 +322,11 @@ object Application {
     val editor: Editor = Editor(helpProvider)
 
     val loginProvider: LoginProvider = LoginProvider(
-            {
+            beforeLogout = {
                 accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
                 accordion.selectedProjectView!!.project.save()
             },
-            {
+            onLogout = {
                 getSessionInfo({ data ->
                     sessionId = data.id
                     loginView.logout()
@@ -307,14 +334,14 @@ object Application {
                     accordion.loadAllContent()
                 })
             },
-            { data ->
+            onLogin = { data ->
                 if (data.isLoggedIn) {
                     loginView.setUserName(data.userName, data.type)
                     statusBarView.setStatus(ActionStatusMessage.login_ok)
                 }
                 accordion.loadAllContent()
             },
-            { exception, actionCode ->
+            onFail = { exception, actionCode ->
                 consoleView.writeException(exception)
                 statusBarView.setStatus(actionCode)
             }
@@ -410,11 +437,15 @@ object Application {
         document.onkeydown = { e ->
             var shortcut = actionManager.getShortcut("org.jetbrains.web.demo.run")
             if (shortcut.isPressed(e as KeyboardEvent)) {
-                runButtonElement.click()
+                Elements.runButton.click()
             } else {
                 shortcut = actionManager.getShortcut("org.jetbrains.web.demo.save")
                 if (shortcut.isPressed(e)) {
-                    saveButton.click()
+                    if(saveButton.disabled){
+                        Elements.saveAsButton.click()
+                    } else{
+                        Elements.saveButton.click()
+                    }
                 }
             }
         }
@@ -471,26 +502,7 @@ object Application {
     fun initButtons() {
         val converterButton = document.getElementById("java2kotlin-button") as HTMLElement
         converterButton.onclick = { converterView.open() }
-        runButtonElement.onclick = {
-            runButton.disabled = true
-            consoleView.clear()
-            junitView.clear()
-            generatedCodeView.clear()
-            runProvider.run(configurationManager.getConfiguration(), accordion.selectedProjectView!!.project)
-        }
-        runButtonElement.title = runButtonElement.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.run").name)
-
-        saveButton.title = saveButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.save").name)
-        saveButton.onclick = {
-            val selectedProject = accordion.selectedProjectView!!.project
-            if (selectedProject.type == ProjectType.USER_PROJECT) {
-                accordion.selectedProjectView!!.project.save()
-                accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
-            } else if (selectedProject.type == ProjectType.TASK) {
-                projectProvider.saveSolution(selectedProject)
-            } else {
-                jq("#saveAsButton").click()
-            }
-        }
+        Elements.runButton.title = Elements.runButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.run").name)
+        Elements.saveButton.title = Elements.saveButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.save").name)
     }
 }
