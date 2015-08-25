@@ -35,7 +35,7 @@ class Button(
     init {
         if(disabled) disable()
         buttonElement.onclick = {
-            if(!disabled) {
+            if(!this.disabled) {
                 onClick()
             }
         }
