@@ -27,11 +27,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ProjectFile {
 
 
-    private Boolean modifiable;
-    private String publicId;
+    protected Boolean modifiable;
+    protected String publicId;
     protected String text;
-    private String name;
-    private Type type;
+    protected String name;
+    protected Type type;
 
     /**
      * This constructor is used to deserialize project file from user request. Jackson calls it wia

@@ -42,20 +42,21 @@ import java.util.Map;
 public class ExamplesLoader {
 
     public static void loadAllExamples() {
-        ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY, "/", new ArrayList<ObjectNode>());
+        ExamplesFolder.ROOT_FOLDER = loadFolder(ApplicationSettings.EXAMPLES_DIRECTORY, "/", new ArrayList<ObjectNode>(), null);
     }
 
-    private static ExamplesFolder loadFolder(String path, String url, List<ObjectNode> parentCommonFiles) {
+    private static ExamplesFolder loadFolder(String path, String url, List<ObjectNode> parentCommonFiles,
+                                             ExamplesFolder parentFolder) {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
             String name = new File(path).getName();
-            Map<String, Example> examples = new LinkedHashMap<>();
-            Map<String, ExamplesFolder> childFolders = new LinkedHashMap<>();
             List<ObjectNode> commonFiles = new ArrayList<>();
             commonFiles.addAll(parentCommonFiles);
             boolean taskFolder = manifest.has("taskFolder") ? manifest.get("taskFolder").asBoolean() : false;
+            if (parentFolder != null && parentFolder.isTaskFolder()) taskFolder = true;
 
+            ExamplesFolder folder = new ExamplesFolder(name, url, taskFolder);
             if (manifest.has("files")) {
                 for (JsonNode node : manifest.get("files")) {
                     ObjectNode fileManifest = (ObjectNode) node;
@@ -67,8 +68,14 @@ public class ExamplesLoader {
             if (manifest.has("folders")) {
                 for (JsonNode node : manifest.get("folders")) {
                     String folderName = node.textValue();
-                    childFolders.put(folderName,
-                            loadFolder(path + File.separator + folderName, url + folderName + "/", commonFiles));
+                    folder.addChildFolder(
+                            loadFolder(
+                                    path + File.separator + folderName,
+                                    url + folderName + "/",
+                                    commonFiles,
+                                    folder
+                            )
+                    );
                 }
             }
 
@@ -76,17 +83,18 @@ public class ExamplesLoader {
                 for (JsonNode node : manifest.get("examples")) {
                     String projectName = node.textValue();
                     String projectPath = path + File.separator + projectName;
-                    Example example = loadExample(
-                            projectPath,
-                            url,
-                            ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES,
-                            commonFiles
+                    folder.addExample(
+                            loadExample(
+                                    projectPath,
+                                    url,
+                                    ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES,
+                                    commonFiles
+                            )
                     );
-                    examples.put(projectName, example);
                 }
             }
 
-            return new ExamplesFolder(name, url, taskFolder, examples, childFolders);
+            return folder;
         } catch (IOException e) {
             System.err.println("Can't load folder: " + e.toString());
             return null;

@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.examples;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -32,14 +33,12 @@ public class ExamplesFolder {
 
     public ExamplesFolder(String name,
                           String id,
-                          Boolean taskFolder,
-                          Map<String, Example> examples,
-                          Map<String, ExamplesFolder> childFolders) {
+                          Boolean taskFolder) {
         this.name = name;
         this.id = id;
         this.taskFolder = taskFolder;
-        this.examples = examples;
-        this.childFolders = childFolders;
+        this.examples = new LinkedHashMap<>();
+        this.childFolders = new LinkedHashMap<>();
         for(Example example : examples.values()){
             example.parent = this;
         }
@@ -71,5 +70,13 @@ public class ExamplesFolder {
 
     public Boolean isTaskFolder() {
         return taskFolder;
+    }
+
+    public void addChildFolder(ExamplesFolder childFolder){
+        childFolders.put(childFolder.name, childFolder);
+    }
+
+    public void addExample(Example example){
+        examples.put(example.name, example);
     }
 }

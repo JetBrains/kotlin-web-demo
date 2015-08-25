@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS projects (
   task_id INT                                                                  DEFAULT NULL, #NULL for user projects
   FOREIGN KEY (task_id) REFERENCES koans_tasks (id)
     ON DELETE RESTRICT,
-  CONSTRAINT UNIQUE (owner_id, name, type),
-  CONSTRAINT UNIQUE (owner_id, task_id)
+  CONSTRAINT `unique_name` UNIQUE (owner_id, name, type),
+  CONSTRAINT `unique_solution` UNIQUE (owner_id, task_id)
 );
 
 CREATE TABLE IF NOT EXISTS koans_tasks (

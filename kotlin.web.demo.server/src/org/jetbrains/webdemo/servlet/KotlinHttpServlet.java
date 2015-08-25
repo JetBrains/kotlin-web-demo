@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class KotlinHttpServlet extends HttpServlet {
@@ -66,19 +67,25 @@ public class KotlinHttpServlet extends HttpServlet {
             ExamplesLoader.loadAllExamples();
             HelpLoader.getInstance();
             MySqlConnector.getInstance();
-
-            List<String> tasksIdentifiers = new ArrayList<>();
-            for(ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()){
-                if(!folder.isTaskFolder()) continue;
-                for(Project example : folder.getExamples()){
-                    tasksIdentifiers.add(example.id);
-                }
-            }
-            MySqlConnector.getInstance().createTaskList(tasksIdentifiers);
+            MySqlConnector.getInstance().createTaskList(getTaskList(ExamplesFolder.ROOT_FOLDER));
         } catch (Throwable e) {
             ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
             System.exit(1);
         }
+    }
+
+    private List<String> getTaskList(ExamplesFolder folder) {
+        List<String> tasksIdentifiers = new ArrayList<>();
+
+        for (ExamplesFolder childFolder : folder.getChildFolders()) {
+            tasksIdentifiers.addAll(getTaskList(childFolder));
+        }
+        if (!folder.isTaskFolder()) return tasksIdentifiers;
+
+        for (Project example : folder.getExamples()) {
+            tasksIdentifiers.add(example.id);
+        }
+        return tasksIdentifiers;
     }
 
     private boolean isWindows() {

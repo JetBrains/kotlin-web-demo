@@ -34,7 +34,7 @@ public class ExamplesUtils {
         return getExample(path);
     }
 
-    public static Project getUserVersionOfExample(UserInfo userInfo, String url) throws DatabaseOperationException {
+    public static Example getUserVersionOfExample(UserInfo userInfo, String url) throws DatabaseOperationException {
         Example example = getExample(url);
         Project userVersion = MySqlConnector.getInstance().getStoredSolution(userInfo, url);
         if(userVersion == null) return example;
@@ -49,7 +49,7 @@ public class ExamplesUtils {
             }
             userFiles.add(resultFile);
         }
-        return new Project(
+        return new Example(
                 example.id,
                 example.name,
                 example.args,
@@ -57,7 +57,9 @@ public class ExamplesUtils {
                 example.originUrl,
                 example.expectedOutput,
                 userFiles,
-                example.readOnlyFileNames
+                example.getHiddenFiles(),
+                example.readOnlyFileNames,
+                example.getHelp()
         );
     }
 
