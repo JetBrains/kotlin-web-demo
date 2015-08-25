@@ -25,9 +25,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.kotlin.j2k.*;
+import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
+import org.jetbrains.webdemo.backend.ResolveUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -53,6 +55,9 @@ public class WebDemoJavaToKotlinConverter {
 
             List<PsiElement> inputElements = null;
             PsiFile javaFile = PsiFileFactory.getInstance(project).createFileFromText("test.java", JavaLanguage.INSTANCE, code);
+
+            //To create a module
+            ResolveUtils.getBindingContext(Collections.EMPTY_LIST, project);
 
             boolean classDefFound = false;
             for (PsiElement element : javaFile.getChildren()) {
