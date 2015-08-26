@@ -47,7 +47,7 @@ class AccordionView(
     public var selectedFileView: FileView? = null
         private set
     private var myProgramsFolder: MyProgramsFolderView by Delegates.notNull()
-    private var publicLinksFolder: FolderView by Delegates.notNull()
+    private var publicLinksFolder: FolderView? = null
 
     init {
         element.innerHTML = ""
@@ -121,7 +121,7 @@ class AccordionView(
     }
 
     fun onBeforeUnload() {
-        var publicLinks = publicLinksFolder.projects.map { it.header }
+        var publicLinks = publicLinksFolder?.projects?.map { it.header } ?: emptyList()
         localStorage.setItem("publicLinks", JSON.stringify(publicLinks.toTypedArray()))
     }
 
@@ -163,7 +163,7 @@ class AccordionView(
         if (isUserProjectInUrl() &&
                 projectId !in projectViews.keySet()) {
             Application.headersProvider.getProjectHeaderById(projectId, { header ->
-                addProject(publicLinksFolder.contentElement, header, publicLinksFolder)
+                addProject(publicLinksFolder!!.contentElement, header, publicLinksFolder!!)
                 selectProject(projectId)
             })
         } else {
