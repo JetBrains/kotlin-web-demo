@@ -37,6 +37,8 @@
 }
 
 .g-grid {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 820px;
     font-size: 0;

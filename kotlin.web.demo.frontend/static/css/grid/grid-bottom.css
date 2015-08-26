@@ -14,6 +14,36 @@
  * limitations under the License.
  */
 
+#workspace-container{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 0;
+}
+
+#program-output {
+    display: flex;
+}
+
+#grid-bottom {
+    height: 247px;
+    top: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+#result-tabs {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.ui-tabs-panel {
+    flex-grow: 1;
+    min-height: 0;
+    height: auto !important;
+}
 
 .result-tabs-footer {
     text-align: center;
@@ -30,7 +60,7 @@
     background-color: #cfcfcf;
 }
 
-.ui-tabs .ui-tabs-panel{
+.ui-tabs .ui-tabs-panel {
     padding: 0;
 }
 
@@ -66,7 +96,7 @@
     border-right-width: 1px;
 }
 
-.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor{
+.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
     cursor: pointer;
 }
 
@@ -87,7 +117,6 @@
 
 #statusBarWrapper {
     font-family: menlo, consolas, monospace;
-    overflow: hidden;
     background-image: -moz-linear-gradient(#f7f7f7, #f0f0f0);
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f7f7f7), to(#f0f0f0));
     background-image: -webkit-linear-gradient(#f7f7f7, #f0f0f0);
@@ -106,7 +135,7 @@
 .consoleOutput {
     overflow: auto;
     padding-left: 5px;
-    height: 100%;
+    flex-grow: 1;
 }
 
 #typeCheckingWrapper {
@@ -230,7 +259,6 @@
 #problems-tree .file-problems-header .text {
     display: inline-block;
     padding-left: 0;
-    top: auto;
     bottom: 1px;
     padding-bottom: 0;
 }
@@ -279,14 +307,14 @@
     font-size: 12px;
     float: left;
     width: 25%;
-    height: 100%;
     border-right: 1px solid #969696;
     box-sizing: border-box;
 }
 
 #test-wrapper {
-    margin-left: 25%;
-    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 #test-console {
@@ -318,7 +346,6 @@
 }
 
 #unit-test-statistic {
-    overflow: hidden;
     background-color: #e8e8e8;
     padding: 3px 3px 3px 7px;
 }

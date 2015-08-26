@@ -15,15 +15,13 @@
  */
 
 #examples-list-resizer {
-    box-sizing: border-box;
     border-top-left-radius: 4px;
     border-right: 1px solid #969696;
-    height: 100%;
     width: 240px;
-    float: left;
 }
 
 .examples-list {
+    position: absolute;
     max-height: 100%;
     overflow: auto;
     overflow-x: hidden;

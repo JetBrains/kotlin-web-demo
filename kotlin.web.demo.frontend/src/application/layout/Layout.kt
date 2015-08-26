@@ -48,7 +48,7 @@ object Layout {
             } else {
                 jq(resizableProjectTreeHolder).show()
             }
-            onAccordionResized()
+            Application.editor.refresh()
             updateGridConfigurationInLocalStorage()
         }
 
@@ -78,7 +78,7 @@ object Layout {
                 } else {
                     jq("#workspace").css("margin-left", 0)
                 }
-                updateEditorHeightAndRefreshEditor()
+                Application.editor.refresh()
             } else {
                 jq("[fullscreen-sensible]").addClass("fullscreen")
                 jq(fullscreenButton).find(".text").html("Exit fullscreen")
@@ -98,8 +98,10 @@ object Layout {
         jq(resizableProjectTreeHolder).resizable(json(
                 "handles" to "e",
                 "minWidth" to 215,
-                "stop" to { updateGridConfigurationInLocalStorage() },
-                "resize" to { onAccordionResized() }
+                "stop" to {
+                    updateGridConfigurationInLocalStorage()
+                    Application.editor.refresh()
+                }
         ))
 
         jq("#grid-bottom").resizable(json(
@@ -108,12 +110,12 @@ object Layout {
                 "start" to {
                     jq("#grid-bottom").resizable("option", "minHeight",
                             jq("#statusBarWrapper").outerHeight() + jq(".result-tabs-footer").outerHeight())
-
-                    jq("#grid-bottom").resizable("option", "maxHeight",
-                            jq("#g-grid").height().toInt() - jq(Elements.argumentsInputElement).outerHeight() - jq("#toolbox").outerHeight())
+                    jq("#grid-bottom").resizable("option", "maxHeight", jq("#workspace-container").height())
                 },
-                "stop" to {updateGridConfigurationInLocalStorage()},
-                "resize" to {onOutputViewResized()}
+                "stop" to {
+                    updateGridConfigurationInLocalStorage()
+                    Application.editor.refresh()
+                }
         ))
 
         argumentsButton.onclick = {
@@ -124,7 +126,7 @@ object Layout {
                 jq(argumentsButton).addClass("active")
                 jq(Elements.argumentsInputElement).show()
             }
-            updateEditorHeightAndRefreshEditor()
+            Application.editor.refresh()
             updateGridConfigurationInLocalStorage()
         }
 
@@ -135,11 +137,9 @@ object Layout {
             if (!gridConfiguration.argumentsVisible) argumentsButton.click()
             if (!gridConfiguration.projectTreeVisible) projectTreeDisplayButton.click()
             jq("#examples-list-resizer").width(gridConfiguration.examplesWidth)
-            onAccordionResized()
             jq("#grid-bottom").height(gridConfiguration.gridBottomHeight)
-            onOutputViewResized()
         }
-        updateEditorHeightAndRefreshEditor()
+        Application.editor.refresh()
 
         updateProjectTreeMaxWidth()
     }
@@ -148,32 +148,8 @@ object Layout {
 
     }
 
-
     private fun updateProjectTreeMaxWidth() {
         jq(resizableProjectTreeHolder).resizable("option", "maxWidth", jq("#grid-top").width().toInt() - parseInt(toolbox.style.minWidth))
-    }
-
-    private fun onAccordionResized() {
-        if (resizableProjectTreeHolder.isVisible()) {
-            jq("#workspace").css("margin-left", jq(resizableProjectTreeHolder).outerWidth())
-        } else {
-            jq("#workspace").css("margin-left", 0)
-        }
-        Application.editor.refresh()
-    }
-
-
-    private fun onOutputViewResized() {
-        jq("#grid-bottom").css("top", "")
-        jq("#result-tabs").css("height", jq("#grid-bottom").height().toInt() - jq("#statusBarWrapper").outerHeight())
-        jq("#test-wrapper").find(".consoleOutput").css("height", jq("#program-output").height().toInt() - jq("#unit-test-statistic").outerHeight(true))
-        jq(".tab-space").css("height", jq("#result-tabs").height().toInt() - jq(".result-tabs-footer").outerHeight())
-
-        var gridHeight = jq("#g-grid").height().toInt()
-        var gridTopHeight = gridHeight - jq("#grid-bottom").outerHeight(true) - jq("#grid-nav").outerHeight(true)
-        gridTopHeight -= (jq(gridTopElement).outerHeight(true) - jq(gridTopElement).height().toInt())
-        jq(gridTopElement).css("height", gridTopHeight)
-        updateEditorHeightAndRefreshEditor()
     }
 
 
@@ -188,22 +164,6 @@ object Layout {
         localStorage.setItem("gridConfiguration", JSON.stringify(gridConfiguration))
     }
 
-    //Calling codemirror refresh from codemirror callback can lead to strange results
-    private fun updateEditorHeight() {
-        val editorNotification = document.getElementById("editor-notifications") as HTMLElement
-        val workspaceHeight = jq(gridTopElement).height().toInt()
-        var toolBoxHeight = jq(toolbox).outerHeight()
-        var commandLineArgumentsHeight = if (Elements.argumentsInputElement.isVisible()) jq(Elements.argumentsInputElement).outerHeight() else 0
-        var notificationsHeight = if (editorNotification.isVisible()) jq("#editor-notifications").outerHeight() else 0
-        var editorHeight = workspaceHeight - toolBoxHeight - commandLineArgumentsHeight - notificationsHeight
-        (document.getElementById("editordiv") as HTMLElement).style.height = editorHeight.toString() + "px"
-    }
-
-    private fun updateEditorHeightAndRefreshEditor() {
-        updateEditorHeight()
-        Application.editor.refresh()
-    }
-
     private fun updateGridHeightFullscreen() {
         var gridHeight = jq(".global-layout").height().toInt() - jq(".global-toolbox").outerHeight(true)
         gridHeight -= (jq(gridElement).outerHeight(true) - jq(gridElement).height().toInt())
@@ -212,7 +172,7 @@ object Layout {
         var gridTopHeight = gridHeight - jq("#statusBarWrapper").outerHeight(true) - jq("#result-tabs").outerHeight() - jq("#grid-nav").outerHeight(true)
         gridTopHeight -= (jq(gridTopElement).outerHeight(true) - jq(gridTopElement).height().toInt())
         jq(gridTopElement).css("height", gridTopHeight)
-        updateEditorHeightAndRefreshEditor()
+        Application.editor.refresh()
     }
 
     private fun isFullscreenMode(): Boolean {
