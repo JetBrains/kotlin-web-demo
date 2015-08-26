@@ -48,7 +48,7 @@ class AccordionView(
     public var selectedFileView: FileView? = null
         private set
     private var myProgramsFolder: MyProgramsFolderView by Delegates.notNull()
-    private var publicLinksFolder: FolderView by Delegates.notNull()
+    private var publicLinksFolder: FolderView? = null
 
     private val onProjectDeleted: (ProjectView) -> Unit = { projectView: ProjectView ->
         projectViews.remove(projectView.project.id)
@@ -171,12 +171,12 @@ class AccordionView(
     }
 
     fun onBeforeUnload() {
-        var publicLinks = publicLinksFolder.projects.map {
+        var publicLinks = publicLinksFolder?.projects?.map {
             json(
                     "name" to it.project.name,
                     "publicId" to it.project.id
             )
-        }
+        } ?: emptyList()
         localStorage.setItem("publicLinks", JSON.stringify(publicLinks.toTypedArray()))
     }
 
@@ -219,7 +219,7 @@ class AccordionView(
             if (localStorage.getItem(projectId) == null) {
                 if (projectId !in myProgramsFolder.projects.map { it.project.id }) {
                     Application.headersProvider.getProjectHeaderById( projectId, { header ->
-                        publicLinksFolder.createProject(header)
+                        publicLinksFolder!!.createProject(header)
                         selectProject(projectId)
                     })
                 } else {
