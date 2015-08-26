@@ -118,47 +118,15 @@
     </macrodef>
 
     <target name="update_to_latest_version">
-        <loadresource property="build.number">
+        <loadresource property="kotlin.build.number">
             <url url="${teamcity}/guestAuth/app/rest/builds/${locator}/number"/>
         </loadresource>
-        <get src="${tc.plugin}/kotlin-plugin-${build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"
+        <get src="${tc.plugin}/kotlin-plugin-${kotlin.build.number}.zip" dest="${dependencies.dir}/kotlin-plugin.zip"
              usetimestamp="true"/>
         <get src="${tc.plugin}/internal/kotlin-compiler-before-shrink.jar"
              dest="${dependencies.dir}/kotlin-compiler.jar" usetimestamp="true"/>
         <get src="${tc.plugin}/kotlin-compiler-sources.jar"
              dest="${dependencies.dir}/kotlin-compiler-sources.jar" usetimestamp="true"/>
-    </target>
-
-    <macrodef name="set_kotlin_version_internal">
-        <sequential>
-            <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
-            <echo message="${version}"/>
-            <replaceregexp file="update_dependencies.xml"
-                           match=" arg2=&#34;(.*[0-9]).(.*[0-9]).(.*[0-9])&#34;"
-                           replace=" arg2=&#34;${version}&#34;"
-                           byline="true"/>
-        </sequential>
-    </macrodef>
-
-    <target name="check_version" depends="check_version_true, check_version_false" if="isLastVersion"/>
-
-    <target name="check_version_true" depends="compare_version" if="isLastVersion">
-        <set_kotlin_version_internal/>
-    </target>
-
-    <target name="check_version_false" depends="compare_version" unless="isLastVersion">
-        <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
-        <echo message="FALSE - ${version}"/>
-        <antcall target="download_and_update_internal"/>
-    </target>
-
-    <target name="compare_version">
-        <get src="${teamcity}/guestAuth/app/rest/buildTypes/id:${teamcity.plugin.build}/builds/status:SUCCESS/number"
-             dest="${dependencies.dir}/build.txt"/>
-        <loadfile srcfile="${dependencies.dir}/build.txt" property="version"/>
-        <condition property="isLastVersion">
-            <equals arg1="${version}" arg2="0.7.111"/>
-        </condition>
     </target>
 
 </project>
