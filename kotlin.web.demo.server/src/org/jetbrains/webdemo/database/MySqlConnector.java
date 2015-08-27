@@ -70,14 +70,37 @@ public class MySqlConnector {
     public void addNewUser(UserInfo userInfo) throws DatabaseOperationException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement st = connection.prepareStatement("INSERT INTO users (client_id, provider, username) VALUES (?, ?, ?)")) {
-            if (findUser(userInfo)) return;
-            st.setString(1, userInfo.getId());
-            st.setString(2, userInfo.getType());
-            st.setString(3, userInfo.getName());
-            st.executeUpdate();
+            if (!findUser(userInfo)) {
+                st.setString(1, userInfo.getId());
+                st.setString(2, userInfo.getType());
+                st.setString(3, userInfo.getName());
+                st.executeUpdate();
+            } else {
+                updateUserName(userInfo);
+            }
+
         } catch (SQLException e) {
             throw new DatabaseOperationException(
                     "Can't add user with id:" + userInfo.getId() + " type:" + userInfo.getType() + " name:" + userInfo.getName(),
+                    e
+            );
+        }
+    }
+
+    public void updateUserName(UserInfo userInfo) throws DatabaseOperationException {
+        try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement st = connection.prepareStatement(
+                        "UPDATE users  SET username = ? WHERE client_id = ? AND provider = ?"
+                )
+        ) {
+            st.setString(1, userInfo.getName());
+            st.setString(2, userInfo.getId());
+            st.setString(3, userInfo.getType());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseOperationException(
+                    "Can't update username of user: " + userInfo.getId() + " type:" + userInfo.getType(),
                     e
             );
         }

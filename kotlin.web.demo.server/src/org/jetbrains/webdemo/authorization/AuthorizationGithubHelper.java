@@ -72,8 +72,9 @@ public class AuthorizationGithubHelper extends AuthorizationHelper {
             Response response = request.send();
 
             JsonNode object = new ObjectMapper().readTree(response.getBody());
+            String name = object.get("name").textValue() != null ? object.get("name").textValue() : "Anonymous";
             userInfo = new UserInfo();
-            userInfo.login(object.get("name").textValue(), object.get("id").asText(), TYPE);
+            userInfo.login(name, object.get("id").asText(), TYPE);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.AUTHORIZATION.name(), "unknown", "github: " + oauthVerifier);
         }
