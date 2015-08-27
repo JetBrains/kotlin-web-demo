@@ -67,22 +67,22 @@ public class MySqlConnector {
         PreparedStatement st = null;
         ResultSet rs = null;
         List<String> storedTasksIdentifiers = new ArrayList<String>();
-        try (Connection connection = dataSource.getConnection()){
+        try (Connection connection = dataSource.getConnection()) {
             st = connection.prepareStatement("SELECT koans_tasks.public_id FROM koans_tasks");
             rs = st.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 storedTasksIdentifiers.add(rs.getString("public_id"));
             }
-            for(String taskId : tasksIdentifiers){
+            for (String taskId : tasksIdentifiers) {
                 if (storedTasksIdentifiers.contains(taskId)) continue;
-                try(PreparedStatement insertStatement = connection.prepareStatement(
+                try (PreparedStatement insertStatement = connection.prepareStatement(
                         "INSERT koans_tasks (public_id) VALUES (?)"
-                )){
+                )) {
                     insertStatement.setString(1, taskId);
                     insertStatement.executeUpdate();
                 }
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new DatabaseOperationException("Can't create tasks list", e);
         } finally {
             closeStatementAndResultSet(st, rs);
@@ -92,14 +92,37 @@ public class MySqlConnector {
     public void addNewUser(UserInfo userInfo) throws DatabaseOperationException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement st = connection.prepareStatement("INSERT INTO users (client_id, provider, username) VALUES (?, ?, ?)")) {
-            if (findUser(userInfo)) return;
-            st.setString(1, userInfo.getId());
-            st.setString(2, userInfo.getType());
-            st.setString(3, userInfo.getName());
-            st.executeUpdate();
+            if (!findUser(userInfo)) {
+                st.setString(1, userInfo.getId());
+                st.setString(2, userInfo.getType());
+                st.setString(3, userInfo.getName());
+                st.executeUpdate();
+            } else {
+                updateUserName(userInfo);
+            }
+
         } catch (SQLException e) {
             throw new DatabaseOperationException(
                     "Can't add user with id:" + userInfo.getId() + " type:" + userInfo.getType() + " name:" + userInfo.getName(),
+                    e
+            );
+        }
+    }
+
+    public void updateUserName(UserInfo userInfo) throws DatabaseOperationException {
+        try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement st = connection.prepareStatement(
+                        "UPDATE users  SET username = ? WHERE client_id = ? AND provider = ?"
+                )
+        ) {
+            st.setString(1, userInfo.getName());
+            st.setString(2, userInfo.getId());
+            st.setString(3, userInfo.getType());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseOperationException(
+                    "Can't update username of user: " + userInfo.getId() + " type:" + userInfo.getType(),
                     e
             );
         }
@@ -159,10 +182,10 @@ public class MySqlConnector {
     public void saveFile(String projectId, ProjectFile file) throws DatabaseOperationException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement st = connection.prepareStatement("UPDATE files JOIN projects " +
-                "ON projects.id = files.project_id SET " +
-                "files.content = ? WHERE " +
-                "files.name = ? AND " +
-                "projects.public_id = ?")) {
+                     "ON projects.id = files.project_id SET " +
+                     "files.content = ? WHERE " +
+                     "files.name = ? AND " +
+                     "projects.public_id = ?")) {
             st.setString(1, file.getText());
             st.setString(2, file.getName());
             st.setString(3, projectId);
@@ -245,8 +268,8 @@ public class MySqlConnector {
         int userId = getUserId(userInfo);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement st = connection.prepareStatement(
-                "UPDATE projects SET projects.args = ? , projects.run_configuration = ? " +
-                        "WHERE projects.owner_id = ?  AND projects.name = ? AND projects.public_id = ?")
+                     "UPDATE projects SET projects.args = ? , projects.run_configuration = ? " +
+                             "WHERE projects.owner_id = ?  AND projects.name = ? AND projects.public_id = ?")
         ) {
             st.setString(1, project.args);
             st.setString(2, project.confType);
@@ -421,7 +444,7 @@ public class MySqlConnector {
         }
     }
 
-    
+
     public Project getProjectContent(String id) throws DatabaseOperationException {
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -469,7 +492,7 @@ public class MySqlConnector {
 
     public Project getStoredSolution(UserInfo userInfo, String taskId) throws DatabaseOperationException {
         String solutionId = getSolutionId(userInfo, taskId);
-        if(solutionId == null) return null;
+        if (solutionId == null) return null;
         return getProjectContent(solutionId);
     }
 
@@ -589,9 +612,9 @@ public class MySqlConnector {
         try (
                 Connection connection = dataSource.getConnection();
                 PreparedStatement st = connection.prepareStatement("UPDATE files JOIN " +
-                "projects ON files.project_id = projects.id JOIN " +
-                "users ON projects.owner_id = users.id SET " +
-                "files.name = ? WHERE " +
+                        "projects ON files.project_id = projects.id JOIN " +
+                        "users ON projects.owner_id = users.id SET " +
+                        "files.name = ? WHERE " +
                         "users.client_id = ? AND  users.provider = ? AND files.public_id = ?")
         ) {
             st.setString(1, escape(newName));
@@ -724,7 +747,7 @@ public class MySqlConnector {
     public Integer getTaskId(String taskPublicId) throws DatabaseOperationException {
         PreparedStatement st = null;
         ResultSet rs = null;
-        try (Connection connection = dataSource.getConnection()){
+        try (Connection connection = dataSource.getConnection()) {
             st = connection.prepareStatement("SELECT koans_tasks.id FROM koans_tasks WHERE public_id = ?");
             st.setString(1, taskPublicId);
             rs = st.executeQuery();
@@ -743,7 +766,7 @@ public class MySqlConnector {
     public Map<String, Boolean> getUserTaskStatuses(UserInfo userInfo) throws DatabaseOperationException {
         PreparedStatement st = null;
         ResultSet rs = null;
-        try (Connection connection = dataSource.getConnection()){
+        try (Connection connection = dataSource.getConnection()) {
             Map<String, Boolean> result = new HashMap<>();
             st = connection.prepareStatement(
                     "SELECT koans_tasks.public_id, projects.type FROM koans_tasks JOIN " +
@@ -757,7 +780,7 @@ public class MySqlConnector {
             st.setString(1, userInfo.getType());
             st.setString(2, userInfo.getId());
             rs = st.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 boolean completed = rs.getString("type").equals("KOANS_TASK");
                 result.put(rs.getString("public_id"), completed);
             }
@@ -779,7 +802,7 @@ public class MySqlConnector {
         try (Connection connection = dataSource.getConnection()) {
             st = connection.prepareStatement(
                     "SELECT projects.name FROM projects WHERE " +
-                    "projects.public_id = ?"
+                            "projects.public_id = ?"
             );
             st.setString(1, projectId);
             rs = st.executeQuery();
@@ -833,10 +856,10 @@ public class MySqlConnector {
 
     @Nullable
     private String getSolutionId(UserInfo userInfo, String taskId) throws DatabaseOperationException {
-        if(!userInfo.isLogin()) return null;
+        if (!userInfo.isLogin()) return null;
         PreparedStatement st = null;
         ResultSet rs = null;
-        try (Connection connection = dataSource.getConnection()){
+        try (Connection connection = dataSource.getConnection()) {
             st = connection.prepareStatement(
                     "SELECT projects.public_id FROM projects JOIN " +
                             "users ON users.id = projects.owner_id JOIN " +
