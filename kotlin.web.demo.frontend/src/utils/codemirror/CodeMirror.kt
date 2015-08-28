@@ -19,7 +19,6 @@ package utils.codemirror
 import org.w3c.dom.HTMLCollection
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
-import org.w3c.dom.events.Event
 
 native
 class CodeMirror() {
@@ -32,14 +31,27 @@ class CodeMirror() {
         fun on(obj: Any, action: String, callback: () -> Unit)
         fun colorize(elements: HTMLCollection)
     }
+
     class Doc(text: String, mode: String = "", firstLineNumber: Int = 1){
         fun markText(start: Position, end: Position, json: Json): Any
         fun getEditor(): utils.codemirror.CodeMirror
-        fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json)
+        fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json): LineWidget
         fun setSelection(anchor: Position, head: Position)
     }
 
+    class LineWidget {
+        val node: HTMLElement
+        val line: Line
+        fun clear()
+    }
+
+    class Line{
+        val widgets: Array<LineWidget>
+        fun lineNo(): Int
+    }
+
     fun getCursor(): Position
+    fun getDoc(): Doc
     fun getTokenAt(pos: Position): Token
     fun replaceRange(replacement: String, from: Position, to: Position = from, origin: String? = null)
     fun execCommand(s: String)
@@ -65,6 +77,7 @@ class CodeMirror() {
     fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit)
     fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json)
     fun setSelection(anchor: Position, head: Position)
+    fun getLineHandle(i: Int): Line
 }
 
 data class Position(val line: Int, val ch: Int)

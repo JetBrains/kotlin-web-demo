@@ -29,10 +29,7 @@ import org.w3c.dom.HTMLPreElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
 import providers.HelpProvider
-import utils.codemirror.CodeMirror
-import utils.codemirror.CompletionView
-import utils.codemirror.Hint
-import utils.codemirror.Position
+import utils.codemirror.*
 import utils.jquery.JQuery
 import utils.jquery.children
 import utils.jquery.find
@@ -63,10 +60,20 @@ class Editor(
     private val documents = hashMapOf<File, CodeMirror.Doc>()
     private var storedCompletionsList: List<CompletionView>? = null
     private val dialogCloseFunctions = arrayListOf<dynamic>()
+    private var helpWidget: CodeMirror.LineWidget? = null
 
     init {
         var timeoutId: Int? = null
-        codeMirror.on("change", {
+        codeMirror.on("change", { codeMirror ->
+            helpWidget?.let {
+                if (it.line.lineNo() != 0) {
+                    it.clear()
+                    val tmpWidget = codeMirror.getDoc().addLineWidget(0, it.node, json("above" to true, "noHScroll" to true))
+                    it.clear()
+                    helpWidget = tmpWidget
+                }
+            }
+
             removeStyles()
             if (openedFile != null) {
                 openedFile!!.userText = codeMirror.getValue()
@@ -134,9 +141,11 @@ class Editor(
     fun refresh() {
         codeMirror.refresh()
     }
-    fun setCursor (lineNo: Int, charNo: Int) {
+
+    fun setCursor(lineNo: Int, charNo: Int) {
         codeMirror.setCursor(lineNo, charNo)
     }
+
     fun focus() {
         codeMirror.focus()
     }
@@ -152,7 +161,8 @@ class Editor(
             codeMirror.setOption("readOnly", !openedFile!!.isModifiable)
             codeMirror.focus()
             codeMirror.swapDoc(relatedDocument)
-            for(closeFunction in dialogCloseFunctions){
+            helpWidget = codeMirror.getLineHandle(0).widgets.getOrNull(0)
+            for (closeFunction in dialogCloseFunctions) {
                 closeFunction()
             }
             dialogCloseFunctions.clear()
@@ -162,20 +172,22 @@ class Editor(
             throw Exception("Previous file wasn't closed")
         }
     }
-    fun closeFile () {
+
+    fun closeFile() {
         codeMirror.swapDoc(CodeMirror.Doc(""))
         openedFile = null
         removeStyles()
         (document.getElementById("workspace-overlay") as HTMLElement).style.display = "block"
     }
-    fun reloadFile () {
+
+    fun reloadFile() {
         val openedFile = this.openedFile;
         this.openedFile = null
         documents.remove(openedFile);
         if (openedFile != null) open(openedFile);
     }
 
-    fun updateHighlighting(){
+    fun updateHighlighting() {
         getHighlighting()
     }
 
@@ -197,7 +209,7 @@ class Editor(
             helpContent?.forEach { help.appendChild(it) }
             jq(help).find("a").attr("target", "_blank")
             CodeMirror.colorize(help.getElementsByTagName("code"))
-            cmDocument.addLineWidget(0, help, json("above" to true, "noHScroll" to true))
+            helpWidget = cmDocument.addLineWidget(0, help, json("above" to true, "noHScroll" to true))
 
             if (file.taskWindows.isEmpty() || file.isModified) return
             val firstWindow = file.taskWindows.first()
@@ -205,7 +217,7 @@ class Editor(
                     Position(firstWindow.line, firstWindow.start + firstWindow.length),
                     Position(firstWindow.line, firstWindow.start)
             )
-            for(taskWindow in file.taskWindows){
+            for (taskWindow in file.taskWindows) {
                 cmDocument.markText(
                         Position(taskWindow.line, taskWindow.start),
                         Position(taskWindow.line, taskWindow.start + taskWindow.length),
@@ -274,7 +286,7 @@ class Editor(
                         "title" to errorMessage
                 )))
 
-                if(relatedDocument.getEditor() !== codeMirror) continue
+                if (relatedDocument.getEditor() !== codeMirror) continue
 
                 if ((codeMirror.lineInfo(interval.start.line) != null) && (codeMirror.lineInfo(interval.start.line).gutterMarkers == null)) {
                     codeMirror.setGutterMarker(interval.start.line, "errors-and-warnings-gutter", document.create.div {
@@ -306,7 +318,7 @@ class Editor(
         }
     }
 
-    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit){
+    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit) {
         val closeFunction = codeMirror.openDialog(template, callback, options)
         dialogCloseFunctions.add(closeFunction)
         return closeFunction;
