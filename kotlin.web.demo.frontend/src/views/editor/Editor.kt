@@ -161,7 +161,7 @@ class Editor(
             codeMirror.setOption("readOnly", !openedFile!!.isModifiable)
             codeMirror.focus()
             codeMirror.swapDoc(relatedDocument)
-            helpWidget = codeMirror.getLineHandle(0).widgets.getOrNull(0)
+            helpWidget = codeMirror.getLineHandle(0).widgets?.getOrNull(0)
             for (closeFunction in dialogCloseFunctions) {
                 closeFunction()
             }

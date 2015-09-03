@@ -46,7 +46,7 @@ class CodeMirror() {
     }
 
     class Line{
-        val widgets: Array<LineWidget>
+        val widgets: Array<LineWidget>?
         fun lineNo(): Int
     }
 
