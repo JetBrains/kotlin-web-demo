@@ -24,7 +24,7 @@ data class ChangeEvent<T>(
         val newValue: T
 )
 
-class Listenable<T>(initialValue: T, private val varListener: VarListener<T>) : ReadWriteProperty<Any?, T> {
+class Listenable<T: Any>(initialValue: T, private val varListener: VarListener<T>) : ReadWriteProperty<Any?, T> {
     private var value = initialValue
     init {
         varListener.setInitialValue(initialValue)
@@ -43,7 +43,7 @@ class Listenable<T>(initialValue: T, private val varListener: VarListener<T>) : 
     }
 }
 
-class VarListener<T> {
+class VarListener<T: Any> {
     private var value: T by Delegates.notNull()
     private val allListeners = arrayListOf <(ChangeEvent<T>) -> Unit>()
     private val namedListeners = hashMapOf<String, (ChangeEvent<T>) -> Unit>()
