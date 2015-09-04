@@ -21,7 +21,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
 
 native
-class CodeMirror() {
+class CodeMirror(element: HTMLElement, parameters: Json) {
     companion object CodeMirror {
         val hint: dynamic
         val commands: dynamic

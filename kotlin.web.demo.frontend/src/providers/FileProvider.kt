@@ -248,7 +248,8 @@ class FileProvider(
                     "modifiable" to file.isModifiable,
                     "type" to file.type,
                     "revertible" to file.isRevertible,
-                    "taskWindows" to file.taskWindows.toTypedArray()
+                    "taskWindows" to file.taskWindows.toTypedArray(),
+                    "solution" to file.solution
             )))
         }
     }

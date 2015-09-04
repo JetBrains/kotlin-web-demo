@@ -200,8 +200,9 @@ public class ExamplesLoader {
             }
         } else {
             if (taskFile.exists() && !isAlreadyLoaded(files, taskFile.getName())) {
+                String solutionText = new String(Files.readAllBytes(solutionFile.toPath())).replaceAll("\r\n", "\n");
                 String taskText = new String(Files.readAllBytes(taskFile.toPath())).replaceAll("\r\n", "\n");
-                files.add(0, new TaskFile(taskText, projectId + "/" + taskFile.getName()));
+                files.add(0, new TaskFile(taskText, solutionText, projectId + "/" + taskFile.getName()));
             }
         }
 

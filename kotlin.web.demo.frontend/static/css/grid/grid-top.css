@@ -322,6 +322,10 @@
     margin-right: 21px;
 }
 
+.taskHelp button {
+    margin-bottom: 5px;
+}
+
 .taskWindow {
     border-top: 1px solid #0000FF;
     border-bottom: 1px solid #0000FF;

@@ -17,25 +17,23 @@
 package views.editor
 
 import application.Application
+import html4k.code
 import html4k.dom.create
 import html4k.js.div
-import jquery.jq
+import html4k.js.pre
 import model.File
 import model.FileType
 import model.Task
-import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLPreElement
 import org.w3c.dom.HTMLTextAreaElement
-import org.w3c.dom.events.Event
 import providers.HelpProvider
-import utils.codemirror.*
-import utils.jquery.JQuery
-import utils.jquery.children
-import utils.jquery.find
-import utils.jquery.toArray
+import utils.codemirror.CodeMirror
+import utils.codemirror.CompletionView
+import utils.codemirror.Hint
+import utils.codemirror.Position
+import utils.jquery.*
 import utils.unEscapeString
-import java.util.*
 import kotlin.browser.document
 import kotlin.browser.window
 
@@ -208,7 +206,28 @@ class Editor(
             val helpContent = JQuery.parseHTML(file.project.help)
             helpContent?.forEach { help.appendChild(it) }
             jq(help).find("a").attr("target", "_blank")
+
+            file.solution?.let {
+                val answerButton = document.createElement("button") as HTMLButtonElement
+                answerButton.type = "button"
+                answerButton.textContent = "Show answer"
+
+                val answer = document.create.pre {
+                    code {
+                        attributes.put("data-lang", "kotlin");
+                        +it
+                    }
+                }
+                answerButton.onclick = {
+                    jq(answer).show()
+                }
+
+                help.appendChild(answerButton)
+                help.appendChild(answer)
+                jq(answer).hide()
+            }
             CodeMirror.colorize(help.getElementsByTagName("code"))
+
             helpWidget = cmDocument.addLineWidget(0, help, json("above" to true, "noHScroll" to true))
 
             if (file.taskWindows.isEmpty() || file.isModified) return

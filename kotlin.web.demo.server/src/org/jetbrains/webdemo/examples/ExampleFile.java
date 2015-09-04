@@ -71,8 +71,15 @@ public class ExampleFile extends ProjectFile {
 }
 
 class TaskFile extends ExampleFile {
-    public TaskFile(String text, String id) {
+    private String solution;
+
+    public TaskFile(String text, String solution, String id) {
         super("Task.kt", text, id, Type.KOTLIN_FILE, null, true, false);
+        this.solution = solution;
+    }
+
+    public String getSolution() {
+        return solution;
     }
 }
 
