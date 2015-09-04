@@ -43,6 +43,7 @@ class CodeMirror(element: HTMLElement, parameters: Json) {
         val node: HTMLElement
         val line: Line
         fun clear()
+        fun changed()
     }
 
     class Line{

@@ -33,6 +33,7 @@ import utils.codemirror.CompletionView
 import utils.codemirror.Hint
 import utils.codemirror.Position
 import utils.jquery.*
+import utils.jquery.ui.toggle
 import utils.unEscapeString
 import kotlin.browser.document
 import kotlin.browser.window
@@ -218,8 +219,13 @@ class Editor(
                         +it
                     }
                 }
+
+                var answerHidden = true
                 answerButton.onclick = {
-                    jq(answer).show()
+                    answerHidden = !answerHidden
+                    answerButton.textContent = "${if (answerHidden) "Show" else "Hide"} answer"
+                    jq(answer).toggle()
+                    helpWidget?.changed()
                 }
 
                 help.appendChild(answerButton)

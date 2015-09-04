@@ -18,6 +18,8 @@ package utils.jquery.ui
 
 import jquery.JQuery
 
+native
+fun JQuery.toggle()
 
 native
 fun JQuery.resizable(parameters: Json)
