@@ -28,7 +28,7 @@ import kotlin.dom.addClass
 import kotlin.dom.hasClass
 import kotlin.dom.removeClass
 
-enum class KeyCode (val code: Int){
+enum class KeyCode(val code: Int) {
     S(83),
     R(82),
     F9(120),
@@ -48,10 +48,10 @@ fun addKotlinExtension(filename: String): String = if (filename.endsWith(".kt"))
 fun removeKotlinExtension(filename: String): String = filename.removeSuffix(".kt")
 
 private val tagsToReplace = hashMapOf(
-    "&" to "&amp;",
-    "<" to "&amp;lt;",
-    ">" to "&amp;gt;",
-    " " to "%20"
+        "&" to "&amp;",
+        "<" to "&amp;lt;",
+        ">" to "&amp;gt;",
+        " " to "%20"
 )
 
 var userProjectPrefix = "/UserProjects/"
@@ -97,7 +97,7 @@ fun getFileIdFromUrl(): String? {
 
 fun setState(hash: String, title: String) {
     var unescapedHash = unEscapeString(hash)
-    unescapedHash = if(unescapedHash.startsWith("#")) unescapedHash else "#" + unescapedHash
+    unescapedHash = if (unescapedHash.startsWith("#")) unescapedHash else "#" + unescapedHash
     document.title = title + " | Try Kotlin"
     if (window.location.hash != unescapedHash) {
         if ((window.location.hash == "" || window.location.hash == "#") && window.location.search == "") {
@@ -110,7 +110,7 @@ fun setState(hash: String, title: String) {
 
 fun replaceState(hash: String, title: String) {
     var unescapedHash = unEscapeString(hash)
-    unescapedHash = if(unescapedHash.startsWith("#")) unescapedHash else "#" + unescapedHash
+    unescapedHash = if (unescapedHash.startsWith("#")) unescapedHash else "#" + unescapedHash
     document.title = title + " | Try Kotlin"
     if (window.location.hash != unescapedHash) {
         window.history.replaceState("", title, unescapedHash)
@@ -151,7 +151,7 @@ fun unBlockContent() {
     (document.getElementById("global-overlay") as HTMLElement).style.display = "none"
 }
 
-fun HTMLIFrameElement.clear(){
+fun HTMLIFrameElement.clear() {
     this.contentWindow!!.location.reload()
 }
 
@@ -165,4 +165,7 @@ native("onerror")
 var Window.onError: (String, String, Int, Int, dynamic) -> Unit
 
 native
-fun decodeURI(uri:String): String
+fun decodeURI(uri: String): String
+
+native
+fun encodeURIComponent(component: String): String

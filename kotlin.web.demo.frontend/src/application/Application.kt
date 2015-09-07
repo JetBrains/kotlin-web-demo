@@ -34,6 +34,8 @@ import utils.jquery.on
 import utils.jquery.trigger
 import utils.jquery.ui.Dialog
 import utils.jquery.ui.tabs
+import utils.social.createFacebookShareLink
+import utils.social.createTweeterShareLink
 import views.*
 import views.dialogs.ConverterView
 import views.dialogs.InputDialogView
@@ -409,6 +411,18 @@ object Application {
     }
 
     fun init() {
+        val toolbox = document.getElementById("global-toolbox-right")!!
+        toolbox.insertBefore(createTweeterShareLink(
+                tweetText ="Amazing tweet about Kotlin.",
+                hashTags = setOf("kotlin"),
+                via = "kotlin",
+                url = "http://try.kotl.in/"
+        ), toolbox.firstChild);
+        toolbox.insertBefore(createFacebookShareLink(
+                caption = "Caption",
+                description = "Description",
+                name = "Name"
+        ), toolbox.firstChild);
         jq("#result-tabs").tabs()
         initButtons()
         setKotlinVersion()
