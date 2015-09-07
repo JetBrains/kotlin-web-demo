@@ -16,6 +16,7 @@
 
 package views.tree
 
+import application.Application
 import html4k.dom.append
 import html4k.js.div
 import jquery.jq
@@ -61,6 +62,7 @@ open class FolderView(parentNode: HTMLElement,
         if (!childFolders.isEmpty()) {
             jq(contentElement).accordion(json(
                     "heightStyle" to "content",
+                    "collapsible" to true,
                     "navigation" to true,
                     "active" to 0,
                     "icons" to json (
@@ -93,10 +95,17 @@ open class FolderView(parentNode: HTMLElement,
         onProjectDeleted(projectView)
     }
 
+    fun selectFolder(folder: FolderView){
+        jq(contentElement).accordion("option", "active", childFolders.indexOf(folder))
+    }
 
     fun select() {
-        parent?.select()
-        headerElement.click()
+        if(parent != null) {
+            parent.selectFolder(this)
+            parent.select()
+        } else {
+            Application.accordion.selectFolder(this)
+        }
     }
 }
 

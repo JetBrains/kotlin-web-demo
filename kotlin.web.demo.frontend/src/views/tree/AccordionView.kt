@@ -49,6 +49,7 @@ class AccordionView(
         private set
     private var myProgramsFolder: MyProgramsFolderView by Delegates.notNull()
     private var publicLinksFolder: FolderView? = null
+    private var childFolders: List<FolderView> by Delegates.notNull()
 
     private val onProjectDeleted: (ProjectView) -> Unit = { projectView: ProjectView ->
         projectViews.remove(projectView.project.id)
@@ -74,6 +75,7 @@ class AccordionView(
         element.innerHTML = ""
         jq(element).accordion(json(
                 "heightStyle" to "content",
+                "collapsible" to true,
                 "navigation" to true,
                 "active" to 0,
                 "icons" to json(
@@ -94,7 +96,7 @@ class AccordionView(
         selectedProjectView = null
         selectedFileView = null
         Application.headersProvider.getAllHeaders { folders ->
-            folders.forEach { folder ->
+            childFolders = folders.map <dynamic, FolderView> { folder ->
                 if (folder.name == "My programs") {
                     myProgramsFolder = MyProgramsFolderView(
                             parentNode = element,
@@ -105,8 +107,9 @@ class AccordionView(
                             onProjectSelected = onProjectSelected,
                             onProjectCreated = onProjectCreated
                     );
+                    myProgramsFolder
                 } else if (folder.name == "Public links") {
-                    publicLinksFolder = FolderView(
+                    val folder = FolderView(
                             parentNode = element,
                             content = folder,
                             parent = null,
@@ -115,6 +118,8 @@ class AccordionView(
                             onProjectSelected = onProjectSelected,
                             onProjectCreated = onProjectCreated
                     )
+                    publicLinksFolder = folder
+                    folder
                 } else if (folder.isTaskFolder) {
                     FolderViewWithProgress(
                             parentNode = element,
@@ -236,6 +241,10 @@ class AccordionView(
             selectedProjectView = projectViews[publicId]
             selectedProjectView!!.select()
         }
+    }
+
+    fun selectFolder(folderView: FolderView) {
+        jq(element).accordion("option", "active", childFolders.indexOf(folderView))
     }
 
 }

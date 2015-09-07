@@ -49,6 +49,9 @@ native
 fun JQuery.accordion(command: String): JQuery
 
 native
+fun JQuery.accordion(command: String, name: String, value: Any): JQuery
+
+native
 public fun JQuery.button(mode : String, param : String, value : Any?) : JQuery = noImpl
 
 native
