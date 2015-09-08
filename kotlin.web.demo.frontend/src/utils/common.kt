@@ -17,10 +17,7 @@
 package utils
 
 import jquery.jq
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLIFrameElement
-import org.w3c.dom.Location
-import org.w3c.dom.Window
+import org.w3c.dom.*
 import utils.jquery.isCheck
 import kotlin.browser.document
 import kotlin.browser.window
@@ -169,3 +166,11 @@ fun decodeURI(uri: String): String
 
 native
 fun encodeURIComponent(component: String): String
+
+fun selectElement(element: Element) {
+    val selection = window.getSelection();
+    val range = document.createRange();
+    range.selectNode(element);
+    selection.removeAllRanges();
+    selection.addRange(range);
+}

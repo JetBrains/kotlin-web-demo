@@ -18,6 +18,7 @@ package utils.jquery
 
 import jquery.JQuery
 import org.w3c.dom.Document
+import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
@@ -97,3 +98,9 @@ fun JQuery.find(selector: String): JQuery
 
 native
 fun JQuery.trigger(action: String)
+
+native
+fun JQuery.focus()
+
+native
+fun JQuery.get(index: Int): Element
