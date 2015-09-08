@@ -28,7 +28,7 @@
     background-color: #dfdfdf;
 }
 
-.ui-dialog .ui-dialog-title{
+.ui-dialog .ui-dialog-title {
     overflow: visible;
 }
 
@@ -44,6 +44,7 @@
     width: 12px;
     background: url("/static/images/icons_all_sprite.png") no-repeat -150px -300px;
 }
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .ui-dialog-titlebar .ui-dialog-titlebar-close {
         background-image: url("/static/images/icons_all_sprite@2x.png");
@@ -71,14 +72,14 @@
     float: right;
 }
 
-.ui-dialog .ui-dialog-buttonpane button{
+.ui-dialog .ui-dialog-buttonpane button {
     margin: 0 4px;
     background-color: #dcdcdc;
     border: 1px solid #969696;
     border-radius: 3px;
 }
 
-.ui-dialog-buttonset .ui-button .ui-button-text{
+.ui-dialog-buttonset .ui-button .ui-button-text {
     padding: 4px 6px;
 }
 
@@ -98,7 +99,7 @@
     line-height: 20px;
 }
 
-.login-dialog .ui-dialog-content{
+.login-dialog .ui-dialog-content {
     padding-top: 10px;
     padding-bottom: 35px;
 }
@@ -107,7 +108,7 @@
     padding-top: 10px;
 }
 
-.login-dialog .ui-dialog-titlebar{
+.login-dialog .ui-dialog-titlebar {
     background-color: white;
 }
 
@@ -135,7 +136,7 @@
     margin-left: 5px;
 }
 
-.input-dialog-error-message{
+.input-dialog-error-message {
     top: 15px;
     position: relative;
     color: red;
@@ -160,7 +161,7 @@
     padding: 3px;
 }
 
-.shortcutKeyCombination{
+.shortcutKeyCombination {
     float: right;
 }
 
@@ -179,7 +180,7 @@
     padding-right: 1px;
 }
 
-.shortcutSeparator:last-child{
+.shortcutSeparator:last-child {
     display: none;
 }
 
@@ -221,7 +222,7 @@
     margin-bottom: 4px;
 }
 
-.difference-dialog-content{
+.difference-dialog-content {
     height: 500px;
 }
 
@@ -232,26 +233,26 @@
     padding-bottom: 3px;
 }
 
-.diff{
+.diff {
     float: left;
     overflow: auto;
     height: 100%;
     width: 50%;
 }
 
-.diff-glutters{
+.diff-glutters {
     float: left;
     height: 100%;
     background-color: #f7f7f7;
 }
 
-.diff-lineNumber{
+.diff-lineNumber {
     padding-left: 7px;
     padding-right: 7px;
     color: #999;
 }
 
-.diff-line{
+.diff-line {
     font-family: menlo, consolas, monospace;
     padding-left: 2px;
 }
@@ -281,21 +282,23 @@
 }
 
 #myPopupForConverterFromJavaToKotlin .CodeMirror,
-#myPopupForConverterFromJavaToKotlin .CodeMirror-gutters{
+#myPopupForConverterFromJavaToKotlin .CodeMirror-gutters {
     height: 100%;
 }
 
-#myPopupForConverterFromJavaToKotlin>div{
+#myPopupForConverterFromJavaToKotlin > div {
+    min-width: 5%;
+    max-width: 95%;
     float: left;
     width: 50%;
     height: 100%;
 }
 
-#myPopupForConverterFromJavaToKotlin .CodeMirror-lines{
+#myPopupForConverterFromJavaToKotlin .CodeMirror-lines {
     padding: 0;
 }
 
-#myPopupForConverterFromJavaToKotlin span.CodeMirror-matchingbracket{
+#myPopupForConverterFromJavaToKotlin span.CodeMirror-matchingbracket {
     color: inherit;
     background-color: #99ccff;
 }

@@ -20,14 +20,18 @@ import html4k.dom.append
 import html4k.js.div
 import html4k.js.textArea
 import jquery.jq
+import org.w3c.dom.events.Event
 import providers.ConverterProvider
 import utils.KeyCode
 import utils.jquery.ui.Dialog
 import utils.jquery.ui.DialogButton
 import utils.codemirror.CodeMirror
+import utils.jquery.JQuery
 import utils.jquery.ui.button
 import utils.jquery.find
 import utils.jquery.keydown
+import utils.jquery.outerWidth
+import utils.jquery.ui.resizable
 import kotlin.browser.document
 import kotlin.browser.window
 
@@ -110,6 +114,18 @@ class ConverterView(converterProvider: ConverterProvider) {
 
 
     init {
+        jq(leftHalf).resizable(json(
+                "handles"to 'e',
+                "resize" to {
+                    val rightHalfWidth = (jq(dialogElement).width() as Int - jq(leftHalf).outerWidth(true)) * 100 / jq(dialogElement).width() as Int
+                    rightHalf.style.width = rightHalfWidth.toString() + "%"
+                    leftHalf.style.width = (100 - rightHalfWidth).toString() + "%"
+                },
+                "stop" to {
+                    kotlinEditor.refresh()
+                    javaEditor.refresh()
+                }
+        ))
         jq(dialogElement).keydown({ event ->
             if (event.keyCode == KeyCode.ENTER.code && (event.ctrlKey || event.metaKey)) {
                 jq(dialogElement).parent().find("button:eq(1):enabled").click()

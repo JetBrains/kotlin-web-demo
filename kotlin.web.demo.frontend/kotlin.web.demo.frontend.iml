@@ -17,9 +17,11 @@
         <CLASSES>
           <root url="kotlin-js-meta://C:\Users\Semyon.Atamas\.IntelliJIdea15\config\plugins\Kotlin\kotlinc\lib\kotlin-jslib.jar!/" />
           <root url="kotlin-js-meta://$MODULE_DIR$/lib/html4k.jar!/" />
+          <root url="kotlin-js-meta://$MODULE_DIR$/lib/html4k.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
+          <root url="jar://$KOTLIN_BUNDLED$/lib/kotlin-jslib-sources.jar!/" />
           <root url="jar://$KOTLIN_BUNDLED$/lib/kotlin-jslib-sources.jar!/" />
         </SOURCES>
       </library>
