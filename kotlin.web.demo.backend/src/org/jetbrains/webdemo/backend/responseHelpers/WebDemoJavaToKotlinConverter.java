@@ -59,22 +59,29 @@ public class WebDemoJavaToKotlinConverter {
             //To create a module
             ResolveUtils.getBindingContext(Collections.EMPTY_LIST, project);
 
-            boolean classDefFound = false;
             for (PsiElement element : javaFile.getChildren()) {
                 if (element instanceof PsiClass) {
                     inputElements = Collections.<PsiElement>singletonList(javaFile);
-                    classDefFound = true;
                 }
             }
 
-            if (!classDefFound) {
-                try {
-                    inputElements = Collections.<PsiElement>singletonList(instance.createMethodFromText(code, javaFile));
-                } catch (Exception e) {
-                    PsiCodeBlock codeBlock = instance.createCodeBlockFromText("{" + code + "}", javaFile);
-                    PsiElement[] childrenWithoutBraces = Arrays.copyOfRange(codeBlock.getChildren(), 1, codeBlock.getChildren().length - 1);
-                    inputElements = Arrays.asList(childrenWithoutBraces);
+            if (inputElements == null) {
+                PsiClass psiClass = instance.createClassFromText(code, javaFile);
+                boolean errorsFound = false;
+                for(PsiElement element : psiClass.getChildren()){
+                    if(element instanceof PsiErrorElement){
+                        errorsFound = true;
+                    }
                 }
+                if(!errorsFound) {
+                    inputElements = Arrays.asList(psiClass.getChildren());
+                }
+            }
+
+            if(inputElements == null){
+                PsiCodeBlock codeBlock = instance.createCodeBlockFromText("{" + code + "}", javaFile);
+                PsiElement[] childrenWithoutBraces = Arrays.copyOfRange(codeBlock.getChildren(), 1, codeBlock.getChildren().length - 1);
+                inputElements = Arrays.asList(childrenWithoutBraces);
             }
 
             List<JavaToKotlinConverter.ElementResult> resultFormConverter = converter.elementsToKotlin(inputElements).getResults();
