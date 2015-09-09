@@ -19,6 +19,7 @@ package utils.codemirror
 import org.w3c.dom.HTMLCollection
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
+import org.w3c.dom.events.Event
 
 @native
 class CodeMirror(element: HTMLElement, parameters: Json) {
@@ -32,7 +33,7 @@ class CodeMirror(element: HTMLElement, parameters: Json) {
         fun colorize(elements: HTMLCollection)
     }
 
-    class Doc(text: String, mode: String = "", firstLineNumber: Int = 1){
+    class Doc(text: String, mode: String = "", firstLineNumber: Int = 1) {
         fun markText(start: Position, end: Position, json: Json): Any
         fun getEditor(): utils.codemirror.CodeMirror
         fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json): LineWidget
@@ -46,9 +47,15 @@ class CodeMirror(element: HTMLElement, parameters: Json) {
         fun changed()
     }
 
-    class Line{
+    class Line {
         val widgets: Array<LineWidget>?
         fun lineNo(): Int
+    }
+
+    class TextMarker {
+        val className: String?
+        fun find(): Range
+        fun clear()
     }
 
     fun getCursor(): Position
@@ -57,6 +64,7 @@ class CodeMirror(element: HTMLElement, parameters: Json) {
     fun replaceRange(replacement: String, from: Position, to: Position = from, origin: String? = null)
     fun execCommand(s: String)
     fun on(action: String, callback: (utils.codemirror.CodeMirror) -> Unit)
+    fun <T>on(action: String, callback: (utils.codemirror.CodeMirror, additionalInfo: T) -> Unit)
     fun getValue(): String
     fun setOption(name: String, value: Any)
     fun refresh()
@@ -79,9 +87,18 @@ class CodeMirror(element: HTMLElement, parameters: Json) {
     fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json)
     fun setSelection(anchor: Position, head: Position)
     fun getLineHandle(i: Int): Line
+    fun coordsChar(cursorCoordinates: Coordinates): Position
+    fun findMarksAt(position: Position): Array<TextMarker>
+    fun listSelections(): Array<Selection>
 }
 
 data class Position(val line: Int, val ch: Int)
+
+data class Range(val from: Position, val to: Position)
+
+data class Selection(val anchor: Position, val head: Position)
+
+data class Coordinates(val left: Double, val top: Double)
 
 @native interface Token {
     val start: Int
@@ -94,7 +111,7 @@ data class Position(val line: Int, val ch: Int)
 data class Hint(val from: Position, val to: Position, var list: Array<CompletionView>)
 
 
-@native interface CompletionView{
+@native interface CompletionView {
     val text: String
     val displayText: String
     fun render(element: HTMLElement, self: dynamic, data: dynamic);

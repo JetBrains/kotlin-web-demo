@@ -27,11 +27,12 @@ import model.Task
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.KeyboardEvent
+import org.w3c.dom.events.MouseEvent
 import providers.HelpProvider
-import utils.codemirror.CodeMirror
-import utils.codemirror.CompletionView
-import utils.codemirror.Hint
-import utils.codemirror.Position
+import utils.KeyCode
+import utils.codemirror.*
 import utils.jquery.*
 import utils.jquery.ui.toggle
 import utils.unEscapeString
@@ -86,6 +87,26 @@ public class Editor(
 
         })
 
+        codeMirror.on("mousedown", { instance: CodeMirror, event: MouseEvent ->
+            val position = instance.coordsChar(Coordinates(event.pageX, event.pageY))
+            val markers = instance.findMarksAt(position)
+
+            val todoMarker = markers.firstOrNull { it.className == "taskWindow" }
+            if (todoMarker != null) {
+                val range = todoMarker.find()
+                instance.setSelection(range.from, range.to)
+                event.preventDefault()
+            }
+        })
+
+        codeMirror.on("keydown", { instance: CodeMirror, event: KeyboardEvent ->
+            when(event.keyCode) {
+                KeyCode.ENTER.code -> {
+                    instance.findMarksAt(instance.getCursor()).firstOrNull { it.className == "taskWindow" }?.clear()
+                }
+            }
+        })
+
         var helpTimeout = 0
         codeMirror.on("cursorActivity", { codemirror ->
             val cursorPosition = codemirror.getCursor()
@@ -99,12 +120,12 @@ public class Editor(
             }
         })
 
-        codeMirror.on("blur", {
+        codeMirror.on("blur", { cm ->
             window.clearTimeout(helpTimeout)
             HelpViewForWords.hide()
         })
 
-        codeMirror.on("endCompletion") {
+        codeMirror.on("endCompletion") { cm ->
             storedCompletionsList = null
         }
 
@@ -249,11 +270,8 @@ public class Editor(
                         json(
                                 "className" to "taskWindow",
                                 "startStyle" to "taskWindow-start",
-                                "clearOnEnter" to true,
                                 "endStyle" to "taskWindow-end",
-                                "handleMouseEvents" to true,
-                                "inclusiveLeft" to true,
-                                "inclusiveRight" to true
+                                "handleMouseEvents" to true
                         )
                 )
             }
