@@ -426,14 +426,6 @@ li[aria-expanded="false"] > ul {
     position: relative;
 }
 
-.tree-node-header .text::-moz-selection {
-    background-color: rgba(0,0,0,0);
-}
-
-.tree-node-header .text::selection {
-    background-color: rgba(0,0,0,0);
-}
-
 .tree-node-header .icon.ok {
     background: url("/static/images/icons_all_sprite.png") no-repeat -150px -450px;
 }

@@ -35,6 +35,7 @@ import utils.jquery.get
 import utils.jquery.toArray
 import views.editor.Diagnostic
 import kotlin.browser.document
+import kotlin.browser.window
 
 
 class ProblemsView(
@@ -93,45 +94,33 @@ class ProblemsView(
             }
         }
 
-        nodeElement.onfocus = { e ->
-            e.stopPropagation()
-            val textNode = jq(nodeElement).find(".tree-node-header .text")[0]
-            selectElement(textNode)
-        }
-
         val childrenElement = nodeElement.append.ul {}
         for (error in errors) {
             renderErrorNode(file, error, childrenElement)
         }
     }
 
-    private fun renderErrorNode(file: File, diagnostic: Diagnostic, parentElement: HTMLElement) {
-        val nodeElement = parentElement.append.li {
-            classes = setOf("tree-node")
-            tabIndex = "-1"
+    private fun renderErrorNode(file: File, diagnostic: Diagnostic, parentElement: HTMLElement) = parentElement.append.li {
+        classes = setOf("tree-node")
+        tabIndex = "-1"
+        div {
+            classes = setOf("tree-node-header")
+            val severity = diagnostic.severity.toLowerCase()
+            div { classes = setOf("icon", severity) }
             div {
-                classes = setOf("tree-node-header")
-                val severity = diagnostic.severity.toLowerCase()
-                div { classes = setOf("icon", severity) }
-                div {
-                    +(severity.capitalize() +
-                            ":(" + (diagnostic.interval.start.line + 1) + ", " + diagnostic.interval.start.ch + ") " +
-                            unEscapeString(diagnostic.message))
-                    classes = setOf("text")
-                }
-            }
-            onDoubleClickFunction = {
-                setCursor(file.name, diagnostic.interval.start.line, diagnostic.interval.start.ch)
-            }
-            onKeyUpFunction = fun(event: Event) {
-                if (event !is KeyboardEvent || event.keyCode != KeyCode.ENTER.code) return
-                setCursor(file.name, diagnostic.interval.start.line, diagnostic.interval.start.ch)
+                +(severity.capitalize() +
+                        ":(" + (diagnostic.interval.start.line + 1) + ", " + diagnostic.interval.start.ch + ") " +
+                        unEscapeString(diagnostic.message))
+                classes = setOf("text")
             }
         }
-        nodeElement.onfocus = { e ->
-            e.stopPropagation()
-            val textNode = jq(nodeElement).find(".tree-node-header .text")[0]
-            selectElement(textNode)
+        onDoubleClickFunction = {
+            window.getSelection().removeAllRanges()
+            setCursor(file.name, diagnostic.interval.start.line, diagnostic.interval.start.ch)
+        }
+        onKeyUpFunction = fun(event: Event) {
+            if (event !is KeyboardEvent || event.keyCode != KeyCode.ENTER.code) return
+            setCursor(file.name, diagnostic.interval.start.line, diagnostic.interval.start.ch)
         }
     }
 }
