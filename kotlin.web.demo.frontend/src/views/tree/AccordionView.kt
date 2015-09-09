@@ -109,7 +109,7 @@ class AccordionView(
                     );
                     myProgramsFolder
                 } else if (folder.name == "Public links") {
-                    val folder = FolderView(
+                    val folderView = FolderView(
                             parentNode = element,
                             content = folder,
                             parent = null,
@@ -118,8 +118,8 @@ class AccordionView(
                             onProjectSelected = onProjectSelected,
                             onProjectCreated = onProjectCreated
                     )
-                    publicLinksFolder = folder
-                    folder
+                    publicLinksFolder = folderView
+                    folderView
                 } else if (folder.isTaskFolder) {
                     FolderViewWithProgress(
                             parentNode = element,

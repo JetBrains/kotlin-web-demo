@@ -22,7 +22,7 @@ import providers.HelpProvider
 import utils.ElementPosition
 import kotlin.browser.document
 
-private object HelpViewForWords{
+object HelpViewForWords{
     private val element = document.body!!.append.div {
         classes = setOf("words-help")
         style = "display: none"

@@ -75,7 +75,7 @@ fun getProjectIdFromUrl(): String {
     urlHash = urlHash.removePrefix("#")
     if (urlHash.startsWith(userProjectPrefix)) {
         urlHash = urlHash.removePrefix(userProjectPrefix)
-        return urlHash.splitBy("/")[0]
+        return urlHash.split('/')[0]
     }
     return urlHash.substring(0, urlHash.lastIndexOf("/"))
 }
@@ -85,7 +85,7 @@ fun getFileIdFromUrl(): String? {
     urlHash = urlHash.removePrefix("#")
 
     if (urlHash.startsWith(userProjectPrefix)) {
-        val path = urlHash.removePrefix(userProjectPrefix).splitBy("/")
+        val path = urlHash.removePrefix(userProjectPrefix).split('/')
         return if (path.size() > 1) path[1] else null
     } else {
         return urlHash
@@ -152,19 +152,19 @@ fun HTMLIFrameElement.clear() {
     this.contentWindow!!.location.reload()
 }
 
-native
+@native
 val Object: dynamic
 
-native
+@native
 fun Window.eval(code: String): dynamic
 
-native("onerror")
+@native("onerror")
 var Window.onError: (String, String, Int, Int, dynamic) -> Unit
 
-native
+@native
 fun decodeURI(uri: String): String
 
-native
+@native
 fun encodeURIComponent(component: String): String
 
 fun selectElement(element: Element) {

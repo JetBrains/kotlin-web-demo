@@ -19,5 +19,5 @@ package utils
 import jquery.JQuery
 
 
-native
+@native
 public fun JQuery.a11yTree(parameters: Json) : JQuery = noImpl

@@ -87,13 +87,13 @@ class DialogButton(val text: String, val click: (Event)->Unit)
 class DialogProperty<T>(initialValue: T) : ReadWriteProperty<Any?, T> {
     private var value: T = initialValue
 
-    override fun set(thisRef: Any?, desc: PropertyMetadata, value: T) {
+    override fun set(thisRef: Any?, property: PropertyMetadata, value: T) {
         var dialog = thisRef as Dialog
         this.value = value
-        jq(dialog.dialogElement).dialog("option", desc.name, value)
+        jq(dialog.dialogElement).dialog("option", property.name, value)
     }
 
-    override fun get(thisRef: Any?, desc: PropertyMetadata): T {
+    override fun get(thisRef: Any?, property: PropertyMetadata): T {
         return value
     }
 

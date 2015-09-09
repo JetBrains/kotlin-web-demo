@@ -38,7 +38,7 @@ import utils.unEscapeString
 import kotlin.browser.document
 import kotlin.browser.window
 
-class Editor(
+public class Editor(
         private val helpProvider: HelpProvider
 ) {
     val codeMirror = CodeMirror.fromTextArea(document.getElementById("code") as HTMLTextAreaElement, json(

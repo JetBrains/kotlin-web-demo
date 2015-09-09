@@ -138,7 +138,7 @@ class HeadersProvider(
     }
 }
 
-native
+@native
 interface FolderContent {
     val name: String
     val id: String
@@ -147,7 +147,7 @@ interface FolderContent {
     val isTaskFolder: Boolean
 }
 
-native
+@native
 interface ProjectInfo {
     val name: String
     val publicId: String

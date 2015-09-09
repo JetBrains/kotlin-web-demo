@@ -18,41 +18,41 @@ package utils.jquery.ui
 
 import jquery.JQuery
 
-native
+@native
 fun JQuery.toggle()
 
-native
+@native
 fun JQuery.resizable(parameters: Json)
 
-native
+@native
 fun JQuery.resizable(mode : String, param : String, value : Any?)
 
-native
+@native
 fun JQuery.selectmenu(parameters: Json)
 
-native
+@native
 fun JQuery.selectmenu(command: String)
 
-native
+@native
 fun JQuery.tabs()
 
-native
+@native
 public fun JQuery.button(command : String) : JQuery = noImpl
 
-native
+@native
 public fun JQuery.button(parameters : Json) : JQuery = noImpl
 
-native
+@native
 fun JQuery.accordion(params: Json): JQuery
 
-native
+@native
 fun JQuery.accordion(command: String): JQuery
 
-native
+@native
 fun JQuery.accordion(command: String, name: String, value: Any): JQuery
 
-native
+@native
 public fun JQuery.button(mode : String, param : String, value : Any?) : JQuery = noImpl
 
-native
+@native
 public fun JQuery.tabs(mode : String, param : String, value : Any?) : JQuery = noImpl

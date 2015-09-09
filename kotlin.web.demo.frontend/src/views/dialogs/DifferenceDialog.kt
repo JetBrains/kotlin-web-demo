@@ -31,7 +31,7 @@ import kotlin.browser.document
 import kotlin.dom.addClass
 
 
-native
+@native
 object  difflib {
     class SequenceMatcher(baseTextLines: Array<String>, newTextLines: Array<String>){
         fun get_opcodes(): Array<dynamic>

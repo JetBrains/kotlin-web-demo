@@ -77,7 +77,7 @@ class JUnitView(
     }
 
     private fun findCommonPackage(classNames: List<String>): List<String> {
-        val sortedClassNames = classNames.sort()
+        val sortedClassNames = classNames.sorted()
         val firstPackage = sortedClassNames.first().split('.')
         val lastPackage = sortedClassNames.last().split('.')
         var j = 0
@@ -102,7 +102,7 @@ class JUnitView(
         }
         var commonPackage = findCommonPackage(classNames)
 
-        var commonPackageFullName = ""
+        var commonPackageFullName :String
         var rootNode: dynamic =
                 if (!commonPackage.isEmpty()) {
                     commonPackageFullName = commonPackage.join(".")
@@ -332,11 +332,11 @@ data class ParsedAssertionMessage(
         val actual: String
 )
 
-native
+@native
 interface TestResult {
     val status: String
     val executionTime: Double
 }
 
-native
+@native
 fun Double.toFixed(noOfDigits: Int): Double

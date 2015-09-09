@@ -30,7 +30,7 @@ class Listenable<T: Any>(initialValue: T, private val varListener: VarListener<T
         varListener.setInitialValue(initialValue)
     }
 
-    override fun set(thisRef: Any?, desc: PropertyMetadata, value: T) {
+    override fun set(thisRef: Any?, property: PropertyMetadata, value: T) {
         if(this.value != value) {
             val e = ChangeEvent(this.value, value)
             this.value = value
@@ -38,7 +38,7 @@ class Listenable<T: Any>(initialValue: T, private val varListener: VarListener<T
         }
     }
 
-    override fun get(thisRef: Any?, desc: PropertyMetadata): T {
+    override fun get(thisRef: Any?, property: PropertyMetadata): T {
         return value
     }
 }

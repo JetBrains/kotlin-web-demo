@@ -51,7 +51,7 @@ public class Task(
     }
 }
 
-native interface TaskWindow {
+@native interface TaskWindow {
     val line: Int;
     val start: Int;
     val length: Int;
