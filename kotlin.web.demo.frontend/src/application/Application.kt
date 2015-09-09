@@ -427,10 +427,6 @@ object Application {
         initButtons()
         setKotlinVersion()
 
-        window.onError = { message, url, line, ch, error ->
-            submitErrorReport(message, "$url $line:$ch", error.stack)
-        }
-
         window.onstorage = { event ->
             if(event is StorageEvent && event.key == "isLoggedIn"){
                 val isLoggedIn = parseBoolean(event.newValue);

@@ -54,19 +54,6 @@ public fun ajax(
     ))
 }
 
-fun submitErrorReport(message: String, url: String, stackTrace: String){
-    ajax(
-            url = generateAjaxUrl(REQUEST_TYPE.ERROR),
-            dataType = DataType.JSON,
-            type = HTTPRequestType.POST,
-            data = json(
-                    "message" to message,
-                    "url" to url,
-                    "stackTrace" to stackTrace
-            )
-    )
-}
-
 public enum class DataType() {
     TEXT,
     JSON
