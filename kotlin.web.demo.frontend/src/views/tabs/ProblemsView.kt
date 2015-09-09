@@ -92,6 +92,9 @@ class ProblemsView(
                     classes = setOf("text")
                 }
             }
+            onDoubleClickFunction = {
+                window.getSelection().removeAllRanges()
+            }
         }
 
         val childrenElement = nodeElement.append.ul {}
