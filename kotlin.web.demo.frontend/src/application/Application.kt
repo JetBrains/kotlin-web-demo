@@ -427,6 +427,10 @@ object Application {
         initButtons()
         setKotlinVersion()
 
+        window.onfocus = {
+            editor.focus()
+        }
+
         window.onstorage = { event ->
             if(event is StorageEvent && event.key == "isLoggedIn"){
                 val isLoggedIn = parseBoolean(event.newValue);
