@@ -22,12 +22,26 @@ import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
+import providers.CompletionProposal
 
 
 @native("$")
-object JQuery {
-    fun ajax(parameters: Json)
-    fun parseHTML(html: String): Array<HTMLElement>?
+class JQuery {
+    companion object JQuery {
+        fun ajax(parameters: Json): Promise
+        fun parseHTML(html: String): Array<HTMLElement>?
+    }
+
+    class Promise {
+        fun then(callback: Function<Unit>)
+        fun done(callback: Function<Unit>)
+        fun fail()
+        fun always()
+        fun pipe()
+        fun progress()
+        fun state()
+        fun promise()
+    }
 }
 
 @native

@@ -17,6 +17,7 @@
 package providers
 import model.Project
 import utils.codemirror.Position
+import utils.jquery.JQuery
 import views.ActionStatusMessage
 
 class CompletionProvider(
@@ -25,6 +26,7 @@ class CompletionProvider(
 )
 {
     private var isLoadingCompletion = false
+    private var request: JQuery.Promise? = null
 
     fun getCompletion(
             project: Project,
@@ -32,10 +34,12 @@ class CompletionProvider(
             cursor: Position,
             callback: (Array<CompletionProposal>) -> Unit
     ) {
-        if (isLoadingCompletion) return
+        if (isLoadingCompletion) {
+            request?.done(callback)
+        }
 
         isLoadingCompletion = true
-        ajax(url = generateAjaxUrl(REQUEST_TYPE.COMPLETE, hashMapOf("runConf" to project.confType)),
+        request = ajax(url = generateAjaxUrl(REQUEST_TYPE.COMPLETE, hashMapOf("runConf" to project.confType)),
                 dataType = DataType.JSON,
                 timeout = 10000,
                 type = HTTPRequestType.POST,

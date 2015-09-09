@@ -37,22 +37,20 @@ public fun ajax(
         type: HTTPRequestType,
         data: Json? = null,
         timeout: Int = 10000,
-        error: (dynamic, String, String) -> Unit = {jqXHR, textStatus, errorThrown ->},
+        error: (dynamic, String, String) -> Unit = { jqXHR, textStatus, errorThrown -> },
         complete: () -> Unit = {},
         statusCode: Json? = null
-){
-    JQuery.ajax(json(
-            "url" to url,
-            "success" to success,
-            "dataType" to dataType,
-            "type" to type.name().toLowerCase(),
-            "data" to (data ?: undefined),
-            "timeout" to timeout,
-            "error" to error,
-            "complete" to complete,
-            "statusCode" to (statusCode ?: undefined)
-    ))
-}
+) = JQuery.ajax(json(
+        "url" to url,
+        "success" to success,
+        "dataType" to dataType,
+        "type" to type.name().toLowerCase(),
+        "data" to (data ?: undefined),
+        "timeout" to timeout,
+        "error" to error,
+        "complete" to complete,
+        "statusCode" to (statusCode ?: undefined)
+))
 
 public enum class DataType() {
     TEXT,
@@ -72,7 +70,7 @@ fun generateAjaxUrl(type: String, parameters: Map<String, String> = emptyMap()):
     return url
 }
 
-fun generateAjaxUrl(type: REQUEST_TYPE, parameters: Map<String, String> = emptyMap()): String{
+fun generateAjaxUrl(type: REQUEST_TYPE, parameters: Map<String, String> = emptyMap()): String {
     return generateAjaxUrl(type.value, parameters)
 }
 
