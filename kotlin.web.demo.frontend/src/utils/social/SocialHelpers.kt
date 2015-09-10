@@ -16,9 +16,8 @@
 
 package utils.social
 
-import html4k.dom.create
-import html4k.js.a
-import html4k.js.onClickFunction
+import kotlinx.html.dom.*
+import kotlinx.html.js.*
 import org.w3c.dom.HTMLAnchorElement
 import utils.encodeURIComponent
 import kotlin.browser.document

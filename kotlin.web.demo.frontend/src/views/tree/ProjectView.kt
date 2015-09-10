@@ -29,9 +29,9 @@ import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
-import html4k.*
-import html4k.js.*
-import html4k.dom.*
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 import model.*
 import org.w3c.dom.HTMLElement
 
@@ -87,6 +87,7 @@ open class ProjectView(
     val project: Project = initProject(header)
     val fileViews = hashMapOf<String, FileView>()
     val headerElement = parent.contentElement.append.div {
+
         id = header.publicId
         classes = setOf("examples-project-name")
         attributes.set("depth", depth.toString())

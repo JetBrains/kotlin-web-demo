@@ -16,24 +16,25 @@
 
 package views.editor
 
+import kotlinx.html.dom.*
+import kotlinx.html.js.*
+import kotlinx.html.*
 import application.Application
-import html4k.code
-import html4k.dom.create
-import html4k.js.div
-import html4k.js.pre
 import model.File
 import model.FileType
 import model.Task
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
-import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import providers.HelpProvider
 import utils.KeyCode
 import utils.codemirror.*
-import utils.jquery.*
+import utils.jquery.JQuery
+import utils.jquery.find
+import utils.jquery.hide
+import utils.jquery.jq
 import utils.jquery.ui.toggle
 import utils.unEscapeString
 import kotlin.browser.document

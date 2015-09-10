@@ -16,8 +16,6 @@
 
 package model
 
-import html4k.div
-import html4k.dom.create
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLPreElement

@@ -16,8 +16,9 @@
 
 package views.editor
 
-import html4k.dom.append
-import html4k.js.div
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 import providers.HelpProvider
 import utils.ElementPosition
 import kotlin.browser.document

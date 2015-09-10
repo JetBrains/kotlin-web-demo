@@ -16,8 +16,6 @@
 
 package views.dialogs
 
-import html4k.dom.append
-import html4k.js.div
 import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLDivElement
@@ -29,6 +27,9 @@ import utils.jquery.ui.Dialog
 import utils.jquery.keydown
 import kotlin.browser.document
 import kotlin.dom.addClass
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 
 
 @native

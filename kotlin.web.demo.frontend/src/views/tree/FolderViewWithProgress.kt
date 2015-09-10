@@ -30,9 +30,9 @@ import java.util.*
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.dom.addClass
-import html4k.*
-import html4k.js.*
-import html4k.dom.*
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 
 
 class FolderViewWithProgress(parentNode: HTMLElement,

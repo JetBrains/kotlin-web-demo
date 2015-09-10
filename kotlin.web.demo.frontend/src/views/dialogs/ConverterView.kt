@@ -16,9 +16,6 @@
 
 package views.dialogs
 
-import html4k.dom.append
-import html4k.js.div
-import html4k.js.textArea
 import jquery.jq
 import org.w3c.dom.events.Event
 import providers.ConverterProvider
@@ -34,6 +31,10 @@ import utils.jquery.outerWidth
 import utils.jquery.ui.resizable
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
+
 
 class ConverterView(converterProvider: ConverterProvider) {
 
