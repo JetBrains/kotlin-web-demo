@@ -114,7 +114,7 @@ public class SessionInfo {
         CONVERT_TO_JS,
         SAVE_PROGRAM,
         AUTHORIZATION,
-        WORK_WITH_DATABASE
+        SEND_MAIL, WORK_WITH_DATABASE
     }
 
     public enum RunConfiguration {

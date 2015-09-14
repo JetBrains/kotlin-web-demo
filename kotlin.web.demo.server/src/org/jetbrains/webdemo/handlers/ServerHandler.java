@@ -18,11 +18,13 @@ package org.jetbrains.webdemo.handlers;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.help.HelpLoader;
+import org.jetbrains.webdemo.mail.MailAgent;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.jetbrains.webdemo.sessions.MyHttpSession;
@@ -33,6 +35,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.Map;
 
 public class ServerHandler {
 
@@ -60,13 +63,14 @@ public class ServerHandler {
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         sendUserName(request, response, sessionInfo);
                         break;
+                    case ("sendMail"):
+                        sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
+                        sessionInfo.setType(SessionInfo.TypeOfRequest.SEND_MAIL);
+                        sendMail(request, response, sessionInfo);
+                        break;
                     case ("loadHelpForWords"):
                         sendHelpContentForWords(request, response);
                         break;
-                    case ("google_key"): {
-                        writeResponse(request, response, ApplicationSettings.GOOGLE_OAUTH_CREDENTIALS.KEY, HttpServletResponse.SC_OK);
-                        break;
-                    }
                     default: {
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         MyHttpSession session = new MyHttpSession(sessionInfo);
@@ -79,6 +83,18 @@ public class ServerHandler {
                         "UNKNOWN", "unknown", request.getRequestURI() + "?" + request.getQueryString());
                 ResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+        }
+    }
+
+    private void sendMail(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
+        try {
+            String from = request.getParameter("from");
+            String name = request.getParameter("name");
+            String title = request.getParameter("subject");
+            String message = request.getParameter("text");
+            MailAgent.getInstance().send(from, name, title, message);
+        } catch (NullPointerException e) {
+            writeResponse(request, response, "Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
@@ -112,7 +128,7 @@ public class ServerHandler {
         }
     }
 
-    @Nullable
+    @NotNull
     private SessionInfo setSessionInfo(final HttpSession session, String originUrl) {
         SessionInfo sessionInfo = new SessionInfo(session.getId());
         UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");

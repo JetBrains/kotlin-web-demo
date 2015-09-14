@@ -28,5 +28,6 @@
     <orderEntry type="library" name="kotlin-compiler" level="project" />
     <orderEntry type="library" name="jwt" level="project" />
     <orderEntry type="library" name="pegdown" level="project" />
+    <orderEntry type="library" name="mail-1.4.7" level="project" />
   </component>
 </module>

@@ -2,5 +2,6 @@
     <info organisation="org.jetbrains" module="webdemo"/>
     <dependencies>
         <dependency org="org.pegdown" name="pegdown" rev="1.5.0"/>
+        <dependency org="javax.mail" name="mail" rev="1.4.7"/>
     </dependencies>
 </ivy-module>

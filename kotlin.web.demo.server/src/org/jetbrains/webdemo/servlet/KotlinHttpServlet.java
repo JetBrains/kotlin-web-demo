@@ -23,6 +23,7 @@ import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
+import org.jetbrains.webdemo.mail.MailAgent;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -66,6 +67,7 @@ public class KotlinHttpServlet extends HttpServlet {
             LogWriter.init();
             ExamplesLoader.loadAllExamples();
             HelpLoader.getInstance();
+            MailAgent.getInstance();
             MySqlConnector.getInstance();
             MySqlConnector.getInstance().createTaskList(getTaskList(ExamplesFolder.ROOT_FOLDER));
         } catch (Throwable e) {
