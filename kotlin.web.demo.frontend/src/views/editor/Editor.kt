@@ -17,8 +17,9 @@
 package views.editor
 
 import application.Application
-import html4k.dom.create
-import html4k.js.div
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 import model.File
 import model.FileType
 import org.w3c.dom.HTMLElement

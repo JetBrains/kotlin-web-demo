@@ -17,9 +17,9 @@
 package views.tabs
 
 import application.Application
-import html4k.dom.*
-import html4k.js.*
-import html4k.*
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 import jquery.JQuery
 import jquery.jq
 import org.w3c.dom.*

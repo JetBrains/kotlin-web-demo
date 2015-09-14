@@ -16,12 +16,9 @@
 
 package views.dialogs
 
-import html4k.InputType
-import html4k.dom.append
-import html4k.dom.create
-import html4k.js.div
-import html4k.js.input
-import html4k.js.span
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 import jquery.jq
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event

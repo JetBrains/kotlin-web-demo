@@ -17,10 +17,9 @@
 package views.tree
 
 import application.Application
-import html4k.dom.append
-import html4k.dom.create
-import html4k.js.div
-import html4k.js.onClickFunction
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 import model.File
 import model.FileType
 import model.ProjectType

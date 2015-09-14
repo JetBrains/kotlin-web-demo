@@ -23,71 +23,71 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 
 
-native("$")
+@native("$")
 object JQuery {
     fun ajax(parameters: Json)
     fun parseHTML(html: String): Array<HTMLElement>?
 }
 
-native
+@native
 public fun JQuery.slideDown()
 
-native
+@native
 public fun JQuery.height(height: Int)
 
-native
+@native
 public fun JQuery.width(width: Int)
 
-native
+@native
 public fun JQuery.children(selector: String): JQuery
 
-native
+@native
 public fun JQuery.outerHeight(includeMargin: Boolean = false): Int
 
-native
+@native
 public fun JQuery.outerWidth(includeMargin: Boolean = false): Int
 
-native
+@native
 public fun JQuery.toArray(): Array<HTMLElement>
 
-native("is")
+@native("is")
 public fun JQuery.isCheck(s: String): Boolean
 
-native
+@native
 fun JQuery.hide()
 
-native
+@native
 fun JQuery.show()
 
-native
+@native
 fun JQuery.children(): JQuery
 
-native
+@native
 fun JQuery.unbind(s: String)
 
-native
+@native
 fun JQuery.on(s: String, onClose: (Event) -> Unit)
 
-native
+@native
 fun JQuery.css(key: String, value: dynamic)
 
-native("val")
+@native("val")
 fun JQuery.value(): String
 
-native("val")
+@native("val")
 fun JQuery.value(s: String)
 
-native("$")
+@native("$")
 fun jq(document: Document): JQuery
 
-native
+@native
 fun JQuery.on(action: String, selector: String, callback: (event: Event) -> Unit)
 
-native
+@native
 fun JQuery.keydown(callback: (KeyboardEvent) -> Unit)
 
-native
+@native
 fun JQuery.find(selector: String): JQuery
 
-native
+@native
 fun JQuery.trigger(action: String)

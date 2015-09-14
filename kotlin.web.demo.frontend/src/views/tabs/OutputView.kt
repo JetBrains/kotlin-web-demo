@@ -17,8 +17,9 @@
 package views.tabs
 
 import application.makeReference
-import html4k.dom.append
-import html4k.js.span
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLSpanElement
 import utils.jquery.JQuery

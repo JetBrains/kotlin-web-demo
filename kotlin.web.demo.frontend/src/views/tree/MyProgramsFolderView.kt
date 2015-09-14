@@ -17,16 +17,15 @@
 package views.tree
 
 import application.Application
-import html4k.div
-import html4k.dom.append
-import html4k.js.div
-import html4k.js.onClickFunction
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import views.dialogs.InputDialogView
 import views.dialogs.ValidationResult
 import views.tree.FolderView
 import views.tree.ProjectView
+import kotlinx.html.*
+import kotlinx.html.js.*
+import kotlinx.html.dom.*
 
 class MyProgramsFolderView(parentNode: HTMLElement,
                            content: dynamic,

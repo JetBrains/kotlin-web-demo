@@ -19,7 +19,7 @@ package utils.codemirror
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
 
-native
+@native
 class CodeMirror() {
     companion object CodeMirror {
         val hint: dynamic
@@ -62,7 +62,7 @@ class CodeMirror() {
 
 data class Position(val line: Int, val ch: Int)
 
-native interface Token {
+@native interface Token {
     val start: Int
     val end: Int
     val string: String
@@ -73,7 +73,7 @@ native interface Token {
 data class Hint(val from: Position, val to: Position, var list: Array<CompletionView>)
 
 
-native interface CompletionView{
+@native interface CompletionView{
     val text: String
     val displayText: String
     fun render(element: HTMLElement, self: dynamic, data: dynamic);
