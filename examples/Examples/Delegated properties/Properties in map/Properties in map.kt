@@ -7,8 +7,8 @@
 import kotlin.properties.Delegates
 
 class User(val map: Map<String, Any?>) {
-    val name: String by Delegates.mapVal(map)
-    val age: Int     by Delegates.mapVal(map)
+    val name: String by Delegates.mapVal(map) { thisRef, desc ->  "" }
+    val age: Int     by Delegates.mapVal(map) { thisRef, desc ->  1 }
 }
 
 fun main(args: Array<String>) {

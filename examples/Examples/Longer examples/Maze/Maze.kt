@@ -53,10 +53,10 @@ fun findPath(maze: Maze): List<Point>? {
     if (previous[maze.end] == null) return null
 
     val path = arrayListOf<Point>()
-    var current = previous[maze.end]
+    var current = previous[maze.end]!!
     while (current != maze.start) {
         path.add(0, current)
-        current = previous[current]
+        current = previous[current]!!
     }
     return path
 }
@@ -176,7 +176,7 @@ fun walkThroughMaze(str: String) {
  *    OOOOOOOOOOOOOOOOO
  */
 fun makeMaze(s: String): Maze {
-    val lines = s.splitBy("\n")
+    val lines = s.split('\n')
     val longestLine = lines.toList().maxBy { it.length() } ?: ""
     val data = Array(lines.size()) { BooleanArray(longestLine.length()) }
 
