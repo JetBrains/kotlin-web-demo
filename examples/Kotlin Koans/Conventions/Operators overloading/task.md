@@ -5,7 +5,7 @@ You could be able to write the code like this: `date + YEAR * 2 + WEEK * 3 + DAY
 
 At first, add an extension function 'plus()' to MyDate, taking TimeInterval as an argument.
 Use an utility function `MyDate.addTimeInterval()` declared in
-[DateUtil.kt](/#/Kotlin%20Koans/Conventions/Operators%20overloading/DateUtil.kt)
+[DateUtil.kt](/#/Kotlin%20Katas/Conventions/Operators%20overloading/DateUtil.kt)
 
 Then, try to support adding several time intervals to a date.
 You may need an extra class.
