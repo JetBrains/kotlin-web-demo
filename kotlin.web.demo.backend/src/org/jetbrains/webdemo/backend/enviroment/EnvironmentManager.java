@@ -35,6 +35,7 @@ import com.intellij.psi.FileContextProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.augment.PsiAugmentProvider;
+import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.compiled.ClassFileDecompilers;
 import com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy;
 import com.intellij.psi.meta.MetaDataContributor;
@@ -58,6 +59,7 @@ import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.idea.DummyCodeStyleManager;
 
 import java.io.File;
 import java.net.URL;
@@ -200,6 +202,7 @@ public class EnvironmentManager {
                 return false;
             }
         });
+        ((MockProject) environment.getProject()).registerService(CodeStyleManager.class, new DummyCodeStyleManager());
 
 
         Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJvm());
