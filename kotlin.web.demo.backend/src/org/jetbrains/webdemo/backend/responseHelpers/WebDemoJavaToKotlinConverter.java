@@ -45,8 +45,7 @@ public class WebDemoJavaToKotlinConverter {
             JavaToKotlinConverter converter = new JavaToKotlinConverter(
                     project,
                     ConverterSettings.defaultSettings,
-                    EmptyReferenceSearcher.INSTANCE$,
-                    EmptyResolverForConverter.INSTANCE$);
+                    EmptyJavaToKotlinServices.INSTANCE$);
             PsiFile javaFile = PsiFileFactory.getInstance(project).createFileFromText("test.java", JavaLanguage.INSTANCE, code);
             String resultFormConverter = JavaToKotlinTranslator.INSTANCE$.prettify(
                     converter.elementsToKotlin(Collections.singletonList(javaFile))
