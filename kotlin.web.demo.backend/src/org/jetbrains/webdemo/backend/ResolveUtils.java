@@ -25,10 +25,12 @@ import org.jetbrains.kotlin.codegen.ClassBuilderFactories;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.context.ContextPackage;
 import org.jetbrains.kotlin.context.ModuleContext;
+import org.jetbrains.kotlin.descriptors.PackagePartProvider;
 import org.jetbrains.kotlin.descriptors.impl.ModuleDescriptorImpl;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.BindingTrace;
+import org.jetbrains.kotlin.resolve.TopDownAnalysisMode;
 import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
 
 import java.util.List;
@@ -56,10 +58,11 @@ public class ResolveUtils {
 
     private static AnalysisResult analyzeFile(@NotNull List<JetFile> files, Project project) {
 
-        ModuleContext moduleContext = TopDownAnalyzerFacadeForJVM.createContextWithSealedModule(project);
+        ModuleContext moduleContext = TopDownAnalyzerFacadeForJVM.createContextWithSealedModule(project, "<module>");
 
         BindingTrace trace = new CliLightClassGenerationSupport.CliBindingTrace();
 
-        return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegrationWithCustomContext(moduleContext, files, trace, null, null);
+        //TODO ???
+        return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegrationNoIncremental(moduleContext, files, trace, TopDownAnalysisMode.TopLevelDeclarations, PackagePartProvider.EMPTY);
     }
 }

@@ -17,9 +17,9 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ProjectFile;
+import org.jetbrains.webdemo.ResponseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ExampleFile extends ProjectFile {
     private boolean hidden;
     @Nullable
     private String confType;
-    private List<TaskWindow> taskWindows;
+    private List<TextRange> taskWindows;
 
     public ExampleFile(String name, String text, String id, Type type, @Nullable String confType, boolean isModifiable, boolean isHidden) {
         super(name, text, isModifiable, id, type);
@@ -37,8 +37,8 @@ public class ExampleFile extends ProjectFile {
         this.taskWindows = getTaskWindowsFromText();
     }
 
-    private List<TaskWindow> getTaskWindowsFromText() {
-        List<TaskWindow> taskWindows = new ArrayList<>();
+    private List<TextRange> getTaskWindowsFromText() {
+        List<TextRange> textRanges = new ArrayList<>();
         String[] fileContentLines = text.split("\\r?\\n");
         for (int i = 0; i < fileContentLines.length; i++) {
             String line = fileContentLines[i];
@@ -47,11 +47,11 @@ public class ExampleFile extends ProjectFile {
                 line = line.replace("<taskWindow>", "");
                 int taskWindowEnd = line.indexOf("</taskWindow>");
                 line = line.replace("</taskWindow>", "");
-                taskWindows.add(new TaskWindow(i, taskWindowStart, taskWindowEnd - taskWindowStart));
+                textRanges.add(new TextRange(i, taskWindowStart, taskWindowEnd - taskWindowStart));
             }
         }
         text = text.replaceAll("<taskWindow>", "").replaceAll("</taskWindow>", "");
-        return taskWindows;
+        return textRanges;
     }
 
     @JsonIgnore
@@ -65,21 +65,32 @@ public class ExampleFile extends ProjectFile {
         return confType;
     }
 
-    public List<TaskWindow> getTaskWindows() {
+    public List<TextRange> getTaskWindows() {
         return taskWindows;
     }
 }
 
 class TaskFile extends ExampleFile {
-    private String solution;
+    private List<String> solutions;
 
     public TaskFile(String text, String solution, String id) {
         super("Task.kt", text, id, Type.KOTLIN_FILE, null, true, false);
-        this.solution = solution;
+        this.solutions = getSolutionsFromText(solution);
     }
 
-    public String getSolution() {
-        return solution;
+    private List<String> getSolutionsFromText(String text){
+        List<String> solutions = new ArrayList<String>();
+        String solution = ResponseUtils.substringBetween(text, "<answer>", "</answer>");
+        while(!solution.equals("")){
+            solutions.add(solution);
+            text = text.replaceFirst("<answer>", "").replaceFirst("</answer>", "");
+            solution = ResponseUtils.substringBetween(text, "<answer>", "</answer>");
+        }
+        return solutions;
+    }
+
+    public List<String> getSolutions() {
+        return solutions;
     }
 }
 
@@ -91,16 +102,23 @@ class TestFile extends ExampleFile {
 
 class SolutionFile extends ExampleFile {
     public SolutionFile(String text, String id) {
-        super("Solution.kt", text, id, Type.SOLUTION_FILE, null, false, false);
+        super(
+                "Solution.kt",
+                text.replaceAll("<answer>", "").replaceFirst("</answer>", ""),
+                id,
+                Type.SOLUTION_FILE,
+                null,
+                false,
+                false);
     }
 }
 
-class TaskWindow {
+class TextRange {
     private int line;
     private int start;
     private int length;
 
-    public TaskWindow(int line, int start, int length) {
+    public TextRange(int line, int start, int length) {
         this.line = line;
         this.start = start;
         this.length = length;
