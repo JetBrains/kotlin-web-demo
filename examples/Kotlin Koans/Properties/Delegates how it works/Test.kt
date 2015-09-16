@@ -2,7 +2,7 @@ import org.junit.Assert
 import org.junit.Test as test
 
 class TestDelegatesHowItWorks {
-    test fun testDate() {
+    @test fun testDate() {
         val d = D()
         d.date = MyDate(2014, 1, 13)
         Assert.assertEquals(2014, d.date.year)

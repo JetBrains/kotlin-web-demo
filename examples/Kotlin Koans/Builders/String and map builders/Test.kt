@@ -2,7 +2,7 @@ import org.junit.Assert
 import org.junit.Test as test
 
 class TestStringAndMapBuilders {
-    test fun testBuildMap() {
+    @test fun testBuildMap() {
         val map: Map<Int, String> = buildMap {
             put(0, "0")
             for (i in 1..10) {

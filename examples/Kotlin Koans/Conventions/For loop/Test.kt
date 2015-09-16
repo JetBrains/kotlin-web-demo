@@ -2,7 +2,7 @@ import org.junit.Assert
 import org.junit.Test as test
 
 class TestForLoop {
-    test fun testIterateOverDateRange() {
+    @test fun testIterateOverDateRange() {
         val actualDateRange = arrayListOf<MyDate>()
         iterateOverDateRange(MyDate(2016, 5, 1), MyDate(2016, 5, 5), {
             date-> actualDateRange.add(date)
@@ -13,7 +13,7 @@ class TestForLoop {
                 expectedDateRange, actualDateRange)
     }
 
-    test fun testIterateOverEmptyRange() {
+    @test fun testIterateOverEmptyRange() {
         var invoked = false
         iterateOverDateRange(MyDate(2016, 1, 1), MyDate(2015, 1, 1), { invoked = true })
         Assert.assertFalse("Handler was invoked on an empty range", invoked)

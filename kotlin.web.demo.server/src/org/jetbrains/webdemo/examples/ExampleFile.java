@@ -104,7 +104,7 @@ class SolutionFile extends ExampleFile {
     public SolutionFile(String text, String id) {
         super(
                 "Solution.kt",
-                text.replaceAll("<answer>", "").replaceFirst("</answer>", ""),
+                text.replaceAll("<answer>", "").replaceAll("</answer>", ""),
                 id,
                 Type.SOLUTION_FILE,
                 null,

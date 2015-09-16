@@ -3,7 +3,7 @@ import org.junit.Test as test
 import java.util.*
 
 public class TestGenericFunctions {
-    test fun testPartitionWordsAndLines() {
+    @test fun testPartitionWordsAndLines() {
         partitionWordsAndLines()
 
         val (words, lines) = listOf("a", "a b", "c", "d e").
@@ -12,7 +12,7 @@ public class TestGenericFunctions {
         Assert.assertEquals(listOf("a b", "d e"), lines)
     }
 
-    test fun testPartitionLettersAndOtherSymbols() {
+    @test fun testPartitionLettersAndOtherSymbols() {
         partitionLettersAndOtherSymbols()
 
         val (letters, other) = setOf('a', '%', 'r', '}').

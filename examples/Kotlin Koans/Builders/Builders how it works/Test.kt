@@ -3,7 +3,7 @@ import org.junit.Assert
 import Answer.*
 
 class TestBuildersHowItWorks {
-    test fun testBuildersQuiz() {
+    @test fun testBuildersQuiz() {
         if (answers.values().toSet() == setOf(null)) {
             Assert.fail("Please specify your answers!")
         }

@@ -8,7 +8,7 @@ class TestRangeTo {
         Assert.assertEquals(message, shouldBeInRange, checkInRange(date, first, last))
     }
 
-    test fun testInRange() {
+    @test fun testInRange() {
         doTest(MyDate(2014, 3, 22), MyDate(2014, 1, 1), MyDate(2015, 1, 1), shouldBeInRange = true)
     }
 }

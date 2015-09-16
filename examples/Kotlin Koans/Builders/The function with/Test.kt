@@ -3,7 +3,7 @@ import org.junit.Test as test
 import java.util.HashMap
 
 class TestTheFunctionWith {
-    test fun testBuildString() {
+    @test fun testBuildString() {
         val s = buildString()
         val sb = StringBuilder()
         sb.append("Numbers: ")
@@ -13,7 +13,7 @@ class TestTheFunctionWith {
         Assert.assertEquals("String should be built:", sb.toString(), s)
     }
 
-    test fun testBuildMap() {
+    @test fun testBuildMap() {
         val map = buildMap()
         val expected = HashMap<Int, String>()
         for (i in 0..10) {

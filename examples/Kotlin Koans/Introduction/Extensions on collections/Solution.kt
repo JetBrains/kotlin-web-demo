@@ -1,3 +1,3 @@
 fun getList(): List<Int> {
-    return arrayListOf(1, 5, 2).sortDescending()
+    return arrayListOf(1, 5, 2).sortedDescending()
 }
