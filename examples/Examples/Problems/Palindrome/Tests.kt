@@ -4,39 +4,39 @@ import org.junit.Test
 import kotlin.test.*
 
 class Tests {
-    Test fun testEmptyString() {
+    @Test fun testEmptyString() {
         test(true, "")
     }
 
-    Test fun testChar() {
+    @Test fun testChar() {
         test(true, "a")
     }
 
-    Test fun testPositive1() {
+    @Test fun testPositive1() {
         test(true, "aba")
     }
 
-    Test fun testPositive2() {
+    @Test fun testPositive2() {
         test(true, "abba")
     }
 
-    Test fun testPositive3() {
+    @Test fun testPositive3() {
         test(true, "abbabba")
     }
 
-    Test fun testPositive4() {
+    @Test fun testPositive4() {
         test(true, "abbaabba")
     }
 
-    Test fun testNegative1() {
+    @Test fun testNegative1() {
         test(false, "ab")
     }
 
-    Test fun testNegative2() {
+    @Test fun testNegative2() {
         test(false, "abab")
     }
 
-    Test fun testNegative3() {
+    @Test fun testNegative3() {
         test(false, "abaa")
     }
 }
