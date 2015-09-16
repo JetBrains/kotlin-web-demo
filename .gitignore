@@ -12,3 +12,9 @@ kotlin.web.demo.executors/executors.policy
 kotlin.web.demo.backend/web/META-INF/context.xml
 kotlin.web.demo.core/resources
 kotlin.web.demo.common/resources/js
+kotlin.web.demo.frontend/node
+kotlin.web.demo.frontend/node_modules
+kotlin.web.demo.frontend/static/lib
+kotlin.web.demo.frontend/static/kotlin.js
+kotlin.web.demo.test/resources/js
+lib/kotlin-plugin/Kotlin
