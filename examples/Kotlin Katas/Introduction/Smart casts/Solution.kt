@@ -1,9 +1,9 @@
-fun eval(expr: Expr): Int =
+<answer>fun eval(expr: Expr): Int =
         when (expr) {
-            is Num -> <answer>expr.value</answer>
-            is Sum -> <answer>eval(expr.left) + eval(expr.right)</answer>
+            is Num -> expr.value
+            is Sum -> eval(expr.left) + eval(expr.right)
             else -> throw IllegalArgumentException("Unknown expression")
-        }
+        }</answer>
 
 interface Expr
 class Num(val value: Int) : Expr

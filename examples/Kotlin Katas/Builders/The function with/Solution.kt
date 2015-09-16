@@ -1,4 +1,4 @@
-fun <T, R> myWith(receiver: T, f: T.() -> R): R = receiver.f()
+<answer>fun <T, R> myWith(receiver: T, f: T.() -> R): R = receiver.f()</answer>
 
 fun buildString(): String {
     val stringBuilder = StringBuilder()

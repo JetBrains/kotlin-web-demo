@@ -1,4 +1,4 @@
-class LazyProperty(val initializer: () -> Int) {
+<answer>class LazyProperty(val initializer: () -> Int) {
     private val lazyValue: Int? = null
         get() {
             if ($lazyValue == null) $lazyValue = initializer()
@@ -7,4 +7,4 @@ class LazyProperty(val initializer: () -> Int) {
 
     val lazy: Int
         get() = lazyValue!!
-}
+}</answer>

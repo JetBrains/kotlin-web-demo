@@ -1,6 +1,6 @@
 import java.util.*
 
-fun <T, C: MutableCollection<T>> Collection<T>.partitionTo(first: C, second: C, predicate: (T) -> Boolean): Pair<C, C> {
+<answer>fun <T, C: MutableCollection<T>> Collection<T>.partitionTo(first: C, second: C, predicate: (T) -> Boolean): Pair<C, C> {
     for (element in this) {
         if (predicate(element)) {
             first.add(element)
@@ -9,7 +9,7 @@ fun <T, C: MutableCollection<T>> Collection<T>.partitionTo(first: C, second: C, 
         }
     }
     return Pair(first, second)
-}
+}</answer>
 
 fun partitionWordsAndLines() {
     val (words, lines) = listOf("a", "a b", "c", "d e").

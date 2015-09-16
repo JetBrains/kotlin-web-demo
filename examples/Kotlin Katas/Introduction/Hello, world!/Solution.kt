@@ -1,1 +1,1 @@
-fun start() = <answer>"OK"</answer>
+fun start() = "OK"

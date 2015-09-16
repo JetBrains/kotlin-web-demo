@@ -1,4 +1,4 @@
-data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int)
+<answer>data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int)</answer>
 
 fun isLeapDay(date: MyDate): Boolean {
 

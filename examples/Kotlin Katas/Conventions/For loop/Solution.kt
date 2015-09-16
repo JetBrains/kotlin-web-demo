@@ -1,4 +1,4 @@
-class DateRange(public val start: MyDate, public val end: MyDate): Iterable<MyDate>{
+<answer>class DateRange(public val start: MyDate, public val end: MyDate): Iterable<MyDate>{
     override fun iterator(): Iterator<MyDate> = DateIterator(this)
 }
 
@@ -10,7 +10,7 @@ class DateIterator(val dateRange:DateRange) : Iterator<MyDate> {
         return result
     }
     override fun hasNext(): Boolean = current <= dateRange.end
-}
+}</answer>
 
 fun iterateOverDateRange(firstDate: MyDate, secondDate: MyDate, handler: (MyDate) -> Unit) {
     for (date in firstDate..secondDate) {

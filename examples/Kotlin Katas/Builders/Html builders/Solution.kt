@@ -1,4 +1,4 @@
-fun renderProductTable(): String {
+<answer>fun renderProductTable(): String {
     return html {
         table {
             tr (color = getTitleColor()) {
@@ -28,7 +28,7 @@ fun renderProductTable(): String {
             }
         }
     }.toString()
-}
+}</answer>
 
 fun getTitleColor() = "#b9c9fe"
 fun getCellColor(index: Int, row: Int) = if ((index + row) %2 == 0) "#dce4ff" else "#eff2ff"
