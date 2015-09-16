@@ -33,13 +33,10 @@ import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.openapi.util.Getter;
 import com.intellij.psi.FileContextProvider;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFinder;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.compiled.ClassFileDecompilers;
-import com.intellij.psi.impl.PsiTreeChangePreprocessor;
 import com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy;
-import com.intellij.psi.impl.compiled.ClsStubBuilderFactory;
 import com.intellij.psi.meta.MetaDataContributor;
 import com.intellij.psi.stubs.BinaryFileStubBuilders;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +49,6 @@ import org.jetbrains.kotlin.cli.jvm.config.ConfigPackage;
 import org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
-import org.jetbrains.kotlin.idea.decompiler.JetClassFileDecompiler;
 import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
 import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
 import org.jetbrains.kotlin.load.kotlin.nativeDeclarations.SuppressNoBodyErrorsForNativeDeclarations;
@@ -68,6 +64,8 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import static org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys.MODULE_NAME;
 
 public class EnvironmentManager {
     private static File KOTLIN_RUNTIME = initializeKotlinRuntime();
@@ -153,9 +151,10 @@ public class EnvironmentManager {
         if (environment == null) {
             environment = createEnvironment();
 
-            Extensions.getRootArea()
+            //TODO
+            /*Extensions.getRootArea()
                     .getExtensionPoint(ClassFileDecompilers.EP_NAME)
-                    .registerExtension(new JetClassFileDecompiler());
+                    .registerExtension(new JetClassFileDecompiler());*/
 
             //throw new IllegalStateException("Environment should be initialized before");
         }
@@ -182,6 +181,7 @@ public class EnvironmentManager {
 
         configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
+        configuration.put(MODULE_NAME, "kotlinWebDemo");
 
         KotlinCoreEnvironment environment = KotlinCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
         ((MockProject) environment.getProject()).registerService(NullableNotNullManager.class, new NullableNotNullManager() {
@@ -214,12 +214,10 @@ public class EnvironmentManager {
     }
 
     private void registerExtensionPoints(ExtensionsArea area) {
-//        CoreApplicationEnvironment.registerExtensionPoint(area, ContentBasedFileSubstitutor.EP_NAME, ContentBasedFileSubstitutor.class);
         CoreApplicationEnvironment.registerExtensionPoint(area, BinaryFileStubBuilders.EP_NAME, FileTypeExtensionPoint.class);
         CoreApplicationEnvironment.registerExtensionPoint(area, FileContextProvider.EP_NAME, FileContextProvider.class);
 
         CoreApplicationEnvironment.registerExtensionPoint(area, MetaDataContributor.EP_NAME, MetaDataContributor.class);
-        CoreApplicationEnvironment.registerExtensionPoint(area, ClsStubBuilderFactory.EP_NAME, ClsStubBuilderFactory.class);
         CoreApplicationEnvironment.registerExtensionPoint(area, PsiAugmentProvider.EP_NAME, PsiAugmentProvider.class);
         CoreApplicationEnvironment.registerExtensionPoint(area, JavaMainMethodProvider.EP_NAME, JavaMainMethodProvider.class);
 

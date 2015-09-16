@@ -24,49 +24,49 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import kotlin.Function1;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.kotlin.analyzer.AnalysisResult;
+import org.jetbrains.kotlin.container.ComponentProvider;
 import org.jetbrains.kotlin.descriptors.*;
 import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor;
 import org.jetbrains.kotlin.descriptors.impl.TypeParameterDescriptorImpl;
 import org.jetbrains.kotlin.idea.codeInsight.ReferenceVariantsHelper;
 import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers;
-import org.jetbrains.kotlin.lexer.JetKeywordToken;
-import org.jetbrains.kotlin.lexer.JetToken;
-import org.jetbrains.kotlin.lexer.JetTokens;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.JetExpression;
 import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.psi.JetQualifiedExpression;
 import org.jetbrains.kotlin.psi.JetSimpleNameExpression;
 import org.jetbrains.kotlin.renderer.DescriptorRenderer;
-import org.jetbrains.kotlin.renderer.DescriptorRendererBuilder;
+import org.jetbrains.kotlin.renderer.DescriptorRendererOptions;
 import org.jetbrains.kotlin.renderer.NameShortness;
+import org.jetbrains.kotlin.renderer.ParameterNameRenderingPolicy;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.DescriptorUtils;
 import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter;
 import org.jetbrains.kotlin.resolve.scopes.JetScope;
 import org.jetbrains.kotlin.types.JetType;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
-import org.jetbrains.webdemo.backend.ResolveUtils;
 import org.jetbrains.webdemo.ResponseUtils;
-import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.backend.BackendSessionInfo;
+import org.jetbrains.webdemo.backend.*;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
 import java.util.*;
 
 public class JsonResponseForCompletion {
-    private static final DescriptorRenderer RENDERER = new DescriptorRendererBuilder()
-            .setNameShortness(NameShortness.SHORT)
-            .setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES)
-            .setParameterNameRenderingPolicy(DescriptorRenderer.ParameterNameRenderingPolicy.NONE)
-            .setRenderDefaultValues(false)
-            .build();
+    private static final DescriptorRenderer RENDERER = IdeDescriptorRenderers.SOURCE_CODE.withOptions(new Function1<DescriptorRendererOptions, Unit>() {
+        @Override
+        public Unit invoke(DescriptorRendererOptions descriptorRendererOptions) {
+            descriptorRendererOptions.setNameShortness(NameShortness.SHORT);
+            descriptorRendererOptions.setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES);
+            descriptorRendererOptions.setParameterNameRenderingPolicy(ParameterNameRenderingPolicy.NONE);
+            descriptorRendererOptions.setRenderDefaultValues(false);
+            return null;
+        }
+    });
 
     private static final Function1<DeclarationDescriptor, Boolean> VISIBILITY_FILTER = new Function1<DeclarationDescriptor, Boolean>() {
         @Override
@@ -156,11 +156,15 @@ public class JsonResponseForCompletion {
         }*/
         sessionInfo.getTimeManager().saveCurrentTime();
         BindingContext bindingContext;
+        ComponentProvider containerProvider;
         try {
             if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.CANVAS)) {
                 bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(convertList(psiFiles), sessionInfo);
+                containerProvider = null;
             } else {
-                bindingContext = ResolveUtils.getBindingContext(convertList(psiFiles), currentProject);
+                Pair<AnalysisResult, ComponentProvider> resolveResult = ResolveUtils.analyzeFile(convertList(psiFiles), currentProject);
+                bindingContext = resolveResult.getFirst().getBindingContext();
+                containerProvider = resolveResult.getSecond();
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), currentPsiFile.getText());
@@ -181,11 +185,11 @@ public class JsonResponseForCompletion {
         Collection<DeclarationDescriptor> descriptors = null;
         boolean isTipsManagerCompletion = true;
         try {
-            ReferenceVariantsHelper helper = new ReferenceVariantsHelper(bindingContext, VISIBILITY_FILTER);
+            ReferenceVariantsHelper helper = new ReferenceVariantsHelper(bindingContext, new KotlinResolutionFacade(containerProvider), VISIBILITY_FILTER);
             if (element instanceof JetSimpleNameExpression) {
-                descriptors = helper.getReferenceVariants((JetSimpleNameExpression) element, DescriptorKindFilter.ALL, false, NAME_FILTER);
+                descriptors = helper.getReferenceVariants((JetSimpleNameExpression) element, DescriptorKindFilter.ALL, NAME_FILTER);
             } else if (element.getParent() instanceof JetSimpleNameExpression) {
-                descriptors = helper.getReferenceVariants((JetSimpleNameExpression) element.getParent(), DescriptorKindFilter.ALL, false, NAME_FILTER);
+                descriptors = helper.getReferenceVariants((JetSimpleNameExpression) element.getParent(), DescriptorKindFilter.ALL, NAME_FILTER);
             } else {
                 isTipsManagerCompletion = false;
                 JetScope resolutionScope;
@@ -244,9 +248,6 @@ public class JsonResponseForCompletion {
                 }
             });
 
-            addKeywordsToArray(jsonArray, JetTokens.KEYWORDS, prefix);
-            addKeywordsToArray(jsonArray, JetTokens.SOFT_KEYWORDS, prefix);
-
             for (DeclarationDescriptor descriptor : descriptors) {
                 Pair<String, String> presentableText = getPresentableText(descriptor);
 
@@ -277,9 +278,7 @@ public class JsonResponseForCompletion {
                     jsonObject.put("tail", presentableText.getSecond());
                 }
             }
-
         }
-
 
         return jsonArray.toString();
     }
@@ -353,17 +352,5 @@ public class JsonResponseForCompletion {
             result.add((JetFile) file);
         }
         return result;
-    }
-
-    private void addKeywordsToArray(ArrayNode array, TokenSet keywords, String prefix){
-        for(IElementType type : keywords.getTypes()){
-            String token = ((JetKeywordToken) type).getValue();
-            if(!token.startsWith(prefix)) continue;
-            ObjectNode jsonObject = array.addObject();
-            jsonObject.put("icon", "");
-            jsonObject.put("text", token);
-            jsonObject.put("displayText", token);
-            jsonObject.put("tail", "");
-        }
     }
 }
