@@ -1,2 +1,2 @@
-// Return set of products ordered by every customer
+// Return a set of products that were ordered by every customer
 fun Shop.getProductsOrderedByAllCustomers(): Set<Product> = <taskWindow>TODO()</taskWindow>

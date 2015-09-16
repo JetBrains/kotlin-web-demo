@@ -10,4 +10,4 @@ then
 were finally
 [supported](http://blog.jetbrains.com/kotlin/2013/08/kotlin-m6-is-here/#SAM-conversions).
 
-In the previous example change an object expression to a lambda:
+In the previous example change an object expression to a lambda.

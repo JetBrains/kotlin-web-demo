@@ -1,7 +1,6 @@
 ## Strings
 
-Read about different string literals and string templates in Kotlin
-[here](http://kotlinlang.org/docs/reference/basic-types.html#string-literals).
+Read about [different string literals and string templates](http://kotlinlang.org/docs/reference/basic-types.html#string-literals) in Kotlin.
 
 Raw strings are useful for writing regex patterns, you don't need to escape a backslash by a backslash.
 Below there is a pattern that matches a date in format `dd.mm.yyyy`;

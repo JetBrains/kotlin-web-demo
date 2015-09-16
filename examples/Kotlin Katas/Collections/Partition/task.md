@@ -1,6 +1,6 @@
 ## Partition
 Implement `Shop.getCustomersWithMoreUndeliveredOrdersThanDelivered()` using
-[partition](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/partition.html).
+[`partition`](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/partition.html).
 
 ```kotlin
 val numbers = listOf(1, 3, -4, 2, -11)

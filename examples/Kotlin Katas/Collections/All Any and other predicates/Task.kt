@@ -4,7 +4,7 @@ fun Shop.checkAllCustomersAreFrom(city: City): Boolean = <taskWindow>TODO()</tas
 // Check there is at least one customer from the given city
 fun Shop.hasCustomerFrom(city: City): Boolean = <taskWindow>TODO()</taskWindow>
 
-// Returns the number of customers from the given city
+// Return the number of customers from the given city
 fun Shop.countCustomersFrom(city: City): Int = <taskWindow>TODO()</taskWindow>
 
 // Return a customer who lives in the given city or null if there is none

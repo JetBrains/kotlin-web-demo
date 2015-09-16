@@ -1,1 +1,1 @@
-fun Customer.getTotalOrderPrice(): Double = orders.flatMap { it.products }.map { it.price }.sum()
+fun Customer.getTotalOrderPrice(): Double = orders.flatMap { it.products }.sumByDouble { it.price }

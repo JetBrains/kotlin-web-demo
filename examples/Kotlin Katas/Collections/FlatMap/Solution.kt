@@ -1,3 +1,3 @@
-val Customer.orderedProducts: Set<Product> get() = orders.flatMap { it.products }.toSet()
+fun Customer.getOrderedProducts(): Set<Product> = orders.flatMap { it.products }.toSet()
 
-val Shop.allOrderedProducts: Set<Product> get() = customers.flatMap { it.orderedProducts }.toSet()
+fun Shop.getAllOrderedProducts(): Set<Product> = customers.flatMap { it.getOrderedProducts() }.toSet()

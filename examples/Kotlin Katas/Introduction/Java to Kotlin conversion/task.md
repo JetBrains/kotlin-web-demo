@@ -1,7 +1,7 @@
 ## Java to Kotlin conversion
 There is a very handy tool for Java developers: Java to Kotlin converter.
 It works better in Intellij, but you can try it online as well.
-To get acquainted with it, please convert the code below.
+To become familiar with it, please convert the code below.
 Copy Java code, choose 'Convert from Java' above and copy the result function back.
 
 ```java
