@@ -129,7 +129,7 @@ class H1() : BodyTag("h1")
 
 class A() : BodyTag("a") {
     public var href: String
-        get() = attributes["href"]
+        get() = attributes["href"]!!
         set(value) {
             attributes["href"] = value
         }
