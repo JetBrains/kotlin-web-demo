@@ -61,9 +61,9 @@ public class ErrorAnalyzer {
         try {
             if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA) ||
                     sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
-                bindingContext = ResolveUtils.getBindingContext(convertList(currentPsiFiles), currentProject);
+                bindingContext = ResolveUtils.getBindingContext(convertList(currentPsiFiles), currentProject, false);
             } else {
-                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(convertList(currentPsiFiles), sessionInfo);
+                bindingContext = ResolveUtils.getBindingContext(convertList(currentPsiFiles), currentProject, true);
             }
 
         } catch (Throwable e) {

@@ -158,11 +158,13 @@ public class JsonResponseForCompletion {
         BindingContext bindingContext;
         ComponentProvider containerProvider;
         try {
-            if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.CANVAS)) {
-                bindingContext = WebDemoTranslatorFacade.analyzeProgramCode(convertList(psiFiles), sessionInfo);
-                containerProvider = null;
+            if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA) ||
+                    sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
+                Pair<AnalysisResult, ComponentProvider> resolveResult = ResolveUtils.analyzeFileForJvm(convertList(psiFiles), currentProject);
+                bindingContext = resolveResult.getFirst().getBindingContext();
+                containerProvider = resolveResult.getSecond();
             } else {
-                Pair<AnalysisResult, ComponentProvider> resolveResult = ResolveUtils.analyzeFile(convertList(psiFiles), currentProject);
+                Pair<AnalysisResult, ComponentProvider> resolveResult = ResolveUtils.analyzeFileForJs(convertList(psiFiles), currentProject);
                 bindingContext = resolveResult.getFirst().getBindingContext();
                 containerProvider = resolveResult.getSecond();
             }
