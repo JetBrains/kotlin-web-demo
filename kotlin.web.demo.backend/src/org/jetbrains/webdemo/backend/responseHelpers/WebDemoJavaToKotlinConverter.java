@@ -56,7 +56,7 @@ public class WebDemoJavaToKotlinConverter {
             PsiFile javaFile = PsiFileFactory.getInstance(project).createFileFromText("test.java", JavaLanguage.INSTANCE, code);
 
             //To create a module
-            ResolveUtils.getBindingContext(Collections.EMPTY_LIST, project);
+            ResolveUtils.getBindingContext(Collections.EMPTY_LIST, project, false);
 
             for (PsiElement element : javaFile.getChildren()) {
                 if (element instanceof PsiClass) {
