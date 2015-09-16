@@ -95,13 +95,23 @@ public class HighlightExamplesTest extends BaseTest {
         Iterator<JsonNode> fields = actualResult.elements();
         while (fields.hasNext()) {
             ArrayNode errors = (ArrayNode) fields.next();
-            assertEquals(errors.size(), 0);
+            assertEquals(getErrorsMessages(errors), errors.size(), 0);
         }
 
         if (jsExamples.contains(project.name)) {
 
         }
 //        assertEquals("Wrong result for example " + file.getName() + " run configuration: " + runConfiguration, expectedResult, actualResult);
+    }
+
+    private String getErrorsMessages(ArrayNode errors) {
+        StringBuilder answer = new StringBuilder();
+        for (JsonNode error : errors) {
+            JsonNode errorStart = error.get("interval").get("start");
+            answer.append('\n').append(errorStart.get("line").asInt()).append(':').append(errorStart.get("ch").asInt()).append(' ')
+                    .append(error.get("message").asText()).append('\n');
+        }
+        return answer.toString();
     }
 }
 
