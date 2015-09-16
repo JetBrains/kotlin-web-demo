@@ -86,6 +86,7 @@ class TaskFile extends ExampleFile {
             text = text.replaceFirst("<answer>", "").replaceFirst("</answer>", "");
             solution = ResponseUtils.substringBetween(text, "<answer>", "</answer>");
         }
+        if(solutions.isEmpty()) solutions.add(text);
         return solutions;
     }
 
