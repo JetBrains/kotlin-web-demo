@@ -16,13 +16,14 @@
 
 package views.dialogs
 
+import jquery.ui.button
 import kotlinx.html.*
 import kotlinx.html.js.*
 import kotlinx.html.dom.*
-import jquery.jq
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event
 import utils.KeyCode
+import utils.jquery.jq
 import utils.jquery.ui.Dialog
 import utils.jquery.ui.DialogButton
 import views.dialogs.ValidationResult

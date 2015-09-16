@@ -16,7 +16,7 @@
 
 package utils
 
-import jquery.JQuery
+import utils.jquery.JQuery
 
 
 @native

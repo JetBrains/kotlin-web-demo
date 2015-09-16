@@ -249,7 +249,7 @@ class FileProvider(
                     "type" to file.type,
                     "revertible" to file.isRevertible,
                     "taskWindows" to file.taskWindows.toTypedArray(),
-                    "solution" to file.solution
+                    "solution" to file.solutions
             )))
         }
     }

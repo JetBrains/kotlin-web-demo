@@ -17,7 +17,6 @@
 package views.tree
 
 import application.Application
-import jquery.jq
 import model.File
 import model.Project
 import model.ProjectType
@@ -25,6 +24,7 @@ import model.UserProject
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.*
+import utils.jquery.jq
 import utils.jquery.ui.accordion
 import utils.jquery.unbind
 import views.*

@@ -31,7 +31,7 @@ class File(
         val type: String = FileType.KOTLIN_FILE.name(),
         isRevertible: Boolean = true,
         val taskWindows: List<TaskWindow> = emptyList(),
-        val solution: String? = null
+        val solutions: Array<String>? = null
 ) {
     val listenableName = VarListener<String>()
     var name: String by Listenable(name, listenableName)
@@ -68,7 +68,7 @@ class File(
                         obj.type,
                         obj.revertible,
                         (obj.taskWindows as Array<TaskWindow>?)?.toArrayList() ?: emptyList(),
-                        obj.solution
+                        obj.solutions
                 )
     }
 

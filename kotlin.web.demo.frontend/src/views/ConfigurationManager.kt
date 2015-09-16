@@ -16,8 +16,7 @@
 
 package views
 
-import jquery.JQuery
-import jquery.jq
+import utils.jquery.jq
 import utils.jquery.on
 import utils.jquery.ui.selectmenu
 import utils.jquery.value

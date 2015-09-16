@@ -230,29 +230,32 @@ public class Editor(
             helpContent?.forEach { help.appendChild(it) }
             jq(help).find("a").attr("target", "_blank")
 
-            file.solution?.let {
+            if(file.solutions != null && file.solutions.isNotEmpty()) {
                 val answerButton = document.createElement("button") as HTMLButtonElement
                 answerButton.type = "button"
                 answerButton.textContent = "Show answer"
-
-                val answer = document.create.pre {
-                    code {
-                        attributes.put("data-lang", "kotlin");
-                        +it
-                    }
-                }
 
                 var answerHidden = true
                 answerButton.onclick = {
                     answerHidden = !answerHidden
                     answerButton.textContent = "${if (answerHidden) "Show" else "Hide"} answer"
-                    jq(answer).toggle()
+                    jq(".task-answer").toggle()
                     helpWidget?.changed()
                 }
-
                 help.appendChild(answerButton)
-                help.appendChild(answer)
-                jq(answer).hide()
+
+
+                file.solutions.forEach {
+                    val answer = document.create.pre {
+                        classes = setOf("task-answer")
+                        code {
+                            attributes.put("data-lang", "kotlin");
+                            +it
+                        }
+                    }
+                    help.appendChild(answer)
+                    jq(answer).hide()
+                }
             }
             CodeMirror.colorize(help.getElementsByTagName("code"))
 

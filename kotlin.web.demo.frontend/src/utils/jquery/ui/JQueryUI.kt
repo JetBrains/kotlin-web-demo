@@ -16,7 +16,7 @@
 
 package utils.jquery.ui
 
-import jquery.JQuery
+import utils.jquery.JQuery
 
 @native
 fun JQuery.toggle()
@@ -41,6 +41,15 @@ public fun JQuery.button(command : String) : JQuery = noImpl
 
 @native
 public fun JQuery.button(parameters : Json) : JQuery = noImpl
+
+@native
+public fun JQuery.dialog(command : String) : JQuery = noImpl
+
+@native
+public fun JQuery.dialog(parameters : Json) : JQuery = noImpl
+
+@native
+fun JQuery.dialog(mode : String, param : String, value : Any?)
 
 @native
 fun JQuery.accordion(params: Json): JQuery

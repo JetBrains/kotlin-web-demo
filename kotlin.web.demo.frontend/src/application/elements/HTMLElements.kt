@@ -17,10 +17,10 @@
 package application.elements
 
 import application.Application
-import jquery.jq
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
 import utils.IncompleteActionManager
+import utils.jquery.jq
 import utils.parseBoolean
 import utils.jquery.ui.selectmenu
 import views.dialogs.InputDialogView

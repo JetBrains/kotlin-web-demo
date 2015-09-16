@@ -16,9 +16,9 @@
 
 package utils
 
-import jquery.jq
 import org.w3c.dom.*
 import utils.jquery.isCheck
+import utils.jquery.jq
 import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.dom.addClass

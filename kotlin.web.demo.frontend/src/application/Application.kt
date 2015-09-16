@@ -17,7 +17,6 @@
 package application
 
 import application.elements.Elements
-import jquery.jq
 import model.File
 import model.ProjectType
 import model.Task
@@ -30,6 +29,7 @@ import org.w3c.dom.events.KeyboardEvent
 import providers.*
 import utils.*
 import utils.jquery
+import utils.jquery.jq
 import utils.jquery.on
 import utils.jquery.trigger
 import utils.jquery.ui.Dialog

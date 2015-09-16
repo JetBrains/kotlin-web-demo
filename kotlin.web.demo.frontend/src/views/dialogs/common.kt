@@ -16,10 +16,11 @@
 
 package views.dialogs
 
-import jquery.JQuery
 import org.w3c.dom.HTMLElement
+import utils.jquery.JQuery
 import utils.jquery.find
+import utils.jquery.jq
 
-fun getDialogButton(dialogElement: HTMLElement, number: Int): JQuery{
-    return jquery.jq(dialogElement).parent().find("button:eq(${number})")
+fun getDialogButton(dialogElement: HTMLElement, number: Int): JQuery {
+    return jq(dialogElement).parent().find("button:eq($number)")
 }

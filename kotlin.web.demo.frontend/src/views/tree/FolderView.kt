@@ -20,10 +20,10 @@ import application.Application
 import kotlinx.html.*
 import kotlinx.html.js.*
 import kotlinx.html.dom.*
-import jquery.jq
 import model.Folder
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
+import utils.jquery.jq
 import utils.jquery.ui.accordion
 import views.tree.ProjectView
 import kotlin.browser.document

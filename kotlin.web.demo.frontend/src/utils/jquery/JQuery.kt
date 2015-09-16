@@ -16,13 +16,13 @@
 
 package utils.jquery
 
-import jquery.JQuery
+import jquery.MouseClickEvent
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
-import providers.CompletionProposal
+import org.w3c.dom.events.MouseEvent
 
 
 @native("$")
@@ -42,6 +42,21 @@ class JQuery {
         fun state()
         fun promise()
     }
+
+    fun html(s: String)
+    fun removeClass(className: String)
+    fun addClass(className: String)
+    fun height(): Number
+    fun height(value: Int)
+    fun width(): Number
+    fun width(value: Int)
+    fun hasClass(className: String): Boolean
+    fun text(text: String)
+    fun click()
+    fun click(handler: Element.(MouseClickEvent ) -> Unit): utils.jquery.JQuery = this;
+    fun slideUp()
+    fun parent(): utils.jquery.JQuery
+    fun attr(name: String, value: String)
 }
 
 @native
@@ -96,7 +111,13 @@ fun JQuery.value(s: String)
 fun jq(document: Document): JQuery
 
 @native("$")
-fun jq(element: HTMLElement): JQuery
+fun jq(selector: String): JQuery
+
+@native("$")
+fun jq(element: Element): JQuery
+
+@native("$")
+fun jq(jq: JQuery): JQuery
 
 @native
 fun JQuery.circleProgress(options: Json)

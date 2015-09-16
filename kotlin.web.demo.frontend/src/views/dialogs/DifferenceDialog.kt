@@ -16,20 +16,18 @@
 
 package views.dialogs
 
-import jquery.jq
-import jquery.ui.dialog
+import kotlinx.html.dom.append
+import kotlinx.html.js.div
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.KeyCode
-import utils.jquery.height
+import utils.jquery.jq
+import utils.jquery.keydown
 import utils.jquery.outerHeight
 import utils.jquery.ui.Dialog
-import utils.jquery.keydown
+import utils.jquery.ui.dialog
 import kotlin.browser.document
 import kotlin.dom.addClass
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
 
 
 @native

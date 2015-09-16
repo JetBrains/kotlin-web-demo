@@ -16,13 +16,13 @@
 
 package views
 
-import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event
 import providers.LoginProvider
 import utils.*
 import utils.jquery.*
+import utils.jquery.ui.dialog
 import kotlin.browser.document
 
 class LoginView(val loginModel: LoginProvider) {

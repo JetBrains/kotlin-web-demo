@@ -19,12 +19,13 @@ package views.dialogs
 import kotlinx.html.*
 import kotlinx.html.js.*
 import kotlinx.html.dom.*
-import jquery.jq
 import jquery.ui.dialog
 import org.w3c.dom.HTMLElement
 import utils.KeyCode
+import utils.jquery.jq
 import utils.jquery.ui.Dialog
 import utils.jquery.keydown
+import utils.jquery.ui.dialog
 import kotlin.browser.document
 
 object ShortcutsDialogView {

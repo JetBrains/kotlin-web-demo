@@ -16,11 +16,10 @@
 
 package utils.jquery.ui
 
-import jquery.jq
-import jquery.ui.dialog
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import utils.KeyCode
+import utils.jquery.jq
 import utils.jquery.keydown
 import kotlin.properties.ReadWriteProperty
 

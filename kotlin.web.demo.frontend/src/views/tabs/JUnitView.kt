@@ -20,8 +20,6 @@ import application.Application
 import kotlinx.html.*
 import kotlinx.html.js.*
 import kotlinx.html.dom.*
-import jquery.JQuery
-import jquery.jq
 import org.w3c.dom.*
 import utils.*
 import utils.jquery.*

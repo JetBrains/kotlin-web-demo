@@ -17,7 +17,6 @@
 package views.tree
 
 import application.Application
-import jquery.jq
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLSpanElement
 import utils.addKotlinExtension
@@ -34,6 +33,7 @@ import kotlinx.html.js.*
 import kotlinx.html.dom.*
 import model.*
 import org.w3c.dom.HTMLElement
+import utils.jquery.jq
 
 open class ProjectView(
         header: ProjectHeader,
