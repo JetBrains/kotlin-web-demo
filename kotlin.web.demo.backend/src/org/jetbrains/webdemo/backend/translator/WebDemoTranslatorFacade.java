@@ -55,23 +55,6 @@ public final class WebDemoTranslatorFacade {
     private WebDemoTranslatorFacade() {
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    @Nullable
-    public static BindingContext analyzeProgramCode(@NotNull List<JetFile> files, BackendSessionInfo sessionInfo) {
-        try {
-            return TopDownAnalyzerFacadeForJS.analyzeFiles(files, new LibrarySourcesConfig.Builder(
-                    Initializer.getInstance().getEnvironment().getProject(),
-                    "moduleId",
-                    LIBRARY_FILES
-            ).build()).getBindingContext();
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS.name(), sessionInfo.getOriginUrl(), "");
-            return null;
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
     public static ObjectNode translateProjectWithCallToMain(@NotNull List<JetFile> files,
                                                             @NotNull String arguments,
                                                             BackendSessionInfo sessionInfo,
