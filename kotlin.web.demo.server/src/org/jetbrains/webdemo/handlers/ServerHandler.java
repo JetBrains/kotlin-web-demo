@@ -88,10 +88,10 @@ public class ServerHandler {
 
     private void sendMail(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
         try {
-            String from = request.getParameter("from");
+            String from = request.getParameter("email");
             String name = request.getParameter("name");
             String title = request.getParameter("subject");
-            String message = request.getParameter("text");
+            String message = request.getParameter("question");
             MailAgent.getInstance().send(from, name, title, message);
         } catch (NullPointerException e) {
             writeResponse(request, response, "Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);

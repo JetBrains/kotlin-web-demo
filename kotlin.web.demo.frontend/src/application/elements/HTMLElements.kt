@@ -23,15 +23,18 @@ import utils.IncompleteActionManager
 import utils.jquery.jq
 import utils.parseBoolean
 import utils.jquery.ui.selectmenu
+import views.dialogs.AskDialog
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import kotlin.browser.document
 import kotlin.browser.localStorage
+import kotlin.dom.onClick
 
 
 internal object Elements{
     val argumentsInputElement = document.getElementById("arguments") as HTMLInputElement
     val shortcutsButton = document.getElementById("shortcuts-button") as HTMLElement
+    val askButton = document.getElementById("ask-button") as HTMLElement
     val onTheFlyCheckbox = document.getElementById("on-the-fly-checkbox") as HTMLInputElement
     val saveAsButton = document.getElementById("saveAsButton") as HTMLElement
     val runMode = document.getElementById("runMode") as HTMLElement
@@ -46,6 +49,10 @@ internal object Elements{
 
         shortcutsButton.onclick = {
             ShortcutsDialogView.open()
+        }
+
+        askButton.onclick = {
+            AskDialog.open()
         }
 
         onTheFlyCheckbox.checked = parseBoolean(localStorage.getItem("highlightOnTheFly"))
