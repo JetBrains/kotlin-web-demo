@@ -17,22 +17,19 @@
 package views.tree
 
 import application.Application
+import kotlinx.html.dom.append
+import kotlinx.html.dom.create
+import kotlinx.html.js.div
+import kotlinx.html.js.img
 import model.Folder
 import model.Project
 import model.Task
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.events.Event
 import utils.jquery.circleProgress
 import utils.jquery.jq
-import views.tabs.TestResult
-import java.util.*
 import kotlin.browser.document
-import kotlin.browser.localStorage
 import kotlin.dom.addClass
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
 
 
 class FolderViewWithProgress(parentNode: HTMLElement,
@@ -151,6 +148,7 @@ class FolderViewWithProgress(parentNode: HTMLElement,
                 { task ->
                     updateProgress()
                     (parent as FolderViewWithProgress).updateProgress()
+                    Application.completedProjects = (Application.completedProjects - task.project.id).toSet()
                 }
         )
         onProjectCreated(projectView)

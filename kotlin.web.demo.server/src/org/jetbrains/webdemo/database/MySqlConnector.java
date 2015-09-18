@@ -264,18 +264,19 @@ public class MySqlConnector {
     }
 
 
-    public void saveProject(UserInfo userInfo, String publicId, Project project) throws DatabaseOperationException {
+    public void saveProject(UserInfo userInfo, String publicId, Project project, String projectType) throws DatabaseOperationException {
         int userId = getUserId(userInfo);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement st = connection.prepareStatement(
-                     "UPDATE projects SET projects.args = ? , projects.run_configuration = ? " +
+                     "UPDATE projects SET projects.args = ? , projects.run_configuration = ?, projects.type = ? " +
                              "WHERE projects.owner_id = ?  AND projects.name = ? AND projects.public_id = ?")
         ) {
             st.setString(1, project.args);
             st.setString(2, project.confType);
-            st.setString(3, userId + "");
-            st.setString(4, escape(project.name));
-            st.setString(5, publicId);
+            st.setString(3, projectType);
+            st.setString(4, userId + "");
+            st.setString(5, escape(project.name));
+            st.setString(6, publicId);
             int rowsUpdated = st.executeUpdate();
             if (rowsUpdated != 1) {
                 DatabaseOperationException e = new DatabaseOperationException(rowsUpdated + " projects were updated");
@@ -850,7 +851,8 @@ public class MySqlConnector {
             for (ProjectFile file : solution.files) {
                 saveFile(solutionId, file);
             }
-            saveProject(userInfo, solutionId, solution);
+            String projectType = completed ?  "KOANS_TASK" : "INCOMPLETE_KOANS_TASK";
+            saveProject(userInfo, solutionId, solution, projectType);
         }
     }
 
@@ -883,6 +885,11 @@ public class MySqlConnector {
         } finally {
             closeStatementAndResultSet(st, rs);
         }
+    }
+
+    public void deleteSolution(UserInfo userInfo, String taskId) throws DatabaseOperationException {
+        String solutionId = getSolutionId(userInfo, taskId);
+        if(solutionId != null) deleteProject(userInfo, solutionId);
     }
 
     private final class IdentifierGenerator {

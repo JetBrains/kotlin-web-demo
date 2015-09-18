@@ -68,6 +68,10 @@ public class ProjectFile {
         this.type = other.type;
     }
 
+    public ProjectFile copy(){
+        return new ProjectFile(this);
+    }
+
     public Boolean isModifiable() {
         return modifiable;
     }

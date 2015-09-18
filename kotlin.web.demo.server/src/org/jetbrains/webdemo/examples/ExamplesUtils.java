@@ -44,7 +44,8 @@ public class ExamplesUtils {
             ProjectFile resultFile = file;
             for(ProjectFile userFile : userVersion.files){
                 if (userFile.getName().equals(file.getName())){
-                    resultFile = new UserFile(file, userFile.getText());
+                    resultFile = file.copy();
+                    ((ExampleFile) resultFile).setUserText(userFile.getText());
                 }
             }
             userFiles.add(resultFile);

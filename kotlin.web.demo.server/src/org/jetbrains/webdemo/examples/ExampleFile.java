@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.intellij.openapi.progress.Task;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -28,13 +29,26 @@ public class ExampleFile extends ProjectFile {
     private boolean hidden;
     @Nullable
     private String confType;
+
+    @Nullable
+    private String userText;
+
     private List<TextRange> taskWindows;
+
+    protected ExampleFile(ExampleFile other){
+        super(other);
+        hidden = other.hidden;
+        confType = other.confType;
+        userText = other.userText;
+        taskWindows = other.taskWindows;
+    }
 
     public ExampleFile(String name, String text, String id, Type type, @Nullable String confType, boolean isModifiable, boolean isHidden) {
         super(name, text, isModifiable, id, type);
         hidden = isHidden;
         this.confType = confType;
         this.taskWindows = getTaskWindowsFromText();
+        userText = null;
     }
 
     private List<TextRange> getTaskWindowsFromText() {
@@ -54,6 +68,10 @@ public class ExampleFile extends ProjectFile {
         return textRanges;
     }
 
+    public ExampleFile copy(){
+        return new ExampleFile(this);
+    }
+
     @JsonIgnore
     public boolean isHidden() {
         return hidden;
@@ -68,26 +86,45 @@ public class ExampleFile extends ProjectFile {
     public List<TextRange> getTaskWindows() {
         return taskWindows;
     }
+
+    @Nullable
+    public String getUserText() {
+        return userText;
+    }
+
+    public void setUserText(@Nullable String userText) {
+        this.userText = userText;
+    }
 }
 
 class TaskFile extends ExampleFile {
     private List<String> solutions;
+
+    protected TaskFile(TaskFile that){
+        super(that);
+        solutions = that.solutions;
+    }
 
     public TaskFile(String text, String solution, String id) {
         super("Task.kt", text, id, Type.KOTLIN_FILE, null, true, false);
         this.solutions = getSolutionsFromText(solution);
     }
 
-    private List<String> getSolutionsFromText(String text){
+    private List<String> getSolutionsFromText(String text) {
         List<String> solutions = new ArrayList<String>();
         String solution = ResponseUtils.substringBetween(text, "<answer>", "</answer>");
-        while(!solution.equals("")){
+        while (!solution.equals("")) {
             solutions.add(solution);
             text = text.replaceFirst("<answer>", "").replaceFirst("</answer>", "");
             solution = ResponseUtils.substringBetween(text, "<answer>", "</answer>");
         }
-        if(solutions.isEmpty()) solutions.add(text);
+        if (solutions.isEmpty()) solutions.add(text);
         return solutions;
+    }
+
+    @Override
+    public ExampleFile copy() {
+        return new TaskFile(this);
     }
 
     public List<String> getSolutions() {

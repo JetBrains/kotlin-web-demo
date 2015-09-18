@@ -49,7 +49,7 @@ class ProjectProvider(
             onProjectLoaded()
         } else {
             if (type == ProjectType.EXAMPLE || type == ProjectType.TASK) {
-                loadExample(publicId, callback)
+                loadExample(publicId, ignoreCache, callback)
             } else {
                 loadProject(publicId, callback, onNotFound)
             }
@@ -93,7 +93,7 @@ class ProjectProvider(
         )
     }
 
-    private fun loadExample(publicId: String, callback: (dynamic) -> Unit) {
+    private fun loadExample(publicId: String, ignoreCache: Boolean, callback: (dynamic) -> Unit) {
         blockContent()
         ajax(
                 url = generateAjaxUrl("loadExample"),
@@ -116,7 +116,7 @@ class ProjectProvider(
                 dataType = DataType.JSON,
                 type = HTTPRequestType.GET,
                 timeout = 10000,
-                data = json("publicId" to publicId),
+                data = json("publicId" to publicId, "ignoreCache" to ignoreCache),
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
                         onFail(textStatus + " : " + errorThrown, ActionStatusMessage.load_project_fail)

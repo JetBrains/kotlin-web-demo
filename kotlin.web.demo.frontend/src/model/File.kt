@@ -26,27 +26,27 @@ class File(
         name: String,
         val id: String,
         var text: String = "",
-        userText: String = text,
+        userText: String? = text,
         val isModifiable: Boolean = true,
         val type: String = FileType.KOTLIN_FILE.name(),
         isRevertible: Boolean = true,
         val taskWindows: List<TaskWindow> = emptyList(),
         val solutions: Array<String>? = null
 ) {
-    val listenableName = VarListener<String>()
-    var name: String by Listenable(name, listenableName)
-
-    val listenableIsModified = VarListener<Boolean>()
-    var isModified: Boolean by Listenable(text != userText, listenableIsModified)
-
-    val listenableIsRevertible = VarListener<Boolean>()
-    var isRevertible: Boolean by Listenable(isRevertible, listenableIsRevertible)
-
-    var userText: String = userText
+    var userText: String = userText ?: text
         set(newText: String) {
             isModified = newText != text
             $userText = newText
         }
+    val listenableName = VarListener<String>()
+
+    var name: String by Listenable(name, listenableName)
+    val listenableIsModified = VarListener<Boolean>()
+
+    var isModified: Boolean by Listenable(text != this.userText, listenableIsModified)
+    val listenableIsRevertible = VarListener<Boolean>()
+
+    var isRevertible: Boolean by Listenable(isRevertible, listenableIsRevertible)
 
     fun toJSON(): dynamic {
         val result = js("({})")

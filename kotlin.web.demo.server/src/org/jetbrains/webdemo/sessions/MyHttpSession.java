@@ -527,7 +527,7 @@ public class MyHttpSession {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             String publicId = request.getParameter("publicId");
-            MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), publicId, currentProject);
+            MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), publicId, currentProject, "USER_PROJECT");
             writeResponse("ок", HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't parse file", HttpServletResponse.SC_BAD_REQUEST);
@@ -555,6 +555,12 @@ public class MyHttpSession {
     private void sendExampleContent() {
         try {
             String id = request.getParameter("publicId");
+            boolean clearCache = Boolean.parseBoolean(request.getParameter("ignoreCache"));
+
+            if(sessionInfo.getUserInfo().isLogin() && clearCache){
+                MySqlConnector.getInstance().deleteSolution(sessionInfo.getUserInfo(), id);
+            }
+
             Project example = sessionInfo.getUserInfo().isLogin() ?
                     ExamplesUtils.getUserVersionOfExample(sessionInfo.getUserInfo(), id) :
                     ExamplesUtils.getExample(id);
