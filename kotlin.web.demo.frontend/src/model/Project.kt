@@ -46,7 +46,7 @@ abstract class Project(
         Application.projectProvider.saveProject(this, { onModified() })
     }
 
-    fun loadOriginal() {
+    public open fun loadOriginal() {
         loadContent(true)
     }
 

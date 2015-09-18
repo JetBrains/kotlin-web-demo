@@ -28,15 +28,16 @@ class TaskView(
         parent: FolderView,
         onHeaderClick: (ProjectView) -> Unit,
         onSelected: (ProjectView) -> Unit,
-        private val onCompleted: (TaskView) -> Unit
-) : ProjectView(header, parent, onHeaderClick, onSelected){
+        private val onCompleted: (TaskView) -> Unit,
+        private val onReverted: (TaskView) -> Unit
+) : ProjectView(header, parent, onHeaderClick, onSelected) {
 
     init {
-        if(header.completed) headerElement.addClass("completed")
+        if (header.completed) headerElement.addClass("completed")
     }
 
     override fun initProject(header: ProjectHeader): Project {
-        if(header !is TaskHeader) throw Exception("Wrong header type.")
+        if (header !is TaskHeader) throw Exception("Wrong header type.")
         val task = Task(
                 header.publicId,
                 header.name,
@@ -47,9 +48,12 @@ class TaskView(
                 onContentNotFound
         )
         task.completedListener.addModifyListener { event ->
-            if(event.newValue){
+            if (event.newValue) {
                 headerElement.addClass("completed")
                 onCompleted(this)
+            } else {
+                headerElement.removeClass("completed")
+                onReverted(this)
             }
         }
         task.modifiedListener.addModifyListener { event ->

@@ -43,6 +43,11 @@ public class Task(
 
     var help: String by Delegates.notNull()
 
+    override public fun loadOriginal() {
+        completed = false
+        loadContent(true)
+    }
+
     override fun contentLoaded(content: dynamic) {
         help = content.help
         super.contentLoaded(content);

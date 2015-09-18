@@ -240,6 +240,13 @@ public class Editor(
                 }
             }
 
+            help.append.button {
+                + "Revert"
+                onClickFunction = {
+                    file.project.loadOriginal()
+                }
+            }
+
             if(file.solutions != null && file.solutions.isNotEmpty()) {
                 val answerButton = document.createElement("button") as HTMLButtonElement
                 answerButton.type = "button"
