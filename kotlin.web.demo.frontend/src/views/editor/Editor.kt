@@ -230,6 +230,16 @@ public class Editor(
             helpContent?.forEach { help.appendChild(it) }
             jq(help).find("a").attr("target", "_blank")
 
+            help.append.button {
+                + "Check"
+                onClickFunction = {
+                    Application.runProvider.run(
+                            Application.configurationManager.getConfiguration(),
+                            Application.accordion.selectedProjectView!!.project
+                    )
+                }
+            }
+
             if(file.solutions != null && file.solutions.isNotEmpty()) {
                 val answerButton = document.createElement("button") as HTMLButtonElement
                 answerButton.type = "button"

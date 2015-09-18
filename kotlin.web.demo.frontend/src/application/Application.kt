@@ -160,7 +160,13 @@ object Application {
             }
     )
 
-    private val runProvider = RunProvider(
+    public val runProvider = RunProvider(
+            beforeRun = {
+                runButton.disable()
+                consoleView.clear()
+                junitView.clear()
+                generatedCodeView.clear()
+            },
             onSuccess = { output, project ->
                 output.forEach { data ->
                     if (data.type == "errors") {
@@ -210,10 +216,6 @@ object Application {
     val runButton: Button = Button(
             Elements.runButton,
             onClick = {
-                runButton.disable()
-                consoleView.clear()
-                junitView.clear()
-                generatedCodeView.clear()
                 runProvider.run(configurationManager.getConfiguration(), accordion.selectedProjectView!!.project)
             }
     )

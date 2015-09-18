@@ -24,13 +24,15 @@ import views.ConfigurationType
 import views.ConfigurationTypeRunner
 
 class RunProvider(
+        private val beforeRun: () -> Unit,
         private val onSuccess: (List<dynamic>, Project) -> Unit,
         private val onErrorsFound: (dynamic, Project) -> Unit,
         private val onComplete: () -> Unit,
         private val onFail: (String) -> Unit
 ) {
-    fun run(configuration: Configuration, project: Project) {
+    public fun run(configuration: Configuration, project: Project) {
         if(project.files.isEmpty()) return;
+        beforeRun()
         if (configuration.type.runner == ConfigurationTypeRunner.JAVA) {
             runJava(project)
         } else {
@@ -38,7 +40,7 @@ class RunProvider(
         }
     }
 
-    fun checkDataForErrors(data: Array<dynamic>): Boolean {
+    private fun checkDataForErrors(data: Array<dynamic>): Boolean {
         val hasErrors = data.any { element ->
             if (element.type == "errors") {
                 var containsErrors = false
