@@ -24,6 +24,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +36,8 @@ import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor;
 import org.jetbrains.kotlin.descriptors.impl.TypeParameterDescriptorImpl;
 import org.jetbrains.kotlin.idea.codeInsight.ReferenceVariantsHelper;
 import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers;
+import org.jetbrains.kotlin.lexer.JetKeywordToken;
+import org.jetbrains.kotlin.lexer.JetTokens;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.JetExpression;
 import org.jetbrains.kotlin.psi.JetFile;
@@ -250,6 +254,9 @@ public class JsonResponseForCompletion {
                 }
             });
 
+            addKeywordsToArray(jsonArray, JetTokens.KEYWORDS, prefix);
+            addKeywordsToArray(jsonArray, JetTokens.SOFT_KEYWORDS, prefix);
+
             for (DeclarationDescriptor descriptor : descriptors) {
                 Pair<String, String> presentableText = getPresentableText(descriptor);
 
@@ -280,6 +287,7 @@ public class JsonResponseForCompletion {
                     jsonObject.put("tail", presentableText.getSecond());
                 }
             }
+
         }
 
         return jsonArray.toString();
@@ -354,5 +362,17 @@ public class JsonResponseForCompletion {
             result.add((JetFile) file);
         }
         return result;
+    }
+
+    private void addKeywordsToArray(ArrayNode array, TokenSet keywords, String prefix){
+        for(IElementType type : keywords.getTypes()){
+            String token = ((JetKeywordToken) type).getValue();
+            if(!token.startsWith(prefix)) continue;
+            ObjectNode jsonObject = array.addObject();
+            jsonObject.put("icon", "");
+            jsonObject.put("text", token);
+            jsonObject.put("displayText", token);
+            jsonObject.put("tail", "");
+        }
     }
 }
