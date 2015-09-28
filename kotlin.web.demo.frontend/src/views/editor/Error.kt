@@ -18,7 +18,7 @@ package views.editor
 
 import utils.codemirror.Position
 
-native
+@native
 interface Diagnostic {
     val className: String
     val interval: Interval

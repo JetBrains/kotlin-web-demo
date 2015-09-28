@@ -17,9 +17,9 @@
 package application
 
 import application.elements.Elements
-import jquery.jq
 import model.File
 import model.ProjectType
+import jquery.jq
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLIFrameElement
@@ -27,7 +27,7 @@ import org.w3c.dom.StorageEvent
 import org.w3c.dom.events.KeyboardEvent
 import providers.*
 import utils.*
-import utils.jquery
+import utils.jquery.jq
 import utils.jquery.on
 import utils.jquery.trigger
 import utils.jquery.ui.Button
@@ -454,7 +454,7 @@ object Application {
         })
 
 
-        jquery.jq(document).on("click", ".ui-widget-overlay", {
+        jq(document).on("click", ".ui-widget-overlay", {
             jq(".ui-dialog-titlebar-close").trigger("click")
         })
     }

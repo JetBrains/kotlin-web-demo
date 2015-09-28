@@ -320,11 +320,11 @@ data class ParsedAssertionMessage(
         val actual: String
 )
 
-native
+@native
 interface TestResult {
     val status: String
     val executionTime: Double
 }
 
-native
+@native
 fun Double.toFixed(noOfDigits: Int): Double

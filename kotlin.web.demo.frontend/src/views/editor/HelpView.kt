@@ -16,14 +16,12 @@
 
 package views.editor
 
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
-import providers.HelpProvider
+import kotlinx.html.dom.append
+import kotlinx.html.js.div
 import utils.ElementPosition
 import kotlin.browser.document
 
-private object HelpViewForWords{
+object HelpViewForWords{
     private val element = document.body!!.append.div {
         classes = setOf("words-help")
         style = "display: none"
