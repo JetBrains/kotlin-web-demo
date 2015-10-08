@@ -28,7 +28,6 @@ import org.w3c.dom.StorageEvent
 import org.w3c.dom.events.KeyboardEvent
 import providers.*
 import utils.*
-import utils.jquery
 import utils.jquery.jq
 import utils.jquery.on
 import utils.jquery.trigger
@@ -512,7 +511,7 @@ object Application {
         })
 
 
-        jquery.jq(document).on("click", ".ui-widget-overlay", {
+        jq(document).on("click", ".ui-widget-overlay", {
             jq(".ui-dialog-titlebar-close").trigger("click")
         })
     }
