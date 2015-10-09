@@ -22,7 +22,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 public class HelloTest {
-    Test fun helloTest(): Unit {
+    @Test fun helloTest(): Unit {
         assertEquals("hello", "hello")
     }
 }
