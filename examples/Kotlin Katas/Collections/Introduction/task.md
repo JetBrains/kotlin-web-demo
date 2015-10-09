@@ -9,4 +9,4 @@ For example, operations that transform a collection to another one, starting wit
 [`toList`](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/to-list.html).
 
 Implement an extension function `Shop.getSetOfCustomers()`.
-The class `Shop` and all related classes can be found at [Shop.kt](/#/Kotlin%20Katas/Collections/Introduction/Shop.kt).
+The class `Shop` and all related classes can be found at [Shop.kt](/#/Kotlin%20Koans/Collections/Introduction/Shop.kt).
