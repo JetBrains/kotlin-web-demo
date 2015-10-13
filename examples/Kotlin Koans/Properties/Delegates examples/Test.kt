@@ -3,17 +3,20 @@ import org.junit.Test as test
 import java.util.HashMap
 
 class TestDelegatesExamples {
-    @test fun testCommodity() {
-        val data = hashMapOf<String, Any?>("description" to "snowboard", "price" to 349, "isAvailable" to true)
-        val p = Commodity(data)
-        Assert.assertEquals("snowboard", p.description)
-        Assert.assertEquals(349, p.price)
-        Assert.assertEquals(true, p.isAvailable)
+    @test fun testLazy() {
+        var initialized = false
+        val lazyProperty = LazyProperty({ initialized = true; 42 })
+        Assert.assertFalse("Property shouldn't be initialized before access", initialized)
+        val result: Int = lazyProperty.lazyValue
+        Assert.assertTrue("Property should be initialized after access", initialized)
+        Assert.assertEquals(42, result)
+    }
 
-        data["price"] = 421
-        Assert.assertEquals("Commodity class should reflect the data in map", 421, p.price)
-
-        p.isAvailable = false
-        Assert.assertEquals("The data in map should reflect the commodity class", false, data["isAvailable"])
+    @test fun initializedOnce() {
+        var initialized = 0
+        val lazyProperty = LazyProperty( { initialized++; 42 })
+        lazyProperty.lazyValue
+        lazyProperty.lazyValue
+        Assert.assertEquals("Lazy property should be initialized once", 1, initialized)
     }
 }

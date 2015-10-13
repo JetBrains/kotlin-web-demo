@@ -8,11 +8,11 @@ class EffectiveDate<R> : ReadWriteProperty<R, MyDate> {
 
     var timeInMillis: Long? = null
 
-    override fun get(thisRef: R, desc: PropertyMetadata): MyDate {
+    override fun get(thisRef: R, property: PropertyMetadata): MyDate {
         <taskWindow>TODO()</taskWindow>
     }
 
-    override fun set(thisRef: R, desc: PropertyMetadata, value: MyDate) {
+    override fun set(thisRef: R, property: PropertyMetadata, value: MyDate) {
         <taskWindow>TODO()</taskWindow>
     }
 }

@@ -1,6 +1,4 @@
-class Commodity(data: MutableMap<String, Any?>) {
-    val description: String by <taskWindow>TODO()</taskWindow>
-    var price: Int by <taskWindow>TODO()</taskWindow>
-    var isAvailable: Boolean by <taskWindow>TODO()</taskWindow>
+class LazyProperty(val initializer: () -> Int) {
+    val lazyValue: Int by <taskWindow>TODO()</taskWindow>
 }
 
