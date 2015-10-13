@@ -1,5 +1,5 @@
-// Return the most expensive among delivered products
-// (use Order.isDelivered flag)
+// Return the most expensive product among all delivered products
+// (use the Order.isDelivered flag)
 fun Customer.getMostExpensiveDeliveredProduct(): Product? = <taskWindow>TODO()</taskWindow>
 
 // Return how many times the given product was ordered.

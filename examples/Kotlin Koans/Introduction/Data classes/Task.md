@@ -28,4 +28,4 @@ The `getPeople` function should start to compile.
 
 Then read about [classes](http://kotlinlang.org/docs/reference/classes.html),
 [properties](http://kotlinlang.org/docs/reference/properties.html)
-and [data classes]() in more detail.
+and [data classes](https://kotlinlang.org/docs/reference/data-classes.html) in more detail.

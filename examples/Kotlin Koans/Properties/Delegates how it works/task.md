@@ -1,7 +1,7 @@
 ## Delegates
 
-Implement methods of the EffectiveDate class so it could be used as a delegate for properties
-with type MyDate and delegated value would be stored as Long.
+Implement the methods of the class 'EffectiveDate' so it can be delegated to.
+Store only the time in milliseconds in 'timeInMillis' property.
 
-Use extension functions `MyDate.toMillis()` and `Long.toDate()`, defined at
+Use the extension functions `MyDate.toMillis()` and `Long.toDate()`, defined at
 [MyDate.kt](/#/Kotlin%20Koans/Properties/Delegates%20how%20it%20works/MyDate.kt)
