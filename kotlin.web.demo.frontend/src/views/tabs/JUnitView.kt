@@ -79,7 +79,7 @@ class JUnitView(
         val firstPackage = sortedClassNames.first().split('.')
         val lastPackage = sortedClassNames.last().split('.')
         var j = 0
-        while (firstPackage.size() > j && lastPackage.size() > j && firstPackage[j] == lastPackage[j]) {
+        while (firstPackage.size > j && lastPackage.size > j && firstPackage[j] == lastPackage[j]) {
             ++j
         }
         return firstPackage.slice(0..j - 1)
@@ -103,7 +103,7 @@ class JUnitView(
         var commonPackageFullName :String
         var rootNode: dynamic =
                 if (!commonPackage.isEmpty()) {
-                    commonPackageFullName = commonPackage.join(".")
+                    commonPackageFullName = commonPackage.joinToString(".")
                     json(
                             "children" to arrayOf<dynamic>(),
                             "name" to commonPackage.last(),
@@ -275,7 +275,7 @@ class JUnitView(
                 Regex("(.*)\\s*expected:\\s*<(.*)>\\s*but was:\\s*<(.*)>")
         )
         for (regExp in  possibleRegExps) {
-            var regExpExecResult = regExp.match(message.replace("\n", "</br>"))
+            var regExpExecResult = regExp.find(message.replace("\n", "</br>"))
             if (regExpExecResult != null) {
                 return ParsedAssertionMessage(
                     regExpExecResult.groups[1]!!.value,
@@ -289,12 +289,12 @@ class JUnitView(
 
     fun createStatistics(data: Array<TestResult>): HTMLDivElement {
         val totalTime = data.fold (0.0) { time, testResult -> time + testResult.executionTime / 1000.0 }
-        val noOfFailedTest = data.count { it.status != Status.OK.name() }
+        val noOfFailedTest = data.count { it.status != Status.OK.name }
         val status = if (noOfFailedTest > 0) Status.FAIL else Status.OK
         val message = if (noOfFailedTest == 0) {
             "All tests passed in ${totalTime.toFixed(3)}s"
         } else {
-            "Failed: ${noOfFailedTest} of ${data.size()} in ${totalTime.toFixed(3)}s"
+            "Failed: ${noOfFailedTest} of ${data.size} in ${totalTime.toFixed(3)}s"
         }
         return document.create.div {
             id = "unit-test-statistic"
@@ -303,7 +303,7 @@ class JUnitView(
             }
             div {
                 id = "tests-status-bar"
-                div("background ${status.name().toLowerCase()}")
+                div("background ${status.name.toLowerCase()}")
             }
         }
     }

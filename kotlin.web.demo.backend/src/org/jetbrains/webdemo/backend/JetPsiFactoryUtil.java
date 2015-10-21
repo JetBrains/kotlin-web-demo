@@ -23,17 +23,19 @@ import com.intellij.psi.impl.PsiFileFactoryImpl;
 import com.intellij.testFramework.LightVirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.idea.JetLanguage;
+import org.jetbrains.kotlin.idea.KotlinLanguage;
 import org.jetbrains.kotlin.psi.JetFile;
+import org.jetbrains.kotlin.psi.KtFile;
 
 public class JetPsiFactoryUtil {
 
-    public static JetFile createFile(@NotNull Project project, @NotNull String name, @NotNull String text) {
+    public static KtFile createFile(@NotNull Project project, @NotNull String name, @NotNull String text) {
         if(!name.endsWith(".kt")){
             name = name + ".kt";
         }
-        LightVirtualFile virtualFile = new LightVirtualFile(name, JetLanguage.INSTANCE, text);
+        LightVirtualFile virtualFile = new LightVirtualFile(name, KotlinLanguage.INSTANCE, text);
         virtualFile.setCharset(CharsetToolkit.UTF8_CHARSET);
-        return (JetFile) ((PsiFileFactoryImpl) PsiFileFactory.getInstance(project)).trySetupPsiForFile(virtualFile, JetLanguage.INSTANCE, true, false);
+        return (KtFile) ((PsiFileFactoryImpl) PsiFileFactory.getInstance(project)).trySetupPsiForFile(virtualFile, KotlinLanguage.INSTANCE, true, false);
     }
 
 }

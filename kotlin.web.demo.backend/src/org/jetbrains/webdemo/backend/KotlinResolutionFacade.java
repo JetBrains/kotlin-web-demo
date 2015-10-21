@@ -24,8 +24,8 @@ import org.jetbrains.kotlin.container.ComponentProvider;
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor;
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor;
 import org.jetbrains.kotlin.idea.resolve.ResolutionFacade;
-import org.jetbrains.kotlin.psi.JetDeclaration;
-import org.jetbrains.kotlin.psi.JetElement;
+import org.jetbrains.kotlin.psi.KtDeclaration;
+import org.jetbrains.kotlin.psi.KtElement;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode;
 
@@ -46,19 +46,19 @@ public class KotlinResolutionFacade implements ResolutionFacade {
 
     @NotNull
     @Override
-    public BindingContext analyze(@NotNull JetElement jetElement, @NotNull BodyResolveMode bodyResolveMode) {
+    public BindingContext analyze(@NotNull KtElement jetElement, @NotNull BodyResolveMode bodyResolveMode) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public AnalysisResult analyzeFullyAndGetResult(@NotNull Collection<? extends JetElement> collection) {
+    public AnalysisResult analyzeFullyAndGetResult(@NotNull Collection<? extends KtElement> collection) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public DeclarationDescriptor resolveToDescriptor(@NotNull JetDeclaration jetDeclaration) {
+    public DeclarationDescriptor resolveToDescriptor(@NotNull KtDeclaration jetDeclaration) {
         throw new UnsupportedOperationException();
     }
 

@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
 import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
-import org.jetbrains.kotlin.cli.jvm.config.ConfigPackage;
+import org.jetbrains.kotlin.cli.jvm.config.JvmClasspathRoot;
 import org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
@@ -176,6 +176,7 @@ public class EnvironmentManager {
         K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
         CompilerConfiguration configuration = new CompilerConfiguration();
 
+        JvmClasspathRoot
         ConfigPackage.addJvmClasspathRoots(configuration, getClasspath(arguments));
         configuration.addAll(JVMConfigurationKeys.ANNOTATIONS_PATH_KEY, getAnnotationsPath());
 

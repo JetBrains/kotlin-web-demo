@@ -49,6 +49,7 @@ import org.jetbrains.kotlin.load.java.lazy.LazyJavaPackageFragmentProvider;
 import org.jetbrains.kotlin.load.java.lazy.SingleModuleClassResolver;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.JetFile;
+import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.*;
 import org.jetbrains.kotlin.resolve.jvm.JavaDescriptorResolver;
 import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
@@ -70,13 +71,13 @@ public class ResolveUtils {
     private ResolveUtils() {
     }
 
-    public static BindingContext getBindingContext(@NotNull List<JetFile> files, Project project, boolean isJs) {
+    public static BindingContext getBindingContext(@NotNull List<KtFile> files, Project project, boolean isJs) {
         Pair<AnalysisResult, ComponentProvider> result = isJs ? analyzeFileForJs(files, project) : analyzeFileForJvm(files, project);
         AnalysisResult analyzeExhaust = result.getFirst();
         return analyzeExhaust.getBindingContext();
     }
 
-    public static GenerationState getGenerationState(@NotNull List<JetFile> files, Project project) {
+    public static GenerationState getGenerationState(@NotNull List<KtFile> files, Project project) {
         AnalysisResult analyzeExhaust = analyzeFileForJvm(files, project).getFirst();
         return new GenerationState(
                 project,
@@ -87,7 +88,7 @@ public class ResolveUtils {
         );
     }
 
-    public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJvm(@NotNull List<JetFile> files, Project project) {
+    public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJvm(@NotNull List<KtFile> files, Project project) {
 
         KotlinCoreEnvironment environment = Initializer.getInstance().getEnvironment();
         ModuleContext moduleContext = TopDownAnalyzerFacadeForJVM.createContextWithSealedModule(project, getModuleName(environment));
@@ -143,7 +144,7 @@ public class ResolveUtils {
         return new Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider>(new ContainerForTopDownAnalyzerForJvm(container).getLazyTopDownAnalyzerForTopLevel(), container);
     }
 
-    public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJs(@NotNull List<JetFile> files, Project project) {
+    public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJs(@NotNull List<KtFile> files, Project project) {
         KotlinCoreEnvironment environment = Initializer.getInstance().getEnvironment();
 
         String moduleName = getModuleName(environment);

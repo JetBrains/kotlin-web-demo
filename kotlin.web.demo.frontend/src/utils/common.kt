@@ -57,7 +57,7 @@ var userProjectPrefix = "/UserProjects/"
 fun unEscapeString(s: String): String {
     var unEscapedString = s
     for (tagEntry in tagsToReplace) {
-        unEscapedString = unEscapedString.replace(tagEntry.getValue(), tagEntry.getKey())
+        unEscapedString = unEscapedString.replace(tagEntry.value, tagEntry.key)
     }
     return unEscapedString
 }
@@ -65,7 +65,7 @@ fun unEscapeString(s: String): String {
 fun escapeString(s: String): String {
     var escapedString = s
     for (tagEntry in tagsToReplace) {
-        escapedString = escapedString.replace(tagEntry.getKey(), tagEntry.getValue())
+        escapedString = escapedString.replace(tagEntry.key, tagEntry.value)
     }
     return escapedString
 }
@@ -86,7 +86,7 @@ fun getFileIdFromUrl(): String? {
 
     if (urlHash.startsWith(userProjectPrefix)) {
         val path = urlHash.removePrefix(userProjectPrefix).split('/')
-        return if (path.size() > 1) path[1] else null
+        return if (path.size > 1) path[1] else null
     } else {
         return urlHash
     }

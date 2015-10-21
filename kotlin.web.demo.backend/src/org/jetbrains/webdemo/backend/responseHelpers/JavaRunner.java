@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.backend.common.output.OutputFile;
 import org.jetbrains.kotlin.idea.MainFunctionDetector;
 import org.jetbrains.kotlin.load.kotlin.PackageClassUtils;
 import org.jetbrains.kotlin.name.FqName;
-import org.jetbrains.kotlin.psi.JetFile;
+import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -41,14 +41,14 @@ public class JavaRunner {
     private final BindingContext bindingContext;
     private final List<OutputFile> files;
     private final ArrayNode jsonArray;
-    private final JetFile currentFile;
+    private final KtFile currentFile;
     private final BackendSessionInfo sessionInfo;
     int returnValue = 0;
     private String arguments;
     private volatile boolean isTimeoutException = false;
     private volatile boolean outputIsTooLong = false;
 
-    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, JetFile currentFile, BackendSessionInfo info) {
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, KtFile currentFile, BackendSessionInfo info) {
         this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;
@@ -376,6 +376,6 @@ public class JavaRunner {
         if (new MainFunctionDetector(bindingContext).hasMain(currentFile.getDeclarations())) {
             return PackageClassUtils.getPackageClassFqName(currentFile.getPackageFqName()).asString();
         }
-        return PackageClassUtils.getPackageClassName(FqName.ROOT);
+        return PackageClassUtils.getPackageClassFqName(FqName.ROOT).asString();
     }
 }

@@ -137,6 +137,6 @@ enum class ProjectType {
     PUBLIC_LINK;
 
     fun toJSON(): String{
-        return name()
+        return name
     }
 }

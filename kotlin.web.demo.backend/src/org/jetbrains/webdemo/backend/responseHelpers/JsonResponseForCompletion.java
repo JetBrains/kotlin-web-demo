@@ -39,10 +39,10 @@ import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers;
 import org.jetbrains.kotlin.lexer.JetKeywordToken;
 import org.jetbrains.kotlin.lexer.JetTokens;
 import org.jetbrains.kotlin.name.Name;
-import org.jetbrains.kotlin.psi.JetExpression;
-import org.jetbrains.kotlin.psi.JetFile;
-import org.jetbrains.kotlin.psi.JetQualifiedExpression;
-import org.jetbrains.kotlin.psi.JetSimpleNameExpression;
+import org.jetbrains.kotlin.psi.KtExpression;
+import org.jetbrains.kotlin.psi.KtFile;
+import org.jetbrains.kotlin.psi.KtQualifiedExpression;
+import org.jetbrains.kotlin.psi.KtSimpleNameExpression;
 import org.jetbrains.kotlin.renderer.DescriptorRenderer;
 import org.jetbrains.kotlin.renderer.DescriptorRendererOptions;
 import org.jetbrains.kotlin.renderer.NameShortness;
@@ -50,13 +50,12 @@ import org.jetbrains.kotlin.renderer.ParameterNameRenderingPolicy;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.DescriptorUtils;
 import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter;
-import org.jetbrains.kotlin.resolve.scopes.JetScope;
-import org.jetbrains.kotlin.types.JetType;
+import org.jetbrains.kotlin.resolve.scopes.KtScope;
+import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.*;
 import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
-import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
 import java.util.*;
 
@@ -117,7 +116,7 @@ public class JsonResponseForCompletion {
 
         if (descriptor instanceof FunctionDescriptor) {
             FunctionDescriptor functionDescriptor = (FunctionDescriptor) descriptor;
-            JetType returnType = functionDescriptor.getReturnType();
+            KotlinType returnType = functionDescriptor.getReturnType();
             typeText = returnType != null ? RENDERER.renderType(returnType) : "";
             presentableText += RENDERER.renderFunctionParameters(functionDescriptor);
 
@@ -128,7 +127,7 @@ public class JsonResponseForCompletion {
                 tailText += " in " + DescriptorUtils.getFqName(containingDeclaration);
             }
         } else if (descriptor instanceof VariableDescriptor) {
-            JetType outType = ((VariableDescriptor) descriptor).getType();
+            KotlinType outType = ((VariableDescriptor) descriptor).getType();
             typeText = RENDERER.renderType(outType);
         } else if (descriptor instanceof ClassDescriptor) {
             DeclarationDescriptor declaredIn = descriptor.getContainingDeclaration();
@@ -192,26 +191,26 @@ public class JsonResponseForCompletion {
         boolean isTipsManagerCompletion = true;
         try {
             ReferenceVariantsHelper helper = new ReferenceVariantsHelper(bindingContext, new KotlinResolutionFacade(containerProvider), VISIBILITY_FILTER);
-            if (element instanceof JetSimpleNameExpression) {
-                descriptors = helper.getReferenceVariants((JetSimpleNameExpression) element, DescriptorKindFilter.ALL, NAME_FILTER);
-            } else if (element.getParent() instanceof JetSimpleNameExpression) {
-                descriptors = helper.getReferenceVariants((JetSimpleNameExpression) element.getParent(), DescriptorKindFilter.ALL, NAME_FILTER);
+            if (element instanceof KtSimpleNameExpression) {
+                descriptors = helper.getReferenceVariants((KtSimpleNameExpression) element, DescriptorKindFilter.ALL, NAME_FILTER);
+            } else if (element.getParent() instanceof KtSimpleNameExpression) {
+                descriptors = helper.getReferenceVariants((KtSimpleNameExpression) element.getParent(), DescriptorKindFilter.ALL, NAME_FILTER);
             } else {
                 isTipsManagerCompletion = false;
-                JetScope resolutionScope;
+                KtScope resolutionScope;
                 PsiElement parent = element.getParent();
-                if (parent instanceof JetQualifiedExpression) {
-                    JetQualifiedExpression qualifiedExpression = (JetQualifiedExpression) parent;
-                    JetExpression receiverExpression = qualifiedExpression.getReceiverExpression();
+                if (parent instanceof KtQualifiedExpression) {
+                    KtQualifiedExpression qualifiedExpression = (KtQualifiedExpression) parent;
+                    KtExpression receiverExpression = qualifiedExpression.getReceiverExpression();
 
-                    final JetType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, receiverExpression).getType();
+                    final KotlinType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, receiverExpression).getType();
                     resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, receiverExpression);
 
                     if (expressionType != null && resolutionScope != null) {
                         descriptors = expressionType.getMemberScope().getAllDescriptors();
                     }
                 } else {
-                    resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, (JetExpression) element);
+                    resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, (KtExpression) element);
                     if (resolutionScope != null) {
                         descriptors = resolutionScope.getAllDescriptors();
                     } else {
@@ -315,7 +314,7 @@ public class JsonResponseForCompletion {
 
     private PsiElement getExpressionForScope() {
         PsiElement element = currentPsiFile.findElementAt(caretPositionOffset);
-        while (!(element instanceof JetExpression)) {
+        while (!(element instanceof KtExpression)) {
             if (element != null) {
                 element = element.getParent();
             } else {
@@ -356,10 +355,10 @@ public class JsonResponseForCompletion {
         return lineStart + charNumber;
     }
 
-    private List<JetFile> convertList(List<PsiFile> list) {
-        List<JetFile> result = new ArrayList<>();
+    private List<KtFile> convertList(List<PsiFile> list) {
+        List<KtFile> result = new ArrayList<>();
         for (PsiFile file : list) {
-            result.add((JetFile) file);
+            result.add((KtFile) file);
         }
         return result;
     }

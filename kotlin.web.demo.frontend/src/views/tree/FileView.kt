@@ -81,9 +81,9 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
         }
 
         when (file.type) {
-            FileType.KOTLIN_FILE.name() -> icon.addClass("kotlin")
-            FileType.KOTLIN_TEST_FILE.name() -> icon.addClass("kotlin-test")
-            FileType.JAVA_FILE.name() -> icon.addClass("java")
+            FileType.KOTLIN_FILE.name -> icon.addClass("kotlin")
+            FileType.KOTLIN_TEST_FILE.name -> icon.addClass("kotlin-test")
+            FileType.JAVA_FILE.name -> icon.addClass("java")
         }
 
         if (!file.isModifiable) {

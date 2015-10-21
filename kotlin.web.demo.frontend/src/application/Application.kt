@@ -401,14 +401,14 @@ object Application {
     }
 
     val configurationManager = ConfigurationManager({ configuration ->
-        accordion.selectedProjectView!!.project.confType = configuration.type.name().toLowerCase()
+        accordion.selectedProjectView!!.project.confType = configuration.type.name.toLowerCase()
         editor.removeStyles()
         problemsView.clear()
         editor.updateHighlighting()
     })
 
     private fun getNumberOfErrorsAndWarnings(diagnostics: Map<File, Array<Diagnostic>>): Int {
-        return diagnostics.values().fold(0, { noOfDiagnostics, diagnostics -> noOfDiagnostics + diagnostics.size() })
+        return diagnostics.values.fold(0, { noOfDiagnostics, diagnostics -> noOfDiagnostics + diagnostics.size })
     }
 
     fun init() {

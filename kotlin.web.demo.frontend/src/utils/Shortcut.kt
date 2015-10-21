@@ -28,5 +28,5 @@ public class Shortcut(val shortcutKeyNames: Array<String>, private val isShortcu
         }
     }
 
-    val name = shortcutKeyNames.join("+")
+    val name = shortcutKeyNames.joinToString("+")
 }

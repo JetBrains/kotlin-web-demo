@@ -113,7 +113,7 @@ class RunProvider(
                                             //Placed here because of firefox bug
                                             //(error modifying context of canvas in invisible iframe)
                                             if (runConfiguration ==
-                                                    ConfigurationType.CANVAS.name().toLowerCase()) {
+                                                    ConfigurationType.CANVAS.name.toLowerCase()) {
                                                 Application.iframeDialog.open()
                                             }
                                             var out: String = Application.iframe.contentWindow!!.eval(element.text)
