@@ -161,7 +161,7 @@ class AccordionView(
         localStorage.removeItem("openedItemId")
 
         if (isUserProjectInUrl() &&
-                projectId !in projectViews.keySet()) {
+                projectId !in projectViews.keys) {
             Application.headersProvider.getProjectHeaderById(projectId, { header ->
                 addProject(publicLinksFolder!!.contentElement, header, publicLinksFolder!!)
                 selectProject(projectId)

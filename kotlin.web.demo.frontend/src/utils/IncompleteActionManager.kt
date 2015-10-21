@@ -22,7 +22,7 @@ import kotlin.browser.localStorage
 object IncompleteActionManager {
 
     fun registerAction(id: String, timePoint: String, onRegistered: dynamic, callback: dynamic) {
-        if (id !in actions.keySet()) {
+        if (id !in actions.keys) {
             actions[id] = json(
                     "timePoint" to timePoint,
                     "callback" to callback,
@@ -34,7 +34,7 @@ object IncompleteActionManager {
     }
 
     fun incomplete(id: String) {
-        if (id in actions.keySet()) {
+        if (id in actions.keys) {
             incompleteActions.add(id)
             actions[id].onRegistered()
         } else {

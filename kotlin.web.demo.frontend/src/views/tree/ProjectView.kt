@@ -161,7 +161,7 @@ class ProjectView(
                     "<span style=\"font-family: monospace\"> a-z A-Z 0-9 ' ' ',' '_' '-'</span>")
         }
         val fileNameWithExtension = addKotlinExtension(fileName)
-        for (fileView in fileViews.values()) {
+        for (fileView in fileViews.values) {
             if (fileView.file.name == fileNameWithExtension) {
                 return ValidationResult(
                         false,
@@ -283,7 +283,7 @@ class ProjectView(
         return Application.accordion.selectedProjectView!!.project === project
     }
 
-    fun getFileViewByName(name: String) = fileViews.values().firstOrNull {
+    fun getFileViewByName(name: String) = fileViews.values.firstOrNull {
         it.file.name == name
     }
 }

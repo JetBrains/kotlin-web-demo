@@ -43,8 +43,8 @@ object DifferenceDialog{
     fun open(baseText: String, newText: String) {
         leftLineElements.clear()
         rightLineElements.clear()
-        var baseTextLines = baseText.splitBy("</br>")
-        var newTextLines = newText.splitBy("</br>")
+        var baseTextLines = baseText.split("</br>")
+        var newTextLines = newText.split("</br>")
         var sequenceMatcher = difflib.SequenceMatcher(baseTextLines.toTypedArray(), newTextLines.toTypedArray())
         createDialogContent(baseTextLines, newTextLines, sequenceMatcher.get_opcodes())
         jq(dialogElement).dialog("open")
@@ -106,7 +106,7 @@ object DifferenceDialog{
         element.appendChild(outputElement)
 
         var lineElements = if(isRightElement) rightLineElements else leftLineElements
-        for(i in 0..lines.size() - 1){
+        for(i in 0..lines.size - 1){
             var lineNumber = document.createElement("div")
             lineNumber.className = "diff-lineNumber"
             lineNumber.innerHTML = i.toString() + ""
@@ -120,7 +120,7 @@ object DifferenceDialog{
             lineElements.add(line)
         }
 
-        for(i in 0..opCodes.size() - 1){
+        for(i in 0..opCodes.size - 1){
             var code = opCodes[i]
             var change = code[0]
             var b = (code[1] as Number).toInt()

@@ -18,6 +18,7 @@ package utils
 
 import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 data class ChangeEvent<T>(
         val oldValue: T,
@@ -30,7 +31,7 @@ class Listenable<T: Any>(initialValue: T, private val varListener: VarListener<T
         varListener.setInitialValue(initialValue)
     }
 
-    override fun set(thisRef: Any?, property: PropertyMetadata, value: T) {
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
         if(this.value != value) {
             val e = ChangeEvent(this.value, value)
             this.value = value
@@ -38,7 +39,7 @@ class Listenable<T: Any>(initialValue: T, private val varListener: VarListener<T
         }
     }
 
-    override fun get(thisRef: Any?, property: PropertyMetadata): T {
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return value
     }
 }
@@ -66,10 +67,10 @@ class VarListener<T: Any> {
     }
 
     fun removeNotifyListener(name: String){
-        var listener = namedListeners.get(name)
+        var listener = namedListeners[name]
         if (listener != null){
             namedListeners.remove(name)
-            allListeners.remove(name)
+            allListeners.remove(listener)
         } else{
             throw IllegalArgumentException("Listener with name $name not found")
         }

@@ -170,7 +170,7 @@ class Editor(
 
     private fun createDocIfNotExist(file: File) {
         if (documents.get(file) == null) {
-            val type = if (file.type != FileType.JAVA_FILE.name()) {
+            val type = if (file.type != FileType.JAVA_FILE.name) {
                 "text/kotlin"
             } else {
                 "text/x-java"
@@ -220,8 +220,8 @@ class Editor(
     public fun showDiagnostics(diagnostics: Map<File, Array<Diagnostic>>) {
         removeStyles()
         for (entry in diagnostics) {
-            val relatedDocument = documents.get(entry.getKey())!!
-            for (diagnostic in entry.getValue()) {
+            val relatedDocument = documents[entry.key]!!
+            for (diagnostic in entry.value) {
                 val interval = diagnostic.interval
                 val errorMessage = unEscapeString(diagnostic.message)
                 val severity = diagnostic.severity

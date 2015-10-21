@@ -56,7 +56,7 @@ class ConfigurationManager(private val onChange: (Configuration) -> Unit) {
     }
 
     fun getType(): String {
-        return configuration.type.name()
+        return configuration.type.name
     }
 
     fun updateConfiguration(type: String) {

@@ -28,7 +28,7 @@ class File(
         text: String = "",
         var originalText: String = text,
         val isModifiable: Boolean = true,
-        val type: String = FileType.KOTLIN_FILE.name(),
+        val type: String = FileType.KOTLIN_FILE.name,
         isRevertible: Boolean = true
 ) {
     val listenableName = VarListener<String>()
@@ -43,7 +43,7 @@ class File(
     var text: String = text
         set(newText: String) {
             isModified = newText != originalText
-            $text = newText
+            field = newText
         }
 
     fun toJSON(): dynamic {

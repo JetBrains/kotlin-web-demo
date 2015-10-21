@@ -45,7 +45,7 @@ public fun ajax(
             "url" to url,
             "success" to success,
             "dataType" to dataType,
-            "type" to type.name().toLowerCase(),
+            "type" to type.name.toLowerCase(),
             "data" to (data ?: undefined),
             "timeout" to timeout,
             "error" to error,
@@ -80,7 +80,7 @@ public enum class HTTPRequestType() {
 fun generateAjaxUrl(type: String, parameters: Map<String, String> = emptyMap()): String {
     var url = "kotlinServer?sessionId=" + sessionId + "&type=" + type
     for (entry in parameters) {
-        url += "&" + entry.getKey() + "=" + entry.getValue()
+        url += "&" + entry.key + "=" + entry.value
     }
     return url
 }

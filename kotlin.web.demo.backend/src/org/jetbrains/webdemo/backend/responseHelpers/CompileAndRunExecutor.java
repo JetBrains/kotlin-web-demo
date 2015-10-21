@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.codegen.CompilationErrorHandler;
 import org.jetbrains.kotlin.codegen.KotlinCodegenFacade;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.diagnostics.Severity;
-import org.jetbrains.kotlin.psi.JetFile;
+import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.JsonUtils;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -134,7 +134,7 @@ public class CompileAndRunExecutor {
             jsonObject.put("text", stringBuilder.toString());
 
 
-            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, args, jsonArray, (JetFile) currentPsiFiles.get(0), sessionInfo);
+            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, args, jsonArray, (KtFile) currentPsiFiles.get(0), sessionInfo);
 
             runner.getResult(outputDir.getAbsolutePath());
         }
@@ -142,10 +142,10 @@ public class CompileAndRunExecutor {
         return jsonArray.toString();
     }
 
-    private List<JetFile> convertList(List<PsiFile> list){
-        List<JetFile> ans = new ArrayList<>();
+    private List<KtFile> convertList(List<PsiFile> list){
+        List<KtFile> ans = new ArrayList<>();
         for(PsiFile psiFile : list){
-            ans.add((JetFile)psiFile);
+            ans.add((KtFile)psiFile);
         }
         return ans;
     }

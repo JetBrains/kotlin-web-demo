@@ -58,7 +58,7 @@ internal class CustomizedCompletionView(private val proposal: CompletionProposal
         } else {
             cm.replaceRange(text, from, to)
             if (text.endsWith('(')) {
-                cm.replaceRange(")", Position(cur.line, token.start + text.length()))
+                cm.replaceRange(")", Position(cur.line, token.start + text.length))
                 cm.execCommand("goCharLeft")
             }
         }
