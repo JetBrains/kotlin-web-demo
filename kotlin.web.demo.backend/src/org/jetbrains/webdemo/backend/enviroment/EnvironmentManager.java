@@ -69,7 +69,6 @@ import java.util.List;
 import static org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys.MODULE_NAME;
 
 public class EnvironmentManager {
-    private static File KOTLIN_RUNTIME = initializeKotlinRuntime();
     private Getter<FileTypeRegistry> registry;
     private KotlinCoreEnvironment environment;
     private Disposable disposable = new Disposable() {
@@ -79,26 +78,8 @@ public class EnvironmentManager {
     };
 
     @Nullable
-    private static File initializeKotlinRuntime() {
-        final File unpackedRuntimePath = getUnpackedRuntimePath();
-        if (unpackedRuntimePath != null) {
-            BackendSettings.KOTLIN_LIBS_DIR = unpackedRuntimePath.getParentFile().getAbsolutePath();
-            ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + BackendSettings.KOTLIN_LIBS_DIR);
-            return unpackedRuntimePath;
-        } else {
-            final File runtimeJarPath = getRuntimeJarPath();
-            if (runtimeJarPath != null && runtimeJarPath.exists()) {
-                BackendSettings.KOTLIN_LIBS_DIR = runtimeJarPath.getParentFile().getAbsolutePath();
-                ErrorWriter.writeInfoToConsole("Kotlin Runtime library founded at " + BackendSettings.KOTLIN_LIBS_DIR);
-                return runtimeJarPath;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
     private static File getUnpackedRuntimePath() {
-        URL url = K2JVMCompiler.class.getClassLoader().getResource("jet/JetObject.class");
+        URL url = K2JVMCompiler.class.getClassLoader().getResource("kotlin/KotlinObject.class");
         if (url != null && url.getProtocol().equals("file")) {
             return new File(url.getPath()).getParentFile().getParentFile();
         }
@@ -137,7 +118,7 @@ public class EnvironmentManager {
 
         }
 
-        classpath.add(KOTLIN_RUNTIME);
+        classpath.add(new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar"));
         classpath.add(new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-reflect.jar"));
         if (arguments.classpath != null) {
             for (String element : Splitter.on(File.pathSeparatorChar).split(arguments.classpath)) {

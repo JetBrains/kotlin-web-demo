@@ -47,12 +47,6 @@ fun main(args: Array<String>) {
 
 interface Element {
     fun render(builder: StringBuilder, indent: String)
-
-    override fun toString(): String {
-        val builder = StringBuilder()
-        render(builder, "")
-        return builder.toString()
-    }
 }
 
 class TextElement(val text: String) : Element {
@@ -65,7 +59,7 @@ abstract class Tag(val name: String) : Element {
     val children = arrayListOf<Element>()
     val attributes = hashMapOf<String, String>()
 
-    protected fun initTag<T : Element>(tag: T, init: T.() -> Unit): T {
+    protected fun <T : Element> initTag(tag: T, init: T.() -> Unit): T {
         tag.init()
         children.add(tag)
         return tag
@@ -81,15 +75,22 @@ abstract class Tag(val name: String) : Element {
 
     private fun renderAttributes(): String? {
         val builder = StringBuilder()
-        for (a in attributes.keySet()) {
+        for (a in attributes.keys) {
             builder.append(" $a=\"${attributes[a]}\"")
     }
+        return builder.toString()
+    }
+
+
+    override fun toString(): String {
+        val builder = StringBuilder()
+        render(builder, "")
         return builder.toString()
     }
 }
 
 abstract class TagWithText(name: String) : Tag(name) {
-    operator fun String.plus() {
+    operator fun String.unaryPlus() {
         children.add(TextElement(this))
     }
 }

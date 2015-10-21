@@ -8,5 +8,5 @@
     ],
     "args": "",
     "confType": "java",
-    "expectedOutput": "Greeting</br>One</br>Between two and four</br>Long</br>Not a string</br>Unknown</br>"
+    "expectedOutput": "Greeting</br>One</br>Long</br>Not a string</br>Unknown</br>"
 }

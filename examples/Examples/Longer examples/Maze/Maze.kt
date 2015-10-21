@@ -177,8 +177,8 @@ fun walkThroughMaze(str: String) {
  */
 fun makeMaze(s: String): Maze {
     val lines = s.split('\n')
-    val longestLine = lines.toList().maxBy { it.length() } ?: ""
-    val data = Array(lines.size()) { BooleanArray(longestLine.length()) }
+    val longestLine = lines.toList().maxBy { it.length } ?: ""
+    val data = Array(lines.size) { BooleanArray(longestLine.length) }
 
     var start: Point? = null
     var end: Point? = null
@@ -194,7 +194,7 @@ fun makeMaze(s: String): Maze {
     }
     }
 
-    return Maze(longestLine.length(), lines.size(), data,
+    return Maze(longestLine.length, lines.size, data,
             start ?: throw IllegalArgumentException("No starting point in the maze (should be indicated with 'I')"),
             end ?: throw IllegalArgumentException("No goal point in the maze (should be indicated with a '$' sign)"))
 }

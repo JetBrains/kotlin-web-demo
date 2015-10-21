@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.kotlin.backend.common.output.OutputFile;
+import org.jetbrains.kotlin.fileClasses.NoResolveFileClassesProvider;
 import org.jetbrains.kotlin.idea.MainFunctionDetector;
 import org.jetbrains.kotlin.load.kotlin.PackageClassUtils;
 import org.jetbrains.kotlin.name.FqName;
@@ -374,7 +375,7 @@ public class JavaRunner {
 
     private String findMainClass() {
         if (new MainFunctionDetector(bindingContext).hasMain(currentFile.getDeclarations())) {
-            return PackageClassUtils.getPackageClassFqName(currentFile.getPackageFqName()).asString();
+            return NoResolveFileClassesProvider.INSTANCE.getFileClassInfo(currentFile).getFileClassFqName().asString();
         }
         return PackageClassUtils.getPackageClassFqName(FqName.ROOT).asString();
     }

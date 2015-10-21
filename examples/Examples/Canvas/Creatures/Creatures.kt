@@ -309,7 +309,7 @@ class RadialGradientGenerator(val context: CanvasRenderingContext2D) {
 
     fun getNext(): Array<out Pair<Double, String>> {
         val result = gradients.get(current)
-        current = (current + 1) % gradients.size()
+        current = (current + 1) % gradients.size
         return result
     }
 }
@@ -318,10 +318,10 @@ fun v(x: Double, y: Double) = Vector(x, y)
 
 class Vector(val x: Double = 0.0, val y: Double = 0.0) {
     operator fun plus(v: Vector) = v(x + v.x, y + v.y)
-    operator fun minus() = v(-x, -y)
+    operator fun unaryMinus() = v(-x, -y)
     operator fun minus(v: Vector) = v(x - v.x, y - v.y)
     operator fun times(koef: Double) = v(x * koef, y * koef)
-    fun distanceTo(v: Vector) = Math.sqrt((this - v).sqr)
+    infix fun distanceTo(v: Vector) = Math.sqrt((this - v).sqr)
     fun rotatedBy(theta: Double): Vector {
         val sin = Math.sin(theta)
         val cos = Math.cos(theta)
@@ -352,7 +352,7 @@ fun main(args: Array<String>) {
 
 fun <T> List<T>.reversed(): List<T> {
     val result = ArrayList<T>()
-    var i = size()
+    var i = size
     while (i > 0) {
         result.add(get(--i))
     }
