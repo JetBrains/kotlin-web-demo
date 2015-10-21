@@ -23,34 +23,34 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.analyzer.AnalysisResult;
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns;
 import org.jetbrains.kotlin.cli.jvm.compiler.CliLightClassGenerationSupport;
 import org.jetbrains.kotlin.cli.jvm.compiler.JvmPackagePartProvider;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.codegen.ClassBuilderFactories;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.container.ComponentProvider;
-import org.jetbrains.kotlin.container.ContainerPackage;
+import org.jetbrains.kotlin.container.ContainerKt;
+import org.jetbrains.kotlin.container.DslKt;
 import org.jetbrains.kotlin.container.StorageComponentContainer;
-import org.jetbrains.kotlin.context.ContextPackage;
+import org.jetbrains.kotlin.context.ContextKt;
 import org.jetbrains.kotlin.context.ModuleContext;
 import org.jetbrains.kotlin.context.MutableModuleContext;
 import org.jetbrains.kotlin.descriptors.PackageFragmentProvider;
 import org.jetbrains.kotlin.descriptors.PackagePartProvider;
 import org.jetbrains.kotlin.descriptors.impl.ModuleDescriptorImpl;
 import org.jetbrains.kotlin.frontend.java.di.ContainerForTopDownAnalyzerForJvm;
-import org.jetbrains.kotlin.frontend.java.di.DiPackage;
+import org.jetbrains.kotlin.frontend.java.di.InjectionKt;
 import org.jetbrains.kotlin.incremental.components.LookupTracker;
-import org.jetbrains.kotlin.js.analyze.TopDownAnalyzerFacadeForJS;
 import org.jetbrains.kotlin.js.config.Config;
 import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.resolve.JsPlatform;
+import org.jetbrains.kotlin.load.java.JavaClassFinderImpl;
 import org.jetbrains.kotlin.load.java.lazy.LazyJavaPackageFragmentProvider;
 import org.jetbrains.kotlin.load.java.lazy.SingleModuleClassResolver;
 import org.jetbrains.kotlin.name.Name;
-import org.jetbrains.kotlin.psi.JetFile;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.*;
+import org.jetbrains.kotlin.resolve.jvm.JavaClassFinderPostConstruct;
 import org.jetbrains.kotlin.resolve.jvm.JavaDescriptorResolver;
 import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
 import org.jetbrains.kotlin.resolve.jvm.platform.JvmPlatform;
@@ -64,7 +64,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.jetbrains.kotlin.cli.jvm.config.ConfigPackage.getModuleName;
+import static org.jetbrains.kotlin.cli.jvm.config.ModuleNameKt.getModuleName;
 
 public class ResolveUtils {
 
@@ -101,7 +101,7 @@ public class ResolveUtils {
                 GlobalSearchScope.allScope(project), LookupTracker.DO_NOTHING, new JvmPackagePartProvider(Initializer.getInstance().getEnvironment()));
 
         List<LazyJavaPackageFragmentProvider> additionalProviders = Collections.singletonList(
-                ContainerPackage.getService(analyzerAndProvider.second, JavaDescriptorResolver.class).getPackageFragmentProvider());
+                DslKt.getService(analyzerAndProvider.second, JavaDescriptorResolver.class).getPackageFragmentProvider());
 
         analyzerAndProvider.first.analyzeFiles(TopDownAnalysisMode.TopLevelDeclarations, files, additionalProviders);
 
@@ -119,26 +119,27 @@ public class ResolveUtils {
             final LookupTracker lookupTracker,
             final PackagePartProvider packagePartProvider
     ) {
-        StorageComponentContainer container = ContainerPackage.createContainer("TopDownAnalyzerForJvm", new Function1<StorageComponentContainer, Unit>() {
+        StorageComponentContainer container = DslKt.createContainer("TopDownAnalyzerForJvm", new Function1<StorageComponentContainer, Unit>() {
             @Override
             public Unit invoke(StorageComponentContainer storageComponentContainer) {
-                ContainerPackage.useInstance(storageComponentContainer, packagePartProvider);
+                DslKt.useInstance(storageComponentContainer, packagePartProvider);
 
-                org.jetbrains.kotlin.frontend.di.DiPackage.configureModule(storageComponentContainer, moduleContext, JvmPlatform.INSTANCE$, bindingTrace);
-                DiPackage.configureJavaTopDownAnalysis(storageComponentContainer, moduleContentScope, moduleContext.getProject(), lookupTracker);
+                org.jetbrains.kotlin.frontend.di.InjectionKt.configureModule(storageComponentContainer, moduleContext, JvmPlatform.INSTANCE, bindingTrace);
+                InjectionKt.configureJavaTopDownAnalysis(storageComponentContainer, moduleContentScope, moduleContext.getProject(), lookupTracker);
 
-                ContainerPackage.useInstance(storageComponentContainer, declarationProviderFactory);
+                DslKt.useInstance(storageComponentContainer, declarationProviderFactory);
 
-                CompilerEnvironment.INSTANCE$.configure(storageComponentContainer);
+                CompilerEnvironment.INSTANCE.configure(storageComponentContainer);
 
-                ContainerPackage.registerSingleton(storageComponentContainer, SingleModuleClassResolver.class);
-                ContainerPackage.registerSingleton(storageComponentContainer, FileScopeProviderImpl.class);
+                ContainerKt.registerSingleton(storageComponentContainer, SingleModuleClassResolver.class);
+                ContainerKt.registerSingleton(storageComponentContainer, FileScopeProviderImpl.class);
 
                 return null;
             }
         });
 
-        DiPackage.javaAnalysisInit(container);
+        DslKt.getService(container, JavaClassFinderImpl.class).initialize();
+        DslKt.getService(container, JavaClassFinderPostConstruct.class).postCreate();
 
         //noinspection unchecked
         return new Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider>(new ContainerForTopDownAnalyzerForJvm(container).getLazyTopDownAnalyzerForTopLevel(), container);
@@ -154,8 +155,8 @@ public class ResolveUtils {
                 WebDemoTranslatorFacade.LIBRARY_FILES
         ).build();
 
-        MutableModuleContext module = ContextPackage.ContextForNewModule(
-                project, Name.special("<" + moduleName + ">"), TopDownAnalyzerFacadeForJS.JS_MODULE_PARAMETERS
+        MutableModuleContext module = ContextKt.ContextForNewModule(
+                project, Name.special("<" + moduleName + ">"), JsPlatform.INSTANCE
         );
         module.setDependencies(computeDependencies(module.getModule(), config));
 
@@ -178,7 +179,7 @@ public class ResolveUtils {
         List<ModuleDescriptorImpl> allDependencies = new ArrayList<ModuleDescriptorImpl>();
         allDependencies.add(module);
         allDependencies.addAll(config.getModuleDescriptors());
-        allDependencies.add(KotlinBuiltIns.getInstance().getBuiltInsModule());
+        allDependencies.add(JsPlatform.INSTANCE.getBuiltIns().getBuiltInsModule());
         return allDependencies;
     }
 
@@ -187,26 +188,26 @@ public class ResolveUtils {
             final BindingTrace bindingTrace,
             final DeclarationProviderFactory declarationProviderFactory
     ) {
-        StorageComponentContainer container = ContainerPackage.createContainer("TopDownAnalyzerForJs", new Function1<StorageComponentContainer, Unit>() {
+        StorageComponentContainer container = DslKt.createContainer("TopDownAnalyzerForJs", new Function1<StorageComponentContainer, Unit>() {
             @Override
             public Unit invoke(StorageComponentContainer storageComponentContainer) {
-                org.jetbrains.kotlin.frontend.di.DiPackage.configureModule(storageComponentContainer, moduleContext, JsPlatform.INSTANCE$, bindingTrace);
+                org.jetbrains.kotlin.frontend.di.InjectionKt.configureModule(storageComponentContainer, moduleContext, JsPlatform.INSTANCE, bindingTrace);
 
-                ContainerPackage.useInstance(storageComponentContainer, declarationProviderFactory);
-                ContainerPackage.registerSingleton(storageComponentContainer, FileScopeProviderImpl.class);
+                DslKt.useInstance(storageComponentContainer, declarationProviderFactory);
+                ContainerKt.registerSingleton(storageComponentContainer, FileScopeProviderImpl.class);
 
-                CompilerEnvironment.INSTANCE$.configure(storageComponentContainer);
+                CompilerEnvironment.INSTANCE.configure(storageComponentContainer);
 
-                ContainerPackage.useInstance(storageComponentContainer, LookupTracker.DO_NOTHING);
-                ContainerPackage.registerSingleton(storageComponentContainer, ResolveSession.class);
-                ContainerPackage.registerSingleton(storageComponentContainer, LazyTopDownAnalyzerForTopLevel.class);
+                DslKt.useInstance(storageComponentContainer, LookupTracker.Companion.getDO_NOTHING());
+                ContainerKt.registerSingleton(storageComponentContainer, ResolveSession.class);
+                ContainerKt.registerSingleton(storageComponentContainer, LazyTopDownAnalyzerForTopLevel.class);
 
                 return null;
             }
         });
 
         //noinspection unchecked
-        return new Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider>(ContainerPackage.getService(container, LazyTopDownAnalyzerForTopLevel.class), container);
+        return new Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider>(DslKt.getService(container, LazyTopDownAnalyzerForTopLevel.class), container);
     }
 
 

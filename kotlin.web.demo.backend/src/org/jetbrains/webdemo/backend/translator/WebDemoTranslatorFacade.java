@@ -21,16 +21,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.kotlin.js.analyze.TopDownAnalyzerFacadeForJS;
 import org.jetbrains.kotlin.js.config.Config;
 import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.facade.K2JSTranslator;
 import org.jetbrains.kotlin.js.facade.MainCallParameters;
 import org.jetbrains.kotlin.js.facade.TranslationResult;
 import org.jetbrains.kotlin.js.facade.exceptions.TranslationException;
-import org.jetbrains.kotlin.psi.JetFile;
-import org.jetbrains.kotlin.resolve.BindingContext;
+import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
@@ -55,7 +52,7 @@ public final class WebDemoTranslatorFacade {
     private WebDemoTranslatorFacade() {
     }
 
-    public static ObjectNode translateProjectWithCallToMain(@NotNull List<JetFile> files,
+    public static ObjectNode translateProjectWithCallToMain(@NotNull List<KtFile> files,
                                                             @NotNull String arguments,
                                                             BackendSessionInfo sessionInfo,
                                                             Map<String, List<ErrorDescriptor>> errors) {
@@ -79,7 +76,7 @@ public final class WebDemoTranslatorFacade {
     }
 
     @NotNull
-    private static MyTranslationResult doTranslate(@NotNull List<JetFile> files,
+    private static MyTranslationResult doTranslate(@NotNull List<KtFile> files,
                                                    @NotNull String arguments,
                                                    BackendSessionInfo sessionInfo,
                                                    Map<String, List<ErrorDescriptor>> errors) throws TranslationException {
