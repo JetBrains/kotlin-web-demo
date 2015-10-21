@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.diagnostics.Diagnostic;
 import org.jetbrains.kotlin.diagnostics.Errors;
 import org.jetbrains.kotlin.diagnostics.Severity;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
-import org.jetbrains.kotlin.psi.JetFile;
+import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
@@ -136,10 +136,10 @@ public class ErrorAnalyzer {
 
     }
 
-    private List<JetFile> convertList(List<PsiFile> list) {
-        List<JetFile> result = new ArrayList<>();
+    private List<KtFile> convertList(List<PsiFile> list) {
+        List<KtFile> result = new ArrayList<>();
         for(PsiFile file : list){
-            result.add((JetFile)file);
+            result.add((KtFile)file);
         }
         return result;
     }
