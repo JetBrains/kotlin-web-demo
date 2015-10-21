@@ -42,6 +42,7 @@ public class BackendHttpServlet extends HttpServlet {
         BackendSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
         BackendSettings.CLASS_PATH = BackendSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes";
         BackendSettings.LIBS_DIR = BackendSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib";
+        BackendSettings.KOTLIN_LIBS_DIR = BackendSettings.LIBS_DIR;
 
         if (!loadTomcatParameters()) {
             ErrorWriter.writeErrorToConsole("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");

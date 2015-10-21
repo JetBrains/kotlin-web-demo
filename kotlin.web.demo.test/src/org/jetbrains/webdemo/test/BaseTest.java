@@ -64,6 +64,7 @@ public class BaseTest extends TestCase {
         ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
         BackendSettings.JAVA_EXECUTE = BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
         BackendSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
+        BackendSettings.KOTLIN_LIBS_DIR = BackendSettings.LIBS_DIR + File.separator + "kotlin-plugin" + File.separator + "Kotlin"  +File.separator + "kotlinc" + File.separator + "lib";
 
         createManager();
         initializePolicyFile();

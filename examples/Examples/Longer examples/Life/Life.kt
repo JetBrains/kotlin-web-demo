@@ -123,7 +123,7 @@ fun runGameOfLife(fieldText: String, steps: Int) {
 
 fun makeField(s: String): Field {
     val lines = s.replace(" ", "").split('\n').filter({ it.isNotEmpty() })
-    val longestLine = lines.toList().maxBy { it.length() } ?: ""
+    val longestLine = lines.toList().maxBy { it.length } ?: ""
 
-    return Field(longestLine.length(), lines.size()) { i, j -> lines[i][j] == '*' }
+    return Field(longestLine.length, lines.size) { i, j -> lines[i][j] == '*' }
 }

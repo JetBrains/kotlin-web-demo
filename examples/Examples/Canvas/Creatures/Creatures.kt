@@ -38,7 +38,7 @@ abstract class Shape() {
 
     abstract fun draw(state: CanvasState)
     // these two abstract methods defines that our shapes can be dragged
-    abstract fun contains(mousePos: Vector): Boolean
+    operator abstract fun contains(mousePos: Vector): Boolean
 
     abstract var pos: Vector
 
@@ -104,10 +104,10 @@ class Logo(override var pos: Vector) : Shape() {
 
 val gradientGenerator: RadialGradientGenerator? = null
     get() {
-        if ($gradientGenerator == null) {
-            $gradientGenerator = RadialGradientGenerator(context)
+        if (field == null) {
+            field = RadialGradientGenerator(context)
         }
-        return $gradientGenerator
+        return field
     }
 
 class Creature(override var pos: Vector, val state: CanvasState) : Shape() {
@@ -309,7 +309,7 @@ class RadialGradientGenerator(val context: CanvasRenderingContext2D) {
 
     fun getNext(): Array<out Pair<Double, String>> {
         val result = gradients.get(current)
-        current = (current + 1) % gradients.size()
+        current = (current + 1) % gradients.size
         return result
     }
 }
@@ -317,11 +317,11 @@ class RadialGradientGenerator(val context: CanvasRenderingContext2D) {
 fun v(x: Double, y: Double) = Vector(x, y)
 
 class Vector(val x: Double = 0.0, val y: Double = 0.0) {
-    fun plus(v: Vector) = v(x + v.x, y + v.y)
-    fun minus() = v(-x, -y)
-    fun minus(v: Vector) = v(x - v.x, y - v.y)
-    fun times(koef: Double) = v(x * koef, y * koef)
-    fun distanceTo(v: Vector) = Math.sqrt((this - v).sqr)
+    operator fun plus(v: Vector) = v(x + v.x, y + v.y)
+    operator fun unaryMinus() = v(-x, -y)
+    operator fun minus(v: Vector) = v(x - v.x, y - v.y)
+    operator fun times(koef: Double) = v(x * koef, y * koef)
+    infix fun distanceTo(v: Vector) = Math.sqrt((this - v).sqr)
     fun rotatedBy(theta: Double): Vector {
         val sin = Math.sin(theta)
         val cos = Math.cos(theta)
@@ -352,7 +352,7 @@ fun main(args: Array<String>) {
 
 fun <T> List<T>.reversed(): List<T> {
     val result = ArrayList<T>()
-    var i = size()
+    var i = size
     while (i > 0) {
         result.add(get(--i))
     }
