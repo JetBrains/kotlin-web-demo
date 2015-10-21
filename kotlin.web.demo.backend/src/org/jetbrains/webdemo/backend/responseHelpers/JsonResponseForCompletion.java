@@ -47,6 +47,7 @@ import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.DescriptorUtils;
 import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter;
 import org.jetbrains.kotlin.resolve.scopes.KtScope;
+import org.jetbrains.kotlin.types.FlexibleTypesKt;
 import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
@@ -56,13 +57,23 @@ import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 import java.util.*;
 
 public class JsonResponseForCompletion {
-    private static final DescriptorRenderer RENDERER = IdeDescriptorRenderers.SOURCE_CODE.withOptions(new Function1<DescriptorRendererOptions, Unit>() {
+    private static final DescriptorRenderer RENDERER = IdeDescriptorRenderers.INSTANCE.getSOURCE_CODE().withOptions(new Function1<DescriptorRendererOptions, Unit>() {
         @Override
         public Unit invoke(DescriptorRendererOptions descriptorRendererOptions) {
             descriptorRendererOptions.setNameShortness(NameShortness.SHORT);
-            descriptorRendererOptions.setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES);
+            descriptorRendererOptions.setTypeNormalizer(IdeDescriptorRenderers.INSTANCE.getAPPROXIMATE_FLEXIBLE_TYPES());
             descriptorRendererOptions.setParameterNameRenderingPolicy(ParameterNameRenderingPolicy.NONE);
             descriptorRendererOptions.setRenderDefaultValues(false);
+            descriptorRendererOptions.setFlexibleTypesForCode(false);
+            descriptorRendererOptions.setTypeNormalizer(new Function1<KotlinType, KotlinType>() {
+                @Override
+                public KotlinType invoke(KotlinType kotlinType) {
+                    if (FlexibleTypesKt.isFlexible(kotlinType)) {
+                        return FlexibleTypesKt.flexibility(kotlinType).getUpperBound();
+                    }
+                    return kotlinType;
+                }
+            });
             return null;
         }
     });
