@@ -38,7 +38,7 @@ fun createTweeterShareLink(
     target = "_blank"
     href = "https://twitter.com/intent/tweet?" +
             "text=${encodeURIComponent(tweetText)}&" +
-            "url=${encodeURIComponent(url)}&" +
+            "url=${encodeURIComponent(url) + "1level.html"}&" +
             "hashtags=${encodeURIComponent(hashTags.join(separator = ","))}&" +
             "via=${encodeURIComponent(via)}"
 
@@ -68,7 +68,7 @@ fun createFacebookShareLink(
         href = "https://www.facebook.com/dialog/feed?" +
                 "app_id=957678017630094&" +
                 "display=popup&" +
-                "link=${encodeURIComponent(link + "level.html")}&" +
+                "link=${encodeURIComponent(link + "1level.html")}&" +
                 "redirect_uri=${encodeURIComponent(redirectURL)}&" +
 //                "picture=${encodeURIComponent(pictureURL)}&" +
                 "name=$name&" +
