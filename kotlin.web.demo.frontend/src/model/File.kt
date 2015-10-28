@@ -36,7 +36,7 @@ class File(
     var userText: String = userText ?: text
         set(newText: String) {
             isModified = newText != text
-            $userText = newText
+            field = newText
         }
     val listenableName = VarListener<String>()
 

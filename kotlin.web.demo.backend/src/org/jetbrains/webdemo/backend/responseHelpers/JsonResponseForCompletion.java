@@ -36,8 +36,8 @@ import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor;
 import org.jetbrains.kotlin.descriptors.impl.TypeParameterDescriptorImpl;
 import org.jetbrains.kotlin.idea.codeInsight.ReferenceVariantsHelper;
 import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers;
-import org.jetbrains.kotlin.lexer.JetKeywordToken;
-import org.jetbrains.kotlin.lexer.JetTokens;
+import org.jetbrains.kotlin.lexer.KtKeywordToken;
+import org.jetbrains.kotlin.lexer.KtTokens;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.KtExpression;
 import org.jetbrains.kotlin.psi.KtFile;
@@ -264,8 +264,8 @@ public class JsonResponseForCompletion {
                 }
             });
 
-            addKeywordsToArray(jsonArray, JetTokens.KEYWORDS, prefix);
-            addKeywordsToArray(jsonArray, JetTokens.SOFT_KEYWORDS, prefix);
+            addKeywordsToArray(jsonArray, KtTokens.KEYWORDS, prefix);
+            addKeywordsToArray(jsonArray, KtTokens.SOFT_KEYWORDS, prefix);
 
             for (DeclarationDescriptor descriptor : descriptors) {
                 Pair<String, String> presentableText = getPresentableText(descriptor);
@@ -376,7 +376,7 @@ public class JsonResponseForCompletion {
 
     private void addKeywordsToArray(ArrayNode array, TokenSet keywords, String prefix){
         for(IElementType type : keywords.getTypes()){
-            String token = ((JetKeywordToken) type).getValue();
+            String token = ((KtKeywordToken) type).getValue();
             if(!token.startsWith(prefix)) continue;
             ObjectNode jsonObject = array.addObject();
             jsonObject.put("icon", "");

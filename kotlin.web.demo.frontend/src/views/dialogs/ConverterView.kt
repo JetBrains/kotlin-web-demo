@@ -112,7 +112,7 @@ class ConverterView(converterProvider: ConverterProvider) {
 
     init {
         jq(leftHalf).resizable(json(
-                "handles"to 'e',
+                "handles" to 'e',
                 "resize" to {
                     val rightHalfWidth = (jq(dialogElement).width() as Int - jq(leftHalf).outerWidth(true)) * 100 / jq(dialogElement).width() as Int
                     rightHalf.style.width = rightHalfWidth.toString() + "%"

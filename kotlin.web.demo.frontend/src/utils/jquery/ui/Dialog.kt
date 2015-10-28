@@ -22,6 +22,7 @@ import utils.KeyCode
 import utils.jquery.jq
 import utils.jquery.keydown
 import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 class Dialog(
         val dialogElement: HTMLElement,
@@ -86,13 +87,13 @@ class DialogButton(val text: String, val click: (Event)->Unit)
 class DialogProperty<T>(initialValue: T) : ReadWriteProperty<Any?, T> {
     private var value: T = initialValue
 
-    override fun set(thisRef: Any?, property: PropertyMetadata, value: T) {
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
         var dialog = thisRef as Dialog
         this.value = value
         jq(dialog.dialogElement).dialog("option", property.name, value)
     }
 
-    override fun get(thisRef: Any?, property: PropertyMetadata): T {
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return value
     }
 

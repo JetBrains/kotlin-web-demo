@@ -204,8 +204,10 @@ public class Editor(
     fun reloadFile() {
         val openedFile = this.openedFile;
         this.openedFile = null
-        documents.remove(openedFile);
-        if (openedFile != null) open(openedFile);
+        if (openedFile != null) {
+            documents.remove(openedFile);
+            open(openedFile)
+        };
     }
 
     fun updateHighlighting() {
