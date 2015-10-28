@@ -68,7 +68,7 @@ fun createFacebookShareLink(
         href = "https://www.facebook.com/dialog/feed?" +
                 "app_id=957678017630094&" +
                 "display=popup&" +
-                "link=${encodeURIComponent(link) + "%2F1level.html"}&" +
+                "link=${encodeURIComponent(link + "level.html")}&" +
                 "redirect_uri=${encodeURIComponent(redirectURL)}&" +
 //                "picture=${encodeURIComponent(pictureURL)}&" +
                 "name=$name&" +
