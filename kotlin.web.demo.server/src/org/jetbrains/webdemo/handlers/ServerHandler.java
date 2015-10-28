@@ -19,12 +19,9 @@ package org.jetbrains.webdemo.handlers;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.mail.MailAgent;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 import org.jetbrains.webdemo.sessions.MyHttpSession;
@@ -35,7 +32,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.Map;
 
 public class ServerHandler {
 
@@ -92,7 +88,7 @@ public class ServerHandler {
             String name = request.getParameter("name");
             String title = request.getParameter("subject");
             String message = request.getParameter("question");
-            MailAgent.getInstance().send(from, name, title, message);
+//            MailAgent.getInstance().send(from, name, title, message);
         } catch (NullPointerException e) {
             writeResponse(request, response, "Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         }
