@@ -38,6 +38,7 @@
       <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.server/web" />
       <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/build.txt" />
       <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.frontend/index.html" />
+      <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.frontend/1level.html" />
     </root>
   </artifact>
 </component>
