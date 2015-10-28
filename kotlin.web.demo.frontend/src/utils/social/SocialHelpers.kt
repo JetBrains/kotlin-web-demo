@@ -54,7 +54,7 @@ fun createFacebookShareLink(
         textContent: String = "FaceBook",
         link: String = window.location.href,
         redirectURL: String = window.location.href,
-        pictureURL: String = window.location.href + "/static/images/canvas/Kotlin-logo.png",
+        pictureURL: String = window.location.href + "/static/images/1level.gif",
         name: String = "",
         caption: String = "",
         description: String = "",
