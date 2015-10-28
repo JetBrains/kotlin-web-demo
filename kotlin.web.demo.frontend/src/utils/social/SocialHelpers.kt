@@ -70,7 +70,7 @@ fun createFacebookShareLink(
                 "display=popup&" +
                 "link=${encodeURIComponent(link) + "%2F1level.html"}&" +
                 "redirect_uri=${encodeURIComponent(redirectURL)}&" +
-                "picture=${encodeURIComponent(pictureURL)}&" +
+//                "picture=${encodeURIComponent(pictureURL)}&" +
                 "name=$name&" +
                 "caption=$caption&" +
                 "description=$description"
