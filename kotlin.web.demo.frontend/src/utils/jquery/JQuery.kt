@@ -138,4 +138,4 @@ fun JQuery.trigger(action: String)
 fun JQuery.focus()
 
 @native
-fun JQuery.get(index: Int): Element
+operator fun JQuery.get(index: Int): Element

@@ -14,15 +14,23 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo;
+package utils.twitter
 
-/**
- * Created by Semyon.Atamas on 2/13/2015.
- */
-public class CommonSettings {
-    public static boolean IS_TEST_VERSION = true;
-    public static String KOTLIN_VERSION = "1.0.0-beta-1038";
-
-    public static String HELP_DIRECTORY = "help";
-    public static String LOGS_DIRECTORY = "logs";
+@native("twttr")
+object Twitter{
+    @native("txt")
+    val text: TwitterText
 }
+
+@native
+class TwitterText{
+    fun extractUrlsWithIndices(tweet: String): Array<URLObject>
+    fun getTweetLength(value: String): Int
+}
+
+@native
+class URLObject{
+    val indices: Array<Int>
+    val url: String
+}
+

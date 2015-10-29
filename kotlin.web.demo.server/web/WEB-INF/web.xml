@@ -19,6 +19,11 @@
         <servlet-class>org.jetbrains.webdemo.servlet.AuthorizationServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>TwitterServlet</servlet-name>
+        <servlet-class>org.jetbrains.webdemo.servlet.TwitterServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>KotlinHttpServlet</servlet-name>
         <url-pattern>/kotlinServer</url-pattern>
@@ -29,6 +34,11 @@
         <url-pattern>/login/*</url-pattern>
         <url-pattern>/verify/*</url-pattern>
         <url-pattern>/logout/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>TwitterServlet</servlet-name>
+        <url-pattern>/twitter/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

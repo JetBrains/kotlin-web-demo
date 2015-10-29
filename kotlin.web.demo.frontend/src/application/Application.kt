@@ -34,11 +34,11 @@ import utils.jquery.trigger
 import utils.jquery.ui.Dialog
 import utils.jquery.ui.tabs
 import utils.social.createFacebookShareLink
-import utils.social.createTweeterShareLink
 import views.*
 import views.dialogs.ConverterView
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
+import views.dialogs.TweetDialog
 import views.editor.Diagnostic
 import views.editor.Editor
 import views.tabs.*
@@ -47,6 +47,7 @@ import views.tree.FolderViewWithProgress
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
+import kotlin.dom.onClick
 
 object Application {
     val actionManager = ActionManager(
@@ -413,12 +414,32 @@ object Application {
 
     fun init() {
         val toolbox = document.getElementById("global-toolbox-right")!!
-        toolbox.insertBefore(createTweeterShareLink(
-                tweetText ="Amazing tweet about Kotlin.",
-                hashTags = setOf("kotlin"),
-                via = "kotlin",
-                url = "http://try.kotl.in/"
-        ), toolbox.firstChild);
+
+        val tl1 = document.createElement("a");
+        tl1.textContent = "1"
+        tl1.onClick { TweetDialog.open(1) }
+        toolbox.insertBefore(tl1, toolbox.firstChild)
+
+        val tl2 = document.createElement("a");
+        tl2.textContent = "2"
+        tl2.onClick { TweetDialog.open(2) }
+        toolbox.insertBefore(tl2, toolbox.firstChild)
+
+        val tl3 = document.createElement("a");
+        tl3.textContent = "3"
+        tl3.onClick { TweetDialog.open(3) }
+        toolbox.insertBefore(tl3, toolbox.firstChild)
+
+        val tl4 = document.createElement("a");
+        tl4.textContent = "4"
+        tl4.onClick { TweetDialog.open(4) }
+        toolbox.insertBefore(tl4, toolbox.firstChild)
+
+        val tl5 = document.createElement("a");
+        tl5.textContent = "5"
+        tl5.onClick { TweetDialog.open(5) }
+        toolbox.insertBefore(tl5, toolbox.firstChild)
+
         toolbox.insertBefore(createFacebookShareLink(
                 caption = "Caption",
                 description = "Description",

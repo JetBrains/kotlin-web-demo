@@ -37,7 +37,8 @@ class Dialog(
         buttons: Array<DialogButton> = arrayOf<DialogButton>(),
         onOpen: ((dynamic, dynamic) -> Unit)? = null,
         onClose: (() -> Unit)? = null,
-        resizeStop: (() -> Unit)? = null
+        resizeStop: (() -> Unit)? = null,
+        dialogClass: String = ""
 ) {
     init {
         jq(dialogElement).keydown { event ->
@@ -58,6 +59,7 @@ class Dialog(
                 "buttons" to buttons,
                 "height" to (height ?: "auto"),
                 "minHeight" to minHeight,
+                "dialogClass" to dialogClass,
                 "resizeStop" to resizeStop
         ))
     }
@@ -70,6 +72,7 @@ class Dialog(
     var height by DialogProperty(height)
     var minHeight by DialogProperty(minHeight)
     var width by DialogProperty(width)
+    var dialogClass by DialogProperty(dialogClass)
     var buttons by DialogProperty(buttons)
 
 

@@ -51,10 +51,6 @@ internal object Elements{
             ShortcutsDialogView.open()
         }
 
-        askButton.onclick = {
-            AskDialog.open()
-        }
-
         onTheFlyCheckbox.checked = parseBoolean(localStorage.getItem("highlightOnTheFly"))
         onTheFlyCheckbox.onchange = {
             Application.editor.highlightOnTheFly = onTheFlyCheckbox.checked

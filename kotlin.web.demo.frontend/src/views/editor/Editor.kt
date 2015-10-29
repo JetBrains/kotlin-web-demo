@@ -47,7 +47,7 @@ public class Editor(
             "lineNumbers" to true,
             "styleActiveLine" to true,
             "matchBrackets" to true,
-            "mode" to "kotlin",
+            "mode" to "twxt/x-kotlin",
             "autoCloseBrackets" to true,
             "continueComments" to true,
             "hintOptions" to json("async" to true),
@@ -130,7 +130,7 @@ public class Editor(
             storedCompletionsList = null
         }
 
-        CodeMirror.registerHelper("hint", "kotlin", { cm: dynamic, callback: dynamic, options: dynamic ->
+        CodeMirror.registerHelper("hint", "text/x-kotlin", { cm: dynamic, callback: dynamic, options: dynamic ->
             getCompletions(cm, callback, options)
         })
 
@@ -217,7 +217,7 @@ public class Editor(
     private fun createDocIfNotExist(file: File) {
         if (documents.get(file) == null) {
             val type = if (file.type != FileType.JAVA_FILE.name()) {
-                "kotlin"
+                "text/x-kotlin"
             } else {
                 "text/x-java"
             }

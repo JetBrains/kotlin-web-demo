@@ -67,7 +67,7 @@ class ConverterView(converterProvider: ConverterProvider) {
             "matchBrackets" to true,
             "styleActiveLine" to true,
             "readOnly" to true,
-            "mode" to "kotlin",
+            "mode" to "text/x-kotlin",
             "tabSize" to 4
     ))
 

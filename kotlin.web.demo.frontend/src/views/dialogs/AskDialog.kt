@@ -23,82 +23,82 @@ import utils.jquery.ui.Dialog
 import kotlin.browser.document
 
 object AskDialog {
-    val element = document.body!!.append.div {
-        classes = setOf("ask-dialog")
-        title = "Ask a question"
-        a {
-            +"StackOverflow"
-            href = "http://stackoverflow.com/questions/ask?tags=kotlin"
-            target = "_blank"
-        }
-        a{
-            +"Devnet"
-            href = "https://devnet.jetbrains.com/community/kotlin"
-            target = "_blank"
-        }
-        form {
-            action = "/kotlinServer?type=sendMail"
-            method = FormMethod.post
-            section {
-                label {
-                    + "Name: "
-                    for_ = "ask-form-name"
-                }
-                input {
-                    type = InputType.text
-                    name = "name"
-                    id = "ask-form-name"
-                }
-            }
-
-            section {
-                label {
-                    + "Email: "
-                    for_ = "ask-form-email"
-                }
-                input {
-                    type = InputType.email
-                    name = "email"
-                    id = "ask-form-email"
-                }
-            }
-
-            section {
-                label {
-                    + "Subject: "
-                    for_ = "ask-form-email"
-                }
-                input {
-                    type = InputType.text
-                    name = "subject"
-                    id = "ask-subject"
-                }
-            }
-
-            section {
-                label {
-                    + "Question: "
-                    for_ = "ask-form-question"
-                }
-                textArea {
-                    id = "ask-form-question"
-                    name = "question"
-                }
-            }
-
-            section {
-                input {
-                    classes = setOf("submit-button")
-                    type = InputType.submit
-                    value = "Submit"
-                }
-            }
-        }
-    }
-
-    val dialog = Dialog(element, autoOpen = false, modal = true)
-
-    fun open(){
-        dialog.open()
-    }
+//    val element = document.body!!.append.div {
+//        classes = setOf("ask-dialog")
+//        title = "Ask a question"
+//        a {
+//            +"StackOverflow"
+//            href = "http://stackoverflow.com/questions/ask?tags=kotlin"
+//            target = "_blank"
+//        }
+//        a{
+//            +"Devnet"
+//            href = "https://devnet.jetbrains.com/community/kotlin"
+//            target = "_blank"
+//        }
+//        form {
+//            action = "/kotlinServer?type=sendMail"
+//            method = FormMethod.post
+//            section {
+//                label {
+//                    + "Name: "
+//                    for_ = "ask-form-name"
+//                }
+//                input {
+//                    type = InputType.text
+//                    name = "name"
+//                    id = "ask-form-name"
+//                }
+//            }
+//
+//            section {
+//                label {
+//                    + "Email: "
+//                    for_ = "ask-form-email"
+//                }
+//                input {
+//                    type = InputType.email
+//                    name = "email"
+//                    id = "ask-form-email"
+//                }
+//            }
+//
+//            section {
+//                label {
+//                    + "Subject: "
+//                    for_ = "ask-form-email"
+//                }
+//                input {
+//                    type = InputType.text
+//                    name = "subject"
+//                    id = "ask-subject"
+//                }
+//            }
+//
+//            section {
+//                label {
+//                    + "Question: "
+//                    for_ = "ask-form-question"
+//                }
+//                textArea {
+//                    id = "ask-form-question"
+//                    name = "question"
+//                }
+//            }
+//
+//            section {
+//                input {
+//                    classes = setOf("submit-button")
+//                    type = InputType.submit
+//                    value = "Submit"
+//                }
+//            }
+//        }
+//    }
+//
+//    val dialog = Dialog(element, autoOpen = false, modal = true)
+//
+//    fun open(){
+//        dialog.open()
+//    }
 }

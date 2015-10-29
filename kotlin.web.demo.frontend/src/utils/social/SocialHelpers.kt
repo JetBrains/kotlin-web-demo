@@ -24,31 +24,31 @@ import kotlin.browser.document
 import kotlin.browser.window
 
 
-fun createTweeterShareLink(
-        tweetText: String = "",
-        url: String = window.location.href,
-        width: Int  = 575,
-        height: Int = 400,
-        hashTags: Set<String> = emptySet<String>(),
-        textContent: String = "Tweet",
-        via: String = ""
-) = document.create.a {
-    +textContent
-    classes = setOf("twitter")
-    target = "_blank"
-    href = "https://twitter.com/intent/tweet?" +
-            "text=${encodeURIComponent(tweetText)}&" +
-            "url=${encodeURIComponent(url) + "1level.html"}&" +
-            "hashtags=${encodeURIComponent(hashTags.join(separator = ","))}&" +
-            "via=${encodeURIComponent(via)}"
-
-    val left   = (window.innerWidth - width)  / 2
-    val top    = (window.innerHeight - height)  / 2
-    onClickFunction = { e ->
-        e.preventDefault()
-        window.open(this.href, "Tweet", "height=$height,width=$width,left=$left,top=$top")
-    }
-}
+//fun createTweeterShareLink(
+//        tweetText: String = "",
+//        url: String = window.location.href,
+//        width: Int  = 575,
+//        height: Int = 400,
+//        hashTags: Set<String> = emptySet<String>(),
+//        textContent: String = "Tweet",
+//        via: String = ""
+//) = document.create.a {
+//    +textContent
+//    classes = setOf("twitter")
+//    target = "_blank"
+//    href = "https://twitter.com/intent/tweet?" +
+//            "text=${encodeURIComponent(tweetText)}&" +
+//            "url=${encodeURIComponent(url)}&" +
+//            "hashtags=${encodeURIComponent(hashTags.join(separator = ","))}&" +
+//            "via=${encodeURIComponent(via)}"
+//
+//    val left   = (window.innerWidth - width)  / 2
+//    val top    = (window.innerHeight - height)  / 2
+//    onClickFunction = { e ->
+//        e.preventDefault()
+//        window.open(this.href, "Tweet", "height=$height,width=$width,left=$left,top=$top")
+//    }
+//}
 
 fun createFacebookShareLink(
         textContent: String = "FaceBook",
@@ -68,7 +68,7 @@ fun createFacebookShareLink(
         href = "https://www.facebook.com/dialog/feed?" +
                 "app_id=957678017630094&" +
                 "display=popup&" +
-                "link=${encodeURIComponent(link + "1level.html")}&" +
+                "link=${encodeURIComponent(link)}&" +
                 "redirect_uri=${encodeURIComponent(redirectURL)}&" +
 //                "picture=${encodeURIComponent(pictureURL)}&" +
                 "name=$name&" +

@@ -36,3 +36,7 @@
         background-size: 250px 900px;
     }
 }
+
+.button {
+    cursor: pointer;
+}
