@@ -286,7 +286,6 @@
 }
 
 .task-help {
-    background-color: white;
     padding-top: 5px;
     padding-left: 15px;
     padding-right: 15px;
@@ -304,6 +303,7 @@
 }
 
 .task-help-wrapper {
+    background-color: white;
     padding-bottom: 4px;
 }
 

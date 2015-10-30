@@ -47,7 +47,7 @@ public class Editor(
             "lineNumbers" to true,
             "styleActiveLine" to true,
             "matchBrackets" to true,
-            "mode" to "twxt/x-kotlin",
+            "mode" to "text/x-kotlin",
             "autoCloseBrackets" to true,
             "continueComments" to true,
             "hintOptions" to json("async" to true),
@@ -134,9 +134,11 @@ public class Editor(
             storedCompletionsList = null
         }
 
-        CodeMirror.registerHelper("hint", "text/x-kotlin", { cm: dynamic, callback: dynamic, options: dynamic ->
+        val helperFunction: dynamic = { cm: dynamic, callback: dynamic, options: dynamic ->
             getCompletions(cm, callback, options)
-        })
+        }
+        helperFunction.async = true
+        CodeMirror.registerHelper("hint", "text/x-kotlin", helperFunction)
 
         if (window.navigator.appVersion.indexOf("Mac") != -1) {
             codeMirror.setOption("extraKeys", json(

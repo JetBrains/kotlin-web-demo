@@ -264,9 +264,6 @@ public class JsonResponseForCompletion {
                 }
             });
 
-            addKeywordsToArray(jsonArray, KtTokens.KEYWORDS, prefix);
-            addKeywordsToArray(jsonArray, KtTokens.SOFT_KEYWORDS, prefix);
-
             for (DeclarationDescriptor descriptor : descriptors) {
                 Pair<String, String> presentableText = getPresentableText(descriptor);
 
@@ -298,6 +295,8 @@ public class JsonResponseForCompletion {
                 }
             }
 
+            addKeywordsToArray(jsonArray, KtTokens.KEYWORDS, prefix);
+            addKeywordsToArray(jsonArray, KtTokens.SOFT_KEYWORDS, prefix);
         }
 
         return jsonArray.toString();
