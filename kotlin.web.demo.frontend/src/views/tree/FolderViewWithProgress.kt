@@ -153,13 +153,14 @@ class FolderViewWithProgress(parentNode: HTMLElement,
                 onProjectSelected,
                 { task ->
                     updateProgress()
-                    (parent as FolderViewWithProgress).updateProgress()
+                    (parent as FolderViewWithProgress?)?.updateProgress()
                     dialogCloseFun?.invoke()
                     openDialog(task)
                 },
                 { task ->
                     updateProgress()
-                    (parent as FolderViewWithProgress).updateProgress()
+                    (parent as FolderViewWithProgress?)?.updateProgress()
+                    dialogCloseFun?.invoke()
                     Application.completedProjects = (Application.completedProjects - task.project.id).toSet()
                 }
         )

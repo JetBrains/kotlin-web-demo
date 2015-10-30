@@ -75,7 +75,7 @@ object Application {
 
     var completedProjects: Set<String>
         get() {
-            val storedArray = JSON.parse<Array<String>>(localStorage.get("completedProjects") ?: "[]")
+            val storedArray = JSON.parse<Array<String>>(localStorage["completedProjects"] ?: "[]")
             return storedArray.toSet()
         }
         set(value) {

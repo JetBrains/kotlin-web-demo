@@ -24,6 +24,7 @@ import model.File
 import model.FileType
 import model.Task
 import org.w3c.dom.HTMLButtonElement
+import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.KeyboardEvent
@@ -190,9 +191,6 @@ public class Editor(
             codeMirror.focus()
             codeMirror.swapDoc(relatedDocument)
             helpWidget = codeMirror.getLineHandle(0).widgets?.getOrNull(0)
-            for (closeFunction in dialogCloseFunctions) {
-                closeFunction()
-            }
             dialogCloseFunctions.clear()
             codeMirror.refresh()
             Application.accordion.onModifiedSelectedFile(file)
@@ -202,6 +200,9 @@ public class Editor(
     }
 
     fun closeFile() {
+        for (closeFunction in dialogCloseFunctions) {
+            closeFunction()
+        }
         codeMirror.swapDoc(CodeMirror.Doc(""))
         openedFile = null
         removeStyles()
@@ -240,9 +241,13 @@ public class Editor(
             helpContent?.forEach { help.appendChild(it) }
             jq(help).find("a").attr("target", "_blank")
 
-            val buttonSet = help.append.div {classes = setOf("buttonset")}
-            buttonSet.append.button {
-                +"Check"
+            val buttonSet = help.append.div { classes = setOf("buttonset") }
+            buttonSet.append.div {
+                classes = setOf("button")
+                div {
+                    classes = setOf("text")
+                    + "Check"
+                }
                 onClickFunction = {
                     Application.runProvider.run(
                             Application.configurationManager.getConfiguration(),
@@ -251,155 +256,161 @@ public class Editor(
                 }
             }
 
-            buttonSet.append.button {
-                +"Revert"
+            buttonSet.append.div {
+                classes = setOf("button")
+                div {
+                    classes = setOf("text")
+                    + "Revert"
+                }
                 onClickFunction = {
                     file.project.loadOriginal()
                 }
             }
 
-            if (file.solutions != null && file.solutions.isNotEmpty()) {
-                val answerButton = document.createElement("button") as HTMLButtonElement
-                answerButton.type = "button"
-                answerButton.textContent = "Show answer"
-                answerButton.style.transform = "rotate(180deg)"
-
-                var answerHidden = true
-                answerButton.onclick = {
-                    answerHidden = !answerHidden
-                    answerButton.textContent = "${if (answerHidden) "Show" else "Hide"} answer"
-                    answerButton.style.transform = if (answerHidden) "rotate(180deg)" else ""
-                    jq(".task-answer").toggle()
-                    helpWidget?.changed()
-                }
-                buttonSet.appendChild(answerButton)
-
-
-                file.solutions.forEach {
-                    val answer = document.create.pre {
-                        classes = setOf("task-answer")
-                        code {
-                            attributes.put("data-lang", "kotlin");
-                            +it
-                        }
-                    }
-                    help.appendChild(answer)
-                    jq(answer).hide()
+        if (file.solutions != null && file.solutions.isNotEmpty()) {
+            val answerButton = buttonSet.append.div {
+                classes = setOf("button")
+                div {
+                    classes = setOf("text")
+                    + "Show answer"
                 }
             }
-            CodeMirror.colorize(help.getElementsByTagName("code"))
+            answerButton.style.transform = "rotate(180deg)"
 
-            helpWidget = cmDocument.addLineWidget(0, helpWrapper, json("above" to true, "noHScroll" to true))
+            var answerHidden = true
+            answerButton.onclick = {
+                answerHidden = !answerHidden
+                answerButton.textContent = "${if (answerHidden) "Show" else "Hide"} answer"
+                answerButton.style.transform = if (answerHidden) "rotate(180deg)" else ""
+                jq(".task-answer").toggle()
+                helpWidget?.changed()
+            }
 
-            if (file.taskWindows.isEmpty() || file.isModified) return
-            val firstWindow = file.taskWindows.first()
-            cmDocument.setSelection(
-                    Position(firstWindow.line, firstWindow.start + firstWindow.length),
-                    Position(firstWindow.line, firstWindow.start)
-            )
-            for (taskWindow in file.taskWindows) {
-                cmDocument.markText(
-                        Position(taskWindow.line, taskWindow.start),
-                        Position(taskWindow.line, taskWindow.start + taskWindow.length),
-                        json(
-                                "className" to "taskWindow",
-                                "startStyle" to "taskWindow-start",
-                                "endStyle" to "taskWindow-end",
-                                "handleMouseEvents" to true
-                        )
-                )
+            file.solutions.forEach {
+                val answer = document.create.pre {
+                    classes = setOf("task-answer")
+                    code {
+                        attributes.put("data-lang", "kotlin");
+                        +it
+                    }
+                }
+                help.appendChild(answer)
+                jq(answer).hide()
             }
         }
-    }
+        CodeMirror.colorize(help.getElementsByTagName("code"))
 
-    private fun getCompletions(cm: CodeMirror, callback: (Hint) -> Unit, options: dynamic) {
-        val cur = cm.getCursor()
-        val token = cm.getTokenAt(cur)
+        helpWidget = cmDocument.addLineWidget(0, helpWrapper, json("above" to true, "noHScroll" to true))
 
-        fun processCompletionsList(completions: List<CompletionView>) {
-            val hint = Hint(
-                    Position(cur.line, token.start),
-                    Position(cur.line, token.end),
-                    completions.toTypedArray()
-            )
-
-            callback(hint)
-        }
-
-        if (storedCompletionsList != null) {
-            val list =
-                    if ((token.string == ".") || (token.string == " ") || (token.string == "(")) {
-                        storedCompletionsList!!
-                    } else {
-                        storedCompletionsList!!.filter { it.text.startsWith(token.string) }
-                    }
-            processCompletionsList(list)
-        } else {
-            Application.completionProvider.getCompletion(
-                    Application.accordion.selectedProjectView!!.project,
-                    openedFile!!.name,
-                    cur,
-                    { completionProposals ->
-                        storedCompletionsList = completionProposals.map(::CustomizedCompletionView)
-                        processCompletionsList(storedCompletionsList!!)
-                    }
+        if (file.taskWindows.isEmpty() || file.isModified) return
+        val firstWindow = file.taskWindows.first()
+        cmDocument.setSelection(
+                Position(firstWindow.line, firstWindow.start + firstWindow.length),
+                Position(firstWindow.line, firstWindow.start)
+        )
+        for (taskWindow in file.taskWindows) {
+            cmDocument.markText(
+                    Position(taskWindow.line, taskWindow.start),
+                    Position(taskWindow.line, taskWindow.start + taskWindow.length),
+                    json(
+                            "className" to "taskWindow",
+                            "startStyle" to "taskWindow-start",
+                            "endStyle" to "taskWindow-end",
+                            "handleMouseEvents" to true
+                    )
             )
         }
+    }
+}
 
+private fun getCompletions(cm: CodeMirror, callback: (Hint) -> Unit, options: dynamic) {
+    val cur = cm.getCursor()
+    val token = cm.getTokenAt(cur)
 
+    fun processCompletionsList(completions: List<CompletionView>) {
+        val hint = Hint(
+                Position(cur.line, token.start),
+                Position(cur.line, token.end),
+                completions.toTypedArray()
+        )
+
+        callback(hint)
     }
 
-    public fun showDiagnostics(diagnostics: Map<File, Array<Diagnostic>>) {
-        removeStyles()
-        for (entry in diagnostics) {
-            val relatedDocument = documents.get(entry.getKey())!!
-            for (diagnostic in entry.getValue()) {
-                val interval = diagnostic.interval
-                val errorMessage = unEscapeString(diagnostic.message)
-                val severity = diagnostic.severity
-
-                arrayClasses.add(relatedDocument.markText(interval.start, interval.end, json(
-                        "className" to diagnostic.className,
-                        "title" to errorMessage
-                )))
-
-                if (relatedDocument.getEditor() !== codeMirror) continue
-
-                if ((codeMirror.lineInfo(interval.start.line) != null) && (codeMirror.lineInfo(interval.start.line).gutterMarkers == null)) {
-                    codeMirror.setGutterMarker(interval.start.line, "errors-and-warnings-gutter", document.create.div {
-                        classes = setOf(severity + "gutter")
-                        title = errorMessage
-                    })
+    if (storedCompletionsList != null) {
+        val list =
+                if ((token.string == ".") || (token.string == " ") || (token.string == "(")) {
+                    storedCompletionsList!!
                 } else {
-                    val gutter: HTMLElement = codeMirror.lineInfo(interval.start.line).gutterMarkers["errors-and-warnings-gutter"]
-                    gutter.title += "\n$errorMessage"
-                    if (gutter.className.indexOf("ERRORgutter") == -1) {
-                        gutter.className = severity + "gutter"
-                    }
+                    storedCompletionsList!!.filter { it.text.startsWith(token.string) }
+                }
+        processCompletionsList(list)
+    } else {
+        Application.completionProvider.getCompletion(
+                Application.accordion.selectedProjectView!!.project,
+                openedFile!!.name,
+                cur,
+                { completionProposals ->
+                    storedCompletionsList = completionProposals.map(::CustomizedCompletionView)
+                    processCompletionsList(storedCompletionsList!!)
+                }
+        )
+    }
+
+
+}
+
+public fun showDiagnostics(diagnostics: Map<File, Array<Diagnostic>>) {
+    removeStyles()
+    for (entry in diagnostics) {
+        val relatedDocument = documents.get(entry.getKey())!!
+        for (diagnostic in entry.getValue()) {
+            val interval = diagnostic.interval
+            val errorMessage = unEscapeString(diagnostic.message)
+            val severity = diagnostic.severity
+
+            arrayClasses.add(relatedDocument.markText(interval.start, interval.end, json(
+                    "className" to diagnostic.className,
+                    "title" to errorMessage
+            )))
+
+            if (relatedDocument.getEditor() !== codeMirror) continue
+
+            if ((codeMirror.lineInfo(interval.start.line) != null) && (codeMirror.lineInfo(interval.start.line).gutterMarkers == null)) {
+                codeMirror.setGutterMarker(interval.start.line, "errors-and-warnings-gutter", document.create.div {
+                    classes = setOf(severity + "gutter")
+                    title = errorMessage
+                })
+            } else {
+                val gutter: HTMLElement = codeMirror.lineInfo(interval.start.line).gutterMarkers["errors-and-warnings-gutter"]
+                gutter.title += "\n$errorMessage"
+                if (gutter.className.indexOf("ERRORgutter") == -1) {
+                    gutter.className = severity + "gutter"
                 }
             }
         }
     }
+}
 
-    fun removeStyles() {
-        arrayClasses.forEach { it.clear() }
-        codeMirror.clearGutter("errors-and-warnings-gutter")
-    }
+fun removeStyles() {
+    arrayClasses.forEach { it.clear() }
+    codeMirror.clearGutter("errors-and-warnings-gutter")
+}
 
-    private var isLoadingHighlighting = false
-    private fun getHighlighting() {
-        if (highlightOnTheFly && openedFile != null && !isLoadingHighlighting) {
-            isLoadingHighlighting = true
-            var example = Application.accordion.selectedProjectView!!.project
-            Application.highlightingProvider.getHighlighting(example, { data -> showDiagnostics(data) }, { isLoadingHighlighting = false })
-        }
+private var isLoadingHighlighting = false
+private fun getHighlighting() {
+    if (highlightOnTheFly && openedFile != null && !isLoadingHighlighting) {
+        isLoadingHighlighting = true
+        var example = Application.accordion.selectedProjectView!!.project
+        Application.highlightingProvider.getHighlighting(example, { data -> showDiagnostics(data) }, { isLoadingHighlighting = false })
     }
+}
 
-    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit) {
-        val closeFunction = codeMirror.openDialog(template, callback, options)
-        dialogCloseFunctions.add(closeFunction)
-        return closeFunction;
-    }
+fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit) {
+    val closeFunction = codeMirror.openDialog(template, callback, options)
+    dialogCloseFunctions.add(closeFunction)
+    return closeFunction;
+}
 
 
 }
