@@ -31,12 +31,12 @@ public class ExamplesFolder {
     private Map<String, Example> examples;
     private Map<String, ExamplesFolder> childFolders;
     private Boolean taskFolder;
-    private List<Integer> levels;
+    private List<LevelInfo> levels;
 
     public ExamplesFolder(String name,
                           String id,
                           Boolean taskFolder,
-                          List<Integer> levels) {
+                          List<LevelInfo> levels) {
         this.name = name;
         this.id = id;
         this.taskFolder = taskFolder;
@@ -84,7 +84,26 @@ public class ExamplesFolder {
         examples.put(example.name, example);
     }
 
-    public List<Integer> getLevels() {
+    public List<LevelInfo> getLevels() {
         return levels;
     }
 }
+
+class LevelInfo {
+    private int projectsNeeded;
+    private String color;
+
+    LevelInfo(int projectsNeeded, String color) {
+        this.projectsNeeded = projectsNeeded;
+        this.color = color;
+    }
+
+    public int getProjectsNeeded() {
+        return projectsNeeded;
+    }
+
+    public String getColor() {
+        return color;
+    }
+}
+

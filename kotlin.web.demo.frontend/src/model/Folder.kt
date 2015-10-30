@@ -25,12 +25,14 @@ open class Folder(
         val projects: List<ProjectHeader>,
         val childFolders: List<Folder>,
         val isTaskFolder: Boolean,
-        val levels: List<Int> = emptyList()
-){
+        val levels: List<LevelInfo> = emptyList()
+) {
     var parent: Folder? = null
-        private  set
+        private set
 
-    init{
+    init {
         childFolders.forEach { it.parent = this }
     }
 }
+
+class LevelInfo(val projectsNeeded: Int, val color: String)

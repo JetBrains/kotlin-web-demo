@@ -17,6 +17,7 @@
 package providers
 
 import model.Folder
+import model.LevelInfo
 import model.ProjectType
 import utils.blockContent
 import utils.unBlockContent
@@ -43,7 +44,7 @@ class HeadersProvider(
             }
         }
         val childFolders = content.childFolders.map {  createFolder(it, type) }
-        val levels = content.levels?.asList() ?: emptyList<Int>()
+        val levels = content.levels?.asList() ?: emptyList<LevelInfo>()
         val folder = Folder(content.name, content.id, projects, childFolders, content.isTaskFolder, levels)
         return folder
     }
@@ -146,7 +147,7 @@ interface FolderContent {
     val projects: Array<ProjectInfo>
     val childFolders: Array<FolderContent>
     val isTaskFolder: Boolean
-    val levels: Array<Int>?
+    val levels: Array<LevelInfo>?
 }
 
 @native

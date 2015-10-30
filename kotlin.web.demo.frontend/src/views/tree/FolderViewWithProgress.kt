@@ -17,12 +17,14 @@
 package views.tree
 
 import application.Application
+import kotlinx.html.colorInput
 import kotlinx.html.div
 import kotlinx.html.dom.append
 import kotlinx.html.dom.create
 import kotlinx.html.js.div
 import kotlinx.html.js.img
 import model.Folder
+import model.LevelInfo
 import model.Project
 import model.Task
 import org.w3c.dom.HTMLDivElement
@@ -205,7 +207,7 @@ class ProgressBar(
         val projectsNumber: Int,
         val onLevelCompleted: (Int) -> Unit,
         completedProjectsNumber: Int,
-        levels: List<Int>) {
+        levels: List<LevelInfo>) {
     val emptyFill = element.append.div {
         classes = setOf("empty-fill")
     }
@@ -215,18 +217,21 @@ class ProgressBar(
         updateElements(completedProjectsNumber)
     }
 
-    private fun initializeLevels(levels: List<Int>): List<LevelMark> {
-        return levels.mapIndexed { ind: Int, it: Int ->
-            val mark = element.append.div {
+    private fun initializeLevels(levels: List<LevelInfo>): List<LevelMark> {
+        return levels.mapIndexed { ind: Int, it: LevelInfo ->
+            val markContainer = element.append.div {
                 classes = setOf("level-mark-container")
-                div {
-                    classes = setOf("level-mark")
-                }
             }
-            mark.style.position = "absolute"
-            mark.style.left = (it.toFloat() * 100f / projectsNumber).toString() + "%"
-            mark.title = it.toString() + "/" + projectsNumber
-            LevelMark(ind + 1, it, mark)
+            markContainer.style.position = "absolute"
+            markContainer.style.left = (it.projectsNeeded.toFloat() * 100f / projectsNumber).toString() + "%"
+            markContainer.title = it.toString() + "/" + projectsNumber
+
+            val mark = markContainer.append.div {
+                classes = setOf("level-mark")
+            }
+
+            mark.style.backgroundColor = it.color
+            LevelMark(ind + 1, it.projectsNeeded, mark)
         }
     }
 

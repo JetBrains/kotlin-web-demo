@@ -1,6 +1,27 @@
 {
   "taskFolder": true,
-  "levels": [8, 16, 24, 32, 40],
+  "levels": [
+    {
+      "projectsNeeded": 8,
+      "color": "blue"
+    },
+    {
+      "projectsNeeded": 16,
+      "color": "blue"
+    },
+    {
+      "projectsNeeded": 24,
+      "color": "blue"
+    },
+    {
+      "projectsNeeded": 32,
+      "color": "blue"
+    },
+    {
+      "projectsNeeded": 40,
+      "color": "blue"
+    }
+  ],
   "folders": [
     "Introduction",
     "Collections",

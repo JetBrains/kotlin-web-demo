@@ -53,11 +53,11 @@ public class ExamplesLoader {
             commonFiles.addAll(parentCommonFiles);
             boolean taskFolder = manifest.has("taskFolder") ? manifest.get("taskFolder").asBoolean() : false;
 
-            List<Integer> levels = null;
+            List<LevelInfo> levels = null;
             if(manifest.has("levels")){
                 levels = new ArrayList<>();
                 for (JsonNode level : manifest.get("levels")){
-                    levels.add(level.asInt());
+                    levels.add(new LevelInfo(level.get("projectsNeeded").asInt(), level.get("color").asText()));
                 }
             }
 
