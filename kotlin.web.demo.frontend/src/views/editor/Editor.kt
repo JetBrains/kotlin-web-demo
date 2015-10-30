@@ -270,17 +270,19 @@ public class Editor(
         if (file.solutions != null && file.solutions.isNotEmpty()) {
             val answerButton = buttonSet.append.div {
                 classes = setOf("button")
-                div {
-                    classes = setOf("text")
-                    + "Show answer"
-                }
+            }
+            val answerButtonText = answerButton.append.div {
+                classes = setOf("text")
+                + "Show answer"
             }
             answerButton.style.transform = "rotate(180deg)"
+            answerButtonText.style.top = "3px"
 
             var answerHidden = true
             answerButton.onclick = {
                 answerHidden = !answerHidden
-                answerButton.textContent = "${if (answerHidden) "Show" else "Hide"} answer"
+                answerButtonText.textContent = "${if (answerHidden) "Show" else "Hide"} answer"
+                answerButtonText.style.top = if (answerHidden) "3px" else ""
                 answerButton.style.transform = if (answerHidden) "rotate(180deg)" else ""
                 jq(".task-answer").toggle()
                 helpWidget?.changed()

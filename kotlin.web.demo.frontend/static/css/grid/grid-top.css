@@ -300,6 +300,8 @@
 
 .task-help .buttonset .button {
     margin-right: 5px;
+    width: 75px;
+    text-align: center;
 }
 
 .task-help-wrapper {
