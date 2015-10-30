@@ -42,19 +42,19 @@ public class JavaRunner {
     private final BindingContext bindingContext;
     private final List<OutputFile> files;
     private final ArrayNode jsonArray;
-    private final KtFile currentFile;
+    private final List<KtFile> ktFiles;
     private final BackendSessionInfo sessionInfo;
     int returnValue = 0;
     private String arguments;
     private volatile boolean isTimeoutException = false;
     private volatile boolean outputIsTooLong = false;
 
-    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, KtFile currentFile, BackendSessionInfo info) {
+    public JavaRunner(BindingContext bindingContext, List<OutputFile> files, String arguments, ArrayNode array, List<KtFile> ktFiles, BackendSessionInfo info) {
         this.bindingContext = bindingContext;
         this.files = files;
         this.arguments = arguments;
         this.jsonArray = array;
-        this.currentFile = currentFile;
+        this.ktFiles = ktFiles;
         this.sessionInfo = info;
     }
 
@@ -107,7 +107,7 @@ public class JavaRunner {
                         //Stream closes after timeout, and stdOut.readLine can produce "Stream closed exception"
                         if(!isTimeoutException) {
                             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                                    sessionInfo.getType(), sessionInfo.getOriginUrl(), "");
                         }
                     }
                 }
@@ -127,7 +127,7 @@ public class JavaRunner {
                     } catch (Throwable e) {
                         if(!isTimeoutException) {
                             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                                    sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                                    sessionInfo.getType(), sessionInfo.getOriginUrl(), "");
                         }
                     }
                 }
@@ -141,7 +141,7 @@ public class JavaRunner {
                 exitValue = process.waitFor();
             } catch (InterruptedException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                        sessionInfo.getType(), sessionInfo.getOriginUrl(), "");
                 return ResponseUtils.getErrorInJson("Impossible to run your program: InterruptedException handled.");
             } finally {
                 try {
@@ -149,7 +149,7 @@ public class JavaRunner {
                     stdErr.close();
                 } catch (IOException e) {
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                            sessionInfo.getType(), sessionInfo.getOriginUrl(), "");
                     //noinspection ReturnInsideFinallyBlock
                     return ResponseUtils.getErrorInJson("Couldn't close output stream after executing code");
                 }
@@ -170,7 +170,7 @@ public class JavaRunner {
                     errStream.append(BackendSettings.KOTLIN_ERROR_MESSAGE);
                     String linkForLog = getLinkForLog(outStream.toString());
                     ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer("An error report in JVM", outStream.toString().replace("<br/>", "\n") + "\n" + errStream.toString().replace("<br/>", "\n") + "\n" + linkForLog,
-                            sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                            sessionInfo.getType(), sessionInfo.getOriginUrl(), "");
                 } else if (!isTimeoutException) {
                     if (outputIsTooLong) {
                         throw new Exception("Your program produces too much output.");
@@ -245,7 +245,7 @@ public class JavaRunner {
                 }
             } catch (IOException e) {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                        sessionInfo.getType(), sessionInfo.getOriginUrl(), "");
             }
         }
         return "";
@@ -260,7 +260,7 @@ public class JavaRunner {
             stackTrace = errStream.substring(pos).replaceAll("<br/>", "\n");
         }
         ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(message, stackTrace,
-                sessionInfo.getType(), sessionInfo.getOriginUrl(), currentFile.getText());
+                sessionInfo.getType(), sessionInfo.getOriginUrl(), "");
     }
 
     private boolean isKotlinLibraryException(String str) {
@@ -374,8 +374,10 @@ public class JavaRunner {
     }
 
     private String findMainClass() {
-        if (new MainFunctionDetector(bindingContext).hasMain(currentFile.getDeclarations())) {
-            return NoResolveFileClassesProvider.INSTANCE.getFileClassInfo(currentFile).getFileClassFqName().asString();
+        for(KtFile file : ktFiles) {
+            if (new MainFunctionDetector(bindingContext).hasMain(file.getDeclarations())) {
+                return NoResolveFileClassesProvider.INSTANCE.getFileClassInfo(file).getFileClassFqName().asString();
+            }
         }
         return PackageClassUtils.getPackageClassFqName(FqName.ROOT).asString();
     }

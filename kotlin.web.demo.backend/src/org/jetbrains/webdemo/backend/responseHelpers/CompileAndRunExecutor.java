@@ -45,7 +45,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeoutException;
 
 public class CompileAndRunExecutor {
 
@@ -134,7 +133,7 @@ public class CompileAndRunExecutor {
             jsonObject.put("text", stringBuilder.toString());
 
 
-            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, args, jsonArray, (KtFile) currentPsiFiles.get(0), sessionInfo);
+            JavaRunner runner = new JavaRunner(generationState.getBindingContext(), files, args, jsonArray, convertList(currentPsiFiles), sessionInfo);
 
             runner.getResult(outputDir.getAbsolutePath());
         }

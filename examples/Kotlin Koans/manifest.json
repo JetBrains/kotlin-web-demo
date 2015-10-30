@@ -3,23 +3,23 @@
   "levels": [
     {
       "projectsNeeded": 8,
-      "color": "blue"
+      "color": "#409BCB"
     },
     {
       "projectsNeeded": 16,
-      "color": "blue"
+      "color": "#6A855B"
     },
     {
       "projectsNeeded": 24,
-      "color": "blue"
+      "color": "#FDC474"
     },
     {
       "projectsNeeded": 32,
-      "color": "blue"
+      "color": "#C9783A"
     },
     {
       "projectsNeeded": 40,
-      "color": "blue"
+      "color": "#9976A9"
     }
   ],
   "folders": [

@@ -211,6 +211,7 @@ class ProgressBar(
         classes = setOf("empty-fill")
     }
     val levelMarks: List<LevelMark> = initializeLevels(levels)
+    private val levels = levels
 
     init {
         updateElements(completedProjectsNumber)
@@ -230,7 +231,7 @@ class ProgressBar(
             }
 
             mark.style.backgroundColor = it.color
-            LevelMark(ind + 1, it.projectsNeeded, mark)
+            LevelMark(ind + 1, it, mark)
         }
     }
 
@@ -239,19 +240,21 @@ class ProgressBar(
         emptyFill.style.width = incompletePercent.toString() + "%"
         counterElement.textContent = completedProjectsNumber.toString() + "/" + projectsNumber
         levelMarks.forEach {
-            if (it.neededNumberOfProjects > completedProjectsNumber) it.show() else it.hide()
+            if (it.levelInfo.projectsNeeded > completedProjectsNumber) it.show() else it.hide()
         }
+        val currentLevel = levels.lastOrNull { it.projectsNeeded > completedProjectsNumber  } ?: levels.last()
+        element.style.backgroundColor = currentLevel.color
     }
 
     fun updateProgress(completedProjectsNumber: Int) {
         updateElements(completedProjectsNumber)
         levelMarks.forEach {
-            if (it.neededNumberOfProjects == completedProjectsNumber) onLevelCompleted(it.level)
+            if (it.levelInfo.projectsNeeded == completedProjectsNumber) onLevelCompleted(it.level)
         }
     }
 }
 
-class LevelMark(val level: Int, val neededNumberOfProjects: Int, val element: HTMLElement) {
+class LevelMark(val level: Int, val levelInfo: LevelInfo, val element: HTMLElement) {
     fun hide() {
         element.style.display = "none"
     }
