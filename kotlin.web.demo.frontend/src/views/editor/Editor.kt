@@ -91,7 +91,7 @@ public class Editor(
         codeMirror.on("mousedown", { instance: CodeMirror, event: MouseEvent ->
             val position = instance.coordsChar(Coordinates(event.pageX, event.pageY))
 
-            //Hack to ignore widget clicksk
+            //Hack to ignore widget clicks
             if (position.line != 0 || position.ch != 0) {
                 val markers = instance.findMarksAt(position)
 
@@ -99,6 +99,7 @@ public class Editor(
                 if (todoMarker != null) {
                     val range = todoMarker.find()
                     instance.setSelection(range.from, range.to)
+                    instance.focus()
                     event.preventDefault()
                 }
             }
