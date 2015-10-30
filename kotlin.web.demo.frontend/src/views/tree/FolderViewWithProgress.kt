@@ -242,7 +242,7 @@ class ProgressBar(
         levelMarks.forEach {
             if (it.levelInfo.projectsNeeded > completedProjectsNumber) it.show() else it.hide()
         }
-        val currentLevel = levels.lastOrNull { it.projectsNeeded > completedProjectsNumber  } ?: levels.last()
+        val currentLevel = levels.firstOrNull { it.projectsNeeded > completedProjectsNumber  } ?: levels.last()
         element.style.backgroundColor = currentLevel.color
     }
 
