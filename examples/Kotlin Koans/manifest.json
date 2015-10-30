@@ -1,5 +1,6 @@
 {
   "taskFolder": true,
+  "levels": [8, 16, 24, 32, 40],
   "folders": [
     "Introduction",
     "Collections",

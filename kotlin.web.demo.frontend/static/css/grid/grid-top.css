@@ -92,6 +92,19 @@
     display: none;
 }
 
+#progress-bar {
+    background-color: #35B056;
+    height: 10px;
+}
+
+#progress-bar .incomplete-overlay{
+    position: absolute;
+    background: white;
+    opacity: 0.5;
+    right: 0;
+    height: 10px;
+}
+
 #workspace {
     flex-grow: 1;
     display: -webkit-box;

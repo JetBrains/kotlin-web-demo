@@ -465,6 +465,7 @@ public class MyHttpSession {
         ObjectNode folderContent = arrayNode.addObject();
         folderContent.put("name", folder.getName());
         folderContent.put("id", folder.getId());
+        if(folder.isTaskFolder()) folderContent.put("levels", objectMapper.valueToTree(folder.getLevels()));
         folderContent.put("isTaskFolder", folder.isTaskFolder());
         ArrayNode exampleHeaders = folderContent.putArray("projects");
         for (Project example : folder.getExamples()) {

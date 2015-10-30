@@ -401,6 +401,8 @@ object Application {
         editor.focus()
     }
 
+//    val progress = Progress(Elements.progressBar)
+
     val configurationManager = ConfigurationManager({ configuration ->
         accordion.selectedProjectView!!.project.confType = configuration.type.name.toLowerCase()
         editor.removeStyles()

@@ -43,7 +43,8 @@ class HeadersProvider(
             }
         }
         val childFolders = content.childFolders.map {  createFolder(it, type) }
-        val folder = Folder(content.name, content.id, projects, childFolders, content.isTaskFolder)
+        val levels = content.levels?.asList() ?: emptyList<Int>()
+        val folder = Folder(content.name, content.id, projects, childFolders, content.isTaskFolder, levels)
         return folder
     }
 
@@ -145,6 +146,7 @@ interface FolderContent {
     val projects: Array<ProjectInfo>
     val childFolders: Array<FolderContent>
     val isTaskFolder: Boolean
+    val levels: Array<Int>?
 }
 
 @native

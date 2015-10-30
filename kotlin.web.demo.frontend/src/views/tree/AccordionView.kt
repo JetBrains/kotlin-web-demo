@@ -96,7 +96,7 @@ class AccordionView(
         selectedProjectView = null
         selectedFileView = null
         Application.headersProvider.getAllHeaders { folders ->
-            childFolders = folders.map <dynamic, FolderView> { folder ->
+            childFolders = folders.map { folder ->
                 if (folder.name == "My programs") {
                     myProgramsFolder = MyProgramsFolderView(
                             parentNode = element,

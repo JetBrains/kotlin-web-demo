@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import org.jetbrains.webdemo.ApplicationSettings;
@@ -34,10 +35,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ExamplesLoader {
 
@@ -54,9 +52,17 @@ public class ExamplesLoader {
             List<ObjectNode> commonFiles = new ArrayList<>();
             commonFiles.addAll(parentCommonFiles);
             boolean taskFolder = manifest.has("taskFolder") ? manifest.get("taskFolder").asBoolean() : false;
-            if (parentFolder != null && parentFolder.isTaskFolder()) taskFolder = true;
 
-            ExamplesFolder folder = new ExamplesFolder(name, url, taskFolder);
+            List<Integer> levels = null;
+            if(manifest.has("levels")){
+                levels = new ArrayList<>();
+                for (JsonNode level : manifest.get("levels")){
+                    levels.add(level.asInt());
+                }
+            }
+
+            if (parentFolder != null && parentFolder.isTaskFolder()) taskFolder = true;
+            ExamplesFolder folder = new ExamplesFolder(name, url, taskFolder, levels);
             if (manifest.has("files")) {
                 for (JsonNode node : manifest.get("files")) {
                     ObjectNode fileManifest = (ObjectNode) node;

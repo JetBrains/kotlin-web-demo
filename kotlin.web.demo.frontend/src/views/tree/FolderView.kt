@@ -48,7 +48,11 @@ open class FolderView(parentNode: HTMLElement,
         id = content.id
     }
 
-    protected val folderNameElement: HTMLDivElement = headerElement.append.div {
+    val container = headerElement.append.div{
+        classes = setOf("container")
+    }
+
+    protected val folderNameElement: HTMLDivElement = container.append.div {
         + content.name
         classes = setOf("text")
     }

@@ -34,7 +34,6 @@ import kotlin.dom.onClick
 internal object Elements{
     val argumentsInputElement = document.getElementById("arguments") as HTMLInputElement
     val shortcutsButton = document.getElementById("shortcuts-button") as HTMLElement
-    val askButton = document.getElementById("ask-button") as HTMLElement
     val onTheFlyCheckbox = document.getElementById("on-the-fly-checkbox") as HTMLInputElement
     val saveAsButton = document.getElementById("saveAsButton") as HTMLElement
     val runMode = document.getElementById("runMode") as HTMLElement
