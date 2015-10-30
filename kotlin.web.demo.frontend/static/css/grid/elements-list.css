@@ -368,6 +368,7 @@
     height: 4px;
     top: 0;
     left: 0;
+    margin-top: 4px;
     background: #19bf44;
     position: relative;
 }

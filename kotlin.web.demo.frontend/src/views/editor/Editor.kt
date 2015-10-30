@@ -90,13 +90,17 @@ public class Editor(
 
         codeMirror.on("mousedown", { instance: CodeMirror, event: MouseEvent ->
             val position = instance.coordsChar(Coordinates(event.pageX, event.pageY))
-            val markers = instance.findMarksAt(position)
 
-            val todoMarker = markers.firstOrNull { it.className == "taskWindow" }
-            if (todoMarker != null) {
-                val range = todoMarker.find()
-                instance.setSelection(range.from, range.to)
-                event.preventDefault()
+            //Hack to ignore widget clicksk
+            if(position.line != 0 || position.ch != 0) {
+                val markers = instance.findMarksAt(position)
+
+                val todoMarker = markers.firstOrNull { it.className == "taskWindow" }
+                if (todoMarker != null) {
+                    val range = todoMarker.find()
+                    instance.setSelection(range.from, range.to)
+                    event.preventDefault()
+                }
             }
         })
 
