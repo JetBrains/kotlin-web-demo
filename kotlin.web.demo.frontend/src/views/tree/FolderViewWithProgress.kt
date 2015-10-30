@@ -46,7 +46,6 @@ class FolderViewWithProgress(parentNode: HTMLElement,
                              onProjectCreated: (ProjectView) -> Unit) :
         FolderView(parentNode, content, parent, onProjectDeleted, onProjectHeaderClick, onProjectSelected, onProjectCreated) {
     val id: String = content.id
-    val counter = document.createElement("div") as HTMLDivElement
     var progressBar: ProgressBar? = null
 
     var radialProgressBar = document.create.div("radial-progressbar")
@@ -54,11 +53,11 @@ class FolderViewWithProgress(parentNode: HTMLElement,
     init {
         contentElement.addClass("progress-folder-content")
         if (hasProgressBar) {
+            val counter = container.append.div { classes = setOf("counter") }
             val element = container.append.div { classes = setOf("progressbar") }
-            container.appendChild(counter)
-            counter.className = "counter"
             progressBar = ProgressBar(
                     element = element,
+                    counterElement = counter,
                     projectsNumber = getNumberOfProjects(),
                     levels = content.levels,
                     completedProjectsNumber = getNumberOfCompletedProjects(),
@@ -194,7 +193,6 @@ class FolderViewWithProgress(parentNode: HTMLElement,
     private fun updateProgress() {
         val numberOfCompletedProjects = getNumberOfCompletedProjects()
         val totalNumberOfProjects = getNumberOfProjects()
-        counter.textContent = getNumberOfCompletedProjects().toString() + "/" + getNumberOfProjects()
         val value = numberOfCompletedProjects.toFloat() / totalNumberOfProjects
         progressBar?.updateProgress(numberOfCompletedProjects)
         jq(radialProgressBar).circleProgress(json("value" to value));
@@ -204,6 +202,7 @@ class FolderViewWithProgress(parentNode: HTMLElement,
 
 class ProgressBar(
         val element: HTMLElement,
+        val counterElement: HTMLElement,
         val projectsNumber: Int,
         val onLevelCompleted: (Int) -> Unit,
         completedProjectsNumber: Int,
@@ -224,7 +223,7 @@ class ProgressBar(
             }
             markContainer.style.position = "absolute"
             markContainer.style.left = (it.projectsNeeded.toFloat() * 100f / projectsNumber).toString() + "%"
-            markContainer.title = it.toString() + "/" + projectsNumber
+            markContainer.title = it.projectsNeeded.toString() + "/" + projectsNumber
 
             val mark = markContainer.append.div {
                 classes = setOf("level-mark")
@@ -238,6 +237,7 @@ class ProgressBar(
     private fun updateElements(completedProjectsNumber: Int){
         val incompletePercent = ( 1f - completedProjectsNumber.toFloat() / projectsNumber) * 100
         emptyFill.style.width = incompletePercent.toString() + "%"
+        counterElement.textContent = completedProjectsNumber.toString() + "/" + projectsNumber
         levelMarks.forEach {
             if (it.neededNumberOfProjects > completedProjectsNumber) it.show() else it.hide()
         }
