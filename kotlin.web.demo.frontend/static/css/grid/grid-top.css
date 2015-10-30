@@ -285,59 +285,67 @@
     height: auto !important;
 }
 
-.taskHelp {
+.task-help {
     background-color: white;
     padding-top: 5px;
     padding-left: 15px;
     padding-right: 15px;
     font-family: 'Open Sans';
     border-bottom: 1px solid #969696;
+    margin-bottom: 4px;
 }
 
-.taskHelp {
+.task-help .buttonset {
+    padding-bottom: 10px;
+}
+
+.task-help .buttonset button {
+    margin-right: 5px;
+}
+
+.task-help-wrapper {
+    padding-bottom: 4px;
+}
+
+.task-help {
     font-size: 14px;
 }
 
-.taskHelp ul {
+.task-help ul {
     line-height: 24px;
 }
 
-.taskHelp ul {
+.task-help ul {
     margin-bottom: 15px;
     margin-left: 30px;
 }
 
-.taskHelp h2 {
+.task-help h2 {
     font-size: 24px;
     margin-bottom: 15px;
 }
 
-.taskHelp p {
+.task-help p {
     margin-bottom: 10px;
 }
 
-.taskHelp code{
+.task-help code{
     font-family: "Consolas", monospace;
 }
 
-.taskHelp p > code {
+.task-help p > code {
     background-color: #efefef;
     border-radius: 4px;
     padding: 2px;
 }
 
-.taskHelp pre code {
+.task-help pre code {
     background-color: #f7f7f7;
     white-space: pre-wrap;
     margin-bottom: 10px;
     padding: 5px 25px 5px 15px;
     display: inline-block;
     margin-right: 21px;
-}
-
-.taskHelp button {
-    margin-bottom: 5px;
-    margin-right: 5px;
 }
 
 .taskWindow {

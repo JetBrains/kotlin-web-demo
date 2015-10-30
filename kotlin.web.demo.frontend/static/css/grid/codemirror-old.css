@@ -39,7 +39,7 @@
 }
 
 .cm-s-default span.cm-def {
-    color: #00f;
+    color: black;
 }
 
 .cm-s-default span.cm-variable {
@@ -51,7 +51,7 @@
 }
 
 .cm-s-default span.cm-variable-3 {
-    color: #0a5;
+    color: black;
 }
 
 .cm-s-default span.cm-property {

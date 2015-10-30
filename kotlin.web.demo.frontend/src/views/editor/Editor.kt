@@ -92,7 +92,7 @@ public class Editor(
             val position = instance.coordsChar(Coordinates(event.pageX, event.pageY))
 
             //Hack to ignore widget clicksk
-            if(position.line != 0 || position.ch != 0) {
+            if (position.line != 0 || position.ch != 0) {
                 val markers = instance.findMarksAt(position)
 
                 val todoMarker = markers.firstOrNull { it.className == "taskWindow" }
@@ -105,7 +105,7 @@ public class Editor(
         })
 
         codeMirror.on("keydown", { instance: CodeMirror, event: KeyboardEvent ->
-            when(event.keyCode) {
+            when (event.keyCode) {
                 KeyCode.ENTER.code -> {
                     instance.findMarksAt(instance.getCursor()).firstOrNull { it.className == "taskWindow" }?.clear()
                 }
@@ -231,13 +231,15 @@ public class Editor(
 
 
             if (!(file.project is Task && file.name == "Task.kt")) return
-            val help = document.create.div("taskHelp")
+            val helpWrapper = document.create.div("task-help-wrapper")
+            val help = helpWrapper.append.div { classes = setOf("task-help") }
             val helpContent = JQuery.parseHTML(file.project.help)
             helpContent?.forEach { help.appendChild(it) }
             jq(help).find("a").attr("target", "_blank")
 
-            help.append.button {
-                + "Check"
+            val buttonSet = help.append.div {classes = setOf("buttonset")}
+            buttonSet.append.button {
+                +"Check"
                 onClickFunction = {
                     Application.runProvider.run(
                             Application.configurationManager.getConfiguration(),
@@ -246,26 +248,28 @@ public class Editor(
                 }
             }
 
-            help.append.button {
-                + "Revert"
+            buttonSet.append.button {
+                +"Revert"
                 onClickFunction = {
                     file.project.loadOriginal()
                 }
             }
 
-            if(file.solutions != null && file.solutions.isNotEmpty()) {
+            if (file.solutions != null && file.solutions.isNotEmpty()) {
                 val answerButton = document.createElement("button") as HTMLButtonElement
                 answerButton.type = "button"
                 answerButton.textContent = "Show answer"
+                answerButton.style.transform = "rotate(180deg)"
 
                 var answerHidden = true
                 answerButton.onclick = {
                     answerHidden = !answerHidden
                     answerButton.textContent = "${if (answerHidden) "Show" else "Hide"} answer"
+                    answerButton.style.transform = if (answerHidden) "rotate(180deg)" else ""
                     jq(".task-answer").toggle()
                     helpWidget?.changed()
                 }
-                help.appendChild(answerButton)
+                buttonSet.appendChild(answerButton)
 
 
                 file.solutions.forEach {
@@ -282,7 +286,7 @@ public class Editor(
             }
             CodeMirror.colorize(help.getElementsByTagName("code"))
 
-            helpWidget = cmDocument.addLineWidget(0, help, json("above" to true, "noHScroll" to true))
+            helpWidget = cmDocument.addLineWidget(0, helpWrapper, json("above" to true, "noHScroll" to true))
 
             if (file.taskWindows.isEmpty() || file.isModified) return
             val firstWindow = file.taskWindows.first()
