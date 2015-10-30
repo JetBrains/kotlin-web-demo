@@ -1,6 +1,6 @@
 import java.util.HashMap
 
-<answer>fun buildMap<K, V>(build: HashMap<K, V>.() -> Unit): Map<K, V> {
+<answer>fun <K, V> buildMap(build: HashMap<K, V>.() -> Unit): Map<K, V> {
     val map = HashMap<K, V>()
     map.build()
     return map

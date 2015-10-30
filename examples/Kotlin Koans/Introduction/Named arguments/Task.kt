@@ -1,1 +1,1 @@
-fun joinOptions(options: Collection<String>) = options.join(<taskWindow>TODO()</taskWindow>)
+fun joinOptions(options: Collection<String>) = options.joinToString(<taskWindow>TODO()</taskWindow>)

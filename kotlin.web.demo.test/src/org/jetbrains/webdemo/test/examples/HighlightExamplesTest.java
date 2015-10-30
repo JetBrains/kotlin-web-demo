@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.intellij.concurrency.Job;
 import com.intellij.psi.PsiFile;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -32,10 +33,7 @@ import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.test.BaseTest;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class HighlightExamplesTest extends BaseTest {
 
@@ -92,10 +90,12 @@ public class HighlightExamplesTest extends BaseTest {
         JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, getProject());
         ObjectNode actualResult = (ObjectNode) new ObjectMapper().readTree(responseForHighlighting.getResult());
 
+        Iterator<String> fileNames = actualResult.fieldNames();
         Iterator<JsonNode> fields = actualResult.elements();
-        while (fields.hasNext()) {
-            ArrayNode errors = (ArrayNode) fields.next();
-            assertEquals(getErrorsMessages(errors), errors.size(), 0);
+        while (fileNames.hasNext()) {
+            String fileName = fileNames.next();
+            ArrayNode errors = (ArrayNode) actualResult.get(fileName);
+            assertEquals(getErrorsMessages(fileName, errors), errors.size(), 0);
         }
 
         if (jsExamples.contains(project.name)) {
@@ -104,12 +104,19 @@ public class HighlightExamplesTest extends BaseTest {
 //        assertEquals("Wrong result for example " + file.getName() + " run configuration: " + runConfiguration, expectedResult, actualResult);
     }
 
-    private String getErrorsMessages(ArrayNode errors) {
+    private String getErrorsMessages(String fileName, ArrayNode errors) {
         StringBuilder answer = new StringBuilder();
         for (JsonNode error : errors) {
+
             JsonNode errorStart = error.get("interval").get("start");
-            answer.append('\n').append(errorStart.get("line").asInt()).append(':').append(errorStart.get("ch").asInt()).append(' ')
-                    .append(error.get("message").asText()).append('\n');
+            answer.append('\n')
+                    .append(fileName)
+                    .append(' ')
+                    .append(errorStart.get("line").asInt())
+                    .append(':')
+                    .append(errorStart.get("ch").asInt())
+                    .append(' ')
+                    .append(error.get("message").asText());
         }
         return answer.toString();
     }
