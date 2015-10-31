@@ -58,7 +58,7 @@
     margin: 0;
     padding: 6px 0 6px 6px;
     font-size: 14px;
-    line-height: 1;
+    line-height: 1.2;
 }
 
 #examples-list .ui-accordion-header .container{
@@ -180,7 +180,6 @@
     display: inline-block;
     position: relative;
     font-size: 14px;
-    bottom: 2px;
     color: #3164a0;
 }
 
