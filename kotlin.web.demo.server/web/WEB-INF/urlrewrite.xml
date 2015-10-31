@@ -1,0 +1,6 @@
+<urlrewrite>
+    <rule>
+        <from>/koans</from>
+        <to type="permanent-redirect">/#/Kotlin%20Koans/Introduction/Hello,%20world!/Task.kt</to>
+    </rule>
+</urlrewrite>
