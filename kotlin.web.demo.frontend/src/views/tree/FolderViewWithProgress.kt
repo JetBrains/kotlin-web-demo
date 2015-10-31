@@ -219,7 +219,7 @@ class ProgressBar(
         set(value: Int) {
             if(value > field){
                 levelMarks.forEach {
-                    if (it.levelInfo.projectsNeeded == completedProjectsNumber) onLevelCompleted(it.level)
+                    if (it.levelInfo.projectsNeeded == value) onLevelCompleted(it.level)
                 }
             }
             field = value
