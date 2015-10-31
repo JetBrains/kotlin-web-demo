@@ -120,7 +120,9 @@ class FolderViewWithProgress(parentNode: HTMLElement,
                     }
                 }
         )
-        close.onclick = { Event -> dialogCloseFun?.invoke() }
+        close.onclick = {
+            Event -> dialogCloseFun?.invoke()
+        }
     }
 
     private fun getNextFolder(folderViewWithProgress: FolderViewWithProgress): FolderViewWithProgress? {
@@ -195,7 +197,7 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         val numberOfCompletedProjects = getNumberOfCompletedProjects()
         val totalNumberOfProjects = getNumberOfProjects()
         val value = numberOfCompletedProjects.toFloat() / totalNumberOfProjects
-        progressBar?.updateProgress(numberOfCompletedProjects)
+        if(progressBar != null) progressBar!!.completedProjectsNumber = numberOfCompletedProjects
         jq(radialProgressBar).circleProgress(json("value" to value));
     }
 
@@ -212,10 +214,22 @@ class ProgressBar(
         classes = setOf("empty-fill")
     }
     val levelMarks: List<LevelMark> = initializeLevels(levels)
+
+    var completedProjectsNumber = completedProjectsNumber
+        set(value: Int) {
+            if(value > field){
+                levelMarks.forEach {
+                    if (it.levelInfo.projectsNeeded == completedProjectsNumber) onLevelCompleted(it.level)
+                }
+            }
+            field = value
+            updateElements()
+        }
+
     private val levels = levels
 
     init {
-        updateElements(completedProjectsNumber)
+        updateElements()
     }
 
     private fun initializeLevels(levels: List<LevelInfo>): List<LevelMark> {
@@ -236,7 +250,7 @@ class ProgressBar(
         }
     }
 
-    private fun updateElements(completedProjectsNumber: Int){
+    private fun updateElements(){
         val incompletePercent = ( 1f - completedProjectsNumber.toFloat() / projectsNumber) * 100
         emptyFill.style.width = incompletePercent.toString() + "%"
         counterElement.textContent = completedProjectsNumber.toString() + "/" + projectsNumber
@@ -246,13 +260,6 @@ class ProgressBar(
         }
         val currentLevel = levels.firstOrNull { it.projectsNeeded > completedProjectsNumber  } ?: levels.last()
         element.style.backgroundColor = currentLevel.color
-    }
-
-    fun updateProgress(completedProjectsNumber: Int) {
-        updateElements(completedProjectsNumber)
-        levelMarks.forEach {
-            if (it.levelInfo.projectsNeeded == completedProjectsNumber) onLevelCompleted(it.level)
-        }
     }
 }
 

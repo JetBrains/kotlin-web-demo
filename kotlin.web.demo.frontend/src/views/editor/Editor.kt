@@ -191,7 +191,6 @@ public class Editor(
             codeMirror.focus()
             codeMirror.swapDoc(relatedDocument)
             helpWidget = codeMirror.getLineHandle(0).widgets?.getOrNull(0)
-            dialogCloseFunctions.clear()
             codeMirror.refresh()
             Application.accordion.onModifiedSelectedFile(file)
         } else {
@@ -203,6 +202,7 @@ public class Editor(
         for (closeFunction in dialogCloseFunctions) {
             closeFunction()
         }
+        dialogCloseFunctions.clear()
         codeMirror.swapDoc(CodeMirror.Doc(""))
         openedFile = null
         removeStyles()
@@ -410,8 +410,17 @@ private fun getHighlighting() {
 
 fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit) {
     val closeFunction = codeMirror.openDialog(template, callback, options)
-    dialogCloseFunctions.add(closeFunction)
-    return closeFunction;
+
+    var closed = false
+    val safeCloseFunction = {
+        if(!closed) {
+            closeFunction()
+            closed = true
+        }
+    }
+
+    dialogCloseFunctions.add(safeCloseFunction)
+    return safeCloseFunction;
 }
 
 
