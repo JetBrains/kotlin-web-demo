@@ -5,5 +5,5 @@ class DateRange(override val start: MyDate, override val end: MyDate): Range<MyD
 }
 
 fun checkInRange(date: MyDate, first: MyDate, last: MyDate): Boolean {
-    return date in DateRange(first, last)
+    return date in first..last
 }
