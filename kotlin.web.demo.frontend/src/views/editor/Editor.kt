@@ -243,7 +243,7 @@ public class Editor(
 
             val buttonSet = help.append.div { classes = setOf("buttonset") }
             buttonSet.append.div {
-                classes = setOf("button")
+                classes = setOf("button", "default-button")
                 div {
                     classes = setOf("text")
                     + "Check"
@@ -257,7 +257,7 @@ public class Editor(
             }
 
             buttonSet.append.div {
-                classes = setOf("button")
+                classes = setOf("button", "default-button")
                 div {
                     classes = setOf("text")
                     + "Revert"
@@ -269,7 +269,7 @@ public class Editor(
 
         if (file.solutions != null && file.solutions.isNotEmpty()) {
             val answerButton = buttonSet.append.div {
-                classes = setOf("button")
+                classes = setOf("button", "default-button")
             }
             val answerButtonText = answerButton.append.div {
                 classes = setOf("text")
