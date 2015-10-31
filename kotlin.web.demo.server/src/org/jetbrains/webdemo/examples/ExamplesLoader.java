@@ -257,13 +257,13 @@ class GFMNodeSerializer extends ToHtmlSerializer {
         String codeMirrorType;
         switch (node.getType()) {
             case "kotlin":
-                codeMirrorType = "kotlin";
+                codeMirrorType = "text/x-kotlin";
                 break;
             case "java":
                 codeMirrorType = "text/x-java";
                 break;
             default:
-                codeMirrorType = "kotlin";
+                codeMirrorType = "text/x-kotlin";
                 break;
         }
         if (!codeMirrorType.equals("")) {
