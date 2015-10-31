@@ -1,6 +1,6 @@
 <answer>operator fun MyDate.rangeTo(other: MyDate) = DateRange(this, other)</answer>
 
-class DateRange(override public val start: MyDate, override public val end: MyDate): Range<MyDate> {
+class DateRange(override val start: MyDate, override val end: MyDate): Range<MyDate> {
     override fun contains(item: MyDate): Boolean = start < item && item < end
 }
 

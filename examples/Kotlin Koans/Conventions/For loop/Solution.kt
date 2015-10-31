@@ -1,4 +1,4 @@
-<answer>class DateRange(public val start: MyDate, public val end: MyDate): Iterable<MyDate>{
+<answer>class DateRange(val start: MyDate, val end: MyDate): Iterable<MyDate>{
     override fun iterator(): Iterator<MyDate> = DateIterator(this)
 }
 

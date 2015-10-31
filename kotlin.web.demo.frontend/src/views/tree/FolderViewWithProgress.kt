@@ -242,6 +242,7 @@ class ProgressBar(
         counterElement.textContent = completedProjectsNumber.toString() + "/" + projectsNumber
         levelMarks.forEach {
             if (it.levelInfo.projectsNeeded > completedProjectsNumber) it.show() else it.hide()
+            if (it.levelInfo.projectsNeeded == projectsNumber) it.hide() //hide last level mark
         }
         val currentLevel = levels.firstOrNull { it.projectsNeeded > completedProjectsNumber  } ?: levels.last()
         element.style.backgroundColor = currentLevel.color
