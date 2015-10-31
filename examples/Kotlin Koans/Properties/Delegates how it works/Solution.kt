@@ -5,8 +5,7 @@ class D {
     var date: MyDate by EffectiveDate()
 }
 
-<answer>
-class EffectiveDate<R> : ReadWriteProperty<R, MyDate> {
+<answer>class EffectiveDate<R> : ReadWriteProperty<R, MyDate> {
 
     var timeInMillis: Long? = null
 
