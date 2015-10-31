@@ -93,14 +93,14 @@ fun getFileIdFromUrl(): String? {
 }
 
 fun setState(hash: String, title: String) {
-    var unescapedHash = unEscapeString(hash)
-    unescapedHash = if (unescapedHash.startsWith("#")) unescapedHash else "#" + unescapedHash
+    var newHash = hash
+    newHash = if (newHash.startsWith("#")) newHash else "#" + newHash
     document.title = title + " | Try Kotlin"
-    if (window.location.hash != unescapedHash) {
+    if (window.location.hash != newHash) {
         if ((window.location.hash == "" || window.location.hash == "#") && window.location.search == "") {
-            window.history.replaceState("", title, unescapedHash)
+            window.history.replaceState("", title, newHash)
         } else {
-            window.history.pushState("", title, unescapedHash)
+            window.history.pushState("", title, newHash)
         }
     }
 }
