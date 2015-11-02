@@ -2,7 +2,7 @@ fun doSomethingStrangeWithCollection(collection: Collection<String>): Collection
 
     val groupsByLength = collection. groupBy { s -> <taskWindow>TODO()</taskWindow> }
 
-    val maximumSizeOfGroup = groupsByLength.values().map { group -> <taskWindow>TODO()</taskWindow> }.max()
+    val maximumSizeOfGroup = groupsByLength.values.map { group -> <taskWindow>TODO()</taskWindow> }.max()
 
-    return groupsByLength.values().firstOrNull { group -> <taskWindow>TODO()</taskWindow> }
+    return groupsByLength.values.firstOrNull { group -> <taskWindow>TODO()</taskWindow> }
 }
