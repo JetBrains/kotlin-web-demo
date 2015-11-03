@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/idea.pacth.server/idea.pacth.server.iml" filepath="$PROJECT_DIR$/idea.pacth.server/idea.pacth.server.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.common/kotlin.web.demo.common.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.common/kotlin.web.demo.common.iml" />
