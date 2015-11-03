@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.servlet;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.CommandRunner;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -31,10 +33,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * Created by Semyon.Atamas on 4/27/2015.
- */
 public class AuthorizationServlet extends HttpServlet {
+    private static Log log = LogFactory.getLog(AuthorizationServlet.class);
+
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -48,7 +49,7 @@ public class AuthorizationServlet extends HttpServlet {
             }
         } catch (Throwable e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            ErrorWriter.getInstance().writeExceptionToExceptionAnalyzer(e, "AUTHORIZATION", "");
+            log.error("Unknown authorization exception.", e);
         }
     }
 
@@ -67,8 +68,7 @@ public class AuthorizationServlet extends HttpServlet {
             CommandRunner.setServerSettingFromTomcatConfig("github_secret", (String) envCtx.lookup("github_secret"));
             CommandRunner.setServerSettingFromTomcatConfig("jba_secret", (String) envCtx.lookup("jba_secret"));
         } catch (Throwable e) {
-            e.printStackTrace();
-            System.exit(1);
+            log.fatal("Can't initialize authorization servlet", e);
         }
     }
 

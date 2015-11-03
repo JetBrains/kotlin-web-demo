@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.servlet;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.examples.Example;
@@ -35,6 +37,8 @@ import java.io.File;
 import java.net.URLDecoder;
 
 public class TwitterServlet extends HttpServlet {
+    private static Log log = LogFactory.getLog(TwitterServlet.class);
+
     private String apiKey;
     private String apiSecret;
 
@@ -46,7 +50,7 @@ public class TwitterServlet extends HttpServlet {
             apiKey = (String) envContext.lookup("twitter_rw_key");
             apiSecret = (String) envContext.lookup("twitter_rw_secret");
         } catch (Exception e) {
-            ErrorWriter.writeExceptionToConsole(e);
+            log.fatal("Can't initialize twitter servlet", e);
         }
     }
 

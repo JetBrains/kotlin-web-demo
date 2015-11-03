@@ -130,7 +130,6 @@ public class HelpLoader {
         } catch (Exception e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.LOAD_EXAMPLE.name(), "unknown", "");
         }
-        ErrorWriter.writeInfoToConsole("Help for keywords was loaded.");
         response.append("\nHelp for keywords was loaded.");
     }
 }

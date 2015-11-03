@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.servlet;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KotlinHttpServlet extends HttpServlet {
-
+    private static Log log = LogFactory.getLog(KotlinHttpServlet.class);
     private final ServerHandler myHandler = new ServerHandler();
 
     @Override
@@ -52,25 +54,21 @@ public class KotlinHttpServlet extends HttpServlet {
         CommonSettings.HELP_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY;
 
         if (!loadTomcatParameters()) {
-            ErrorWriter.writeErrorToConsole("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
-            System.exit(1);
+            log.fatal("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
         }
 
         ErrorWriter.ERROR_WRITER = ErrorWriter.getInstance();
 //        Initializer.INITIALIZER = ServerInitializer.getInstance();
 
         try {
-            ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
             new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
             LogWriter.init();
             ExamplesLoader.loadAllExamples();
             HelpLoader.getInstance();
-//            MailAgent.getInstance();
             MySqlConnector.getInstance();
             MySqlConnector.getInstance().createTaskList(getTaskList(ExamplesFolder.ROOT_FOLDER));
         } catch (Throwable e) {
-            ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
-            System.exit(1);
+            log.fatal("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
         }
     }
 

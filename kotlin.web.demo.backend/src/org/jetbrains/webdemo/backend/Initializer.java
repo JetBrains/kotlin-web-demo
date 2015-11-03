@@ -17,6 +17,8 @@
 package org.jetbrains.webdemo.backend;
 
 import com.intellij.openapi.application.ApplicationManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
@@ -29,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Initializer {
+    private static Log log = LogFactory.getLog(Initializer.class);
     private static EnvironmentManager environmentManager = new EnvironmentManager();
     private static Initializer INITIALIZER = new Initializer();
 
@@ -56,7 +59,7 @@ public class Initializer {
         try {
             environmentManager.getEnvironment();
         } catch (Throwable e) {
-            ErrorWriter.writeExceptionToConsole("Impossible to init jetCoreEnvironment", e);
+            log.fatal("Impossible to init jetCoreEnvironment", e);
             return false;
         }
 

@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.naming.NamingContext;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -39,6 +41,7 @@ import java.sql.*;
 import java.util.*;
 
 public class MySqlConnector {
+    private static Log log = LogFactory.getLog(MySqlConnector.class);
     private static final MySqlConnector connector = new MySqlConnector();
     private DataSource dataSource;
     private String databaseUrl;
@@ -52,7 +55,7 @@ public class MySqlConnector {
             dataSource = (DataSource) envCtx.lookup("jdbc/kotlin");
             Connection connection = dataSource.getConnection();
             databaseUrl = connection.toString();
-            ErrorWriter.writeInfoToConsole("Connected to database: " + connection.toString());
+            log.info("Connected to database: " + connection.toString());
             ErrorWriter.getInfoForLog("CONNECT_TO_DATABASE", "-1", "Connected to database: " + databaseUrl);
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, SessionInfo.TypeOfRequest.WORK_WITH_DATABASE.name(), "unknown", databaseUrl);

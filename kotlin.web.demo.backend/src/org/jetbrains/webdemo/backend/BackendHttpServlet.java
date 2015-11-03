@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.backend;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
 
@@ -31,7 +33,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class BackendHttpServlet extends HttpServlet {
-
+    private static Log log = LogFactory.getLog(BackendHttpServlet.class);
     private final ServerHandler myHandler = new ServerHandler();
 
     @Override
@@ -45,8 +47,7 @@ public class BackendHttpServlet extends HttpServlet {
         BackendSettings.KOTLIN_LIBS_DIR = BackendSettings.LIBS_DIR;
 
         if (!loadTomcatParameters()) {
-            ErrorWriter.writeErrorToConsole("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
-            System.exit(1);
+            log.fatal("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
         }
 
         LogWriter.init();
@@ -55,20 +56,18 @@ public class BackendHttpServlet extends HttpServlet {
 
         try {
             if (Initializer.getInstance().initJavaCoreEnvironment()) {
-                ErrorWriter.writeInfoToConsole("Use \"help\" to look at all options");
                 new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
             } else {
-                ErrorWriter.writeErrorToConsole("Initialisation of java core environment failed, server didn't start.");
+                log.fatal("Initialisation of java core environment failed, server didn't start.");
             }
         } catch (Throwable e) {
-            ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of java core environment failed, server didn't start", e);
-            System.exit(1);
+            log.fatal("Initialisation of java core environment failed, server didn't start", e);
         }
 
         try {
             Initializer.getInstance().initializeExecutorsPolicyFile();
         } catch (Throwable e) {
-            ErrorWriter.writeExceptionToConsole("FATAL ERROR: Initialisation of executors policy file failed, server didn't start", e);
+            log.fatal("FATAL ERROR: Initialisation of executors policy file failed, server didn't start", e);
             System.exit(1);
         }
     }

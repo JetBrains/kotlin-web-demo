@@ -22,7 +22,6 @@
           <element id="library" level="project" name="junit" />
           <element id="library" level="project" name="jwt" />
           <element id="library" level="project" name="pegdown" />
-          <element id="library" level="project" name="mail-1.4.7" />
           <element id="library" level="project" name="twitter4j-core-4.0.4" />
           <element id="library" level="project" name="urlrewritefilter-4.0.4" />
         </element>
