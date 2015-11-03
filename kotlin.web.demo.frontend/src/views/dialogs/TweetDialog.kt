@@ -20,18 +20,18 @@ import kotlinx.html.*
 import kotlinx.html.dom.append
 import kotlinx.html.js.div
 import kotlinx.html.js.onInputFunction
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLImageElement
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.HTMLTextAreaElement
+import kotlinx.html.js.onSubmitFunction
+import org.w3c.dom.*
 import utils.jquery.find
 import utils.jquery.get
 import utils.jquery.jq
 import utils.jquery.ui.Dialog
 import utils.twitter.Twitter
 import kotlin.browser.document
+import kotlin.browser.window
 
 object TweetDialog {
+    private val MAX_TWEET_LENGTH = 116
     val element: HTMLDivElement = document.body!!.append.div {
         title = "Congratulations!"
         img {
@@ -40,13 +40,14 @@ object TweetDialog {
             height = "250px"
         }
         form {
+            id="tweet-form"
             action = "/twitter/login"
             classes = setOf("tweet-form")
             textArea {
                 classes = setOf("tweet-content")
                 name = "tweet-text"
                 onInputFunction = {
-                    counter.textContent = (140 - Twitter.text.getTweetLength(tweetContentInput.value)).toString()
+                    counter.textContent = (MAX_TWEET_LENGTH - Twitter.text.getTweetLength(tweetContentInput.value)).toString()
                 }
             }
             input {
@@ -71,9 +72,21 @@ object TweetDialog {
     }
 
     val counter = jq(element).find(".charsleft-counter")[0]
+    val tweetForm = jq(element).find(".tweet-form")[0] as HTMLFormElement
     val tweetContentInput = jq(element).find(".tweet-content")[0] as HTMLTextAreaElement
     val levelGif = jq(element).find("#level-gif")[0] as HTMLImageElement
     val levelInput = jq(element).find("#level-input-field")[0] as HTMLInputElement
+
+    init {
+        tweetForm.onsubmit = {
+            if(Twitter.text.getTweetLength(tweetContentInput.value) > MAX_TWEET_LENGTH){
+                window.alert("Tweet message can't be longer than $MAX_TWEET_LENGTH characters.")
+                false;
+            } else{
+                undefined
+            }
+        }
+    }
 
     val dialog = Dialog(
             element,
