@@ -24,6 +24,7 @@
           <element id="library" level="project" name="pegdown" />
           <element id="library" level="project" name="twitter4j-core-4.0.4" />
           <element id="library" level="project" name="urlrewritefilter-4.0.4" />
+          <element id="library" level="project" name="commons-logging-1.2" />
         </element>
       </element>
       <element id="directory" name="static">
