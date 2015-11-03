@@ -17,9 +17,7 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.Lists;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.JsonUtils;
 import org.jetbrains.webdemo.ProjectFile;
@@ -35,7 +33,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class ExamplesLoader {
 
@@ -141,7 +142,12 @@ public class ExamplesLoader {
                 help = new GFMNodeSerializer().toHtml(processor.parseMarkdown(helpInMarkdown.toCharArray()));
             }
 
-            List<JsonNode> fileManifests = manifest.has("files") ? Lists.newArrayList(manifest.get("files")) : new ArrayList<JsonNode>();
+            List<JsonNode> fileManifests = new ArrayList<JsonNode>();
+            if(manifest.has("files")) {
+                for(JsonNode fileManifest : manifest.get("files")){
+                    fileManifests.add(fileManifest);
+                }
+            }
             fileManifests.addAll(commonFilesManifests);
             for (JsonNode fileDescriptor : fileManifests) {
 

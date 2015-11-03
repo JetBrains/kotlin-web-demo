@@ -24,12 +24,12 @@
     <orderEntry type="library" name="log4j" level="project" />
     <orderEntry type="library" name="javax.servlet" level="project" />
     <orderEntry type="library" name="jackson" level="project" />
-    <orderEntry type="module" module-name="kotlin.web.demo.common" />
-    <orderEntry type="library" name="kotlin-compiler" level="project" />
     <orderEntry type="library" name="jwt" level="project" />
     <orderEntry type="library" name="pegdown" level="project" />
     <orderEntry type="library" name="twitter4j-core-4.0.4" level="project" />
     <orderEntry type="library" name="urlrewritefilter-4.0.4" level="project" />
     <orderEntry type="library" name="commons-logging-1.2" level="project" />
+    <orderEntry type="library" name="annotations-12.0" level="project" />
+    <orderEntry type="module" module-name="kotlin.web.demo.common" />
   </component>
 </module>

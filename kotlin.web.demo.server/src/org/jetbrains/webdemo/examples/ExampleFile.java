@@ -17,7 +17,6 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.intellij.openapi.progress.Task;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.ResponseUtils;

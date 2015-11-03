@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
@@ -122,9 +121,6 @@ public class MyHttpSession {
                     break;
                 case ("saveSolution"):
                     sendSaveSolutionResult();
-                    break;
-                default:
-                    sendResourceFile();
                     break;
             }
         } catch (Throwable e) {
@@ -614,65 +610,6 @@ public class MyHttpSession {
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), JsonUtils.toJson(currentProject));
-        }
-    }
-
-
-    private void sendResourceFile() {
-        String path = request.getRequestURI() + "?" + request.getQueryString();
-        path = ResponseUtils.substringAfterReturnAll(path, "resources");
-//        ErrorWriter.LOG_FOR_INFO.error(ErrorWriter.getInfoForLogWoIp(SessionInfo.TypeOfRequest.GET_RESOURCE.name(), "-1", "Resource doesn't downloaded from nginx: " + path));
-        if (path.equals("")) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                    new UnsupportedOperationException("Empty path to resource"),
-                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), path);
-            writeResponse("Path to the file is incorrect.", HttpServletResponse.SC_NOT_FOUND);
-            return;
-        } else if (path.startsWith("/messages/")) {
-            writeResponse("", HttpServletResponse.SC_OK);
-            return;
-        } else if (path.equals("/") || path.equals("/index.html")) {
-            path = "/index.html";
-            StringBuilder responseStr = new StringBuilder();
-            try (InputStream is = ServerHandler.class.getResourceAsStream(path)) {
-                responseStr.append(ResponseUtils.readData(is, true));
-            } catch (FileNotFoundException e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), "index.html not found");
-                writeResponse("Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
-                return;
-            } catch (IOException e) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), "index.html not found");
-                writeResponse("Cannot open this page", HttpServletResponse.SC_BAD_GATEWAY);
-                return;
-            }
-
-            try (OutputStream os = response.getOutputStream()) {
-                os.write(responseStr.toString().getBytes());
-            } catch (IOException e) {
-                //This is an exception we can't send data to client
-            }
-            return;
-        }
-
-        InputStream is = ServerHandler.class.getResourceAsStream(path);
-        if (is == null) {
-            if (request.getQueryString() != null) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(
-                        new UnsupportedOperationException("Broken path to resource"),
-                        SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
-            }
-            writeResponse(("Resource not found. " + path), HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        try {
-            FileUtil.copy(is, response.getOutputStream());
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    SessionInfo.TypeOfRequest.GET_RESOURCE.name(), request.getHeader("Origin"), request.getRequestURI() + "?" + request.getQueryString());
-            writeResponse("Could not load the resource from the server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
