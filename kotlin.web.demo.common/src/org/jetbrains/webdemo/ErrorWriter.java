@@ -34,7 +34,7 @@ public class ErrorWriter {
     public static final Logger LOG_FOR_INFO = Logger.getLogger("infoLogger");
     public static ErrorWriter ERROR_WRITER = new ErrorWriter();
 
-`    public static String getExceptionForLog(String typeOfRequest, Throwable throwable, String originUrl, String moreinfo) {
+    public static String getExceptionForLog(String typeOfRequest, Throwable throwable, String originUrl, String moreinfo) {
         StringBuilder builder = new StringBuilder();
         builder.append("\n<error>");
         builder.append("\n<version>");
