@@ -47,7 +47,7 @@ object TweetDialog {
                 classes = setOf("tweet-content")
                 name = "tweet-text"
                 onInputFunction = {
-                    counter.textContent = (MAX_TWEET_LENGTH - Twitter.text.getTweetLength(tweetContentInput.value)).toString()
+                    updateCounter()
                 }
             }
             input {
@@ -100,7 +100,13 @@ object TweetDialog {
     fun open(level: Int ){
         levelInput.value = level.toString()
         levelGif.src = "static/images/${level}level.gif"
-        tweetContentInput.value = "Hey, I just completed $level level of Kotlin Koans. http://try.kotl.in/koans #kotlinkoans"
+        tweetContentInput.value = "Hey, I just completed level $level of Kotlin Koans. http://try.kotl.in/koans #kotlinkoans"
+        updateCounter()
         dialog.open()
     }
+
+    private fun updateCounter(){
+        counter.textContent = (MAX_TWEET_LENGTH - Twitter.text.getTweetLength(tweetContentInput.value)).toString()
+    }
+
 }
