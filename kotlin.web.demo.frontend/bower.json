@@ -2,7 +2,7 @@
   "name": "try.kotl.in",
   "version": "1.0.0",
   "dependencies": {
-    "codemirror": "5.8.0",
+    "codemirror": "codemirror/CodeMirror#a1e780ba7a6dce48781c93f998e6544fae657280",
     "jquery": "1.11.1",
     "jquery-ui": "1.11.4",
     "jquery-circle-progress": "1.1.3",
