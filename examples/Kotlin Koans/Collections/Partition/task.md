@@ -9,4 +9,4 @@ positive == listOf(1, 3, 2)
 negative == listOf(-4, -11)
 ```
 
-Note that [multi-assignment](http://kotlinlang.org/docs/reference/multi-declarations.html) syntax is used in this example.
+Note that [destructuring declaration](http://kotlinlang.org/docs/reference/multi-declarations.html) syntax is used in this example.

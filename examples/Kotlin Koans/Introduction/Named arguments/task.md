@@ -15,4 +15,4 @@ fun joinToString(
 ```
 
 It can be called on a collection of Strings.
-Using named arguments make the function `joinOptions()` return the list in a JSON format (e.g., "[a, b, c]")
+Specifying only two arguments make the function `joinOptions()` return the list in a JSON format (e.g., "[a, b, c]")

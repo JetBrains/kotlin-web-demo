@@ -1,10 +1,10 @@
 <answer>class LazyProperty(val initializer: () -> Int) {
-    private val lazyValue: Int? = null
-        get() {
-            if (field == null) field = initializer()
-            return field
-        }
-
+    var value: Int? = null
     val lazy: Int
-        get() = lazyValue!!
+        get() {
+            if (value == null) {
+                value = initializer()
+            }
+            return value!!
+        }
 }</answer>

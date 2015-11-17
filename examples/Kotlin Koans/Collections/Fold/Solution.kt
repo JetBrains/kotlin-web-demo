@@ -1,5 +1,6 @@
 fun Shop.getProductsOrderedByAllCustomers(): Set<Product> {
-    return customers.fold(customers.flatMap { it.orders.flatMap { it.products } }.toSet(), {
+    val allProducts = customers.flatMap { it.orders.flatMap { it.products }}.toSet()
+    return customers.fold(allProducts, {
         orderedByAll, customer ->
         orderedByAll.intersect(customer.orders.flatMap { it.products }.toSet())
     })

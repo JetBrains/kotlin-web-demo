@@ -10,4 +10,4 @@ listOf("a", "b", "cc").sumBy { it.length() } == 4
 ```
 
 If you want to sum the double values, use
-[`sumByDouble`](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/sum-by-double.html)
+[`sumByDouble`](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/sum-by-double.html).
