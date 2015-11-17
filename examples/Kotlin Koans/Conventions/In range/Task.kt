@@ -1,4 +1,4 @@
-class DateRange(override val start: MyDate, override val end: MyDate) : Range<MyDate> {
+class DateRange(override val start: MyDate, override val endInclusive: MyDate) : ClosedRange<MyDate> {
 }
 
 fun checkInRange(date: MyDate, first: MyDate, last: MyDate): Boolean {
