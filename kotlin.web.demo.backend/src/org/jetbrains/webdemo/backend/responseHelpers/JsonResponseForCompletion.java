@@ -50,7 +50,8 @@ import org.jetbrains.kotlin.renderer.ParameterNameRenderingPolicy;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.DescriptorUtils;
 import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter;
-import org.jetbrains.kotlin.resolve.scopes.KtScope;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScope;
+import org.jetbrains.kotlin.resolve.scopes.MemberScope;
 import org.jetbrains.kotlin.types.FlexibleTypesKt;
 import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -169,17 +170,20 @@ public class JsonResponseForCompletion {
             throw new NullPointerException("Test Attachments");
         }*/
         sessionInfo.getTimeManager().saveCurrentTime();
+        AnalysisResult analysisResult;
         BindingContext bindingContext;
         ComponentProvider containerProvider;
         try {
             if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA) ||
                     sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
                 Pair<AnalysisResult, ComponentProvider> resolveResult = ResolveUtils.analyzeFileForJvm(convertList(psiFiles), currentProject);
-                bindingContext = resolveResult.getFirst().getBindingContext();
+                analysisResult = resolveResult.first;
+                bindingContext = analysisResult.getBindingContext();
                 containerProvider = resolveResult.getSecond();
             } else {
                 Pair<AnalysisResult, ComponentProvider> resolveResult = ResolveUtils.analyzeFileForJs(convertList(psiFiles), currentProject);
-                bindingContext = resolveResult.getFirst().getBindingContext();
+                analysisResult = resolveResult.first;
+                bindingContext = analysisResult.getBindingContext();
                 containerProvider = resolveResult.getSecond();
             }
         } catch (Throwable e) {
@@ -201,29 +205,34 @@ public class JsonResponseForCompletion {
         Collection<DeclarationDescriptor> descriptors = null;
         boolean isTipsManagerCompletion = true;
         try {
-            ReferenceVariantsHelper helper = new ReferenceVariantsHelper(bindingContext, new KotlinResolutionFacade(containerProvider), VISIBILITY_FILTER);
+            ReferenceVariantsHelper helper = new ReferenceVariantsHelper(
+                    bindingContext,
+                    new KotlinResolutionFacade(containerProvider),
+                    analysisResult.getModuleDescriptor(),
+                    VISIBILITY_FILTER
+            );
             if (element instanceof KtSimpleNameExpression) {
-                descriptors = helper.getReferenceVariants((KtSimpleNameExpression) element, DescriptorKindFilter.ALL, NAME_FILTER);
+                descriptors = helper.getReferenceVariants((KtSimpleNameExpression) element, DescriptorKindFilter.ALL, NAME_FILTER, true, true, true, null);
             } else if (element.getParent() instanceof KtSimpleNameExpression) {
-                descriptors = helper.getReferenceVariants((KtSimpleNameExpression) element.getParent(), DescriptorKindFilter.ALL, NAME_FILTER);
+                descriptors = helper.getReferenceVariants((KtSimpleNameExpression) element.getParent(), DescriptorKindFilter.ALL, NAME_FILTER, true, true, true, null);
             } else {
                 isTipsManagerCompletion = false;
-                KtScope resolutionScope;
+                LexicalScope resolutionScope;
                 PsiElement parent = element.getParent();
                 if (parent instanceof KtQualifiedExpression) {
                     KtQualifiedExpression qualifiedExpression = (KtQualifiedExpression) parent;
                     KtExpression receiverExpression = qualifiedExpression.getReceiverExpression();
 
                     final KotlinType expressionType = bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, receiverExpression).getType();
-                    resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, receiverExpression);
+                    resolutionScope = bindingContext.get(BindingContext.LEXICAL_SCOPE, receiverExpression);
 
                     if (expressionType != null && resolutionScope != null) {
-                        descriptors = expressionType.getMemberScope().getAllDescriptors();
+                        descriptors = expressionType.getMemberScope().getContributedDescriptors(DescriptorKindFilter.ALL, MemberScope.ALL_NAME_FILTER);
                     }
                 } else {
-                    resolutionScope = bindingContext.get(BindingContext.RESOLUTION_SCOPE, (KtExpression) element);
+                    resolutionScope = bindingContext.get(BindingContext.LEXICAL_SCOPE, (KtExpression) element);
                     if (resolutionScope != null) {
-                        descriptors = resolutionScope.getAllDescriptors();
+                        descriptors = resolutionScope.getContributedDescriptors(DescriptorKindFilter.ALL, MemberScope.ALL_NAME_FILTER);
                     } else {
                         return "[]";
                     }
@@ -373,10 +382,10 @@ public class JsonResponseForCompletion {
         return result;
     }
 
-    private void addKeywordsToArray(ArrayNode array, TokenSet keywords, String prefix){
-        for(IElementType type : keywords.getTypes()){
+    private void addKeywordsToArray(ArrayNode array, TokenSet keywords, String prefix) {
+        for (IElementType type : keywords.getTypes()) {
             String token = ((KtKeywordToken) type).getValue();
-            if(!token.startsWith(prefix)) continue;
+            if (!token.startsWith(prefix)) continue;
             ObjectNode jsonObject = array.addObject();
             jsonObject.put("icon", "");
             jsonObject.put("text", token);
