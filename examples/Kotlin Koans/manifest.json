@@ -24,8 +24,8 @@
   ],
   "folders": [
     "Introduction",
-    "Collections",
     "Conventions",
+    "Collections",
     "Properties",
     "Builders",
     "Generics"
