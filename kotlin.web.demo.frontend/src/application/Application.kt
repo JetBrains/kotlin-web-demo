@@ -83,7 +83,7 @@ object Application {
             onProjectSelected = { project ->
                 if (project.files.isEmpty()) {
                     editor.closeFile()
-                    if (accordion.selectedProjectView!!.project.id != getProjectIdFromUrl()) {
+                    if (getSelectedProjectView().project.id != getProjectIdFromUrl()) {
                         setState(userProjectPrefix + project.id, project.name)
                     }
                     navBarView.onProjectSelected(project)
@@ -116,9 +116,9 @@ object Application {
                                 currentFile.project.type == ProjectType.TASK) {
                             currentFile.id
                         } else if (currentFile.isModifiable) {
-                            userProjectPrefix + accordion.selectedProjectView!!.project.id + "/" + currentFile.id
+                            userProjectPrefix + getSelectedProjectView().project.id + "/" + currentFile.id
                         } else {
-                            userProjectPrefix + accordion.selectedProjectView!!.project.id + "/" + currentFile.name
+                            userProjectPrefix + getSelectedProjectView().project.id + "/" + currentFile.name
                         }
                 setState(url, currentFile.project.name)
                 navBarView.onFileSelected(previousFile, currentFile)
@@ -149,12 +149,14 @@ object Application {
                 }
             },
             onSelectedFileDeleted = {
-                var project = accordion.selectedProjectView!!.project
+                var project = getSelectedProjectView().project
                 navBarView.onSelectedFileDeleted()
                 replaceState(userProjectPrefix + project.id, project.name)
                 editor.closeFile()
             }
     )
+
+    fun getSelectedProjectView() = accordion.selectedProjectView!!
 
     public val runProvider = RunProvider(
             beforeRun = {
