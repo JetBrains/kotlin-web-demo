@@ -1,4 +1,4 @@
-<answer>fun <T, R> T.myApply(f: T.() -> R): R = this.f()</answer>
+<answer>fun <T> T.myApply(f: T.() -> Unit): T { f(); return this }</answer>
 
 fun buildString(): String {
     return StringBuilder().myApply {
@@ -6,8 +6,7 @@ fun buildString(): String {
         for (i in 1..10) {
             append(i)
         }
-        toString()
-    }
+    }.toString()
 }
 
 fun buildMap(): Map<Int, String> {
@@ -16,6 +15,5 @@ fun buildMap(): Map<Int, String> {
         for (i in 1..10) {
             put(i, "$i")
         }
-        this
     }
 }

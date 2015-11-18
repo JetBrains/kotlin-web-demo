@@ -1,4 +1,4 @@
-fun <T, R> T.myApply(f: T.() -> R): R = <taskWindow>TODO()</taskWindow>
+fun <T> T.myApply(f: T.() -> Unit): T { <taskWindow>TODO()</taskWindow> }
 
 fun buildString(): String {
     return StringBuilder().myApply {
@@ -6,8 +6,7 @@ fun buildString(): String {
         for (i in 1..10) {
             append(i)
         }
-        toString()
-    }
+    }.toString()
 }
 
 fun buildMap(): Map<Int, String> {
@@ -16,6 +15,5 @@ fun buildMap(): Map<Int, String> {
         for (i in 1..10) {
             put(i, "$i")
         }
-        this
     }
 }
