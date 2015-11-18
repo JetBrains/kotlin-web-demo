@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestSum {
-    @test fun testGetTotalOrderPrice() {
+    @Test fun testGetTotalOrderPrice() {
         Assert.assertEquals(148.0, customers[nathan]!!.getTotalOrderPrice(), 0.1)
     }
 }

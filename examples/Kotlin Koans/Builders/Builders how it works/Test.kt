@@ -1,9 +1,9 @@
-import org.junit.Test as test
+import org.junit.Test
 import org.junit.Assert
 import Answer.*
 
 class TestBuildersHowItWorks {
-    @test fun testBuildersQuiz() {
+    @Test fun testBuildersQuiz() {
         if (answers.values.toSet() == setOf(null)) {
             Assert.fail("Please specify your answers!")
         }

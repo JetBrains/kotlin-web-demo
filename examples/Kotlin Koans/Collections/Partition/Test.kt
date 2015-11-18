@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestPartition {
-    @test fun testGetCustomersWhoHaveMoreUndeliveredOrdersThanDelivered() {
+    @Test fun testGetCustomersWhoHaveMoreUndeliveredOrdersThanDelivered() {
         Assert.assertEquals(setOf(customers[reka]), shop.getCustomersWithMoreUndeliveredOrdersThanDelivered())
     }
 }

@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestSort {
-    @test fun testGetCustomersSortedByNumberOfOrders() {
+    @Test fun testGetCustomersSortedByNumberOfOrders() {
         Assert.assertEquals(sortedCustomers, shop.getCustomersSortedByNumberOfOrders())
     }
 }

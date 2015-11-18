@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestFold {
-    @test fun testGetProductsOrderedByAllCustomers() {
+    @Test fun testGetProductsOrderedByAllCustomers() {
         val testShop = shop("test shop for 'fold'",
                 customer(lucas, Canberra,
                         order(idea),

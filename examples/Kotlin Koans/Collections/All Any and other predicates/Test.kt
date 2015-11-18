@@ -1,21 +1,21 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestAllAnyAndOtherPredicates {
 
-    @test fun testAllCustomersAreFromCity() {
+    @Test fun testAllCustomersAreFromCity() {
         Assert.assertFalse(shop.checkAllCustomersAreFrom(Canberra))
     }
 
-    @test fun testAnyCustomerIsFromCity() {
+    @Test fun testAnyCustomerIsFromCity() {
         Assert.assertTrue(shop.hasCustomerFrom(Canberra))
     }
 
-    @test fun testCountCustomersFromCity() {
+    @Test fun testCountCustomersFromCity() {
         Assert.assertEquals(2, shop.countCustomersFrom(Canberra))
     }
 
-    @test fun testAnyCustomerFromCity() {
+    @Test fun testAnyCustomerFromCity() {
         Assert.assertEquals(customers[lucas], shop.findAnyCustomerFrom(Canberra))
     }
 }

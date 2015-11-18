@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestIntroduction {
-    @test fun testSetOfCustomers(){
+    @Test fun testSetOfCustomers(){
         Assert.assertEquals(shop.getSetOfCustomers(), customers.values.toSet())
     }
 }

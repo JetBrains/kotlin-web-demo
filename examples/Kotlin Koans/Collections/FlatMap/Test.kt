@@ -1,12 +1,12 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestFlatMap {
-    @test fun testGetOrderedProductsSet() {
+    @Test fun testGetOrderedProductsSet() {
         Assert.assertEquals(setOf(idea), customers[reka]!!.getOrderedProducts())
     }
 
-    @test fun testGetAllOrderedProducts() {
+    @Test fun testGetAllOrderedProducts() {
         Assert.assertEquals(orderedProducts, shop.getAllOrderedProducts())
     }
 }

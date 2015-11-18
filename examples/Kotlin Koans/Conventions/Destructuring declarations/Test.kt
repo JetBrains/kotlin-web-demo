@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestMultiAssignment {
-    @test fun testIsLeapDay() {
+    @Test fun testIsLeapDay() {
         Assert.assertTrue(isLeapDay(MyDate(2016, 2, 29)))
         Assert.assertFalse(isLeapDay(MyDate(2015, 2, 29)))
     }

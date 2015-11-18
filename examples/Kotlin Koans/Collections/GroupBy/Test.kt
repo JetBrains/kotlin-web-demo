@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestGroupBy {
-    @test fun testGroupCustomersByCity() {
+    @Test fun testGroupCustomersByCity() {
         Assert.assertEquals(groupedByCities, shop.groupCustomersByCity())
     }
 }

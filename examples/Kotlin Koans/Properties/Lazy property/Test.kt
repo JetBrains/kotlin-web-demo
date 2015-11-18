@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TetLazyProperty {
-    @test fun testLazy() {
+    @Test fun testLazy() {
         var initialized = false
         val lazyProperty = LazyProperty({ initialized = true; 42 })
         Assert.assertFalse("Property shouldn't be initialized before access", initialized)
@@ -11,7 +11,7 @@ class TetLazyProperty {
         Assert.assertEquals(42, result)
     }
 
-    @test fun initializedOnce() {
+    @Test fun initializedOnce() {
         var initialized = 0
         val lazyProperty = LazyProperty( { initialized++; 42 })
         lazyProperty.lazy

@@ -1,12 +1,12 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestMaxMin {
-    @test fun testCustomerWithMaximumNumberOfOrders() {
+    @Test fun testCustomerWithMaximumNumberOfOrders() {
         Assert.assertEquals(customers[reka], shop.getCustomerWithMaximumNumberOfOrders())
     }
 
-    @test fun testTheMostExpensiveOrderedProduct() {
+    @Test fun testTheMostExpensiveOrderedProduct() {
         Assert.assertEquals(rubyMine, customers[nathan]!!.getMostExpensiveOrderedProduct())
     }
 }

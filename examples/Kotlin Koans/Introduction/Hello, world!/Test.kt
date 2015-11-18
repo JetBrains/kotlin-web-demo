@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestStart {
-    @test fun testOk() {
+    @Test fun testOk() {
         Assert.assertEquals("OK", start())
     }
 }

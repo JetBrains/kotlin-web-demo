@@ -1,13 +1,13 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestHtmlBuilders {
-    @test fun productTableIsFilled() {
+    @Test fun productTableIsFilled() {
         val result = renderProductTable()
         Assert.assertTrue("Product table should contain the corresponding data", result.contains("cactus"))
     }
 
-    @test fun productTableIsColored() {
+    @Test fun productTableIsColored() {
         val result = renderProductTable()
         Assert.assertTrue("Product table should be colored", result.contains("bgcolor"))
     }

@@ -1,8 +1,8 @@
 import org.junit.Assert
-import org.junit.Test as test
+import org.junit.Test
 
 class TestStringAndMapBuilders {
-    @test fun testBuildMap() {
+    @Test fun testBuildMap() {
         val map: Map<Int, String> = buildMap {
             put(0, "0")
             for (i in 1..10) {
