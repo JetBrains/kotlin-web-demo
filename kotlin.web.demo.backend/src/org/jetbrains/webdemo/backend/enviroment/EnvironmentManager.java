@@ -41,9 +41,7 @@ import com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy;
 import com.intellij.psi.meta.MetaDataContributor;
 import com.intellij.psi.stubs.BinaryFileStubBuilders;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments;
-import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys;
@@ -52,18 +50,14 @@ import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
 import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
-import org.jetbrains.kotlin.resolve.AnalyzerScriptParameter;
 import org.jetbrains.kotlin.resolve.diagnostics.DiagnosticsWithSuppression;
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
-import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.idea.DummyCodeStyleManager;
 
 import java.io.File;
-import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import static org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys.MODULE_NAME;
@@ -76,25 +70,6 @@ public class EnvironmentManager {
         public void dispose() {
         }
     };
-
-    @Nullable
-    private static File getUnpackedRuntimePath() {
-        URL url = K2JVMCompiler.class.getClassLoader().getResource("kotlin/KotlinObject.class");
-        if (url != null && url.getProtocol().equals("file")) {
-            return new File(url.getPath()).getParentFile().getParentFile();
-        }
-        return null;
-    }
-
-    @Nullable
-    private static File getRuntimeJarPath() {
-        URL url = K2JVMCompiler.class.getClassLoader().getResource("kotlin/KotlinPackage.class");
-        if (url != null && url.getProtocol().equals("jar")) {
-            String path = url.getPath();
-            return new File(path.substring(path.indexOf(":") + 1, path.indexOf("!/")));
-        }
-        return null;
-    }
 
     @NotNull
     private static List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments) {
@@ -114,8 +89,6 @@ public class EnvironmentManager {
 
         if (junit.exists()) {
             classpath.add(junit);
-        } else {
-
         }
 
         classpath.add(new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar"));
@@ -157,8 +130,6 @@ public class EnvironmentManager {
         CompilerConfiguration configuration = new CompilerConfiguration();
 
         JvmContentRootsKt.addJvmClasspathRoots(configuration, getClasspath(arguments));
-
-        configuration.put(JVMConfigurationKeys.SCRIPT_PARAMETERS, Collections.<AnalyzerScriptParameter>emptyList());
 
         configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
@@ -206,13 +177,4 @@ public class EnvironmentManager {
         CoreApplicationEnvironment.registerExtensionPoint(area, ClsCustomNavigationPolicy.EP_NAME, ClsCustomNavigationPolicy.class);
         CoreApplicationEnvironment.registerExtensionPoint(area, ClassFileDecompilers.EP_NAME, ClassFileDecompilers.Decompiler.class);
     }
-
-
-    @NotNull
-    private List<File> getAnnotationsPath() {
-        List<File> annotationsPath = Lists.newArrayList();
-        annotationsPath.add(PathUtil.getKotlinPathsForCompiler().getJdkAnnotationsPath());
-        return annotationsPath;
-    }
-
 }

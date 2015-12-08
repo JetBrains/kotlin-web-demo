@@ -1,14 +1,14 @@
 /**
  * Properties stored in a map. This comes up a lot in applications like parsing JSON
  * or doing other "dynamic" stuff. Delegates take values from this map (by the string keys -
- * names of properties). Of course, you can have var's as well (with mapVar() function),
+ * names of properties). Of course, you can have var's as well (add import kotlin.properties.setValue),
  * that will modify the map upon assignment (note that you'd need MutableMap instead of read-only Map).
  */
-import kotlin.properties.Delegates
+import kotlin.properties.getValue
 
 class User(val map: Map<String, Any?>) {
-    val name: String by Delegates.mapVal(map) { thisRef, desc ->  "" }
-    val age: Int     by Delegates.mapVal(map) { thisRef, desc ->  1 }
+    val name: String by map
+    val age: Int     by map
 }
 
 fun main(args: Array<String>) {

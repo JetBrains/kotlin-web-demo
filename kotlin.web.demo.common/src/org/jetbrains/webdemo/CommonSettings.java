@@ -21,7 +21,7 @@ package org.jetbrains.webdemo;
  */
 public class CommonSettings {
     public static boolean IS_TEST_VERSION = true;
-    public static String KOTLIN_VERSION = "1.0.0-beta-2423";
+    public static String KOTLIN_VERSION = "1.0.0-beta-3594";
 
     public static String HELP_DIRECTORY = "help";
     public static String LOGS_DIRECTORY = "logs";

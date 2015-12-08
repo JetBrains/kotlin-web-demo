@@ -23,8 +23,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.kotlin.backend.common.output.OutputFile;
 import org.jetbrains.kotlin.fileClasses.NoResolveFileClassesProvider;
 import org.jetbrains.kotlin.idea.MainFunctionDetector;
-import org.jetbrains.kotlin.load.kotlin.PackageClassUtils;
-import org.jetbrains.kotlin.name.FqName;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.webdemo.ErrorWriter;
@@ -379,6 +377,6 @@ public class JavaRunner {
                 return NoResolveFileClassesProvider.INSTANCE.getFileClassInfo(file).getFileClassFqName().asString();
             }
         }
-        return PackageClassUtils.getPackageClassFqName(FqName.ROOT).asString();
+        return NoResolveFileClassesProvider.INSTANCE.getFileClassInfo(ktFiles.iterator().next()).getFileClassFqName().asString();
     }
 }
