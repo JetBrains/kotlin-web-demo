@@ -8,5 +8,5 @@ Implement `Shop.getCustomerWithMaximumNumberOfOrders()` and `Customer.getMostExp
 
 ```kotlin
 listOf(1, 42, 4).max() == 42
-listOf("a", "ab").minBy { it.length() } == "a"
+listOf("a", "ab").minBy { it.length } == "a"
 ```
