@@ -416,10 +416,14 @@
     z-index: -1;
 }
 
+a.advent-of-code-link {
+    margin-left: 4px;
+    outline: none;
+}
+
 .advent-of-code-icon {
     width: 14px;
     height: 14px;
-    margin-left: 4px;
     display: inline-block;
     background-image: url("/static/images/star.png");
 }

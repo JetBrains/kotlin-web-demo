@@ -81,7 +81,7 @@ class HeadersProvider(
                         foldersContent.mapTo(folders, {
                             val type = when {
                                 it.name == "My programs" -> ProjectType.USER_PROJECT
-                                it.name == "Advent Of Code" -> ProjectType.ADVENT_OF_CODE_PROJECT
+                                it.name == "Advent of Code" -> ProjectType.ADVENT_OF_CODE_PROJECT
                                 it.isTaskFolder -> ProjectType.TASK
                                 else  -> ProjectType.EXAMPLE
                             }

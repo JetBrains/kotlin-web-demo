@@ -55,7 +55,7 @@ class MyProgramsFolderView(parentNode: HTMLElement,
             }
         }
 
-        jq(container).find("advent-of-code-link").on("click", { e -> e.stopPropagation()})
+        jq(container).find(".advent-of-code-link").on("click", { e -> e.stopPropagation()})
 
         folderNameElement.style.display = "inline-block"
         if (!Application.loginView.isLoggedIn) {
