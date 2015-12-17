@@ -109,7 +109,7 @@ open class ProjectView(
             onHeaderClick(this)
         }
 
-        if (header.type == ProjectType.USER_PROJECT || header.type == ProjectType.PUBLIC_LINK) {
+        if (header.type == ProjectType.USER_PROJECT || header.type == ProjectType.PUBLIC_LINK || header.type == ProjectType.ADVENT_OF_CODE_PROJECT) {
             var deleteButton = document.createElement("div") as HTMLDivElement
             deleteButton.className = "delete icon"
             deleteButton.title = "Delete this project"
@@ -122,7 +122,7 @@ open class ProjectView(
             actionIconsElement.appendChild(deleteButton)
         }
 
-        if (header.type != ProjectType.USER_PROJECT) {
+        if (header.type != ProjectType.USER_PROJECT || header.type == ProjectType.ADVENT_OF_CODE_PROJECT) {
             if (header.modified) headerElement.addClass("modified")
 
             var revertIcon = document.createElement("div") as HTMLDivElement

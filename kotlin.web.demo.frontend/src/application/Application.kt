@@ -104,7 +104,8 @@ object Application {
             },
             onSelectFile = { previousFile, currentFile ->
                 if (previousFile != null) {
-                    if (previousFile.project.type != ProjectType.USER_PROJECT) {
+                    if (previousFile.project.type != ProjectType.USER_PROJECT &&
+                            previousFile.project.type != ProjectType.ADVENT_OF_CODE_PROJECT) {
                         previousFile.project.save()
                     } else {
                         Application.fileProvider.saveFile(previousFile)
@@ -285,6 +286,9 @@ object Application {
             },
             onNewProjectAdded = { name, projectId, fileId ->
                 accordion.addNewProject(name, projectId, fileId)
+            },
+            onAdventOfCodeProjectAdded = { name, projectId, fileId, inputFileId, inputFileContent ->
+                accordion.addAdventOfCodeProject(name, projectId, fileId, inputFileId, inputFileContent)
             },
             onFail = { message, status ->
                 statusBarView.setStatus(status)
@@ -471,7 +475,7 @@ object Application {
                     var content = JSON.parse<dynamic>(localStorage.getItem("contentToSave")!!)
                     localStorage.removeItem("contentToSave")
                     if (content != null && loginView.isLoggedIn) {
-                        InputDialogView.open(
+                        InputDialogView(
                                 "Save project",
                                 "Project name:",
                                 "Save",
@@ -479,10 +483,10 @@ object Application {
                                 { name ->
                                     accordion.validateNewProjectName(name)
                                 },
-                                { name ->
+                                { userInput ->
                                     projectProvider.forkProject(content, { data ->
                                         accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content))
-                                    }, name)
+                                    }, userInput.value)
                                 }
                         )
                     }

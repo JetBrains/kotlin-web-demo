@@ -26,6 +26,7 @@ import kotlin.browser.localStorage
 class ProjectProvider(
         private val onProjectLoaded: () -> Unit,
         private val onNewProjectAdded: (String, String, String) -> Unit,
+        private val onAdventOfCodeProjectAdded: (String, String, String, String, String) -> Unit,
         private val onFail: (String, ActionStatusMessage) -> Unit
 ) {
 
@@ -57,7 +58,7 @@ class ProjectProvider(
     }
 
     fun deleteProject(id: String, type: ProjectType, callback: () -> Unit) {
-        if (type == ProjectType.USER_PROJECT) {
+        if (type == ProjectType.USER_PROJECT || type == ProjectType.ADVENT_OF_CODE_PROJECT) {
             deleteProject(id, callback)
         } else if (type == ProjectType.PUBLIC_LINK) {
             callback()
@@ -128,6 +129,32 @@ class ProjectProvider(
         )
     }
 
+    fun addAdventOfCodeProject(name: String, inputFileContent: String) {
+        blockContent()
+        ajax(
+                url = generateAjaxUrl("addAdventOfCodeProject"),
+                success = { data ->
+                    try {
+                        onAdventOfCodeProjectAdded(name, data.projectId, data.fileId, data.inputFileId, inputFileContent)
+                    } catch (e: Throwable) {
+                        console.log(e)
+                    }
+                },
+                type = HTTPRequestType.POST,
+                timeout = 10000,
+                data = json("name" to name, "inputFileContent" to inputFileContent),
+                dataType = DataType.JSON,
+                error = { jqXHR, textStatus, errorThrown ->
+                    try {
+                        onFail(textStatus + " : " + errorThrown, ActionStatusMessage.add_project_fail)
+                    } catch (e: Throwable) {
+                        console.log(e)
+                    }
+                },
+                complete = ::unBlockContent
+        )
+    }
+
     fun addNewProject(name: String) {
         blockContent()
         ajax(
@@ -141,7 +168,7 @@ class ProjectProvider(
                 },
                 type = HTTPRequestType.POST,
                 timeout = 10000,
-                data = json("args" to name),
+                data = json("name" to name),
                 dataType = DataType.JSON,
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
@@ -279,7 +306,7 @@ class ProjectProvider(
                     },
                     type = HTTPRequestType.POST,
                     timeout = 10000,
-                    data = json("project" to JSON.stringify(project), "publicId" to project.id),
+                    data = json("project" to JSON.stringify(project), "publicId" to project.id, "type" to project.type.toString()),
                     dataType = DataType.TEXT,
                     error = { jqXHR, textStatus, errorThrown ->
                         try {

@@ -175,7 +175,6 @@
 
 
 #input-dialog {
-    text-align: center;
     padding: 40px 20px;
 }
 
@@ -184,6 +183,14 @@
     border: 1px solid #969696;
     border-radius: 3px;
     margin-left: 5px;
+}
+
+#input-dialog .form-wrapper{
+    margin-bottom: 15px;
+}
+
+#input-dialog .textarea-label{
+    margin-bottom: 5px;
 }
 
 .input-dialog-error-message {
@@ -383,4 +390,9 @@
 }
 
 .ask-dialog .submit-button {
+}
+
+#advent-of-code-input {
+    width: 100%;
+    height: 100px;
 }

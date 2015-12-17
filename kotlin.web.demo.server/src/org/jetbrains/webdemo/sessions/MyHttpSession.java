@@ -98,6 +98,9 @@ public class MyHttpSession {
                 case ("addProject"):
                     sendAddProjectResult();
                     break;
+                case ("addAdventOfCodeProject"):
+                    sendAddAdventOfCodeProjectResult();
+                    break;
                 case ("addFile"):
                     sendAddFileResult();
                     break;
@@ -399,7 +402,7 @@ public class MyHttpSession {
                     currentProject = objectMapper.readValue(content, Project.class);
                     currentProject.name = request.getParameter("args"); //when user calls save as we must change project name
                     ExamplesUtils.addHiddenFilesToProject(currentProject);
-                    String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), currentProject);
+                    String publicId = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), currentProject, "USER_PROJECT");
                     ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
                     result.put("publicId", publicId);
                     Project project = MySqlConnector.getInstance().getProjectContent(publicId);
@@ -409,9 +412,23 @@ public class MyHttpSession {
                     writeResponse("Can't parse file", HttpServletResponse.SC_BAD_REQUEST);
                 }
             } else {
-                String publicIds = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), request.getParameter("args"));
+                String name = request.getParameter("name");
+                String publicIds = MySqlConnector.getInstance().addProject(sessionInfo.getUserInfo(), name, "USER_PROJECT");
                 writeResponse(publicIds, HttpServletResponse.SC_OK);
             }
+        } catch (NullPointerException e) {
+            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (DatabaseOperationException e) {
+            writeResponse(e.getMessage(), HttpServletResponse.SC_FORBIDDEN);
+        }
+    }
+
+    private void sendAddAdventOfCodeProjectResult() {
+        try {
+            String inputFileContent = request.getParameter("inputFileContent");
+            String name = request.getParameter("name");
+            String publicIds = MySqlConnector.getInstance().addAdventOfCodeProject(sessionInfo.getUserInfo(), name, inputFileContent);
+            writeResponse(publicIds, HttpServletResponse.SC_OK);
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         } catch (DatabaseOperationException e) {
@@ -446,9 +463,19 @@ public class MyHttpSession {
             myProgramsContent.put("id", "My%20programs");
             myProgramsContent.putArray("childFolders");
             if (sessionInfo.getUserInfo().isLogin()) {
-                myProgramsContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo()));
+                myProgramsContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo(), "USER_PROJECT"));
             } else {
                 myProgramsContent.putArray("projects");
+            }
+
+            ObjectNode adventOfCodeContent = responseBody.addObject();
+            adventOfCodeContent.put("name", "Advent Of Code");
+            adventOfCodeContent.put("id", "advent%20of%20code");
+            adventOfCodeContent.putArray("childFolders");
+            if (sessionInfo.getUserInfo().isLogin()) {
+                adventOfCodeContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo(), "ADVENT_OF_CODE_PROJECT"));
+            } else {
+                adventOfCodeContent.putArray("projects");
             }
             writeResponse(responseBody.toString(), HttpServletResponse.SC_OK);
         } catch (DatabaseOperationException e) {
@@ -461,7 +488,7 @@ public class MyHttpSession {
         ObjectNode folderContent = arrayNode.addObject();
         folderContent.put("name", folder.getName());
         folderContent.put("id", folder.getId());
-        if(folder.isTaskFolder()) folderContent.put("levels", objectMapper.valueToTree(folder.getLevels()));
+        if (folder.isTaskFolder()) folderContent.put("levels", objectMapper.valueToTree(folder.getLevels()));
         folderContent.put("isTaskFolder", folder.isTaskFolder());
         ArrayNode exampleHeaders = folderContent.putArray("projects");
         for (Project example : folder.getExamples()) {
@@ -524,7 +551,8 @@ public class MyHttpSession {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             String publicId = request.getParameter("publicId");
-            MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), publicId, currentProject, "USER_PROJECT");
+            String type = request.getParameter("type");
+            MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), publicId, currentProject, type);
             writeResponse("ок", HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't parse file", HttpServletResponse.SC_BAD_REQUEST);
@@ -554,7 +582,7 @@ public class MyHttpSession {
             String id = request.getParameter("publicId");
             boolean clearCache = Boolean.parseBoolean(request.getParameter("ignoreCache"));
 
-            if(sessionInfo.getUserInfo().isLogin() && clearCache){
+            if (sessionInfo.getUserInfo().isLogin() && clearCache) {
                 MySqlConnector.getInstance().deleteSolution(sessionInfo.getUserInfo(), id);
             }
 

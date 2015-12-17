@@ -23,20 +23,29 @@ import views.dialogs.ValidationResult
 import java.util.*
 
 
-class UserProject(
+open class UserProject(
         id: String,
         name: String,
         parent: Folder,
+        type: ProjectType,
         onFileDeleted: (String) -> Unit,
         onContentLoaded: (ArrayList<File>) -> Unit,
         onContentNotFound: () -> Unit,
         val onFileAdded: (File) -> Unit
-) : Project(ProjectType.USER_PROJECT, id, name, parent, onFileDeleted, onContentLoaded, onContentNotFound) {
+) : Project(type, id, name, parent, onFileDeleted, onContentLoaded, onContentNotFound) {
     val nameListener = VarListener<String>()
     override var name by Listenable(name, nameListener)
 
     fun addEmptyFile(name: String, publicId: String): File {
         var file = File(this, name, publicId)
+        file.listenableIsModified.addModifyListener {onModified()}
+        files.add(file)
+        onFileAdded(file)
+        return file
+    }
+
+    fun addFile(name: String, publicId: String, content: String): File {
+        var file = File(this, name, publicId, content)
         file.listenableIsModified.addModifyListener {onModified()}
         files.add(file)
         onFileAdded(file)

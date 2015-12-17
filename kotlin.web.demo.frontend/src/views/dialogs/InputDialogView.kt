@@ -16,62 +16,106 @@
 
 package views.dialogs
 
-import jquery.ui.button
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
-import org.w3c.dom.HTMLDivElement
+import kotlinx.html.InputType
+import kotlinx.html.div
+import kotlinx.html.dom.create
+import kotlinx.html.input
+import kotlinx.html.js.div
+import kotlinx.html.span
+import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
 import utils.KeyCode
-import utils.jquery.jq
+import utils.jquery.*
 import utils.jquery.ui.Dialog
 import utils.jquery.ui.DialogButton
-import views.dialogs.ValidationResult
 import utils.jquery.ui.button
-import utils.jquery.keydown
-import utils.jquery.trigger
 import kotlin.browser.document
 
 
-object InputDialogView {
-    private val dialogElement: HTMLDivElement = document.create.div {
-        id = "input-dialog"
-    }
+open class InputDialogView(
+        val dialogTitle: String,
+        val inputLabel: String,
+        val okButtonCaption: String,
+        val defaultValue: String,
+        val validate: (String) -> ValidationResult,
+        val callback: (UserInput) -> Unit,
+        val submitOnEnter: Boolean = true
+) {
+    private val dialogElement = render()
 
-    private val inputLabelElement = dialogElement.append.span {
-        id = "input-dialog-text"
-    }
+    private val errorMessageElement = jq(dialogElement).find(".input-dialog-error-message")[0]
 
-    private val inputElement = dialogElement.append.input {
-        id = "input-dialog-input"
-        type = InputType.text
-    }
+    protected val inputElement = jq(dialogElement).find("#input-dialog-input")[0] as HTMLInputElement
 
-    private val errorMessageElement = dialogElement.append.div {
-        classes = setOf("input-dialog-error-message")
-    }
-
-    private val dialog = Dialog(
+    private val dialog: Dialog = Dialog(
             dialogElement,
             resizable = false,
             modal = true,
             width = 380,
-            autoOpen = false,
             onOpen = { event, ui ->
                 inputElement.select()
-            }
+            },
+            onClose = { this.close() },
+            buttons = arrayOf(
+                    DialogButton(
+                            text = okButtonCaption,
+                            click = { event: Event ->
+                                event.stopPropagation()
+                                callback(getUserInput())
+                                this.close()
+                            }
+                    ),
+                    DialogButton(
+                            text = "Cancel",
+                            click = { event: Event ->
+                                event.stopPropagation()
+                                this.close()
+                            }
+                    )
+            )
     )
 
     init {
-        jq(dialogElement).keydown({ event ->
-            when (event.keyCode) {
-                KeyCode.ENTER.code -> {
-                    val okButton = getDialogButton(dialogElement, 1)
-                    okButton.trigger("click")
+        if(submitOnEnter) {
+            jq(dialogElement).keydown({ event ->
+                when (event.keyCode) {
+                    KeyCode.ENTER.code -> {
+                        val okButton = getDialogButton(dialogElement, 1)
+                        okButton.trigger("click")
+                    }
                 }
-            }
-            event.stopPropagation()
-        })
+                event.stopPropagation()
+            })
+        }
+
+        inputElement.oninput = {
+            processValidationResult(validate(inputElement.value))
+        }
+        inputElement.select()
+    }
+
+    open fun render() = document.create.div {
+        id = "input-dialog"
+        title = dialogTitle
+        span {
+            +inputLabel
+            id = "input-dialog-text"
+        }
+        input {
+            id = "input-dialog-input"
+            type = InputType.text
+            value = getVerifiedDefaultValue(defaultValue, validate)
+        }
+        div {
+            classes = setOf("input-dialog-error-message")
+        }
+    }
+
+    protected open fun getUserInput() = UserInput(inputElement.value)
+
+    fun close() {
+        dialog.destroy()
+        dialogElement.parentNode?.removeChild(dialogElement);
     }
 
     private fun processValidationResult(result: ValidationResult) {
@@ -82,7 +126,7 @@ object InputDialogView {
         inputElement.focus()
     }
 
-    private fun getVerifiedDefaultValue(defaultValue: String, validate: (String) -> ValidationResult): String {
+    protected fun getVerifiedDefaultValue(defaultValue: String, validate: (String) -> ValidationResult): String {
         var verifiedDefaultValue = defaultValue
         var i = 1
         while (!validate(verifiedDefaultValue).valid) {
@@ -91,44 +135,8 @@ object InputDialogView {
         }
         return verifiedDefaultValue
     }
-
-    fun open(
-            title: String,
-            inputLabel: String,
-            okButtonCaption: String,
-            defaultValue: String,
-            validate: (String) -> ValidationResult,
-            callback: (String) -> Unit
-    ) {
-
-        inputElement.oninput = {
-            processValidationResult(validate(inputElement.value))
-        }
-        inputElement.value = getVerifiedDefaultValue(defaultValue, validate)
-        inputElement.select()
-
-        inputLabelElement.textContent = inputLabel
-
-        dialog.title = title
-        dialog.buttons = arrayOf(
-                DialogButton(
-                        text = okButtonCaption,
-                        click = { event: Event ->
-                            event.stopPropagation()
-                            callback(inputElement.value)
-                            dialog.close()
-                        }
-                ),
-                DialogButton(
-                        text = "Cancel",
-                        click = { event: Event ->
-                            event.stopPropagation()
-                            dialog.close()
-                        }
-                )
-        )
-        dialog.open()
-    }
 }
+
+open class UserInput(val value: String);
 
 data class ValidationResult(val valid: Boolean, val message: String = "")

@@ -103,8 +103,8 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                     classes = setOf ("rename", "icon")
                     title = "Rename file"
                     onClickFunction = { event ->
-                        InputDialogView.open(
-                                title = "Rename file",
+                        InputDialogView(
+                                dialogTitle = "Rename file",
                                 inputLabel = "File name:",
                                 okButtonCaption = "Rename",
                                 defaultValue = removeKotlinExtension(file.name),
@@ -115,10 +115,10 @@ class FileView(val projectView: ProjectView, parentNode: HTMLElement, val file: 
                                         projectView.project.validateNewFileName(newName)
                                     }
                                 },
-                                callback = { newName: String ->
+                                callback = { userInput->
                                     Application.fileProvider.renameFile(file.id, { newName: String ->
                                         file.name = addKotlinExtension(newName)
-                                    }, newName)
+                                    }, userInput.value)
                                 }
                         )
                         event.stopPropagation()

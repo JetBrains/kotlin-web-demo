@@ -41,7 +41,7 @@ public class UserProjectView(
             renameImg.title = "Rename this project"
             renameImg.onclick = { event ->
                 event.stopPropagation()
-                InputDialogView.open(
+                InputDialogView(
                         "Rename project",
                         "Project name:",
                         "Rename",
@@ -53,7 +53,7 @@ public class UserProjectView(
                                 Application.accordion.validateNewProjectName(newName)
                             }
                         },
-                        { newName -> Application.projectProvider.renameProject(project, newName) }
+                        { userInput -> Application.projectProvider.renameProject(project, userInput.value) }
                 )
             }
             actionIconsElement.insertBefore(renameImg, actionIconsElement.firstChild)
@@ -62,13 +62,13 @@ public class UserProjectView(
             addFileImg.className = "new-file icon"
             addFileImg.onclick = { event ->
                 event.stopPropagation()
-                InputDialogView.open(
+                InputDialogView(
                         "Add new file",
                         "File name:",
                         "Add",
                         "Untitled",
                         { name -> project.validateNewFileName(name) },
-                        { name -> Application.fileProvider.addNewFile(this.project, name) }
+                        { userInput -> Application.fileProvider.addNewFile(this.project, userInput.value) }
                 )
             }
             actionIconsElement.insertBefore(addFileImg, actionIconsElement.firstChild)
@@ -81,6 +81,7 @@ public class UserProjectView(
                 header.publicId,
                 header.name,
                 parent.content,
+                header.type,
                 onFileDeleted,
                 onContentLoaded,
                 onContentNotFound,

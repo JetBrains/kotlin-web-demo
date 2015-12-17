@@ -300,9 +300,9 @@ public class MySqlConnector {
     }
 
 
-    public String addProject(UserInfo userInfo, String name) throws DatabaseOperationException {
+    public String addProject(UserInfo userInfo, String name, String type) throws DatabaseOperationException {
         try {
-            String projectId = addProject(userInfo, new Project(name, "", "java"));
+            String projectId = addProject(userInfo, new Project(name, "", "java"), type, null);
             String fileId = addFileToProject(userInfo, projectId, name, "fun main(args: Array<String>) {\n\n}");
 
             ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
@@ -314,27 +314,32 @@ public class MySqlConnector {
         }
     }
 
-    public String addProject(UserInfo userInfo, Project project) throws DatabaseOperationException {
-        return addProject(userInfo, project, null, false);
+    public String addAdventOfCodeProject(UserInfo userInfo, String name, String inputFileContent) throws DatabaseOperationException {
+        try {
+            String projectId = addProject(userInfo, new Project(name, "", "java"), "ADVENT_OF_CODE_PROJECT", null);
+            String fileId = addFileToProject(userInfo, projectId, name, "fun main(args: Array<String>) {\n\n}");
+            String inputFileId = addFileToProject(userInfo, projectId, "Input.kt", inputFileContent);
+
+            ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
+            response.put("projectId", projectId);
+            response.put("fileId", fileId);
+            response.put("inputFileId", inputFileId);
+            return objectMapper.writeValueAsString(response);
+        } catch (IOException e) {
+            throw new DatabaseOperationException("IO exception");
+        }
     }
 
-    private String addProject(UserInfo userInfo, Project project, String taskPublicId, boolean completed) throws DatabaseOperationException {
+    public String addProject(UserInfo userInfo, Project project, String type) throws DatabaseOperationException {
+        return addProject(userInfo, project, type, null);
+    }
+
+    private String addProject(UserInfo userInfo, Project project, String type, Integer taskId) throws DatabaseOperationException {
         if (!checkCountOfProjects(userInfo)) {
             throw new DatabaseOperationException("You can't save more than 100 projects");
         }
 
         int userId = getUserId(userInfo);
-        Integer taskId = getTaskId(taskPublicId);
-        String type;
-        if (taskId == null) {
-            type = "USER_PROJECT";
-        } else {
-            if (completed) {
-                type = "KOANS_TASK";
-            } else {
-                type = "INCOMPLETE_KOANS_TASK";
-            }
-        }
 
         PreparedStatement st = null;
         try (Connection connection = dataSource.getConnection()) {
@@ -414,17 +419,18 @@ public class MySqlConnector {
         }
     }
 
-    public ArrayNode getProjectHeaders(UserInfo userInfo) throws DatabaseOperationException {
+    public ArrayNode getProjectHeaders(UserInfo userInfo, String projectType) throws DatabaseOperationException {
         PreparedStatement st = null;
         ResultSet rs = null;
         try (Connection connection = dataSource.getConnection()) {
             st = connection.prepareStatement(
                     "SELECT projects.public_id, projects.name FROM projects JOIN " +
                             "users ON projects.owner_id = users.id WHERE " +
-                            "(users.client_id = ? AND users.provider = ? AND projects.type = 'USER_PROJECT')"
+                            "(users.client_id = ? AND users.provider = ? AND projects.type = ?)"
             );
             st.setString(1, userInfo.getId());
             st.setString(2, userInfo.getType());
+            st.setString(3, projectType);
 
             rs = st.executeQuery();
 
@@ -849,7 +855,9 @@ public class MySqlConnector {
     public void saveSolution(UserInfo userInfo, Project solution, boolean completed) throws DatabaseOperationException {
         String solutionId = getSolutionId(userInfo, solution.id);
         if (solutionId == null) {
-            addProject(userInfo, solution, solution.id, completed);
+            Integer taskId = getTaskId(solutionId);
+            String type = completed ? "KOANS_TASK" : "INCOMPLETE_KOANS_TASK";
+            addProject(userInfo, solution, type, taskId);
         } else {
             for (ProjectFile file : solution.files) {
                 saveFile(solutionId, file);

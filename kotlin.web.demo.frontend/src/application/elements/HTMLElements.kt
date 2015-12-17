@@ -63,7 +63,7 @@ internal object Elements{
 
         saveAsButton.onclick = {
             if (Application.loginView.isLoggedIn) {
-                InputDialogView.open(
+                InputDialogView(
                         "Save project",
                         "Project name:",
                         "Save",
@@ -71,11 +71,11 @@ internal object Elements{
                         { name ->
                             Application.accordion.validateNewProjectName(name)
                         },
-                        { name ->
+                        { userInput ->
                             Application.projectProvider.forkProject(Application.accordion.selectedProjectView!!.project, { data ->
                                 Application.accordion.selectedProjectView!!.project.loadOriginal()
                                 Application.accordion.addNewProjectWithContent(data.publicId, JSON.parse(data.content))
-                            }, name)
+                            }, userInput.value)
                         }
                 )
             } else {

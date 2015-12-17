@@ -23,6 +23,8 @@ import kotlinx.html.dom.*
 import model.Folder
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
+import views.dialogs.AdventOfCodeInput
+import views.dialogs.AdventOfCodeInputDialog
 import views.dialogs.InputDialogView
 import views.dialogs.ValidationResult
 import views.tree.FolderView
@@ -31,6 +33,7 @@ import views.tree.ProjectView
 class MyProgramsFolderView(parentNode: HTMLElement,
                            content: Folder,
                            parent: FolderView?,
+                           type: String,
                            onProjectDeleted: (ProjectView) -> Unit,
                            onProjectHeaderClick: (ProjectView) -> Unit,
                            onProjectSelected: (ProjectView) -> Unit,
@@ -45,8 +48,8 @@ class MyProgramsFolderView(parentNode: HTMLElement,
             headerElement.onclick = {
                 Application.loginView.openLoginDialog()
             }
-            headerElement.append.div{
-                + "(please log in)"
+            headerElement.append.div {
+                +"(please log in)"
                 id = "login-link"
                 classes = setOf("login-link")
             }
@@ -55,22 +58,38 @@ class MyProgramsFolderView(parentNode: HTMLElement,
                 classes = setOf("icons")
                 div {
                     classes = setOf("new-project", "icon")
-                    onClickFunction = {
-                        InputDialogView.open(
-                                title = "Add new project",
-                                inputLabel = "Project name:",
-                                okButtonCaption = "Add",
-                                defaultValue = "Untitled",
-                                validate = { name -> validateNewProjectName(name) },
-                                callback = { name -> Application.projectProvider.addNewProject(name) }
-                        )
+                    onClickFunction = { event ->
+                        event.stopPropagation()
+                        if (type == "ADVENT_OF_CODE_PROJECT") {
+                            AdventOfCodeInputDialog(
+                                    dialogTitle = "Add new advent of code project",
+                                    inputLabel = "Project name:",
+                                    okButtonCaption = "Add",
+                                    defaultValue = "Advent",
+                                    validate = { name -> validateNewProjectName(name) },
+                                    callback = { userInput ->
+                                        userInput as AdventOfCodeInput
+                                        Application.projectProvider.addAdventOfCodeProject(userInput.value, userInput.codeInput)
+                                    }
+                            )
+                        } else {
+                            InputDialogView(
+                                    dialogTitle = "Add new project",
+                                    inputLabel = "Project name:",
+                                    okButtonCaption = "Add",
+                                    defaultValue = "Untitled",
+                                    validate = { name -> validateNewProjectName(name) },
+                                    callback = { userInput -> Application.projectProvider.addNewProject(userInput.value) }
+                            )
+
+                        }
                     }
                 }
             }
         }
     }
 
-    override fun createProject(header: ProjectHeader): ProjectView{
+    override fun createProject(header: ProjectHeader): ProjectView {
         val projectView = UserProjectView(
                 header,
                 this,

@@ -48,6 +48,7 @@ class AccordionView(
     public var selectedFileView: FileView? = null
         private set
     private var myProgramsFolder: MyProgramsFolderView by Delegates.notNull()
+    private var adventOfCodeFolder: MyProgramsFolderView by Delegates.notNull()
     private var publicLinksFolder: FolderView? = null
     private var childFolders: List<FolderView> by Delegates.notNull()
 
@@ -85,7 +86,7 @@ class AccordionView(
         ))
     }
 
-    fun selectedFileDeleted () {
+    fun selectedFileDeleted() {
         selectedFileView = null
         onSelectedFileDeleted()
     }
@@ -102,12 +103,25 @@ class AccordionView(
                             parentNode = element,
                             content = folder,
                             parent = null,
+                            type = "USER_PROJECT",
                             onProjectDeleted = onProjectDeleted,
                             onProjectHeaderClick = onProjectHeaderClick,
                             onProjectSelected = onProjectSelected,
                             onProjectCreated = onProjectCreated
                     );
                     myProgramsFolder
+                } else if (folder.name == "Advent Of Code") {
+                    adventOfCodeFolder = MyProgramsFolderView(
+                            parentNode = element,
+                            content = folder,
+                            parent = null,
+                            type = "ADVENT_OF_CODE_PROJECT",
+                            onProjectDeleted = onProjectDeleted,
+                            onProjectHeaderClick = onProjectHeaderClick,
+                            onProjectSelected = onProjectSelected,
+                            onProjectCreated = onProjectCreated
+                    );
+                    adventOfCodeFolder
                 } else if (folder.name == "Public links") {
                     val folderView = FolderView(
                             parentNode = element,
@@ -147,6 +161,7 @@ class AccordionView(
             jq(element).accordion("refresh")
             if (!Application.loginView.isLoggedIn) {
                 jq(myProgramsFolder.headerElement).unbind("click")
+                jq(adventOfCodeFolder.headerElement).unbind("click")
             }
             loadFirstItem()
         }
@@ -159,8 +174,23 @@ class AccordionView(
                 ProjectType.USER_PROJECT,
                 false
         ))
+
         projectView.project.setDefaultContent()
         (projectView.project as UserProject).addFileWithMain(name, fileId)
+        selectProject(publicId)
+    }
+
+    fun addAdventOfCodeProject(name: String, publicId: String, fileId: String, inputFileId: String, fileContent: String) {
+        val projectView = adventOfCodeFolder.createProject(ProjectHeader(
+                name,
+                publicId,
+                ProjectType.ADVENT_OF_CODE_PROJECT,
+                false
+        ))
+
+        projectView.project.setDefaultContent()
+        (projectView.project as UserProject).addFileWithMain(name, inputFileId)
+        projectView.project.addFile("Input.kt", fileId, fileContent)
         selectProject(publicId)
     }
 

@@ -80,6 +80,10 @@ class Dialog(
         jq(dialogElement).dialog("open")
     }
 
+    fun destroy() {
+        jq(dialogElement).dialog("destroy")
+    }
+
     fun close() {
         jq(dialogElement).dialog("close")
     }
