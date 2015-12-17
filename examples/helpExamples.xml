@@ -214,7 +214,7 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <name>Multi-declarations</name>
         <text>
             <p>
-                In this example introduces a concept that we call <b>mutli-declarations</b>. It creates multiple variable at once. Anything can be on the right-hand side of a mutli-declaration, as long as the required number of <b>component</b> functions can be called on it.
+                In this example introduces a concept that we call <b>multi-declarations</b>. It creates multiple variable at once. Anything can be on the right-hand side of a multi-declaration, as long as the required number of <b>component</b> functions can be called on it.
             </p>
         </text>
         <args/>
