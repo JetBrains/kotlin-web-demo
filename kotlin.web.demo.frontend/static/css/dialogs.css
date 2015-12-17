@@ -183,10 +183,11 @@
     border: 1px solid #969696;
     border-radius: 3px;
     margin-left: 5px;
+    margin-bottom: 5px;
 }
 
 #input-dialog .form-wrapper{
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 #input-dialog .textarea-label{
@@ -194,8 +195,8 @@
 }
 
 .input-dialog-error-message {
-    top: 15px;
     position: relative;
+    text-align: center;
     color: red;
 }
 

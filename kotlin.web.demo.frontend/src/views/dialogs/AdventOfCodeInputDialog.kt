@@ -52,13 +52,13 @@ class AdventOfCodeInputDialog(
                 type = InputType.text
                 value = getVerifiedDefaultValue(defaultValue, validate)
             }
-        }
-        div {
-            classes = setOf("input-dialog-error-message")
+            div {
+                classes = setOf("input-dialog-error-message")
+            }
         }
         div {
             classes = setOf("textarea-label")
-            +"Your input: "
+            +"Your puzzle input: "
         }
         textArea {
             id = "advent-of-code-input"

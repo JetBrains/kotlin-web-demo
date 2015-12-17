@@ -97,6 +97,7 @@ class MyProgramsFolderView(parentNode: HTMLElement,
                 onProjectSelected
         )
         onProjectCreated(projectView)
+        projects.add(projectView)
         return projectView
     }
 
