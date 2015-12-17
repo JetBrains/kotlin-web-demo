@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS projects (
   run_configuration ENUM ('java', 'js', 'canvas', 'junit') NOT NULL             DEFAULT 'java',
   origin            VARCHAR(100),
   read_only_files   TEXT                                   NOT NULL,
-  type    ENUM('USER_PROJECT', 'KOANS_TASK', 'INCOMPLETE_KOANS_TASK') NOT NULL DEFAULT 'USER_PROJECT',
+  type    ENUM('USER_PROJECT', 'KOANS_TASK', 'INCOMPLETE_KOANS_TASK', 'ADVENT_OF_CODE_PROJECT') NOT NULL DEFAULT 'USER_PROJECT',
   task_id INT                                                                  DEFAULT NULL, #NULL for user projects
   FOREIGN KEY (task_id) REFERENCES koans_tasks (id)
     ON DELETE RESTRICT,
