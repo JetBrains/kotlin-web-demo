@@ -40,6 +40,7 @@ class AdventOfCodeInputDialog(
 
     override fun render() = document.create.div {
         id = "input-dialog"
+        classes = setOf("advent-of-code-dialog")
         title = dialogTitle
         div {
             classes = setOf("form-wrapper")

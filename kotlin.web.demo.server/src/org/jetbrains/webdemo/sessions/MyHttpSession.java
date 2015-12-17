@@ -229,8 +229,8 @@ public class MyHttpSession {
             }
 
             conn.setRequestMethod("POST");
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(15000);
             conn.setUseCaches(false);
             conn.setDoOutput(hasoutbody);
 

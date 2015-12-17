@@ -317,7 +317,7 @@ public class MySqlConnector {
     public String addAdventOfCodeProject(UserInfo userInfo, String name, String inputFileContent) throws DatabaseOperationException {
         try {
             String projectId = addProject(userInfo, new Project(name, "", "java"), "ADVENT_OF_CODE_PROJECT", null);
-            String fileId = addFileToProject(userInfo, projectId, name, "fun main(args: Array<String>) {\n\n}");
+            String fileId = addFileToProject(userInfo, projectId, name, "fun main(args: Array<String>) {\n//your input stored in the `input` variable\n}");
             String inputFileId = addFileToProject(userInfo, projectId, "Input.kt", inputFileContent);
 
             ObjectNode response = new ObjectNode(JsonNodeFactory.instance);

@@ -64,7 +64,7 @@
 #examples-list .ui-accordion-header .container{
     flex-grow: 1;
     padding-left: 7px;
-    padding-right: 10px;
+    padding-right: 5px;
 }
 
 #examples-list > .ui-accordion-header:first-child {
@@ -360,6 +360,7 @@
     height: 15px;
     margin-top: 7px;
     margin-right: 3px;
+    display: inline-block;
     background: url("/static/images/icons_all_sprite.png") no-repeat -50px -200px;
 }
 
@@ -413,4 +414,16 @@
     left: 1px;
     top: 1px;
     z-index: -1;
+}
+
+.advent-of-code-icon {
+    width: 14px;
+    height: 14px;
+    margin-left: 4px;
+    display: inline-block;
+    background-image: url("/static/images/star.png");
+}
+
+.advent-of-code-icon:hover {
+    background-image: url("/static/images/starHover.png");
 }

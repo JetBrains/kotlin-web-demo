@@ -23,6 +23,9 @@ import kotlinx.html.dom.*
 import model.Folder
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
+import utils.jquery.find
+import utils.jquery.jq
+import utils.jquery.on
 import views.dialogs.AdventOfCodeInput
 import views.dialogs.AdventOfCodeInputDialog
 import views.dialogs.InputDialogView
@@ -42,14 +45,27 @@ class MyProgramsFolderView(parentNode: HTMLElement,
 
 
     init {
+        if(type == "ADVENT_OF_CODE_PROJECT"){
+            container.append.a {
+                href = "http://adventofcode.com/"
+                classes = setOf("advent-of-code-link")
+                div {
+                    classes = setOf("advent-of-code-icon")
+                }
+            }
+        }
+
+        jq(container).find("advent-of-code-link").on("click", { e -> e.stopPropagation()})
+
         if (!Application.loginView.isLoggedIn) {
             folderNameElement.style.display = "inline-block"
             headerElement.style.color = "rgba(0,0,0,0.5)"
             headerElement.onclick = {
                 Application.loginView.openLoginDialog()
             }
+
             headerElement.append.div {
-                +"(please log in)"
+                +"(log in)"
                 id = "login-link"
                 classes = setOf("login-link")
             }
@@ -62,7 +78,7 @@ class MyProgramsFolderView(parentNode: HTMLElement,
                         event.stopPropagation()
                         if (type == "ADVENT_OF_CODE_PROJECT") {
                             AdventOfCodeInputDialog(
-                                    dialogTitle = "Add new advent of code project",
+                                    dialogTitle = "Add new \"Advent of Code\" project",
                                     inputLabel = "Project name:",
                                     okButtonCaption = "Add",
                                     defaultValue = "Advent",

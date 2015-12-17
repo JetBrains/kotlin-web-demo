@@ -186,8 +186,18 @@
     margin-bottom: 5px;
 }
 
+#input-dialog.advent-of-code-dialog {
+    padding-bottom: 10px;
+    padding-top: 20px;
+}
+
+#input-dialog.advent-of-code-dialog input{
+    padding: 2px 2px 2px 0;
+}
+
+
 #input-dialog .form-wrapper{
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 #input-dialog .textarea-label{

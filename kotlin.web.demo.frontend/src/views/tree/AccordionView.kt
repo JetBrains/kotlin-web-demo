@@ -189,8 +189,8 @@ class AccordionView(
         ))
 
         projectView.project.setDefaultContent()
-        (projectView.project as UserProject).addFileWithMain(name, inputFileId)
-        projectView.project.addFile("Input.kt", fileId, fileContent)
+        (projectView.project as UserProject).addFile(name, fileId, "fun main(args: Array<String>) {\n//your input stored in the `input` variable\n}")
+        projectView.project.addFile("Input.kt", inputFileId, fileContent)
         selectProject(publicId)
     }
 

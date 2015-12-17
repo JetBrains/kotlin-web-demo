@@ -80,7 +80,7 @@ class RunProvider(
                 dataType = DataType.JSON,
                 type = HTTPRequestType.POST,
                 data = json ("project" to JSON.stringify(project)),
-                timeout = 10000,
+                timeout = 15000,
                 complete = { onComplete() },
                 error = { jqXHR, textStatus, errorThrown ->
                     try {
