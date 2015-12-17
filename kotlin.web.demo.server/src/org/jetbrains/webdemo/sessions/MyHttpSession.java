@@ -458,6 +458,16 @@ public class MyHttpSession {
                 addFolderContent(responseBody, folder, taskStatuses);
             }
 
+            ObjectNode adventOfCodeContent = responseBody.addObject();
+            adventOfCodeContent.put("name", "Advent Of Code");
+            adventOfCodeContent.put("id", "advent%20of%20code");
+            adventOfCodeContent.putArray("childFolders");
+            if (sessionInfo.getUserInfo().isLogin()) {
+                adventOfCodeContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo(), "ADVENT_OF_CODE_PROJECT"));
+            } else {
+                adventOfCodeContent.putArray("projects");
+            }
+
             ObjectNode myProgramsContent = responseBody.addObject();
             myProgramsContent.put("name", "My programs");
             myProgramsContent.put("id", "My%20programs");
@@ -468,15 +478,7 @@ public class MyHttpSession {
                 myProgramsContent.putArray("projects");
             }
 
-            ObjectNode adventOfCodeContent = responseBody.addObject();
-            adventOfCodeContent.put("name", "Advent Of Code");
-            adventOfCodeContent.put("id", "advent%20of%20code");
-            adventOfCodeContent.putArray("childFolders");
-            if (sessionInfo.getUserInfo().isLogin()) {
-                adventOfCodeContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo(), "ADVENT_OF_CODE_PROJECT"));
-            } else {
-                adventOfCodeContent.putArray("projects");
-            }
+
             writeResponse(responseBody.toString(), HttpServletResponse.SC_OK);
         } catch (DatabaseOperationException e) {
             writeResponse(e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

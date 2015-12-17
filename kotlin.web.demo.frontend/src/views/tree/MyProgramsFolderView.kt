@@ -57,8 +57,8 @@ class MyProgramsFolderView(parentNode: HTMLElement,
 
         jq(container).find("advent-of-code-link").on("click", { e -> e.stopPropagation()})
 
+        folderNameElement.style.display = "inline-block"
         if (!Application.loginView.isLoggedIn) {
-            folderNameElement.style.display = "inline-block"
             headerElement.style.color = "rgba(0,0,0,0.5)"
             headerElement.onclick = {
                 Application.loginView.openLoginDialog()
