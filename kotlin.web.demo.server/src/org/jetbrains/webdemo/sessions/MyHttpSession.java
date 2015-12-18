@@ -459,7 +459,7 @@ public class MyHttpSession {
             }
 
             ObjectNode adventOfCodeContent = responseBody.addObject();
-            adventOfCodeContent.put("name", "Advent Of Code");
+            adventOfCodeContent.put("name", "Advent of Code");
             adventOfCodeContent.put("id", "advent%20of%20code");
             adventOfCodeContent.putArray("childFolders");
             if (sessionInfo.getUserInfo().isLogin()) {
