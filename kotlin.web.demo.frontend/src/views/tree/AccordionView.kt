@@ -110,7 +110,7 @@ class AccordionView(
                             onProjectCreated = onProjectCreated
                     );
                     myProgramsFolder
-                } else if (folder.name == "Advent Of Code") {
+                } else if (folder.id == "advent%20of%20code") {
                     adventOfCodeFolder = MyProgramsFolderView(
                             parentNode = element,
                             content = folder,
