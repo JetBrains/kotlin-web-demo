@@ -553,7 +553,7 @@ public class MyHttpSession {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             String publicId = request.getParameter("publicId");
-            String type = request.getParameter("type");
+            String type = request.getParameter("projectType");
             MySqlConnector.getInstance().saveProject(sessionInfo.getUserInfo(), publicId, currentProject, type);
             writeResponse("ок", HttpServletResponse.SC_OK);
         } catch (IOException e) {

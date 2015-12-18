@@ -306,7 +306,7 @@ class ProjectProvider(
                     },
                     type = HTTPRequestType.POST,
                     timeout = 10000,
-                    data = json("project" to JSON.stringify(project), "publicId" to project.id, "type" to project.type.toString()),
+                    data = json("project" to JSON.stringify(project), "publicId" to project.id, "projectType" to project.type.name),
                     dataType = DataType.TEXT,
                     error = { jqXHR, textStatus, errorThrown ->
                         try {
