@@ -73,11 +73,11 @@ class AdventOfCodeInputDialog(
             val lines = adventOfCodeInput.value.split(Regex("\r?\n"));
             val inputFileContentBuilder = StringBuilder();
             inputFileContentBuilder.append("val input = listOf(")
-            inputFileContentBuilder.append(lines.joinToString(separator = "\",\n\"", prefix = "\n\"", postfix = "\"\n"))
+            inputFileContentBuilder.append(lines.joinToString(separator = "\"\"\",\n\"\"\"", prefix = "\n\"\"\"", postfix = "\"\"\"\n"))
             inputFileContentBuilder.append(")")
             inputFileContentBuilder.toString()
         } else {
-            "val input = \"$codeInput\""
+            "val input = \"\"\"$codeInput\"\"\""
         }
         return AdventOfCodeInput(inputElement.value, inputFileContent)
     }

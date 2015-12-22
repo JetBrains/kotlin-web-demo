@@ -37,7 +37,7 @@ open class UserProject(
     override var name by Listenable(name, nameListener)
 
     fun addEmptyFile(name: String, publicId: String): File {
-        var file = File(this, name, publicId)
+        var file = File(this, addKotlinExtension(name), publicId)
         file.listenableIsModified.addModifyListener {onModified()}
         files.add(file)
         onFileAdded(file)
@@ -45,7 +45,7 @@ open class UserProject(
     }
 
     fun addFile(name: String, publicId: String, content: String): File {
-        var file = File(this, name, publicId, content)
+        var file = File(this, addKotlinExtension(name), publicId, content)
         file.listenableIsModified.addModifyListener {onModified()}
         files.add(file)
         onFileAdded(file)
