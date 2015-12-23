@@ -20,6 +20,7 @@
           <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-jdk-annotations.jar" />
           <element id="library" level="project" name="junit" />
           <element id="library" level="project" name="commons-logging-1.2" />
+          <element id="library" level="project" name="kotlin-test" />
         </element>
       </element>
       <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/web" />
