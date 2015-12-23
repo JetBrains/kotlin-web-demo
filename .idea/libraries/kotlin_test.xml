@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="kotlin-test">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-test.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
