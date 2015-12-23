@@ -93,6 +93,7 @@ public class EnvironmentManager {
 
         classpath.add(new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar"));
         classpath.add(new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-reflect.jar"));
+        classpath.add(new File(BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-test.jar"));
         if (arguments.classpath != null) {
             for (String element : Splitter.on(File.pathSeparatorChar).split(arguments.classpath)) {
                 classpath.add(new File(element));

@@ -28,5 +28,6 @@
     <orderEntry type="library" name="kotlin-j2kConverter" level="project" />
     <orderEntry type="module" module-name="kotlin.web.demo.common" />
     <orderEntry type="library" name="commons-logging-1.2" level="project" />
+    <orderEntry type="library" name="kotlin-test" level="project" />
   </component>
 </module>

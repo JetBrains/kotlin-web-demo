@@ -487,7 +487,6 @@ abstract class Shape() {
 
 class Vector(val x: Double = 0.0, val y: Double = 0.0) {
     operator fun plus(v: Vector) = v(x + v.x, y + v.y)
-    operator fun minus() = v(-x, -y)
     operator fun minus(v: Vector) = v(x - v.x, y - v.y)
     operator fun times(koef: Double) = v(x * koef, y * koef)
     fun distanceTo(v: Vector) = Math.sqrt((this - v).sqr)

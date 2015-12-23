@@ -345,6 +345,7 @@ public class JavaRunner {
         String classpath = (pathToRootOut +
                 File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar" +
                 File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-reflect.jar" +
+                File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-test.jar" +
                 File.pathSeparator + BackendSettings.CLASS_PATH + File.separator + "Executors.jar");
         if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
             builder.add(classpath +
