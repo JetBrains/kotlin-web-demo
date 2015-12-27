@@ -1,5 +1,5 @@
 /**
- *  Kotlin Standart Library provide component functions for Map.Entry
+ *  Kotlin Standard Library provide component functions for Map.Entry
  */
 
 fun main(args: Array<String>) {
