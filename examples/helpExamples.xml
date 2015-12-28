@@ -224,7 +224,7 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <name>Traversing a map</name>
         <text>
             <p>
-                Kotlin Standart Library provide <b>component</b> functions for Map.Entry
+                Kotlin Standard Library provide <b>component</b> functions for Map.Entry
             </p>
         </text>
         <args/>
