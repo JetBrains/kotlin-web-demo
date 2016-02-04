@@ -7,4 +7,4 @@ Read about [read-only and mutable views on Java collections](http://blog.jetbrai
 In [Kotlin standard library](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/)
 there are lots of extension functions that make the work with collections more convenient.
 Rewrite the previous example once more using an extension function
-[`sortedDescending`](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/sorted-descending.html).
+[`sortedDescending`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/sorted-descending.html).

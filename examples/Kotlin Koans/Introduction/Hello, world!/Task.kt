@@ -1,1 +1,1 @@
-fun start() = <taskWindow>TODO()</taskWindow>
+fun start(): String = <taskWindow>TODO()</taskWindow>

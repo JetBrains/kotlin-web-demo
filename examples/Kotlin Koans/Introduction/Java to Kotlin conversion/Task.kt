@@ -1,1 +1,1 @@
-fun toJSON(collection: Collection<Int>): String = <taskWindow>TODO()</taskWindow>
+<taskWindow>fun toJSON(collection: Collection<Int>): String = TODO()</taskWindow>

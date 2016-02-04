@@ -1,6 +1,6 @@
 <answer>fun <T> T.myApply(f: T.() -> Unit): T { f(); return this }</answer>
 
-fun buildString(): String {
+fun createString(): String {
     return StringBuilder().myApply {
         append("Numbers: ")
         for (i in 1..10) {
@@ -9,7 +9,7 @@ fun buildString(): String {
     }.toString()
 }
 
-fun buildMap(): Map<Int, String> {
+fun createMap(): Map<Int, String> {
     return hashMapOf<Int, String>().myApply {
         put(0, "0")
         for (i in 1..10) {

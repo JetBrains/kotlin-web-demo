@@ -1,6 +1,6 @@
 import java.util.*
 
-fun partitionTo() = <taskWindow>TODO()</taskWindow>
+<taskWindow>fun partitionTo() = TODO()</taskWindow>
 
 fun partitionWordsAndLines() {
     val (words, lines) = listOf("a", "a b", "c", "d e").

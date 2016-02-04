@@ -1,7 +1,7 @@
 {
   "sequential": false,
   "examples": [
-    "Extension function literals",
+    "Function literals with receiver",
     "String and map builders",
     "The function apply",
     "Html builders",

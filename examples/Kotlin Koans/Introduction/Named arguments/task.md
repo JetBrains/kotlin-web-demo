@@ -2,7 +2,7 @@
 
 [Default and named](http://kotlinlang.org/docs/reference/functions.html#default-arguments)
 arguments help to minimize the number of overloads and improve the readability of the function invocation.
-The library function [`joinToString`](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/join-to-string.html)
+The library function [`joinToString`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/join-to-string.html)
 is declared with default values for parameters:
 
 ```

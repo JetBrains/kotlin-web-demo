@@ -1,8 +1,8 @@
 ## Sort
 
 Implement `Shop.getCustomersSortedByNumberOfOrders()` using
-[`sorted`](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/sorted.html) or
-[`sortedBy`](http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/sorted-by.html).
+[`sorted`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/sorted.html) or
+[`sortedBy`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/sorted-by.html).
 
 ```kotlin
 listOf("bbb", "a", "cc").sorted() == listOf("a", "bbb", "cc")

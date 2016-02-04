@@ -1,4 +1,4 @@
-fun toJSON(collection:Collection<Int>):String {
+fun toJSON(collection: Collection<Int>): String {
     val sb = StringBuilder()
     sb.append("[")
     val iterator = collection.iterator()

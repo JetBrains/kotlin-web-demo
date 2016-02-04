@@ -1,1 +1,1 @@
-fun start() = "OK"
+fun start(): String = "OK"
