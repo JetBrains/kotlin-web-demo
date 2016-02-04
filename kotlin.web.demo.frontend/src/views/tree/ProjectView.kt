@@ -202,7 +202,7 @@ open class ProjectView(
         return Application.accordion.selectedProjectView === this
     }
 
-    fun getFileViewByName(name: String) = fileViews.values().firstOrNull {
+    fun getFileViewByName(name: String) = fileViews.values.firstOrNull {
         it.file.name == name
     }
 

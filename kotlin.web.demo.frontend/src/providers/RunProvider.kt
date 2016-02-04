@@ -18,7 +18,10 @@ package providers
 
 import application.Application
 import model.Project
-import utils.*
+import utils.Object
+import utils.clear
+import utils.eval
+import utils.unEscapeString
 import views.Configuration
 import views.ConfigurationType
 import views.ConfigurationTypeRunner
@@ -66,7 +69,7 @@ class RunProvider(
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForErrors(data)) {
-                                onSuccess(data.toArrayList(), project)
+                                onSuccess(data.toMutableList(), project)
                             } else {
                                 onErrorsFound(data, project)
                             }

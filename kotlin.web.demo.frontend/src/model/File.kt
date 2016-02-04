@@ -16,10 +16,8 @@
 
 package model
 
-import application.Application
 import utils.Listenable
 import utils.VarListener
-import kotlin.browser.localStorage
 
 class File(
         val project: Project,
@@ -28,7 +26,7 @@ class File(
         var text: String = "",
         userText: String? = text,
         val isModifiable: Boolean = true,
-        val type: String = FileType.KOTLIN_FILE.name(),
+        val type: String = FileType.KOTLIN_FILE.name,
         isRevertible: Boolean = true,
         val taskWindows: List<TaskWindow> = emptyList(),
         val solutions: Array<String>? = null
@@ -67,7 +65,7 @@ class File(
                         obj.modifiable,
                         obj.type,
                         obj.revertible,
-                        (obj.taskWindows as Array<TaskWindow>?)?.toArrayList() ?: emptyList(),
+                        (obj.taskWindows as Array<TaskWindow>?)?.toMutableList() ?: emptyList(),
                         obj.solutions
                 )
     }
