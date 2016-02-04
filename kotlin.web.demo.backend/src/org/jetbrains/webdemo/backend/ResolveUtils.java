@@ -98,7 +98,7 @@ public class ResolveUtils {
 
         Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJvm(
                 moduleContext, trace, providerFactory,
-                GlobalSearchScope.allScope(project), LookupTracker.DO_NOTHING, new JvmPackagePartProvider(Initializer.getInstance().getEnvironment()));
+                GlobalSearchScope.allScope(project), LookupTracker.Companion.getDO_NOTHING(), new JvmPackagePartProvider(Initializer.getInstance().getEnvironment()));
 
         List<LazyJavaPackageFragmentProvider> additionalProviders = Collections.singletonList(
                 DslKt.getService(analyzerAndProvider.second, JavaDescriptorResolver.class).getPackageFragmentProvider());

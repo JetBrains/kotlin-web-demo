@@ -62,11 +62,11 @@ import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
 import java.util.*;
 
 public class JsonResponseForCompletion {
-    private static final DescriptorRenderer RENDERER = IdeDescriptorRenderers.INSTANCE.getSOURCE_CODE().withOptions(new Function1<DescriptorRendererOptions, Unit>() {
+    private static final DescriptorRenderer RENDERER = IdeDescriptorRenderers.SOURCE_CODE.withOptions(new Function1<DescriptorRendererOptions, Unit>() {
         @Override
         public Unit invoke(DescriptorRendererOptions descriptorRendererOptions) {
             descriptorRendererOptions.setNameShortness(NameShortness.SHORT);
-            descriptorRendererOptions.setTypeNormalizer(IdeDescriptorRenderers.INSTANCE.getAPPROXIMATE_FLEXIBLE_TYPES());
+            descriptorRendererOptions.setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES);
             descriptorRendererOptions.setParameterNameRenderingPolicy(ParameterNameRenderingPolicy.NONE);
             descriptorRendererOptions.setRenderDefaultValues(false);
             descriptorRendererOptions.setFlexibleTypesForCode(false);
@@ -227,12 +227,12 @@ public class JsonResponseForCompletion {
                     resolutionScope = bindingContext.get(BindingContext.LEXICAL_SCOPE, receiverExpression);
 
                     if (expressionType != null && resolutionScope != null) {
-                        descriptors = expressionType.getMemberScope().getContributedDescriptors(DescriptorKindFilter.ALL, MemberScope.ALL_NAME_FILTER);
+                        descriptors = expressionType.getMemberScope().getContributedDescriptors(DescriptorKindFilter.ALL, MemberScope.Companion.getALL_NAME_FILTER());
                     }
                 } else {
                     resolutionScope = bindingContext.get(BindingContext.LEXICAL_SCOPE, (KtExpression) element);
                     if (resolutionScope != null) {
-                        descriptors = resolutionScope.getContributedDescriptors(DescriptorKindFilter.ALL, MemberScope.ALL_NAME_FILTER);
+                        descriptors = resolutionScope.getContributedDescriptors(DescriptorKindFilter.ALL, MemberScope.Companion.getALL_NAME_FILTER());
                     } else {
                         return "[]";
                     }

@@ -20,12 +20,12 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.progress.EmptyProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import org.jetbrains.kotlin.j2k.*;
-import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
+import org.jetbrains.kotlin.j2k.ConverterSettings;
+import org.jetbrains.kotlin.j2k.EmptyJavaToKotlinServices;
+import org.jetbrains.kotlin.j2k.JavaToKotlinConverter;
+import org.jetbrains.kotlin.j2k.JavaToKotlinTranslator;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
@@ -48,8 +48,8 @@ public class WebDemoJavaToKotlinConverter {
         try {
             JavaToKotlinConverter converter = new JavaToKotlinConverter(
                     project,
-                    ConverterSettings.defaultSettings,
-                    EmptyJavaToKotlinServices.INSTANCE$);
+                    ConverterSettings.Companion.getDefaultSettings(),
+                    EmptyJavaToKotlinServices.INSTANCE);
             PsiElementFactory instance = PsiElementFactory.SERVICE.getInstance(project);
 
             List<PsiElement> inputElements = null;
@@ -89,7 +89,7 @@ public class WebDemoJavaToKotlinConverter {
                 if (it == null) continue;
                 textResult = textResult + it.getText() + "\n";
             }
-            textResult = JavaToKotlinTranslator.INSTANCE$.prettify(textResult);
+            textResult = JavaToKotlinTranslator.INSTANCE.prettify(textResult);
 
             if (resultFormConverter.isEmpty()) {
                 result.add(ResponseUtils.getErrorAsJsonNode("Generated code is empty."));

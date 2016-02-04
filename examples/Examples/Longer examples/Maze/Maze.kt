@@ -20,6 +20,8 @@
  */
 package maze
 
+import java.util.*
+
 /**
  * Declare a point class.
  */
@@ -33,7 +35,7 @@ data class Point(val i: Int, val j: Int)
 fun findPath(maze: Maze): List<Point>? {
     val previous = hashMapOf<Point, Point>()
 
-    val queue = linkedListOf<Point>()
+    val queue = LinkedList<Point>()
     val visited = hashSetOf<Point>()
 
     queue.offer(maze.start)

@@ -50,7 +50,7 @@ import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
 import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
-import org.jetbrains.kotlin.resolve.diagnostics.DiagnosticsWithSuppression;
+import org.jetbrains.kotlin.resolve.diagnostics.SuppressStringProvider;
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
 import org.jetbrains.webdemo.backend.BackendSettings;
@@ -158,7 +158,7 @@ public class EnvironmentManager {
 
         Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJvm());
         Extensions.getRootArea().getExtensionPoint(DefaultErrorMessages.Extension.EP_NAME).registerExtension(new DefaultErrorMessagesJs());
-        Extensions.getRootArea().getExtensionPoint(DiagnosticsWithSuppression.SuppressStringProvider.EP_NAME).registerExtension(new SuppressUnusedParameterForJsNative());
+        Extensions.getRootArea().getExtensionPoint(SuppressStringProvider.Companion.getEP_NAME()).registerExtension(new SuppressUnusedParameterForJsNative());
 
         registerExtensionPoints(Extensions.getRootArea());
 
