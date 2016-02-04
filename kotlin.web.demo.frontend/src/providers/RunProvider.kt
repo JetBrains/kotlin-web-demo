@@ -69,7 +69,7 @@ class RunProvider(
                     try {
                         if (checkDataForNull(data)) {
                             if (checkDataForErrors(data)) {
-                                onSuccess(data.toMutableList(), project)
+                                onSuccess(data.toArrayList(), project)
                             } else {
                                 onErrorsFound(data, project)
                             }

@@ -61,7 +61,7 @@ object IncompleteActionManager {
     }
 
     var actions = hashMapOf<String, dynamic>()
-    var incompleteActions = JSON.parse<Array<String>>(localStorage.getItem("incompleteActions") ?: "[]").toMutableList()
+    val incompleteActions = JSON.parse<Array<String>>(localStorage.getItem("incompleteActions") ?: "[]").toArrayList()
 
     init {
         localStorage.removeItem("incompleteActions")

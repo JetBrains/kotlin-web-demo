@@ -65,7 +65,7 @@ class File(
                         obj.modifiable,
                         obj.type,
                         obj.revertible,
-                        (obj.taskWindows as Array<TaskWindow>?)?.toMutableList() ?: emptyList(),
+                        (obj.taskWindows as Array<TaskWindow>?)?.toArrayList() ?: emptyList(),
                         obj.solutions
                 )
     }
