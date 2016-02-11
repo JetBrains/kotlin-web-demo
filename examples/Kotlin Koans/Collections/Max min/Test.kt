@@ -1,15 +1,15 @@
 import org.junit.Assert
 import org.junit.Test
-import koans.util.errorMessage
+import koans.util.toMessage
 
 class TestMaxMin {
     @Test fun testCustomerWithMaximumNumberOfOrders() {
-        Assert.assertTrue(errorMessage("getCustomerWithMaximumNumberOfOrders"),
+        Assert.assertTrue("getCustomerWithMaximumNumberOfOrders".toMessage(),
                 customers[reka] == shop.getCustomerWithMaximumNumberOfOrders())
     }
 
     @Test fun testTheMostExpensiveOrderedProduct() {
-        Assert.assertTrue(errorMessage("getMostExpensiveOrderedProduct"),
+        Assert.assertTrue("getMostExpensiveOrderedProduct".toMessage(),
                 rubyMine == customers[nathan]!!.getMostExpensiveOrderedProduct())
     }
 }

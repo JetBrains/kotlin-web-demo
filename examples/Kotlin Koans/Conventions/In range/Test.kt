@@ -1,9 +1,10 @@
 import org.junit.Assert
 import org.junit.Test
+import koans.util.inEquals
 
 class TestInRange {
     fun doTest(date: MyDate, first: MyDate, last: MyDate, shouldBeInRange: Boolean) {
-        val message = "${date} should${if (shouldBeInRange) "" else "n't"} be in ${DateRange(first, last)}"
+        val message = "${date} should${if (shouldBeInRange) "" else "n't"} be in ${DateRange(first, last)}".inEquals()
         Assert.assertEquals(message, shouldBeInRange, checkInRange(date, first, last))
     }
 

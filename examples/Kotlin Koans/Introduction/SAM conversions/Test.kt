@@ -1,9 +1,9 @@
 import org.junit.Test
 import org.junit.Assert
-import koans.util.errorMessage
+import koans.util.toMessageInEquals
 
 class TestSamConversions {
     @Test fun testSort() {
-        Assert.assertEquals(errorMessage("getList"), listOf(5, 2, 1), getList())
+        Assert.assertEquals("getList".toMessageInEquals(), listOf(5, 2, 1), getList())
     }
 }

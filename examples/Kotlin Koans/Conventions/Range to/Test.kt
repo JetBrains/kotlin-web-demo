@@ -1,10 +1,11 @@
 import org.junit.Assert
 import org.junit.Test
 import java.util.ArrayList
+import koans.util.inEquals
 
 class TestRangeTo {
     fun doTest(date: MyDate, first: MyDate, last: MyDate, shouldBeInRange: Boolean) {
-        val message = "${date} should${if (shouldBeInRange) "" else "n't"} be in range: ${first}..${last}"
+        val message = "${date} should${if (shouldBeInRange) "" else "n't"} be in range: ${first}..${last}".inEquals()
         Assert.assertEquals(message, shouldBeInRange, checkInRange(date, first, last))
     }
 

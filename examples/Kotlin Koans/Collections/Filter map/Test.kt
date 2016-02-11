@@ -1,15 +1,15 @@
 import org.junit.Assert
 import org.junit.Test
-import koans.util.errorMessage
+import koans.util.toMessage
 
 class TestFilterMap {
     @Test fun testCitiesCustomersAreFrom() {
-        Assert.assertTrue(errorMessage("getCitiesCustomersAreFrom"),
+        Assert.assertTrue("getCitiesCustomersAreFrom".toMessage(),
                 setOf(Canberra, Vancouver, Budapest, Ankara, Tokyo) == shop.getCitiesCustomersAreFrom())
     }
 
     @Test fun testCustomersFromCity() {
-        Assert.assertTrue(errorMessage("getCustomersFrom"),
+        Assert.assertTrue("getCustomersFrom".toMessage(),
                 listOf(customers[lucas], customers[cooper]) == shop.getCustomersFrom(Canberra))
     }
 }

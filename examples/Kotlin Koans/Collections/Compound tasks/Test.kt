@@ -1,6 +1,6 @@
 import org.junit.Assert
 import org.junit.Test
-import koans.util.errorMessage
+import koans.util.toMessage
 
 class K_Compound_Tasks {
 
@@ -11,10 +11,10 @@ class K_Compound_Tasks {
                         order(reSharper)
                 )
         )
-        Assert.assertTrue(errorMessage("getMostExpensiveDeliveredProduct"), reSharper == testShop.customers[0].getMostExpensiveDeliveredProduct())
+        Assert.assertTrue("getMostExpensiveDeliveredProduct".toMessage(), reSharper == testShop.customers[0].getMostExpensiveDeliveredProduct())
     }
 
     @Test fun testNumberOfTimesEachProductWasOrdered() {
-        Assert.assertTrue(errorMessage("getNumberOfTimesProductWasOrdered"), 3 == shop.getNumberOfTimesProductWasOrdered(reSharper))
+        Assert.assertTrue("getNumberOfTimesProductWasOrdered".toMessage(), 3 == shop.getNumberOfTimesProductWasOrdered(reSharper))
     }
 }

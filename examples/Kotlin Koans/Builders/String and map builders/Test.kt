@@ -1,5 +1,6 @@
 import org.junit.Assert
 import org.junit.Test
+import koans.util.inEquals
 
 class TestStringAndMapBuilders {
     @Test fun testBuildMap() {
@@ -13,6 +14,6 @@ class TestStringAndMapBuilders {
         for (i in 0..10) {
             expected[i] = "$i"
         }
-        Assert.assertEquals("Map should be filled with the right values", expected, map)
+        Assert.assertEquals("Map should be filled with the right values".inEquals(), expected, map)
     }
 }
