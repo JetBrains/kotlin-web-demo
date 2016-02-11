@@ -1,21 +1,22 @@
 import org.junit.Assert
 import org.junit.Test
+import koans.util.errorMessage
 
 class TestAllAnyAndOtherPredicates {
 
     @Test fun testAllCustomersAreFromCity() {
-        Assert.assertFalse(shop.checkAllCustomersAreFrom(Canberra))
+        Assert.assertFalse(errorMessage("checkAllCustomersAreFrom"), shop.checkAllCustomersAreFrom(Canberra))
     }
 
     @Test fun testAnyCustomerIsFromCity() {
-        Assert.assertTrue(shop.hasCustomerFrom(Canberra))
+        Assert.assertTrue(errorMessage("hasCustomerFrom"), shop.hasCustomerFrom(Canberra))
     }
 
     @Test fun testCountCustomersFromCity() {
-        Assert.assertEquals(2, shop.countCustomersFrom(Canberra))
+        Assert.assertTrue(errorMessage("countCustomersFrom"), 2 == shop.countCustomersFrom(Canberra))
     }
 
     @Test fun testAnyCustomerFromCity() {
-        Assert.assertEquals(customers[lucas], shop.findAnyCustomerFrom(Canberra))
+        Assert.assertTrue(errorMessage("findAnyCustomerFrom"), customers[lucas] == shop.findAnyCustomerFrom(Canberra))
     }
 }

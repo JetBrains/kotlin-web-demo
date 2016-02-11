@@ -1,8 +1,10 @@
 import org.junit.Assert
 import org.junit.Test
+import koans.util.errorMessage
 
 class TestIntroduction {
     @Test fun testSetOfCustomers(){
-        Assert.assertEquals(shop.getSetOfCustomers(), customers.values.toSet())
+        Assert.assertTrue(errorMessage("getSetOfCustomers"),
+                shop.getSetOfCustomers() == customers.values.toSet())
     }
 }

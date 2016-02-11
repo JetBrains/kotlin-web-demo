@@ -35,7 +35,7 @@
       "modifiable": false,
       "hidden": true,
       "skipInTestVersion": false,
-      "filename": "kotlinUtil.kt"
+      "filename": "koansTestUtil.kt"
     }
   ]
 }

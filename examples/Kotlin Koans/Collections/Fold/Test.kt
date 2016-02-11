@@ -1,5 +1,6 @@
 import org.junit.Assert
 import org.junit.Test
+import koans.util.errorMessage
 
 class TestFold {
     @Test fun testGetProductsOrderedByAllCustomers() {
@@ -13,6 +14,7 @@ class TestFold {
                         order(youTrack)
                 )
         )
-        Assert.assertEquals(setOf(idea), testShop.getSetOfProductsOrderedByEveryCustomer())
+        Assert.assertTrue(errorMessage("getSetOfProductsOrderedByEveryCustomer"),
+                setOf(idea) == testShop.getSetOfProductsOrderedByEveryCustomer())
     }
 }
