@@ -27,6 +27,7 @@ import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
+import org.jetbrains.webdemo.examples.Example;
 import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.test.BaseTest;
@@ -40,16 +41,16 @@ import java.util.regex.Pattern;
 public class RunExamplesTest extends BaseTest {
 
     private static ArrayList<String> jsExamples = new ArrayList<String>();
-    private final Project project;
+    private final Example project;
     private final String runConfiguration;
 
-    public RunExamplesTest(Project project) {
+    public RunExamplesTest(Example project) {
         super(project.name);
         this.project = project;
         this.runConfiguration = project.confType;
     }
 
-    public RunExamplesTest(Project project, String runConfiguration) {
+    public RunExamplesTest(Example project, String runConfiguration) {
         super(project.name + "_" + runConfiguration);
         this.project = project;
         this.runConfiguration = runConfiguration;
@@ -67,7 +68,7 @@ public class RunExamplesTest extends BaseTest {
         //jsExamples.add("HTML Builder.kt");
 
         TestSuite suite = new TestSuite(RunExamplesTest.class.getName());
-        for (Project project : ExamplesUtils.getAllExamples(ExamplesFolder.ROOT_FOLDER)) {
+        for (Example project : ExamplesUtils.getAllExamples(ExamplesFolder.ROOT_FOLDER)) {
             suite.addTest(new RunExamplesTest(project));
             if (jsExamples.contains(project.name)) {
                 suite.addTest(new RunExamplesTest(project, "js"));
@@ -83,6 +84,9 @@ public class RunExamplesTest extends BaseTest {
         sessionInfo.setRunConfiguration(runConfiguration);
         List<PsiFile> psiFiles = new ArrayList<>();
         for (ProjectFile file : project.files) {
+            psiFiles.add(JetPsiFactoryUtil.createFile(getProject(), file.getName(), file.getText()));
+        }
+        for (ProjectFile file : project.getHiddenFiles()){
             psiFiles.add(JetPsiFactoryUtil.createFile(getProject(), file.getName(), file.getText()));
         }
 

@@ -29,6 +29,7 @@ import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
 import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForHighlighting;
+import org.jetbrains.webdemo.examples.Example;
 import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.test.BaseTest;
@@ -38,17 +39,17 @@ import java.util.*;
 public class HighlightExamplesTest extends BaseTest {
 
     private static ArrayList<String> jsExamples = new ArrayList<String>();
-    private final Project project;
+    private final Example project;
     private String runConfiguration;
 
 
-    public HighlightExamplesTest(Project project) {
+    public HighlightExamplesTest(Example project) {
         super(project.name);
         this.project = project;
         this.runConfiguration = project.confType;
     }
 
-    public HighlightExamplesTest(Project project, String runConfiguration) {
+    public HighlightExamplesTest(Example project, String runConfiguration) {
         super(project.name + "_" + runConfiguration);
         this.project = project;
         this.runConfiguration = runConfiguration;
@@ -69,7 +70,7 @@ public class HighlightExamplesTest extends BaseTest {
 
 
         TestSuite suite = new TestSuite(HighlightExamplesTest.class.getName());
-        for (Project project : ExamplesUtils.getAllExamples(ExamplesFolder.ROOT_FOLDER)) {
+        for (Example project : ExamplesUtils.getAllExamples(ExamplesFolder.ROOT_FOLDER)) {
             suite.addTest(new HighlightExamplesTest(project));
             if (jsExamples.contains(project.name)) {
                 suite.addTest(new HighlightExamplesTest(project, "js"));
@@ -84,6 +85,9 @@ public class HighlightExamplesTest extends BaseTest {
         sessionInfo.setRunConfiguration(runConfiguration);
         List<PsiFile> psiFiles = new ArrayList<>();
         for (ProjectFile file : project.files) {
+            psiFiles.add(JetPsiFactoryUtil.createFile(getProject(), file.getName(), file.getText()));
+        }
+        for (ProjectFile file : project.getHiddenFiles()){
             psiFiles.add(JetPsiFactoryUtil.createFile(getProject(), file.getName(), file.getText()));
         }
 

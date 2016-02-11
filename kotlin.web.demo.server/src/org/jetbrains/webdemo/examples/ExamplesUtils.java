@@ -109,8 +109,8 @@ public class ExamplesUtils {
         throw new NullPointerException("File not found");
     }
 
-    public static List<Project> getAllExamples(ExamplesFolder folder) {
-        List<Project> examples = new ArrayList<>();
+    public static List<Example> getAllExamples(ExamplesFolder folder) {
+        List<Example> examples = new ArrayList<>();
         examples.addAll(folder.getExamples());
         for (ExamplesFolder childFolder : folder.getChildFolders()) {
             examples.addAll(getAllExamples(childFolder));
