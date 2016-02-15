@@ -131,17 +131,14 @@
     -o-transition: 0.3s all;
     transition: 0.3s all;
     position: relative;
-    opacity: 0.8;
-    top: 0;
+    top: 12px;
     float: left;
-    width: 129px;
-    height: 43px;
+    width: 103px;
+    height: 22px;
     background: url("/static/images/logos-sprite.png") no-repeat;
     font-size: 0;
     text-decoration: none; }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .global-header-logo {
         background-image: url("/static/images/logos-sprite@2x.png");
-        background-size: 150px 100px; } }
-.global-header-logo:hover {
-    opacity: 1; }
+        background-size: 200px 100px; } }
