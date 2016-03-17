@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS users (
   id        INT                                    NOT NULL PRIMARY KEY AUTO_INCREMENT,
   client_id VARCHAR(45)                            NOT NULL,
   provider  ENUM ('google', 'twitter', 'facebook', 'github', 'jba') NOT NULL,
-  username VARCHAR(45) NOT NULL             DEFAULT '',
+  username VARCHAR(100) NOT NULL             DEFAULT '',
   CONSTRAINT client_id UNIQUE (client_id, provider)
-);
+) DEFAULT CHARSET=UTF;
 
 CREATE TABLE IF NOT EXISTS projects (
   id                INT                                    NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS projects (
     ON DELETE RESTRICT,
   CONSTRAINT `unique_name` UNIQUE (owner_id, name, type),
   CONSTRAINT `unique_solution` UNIQUE (owner_id, task_id)
-);
+) DEFAULT CHARSET=UTF;
 
 CREATE TABLE IF NOT EXISTS koans_tasks (
   id        INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
