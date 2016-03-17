@@ -855,7 +855,7 @@ public class MySqlConnector {
     public void saveSolution(UserInfo userInfo, Project solution, boolean completed) throws DatabaseOperationException {
         String solutionId = getSolutionId(userInfo, solution.id);
         if (solutionId == null) {
-            Integer taskId = getTaskId(solutionId);
+            Integer taskId = getTaskId(solution.id);
             String type = completed ? "KOANS_TASK" : "INCOMPLETE_KOANS_TASK";
             addProject(userInfo, solution, type, taskId);
         } else {
