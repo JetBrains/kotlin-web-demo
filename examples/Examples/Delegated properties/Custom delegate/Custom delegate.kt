@@ -3,7 +3,7 @@
  * The expression after by is the delegate, because get() and set() methods
  * corresponding to the property will be delegated to it.
  * Property delegates don't have to implement any interface, but they have
- * to provide methods named get() and set() to be called.</p>
+ * to provide methods named getValue() and setValue() to be called.</p>
  */
 
 import kotlin.reflect.KProperty
