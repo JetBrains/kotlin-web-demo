@@ -78,7 +78,7 @@ abstract class Project(
         onFileDeleted(file.id)
     }
 
-    open protected  fun contentLoaded(content: dynamic) {
+    open fun contentLoaded(content: dynamic) {
         contentLoaded = true
         originUrl = content.originUrl
         args = content.args
