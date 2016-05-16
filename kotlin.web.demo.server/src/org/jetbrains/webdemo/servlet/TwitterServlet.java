@@ -19,6 +19,7 @@ package org.jetbrains.webdemo.servlet;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.webdemo.ApplicationSettings;
+import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.examples.Example;
 import twitter4j.StatusUpdate;
@@ -96,7 +97,7 @@ public class TwitterServlet extends HttpServlet {
 
             String level = (String) request.getSession().getAttribute("kotlin-level");
             request.getSession().removeAttribute("level");
-            statusUpdate.setMedia(new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "static/images/" + level + "level.gif"));
+            statusUpdate.setMedia(new File(CommonSettings.WEBAPP_ROOT_DIRECTORY + "static/images/" + level + "level.gif"));
 
             twitter.updateStatus(statusUpdate);
             request.getSession().removeAttribute("requestToken");

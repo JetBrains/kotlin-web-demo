@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.fileClasses.NoResolveFileClassesProvider;
 import org.jetbrains.kotlin.idea.MainFunctionDetector;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
+import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
@@ -340,7 +341,7 @@ public class JavaRunner {
         builder.add("-ea");
         builder.add("-Xmx32m");
         builder.add("-Djava.security.manager");
-        builder.add("-Djava.security.policy=" + BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
+        builder.add("-Djava.security.policy=" + CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy");
         builder.add("-classpath");
         String classpath = (pathToRootOut +
                 File.pathSeparator + BackendSettings.KOTLIN_LIBS_DIR + File.separator + "kotlin-runtime.jar" +

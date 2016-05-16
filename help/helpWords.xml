@@ -80,7 +80,7 @@
             <pre>val a : Int = 1</pre>
             <pre>val b = 1 // Type is inferred</pre>
             <pre><i>// Type required when</i></pre>
-            <pre><i>// no initializer provided</i></pre>
+            <pre><i>// no kotlinWrapper provided</i></pre>
             <pre>val c : Int </pre>
             <pre>c = 1 // definite assignment</pre>
             <a href="http://kotlinlang.org/docs/reference/basic-syntax.html#defining-local-variables">More info</a>

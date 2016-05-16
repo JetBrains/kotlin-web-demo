@@ -23,11 +23,10 @@ package org.jetbrains.webdemo.backend;
 public class BackendSettings {
     public static String JAVA_HOME = null;
     public static String JAVA_EXECUTE = "";
-    public static String WEBAPP_ROOT_DIRECTORY = "";
     public static String CLASS_PATH = "";
     public static String LIBS_DIR = "";
     public static String KOTLIN_LIBS_DIR = "";
-    public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin compiler: a bug was reported to developers.";
+    public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin kotlin: a bug was reported to developers.";
     public static int TIMEOUT_FOR_EXECUTION = 10000; //seconds
     public static int MAX_OUTPUT_SIZE = 100 * 1024;
 

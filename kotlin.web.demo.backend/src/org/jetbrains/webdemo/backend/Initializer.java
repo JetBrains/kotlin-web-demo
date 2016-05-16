@@ -20,7 +20,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
-import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 
 import java.io.File;
@@ -67,11 +67,11 @@ public class Initializer {
     }
 
     public void initializeExecutorsPolicyFile() throws IOException {
-        Path templateFilePath = Paths.get(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
+        Path templateFilePath = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));
-        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", BackendSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"))
+        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", CommonSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"))
                 .replaceAll("@KOTLIN_LIBS@", BackendSettings.KOTLIN_LIBS_DIR.replaceAll("\\\\", "/"));
-        try (PrintWriter policyFile = new PrintWriter(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
+        try (PrintWriter policyFile = new PrintWriter(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
             policyFile.write(policyFileContent);
         }
     }

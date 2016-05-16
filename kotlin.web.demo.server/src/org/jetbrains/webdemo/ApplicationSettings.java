@@ -18,7 +18,6 @@ package org.jetbrains.webdemo;
 
 public class ApplicationSettings {
     public static final String DATABASE_VERSION = "1.0";
-    public static String WEBAPP_ROOT_DIRECTORY = "";
     public static String BACKEND_URL = "";
     public static String EXAMPLES_DIRECTORY = "examples";
     public static String HELP_FOR_WORDS = "helpWords.xml";

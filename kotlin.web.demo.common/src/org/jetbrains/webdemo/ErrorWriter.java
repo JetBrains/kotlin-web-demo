@@ -93,7 +93,7 @@ public class ErrorWriter {
         log.info(message);
     }
 
-    public void writeExceptionToExceptionAnalyzer(Throwable e, String type, String originUrl) {
+    public void writeExceptionToExceptionAnalyzer(Throwable e, String type) {
         log.error(type, e);
     }
 

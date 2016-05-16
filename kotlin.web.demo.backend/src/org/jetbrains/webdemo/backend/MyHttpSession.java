@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.backend.responseHelpers.*;
+import org.jetbrains.webdemo.kotlin.KotlinWrapper;
+import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +44,7 @@ public class MyHttpSession {
         try {
             this.request = request;
             this.response = response;
+            KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
             switch (request.getParameter("type")) {
                 case ("run"):
                     sendExecutorResult();
@@ -70,8 +73,15 @@ public class MyHttpSession {
     }
 
     private void sendConversationResult() {
-        writeResponse(new WebDemoJavaToKotlinConverter(sessionInfo).getResult(request.getParameter("text"),
-                Initializer.getInstance().getEnvironment().getProject()), HttpServletResponse.SC_OK);
+        try {
+            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
+            String javaCode = request.getParameter("text");
+            String kotlinCode = wrapper.translateJavaToKotlin(javaCode);
+            writeResponse(kotlinCode, HttpServletResponse.SC_OK);
+        } catch (Exception e){
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Error during java to kotlin translation");
+            writeResponse("Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     private void sendExecutorResult() {

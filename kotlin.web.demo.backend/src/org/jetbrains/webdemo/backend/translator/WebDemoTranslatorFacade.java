@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.js.facade.MainCallParameters;
 import org.jetbrains.kotlin.js.facade.TranslationResult;
 import org.jetbrains.kotlin.js.facade.exceptions.TranslationException;
 import org.jetbrains.kotlin.psi.KtFile;
+import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
@@ -43,7 +44,7 @@ import java.util.*;
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
 
-    public static final String JS_LIB_ROOT = new File(BackendSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "js").getAbsolutePath();
+    public static final String JS_LIB_ROOT = new File(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "js").getAbsolutePath();
     public static final List<String> LIBRARY_FILES = Collections.singletonList(JS_LIB_ROOT);
 
     @SuppressWarnings("FieldCanBeLocal")

@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -41,15 +42,16 @@ public class BackendHttpServlet extends HttpServlet {
         super.init(config);
         System.setProperty("java.awt.headless", "true");
 
-        BackendSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
-        BackendSettings.CLASS_PATH = BackendSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes";
-        BackendSettings.LIBS_DIR = BackendSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib";
+        CommonSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
+        BackendSettings.CLASS_PATH = CommonSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes";
+        BackendSettings.LIBS_DIR = CommonSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib";
         BackendSettings.KOTLIN_LIBS_DIR = BackendSettings.LIBS_DIR;
 
         if (!loadTomcatParameters()) {
             log.fatal("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
         }
 
+        KotlinWrappersManager.init();
         LogWriter.init();
         ErrorWriter.getInstance();
         Initializer.getInstance();
@@ -95,7 +97,7 @@ public class BackendHttpServlet extends HttpServlet {
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", (String) envCtx.lookup("app_output_dir"));
             } catch (NamingException e) {
-                File rootFolder = new File(BackendSettings.WEBAPP_ROOT_DIRECTORY);
+                File rootFolder = new File(CommonSettings.WEBAPP_ROOT_DIRECTORY);
                 String appHome = rootFolder.getParentFile().getParentFile().getParent();
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", appHome);
             }

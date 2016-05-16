@@ -49,9 +49,9 @@ public class KotlinHttpServlet extends HttpServlet {
         System.setProperty("kotlin.running.in.server.mode", "true");
         System.setProperty("java.awt.headless", "true");
 
-        ApplicationSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
-        ApplicationSettings.EXAMPLES_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY + "examples";
-        CommonSettings.HELP_DIRECTORY = ApplicationSettings.WEBAPP_ROOT_DIRECTORY;
+        CommonSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
+        ApplicationSettings.EXAMPLES_DIRECTORY = CommonSettings.WEBAPP_ROOT_DIRECTORY + "examples";
+        CommonSettings.HELP_DIRECTORY = CommonSettings.WEBAPP_ROOT_DIRECTORY;
 
         if (!loadTomcatParameters()) {
             log.fatal("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
@@ -98,7 +98,7 @@ public class KotlinHttpServlet extends HttpServlet {
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", (String) envCtx.lookup("app_output_dir"));
             } catch (NamingException e) {
-                File rootFolder = new File(ApplicationSettings.WEBAPP_ROOT_DIRECTORY);
+                File rootFolder = new File(CommonSettings.WEBAPP_ROOT_DIRECTORY);
                 String appHome = rootFolder.getParentFile().getParentFile().getParent();
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", appHome);
             }

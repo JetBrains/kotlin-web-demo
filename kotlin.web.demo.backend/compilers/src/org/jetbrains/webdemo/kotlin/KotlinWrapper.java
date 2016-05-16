@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo;
+package org.jetbrains.webdemo.kotlin;public interface KotlinWrapper {
+    void init();
 
-/**
- * Created by Semyon.Atamas on 2/13/2015.
- */
-public class CommonSettings {
-    public static boolean IS_TEST_VERSION = true;
-    public static String KOTLIN_VERSION = "1.0.2";
-
-    public static String HELP_DIRECTORY = "help";
-    public static String LOGS_DIRECTORY = "logs";
-    public static String WEBAPP_ROOT_DIRECTORY = "";
+    String translateJavaToKotlin(String javaCode);
 }
