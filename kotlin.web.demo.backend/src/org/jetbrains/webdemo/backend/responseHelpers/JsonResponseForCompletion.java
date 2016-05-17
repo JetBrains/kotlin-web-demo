@@ -57,7 +57,7 @@ import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.*;
-import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
+import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException;
 
 import java.util.*;
 

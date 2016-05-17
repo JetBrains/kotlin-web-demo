@@ -32,11 +32,10 @@ import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
-import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.Initializer;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
-import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
+import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException;
 
 import java.io.File;
 import java.util.*;

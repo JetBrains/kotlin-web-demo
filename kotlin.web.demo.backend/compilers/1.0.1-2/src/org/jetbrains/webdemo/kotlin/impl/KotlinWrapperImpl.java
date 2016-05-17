@@ -17,8 +17,17 @@
 package org.jetbrains.webdemo.kotlin.impl;
 
 
+import org.jetbrains.kotlin.psi.KtFile;
+import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.ProjectFile;
+import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
+import org.jetbrains.webdemo.kotlin.impl.analyzer.ErrorAnalyzer;
 import org.jetbrains.webdemo.kotlin.impl.converter.WebDemoJavaToKotlinConverter;
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class KotlinWrapperImpl implements org.jetbrains.webdemo.kotlin.KotlinWrapper {
     @Override
@@ -28,5 +37,21 @@ public class KotlinWrapperImpl implements org.jetbrains.webdemo.kotlin.KotlinWra
 
     public String translateJavaToKotlin(String javaCode) {
        return WebDemoJavaToKotlinConverter.getResult(javaCode);
+    }
+
+    @Override
+    public Map<String, List<ErrorDescriptor>> getErrors(Project project) {
+        List<KtFile> files = createPsiFiles(project);
+        ErrorAnalyzer analyzer = new ErrorAnalyzer(files, EnvironmentManager.getEnvironment().getProject());
+        boolean isJs = project.confType.equals("js") || project.confType.equals("canvas");
+        return analyzer.getAllErrors(isJs);
+    }
+
+    private List<KtFile> createPsiFiles(Project project) {
+        List<KtFile> result = new ArrayList<>();
+        for (ProjectFile file : project.files) {
+            result.add(JetPsiFactoryUtil.createFile(EnvironmentManager.getEnvironment().getProject(), file.getName(), file.getText()));
+        }
+        return result;
     }
 }

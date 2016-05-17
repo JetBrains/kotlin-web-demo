@@ -23,21 +23,6 @@ public class Interval {
     public final Point end;
 
     public Interval(int start, int end, Document currentDocument) {
-
-        /*PsiFile file = diagnostic.getPsiFile();
-        Document document = file.getViewProvider().getDocument();
-        TextRange firstRange = diagnostic.getTextRanges().iterator().next();
-        int offset = firstRange.getStartOffset();
-        if (document != null) {
-            int lineNumber = document.getLineNumber(offset);
-            int lineStartOffset = document.getLineStartOffset(lineNumber);
-            int column = offset - lineStartOffset;
-
-            return "(" + (lineNumber + 1) + "," + (column + 1) + ")";
-        }
-        return "(offset: " + offset + " line unknown)";*/
-
-
         int lineNumberForElementStart = currentDocument.getLineNumber(start);
         int lineNumberForElementEnd = currentDocument.getLineNumber(end);
         int charNumberForElementStart = start - currentDocument.getLineStartOffset(lineNumberForElementStart);

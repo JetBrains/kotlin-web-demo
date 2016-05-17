@@ -67,5 +67,6 @@
     </orderEntry>
     <orderEntry type="module" module-name="compilers" />
     <orderEntry type="module" module-name="kotlin.web.demo.backend" />
+    <orderEntry type="module" module-name="kotlin.web.demo.common" />
   </component>
 </module>

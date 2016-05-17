@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.kotlin;
+package org.jetbrains.webdemo.kotlin.datastructures;
 
-import org.jetbrains.webdemo.Project;
-import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
+public class TextInterval {
+    private final TextPosition start;
+    private final TextPosition end;
 
-import java.util.List;
-import java.util.Map;
+    public TextInterval(TextPosition start, TextPosition end){
+        this.start = start;
+        this.end = end;
+    }
 
-public interface KotlinWrapper {
-    void init();
+    public TextPosition getStart() {
+        return start;
+    }
 
-    String translateJavaToKotlin(String javaCode);
-
-    Map<String, List<ErrorDescriptor>> getErrors(Project project);
+    public TextPosition getEnd() {
+        return end;
+    }
 }
+
+

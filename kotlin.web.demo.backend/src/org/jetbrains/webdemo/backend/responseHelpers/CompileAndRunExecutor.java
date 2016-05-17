@@ -37,7 +37,7 @@ import org.jetbrains.webdemo.backend.BackendUtils;
 import org.jetbrains.webdemo.backend.ResolveUtils;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
 import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorDescriptor;
-import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
+import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException;
 
 import java.io.File;
 import java.io.IOException;

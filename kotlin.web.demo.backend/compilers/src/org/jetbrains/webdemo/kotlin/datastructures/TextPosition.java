@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.kotlin;
+package org.jetbrains.webdemo.kotlin.datastructures;
 
-import org.jetbrains.webdemo.Project;
-import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
+public class TextPosition {
+    private int line;
+    private int ch;
 
-import java.util.List;
-import java.util.Map;
+    public TextPosition(int line, int ch) {
+        this.line = line;
+        this.ch = ch;
+    }
 
-public interface KotlinWrapper {
-    void init();
+    public int getLine() {
+        return line;
+    }
 
-    String translateJavaToKotlin(String javaCode);
-
-    Map<String, List<ErrorDescriptor>> getErrors(Project project);
+    public int getCh() {
+        return ch;
+    }
 }

@@ -33,7 +33,7 @@ import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSessionInfo;
 import org.jetbrains.webdemo.backend.BackendUtils;
 import org.jetbrains.webdemo.backend.ResolveUtils;
-import org.jetbrains.webdemo.backend.exceptions.KotlinCoreException;
+import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 
 import java.util.*;

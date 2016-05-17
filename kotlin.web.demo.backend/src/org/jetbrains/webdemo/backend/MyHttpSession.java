@@ -19,15 +19,19 @@ package org.jetbrains.webdemo.backend;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.backend.responseHelpers.*;
+import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
+import org.jetbrains.webdemo.backend.responseHelpers.JsConverter;
+import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
+import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MyHttpSession {
     private final BackendSessionInfo sessionInfo;
@@ -134,13 +138,11 @@ public class MyHttpSession {
     }
 
     public void sendHighlightingResult() {
-        sessionInfo.setType(BackendSessionInfo.TypeOfRequest.HIGHLIGHT);
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            sessionInfo.setRunConfiguration(currentProject.confType);
-            List<PsiFile> psiFiles = createProjectPsiFiles(currentProject);
-            JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(psiFiles, sessionInfo, Initializer.getInstance().getEnvironment().getProject());
-            String response = responseForHighlighting.getResult();
+            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
+            Map<String, List<ErrorDescriptor>> analysisResult = wrapper.getErrors(currentProject);
+            String response = objectMapper.writeValueAsString(analysisResult);
             response = response.replaceAll("\\n", "");
             writeResponse(response, HttpServletResponse.SC_OK);
         } catch (IOException e) {

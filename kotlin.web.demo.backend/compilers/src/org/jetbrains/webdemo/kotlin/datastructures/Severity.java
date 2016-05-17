@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.kotlin;
+package org.jetbrains.webdemo.kotlin.datastructures;
 
-import org.jetbrains.webdemo.Project;
-import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
-
-import java.util.List;
-import java.util.Map;
-
-public interface KotlinWrapper {
-    void init();
-
-    String translateJavaToKotlin(String javaCode);
-
-    Map<String, List<ErrorDescriptor>> getErrors(Project project);
+public enum Severity {
+    INFO,
+    ERROR,
+    WARNING
 }
