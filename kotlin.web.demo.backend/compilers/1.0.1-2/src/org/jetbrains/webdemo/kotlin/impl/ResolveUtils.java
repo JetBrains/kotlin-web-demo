@@ -58,7 +58,6 @@ import org.jetbrains.kotlin.resolve.lazy.FileScopeProviderImpl;
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession;
 import org.jetbrains.kotlin.resolve.lazy.declarations.DeclarationProviderFactory;
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory;
-//import org.jetbrains.webdemo.backend.translator.WebDemoTranslatorFacade;
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager;
 
 import java.util.ArrayList;
@@ -73,7 +72,7 @@ public class ResolveUtils {
     }
 
     public static BindingContext getBindingContext(@NotNull List<KtFile> files, Project project, boolean isJs) {
-        Pair<AnalysisResult, ComponentProvider> result =  analyzeFileForJvm(files, project);
+        Pair<AnalysisResult, ComponentProvider> result = isJs ? analyzeFileForJs(files, project) : analyzeFileForJvm(files, project);
         AnalysisResult analyzeExhaust = result.getFirst();
         return analyzeExhaust.getBindingContext();
     }
@@ -146,34 +145,34 @@ public class ResolveUtils {
         return new Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider>(new ContainerForTopDownAnalyzerForJvm(container).getLazyTopDownAnalyzerForTopLevel(), container);
     }
 
-//    public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJs(@NotNull List<KtFile> files, Project project) {
-//        KotlinCoreEnvironment environment = EnvironmentManager.getEnvironment();
-//
-//        String moduleName = getModuleName(environment);
-//        Config config = new LibrarySourcesConfig.Builder(
-//                project,
-//                moduleName,
-//                WebDemoTranslatorFacade.LIBRARY_FILES
-//        ).build();
-//
-//        MutableModuleContext module = ContextKt.ContextForNewModule(
-//                project, Name.special("<" + moduleName + ">"), JsPlatform.INSTANCE
-//        );
-//        module.setDependencies(computeDependencies(module.getModule(), config));
-//
-//        BindingTrace trace = new CliLightClassGenerationSupport.CliBindingTrace();
-//
-//        FileBasedDeclarationProviderFactory providerFactory = new FileBasedDeclarationProviderFactory(module.getStorageManager(), files);
-//
-//        Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJs(module, trace, providerFactory);
-//
-//        analyzerAndProvider.getFirst().analyzeFiles(TopDownAnalysisMode.TopLevelDeclarations, files, Collections.<PackageFragmentProvider>emptyList());
-//
-//        //noinspection unchecked
-//        return new Pair<AnalysisResult, ComponentProvider>(
-//                AnalysisResult.success(trace.getBindingContext(), module.getModule()),
-//                analyzerAndProvider.second);
-//    }
+    public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJs(@NotNull List<KtFile> files, Project project) {
+        KotlinCoreEnvironment environment = EnvironmentManager.getEnvironment();
+
+        String moduleName = getModuleName(environment);
+        Config config = new LibrarySourcesConfig.Builder(
+                project,
+                moduleName,
+                Collections.singletonList(WrapperSettings.JS_LIB_ROOT.toString())
+        ).build();
+
+        MutableModuleContext module = ContextKt.ContextForNewModule(
+                project, Name.special("<" + moduleName + ">"), JsPlatform.INSTANCE
+        );
+        module.setDependencies(computeDependencies(module.getModule(), config));
+
+        BindingTrace trace = new CliLightClassGenerationSupport.CliBindingTrace();
+
+        FileBasedDeclarationProviderFactory providerFactory = new FileBasedDeclarationProviderFactory(module.getStorageManager(), files);
+
+        Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJs(module, trace, providerFactory);
+
+        analyzerAndProvider.getFirst().analyzeFiles(TopDownAnalysisMode.TopLevelDeclarations, files, Collections.<PackageFragmentProvider>emptyList());
+
+        //noinspection unchecked
+        return new Pair<AnalysisResult, ComponentProvider>(
+                AnalysisResult.success(trace.getBindingContext(), module.getModule()),
+                analyzerAndProvider.second);
+    }
 
     @NotNull
     private static List<ModuleDescriptorImpl> computeDependencies(ModuleDescriptorImpl module, @NotNull Config config) {

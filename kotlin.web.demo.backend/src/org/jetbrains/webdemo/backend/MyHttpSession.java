@@ -21,9 +21,9 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
 import org.jetbrains.webdemo.backend.responseHelpers.JsConverter;
-import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForCompletion;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
+import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,7 +82,7 @@ public class MyHttpSession {
             String javaCode = request.getParameter("text");
             String kotlinCode = wrapper.translateJavaToKotlin(javaCode);
             writeResponse(kotlinCode, HttpServletResponse.SC_OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Error during java to kotlin translation");
             writeResponse("Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
@@ -106,7 +106,7 @@ public class MyHttpSession {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
-        } catch (Exception e){
+        } catch (Exception e) {
             writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
@@ -125,11 +125,10 @@ public class MyHttpSession {
             int line = Integer.parseInt(request.getParameter("line"));
             int ch = Integer.parseInt(request.getParameter("ch"));
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            List<PsiFile> psiFiles = createProjectPsiFiles(currentProject);
-            sessionInfo.setRunConfiguration(currentProject.confType);
+            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
 
-            JsonResponseForCompletion jsonResponseForCompletion = new JsonResponseForCompletion(psiFiles, sessionInfo, fileName, line, ch);
-            writeResponse(jsonResponseForCompletion.getResult(), HttpServletResponse.SC_OK);
+            List<CompletionVariant> completionVariants = wrapper.getCompletionVariants(currentProject, fileName, line, ch);
+            writeResponse(objectMapper.writeValueAsString(completionVariants), HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
         } catch (NullPointerException e) {

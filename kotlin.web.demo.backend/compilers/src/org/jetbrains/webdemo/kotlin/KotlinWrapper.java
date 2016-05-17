@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.kotlin;
 
 import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface KotlinWrapper {
     String translateJavaToKotlin(String javaCode);
 
     Map<String, List<ErrorDescriptor>> getErrors(Project project);
+
+    List<CompletionVariant> getCompletionVariants(Project project, String filename, int line, int ch);
 }
