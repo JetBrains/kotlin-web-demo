@@ -24,6 +24,7 @@ import com.intellij.codeInsight.runner.JavaMainMethodProvider;
 import com.intellij.core.CoreApplicationEnvironment;
 import com.intellij.mock.MockProject;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.extensions.ExtensionsArea;
 import com.intellij.openapi.fileTypes.FileTypeExtensionPoint;
@@ -73,20 +74,20 @@ public class EnvironmentManager {
         environment = createEnvironment();
     }
 
+    public static void reinitializeJavaEnvironment(){
+        ApplicationManager.setApplication(
+                environment.getApplication(),
+                registry,
+                disposable
+        );
+    }
+
     @NotNull
     public static KotlinCoreEnvironment getEnvironment() {
         if (environment == null) {
             throw new IllegalStateException("Environment should be initialized before");
         }
         return environment;
-    }
-
-    public static Disposable getDisposable() {
-        return disposable;
-    }
-
-    public static Getter<FileTypeRegistry> getRegistry() {
-        return registry;
     }
 
     @NotNull

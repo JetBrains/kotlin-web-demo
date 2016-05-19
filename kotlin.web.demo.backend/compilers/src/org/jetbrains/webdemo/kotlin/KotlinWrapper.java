@@ -20,6 +20,7 @@ import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
+import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -29,6 +30,8 @@ public interface KotlinWrapper {
     void init();
 
     String translateJavaToKotlin(String javaCode);
+
+    TranslationResult compileKotlinToJS(Project project);
 
     Map<String, List<ErrorDescriptor>> getErrors(Project project);
 

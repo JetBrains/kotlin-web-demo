@@ -18,9 +18,6 @@ package org.jetbrains.webdemo.backend;
 
 import org.jetbrains.webdemo.TimeManager;
 
-/**
- * Created by Semyon.Atamas on 2/13/2015.
- */
 public class BackendSessionInfo {
     private final TimeManager timeManager = new TimeManager();
     private String id;

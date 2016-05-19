@@ -27,6 +27,7 @@ import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
+import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -96,10 +97,12 @@ public class MyHttpSession {
 
             Map<String, List<ErrorDescriptor>> errorDescriptors = wrapper.getErrors(currentProject);
 
-            if (isOnlyWarnings(errorDescriptors)) {
-                if (!currentProject.confType.equals("js") && !currentProject.confType.equals("canvas")) {
+
+            if (!currentProject.confType.equals("js") && !currentProject.confType.equals("canvas")) {
+                ExecutionResult executionResult = null;
+                if (isOnlyWarnings(errorDescriptors)) {
                     CompilationResult compilationResult = wrapper.compileCorrectFiles(currentProject);
-                    ExecutionResult programOutput = ExecutorUtils.executeCompiledFiles(
+                    executionResult = ExecutorUtils.executeCompiledFiles(
                             compilationResult.getFiles(),
                             compilationResult.getMainClass(),
                             wrapper.getKotlinRuntimeLibraries(),
@@ -107,12 +110,21 @@ public class MyHttpSession {
                             currentProject.args,
                             currentProject.confType.equals("junit")
                     );
-                    programOutput.addWarningsFromCompiler(errorDescriptors);
-                    writeResponse(objectMapper.writeValueAsString(programOutput), HttpServletResponse.SC_OK);
+                    executionResult.addWarningsFromCompiler(errorDescriptors);
                 } else {
-//                sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS);
-//                writeResponse(new JsConverter(sessionInfo).getResult(psiFiles, sessionInfo, currentProject.args), HttpServletResponse.SC_OK);
+                    executionResult = new ExecutionResult(errorDescriptors);
                 }
+
+                writeResponse(objectMapper.writeValueAsString(executionResult), HttpServletResponse.SC_OK);
+            } else {
+                TranslationResult translationResult;
+                if (isOnlyWarnings(errorDescriptors)) {
+                    translationResult = wrapper.compileKotlinToJS(currentProject);
+                    translationResult.addWarningsFromAnalyzer(errorDescriptors);
+                } else {
+                    translationResult = new TranslationResult(errorDescriptors);
+                }
+                writeResponse(objectMapper.writeValueAsString(translationResult), HttpServletResponse.SC_OK);
             }
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
@@ -132,14 +144,6 @@ public class MyHttpSession {
             }
         }
         return true;
-    }
-
-    private List<PsiFile> createProjectPsiFiles(Project example) {
-        List<PsiFile> result = new ArrayList<>();
-        for (ProjectFile file : example.files) {
-            result.add(JetPsiFactoryUtil.createFile(Initializer.getInstance().getEnvironment().getProject(), file.getName(), file.getText()));
-        }
-        return result;
     }
 
     public void sendCompletionResult() {

@@ -35,6 +35,9 @@
             <element id="directory" name="classes">
               <element id="module-output" name="1.0.1-2" />
             </element>
+            <element id="directory" name="js">
+              <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.common/resources/js" />
+            </element>
           </element>
         </element>
       </element>

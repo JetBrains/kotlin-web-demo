@@ -18,11 +18,20 @@ package org.jetbrains.webdemo.backend.executor.result;
 
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ExecutionResult {
     private Map<String, List<ErrorDescriptor>> compilerErrors;
+
+    public ExecutionResult(){
+        compilerErrors = new HashMap<>();
+    }
+
+    public ExecutionResult(Map<String, List<ErrorDescriptor>> compilerErrors){
+        this.compilerErrors = compilerErrors;
+    }
 
     public Map<String, List<ErrorDescriptor>> getCompilerErrors() {
         return compilerErrors;

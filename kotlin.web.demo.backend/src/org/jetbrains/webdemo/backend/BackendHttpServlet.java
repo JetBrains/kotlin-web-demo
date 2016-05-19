@@ -54,20 +54,9 @@ public class BackendHttpServlet extends HttpServlet {
         KotlinWrappersManager.init();
         LogWriter.init();
         ErrorWriter.getInstance();
-        Initializer.getInstance();
 
         try {
-            if (Initializer.getInstance().initJavaCoreEnvironment()) {
-                new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
-            } else {
-                log.fatal("Initialisation of java core environment failed, server didn't start.");
-            }
-        } catch (Throwable e) {
-            log.fatal("Initialisation of java core environment failed, server didn't start", e);
-        }
-
-        try {
-            Initializer.getInstance().initializeExecutorsPolicyFile();
+            Initializer.initializeExecutorsPolicyFile();
         } catch (Throwable e) {
             log.fatal("FATAL ERROR: Initialisation of executors policy file failed, server didn't start", e);
             System.exit(1);

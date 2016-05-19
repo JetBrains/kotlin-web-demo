@@ -16,12 +16,7 @@
 
 package org.jetbrains.webdemo.backend;
 
-import com.intellij.openapi.application.ApplicationManager;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.webdemo.CommonSettings;
-import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,42 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Initializer {
-    private static Log log = LogFactory.getLog(Initializer.class);
-    private static EnvironmentManager environmentManager = new EnvironmentManager();
-    private static Initializer INITIALIZER = new Initializer();
-
-    public static Initializer getInstance() {
-        return INITIALIZER;
-    }
-
-    public static void reinitializeJavaEnvironment() {
-        ApplicationManager.setApplication(
-                INITIALIZER.getEnvironmentManager().getEnvironment().getApplication(),
-                INITIALIZER.getEnvironmentManager().getRegistry(),
-                INITIALIZER.getEnvironmentManager().getDisposable()
-        );
-    }
-
-    public EnvironmentManager getEnvironmentManager() {
-        return environmentManager;
-    }
-
-    public static void setEnvironmentManager(EnvironmentManager newEnvironmentManager) {
-        environmentManager = newEnvironmentManager;
-    }
-
-    public boolean initJavaCoreEnvironment() {
-        try {
-            environmentManager.getEnvironment();
-        } catch (Throwable e) {
-            log.fatal("Impossible to init jetCoreEnvironment", e);
-            return false;
-        }
-
-        return true;
-    }
-
-    public void initializeExecutorsPolicyFile() throws IOException {
+    public static void initializeExecutorsPolicyFile() throws IOException {
         Path templateFilePath = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));
         String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", CommonSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"))
@@ -74,10 +34,5 @@ public class Initializer {
         try (PrintWriter policyFile = new PrintWriter(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
             policyFile.write(policyFileContent);
         }
-    }
-
-
-    public KotlinCoreEnvironment getEnvironment() {
-        return getEnvironmentManager().getEnvironment();
     }
 }

@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.kotlin.impl;
 
-
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ProjectFile;
@@ -24,11 +23,13 @@ import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
+import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult;
 import org.jetbrains.webdemo.kotlin.impl.analyzer.ErrorAnalyzer;
 import org.jetbrains.webdemo.kotlin.impl.compiler.KotlinCompilerWrapper;
 import org.jetbrains.webdemo.kotlin.impl.completion.CompletionProvider;
 import org.jetbrains.webdemo.kotlin.impl.converter.WebDemoJavaToKotlinConverter;
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager;
+import org.jetbrains.webdemo.kotlin.impl.translator.WebDemoTranslatorFacade;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,6 +53,12 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         ErrorAnalyzer analyzer = new ErrorAnalyzer(files, EnvironmentManager.getEnvironment().getProject());
         boolean isJs = project.confType.equals("js") || project.confType.equals("canvas");
         return analyzer.getAllErrors(isJs);
+    }
+
+    @Override
+    public TranslationResult compileKotlinToJS(Project project){
+        List<KtFile> files = createPsiFiles(project);
+        return WebDemoTranslatorFacade.translateProjectWithCallToMain(files, project.args);
     }
 
     @Override
