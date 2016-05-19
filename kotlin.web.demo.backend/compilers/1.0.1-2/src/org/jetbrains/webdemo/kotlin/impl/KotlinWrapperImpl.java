@@ -20,18 +20,23 @@ package org.jetbrains.webdemo.kotlin.impl;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ProjectFile;
+import org.jetbrains.webdemo.kotlin.KotlinWrapper;
+import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 import org.jetbrains.webdemo.kotlin.impl.analyzer.ErrorAnalyzer;
+import org.jetbrains.webdemo.kotlin.impl.compiler.KotlinCompilerWrapper;
 import org.jetbrains.webdemo.kotlin.impl.completion.CompletionProvider;
 import org.jetbrains.webdemo.kotlin.impl.converter.WebDemoJavaToKotlinConverter;
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class KotlinWrapperImpl implements org.jetbrains.webdemo.kotlin.KotlinWrapper {
+public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
     public void init() {
         EnvironmentManager.init();
@@ -55,6 +60,27 @@ public class KotlinWrapperImpl implements org.jetbrains.webdemo.kotlin.KotlinWra
         CompletionProvider completionProvider = new CompletionProvider(files, filename, line, ch);
         boolean isJs = project.confType.equals("js") || project.confType.equals("canvas");
         return completionProvider.getResult(isJs);
+    }
+
+    @Override
+    public CompilationResult compileCorrectFiles(Project project) {
+        List<KtFile> files = createPsiFiles(project);
+        KotlinCompilerWrapper compilerWrapper = new KotlinCompilerWrapper();
+        return compilerWrapper.compile(files, EnvironmentManager.getEnvironment().getProject());
+    }
+
+    @Override
+    public List<Path> getKotlinRuntimeLibraries() {
+        List<Path> libraries = new ArrayList<>();
+        libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-runtime.jar"));
+        libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-reflect.jar"));
+        libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-test.jar"));
+        return libraries;
+    }
+
+    @Override
+    public Path getKotlinCompilerJar() {
+        return WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-compiler.jar");
     }
 
     private List<KtFile> createPsiFiles(Project project) {

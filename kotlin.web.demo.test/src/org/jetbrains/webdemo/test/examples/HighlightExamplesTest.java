@@ -105,7 +105,7 @@ public class HighlightExamplesTest extends BaseTest {
         if (jsExamples.contains(project.name)) {
 
         }
-//        assertEquals("Wrong result for example " + file.getName() + " run configuration: " + runConfiguration, expectedResult, actualResult);
+//        assertEquals("Wrong result for example " + file.getName() + " execute configuration: " + runConfiguration, expectedResult, actualResult);
     }
 
     private String getErrorsMessages(String fileName, ArrayNode errors) {

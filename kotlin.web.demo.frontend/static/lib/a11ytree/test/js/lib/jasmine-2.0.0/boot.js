@@ -107,7 +107,7 @@
   /**
    * ## Runner Parameters
    *
-   * More browser specific code - wrap the query string in an object and to allow for getting/setting parameters from the runner user interface.
+   * More browser specific code - wrap the query string in an object and to allow for getting/setting parameters from the executor user interface.
    */
 
   var queryString = new jasmine.QueryString({
@@ -119,7 +119,7 @@
 
   /**
    * ## Reporters
-   * The `HtmlReporter` builds all of the HTML UI for the runner page. This reporter paints the dots, stars, and x's for specs, as well as all spec names and all failures (if any).
+   * The `HtmlReporter` builds all of the HTML UI for the executor page. This reporter paints the dots, stars, and x's for specs, as well as all spec names and all failures (if any).
    */
   var htmlReporter = new jasmine.HtmlReporter({
     env: env,

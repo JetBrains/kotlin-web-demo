@@ -4586,7 +4586,7 @@ _blanket.extend({
                     };
                     var check = function() {
                         if (allLoaded()) {
-                            if (_blanket.options("debug")) {console.log("BLANKET-All files loaded, init start test runner callback.");}
+                            if (_blanket.options("debug")) {console.log("BLANKET-All files loaded, init start test executor callback.");}
                             var cb = _blanket.options("testReadyCallback");
 
                             if (cb){

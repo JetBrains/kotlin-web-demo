@@ -19,10 +19,12 @@ package org.jetbrains.webdemo.backend;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.backend.responseHelpers.CompileAndRunExecutor;
-import org.jetbrains.webdemo.backend.responseHelpers.JsConverter;
+import org.jetbrains.webdemo.backend.executor.ProgramOutput;
+import org.jetbrains.webdemo.backend.executor.ExecutorUtils;
+import org.jetbrains.webdemo.backend.executor.result.ExecutionResult;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
+import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 
@@ -48,7 +50,6 @@ public class MyHttpSession {
         try {
             this.request = request;
             this.response = response;
-            KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
             switch (request.getParameter("type")) {
                 case ("run"):
                     sendExecutorResult();
@@ -91,16 +92,27 @@ public class MyHttpSession {
     private void sendExecutorResult() {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            List<PsiFile> psiFiles = createProjectPsiFiles(currentProject);
-            sessionInfo.setRunConfiguration(currentProject.confType);
-            if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA) || sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JUNIT)) {
-                sessionInfo.setType(BackendSessionInfo.TypeOfRequest.RUN);
+            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
 
-                CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(psiFiles, Initializer.getInstance().getEnvironment().getProject(), sessionInfo, currentProject.args);
-                writeResponse(responseForCompilation.getResult(), HttpServletResponse.SC_OK);
-            } else {
-                sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS);
-                writeResponse(new JsConverter(sessionInfo).getResult(psiFiles, sessionInfo, currentProject.args), HttpServletResponse.SC_OK);
+            Map<String, List<ErrorDescriptor>> errorDescriptors = wrapper.getErrors(currentProject);
+
+            if (isOnlyWarnings(errorDescriptors)) {
+                if (!currentProject.confType.equals("js") && !currentProject.confType.equals("canvas")) {
+                    CompilationResult compilationResult = wrapper.compileCorrectFiles(currentProject);
+                    ExecutionResult programOutput = ExecutorUtils.executeCompiledFiles(
+                            compilationResult.getFiles(),
+                            compilationResult.getMainClass(),
+                            wrapper.getKotlinRuntimeLibraries(),
+                            wrapper.getKotlinCompilerJar(),
+                            currentProject.args,
+                            currentProject.confType.equals("junit")
+                    );
+                    programOutput.addWarningsFromCompiler(errorDescriptors);
+                    writeResponse(objectMapper.writeValueAsString(programOutput), HttpServletResponse.SC_OK);
+                } else {
+//                sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS);
+//                writeResponse(new JsConverter(sessionInfo).getResult(psiFiles, sessionInfo, currentProject.args), HttpServletResponse.SC_OK);
+                }
             }
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
@@ -109,6 +121,17 @@ public class MyHttpSession {
         } catch (Exception e) {
             writeResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
         }
+    }
+
+    private boolean isOnlyWarnings(Map<String, List<ErrorDescriptor>> map) {
+        for (String key : map.keySet()) {
+            for (ErrorDescriptor errorDescriptor : map.get(key)) {
+                if (errorDescriptor.getSeverity() == org.jetbrains.webdemo.kotlin.datastructures.Severity.ERROR) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private List<PsiFile> createProjectPsiFiles(Project example) {

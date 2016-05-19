@@ -14,29 +14,21 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.kotlin;
+package org.jetbrains.webdemo.backend.executor.result;
 
-import org.jetbrains.webdemo.Project;
-import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
-import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-public interface KotlinWrapper {
-    void init();
+public class ExecutionResult {
+    private Map<String, List<ErrorDescriptor>> compilerErrors;
 
-    String translateJavaToKotlin(String javaCode);
+    public Map<String, List<ErrorDescriptor>> getCompilerErrors() {
+        return compilerErrors;
+    }
 
-    Map<String, List<ErrorDescriptor>> getErrors(Project project);
-
-    List<CompletionVariant> getCompletionVariants(Project project, String filename, int line, int ch);
-
-    CompilationResult compileCorrectFiles(Project project);
-
-    List<Path> getKotlinRuntimeLibraries();
-
-    Path getKotlinCompilerJar();
+    public void addWarningsFromCompiler(Map<String, List<ErrorDescriptor>> warnings) {
+        this.compilerErrors = warnings;
+    }
 }

@@ -21,6 +21,7 @@ package org.jetbrains.webdemo.executors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
@@ -60,7 +61,9 @@ public class JunitExecutor {
                 module.addSerializer(org.junit.ComparisonFailure.class , new OrgJunitComparisonFailureSerializer());
                 objectMapper.registerModule(module);
                 System.setOut(standardOutput);
-                System.out.print(objectMapper.writeValueAsString(output));
+                ObjectNode result = objectMapper.createObjectNode();
+                result.put("testResults", objectMapper.valueToTree(output));
+                System.out.print(objectMapper.writeValueAsString(result));
             } catch (IOException e) {
                 e.printStackTrace();
             }
