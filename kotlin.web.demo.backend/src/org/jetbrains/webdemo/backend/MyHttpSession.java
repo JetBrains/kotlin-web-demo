@@ -37,15 +37,10 @@ import java.util.List;
 import java.util.Map;
 
 public class MyHttpSession {
-    private final BackendSessionInfo sessionInfo;
     private HttpServletRequest request;
     private HttpServletResponse response;
     private Project currentProject;
     private ObjectMapper objectMapper = new ObjectMapper();
-
-    public MyHttpSession(BackendSessionInfo info) {
-        this.sessionInfo = info;
-    }
 
     public void handle(final HttpServletRequest request, final HttpServletResponse response) {
         try {
@@ -59,21 +54,14 @@ public class MyHttpSession {
                     sendHighlightingResult();
                     break;
                 case ("convertToKotlin"):
-                    sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
                     sendConversationResult();
                     break;
                 case ("complete"):
-                    sessionInfo.setType(BackendSessionInfo.TypeOfRequest.COMPLETE);
                     sendCompletionResult();
                     break;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
-            if (sessionInfo != null && sessionInfo.getType() != null && currentProject != null) {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), JsonUtils.toJson(currentProject));
-            } else {
-                ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
-            }
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "");
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -184,7 +172,7 @@ public class MyHttpSession {
             ResponseUtils.writeResponse(request, response, responseBody, statusCode);
         } catch (IOException e) {
             //This is an exception we can't send data to client
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, sessionInfo.getType(), sessionInfo.getOriginUrl(), JsonUtils.toJson(currentProject));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "");
         }
     }
 

@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Map;
 
 public class ServerHandler {
 
@@ -34,10 +33,8 @@ public class ServerHandler {
         if (request.getQueryString() != null && request.getQueryString().equals("test")) {
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
-            BackendSessionInfo sessionInfo;
             try {
-                sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                MyHttpSession session = new MyHttpSession(sessionInfo);
+                MyHttpSession session = new MyHttpSession();
                 session.handle(request, response);
             } catch (Throwable e) {
                 //Do not stop server
@@ -46,13 +43,6 @@ public class ServerHandler {
                 ResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
-    }
-
-    @Nullable
-    private BackendSessionInfo setSessionInfo(final HttpSession session, String originUrl) {
-        BackendSessionInfo sessionInfo = new BackendSessionInfo(session.getId());
-        sessionInfo.setOriginUrl(originUrl);
-        return sessionInfo;
     }
 
 }
