@@ -20,18 +20,10 @@ class ConverterProvider(){
     fun convert(text: String, onSuccess: (String) -> Unit, onFail: (dynamic) -> Unit, onComplete: () -> Unit) {
         ajax(
                 url = generateAjaxUrl("convertToKotlin"),
-                success = { data: dynamic ->
-                    if (checkDataForNull(data)) {
-                        if (checkDataForException(data)) {
-                            onSuccess(data[0].text)
-                        } else {
-                            onFail(data)
-                        }
-                    } else {
-                        onFail("Incorrect data format.")
-                    }
+                success = { data: String ->
+                    onSuccess(data);
                 },
-                dataType = DataType.JSON,
+                dataType = DataType.TEXT,
                 type = HTTPRequestType.POST,
                 data = json("text" to text),
                 timeout = 10000,

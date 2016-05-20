@@ -90,7 +90,7 @@ class ConverterView(converterProvider: ConverterProvider) {
                                 javaEditor.getValue(),
                                 onSuccess = { text ->
                                     kotlinEditor.setValue(text)
-                                    var lineCount: Int = kotlinEditor.lineCount()
+                                    val lineCount: Int = kotlinEditor.lineCount()
                                     kotlinEditor.operation({
                                         for (i in 0..lineCount) kotlinEditor.indentLine(i)
                                     })
