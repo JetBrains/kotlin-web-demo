@@ -20,6 +20,7 @@ import kotlinx.html.*
 import kotlinx.html.js.*
 import kotlinx.html.dom.*
 import org.w3c.dom.HTMLDivElement
+import providers.JavaRunResult
 import views.tabs.OutputView
 import kotlin.text.js.RegExp
 
@@ -58,6 +59,14 @@ class ConsoleView(
         }
     }
 
+    fun showJavaRunResult(runResult: JavaRunResult) {
+        val outputView = prepareTab()
+        outputView.printMarkedText(runResult.text ?: "")
+        if (runResult.exception != null) {
+            outputView.printException(runResult.exception)
+        }
+    }
+
     fun setOutput(data: dynamic) {
         val outputView = prepareTab()
         if (data.type == "jsException") {
@@ -90,9 +99,18 @@ class ConsoleView(
         }
     }
 
+    fun showJsException(exception: Throwable) {
+        val outputView = prepareTab()
+        outputView.printErrorLine("Unhandled JavaScript exception")
+    }
+
+    fun showUnmarkedText(text: String) {
+        val outputView = prepareTab()
+        outputView.print(text)
+    }
+
     private fun prepareTab(): OutputView {
         element.innerHTML = ""
-        tabs?.tabs("option", "active", 1)
         return OutputView(element.append.div {
             classes = setOf("consoleOutput")
         })

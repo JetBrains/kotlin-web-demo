@@ -17,24 +17,26 @@
 package providers
 
 import application.Application
+import model.File
 import model.Project
 import utils.Object
 import utils.clear
 import utils.eval
-import utils.unEscapeString
 import views.Configuration
 import views.ConfigurationType
 import views.ConfigurationTypeRunner
+import views.editor.Diagnostic
+import kotlin.js.native
 
 class RunProvider(
         private val beforeRun: () -> Unit,
-        private val onSuccess: (List<dynamic>, Project) -> Unit,
-        private val onErrorsFound: (dynamic, Project) -> Unit,
+        private val onSuccess: (RunResult, Project) -> Unit,
+        private val processTranslateToJSResult: (TranslationResult, Project) -> Unit,
         private val onComplete: () -> Unit,
         private val onFail: (String) -> Unit
 ) {
-    public fun run(configuration: Configuration, project: Project) {
-        if(project.files.isEmpty()) return;
+    fun run(configuration: Configuration, project: Project) {
+        if (project.files.isEmpty()) return;
         beforeRun()
         if (configuration.type.runner == ConfigurationTypeRunner.JAVA) {
             runJava(project)
@@ -65,19 +67,12 @@ class RunProvider(
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("run", hashMapOf("runConf" to project.confType)),
-                success = { data: Array<dynamic> ->
-                    try {
-                        if (checkDataForNull(data)) {
-                            if (checkDataForErrors(data)) {
-                                onSuccess(data.toMutableList(), project)
-                            } else {
-                                onErrorsFound(data, project)
-                            }
-                        } else {
-                            onFail("Incorrect data format.")
-                        }
-                    } catch (e: Throwable) {
-                        console.log(e)
+                success = { data: dynamic ->
+                    val errors = getErrorsMapFromObject(data.errors, project)
+                    if (project.confType == "junit") {
+                        onSuccess(JunitExecutionResult(errors, data.testResults.asList()), project)
+                    } else {
+                        onSuccess(JavaRunResult(errors, data.text, data.exception), project);
                     }
                 },
                 dataType = DataType.JSON,
@@ -105,42 +100,30 @@ class RunProvider(
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("run", hashMapOf("runConf" to runConfiguration)),
-                success = { data: Array<dynamic> ->
-                    try {
-                        if (checkDataForNull(data)) {
-                            if (checkDataForErrors(data)) {
-                                var output = arrayListOf<dynamic>()
-                                for (element in data) {
-                                    if (element.type == "generatedJSCode") {
-                                        try {
-                                            //Placed here because of firefox bug
-                                            //(error modifying context of canvas in invisible iframe)
-                                            if (runConfiguration ==
-                                                    ConfigurationType.CANVAS.name.toLowerCase()) {
-                                                Application.iframeDialog.open()
-                                            }
-                                            var out: String = Application.iframe.contentWindow!!.eval(element.text)
-                                            output.add(json("text" to unEscapeString(out), "type" to "jsOut"))
-                                        } catch (e: Throwable) {
-                                            output.add(json("type" to "jsException", "exception" to e))
-                                        } finally {
-                                            if (runConfiguration == "js") {
-                                                Application.iframe.clear()
-                                            }
-                                        }
-                                    }
-                                    output.add(element)
-                                }
-                                onSuccess(output, project)
-                            } else {
-                                onErrorsFound(data, project)
+                success = { data: dynamic ->
+                    val translationResult: TranslationResult;
+                    val errors = getErrorsMapFromObject(data.errors, project)
+                    if (data.jsCode != null) {
+                        try {
+                            //Placed here because of firefox bug
+                            //(error modifying context of canvas in invisible iframe)
+                            if (runConfiguration ==
+                                    ConfigurationType.CANVAS.name.toLowerCase()) {
+                                Application.iframeDialog.open()
                             }
-                        } else {
-                            onFail("Incorrect data format.")
+                            val out: String = Application.iframe.contentWindow!!.eval(data.jsCode)
+                            translationResult = TranslationResult(errors, data.jsCode, out, null)
+                        } catch (e: Throwable) {
+                            translationResult = TranslationResult(errors, data.jsCode, null, e)
+                        } finally {
+                            if (runConfiguration == "js") {
+                                Application.iframe.clear()
+                            }
                         }
-                    } catch (e: Throwable) {
-                        console.log(e)
+                    } else {
+                        translationResult = TranslationResult(errors, null, null, null)
                     }
+                    processTranslateToJSResult(translationResult, project)
                 },
                 dataType = DataType.JSON,
                 type = HTTPRequestType.POST,
@@ -163,3 +146,58 @@ class RunProvider(
         )
     }
 }
+
+open class RunResult(
+        val errors: Map<File, List<Diagnostic>>
+)
+
+class JavaRunResult(
+        errors: Map<File, List<Diagnostic>>,
+        val text: String?,
+        val exception: ExceptionDescriptor?
+) : RunResult(errors)
+
+@native interface ExceptionDescriptor {
+    val message: String
+    val fullName: String
+    val stackTrace: List<StackTraceElement>
+    val cause: ExceptionDescriptor
+}
+
+@native interface StackTraceElement {
+    val declaringClass: String
+    val methodName: String
+    val fileName: String
+    val lineNumber: Int
+}
+
+class  JunitExecutionResult(
+        errors: Map<File, List<Diagnostic>>,
+        val testResults: List<TestResult>
+): RunResult(errors)
+
+@native
+interface TestResult {
+    val output: String
+    val sourceFileName: String
+    val className: String
+    val methodName: String
+    val executionTime: Long
+    val exception: ExceptionDescriptor?
+    val methodPosition: Int
+    val status: Status
+
+    @native enum class Status {
+        OK,
+        FAIL,
+        ERROR
+    }
+}
+
+class TranslationResult(
+        errors: Map<File, List<Diagnostic>>,
+        val jsCode: String?,
+        val output: String?,
+        val exception: Throwable?
+) : RunResult(errors);
+

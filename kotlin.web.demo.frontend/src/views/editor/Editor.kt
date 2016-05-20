@@ -362,7 +362,7 @@ private fun getCompletions(cm: CodeMirror, callback: (Hint) -> Unit, options: dy
 
 }
 
-public fun showDiagnostics(diagnostics: Map<File, Array<Diagnostic>>) {
+public fun showDiagnostics(diagnostics: Map<File, List<Diagnostic>>) {
     removeStyles()
     for (entry in diagnostics) {
         val relatedDocument = documents[entry.key]!!

@@ -21,6 +21,7 @@ import kotlinx.html.*
 import kotlinx.html.js.*
 import kotlinx.html.dom.*
 import org.w3c.dom.*
+import providers.TestResult
 import utils.*
 import utils.jquery.*
 import utils.jquery.ui.tabs
@@ -37,7 +38,7 @@ class JUnitView(
         private val tabs: JQuery
 ) {
 
-    fun setOutput(data: dynamic) {
+    fun setOutput(testResults: List<TestResult>) {
         element.innerHTML = ""
 
         tabs.tabs("option", "active", 1)
@@ -53,19 +54,15 @@ class JUnitView(
         var wrapper = document.createElement("div")
         wrapper.id = "test-wrapper"
         element.appendChild(wrapper)
-        val statistic = createStatistics(data.testResults)
+        val statistic = createStatistics(testResults)
         wrapper.appendChild(statistic)
         wrapper.appendChild(consoleElement)
 
-        if (data.type == "out") {
-            if (data.testResults.length != 0) {
-                createStatistics(data.testResults)
-                navTree.appendChild(createTestTree(data.testResults, outputView))
-            } else {
-                Application.consoleView.writeException("No test method found")
-            }
+        if (testResults.size != 0) {
+            createStatistics(testResults)
+            navTree.appendChild(createTestTree(testResults, outputView))
         } else {
-            throw Exception("Unknown data type")
+            Application.consoleView.writeException("No test method found")
         }
         jq(consoleElement).height(jq(wrapper).height().toInt() - jq(statistic).outerHeight(true).toInt())
     }
@@ -85,7 +82,7 @@ class JUnitView(
         return firstPackage.slice(0..j - 1)
     }
 
-    fun createTestTree(data: Array<dynamic>, outputView: OutputView): HTMLElement {
+    fun createTestTree(data: List<TestResult>, outputView: OutputView): HTMLElement {
         var testsData = hashMapOf<String, dynamic>()
         for (testResult in data) {
             testsData[testResult.className + '.' + testResult.methodName] = json(
@@ -100,7 +97,7 @@ class JUnitView(
         }
         var commonPackage = findCommonPackage(classNames)
 
-        var commonPackageFullName :String
+        var commonPackageFullName: String
         var rootNode: dynamic =
                 if (!commonPackage.isEmpty()) {
                     commonPackageFullName = commonPackage.joinToString(".")
@@ -125,15 +122,15 @@ class JUnitView(
                 var testNode = json(
                         "children" to arrayOf<dynamic>(),
                         "name" to  getClassNameWithoutAPackage(testResult.methodName),
-                        "icon" to  testResult.status.toLowerCase(),
+                        "icon" to  testResult.status.name.toLowerCase(),
                         "sourceFileName" to  testResult.sourceFileName,
                         "methodPosition" to  testResult.methodPosition,
                         "id" to  testResult.className + '.' + testResult.methodName
                 )
                 rootNode.children.push(testNode)
-                if (testResult.status == Status.ERROR) {
+                if (testResult.status == TestResult.Status.ERROR) {
                     rootNode.icon = "error"
-                } else if (testResult.status == Status.FAIL && rootNode.icon != "error") {
+                } else if (testResult.status == TestResult.Status.FAIL && rootNode.icon != "error") {
                     rootNode.icon = "fail"
                 }
             }
@@ -144,7 +141,7 @@ class JUnitView(
                     classNodes[testResult.className] = json(
                             "children" to  arrayOf<dynamic>(),
                             "name" to  getClassNameWithoutAPackage(testResult.className),
-                            "icon" to  testResult.status.toLowerCase(),
+                            "icon" to  testResult.status.name.toLowerCase(),
                             "id" to  testResult.className
                     )
                     rootNode.children.push(classNodes[testResult.className])
@@ -153,17 +150,17 @@ class JUnitView(
                 var testNode = json(
                         "children" to arrayOf<dynamic>(),
                         "name" to testResult.methodName,
-                        "icon" to testResult.status.toLowerCase(),
+                        "icon" to testResult.status.name.toLowerCase(),
                         "sourceFileName" to testResult.sourceFileName,
                         "methodPosition" to testResult.methodPosition,
                         "id" to testResult.className + '.' + testResult.methodName
                 )
                 classNode.children.push(testNode)
 
-                if (testResult.status == Status.ERROR) {
+                if (testResult.status == TestResult.Status.ERROR) {
                     classNode.icon = "error"
                     rootNode.icon = "error"
-                } else if (testResult.status == Status.FAIL && rootNode.icon != "error") {
+                } else if (testResult.status == TestResult.Status.FAIL && rootNode.icon != "error") {
                     classNode.icon = "fail"
                     rootNode.icon = "fail"
                 }
@@ -192,7 +189,7 @@ class JUnitView(
                             } else {
                                 null
                             }
-                    if(parsedMessage != null){
+                    if (parsedMessage != null) {
                         outputView.printErrorLine(testData.exception.fullName + ": " + parsedMessage.message)
                         outputView.printErrorLine("")
                         outputView.print("Expected: ")
@@ -266,7 +263,6 @@ class JUnitView(
     }
 
 
-
     fun getClassNameWithoutAPackage(fullClassName: String): String = fullClassName.split('.').last()
 
     fun parseAssertionErrorMessage(message: String): ParsedAssertionMessage? {
@@ -278,18 +274,18 @@ class JUnitView(
             var regExpExecResult = regExp.find(message.replace("\n", "</br>"))
             if (regExpExecResult != null) {
                 return ParsedAssertionMessage(
-                    regExpExecResult.groups[1]!!.value,
-                    regExpExecResult.groups[2]!!.value,
-                    regExpExecResult.groups[3]!!.value
+                        regExpExecResult.groups[1]!!.value,
+                        regExpExecResult.groups[2]!!.value,
+                        regExpExecResult.groups[3]!!.value
                 )
             }
         }
         return null
     }
 
-    fun createStatistics(data: Array<TestResult>): HTMLDivElement {
+    fun createStatistics(data: List<TestResult>): HTMLDivElement {
         val totalTime = data.fold (0.0) { time, testResult -> time + testResult.executionTime / 1000.0 }
-        val noOfFailedTest = data.count { it.status != Status.OK.name }
+        val noOfFailedTest = data.count { it.status != TestResult.Status.OK }
         val status = if (noOfFailedTest > 0) Status.FAIL else Status.OK
         val message = if (noOfFailedTest == 0) {
             "All tests passed in ${totalTime.toFixed(3)}s"
@@ -329,12 +325,6 @@ data class ParsedAssertionMessage(
         val expected: String,
         val actual: String
 )
-
-@native
-interface TestResult {
-    val status: String
-    val executionTime: Double
-}
 
 @native
 fun Double.toFixed(noOfDigits: Int): Double

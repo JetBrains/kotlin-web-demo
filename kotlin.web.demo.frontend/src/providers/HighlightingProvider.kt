@@ -21,11 +21,11 @@ import model.Project
 import views.editor.Diagnostic
 
 class HighlightingProvider(
-        private val onSuccess: (Map<File, Array<Diagnostic>>) -> Unit,
+        private val onSuccess: (Map<File, List<Diagnostic>>) -> Unit,
         private val onFail: (String, String) -> Unit
 ) {
 
-    fun getHighlighting(project: Project, callback: (Map<File, Array<Diagnostic>>) -> Unit, finallyCallback: (() -> Unit)?) {
+    fun getHighlighting(project: Project, callback: (Map<File, List<Diagnostic>>) -> Unit, finallyCallback: (() -> Unit)?) {
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("highlight", hashMapOf("runConf" to project.confType)),

@@ -23,21 +23,21 @@ import java.util.List;
 import java.util.Map;
 
 public class ExecutionResult {
-    private Map<String, List<ErrorDescriptor>> compilerErrors;
+    private Map<String, List<ErrorDescriptor>> errors;
 
     public ExecutionResult(){
-        compilerErrors = new HashMap<>();
+        errors = new HashMap<>();
     }
 
-    public ExecutionResult(Map<String, List<ErrorDescriptor>> compilerErrors){
-        this.compilerErrors = compilerErrors;
+    public ExecutionResult(Map<String, List<ErrorDescriptor>> errors){
+        this.errors = errors;
     }
 
-    public Map<String, List<ErrorDescriptor>> getCompilerErrors() {
-        return compilerErrors;
+    public Map<String, List<ErrorDescriptor>> getErrors() {
+        return errors;
     }
 
     public void addWarningsFromCompiler(Map<String, List<ErrorDescriptor>> warnings) {
-        this.compilerErrors = warnings;
+        this.errors = warnings;
     }
 }

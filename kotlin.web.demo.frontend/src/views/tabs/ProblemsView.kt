@@ -39,7 +39,7 @@ class ProblemsView(
         element.innerHTML = ""
     }
 
-    fun addMessages(errorMap: Map<File, Array<Diagnostic>>) {
+    fun addMessages(errorMap: Map<File, List<Diagnostic>>) {
         val fileNodes = jq("#problems-tree").find(">li").toArray()
         val collapsedNodes = arrayListOf<String>()
         for (fileNode in fileNodes) {
@@ -70,7 +70,7 @@ class ProblemsView(
         }
     }
 
-    private fun renderFileNode(file: File, errors: Array<Diagnostic>, parentElement: HTMLElement) {
+    private fun renderFileNode(file: File, errors: List<Diagnostic>, parentElement: HTMLElement) {
         val nodeElement = parentElement.append.li {
             classes = setOf("tree-node")
             id = file.id + "_problems"

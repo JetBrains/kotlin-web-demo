@@ -88,8 +88,8 @@ object Application {
                     }
                     navBarView.onProjectSelected(project)
                 }
-                if(project is UserProject ||
-                        (project is Task && loginView.isLoggedIn)){
+                if (project is UserProject ||
+                        (project is Task && loginView.isLoggedIn)) {
                     saveButton.enable()
                 } else {
                     saveButton.disable()
@@ -167,41 +167,42 @@ object Application {
                 generatedCodeView.clear()
             },
             onSuccess = { output, project ->
-                output.forEach { data ->
-                    if (data.type == "errors") {
-                        problemsView.addMessages(getErrorsMapFromObject(data.errors, project))
-                        editor.showDiagnostics(getErrorsMapFromObject(data.errors, project))
-                    } else if (data.type == "toggle-info" || data.type == "info" || data.type == "generatedJSCode") {
-                        generatedCodeView.setOutput(data)
-                    } else {
-                        if (configurationManager.getConfiguration().type == ConfigurationType.JUNIT) {
-                            if (project is Task) {
-                                val testResults: Array<TestResult> = data.testResults
-                                val completed = testResults.all { it.status.equals("OK") }
-                                if (completed) {
-                                    projectProvider.saveSolution(project, completed)
-                                    project.completed = true
-                                    completedProjects = (completedProjects + project.id).toSet();
-                                }
-                            }
-                            junitView.setOutput(data)
-                        } else {
-                            consoleView.setOutput(data)
+                if (!isOnlyWarnings(output.errors)) {
+                    jq("#result-tabs").tabs("option", "active", 0)
+                } else {
+                    jq("#result-tabs").tabs("option", "active", 1)
+                }
+                problemsView.addMessages(output.errors)
+                editor.showDiagnostics(output.errors)
+
+                if (output is JunitExecutionResult) {
+                    if (project is Task) {
+                        val completed = output.testResults.all { it.status.equals("OK") }
+                        if (completed) {
+                            projectProvider.saveSolution(project, completed)
+                            project.completed = true
+                            completedProjects = (completedProjects + project.id).toSet();
                         }
                     }
+                    junitView.setOutput(output.testResults)
+                } else if (output is JavaRunResult) {
+                    consoleView.showJavaRunResult(output)
                 }
                 statusBarView.setStatus(ActionStatusMessage.run_java_ok)
             },
-            onErrorsFound = { data, project ->
-                data.forEach { data ->
-                    if (data.type == "errors") {
-                        jq("#result-tabs").tabs("option", "active", 0)
-                        problemsView.addMessages(getErrorsMapFromObject(data.errors, project))
-                        editor.showDiagnostics(getErrorsMapFromObject(data.errors, project))
-                        statusBarView.setStatus(ActionStatusMessage.get_highlighting_ok,
-                                getNumberOfErrorsAndWarnings(getErrorsMapFromObject(data.errors, project)).toString())
-                    }
+            processTranslateToJSResult = { translationResult, project ->
+                problemsView.addMessages(translationResult.errors)
+                editor.showDiagnostics(translationResult.errors)
+                if (translationResult.jsCode != null) {
+                    generatedCodeView.showGeneratedCode(translationResult.jsCode)
                 }
+                if (translationResult.exception != null) {
+                    consoleView.showJsException(translationResult.exception)
+                }
+                if (translationResult.output != null) {
+                    consoleView.showUnmarkedText(translationResult.output)
+                }
+                statusBarView.setStatus(ActionStatusMessage.run_js_ok)
             },
             onComplete = {
                 runButton.enable()
@@ -211,6 +212,12 @@ object Application {
                 statusBarView.setStatus(ActionStatusMessage.run_java_fail)
             }
     )
+
+    private fun isOnlyWarnings(errors: Map<File, List<Diagnostic>>): Boolean {
+        return errors.values.flatten().none {
+            it.severity == "ERROR"
+        }
+    }
 
     val runButton: Button = Button(
             Elements.runButton,
@@ -412,7 +419,7 @@ object Application {
         editor.updateHighlighting()
     })
 
-    private fun getNumberOfErrorsAndWarnings(diagnostics: Map<File, Array<Diagnostic>>): Int {
+    private fun getNumberOfErrorsAndWarnings(diagnostics: Map<File, List<Diagnostic>>): Int {
         return diagnostics.values.fold(0, { noOfDiagnostics, diagnostics -> noOfDiagnostics + diagnostics.size })
     }
 
@@ -426,9 +433,9 @@ object Application {
         }
 
         window.onstorage = { event ->
-            if(event is StorageEvent && event.key == "isLoggedIn"){
+            if (event is StorageEvent && event.key == "isLoggedIn") {
                 val isLoggedIn = parseBoolean(event.newValue);
-                if(loginView.isLoggedIn != isLoggedIn) window.location.reload()
+                if (loginView.isLoggedIn != isLoggedIn) window.location.reload()
             }
         }
 
@@ -451,9 +458,9 @@ object Application {
             } else {
                 shortcut = actionManager.getShortcut("org.jetbrains.web.demo.save")
                 if (shortcut.isPressed(e)) {
-                    if(saveButton.disabled){
+                    if (saveButton.disabled) {
                         Elements.saveAsButton.click()
-                    } else{
+                    } else {
                         Elements.saveButton.click()
                     }
                 }
