@@ -17,9 +17,7 @@
 package org.jetbrains.webdemo.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.intellij.psi.PsiFile;
 import org.jetbrains.webdemo.*;
-import org.jetbrains.webdemo.backend.executor.ProgramOutput;
 import org.jetbrains.webdemo.backend.executor.ExecutorUtils;
 import org.jetbrains.webdemo.backend.executor.result.ExecutionResult;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
@@ -32,7 +30,6 @@ import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +51,7 @@ public class MyHttpSession {
                     sendHighlightingResult();
                     break;
                 case ("convertToKotlin"):
-                    sendConversationResult();
+                    sendConversionResult();
                     break;
                 case ("complete"):
                     sendCompletionResult();
@@ -66,7 +63,7 @@ public class MyHttpSession {
         }
     }
 
-    private void sendConversationResult() {
+    private void sendConversionResult() {
         try {
             KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
             String javaCode = request.getParameter("text");
