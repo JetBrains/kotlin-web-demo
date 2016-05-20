@@ -70,7 +70,8 @@ class RunProvider(
                 success = { data: dynamic ->
                     val errors = getErrorsMapFromObject(data.errors, project)
                     if (project.confType == "junit") {
-                        onSuccess(JunitExecutionResult(errors, data.testResults.asList()), project)
+                        val testResults: Array<TestResult> = data.testResults;
+                        onSuccess(JunitExecutionResult(errors, testResults.asList()), project)
                     } else {
                         onSuccess(JavaRunResult(errors, data.text, data.exception), project);
                     }
@@ -182,16 +183,22 @@ interface TestResult {
     val sourceFileName: String
     val className: String
     val methodName: String
-    val executionTime: Long
+    val executionTime: Int
     val exception: ExceptionDescriptor?
+    val comparisonFailure: ComparisonFailureDescriptor?
     val methodPosition: Int
-    val status: Status
+    val status: String
+}
 
-    @native enum class Status {
-        OK,
-        FAIL,
-        ERROR
-    }
+@native interface ComparisonFailureDescriptor : ExceptionDescriptor {
+    val expected: String
+    val actual: String
+}
+
+enum class Status {
+    OK,
+    FAIL,
+    ERROR
 }
 
 class TranslationResult(

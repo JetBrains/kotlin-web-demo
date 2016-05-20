@@ -27,6 +27,7 @@ import org.w3c.dom.HTMLIFrameElement
 import org.w3c.dom.StorageEvent
 import org.w3c.dom.events.KeyboardEvent
 import providers.*
+import providers.Status
 import utils.*
 import utils.jquery.jq
 import utils.jquery.on
@@ -177,7 +178,7 @@ object Application {
 
                 if (output is JunitExecutionResult) {
                     if (project is Task) {
-                        val completed = output.testResults.all { it.status.equals("OK") }
+                        val completed = output.testResults.all { it.status == Status.OK.name }
                         if (completed) {
                             projectProvider.saveSolution(project, completed)
                             project.completed = true

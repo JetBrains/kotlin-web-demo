@@ -21,6 +21,7 @@ import kotlinx.html.*
 import kotlinx.html.js.*
 import kotlinx.html.dom.*
 import org.w3c.dom.*
+import providers.Status
 import providers.TestResult
 import utils.*
 import utils.jquery.*
@@ -83,12 +84,9 @@ class JUnitView(
     }
 
     fun createTestTree(data: List<TestResult>, outputView: OutputView): HTMLElement {
-        var testsData = hashMapOf<String, dynamic>()
+        var testsData = hashMapOf<String, TestResult>()
         for (testResult in data) {
-            testsData[testResult.className + '.' + testResult.methodName] = json(
-                    "output" to testResult.output,
-                    "exception" to testResult.exception
-            )
+            testsData[testResult.className + '.' + testResult.methodName] = testResult
         }
 
         var classNames = arrayListOf<String>()
@@ -119,18 +117,18 @@ class JUnitView(
 
         if (commonPackageFullName == classNames[0]) {
             for (testResult in data) {
-                var testNode = json(
+                val testNode = json(
                         "children" to arrayOf<dynamic>(),
                         "name" to  getClassNameWithoutAPackage(testResult.methodName),
-                        "icon" to  testResult.status.name.toLowerCase(),
+                        "icon" to  testResult.status.toLowerCase(),
                         "sourceFileName" to  testResult.sourceFileName,
                         "methodPosition" to  testResult.methodPosition,
                         "id" to  testResult.className + '.' + testResult.methodName
                 )
                 rootNode.children.push(testNode)
-                if (testResult.status == TestResult.Status.ERROR) {
+                if (testResult.status == Status.ERROR.name) {
                     rootNode.icon = "error"
-                } else if (testResult.status == TestResult.Status.FAIL && rootNode.icon != "error") {
+                } else if (testResult.status == Status.FAIL.name && rootNode.icon != "error") {
                     rootNode.icon = "fail"
                 }
             }
@@ -141,7 +139,7 @@ class JUnitView(
                     classNodes[testResult.className] = json(
                             "children" to  arrayOf<dynamic>(),
                             "name" to  getClassNameWithoutAPackage(testResult.className),
-                            "icon" to  testResult.status.name.toLowerCase(),
+                            "icon" to  testResult.status.toString().toLowerCase(),
                             "id" to  testResult.className
                     )
                     rootNode.children.push(classNodes[testResult.className])
@@ -150,17 +148,17 @@ class JUnitView(
                 var testNode = json(
                         "children" to arrayOf<dynamic>(),
                         "name" to testResult.methodName,
-                        "icon" to testResult.status.name.toLowerCase(),
+                        "icon" to testResult.status.toString().toLowerCase(),
                         "sourceFileName" to testResult.sourceFileName,
                         "methodPosition" to testResult.methodPosition,
                         "id" to testResult.className + '.' + testResult.methodName
                 )
                 classNode.children.push(testNode)
 
-                if (testResult.status == TestResult.Status.ERROR) {
+                if (testResult.status == Status.ERROR.name) {
                     classNode.icon = "error"
                     rootNode.icon = "error"
-                } else if (testResult.status == TestResult.Status.FAIL && rootNode.icon != "error") {
+                } else if (testResult.status == Status.FAIL.name && rootNode.icon != "error") {
                     classNode.icon = "fail"
                     rootNode.icon = "fail"
                 }
@@ -173,37 +171,30 @@ class JUnitView(
 
         fun printTestOutput(element: HTMLElement) {
             if (element.hasClass("at-no-children")) {
-                val testData = testsData[element.id]
-                outputView.printMarkedText(testsData[element.id].output)
-                if (testData.exception != null) {
-                    val parsedMessage =
-                            if (testData.exception.fullName == "org.junit.ComparisonFailure" ||
-                                    testData.exception.fullName == "junit.framework.ComparisonFailure"
-                            ) {
-                                ParsedAssertionMessage(
-                                        parseAssertionErrorMessage(unEscapeString(testData.exception.message))?.message ?: "",
-                                        testData.exception.expected,
-                                        testData.exception.actual)
-                            } else if (testData.exception.message != null) {
-                                parseAssertionErrorMessage(unEscapeString(testData.exception.message))
-                            } else {
-                                null
-                            }
-                    if (parsedMessage != null) {
-                        outputView.printErrorLine(testData.exception.fullName + ": " + parsedMessage.message)
-                        outputView.printErrorLine("")
-                        outputView.print("Expected: ")
-                        outputView.printErrorLine(parsedMessage.expected)
-                        outputView.print("Actual: ")
-                        outputView.printErrorLine(parsedMessage.actual)
-                        outputView.printError("    ")
-                        outputView.element.appendChild(createDifferenceReference(parsedMessage.expected, parsedMessage.actual))
-                        outputView.println("")
-                        outputView.println("")
-                        outputView.printExceptionBody(testData.exception)
-                    } else {
-                        outputView.printException(testData.exception)
-                    }
+                val testData = testsData[element.id]!!
+                outputView.printMarkedText(testData.output)
+
+                val comparisonFailure = testData.comparisonFailure
+                if (comparisonFailure != null) {
+                    val parsedMessage = ParsedAssertionMessage(
+                            parseAssertionErrorMessage(unEscapeString(testData.comparisonFailure!!.message))?.message ?: "",
+                            testData.comparisonFailure!!.expected,
+                            testData.comparisonFailure!!.actual)
+                    outputView.printErrorLine(comparisonFailure.fullName + ": " + parsedMessage.message)
+                    outputView.printErrorLine("")
+                    outputView.print("Expected: ")
+                    outputView.printErrorLine(parsedMessage.expected)
+                    outputView.print("Actual: ")
+                    outputView.printErrorLine(parsedMessage.actual)
+                    outputView.printError("    ")
+                    outputView.element.appendChild(createDifferenceReference(parsedMessage.expected, parsedMessage.actual))
+                    outputView.println("")
+                    outputView.println("")
+                    outputView.printExceptionBody(testData.comparisonFailure)
+                }
+
+                if(testData.exception != null){
+                    outputView.printException(testData.exception)
                 }
             } else {
                 jq(element).children("ul").children("li").toArray().forEach {
@@ -285,7 +276,7 @@ class JUnitView(
 
     fun createStatistics(data: List<TestResult>): HTMLDivElement {
         val totalTime = data.fold (0.0) { time, testResult -> time + testResult.executionTime / 1000.0 }
-        val noOfFailedTest = data.count { it.status != TestResult.Status.OK }
+        val noOfFailedTest = data.count { it.status != Status.OK.name }
         val status = if (noOfFailedTest > 0) Status.FAIL else Status.OK
         val message = if (noOfFailedTest == 0) {
             "All tests passed in ${totalTime.toFixed(3)}s"
@@ -312,12 +303,6 @@ class JUnitView(
             event.stopPropagation()
         }
     }
-}
-
-enum class Status() {
-    OK,
-    FAIL,
-    ERROR
 }
 
 data class ParsedAssertionMessage(

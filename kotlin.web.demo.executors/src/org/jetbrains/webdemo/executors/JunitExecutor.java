@@ -121,6 +121,7 @@ class TestRunInfo {
     public String methodName = "";
     public long executionTime = 0;
     public Throwable exception = null;
+    public AssertionError comparisonFailure = null;
     public int methodPosition;
     public Status status = Status.OK;
 
@@ -164,12 +165,13 @@ class MyRunListener extends RunListener {
     @Override
     public void testFailure(Failure failure) {
         Throwable exception = failure.getException();
-        currentTestRunInfo.exception = exception;
 
         if (exception instanceof AssertionError) {
             currentTestRunInfo.status = TestRunInfo.Status.FAIL;
+            currentTestRunInfo.comparisonFailure = (AssertionError) exception;
         } else {
             currentTestRunInfo.status = TestRunInfo.Status.ERROR;
+            currentTestRunInfo.exception = exception;
         }
     }
 

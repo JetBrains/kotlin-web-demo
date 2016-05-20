@@ -17,6 +17,8 @@
 package org.jetbrains.webdemo.backend.executor.result;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -61,24 +63,57 @@ class ExceptionDescriptor {
         this.stackTrace = stackTrace;
         this.cause = cause;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public List<StackTraceElement> getStackTrace() {
+        return stackTrace;
+    }
+
+    public ExceptionDescriptor getCause() {
+        return cause;
+    }
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class StackTraceElement {
-    private String declaringClass;
+    private String className;
     private String methodName;
     private String fileName;
     private int lineNumber;
 
     @JsonCreator
     public StackTraceElement(
-            @JsonProperty("declaringClass") String declaringClass,
+            @JsonProperty("className") String className,
             @JsonProperty("methodName") String methodName,
             @JsonProperty("fileName") String fileName,
             @JsonProperty("lineNumber") int lineNumber
     ) {
-        this.declaringClass = declaringClass;
+        this.className = className;
         this.methodName = methodName;
         this.fileName = fileName;
         this.lineNumber = lineNumber;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
     }
 }

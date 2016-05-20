@@ -26,21 +26,110 @@ public class JunitExecutionResult extends ExecutionResult {
     public JunitExecutionResult(@JsonProperty("testResults") List<TestRunInfo> testResults) {
         this.testResults = testResults;
     }
+
+    public List<TestRunInfo> getTestResults() {
+        return testResults;
+    }
 }
 
 class TestRunInfo {
-    public String output = "";
-    public String sourceFileName = "";
-    public String className = "";
-    public String methodName = "";
-    public long executionTime = 0;
-    public ExceptionDescriptor exception = null;
-    public int methodPosition;
-    public Status status = Status.OK;
+    private String output;
+    private String sourceFileName;
+    private String className;
+    private String methodName;
+    private long executionTime;
+    private ExceptionDescriptor exception;
+    private ComparisonFailureDescriptor comparisonFailure;
+    private int methodPosition;
+    private Status status;
+
+    public TestRunInfo(
+            @JsonProperty("output") String output,
+            @JsonProperty("sourceFileName") String sourceFileName,
+            @JsonProperty("className") String className,
+            @JsonProperty("methodName") String methodName,
+            @JsonProperty("executionTime") long executionTime,
+            @JsonProperty("exception") ExceptionDescriptor exception,
+            @JsonProperty("comparisonFailure") ComparisonFailureDescriptor comparisonFailure,
+            @JsonProperty("methodPosition") int methodPosition,
+            @JsonProperty("status") Status status
+    ) {
+        this.output = output;
+        this.sourceFileName = sourceFileName;
+        this.className = className;
+        this.methodName = methodName;
+        this.executionTime = executionTime;
+        this.exception = exception;
+        this.methodPosition = methodPosition;
+        this.status = status;
+        this.comparisonFailure = comparisonFailure;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public String getSourceFileName() {
+        return sourceFileName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public long getExecutionTime() {
+        return executionTime;
+    }
+
+    public ExceptionDescriptor getException() {
+        return exception;
+    }
+
+    public int getMethodPosition() {
+        return methodPosition;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public ComparisonFailureDescriptor getComparisonFailure() {
+        return comparisonFailure;
+    }
 
     public enum Status {
         OK,
         FAIL,
         ERROR
+    }
+}
+
+class ComparisonFailureDescriptor extends ExceptionDescriptor{
+    private String expected;
+    private String actual;
+
+    ComparisonFailureDescriptor(
+            @JsonProperty("message") String message,
+            @JsonProperty("fullName") String fullName,
+            @JsonProperty("stackTrace") List<StackTraceElement> stackTrace,
+            @JsonProperty("cause") ExceptionDescriptor cause,
+            @JsonProperty("expected") String expected,
+            @JsonProperty("actual") String actual
+    ) {
+        super(message, fullName, stackTrace, cause);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
+    public String getExpected() {
+        return expected;
+    }
+
+    public String getActual() {
+        return actual;
     }
 }
