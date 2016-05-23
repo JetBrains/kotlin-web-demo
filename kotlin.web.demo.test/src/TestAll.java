@@ -31,10 +31,10 @@ public class TestAll extends TestCase {
         ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
         ExamplesLoader.loadAllExamples();
         TestSuite suite = new TestSuite(
-                HighlightingTest.class
-//                CompletionTest.class,
+                HighlightingTest.class,
+//                CompletionTest.class
 //                RunTest.class,
-//                J2KConverterTest.class
+                J2KConverterTest.class
         );
 //        suite.addTest(HighlightExamplesTest.suite());
 //        suite.addTest(RunExamplesTest.suite());

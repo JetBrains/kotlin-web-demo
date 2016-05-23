@@ -17,22 +17,23 @@
 package org.jetbrains.webdemo.test.j2kconverter;
 
 import org.jetbrains.webdemo.test.BaseTest;
+import org.jetbrains.webdemo.test.TestUtils;
+
+import java.io.IOException;
 
 public class J2KConverterTest extends BaseTest {
 
-//    public void test$j2kconverter$class() throws IOException {
-//        String fileName = TestUtils.getNameByTestName(this) + ".java";
-//        String expectedResult = "[{\"text\":\"class Foo {\\ninternal fun bar() {}\\ninternal fun foo():Int {\\nreturn 0\\n}\\n}\"}]";
-//
-//        assertTrue(true);
-//        compareResult(fileName, expectedResult);
-//    }
-//
-//    private void compareResult(String fileName, String expectedResult) throws IOException {
-//        BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
-//        PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), fileName, "class A");
-//        new ErrorAnalyzer(Collections.singletonList(currentPsiFile), sessionInfo, currentPsiFile.getProject()).getAllErrors();
-//        String actualResult = new WebDemoJavaToKotlinConverter(sessionInfo).getResult(TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName), currentPsiFile.getProject());
-//        assertEquals("wrong result in " + fileName, expectedResult, actualResult);
-//    }
+    public void test$j2kconverter$class() throws IOException {
+        String javaCodeFileName = TestUtils.getNameByTestName(this) + ".java";
+        String kotlinCodeFileName = TestUtils.getNameByTestName(this) + ".kt";
+        compareResult(javaCodeFileName, kotlinCodeFileName);
+    }
+
+    private void compareResult(String javaCodeFileName, String kotlinCodeFileName) throws IOException {
+        String javaCode = TestUtils.getDataFromFile(TestUtils.TEST_SRC, javaCodeFileName);
+        String expectedResult = TestUtils.getDataFromFile(TestUtils.TEST_SRC, kotlinCodeFileName);
+        String actualResult = kotlinWrapper.translateJavaToKotlin(javaCode);
+
+        assertEquals("wrong result in " + javaCodeFileName, expectedResult, actualResult + "\n");
+    }
 }

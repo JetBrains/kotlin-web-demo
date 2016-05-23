@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.kotlin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.webdemo.CommonSettings;
-import org.jetbrains.webdemo.kotlin.classloader.ParentLastURLClassLoader;
+import org.jetbrains.webdemo.kotlin.classloader.ChildFirstURLClassLoader;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,7 +39,7 @@ public class KotlinWrappersManager {
     public static void init() {
         for(String kotlinVersion : WRAPPERS_DIR.toFile().list()) {
             try {
-                ClassLoader kotlinClassLoader = new ParentLastURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion));
+                ClassLoader kotlinClassLoader = new ChildFirstURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion));
                 KotlinWrapper kotlinWrapper = (KotlinWrapper) kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance();
                 kotlinWrapper.init();
                 wrappers.put(kotlinVersion, kotlinWrapper);
@@ -53,7 +53,7 @@ public class KotlinWrappersManager {
         return wrappers.get(kotlinVersion);
     }
 
-    private static List<URL> getForKotlinWrapperClassLoaderURLs(String kotlinVersion) {
+    private static URL[] getForKotlinWrapperClassLoaderURLs(String kotlinVersion) {
         try {
             Path wrapperDir = WRAPPERS_DIR.resolve(kotlinVersion);
             Path classesDir = wrapperDir.resolve("classes");
@@ -65,9 +65,9 @@ public class KotlinWrappersManager {
                 urls.add(jarsDir.resolve(jarFile).toUri().toURL());
             }
             urls.add(classesDir.toUri().toURL());
-            return urls;
+            return urls.toArray(new URL[urls.size()]);
         } catch (MalformedURLException e) {
-            return new ArrayList<>();
+            return new URL[0];
         }
     }
 }
