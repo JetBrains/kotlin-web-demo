@@ -17,7 +17,10 @@
 package org.jetbrains.webdemo.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Project;
+import org.jetbrains.webdemo.ProjectFile;
+import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.executor.ExecutorUtils;
 import org.jetbrains.webdemo.backend.executor.result.ExecutionResult;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
@@ -30,6 +33,7 @@ import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,8 +84,9 @@ public class MyHttpSession {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
 
-            Map<String, List<ErrorDescriptor>> errorDescriptors = wrapper.getErrors(currentProject);
-
+            Map<String, String> files = getFilesContentFromProject(currentProject);
+            boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");
+            Map<String, List<ErrorDescriptor>> errorDescriptors = wrapper.getErrors(files, isJs);
 
             if (!currentProject.confType.equals("js") && !currentProject.confType.equals("canvas")) {
                 ExecutionResult executionResult = null;
@@ -152,7 +157,9 @@ public class MyHttpSession {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
-            Map<String, List<ErrorDescriptor>> analysisResult = wrapper.getErrors(currentProject);
+            Map<String, String> files = getFilesContentFromProject(currentProject);
+            boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");
+            Map<String, List<ErrorDescriptor>> analysisResult = wrapper.getErrors(files, isJs);
             String response = objectMapper.writeValueAsString(analysisResult);
             response = response.replaceAll("\\n", "");
             writeResponse(response, HttpServletResponse.SC_OK);
@@ -161,6 +168,14 @@ public class MyHttpSession {
         } catch (NullPointerException e) {
             writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
         }
+    }
+
+    private Map<String, String> getFilesContentFromProject(Project project) {
+        Map<String, String> result = new HashMap<>();
+        for (ProjectFile file : project.files) {
+            result.put(file.getName(), file.getText());
+        }
+        return result;
     }
 
     //Send Response

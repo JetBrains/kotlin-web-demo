@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.backend/compilers/1.0.1-2/1.0.1-2.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/1.0.1-2/1.0.1-2.iml" group="compilers" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2.iml" group="compilers" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.backend/compilers/compilers.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/compilers.iml" group="compilers" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" />

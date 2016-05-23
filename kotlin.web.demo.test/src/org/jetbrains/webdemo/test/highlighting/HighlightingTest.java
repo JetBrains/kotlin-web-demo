@@ -16,86 +16,89 @@
 
 package org.jetbrains.webdemo.test.highlighting;
 
-import com.intellij.psi.PsiFile;
-import org.jetbrains.webdemo.backend.BackendSessionInfo;
-import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
-import org.jetbrains.webdemo.backend.responseHelpers.JsonResponseForHighlighting;
-import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
+import org.jetbrains.webdemo.kotlin.datastructures.Severity;
+import org.jetbrains.webdemo.kotlin.datastructures.TextInterval;
+import org.jetbrains.webdemo.kotlin.datastructures.TextPosition;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class HighlightingTest extends BaseTest {
 
     public void test$errors$oneError() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "{\"" + fileName + "\":[" +
-                "{" +
-                "\"interval\":{\"start\":{\"line\":1,\"ch\":2},\"end\":{\"line\":1,\"ch\":8}}," +
-                "\"message\":\"Unresolved reference: prntln\"," +
-                "\"severity\":\"ERROR\"," +
-                "\"className\":\"ERROR\"" +
-                "}" +
-                "]}";
-        compareResponseAndExpectedResult(fileName, expectedResult, "java");
+        List<ErrorDescriptor> expectedResult = new ArrayList<>();
+        expectedResult.add(new ErrorDescriptor(
+                new TextInterval(new TextPosition(1, 2), new TextPosition(1,8)),
+                "Unresolved reference: prntln",
+                Severity.ERROR,
+                null
+        ));
+        compareResponseAndExpectedResult(fileName, expectedResult, false);
     }
 
     public void test$errors$oneError$js() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this).substring(0, TestUtils.getNameByTestName(this).length() - 3) + ".kt";
-        String expectedResult = "{\"" + fileName + "\":[" +
-                "{" +
-                "\"interval\":{\"start\":{\"line\":1,\"ch\":2},\"end\":{\"line\":1,\"ch\":8}}," +
-                "\"message\":\"Unresolved reference: prntln\"," +
-                "\"severity\":\"ERROR\"," +
-                "\"className\":\"ERROR\"" +
-                "}" +
-                "]}";
-        compareResponseAndExpectedResult(fileName, expectedResult, "js");
+        List<ErrorDescriptor> expectedResult = new ArrayList<>();
+        expectedResult.add(new ErrorDescriptor(
+                new TextInterval(new TextPosition(1,2), new TextPosition(1,8)),
+                "Unresolved reference: prntln",
+                Severity.ERROR,
+                null
+        ));
+        compareResponseAndExpectedResult(fileName, expectedResult, true);
     }
 
     public void test$warnings$oneWarning() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "{\"" + fileName + "\":[" +
-                "{" +
-                "\"interval\":{\"start\":{\"line\":2,\"ch\":5},\"end\":{\"line\":2,\"ch\":7}}," +
-                "\"message\":\"Unnecessary safe call on a non-null receiver of type Int\"," +
-                "\"severity\":\"WARNING\"," +
-                "\"className\":\"WARNING\"" +
-                "}" +
-                "]}";
-        compareResponseAndExpectedResult(fileName, expectedResult, "java");
+        List<ErrorDescriptor> expectedResult = new ArrayList<>();
+        expectedResult.add(new ErrorDescriptor(
+                new TextInterval(new TextPosition(2, 5), new TextPosition(2, 7)),
+                "Unnecessary safe call on a non-null receiver of type kotlin.Int",
+                Severity.WARNING,
+                null
+        ));
+        compareResponseAndExpectedResult(fileName, expectedResult, false);
     }
 
     public void test$errors$twoErrorsInOneLine() throws IOException, InterruptedException {
         String fileName = TestUtils.getNameByTestName(this) + ".kt";
-        String expectedResult = "{\"" + fileName + "\":[" +
-                "{" +
-                "\"interval\":{\"start\":{\"line\":1,\"ch\":2},\"end\":{\"line\":1,\"ch\":8}}," +
-                "\"message\":\"Unresolved reference: prntln\"," +
-                "\"severity\":\"ERROR\"," +
-                "\"className\":\"ERROR\"" +
-                "}" +
-                "," +
-                "{" +
-                "\"interval\":{\"start\":{\"line\":1,\"ch\":15},\"end\":{\"line\":1,\"ch\":16}}," +
-                "\"message\":\"Expecting ')'\"," +
-                "\"severity\":\"ERROR\"," +
-                "\"className\":\"red_wavy_line\"" +
-                "}" +
-                "]}";
-        compareResponseAndExpectedResult(fileName, expectedResult, "java");
+        List<ErrorDescriptor> expectedResult = new ArrayList<>();
+        expectedResult.add(new ErrorDescriptor(
+                new TextInterval(new TextPosition(1,2), new TextPosition(1,8)),
+                "Unresolved reference: prntln",
+                Severity.ERROR,
+                null
+        ));
+        expectedResult.add(new ErrorDescriptor(
+                new TextInterval(new TextPosition(1,15), new TextPosition(1,16)),
+                "Expecting ')'",
+                Severity.ERROR,
+                "red_wavy_line"
+        ));
+        compareResponseAndExpectedResult(fileName, expectedResult, false);
     }
 
-    private void compareResponseAndExpectedResult(String fileName, String expectedResult, String runConfiguration) throws IOException {
-        BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.HIGHLIGHT);
-        sessionInfo.setRunConfiguration(runConfiguration);
-        PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), fileName, TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
-        JsonResponseForHighlighting responseForHighlighting = new JsonResponseForHighlighting(Collections.singletonList(currentPsiFile), sessionInfo, currentPsiFile.getProject());
-        String actualResult = responseForHighlighting.getResult();
+    private void compareResponseAndExpectedResult(String fileName, List<ErrorDescriptor> expectedResult, boolean isJs)
+            throws IOException {
+        String fileContent = TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName);
+        Map<String, String> files = new HashMap<>();
+        files.put(fileName, fileContent);
+        List<ErrorDescriptor> actualErrors = kotlinWrapper.getErrors(files, isJs).get(fileName);
 
-        assertEquals("Wrong result", expectedResult, actualResult);
+        for (ErrorDescriptor expectedError : expectedResult) {
+            assertTrue(actualErrors.contains(expectedError));
+        }
+
+        for (ErrorDescriptor actualError : actualErrors){
+            assertTrue(expectedResult.contains(actualError));
+        }
     }
 
 }

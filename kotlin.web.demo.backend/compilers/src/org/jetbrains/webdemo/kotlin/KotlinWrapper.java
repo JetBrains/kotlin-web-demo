@@ -33,7 +33,7 @@ public interface KotlinWrapper {
 
     TranslationResult compileKotlinToJS(Project project);
 
-    Map<String, List<ErrorDescriptor>> getErrors(Project project);
+    Map<String, List<ErrorDescriptor>> getErrors(Map<String, String> files, boolean isJs);
 
     List<CompletionVariant> getCompletionVariants(Project project, String filename, int line, int ch);
 

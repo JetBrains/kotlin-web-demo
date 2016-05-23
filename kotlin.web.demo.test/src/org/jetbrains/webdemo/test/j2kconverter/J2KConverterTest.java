@@ -16,32 +16,23 @@
 
 package org.jetbrains.webdemo.test.j2kconverter;
 
-import com.intellij.psi.PsiFile;
-import org.jetbrains.webdemo.backend.BackendSessionInfo;
-import org.jetbrains.webdemo.backend.JetPsiFactoryUtil;
-import org.jetbrains.webdemo.backend.errorsDescriptors.ErrorAnalyzer;
-import org.jetbrains.webdemo.backend.responseHelpers.WebDemoJavaToKotlinConverter;
 import org.jetbrains.webdemo.test.BaseTest;
-import org.jetbrains.webdemo.test.TestUtils;
-
-import java.io.IOException;
-import java.util.Collections;
 
 public class J2KConverterTest extends BaseTest {
 
-    public void test$j2kconverter$class() throws IOException {
-        String fileName = TestUtils.getNameByTestName(this) + ".java";
-        String expectedResult = "[{\"text\":\"class Foo {\\ninternal fun bar() {}\\ninternal fun foo():Int {\\nreturn 0\\n}\\n}\"}]";
-
-        assertTrue(true);
-        compareResult(fileName, expectedResult);
-    }
-
-    private void compareResult(String fileName, String expectedResult) throws IOException {
-        BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
-        PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), fileName, "class A");
-        new ErrorAnalyzer(Collections.singletonList(currentPsiFile), sessionInfo, currentPsiFile.getProject()).getAllErrors();
-        String actualResult = new WebDemoJavaToKotlinConverter(sessionInfo).getResult(TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName), currentPsiFile.getProject());
-        assertEquals("wrong result in " + fileName, expectedResult, actualResult);
-    }
+//    public void test$j2kconverter$class() throws IOException {
+//        String fileName = TestUtils.getNameByTestName(this) + ".java";
+//        String expectedResult = "[{\"text\":\"class Foo {\\ninternal fun bar() {}\\ninternal fun foo():Int {\\nreturn 0\\n}\\n}\"}]";
+//
+//        assertTrue(true);
+//        compareResult(fileName, expectedResult);
+//    }
+//
+//    private void compareResult(String fileName, String expectedResult) throws IOException {
+//        BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.CONVERT_TO_KOTLIN);
+//        PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), fileName, "class A");
+//        new ErrorAnalyzer(Collections.singletonList(currentPsiFile), sessionInfo, currentPsiFile.getProject()).getAllErrors();
+//        String actualResult = new WebDemoJavaToKotlinConverter(sessionInfo).getResult(TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName), currentPsiFile.getProject());
+//        assertEquals("wrong result in " + fileName, expectedResult, actualResult);
+//    }
 }

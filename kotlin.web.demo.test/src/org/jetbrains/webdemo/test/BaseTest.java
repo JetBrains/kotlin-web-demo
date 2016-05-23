@@ -16,19 +16,12 @@
 
 package org.jetbrains.webdemo.test;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
 import junit.framework.TestCase;
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
-import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.CommonSettings;
-import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
-import org.jetbrains.webdemo.backend.Initializer;
-import org.jetbrains.webdemo.backend.enviroment.EnvironmentManager;
-import org.jetbrains.webdemo.examples.ExamplesLoader;
-import org.jetbrains.webdemo.help.HelpLoader;
-import org.jetbrains.webdemo.session.SessionInfo;
+import org.jetbrains.webdemo.kotlin.KotlinWrapper;
+import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
+import org.junit.BeforeClass;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,48 +31,46 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class BaseTest extends TestCase {
-
-    protected SessionInfo sessionInfo = new SessionInfo("test");
-    protected EnvironmentManager myEnvironmentManager = new EnvironmentManager();
+    protected KotlinWrapper kotlinWrapper = null;
 
     public BaseTest(String name) {
         super(name);
     }
+
     public BaseTest() {
     }
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        System.setProperty("kotlin.running.in.server.mode", "true");
-        System.setProperty("java.awt.headless", "true");
+        if(kotlinWrapper == null) {
+            Path currentAbsolutePath = Paths.get("").toAbsolutePath();
+            KotlinWrappersManager.WRAPPERS_DIR =
+                    currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions");
+            KotlinWrappersManager.init();
+            kotlinWrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
+        }
 
-        Path currentRelativePath = Paths.get("");
-        String currentAbsolutePath = currentRelativePath.toAbsolutePath().toString();
-
-        Initializer.getInstance();
-        ErrorWriter.ERROR_WRITER = ErrorWriter.getInstance();
-
-        CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
-        BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
-        ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
-        BackendSettings.JAVA_EXECUTE = BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
-        BackendSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
-        BackendSettings.KOTLIN_LIBS_DIR = BackendSettings.LIBS_DIR + File.separator + "kotlin-plugin" + File.separator + "Kotlin"  +File.separator + "kotlinc" + File.separator + "lib";
-
-        createManager();
-        initializePolicyFile();
-
-        ExamplesLoader.loadAllExamples();
-        HelpLoader.getInstance();
+//        CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
+//        BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
+//        ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
+//        BackendSettings.JAVA_EXECUTE = BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
+//        BackendSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
+//        BackendSettings.KOTLIN_LIBS_DIR = BackendSettings.LIBS_DIR + File.separator + "kotlin-plugin" + File.separator + "Kotlin"  +File.separator + "kotlinc" + File.separator + "lib";
+//
+//        createManager();
+//        initializePolicyFile();
+//
+//        ExamplesLoader.loadAllExamples();
+//        HelpLoader.getInstance();
     }
 
-    protected KotlinCoreEnvironment createManager() {
-        myEnvironmentManager.getEnvironment();
-        Initializer.setEnvironmentManager(myEnvironmentManager);
-
-        return myEnvironmentManager.getEnvironment();
-    }
+//    protected KotlinCoreEnvironment createManager() {
+//        myEnvironmentManager.getEnvironment();
+//        Initializer.setEnvironmentManager(myEnvironmentManager);
+//
+//        return myEnvironmentManager.getEnvironment();
+//    }
 
     protected void initializePolicyFile() throws IOException {
         Path templateFilePath = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
@@ -92,15 +83,15 @@ public class BaseTest extends TestCase {
         }
     }
 
-    protected Project getProject() {
-        return myEnvironmentManager.getEnvironment().getProject();
-    }
-
-    @Override
-    public void tearDown() throws Exception {
-        Disposer.dispose(myEnvironmentManager.getDisposable());
-        myEnvironmentManager = null;
-        sessionInfo = null;
-        super.tearDown();
-    }
+//    protected Project getProject() {
+//        return myEnvironmentManager.getEnvironment().getProject();
+//    }
+//
+//    @Override
+//    public void tearDown() throws Exception {
+//        Disposer.dispose(myEnvironmentManager.getDisposable());
+//        myEnvironmentManager = null;
+//        sessionInfo = null;
+//        super.tearDown();
+//    }
 }

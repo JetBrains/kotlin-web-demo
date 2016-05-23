@@ -32,4 +32,23 @@ public class TextPosition {
     public int getCh() {
         return ch;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TextPosition that = (TextPosition) o;
+
+        if (line != that.line) return false;
+        return ch == that.ch;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = line;
+        result = 31 * result + ch;
+        return result;
+    }
 }

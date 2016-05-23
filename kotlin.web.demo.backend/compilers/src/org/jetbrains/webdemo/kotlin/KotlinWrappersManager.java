@@ -44,7 +44,7 @@ public class KotlinWrappersManager {
                 kotlinWrapper.init();
                 wrappers.put(kotlinVersion, kotlinWrapper);
             } catch (Exception e) {
-                log.error("Can't initialize kotlin kotlin version " + kotlinVersion, e);
+                log.error("Can't initialize kotlin version " + kotlinVersion, e);
             }
         }
     }

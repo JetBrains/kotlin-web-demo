@@ -17,5 +17,6 @@
     <orderEntry type="module" module-name="kotlin.web.demo.backend" />
     <orderEntry type="module" module-name="kotlin.web.demo.common" />
     <orderEntry type="library" scope="TEST" name="junit" level="project" />
+    <orderEntry type="module" module-name="compilers" />
   </component>
 </module>

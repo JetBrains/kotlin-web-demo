@@ -32,6 +32,25 @@ public class TextInterval {
     public TextPosition getEnd() {
         return end;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TextInterval that = (TextInterval) o;
+
+        if (!start.equals(that.start)) return false;
+        return end.equals(that.end);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = start.hashCode();
+        result = 31 * result + end.hashCode();
+        return result;
+    }
 }
 
 

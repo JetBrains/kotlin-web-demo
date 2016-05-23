@@ -44,19 +44,18 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     }
 
     public String translateJavaToKotlin(String javaCode) {
-       return WebDemoJavaToKotlinConverter.getResult(javaCode);
+        return WebDemoJavaToKotlinConverter.getResult(javaCode);
     }
 
     @Override
-    public Map<String, List<ErrorDescriptor>> getErrors(Project project) {
-        List<KtFile> files = createPsiFiles(project);
-        ErrorAnalyzer analyzer = new ErrorAnalyzer(files, EnvironmentManager.getEnvironment().getProject());
-        boolean isJs = project.confType.equals("js") || project.confType.equals("canvas");
+    public Map<String, List<ErrorDescriptor>> getErrors(Map<String, String> files, boolean isJs) {
+        List<KtFile> psiFiles = createPsiFiles(files);
+        ErrorAnalyzer analyzer = new ErrorAnalyzer(psiFiles, EnvironmentManager.getEnvironment().getProject());
         return analyzer.getAllErrors(isJs);
     }
 
     @Override
-    public TranslationResult compileKotlinToJS(Project project){
+    public TranslationResult compileKotlinToJS(Project project) {
         List<KtFile> files = createPsiFiles(project);
         return WebDemoTranslatorFacade.translateProjectWithCallToMain(files, project.args);
     }
@@ -88,6 +87,14 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
     public Path getKotlinCompilerJar() {
         return WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-compiler.jar");
+    }
+
+    private List<KtFile> createPsiFiles(Map<String, String> files) {
+        List<KtFile> result = new ArrayList<>();
+        for (String fileName : files.keySet()) {
+            result.add(JetPsiFactoryUtil.createFile(EnvironmentManager.getEnvironment().getProject(), fileName, files.get(fileName)));
+        }
+        return result;
     }
 
     private List<KtFile> createPsiFiles(Project project) {
