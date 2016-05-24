@@ -28,11 +28,11 @@ import org.jetbrains.webdemo.test.run.RunTest;
 public class TestAll extends TestCase {
 
     public static TestSuite suite() {
-        ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
-        ExamplesLoader.loadAllExamples();
+//        ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
+//        ExamplesLoader.loadAllExamples();
         TestSuite suite = new TestSuite(
                 HighlightingTest.class,
-//                CompletionTest.class
+                CompletionTest.class,
 //                RunTest.class,
                 J2KConverterTest.class
         );

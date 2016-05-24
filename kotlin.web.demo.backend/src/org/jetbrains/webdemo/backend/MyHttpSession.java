@@ -144,7 +144,9 @@ public class MyHttpSession {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
             KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
 
-            List<CompletionVariant> completionVariants = wrapper.getCompletionVariants(currentProject, fileName, line, ch);
+            Map<String, String> files = getFilesContentFromProject(currentProject);
+            boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");
+            List<CompletionVariant> completionVariants = wrapper.getCompletionVariants(files, fileName, line, ch, isJs);
             writeResponse(objectMapper.writeValueAsString(completionVariants), HttpServletResponse.SC_OK);
         } catch (IOException e) {
             writeResponse("Can't parse project", HttpServletResponse.SC_BAD_REQUEST);

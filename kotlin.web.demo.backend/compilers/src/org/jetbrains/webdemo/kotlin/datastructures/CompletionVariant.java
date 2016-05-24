@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.kotlin.datastructures;
 
+import com.sun.istack.internal.Nullable;
+
 public class CompletionVariant {
     private final String text;
     private final String displayText;
@@ -43,5 +45,28 @@ public class CompletionVariant {
 
     public String getIcon() {
         return icon;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CompletionVariant that = (CompletionVariant) o;
+
+        if (!text.equals(that.text)) return false;
+        if (!displayText.equals(that.displayText)) return false;
+        if (!tail.equals(that.tail)) return false;
+        return icon.equals(that.icon);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = text.hashCode();
+        result = 31 * result + displayText.hashCode();
+        result = 31 * result + tail.hashCode();
+        result = 31 * result + icon.hashCode();
+        return result;
     }
 }

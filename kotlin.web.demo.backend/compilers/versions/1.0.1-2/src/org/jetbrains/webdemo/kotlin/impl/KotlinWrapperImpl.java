@@ -61,10 +61,10 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     }
 
     @Override
-    public List<CompletionVariant> getCompletionVariants(Project project, String filename, int line, int ch) {
-        List<KtFile> files = createPsiFiles(project);
+    public List<CompletionVariant> getCompletionVariants(
+            Map<String, String> projectFiles, String filename, int line, int ch, boolean isJs) {
+        List<KtFile> files = createPsiFiles(projectFiles);
         CompletionProvider completionProvider = new CompletionProvider(files, filename, line, ch);
-        boolean isJs = project.confType.equals("js") || project.confType.equals("canvas");
         return completionProvider.getResult(isJs);
     }
 

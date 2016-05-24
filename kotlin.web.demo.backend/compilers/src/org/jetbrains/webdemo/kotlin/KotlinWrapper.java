@@ -35,7 +35,7 @@ public interface KotlinWrapper {
 
     Map<String, List<ErrorDescriptor>> getErrors(Map<String, String> files, boolean isJs);
 
-    List<CompletionVariant> getCompletionVariants(Project project, String filename, int line, int ch);
+    List<CompletionVariant> getCompletionVariants(Map<String, String> projectFiles, String filename, int line, int ch, boolean isJs);
 
     CompilationResult compileCorrectFiles(Project project);
 

@@ -17,12 +17,12 @@
 package org.jetbrains.webdemo.test;
 
 import junit.framework.TestCase;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ResponseUtils;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class TestUtils {
     public static final String TEST_SRC = "kotlin.web.demo.test/testData/";
@@ -79,40 +79,6 @@ public class TestUtils {
         testName = testName.replace("$", "/");
         testName = testName.replace("_", " ");
         return testName;
-    }
-
-    public static String getActualResultForRequest(String urlWoLocalhost, @Nullable String data, @Nullable String query) throws IOException {
-        String urlPath = /*HOST +*/ urlWoLocalhost.replace(" ", "%20");
-        if (query != null) {
-            urlPath = urlPath + "?sessionId=555&" + query;
-        }
-        URL url = new URL(urlPath);
-        HttpURLConnection urlConnection = null;
-        urlConnection = (HttpURLConnection) url.openConnection();
-        if (data != null) {
-            urlConnection.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
-            wr.write(data);
-            wr.flush();
-            wr.close();
-        }
-
-        BufferedReader in = null;
-
-        try {
-            in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-        } catch (FileNotFoundException e) {
-            in = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
-        }
-
-        String str;
-        StringBuilder result = new StringBuilder();
-        while ((str = in.readLine()) != null) {
-            result.append(str);
-        }
-        in.close();
-
-        return result.toString();
     }
 
     public static  String escape(String str) {
