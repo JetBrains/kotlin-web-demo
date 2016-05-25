@@ -30,8 +30,8 @@ public class J2KConverterTest extends BaseTest {
     }
 
     private void compareResult(String javaCodeFileName, String kotlinCodeFileName) throws IOException {
-        String javaCode = TestUtils.getDataFromFile(TestUtils.TEST_SRC, javaCodeFileName);
-        String expectedResult = TestUtils.getDataFromFile(TestUtils.TEST_SRC, kotlinCodeFileName);
+        String javaCode = TestUtils.getDataFromFile(javaCodeFileName);
+        String expectedResult = TestUtils.getDataFromFile(kotlinCodeFileName);
         String actualResult = kotlinWrapper.translateJavaToKotlin(javaCode);
 
         assertEquals("wrong result in " + javaCodeFileName, expectedResult, actualResult + "\n");

@@ -18,13 +18,11 @@ package org.jetbrains.webdemo.kotlin;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.kotlin.classloader.ChildFirstURLClassLoader;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,12 +32,13 @@ public class KotlinWrappersManager {
     private static Map<String, KotlinWrapper> wrappers = new HashMap<>();
     private static Log log = LogFactory.getLog(KotlinWrappersManager.class);
     private static String INITIALIZER_CLASSNAME = "org.jetbrains.webdemo.kotlin.impl.KotlinWrapperImpl";
-    public static Path WRAPPERS_DIR = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "WEB-INF", "kotlin-wrappers");
+    private static Path myWrappersDir;
 
-    public static void init() {
-        for (String kotlinVersion : WRAPPERS_DIR.toFile().list()) {
+    public static void init(Path wrappersDir) {
+        myWrappersDir = wrappersDir;
+        for (String kotlinVersion : wrappersDir.toFile().list()) {
             try {
-                ClassLoader kotlinClassLoader = new ChildFirstURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion),
+                ClassLoader kotlinClassLoader = new ChildFirstURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion, wrappersDir),
                         Thread.currentThread().getContextClassLoader());
                 KotlinWrapper kotlinWrapper = (KotlinWrapper) kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance();
                 kotlinWrapper.init();
@@ -54,9 +53,9 @@ public class KotlinWrappersManager {
         return wrappers.get(kotlinVersion);
     }
 
-    private static URL[] getForKotlinWrapperClassLoaderURLs(String kotlinVersion) {
+    private static URL[] getForKotlinWrapperClassLoaderURLs(String kotlinVersion, Path wrappersDir) {
         try {
-            Path wrapperDir = WRAPPERS_DIR.resolve(kotlinVersion);
+            Path wrapperDir = wrappersDir.resolve(kotlinVersion);
             Path classesDir = wrapperDir.resolve("classes");
             Path jarsDir = wrapperDir.resolve("kotlin");
 
@@ -70,5 +69,9 @@ public class KotlinWrappersManager {
         } catch (MalformedURLException e) {
             return new URL[0];
         }
+    }
+
+    public static Path getWrappersDir() {
+        return myWrappersDir;
     }
 }

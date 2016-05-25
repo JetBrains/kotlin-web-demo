@@ -132,7 +132,7 @@ public class CompletionTest extends BaseTest {
 
     private void compareResult(int line, int ch, List<CompletionVariant> expectedVariants, boolean isJs) throws IOException {
         Map<String, String> files = new HashMap<>();
-        files.put("root.kt", TestUtils.getDataFromFile(TestUtils.TEST_SRC, "completion/root.kt"));
+        files.put("root.kt", TestUtils.getDataFromFile("completion/root.kt"));
         List<CompletionVariant> result = kotlinWrapper.getCompletionVariants(files, "root.kt", line, ch, isJs);
         for(CompletionVariant variant : expectedVariants) {
             assertTrue(result.contains(variant));

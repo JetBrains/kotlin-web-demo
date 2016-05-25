@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class BaseTest extends TestCase {
-    protected KotlinWrapper kotlinWrapper = null;
+    protected static KotlinWrapper kotlinWrapper = null;
 
     public BaseTest(String name) {
         super(name);
@@ -42,15 +42,11 @@ public class BaseTest extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        Path currentAbsolutePath = TestUtils.getApplicationFolder();
         if(kotlinWrapper == null) {
-            Path currentAbsolutePath = Paths.get("").toAbsolutePath();
-            KotlinWrappersManager.WRAPPERS_DIR =
-                    currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions");
-            KotlinWrappersManager.init();
+            KotlinWrappersManager.init(currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions"));
             kotlinWrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
         }
-
-        Path currentAbsolutePath = Paths.get("").toAbsolutePath();
         CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
         BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
 //        ApplicationSettings.EXAMPLES_DIRECTORY = "examples";

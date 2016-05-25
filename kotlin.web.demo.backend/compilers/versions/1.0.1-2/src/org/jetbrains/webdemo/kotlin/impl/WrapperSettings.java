@@ -22,7 +22,7 @@ import java.nio.file.Path;
 
 public class WrapperSettings {
     public static String KOTLIN_VERSION = "1.0.1-2";
-    public static Path WRAPPER_DIV = KotlinWrappersManager.WRAPPERS_DIR.resolve(KOTLIN_VERSION);
+    public static Path WRAPPER_DIV = KotlinWrappersManager.getWrappersDir().resolve(KOTLIN_VERSION);
     public static Path KOTLIN_JARS_FOLDER = WRAPPER_DIV.resolve("kotlin");
     public static Path JS_LIB_ROOT = WRAPPER_DIV.resolve("js");
 

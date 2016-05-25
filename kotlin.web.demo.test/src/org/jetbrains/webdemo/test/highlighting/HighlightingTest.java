@@ -87,7 +87,7 @@ public class HighlightingTest extends BaseTest {
 
     private void compareResponseAndExpectedResult(String fileName, List<ErrorDescriptor> expectedResult, boolean isJs)
             throws IOException {
-        String fileContent = TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName);
+        String fileContent = TestUtils.getDataFromFile(fileName);
         Map<String, String> files = new HashMap<>();
         files.put(fileName, fileContent);
         List<ErrorDescriptor> actualErrors = kotlinWrapper.getErrors(files, isJs).get(fileName);

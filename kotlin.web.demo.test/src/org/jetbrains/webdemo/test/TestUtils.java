@@ -23,15 +23,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class TestUtils {
-    public static final String TEST_SRC = "kotlin.web.demo.test/testData/";
+    private static final Path TEST_SRC = getApplicationFolder().resolve("kotlin.web.demo.test").resolve("testData");
 
-    public static String getDataFromFile(String rootDirectory, String fileName) {
+    public static String getDataFromFile(String fileName) {
         StringBuilder resultData = new StringBuilder();
-        String filePath = rootDirectory + fileName;
+        Path filePath = TEST_SRC.resolve(fileName);
 
-        File file = new File(filePath);
+        File file = filePath.toFile();
         try {
             if (file.exists()) {
                 FileReader fileReader = new FileReader(file);
@@ -89,5 +92,17 @@ public class TestUtils {
 
     public static String getUrlFromFileName(String fileName) {
         return "path=" + fileName;
+    }
+
+    public static Path getApplicationFolder(){
+        try {
+            Path result = Paths.get(TestUtils.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            while (!result.getFileName().toString().equals("out")) {
+                result = result.getParent();
+            }
+            return result.getParent();
+        } catch (URISyntaxException e) {
+            return null;
+        }
     }
 }
