@@ -16,104 +16,89 @@
 
 package org.jetbrains.webdemo.test.run;
 
+import org.jetbrains.webdemo.backend.executor.ExecutorUtils;
+import org.jetbrains.webdemo.backend.executor.result.JavaExecutionResult;
+import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.test.BaseTest;
+import org.jetbrains.webdemo.test.TestUtils;
+
+import java.security.AccessControlException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RunTest extends BaseTest {
 
-//    public void test$execution$FooOutErr() throws Exception {
-//        String expectedResult = "<outStream>Hello</br></outStream><errStream>ERROR</br></errStream>";
-//        String fileName = TestUtils.getNameByTestName(this) + ".kt";
-//        compareResult(fileName, "", expectedResult, "java");
-//    }
-//
-//    public void test$execution$ManyArgs() throws Exception {
-//        String expectedResult = "<outStream>a</br>b</br>c</br></outStream>";
-//        String fileName = TestUtils.getNameByTestName(this) + ".kt";
-//        compareResult(fileName, "a b c", expectedResult, "java");
-//
-//        compareResult(fileName, "\"a\" b c", expectedResult, "java");
-//        expectedResult = "<outStream>a b</br>c</br></outStream>";
-//        compareResult(fileName, "\"a b\" c", expectedResult, "java");
-//        expectedResult = "";
-//        compareResult(fileName, "", expectedResult, "java");
-//
-//        //"info"},{"text":"a \["Hello]\" b<br/>c<br/>","ty...>
-//        //"info"},{"text":"a \[\\"Hello\\]\" b<br/>c<br/>","ty
-//
-//        //expectedResult = "[{\"text\":\"Generated classfiles: <br/>_DefaultPackage.class<br/>\",\"type\":\"info\"},{\"text\":\"a \\\"Hello\\\" b<br/>c<br/>\",\"type\":\"out\"}]";
-//        //compareResult(fileName, "\"a \\\"Hello\\\" b\" c", expectedResult, "java");
-//    }
-//
-//    public void test$execution$FooOut() throws Exception {
-//        String expectedResult = "<outStream>Hello</br></outStream>";
-//        String fileName = TestUtils.getNameByTestName(this) + ".kt";
-//        compareResult(fileName, "", expectedResult, "java");
-//    }
-//
-//    public void test$execution$Reflection() throws Exception {
-//        String expectedResult = "<outStream>Any</br>A</br>x</br></outStream>";
-//        String fileName = TestUtils.getNameByTestName(this) + ".kt";
-//        compareResult(fileName, "", expectedResult, "java");
-//    }
-//
-//    public void test$execution$FooErr() throws Exception {
-//        String expectedResult = "<errStream>ERROR</br></errStream>";
-//        String fileName = TestUtils.getNameByTestName(this) + ".kt";
-//        compareResult(fileName, "", expectedResult, "java");
-//    }
-//
-//    //Runtime.getRuntime().exec() Exception
-//    public void test$errors$securityExecutionError() throws Exception {
-//        String fileName = TestUtils.getNameByTestName(this) + ".kt";
-//        checkException(fileName, "", "java", AccessControlException.class.getName());
-//    }
-//
-//    private void checkException(String fileName, String args, String runConfiguration, String exceptionName) throws Exception {
-//        BackendSessionInfo sessionInfo = new BackendSessionInfo("test", BackendSessionInfo.TypeOfRequest.RUN);
-//        sessionInfo.setRunConfiguration(runConfiguration);
-//
-//        if (sessionInfo.getRunConfiguration().equals(SessionInfo.RunConfiguration.JAVA)) {
-//            PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
-//
-//            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(currentPsiFile), currentPsiFile.getProject(), sessionInfo, args);
-//            ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
-//            for (JsonNode outputObject : actualResult) {
-//                if (outputObject.get("type").asText().equals("out")) {
-//                    assertEquals(actualResult.get(1).get("exception").get("fullName").asText(), exceptionName);
-//                }
-//            }
-//        }
-//    }
-//
-//
-//    //Exception when read file from other directory
-//    public void test$errors$securityFilePermissionError() throws Exception {
-//        String fileName = TestUtils.getNameByTestName(this) + ".kt";
-//        checkException(fileName, "", "java", AccessControlException.class.getName());
-//    }
-//
-//    private void compareResult(String fileName, String args, String expectedResult, String runConfiguration) throws Exception {
-//        BackendSessionInfo sessionInfo = new BackendSessionInfo("test");
-//        sessionInfo.setRunConfiguration(runConfiguration);
-//
-//        if (sessionInfo.getRunConfiguration().equals(BackendSessionInfo.RunConfiguration.JAVA)) {
-//            PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
-//            sessionInfo.setType(BackendSessionInfo.TypeOfRequest.RUN);
-//
-//            CompileAndRunExecutor responseForCompilation = new CompileAndRunExecutor(Collections.singletonList(currentPsiFile), currentPsiFile.getProject(), sessionInfo, args);
-//            ArrayNode actualResult = (ArrayNode) new ObjectMapper().readTree(responseForCompilation.getResult());
-//            for (JsonNode outputObject : actualResult) {
-//                if (outputObject.get("type").asText().equals("out")) {
-//                    String outputText = Common.unEscapeString(outputObject.get("text").asText().replaceAll(System.lineSeparator(), "</br>"));
-//                    assertEquals(expectedResult, outputText);
-//                    assertTrue(outputObject.get("exception").isNull());
-//                }
-//            }
-//        } else {
-//            sessionInfo.setType(BackendSessionInfo.TypeOfRequest.CONVERT_TO_JS);
-//            PsiFile currentPsiFile = JetPsiFactoryUtil.createFile(getProject(), getProject().getName(), TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
-//            String actualResult = new JsConverter(sessionInfo).getResult(Collections.singletonList(currentPsiFile), sessionInfo, args);
-//            assertEquals("wrong result", expectedResult, actualResult);
-//        }
-//    }
+    public void test$execution$FooOutErr() throws Exception {
+        String expectedResult = "<outStream>Hello\n</outStream><errStream>ERROR\n</errStream>";
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        compareResult(fileName, "", expectedResult);
+    }
+
+    public void test$execution$ManyArgs() throws Exception {
+        String expectedResult = "<outStream>a\nb\nc\n</outStream>";
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        compareResult(fileName, "a b c", expectedResult);
+
+        compareResult(fileName, "\"a\" b c", expectedResult);
+        expectedResult = "<outStream>a b\nc\n</outStream>";
+        compareResult(fileName, "\"a b\" c", expectedResult);
+        expectedResult = "";
+        compareResult(fileName, "", expectedResult);
+    }
+
+    public void test$execution$FooOut() throws Exception {
+        String expectedResult = "<outStream>Hello\n</outStream>";
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        compareResult(fileName, "", expectedResult);
+    }
+
+    public void test$execution$Reflection() throws Exception {
+        String expectedResult = "<outStream>Any\nA\n</outStream>";
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        compareResult(fileName, "", expectedResult);
+    }
+
+    public void test$execution$FooErr() throws Exception {
+        String expectedResult = "<errStream>ERROR\n</errStream>";
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        compareResult(fileName, "", expectedResult);
+    }
+
+    //Runtime.getRuntime().exec() Exception
+    public void test$errors$securityExecutionError() throws Exception {
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        checkException(fileName, "", AccessControlException.class.getName());
+    }
+
+    private void checkException(String fileName, String args, String exceptionName) throws Exception {
+        JavaExecutionResult result = compileAndExecute(fileName, args);
+        assertEquals(exceptionName, result.getException().getFullName());
+    }
+
+
+    //Exception when read file from other directory
+    public void test$errors$securityFilePermissionError() throws Exception {
+        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        checkException(fileName, "", AccessControlException.class.getName());
+    }
+
+    private void compareResult(String fileName, String args, String expectedResult) throws Exception {
+        JavaExecutionResult result = compileAndExecute(fileName, args);
+        assertNull(result.getException());
+        assertEquals(expectedResult, result.getText());
+    }
+
+    private JavaExecutionResult compileAndExecute(String fileName, String args) throws Exception {
+        Map<String, String> files = new HashMap<>();
+        files.put(fileName, TestUtils.getDataFromFile(TestUtils.TEST_SRC, fileName));
+        CompilationResult compilationResult = kotlinWrapper.compileCorrectFiles(files);
+        return (JavaExecutionResult) ExecutorUtils.executeCompiledFiles(
+                compilationResult.getFiles(),
+                compilationResult.getMainClass(),
+                kotlinWrapper.getKotlinRuntimeLibraries(),
+                kotlinWrapper.getKotlinCompilerJar(),
+                args,
+                false
+        );
+    }
 }

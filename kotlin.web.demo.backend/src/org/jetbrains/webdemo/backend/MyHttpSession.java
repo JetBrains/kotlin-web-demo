@@ -91,7 +91,7 @@ public class MyHttpSession {
             if (!currentProject.confType.equals("js") && !currentProject.confType.equals("canvas")) {
                 ExecutionResult executionResult = null;
                 if (isOnlyWarnings(errorDescriptors)) {
-                    CompilationResult compilationResult = wrapper.compileCorrectFiles(currentProject);
+                    CompilationResult compilationResult = wrapper.compileCorrectFiles(getFilesContentFromProject(currentProject));
                     executionResult = ExecutorUtils.executeCompiledFiles(
                             compilationResult.getFiles(),
                             compilationResult.getMainClass(),

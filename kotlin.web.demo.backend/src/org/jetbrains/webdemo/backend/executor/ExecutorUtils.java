@@ -69,7 +69,11 @@ public class ExecutorUtils {
                 executorBuilder.setMainClass("org.jetbrains.webdemo.executors.JavaExecutor");
                 executorBuilder.addArgument(mainClass);
             }
-            executorBuilder.addArgument(arguments);
+
+            for(String argument : arguments.split(" ")) {
+                if(argument.trim().isEmpty()) continue;
+                executorBuilder.addArgument(argument);
+            }
 
             ProgramOutput output = executorBuilder.build().execute();
             return parseOutput(output.getStandardOutput(), isJunit);

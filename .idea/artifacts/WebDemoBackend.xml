@@ -25,12 +25,7 @@
         <element id="directory" name="kotlin-wrappers">
           <element id="directory" name="1.0.1-2">
             <element id="directory" name="kotlin">
-              <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/kotlin-plugin/Kotlin/kotlinc/lib/j2k.jar" />
-              <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-compiler.jar" />
-              <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/kotlin-plugin/Kotlin/lib/kotlin-plugin.jar" />
-              <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/kotlin-plugin/Kotlin/lib/kotlin-reflect.jar" />
-              <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/kotlin-plugin/Kotlin/lib/kotlin-runtime.jar" />
-              <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/kotlin-plugin/Kotlin/kotlinc/lib/kotlin-test.jar" />
+              <element id="library" level="module" name="kotlin" module-name="1.0.1-2" />
             </element>
             <element id="directory" name="classes">
               <element id="module-output" name="1.0.1-2" />

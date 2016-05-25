@@ -21,7 +21,6 @@ import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
-import org.junit.BeforeClass;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,15 +50,15 @@ public class BaseTest extends TestCase {
             kotlinWrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
         }
 
-//        CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
-//        BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
+        Path currentAbsolutePath = Paths.get("").toAbsolutePath();
+        CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
+        BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
 //        ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
-//        BackendSettings.JAVA_EXECUTE = BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + "java";
-//        BackendSettings.LIBS_DIR = currentAbsolutePath + File.separator + "lib";
-//        BackendSettings.KOTLIN_LIBS_DIR = BackendSettings.LIBS_DIR + File.separator + "kotlin-plugin" + File.separator + "Kotlin"  +File.separator + "kotlinc" + File.separator + "lib";
+        BackendSettings.JAVA_EXECUTE = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+        BackendSettings.LIBS_DIR = currentAbsolutePath.resolve("lib").toString();
 //
 //        createManager();
-//        initializePolicyFile();
+        initializePolicyFile();
 //
 //        ExamplesLoader.loadAllExamples();
 //        HelpLoader.getInstance();
@@ -73,11 +72,12 @@ public class BaseTest extends TestCase {
 //    }
 
     protected void initializePolicyFile() throws IOException {
+        Path kotlinLibsDir = kotlinWrapper.getKotlinCompilerJar().getParent();
         Path templateFilePath = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));
         String policyFileContent = templateFileContent.replaceAll("@CLASS_PATH@", BackendSettings.CLASS_PATH.replaceAll("\\\\", "/"));
         policyFileContent = policyFileContent.replaceAll("@LIBS_DIR@", BackendSettings.LIBS_DIR.replaceAll("\\\\", "/"));
-        policyFileContent = policyFileContent.replaceAll("@KOTLIN_LIBS@", BackendSettings.KOTLIN_LIBS_DIR.replaceAll("\\\\", "/"));
+        policyFileContent = policyFileContent.replaceAll("@KOTLIN_LIBS@", kotlinLibsDir.toString().replaceAll("\\\\", "/"));
         try (PrintWriter policyFile = new PrintWriter(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
             policyFile.write(policyFileContent);
         }

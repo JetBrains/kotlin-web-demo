@@ -37,7 +37,7 @@ public interface KotlinWrapper {
 
     List<CompletionVariant> getCompletionVariants(Map<String, String> projectFiles, String filename, int line, int ch, boolean isJs);
 
-    CompilationResult compileCorrectFiles(Project project);
+    CompilationResult compileCorrectFiles(Map<String, String> projectFiles);
 
     List<Path> getKotlinRuntimeLibraries();
 

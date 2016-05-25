@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.net.URL;
 import java.util.List;
 
 public class JavaExecutionResult extends ExecutionResult {
@@ -32,7 +33,7 @@ public class JavaExecutionResult extends ExecutionResult {
             @JsonProperty("text") String text,
             @JsonProperty("exception") ExceptionDescriptor exception
     ) {
-        this.text = text;
+        this.text = text.replaceAll("&amp;lt;", "<").replaceAll("&amp;gt;", ">").replace("\r", "");
         this.exception = exception;
     }
 
@@ -42,42 +43,6 @@ public class JavaExecutionResult extends ExecutionResult {
 
     public ExceptionDescriptor getException() {
         return exception;
-    }
-}
-
-class ExceptionDescriptor {
-    private String message;
-    private String fullName;
-    private List<StackTraceElement> stackTrace;
-    private ExceptionDescriptor cause;
-
-    @JsonCreator
-    ExceptionDescriptor(
-            @JsonProperty("message") String message,
-            @JsonProperty("fullName") String fullName,
-            @JsonProperty("stackTrace") List<StackTraceElement> stackTrace,
-            @JsonProperty("cause") ExceptionDescriptor cause
-    ) {
-        this.message = message;
-        this.fullName = fullName;
-        this.stackTrace = stackTrace;
-        this.cause = cause;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public List<StackTraceElement> getStackTrace() {
-        return stackTrace;
-    }
-
-    public ExceptionDescriptor getCause() {
-        return cause;
     }
 }
 

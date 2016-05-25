@@ -33,7 +33,7 @@ public class TestAll extends TestCase {
         TestSuite suite = new TestSuite(
                 HighlightingTest.class,
                 CompletionTest.class,
-//                RunTest.class,
+                RunTest.class,
                 J2KConverterTest.class
         );
 //        suite.addTest(HighlightExamplesTest.suite());
