@@ -17,8 +17,11 @@
 package org.jetbrains.webdemo.test;
 
 import junit.framework.TestCase;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.examples.ExamplesFolder;
+import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 
@@ -31,6 +34,7 @@ import java.nio.file.Paths;
 
 public class BaseTest extends TestCase {
     protected static KotlinWrapper kotlinWrapper = null;
+    private static boolean initialized = false;
 
     public BaseTest(String name) {
         super(name);
@@ -42,22 +46,24 @@ public class BaseTest extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        Path currentAbsolutePath = TestUtils.getApplicationFolder();
-        if(kotlinWrapper == null) {
+        if (!initialized) {
+            Path currentAbsolutePath = TestUtils.getApplicationFolder();
+            CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
+            BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
+            BackendSettings.JAVA_EXECUTE = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+            BackendSettings.LIBS_DIR = currentAbsolutePath.resolve("lib").toString();
+
             KotlinWrappersManager.init(currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions"));
             kotlinWrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
+
+            initializePolicyFile();
+            if(ExamplesFolder.ROOT_FOLDER == null) {
+                ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
+                ApplicationSettings.EXAMPLES_DIRECTORY = currentAbsolutePath.resolve("examples").toString();
+                ExamplesLoader.loadAllExamples();
+            }
+            initialized = true;
         }
-        CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
-        BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
-//        ApplicationSettings.EXAMPLES_DIRECTORY = "examples";
-        BackendSettings.JAVA_EXECUTE = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-        BackendSettings.LIBS_DIR = currentAbsolutePath.resolve("lib").toString();
-//
-//        createManager();
-        initializePolicyFile();
-//
-//        ExamplesLoader.loadAllExamples();
-//        HelpLoader.getInstance();
     }
 
 //    protected KotlinCoreEnvironment createManager() {

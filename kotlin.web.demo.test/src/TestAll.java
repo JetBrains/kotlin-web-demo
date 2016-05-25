@@ -18,6 +18,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.examples.ExamplesLoader;
+import org.jetbrains.webdemo.test.TestUtils;
 import org.jetbrains.webdemo.test.completion.CompletionTest;
 import org.jetbrains.webdemo.test.examples.HighlightExamplesTest;
 import org.jetbrains.webdemo.test.examples.RunExamplesTest;
@@ -28,16 +29,17 @@ import org.jetbrains.webdemo.test.run.RunTest;
 public class TestAll extends TestCase {
 
     public static TestSuite suite() {
-//        ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
-//        ExamplesLoader.loadAllExamples();
+        ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
+        ApplicationSettings.EXAMPLES_DIRECTORY = TestUtils.getApplicationFolder().resolve("examples").toString();
+        ExamplesLoader.loadAllExamples();
         TestSuite suite = new TestSuite(
                 HighlightingTest.class,
                 CompletionTest.class,
                 RunTest.class,
                 J2KConverterTest.class
         );
-//        suite.addTest(HighlightExamplesTest.suite());
-//        suite.addTest(RunExamplesTest.suite());
+        suite.addTest(HighlightExamplesTest.suite());
+        suite.addTest(RunExamplesTest.suite());
         return suite;
     }
 
