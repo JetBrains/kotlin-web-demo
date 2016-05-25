@@ -192,6 +192,11 @@ object Application {
                 statusBarView.setStatus(ActionStatusMessage.run_java_ok)
             },
             processTranslateToJSResult = { translationResult, project ->
+                if (!isOnlyWarnings(translationResult.errors)) {
+                    jq("#result-tabs").tabs("option", "active", 0)
+                } else {
+                    jq("#result-tabs").tabs("option", "active", 1)
+                }
                 problemsView.addMessages(translationResult.errors)
                 editor.showDiagnostics(translationResult.errors)
                 if (translationResult.jsCode != null) {

@@ -31,12 +31,10 @@
         <element id="dir-copy" path="$PROJECT_DIR$/examples" />
       </element>
       <element id="file-copy" path="$PROJECT_DIR$/help/helpWords.xml" />
-      <element id="directory" name="js">
-        <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.common/resources/js" />
-      </element>
       <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.server/web" />
       <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-plugin/Kotlin/kotlinc/build.txt" />
       <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.frontend/index.html" />
+      <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/js/kotlin.js" />
     </root>
   </artifact>
 </component>

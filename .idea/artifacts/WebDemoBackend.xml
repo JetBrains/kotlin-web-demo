@@ -31,15 +31,12 @@
               <element id="module-output" name="1.0.1-2" />
             </element>
             <element id="directory" name="js">
-              <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.common/resources/js" />
+              <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/js" />
             </element>
           </element>
         </element>
       </element>
       <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.backend/web" />
-      <element id="directory" name="js">
-        <element id="dir-copy" path="$PROJECT_DIR$/kotlin.web.demo.common/resources/js" />
-      </element>
       <element id="file-copy" path="$PROJECT_DIR$/kotlin.web.demo.executors/executors.policy.template" />
     </root>
   </artifact>
