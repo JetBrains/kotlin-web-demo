@@ -37,9 +37,10 @@ public class KotlinWrappersManager {
     public static Path WRAPPERS_DIR = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "WEB-INF", "kotlin-wrappers");
 
     public static void init() {
-        for(String kotlinVersion : WRAPPERS_DIR.toFile().list()) {
+        for (String kotlinVersion : WRAPPERS_DIR.toFile().list()) {
             try {
-                ClassLoader kotlinClassLoader = new ChildFirstURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion));
+                ClassLoader kotlinClassLoader = new ChildFirstURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion),
+                        Thread.currentThread().getContextClassLoader());
                 KotlinWrapper kotlinWrapper = (KotlinWrapper) kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance();
                 kotlinWrapper.init();
                 wrappers.put(kotlinVersion, kotlinWrapper);
