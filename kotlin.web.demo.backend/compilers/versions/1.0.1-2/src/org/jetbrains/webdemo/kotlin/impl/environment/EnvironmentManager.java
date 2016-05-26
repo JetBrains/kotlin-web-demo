@@ -52,11 +52,10 @@ import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
 import org.jetbrains.kotlin.resolve.diagnostics.SuppressStringProvider;
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
-import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.kotlin.idea.DummyCodeStyleManager;
-import org.jetbrains.webdemo.kotlin.impl.WrapperSettings;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.jetbrains.kotlin.cli.jvm.config.JVMConfigurationKeys.MODULE_NAME;
@@ -70,8 +69,8 @@ public class EnvironmentManager {
         }
     };
 
-    public static void init(){
-        environment = createEnvironment();
+    public static void init(List<Path> libraries){
+        environment = createEnvironment(libraries);
     }
 
     public static void reinitializeJavaEnvironment(){
@@ -91,11 +90,11 @@ public class EnvironmentManager {
     }
 
     @NotNull
-    private static KotlinCoreEnvironment createEnvironment() {
+    private static KotlinCoreEnvironment createEnvironment(List<Path> libraries) {
         K2JVMCompilerArguments arguments = new K2JVMCompilerArguments();
         CompilerConfiguration configuration = new CompilerConfiguration();
 
-        JvmContentRootsKt.addJvmClasspathRoots(configuration, getClasspath(arguments));
+        JvmContentRootsKt.addJvmClasspathRoots(configuration, getClasspath(arguments, libraries));
 
         configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
@@ -145,19 +144,12 @@ public class EnvironmentManager {
     }
 
     @NotNull
-    private static List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments) {
+    private static List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments, List<Path> libraries) {
         List<File> classpath = Lists.newArrayList();
         classpath.addAll(PathUtil.getJdkClassesRoots());
-
-        File junit = new File(BackendSettings.LIBS_DIR + File.separator + "junit.jar");
-
-        if (junit.exists()) {
-            classpath.add(junit);
+        for(Path library : libraries){
+            classpath.add(library.toFile());
         }
-
-        classpath.add(new File(WrapperSettings.KOTLIN_JARS_FOLDER + File.separator + "kotlin-runtime.jar"));
-        classpath.add(new File(WrapperSettings.KOTLIN_JARS_FOLDER + File.separator + "kotlin-reflect.jar"));
-        classpath.add(new File(WrapperSettings.KOTLIN_JARS_FOLDER + File.separator + "kotlin-test.jar"));
         if (arguments.classpath != null) {
             for (String element : Splitter.on(File.pathSeparatorChar).split(arguments.classpath)) {
                 classpath.add(new File(element));

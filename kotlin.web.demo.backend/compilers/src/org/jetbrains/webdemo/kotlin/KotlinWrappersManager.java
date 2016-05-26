@@ -34,14 +34,14 @@ public class KotlinWrappersManager {
     private static String INITIALIZER_CLASSNAME = "org.jetbrains.webdemo.kotlin.impl.KotlinWrapperImpl";
     private static Path myWrappersDir;
 
-    public static void init(Path wrappersDir) {
+    public static void init(Path wrappersDir, List<Path> javaLibraries) {
         myWrappersDir = wrappersDir;
         for (String kotlinVersion : wrappersDir.toFile().list()) {
             try {
                 ClassLoader kotlinClassLoader = new ChildFirstURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion, wrappersDir),
                         Thread.currentThread().getContextClassLoader());
                 KotlinWrapper kotlinWrapper = (KotlinWrapper) kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance();
-                kotlinWrapper.init();
+                kotlinWrapper.init(javaLibraries);
                 wrappers.put(kotlinVersion, kotlinWrapper);
             } catch (Exception e) {
                 log.error("Can't initialize kotlin version " + kotlinVersion, e);

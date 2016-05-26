@@ -17,8 +17,6 @@
 package org.jetbrains.webdemo.kotlin.impl;
 
 import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.webdemo.Project;
-import org.jetbrains.webdemo.ProjectFile;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
@@ -32,15 +30,16 @@ import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager;
 import org.jetbrains.webdemo.kotlin.impl.translator.WebDemoTranslatorFacade;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
-    public void init() {
-        EnvironmentManager.init();
+    public void init(List<Path> javaLibraries) {
+        List<Path> libraries = getKotlinRuntimeLibraries();
+        libraries.addAll(javaLibraries);
+        EnvironmentManager.init(libraries);
     }
 
     public String translateJavaToKotlin(String javaCode) {
@@ -55,9 +54,9 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     }
 
     @Override
-    public TranslationResult compileKotlinToJS(Project project) {
-        List<KtFile> files = createPsiFiles(project);
-        return WebDemoTranslatorFacade.translateProjectWithCallToMain(files, project.args);
+    public TranslationResult compileKotlinToJS(Map<String, String> files, String[] args) {
+        List<KtFile> ktFiles = createPsiFiles(files);
+        return WebDemoTranslatorFacade.translateProjectWithCallToMain(ktFiles, args);
     }
 
     @Override
@@ -93,14 +92,6 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         List<KtFile> result = new ArrayList<>();
         for (String fileName : files.keySet()) {
             result.add(JetPsiFactoryUtil.createFile(EnvironmentManager.getEnvironment().getProject(), fileName, files.get(fileName)));
-        }
-        return result;
-    }
-
-    private List<KtFile> createPsiFiles(Project project) {
-        List<KtFile> result = new ArrayList<>();
-        for (ProjectFile file : project.files) {
-            result.add(JetPsiFactoryUtil.createFile(EnvironmentManager.getEnvironment().getProject(), file.getName(), file.getText()));
         }
         return result;
     }

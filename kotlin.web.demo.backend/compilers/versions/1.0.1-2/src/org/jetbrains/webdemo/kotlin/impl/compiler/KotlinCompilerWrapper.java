@@ -26,10 +26,10 @@ import org.jetbrains.kotlin.fileClasses.NoResolveFileClassesProvider;
 import org.jetbrains.kotlin.idea.MainFunctionDetector;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
-import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.kotlin.impl.ResolveUtils;
+import org.jetbrains.webdemo.kotlin.impl.WrapperLogger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,8 +42,8 @@ public class KotlinCompilerWrapper {
             String mainClass = findMainClass(generationState.getBindingContext(), currentPsiFiles);
             KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
                 @Override
-                public void reportException(Throwable throwable, String s) {
-                    ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(throwable, s + " ");
+                public void reportException(Throwable throwable, String fileUrl) {
+                    WrapperLogger.reportException("Compilation error at file " + fileUrl, throwable);
                 }
             });
 

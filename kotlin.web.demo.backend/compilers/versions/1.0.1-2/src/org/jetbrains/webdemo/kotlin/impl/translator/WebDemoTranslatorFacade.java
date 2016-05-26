@@ -26,7 +26,6 @@ import org.jetbrains.kotlin.js.facade.MainCallParameters;
 import org.jetbrains.kotlin.js.facade.TranslationResult;
 import org.jetbrains.kotlin.js.facade.exceptions.TranslationException;
 import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.kotlin.impl.WrapperSettings;
@@ -47,7 +46,7 @@ public final class WebDemoTranslatorFacade {
     }
 
     public static org.jetbrains.webdemo.kotlin.datastructures.TranslationResult translateProjectWithCallToMain
-            (@NotNull List<KtFile> files, @NotNull String arguments) {
+            (@NotNull List<KtFile> files, @NotNull String[] arguments) {
         try {
             return doTranslate(files, arguments);
         } catch (Throwable e) {
@@ -60,7 +59,7 @@ public final class WebDemoTranslatorFacade {
     @NotNull
     private static org.jetbrains.webdemo.kotlin.datastructures.TranslationResult doTranslate(
             @NotNull List<KtFile> files,
-            @NotNull String arguments
+            @NotNull String[] arguments
     ) throws TranslationException {
         Project currentProject = EnvironmentManager.getEnvironment().getProject();
         Config config = new LibrarySourcesConfig.Builder(
@@ -70,7 +69,7 @@ public final class WebDemoTranslatorFacade {
         ).build();
         K2JSTranslator translator = new K2JSTranslator(config);
         TranslationResult result = translator.translate(files, MainCallParameters.mainWithArguments(
-                Arrays.asList(ResponseUtils.splitArguments(arguments))));
+                Arrays.asList(arguments)));
         if (result instanceof TranslationResult.Success) {
             TranslationResult.Success success = ((TranslationResult.Success) result);
             return new org.jetbrains.webdemo.kotlin.datastructures.TranslationResult(

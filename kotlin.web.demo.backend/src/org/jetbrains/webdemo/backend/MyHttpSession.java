@@ -109,7 +109,7 @@ public class MyHttpSession {
             } else {
                 TranslationResult translationResult;
                 if (isOnlyWarnings(errorDescriptors)) {
-                    translationResult = wrapper.compileKotlinToJS(currentProject);
+                    translationResult = wrapper.compileKotlinToJS(files, ResponseUtils.splitArguments(currentProject.args));
                     translationResult.addWarningsFromAnalyzer(errorDescriptors);
                 } else {
                     translationResult = new TranslationResult(errorDescriptors);

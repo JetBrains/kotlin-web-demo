@@ -31,6 +31,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 
 public class BaseTest extends TestCase {
     protected static KotlinWrapper kotlinWrapper = null;
@@ -53,7 +54,9 @@ public class BaseTest extends TestCase {
             BackendSettings.JAVA_EXECUTE = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
             BackendSettings.LIBS_DIR = currentAbsolutePath.resolve("lib").toString();
 
-            KotlinWrappersManager.init(currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions"));
+            Path wrappersDir = currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions");
+            Path junitLib = Paths.get(BackendSettings.LIBS_DIR, "junit.jar");
+            KotlinWrappersManager.init(wrappersDir, Collections.singletonList(junitLib));
             kotlinWrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
 
             initializePolicyFile();

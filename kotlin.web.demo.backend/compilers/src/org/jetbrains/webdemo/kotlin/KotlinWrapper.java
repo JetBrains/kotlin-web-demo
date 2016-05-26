@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.kotlin;
 
-import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
@@ -27,11 +26,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface KotlinWrapper {
-    void init();
+    void init(List<Path> javaLibraries);
 
     String translateJavaToKotlin(String javaCode);
 
-    TranslationResult compileKotlinToJS(Project project);
+    TranslationResult compileKotlinToJS(Map<String, String> files, String[] args);
 
     Map<String, List<ErrorDescriptor>> getErrors(Map<String, String> files, boolean isJs);
 

@@ -11,8 +11,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="compilers" />
-    <orderEntry type="module" module-name="kotlin.web.demo.backend" />
-    <orderEntry type="module" module-name="kotlin.web.demo.common" />
     <orderEntry type="module-library">
       <library name="kotlin">
         <CLASSES>
@@ -32,5 +30,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-logging-1.2" level="project" />
   </component>
 </module>

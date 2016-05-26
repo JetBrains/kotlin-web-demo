@@ -32,7 +32,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 
 public class BackendHttpServlet extends HttpServlet {
     private static Log log = LogFactory.getLog(BackendHttpServlet.class);
@@ -52,7 +54,9 @@ public class BackendHttpServlet extends HttpServlet {
             log.fatal("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
         }
 
-        KotlinWrappersManager.init(Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "WEB-INF", "kotlin-wrappers"));
+        Path wrappersDir = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "WEB-INF", "kotlin-wrappers");
+        Path junitLib = Paths.get(BackendSettings.LIBS_DIR + "junit.jar");
+        KotlinWrappersManager.init(wrappersDir, Collections.singletonList(junitLib));
         LogWriter.init();
         ErrorWriter.getInstance();
 

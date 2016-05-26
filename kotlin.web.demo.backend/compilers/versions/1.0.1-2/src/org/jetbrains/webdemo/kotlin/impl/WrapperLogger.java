@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.kotlin.exceptions;
+package org.jetbrains.webdemo.kotlin.impl;
 
-public class KotlinCoreException extends RuntimeException {
-    private final Throwable e;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-    public KotlinCoreException(Throwable e) {
-        this.e = e;
+public class WrapperLogger {
+    private static final Log log = LogFactory.getLog("wrapper-1.0.1-2");
+
+    public static void reportException(String message, Throwable e){
+        log.error(message, e);
     }
-
-    @Override
-    public String getMessage() {
-        return e.getMessage();
-    }
-
-    @Override
-    public Throwable fillInStackTrace() {
-        return null;
-    }
-
 }
