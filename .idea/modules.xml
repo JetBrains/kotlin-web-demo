@@ -2,15 +2,28 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2.iml" group="compilers" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.backend/compilers/compilers.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.backend/compilers/compilers.iml" group="compilers" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.common/kotlin.web.demo.common.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.common/kotlin.web.demo.common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2.iml" group="kotlin.web.demo.backend/compilers/versions/1.0.1-2" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2_main.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2_main.iml" group="kotlin.web.demo.backend/compilers/versions/1.0.1-2" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2_test.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/1.0.1-2/1.0.1-2_test.iml" group="kotlin.web.demo.backend/compilers/versions/1.0.1-2" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/compilers.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/compilers.iml" group="kotlin.web.demo.backend/compilers" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/compilers_main.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/compilers_main.iml" group="kotlin.web.demo.backend/compilers" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/compilers_test.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/compilers_test.iml" group="kotlin.web.demo.backend/compilers" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin-web-demo.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin-web-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin-web-demo_main.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin-web-demo_main.iml" group="kotlin-web-demo" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin-web-demo_test.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin-web-demo_test.iml" group="kotlin-web-demo" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/kotlin.web.demo.backend.iml" group="kotlin.web.demo.backend" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/kotlin.web.demo.backend_main.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/kotlin.web.demo.backend_main.iml" group="kotlin.web.demo.backend" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/kotlin.web.demo.backend_test.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/kotlin.web.demo.backend_test.iml" group="kotlin.web.demo.backend" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.common/kotlin.web.demo.common.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.common/kotlin.web.demo.common.iml" group="kotlin.web.demo.common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.common/kotlin.web.demo.common_main.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.common/kotlin.web.demo.common_main.iml" group="kotlin.web.demo.common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.common/kotlin.web.demo.common_test.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.common/kotlin.web.demo.common_test.iml" group="kotlin.web.demo.common" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.executors/kotlin.web.demo.executors.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.executors/kotlin.web.demo.executors.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.frontend/kotlin.web.demo.frontend.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.frontend/kotlin.web.demo.frontend.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.server/kotlin.web.demo.server.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" filepath="$PROJECT_DIR$/kotlin.web.demo.test/kotlin.web.demo.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/versions.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/versions.iml" group="kotlin.web.demo.backend/compilers/versions" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/versions_main.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/versions_main.iml" group="kotlin.web.demo.backend/compilers/versions" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/versions_test.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin.web.demo.backend/compilers/versions/versions_test.iml" group="kotlin.web.demo.backend/compilers/versions" />
     </modules>
   </component>
 </project>

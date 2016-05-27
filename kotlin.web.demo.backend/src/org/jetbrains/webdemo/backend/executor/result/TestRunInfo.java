@@ -31,22 +31,18 @@ public class TestRunInfo {
 
     public TestRunInfo(
             @JsonProperty("output") String output,
-            @JsonProperty("sourceFileName") String sourceFileName,
             @JsonProperty("className") String className,
             @JsonProperty("methodName") String methodName,
             @JsonProperty("executionTime") long executionTime,
             @JsonProperty("exception") ExceptionDescriptor exception,
             @JsonProperty("comparisonFailure") ComparisonFailureDescriptor comparisonFailure,
-            @JsonProperty("methodPosition") int methodPosition,
             @JsonProperty("status") Status status
     ) {
         this.output = output;
-        this.sourceFileName = sourceFileName;
         this.className = className;
         this.methodName = methodName;
         this.executionTime = executionTime;
         this.exception = exception;
-        this.methodPosition = methodPosition;
         this.status = status;
         this.comparisonFailure = comparisonFailure;
     }
@@ -85,6 +81,14 @@ public class TestRunInfo {
 
     public ComparisonFailureDescriptor getComparisonFailure() {
         return comparisonFailure;
+    }
+
+    public void setSourceFileName(String sourceFileName) {
+        this.sourceFileName = sourceFileName;
+    }
+
+    public void setMethodPosition(int methodPosition) {
+        this.methodPosition = methodPosition;
     }
 
     public enum Status {

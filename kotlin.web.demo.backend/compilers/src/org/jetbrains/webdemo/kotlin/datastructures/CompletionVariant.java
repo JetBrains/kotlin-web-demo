@@ -16,8 +16,6 @@
 
 package org.jetbrains.webdemo.kotlin.datastructures;
 
-import com.sun.istack.internal.Nullable;
-
 public class CompletionVariant {
     private final String text;
     private final String displayText;

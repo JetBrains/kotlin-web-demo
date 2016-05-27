@@ -26,5 +26,21 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="1.0.1-2_main" target="1.7" />
+      <module name="1.0.1-2_test" target="1.7" />
+      <module name="build_main" target="1.7" />
+      <module name="build_test" target="1.7" />
+      <module name="compilers_main" target="1.7" />
+      <module name="compilers_test" target="1.7" />
+      <module name="kotlin-web-demo_main" target="1.7" />
+      <module name="kotlin-web-demo_test" target="1.7" />
+      <module name="kotlin.web.demo.backend_main" target="1.7" />
+      <module name="kotlin.web.demo.backend_test" target="1.7" />
+      <module name="kotlin.web.demo.common_main" target="1.7" />
+      <module name="kotlin.web.demo.common_test" target="1.7" />
+      <module name="versions_main" target="1.7" />
+      <module name="versions_test" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -17,17 +17,10 @@
 package org.jetbrains.webdemo.kotlin.datastructures;
 
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
-
 public class ErrorDescriptor {
-    @NotNull
     private final TextInterval interval;
-    @NotNull
     private final String message;
-    @NotNull
     private final Severity severity;
-    @NotNull
     private String className = null;
 
     public ErrorDescriptor(TextInterval interval, String message, Severity severity, String className) {

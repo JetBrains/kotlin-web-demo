@@ -18,10 +18,7 @@ package org.jetbrains.webdemo.kotlin.impl;
 
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
-import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
-import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
-import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
-import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult;
+import org.jetbrains.webdemo.kotlin.datastructures.*;
 import org.jetbrains.webdemo.kotlin.impl.analyzer.ErrorAnalyzer;
 import org.jetbrains.webdemo.kotlin.impl.compiler.KotlinCompilerWrapper;
 import org.jetbrains.webdemo.kotlin.impl.completion.CompletionProvider;
@@ -81,6 +78,11 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-reflect.jar"));
         libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-test.jar"));
         return libraries;
+    }
+
+    @Override
+    public MethodPositions getMethodPositions(byte[] classFile, String classFileName) {
+        return MethodsFinder.readMethodPositions(classFile, classFileName);
     }
 
     @Override

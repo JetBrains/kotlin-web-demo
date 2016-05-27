@@ -16,13 +16,15 @@
 
 package org.jetbrains.webdemo;
 
-import org.apache.log4j.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Created by Semyon.Atamas on 2/27/2015.
  */
 public class LogWriter {
-    private static final Logger ACCESS_LOGGER = Logger.getLogger("accessLogger");
+    private static final Log ACCESS_LOGGER = LogFactory.getLog("accessLogger");
 
     public static void init() {
 

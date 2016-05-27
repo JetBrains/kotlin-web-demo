@@ -31,12 +31,13 @@ import org.junit.runner.notification.RunListener;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class JunitExecutor {
     static List<TestRunInfo> output = new ArrayList<TestRunInfo>();
-    static MethodsFinder.TestClass testClass;
     private static PrintStream standardOutput = System.out;
 
 
@@ -47,20 +48,26 @@ public class JunitExecutor {
             List<Class> classes = getAllClassesFromTheDir(new File(args[0]));
             for (Class cl : classes) {
                 Request request = Request.aClass(cl);
-                if(request.getRunner() instanceof ErrorReportingRunner) continue;
-                String classFileName = cl.getName().replace('.', '/') + ".class";
-                InputStream stream = cl.getClassLoader().getResourceAsStream(classFileName);
-                testClass = MethodsFinder.readMethodPositions(stream, classFileName);
+                if (request.getRunner() instanceof ErrorReportingRunner) continue;
                 jUnitCore.run(request);
             }
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Throwable.class, new ThrowableSerializer());
-                module.addSerializer(junit.framework.ComparisonFailure.class , new JunitFrameworkComparisonFailureSerializer());
-                module.addSerializer(org.junit.ComparisonFailure.class , new OrgJunitComparisonFailureSerializer());
+                module.addSerializer(junit.framework.ComparisonFailure.class, new JunitFrameworkComparisonFailureSerializer());
+                module.addSerializer(org.junit.ComparisonFailure.class, new OrgJunitComparisonFailureSerializer());
                 objectMapper.registerModule(module);
                 System.setOut(standardOutput);
+
+                Map<String, List<TestRunInfo>> groupedTestResults = new HashMap<>();
+                for (TestRunInfo testRunInfo : output) {
+                    if (!groupedTestResults.containsKey(testRunInfo.className)) {
+                        groupedTestResults.put(testRunInfo.className, new ArrayList<TestRunInfo>());
+                    }
+                    groupedTestResults.get(testRunInfo.className).add(testRunInfo);
+                }
+
                 ObjectNode result = objectMapper.createObjectNode();
                 result.put("testResults", objectMapper.valueToTree(output));
                 System.out.print(objectMapper.writeValueAsString(result));
@@ -116,13 +123,11 @@ public class JunitExecutor {
 
 class TestRunInfo {
     public String output = "";
-    public String sourceFileName = "";
     public String className = "";
     public String methodName = "";
     public long executionTime = 0;
     public Throwable exception = null;
     public AssertionError comparisonFailure = null;
-    public int methodPosition;
     public Status status = Status.OK;
 
     public enum Status {
@@ -148,10 +153,8 @@ class MyRunListener extends RunListener {
     @Override
     public void testStarted(Description description) {
         currentTestRunInfo = new TestRunInfo();
-        currentTestRunInfo.sourceFileName = JunitExecutor.testClass.getSourceFileName();
         currentTestRunInfo.className = description.getClassName();
         currentTestRunInfo.methodName = description.getMethodName();
-        currentTestRunInfo.methodPosition = JunitExecutor.testClass.getMethodPosition(currentTestRunInfo.methodName);
 
         JunitExecutor.output.add(currentTestRunInfo);
         testOutputStream = new ByteArrayOutputStream();

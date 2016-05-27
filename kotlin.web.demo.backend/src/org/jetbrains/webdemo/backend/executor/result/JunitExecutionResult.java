@@ -19,20 +19,21 @@ package org.jetbrains.webdemo.backend.executor.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+import java.util.Map;
 
 public class JunitExecutionResult extends ExecutionResult {
-    private List<TestRunInfo> testResults;
+    private Map<String, TestRunInfo> testResults;
 
-    public JunitExecutionResult(@JsonProperty("testResults") List<TestRunInfo> testResults) {
+    public JunitExecutionResult(@JsonProperty("testResults") Map<String, TestRunInfo> testResults) {
         this.testResults = testResults;
     }
 
-    public List<TestRunInfo> getTestResults() {
+    public Map<String, TestRunInfo> getTestResults() {
         return testResults;
     }
 }
 
-class ComparisonFailureDescriptor extends ExceptionDescriptor{
+class ComparisonFailureDescriptor extends ExceptionDescriptor {
     private String expected;
     private String actual;
 

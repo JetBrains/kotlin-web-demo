@@ -16,10 +16,7 @@
 
 package org.jetbrains.webdemo.kotlin;
 
-import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
-import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
-import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
-import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult;
+import org.jetbrains.webdemo.kotlin.datastructures.*;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -39,6 +36,8 @@ public interface KotlinWrapper {
     CompilationResult compileCorrectFiles(Map<String, String> projectFiles);
 
     List<Path> getKotlinRuntimeLibraries();
+
+    MethodPositions getMethodPositions(byte[] classFile, String classFileName);
 
     Path getKotlinCompilerJar();
 }

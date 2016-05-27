@@ -18,10 +18,12 @@ package org.jetbrains.webdemo.backend;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.naming.NamingContext;
-import org.jetbrains.webdemo.*;
+import org.jetbrains.webdemo.CommonSettings;
+import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.LogWriter;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
@@ -76,7 +78,7 @@ public class BackendHttpServlet extends HttpServlet {
         InitialContext initCtx = null;
         try {
             initCtx = new InitialContext();
-            NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("java_home", (String) envCtx.lookup("java_home"));
             } catch (NamingException e) {

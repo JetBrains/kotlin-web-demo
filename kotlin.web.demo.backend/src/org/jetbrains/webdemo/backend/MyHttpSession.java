@@ -101,6 +101,7 @@ public class MyHttpSession {
                             currentProject.confType.equals("junit")
                     );
                     executionResult.addWarningsFromCompiler(errorDescriptors);
+                    //TODO add method positions for junit tests
                 } else {
                     executionResult = new ExecutionResult(errorDescriptors);
                 }
