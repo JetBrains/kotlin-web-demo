@@ -5,9 +5,7 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="kotlin.web.demo.server" />
-          <element id="module-output" name="idea.pacth.server" />
-          <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-1.2.16.jar" path-in-jar="/" />
-          <element id="module-output" name="kotlin.web.demo.common" />
+          <element id="module-output" name="kotlin.web.demo.common_main" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="log4j" />
@@ -22,6 +20,10 @@
           <element id="library" level="project" name="urlrewritefilter-4.0.4" />
           <element id="library" level="project" name="commons-logging-1.2" />
           <element id="library" level="project" name="annotations-12.0" />
+          <element id="library" level="project" name="Gradle: commons-logging:commons-logging:1.2" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.7.4" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.7.4" />
+          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.7.4" />
         </element>
       </element>
       <element id="directory" name="static">
