@@ -30,6 +30,6 @@
     <orderEntry type="library" name="urlrewritefilter-4.0.4" level="project" />
     <orderEntry type="library" name="commons-logging-1.2" level="project" />
     <orderEntry type="library" name="annotations-12.0" level="project" />
-    <orderEntry type="module" module-name="kotlin.web.demo.common" />
+    <orderEntry type="module" module-name="kotlin.web.demo.common_main" />
   </component>
 </module>

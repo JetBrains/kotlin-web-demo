@@ -74,9 +74,9 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
     public List<Path> getKotlinRuntimeLibraries() {
         List<Path> libraries = new ArrayList<>();
-        libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-runtime.jar"));
-        libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-reflect.jar"));
-        libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-test.jar"));
+        libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-runtime-" + WrapperSettings.KOTLIN_VERSION + ".jar"));
+        libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-reflect-" + WrapperSettings.KOTLIN_VERSION + ".jar"));
+        libraries.add(WrapperSettings.KOTLIN_JARS_FOLDER.resolve("kotlin-test-" + WrapperSettings.KOTLIN_VERSION + ".jar"));
         return libraries;
     }
 

@@ -96,7 +96,7 @@ project("kotlin.web.demo.backend") {
                 into "WEB-INF/kotlin-wrappers/$kotlinVersion/js"
             }
             from(wrapperProject.configurations['kotlin']) {
-                into "WEB-INF/kotlin-wrappers/$kotlinVersion/lib"
+                into "WEB-INF/kotlin-wrappers/$kotlinVersion/kotlin"
             }
         }
     }
