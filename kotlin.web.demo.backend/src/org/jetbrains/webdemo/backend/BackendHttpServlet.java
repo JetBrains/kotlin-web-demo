@@ -57,7 +57,7 @@ public class BackendHttpServlet extends HttpServlet {
         }
 
         Path wrappersDir = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "WEB-INF", "kotlin-wrappers");
-        Path junitLib = Paths.get(BackendSettings.LIBS_DIR + "junit.jar");
+        Path junitLib = Paths.get(BackendSettings.LIBS_DIR, "junit-4.12.jar");
         KotlinWrappersManager.init(wrappersDir, Collections.singletonList(junitLib));
         LogWriter.init();
         ErrorWriter.getInstance();

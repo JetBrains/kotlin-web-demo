@@ -64,8 +64,8 @@ for (kotlinVersion in kotlinVersions) {
             kotlin tc("bt345:$kotlinVersion:internal/kotlin-compiler-before-shrink.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/lib/kotlin-plugin.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/lib/kotlin-runtime.jar")
-            kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/lib/kotlin-reflect.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
+            kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
 //            compile tc("bt345:$kotlinVersion:kotlin-plugin-$kotlinVersion.zip!")
         }
     }
