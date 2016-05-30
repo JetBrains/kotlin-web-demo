@@ -25,7 +25,6 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/kotlin.web.demo.frontend/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

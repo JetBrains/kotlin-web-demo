@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<help>
+    <example>
+        <name>Simplest version</name>
+        <text>We declare a package-level function main which returns Unit and takes an Array of strings as a
+            parameter.
+            <br/>
+            Note that semicolons are optional.
+        </text>
+        <args/>
+	 <mode>java js</mode>
+    </example>
+    <example>
+        <name>Reading a name from the command line</name>
+        <text>Line 6 demonstrates
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Strings#Strings-Templates">string templates</a>
+            and <a href="http://confluence.jetbrains.net/display/Kotlin/Basic+types#Basictypes-Arrays">array access</a>.
+        </text>
+        <args>guest</args>
+        <mode>java js</mode>
+    </example>
+    <example>
+        <name>Reading many names from the command line</name>
+        <text>Line 2 demonstrates the
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Forloop">
+                <b>for</b>-loop</a>
+            , that would have been called "enhanced" if there were any other for-loop in Kotlin.
+        </text>
+        <args>guest1 guest2 guest3</args>
+        <mode>java js</mode>
+    </example>
+    <example>
+        <name>An object-oriented Hello</name>
+        <text>Here we have a
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Classes+and+Inheritance">class</a>
+            with a
+            <i>primary constructor</i>
+            and a member function.
+            <br/>
+            Note that there's no
+            <b>new</b>
+            keyword used to create an object.
+        </text>
+        <args>guest1</args>
+        <mode>java js</mode>
+    </example>
+    <example>
+        <name>A multi-language Hello</name>
+        <text>In this example,
+            <b>val</b>
+            denotes a declaration of a read-only local variable, that is assigned an
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Ifexpression">
+                <b>if-expression</b>
+            </a>
+            . Then we use very basic
+            <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">pattern matching</a>
+            expression.
+        </text>
+        <args>FR</args>
+        <mode>java js</mode>
+    </example>
+    <example>
+        <name>Use a conditional expression</name>
+        <text><a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-Ifexpression"><b>if</b></a> is an expression, i.e. it returns a value. Therefore there is not ternary operator (condition ? then : else), because ordinary <b>if</b> works fine in this role.
+        </text>
+        <args>10 20</args>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Null-checks</name>
+        <text>A reference must be explicitly marked as nullable to be able hold a null.
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Null-safety">Null-safety</a>
+        </text>
+        <args>2 3</args>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>is-checks and smart casts</name>
+        <text>The is operator checks if an expression is an instance of a type (and <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">more</a>).
+            If we is-checked an immutable local variable or property, there's no need to cast it explicitly to the is-checked type.
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Classes+and+Inheritance">Classes and Inheritance</a>.
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Type+casts">Type casts</a>.
+        </text>
+        <args/>
+        <mode>java js</mode>
+    </example>
+    <example>
+        <name>Use a while-loop</name>
+        <text><b>While</b> and <b>do..while</b> work as usual:
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-While">while-loop</a>.
+        </text>
+        <args>guest1 guest2 guest3 guest4</args>
+        <mode>java js</mode>
+    </example>
+    <example>
+        <name>Use a for-loop</name>
+        <text>For loop iterates through anything that provides an iterator.
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Control+structures#Controlstructures-For">for-loop</a>.
+        </text>
+        <args>guest1 guest2 guest3</args>
+        <mode>java js</mode>
+    </example>
+    <example>
+        <name>Use ranges and in</name>
+        <text>Check if a number lies within a range.<br/>
+            Check if a number is out of range.<br/>
+            Check if a collection contains an object<br/>
+            See <a href="http://confluence.jetbrains.net/display/Kotlin/Ranges">Ranges</a>
+        </text>
+        <args>4</args>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Use when</name>
+        <text>See <a href="http://confluence.jetbrains.net/display/Kotlin/Pattern+matching">Pattern-matching</a>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>99 Bottles of Beer</name>
+        <text>
+            <p>
+                This example implements the famous "99 Bottles of Beer" program.
+                See <a href="http://99-bottles-of-beer.net/">99-bottles-of-beer.net</a>.
+            </p>
+            <p>
+                Additionally, you can pass the desired initial number of bottles to use (rather than 99) 
+                as a command-line argument.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Maze</name>
+        <text>
+            <p>
+                Find your way through a maze to get a prize :)
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Life</name>
+        <text>
+            <p>
+               This is a straightforward implementation of The Game of Life
+               See <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia</a>
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>HTML Builder</name>
+        <text>
+            <p>
+This is an example of a <b>Type-Safe Groovy-style Builder</b><br/>
+
+Builders are good for declaratively describing data in your code.
+In this example we show how to describe an HTML page in Kotlin.
+
+See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-style+builders">this page</a> for details.
+            </p>
+        </text>
+        <args/>
+        <mode>java js</mode>
+    </example>
+    <example>
+        <name>Hello, Kotlin</name>
+        <text>
+            <p>
+                This example is just simple text floating around. If you are using chrome, there is a bug that spoil the visuals.
+            </p>
+        </text>
+        <args/>
+        <mode>canvas</mode>
+    </example>
+    <example>
+        <name>Fancy lines</name>
+        <text>
+            <p>
+                This example is based on <a href="http://www.w3.org/TR/2dcontext/">example</a> from html5 canvas2D docs.<br/>
+                Note that only a subset of the api is supported for now.
+            </p>
+        </text>
+        <args/>
+        <mode>canvas</mode>
+    </example>
+    <example>
+        <name>Creatures</name>
+        <text>
+            <p>
+                In this example strange creatures are watching the kotlin logo. You can drag'n'drop them as well as the logo.
+                Doubleclick to add more creatures but be careful. They may be watching you!
+            </p>
+        </text>
+        <args/>
+        <mode>canvas</mode>
+    </example>
+    <example>
+        <name>Traffic light</name>
+        <text>
+            <p>
+                In this example you can see a crossroads. Traffic light change color by timer, but you can change it manually using controls at the right part of screen.
+            </p>
+        </text>
+        <args/>
+        <mode>canvas</mode>
+    </example>
+    <example>
+        <name>Multi-declarations</name>
+        <text>
+            <p>
+                In this example introduces a concept that we call <b>multi-declarations</b>. It creates multiple variable at once. Anything can be on the right-hand side of a multi-declaration, as long as the required number of <b>component</b> functions can be called on it.
+            </p>
+        </text>
+        <args/>
+        <mode>java js</mode>
+    </example>
+	<example>
+        <name>Traversing a map</name>
+        <text>
+            <p>
+                Kotlin Standard Library provide <b>component</b> functions for Map.Entry
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Data classes</name>
+        <text>
+            <p>
+                <b>Data class</b> gets <b>component functions</b>, one for each property declared in the primary constructor, generated summatically, same for all the other goodies common for data: <b>toString()</b>, <b>equals()</b>, <b>hashCode()</b> and <b>copy()</b>.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Autogenerated functions</name>
+        <text>
+            <p>
+                <b>Data class</b> gets next functions, generated automatically: <b>component functions</b>, <b>toString()</b>, <b>equals()</b>, <b>hashCode()</b> and <b>copy()</b>.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Custom delegate</name>
+        <text>
+            <p>
+                There’s some new syntax: you can say <b>val 'property name': 'Type' by 'expression'</b>. The expression after by is the delegate, because get() and set() methods corresponding to the property will be delegated to it.  Property delegates don’t have to implement any interface, but they have to provide methods named get() and set() to be called.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Lazy property</name>
+        <text>
+            <p>
+                Delegates.lazy() is a function that returns a delegate that implements a lazy property: the first call to get() executes the lambda expression passed to lazy() as an argument and remembers the result, subsequent calls to get() simply return the remembered result. If you want thread safety, use blockingLazy() instead: it guarantees that the values will be computed only in one thread, and that all threads will see the same value.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Observable property</name>
+        <text>
+            <p>
+                The observable() function takes two arguments: initial value and a handler for modifications. The handler gets called every time we assign to ‘name’, it has three parameters: a property being assigned to, the old value and the new one. If you want to be able to ‘veto’ the assignment, use vetoable() instead of observable().
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>NotNull property</name>
+        <text>
+            <p>
+                Users frequently ask what to do when you have a non-null var, but you don’t have an appropriate value to assign to it in constructor (i.e. it must be assigned later)? You can’t have an uninitialized non-abstract property in Kotlin. You could initialize it with null, bit then you’d have to check every time you access it. Now you have a delegate to handle this. If you read from this property before writing to it, it throws an exception, after the first assignment it works as expected.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Properties in map</name>
+        <text>
+            <p>
+                Properties stored in a map. This comes up a lot in applications like parsing JSON or doing other “dynamic” stuff. Delegates take values from this map (by the string keys – names of properties). Of course, you can have var’s as well (with mapVar() function), that will modify the map upon assignment (note that you’d need MutableMap instead of read-only Map).
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Reference to a function</name>
+        <text>
+            <p>
+                “Callable References” or “Feature Literals”, i.e. an ability to pass named functions or properties as values. Users often ask “I have a foo() function, how do I pass it as an argument?”. The answer is: “you prefix it with a ‘::’”.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+    <example>
+        <name>Composition of functions</name>
+        <text>
+            <p>
+                The composition function return a composition of two functions passed to it: compose(f, g) = f(g(*)). Now, you can apply it to callable references.
+            </p>
+        </text>
+        <args/>
+        <mode>java</mode>
+    </example>
+
+</help>

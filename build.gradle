@@ -16,18 +16,21 @@
 
 buildscript {
     repositories {
+        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.1-2'
+        classpath "com.moowork.gradle:gradle-node-plugin:0.11"
         classpath "gradle.plugin.com.github.jk1:tcdeps:0.9.1"
     }
 }
 
 def kotlinVersions = file('kotlin.web.demo.backend/compilers/versions').list();
 
-allprojects {
+configure(subprojects.findAll { it.name != 'kotlin.web.demo.frontend' }) {
     apply plugin: 'java'
     repositories {
         mavenCentral()
@@ -112,12 +115,94 @@ project("kotlin.web.demo.executors") {
     }
 }
 
+project(':kotlin.web.demo.frontend') {
+    apply plugin: 'kotlin2js'
+    apply plugin: 'com.moowork.node'
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "http://dl.bintray.com/kotlinx/kotlinx"
+        }
+    }
+
+    dependencies {
+        compile 'org.jetbrains.kotlin:kotlin-js-library:1.0.1-2'
+        compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.8"
+    }
+
+    sourceSets {
+        main {
+            kotlin {
+                srcDir 'src'
+            }
+        }
+    }
+
+    compileKotlin2Js.kotlinOptions.outputFile = "${projectDir}/static/kotlin.web.demo.frontend.js"
+
+
+    task bowerInstall(type: NodeTask,dependsOn: npmInstall){
+        script = file('node_modules/bower/bin/bower')
+        args = ['install']
+    }
+    build.dependsOn('bowerInstall')
+
+    node {
+        version='4.0.0'
+        download = true
+    }
+
+    task copyJsFilesFromDependencies(dependsOn: build) {
+        configurations.compile.each { File file ->
+            copy {
+                includeEmptyDirs = false
+
+                from zipTree(file.absolutePath)
+                into "${projectDir}/static/lib"
+                include { fileTreeElement ->
+                    def path = fileTreeElement.path
+                    path.endsWith(".js") && !path.endsWith(".meta.js") &&
+                            (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+                }
+            }
+        }
+    }
+}
+
+project("kotlin.web.demo.server") {
+    apply plugin: 'war'
+
+    webAppDirName = 'web'
+    dependencies {
+        compile project(":kotlin.web.demo.common")
+        compile group: 'org.scribe', name: 'scribe', version: '1.3.7'
+        compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
+        compile 'org.twitter4j:twitter4j-core:4.0.4'
+        compile 'com.nimbusds:nimbus-jose-jwt:3.9'
+        compile 'org.pegdown:pegdown:1.5.0'
+        runtime 'org.tuckey:urlrewritefilter:4.0.4'
+    }
+
+    war {
+        dependsOn ':kotlin.web.demo.frontend:build'
+        from('examples'){
+            into 'examples'
+        }
+        from('help')
+        from("${project(':kotlin.web.demo.frontend').projectDir}/static") {
+            into 'static'
+        }
+        from("${project(':kotlin.web.demo.frontend').projectDir}/index.html")
+    }
+}
+
 project("kotlin.web.demo.common") {
     dependencies {
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4'
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4'
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4'
-        compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4', transitive: true
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4', transitive: true
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4', transitive: true
+        compile group: 'javax.servlet', name: 'servlet-api', version: '2.4', transitive: true
     }
 }
 

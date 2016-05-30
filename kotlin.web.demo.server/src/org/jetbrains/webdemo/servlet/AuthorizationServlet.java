@@ -18,14 +18,13 @@ package org.jetbrains.webdemo.servlet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.CommandRunner;
-import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.authorization.AuthorizationHelper;
 import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.session.UserInfo;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +56,7 @@ public class AuthorizationServlet extends HttpServlet {
     public void init() {
         try {
             InitialContext initialContext = new InitialContext();
-            NamingContext envCtx = (NamingContext) initialContext.lookup("java:comp/env");
+            Context envCtx = (Context) initialContext.lookup("java:comp/env");
             CommandRunner.setServerSettingFromTomcatConfig("google_key", (String) envCtx.lookup("google_key"));
             CommandRunner.setServerSettingFromTomcatConfig("google_secret", (String) envCtx.lookup("google_secret"));
             CommandRunner.setServerSettingFromTomcatConfig("twitter_key", (String) envCtx.lookup("twitter_key"));

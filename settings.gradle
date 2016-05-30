@@ -16,6 +16,5 @@
 
 def kotlinVersions = file('kotlin.web.demo.backend/compilers/versions').list()
 def kotlinWrappers = kotlinVersions.collect({ ':kotlin.web.demo.backend:compilers:versions:' + it });
-def projectsNames = (kotlinWrappers + ":kotlin.web.demo.backend:compilers" + ":kotlin.web.demo.common") as String[]
-include(projectsNames)
-include ':kotlin.web.demo.executors'
+include(kotlinWrappers as String[])
+include ':kotlin.web.demo.executors', ':kotlin.web.demo.server', ':kotlin.web.demo.common', ':kotlin.web.demo.backend:compilers', ':kotlin.web.demo.frontend'

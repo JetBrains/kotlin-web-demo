@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.servlet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.naming.NamingContext;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examples.ExamplesFolder;
@@ -26,6 +25,7 @@ import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
@@ -94,7 +94,7 @@ public class KotlinHttpServlet extends HttpServlet {
         InitialContext initCtx = null;
         try {
             initCtx = new InitialContext();
-            NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", (String) envCtx.lookup("app_output_dir"));
             } catch (NamingException e) {

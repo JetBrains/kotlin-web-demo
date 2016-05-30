@@ -22,23 +22,25 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.naming.NamingContext;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ProjectFile;
-import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MySqlConnector {
     private static Log log = LogFactory.getLog(MySqlConnector.class);
@@ -51,7 +53,7 @@ public class MySqlConnector {
     private MySqlConnector() {
         try {
             InitialContext initCtx = new InitialContext();
-            NamingContext envCtx = (NamingContext) initCtx.lookup("java:comp/env");
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
             dataSource = (DataSource) envCtx.lookup("jdbc/kotlin");
             Connection connection = dataSource.getConnection();
             databaseUrl = connection.toString();
