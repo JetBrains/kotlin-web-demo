@@ -57,6 +57,7 @@ for (kotlinVersion in kotlinVersions) {
         }
         configurations {
             kotlin
+            kotlinJS
             compile.extendsFrom(kotlin)
         }
         dependencies {
@@ -66,7 +67,7 @@ for (kotlinVersion in kotlinVersions) {
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/lib/kotlin-runtime.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
-//            compile tc("bt345:$kotlinVersion:kotlin-plugin-$kotlinVersion.zip!")
+            kotlinJS tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
         }
     }
 }
@@ -87,12 +88,12 @@ project("kotlin.web.demo.backend") {
             include 'executors.policy.template'
         }
 
-        for(kotlinVersion in kotlinVersions) {
+        for (kotlinVersion in kotlinVersions) {
             def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
             from(wrapperProject.sourceSets.main.output) {
                 into("WEB-INF/kotlin-wrappers/$kotlinVersion/classes")
             }
-            from(wrapperProject.projectDir.getAbsolutePath() + '/js') {
+            from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) }) {
                 into "WEB-INF/kotlin-wrappers/$kotlinVersion/js"
             }
             from(wrapperProject.configurations['kotlin']) {
