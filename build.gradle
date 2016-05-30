@@ -42,6 +42,11 @@ configure(subprojects.findAll { it.name != 'kotlin.web.demo.frontend' }) {
                 srcDir 'src'
             }
         }
+        test {
+            java {
+                srcDir 'test'
+            }
+        }
     }
 
     dependencies {
@@ -210,6 +215,16 @@ project("kotlin.web.demo.common") {
         compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4', transitive: true
         compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4', transitive: true
         compile group: 'javax.servlet', name: 'servlet-api', version: '2.4', transitive: true
+    }
+}
+
+project('kotlin.web.demo.test') {
+    dependencies {
+        testCompile project(':kotlin.web.demo.common')
+        testCompile project(':kotlin.web.demo.backend:compilers')
+        testCompile project(':kotlin.web.demo.backend')
+        testCompile project(':kotlin.web.demo.server')
+        testCompile group: 'junit', 'name': 'junit', 'version': '4.12'
     }
 }
 
