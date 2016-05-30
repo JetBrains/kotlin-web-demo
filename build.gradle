@@ -104,12 +104,6 @@ project("kotlin.web.demo.backend") {
 }
 
 project("kotlin.web.demo.executors") {
-    apply plugin: 'com.github.jk1.tcdeps'
-    repositories {
-        teamcityServer {
-            url = 'http://teamcity.jetbrains.com'
-        }
-    }
     dependencies {
         compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4'
         compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4'
