@@ -66,7 +66,6 @@ for (kotlinVersion in kotlinVersions) {
         configurations {
             kotlin
             kotlinJS
-            compile.extendsFrom(kotlin)
         }
         dependencies {
             compile project(":kotlin.web.demo.backend:compilers")
@@ -76,7 +75,17 @@ for (kotlinVersion in kotlinVersions) {
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
             kotlinJS tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
+            compile fileTree( dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar' )
         }
+    }
+}
+
+// Idea can't resolve tc dependencies, so we have to download them
+// into folder and add all jars from this folder as dependencies.
+task copyKotlinLibs(type: Copy) {
+    for(kotlinVersion in kotlinVersions) {
+        into project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion").projectDir.toString() + File.separator + "kotlin"
+        from project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion").configurations.kotlin
     }
 }
 
@@ -226,6 +235,10 @@ project('kotlin.web.demo.test') {
         testCompile project(':kotlin.web.demo.server')
         testCompile group: 'junit', 'name': 'junit', 'version': '4.12'
     }
+    for (kotlinVersion in kotlinVersions) {
+        test.dependsOn(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion:classes")
+    }
+    test.dependsOn(":copyKotlinLibs")
 }
 
 project(':kotlin.web.demo.backend:compilers:versions').jar { onlyIf { false } }
