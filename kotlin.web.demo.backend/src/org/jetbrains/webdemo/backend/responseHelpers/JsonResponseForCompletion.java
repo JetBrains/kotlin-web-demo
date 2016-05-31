@@ -43,9 +43,9 @@ import org.jetbrains.kotlin.psi.KtExpression;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.psi.KtQualifiedExpression;
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression;
+import org.jetbrains.kotlin.renderer.ClassifierNamePolicy;
 import org.jetbrains.kotlin.renderer.DescriptorRenderer;
 import org.jetbrains.kotlin.renderer.DescriptorRendererOptions;
-import org.jetbrains.kotlin.renderer.NameShortness;
 import org.jetbrains.kotlin.renderer.ParameterNameRenderingPolicy;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.DescriptorUtils;
@@ -65,11 +65,10 @@ public class JsonResponseForCompletion {
     private static final DescriptorRenderer RENDERER = IdeDescriptorRenderers.SOURCE_CODE.withOptions(new Function1<DescriptorRendererOptions, Unit>() {
         @Override
         public Unit invoke(DescriptorRendererOptions descriptorRendererOptions) {
-            descriptorRendererOptions.setNameShortness(NameShortness.SHORT);
+            descriptorRendererOptions.setClassifierNamePolicy(ClassifierNamePolicy.SHORT.INSTANCE);
             descriptorRendererOptions.setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES);
             descriptorRendererOptions.setParameterNameRenderingPolicy(ParameterNameRenderingPolicy.NONE);
             descriptorRendererOptions.setRenderDefaultValues(false);
-            descriptorRendererOptions.setFlexibleTypesForCode(false);
             descriptorRendererOptions.setTypeNormalizer(new Function1<KotlinType, KotlinType>() {
                 @Override
                 public KotlinType invoke(KotlinType kotlinType) {

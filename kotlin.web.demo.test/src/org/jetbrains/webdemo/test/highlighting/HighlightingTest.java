@@ -60,7 +60,7 @@ public class HighlightingTest extends BaseTest {
         String expectedResult = "{\"" + fileName + "\":[" +
                 "{" +
                 "\"interval\":{\"start\":{\"line\":2,\"ch\":5},\"end\":{\"line\":2,\"ch\":7}}," +
-                "\"message\":\"Unnecessary safe call on a non-null receiver of type kotlin.Int\"," +
+                "\"message\":\"Unnecessary safe call on a non-null receiver of type Int\"," +
                 "\"severity\":\"WARNING\"," +
                 "\"className\":\"WARNING\"" +
                 "}" +
