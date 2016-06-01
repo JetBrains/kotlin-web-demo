@@ -68,9 +68,7 @@ public class JunitExecutor {
                     groupedTestResults.get(testRunInfo.className).add(testRunInfo);
                 }
 
-                ObjectNode result = objectMapper.createObjectNode();
-                result.put("testResults", objectMapper.valueToTree(output));
-                System.out.print(objectMapper.writeValueAsString(result));
+                System.out.print(objectMapper.writeValueAsString(groupedTestResults));
             } catch (IOException e) {
                 e.printStackTrace();
             }

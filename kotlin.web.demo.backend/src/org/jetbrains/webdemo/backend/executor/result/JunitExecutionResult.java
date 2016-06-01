@@ -16,8 +16,11 @@
 
 package org.jetbrains.webdemo.backend.executor.result;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import junit.framework.TestResult;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +28,12 @@ public class JunitExecutionResult extends ExecutionResult {
     private Map<String, List<TestRunInfo>> testResults;
 
     public JunitExecutionResult(@JsonProperty("testResults") Map<String, List<TestRunInfo>> testResults) {
-        this.testResults = testResults;
+        this.testResults = new HashMap<>();
+    }
+
+    @JsonAnySetter
+    public void addClassTests(String className, List<TestRunInfo> testRunInfo) {
+        testResults.put(className, testRunInfo);
     }
 
     public Map<String, List<TestRunInfo>> getTestResults() {

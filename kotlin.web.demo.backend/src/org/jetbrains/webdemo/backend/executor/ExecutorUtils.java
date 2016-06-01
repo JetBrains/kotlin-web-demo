@@ -40,6 +40,7 @@ public class ExecutorUtils {
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-annotations-2.7.4.jar")
     );
     private static Path junit = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
+    private static Path hamcrest = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "hamcrest-core-1.3.jar");
 
     public static ExecutionResult executeCompiledFiles(
             Map<String, byte[]> files,
@@ -62,6 +63,7 @@ public class ExecutorUtils {
                     .addToClasspath(codeDirectory);
             if (isJunit) {
                 executorBuilder.addToClasspath(junit);
+                executorBuilder.addToClasspath(hamcrest);
                 executorBuilder.addToClasspath(kotlinCompilerJar);
                 executorBuilder.setMainClass("org.jetbrains.webdemo.executors.JunitExecutor");
                 executorBuilder.addArgument(codeDirectory.toString());
