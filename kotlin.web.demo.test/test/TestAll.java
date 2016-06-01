@@ -25,22 +25,24 @@ import org.jetbrains.webdemo.test.examples.RunExamplesTest;
 import org.jetbrains.webdemo.test.highlighting.HighlightingTest;
 import org.jetbrains.webdemo.test.j2kconverter.J2KConverterTest;
 import org.jetbrains.webdemo.test.run.RunTest;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        HighlightingTest.class,
+        CompletionTest.class,
+        RunTest.class,
+        J2KConverterTest.class,
+        HighlightExamplesTest.class
+})
 public class TestAll extends TestCase {
 
-    public static TestSuite suite() {
-        ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
-        ApplicationSettings.EXAMPLES_DIRECTORY = TestUtils.getApplicationFolder().resolve("examples").toString();
-        ExamplesLoader.loadAllExamples();
-        TestSuite suite = new TestSuite(
-                HighlightingTest.class,
-                CompletionTest.class,
-                RunTest.class,
-                J2KConverterTest.class
-        );
-        suite.addTest(HighlightExamplesTest.suite());
-        suite.addTest(RunExamplesTest.suite());
-        return suite;
-    }
+//    public static TestSuite suite() {
+//        ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
+//        ApplicationSettings.EXAMPLES_DIRECTORY = TestUtils.getApplicationFolder().resolve("kotlin.web.demo.server").resolve("examples").toString();
+//        ExamplesLoader.loadAllExamples();
+//    }
 
 }

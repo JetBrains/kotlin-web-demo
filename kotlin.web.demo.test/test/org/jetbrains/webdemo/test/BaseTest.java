@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-public class BaseTest extends TestCase {
+public abstract class BaseTest extends TestCase {
     protected static KotlinWrapper kotlinWrapper = null;
     private static boolean initialized = false;
 
@@ -47,6 +47,10 @@ public class BaseTest extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        init();
+    }
+
+    public static void init() throws IOException {
         if (!initialized) {
             Path currentAbsolutePath = TestUtils.getApplicationFolder();
             CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
@@ -56,13 +60,14 @@ public class BaseTest extends TestCase {
 
             Path wrappersDir = currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions");
             Path junitLib = Paths.get(BackendSettings.LIBS_DIR, "junit.jar");
-            KotlinWrappersManager.init(wrappersDir, Collections.singletonList(junitLib));
+            KotlinWrappersManager.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("build", "classes", "main"));
             kotlinWrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
 
             initializePolicyFile();
-            if(ExamplesFolder.ROOT_FOLDER == null) {
+            if (ExamplesFolder.ROOT_FOLDER == null) {
                 ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
-                ApplicationSettings.EXAMPLES_DIRECTORY = currentAbsolutePath.resolve("examples").toString();
+                ApplicationSettings.EXAMPLES_DIRECTORY = currentAbsolutePath.resolve("kotlin.web.demo.server")
+                        .resolve("examples").toString();
                 ExamplesLoader.loadAllExamples();
             }
             initialized = true;
@@ -76,7 +81,7 @@ public class BaseTest extends TestCase {
 //        return myEnvironmentManager.getEnvironment();
 //    }
 
-    protected void initializePolicyFile() throws IOException {
+    protected static void initializePolicyFile() throws IOException {
         Path kotlinLibsDir = kotlinWrapper.getKotlinCompilerJar().getParent();
         Path templateFilePath = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));

@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 public class JunitExecutionResult extends ExecutionResult {
-    private Map<String, TestRunInfo> testResults;
+    private Map<String, List<TestRunInfo>> testResults;
 
-    public JunitExecutionResult(@JsonProperty("testResults") Map<String, TestRunInfo> testResults) {
+    public JunitExecutionResult(@JsonProperty("testResults") Map<String, List<TestRunInfo>> testResults) {
         this.testResults = testResults;
     }
 
-    public Map<String, TestRunInfo> getTestResults() {
+    public Map<String, List<TestRunInfo>> getTestResults() {
         return testResults;
     }
 }

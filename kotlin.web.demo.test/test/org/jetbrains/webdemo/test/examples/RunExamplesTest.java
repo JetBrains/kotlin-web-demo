@@ -98,9 +98,11 @@ public class RunExamplesTest extends BaseTest {
         } else if (project.confType.equals("junit")) {
             JunitExecutionResult executionResult = (JunitExecutionResult) compileAndExecute(files, project.args, true);
             assertFalse("No test results", executionResult.getTestResults().isEmpty());
-            for (TestRunInfo testRunInfo : executionResult.getTestResults()) {
-                String message = testRunInfo.getClassName() + "." + testRunInfo.getMethodName() + " status:" + testRunInfo.getStatus();
-                assertEquals(message, TestRunInfo.Status.OK, testRunInfo.getStatus());
+            for (String className : executionResult.getTestResults().keySet()) {
+                for(TestRunInfo testRunInfo : executionResult.getTestResults().get(className)) {
+                    String message = testRunInfo.getClassName() + "." + testRunInfo.getMethodName() + " status:" + testRunInfo.getStatus();
+                    assertEquals(message, TestRunInfo.Status.OK, testRunInfo.getStatus());
+                }
             }
         }
 

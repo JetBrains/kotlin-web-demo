@@ -97,10 +97,10 @@ public class TestUtils {
     public static Path getApplicationFolder(){
         try {
             Path result = Paths.get(TestUtils.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            while (!result.getFileName().toString().equals("out")) {
+            while (!result.getFileName().toString().equals("build")) {
                 result = result.getParent();
             }
-            return result.getParent();
+            return result.getParent().getParent();
         } catch (URISyntaxException e) {
             return null;
         }

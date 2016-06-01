@@ -34,11 +34,11 @@ public class KotlinWrappersManager {
     private static String INITIALIZER_CLASSNAME = "org.jetbrains.webdemo.kotlin.impl.KotlinWrapperImpl";
     private static Path myWrappersDir;
 
-    public static void init(Path wrappersDir, List<Path> javaLibraries) {
+    public static void init(Path wrappersDir, List<Path> javaLibraries, Path relativeClassDirectoryPath) {
         myWrappersDir = wrappersDir;
         for (String kotlinVersion : wrappersDir.toFile().list()) {
             try {
-                ClassLoader kotlinClassLoader = new ChildFirstURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion, wrappersDir),
+                ClassLoader kotlinClassLoader = new ChildFirstURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion, wrappersDir, relativeClassDirectoryPath),
                         Thread.currentThread().getContextClassLoader());
                 KotlinWrapper kotlinWrapper = (KotlinWrapper) kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance();
                 kotlinWrapper.init(javaLibraries);
@@ -53,10 +53,10 @@ public class KotlinWrappersManager {
         return wrappers.get(kotlinVersion);
     }
 
-    private static URL[] getForKotlinWrapperClassLoaderURLs(String kotlinVersion, Path wrappersDir) {
+    private static URL[] getForKotlinWrapperClassLoaderURLs(String kotlinVersion, Path wrappersDir, Path relativeClassDirectoryPath) {
         try {
             Path wrapperDir = wrappersDir.resolve(kotlinVersion);
-            Path classesDir = wrapperDir.resolve("classes");
+            Path classesDir = wrapperDir.resolve(relativeClassDirectoryPath);
             Path jarsDir = wrapperDir.resolve("kotlin");
 
             List<URL> urls = new ArrayList<>();

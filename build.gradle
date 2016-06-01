@@ -75,17 +75,24 @@ for (kotlinVersion in kotlinVersions) {
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
             kotlinJS tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
-            compile fileTree( dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar' )
+            compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
         }
     }
 }
 
 // Idea can't resolve tc dependencies, so we have to download them
 // into folder and add all jars from this folder as dependencies.
-task copyKotlinLibs(type: Copy) {
-    for(kotlinVersion in kotlinVersions) {
-        into project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion").projectDir.toString() + File.separator + "kotlin"
-        from project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion").configurations.kotlin
+task copyKotlinLibs() {
+    for (kotlinVersion in kotlinVersions) {
+        def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
+        copy {
+            from wrapperProject.configurations.kotlin
+            into wrapperProject.projectDir.toString() + File.separator + "kotlin"
+        }
+        copy {
+            from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) })
+            into wrapperProject.projectDir.toString() + File.separator + "js"
+        }
     }
 }
 
@@ -127,6 +134,12 @@ project("kotlin.web.demo.executors") {
         compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4'
         compile group: 'junit', 'name': 'junit', 'version': '4.12'
     }
+
+    task copyToLib(type: Copy) {
+        into "$buildDir/libs"
+        from configurations.compile
+    }
+    jar.dependsOn(copyToLib)
 }
 
 project(':kotlin.web.demo.frontend') {
@@ -156,14 +169,14 @@ project(':kotlin.web.demo.frontend') {
     compileKotlin2Js.kotlinOptions.outputFile = "${projectDir}/static/kotlin.web.demo.frontend.js"
 
 
-    task bowerInstall(type: NodeTask,dependsOn: npmInstall){
+    task bowerInstall(type: NodeTask, dependsOn: npmInstall) {
         script = file('node_modules/bower/bin/bower')
         args = ['install']
     }
     build.dependsOn('bowerInstall')
 
     node {
-        version='4.0.0'
+        version = '4.0.0'
         download = true
     }
 
@@ -200,7 +213,7 @@ project("kotlin.web.demo.server") {
 
     war {
         dependsOn ':kotlin.web.demo.frontend:build'
-        from('examples'){
+        from('examples') {
             into 'examples'
         }
         from('help')
@@ -238,6 +251,7 @@ project('kotlin.web.demo.test') {
     for (kotlinVersion in kotlinVersions) {
         test.dependsOn(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion:classes")
     }
+    test.dependsOn(":kotlin.web.demo.executors:jar")
     test.dependsOn(":copyKotlinLibs")
 }
 
