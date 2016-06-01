@@ -34,12 +34,12 @@ import java.util.Random;
 
 public class ExecutorUtils {
     private static List<Path> jarFiles = Arrays.asList(
-            Paths.get(BackendSettings.LIBS_DIR, "kotlin.web.demo.executors.jar"),
-            Paths.get(BackendSettings.LIBS_DIR, "jackson-databind-2.7.4.jar"),
-            Paths.get(BackendSettings.LIBS_DIR, "jackson-core-2.7.4.jar"),
-            Paths.get(BackendSettings.LIBS_DIR, "jackson-annotations-2.7.4.jar")
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "kotlin.web.demo.executors.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-databind-2.7.4.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-core-2.7.4.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-annotations-2.7.4.jar")
     );
-    private static Path junit = Paths.get(BackendSettings.LIBS_DIR, "junit-4.12.jar");
+    private static Path junit = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
 
     public static ExecutionResult executeCompiledFiles(
             Map<String, byte[]> files,

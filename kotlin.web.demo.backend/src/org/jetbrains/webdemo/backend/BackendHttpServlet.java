@@ -49,15 +49,15 @@ public class BackendHttpServlet extends HttpServlet {
 
         CommonSettings.WEBAPP_ROOT_DIRECTORY = getServletContext().getRealPath("/");
         BackendSettings.CLASS_PATH = CommonSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "classes";
-        BackendSettings.LIBS_DIR = CommonSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib";
-        BackendSettings.KOTLIN_LIBS_DIR = BackendSettings.LIBS_DIR;
+        BackendSettings.EXECUTORS_LIBS_DIR = CommonSettings.WEBAPP_ROOT_DIRECTORY + "WEB-INF" + File.separator + "lib";
+        BackendSettings.KOTLIN_LIBS_DIR = BackendSettings.EXECUTORS_LIBS_DIR;
 
         if (!loadTomcatParameters()) {
             log.fatal("FATAL ERROR: Cannot load parameters from tomcat config, server didn't start");
         }
 
         Path wrappersDir = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "WEB-INF", "kotlin-wrappers");
-        Path junitLib = Paths.get(BackendSettings.LIBS_DIR, "junit-4.12.jar");
+        Path junitLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
         KotlinWrappersManager.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("classes"));
         LogWriter.init();
         ErrorWriter.getInstance();

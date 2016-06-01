@@ -24,7 +24,7 @@ public class BackendSettings {
     public static String JAVA_HOME = null;
     public static String JAVA_EXECUTE = "";
     public static String CLASS_PATH = "";
-    public static String LIBS_DIR = "";
+    public static String EXECUTORS_LIBS_DIR = "";
     public static String KOTLIN_LIBS_DIR = "";
     public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin kotlin: a bug was reported to developers.";
     public static int TIMEOUT_FOR_EXECUTION = 10000; //seconds

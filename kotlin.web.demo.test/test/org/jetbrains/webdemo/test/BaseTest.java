@@ -56,10 +56,11 @@ public abstract class BaseTest extends TestCase {
             CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
             BackendSettings.CLASS_PATH = currentAbsolutePath + File.separator + "out" + File.separator + "production";
             BackendSettings.JAVA_EXECUTE = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-            BackendSettings.LIBS_DIR = currentAbsolutePath.resolve("lib").toString();
+            BackendSettings.EXECUTORS_LIBS_DIR = currentAbsolutePath.resolve("kotlin.web.demo.executors")
+                    .resolve("build").resolve("libs").toString();
 
             Path wrappersDir = currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions");
-            Path junitLib = Paths.get(BackendSettings.LIBS_DIR, "junit.jar");
+            Path junitLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
             KotlinWrappersManager.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("build", "classes", "main"));
             kotlinWrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
 
@@ -86,7 +87,7 @@ public abstract class BaseTest extends TestCase {
         Path templateFilePath = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));
         String policyFileContent = templateFileContent.replaceAll("@CLASS_PATH@", BackendSettings.CLASS_PATH.replaceAll("\\\\", "/"));
-        policyFileContent = policyFileContent.replaceAll("@LIBS_DIR@", BackendSettings.LIBS_DIR.replaceAll("\\\\", "/"));
+        policyFileContent = policyFileContent.replaceAll("@LIBS_DIR@", BackendSettings.EXECUTORS_LIBS_DIR.replaceAll("\\\\", "/"));
         policyFileContent = policyFileContent.replaceAll("@KOTLIN_LIBS@", kotlinLibsDir.toString().replaceAll("\\\\", "/"));
         try (PrintWriter policyFile = new PrintWriter(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
             policyFile.write(policyFileContent);
