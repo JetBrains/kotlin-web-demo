@@ -30,7 +30,7 @@ buildscript {
 
 def kotlinVersions = file('kotlin.web.demo.backend/compilers/versions').list();
 
-configure(subprojects.findAll { it.name != 'kotlin.web.demo.frontend' }) {
+configure(allprojects.findAll { it.name != 'kotlin.web.demo.frontend' }) {
     apply plugin: 'java'
 
     sourceCompatibility = 1.7
