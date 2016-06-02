@@ -26,6 +26,7 @@ import views.Configuration
 import views.ConfigurationType
 import views.ConfigurationTypeRunner
 import views.editor.Diagnostic
+import java.util.*
 import kotlin.js.native
 
 class RunProvider(
@@ -70,8 +71,7 @@ class RunProvider(
                 success = { data: dynamic ->
                     val errors = getErrorsMapFromObject(data.errors, project)
                     if (project.confType == "junit") {
-                        val testResults: Array<TestResult> = data.testResults;
-                        onSuccess(JunitExecutionResult(errors, testResults.asList()), project)
+                        onSuccess(JunitExecutionResult(errors, data.testResults), project)
                     } else {
                         onSuccess(JavaRunResult(errors, data.text, data.exception), project);
                     }
@@ -172,10 +172,18 @@ class JavaRunResult(
     val lineNumber: Int
 }
 
-class  JunitExecutionResult(
+class JunitExecutionResult(
         errors: Map<File, List<Diagnostic>>,
-        val testResults: List<TestResult>
-): RunResult(errors)
+        testResults: dynamic
+) : RunResult(errors) {
+    val testResults = HashMap<String, List<TestResult>>()
+    init {
+        for (className in Object.keys(testResults)) {
+            val classTests: Array<TestResult> = testResults[className]
+            this.testResults.put(className, classTests.asList())
+        }
+    }
+}
 
 @native
 interface TestResult {

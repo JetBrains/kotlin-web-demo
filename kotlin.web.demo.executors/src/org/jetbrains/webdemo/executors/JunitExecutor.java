@@ -22,6 +22,7 @@ package org.jetbrains.webdemo.executors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.junit.Test;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
@@ -30,6 +31,8 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
 import java.io.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,8 +50,16 @@ public class JunitExecutor {
             jUnitCore.addListener(new MyRunListener());
             List<Class> classes = getAllClassesFromTheDir(new File(args[0]));
             for (Class cl : classes) {
+                boolean hasTestMethods = false;
+                for(Method method : cl.getMethods()) {
+                    if(method.isAnnotationPresent(Test.class)){
+                        hasTestMethods = true;
+                        break;
+                    }
+                }
+                if(!hasTestMethods) continue;
+
                 Request request = Request.aClass(cl);
-                if (request.getRunner() instanceof ErrorReportingRunner) continue;
                 jUnitCore.run(request);
             }
             try {

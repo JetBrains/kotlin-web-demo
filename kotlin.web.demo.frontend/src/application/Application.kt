@@ -178,14 +178,14 @@ object Application {
 
                 if (output is JunitExecutionResult) {
                     if (project is Task) {
-                        val completed = output.testResults.all { it.status == Status.OK.name }
+                        val completed = output.testResults.values.flatten().all { it.status == Status.OK.name }
                         if (completed) {
                             projectProvider.saveSolution(project, completed)
                             project.completed = true
                             completedProjects = (completedProjects + project.id).toSet();
                         }
                     }
-                    junitView.setOutput(output.testResults)
+                    junitView.setOutput(output.testResults.values.flatten())
                 } else if (output is JavaRunResult) {
                     consoleView.showJavaRunResult(output)
                 }
