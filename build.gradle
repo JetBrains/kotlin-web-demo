@@ -32,6 +32,10 @@ def kotlinVersions = file('kotlin.web.demo.backend/compilers/versions').list();
 
 configure(subprojects.findAll { it.name != 'kotlin.web.demo.frontend' }) {
     apply plugin: 'java'
+
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+
     repositories {
         mavenCentral()
     }
@@ -166,8 +170,7 @@ project(':kotlin.web.demo.frontend') {
         }
     }
 
-    compileKotlin2Js.kotlinOptions.outputFile = "${projectDir}/static/kotlin.web.demo.frontend.js"
-
+    compileKotlin2Js.kotlinOptions.outputFile = "${buildDir}/kotlin.web.demo.frontend.js"
 
     task bowerInstall(type: NodeTask, dependsOn: npmInstall) {
         script = file('node_modules/bower/bin/bower')
@@ -219,6 +222,10 @@ project("kotlin.web.demo.server") {
         from('help')
         from("${project(':kotlin.web.demo.frontend').projectDir}/static") {
             into 'static'
+        }
+        from("${project(':kotlin.web.demo.frontend').buildDir}") {
+            into 'static'
+            include 'kotlin.web.demo.frontend.js'
         }
         from("${project(':kotlin.web.demo.frontend').projectDir}/index.html")
         for (kotlinVersion in kotlinVersions) {
