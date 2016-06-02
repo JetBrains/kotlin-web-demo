@@ -55,4 +55,8 @@ public class Example extends Project{
     public String getHelp() {
         return help;
     }
+
+    public String toString(){
+        return name + " (" + id.replaceAll("%20", " ") + ')';
+    }
 }

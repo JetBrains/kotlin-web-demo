@@ -8,25 +8,5 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="1.0.1-2_main" target="1.8" />
-      <module name="1.0.1-2_test" target="1.8" />
-      <module name="compilers_main" target="1.8" />
-      <module name="compilers_test" target="1.8" />
-      <module name="kotlin.web.demo.backend_main" target="1.8" />
-      <module name="kotlin.web.demo.backend_test" target="1.8" />
-      <module name="kotlin.web.demo.common_main" target="1.8" />
-      <module name="kotlin.web.demo.common_test" target="1.8" />
-      <module name="kotlin.web.demo.executors_main" target="1.8" />
-      <module name="kotlin.web.demo.executors_test" target="1.8" />
-      <module name="kotlin.web.demo.frontend_main" target="1.8" />
-      <module name="kotlin.web.demo.frontend_test" target="1.8" />
-      <module name="kotlin.web.demo.server_main" target="1.8" />
-      <module name="kotlin.web.demo.server_test" target="1.8" />
-      <module name="kotlin.web.demo.test_main" target="1.8" />
-      <module name="kotlin.web.demo.test_test" target="1.8" />
-      <module name="versions_main" target="1.8" />
-      <module name="versions_test" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

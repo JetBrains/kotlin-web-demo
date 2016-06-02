@@ -83,7 +83,7 @@ public class ExamplesTest extends BaseTest {
             JunitExecutionResult executionResult = (JunitExecutionResult) compileAndExecute(files, project.args, true);
             assertFalse("No test results", executionResult.getTestResults().isEmpty());
             for (String className : executionResult.getTestResults().keySet()) {
-                for(TestRunInfo testRunInfo : executionResult.getTestResults().get(className)) {
+                for (TestRunInfo testRunInfo : executionResult.getTestResults().get(className)) {
                     String message = testRunInfo.getClassName() + "." + testRunInfo.getMethodName() + " status:" + testRunInfo.getStatus();
                     assertEquals(message, TestRunInfo.Status.OK, testRunInfo.getStatus());
                 }
@@ -134,12 +134,12 @@ public class ExamplesTest extends BaseTest {
         return answer.toString();
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "{index} {0}")
     public static Collection<Object[]> data() throws IOException {
         init();
         List<Object[]> parameters = new ArrayList<>();
         for (Example project : ExamplesUtils.getAllExamples(ExamplesFolder.ROOT_FOLDER)) {
-            parameters.add(new Object[] {project});
+            parameters.add(new Object[]{project});
         }
         return parameters;
     }
