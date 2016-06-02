@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="html4k">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/kotlin.web.demo.frontend/lib/html4k.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

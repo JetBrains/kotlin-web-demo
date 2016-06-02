@@ -1,6 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run frontend tests" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="$PROJECT_DIR$/kotlin.web.demo.frontend/test_env/karma.conf.js">
-    <envs />
-    <method />
-  </configuration>
-</component>
