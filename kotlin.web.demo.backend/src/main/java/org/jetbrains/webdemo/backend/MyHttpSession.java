@@ -82,7 +82,7 @@ public class MyHttpSession {
     private void sendExecutorResult() {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
+            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.2");
 
             Map<String, String> files = getFilesContentFromProject(currentProject);
             boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");

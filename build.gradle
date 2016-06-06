@@ -30,7 +30,9 @@ buildscript {
 
 def kotlinVersions = file('kotlin.web.demo.backend/compilers/versions').list();
 
-configure(allprojects.findAll { it.name != 'kotlin.web.demo.frontend' }) {
+configure(allprojects.findAll {
+    it.name != 'kotlin.web.demo.frontend'
+}) {
     apply plugin: 'java'
 
     sourceCompatibility = 1.7
@@ -41,11 +43,6 @@ configure(allprojects.findAll { it.name != 'kotlin.web.demo.frontend' }) {
     }
 
     sourceSets {
-        main {
-            java {
-                srcDir 'src'
-            }
-        }
         test {
             java {
                 srcDir 'test'
@@ -235,6 +232,16 @@ project("kotlin.web.demo.server") {
                 into "static/kotlin/${kotlinVersion}"
             }
         }
+    }
+}
+
+project(":kotlin.web.demo.backend:compilers") {
+    apply plugin: 'kotlin'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.1-2"
     }
 }
 
