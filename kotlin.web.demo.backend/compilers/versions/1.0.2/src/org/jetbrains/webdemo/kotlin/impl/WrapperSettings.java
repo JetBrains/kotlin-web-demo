@@ -16,8 +16,11 @@
 
 package org.jetbrains.webdemo.kotlin.impl;
 
+import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
+
 import java.nio.file.Path;
 
 public class WrapperSettings {
     public static Path JS_LIB_ROOT;
+
 }

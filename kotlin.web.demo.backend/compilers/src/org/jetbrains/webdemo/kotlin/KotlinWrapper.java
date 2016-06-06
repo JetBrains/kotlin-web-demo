@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface KotlinWrapper {
-    void init(List<Path> javaLibraries);
+    void init(List<Path> javaLibraries, String kotlinVersion);
 
     String translateJavaToKotlin(String javaCode);
 

@@ -16,8 +16,13 @@
 
 package org.jetbrains.webdemo.kotlin.impl;
 
-import java.nio.file.Path;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-public class WrapperSettings {
-    public static Path JS_LIB_ROOT;
+public class WrapperLogger {
+    private static final Log log = LogFactory.getLog("wrapper-1.0.1-2");
+
+    public static void reportException(String message, Throwable e){
+        log.error(message, e);
+    }
 }

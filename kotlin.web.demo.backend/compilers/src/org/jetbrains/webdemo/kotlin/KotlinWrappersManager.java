@@ -41,9 +41,9 @@ public class KotlinWrappersManager {
                 ClassLoader kotlinClassLoader = new ChildFirstURLClassLoader(getForKotlinWrapperClassLoaderURLs(kotlinVersion, wrappersDir, relativeClassDirectoryPath),
                         Thread.currentThread().getContextClassLoader());
                 KotlinWrapper kotlinWrapper = (KotlinWrapper) kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance();
-                kotlinWrapper.init(javaLibraries);
+                kotlinWrapper.init(javaLibraries, kotlinVersion);
                 wrappers.put(kotlinVersion, kotlinWrapper);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 log.error("Can't initialize kotlin version " + kotlinVersion, e);
             }
         }
