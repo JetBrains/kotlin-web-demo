@@ -142,9 +142,16 @@ public class ServerHandler {
 
 
     //Send Response
-    private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) {
+    private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int statusCode) {
         try {
-            response.sendError(errorCode, responseBody);
+            response.addHeader("Cache-Control", "no-cache");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(statusCode);
+            if(!responseBody.equals("")) {
+                try (PrintWriter writer = response.getWriter()) {
+                    writer.write(responseBody);
+                }
+            }
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", request.getHeader("Origin"), "null");
