@@ -30,12 +30,10 @@ buildscript {
 
 def kotlinVersions = file('kotlin.web.demo.backend/compilers/versions').list();
 
-configure(allprojects.findAll {
-    it.name != 'kotlin.web.demo.frontend' &&
-    it.name != 'kotlin.web.demo.backend:compilers'
-}) {
+configure(allprojects.findAll({
+    it.name != 'kotlin.web.demo.frontend'
+})) {
     apply plugin: 'java'
-
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
 
@@ -59,10 +57,26 @@ configure(allprojects.findAll {
     }
 }
 
+configure([
+        project(':kotlin.web.demo.server'),
+        project(':kotlin.web.demo.backend'),
+        project(':kotlin.web.demo.common'),
+        project(':kotlin.web.demo.executors'),
+        project(':kotlin.web.demo.backend:compilers'),
+        project(':kotlin.web.demo.test')
+]) {
+    apply plugin: 'kotlin'
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.1-2"
+        compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4"
+    }
+}
+
 for (kotlinVersion in kotlinVersions) {
     def projectsName = ":kotlin.web.demo.backend:compilers:versions:$kotlinVersion"
     project(projectsName) {
         apply plugin: 'com.github.jk1.tcdeps'
+
         repositories {
             teamcityServer {
                 url = 'http://teamcity.jetbrains.com'
@@ -98,21 +112,6 @@ task copyKotlinLibs() {
             from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) })
             into wrapperProject.projectDir.toString() + File.separator + "js"
         }
-    }
-}
-
-project(":kotlin.web.demo.backend:compilers") {
-    apply plugin: 'kotlin'
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4"
-        compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.1-2"
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4', transitive: true
-        compile 'commons-logging:commons-logging:1.2'
     }
 }
 
