@@ -21,14 +21,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class ResponseUtils {
@@ -292,40 +289,5 @@ public class ResponseUtils {
             j++;
         }
         return result;
-    }
-
-    public static boolean isOriginAccepted(HttpServletRequest request) {
-        String originHeader = request.getHeader("origin");
-        //TODO send origin headers
-        if (originHeader == null) {
-            return true;
-        }
-        if (URLS.contains(originHeader)) {
-            return true;
-        }
-
-        String originWithoutHttp = ResponseUtils.substringAfterReturnAll(originHeader, "http://");
-        return originWithoutHttp.equals(request.getHeader("host"));
-    }
-
-    public static void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) throws IOException {
-        addHeadersToResponse(request, response);
-        response.setStatus(errorCode);
-        if(!responseBody.equals("")) {
-            try (PrintWriter writer = response.getWriter()) {
-                writer.write(responseBody);
-            }
-        }
-    }
-
-    public static void addHeadersToResponse(HttpServletRequest request, HttpServletResponse response) {
-        if (isOriginAccepted(request)) {
-            response.addHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-            response.addHeader("Access-Control-Allow-Methods", "GET, POST");
-            response.addHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type");
-            response.addHeader("Access-Control-Allow-Credentials", "true");
-        }
-        response.addHeader("Cache-Control", "no-cache");
-        response.setCharacterEncoding("UTF-8");
     }
 }

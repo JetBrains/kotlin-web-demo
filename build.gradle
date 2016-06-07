@@ -31,7 +31,8 @@ buildscript {
 def kotlinVersions = file('kotlin.web.demo.backend/compilers/versions').list();
 
 configure(allprojects.findAll {
-    it.name != 'kotlin.web.demo.frontend'
+    it.name != 'kotlin.web.demo.frontend' &&
+    it.name != 'kotlin.web.demo.backend:compilers'
 }) {
     apply plugin: 'java'
 
@@ -51,6 +52,9 @@ configure(allprojects.findAll {
     }
 
     dependencies {
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4', transitive: true
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4', transitive: true
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4', transitive: true
         compile 'commons-logging:commons-logging:1.2'
     }
 }
@@ -97,9 +101,23 @@ task copyKotlinLibs() {
     }
 }
 
+project(":kotlin.web.demo.backend:compilers") {
+    apply plugin: 'kotlin'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4"
+        compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.1-2"
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4', transitive: true
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4', transitive: true
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4', transitive: true
+        compile 'commons-logging:commons-logging:1.2'
+    }
+}
+
 project("kotlin.web.demo.backend") {
     apply plugin: 'war'
-    webAppDirName = 'web'
 
     dependencies {
         compile project(":kotlin.web.demo.backend:compilers")
@@ -130,9 +148,6 @@ project("kotlin.web.demo.backend") {
 
 project("kotlin.web.demo.executors") {
     dependencies {
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4'
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4'
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4'
         compile group: 'junit', 'name': 'junit', 'version': '4.12'
     }
 
@@ -209,6 +224,7 @@ project("kotlin.web.demo.server") {
         compile 'com.nimbusds:nimbus-jose-jwt:3.9'
         compile 'org.pegdown:pegdown:1.5.0'
         runtime 'org.tuckey:urlrewritefilter:4.0.4'
+        providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     }
 
     war {
@@ -235,24 +251,6 @@ project("kotlin.web.demo.server") {
     }
 }
 
-project(":kotlin.web.demo.backend:compilers") {
-    apply plugin: 'kotlin'
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        compile "org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.1-2"
-    }
-}
-
-project("kotlin.web.demo.common") {
-    dependencies {
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4', transitive: true
-        compile group: 'javax.servlet', name: 'servlet-api', version: '2.4', transitive: true
-    }
-}
 
 project('kotlin.web.demo.test') {
     dependencies {

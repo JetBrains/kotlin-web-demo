@@ -61,8 +61,8 @@ public abstract class BaseTest extends TestCase {
 
             Path wrappersDir = currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions");
             Path junitLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
-            KotlinWrappersManager.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("build", "classes", "main"));
-            kotlinWrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
+            KotlinWrappersManager.INSTANCE.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("build", "classes", "main"));
+            kotlinWrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.1-2");
 
             initializePolicyFile();
             if (ExamplesFolder.ROOT_FOLDER == null) {

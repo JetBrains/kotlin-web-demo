@@ -33,6 +33,7 @@ import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,7 @@ public class MyHttpSession {
 
     private void sendConversionResult() {
         try {
-            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
+            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.1-2");
             String javaCode = request.getParameter("text");
             String kotlinCode = wrapper.translateJavaToKotlin(javaCode);
             writeResponse(kotlinCode, HttpServletResponse.SC_OK);
@@ -82,7 +83,7 @@ public class MyHttpSession {
     private void sendExecutorResult() {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.2");
+            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.2");
 
             Map<String, String> files = getFilesContentFromProject(currentProject);
             boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");
@@ -143,7 +144,7 @@ public class MyHttpSession {
             int line = Integer.parseInt(request.getParameter("line"));
             int ch = Integer.parseInt(request.getParameter("ch"));
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
+            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.1-2");
 
             Map<String, String> files = getFilesContentFromProject(currentProject);
             boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");
@@ -159,7 +160,7 @@ public class MyHttpSession {
     public void sendHighlightingResult() {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            KotlinWrapper wrapper = KotlinWrappersManager.getKotlinWrapper("1.0.1-2");
+            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.1-2");
             Map<String, String> files = getFilesContentFromProject(currentProject);
             boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");
             Map<String, List<ErrorDescriptor>> analysisResult = wrapper.getErrors(files, isJs);
@@ -184,7 +185,13 @@ public class MyHttpSession {
     //Send Response
     private void writeResponse(String responseBody, int statusCode) {
         try {
-            ResponseUtils.writeResponse(request, response, responseBody, statusCode);
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(statusCode);
+            if (!responseBody.equals("")) {
+                try (PrintWriter writer = response.getWriter()) {
+                    writer.write(responseBody);
+                }
+            }
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "");

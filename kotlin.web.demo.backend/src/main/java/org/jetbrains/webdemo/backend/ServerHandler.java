@@ -38,7 +38,7 @@ public class ServerHandler {
                 //Do not stop server
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         "UNKNOWN", "unknown", request.getRequestURI() + "?" + request.getQueryString());
-                ResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
     }

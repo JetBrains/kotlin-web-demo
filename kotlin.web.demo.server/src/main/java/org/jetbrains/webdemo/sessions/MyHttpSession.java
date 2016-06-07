@@ -30,10 +30,7 @@ import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
@@ -622,7 +619,14 @@ public class MyHttpSession {
     //Send Response
     private void writeResponse(String responseBody, int statusCode) {
         try {
-            ResponseUtils.writeResponse(request, response, responseBody, statusCode);
+            response.addHeader("Cache-Control", "no-cache");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(statusCode);
+            if(!responseBody.equals("")) {
+                try (PrintWriter writer = response.getWriter()) {
+                    writer.write(responseBody);
+                }
+            }
             if (currentProject != null) {
                 LogWriter.logRequestInfo(
                         sessionInfo.getId(),

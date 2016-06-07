@@ -39,8 +39,8 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
     public void init(List<Path> javaLibraries, String kotlinVersion) {
         this.kotlinVersion = kotlinVersion;
-        jarsFolder = KotlinWrappersManager.getWrappersDir().resolve(kotlinVersion).resolve("kotlin");
-        WrapperSettings.JS_LIB_ROOT = KotlinWrappersManager.getWrappersDir().resolve(kotlinVersion).resolve("js");
+        jarsFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion).resolve("kotlin");
+        WrapperSettings.JS_LIB_ROOT = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion).resolve("js");
         List<Path> libraries = getKotlinRuntimeLibraries();
         libraries.addAll(javaLibraries);
         EnvironmentManager.init(libraries);

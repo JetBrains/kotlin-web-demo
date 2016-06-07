@@ -45,8 +45,6 @@ public class ServerHandler {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         "TEST", request.getHeader("Origin"), "null");
             }
-        } else if (!ResponseUtils.isOriginAccepted(request)) {
-            ErrorWriter.ERROR_WRITER.writeInfo(request.getHeader("Origin") + " try to connect to server");
         } else {
             SessionInfo sessionInfo;
             try {
@@ -77,7 +75,7 @@ public class ServerHandler {
                 //Do not stop server
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
                         "UNKNOWN", "unknown", request.getRequestURI() + "?" + request.getQueryString());
-                ResponseUtils.writeResponse(request, response, "Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -146,7 +144,7 @@ public class ServerHandler {
     //Send Response
     private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int errorCode) {
         try {
-            ResponseUtils.writeResponse(request, response, responseBody, errorCode);
+            response.sendError(errorCode, responseBody);
         } catch (IOException e) {
             //This is an exception we can't send data to client
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", request.getHeader("Origin"), "null");
