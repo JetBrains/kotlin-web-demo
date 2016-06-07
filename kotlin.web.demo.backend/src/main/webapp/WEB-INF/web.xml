@@ -28,6 +28,7 @@
     <servlet>
         <servlet-name>BackendHttpServlet</servlet-name>
         <servlet-class>org.jetbrains.webdemo.backend.BackendHttpServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
     </servlet>
 
     <servlet-mapping>

@@ -34,7 +34,7 @@ object KotlinWrappersManager {
 
     fun init(wrappersDir: Path, javaLibraries: List<Path>, relativeClassDirectoryPath: Path) {
         this.wrappersDir = wrappersDir
-        val configFile = KotlinWrappersManager::class.java.classLoader.getResourceAsStream("/config.json")
+        val configFile = KotlinWrappersManager::class.java.classLoader.getResourceAsStream("/compilers-config.json")
         val wrappersConfig: List<KotlinWrapperConfig> = jacksonObjectMapper().readValue(configFile)
         for ((version) in wrappersConfig) {
             try {
