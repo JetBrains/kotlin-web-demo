@@ -61,10 +61,23 @@ public class MyHttpSession {
                 case ("complete"):
                     sendCompletionResult();
                     break;
+                case ("getKotlinVersions"):
+                    sendKotlinVersions();
+                    break;
             }
         } catch (Throwable e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "");
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendKotlinVersions() {
+        try {
+            writeResponse(objectMapper.writeValueAsString(KotlinWrappersManager.INSTANCE.getWrappersConfig()),
+                    HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Can't send kotlin versions");
+            writeResponse("Internal server error", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

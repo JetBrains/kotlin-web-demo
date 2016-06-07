@@ -20,5 +20,6 @@ package providers
 enum class REQUEST_TYPE(val value: String){
     ERROR("error"),
     LOAD_PROJECT_NAME("loadProjectName"),
+    GET_KOTLIN_VERSIONS("getKotlinVersions"),
     COMPLETE("complete")
 }

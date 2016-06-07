@@ -17,6 +17,8 @@
 package org.jetbrains.webdemo;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,15 +28,19 @@ public class Project {
     public String name;
     public String args = "";
     public String confType = "java";
+
     public List<ProjectFile> files;
     public List<String> readOnlyFileNames = new ArrayList<>();
     public String expectedOutput;
+    private String compilerVersion = null;
 
     /**
      * For Jackson
      */
-    public Project() {
-
+    public Project(
+            @JsonProperty("compilerVersion") String compilerVersion
+    ) {
+        this.compilerVersion = compilerVersion;
     }
 
     public Project(
@@ -85,5 +91,9 @@ public class Project {
         this.files = files;
         this.expectedOutput = expectedOutput;
         this.readOnlyFileNames = readOnlyFileNames;
+    }
+
+    public String getCompilerVersion() {
+        return compilerVersion;
     }
 }

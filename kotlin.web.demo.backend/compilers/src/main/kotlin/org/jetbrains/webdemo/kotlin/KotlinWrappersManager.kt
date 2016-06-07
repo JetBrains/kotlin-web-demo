@@ -20,29 +20,37 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.commons.logging.LogFactory
 import org.jetbrains.webdemo.kotlin.classloader.ChildFirstURLClassLoader
-import java.net.MalformedURLException
 import java.net.URL
 import java.nio.file.Path
 import java.util.*
 import kotlin.properties.Delegates
 
 object KotlinWrappersManager {
-    private val wrappers = HashMap<String, KotlinWrapper>()
     private val log = LogFactory.getLog(KotlinWrappersManager::class.java)
     private val INITIALIZER_CLASSNAME = "org.jetbrains.webdemo.kotlin.impl.KotlinWrapperImpl"
+    private val wrappers = HashMap<String, KotlinWrapper>()
+
+    var wrappersConfig by Delegates.notNull<ArrayList<KotlinWrapperConfig>>()
+        private set
+    var defaultWrapper by Delegates.notNull<KotlinWrapper>()
+        private set
     var wrappersDir by Delegates.notNull<Path>()
+        private set
 
     fun init(wrappersDir: Path, javaLibraries: List<Path>, relativeClassDirectoryPath: Path) {
         this.wrappersDir = wrappersDir
         val configFile = KotlinWrappersManager::class.java.classLoader.getResourceAsStream("/compilers-config.json")
-        val wrappersConfig: List<KotlinWrapperConfig> = jacksonObjectMapper().readValue(configFile)
-        for ((version) in wrappersConfig) {
+        wrappersConfig = jacksonObjectMapper().readValue(configFile)
+        for ((version, isLatestStable) in wrappersConfig) {
             try {
                 val classPath = getForKotlinWrapperClassLoaderURLs(version, wrappersDir, relativeClassDirectoryPath)
                 val kotlinClassLoader = ChildFirstURLClassLoader(classPath, Thread.currentThread().contextClassLoader)
                 val kotlinWrapper = kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance() as KotlinWrapper
                 kotlinWrapper.init(javaLibraries, version)
                 wrappers.put(version, kotlinWrapper)
+                if(isLatestStable){
+                    defaultWrapper = kotlinWrapper
+                }
             } catch (e: Throwable) {
                 log.error("Can't initialize kotlin version " + version, e)
             }
@@ -69,4 +77,4 @@ object KotlinWrappersManager {
     }
 }
 
-data class KotlinWrapperConfig(val version: String, val latest: Boolean)
+data class KotlinWrapperConfig(val version: String, val latestStable: Boolean)

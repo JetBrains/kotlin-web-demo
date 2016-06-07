@@ -62,6 +62,9 @@ public class MyHttpSession {
                 case ("run"):
                     forwardRunRequest();
                     break;
+                case ("getKotlinVersions"):
+                    forwardRequestToBackend(request, null);
+                    break;
                 case ("complete"):
                     forwardCompleteRequest();
                     break;
@@ -225,24 +228,30 @@ public class MyHttpSession {
                 }
             }
 
-            conn.setRequestMethod("POST");
+
+
             conn.setConnectTimeout(15000);
             conn.setReadTimeout(15000);
             conn.setUseCaches(false);
             conn.setDoOutput(hasoutbody);
 
-            try (OutputStream requestBody = conn.getOutputStream()) {
-                boolean first = true;
-                for (String key : postParameters.keySet()) {
-                    if (first) {
-                        first = false;
-                    } else {
-                        requestBody.write('&');
+            if(postParameters != null && !postParameters.isEmpty()) {
+                conn.setRequestMethod("POST");
+                try (OutputStream requestBody = conn.getOutputStream()) {
+                    boolean first = true;
+                    for (String key : postParameters.keySet()) {
+                        if (first) {
+                            first = false;
+                        } else {
+                            requestBody.write('&');
+                        }
+                        requestBody.write(URLEncoder.encode(key, "UTF8").getBytes());
+                        requestBody.write('=');
+                        requestBody.write(URLEncoder.encode(postParameters.get(key), "UTF8").getBytes());
                     }
-                    requestBody.write(URLEncoder.encode(key, "UTF8").getBytes());
-                    requestBody.write('=');
-                    requestBody.write(URLEncoder.encode(postParameters.get(key), "UTF8").getBytes());
                 }
+            } else {
+                conn.setRequestMethod("GET");
             }
 
             StringBuilder responseBody = new StringBuilder();

@@ -35,6 +35,7 @@ abstract class Project(
                 "id" to id,
                 "name" to name,
                 "args" to args,
+                "compilerVersion" to compilerVersion,
                 "confType" to confType,
                 "originUrl" to originUrl,
                 "files" to files.filter { it.isModifiable },
@@ -82,8 +83,7 @@ abstract class Project(
         contentLoaded = true
         originUrl = content.originUrl
         args = content.args
-        //TODO
-//        name = content.name
+        compilerVersion = content.compilerVersion
         confType = content.confType
         files = content.files
         revertible = if (content.hasOwnProperty("revertible")) content.revertible else true
@@ -120,6 +120,7 @@ abstract class Project(
     var files = arrayListOf<File>()
     open val name = name
     var contentLoaded = false
+    var compilerVersion: String? = null
     var args = ""
     var confType = "java"
     var originUrl = null

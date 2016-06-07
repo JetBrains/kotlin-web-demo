@@ -57,6 +57,7 @@ class JQuery {
     fun slideUp()
     fun parent(): utils.jquery.JQuery
     fun attr(name: String, value: String)
+    fun  append(any: String)
 }
 
 @native

@@ -21,11 +21,11 @@ import model.File
 import model.ProjectType
 import model.Task
 import model.UserProject
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLIFrameElement
-import org.w3c.dom.StorageEvent
+import kotlinx.html.dom.append
+import kotlinx.html.option
+import org.w3c.dom.*
 import org.w3c.dom.events.KeyboardEvent
+import org.w3c.dom.events.MutationEvent
 import providers.*
 import providers.Status
 import utils.*
@@ -69,6 +69,13 @@ object Application {
                     })
             )
     )
+    val versionView = KotlinVersionView(
+            document.getElementById("webdemo-kotlin-version") as HTMLSelectElement,
+            onChange = { newValue ->
+                accordion.selectedProjectView!!.project.compilerVersion = newValue
+                Unit
+            }
+    )
 
     var completedProjects: Set<String>
         get() {
@@ -99,6 +106,7 @@ object Application {
                 junitView.clear()
                 generatedCodeView.clear()
                 problemsView.clear()
+                versionView.setVersion(project.compilerVersion);
                 jq("#result-tabs").tabs("option", "active", 0)
                 Elements.argumentsInputElement.value = project.args
                 configurationManager.updateConfiguration(project.confType)
@@ -113,7 +121,7 @@ object Application {
                     }
                 }
 
-                var url =
+                val url =
                         if (currentFile.project.type == ProjectType.EXAMPLE ||
                                 currentFile.project.type == ProjectType.TASK) {
                             currentFile.id
@@ -373,23 +381,14 @@ object Application {
     var navBarView = NavBarView(document.getElementById("grid-nav") as HTMLDivElement)
 
 
-    private fun setKotlinVersion() {
+    private fun setKotlinVersions() {
         ajax(
-                url = "http://kotlinlang.org/latest_release_version.txt",
+                url = generateAjaxUrl(REQUEST_TYPE.GET_KOTLIN_VERSIONS),
                 type = HTTPRequestType.GET,
-                dataType = DataType.TEXT,
+                dataType = DataType.JSON,
                 timeout = 1000,
-                success = { kotlinVersion ->
-                    (document.getElementById("kotlinlang-kotlin-version") as HTMLElement).innerHTML = "($kotlinVersion)"
-                }
-        )
-        ajax(
-                url = "build.txt",
-                type = HTTPRequestType.GET,
-                dataType = DataType.TEXT,
-                timeout = 1000,
-                success = { kotlinVersion ->
-                    (document.getElementById("webdemo-kotlin-version") as HTMLElement).innerHTML = kotlinVersion
+                success = { kotlinVersions: Array<KotlinWrapperConfig> ->
+                    versionView.init(kotlinVersions)
                 }
         )
     }
@@ -432,7 +431,7 @@ object Application {
     fun init() {
         jq("#result-tabs").tabs()
         initButtons()
-        setKotlinVersion()
+        setKotlinVersions()
 
         window.onfocus = {
             editor.focus()
@@ -528,4 +527,9 @@ object Application {
         Elements.runButton.title = Elements.runButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.run").name)
         Elements.saveButton.title = Elements.saveButton.title.replace("@shortcut@", actionManager.getShortcut("org.jetbrains.web.demo.save").name)
     }
+}
+
+@native interface KotlinWrapperConfig {
+    val version: String
+    val latestStable: Boolean
 }
