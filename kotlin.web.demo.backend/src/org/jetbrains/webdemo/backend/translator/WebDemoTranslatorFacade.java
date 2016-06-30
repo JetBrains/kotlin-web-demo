@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.kotlin.js.config.Config;
+import org.jetbrains.kotlin.js.config.JsConfig;
 import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.facade.K2JSTranslator;
 import org.jetbrains.kotlin.js.facade.MainCallParameters;
@@ -81,7 +81,7 @@ public final class WebDemoTranslatorFacade {
                                                    BackendSessionInfo sessionInfo,
                                                    Map<String, List<ErrorDescriptor>> errors) throws TranslationException {
         Project currentProject = Initializer.getInstance().getEnvironment().getProject();
-        Config config = new LibrarySourcesConfig.Builder(
+        JsConfig config = new LibrarySourcesConfig.Builder(
                 currentProject,
                 "moduleId",
                 LIBRARY_FILES
