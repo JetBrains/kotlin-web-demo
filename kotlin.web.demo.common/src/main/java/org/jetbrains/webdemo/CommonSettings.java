@@ -16,12 +16,8 @@
 
 package org.jetbrains.webdemo;
 
-/**
- * Created by Semyon.Atamas on 2/13/2015.
- */
 public class CommonSettings {
     public static boolean IS_TEST_VERSION = true;
-    public static String KOTLIN_VERSION = "1.0.2";
 
     public static String HELP_DIRECTORY = "help";
     public static String LOGS_DIRECTORY = "logs";

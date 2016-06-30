@@ -58,7 +58,8 @@ object KotlinWrappersManager {
         }
     }
 
-    fun getKotlinWrapper(kotlinVersion: String): KotlinWrapper? {
+    fun getKotlinWrapper(kotlinVersion: String?): KotlinWrapper? {
+        if(kotlinVersion == null) return defaultWrapper;
         return wrappers[kotlinVersion]
     }
 

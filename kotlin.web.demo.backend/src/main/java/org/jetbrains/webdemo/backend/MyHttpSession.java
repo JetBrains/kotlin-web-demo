@@ -83,7 +83,7 @@ public class MyHttpSession {
 
     private void sendConversionResult() {
         try {
-            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.1-2");
+            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper(currentProject.getCompilerVersion());
             String javaCode = request.getParameter("text");
             String kotlinCode = wrapper.translateJavaToKotlin(javaCode);
             writeResponse(kotlinCode, HttpServletResponse.SC_OK);
@@ -96,7 +96,7 @@ public class MyHttpSession {
     private void sendExecutorResult() {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.2");
+            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper(currentProject.getCompilerVersion());
 
             Map<String, String> files = getFilesContentFromProject(currentProject);
             boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");
@@ -157,7 +157,7 @@ public class MyHttpSession {
             int line = Integer.parseInt(request.getParameter("line"));
             int ch = Integer.parseInt(request.getParameter("ch"));
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.1-2");
+            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper(currentProject.getCompilerVersion());
 
             Map<String, String> files = getFilesContentFromProject(currentProject);
             boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");
@@ -173,7 +173,7 @@ public class MyHttpSession {
     public void sendHighlightingResult() {
         try {
             currentProject = objectMapper.readValue(request.getParameter("project"), Project.class);
-            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.1-2");
+            KotlinWrapper wrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper(currentProject.getCompilerVersion());
             Map<String, String> files = getFilesContentFromProject(currentProject);
             boolean isJs = currentProject.confType.equals("js") || currentProject.confType.equals("canvas");
             Map<String, List<ErrorDescriptor>> analysisResult = wrapper.getErrors(files, isJs);
