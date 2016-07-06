@@ -352,13 +352,10 @@ object Application {
                 accordion.selectedProjectView!!.project.save()
             },
             onLogout = {
-                getSessionInfo({ data ->
-                    sessionId = data.id
-                    localStorage["isLoggedIn"] = "false";
-                    loginView.logout()
-                    statusBarView.setStatus(ActionStatusMessage.logout_ok)
-                    accordion.loadAllContent()
-                })
+                localStorage["isLoggedIn"] = "false";
+                loginView.logout()
+                statusBarView.setStatus(ActionStatusMessage.logout_ok)
+                accordion.loadAllContent()
             },
             onLogin = { data ->
                 if (data.isLoggedIn) {
@@ -393,17 +390,6 @@ object Application {
                 }
         )
     }
-
-    fun getSessionInfo(callback: (dynamic) -> Unit) {
-        ajax(
-                url = "kotlinServer?sessionId=$sessionId&type=getSessionInfo",
-                type = HTTPRequestType.GET,
-                dataType = DataType.JSON,
-                timeout = 10000,
-                success = callback
-        )
-    }
-
 
     val generatedCodeView = GeneratedCodeView(document.getElementById("generated-code") as HTMLElement)
 
@@ -512,10 +498,6 @@ object Application {
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.reformat").shortcutKeyNames, "Reformat selected fragment")
         ShortcutsDialogView.addShortcut(actionManager.getShortcut("org.jetbrains.web.demo.save").shortcutKeyNames, "Save current project")
         editor.highlightOnTheFly = Elements.onTheFlyCheckbox.checked
-        getSessionInfo({ data ->
-            sessionId = data.id
-        })
-
 
         jq(document).on("click", ".ui-widget-overlay", {
             jq(".ui-dialog-titlebar-close").trigger("click")

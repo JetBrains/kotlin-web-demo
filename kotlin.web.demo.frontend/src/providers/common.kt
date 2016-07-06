@@ -62,7 +62,7 @@ public enum class HTTPRequestType() {
 }
 
 fun generateAjaxUrl(type: String, parameters: Map<String, String> = emptyMap()): String {
-    var url = "kotlinServer?sessionId=" + sessionId + "&type=" + type
+    var url = "kotlinServer?type=" + type
     for (entry in parameters) {
         url += "&" + entry.key + "=" + entry.value
     }
@@ -85,5 +85,3 @@ fun getErrorsMapFromObject(obj: dynamic, project: Project): Map<File, List<Diagn
     }
     return errors
 }
-
-var sessionId = "-1"

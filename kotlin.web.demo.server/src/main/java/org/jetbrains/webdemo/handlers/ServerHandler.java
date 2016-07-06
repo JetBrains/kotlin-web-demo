@@ -49,10 +49,6 @@ public class ServerHandler {
             SessionInfo sessionInfo;
             try {
                 switch (request.getParameter("type")) {
-                    case ("getSessionInfo"):
-                        sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sendSessionInfo(request, response, sessionInfo);
-                        break;
                     case ("getUserName"):
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         sendUserName(request, response, sessionInfo);
