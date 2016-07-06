@@ -75,6 +75,9 @@ object Application {
             document.getElementById("webdemo-kotlin-version") as HTMLSelectElement,
             onChange = { newValue ->
                 accordion.selectedProjectView!!.project.compilerVersion = newValue
+                editor.removeStyles()
+                problemsView.clear()
+                editor.updateHighlighting()
                 Unit
             }
     )
