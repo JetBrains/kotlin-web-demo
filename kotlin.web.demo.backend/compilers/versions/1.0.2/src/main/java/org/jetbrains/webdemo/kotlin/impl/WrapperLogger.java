@@ -20,7 +20,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class WrapperLogger {
-    private static final Log log = LogFactory.getLog("wrapper-1.0.1-2");
+    private static Log log;
+
+    public static void init(String kotlinVersion) {
+        log = LogFactory.getLog("wrapper-" + kotlinVersion);
+    }
 
     public static void reportException(String message, Throwable e){
         log.error(message, e);
