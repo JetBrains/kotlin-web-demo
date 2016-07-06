@@ -28,7 +28,7 @@ buildscript {
     }
 }
 
-def kotlinVersions = file('kotlin.web.demo.backend/compilers/versions').list();
+ext.kotlinVersions = gradle.ext.kotlinVersions
 
 configure(allprojects.findAll({
     it.name != 'kotlin.web.demo.frontend'

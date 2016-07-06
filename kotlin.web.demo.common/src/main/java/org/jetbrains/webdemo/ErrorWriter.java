@@ -25,35 +25,6 @@ public class ErrorWriter {
     public static final Log log = LogFactory.getLog("exceptionLogger");
     public static ErrorWriter ERROR_WRITER = new ErrorWriter();
 
-    public static String getExceptionForLog(String typeOfRequest, String originUrl, String message, String stackTrace, String moreinfo) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("\n<error>");
-        builder.append("\n<version>");
-        builder.append(CommonSettings.KOTLIN_VERSION);
-        builder.append("</version>");
-        builder.append("\n<type>");
-        builder.append(ResponseUtils.escapeString(typeOfRequest));
-        builder.append("</type>");
-        builder.append("\n<message>");
-        builder.append(ResponseUtils.escapeString(message));
-        builder.append("</message>");
-        builder.append("\n<stack>");
-        builder.append(ResponseUtils.escapeString(stackTrace));
-        builder.append("\n</stack>");
-        builder.append("\n<moreinfo>");
-        builder.append("\n");
-        builder.append("Origin url: ");
-        builder.append(ResponseUtils.escapeString(originUrl));
-        builder.append("\n").append(ResponseUtils.escapeString(moreinfo));
-        builder.append("\n</moreinfo>");
-        builder.append("\n</error>");
-        return builder.toString();
-    }
-
-    public static String getExceptionForLog(String typeOfRequest, String message, String originUrl, String moreinfo) {
-        return getExceptionForLog(typeOfRequest, message, message, originUrl, moreinfo);
-    }
-
     public static String getInfoForLog(String typeOfRequest, String userId, String message) {
         StringBuilder builder = new StringBuilder();
         builder.append("type=").append(typeOfRequest);
@@ -61,17 +32,6 @@ public class ErrorWriter {
         builder.append("userId=");
         builder.append(String.valueOf(userId));
         builder.append(" ip=0 ");
-        builder.append("message=").append(message);
-        return builder.toString();
-    }
-
-    public static String getInfoForLogWoIp(String typeOfRequest, String userId, String message) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("type=").append(typeOfRequest);
-        builder.append(" ");
-        builder.append("userId=");
-        builder.append(String.valueOf(userId));
-        builder.append(" ");
         builder.append("message=").append(message);
         return builder.toString();
     }
