@@ -35,12 +35,14 @@ import java.util.Map;
 public class KotlinWrapperImpl implements KotlinWrapper {
     private Path jarsFolder;
     private String kotlinVersion;
+    private Path wrapperFolder;
 
     @Override
     public void init(List<Path> javaLibraries, String kotlinVersion) {
         this.kotlinVersion = kotlinVersion;
         WrapperLogger.init(kotlinVersion);
         jarsFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion).resolve("kotlin");
+        wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
         WrapperSettings.JS_LIB_ROOT = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion).resolve("js");
         List<Path> libraries = getKotlinRuntimeLibraries();
         libraries.addAll(javaLibraries);
@@ -94,8 +96,18 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     }
 
     @Override
-    public Path getKotlinCompilerJar() {
-        return jarsFolder.resolve("kotlin-compiler.jar");
+    public Path getKotlinRuntimeJar() {
+        return jarsFolder.resolve("kotlin-runtime-" + kotlinVersion + ".jar");
+    }
+
+    @Override
+    public Path getWrapperFolder() {
+        return wrapperFolder;
+    }
+
+    @Override
+    public String getWrapperVersion() {
+        return kotlinVersion;
     }
 
     private List<KtFile> createPsiFiles(Map<String, String> files) {

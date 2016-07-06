@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.test;
 
 import junit.framework.TestCase;
+import kotlin.text.Regex;
 import org.jetbrains.webdemo.ResponseUtils;
 
 import java.io.BufferedReader;
@@ -76,11 +77,11 @@ public class TestUtils {
         return str.replaceAll("([\n])", System.getProperty("line.separator"));
     }
 
-    public static String getNameByTestName(TestCase testCase) {
-        String testName = testCase.getName();
+    public static String getNameByTestName(String testName) {
         testName = ResponseUtils.substringAfter(testName, "test$");
         testName = testName.replace("$", "/");
         testName = testName.replace("_", " ");
+        testName = testName.replaceFirst("\\[.*\\]", "");
         return testName;
     }
 

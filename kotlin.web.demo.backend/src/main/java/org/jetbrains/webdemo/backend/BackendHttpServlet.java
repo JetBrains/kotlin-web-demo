@@ -63,7 +63,8 @@ public class BackendHttpServlet extends HttpServlet {
         ErrorWriter.getInstance();
 
         try {
-            Initializer.initializeExecutorsPolicyFile();
+            Path policyTemplate = Paths.get(BackendHttpServlet.class.getResource("/executors.policy.template").toURI());
+            Initializer.initializeExecutorsPolicyFile(policyTemplate);
         } catch (Throwable e) {
             log.fatal("FATAL ERROR: Initialisation of executors policy file failed, server didn't start", e);
             System.exit(1);

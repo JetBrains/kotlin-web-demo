@@ -110,8 +110,8 @@ public class MyHttpSession {
                             compilationResult.getFiles(),
                             compilationResult.getMainClass(),
                             wrapper.getKotlinRuntimeLibraries(),
-                            wrapper.getKotlinCompilerJar(),
                             currentProject.args,
+                            wrapper.getWrapperFolder().resolve("executors.policy"),
                             currentProject.confType.equals("junit")
                     );
                     executionResult.addWarningsFromCompiler(errorDescriptors);

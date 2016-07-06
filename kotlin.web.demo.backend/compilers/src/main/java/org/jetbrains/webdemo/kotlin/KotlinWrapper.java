@@ -39,5 +39,9 @@ public interface KotlinWrapper {
 
     MethodPositions getMethodPositions(byte[] classFile, String classFileName);
 
-    Path getKotlinCompilerJar();
+    Path getKotlinRuntimeJar();
+
+    Path getWrapperFolder();
+
+    String getWrapperVersion();
 }

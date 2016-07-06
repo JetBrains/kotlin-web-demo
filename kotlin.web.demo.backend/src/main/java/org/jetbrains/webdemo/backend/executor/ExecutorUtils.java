@@ -46,8 +46,8 @@ public class ExecutorUtils {
             Map<String, byte[]> files,
             String mainClass,
             List<Path> kotlinRuntimeJars,
-            Path kotlinCompilerJar,
             String arguments,
+            Path executorsPolicy,
             boolean isJunit
     ) throws Exception {
         Path codeDirectory = null;
@@ -57,14 +57,13 @@ public class ExecutorUtils {
                     .enableAssertions()
                     .setMemoryLimit(32)
                     .enableSecurityManager()
-                    .setPolicyFile(Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "executors.policy"))
+                    .setPolicyFile(executorsPolicy)
                     .addToClasspath(kotlinRuntimeJars)
                     .addToClasspath(jarFiles)
                     .addToClasspath(codeDirectory);
             if (isJunit) {
                 executorBuilder.addToClasspath(junit);
                 executorBuilder.addToClasspath(hamcrest);
-                executorBuilder.addToClasspath(kotlinCompilerJar);
                 executorBuilder.setMainClass("org.jetbrains.webdemo.executors.JunitExecutor");
                 executorBuilder.addArgument(codeDirectory.toString());
             } else {

@@ -17,6 +17,8 @@
 package org.jetbrains.webdemo.backend;
 
 import org.jetbrains.webdemo.CommonSettings;
+import org.jetbrains.webdemo.kotlin.KotlinWrapper;
+import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,13 +28,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Initializer {
-    public static void initializeExecutorsPolicyFile() throws IOException {
-        Path templateFilePath = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
+    public static void initializeExecutorsPolicyFile(Path templateFilePath) throws IOException {
         String templateFileContent = new String(Files.readAllBytes(templateFilePath));
-        String policyFileContent = templateFileContent.replaceAll("@WEBAPPS_ROOT@", CommonSettings.WEBAPP_ROOT_DIRECTORY.replaceAll("\\\\", "/"))
-                .replaceAll("@KOTLIN_LIBS@", BackendSettings.KOTLIN_LIBS_DIR.replaceAll("\\\\", "/"));
-        try (PrintWriter policyFile = new PrintWriter(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
-            policyFile.write(policyFileContent);
+        String policyFileContent = templateFileContent.replaceAll("@LIBS_DIR@", BackendSettings.EXECUTORS_LIBS_DIR.replaceAll("\\\\", "/"));
+        for (KotlinWrapper wrapper : KotlinWrappersManager.INSTANCE.getAllWrappers()) {
+            policyFileContent = policyFileContent.replaceAll("@KOTLIN_RUNTIME@", wrapper.getKotlinRuntimeJar().toUri().toString().replace("file:///", ""));
+            try (PrintWriter policyFile = new PrintWriter(wrapper.getWrapperFolder().resolve("executors.policy").toFile())) {
+                policyFile.write(policyFileContent);
+            }
+
         }
     }
 }

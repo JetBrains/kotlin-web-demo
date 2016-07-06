@@ -90,7 +90,7 @@ for (kotlinVersion in kotlinVersions) {
             compile project(":kotlin.web.demo.backend:compilers")
             kotlin tc("bt345:$kotlinVersion:internal/kotlin-compiler-before-shrink.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/lib/kotlin-plugin.jar")
-            kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/lib/kotlin-runtime.jar")
+            kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-runtime.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
             kotlinJS tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
@@ -260,6 +260,7 @@ project('kotlin.web.demo.test') {
         testCompile project(':kotlin.web.demo.backend:compilers')
         testCompile project(':kotlin.web.demo.backend')
         testCompile project(':kotlin.web.demo.server')
+        testCompile group: 'org.jetbrains.kotlin', 'name': 'kotlin-test', 'version': '1.0.1-2'
         testCompile group: 'junit', 'name': 'junit', 'version': '4.12'
     }
     for (kotlinVersion in kotlinVersions) {
@@ -267,6 +268,7 @@ project('kotlin.web.demo.test') {
     }
     test.dependsOn(":kotlin.web.demo.executors:jar")
     test.dependsOn(":copyKotlinLibs")
+    test.dependsOn(":copyDependencies")
 }
 
 project(':kotlin.web.demo.backend:compilers:versions').jar { onlyIf { false } }

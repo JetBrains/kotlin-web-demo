@@ -18,14 +18,23 @@ package org.jetbrains.webdemo.test.j2kconverter;
 
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 
+@RunWith(Parameterized.class)
 public class J2KConverterTest extends BaseTest {
 
+    public J2KConverterTest(String kotlinVersion) {
+        super(kotlinVersion);
+    }
+
+    @Test
     public void test$j2kconverter$class() throws IOException {
-        String javaCodeFileName = TestUtils.getNameByTestName(this) + ".java";
-        String kotlinCodeFileName = TestUtils.getNameByTestName(this) + ".kt";
+        String javaCodeFileName = TestUtils.getNameByTestName(name.getMethodName()) + ".java";
+        String kotlinCodeFileName = TestUtils.getNameByTestName(name.getMethodName()) + ".kt";
         compareResult(javaCodeFileName, kotlinCodeFileName);
     }
 

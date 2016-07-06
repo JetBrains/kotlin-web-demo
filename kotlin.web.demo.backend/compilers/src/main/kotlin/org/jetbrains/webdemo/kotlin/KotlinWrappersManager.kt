@@ -39,7 +39,7 @@ object KotlinWrappersManager {
 
     fun init(wrappersDir: Path, javaLibraries: List<Path>, relativeClassDirectoryPath: Path) {
         this.wrappersDir = wrappersDir
-        val configFile = KotlinWrappersManager::class.java.classLoader.getResourceAsStream("/compilers-config.json")
+        val configFile = KotlinWrappersManager::class.java.getResourceAsStream("/compilers-config.json")
         wrappersConfig = jacksonObjectMapper().readValue(configFile)
         for ((version, isLatestStable) in wrappersConfig) {
             try {
@@ -57,6 +57,10 @@ object KotlinWrappersManager {
 
         }
     }
+
+    fun getKotlinVersions(): Set<String> = wrappers.keys
+
+    fun getAllWrappers(): Collection<KotlinWrapper> = wrappers.values;
 
     fun getKotlinWrapper(kotlinVersion: String?): KotlinWrapper? {
         if(kotlinVersion == null) return defaultWrapper;

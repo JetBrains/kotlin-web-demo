@@ -25,6 +25,8 @@ import org.jetbrains.webdemo.backend.executor.result.TestRunInfo;
 import org.jetbrains.webdemo.examples.Example;
 import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
+import org.jetbrains.webdemo.kotlin.KotlinWrapper;
+import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 import org.jetbrains.webdemo.kotlin.datastructures.TextPosition;
@@ -35,6 +37,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,7 +47,7 @@ public class ExamplesTest extends BaseTest {
     private final Example project;
 
     public ExamplesTest(Example project) {
-        super(project.name);
+        super(KotlinWrappersManager.INSTANCE.getDefaultWrapper().getWrapperVersion(), project.name);
         this.project = project;
     }
 
@@ -107,8 +110,8 @@ public class ExamplesTest extends BaseTest {
                 compilationResult.getFiles(),
                 compilationResult.getMainClass(),
                 kotlinWrapper.getKotlinRuntimeLibraries(),
-                kotlinWrapper.getKotlinCompilerJar(),
                 args,
+                kotlinWrapper.getWrapperFolder().resolve("executors.policy"),
                 isJunit
         );
     }
@@ -135,7 +138,7 @@ public class ExamplesTest extends BaseTest {
     }
 
     @Parameterized.Parameters(name = "{index} {0}")
-    public static Collection<Object[]> data() throws IOException {
+    public static Collection<Object[]> data() throws IOException, URISyntaxException {
         init();
         List<Object[]> parameters = new ArrayList<>();
         for (Example project : ExamplesUtils.getAllExamples(ExamplesFolder.ROOT_FOLDER)) {

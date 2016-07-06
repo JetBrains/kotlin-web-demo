@@ -18,25 +18,36 @@ package org.jetbrains.webdemo.test.run;
 
 import org.jetbrains.webdemo.backend.executor.ExecutorUtils;
 import org.jetbrains.webdemo.backend.executor.result.JavaExecutionResult;
+import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import java.io.IOException;
 import java.security.AccessControlException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+@RunWith(Parameterized.class)
 public class RunTest extends BaseTest {
 
+    public RunTest(String kotlinVersion) {
+        super(kotlinVersion);
+    }
+
+    @Test
     public void test$execution$FooOutErr() throws Exception {
         String expectedResult = "<outStream>Hello\n</outStream><errStream>ERROR\n</errStream>";
-        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        String fileName = TestUtils.getNameByTestName(name.getMethodName()) + ".kt";
         compareResult(fileName, "", expectedResult);
     }
 
+    @Test
     public void test$execution$ManyArgs() throws Exception {
         String expectedResult = "<outStream>a\nb\nc\n</outStream>";
-        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        String fileName = TestUtils.getNameByTestName(name.getMethodName()) + ".kt";
         compareResult(fileName, "a b c", expectedResult);
 
         compareResult(fileName, "\"a\" b c", expectedResult);
@@ -46,27 +57,31 @@ public class RunTest extends BaseTest {
         compareResult(fileName, "", expectedResult);
     }
 
+    @Test
     public void test$execution$FooOut() throws Exception {
         String expectedResult = "<outStream>Hello\n</outStream>";
-        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        String fileName = TestUtils.getNameByTestName(name.getMethodName()) + ".kt";
         compareResult(fileName, "", expectedResult);
     }
 
+    @Test
     public void test$execution$Reflection() throws Exception {
         String expectedResult = "<outStream>Any\nA\n</outStream>";
-        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        String fileName = TestUtils.getNameByTestName(name.getMethodName()) + ".kt";
         compareResult(fileName, "", expectedResult);
     }
 
+    @Test
     public void test$execution$FooErr() throws Exception {
         String expectedResult = "<errStream>ERROR\n</errStream>";
-        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        String fileName = TestUtils.getNameByTestName(name.getMethodName()) + ".kt";
         compareResult(fileName, "", expectedResult);
     }
 
+    @Test
     //Runtime.getRuntime().exec() Exception
     public void test$errors$securityExecutionError() throws Exception {
-        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        String fileName = TestUtils.getNameByTestName(name.getMethodName()) + ".kt";
         checkException(fileName, "", AccessControlException.class.getName());
     }
 
@@ -75,10 +90,10 @@ public class RunTest extends BaseTest {
         assertEquals(exceptionName, result.getException().getFullName());
     }
 
-
+    @Test
     //Exception when read file from other directory
     public void test$errors$securityFilePermissionError() throws Exception {
-        String fileName = TestUtils.getNameByTestName(this) + ".kt";
+        String fileName = TestUtils.getNameByTestName(name.getMethodName()) + ".kt";
         checkException(fileName, "", AccessControlException.class.getName());
     }
 
@@ -96,8 +111,8 @@ public class RunTest extends BaseTest {
                 compilationResult.getFiles(),
                 compilationResult.getMainClass(),
                 kotlinWrapper.getKotlinRuntimeLibraries(),
-                kotlinWrapper.getKotlinCompilerJar(),
                 args,
+                kotlinWrapper.getWrapperFolder().resolve("executors.policy"),
                 false
         );
     }

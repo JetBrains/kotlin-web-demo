@@ -8,6 +8,7 @@ statistics
 !.idea/vcs.xml
 kotlin.web.demo.backend/compilers/versions/*/js
 kotlin.web.demo.backend/compilers/versions/*/kotlin
+kotlin.web.demo.backend/compilers/versions/*/executors.policy
 *.iml
 kotlin.web.demo.server/web/META-INF/context.xml
 kotlin.web.demo.executors/executors.policy

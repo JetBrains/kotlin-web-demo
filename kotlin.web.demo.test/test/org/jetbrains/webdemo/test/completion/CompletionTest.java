@@ -16,18 +16,25 @@
 
 package org.jetbrains.webdemo.test.completion;
 
+import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@RunWith(Parameterized.class)
 public class CompletionTest extends BaseTest {
 
+    public CompletionTest(String kotlinVersion) {
+        super(kotlinVersion);
+    }
+
+    @Test
     public void test$java$system() throws IOException {
         List<CompletionVariant> expectedVariants = new ArrayList<>();
         expectedVariants.add(new CompletionVariant(
@@ -39,6 +46,7 @@ public class CompletionTest extends BaseTest {
         compareResult(1, 6, expectedVariants, false);
     }
 
+    @Test
     public void test$java$out() throws IOException {
         List<CompletionVariant> expectedVariants = new ArrayList<>();
         expectedVariants.add(new CompletionVariant(
@@ -49,7 +57,8 @@ public class CompletionTest extends BaseTest {
         ));
         compareResult(1, 10, expectedVariants, false);
     }
-//
+
+    @Test
     public void test$all$variable() throws IOException {
         List<CompletionVariant> expectedVariants = new ArrayList<>();
         expectedVariants.add(new CompletionVariant(
@@ -62,6 +71,7 @@ public class CompletionTest extends BaseTest {
         compareResult(14, 23, expectedVariants, true);
     }
 
+    @Test
     public void test$all$class() throws IOException {
         List<CompletionVariant> expectedVariants = new ArrayList<>();
         expectedVariants.add(new CompletionVariant(
@@ -85,6 +95,7 @@ public class CompletionTest extends BaseTest {
         compareResult(12, 28, expectedVariants, false);
     }
 
+    @Test
     public void test$js$type$in$constructor() throws IOException {
         List<CompletionVariant> expectedVariants = new ArrayList<>();
         expectedVariants.add(new CompletionVariant(
@@ -95,6 +106,8 @@ public class CompletionTest extends BaseTest {
         ));
         compareResult(12, 28, expectedVariants, true);
     }
+
+    @Test
     public void test$java$println() throws IOException {
         List<CompletionVariant> expectedVariants = new ArrayList<>();
         expectedVariants.add(new CompletionVariant(
@@ -118,6 +131,7 @@ public class CompletionTest extends BaseTest {
         compareResult(1, 20, expectedVariants, false);
     }
 
+    @Test
     public void test$js$a() throws IOException {
         List<CompletionVariant> expectedVariants = new ArrayList<>();
         expectedVariants.add(new CompletionVariant(
@@ -134,9 +148,8 @@ public class CompletionTest extends BaseTest {
         Map<String, String> files = new HashMap<>();
         files.put("root.kt", TestUtils.getDataFromFile("completion/root.kt"));
         List<CompletionVariant> result = kotlinWrapper.getCompletionVariants(files, "root.kt", line, ch, isJs);
-        for(CompletionVariant variant : expectedVariants) {
+        for (CompletionVariant variant : expectedVariants) {
             assertTrue(result.contains(variant));
         }
     }
-
 }

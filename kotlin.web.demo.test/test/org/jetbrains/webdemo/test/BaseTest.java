@@ -24,24 +24,35 @@ import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
+import org.junit.Rule;
+import org.junit.rules.TestName;
+import org.junit.runners.Parameterized;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public abstract class BaseTest extends TestCase {
-    protected static KotlinWrapper kotlinWrapper = null;
+    protected KotlinWrapper kotlinWrapper = null;
     private static boolean initialized = false;
+    @Rule
+    public TestName name = new TestName();
 
-    public BaseTest(String name) {
+    public BaseTest(String kotlinVersion, String name) {
         super(name);
+        kotlinWrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper(kotlinVersion);
     }
 
-    public BaseTest() {
+    public BaseTest(String kotlinVersion) {
+        kotlinWrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper(kotlinVersion);
     }
 
     @Override
@@ -50,7 +61,7 @@ public abstract class BaseTest extends TestCase {
         init();
     }
 
-    public static void init() throws IOException {
+    public static void init() throws IOException, URISyntaxException {
         if (!initialized) {
             Path currentAbsolutePath = TestUtils.getApplicationFolder();
             CommonSettings.WEBAPP_ROOT_DIRECTORY = currentAbsolutePath + File.separator + "kotlin.web.demo.test" + File.separator + "resources";
@@ -62,9 +73,8 @@ public abstract class BaseTest extends TestCase {
             Path wrappersDir = currentAbsolutePath.resolve("kotlin.web.demo.backend").resolve("compilers").resolve("versions");
             Path junitLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
             KotlinWrappersManager.INSTANCE.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("build", "classes", "main"));
-            kotlinWrapper = KotlinWrappersManager.INSTANCE.getKotlinWrapper("1.0.1-2");
 
-            initializePolicyFile();
+            initializePolicyFiles();
             if (ExamplesFolder.ROOT_FOLDER == null) {
                 ApplicationSettings.LOAD_TEST_VERSION_OF_EXAMPLES = true;
                 ApplicationSettings.EXAMPLES_DIRECTORY = currentAbsolutePath.resolve("kotlin.web.demo.server")
@@ -82,15 +92,16 @@ public abstract class BaseTest extends TestCase {
 //        return myEnvironmentManager.getEnvironment();
 //    }
 
-    protected static void initializePolicyFile() throws IOException {
-        Path kotlinLibsDir = kotlinWrapper.getKotlinCompilerJar().getParent();
-        Path templateFilePath = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy.template");
-        String templateFileContent = new String(Files.readAllBytes(templateFilePath));
-        String policyFileContent = templateFileContent.replaceAll("@CLASS_PATH@", BackendSettings.CLASS_PATH.replaceAll("\\\\", "/"));
-        policyFileContent = policyFileContent.replaceAll("@LIBS_DIR@", BackendSettings.EXECUTORS_LIBS_DIR.replaceAll("\\\\", "/"));
-        policyFileContent = policyFileContent.replaceAll("@KOTLIN_LIBS@", kotlinLibsDir.toString().replaceAll("\\\\", "/"));
-        try (PrintWriter policyFile = new PrintWriter(CommonSettings.WEBAPP_ROOT_DIRECTORY + File.separator + "executors.policy")) {
-            policyFile.write(policyFileContent);
+    protected static void initializePolicyFiles() throws IOException, URISyntaxException {
+        for (KotlinWrapper wrapper : KotlinWrappersManager.INSTANCE.getAllWrappers()) {
+            Path templateFilePath = Paths.get(KotlinWrappersManager.class.getResource("/executors.policy.template").toURI());
+            String templateFileContent = new String(Files.readAllBytes(templateFilePath));
+            String policyFileContent = templateFileContent;
+            policyFileContent = policyFileContent.replaceAll("@LIBS_DIR@", BackendSettings.EXECUTORS_LIBS_DIR.replaceAll("\\\\", "/"));
+            policyFileContent = policyFileContent.replaceAll("@KOTLIN_RUNTIME@", wrapper.getKotlinRuntimeJar().toUri().toString().replace("file:///", ""));
+            try (PrintWriter policyFile = new PrintWriter(wrapper.getWrapperFolder().resolve("executors.policy").toFile())) {
+                policyFile.write(policyFileContent);
+            }
         }
     }
 
@@ -105,4 +116,15 @@ public abstract class BaseTest extends TestCase {
 //        sessionInfo = null;
 //        super.tearDown();
 //    }
+
+    @Parameterized.Parameters(name = "kotlin-{0}")
+    public static Collection<Object[]> data() throws IOException, URISyntaxException {
+        init();
+        List<Object[]> parameters = new ArrayList<>();
+        Collection<String> versions = KotlinWrappersManager.INSTANCE.getKotlinVersions();
+        for (String version : versions) {
+            parameters.add(new Object[]{version});
+        }
+        return parameters;
+    }
 }
