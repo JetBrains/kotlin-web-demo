@@ -20,7 +20,6 @@ import application.Application
 import model.File
 import model.Project
 import utils.Object
-import utils.clear
 import utils.eval
 import views.Configuration
 import views.ConfigurationType

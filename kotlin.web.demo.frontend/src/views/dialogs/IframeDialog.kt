@@ -42,7 +42,7 @@ class IframeDialog(kotlinVersion: String) {
             resizable = false,
             autoOpen = false,
             modal = true,
-            onClose = { iframe.clear() }
+            onClose = { iframe.contentWindow!!.location.reload() }
     )
 
     fun open() {

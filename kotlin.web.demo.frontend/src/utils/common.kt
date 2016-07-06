@@ -148,10 +148,6 @@ fun unBlockContent() {
     (document.getElementById("global-overlay") as HTMLElement).style.display = "none"
 }
 
-fun HTMLIFrameElement.clear() {
-    this.contentWindow!!.location.reload()
-}
-
 @native
 val Object: dynamic
 
