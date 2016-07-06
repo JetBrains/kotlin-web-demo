@@ -36,12 +36,14 @@ import utils.jquery.ui.Dialog
 import utils.jquery.ui.tabs
 import views.*
 import views.dialogs.ConverterView
+import views.dialogs.IframeDialog
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import views.editor.Diagnostic
 import views.editor.Editor
 import views.tabs.*
 import views.tree.AccordionView
+import java.util.*
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
@@ -257,16 +259,11 @@ object Application {
     private val converterProvider = ConverterProvider()
     private val converterView = ConverterView(converterProvider)
 
-    public val iframe: HTMLIFrameElement = document.getElementById("k2js-iframe") as HTMLIFrameElement
-    public val iframeDialog: Dialog = Dialog(
-            document.getElementById("iframePopup") as HTMLElement,
-            width = 640,
-            height = 360,
-            resizable = false,
-            autoOpen = false,
-            modal = true,
-            onClose = { iframe.clear() }
-    )
+    private val iframeDialogs = HashMap<String, IframeDialog>()
+    fun getIframeDialog(kotlinVersion: String): IframeDialog {
+        val iframeDialog = iframeDialogs.get(kotlinVersion) ?: throw Throwable("No such kotlin version: $kotlinVersion")
+        return iframeDialog
+    }
 
     val fileProvider = FileProvider(
             { error, status ->
@@ -389,6 +386,10 @@ object Application {
                 timeout = 1000,
                 success = { kotlinVersions: Array<KotlinWrapperConfig> ->
                     versionView.init(kotlinVersions)
+                    kotlinVersions.forEach { wrapperConfig ->
+                        val version = wrapperConfig.version
+                        iframeDialogs[version] = IframeDialog(version)
+                    }
                 }
         )
     }

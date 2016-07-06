@@ -245,6 +245,10 @@ project("kotlin.web.demo.server") {
                 include "kotlin.js"
                 into "static/kotlin/${kotlinVersion}"
             }
+            from(project(":kotlin.web.demo.frontend").projectDir.absolutePath + File.separator + "static") {
+                include "iframe.html"
+                into "static/kotlin/${kotlinVersion}"
+            }
         }
     }
 }

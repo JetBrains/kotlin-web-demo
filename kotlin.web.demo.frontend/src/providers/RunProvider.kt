@@ -105,20 +105,23 @@ class RunProvider(
                     val translationResult: TranslationResult;
                     val errors = getErrorsMapFromObject(data.errors, project)
                     if (data.jsCode != null) {
+                        val kotlinVersion = Application.versionView.defaultVersion
+                        val iframeDialog = Application.getIframeDialog(kotlinVersion)
+
                         try {
                             //Placed here because of firefox bug
                             //(error modifying context of canvas in invisible iframe)
                             if (runConfiguration ==
                                     ConfigurationType.CANVAS.name.toLowerCase()) {
-                                Application.iframeDialog.open()
+                                iframeDialog.open()
                             }
-                            val out: String = Application.iframe.contentWindow!!.eval(data.jsCode)
+                            val out: String = iframeDialog.iframe.contentWindow!!.eval(data.jsCode)
                             translationResult = TranslationResult(errors, data.jsCode, out, null)
                         } catch (e: Throwable) {
                             translationResult = TranslationResult(errors, data.jsCode, null, e)
                         } finally {
                             if (runConfiguration == "js") {
-                                Application.iframe.clear()
+                                iframeDialog.iframe.contentWindow!!.location.reload()
                             }
                         }
                     } else {
@@ -177,6 +180,7 @@ class JunitExecutionResult(
         testResults: dynamic
 ) : RunResult(errors) {
     val testResults = HashMap<String, List<TestResult>>()
+
     init {
         for (className in Object.keys(testResults)) {
             val classTests: Array<TestResult> = testResults[className]
