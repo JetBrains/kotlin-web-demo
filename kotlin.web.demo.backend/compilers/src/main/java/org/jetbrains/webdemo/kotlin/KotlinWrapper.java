@@ -37,7 +37,7 @@ public interface KotlinWrapper {
 
     List<Path> getKotlinRuntimeLibraries();
 
-    MethodPositions getMethodPositions(byte[] classFile, String classFileName);
+    MethodPositions getMethodPositions(Map<String, byte[]> classFiles);
 
     Path getKotlinRuntimeJar();
 

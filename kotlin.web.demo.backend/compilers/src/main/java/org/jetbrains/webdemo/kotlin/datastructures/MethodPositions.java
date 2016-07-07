@@ -16,28 +16,28 @@
 
 package org.jetbrains.webdemo.kotlin.datastructures;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class MethodPositions {
-    private String sourceFile;
-    private String classFileName;
-    private Map<String, Integer> positions;
+    private Map<String, ClassMethodPositions> classMethodPositions = new HashMap<>();
 
-    public MethodPositions(String sourceFile, String classFileName, Map<String, Integer> positions) {
-        this.sourceFile = sourceFile;
-        this.classFileName = classFileName;
-        this.positions = positions;
+    public void addClassMethodPositions(String classFileName, ClassMethodPositions methodPositions){
+        String className = classFileName.substring(0, classFileName.lastIndexOf('.'));
+        classMethodPositions.put(className, methodPositions);
     }
 
-    public String getSourceFile() {
-        return sourceFile;
+    public int getMethodPosition(String className, String methodName) {
+        if(!classMethodPositions.containsKey(className)) {
+            return -1;
+        }
+        return classMethodPositions.get(className).getMethodPosition(methodName);
     }
 
-    public Integer getMethodPosition(String methodName) {
-        return positions.get(methodName);
-    }
-
-    public String getClassFileName() {
-        return classFileName;
+    public String getSourceFile(String className) {
+        if(!classMethodPositions.containsKey(className)) {
+            return null;
+        }
+        return classMethodPositions.get(className).getSourceFile();
     }
 }

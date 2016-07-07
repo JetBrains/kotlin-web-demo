@@ -23,6 +23,7 @@ import org.jetbrains.webdemo.Project
 import org.jetbrains.webdemo.ResponseUtils
 import org.jetbrains.webdemo.backend.executor.ExecutorUtils
 import org.jetbrains.webdemo.backend.executor.result.ExecutionResult
+import org.jetbrains.webdemo.backend.executor.result.JunitExecutionResult
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor
 import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult
@@ -96,7 +97,18 @@ class MyHttpSession {
                             wrapper.wrapperFolder.resolve("executors.policy"),
                             currentProject.confType == "junit")
                     executionResult.addWarningsFromCompiler(errorDescriptors)
-                    //TODO add method positions for junit tests
+
+                    if (executionResult is JunitExecutionResult) {
+                        val classFileNames = executionResult.testResults.map { it.key + ".class" }
+                        val classFiles = compilationResult.files.filter {
+                            it.key in classFileNames
+                        }
+                        val methodPositions = wrapper.getMethodPositions(classFiles)
+                        for (test in executionResult.testResults.values.flatten()) {
+                            test.methodPosition = methodPositions.getMethodPosition(test.className, test.methodName)
+                            test.sourceFileName = methodPositions.getSourceFile(test.className)
+                        }
+                    }
                 } else {
                     executionResult = ExecutionResult(errorDescriptors)
                 }
@@ -158,7 +170,7 @@ class MyHttpSession {
         try {
             val currentProject: Project = objectMapper.readValue<Project>(request.getParameter("project"))
             val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject.compilerVersion)
-            if(wrapper == null) {
+            if (wrapper == null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "")
                 return;
             }

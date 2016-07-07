@@ -17,13 +17,13 @@
 package org.jetbrains.webdemo.kotlin.impl;
 
 import org.jetbrains.org.objectweb.asm.*;
-import org.jetbrains.webdemo.kotlin.datastructures.MethodPositions;
+import org.jetbrains.webdemo.kotlin.datastructures.ClassMethodPositions;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MethodsFinder {
-    public static MethodPositions readMethodPositions(byte[] classFile, String classFileName) {
+    public static ClassMethodPositions readClassMethodPositions(byte[] classFile, String classFileName) {
         ClassReader classReader = new ClassReader(classFile);
         final Map<String, Integer> positions = new HashMap<String, Integer>();
 
@@ -55,7 +55,7 @@ public class MethodsFinder {
                 0
         );
 
-        return new MethodPositions(
+        return new ClassMethodPositions(
                 sourceFileName[0],
                 classFileName,
                 positions

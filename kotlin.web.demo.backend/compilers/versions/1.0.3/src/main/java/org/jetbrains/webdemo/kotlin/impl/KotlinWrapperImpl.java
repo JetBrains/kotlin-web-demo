@@ -91,11 +91,6 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     }
 
     @Override
-    public MethodPositions getMethodPositions(byte[] classFile, String classFileName) {
-        return MethodsFinder.readMethodPositions(classFile, classFileName);
-    }
-
-    @Override
     public Path getKotlinRuntimeJar() {
         return jarsFolder.resolve("kotlin-runtime-" + kotlinVersion + ".jar");
     }
@@ -108,6 +103,15 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
     public String getWrapperVersion() {
         return kotlinVersion;
+    }
+
+    @Override
+    public MethodPositions getMethodPositions(Map<String, byte[]> classFiles) {
+        MethodPositions methodPositions= new MethodPositions();
+        for(String key : classFiles.keySet()){
+            methodPositions.addClassMethodPositions(key, MethodsFinder.readClassMethodPositions(classFiles.get(key), key));
+        }
+        return methodPositions;
     }
 
     private List<KtFile> createPsiFiles(Map<String, String> files) {
