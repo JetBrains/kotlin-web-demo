@@ -126,6 +126,8 @@ project("kotlin.web.demo.backend") {
     }
 
     war {
+        archiveName "WebDemoBackend.war"
+
         from(project(':kotlin.web.demo.executors').projectDir) {
             include 'executors.policy.template'
         }
@@ -227,6 +229,8 @@ project("kotlin.web.demo.server") {
 
     war {
         dependsOn ':kotlin.web.demo.frontend:build'
+        archiveName "WebDemo.war"
+
         from('examples') {
             into 'examples'
         }
@@ -268,7 +272,6 @@ project('kotlin.web.demo.test') {
     }
     test.dependsOn(":kotlin.web.demo.executors:jar")
     test.dependsOn(":copyKotlinLibs")
-    test.dependsOn(":copyDependencies")
 }
 
 project(':kotlin.web.demo.backend:compilers:versions').jar { onlyIf { false } }
