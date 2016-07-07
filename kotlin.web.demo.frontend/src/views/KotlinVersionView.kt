@@ -21,6 +21,10 @@ import org.w3c.dom.HTMLSelectElement
 import kotlinx.html.dom.append
 import kotlinx.html.option
 import org.w3c.dom.events.Event
+import utils.jquery.jq
+import utils.jquery.on
+import utils.jquery.ui.selectmenu
+import utils.jquery.value
 import kotlin.properties.Delegates
 
 class KotlinVersionView(
@@ -28,12 +32,17 @@ class KotlinVersionView(
         val onChange: (String) -> dynamic
 ) {
     var defaultVersion by Delegates.notNull<String>()
+    var select = jq(element)
 
     init {
-        element.onchange = { event ->
+        select.selectmenu(json(
+                "icons" to json( "button" to "selectmenu-arrow-icon" ),
+                "position" to json("my" to "bottom", "at" to "top")
+        ))
+        select.on("selectmenuchange", { event ->
             val newValue = (event.currentTarget as HTMLSelectElement).value
             onChange(newValue)
-        }
+        })
     }
 
     fun init(kotlinVersions: Array<KotlinWrapperConfig>){
@@ -42,20 +51,22 @@ class KotlinVersionView(
                 defaultVersion = it.version
             }
             element.append.option {
-                +it.version
+                + ("v. " + it.version)
                 value = it.version
                 if(it.latestStable){
                     selected = true
                 }
             }
         }
+        select.selectmenu("refresh")
     }
 
     fun setVersion(newVersion: String?) {
         if(newVersion != null) {
-            element.value = newVersion
+            select.value(newVersion)
         } else {
-            element.value = defaultVersion
+            select.value(defaultVersion)
         }
+        select.selectmenu("refresh")
     }
 }

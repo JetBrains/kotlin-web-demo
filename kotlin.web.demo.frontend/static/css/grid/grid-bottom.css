@@ -107,12 +107,17 @@
 }
 
 .kotlin-info {
-    line-height: 22px;
     float: right;
+    display: flex;
+    align-items: center;
+    height: 100%;
     font-size: 14px;
     padding: 0 10px;
-    margin-top: 3px;
     color: #000000;
+}
+
+#webdemo-kotlin-version-button {
+    margin-left: 5px;
 }
 
 #statusBarWrapper {

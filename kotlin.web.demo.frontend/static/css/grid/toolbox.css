@@ -145,19 +145,23 @@
     font-size: 12px;
 }
 
-#runMode-button {
+#runMode .ui-selectmenu-button{
     float: left;
-    outline: none;
     top: 4px;
+    margin-bottom: 2px;
+}
+
+.ui-selectmenu-button {
+    outline: none;
+    line-height: 1;
     border: 1px solid #969696;
     background-color: #f9f9f9;
     padding: 4px;
     font-size: 12px;
     border-radius: 3px;
-    margin-bottom: 2px;
 }
 
-#runMode-button .ui-icon.selectmenu-arrow-icon {
+.ui-selectmenu-button .ui-icon.selectmenu-arrow-icon {
     position: static;
     width: 7px;
     height: 4px;
@@ -166,23 +170,23 @@
     background: url("/static/images/icons_all_sprite.png") -100px -750px;
 }
 
-#runMode-button .ui-selectmenu-text {
+.ui-selectmenu-button span.ui-selectmenu-text {
     padding: 0;
     line-height: 1;
     display: inline;
 }
 
-#runMode-menu {
+.ui-selectmenu-menu {
     border: 1px solid #969696;
     border-radius: 3px;
     background-color: #ffffff;
 }
 
-#runMode-menu .ui-menu-item {
+.ui-selectmenu-menu .ui-menu-item {
     padding: 2px;
 }
 
-#runMode-menu .ui-menu-item.ui-state-focus {
+.ui-selectmenu-menu .ui-menu-item.ui-state-focus {
     margin: 0;
     background-color: #eeeeee;
 }
