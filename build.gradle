@@ -229,7 +229,7 @@ project("kotlin.web.demo.server") {
 
     war {
         dependsOn ':kotlin.web.demo.frontend:build'
-        archiveName "WebDemo.war"
+        archiveName "WebDemoWar.war"
 
         from('examples') {
             into 'examples'
