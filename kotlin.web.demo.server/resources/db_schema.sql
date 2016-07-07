@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS projects (
   read_only_files   TEXT                                   NOT NULL,
   type    ENUM('USER_PROJECT', 'KOANS_TASK', 'INCOMPLETE_KOANS_TASK', 'ADVENT_OF_CODE_PROJECT') NOT NULL DEFAULT 'USER_PROJECT',
   task_id INT                                                                  DEFAULT NULL, #NULL for user projects
+  compiler_version VARCHAR (45) DEFAULT NULL,
   FOREIGN KEY (task_id) REFERENCES koans_tasks (id)
     ON DELETE RESTRICT,
   CONSTRAINT `unique_name` UNIQUE (owner_id, name, type),

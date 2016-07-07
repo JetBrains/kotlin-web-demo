@@ -61,6 +61,7 @@ public class Project {
             String args,
             String confType,
             String originUrl,
+            String compilerVersion,
             List<String> readOnlyFileNames
     ) {
         this.id = id;
@@ -69,6 +70,7 @@ public class Project {
         this.confType = confType;
         this.originUrl = originUrl;
         this.files = new ArrayList<>();
+        this.compilerVersion = compilerVersion;
         this.readOnlyFileNames = readOnlyFileNames;
     }
 

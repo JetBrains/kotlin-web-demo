@@ -74,7 +74,9 @@ object Application {
     val versionView = KotlinVersionView(
             document.getElementById("webdemo-kotlin-version") as HTMLSelectElement,
             onChange = { newValue ->
-                accordion.selectedProjectView!!.project.compilerVersion = newValue
+                val project = accordion.selectedProjectView!!.project
+                project.compilerVersion = newValue
+                project.save()
                 editor.removeStyles()
                 problemsView.clear()
                 editor.updateHighlighting()
