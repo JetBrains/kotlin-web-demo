@@ -93,6 +93,7 @@ for (kotlinVersion in kotlinVersions) {
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-runtime.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
             kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
+            kotlin tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
             kotlinJS tc("bt345:$kotlinVersion:kotlin-plugin-${kotlinVersion}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
             compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
         }

@@ -104,7 +104,7 @@ class RunProvider(
                     val translationResult: TranslationResult;
                     val errors = getErrorsMapFromObject(data.errors, project)
                     if (data.jsCode != null) {
-                        val kotlinVersion = Application.versionView.defaultVersion
+                        val kotlinVersion = project.compilerVersion ?: Application.versionView.defaultVersion
                         val iframeDialog = Application.getIframeDialog(kotlinVersion)
 
                         try {
