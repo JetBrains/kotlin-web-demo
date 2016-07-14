@@ -41,12 +41,12 @@ object KotlinWrappersManager {
         this.wrappersDir = wrappersDir
         val configFile = KotlinWrappersManager::class.java.getResourceAsStream("/compilers-config.json")
         wrappersConfig = jacksonObjectMapper().readValue(configFile)
-        for ((version, isLatestStable) in wrappersConfig) {
+        for ((version, build, isLatestStable) in wrappersConfig) {
             try {
                 val classPath = getForKotlinWrapperClassLoaderURLs(version, wrappersDir, relativeClassDirectoryPath)
                 val kotlinClassLoader = ChildFirstURLClassLoader(classPath, Thread.currentThread().contextClassLoader)
                 val kotlinWrapper = kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance() as KotlinWrapper
-                kotlinWrapper.init(javaLibraries, version)
+                kotlinWrapper.init(javaLibraries, version, build)
                 wrappers.put(version, kotlinWrapper)
                 if(isLatestStable){
                     defaultWrapper = kotlinWrapper
@@ -82,4 +82,4 @@ object KotlinWrappersManager {
     }
 }
 
-data class KotlinWrapperConfig(val version: String, val latestStable: Boolean)
+data class KotlinWrapperConfig(val version: String, val build: String, val latestStable: Boolean)

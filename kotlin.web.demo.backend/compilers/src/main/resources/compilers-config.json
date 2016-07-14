@@ -1,12 +1,15 @@
 [
   {
-    "version": "1.0.2"
+    "version": "1.0.2",
+    "build": "1.0.2"
   },
   {
     "version": "1.0.3",
+    "build": "1.0.3",
     "latestStable": true
   },
   {
-    "version": "1.1-M01"
+    "version": "1.1-M01",
+    "build": "1.1.0-dev-1748"
   }
 ]

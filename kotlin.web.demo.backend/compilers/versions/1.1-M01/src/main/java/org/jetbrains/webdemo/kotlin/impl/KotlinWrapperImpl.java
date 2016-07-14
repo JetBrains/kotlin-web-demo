@@ -36,11 +36,13 @@ import java.util.Map;
 public class KotlinWrapperImpl implements KotlinWrapper {
     private Path jarsFolder;
     private String kotlinVersion;
+    private String kotlinBuild;
     private Path wrapperFolder;
 
     @Override
-    public void init(List<Path> javaLibraries, String kotlinVersion) {
+    public void init(List<Path> javaLibraries, String kotlinVersion, String build) {
         this.kotlinVersion = kotlinVersion;
+        this.kotlinBuild = build;
         WrapperLogger.init(kotlinVersion);
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
         jarsFolder = wrapperFolder.resolve("kotlin");
@@ -86,15 +88,15 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
     public List<Path> getKotlinRuntimeLibraries() {
         List<Path> libraries = new ArrayList<>();
-        libraries.add(jarsFolder.resolve("kotlin-runtime-" + kotlinVersion + ".jar"));
-        libraries.add(jarsFolder.resolve("kotlin-reflect-" + kotlinVersion + ".jar"));
-        libraries.add(jarsFolder.resolve("kotlin-test-" + kotlinVersion + ".jar"));
+        libraries.add(jarsFolder.resolve("kotlin-runtime-" + kotlinBuild + ".jar"));
+        libraries.add(jarsFolder.resolve("kotlin-reflect-" + kotlinBuild + ".jar"));
+        libraries.add(jarsFolder.resolve("kotlin-test-" + kotlinBuild + ".jar"));
         return libraries;
     }
 
     @Override
     public Path getKotlinRuntimeJar() {
-        return jarsFolder.resolve("kotlin-runtime-" + kotlinVersion + ".jar");
+        return jarsFolder.resolve("kotlin-runtime-" + kotlinBuild + ".jar");
     }
 
     @Override
