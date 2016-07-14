@@ -46,7 +46,7 @@ class MyHttpSession {
             }
         } catch (e: Throwable) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "")
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
+            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
         }
 
     }
@@ -57,7 +57,7 @@ class MyHttpSession {
             response.sendResponse(HttpServletResponse.SC_OK, message)
         } catch (e: IOException) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Can't send kotlin versions")
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
+            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
         }
 
     }
@@ -71,7 +71,7 @@ class MyHttpSession {
             response.sendResponse(HttpServletResponse.SC_OK, kotlinCode)
         } catch (e: Exception) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Error during java to kotlin translation")
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
+            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
         }
 
     }
@@ -126,11 +126,11 @@ class MyHttpSession {
                 response.sendResponse(HttpServletResponse.SC_OK, objectMapper.writeValueAsString(translationResult))
             }
         } catch (e: IOException) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
+            response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
         } catch (e: NullPointerException) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
+            response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         } catch (e: Exception) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.message ?: "")
+            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.message ?: "")
         }
 
     }
@@ -159,9 +159,9 @@ class MyHttpSession {
             val completionVariants = wrapper!!.getCompletionVariants(files, fileName, line, ch, isJs)
             response.sendResponse(HttpServletResponse.SC_OK, objectMapper.writeValueAsString(completionVariants))
         } catch (e: IOException) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
+            response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
         } catch (e: NullPointerException) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
+            response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         }
 
     }
@@ -171,7 +171,7 @@ class MyHttpSession {
             val currentProject: Project = objectMapper.readValue<Project>(request.getParameter("project"))
             val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject.compilerVersion)
             if (wrapper == null) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "")
+                response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "")
                 return;
             }
             val files = getFilesContentFromProject(currentProject)
@@ -180,9 +180,9 @@ class MyHttpSession {
             val result = objectMapper.writeValueAsString(analysisResult)
             response.sendResponse(HttpServletResponse.SC_OK, result.replace("\\n".toRegex(), ""))
         } catch (e: IOException) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
+            response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
         } catch (e: NullPointerException) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
+            response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         }
 
     }
