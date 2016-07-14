@@ -32,7 +32,7 @@ public class Initializer {
         for (KotlinWrapper wrapper : KotlinWrappersManager.INSTANCE.getAllWrappers()) {
             String templateFileContent = new String(Files.readAllBytes(templateFilePath));
             String policyFileContent = templateFileContent.replaceAll("@LIBS_DIR@", BackendSettings.EXECUTORS_LIBS_DIR.replaceAll("\\\\", "/"));
-            policyFileContent = policyFileContent.replaceAll("@KOTLIN_RUNTIME@", wrapper.getKotlinRuntimeJar().toUri().toString().replace("file:///", ""));
+            policyFileContent = policyFileContent.replaceAll("@KOTLIN_RUNTIME@", wrapper.getKotlinRuntimeJar().toString().replaceAll("\\\\", "/"));
             try (PrintWriter policyFile = new PrintWriter(wrapper.getWrapperFolder().resolve("executors.policy").toFile())) {
                 policyFile.write(policyFileContent);
             }
