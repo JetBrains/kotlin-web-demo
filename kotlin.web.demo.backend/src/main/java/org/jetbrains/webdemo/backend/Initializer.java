@@ -29,9 +29,9 @@ import java.nio.file.Paths;
 
 public class Initializer {
     public static void initializeExecutorsPolicyFile(Path templateFilePath) throws IOException {
-        String templateFileContent = new String(Files.readAllBytes(templateFilePath));
-        String policyFileContent = templateFileContent.replaceAll("@LIBS_DIR@", BackendSettings.EXECUTORS_LIBS_DIR.replaceAll("\\\\", "/"));
         for (KotlinWrapper wrapper : KotlinWrappersManager.INSTANCE.getAllWrappers()) {
+            String templateFileContent = new String(Files.readAllBytes(templateFilePath));
+            String policyFileContent = templateFileContent.replaceAll("@LIBS_DIR@", BackendSettings.EXECUTORS_LIBS_DIR.replaceAll("\\\\", "/"));
             policyFileContent = policyFileContent.replaceAll("@KOTLIN_RUNTIME@", wrapper.getKotlinRuntimeJar().toUri().toString().replace("file:///", ""));
             try (PrintWriter policyFile = new PrintWriter(wrapper.getWrapperFolder().resolve("executors.policy").toFile())) {
                 policyFile.write(policyFileContent);
