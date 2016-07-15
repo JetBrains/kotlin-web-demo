@@ -2,7 +2,6 @@
   <configuration default="false" name="WebDemoServer" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="WebDemo Tomcat" ALTERNATIVE_JRE_ENABLED="false">
     <option name="OPEN_IN_BROWSER" value="false" />
     <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/" />
-    <option name="COMMON_VM_ARGUMENTS" value="-Xmx1024m" />
     <option name="UPDATING_POLICY" value="restart-server" />
     <deployment>
       <file path="$PROJECT_DIR$/kotlin.web.demo.backend/build/libs/WebDemoBackend.war">
@@ -94,8 +93,7 @@
     </ConfigurationWrapper>
     <method>
       <option name="Make" enabled="false" />
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="war" externalProjectPath="$PROJECT_DIR$/kotlin.web.demo.backend" vmOptions="" scriptParameters="" />
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="war" externalProjectPath="$PROJECT_DIR$/kotlin.web.demo.server" vmOptions="" scriptParameters="" />
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="build" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="-x tests" />
     </method>
   </configuration>
 </component>
