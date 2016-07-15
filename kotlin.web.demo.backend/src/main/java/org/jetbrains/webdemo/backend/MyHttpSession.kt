@@ -45,7 +45,7 @@ class MyHttpSession {
                 "getKotlinVersions" -> sendKotlinVersions(response)
             }
         } catch (e: Throwable) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "")
+            ErrorWriter.log.error(e)
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
         }
 
@@ -56,29 +56,33 @@ class MyHttpSession {
             val message = objectMapper.writeValueAsString(KotlinWrappersManager.wrappersConfig)
             response.sendResponse(HttpServletResponse.SC_OK, message)
         } catch (e: IOException) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Can't send kotlin versions")
-            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
+            ErrorWriter.log.error("Can't send kotlin versions", e)
+            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
         }
 
     }
 
     private fun sendConversionResult(request: HttpServletRequest, response: HttpServletResponse) {
+        var kotlinVersion: String? = null
         try {
             val currentProject = objectMapper.readValue(request.getParameter("project"), Project::class.java)
+            kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
             val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject!!.compilerVersion)
             val javaCode = request.getParameter("text")
             val kotlinCode = wrapper!!.translateJavaToKotlin(javaCode)
             response.sendResponse(HttpServletResponse.SC_OK, kotlinCode)
         } catch (e: Exception) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Error during java to kotlin translation")
-            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
+            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: error during java to kotlin translation", e)
         }
 
     }
 
     private fun sendExecutorResult(request: HttpServletRequest, response: HttpServletResponse) {
+        var kotlinVersion: String? = null
         try {
             val currentProject = objectMapper.readValue<Project>(request.getParameter("project"))
+            kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
             val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject.compilerVersion)
 
             val files = getFilesContentFromProject(currentProject)
@@ -130,9 +134,9 @@ class MyHttpSession {
         } catch (e: NullPointerException) {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         } catch (e: Exception) {
-            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.message ?: "")
+            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't run project", e)
         }
-
     }
 
     private fun isOnlyWarnings(map: Map<String, List<ErrorDescriptor>>): Boolean {
@@ -147,11 +151,13 @@ class MyHttpSession {
     }
 
     fun sendCompletionResult(request: HttpServletRequest, response: HttpServletResponse) {
+        var kotlinVersion: String? = null
         try {
             val fileName = request.getParameter("filename")
             val line = Integer.parseInt(request.getParameter("line"))
             val ch = Integer.parseInt(request.getParameter("ch"))
             val currentProject = objectMapper.readValue(request.getParameter("project"), Project::class.java)
+            kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
             val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject!!.compilerVersion)
 
             val files = getFilesContentFromProject(currentProject)
@@ -162,13 +168,18 @@ class MyHttpSession {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
         } catch (e: NullPointerException) {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
+        } catch (e: Throwable) {
+            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't get completion variants", e)
         }
 
     }
 
     fun sendHighlightingResult(request: HttpServletRequest, response: HttpServletResponse) {
+        var kotlinVersion: String? = null
         try {
             val currentProject: Project = objectMapper.readValue<Project>(request.getParameter("project"))
+            kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
             val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject.compilerVersion)
             if (wrapper == null) {
                 response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "")
@@ -183,6 +194,9 @@ class MyHttpSession {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
         } catch (e: NullPointerException) {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
+        } catch (e: Throwable) {
+            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't analyze project", e)
         }
 
     }
