@@ -90,8 +90,8 @@ public class ResolveUtils {
     }
 
     public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJvm(@NotNull List<KtFile> files, Project project) {
-
         KotlinCoreEnvironment environment = EnvironmentManager.getEnvironment();
+        LanguageVersion languageVersion = EnvironmentManager.getLanguageVersion();
         ModuleContext moduleContext = TopDownAnalyzerFacadeForJVM.createContextWithSealedModule(project, getModuleName(environment));
         BindingTrace trace = new CliLightClassGenerationSupport.CliBindingTrace();
 
@@ -100,7 +100,7 @@ public class ResolveUtils {
         Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJvm(
                 moduleContext, trace, providerFactory,
                 GlobalSearchScope.allScope(project), LookupTracker.Companion.getDO_NOTHING(), new JvmPackagePartProvider(EnvironmentManager.getEnvironment()),
-                LanguageVersion.KOTLIN_1_0
+                languageVersion
         );
 
         List<LazyJavaPackageFragmentProvider> additionalProviders = Collections.singletonList(
@@ -149,6 +149,7 @@ public class ResolveUtils {
 
     public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJs(@NotNull List<KtFile> files, Project project) {
         KotlinCoreEnvironment environment = EnvironmentManager.getEnvironment();
+        LanguageVersion languageVersion = EnvironmentManager.getLanguageVersion();
 
         String moduleName = getModuleName(environment);
         JsConfig config = new LibrarySourcesConfig.Builder(
@@ -166,7 +167,7 @@ public class ResolveUtils {
 
         FileBasedDeclarationProviderFactory providerFactory = new FileBasedDeclarationProviderFactory(module.getStorageManager(), files);
 
-        Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJs(module, trace, providerFactory, LanguageVersion.KOTLIN_1_0);
+        Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJs(module, trace, providerFactory, languageVersion);
 
         analyzerAndProvider.getFirst().analyzeFiles(TopDownAnalysisMode.TopLevelDeclarations, files, Collections.<PackageFragmentProvider>emptyList());
 

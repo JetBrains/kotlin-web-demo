@@ -46,6 +46,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.cli.jvm.config.JvmContentRootsKt;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.config.JVMConfigurationKeys;
+import org.jetbrains.kotlin.config.LanguageVersion;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
 import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
@@ -79,6 +80,11 @@ public class EnvironmentManager {
                 registry,
                 disposable
         );
+    }
+
+    @NotNull
+    public static LanguageVersion getLanguageVersion() {
+        return LanguageVersion.KOTLIN_1_0;
     }
 
     @NotNull
