@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="init" default="all">
+    <property name="tomcat.home" value="apache-tomcat"/>
+
+    <target name="downloadTomcat" depends="tomcat.check" unless="tomcat.exists">
+        <property name="tomcat.version" value="7.0.70"/>
+        <property name="tomcatMirror" value="http://archive.apache.org"/>
+        <property name="tomcatMirrorPath" value="/dist/tomcat/tomcat-7/v${tomcat.version}/bin"/>
+        <property name="tomcatName" value="apache-tomcat-${tomcat.version}"/>
+
+        <get src="${tomcatMirror}/${tomcatMirrorPath}/${tomcatName}.zip" dest="${tomcatName}.zip"/>
+        <unzip src="${tomcatName}.zip" dest=""/>
+        <rename src="${tomcatName}" dest="apache-tomcat"/>
+        <delete file="${tomcatName}.zip"/>
+        <delete includeemptydirs="true">
+            <fileset dir="apache-tomcat/webapps" includes="**/*"/>
+        </delete>
+        <chmod file="${tomcat.home}/bin/catalina.sh" perm="777"/>
+        <antcall target="getMySQLConnector"/>
+    </target>
+
+    <target name="getMySQLConnector">
+        <property name="connector.version" value="5.1.38"/>
+        <get src="http://downloads.mysql.com/archives/get/file/mysql-connector-java-${connector.version}.zip"
+             dest="mysql-connector-java.zip"/>
+        <unzip src="mysql-connector-java.zip" dest="">
+            <patternset>
+                <include
+                        name="mysql-connector-java-${connector.version}/mysql-connector-java-${connector.version}-bin.jar"/>
+            </patternset>
+        </unzip>
+        <move file="mysql-connector-java-${connector.version}/mysql-connector-java-${connector.version}-bin.jar"
+              tofile="${tomcat.home}/lib/mysql-connector-java.jar"/>
+        <delete dir="mysql-connector-java-${connector.version}" includeemptydirs="true"/>
+        <delete file="mysql-connector-java.zip"/>
+    </target>
+
+    <target name="tomcat.check">
+        <condition property="tomcat.exists">
+            <available file="${tomcat.home}" type="dir"/>
+        </condition>
+    </target>
+    <target name="all" depends="downloadTomcat"/>
+</project>
