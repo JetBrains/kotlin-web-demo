@@ -63,17 +63,14 @@ class MyHttpSession {
     }
 
     private fun sendConversionResult(request: HttpServletRequest, response: HttpServletResponse) {
-        var kotlinVersion: String? = null
         try {
-            val currentProject = objectMapper.readValue(request.getParameter("project"), Project::class.java)
-            kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
-            val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject!!.compilerVersion)
+            val wrapper = KotlinWrappersManager.defaultWrapper
             val javaCode = request.getParameter("text")
-            val kotlinCode = wrapper!!.translateJavaToKotlin(javaCode)
+            val kotlinCode = wrapper.translateJavaToKotlin(javaCode)
             response.sendResponse(HttpServletResponse.SC_OK, kotlinCode)
         } catch (e: Exception) {
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorWriter.log.error("Kotlin v.$kotlinVersion: error during java to kotlin translation", e)
+            ErrorWriter.log.error("Eerror during java to kotlin translation", e)
         }
 
     }
