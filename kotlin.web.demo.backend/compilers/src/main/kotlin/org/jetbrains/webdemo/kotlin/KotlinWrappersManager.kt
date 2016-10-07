@@ -82,4 +82,4 @@ object KotlinWrappersManager {
     }
 }
 
-data class KotlinWrapperConfig(val version: String, val build: String, val latestStable: Boolean)
+data class KotlinWrapperConfig(val version: String, val build: String, val latestStable: Boolean, val obsolete: Boolean)

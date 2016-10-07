@@ -520,4 +520,5 @@ object Application {
 @native interface KotlinWrapperConfig {
     val version: String
     val latestStable: Boolean
+    val obsolete: Boolean
 }

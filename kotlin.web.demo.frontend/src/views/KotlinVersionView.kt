@@ -28,16 +28,16 @@ import utils.jquery.value
 import kotlin.properties.Delegates
 
 class KotlinVersionView(
-        val element: HTMLSelectElement,
-        val onChange: (String) -> dynamic
+    val element: HTMLSelectElement,
+    val onChange: (String) -> dynamic
 ) {
     var defaultVersion by Delegates.notNull<String>()
     var select = jq(element)
 
     init {
         select.selectmenu(json(
-                "icons" to json( "button" to "selectmenu-arrow-icon" ),
-                "position" to json("my" to "bottom", "at" to "top")
+            "icons" to json("button" to "selectmenu-arrow-icon"),
+            "position" to json("my" to "bottom", "at" to "top")
         ))
         select.on("selectmenuchange", { event ->
             val newValue = (event.currentTarget as HTMLSelectElement).value
@@ -45,24 +45,25 @@ class KotlinVersionView(
         })
     }
 
-    fun init(kotlinVersions: Array<KotlinWrapperConfig>){
+    fun init(kotlinVersions: Array<KotlinWrapperConfig>) {
         kotlinVersions.forEach {
-            if(it.latestStable){
+            if (it.latestStable) {
                 defaultVersion = it.version
             }
             element.append.option {
-                + ("v. " + it.version)
+                +("v. " + it.version)
                 value = it.version
-                if(it.latestStable){
+                if (it.latestStable) {
                     selected = true
                 }
+                disabled = it.obsolete
             }
         }
         select.selectmenu("refresh")
     }
 
     fun setVersion(newVersion: String?) {
-        if(newVersion != null) {
+        if (newVersion != null) {
             select.value(newVersion)
         } else {
             select.value(defaultVersion)

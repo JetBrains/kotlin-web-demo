@@ -1,7 +1,8 @@
 [
   {
     "version": "1.0.3",
-    "build": "1.0.3"
+    "build": "1.0.3",
+    "obsolete": true
   },
   {
     "version": "1.0.4",
