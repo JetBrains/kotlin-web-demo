@@ -29,7 +29,6 @@ import org.jetbrains.webdemo.kotlin.impl.translator.WebDemoTranslatorFacade;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,9 +43,9 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         this.kotlinVersion = kotlinVersion;
         this.kotlinBuild = build;
         WrapperLogger.init(kotlinVersion);
+        jarsFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion).resolve("kotlin");
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
-        jarsFolder = wrapperFolder.resolve("kotlin");
-        WrapperSettings.JS_LIB_ROOT = wrapperFolder.resolve("js");
+        WrapperSettings.JS_LIB_ROOT = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion).resolve("js");
         List<Path> libraries = getKotlinRuntimeLibraries();
         libraries.addAll(javaLibraries);
         EnvironmentManager.init(libraries);
@@ -116,7 +115,6 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         }
         return methodPositions;
     }
-
 
     private List<KtFile> createPsiFiles(Map<String, String> files) {
         List<KtFile> result = new ArrayList<>();

@@ -1,7 +1,11 @@
 [
   {
     "version": "1.0.3",
-    "build": "1.0.3",
+    "build": "1.0.3"
+  },
+  {
+    "version": "1.0.4",
+    "build": "1.0.4",
     "latestStable": true
   },
   {

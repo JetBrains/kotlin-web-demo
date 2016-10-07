@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.kotlin.impl.translator;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.kotlin.js.config.Config;
+import org.jetbrains.kotlin.js.config.JsConfig;
 import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.facade.K2JSTranslator;
 import org.jetbrains.kotlin.js.facade.MainCallParameters;
@@ -62,7 +62,7 @@ public final class WebDemoTranslatorFacade {
             @NotNull String[] arguments
     ) throws TranslationException {
         Project currentProject = EnvironmentManager.getEnvironment().getProject();
-        Config config = new LibrarySourcesConfig.Builder(
+        JsConfig config = new LibrarySourcesConfig.Builder(
                 currentProject,
                 "moduleId",
                 LIBRARY_FILES
