@@ -97,6 +97,10 @@ for (config in kotlinConfigs) {
             kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
             kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
             kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
+            if(build == "1.1.0-dev-4039") {
+                kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
+            }
+
             kotlinJS tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
             compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
         }
