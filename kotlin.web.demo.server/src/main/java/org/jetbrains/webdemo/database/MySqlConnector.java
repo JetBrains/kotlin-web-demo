@@ -273,7 +273,7 @@ public class MySqlConnector {
         int userId = getUserId(userInfo);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement st = connection.prepareStatement(
-                     "UPDATE projects SET projects.args = ? , projects.run_configuration = ?, projects.type = ?, projects.compiler_version = ?" +
+                     "UPDATE projects SET projects.args = ? , projects.run_configuration = ?, projects.type = ?, projects.compiler_version = ? " +
                              "WHERE projects.owner_id = ?  AND projects.name = ? AND projects.public_id = ?")
         ) {
             st.setString(1, project.args);
