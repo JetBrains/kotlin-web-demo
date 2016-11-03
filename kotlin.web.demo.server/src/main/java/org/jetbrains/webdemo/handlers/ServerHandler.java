@@ -16,11 +16,15 @@
 
 package org.jetbrains.webdemo.handlers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.session.SessionInfo;
 import org.jetbrains.webdemo.session.UserInfo;
@@ -30,10 +34,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerHandler {
+    private ObjectMapper objectMapper = new ObjectMapper();
 
 
     public void handle(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
@@ -61,6 +74,21 @@ public class ServerHandler {
                     case ("loadHelpForWords"):
                         sendHelpContentForWords(request, response);
                         break;
+                    case ("getKotlinVersions"):
+                        forwardRequestToBackend(request, response, null);
+                        break;
+                    case ("run"):
+                        forwardRunRequest(request, response);
+                        break;
+                    case ("highlight"):
+                        forwardHighlightRequest(request, response);
+                        break;
+                    case ("complete"):
+                        forwardCompleteRequest(request, response);
+                        break;
+                    case ("convertToKotlin"):
+                        forwardConvertResult(request, response);
+                        break;
                     default: {
                         sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
                         MyHttpSession session = new MyHttpSession(sessionInfo);
@@ -73,6 +101,150 @@ public class ServerHandler {
                         "UNKNOWN", "unknown", request.getRequestURI() + "?" + request.getQueryString());
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+        }
+    }
+
+    private void forwardRunRequest(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
+            ExamplesUtils.addHiddenFilesToProject(project);
+            ExamplesUtils.addUnmodifiableFilesToProject(project);
+            Map<String, String> postParameters = new HashMap<>();
+            postParameters.put("project", objectMapper.writeValueAsString(project));
+            forwardRequestToBackend(request, response, postParameters);
+        } catch (IOException e) {
+            writeResponse(request, response, "Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (NullPointerException e) {
+            writeResponse(request, response, "Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    private void forwardConvertResult(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, String> postParameters = new HashMap<>();
+        postParameters.put("text", request.getParameter("text"));
+        forwardRequestToBackend(request, response, postParameters);
+    }
+
+    private void forwardCompleteRequest(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
+            ExamplesUtils.addUnmodifiableFilesToProject(project);
+            ExamplesUtils.addHiddenFilesToProject(project);
+            Map<String, String> postParameters = new HashMap<>();
+            postParameters.put("project", objectMapper.writeValueAsString(project));
+            postParameters.put("filename", request.getParameter("filename"));
+            postParameters.put("line", request.getParameter("line"));
+            postParameters.put("ch", request.getParameter("ch"));
+            forwardRequestToBackend(request, response, postParameters);
+        } catch (IOException e) {
+            writeResponse(request, response, "Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (NullPointerException e) {
+            writeResponse(request, response, "Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    private void forwardHighlightRequest(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Project project = objectMapper.readValue(request.getParameter("project"), Project.class);
+            ExamplesUtils.addHiddenFilesToProject(project);
+            ExamplesUtils.addUnmodifiableFilesToProject(project);
+            Map<String, String> postParameters = new HashMap<>();
+            postParameters.put("project", objectMapper.writeValueAsString(project));
+            forwardRequestToBackend(request, response, postParameters);
+        } catch (IOException e) {
+            writeResponse(request, response, "Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
+        } catch (NullPointerException e) {
+            writeResponse(request, response, "Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    private void forwardRequestToBackend(HttpServletRequest request, HttpServletResponse response, Map<String, String> postParameters) {
+        final boolean hasoutbody = (request.getMethod().equals("POST"));
+
+        try {
+            final URL url = new URL("http://" + ApplicationSettings.BACKEND_URL + "/"
+                    + (request.getQueryString() != null ? "?" + request.getQueryString() : ""));
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            final Enumeration<String> headers = request.getHeaderNames();
+            while (headers.hasMoreElements()) {
+                final String header = headers.nextElement();
+                final Enumeration<String> values = request.getHeaders(header);
+                while (values.hasMoreElements()) {
+                    final String value = values.nextElement();
+                    conn.addRequestProperty(header, value);
+                }
+            }
+
+
+            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(15000);
+            conn.setUseCaches(false);
+            conn.setDoOutput(hasoutbody);
+
+            if (postParameters != null && !postParameters.isEmpty()) {
+                conn.setRequestMethod("POST");
+                try (OutputStream requestBody = conn.getOutputStream()) {
+                    boolean first = true;
+                    for (String key : postParameters.keySet()) {
+                        if (first) {
+                            first = false;
+                        } else {
+                            requestBody.write('&');
+                        }
+                        requestBody.write(URLEncoder.encode(key, "UTF8").getBytes());
+                        requestBody.write('=');
+                        requestBody.write(URLEncoder.encode(postParameters.get(key), "UTF8").getBytes());
+                    }
+                }
+            } else {
+                conn.setRequestMethod("GET");
+            }
+
+            StringBuilder responseBody = new StringBuilder();
+            if (conn.getResponseCode() >= 400) {
+                StringBuilder serverMessage = new StringBuilder();
+                try (InputStream errorStream = conn.getErrorStream()) {
+                    if (errorStream != null) {
+                        byte[] buffer = new byte[1024];
+                        while (true) {
+                            final int read = errorStream.read(buffer);
+                            if (read <= 0) break;
+                            serverMessage.append(new String(buffer, 0, read));
+                        }
+                    }
+                }
+
+
+                switch (conn.getResponseCode()) {
+                    case HttpServletResponse.SC_NOT_FOUND:
+                        responseBody.append("Kotlin compile server not found");
+                        break;
+                    case HttpServletResponse.SC_SERVICE_UNAVAILABLE:
+                        responseBody.append("Kotlin compile server is temporary overloaded");
+                        break;
+                    default:
+                        responseBody = serverMessage;
+                        break;
+                }
+            } else {
+                try (InputStream inputStream = conn.getInputStream()) {
+                    if (inputStream != null) {
+                        byte[] buffer = new byte[1024];
+                        while (true) {
+                            final int read = inputStream.read(buffer);
+                            if (read <= 0) break;
+                            responseBody.append(new String(buffer, 0, read));
+                        }
+                    }
+                }
+            }
+            writeResponse(request, response, responseBody.toString(), conn.getResponseCode());
+        } catch (SocketTimeoutException e) {
+            writeResponse(request, response, "Compile server connection timeout", HttpServletResponse.SC_GATEWAY_TIMEOUT);
+        } catch (Exception e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "FORWARD_REQUEST_TO_BACKEND", "", "Can't forward request to Kotlin compile server");
+            writeResponse(request, response, "Can't send your request to Kotlin compile server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -143,7 +315,7 @@ public class ServerHandler {
             response.addHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(statusCode);
-            if(!responseBody.equals("")) {
+            if (!responseBody.equals("")) {
                 try (PrintWriter writer = response.getWriter()) {
                     writer.write(responseBody);
                 }
