@@ -179,8 +179,8 @@ project(':kotlin.web.demo.frontend') {
     }
 
     dependencies {
-        compile 'org.jetbrains.kotlin:kotlin-js-library:1.0.1-2'
-        compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.8"
+        compile 'org.jetbrains.kotlin:kotlin-js-library:1.0.5-2'
+        compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.12"
     }
 
     sourceSets {

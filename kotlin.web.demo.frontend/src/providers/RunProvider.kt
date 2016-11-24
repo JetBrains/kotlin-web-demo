@@ -101,7 +101,7 @@ class RunProvider(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("run", hashMapOf("runConf" to runConfiguration)),
                 success = { data: dynamic ->
-                    val translationResult: TranslationResult;
+                    var translationResult: TranslationResult;
                     val errors = getErrorsMapFromObject(data.errors, project)
                     if (data.jsCode != null) {
                         val kotlinVersion = project.compilerVersion ?: Application.versionView.defaultVersion
