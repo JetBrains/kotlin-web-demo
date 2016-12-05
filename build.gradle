@@ -22,7 +22,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.5-2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.5'
         classpath "com.moowork.gradle:gradle-node-plugin:0.11"
         classpath "gradle.plugin.com.github.jk1:tcdeps:0.9.1"
     }
@@ -68,7 +68,7 @@ configure([
 ]) {
     apply plugin: 'kotlin'
     dependencies {
-        compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.5-2"
+        compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.5"
         compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4"
     }
 }
@@ -179,7 +179,7 @@ project(':kotlin.web.demo.frontend') {
     }
 
     dependencies {
-        compile 'org.jetbrains.kotlin:kotlin-js-library:1.0.5-2'
+        compile 'org.jetbrains.kotlin:kotlin-js-library:1.0.5'
         compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.12"
     }
 
