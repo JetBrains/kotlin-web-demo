@@ -28,115 +28,115 @@ import org.w3c.dom.events.MouseEvent
 @native("$")
 class JQuery {
     companion object JQuery {
-        fun ajax(parameters: Json): Promise
-        fun parseHTML(html: String): Array<HTMLElement>?
+        fun ajax(parameters: Json): Promise = noImpl
+        fun parseHTML(html: String): Array<HTMLElement>? = noImpl
     }
 
     class Promise {
-        fun then(callback: Function<Unit>)
-        fun done(callback: Function<Unit>)
-        fun fail()
-        fun always()
-        fun pipe()
-        fun progress()
-        fun state()
-        fun promise()
+        fun then(callback: Function<Unit>): Nothing = noImpl
+        fun done(callback: Function<Unit>): Nothing = noImpl
+        fun fail(): Nothing = noImpl
+        fun always(): Nothing = noImpl
+        fun pipe(): Nothing = noImpl
+        fun progress(): Nothing = noImpl
+        fun state(): Nothing = noImpl
+        fun promise(): Nothing = noImpl
     }
 
-    fun html(s: String)
-    fun removeClass(className: String)
-    fun addClass(className: String)
-    fun height(): Number
-    fun height(value: Int)
-    fun width(): Number
-    fun width(value: Int)
-    fun hasClass(className: String): Boolean
-    fun text(text: String)
-    fun click()
-    fun click(handler: Element.(MouseClickEvent ) -> Unit): utils.jquery.JQuery = this;
-    fun slideUp()
-    fun parent(): utils.jquery.JQuery
-    fun attr(name: String, value: String)
-    fun  append(any: String)
+    fun html(s: String): Nothing = noImpl
+    fun removeClass(className: String): Nothing = noImpl
+    fun addClass(className: String): Nothing = noImpl
+    fun height(): Number = noImpl
+    fun height(value: Int): Nothing = noImpl
+    fun width(): Number = noImpl
+    fun width(value: Int): Nothing = noImpl
+    fun hasClass(className: String): Boolean = noImpl
+    fun text(text: String): Nothing = noImpl
+    fun click(): Nothing = noImpl
+    fun click(handler: Element.(MouseClickEvent) -> Unit): utils.jquery.JQuery = noImpl
+    fun slideUp(): Nothing = noImpl
+    fun parent(): utils.jquery.JQuery = noImpl
+    fun attr(name: String, value: String): Nothing = noImpl
+    fun append(any: String): Nothing = noImpl
 }
 
 @native
-public fun JQuery.slideDown()
+public fun JQuery.slideDown(): Nothing = noImpl
 
 @native
-public fun JQuery.height(height: Int)
+public fun JQuery.height(height: Int): Nothing = noImpl
 
 @native
-public fun JQuery.width(width: Int)
+public fun JQuery.width(width: Int): Nothing = noImpl
 
 @native
-public fun JQuery.children(selector: String): JQuery
+public fun JQuery.children(selector: String): JQuery = noImpl
 
 @native
-public fun JQuery.outerHeight(includeMargin: Boolean = false): Int
+public fun JQuery.outerHeight(includeMargin: Boolean = false): Int = noImpl
 
 @native
-public fun JQuery.outerWidth(includeMargin: Boolean = false): Int
+public fun JQuery.outerWidth(includeMargin: Boolean = false): Int = noImpl
 
 @native
-public fun JQuery.toArray(): Array<HTMLElement>
+public fun JQuery.toArray(): Array<HTMLElement> = noImpl
 
 @native("is")
-public fun JQuery.isCheck(s: String): Boolean
+public fun JQuery.isCheck(s: String): Boolean = noImpl
 
 @native
-fun JQuery.hide()
+fun JQuery.hide(): Nothing = noImpl
 
 @native
-fun JQuery.show()
+fun JQuery.show(): Nothing = noImpl
 
 @native
-fun JQuery.children(): JQuery
+fun JQuery.children(): JQuery = noImpl
 
 @native
-fun JQuery.unbind(s: String)
+fun JQuery.unbind(s: String): Nothing = noImpl
 
 @native
-fun JQuery.on(s: String, onClose: (Event) -> Unit)
+fun JQuery.on(s: String, onClose: (Event) -> Unit): Nothing = noImpl
 
 @native
-fun JQuery.css(key: String, value: dynamic)
+fun JQuery.css(key: String, value: dynamic): Nothing = noImpl
 
 @native("val")
-fun JQuery.value(): String
+fun JQuery.value(): String = noImpl
 
 @native("val")
-fun JQuery.value(s: String)
+fun JQuery.value(s: String): Nothing = noImpl
 
 @native("$")
-fun jq(document: Document): JQuery
+fun jq(document: Document): JQuery = noImpl
 
 @native("$")
-fun jq(selector: String): JQuery
+fun jq(selector: String): JQuery = noImpl
 
 @native("$")
-fun jq(element: Element): JQuery
+fun jq(element: Element): JQuery = noImpl
 
 @native("$")
-fun jq(jq: JQuery): JQuery
+fun jq(jq: JQuery): JQuery = noImpl
 
 @native
-fun JQuery.circleProgress(options: Json)
+fun JQuery.circleProgress(options: Json): Nothing = noImpl
 
 @native
-fun JQuery.on(action: String, selector: String, callback: (event: Event) -> Unit)
+fun JQuery.on(action: String, selector: String, callback: (event: Event) -> Unit): Nothing = noImpl
 
 @native
-fun JQuery.keydown(callback: (KeyboardEvent) -> Unit)
+fun JQuery.keydown(callback: (KeyboardEvent) -> Unit): Nothing = noImpl
 
 @native
-fun JQuery.find(selector: String): JQuery
+fun JQuery.find(selector: String): JQuery = noImpl
 
 @native
-fun JQuery.trigger(action: String)
+fun JQuery.trigger(action: String): Nothing = noImpl
 
 @native
-fun JQuery.focus()
+fun JQuery.focus(): Nothing = noImpl
 
 @native
-operator fun JQuery.get(index: Int): Element
+operator fun JQuery.get(index: Int): Element = noImpl

@@ -312,4 +312,4 @@ data class ParsedAssertionMessage(
 )
 
 @native
-fun Double.toFixed(noOfDigits: Int): Double
+fun Double.toFixed(noOfDigits: Int): Double = noImpl

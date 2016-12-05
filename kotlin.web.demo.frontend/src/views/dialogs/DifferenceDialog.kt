@@ -33,7 +33,7 @@ import kotlin.dom.addClass
 @native
 object  difflib {
     class SequenceMatcher(baseTextLines: Array<String>, newTextLines: Array<String>){
-        fun get_opcodes(): Array<dynamic>
+        fun get_opcodes(): Array<dynamic> = noImpl
     }
 }
 

@@ -19,22 +19,22 @@ package utils.jquery.ui
 import utils.jquery.JQuery
 
 @native
-fun JQuery.toggle()
+fun JQuery.toggle(): Nothing = noImpl
 
 @native
-fun JQuery.resizable(parameters: Json)
+fun JQuery.resizable(parameters: Json): Nothing = noImpl
 
 @native
-fun JQuery.resizable(mode : String, param : String, value : Any?)
+fun JQuery.resizable(mode : String, param : String, value : Any?): Nothing = noImpl
 
 @native
-fun JQuery.selectmenu(parameters: Json)
+fun JQuery.selectmenu(parameters: Json): Nothing = noImpl
 
 @native
-fun JQuery.selectmenu(command: String)
+fun JQuery.selectmenu(command: String): Nothing = noImpl
 
 @native
-fun JQuery.tabs()
+fun JQuery.tabs(): Nothing = noImpl
 
 @native
 public fun JQuery.button(command : String) : JQuery = noImpl
@@ -49,16 +49,16 @@ public fun JQuery.dialog(command : String) : JQuery = noImpl
 public fun JQuery.dialog(parameters : Json) : JQuery = noImpl
 
 @native
-fun JQuery.dialog(mode : String, param : String, value : Any?)
+fun JQuery.dialog(mode : String, param : String, value : Any?): Nothing = noImpl
 
 @native
-fun JQuery.accordion(params: Json): JQuery
+fun JQuery.accordion(params: Json): JQuery = noImpl
 
 @native
-fun JQuery.accordion(command: String): JQuery
+fun JQuery.accordion(command: String): JQuery = noImpl
 
 @native
-fun JQuery.accordion(command: String, name: String, value: Any): JQuery
+fun JQuery.accordion(command: String, name: String, value: Any): JQuery = noImpl
 
 @native
 public fun JQuery.button(mode : String, param : String, value : Any?) : JQuery = noImpl

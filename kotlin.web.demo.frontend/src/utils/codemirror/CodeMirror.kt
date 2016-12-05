@@ -58,38 +58,38 @@ class CodeMirror(element: HTMLElement, parameters: Json) {
         fun clear()
     }
 
-    fun getCursor(): Position
-    fun getDoc(): Doc
-    fun getTokenAt(pos: Position): Token
-    fun replaceRange(replacement: String, from: Position, to: Position = from, origin: String? = null)
-    fun execCommand(s: String)
-    fun on(action: String, callback: (utils.codemirror.CodeMirror) -> Unit)
-    fun <T>on(action: String, callback: (utils.codemirror.CodeMirror, additionalInfo: T) -> Unit)
-    fun getValue(): String
-    fun setOption(name: String, value: Any)
-    fun refresh()
-    fun setCursor(lineNo: Int, charNo: Int)
-    fun focus()
-    fun setValue(text: String)
-    fun setHistory(history: dynamic)
-    fun getHistory(): dynamic
-    fun clearHistory()
-    fun cursorCoords(): dynamic
-    fun clearGutter(gutter: String)
-    fun markText(start: Position, end: Position, json: Json): Any
-    fun setGutterMarker(line: Int, gutter: String, element: HTMLElement)
-    fun lineInfo(line: Int): dynamic
-    fun lineCount(): Int
-    fun indentLine(lineNo: Int)
-    fun operation(function: () -> Unit)
-    fun swapDoc(document: Doc)
-    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit)
-    fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json)
-    fun setSelection(anchor: Position, head: Position)
-    fun getLineHandle(i: Int): Line
-    fun coordsChar(cursorCoordinates: Coordinates): Position
-    fun findMarksAt(position: Position): Array<TextMarker>
-    fun listSelections(): Array<Selection>
+    fun getCursor(): Position = noImpl
+    fun getDoc(): Doc = noImpl
+    fun getTokenAt(pos: Position): Token = noImpl
+    fun replaceRange(replacement: String, from: Position, to: Position = from, origin: String? = null): Nothing = noImpl
+    fun execCommand(s: String): Nothing = noImpl
+    fun on(action: String, callback: (utils.codemirror.CodeMirror) -> Unit): Nothing = noImpl
+    fun <T> on(action: String, callback: (utils.codemirror.CodeMirror, additionalInfo: T) -> Unit): Nothing = noImpl
+    fun getValue(): String = noImpl
+    fun setOption(name: String, value: Any): Nothing = noImpl
+    fun refresh(): Nothing = noImpl
+    fun setCursor(lineNo: Int, charNo: Int): Nothing = noImpl
+    fun focus(): Nothing = noImpl
+    fun setValue(text: String): Nothing = noImpl
+    fun setHistory(history: dynamic): Nothing = noImpl
+    fun getHistory(): dynamic = noImpl
+    fun clearHistory(): Nothing = noImpl
+    fun cursorCoords(): dynamic = noImpl
+    fun clearGutter(gutter: String): Nothing = noImpl
+    fun markText(start: Position, end: Position, json: Json): Any = noImpl
+    fun setGutterMarker(line: Int, gutter: String, element: HTMLElement): Nothing = noImpl
+    fun lineInfo(line: Int): dynamic = noImpl
+    fun lineCount(): Int = noImpl
+    fun indentLine(lineNo: Int): Nothing = noImpl
+    fun operation(function: () -> Unit): Nothing = noImpl
+    fun swapDoc(document: Doc): Nothing = noImpl
+    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit) = noImpl
+    fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json): Nothing = noImpl
+    fun setSelection(anchor: Position, head: Position): Nothing = noImpl
+    fun getLineHandle(i: Int): Line = noImpl
+    fun coordsChar(cursorCoordinates: Coordinates): Position = noImpl
+    fun findMarksAt(position: Position): Array<TextMarker> = noImpl
+    fun listSelections(): Array<Selection> = noImpl
 }
 
 data class Position(val line: Int, val ch: Int)

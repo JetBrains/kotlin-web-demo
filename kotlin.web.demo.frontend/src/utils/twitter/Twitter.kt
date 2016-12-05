@@ -19,18 +19,18 @@ package utils.twitter
 @native("twttr")
 object Twitter{
     @native("txt")
-    val text: TwitterText
+    val text: TwitterText = noImpl
 }
 
 @native
 class TwitterText{
-    fun extractUrlsWithIndices(tweet: String): Array<URLObject>
-    fun getTweetLength(value: String): Int
+    fun extractUrlsWithIndices(tweet: String): Array<URLObject> = noImpl
+    fun getTweetLength(value: String): Int = noImpl
 }
 
 @native
 class URLObject{
-    val indices: Array<Int>
-    val url: String
+    val indices: Array<Int> = noImpl
+    val url: String = noImpl
 }
 
