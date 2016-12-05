@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
+
 buildscript {
+    apply from: 'versions.gradle'
     repositories {
         mavenCentral()
+        maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.5'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.moowork.gradle:gradle-node-plugin:0.11"
         classpath "gradle.plugin.com.github.jk1:tcdeps:0.9.1"
     }
@@ -30,6 +33,12 @@ buildscript {
 
 ext.kotlinConfigs = gradle.ext.kotlinConfigs
 ext.kotlinVersions = kotlinConfigs.collect { it.version }
+
+allprojects {
+    repositories {
+        maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
+    }
+}
 
 configure(allprojects.findAll({
     it.name != 'kotlin.web.demo.frontend'
@@ -68,7 +77,7 @@ configure([
 ]) {
     apply plugin: 'kotlin'
     dependencies {
-        compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.5"
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4"
     }
 }
@@ -97,7 +106,7 @@ for (config in kotlinConfigs) {
             kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
             kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
             kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
-            if(build == "1.1.0-dev-4039") {
+            if (build == "1.1.0-dev-4039") {
                 kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
             }
 
@@ -179,7 +188,7 @@ project(':kotlin.web.demo.frontend') {
     }
 
     dependencies {
-        compile 'org.jetbrains.kotlin:kotlin-js-library:1.0.5'
+        compile "org.jetbrains.kotlin:kotlin-js-library:$kotlinVersion"
         compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.12"
     }
 
