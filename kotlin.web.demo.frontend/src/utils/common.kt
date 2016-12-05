@@ -149,19 +149,16 @@ fun unBlockContent() {
 }
 
 @native
-val Object: dynamic
+val Object: dynamic = noImpl
 
 @native
-fun Window.eval(code: String): dynamic
-
-@native("onerror")
-var Window.onError: (String, String, Int, Int, dynamic) -> Unit
+fun Window.eval(code: String): dynamic = noImpl
 
 @native
-fun decodeURI(uri: String): String
+fun decodeURI(uri: String): String = noImpl
 
 @native
-fun encodeURIComponent(component: String): String
+fun encodeURIComponent(component: String): String = noImpl
 
 fun selectElement(element: Element) {
     val selection = window.getSelection();

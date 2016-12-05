@@ -33,41 +33,41 @@ class JQuery {
     }
 
     class Promise {
-        fun then(callback: Function<Unit>): Nothing = noImpl
-        fun done(callback: Function<Unit>): Nothing = noImpl
-        fun fail(): Nothing = noImpl
-        fun always(): Nothing = noImpl
-        fun pipe(): Nothing = noImpl
-        fun progress(): Nothing = noImpl
-        fun state(): Nothing = noImpl
-        fun promise(): Nothing = noImpl
+        fun then(callback: Function<Unit>): Unit = noImpl
+        fun done(callback: Function<Unit>): Unit = noImpl
+        fun fail(): Unit = noImpl
+        fun always(): Unit = noImpl
+        fun pipe(): Unit = noImpl
+        fun progress(): Unit = noImpl
+        fun state(): Unit = noImpl
+        fun promise(): Unit = noImpl
     }
 
-    fun html(s: String): Nothing = noImpl
-    fun removeClass(className: String): Nothing = noImpl
-    fun addClass(className: String): Nothing = noImpl
+    fun html(s: String): Unit = noImpl
+    fun removeClass(className: String): Unit = noImpl
+    fun addClass(className: String): Unit = noImpl
     fun height(): Number = noImpl
-    fun height(value: Int): Nothing = noImpl
+    fun height(value: Int): Unit = noImpl
     fun width(): Number = noImpl
-    fun width(value: Int): Nothing = noImpl
+    fun width(value: Int): Unit = noImpl
     fun hasClass(className: String): Boolean = noImpl
-    fun text(text: String): Nothing = noImpl
-    fun click(): Nothing = noImpl
+    fun text(text: String): Unit = noImpl
+    fun click(): Unit = noImpl
     fun click(handler: Element.(MouseClickEvent) -> Unit): utils.jquery.JQuery = noImpl
-    fun slideUp(): Nothing = noImpl
+    fun slideUp(): Unit = noImpl
     fun parent(): utils.jquery.JQuery = noImpl
-    fun attr(name: String, value: String): Nothing = noImpl
-    fun append(any: String): Nothing = noImpl
+    fun attr(name: String, value: String): Unit = noImpl
+    fun append(any: String): Unit = noImpl
 }
 
 @native
-public fun JQuery.slideDown(): Nothing = noImpl
+public fun JQuery.slideDown(): Unit = noImpl
 
 @native
-public fun JQuery.height(height: Int): Nothing = noImpl
+public fun JQuery.height(height: Int): Unit = noImpl
 
 @native
-public fun JQuery.width(width: Int): Nothing = noImpl
+public fun JQuery.width(width: Int): Unit = noImpl
 
 @native
 public fun JQuery.children(selector: String): JQuery = noImpl
@@ -85,28 +85,28 @@ public fun JQuery.toArray(): Array<HTMLElement> = noImpl
 public fun JQuery.isCheck(s: String): Boolean = noImpl
 
 @native
-fun JQuery.hide(): Nothing = noImpl
+fun JQuery.hide(): Unit = noImpl
 
 @native
-fun JQuery.show(): Nothing = noImpl
+fun JQuery.show(): Unit = noImpl
 
 @native
 fun JQuery.children(): JQuery = noImpl
 
 @native
-fun JQuery.unbind(s: String): Nothing = noImpl
+fun JQuery.unbind(s: String): Unit = noImpl
 
 @native
-fun JQuery.on(s: String, onClose: (Event) -> Unit): Nothing = noImpl
+fun JQuery.on(s: String, onClose: (Event) -> Unit): Unit = noImpl
 
 @native
-fun JQuery.css(key: String, value: dynamic): Nothing = noImpl
+fun JQuery.css(key: String, value: dynamic): Unit = noImpl
 
 @native("val")
 fun JQuery.value(): String = noImpl
 
 @native("val")
-fun JQuery.value(s: String): Nothing = noImpl
+fun JQuery.value(s: String): Unit = noImpl
 
 @native("$")
 fun jq(document: Document): JQuery = noImpl
@@ -121,22 +121,22 @@ fun jq(element: Element): JQuery = noImpl
 fun jq(jq: JQuery): JQuery = noImpl
 
 @native
-fun JQuery.circleProgress(options: Json): Nothing = noImpl
+fun JQuery.circleProgress(options: Json): Unit = noImpl
 
 @native
-fun JQuery.on(action: String, selector: String, callback: (event: Event) -> Unit): Nothing = noImpl
+fun JQuery.on(action: String, selector: String, callback: (event: Event) -> Unit): Unit = noImpl
 
 @native
-fun JQuery.keydown(callback: (KeyboardEvent) -> Unit): Nothing = noImpl
+fun JQuery.keydown(callback: (KeyboardEvent) -> Unit): Unit = noImpl
 
 @native
 fun JQuery.find(selector: String): JQuery = noImpl
 
 @native
-fun JQuery.trigger(action: String): Nothing = noImpl
+fun JQuery.trigger(action: String): Unit = noImpl
 
 @native
-fun JQuery.focus(): Nothing = noImpl
+fun JQuery.focus(): Unit = noImpl
 
 @native
 operator fun JQuery.get(index: Int): Element = noImpl

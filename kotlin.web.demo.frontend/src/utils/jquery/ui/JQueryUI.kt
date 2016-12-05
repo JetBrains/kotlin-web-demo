@@ -19,22 +19,22 @@ package utils.jquery.ui
 import utils.jquery.JQuery
 
 @native
-fun JQuery.toggle(): Nothing = noImpl
+fun JQuery.toggle(): Unit = noImpl
 
 @native
-fun JQuery.resizable(parameters: Json): Nothing = noImpl
+fun JQuery.resizable(parameters: Json): Unit = noImpl
 
 @native
-fun JQuery.resizable(mode : String, param : String, value : Any?): Nothing = noImpl
+fun JQuery.resizable(mode : String, param : String, value : Any?): Unit = noImpl
 
 @native
-fun JQuery.selectmenu(parameters: Json): Nothing = noImpl
+fun JQuery.selectmenu(parameters: Json): Unit = noImpl
 
 @native
-fun JQuery.selectmenu(command: String): Nothing = noImpl
+fun JQuery.selectmenu(command: String): Unit = noImpl
 
 @native
-fun JQuery.tabs(): Nothing = noImpl
+fun JQuery.tabs(): Unit = noImpl
 
 @native
 public fun JQuery.button(command : String) : JQuery = noImpl
@@ -49,7 +49,7 @@ public fun JQuery.dialog(command : String) : JQuery = noImpl
 public fun JQuery.dialog(parameters : Json) : JQuery = noImpl
 
 @native
-fun JQuery.dialog(mode : String, param : String, value : Any?): Nothing = noImpl
+fun JQuery.dialog(mode : String, param : String, value : Any?): Unit = noImpl
 
 @native
 fun JQuery.accordion(params: Json): JQuery = noImpl
