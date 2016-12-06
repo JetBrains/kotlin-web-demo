@@ -82,4 +82,9 @@ object KotlinWrappersManager {
     }
 }
 
-data class KotlinWrapperConfig(val version: String, val build: String, val latestStable: Boolean, val obsolete: Boolean)
+data class KotlinWrapperConfig(
+    val version: String,
+    val build: String,
+    val obsolete: Boolean,
+    val latestStable: Boolean = false,
+    val hasScriptJar: Boolean = false)

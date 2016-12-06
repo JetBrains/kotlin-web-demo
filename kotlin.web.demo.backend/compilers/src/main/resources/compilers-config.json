@@ -15,10 +15,12 @@
   },
   {
     "version": "1.1-M02",
-    "build": "1.1.0-dev-4977"
+    "build": "1.1.0-dev-4977",
+    "hasScriptJar": true
   },
   {
     "version": "1.1-M03",
-    "build": "1.1.0-dev-4845"
+    "build": "1.1.0-dev-4845",
+    "hasScriptJar": true
   }
 ]

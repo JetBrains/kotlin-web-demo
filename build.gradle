@@ -106,7 +106,7 @@ for (config in kotlinConfigs) {
             kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
             kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
             kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
-            if (build == "1.1.0-dev-4039") {
+            if (config.hasScriptJar) {
                 kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
             }
 
