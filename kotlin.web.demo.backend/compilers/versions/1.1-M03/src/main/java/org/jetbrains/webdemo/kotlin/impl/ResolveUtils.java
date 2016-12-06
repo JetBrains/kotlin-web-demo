@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.codegen.ClassBuilderFactories;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
+import org.jetbrains.kotlin.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.LanguageVersion;
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl;
 import org.jetbrains.kotlin.container.ComponentProvider;
@@ -95,11 +96,14 @@ public class ResolveUtils {
         KotlinCoreEnvironment environment = EnvironmentManager.getEnvironment();
         BindingTrace trace = new CliLightClassGenerationSupport.CliBindingTrace();
 
+
+        CompilerConfiguration configuration = environment.getConfiguration();
+        configuration.put(JVMConfigurationKeys.ADD_BUILT_INS_FROM_COMPILER_TO_DEPENDENCIES, true);
         ComponentProvider container = TopDownAnalyzerFacadeForJVM.INSTANCE.createContainer(
                 environment.getProject(),
                 files,
                 trace,
-                environment.getConfiguration(),
+                configuration,
                 new Function1<GlobalSearchScope, PackagePartProvider>() {
                     @Override
                     public PackagePartProvider invoke(GlobalSearchScope globalSearchScope) {
