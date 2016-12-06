@@ -189,7 +189,7 @@ project(':kotlin.web.demo.frontend') {
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-js-library:$kotlinVersion"
-        compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.12"
+        compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.8"
     }
 
     sourceSets {
