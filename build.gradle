@@ -85,6 +85,8 @@ configure([
 for (config in kotlinConfigs) {
     def build = config.build
     def version = config.version
+    def buildType = config.buildType ?: "bt345"
+    def pluginBuild = config.pluginBuild ?: config.build
     def projectsName = ":kotlin.web.demo.backend:compilers:versions:$version"
     project(projectsName) {
         apply plugin: 'com.github.jk1.tcdeps'
@@ -99,18 +101,19 @@ for (config in kotlinConfigs) {
             kotlinJS
         }
         dependencies {
+
             compile project(":kotlin.web.demo.backend:compilers")
-            kotlin tc("bt345:$build:internal/kotlin-compiler-before-shrink.jar")
-            kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/lib/kotlin-plugin.jar")
-            kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-runtime.jar")
-            kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
-            kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
-            kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
+            kotlin tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
+            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
+            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-runtime.jar")
+            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
+            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
+            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
             if (config.hasScriptJar) {
-                kotlin tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
+                kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
             }
 
-            kotlinJS tc("bt345:$build:kotlin-plugin-${build}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
+            kotlinJS tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
             compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
         }
     }

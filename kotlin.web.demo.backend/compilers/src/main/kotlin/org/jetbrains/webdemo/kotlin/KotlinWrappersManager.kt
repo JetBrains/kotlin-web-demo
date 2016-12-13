@@ -16,6 +16,7 @@
 
 package org.jetbrains.webdemo.kotlin
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.commons.logging.LogFactory
@@ -82,6 +83,7 @@ object KotlinWrappersManager {
     }
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class KotlinWrapperConfig(
     val version: String,
     val build: String,
