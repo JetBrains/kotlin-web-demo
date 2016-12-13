@@ -36,18 +36,18 @@ object KotlinWrappersManager {
 
     fun init(wrappersDir: Path, javaLibraries: List<Path>, relativeClassDirectoryPath: Path) {
         this.wrappersDir = wrappersDir
-        for ((version, build, isLatestStable) in KotlinVersionsManager.kotlinVersionConfigs) {
+        for (versionConfig in KotlinVersionsManager.kotlinVersionConfigs) {
             try {
-                val classPath = getForKotlinWrapperClassLoaderURLs(version, wrappersDir, relativeClassDirectoryPath)
+                val classPath = getForKotlinWrapperClassLoaderURLs(versionConfig.version, wrappersDir, relativeClassDirectoryPath)
                 val kotlinClassLoader = ChildFirstURLClassLoader(classPath, Thread.currentThread().contextClassLoader)
                 val kotlinWrapper = kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance() as KotlinWrapper
-                kotlinWrapper.init(javaLibraries, version, build)
-                wrappers.put(version, kotlinWrapper)
-                if(isLatestStable){
+                kotlinWrapper.init(javaLibraries, versionConfig.version, versionConfig.build)
+                wrappers.put(versionConfig.version, kotlinWrapper)
+                if (versionConfig.latestStable) {
                     defaultWrapper = kotlinWrapper
                 }
             } catch (e: Throwable) {
-                log.error("Can't initialize kotlin version " + version, e)
+                log.error("Can't initialize kotlin version " + versionConfig.version, e)
             }
 
         }
@@ -58,7 +58,7 @@ object KotlinWrappersManager {
     fun getAllWrappers(): Collection<KotlinWrapper> = wrappers.values;
 
     fun getKotlinWrapper(kotlinVersion: String?): KotlinWrapper? {
-        if(kotlinVersion == null) return defaultWrapper;
+        if (kotlinVersion == null) return defaultWrapper;
         return wrappers[kotlinVersion]
     }
 
