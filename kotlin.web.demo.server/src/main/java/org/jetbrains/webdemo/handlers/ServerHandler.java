@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.KotlinVersionsManager;
 import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
@@ -60,6 +61,7 @@ public class ServerHandler {
             }
         } else {
             SessionInfo sessionInfo;
+            response.setHeader("Access-Control-Allow-Origin", "*");
             try {
                 switch (request.getParameter("type")) {
                     case ("getUserName"):
@@ -75,7 +77,7 @@ public class ServerHandler {
                         sendHelpContentForWords(request, response);
                         break;
                     case ("getKotlinVersions"):
-                        forwardRequestToBackend(request, response, null);
+                        sendKotlinVersions(request, response);
                         break;
                     case ("run"):
                         forwardRunRequest(request, response);
@@ -245,6 +247,16 @@ public class ServerHandler {
         } catch (Exception e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "FORWARD_REQUEST_TO_BACKEND", "", "Can't forward request to Kotlin compile server");
             writeResponse(request, response, "Can't send your request to Kotlin compile server", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendKotlinVersions(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String message = objectMapper.writeValueAsString(KotlinVersionsManager.INSTANCE.getKotlinVersionConfigs());
+            writeResponse(request, response, message, HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            ErrorWriter.log.error("Can't send kotlin versions", e);
+            writeResponse(request, response, "Can't send kotlin versions", HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 

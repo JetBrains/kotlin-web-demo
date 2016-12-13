@@ -98,4 +98,8 @@ public class Project {
     public String getCompilerVersion() {
         return compilerVersion;
     }
+
+    public void setCompilerVersion(String compilerVersion) {
+        this.compilerVersion = compilerVersion;
+    }
 }

@@ -375,6 +375,9 @@ public class MyHttpSession {
             String id = request.getParameter("publicId");
             Project result = MySqlConnector.getInstance().getProjectContent(id);
             if (result != null) {
+                if(!KotlinVersionsManager.INSTANCE.getKotlinVersions().contains(result.getCompilerVersion())){
+                    result.setCompilerVersion(KotlinVersionsManager.INSTANCE.getLatestStableVersion());
+                }
                 writeResponse(objectMapper.writeValueAsString(result), HttpServletResponse.SC_OK);
             } else {
                 writeResponse("", HttpServletResponse.SC_NOT_FOUND);

@@ -1,10 +1,5 @@
 [
   {
-    "version": "1.0.3",
-    "build": "1.0.3",
-    "obsolete": true
-  },
-  {
     "version": "1.0.4",
     "build": "1.0.4"
   },
@@ -14,10 +9,6 @@
     "build": "1.0.5-release-134",
     "pluginBuild": "1.0.5-release-IJ2016.3-2",
     "latestStable": true
-  },
-  {
-    "version": "1.1-M01",
-    "build": "1.1-M01"
   },
   {
     "version": "1.1-M02",

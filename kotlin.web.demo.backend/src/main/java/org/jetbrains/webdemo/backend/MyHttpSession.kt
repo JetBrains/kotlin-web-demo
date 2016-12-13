@@ -42,22 +42,10 @@ class MyHttpSession {
                 "highlight" -> sendHighlightingResult(request, response)
                 "convertToKotlin" -> sendConversionResult(request, response)
                 "complete" -> sendCompletionResult(request, response)
-                "getKotlinVersions" -> sendKotlinVersions(response)
             }
         } catch (e: Throwable) {
             ErrorWriter.log.error(e)
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error")
-        }
-
-    }
-
-    private fun sendKotlinVersions(response: HttpServletResponse) {
-        try {
-            val message = objectMapper.writeValueAsString(KotlinWrappersManager.wrappersConfig)
-            response.sendResponse(HttpServletResponse.SC_OK, message)
-        } catch (e: IOException) {
-            ErrorWriter.log.error("Can't send kotlin versions", e)
-            response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
         }
 
     }
@@ -80,11 +68,16 @@ class MyHttpSession {
         try {
             val currentProject = objectMapper.readValue<Project>(request.getParameter("project"))
             kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
-            val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject.compilerVersion)
+
+            val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
+            if(wrapper == null) {
+                response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Unsupported kotlin version: $kotlinVersion")
+                return
+            }
 
             val files = getFilesContentFromProject(currentProject)
             val isJs = currentProject.confType == "js" || currentProject.confType == "canvas"
-            val errorDescriptors = wrapper!!.getErrors(files, isJs)
+            val errorDescriptors = wrapper.getErrors(files, isJs)
 
             if (currentProject.confType != "js" && currentProject.confType != "canvas") {
                 var executionResult: ExecutionResult? = null
@@ -155,11 +148,15 @@ class MyHttpSession {
             val ch = Integer.parseInt(request.getParameter("ch"))
             val currentProject = objectMapper.readValue(request.getParameter("project"), Project::class.java)
             kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
-            val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject!!.compilerVersion)
+            val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
+            if(wrapper == null) {
+                response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Unsupported kotlin version: $kotlinVersion")
+                return
+            }
 
             val files = getFilesContentFromProject(currentProject)
             val isJs = currentProject.confType == "js" || currentProject.confType == "canvas"
-            val completionVariants = wrapper!!.getCompletionVariants(files, fileName, line, ch, isJs)
+            val completionVariants = wrapper.getCompletionVariants(files, fileName, line, ch, isJs)
             response.sendResponse(HttpServletResponse.SC_OK, objectMapper.writeValueAsString(completionVariants))
         } catch (e: IOException) {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
@@ -177,10 +174,10 @@ class MyHttpSession {
         try {
             val currentProject: Project = objectMapper.readValue<Project>(request.getParameter("project"))
             kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
-            val wrapper = KotlinWrappersManager.getKotlinWrapper(currentProject.compilerVersion)
+            val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
             if (wrapper == null) {
-                response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "")
-                return;
+                response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Unsupported kotlin version: $kotlinVersion")
+                return
             }
             val files = getFilesContentFromProject(currentProject)
             val isJs = currentProject.confType == "js" || currentProject.confType == "canvas"

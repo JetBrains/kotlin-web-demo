@@ -82,6 +82,17 @@ configure([
     }
 }
 
+configure([
+        project(':kotlin.web.demo.server'),
+        project(':kotlin.web.demo.backend'),
+        project(':kotlin.web.demo.backend:compilers'),
+        project(':kotlin.web.demo.test')
+]) {
+    dependencies {
+        compile project(':kotlin.web.demo.common')
+    }
+}
+
 for (config in kotlinConfigs) {
     def build = config.build
     def version = config.version
@@ -141,7 +152,6 @@ project("kotlin.web.demo.backend") {
     dependencies {
         compile project(":kotlin.web.demo.backend:compilers")
         compile project(":kotlin.web.demo.executors")
-        compile project(":kotlin.web.demo.common")
         providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
     }
 
@@ -237,7 +247,6 @@ project("kotlin.web.demo.server") {
     apply plugin: 'war'
 
     dependencies {
-        compile project(":kotlin.web.demo.common")
         compile group: 'org.scribe', name: 'scribe', version: '1.3.7'
         compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
         compile 'org.twitter4j:twitter4j-core:4.0.4'
@@ -280,7 +289,6 @@ project("kotlin.web.demo.server") {
 
 project('kotlin.web.demo.test') {
     dependencies {
-        testCompile project(':kotlin.web.demo.common')
         testCompile project(':kotlin.web.demo.backend:compilers')
         testCompile project(':kotlin.web.demo.backend')
         testCompile project(':kotlin.web.demo.server')

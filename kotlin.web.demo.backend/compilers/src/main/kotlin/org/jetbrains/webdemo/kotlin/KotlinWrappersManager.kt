@@ -16,10 +16,8 @@
 
 package org.jetbrains.webdemo.kotlin
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.commons.logging.LogFactory
+import org.jetbrains.webdemo.KotlinVersionsManager
 import org.jetbrains.webdemo.kotlin.classloader.ChildFirstURLClassLoader
 import java.net.URL
 import java.nio.file.Path
@@ -31,8 +29,6 @@ object KotlinWrappersManager {
     private val INITIALIZER_CLASSNAME = "org.jetbrains.webdemo.kotlin.impl.KotlinWrapperImpl"
     private val wrappers = HashMap<String, KotlinWrapper>()
 
-    var wrappersConfig by Delegates.notNull<ArrayList<KotlinWrapperConfig>>()
-        private set
     var defaultWrapper by Delegates.notNull<KotlinWrapper>()
         private set
     var wrappersDir by Delegates.notNull<Path>()
@@ -40,9 +36,7 @@ object KotlinWrappersManager {
 
     fun init(wrappersDir: Path, javaLibraries: List<Path>, relativeClassDirectoryPath: Path) {
         this.wrappersDir = wrappersDir
-        val configFile = KotlinWrappersManager::class.java.getResourceAsStream("/compilers-config.json")
-        wrappersConfig = jacksonObjectMapper().readValue(configFile)
-        for ((version, build, isLatestStable) in wrappersConfig) {
+        for ((version, build, isLatestStable) in KotlinVersionsManager.kotlinVersionConfigs) {
             try {
                 val classPath = getForKotlinWrapperClassLoaderURLs(version, wrappersDir, relativeClassDirectoryPath)
                 val kotlinClassLoader = ChildFirstURLClassLoader(classPath, Thread.currentThread().contextClassLoader)
@@ -82,11 +76,3 @@ object KotlinWrappersManager {
         return urls.toTypedArray()
     }
 }
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class KotlinWrapperConfig(
-    val version: String,
-    val build: String,
-    val obsolete: Boolean,
-    val latestStable: Boolean = false,
-    val hasScriptJar: Boolean = false)
