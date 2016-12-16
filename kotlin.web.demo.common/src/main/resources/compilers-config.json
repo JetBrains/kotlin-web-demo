@@ -1,13 +1,13 @@
 [
   {
-    "version": "1.0.4",
-    "build": "1.0.4"
-  },
-  {
     "version": "1.0.5",
     "buildType": "Kotlin_105_CompilerAndPlugin_NoTests",
     "build": "1.0.5-release-134",
-    "pluginBuild": "1.0.5-release-IJ2016.3-2",
+    "pluginBuild": "1.0.5-release-IJ2016.3-2"
+  },
+  {
+    "version": "1.0.6",
+    "build": "1.0.6-eap-85",
     "latestStable": true
   },
   {

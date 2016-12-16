@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.codegen.ClassBuilderFactories;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.config.LanguageVersion;
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl;
 import org.jetbrains.kotlin.container.ComponentProvider;
 import org.jetbrains.kotlin.container.ContainerKt;
 import org.jetbrains.kotlin.container.DslKt;
@@ -100,8 +101,7 @@ public class ResolveUtils {
 
         Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJvm(
                 moduleContext, trace, providerFactory,
-                GlobalSearchScope.allScope(project), LookupTracker.Companion.getDO_NOTHING(), new JvmPackagePartProvider(EnvironmentManager.getEnvironment()),
-                languageVersion
+                GlobalSearchScope.allScope(project), LookupTracker.Companion.getDO_NOTHING(), new JvmPackagePartProvider(EnvironmentManager.getEnvironment())
         );
 
         List<LazyJavaPackageFragmentProvider> additionalProviders = Collections.singletonList(
@@ -121,8 +121,7 @@ public class ResolveUtils {
             final DeclarationProviderFactory declarationProviderFactory,
             final GlobalSearchScope moduleContentScope,
             final LookupTracker lookupTracker,
-            final PackagePartProvider packagePartProvider,
-            final LanguageVersion languageVersion
+            final PackagePartProvider packagePartProvider
     ) {
         StorageComponentContainer container = DslKt.createContainer("TopDownAnalyzerForJvm", new Function1<StorageComponentContainer, Unit>() {
             @Override
@@ -130,7 +129,7 @@ public class ResolveUtils {
                 DslKt.useInstance(storageComponentContainer, packagePartProvider);
 
                 org.jetbrains.kotlin.frontend.di.InjectionKt.configureModule(storageComponentContainer, moduleContext, JvmPlatform.INSTANCE, bindingTrace);
-                InjectionKt.configureJavaTopDownAnalysis(storageComponentContainer, moduleContentScope, moduleContext.getProject(), lookupTracker, languageVersion);
+                InjectionKt.configureJavaTopDownAnalysis(storageComponentContainer, moduleContentScope, moduleContext.getProject(), lookupTracker, LanguageVersionSettingsImpl.DEFAULT);
 
                 DslKt.useInstance(storageComponentContainer, declarationProviderFactory);
 

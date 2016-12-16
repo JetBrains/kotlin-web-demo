@@ -93,4 +93,10 @@ public class KotlinResolutionFacade implements ResolutionFacade {
     public <T> T getFrontendService(@NotNull ModuleDescriptor moduleDescriptor, @NotNull Class<T> aClass) {
         throw new UnsupportedOperationException();
     }
+
+    @NotNull
+    @Override
+    public BindingContext analyze(Collection<? extends KtElement> collection, BodyResolveMode bodyResolveMode) {
+        throw new UnsupportedOperationException();
+    }
 }
