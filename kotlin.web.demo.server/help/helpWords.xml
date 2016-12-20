@@ -6,9 +6,7 @@
             For loop iterates through anything that provides an iterator. The syntax is as follows:
             <pre>for (item in collection)</pre>
             <pre>  print(item)</pre>
-            <a href="http://kotlinlang.org/docs/reference/control-flow.html#for-loops">More
-                info
-            </a>
+            <a href="http://kotlinlang.org/docs/reference/control-flow.html#for-loops">More info</a>
         </text>
     </keyword>
     <keyword>
@@ -77,11 +75,11 @@
     <keyword>
         <name>val</name>
         <text>Assign-once (read-only) local variable:
-            <pre>val a : Int = 1</pre>
+            <pre>val a: Int = 1</pre>
             <pre>val b = 1 // Type is inferred</pre>
             <pre><i>// Type required when</i></pre>
             <pre><i>// no kotlinWrapper provided</i></pre>
-            <pre>val c : Int </pre>
+            <pre>val c: Int </pre>
             <pre>c = 1 // definite assignment</pre>
             <a href="http://kotlinlang.org/docs/reference/basic-syntax.html#defining-local-variables">More info</a>
             <a href="http://kotlinlang.org/docs/reference/properties.html">See also</a>
@@ -99,7 +97,7 @@
     <keyword>
         <name>fun</name>
         <text>Define a function:
-            <pre>fun sum(a : Int, b : Int) : Int {</pre>
+            <pre>fun sum(a: Int, b: Int): Int {</pre>
             <pre>  return a + b</pre>
             <pre>}</pre>
             <a href="http://kotlinlang.org/docs/reference/basic-syntax.html#defining-functions">More info</a>
@@ -120,16 +118,14 @@
             For loop iterates through anything that provides an iterator. The syntax is as follows:
             <pre>for (item in collection)</pre>
             <pre>  print(item)</pre>
-            <a href="http://kotlinlang.org/docs/reference/control-flow.html#for-loops">More
-                info
-            </a>
+            <a href="http://kotlinlang.org/docs/reference/control-flow.html#for-loops">More info</a>
         </text>
     </keyword>
     <keyword>
         <name>if</name>
         <text>In Kotlin, <b>if</b> is an expression,
             i.e. it returns a value. Therefore there is not ternary operator (condition ? then : else), because ordinary <b>if</b> works fine in this role.
-            <pre>var max : Int</pre>
+            <pre>var max: Int</pre>
             <pre>if (a > b)</pre>
             <pre>  max = a</pre>
             <pre>else </pre>
@@ -141,7 +137,7 @@
         <name>vararg</name>
         <text>The last argument of a function may be marked with <b>vararg</b> annotation.
             By default, <b>vararg</b> creates an array, but this behavior can be customized by providing arguments to the annotation.
-            <pre>fun asList&lt;T&gt;(vararg ts : T) : List&lt;T&gt; {</pre>
+            <pre>fun asList&lt;T&gt;(vararg ts: T): List&lt;T&gt; {</pre>
             <pre>...</pre>
             <a href="http://kotlinlang.org/docs/reference/functions.html#variable-number-of-arguments-varargs">More info</a>
         </text>
@@ -149,7 +145,7 @@
     <keyword>
         <name>inline</name>
         <text>You can add an inline annotation for a function:
-            <pre>inline fun lock&lt;T&gt;(lock : Lock, body : fun() : T) : T {</pre>
+            <pre>inline fun lock&lt;T&gt;(lock: Lock, body: fun(): T): T {</pre>
             <pre>...</pre>
             <a href="http://kotlinlang.org/docs/reference/inline-functions.html">More info</a>
         </text>
