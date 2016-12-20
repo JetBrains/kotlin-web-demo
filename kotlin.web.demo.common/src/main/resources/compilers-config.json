@@ -11,13 +11,13 @@
     "latestStable": true
   },
   {
-    "version": "1.1-M02",
-    "build": "1.1.0-dev-4977",
+    "version": "1.1-M03",
+    "build": "1.1.0-dev-4845",
     "hasScriptJar": true
   },
   {
-    "version": "1.1-M03",
-    "build": "1.1.0-dev-4845",
+    "version": "1.1-M04",
+    "build": "1.1.0-dev-5596",
     "hasScriptJar": true
   }
 ]

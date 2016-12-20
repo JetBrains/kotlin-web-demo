@@ -59,7 +59,7 @@ public class KotlinResolutionFacade implements ResolutionFacade {
 
     @NotNull
     @Override
-    public DeclarationDescriptor resolveToDescriptor(@NotNull KtDeclaration jetDeclaration) {
+    public DeclarationDescriptor resolveToDescriptor(@NotNull KtDeclaration jetDeclaration, BodyResolveMode resolveMode) {
         throw new UnsupportedOperationException();
     }
 

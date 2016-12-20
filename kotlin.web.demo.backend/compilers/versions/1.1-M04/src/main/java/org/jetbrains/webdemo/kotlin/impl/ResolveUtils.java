@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.codegen.ClassBuilderFactories;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
-import org.jetbrains.kotlin.config.LanguageVersion;
+import org.jetbrains.kotlin.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl;
 import org.jetbrains.kotlin.container.ComponentProvider;
 import org.jetbrains.kotlin.container.ContainerKt;
@@ -50,10 +50,14 @@ import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.resolve.JsPlatform;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.kotlin.resolve.*;
+import org.jetbrains.kotlin.resolve.BindingContext;
+import org.jetbrains.kotlin.resolve.BindingTrace;
+import org.jetbrains.kotlin.resolve.CompilerEnvironment;
+import org.jetbrains.kotlin.resolve.LazyTopDownAnalyzer;
+import org.jetbrains.kotlin.resolve.TopDownAnalysisMode;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
-import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisCompletedHandlerExtension;
+import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension;
 import org.jetbrains.kotlin.resolve.lazy.FileScopeProviderImpl;
 import org.jetbrains.kotlin.resolve.lazy.KotlinCodeAnalyzer;
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession;
@@ -95,11 +99,14 @@ public class ResolveUtils {
         KotlinCoreEnvironment environment = EnvironmentManager.getEnvironment();
         BindingTrace trace = new CliLightClassGenerationSupport.CliBindingTrace();
 
+
+        CompilerConfiguration configuration = environment.getConfiguration();
+        configuration.put(JVMConfigurationKeys.ADD_BUILT_INS_FROM_COMPILER_TO_DEPENDENCIES, true);
         ComponentProvider container = TopDownAnalyzerFacadeForJVM.INSTANCE.createContainer(
                 environment.getProject(),
                 files,
                 trace,
-                environment.getConfiguration(),
+                configuration,
                 new Function1<GlobalSearchScope, PackagePartProvider>() {
                     @Override
                     public PackagePartProvider invoke(GlobalSearchScope globalSearchScope) {
@@ -118,7 +125,7 @@ public class ResolveUtils {
         DslKt.getService(container, LazyTopDownAnalyzer.class).analyzeDeclarations(TopDownAnalysisMode.TopLevelDeclarations, files, DataFlowInfo.Companion.getEMPTY());
 
         ModuleDescriptor moduleDescriptor = DslKt.getService(container, ModuleDescriptor.class);
-        for (AnalysisCompletedHandlerExtension extension : AnalysisCompletedHandlerExtension.Companion.getInstances(project)) {
+        for (AnalysisHandlerExtension extension : AnalysisHandlerExtension.Companion.getInstances(project)) {
             AnalysisResult result = extension.analysisCompleted(project, moduleDescriptor, trace, files);
             if (result != null) break;
         }
@@ -139,7 +146,6 @@ public class ResolveUtils {
         MutableModuleContext module = ContextKt.ContextForNewModule(
                 ContextKt.ProjectContext(project),
                 Name.special("<" + config.getModuleId() + ">"),
-                JsPlatform.INSTANCE,
                 JsPlatform.INSTANCE.getBuiltIns()
         );
         module.setDependencies(computeDependencies(module.getModule(), config));
