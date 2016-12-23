@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.webdemo.ApplicationSettings;
+import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.KotlinVersionsManager;
 import org.jetbrains.webdemo.Project;
@@ -61,7 +62,11 @@ public class ServerHandler {
             }
         } else {
             SessionInfo sessionInfo;
-            response.setHeader("Access-Control-Allow-Origin", "*");
+            if (CommonSettings.IS_TEST_VERSION) {
+                response.setHeader("Access-Control-Allow-Origin", "*");
+            } else {
+                response.setHeader("Access-Control-Allow-Origin", "http://staging.kotlinlang.org.s3-website-eu-west-1.amazonaws.com/");
+            }
             try {
                 switch (request.getParameter("type")) {
                     case ("getUserName"):
