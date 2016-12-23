@@ -19,6 +19,7 @@ package org.jetbrains.webdemo.backend.executor.result;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExceptionDescriptor {
@@ -36,7 +37,7 @@ public class ExceptionDescriptor {
     ) {
         this.message = message;
         this.fullName = fullName;
-        this.stackTrace = stackTrace;
+        this.stackTrace = removeReflectionStackTracePart(stackTrace);
         this.cause = cause;
     }
 
@@ -54,5 +55,16 @@ public class ExceptionDescriptor {
 
     public ExceptionDescriptor getCause() {
         return cause;
+    }
+
+    private List<StackTraceElement> removeReflectionStackTracePart(List<StackTraceElement> stackTraceElements){
+        List<StackTraceElement> actualStackTrace = new ArrayList<StackTraceElement>();
+        for(StackTraceElement element : stackTraceElements) {
+            if(element.getClassName().startsWith("sun.reflect")) {
+                break;
+            }
+            actualStackTrace.add(element);
+        }
+        return actualStackTrace;
     }
 }
