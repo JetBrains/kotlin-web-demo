@@ -7,7 +7,9 @@
   },
   {
     "version": "1.0.6",
-    "build": "1.0.6-eap-85",
+    "buildType": "Kotlin_106_CompilerAndPlugin_NoTests",
+    "build": "1.0.6-release-127",
+    "pluginBuild": "1.0.6-release-IJ2016.3-1",
     "latestStable": true
   },
   {
