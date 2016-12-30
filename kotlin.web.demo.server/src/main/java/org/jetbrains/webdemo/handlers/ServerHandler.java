@@ -65,7 +65,7 @@ public class ServerHandler {
             if (CommonSettings.IS_TEST_VERSION) {
                 response.setHeader("Access-Control-Allow-Origin", "*");
             } else {
-                response.setHeader("Access-Control-Allow-Origin", "http://staging.kotlinlang.org.s3-website-eu-west-1.amazonaws.com/");
+                response.setHeader("Access-Control-Allow-Origin", "http://staging.kotlinlang.org.s3-website-eu-west-1.amazonaws.com");
             }
             try {
                 switch (request.getParameter("type")) {
