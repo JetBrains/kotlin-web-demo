@@ -13,13 +13,13 @@
     "latestStable": true
   },
   {
-    "version": "1.1-M03",
-    "build": "1.1.0-dev-4845",
+    "version": "1.1-M04",
+    "build": "1.1.0-dev-5651",
     "hasScriptJar": true
   },
   {
-    "version": "1.1-M04",
-    "build": "1.1.0-dev-5651",
+    "version": "1.1-beta",
+    "build": "1.1.0-dev-6126",
     "hasScriptJar": true
   }
 ]

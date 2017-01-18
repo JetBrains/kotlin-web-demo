@@ -35,6 +35,7 @@ import org.jetbrains.kotlin.idea.codeInsight.ReferenceVariantsHelper;
 import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers;
 import org.jetbrains.kotlin.lexer.KtKeywordToken;
 import org.jetbrains.kotlin.lexer.KtTokens;
+import org.jetbrains.kotlin.name.FqNameUnsafe;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.KtExpression;
 import org.jetbrains.kotlin.psi.KtFile;
@@ -181,7 +182,8 @@ public class CompletionProvider {
                     bindingContext,
                     new KotlinResolutionFacade(containerProvider),
                     analysisResult.getModuleDescriptor(),
-                    VISIBILITY_FILTER
+                    VISIBILITY_FILTER,
+                    Collections.<FqNameUnsafe>emptySet()
             );
 
             if (element instanceof KtSimpleNameExpression) {
