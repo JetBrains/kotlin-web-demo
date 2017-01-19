@@ -149,7 +149,6 @@ public class ResolveUtils {
 
     public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJs(@NotNull List<KtFile> files, Project project) {
         KotlinCoreEnvironment environment = EnvironmentManager.getEnvironment();
-        LanguageVersion languageVersion = EnvironmentManager.getLanguageVersion();
 
         String moduleName = getModuleName(environment);
         JsConfig config = new LibrarySourcesConfig.Builder(
@@ -167,7 +166,7 @@ public class ResolveUtils {
 
         FileBasedDeclarationProviderFactory providerFactory = new FileBasedDeclarationProviderFactory(module.getStorageManager(), files);
 
-        Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJs(module, trace, providerFactory, languageVersion);
+        Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJs(module, trace, providerFactory);
 
         analyzerAndProvider.getFirst().analyzeFiles(TopDownAnalysisMode.TopLevelDeclarations, files, Collections.<PackageFragmentProvider>emptyList());
 
@@ -191,8 +190,7 @@ public class ResolveUtils {
     private static Pair<LazyTopDownAnalyzerForTopLevel, ComponentProvider> createContainerForTopDownAnalyzerForJs(
             final ModuleContext moduleContext,
             final BindingTrace bindingTrace,
-            final DeclarationProviderFactory declarationProviderFactory,
-            final LanguageVersion languageVersion
+            final DeclarationProviderFactory declarationProviderFactory
     ) {
         StorageComponentContainer container = DslKt.createContainer("TopDownAnalyzerForJs", new Function1<StorageComponentContainer, Unit>() {
             @Override
@@ -205,7 +203,7 @@ public class ResolveUtils {
                 CompilerEnvironment.INSTANCE.configure(storageComponentContainer);
 
                 DslKt.useInstance(storageComponentContainer, LookupTracker.Companion.getDO_NOTHING());
-                DslKt.useInstance(storageComponentContainer, languageVersion);
+                DslKt.useInstance(storageComponentContainer, LanguageVersionSettingsImpl.DEFAULT);
                 ContainerKt.registerSingleton(storageComponentContainer, ResolveSession.class);
                 ContainerKt.registerSingleton(storageComponentContainer, LazyTopDownAnalyzerForTopLevel.class);
 
