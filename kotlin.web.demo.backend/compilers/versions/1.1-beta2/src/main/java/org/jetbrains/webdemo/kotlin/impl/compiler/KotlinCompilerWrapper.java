@@ -37,10 +37,10 @@ import java.util.List;
 import java.util.Map;
 
 public class KotlinCompilerWrapper {
-    public CompilationResult compile(List<KtFile> currentPsiFiles, Project currentProject, CompilerConfiguration configuration) {
+    public CompilationResult compile(List<KtFile> currentPsiFiles, Project currentProject, CompilerConfiguration configuration, String fileName) {
         try {
             GenerationState generationState = ResolveUtils.getGenerationState(currentPsiFiles, currentProject, configuration);
-            String mainClass = findMainClass(generationState.getBindingContext(), currentPsiFiles);
+            String mainClass = findMainClass(generationState.getBindingContext(), currentPsiFiles, fileName);
             KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
                 @Override
                 public void reportException(Throwable throwable, String fileUrl) {
@@ -59,12 +59,22 @@ public class KotlinCompilerWrapper {
         }
     }
 
-    private String findMainClass(BindingContext bindingContext, List<KtFile> files) {
+    private String findMainClass(BindingContext bindingContext, List<KtFile> files, String fileName) {
+        MainFunctionDetector mainFunctionDetector = new MainFunctionDetector(bindingContext);
         for (KtFile file : files) {
-            if (new MainFunctionDetector(bindingContext).hasMain(file.getDeclarations())) {
-                return NoResolveFileClassesProvider.INSTANCE.getFileClassInfo(file).getFileClassFqName().asString();
+            if (file.getName().contains(fileName) && mainFunctionDetector.hasMain(file.getDeclarations())) {
+                return getMainClassName(file);
             }
         }
-        return NoResolveFileClassesProvider.INSTANCE.getFileClassInfo(files.iterator().next()).getFileClassFqName().asString();
+        for (KtFile file : files) {
+            if (mainFunctionDetector.hasMain(file.getDeclarations())) {
+                return getMainClassName(file);
+            }
+        }
+        return getMainClassName(files.iterator().next());
+    }
+
+    private String getMainClassName(KtFile file) {
+        return NoResolveFileClassesProvider.INSTANCE.getFileClassInfo(file).getFileClassFqName().asString();
     }
 }

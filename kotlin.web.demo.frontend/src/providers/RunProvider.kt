@@ -35,11 +35,11 @@ class RunProvider(
         private val onComplete: () -> Unit,
         private val onFail: (String) -> Unit
 ) {
-    fun run(configuration: Configuration, project: Project) {
+    fun run(configuration: Configuration, project: Project, file: File) {
         if (project.files.isEmpty()) return;
         beforeRun()
         if (configuration.type.runner == ConfigurationTypeRunner.JAVA) {
-            runJava(project)
+            runJava(project, file)
         } else {
             loadJsFromServer(project)
         }
@@ -63,7 +63,7 @@ class RunProvider(
         return !hasErrors
     }
 
-    private fun runJava(project: Project) {
+    private fun runJava(project: Project, file: File) {
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("run", hashMapOf("runConf" to project.confType)),
@@ -77,7 +77,7 @@ class RunProvider(
                 },
                 dataType = DataType.JSON,
                 type = HTTPRequestType.POST,
-                data = json ("project" to JSON.stringify(project)),
+                data = json ("project" to JSON.stringify(project), "filename" to file.name),
                 timeout = 15000,
                 complete = { onComplete() },
                 error = { jqXHR, textStatus, errorThrown ->

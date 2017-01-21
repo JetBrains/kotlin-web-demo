@@ -243,7 +243,10 @@ object Application {
     val runButton: Button = Button(
             Elements.runButton,
             onClick = {
-                runProvider.run(configurationManager.getConfiguration(), accordion.selectedProjectView!!.project)
+                runProvider.run(configurationManager.getConfiguration(),
+                        accordion.selectedProjectView!!.project,
+                        accordion.selectedFileView!!.file
+                )
             }
     )
 

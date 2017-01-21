@@ -106,7 +106,7 @@ public class RunTest extends BaseTest {
     private JavaExecutionResult compileAndExecute(String fileName, String args) throws Exception {
         Map<String, String> files = new HashMap<>();
         files.put(fileName, TestUtils.getDataFromFile(fileName));
-        CompilationResult compilationResult = kotlinWrapper.compileCorrectFiles(files);
+        CompilationResult compilationResult = kotlinWrapper.compileCorrectFiles(files, fileName);
         return (JavaExecutionResult) ExecutorUtils.executeCompiledFiles(
                 compilationResult.getFiles(),
                 compilationResult.getMainClass(),

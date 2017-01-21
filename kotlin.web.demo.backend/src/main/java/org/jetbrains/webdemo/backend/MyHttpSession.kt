@@ -82,7 +82,8 @@ class MyHttpSession {
             if (currentProject.confType != "js" && currentProject.confType != "canvas") {
                 var executionResult: ExecutionResult? = null
                 if (isOnlyWarnings(errorDescriptors)) {
-                    val compilationResult = wrapper.compileCorrectFiles(getFilesContentFromProject(currentProject))
+                    val filename = request.getParameter("filename")
+                    val compilationResult = wrapper.compileCorrectFiles(getFilesContentFromProject(currentProject), filename)
                     executionResult = ExecutorUtils.executeCompiledFiles(
                             compilationResult.files,
                             compilationResult.mainClass,

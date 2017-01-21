@@ -105,7 +105,7 @@ public class ExamplesTest extends BaseTest {
     }
 
     private ExecutionResult compileAndExecute(Map<String, String> files, String args, boolean isJunit) throws Exception {
-        CompilationResult compilationResult = kotlinWrapper.compileCorrectFiles(files);
+        CompilationResult compilationResult = kotlinWrapper.compileCorrectFiles(files, null);
         return ExecutorUtils.executeCompiledFiles(
                 compilationResult.getFiles(),
                 compilationResult.getMainClass(),

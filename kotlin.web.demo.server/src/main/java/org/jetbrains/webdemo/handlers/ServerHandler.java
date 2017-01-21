@@ -118,6 +118,10 @@ public class ServerHandler {
             ExamplesUtils.addUnmodifiableFilesToProject(project);
             Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(project));
+            String filename = request.getParameter("filename");
+            if (filename != null) {
+                postParameters.put("filename", filename);
+            }
             forwardRequestToBackend(request, response, postParameters);
         } catch (IOException e) {
             writeResponse(request, response, "Can't parse project", HttpServletResponse.SC_BAD_REQUEST);

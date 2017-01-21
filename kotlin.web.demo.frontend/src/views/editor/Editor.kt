@@ -251,7 +251,8 @@ public class Editor(
                 onClickFunction = {
                     Application.runProvider.run(
                             Application.configurationManager.getConfiguration(),
-                            Application.accordion.selectedProjectView!!.project
+                            Application.accordion.selectedProjectView!!.project,
+                            Application.accordion.selectedFileView!!.file
                     )
                 }
             }
