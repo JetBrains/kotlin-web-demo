@@ -1,0 +1,9 @@
+{
+  "name" : "3.4",
+  "files" : [ {
+    "filename" : "2_VarargsFunctionsThatAcceptAnArbitraryNumberOfArguments.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

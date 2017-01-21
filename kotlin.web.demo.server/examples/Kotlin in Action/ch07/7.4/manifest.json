@@ -1,0 +1,18 @@
+{
+  "name" : "7.4",
+  "files" : [ {
+    "filename" : "1_DestructuringDeclarationsAndLoops.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "7.4_1_DestructuringDeclarations.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "7.4_2_SplitFilename.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "7.4_3_DestructuringDeclarations2.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

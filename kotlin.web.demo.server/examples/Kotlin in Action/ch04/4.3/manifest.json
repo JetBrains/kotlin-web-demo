@@ -1,0 +1,21 @@
+{
+  "name" : "4.3",
+  "files" : [ {
+    "filename" : "1.1_StringRepresentationToString.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1.2_1_ObjectEqualityEquals.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1.2_2_ObjectEqualityEquals1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2.1_DataClassesAndImmutabilityTheCopyMethod.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_ClassDelegationUsingTheByKeyword.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

@@ -1,0 +1,12 @@
+{
+  "name" : "3.2",
+  "files" : [ {
+    "filename" : "3.2_1_MakingFunctionsEasierToCall.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3.2_2_JoinToString.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

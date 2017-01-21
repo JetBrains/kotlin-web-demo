@@ -1,0 +1,21 @@
+{
+  "name" : "2.4",
+  "files" : [ {
+    "filename" : "2_1_FizzBuzz.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_IteratingOverNumbersRangesAndProgressions1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_IteratingOverMaps.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_1_UsingAnInCheck.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_2_UsingAnInCheck1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

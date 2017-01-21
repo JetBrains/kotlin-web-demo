@@ -1,0 +1,39 @@
+{
+  "name" : "2.3",
+  "files" : [ {
+    "filename" : "1_1_colors.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_DeclaringEnumClasses1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_UsingWhenToDealWithEnumClasses.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_GetWarmth.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_3_UsingWhenToDealWithEnumClasses2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_UsingWhenWithArbitraryObjects.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_UsingWhenWithoutAnArgument.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_SmartCastsCombiningTypeChecksAndCasts.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6_1_EvalIf.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6_2_RefactoringReplacingIfWithWhen1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "7_BlocksAsBranchesOfIfAndWhen.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

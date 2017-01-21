@@ -1,0 +1,21 @@
+{
+  "name" : "3.5",
+  "files" : [ {
+    "filename" : "1_1_SplittingStrings.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_SplittingStrings1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_ParsePath.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_RegularExpressionsAndTriplequotedStrings1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_MultilineTriplequotedStrings.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

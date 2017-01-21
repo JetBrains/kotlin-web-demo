@@ -1,0 +1,33 @@
+{
+  "name" : "6.3",
+  "files" : [ {
+    "filename" : "1_1_AddValidNumbers.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_NullabilityAndCollections1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_ReadonlyAndMutableCollections.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_KotlinCollectionsAndJava1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_1_Arrays.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_2_Arrays1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_3_Arrays2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_4_Arrays3.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_5_Arrays4.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

@@ -1,0 +1,12 @@
+{
+  "name" : "3.1",
+  "files" : [ {
+    "filename" : "3.1_1_CreatingCollectionsInKotlin.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3.1_2_CreatingCollectionsInKotlin1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

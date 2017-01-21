@@ -1,0 +1,30 @@
+{
+  "name" : "9.3",
+  "files" : [ {
+    "filename" : "1_WhyVarianceExistsPassingAnArgumentToAFunction.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_1_CopyDataAny.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_2_CopyDataOut.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_3_CopyDataIn.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6.2_1_printFirst.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6.2_2_StarProjectionUsingInsteadOfATypeArgument1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6.2_3_FieldValidator.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6.2_4_StarProjectionUsingInsteadOfATypeArgument3.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

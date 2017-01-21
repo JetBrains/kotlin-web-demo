@@ -1,0 +1,27 @@
+{
+  "name" : "3.3",
+  "files" : [ {
+    "filename" : "3_1_JoinToStringFinal.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_UtilityFunctionsAsExtensions1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_3_UtilityFunctionsAsExtensions2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3.3_AddingMethodsToOtherPeoplesClassesExtensionFunctionsAndProperties.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_1_NoOverridingForExtensionFunctions.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_2_NoOverridingForExtensionFunctions1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_ExtensionProperties.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

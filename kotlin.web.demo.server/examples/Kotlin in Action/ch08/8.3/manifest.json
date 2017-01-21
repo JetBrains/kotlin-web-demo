@@ -1,0 +1,24 @@
+{
+  "name" : "8.3",
+  "files" : [ {
+    "filename" : "1_1_LookForAlice.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_ReturnStatementsInLambdasReturnFromAnEnclosingFunction1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_ReturnWithLabel.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_ReturningFromLambdasReturnWithALabel1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_3_ReturningFromLambdasReturnWithALabel2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_AnonymousFunctionsLocalReturnsByDefault.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

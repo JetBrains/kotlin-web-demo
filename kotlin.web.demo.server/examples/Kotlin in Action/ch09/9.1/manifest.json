@@ -1,0 +1,21 @@
+{
+  "name" : "9.1",
+  "files" : [ {
+    "filename" : "1_1_GenericFunctionsAndProperties.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_GenericFunctionsAndProperties1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_TypeParameterConstraints.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_TypeParameterConstraints1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_3_TypeParameterConstraints2.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

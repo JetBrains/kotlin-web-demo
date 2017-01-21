@@ -1,0 +1,51 @@
+{
+  "name" : "6.1",
+  "files" : [ {
+    "filename" : "1_NullableTypes.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_SafeCallOperator.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_SafeCallOperator1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_3_SafeCallOperator2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_1_ElvisOperator.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_2_ElvisOperator1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_SafeCastsAs.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6_NotnullAssertions.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "7_TheLetFunction.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "8_1_LateinitializedProperties.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "8_2_LateinitializedProperties1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "9_ExtensionsForNullableTypes.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "10_NullabilityOfTypeParameters.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "11.1_2_PlatformTypes1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "Person.java",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

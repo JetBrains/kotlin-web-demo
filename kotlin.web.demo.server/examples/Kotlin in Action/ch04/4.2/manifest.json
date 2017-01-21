@@ -1,0 +1,33 @@
+{
+  "name" : "4.2",
+  "files" : [ {
+    "filename" : "1_1_InitializingClassesPrimaryConstructorAndInitializerBlocks.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_InitializingClassesPrimaryConstructorAndInitializerBlocks1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_3_InitializingClassesPrimaryConstructorAndInitializerBlocks2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_4_InitializingClassesPrimaryConstructorAndInitializerBlocks3.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_5_InitializingClassesPrimaryConstructorAndInitializerBlocks4.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_ImplementingPropertiesDeclaredInInterfaces.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_ImplementingPropertiesDeclaredInInterfaces1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_AccessingABackingFieldFromAGetterOrSetter.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_ChangingAccessorVisibility.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

@@ -1,0 +1,15 @@
+{
+  "name" : "2.5",
+  "files" : [ {
+    "filename" : "1_TryCatchAndFinally.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_TryAsAnExpression.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_TryAsAnExpression1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

@@ -1,0 +1,42 @@
+{
+  "name" : "8.1",
+  "files" : [ {
+    "filename" : "1_FunctionTypes.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_CallingFunctionsPassedAsArguments.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_CallingFunctionsPassedAsArguments1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_ProcessTheAnswer.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_1_JoinToStringDefault.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_2_DefaultAndNullValuesForParametersWithFunctionTypes1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_1_ReturningFunctionsFromFunctions.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_2_ReturningFunctionsFromFunctions1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6_1_RemovingDuplicationThroughLambdas.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6_2_RemovingDuplicationThroughLambdas1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6_3_RemovingDuplicationThroughLambdas2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6_4_RemovingDuplicationThroughLambdas3.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

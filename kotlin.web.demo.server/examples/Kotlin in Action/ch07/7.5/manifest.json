@@ -1,0 +1,30 @@
+{
+  "name" : "7.5",
+  "files" : [ {
+    "filename" : "2_1_LazyEmails.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_LazyInitialization1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_ImplementingDelegatedProperties.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_ImplementingDelegatedProperties1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_3_ImplementingDelegatedProperties2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_4_ImplementingDelegatedProperties3.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_1_ExpandoObject.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_2_StoringPropertyValuesInAMap1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

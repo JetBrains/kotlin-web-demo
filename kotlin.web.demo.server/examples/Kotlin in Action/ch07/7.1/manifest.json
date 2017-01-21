@@ -1,0 +1,36 @@
+{
+  "name" : "7.1",
+  "files" : [ {
+    "filename" : "1_1_PointPlusMember.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_PointPlusExtension.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_3_BinaryOperators2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_4_BinaryOperators3.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_5_BinaryOperators4.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_CompoundAssignmentOperators.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_CompoundAssignmentOperators1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_3_CompoundAssignmentOperators2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_UnaryOperators.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_UnaryOperators1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

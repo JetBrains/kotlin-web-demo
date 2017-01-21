@@ -1,0 +1,24 @@
+{
+  "name" : "11.2",
+  "files" : [ {
+    "filename" : "1_1_LambdasWithReceiversAndExtensionFunctionTypes.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_LambdasWithReceiversAndExtensionFunctionTypes1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_3_LambdasWithReceiversAndExtensionFunctionTypes2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_4_LambdasWithReceiversAndExtensionFunctionTypes3.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_HtmlTags.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_UsingLambdasWithReceiversInHTMLBuilders1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

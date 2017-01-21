@@ -1,0 +1,18 @@
+{
+  "name" : "9.2",
+  "files" : [ {
+    "filename" : "1_1_GenericsAtRuntimeTypeChecksAndCasts.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_GenericsAtRuntimeTypeChecksAndCasts1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_DeclaringFunctionsWithReifiedTypeParameters.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_DeclaringFunctionsWithReifiedTypeParameters1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

@@ -1,0 +1,9 @@
+{
+  "name" : "5.4",
+  "files" : [ {
+    "filename" : "2_SAMConstructorsExplicitConversionOfLambdasToFunctionalInterfaces.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

@@ -1,0 +1,18 @@
+{
+  "name" : "5.3",
+  "files" : [ {
+    "filename" : "1_1_ExecutingSequenceOperationsIntermediateAndTerminalOperations.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_ExecutingSequenceOperationsIntermediateAndTerminalOperations1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_CreatingSequences.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_CreatingSequences1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

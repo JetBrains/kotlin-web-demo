@@ -1,0 +1,21 @@
+{
+  "name" : "7.3",
+  "files" : [ {
+    "filename" : "1_1_IndexOperator.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_IndexOperator1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_InOperator.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_RangePriority.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_IteratorConvention.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

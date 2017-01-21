@@ -1,0 +1,21 @@
+{
+  "name" : "5.5",
+  "files" : [ {
+    "filename" : "1_1_Alphabet.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_TheWithFunction1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_3_TheWithFunction2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_TheApplyFunction.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_TheApplyFunction1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

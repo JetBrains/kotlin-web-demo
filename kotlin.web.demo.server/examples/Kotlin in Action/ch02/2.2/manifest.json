@@ -1,0 +1,21 @@
+{
+  "name" : "2.2",
+  "files" : [ {
+    "filename" : "1_1_Person.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_3_Properties2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_CustomAccessors.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_Rectangle.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_RectangleExample.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

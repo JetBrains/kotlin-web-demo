@@ -1,0 +1,42 @@
+{
+  "name" : "5.2",
+  "files" : [ {
+    "filename" : "1_1_EssentialsFilterAndMap.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_EssentialsFilterAndMap1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_3_EssentialsFilterAndMap2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_4_EssentialsFilterAndMap3.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_5_EssentialsFilterAndMap4.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_AllAnyCountAndFindApplyingAPredicateToACollection.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_AllAnyCountAndFindApplyingAPredicateToACollection1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_3_AllAnyCountAndFindApplyingAPredicateToACollection2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_GroupByConvertingAListToAMapOfGroups.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_GroupByConvertingAListToAMapOfGroups1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_1_FlatMapAndFlattenProcessingElementsInNestedCollections.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_2_FlatMapAndFlattenProcessingElementsInNestedCollections1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

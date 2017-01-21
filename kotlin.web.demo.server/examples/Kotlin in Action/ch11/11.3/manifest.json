@@ -1,0 +1,15 @@
+{
+  "name" : "11.3",
+  "files" : [ {
+    "filename" : "1_TheInvokeConventionObjectsCallableAsFunctions.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_TheInvokeConventionAndFunctionalTypes.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_TheInvokeConventionInDSLsDeclaringDependenciesInGradle.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

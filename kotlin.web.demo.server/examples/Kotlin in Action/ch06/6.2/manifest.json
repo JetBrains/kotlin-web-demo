@@ -1,0 +1,24 @@
+{
+  "name" : "6.2",
+  "files" : [ {
+    "filename" : "1_PrimitiveTypes.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_NullablePrimitiveTypes.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_NumberConversions.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_NumberConversions1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_3_NumberConversions2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "6_NothingType.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

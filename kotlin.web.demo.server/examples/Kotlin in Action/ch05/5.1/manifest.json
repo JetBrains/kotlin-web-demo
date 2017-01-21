@@ -1,0 +1,36 @@
+{
+  "name" : "5.1",
+  "files" : [ {
+    "filename" : "2_LambdasAndCollections.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3.4_SyntaxForLambdaExpressions4.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_1_SyntaxForLambdaExpressions.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_2_SyntaxForLambdaExpressions1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_3_SyntaxForLambdaExpressions2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "3_4_SyntaxForLambdaExpressions3.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_1_AccessingVariablesInScope.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_2_AccessingVariablesInScope1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_1_MemberReferences.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_2_MemberReferences1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}

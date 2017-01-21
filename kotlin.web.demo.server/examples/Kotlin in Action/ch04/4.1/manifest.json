@@ -1,0 +1,36 @@
+{
+  "name" : "4.1",
+  "files" : [ {
+    "filename" : "1_1_InterfacesInKotlin.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "1_2_main.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_1_OpenFinalAndAbstractModifiersFinalByDefault.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_2_OpenFinalAndAbstractModifiersFinalByDefault1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "2_3_OpenFinalAndAbstractModifiersFinalByDefault2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_1_View.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_2_Button1.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "4_3_InnerAndNestedClassesNestedByDefault2.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_1_SealedClassesDefiningRestrictedClassHierarchies.kt",
+    "modifiable" : "true"
+  }, {
+    "filename" : "5_2_SealedClassesDefiningRestrictedClassHierarchies1.kt",
+    "modifiable" : "true"
+  } ],
+  "args" : "",
+  "confType" : "java"
+}
