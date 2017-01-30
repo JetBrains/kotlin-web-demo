@@ -39,6 +39,9 @@
   }, {
     "filename" : "10_NullabilityOfTypeParameters.kt",
     "modifiable" : "true"
+  }, {
+    "filename" : "11.1_2_PlatformTypes1.kt",
+    "modifiable" : "true"
   } ],
   "args" : "",
   "confType" : "java"
