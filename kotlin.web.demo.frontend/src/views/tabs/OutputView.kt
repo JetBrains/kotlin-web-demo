@@ -17,13 +17,12 @@
 package views.tabs
 
 import application.makeReference
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
+import kotlinx.html.dom.append
+import kotlinx.html.js.span
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLSpanElement
-import utils.jquery.JQuery
 import utils.unEscapeString
+import kotlin.browser.document
 
 
 class OutputView(val element: HTMLElement) {
@@ -49,13 +48,22 @@ class OutputView(val element: HTMLElement) {
     }
 
     fun printMarkedText(text: String) {
-        val spanElements = JQuery.parseHTML(unEscapeString(text)
-                .replace("<outStream>", "<span class=\"standard-output\">")
-                .replace("</outStream>", "</span>")
-                .replace("<errStream>", "<span class=\"error-output\">")
-                .replace("</errStream>", "</span>")
-        )
-        spanElements?.forEach { element.appendChild(it) }
+        var unprocessedFragment = unEscapeString(text)
+        while (unprocessedFragment.isNotBlank()){
+            val spanElement = document.createElement("span") as HTMLSpanElement
+            if(unprocessedFragment.startsWith("<outStream>")){
+                unprocessedFragment = unprocessedFragment.substringAfter("<outStream>")
+                spanElement.className = "standard-output"
+                spanElement.textContent = unprocessedFragment.substringBefore("</outStream>")
+                unprocessedFragment = unprocessedFragment.substringAfter("</outStream>")
+            } else{
+                unprocessedFragment = unprocessedFragment.substringAfter("<errStream>")
+                spanElement.className = "error-output"
+                spanElement.textContent = unprocessedFragment.substringBefore("</errStream>")
+                unprocessedFragment = unprocessedFragment.substringAfter("</errStream>")
+            }
+            element.appendChild(spanElement)
+        }
     }
 
     fun printException(exception: dynamic) {
