@@ -202,7 +202,7 @@ project(':kotlin.web.demo.frontend') {
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-js-library:$kotlinVersion"
-        compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.8"
+        compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.12"
     }
 
     sourceSets {
@@ -213,7 +213,10 @@ project(':kotlin.web.demo.frontend') {
         }
     }
 
-    compileKotlin2Js.kotlinOptions.outputFile = "${buildDir}/kotlin.web.demo.frontend.js"
+    compileKotlin2Js{
+        kotlinOptions.outputFile = "${buildDir}/kotlin.web.demo.frontend.js"
+        kotlinOptions.moduleKind='commonjs'
+    }
 
     task bowerInstall(type: NodeTask, dependsOn: npmInstall) {
         script = file('node_modules/bower/bin/bower')
@@ -226,13 +229,13 @@ project(':kotlin.web.demo.frontend') {
         download = true
     }
 
-    task copyJsFilesFromDependencies(dependsOn: build) {
+    task copyJsFilesFromDependencies(dependsOn: 'compileKotlin2Js') {
         configurations.compile.each { File file ->
             copy {
                 includeEmptyDirs = false
 
                 from zipTree(file.absolutePath)
-                into "${projectDir}/static/lib"
+                into "${buildDir}/libs"
                 include { fileTreeElement ->
                     def path = fileTreeElement.path
                     path.endsWith(".js") && !path.endsWith(".meta.js") &&
@@ -241,6 +244,12 @@ project(':kotlin.web.demo.frontend') {
             }
         }
     }
+
+    task buildAssets(type: NpmTask, dependsOn: 'copyJsFilesFromDependencies') {
+        args=['run', 'build']
+    }
+
+    build.dependsOn 'buildAssets'
 }
 
 project("kotlin.web.demo.server") {

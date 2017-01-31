@@ -155,15 +155,10 @@ val Object: dynamic = noImpl
 fun Window.eval(code: String): dynamic = noImpl
 
 @native
+fun Window.getSelection(): dynamic = noImpl
+
+@native
 fun decodeURI(uri: String): String = noImpl
 
 @native
 fun encodeURIComponent(component: String): String = noImpl
-
-fun selectElement(element: Element) {
-    val selection = window.getSelection();
-    val range = document.createRange();
-    range.selectNode(element);
-    selection.removeAllRanges();
-    selection.addRange(range);
-}

@@ -1,10 +1,12 @@
 {
   "name": "try.kotl.in",
   "version": "1.0.0",
-  "scripts" : {
-    "postinstall": "bower install"
+  "scripts": {
+    "postinstall": "bower install",
+    "build": "webpack --bail"
   },
   "dependencies": {
-    "bower": "*"
+    "bower": "*",
+    "webpack": "1.13.2"
   }
 }

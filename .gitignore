@@ -24,3 +24,4 @@ kotlin.web.demo.frontend/static/kotlin.web.demo.frontend.js
 kotlin.web.demo.frontend/static/kotlin.web.demo.frontend.meta.js
 kotlin.web.demo.test/resources/js
 lib/kotlin-plugin/Kotlin
+/kotlin.web.demo.frontend/static/index.js
