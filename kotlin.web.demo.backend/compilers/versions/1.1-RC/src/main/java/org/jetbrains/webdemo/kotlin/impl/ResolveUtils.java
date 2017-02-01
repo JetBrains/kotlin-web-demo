@@ -146,7 +146,8 @@ public class ResolveUtils {
         MutableModuleContext module = ContextKt.ContextForNewModule(
                 ContextKt.ProjectContext(project),
                 Name.special("<" + config.getModuleId() + ">"),
-                JsPlatform.INSTANCE.getBuiltIns()
+                JsPlatform.INSTANCE.getBuiltIns(),
+                null
         );
         module.setDependencies(computeDependencies(module.getModule(), config));
 

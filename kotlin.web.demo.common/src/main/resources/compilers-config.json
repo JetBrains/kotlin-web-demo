@@ -13,13 +13,17 @@
     "latestStable": true
   },
   {
-    "version": "1.1-M04",
-    "build": "1.1.0-dev-5651",
+    "version": "1.1-beta",
+    "buildType": "Kotlin_11Beta_CompilerAndPlugin_NoTests",
+    "build": "1.1.0-beta-17",
+    "pluginBuild": "1.1.0-beta-17-IJ2016.3-1",
     "hasScriptJar": true
   },
   {
-    "version": "1.1-beta",
-    "build": "1.1.0-dev-6126",
+    "version": "1.1-RC",
+    "buildType": "Kotlin_110_CompilerAndPlugin_NoTests",
+    "build": "1.1.0-rc-25",
+    "pluginBuild": "1.1.0-rc-25-IJ2017.1-1",
     "hasScriptJar": true
   }
 ]

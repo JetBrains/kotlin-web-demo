@@ -78,8 +78,10 @@ public final class WebDemoTranslatorFacade {
                 Arrays.asList(arguments)));
         if (result instanceof TranslationResult.Success) {
             TranslationResult.Success success = ((TranslationResult.Success) result);
+
             return new org.jetbrains.webdemo.kotlin.datastructures.TranslationResult(
-                    K2JSTranslator.FLUSH_SYSTEM_OUT + success.getCode() + "\n" + K2JSTranslator.GET_SYSTEM_OUT);
+                    "kotlin.kotlin.io.output.flush();\n" + success.getCode() + "\n" + "kotlin.kotlin.io.output.buffer;\n");
+
         } else {
             Map<String, List<ErrorDescriptor>> errors = new HashMap<>();
             for (PsiFile psiFile : files) {
