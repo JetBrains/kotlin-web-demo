@@ -119,7 +119,7 @@ public class ResolveUtils {
                         return new FileBasedDeclarationProviderFactory(storageManager, (Collection<KtFile>) ktFiles);
                     }
                 },
-                GlobalSearchScope.allScope(environment.getProject())
+                TopDownAnalyzerFacadeForJVM.INSTANCE.newModuleSearchScope(project, files)
         );
 
         DslKt.getService(container, LazyTopDownAnalyzer.class).analyzeDeclarations(TopDownAnalysisMode.TopLevelDeclarations, files, DataFlowInfo.Companion.getEMPTY());
