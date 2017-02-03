@@ -16,8 +16,8 @@
 
 package application
 
+import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLLinkElement
 import org.w3c.dom.HTMLSpanElement
 import kotlin.browser.document
 
@@ -26,8 +26,8 @@ fun makeReference(fileName: String?, lineNo: Int): HTMLElement {
     val selectedProjectView = Application.accordion.selectedProjectView!!
     if (fileName != null &&
             selectedProjectView.getFileViewByName(fileName) != null) {
-        var fileView = selectedProjectView.getFileViewByName(fileName)
-        var a = document.createElement("div") as HTMLLinkElement
+        val fileView = selectedProjectView.getFileViewByName(fileName)
+        val a = document.createElement("div") as HTMLDivElement
         a.className = "link"
         a.innerHTML = fileName + ':' + lineNo
         a.onclick = {
@@ -37,7 +37,7 @@ fun makeReference(fileName: String?, lineNo: Int): HTMLElement {
         }
         return a
     } else {
-        var span = document.createElement("span") as HTMLSpanElement
+        val span = document.createElement("span") as HTMLSpanElement
         if (fileName != null) {
             span.innerHTML = fileName + ':' + lineNo
         } else {
