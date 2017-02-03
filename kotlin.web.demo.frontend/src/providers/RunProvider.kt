@@ -17,6 +17,7 @@
 package providers
 
 import application.Application
+import model.Example
 import model.File
 import model.Project
 import utils.Object
@@ -64,6 +65,10 @@ class RunProvider(
     }
 
     private fun runJava(project: Project, file: File) {
+        val requestData = json ("project" to JSON.stringify(project), "filename" to file.name)
+        if(project is Example) {
+            requestData["searchForMain"] = project.searchForMain
+        }
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("run", hashMapOf("runConf" to project.confType)),
@@ -77,7 +82,7 @@ class RunProvider(
                 },
                 dataType = DataType.JSON,
                 type = HTTPRequestType.POST,
-                data = json ("project" to JSON.stringify(project), "filename" to file.name),
+                data = requestData,
                 timeout = 15000,
                 complete = { onComplete() },
                 error = { jqXHR, textStatus, errorThrown ->

@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.test.run;
 
 import org.jetbrains.webdemo.backend.executor.ExecutorUtils;
 import org.jetbrains.webdemo.backend.executor.result.JavaExecutionResult;
-import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
@@ -26,7 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.IOException;
 import java.security.AccessControlException;
 import java.util.*;
 
@@ -106,7 +104,7 @@ public class RunTest extends BaseTest {
     private JavaExecutionResult compileAndExecute(String fileName, String args) throws Exception {
         Map<String, String> files = new HashMap<>();
         files.put(fileName, TestUtils.getDataFromFile(fileName));
-        CompilationResult compilationResult = kotlinWrapper.compileCorrectFiles(files, fileName);
+        CompilationResult compilationResult = kotlinWrapper.compileCorrectFiles(files, fileName, true);
         return (JavaExecutionResult) ExecutorUtils.executeCompiledFiles(
                 compilationResult.getFiles(),
                 compilationResult.getMainClass(),

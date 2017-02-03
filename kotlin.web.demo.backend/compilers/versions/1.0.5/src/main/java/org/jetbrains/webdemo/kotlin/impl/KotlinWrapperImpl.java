@@ -77,10 +77,10 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     }
 
     @Override
-    public CompilationResult compileCorrectFiles(Map<String, String> projectFiles, String filename) {
+    public CompilationResult compileCorrectFiles(Map<String, String> projectFiles, String filename, boolean searchForMain) {
         List<KtFile> files = createPsiFiles(projectFiles);
         KotlinCompilerWrapper compilerWrapper = new KotlinCompilerWrapper();
-        return compilerWrapper.compile(files, EnvironmentManager.getEnvironment().getProject(), filename);
+        return compilerWrapper.compile(files, EnvironmentManager.getEnvironment().getProject(), filename, searchForMain);
     }
 
     @Override

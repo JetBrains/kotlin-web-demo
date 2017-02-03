@@ -122,6 +122,7 @@ public class ExamplesLoader {
             String id = (parentUrl + name).replaceAll(" ", "%20");
             String args = manifest.has("args") ? manifest.get("args").asText() : "";
             String runConfiguration = manifest.get("confType").asText();
+            boolean searchForMain = manifest.has("searchForMain") ? manifest.get("searchForMain").asBoolean() : true;
             String expectedOutput;
             List<String> readOnlyFileNames = new ArrayList<>();
             List<ProjectFile> files = new ArrayList<>();
@@ -183,6 +184,7 @@ public class ExamplesLoader {
                     runConfiguration,
                     id,
                     expectedOutput,
+                    searchForMain,
                     files,
                     hiddenFiles,
                     readOnlyFileNames,

@@ -83,7 +83,8 @@ class MyHttpSession {
                 var executionResult: ExecutionResult? = null
                 if (isOnlyWarnings(errorDescriptors)) {
                     val filename = request.getParameter("filename")
-                    val compilationResult = wrapper.compileCorrectFiles(getFilesContentFromProject(currentProject), filename)
+                    val searchForMain = request.getParameter("searchForMain") == "true"
+                    val compilationResult = wrapper.compileCorrectFiles(getFilesContentFromProject(currentProject), filename, searchForMain)
                     executionResult = ExecutorUtils.executeCompiledFiles(
                             compilationResult.files,
                             compilationResult.mainClass,

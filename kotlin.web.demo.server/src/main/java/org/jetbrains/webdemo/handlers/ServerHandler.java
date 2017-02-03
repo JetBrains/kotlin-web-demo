@@ -118,10 +118,8 @@ public class ServerHandler {
             ExamplesUtils.addUnmodifiableFilesToProject(project);
             Map<String, String> postParameters = new HashMap<>();
             postParameters.put("project", objectMapper.writeValueAsString(project));
-            String filename = request.getParameter("filename");
-            if (filename != null) {
-                postParameters.put("filename", filename);
-            }
+            postParameters.put("filename", request.getParameter("filename"));
+            postParameters.put("searchForMain", request.getParameter("searchForMain"));
             forwardRequestToBackend(request, response, postParameters);
         } catch (IOException e) {
             writeResponse(request, response, "Can't parse project", HttpServletResponse.SC_BAD_REQUEST);
@@ -197,15 +195,16 @@ public class ServerHandler {
                 conn.setRequestMethod("POST");
                 try (OutputStream requestBody = conn.getOutputStream()) {
                     boolean first = true;
-                    for (String key : postParameters.keySet()) {
+                    for (Map.Entry<String, String> entry : postParameters.entrySet()) {
+                        if(entry.getValue() == null) continue;
                         if (first) {
                             first = false;
                         } else {
                             requestBody.write('&');
                         }
-                        requestBody.write(URLEncoder.encode(key, "UTF8").getBytes());
+                        requestBody.write(URLEncoder.encode(entry.getKey(), "UTF8").getBytes());
                         requestBody.write('=');
-                        requestBody.write(URLEncoder.encode(postParameters.get(key), "UTF8").getBytes());
+                        requestBody.write(URLEncoder.encode(entry.getValue(), "UTF8").getBytes());
                     }
                 }
             } else {

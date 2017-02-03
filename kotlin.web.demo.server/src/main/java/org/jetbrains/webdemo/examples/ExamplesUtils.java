@@ -57,6 +57,7 @@ public class ExamplesUtils {
                 example.confType,
                 example.originUrl,
                 example.expectedOutput,
+                example.shouldSearchForMain(),
                 userFiles,
                 example.getHiddenFiles(),
                 example.readOnlyFileNames,

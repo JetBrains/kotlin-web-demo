@@ -37,10 +37,10 @@ import java.util.List;
 import java.util.Map;
 
 public class KotlinCompilerWrapper {
-    public CompilationResult compile(List<KtFile> currentPsiFiles, Project currentProject, CompilerConfiguration configuration, String fileName) {
+    public CompilationResult compile(List<KtFile> currentPsiFiles, Project currentProject, CompilerConfiguration configuration, String fileName, boolean searchForMain) {
         try {
             GenerationState generationState = ResolveUtils.getGenerationState(currentPsiFiles, currentProject, configuration);
-            String mainClass = findMainClass(generationState.getBindingContext(), currentPsiFiles, fileName);
+            String mainClass = findMainClass(generationState.getBindingContext(), currentPsiFiles, fileName, searchForMain);
             KotlinCodegenFacade.compileCorrectFiles(generationState, new CompilationErrorHandler() {
                 @Override
                 public void reportException(Throwable throwable, String fileUrl) {
@@ -59,11 +59,13 @@ public class KotlinCompilerWrapper {
         }
     }
 
-    private String findMainClass(BindingContext bindingContext, List<KtFile> files, String fileName) {
+    private String findMainClass(BindingContext bindingContext, List<KtFile> files, String fileName, boolean searchForMain) {
         MainFunctionDetector mainFunctionDetector = new MainFunctionDetector(bindingContext);
         for (KtFile file : files) {
-            if (file.getName().contains(fileName) && mainFunctionDetector.hasMain(file.getDeclarations())) {
-                return getMainClassName(file);
+            if (file.getName().contains(fileName)) {
+                if(!searchForMain || mainFunctionDetector.hasMain(file.getDeclarations())) {
+                    return getMainClassName(file);
+                }
             }
         }
         for (KtFile file : files) {

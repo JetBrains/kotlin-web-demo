@@ -30,6 +30,7 @@ public class Example extends Project{
     @JsonIgnore
     public ExamplesFolder parent;
     private String help;
+    private boolean searchForMain;
 
     public Example(
             String id,
@@ -38,6 +39,7 @@ public class Example extends Project{
             String confType,
             String originUrl,
             String expectedOutput,
+            boolean searchForMain,
             List<ProjectFile> files,
             List<ProjectFile> hiddenFiles,
             List<String> readOnlyFileNames,
@@ -45,11 +47,17 @@ public class Example extends Project{
         super(id, name, args, confType, originUrl, expectedOutput, files, readOnlyFileNames);
         this.hiddenFiles = hiddenFiles;
         this.help = help;
+        this.searchForMain = searchForMain;
     }
 
     @JsonIgnore
     public List<ProjectFile> getHiddenFiles(){
         return hiddenFiles;
+    }
+
+    @JsonProperty("searchForMain")
+    public boolean shouldSearchForMain(){
+        return searchForMain;
     }
 
     public String getHelp() {

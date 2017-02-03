@@ -25,7 +25,6 @@ import org.jetbrains.webdemo.backend.executor.result.TestRunInfo;
 import org.jetbrains.webdemo.examples.Example;
 import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
-import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
@@ -105,7 +104,7 @@ public class ExamplesTest extends BaseTest {
     }
 
     private ExecutionResult compileAndExecute(Map<String, String> files, String args, boolean isJunit) throws Exception {
-        CompilationResult compilationResult = kotlinWrapper.compileCorrectFiles(files, null);
+        CompilationResult compilationResult = kotlinWrapper.compileCorrectFiles(files, null, true);
         return ExecutorUtils.executeCompiledFiles(
                 compilationResult.getFiles(),
                 compilationResult.getMainClass(),

@@ -25,4 +25,11 @@ class Example(
         parent: Folder,
         onContentLoaded: (ArrayList<File>) -> Unit,
         onContentNotFound: () -> Unit
-) : Project(ProjectType.EXAMPLE, id, name, parent, {}, onContentLoaded, onContentNotFound)
+) : Project(ProjectType.EXAMPLE, id, name, parent, {}, onContentLoaded, onContentNotFound) {
+    var searchForMain: Boolean = true
+
+    override fun contentLoaded(content: dynamic) {
+        searchForMain = content.searchForMain
+        super.contentLoaded(content)
+    }
+}
