@@ -70,7 +70,7 @@ public final class WebDemoTranslatorFacade {
 
         CompilerConfiguration configuration = environment.getConfiguration().copy();
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "moduleId");
-        configuration.put(JSConfigurationKeys.LIBRARY_FILES, Collections.singletonList(WrapperSettings.JS_LIB_ROOT.toString()));
+        configuration.put(JSConfigurationKeys.LIBRARIES, Collections.singletonList(WrapperSettings.JS_LIB_ROOT.toString()));
 
         JsConfig config = new LibrarySourcesConfig(currentProject, configuration);
         K2JSTranslator translator = new K2JSTranslator(config);
