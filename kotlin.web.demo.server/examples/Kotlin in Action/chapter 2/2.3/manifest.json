@@ -35,5 +35,6 @@
     "modifiable" : "true"
   } ],
   "args" : "",
+  "searchForMain": false,
   "confType" : "java"
 }
