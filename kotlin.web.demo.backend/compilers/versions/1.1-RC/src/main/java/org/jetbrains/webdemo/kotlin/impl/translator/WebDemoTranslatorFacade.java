@@ -70,7 +70,7 @@ public final class WebDemoTranslatorFacade {
 
         CompilerConfiguration configuration = environment.getConfiguration().copy();
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "moduleId");
-        configuration.put(JSConfigurationKeys.LIBRARY_FILES, Collections.singletonList(WrapperSettings.JS_LIB_ROOT.toString()));
+        configuration.put(JSConfigurationKeys.LIBRARIES, Collections.singletonList(WrapperSettings.JS_LIB_ROOT.toString()));
 
         JsConfig config = new LibrarySourcesConfig(currentProject, configuration);
         K2JSTranslator translator = new K2JSTranslator(config);
@@ -78,8 +78,10 @@ public final class WebDemoTranslatorFacade {
                 Arrays.asList(arguments)));
         if (result instanceof TranslationResult.Success) {
             TranslationResult.Success success = ((TranslationResult.Success) result);
+
             return new org.jetbrains.webdemo.kotlin.datastructures.TranslationResult(
-                    K2JSTranslator.FLUSH_SYSTEM_OUT + success.getCode() + "\n" + K2JSTranslator.GET_SYSTEM_OUT);
+                    "kotlin.kotlin.io.output.flush();\n" + success.getCode() + "\n" + "kotlin.kotlin.io.output.buffer;\n");
+
         } else {
             Map<String, List<ErrorDescriptor>> errors = new HashMap<>();
             for (PsiFile psiFile : files) {
