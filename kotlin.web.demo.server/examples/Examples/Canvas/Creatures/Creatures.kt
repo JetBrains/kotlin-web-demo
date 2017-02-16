@@ -5,11 +5,11 @@
  */
 package creatures
 
-import java.util.ArrayList
 import jquery.*
 import org.w3c.dom.*
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.js.Math
 
 
 fun getImage(path: String): HTMLImageElement {
@@ -208,13 +208,17 @@ class CanvasState(val canvas: HTMLCanvasElement) {
         get() = v(width.toDouble(), height.toDouble())
     val context = creatures.context
     var valid = false
-    var shapes = ArrayList<Shape>()
+    var shapes = mutableListOf<Shape>()
     var selection: Shape? = null
     var dragOff = Vector()
     val interval = 1000 / 30
 
     init {
-        jq(canvas).mousedown {
+        fun fix(f: Element.(MouseEvent) -> Unit) : Element.(MouseEvent) -> Unit {
+            return { f.asDynamic().apply(null, js("[this].concat(Array.from(arguments))")) } as Element.(MouseEvent) -> Unit
+        }
+
+        jq(canvas).mousedown(fix {
             valid = false
             selection = null
             val mousePos = mousePos(it)
@@ -226,28 +230,28 @@ class CanvasState(val canvas: HTMLCanvasElement) {
                     break
                 }
             }
-        }
+        })
 
-        jq(canvas).mousemove {
+        jq(canvas).mousemove(fix {
             if (selection != null) {
                 selection!!.pos = mousePos(it) - dragOff
                 valid = false
             }
-        }
+        })
 
-        jq(canvas).mouseup {
+        jq(canvas).mouseup(fix {
             if (selection != null) {
                 selection!!.selected = false
             }
             selection = null
             valid = false
-        }
+        })
 
-        jq(canvas).dblclick {
+        jq(canvas).dblclick(fix {
             val newCreature = Creature(mousePos(it), this@CanvasState)
             addShape(newCreature)
             valid = false
-        }
+        })
 
         window.setInterval({
             draw()
@@ -259,7 +263,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
         var element: HTMLElement? = canvas
         while (element != null) {
             val el: HTMLElement = element
-            offset += Vector(el.offsetLeft, el.offsetTop)
+            offset += Vector(el.offsetLeft.toDouble(), el.offsetTop.toDouble())
             element = el.offsetParent as HTMLElement?
         }
         return Vector(e.pageX, e.pageY) - offset
@@ -291,7 +295,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
 }
 
 class RadialGradientGenerator(val context: CanvasRenderingContext2D) {
-    val gradients = ArrayList<Array<out Pair<Double, String>>>()
+    val gradients = mutableListOf<Array<out Pair<Double, String>>>()
     var current = 0
 
     fun newColorStops(vararg colorStops: Pair<Double, String>) {
@@ -351,7 +355,7 @@ fun main(args: Array<String>) {
 }
 
 fun <T> List<T>.reversed(): List<T> {
-    val result = ArrayList<T>()
+    val result = mutableListOf<T>()
     var i = size
     while (i > 0) {
         result.add(get(--i))

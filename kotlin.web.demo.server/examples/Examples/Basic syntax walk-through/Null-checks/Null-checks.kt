@@ -7,7 +7,7 @@ package multiplier
 // Return null if str does not hold a number
 fun parseInt(str: String): Int? {
     try {
-        return Integer.parseInt(str)
+        return str.toInt()
     } catch (e: NumberFormatException) {
         println("One of the arguments isn't Int")
     }

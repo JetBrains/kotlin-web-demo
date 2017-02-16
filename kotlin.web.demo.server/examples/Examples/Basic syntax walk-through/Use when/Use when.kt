@@ -5,7 +5,7 @@
 fun main(args: Array<String>) {
     cases("Hello")
     cases(1)
-    cases(System.currentTimeMillis())
+    cases(0L)
     cases(MyClass())
     cases("hello")
 }

@@ -4,14 +4,15 @@
  */
 package traffic
 
-import java.util.ArrayList
 import jquery.*
-import org.w3c.dom.CanvasRenderingContext2D
+import org.w3c.dom.*
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLImageElement
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.js.Math
+import kotlin.js.Date
 
 fun getImage(path: String): HTMLImageElement {
     val image = window.document.createElement("img") as HTMLImageElement
@@ -180,12 +181,12 @@ class Colors() {
 }
 
 class TrafficLight(override var pos: Vector, val direction: String, val startColor: String) : Shape() {
-    val list = ArrayList<TrafficLightItem>()
+    val list = mutableListOf<TrafficLightItem>()
     var size = Vector(27.0, 34.0);
     var timer = Timer(Vector(pos.x + 6, pos.y + 12))
     var currentColor = startColor;
     var isForceColorChange = false
-    var changeColorForward = (startColor == "red")
+    var shouldChangeColorForward = (startColor == "red")
 
     init {
         list.add(TrafficLightItem(v(pos.x, pos.y), PATH_TO_IMAGES + "red_color.png"))
@@ -221,11 +222,11 @@ class TrafficLight(override var pos: Vector, val direction: String, val startCol
     }
 
     fun changeColor() {
-        if (changeColorForward) changeColorForward() else changeColorBackward()
+        if (shouldChangeColorForward) changeColorForward() else changeColorBackward()
     }
 
     fun changeColorForward() {
-        changeColorForward = false
+        shouldChangeColorForward = false
         currentColor = "yellow"
         window.setTimeout({
             if (!isForceColorChange) timer.resetTimer() else isForceColorChange = false
@@ -236,7 +237,7 @@ class TrafficLight(override var pos: Vector, val direction: String, val startCol
 
 
     fun changeColorBackward() {
-        changeColorForward = true
+        shouldChangeColorForward = true
         currentColor = "green_flash"
         window.setTimeout({
             currentColor = "yellow"
@@ -371,7 +372,7 @@ class Map(override var pos: Vector) : Shape() {
 
 class CanvasState(val canvas: HTMLCanvasElement) {
     val context = traffic.context
-    var shapes = ArrayList<Shape>()
+    var shapes = mutableListOf<Shape>()
 
     var width = canvas.width
     var height = canvas.height
@@ -384,7 +385,11 @@ class CanvasState(val canvas: HTMLCanvasElement) {
     }
 
     init {
-        jq(canvas).click {
+        fun fix(f: Element.(MouseEvent) -> Unit) : Element.(MouseEvent) -> Unit {
+            return { f.asDynamic().apply(null, js("[this].concat(Array.from(arguments))")) } as Element.(MouseEvent) -> Unit
+        }
+
+        jq(canvas).click(fix {
             val mousePos = mousePos(it)
             shapeLoop@ for (shape in shapes) {
                 if (shape is Button && mousePos in shape) {
@@ -411,16 +416,16 @@ class CanvasState(val canvas: HTMLCanvasElement) {
 
                 }
             }
-        }
+        })
 
-        jq(canvas).mousemove {
+        jq(canvas).mousemove(fix {
             val mousePos = mousePos(it)
             for (shape in shapes) {
                 if (shape is Button && mousePos in shape) {
                     shape.mouseOver()
                 }
             }
-        }
+        })
 
         window.setInterval({
             draw()
@@ -442,7 +447,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
         var element: HTMLElement? = canvas
         while (element != null) {
             val el: HTMLElement = element
-            offset += Vector(el.offsetLeft, el.offsetTop)
+            offset += Vector(el.offsetLeft.toDouble(), el.offsetTop.toDouble())
             element = el.offsetParent as HTMLElement?
         }
         return Vector(e.pageX, e.pageY) - offset

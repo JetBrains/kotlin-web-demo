@@ -33,9 +33,9 @@ fun main(args: Array<String>) {
         printBottles(99)
     } else {
         try {
-            printBottles(Integer.parseInt(args[0]))
+            printBottles(args[0].toInt())
         } catch (e: NumberFormatException) {
-            System.err.println("You have passed '${args[0]}' as a number of bottles, " +
+            println("You have passed '${args[0]}' as a number of bottles, " +
                     "but it is not a valid integer number")
         }
     }
