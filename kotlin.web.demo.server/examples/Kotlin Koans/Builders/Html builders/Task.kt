@@ -19,4 +19,4 @@ fun renderProductTable(): String {
 }
 
 fun getTitleColor() = "#b9c9fe"
-fun getCellColor(index: Int, row: Int) = if ((index + row) %2 == 0) "#dce4ff" else "#eff2ff"
+fun getCellColor(row: Int, column: Int) = if ((row + column) %2 == 0) "#dce4ff" else "#eff2ff"
