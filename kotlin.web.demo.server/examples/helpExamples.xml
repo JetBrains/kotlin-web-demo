@@ -211,10 +211,10 @@ See <a href="http://confluence.jetbrains.net/display/Kotlin/Type-safe+Groovy-sty
         <mode>canvas</mode>
     </example>
     <example>
-        <name>Multi-declarations</name>
+        <name>Destructuring declarations</name>
         <text>
             <p>
-                In this example introduces a concept that we call <b>multi-declarations</b>. It creates multiple variable at once. Anything can be on the right-hand side of a multi-declaration, as long as the required number of <b>component</b> functions can be called on it.
+                In this example introduces a concept that we call <b>destructuring declarations</b>. It creates multiple variable at once. Anything can be on the right-hand side of a multi-declaration, as long as the required number of <b>component</b> functions can be called on it.
             </p>
         </text>
         <args/>

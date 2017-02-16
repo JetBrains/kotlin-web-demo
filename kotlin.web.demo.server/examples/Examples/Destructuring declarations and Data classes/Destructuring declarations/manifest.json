@@ -1,8 +1,8 @@
 {
-    "name": "Multi-declarations",
+    "name": "Destructuring declarations",
     "files": [
         {
-            "filename": "Multi-declarations.kt",
+            "filename": "Destructuring declarations.kt",
             "modifiable": "true"
         }
     ],

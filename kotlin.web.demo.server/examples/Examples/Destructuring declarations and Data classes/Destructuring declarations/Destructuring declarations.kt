@@ -1,7 +1,7 @@
 /**
- * This example introduces a concept that we call mutli-declarations.
+ * This example introduces a concept that we call destructuring declarations.
  * It creates multiple variable at once. Anything can be on the right-hand
- * side of a mutli-declaration, as long as the required number of component
+ * side of a destructuring declaration, as long as the required number of component
  * functions can be called on it.
  * See http://kotlinlang.org/docs/reference/multi-declarations.html#multi-declarations
  */
