@@ -25,7 +25,6 @@ import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.KotlinVersionsManager;
 import org.jetbrains.webdemo.Project;
-import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
 import org.jetbrains.webdemo.help.HelpLoader;
 import org.jetbrains.webdemo.session.SessionInfo;
@@ -62,22 +61,8 @@ public class ServerHandler {
             }
         } else {
             SessionInfo sessionInfo;
-            if (CommonSettings.IS_TEST_VERSION) {
-                response.setHeader("Access-Control-Allow-Origin", "*");
-            } else {
-                response.setHeader("Access-Control-Allow-Origin", "http://staging.kotlinlang.org.s3-website-eu-west-1.amazonaws.com");
-            }
             try {
                 switch (request.getParameter("type")) {
-                    case ("getUserName"):
-                        sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sendUserName(request, response, sessionInfo);
-                        break;
-                    case ("sendMail"):
-                        sessionInfo = setSessionInfo(request.getSession(), request.getHeader("Origin"));
-                        sessionInfo.setType(SessionInfo.TypeOfRequest.SEND_MAIL);
-                        sendMail(request, response, sessionInfo);
-                        break;
                     case ("loadHelpForWords"):
                         sendHelpContentForWords(request, response);
                         break;
@@ -268,48 +253,6 @@ public class ServerHandler {
         }
     }
 
-    private void sendMail(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
-        try {
-            String from = request.getParameter("email");
-            String name = request.getParameter("name");
-            String title = request.getParameter("subject");
-            String message = request.getParameter("question");
-//            MailAgent.getInstance().send(from, name, title, message);
-        } catch (NullPointerException e) {
-            writeResponse(request, response, "Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
-        }
-    }
-
-    private void sendSessionInfo(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
-        try {
-            String id = sessionInfo.getId();
-            ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
-            responseBody.put("id", id);
-            responseBody.put("isLoggedIn", sessionInfo.getUserInfo().isLogin());
-            writeResponse(request, response, responseBody.toString(), HttpServletResponse.SC_OK);
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "?" + request.getQueryString());
-        }
-    }
-
-    private void sendUserName(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
-        try {
-            ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
-            if (sessionInfo.getUserInfo().isLogin()) {
-                responseBody.put("isLoggedIn", true);
-                responseBody.put("userName", URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
-                responseBody.put("type", sessionInfo.getUserInfo().getType());
-            } else {
-                responseBody.put("isLoggedIn", false);
-            }
-            writeResponse(request, response, responseBody.toString(), HttpServletResponse.SC_OK);
-        } catch (Throwable e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
-                    "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "?" + request.getQueryString());
-        }
-    }
-
     @NotNull
     private SessionInfo setSessionInfo(final HttpSession session, String originUrl) {
         SessionInfo sessionInfo = new SessionInfo(session.getId());
@@ -333,6 +276,7 @@ public class ServerHandler {
     private void writeResponse(HttpServletRequest request, HttpServletResponse response, String responseBody, int statusCode) {
         try {
             response.addHeader("Cache-Control", "no-cache");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(statusCode);
             if (!responseBody.equals("")) {

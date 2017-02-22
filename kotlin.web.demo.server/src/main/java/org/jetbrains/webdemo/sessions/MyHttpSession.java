@@ -56,6 +56,9 @@ public class MyHttpSession {
             this.response = response;
 
             switch (request.getParameter("type")) {
+                case ("getUserName"):
+                    sendUserName(request, response, sessionInfo);
+                    break;
                 case ("loadHeaders"):
                     sendExamplesList();
                     break;
@@ -119,6 +122,23 @@ public class MyHttpSession {
                 ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "UNKNOWN", "unknown", "null");
             }
             writeResponse(ResponseUtils.getErrorInJson("Internal server error"), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void sendUserName(HttpServletRequest request, HttpServletResponse response, SessionInfo sessionInfo) {
+        try {
+            ObjectNode responseBody = new ObjectNode(JsonNodeFactory.instance);
+            if (sessionInfo.getUserInfo().isLogin()) {
+                responseBody.put("isLoggedIn", true);
+                responseBody.put("userName", URLEncoder.encode(sessionInfo.getUserInfo().getName(), "UTF-8"));
+                responseBody.put("type", sessionInfo.getUserInfo().getType());
+            } else {
+                responseBody.put("isLoggedIn", false);
+            }
+            writeResponse(responseBody.toString(), HttpServletResponse.SC_OK);
+        } catch (Throwable e) {
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e,
+                    "UNKNOWN", sessionInfo.getOriginUrl(), request.getRequestURI() + "?" + request.getQueryString());
         }
     }
 
