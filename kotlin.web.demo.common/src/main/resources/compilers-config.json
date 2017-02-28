@@ -13,17 +13,17 @@
     "latestStable": true
   },
   {
-    "version": "1.1-beta2",
-    "buildType": "Kotlin_110_CompilerAndPlugin_NoTests",
-    "build": "1.1.0-beta-37",
-    "pluginBuild": "1.1.0-beta-37-IJ2017.1-1",
-    "hasScriptJar": true
-  },
-  {
     "version": "1.1-RC",
     "buildType": "Kotlin_110_CompilerAndPlugin_NoTests",
     "build": "1.1.0-rc-86",
     "pluginBuild": "1.1.0-rc-86-IJ2017.1-1",
+    "hasScriptJar": true
+  },
+  {
+    "version": "1.1",
+    "buildType": "Kotlin_110_CompilerAndPlugin_NoTests",
+    "build": "1.1.0-release-102",
+    "pluginBuild": "1.1.0-release-IJ2017.1-1",
     "hasScriptJar": true
   }
 ]
