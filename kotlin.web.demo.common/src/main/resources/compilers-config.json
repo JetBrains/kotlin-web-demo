@@ -9,8 +9,7 @@
     "version": "1.0.6",
     "buildType": "Kotlin_106_CompilerAndPlugin_NoTests",
     "build": "1.0.6-release-127",
-    "pluginBuild": "1.0.6-release-IJ2016.3-1",
-    "latestStable": true
+    "pluginBuild": "1.0.6-release-IJ2016.3-1"
   },
   {
     "version": "1.1-RC",
@@ -24,6 +23,7 @@
     "buildType": "Kotlin_110_CompilerAndPlugin_NoTests",
     "build": "1.1.0-release-102",
     "pluginBuild": "1.1.0-release-IJ2017.1-1",
-    "hasScriptJar": true
+    "hasScriptJar": true,
+    "latestStable": true
   }
 ]
