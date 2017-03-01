@@ -12,6 +12,7 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.js.Math
 
 fun main(args: Array<String>) {
     jq {

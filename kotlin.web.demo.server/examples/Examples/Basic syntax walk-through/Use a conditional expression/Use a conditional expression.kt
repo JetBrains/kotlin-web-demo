@@ -5,7 +5,7 @@
  * See http://kotlinlang.org/docs/reference/control-flow.html#if-expression
  */
 fun main(args: Array<String>) {
-    println(max(Integer.parseInt(args[0]), Integer.parseInt(args[1])))
+    println(max(args[0].toInt(), args[1].toInt()))
 }
 
 fun max(a: Int, b: Int) = if (a > b) a else b
