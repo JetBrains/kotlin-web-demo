@@ -385,11 +385,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
     }
 
     init {
-        fun fix(f: Element.(MouseEvent) -> Unit) : Element.(MouseEvent) -> Unit {
-            return { f.asDynamic().apply(null, js("[this].concat(Array.from(arguments))")) } as Element.(MouseEvent) -> Unit
-        }
-
-        jq(canvas).click(fix {
+        jq(canvas).click {
             val mousePos = mousePos(it)
             shapeLoop@ for (shape in shapes) {
                 if (shape is Button && mousePos in shape) {
@@ -416,16 +412,16 @@ class CanvasState(val canvas: HTMLCanvasElement) {
 
                 }
             }
-        })
+        }
 
-        jq(canvas).mousemove(fix {
+        jq(canvas).mousemove {
             val mousePos = mousePos(it)
             for (shape in shapes) {
                 if (shape is Button && mousePos in shape) {
                     shape.mouseOver()
                 }
             }
-        })
+        }
 
         window.setInterval({
             draw()
