@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.kotlin.impl;
 
 import org.jetbrains.kotlin.psi.KtFile;
+import org.jetbrains.webdemo.KotlinVersionConfig;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 import org.jetbrains.webdemo.kotlin.datastructures.*;
@@ -39,9 +40,9 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     private Path wrapperFolder;
 
     @Override
-    public void init(List<Path> javaLibraries, String kotlinVersion, String build) {
-        this.kotlinVersion = kotlinVersion;
-        this.kotlinBuild = build;
+    public void init(List<Path> javaLibraries, KotlinVersionConfig config) {
+        this.kotlinVersion = config.getVersion();
+        this.kotlinBuild = config.getBuild();
         WrapperLogger.init(kotlinVersion);
         jarsFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion).resolve("kotlin");
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);

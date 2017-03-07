@@ -23,4 +23,5 @@ data class KotlinVersionConfig(
     val build: String,
     val obsolete: Boolean,
     val latestStable: Boolean = false,
-    val hasScriptJar: Boolean = false)
+    val hasScriptJar: Boolean = false,
+    val stdlibVersion: String? = null)

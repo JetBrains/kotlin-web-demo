@@ -17,6 +17,7 @@
 package org.jetbrains.webdemo.kotlin;
 
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.webdemo.KotlinVersionConfig;
 import org.jetbrains.webdemo.kotlin.datastructures.*;
 
 import java.nio.file.Path;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface KotlinWrapper {
-    void init(List<Path> javaLibraries, String kotlinVersion, String build);
+    void init(List<Path> javaLibraries, KotlinVersionConfig config);
 
     String translateJavaToKotlin(String javaCode);
 

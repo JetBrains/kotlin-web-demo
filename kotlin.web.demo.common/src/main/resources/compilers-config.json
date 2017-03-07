@@ -13,6 +13,7 @@
   },
   {
     "version": "1.1-RC",
+    "stdlibVersion": "1.1.0-rc-86",
     "buildType": "Kotlin_110_CompilerAndPlugin_NoTests",
     "build": "1.1.0-rc-86",
     "pluginBuild": "1.1.0-rc-86-IJ2017.1-1",
@@ -20,6 +21,7 @@
   },
   {
     "version": "1.1",
+    "stdlibVersion": "1.1.0",
     "buildType": "Kotlin_110_CompilerAndPlugin_NoTests",
     "build": "1.1.0-release-102",
     "pluginBuild": "1.1.0-release-IJ2017.1-1",

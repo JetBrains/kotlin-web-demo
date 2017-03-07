@@ -16,8 +16,10 @@
 
 package org.jetbrains.webdemo.kotlin.impl;
 
+import kotlin.KotlinVersion;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.psi.KtFile;
+import org.jetbrains.webdemo.KotlinVersionConfig;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 import org.jetbrains.webdemo.kotlin.datastructures.*;
@@ -37,12 +39,14 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     private Path jarsFolder;
     private String kotlinVersion;
     private String kotlinBuild;
+    private String stdlibVersion;
     private Path wrapperFolder;
 
     @Override
-    public void init(List<Path> javaLibraries, String kotlinVersion, String build) {
-        this.kotlinVersion = kotlinVersion;
-        this.kotlinBuild = build;
+    public void init(List<Path> javaLibraries, KotlinVersionConfig config) {
+        this.kotlinVersion = config.getVersion();
+        this.kotlinBuild = config.getBuild();
+        stdlibVersion = config.getStdlibVersion();
         WrapperLogger.init(kotlinVersion);
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
         jarsFolder = wrapperFolder.resolve("kotlin");
@@ -91,6 +95,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         libraries.add(jarsFolder.resolve("kotlin-runtime-" + kotlinBuild + ".jar"));
         libraries.add(jarsFolder.resolve("kotlin-reflect-" + kotlinBuild + ".jar"));
         libraries.add(jarsFolder.resolve("kotlin-test-" + kotlinBuild + ".jar"));
+        libraries.addAll(getCompileTimeLibraries());
         return libraries;
     }
 
@@ -111,8 +116,8 @@ public class KotlinWrapperImpl implements KotlinWrapper {
 
     @Override
     public MethodPositions getMethodPositions(Map<String, byte[]> classFiles) {
-        MethodPositions methodPositions= new MethodPositions();
-        for(String key : classFiles.keySet()){
+        MethodPositions methodPositions = new MethodPositions();
+        for (String key : classFiles.keySet()) {
             methodPositions.addClassMethodPositions(key, MethodsFinder.readClassMethodPositions(classFiles.get(key), key));
         }
         return methodPositions;
@@ -124,5 +129,14 @@ public class KotlinWrapperImpl implements KotlinWrapper {
             result.add(JetPsiFactoryUtil.createFile(EnvironmentManager.getEnvironment().getProject(), fileName, files.get(fileName)));
         }
         return result;
+    }
+
+    private List<Path> getCompileTimeLibraries (){
+        List<Path> libraries = new ArrayList<>();
+        libraries.add(jarsFolder.resolve("annotations-13.0.jar"));
+        libraries.add(jarsFolder.resolve("kotlin-stdlib-" + stdlibVersion + ".jar"));
+        libraries.add(jarsFolder.resolve("kotlin-stdlib-jre7-" + stdlibVersion + ".jar"));
+        libraries.add(jarsFolder.resolve("kotlin-stdlib-jre8-" + stdlibVersion + ".jar"));
+        return libraries;
     }
 }

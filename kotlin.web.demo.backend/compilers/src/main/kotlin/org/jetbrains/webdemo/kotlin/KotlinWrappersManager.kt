@@ -41,7 +41,7 @@ object KotlinWrappersManager {
                 val classPath = getForKotlinWrapperClassLoaderURLs(versionConfig.version, wrappersDir, relativeClassDirectoryPath)
                 val kotlinClassLoader = ChildFirstURLClassLoader(classPath, Thread.currentThread().contextClassLoader)
                 val kotlinWrapper = kotlinClassLoader.loadClass(INITIALIZER_CLASSNAME).newInstance() as KotlinWrapper
-                kotlinWrapper.init(javaLibraries, versionConfig.version, versionConfig.build)
+                kotlinWrapper.init(javaLibraries, versionConfig)
                 wrappers.put(versionConfig.version, kotlinWrapper)
                 if (versionConfig.latestStable) {
                     defaultWrapper = kotlinWrapper
