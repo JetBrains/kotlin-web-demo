@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.kotlin.impl;
 
-import kotlin.KotlinVersion;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.webdemo.KotlinVersionConfig;
@@ -39,8 +38,8 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     private Path jarsFolder;
     private String kotlinVersion;
     private String kotlinBuild;
-    private String stdlibVersion;
     private Path wrapperFolder;
+    private String stdlibVersion;
 
     @Override
     public void init(List<Path> javaLibraries, KotlinVersionConfig config) {
@@ -116,8 +115,8 @@ public class KotlinWrapperImpl implements KotlinWrapper {
 
     @Override
     public MethodPositions getMethodPositions(Map<String, byte[]> classFiles) {
-        MethodPositions methodPositions = new MethodPositions();
-        for (String key : classFiles.keySet()) {
+        MethodPositions methodPositions= new MethodPositions();
+        for(String key : classFiles.keySet()){
             methodPositions.addClassMethodPositions(key, MethodsFinder.readClassMethodPositions(classFiles.get(key), key));
         }
         return methodPositions;
