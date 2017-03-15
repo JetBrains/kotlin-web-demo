@@ -88,9 +88,9 @@ b. `this` refers to an instance of an outer class
 c. `this` refers to a receiver parameter TR of the function literal:
 
 ```kotlin
-tr (color = "yellow") { TR.(): Unit ->
-      this.td {
-          text("Product")
-      }
+tr (color = "yellow") {
+    this@tr.td {
+        text("Product")
+    }
 }
 ```
