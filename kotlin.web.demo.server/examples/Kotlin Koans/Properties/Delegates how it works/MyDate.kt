@@ -4,7 +4,8 @@ data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int)
 
 fun MyDate.toMillis(): Long {
     val c = Calendar.getInstance()
-    c.set(year, month, dayOfMonth)
+    c.set(year, month, dayOfMonth, 0, 0, 0)
+    c.set(Calendar.MILLISECOND, 0)
     return c.getTimeInMillis()
 }
 

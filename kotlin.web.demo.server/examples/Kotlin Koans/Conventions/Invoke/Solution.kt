@@ -1,7 +1,7 @@
 <answer>class Invokable {
-    public var numberOfInvocations: Int = 0
+    var numberOfInvocations: Int = 0
         private set
-    operator public fun invoke(): Invokable {
+    operator fun invoke(): Invokable {
         numberOfInvocations++
         return this
     }

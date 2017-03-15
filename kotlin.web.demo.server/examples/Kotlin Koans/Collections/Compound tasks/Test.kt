@@ -15,6 +15,16 @@ class K_Compound_Tasks {
     }
 
     @Test fun testNumberOfTimesEachProductWasOrdered() {
-        Assert.assertTrue("getNumberOfTimesProductWasOrdered".toMessage(), 3 == shop.getNumberOfTimesProductWasOrdered(reSharper))
+        Assert.assertTrue(4 == shop.getNumberOfTimesProductWasOrdered(idea))
+    }
+
+    @Test fun testNumberOfTimesEachProductWasOrderedForRepeatedProduct() {
+        Assert.assertTrue("A customer may order a product for several times",
+                3 == shop.getNumberOfTimesProductWasOrdered(reSharper))
+    }
+
+    @Test fun testNumberOfTimesEachProductWasOrderedForRepeatedInOrderProduct() {
+        Assert.assertTrue("An order may contain a particular product more than once",
+                3 == shop.getNumberOfTimesProductWasOrdered(phpStorm))
     }
 }

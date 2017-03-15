@@ -11,7 +11,7 @@ class TestNullableTypes {
         var invoked = false
         val expectedMessage = message
         sendMessageToClient(client, message, object : Mailer {
-            public override fun sendMessage(email: String, message: String) {
+            override fun sendMessage(email: String, message: String) {
                 invoked = true
                 Assert.assertEquals("The message is not as expected:",
                         expectedMessage, message)

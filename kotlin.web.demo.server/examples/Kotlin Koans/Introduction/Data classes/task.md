@@ -22,7 +22,7 @@ public class Person {
 }
 ```
 
-Then add an annotation `data` to the resulting class.
+Then add a modifier `data` to the resulting class.
 This annotation means the compiler will generate a bunch of useful methods in this class: `equals`/`hashCode`, `toString` and some others.
 The `getPeople` function should start to compile.
 

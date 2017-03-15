@@ -3,7 +3,7 @@ import org.junit.Test
 import java.util.*
 import koans.util.toMessageInEquals
 
-public class TestGenericFunctions {
+class TestGenericFunctions {
     @Test fun testPartitionWordsAndLines() {
         partitionWordsAndLines()
 

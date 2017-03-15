@@ -1,6 +1,5 @@
 import org.junit.Assert
 import org.junit.Test
-import TimeInterval.*
 import koans.util.toMessageInEquals
 
 class TestOperatorsOverloading {
