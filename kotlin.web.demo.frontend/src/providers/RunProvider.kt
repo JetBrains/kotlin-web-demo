@@ -180,15 +180,17 @@ class JavaRunResult(
 }
 
 class JunitExecutionResult(
-        errors: Map<File, List<Diagnostic>>,
-        testResults: dynamic
+    errors: Map<File, List<Diagnostic>>,
+    testResults: dynamic
 ) : RunResult(errors) {
     val testResults = HashMap<String, List<TestResult>>()
 
     init {
-        for (className in Object.keys(testResults)) {
-            val classTests: Array<TestResult> = testResults[className]
-            this.testResults.put(className, classTests.asList())
+        if (testResults != null) {
+            for (className in Object.keys(testResults)) {
+                val classTests: Array<TestResult> = testResults[className]
+                this.testResults.put(className, classTests.asList())
+            }
         }
     }
 }

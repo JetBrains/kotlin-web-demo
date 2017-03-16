@@ -184,26 +184,26 @@ object Application {
                 generatedCodeView.clear()
             },
             onSuccess = { output, project ->
-                if (!isOnlyWarnings(output.errors)) {
-                    jq("#result-tabs").tabs("option", "active", 0)
-                } else {
-                    jq("#result-tabs").tabs("option", "active", 1)
-                }
                 problemsView.addMessages(output.errors)
                 editor.showDiagnostics(output.errors)
 
-                if (output is JunitExecutionResult) {
-                    if (project is Task) {
-                        val completed = output.testResults.values.flatten().all { it.status == Status.OK.name }
-                        if (completed) {
-                            projectProvider.saveSolution(project, completed)
-                            project.completed = true
-                            completedProjects = (completedProjects + project.id).toSet();
+                if (isOnlyWarnings(output.errors)) {
+                    jq("#result-tabs").tabs("option", "active", 1)
+                    if (output is JunitExecutionResult) {
+                        if (project is Task) {
+                            val completed = output.testResults.values.flatten().all { it.status == Status.OK.name }
+                            if (completed) {
+                                projectProvider.saveSolution(project, completed)
+                                project.completed = true
+                                completedProjects = (completedProjects + project.id).toSet();
+                            }
                         }
+                        junitView.setOutput(output.testResults.values.flatten())
+                    } else if (output is JavaRunResult) {
+                        consoleView.showJavaRunResult(output)
                     }
-                    junitView.setOutput(output.testResults.values.flatten())
-                } else if (output is JavaRunResult) {
-                    consoleView.showJavaRunResult(output)
+                } else {
+                    jq("#result-tabs").tabs("option", "active", 0)
                 }
                 statusBarView.setStatus(ActionStatusMessage.run_java_ok)
             },
