@@ -214,11 +214,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
     val interval = 1000 / 30
 
     init {
-        fun fix(f: Element.(MouseEvent) -> Unit) : Element.(MouseEvent) -> Unit {
-            return { f.asDynamic().apply(null, js("[this].concat(Array.from(arguments))")) } as Element.(MouseEvent) -> Unit
-        }
-
-        jq(canvas).mousedown(fix {
+        jq(canvas).mousedown {
             valid = false
             selection = null
             val mousePos = mousePos(it)
@@ -230,28 +226,28 @@ class CanvasState(val canvas: HTMLCanvasElement) {
                     break
                 }
             }
-        })
+        }
 
-        jq(canvas).mousemove(fix {
+        jq(canvas).mousemove {
             if (selection != null) {
                 selection!!.pos = mousePos(it) - dragOff
                 valid = false
             }
-        })
+        }
 
-        jq(canvas).mouseup(fix {
+        jq(canvas).mouseup {
             if (selection != null) {
                 selection!!.selected = false
             }
             selection = null
             valid = false
-        })
+        }
 
-        jq(canvas).dblclick(fix {
+        jq(canvas).dblclick {
             val newCreature = Creature(mousePos(it), this@CanvasState)
             addShape(newCreature)
             valid = false
-        })
+        }
 
         window.setInterval({
             draw()
