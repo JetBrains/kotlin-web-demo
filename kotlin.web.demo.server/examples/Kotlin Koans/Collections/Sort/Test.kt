@@ -4,6 +4,8 @@ import koans.util.toMessage
 
 class TestSort {
     @Test fun testGetCustomersSortedByNumberOfOrders() {
-        Assert.assertTrue("getCustomersSortedByNumberOfOrders".toMessage(), sortedCustomers == shop.getCustomersSortedByNumberOfOrders())
+        Assert.assertEquals("getCustomersSortedByNumberOfOrders".toMessage(),
+                sortedCustomers, shop.getCustomersSortedByNumberOfOrders())
+
     }
 }

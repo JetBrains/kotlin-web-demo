@@ -5,7 +5,8 @@ import koans.util.toMessage
 class TestAllAnyAndOtherPredicates {
 
     @Test fun testAllCustomersAreFromCity() {
-        Assert.assertFalse("checkAllCustomersAreFrom".toMessage(), shop.checkAllCustomersAreFrom(Canberra))
+        Assert.assertFalse("checkAllCustomersAreFrom".toMessage(),
+                shop.checkAllCustomersAreFrom(Canberra))
     }
 
     @Test fun testAnyCustomerIsFromCity() {
@@ -13,10 +14,11 @@ class TestAllAnyAndOtherPredicates {
     }
 
     @Test fun testCountCustomersFromCity() {
-        Assert.assertTrue("countCustomersFrom".toMessage(), 2 == shop.countCustomersFrom(Canberra))
+        Assert.assertEquals("countCustomersFrom".toMessage(), 2, shop.countCustomersFrom(Canberra))
     }
 
     @Test fun testAnyCustomerFromCity() {
-        Assert.assertTrue("findAnyCustomerFrom".toMessage(), customers[lucas] == shop.findAnyCustomerFrom(Canberra))
+        Assert.assertEquals("findAnyCustomerFrom".toMessage(), customers[lucas], shop.findAnyCustomerFrom(Canberra))
+        Assert.assertEquals("findAnyCustomerFrom".toMessage(), null, shop.findAnyCustomerFrom(City("Chicago")))
     }
 }

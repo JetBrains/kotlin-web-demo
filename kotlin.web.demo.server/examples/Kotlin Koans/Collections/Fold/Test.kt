@@ -14,7 +14,8 @@ class TestFold {
                         order(youTrack)
                 )
         )
-        Assert.assertTrue("getSetOfProductsOrderedByEveryCustomer".toMessage(),
-                setOf(idea) == testShop.getSetOfProductsOrderedByEveryCustomer())
+        Assert.assertEquals("getSetOfProductsOrderedByEveryCustomer".toMessage(),
+                setOf(idea), testShop.getSetOfProductsOrderedByEveryCustomer())
+
     }
 }

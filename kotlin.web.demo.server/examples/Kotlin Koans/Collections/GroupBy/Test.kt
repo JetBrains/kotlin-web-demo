@@ -4,7 +4,7 @@ import koans.util.toMessage
 
 class TestGroupBy {
     @Test fun testGroupCustomersByCity() {
-        Assert.assertTrue("groupCustomersByCity".toMessage(),
-                groupedByCities == shop.groupCustomersByCity())
+        Assert.assertEquals("groupCustomersByCity".toMessage(),
+                groupedByCities, shop.groupCustomersByCity())
     }
 }

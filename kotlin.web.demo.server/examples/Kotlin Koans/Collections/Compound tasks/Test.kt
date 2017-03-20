@@ -11,20 +11,20 @@ class K_Compound_Tasks {
                         order(reSharper)
                 )
         )
-        Assert.assertTrue("getMostExpensiveDeliveredProduct".toMessage(), reSharper == testShop.customers[0].getMostExpensiveDeliveredProduct())
+        Assert.assertEquals("getMostExpensiveDeliveredProduct".toMessage(), reSharper, testShop.customers[0].getMostExpensiveDeliveredProduct())
     }
 
     @Test fun testNumberOfTimesEachProductWasOrdered() {
-        Assert.assertTrue(4 == shop.getNumberOfTimesProductWasOrdered(idea))
+        Assert.assertEquals(4, shop.getNumberOfTimesProductWasOrdered(idea))
     }
 
     @Test fun testNumberOfTimesEachProductWasOrderedForRepeatedProduct() {
-        Assert.assertTrue("A customer may order a product for several times",
-                3 == shop.getNumberOfTimesProductWasOrdered(reSharper))
+        Assert.assertEquals("A customer may order a product for several times",
+                3, shop.getNumberOfTimesProductWasOrdered(reSharper))
     }
 
     @Test fun testNumberOfTimesEachProductWasOrderedForRepeatedInOrderProduct() {
-        Assert.assertTrue("An order may contain a particular product more than once",
-                3 == shop.getNumberOfTimesProductWasOrdered(phpStorm))
+        Assert.assertEquals("An order may contain a particular product more than once",
+                3, shop.getNumberOfTimesProductWasOrdered(phpStorm))
     }
 }

@@ -4,7 +4,7 @@ import koans.util.toMessage
 
 class TestIntroduction {
     @Test fun testSetOfCustomers(){
-        Assert.assertTrue("getSetOfCustomers".toMessage(),
-                shop.getSetOfCustomers() == customers.values.toSet())
+        Assert.assertEquals("getSetOfCustomers".toMessage(),
+                customers.values.toSet(), shop.getSetOfCustomers())
     }
 }

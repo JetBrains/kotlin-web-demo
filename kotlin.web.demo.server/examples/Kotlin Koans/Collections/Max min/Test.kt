@@ -4,12 +4,12 @@ import koans.util.toMessage
 
 class TestMaxMin {
     @Test fun testCustomerWithMaximumNumberOfOrders() {
-        Assert.assertTrue("getCustomerWithMaximumNumberOfOrders".toMessage(),
-                customers[reka] == shop.getCustomerWithMaximumNumberOfOrders())
+        Assert.assertEquals("getCustomerWithMaximumNumberOfOrders".toMessage(),
+                customers[reka], shop.getCustomerWithMaximumNumberOfOrders())
     }
 
     @Test fun testTheMostExpensiveOrderedProduct() {
-        Assert.assertTrue("getMostExpensiveOrderedProduct".toMessage(),
-                rubyMine == customers[nathan]!!.getMostExpensiveOrderedProduct())
+        Assert.assertEquals("getMostExpensiveOrderedProduct".toMessage(),
+                rubyMine, customers[nathan]!!.getMostExpensiveOrderedProduct())
     }
 }
