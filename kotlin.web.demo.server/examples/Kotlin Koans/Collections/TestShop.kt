@@ -51,7 +51,12 @@ val shop = shop("jb test shop",
         ),
         customer(asuka, Tokyo,
                 order(idea)
+        ),
+        customer(riku, Tokyo,
+                order(phpStorm, phpStorm),
+                order(phpStorm)
         )
+
 )
 
 val customers: Map<String, Customer> = shop.customers.fold(hashMapOf<String, Customer>(), {
