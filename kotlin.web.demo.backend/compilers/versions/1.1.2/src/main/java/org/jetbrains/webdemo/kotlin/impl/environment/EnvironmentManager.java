@@ -48,6 +48,7 @@ import org.jetbrains.kotlin.config.CommonConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.LanguageVersion;
+import org.jetbrains.kotlin.config.TargetPlatformVersion;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
 import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
@@ -58,6 +59,7 @@ import org.jetbrains.webdemo.kotlin.idea.DummyCodeStyleManager;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 
 public class EnvironmentManager {
@@ -83,8 +85,8 @@ public class EnvironmentManager {
     }
 
     @NotNull
-    public static LanguageVersion getLanguageVersion() {
-        return LanguageVersion.KOTLIN_1_1;
+    public static TargetPlatformVersion getLanguageVersion() {
+        return TargetPlatformVersion.NoVersion.INSTANCE;
     }
 
     @NotNull
@@ -116,6 +118,11 @@ public class EnvironmentManager {
             @Override
             public boolean isNotNull(@NotNull PsiModifierListOwner owner, boolean checkBases) {
                 return true;
+            }
+
+            @Override
+            public List<String> getPredefinedNotNulls() {
+                return Collections.emptyList();
             }
 
             @Override

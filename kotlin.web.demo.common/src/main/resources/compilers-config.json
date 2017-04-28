@@ -12,19 +12,20 @@
     "pluginBuild": "1.0.6-release-IJ2016.3-1"
   },
   {
-    "version": "1.1",
-    "stdlibVersion": "1.1.0",
-    "buildType": "Kotlin_110_CompilerAndPlugin_NoTests",
-    "build": "1.1.0-release-102",
-    "pluginBuild": "1.1.0-release-IJ2017.1-1",
-    "hasScriptJar": true
-  },
-  {
     "version": "1.1.1",
     "stdlibVersion": "1.1.1",
     "buildType": "Kotlin_111_CompilerAndPlugin_NoTests",
     "build": "1.1.1-release-37",
     "pluginBuild": "1.1.1-release-IJ2017.1-1",
+    "hasScriptJar": true,
+    "latestStable": true
+  },
+  {
+    "version": "1.1.2",
+    "stdlibVersion": "1.1.2",
+    "buildType": "Kotlin_112_CompilerAndPlugin_NoTests",
+    "build": "1.1.2-release-87",
+    "pluginBuild": "1.1.2-release-IJ2017.2-2",
     "hasScriptJar": true,
     "latestStable": true
   }

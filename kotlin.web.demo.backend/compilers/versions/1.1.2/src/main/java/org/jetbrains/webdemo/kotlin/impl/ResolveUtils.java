@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl;
+import org.jetbrains.kotlin.config.TargetPlatformVersion;
 import org.jetbrains.kotlin.container.ComponentProvider;
 import org.jetbrains.kotlin.container.ContainerKt;
 import org.jetbrains.kotlin.container.DslKt;
@@ -46,10 +47,10 @@ import org.jetbrains.kotlin.incremental.components.LookupTracker;
 import org.jetbrains.kotlin.js.analyze.TopDownAnalyzerFacadeForJS;
 import org.jetbrains.kotlin.js.config.JSConfigurationKeys;
 import org.jetbrains.kotlin.js.config.JsConfig;
-import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.resolve.JsPlatform;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.KtFile;
+import org.jetbrains.kotlin.resolve.AnnotationResolverImpl;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.BindingTrace;
 import org.jetbrains.kotlin.resolve.CompilerEnvironment;
@@ -141,7 +142,7 @@ public class ResolveUtils {
 
         CompilerConfiguration configuration = environment.getConfiguration().copy();
         configuration.put(JSConfigurationKeys.LIBRARIES, Collections.singletonList(WrapperSettings.JS_LIB_ROOT.toString()));
-        JsConfig config = new LibrarySourcesConfig(project, configuration);
+        JsConfig config = new JsConfig(project, configuration);
 
         MutableModuleContext module = ContextKt.ContextForNewModule(
                 ContextKt.ProjectContext(project),
@@ -155,7 +156,7 @@ public class ResolveUtils {
 
         FileBasedDeclarationProviderFactory providerFactory = new FileBasedDeclarationProviderFactory(module.getStorageManager(), files);
 
-        Pair<LazyTopDownAnalyzer, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJs(module, trace, providerFactory);
+        Pair<LazyTopDownAnalyzer, ComponentProvider> analyzerAndProvider = createContainerForTopDownAnalyzerForJs(module, trace, EnvironmentManager.getLanguageVersion(),providerFactory);
 
         //noinspection unchecked
         return new Pair<AnalysisResult, ComponentProvider>(
@@ -177,6 +178,7 @@ public class ResolveUtils {
     private static Pair<LazyTopDownAnalyzer, ComponentProvider> createContainerForTopDownAnalyzerForJs(
             final ModuleContext moduleContext,
             final BindingTrace bindingTrace,
+            final TargetPlatformVersion platformVersion,
             final DeclarationProviderFactory declarationProviderFactory
     ) {
         StorageComponentContainer container = DslKt.composeContainer(
@@ -185,9 +187,10 @@ public class ResolveUtils {
                 new Function1<StorageComponentContainer, Unit>() {
             @Override
             public Unit invoke(StorageComponentContainer storageComponentContainer) {
-                org.jetbrains.kotlin.frontend.di.InjectionKt.configureModule(storageComponentContainer, moduleContext, JsPlatform.INSTANCE, bindingTrace);
+                org.jetbrains.kotlin.frontend.di.InjectionKt.configureModule(storageComponentContainer, moduleContext, JsPlatform.INSTANCE, platformVersion, bindingTrace);
 
                 DslKt.useInstance(storageComponentContainer, declarationProviderFactory);
+                ContainerKt.registerSingleton(storageComponentContainer, AnnotationResolverImpl.class);
                 ContainerKt.registerSingleton(storageComponentContainer, FileScopeProviderImpl.class);
 
                 CompilerEnvironment.INSTANCE.configure(storageComponentContainer);

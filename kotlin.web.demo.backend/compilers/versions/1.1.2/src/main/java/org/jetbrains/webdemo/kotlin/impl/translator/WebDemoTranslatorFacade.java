@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.config.CommonConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.js.config.JSConfigurationKeys;
 import org.jetbrains.kotlin.js.config.JsConfig;
-import org.jetbrains.kotlin.js.config.LibrarySourcesConfig;
 import org.jetbrains.kotlin.js.facade.K2JSTranslator;
 import org.jetbrains.kotlin.js.facade.MainCallParameters;
 import org.jetbrains.kotlin.js.facade.TranslationResult;
@@ -36,7 +35,12 @@ import org.jetbrains.webdemo.kotlin.impl.WrapperSettings;
 import org.jetbrains.webdemo.kotlin.impl.analyzer.ErrorAnalyzer;
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("UnusedDeclaration")
 public final class WebDemoTranslatorFacade {
@@ -72,7 +76,7 @@ public final class WebDemoTranslatorFacade {
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "moduleId");
         configuration.put(JSConfigurationKeys.LIBRARIES, Collections.singletonList(WrapperSettings.JS_LIB_ROOT.toString()));
 
-        JsConfig config = new LibrarySourcesConfig(currentProject, configuration);
+        JsConfig config = new JsConfig(currentProject, configuration);
         K2JSTranslator translator = new K2JSTranslator(config);
         TranslationResult result = translator.translate(files, MainCallParameters.mainWithArguments(
                 Arrays.asList(arguments)));
