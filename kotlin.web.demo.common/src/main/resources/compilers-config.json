@@ -25,7 +25,7 @@
     "stdlibVersion": "1.1.2",
     "buildType": "Kotlin_112_CompilerAndPlugin_NoTests",
     "build": "1.1.2-release-87",
-    "pluginBuild": "1.1.2-release-IJ2017.2-2",
+    "pluginBuild": "1.1.2-release-IJ2016.3-2",
     "hasScriptJar": true,
     "latestStable": true
   }
