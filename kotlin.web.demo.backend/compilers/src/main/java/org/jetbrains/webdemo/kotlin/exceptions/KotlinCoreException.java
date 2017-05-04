@@ -20,6 +20,7 @@ public class KotlinCoreException extends RuntimeException {
     private final Throwable e;
 
     public KotlinCoreException(Throwable e) {
+        super(e);
         this.e = e;
     }
 
@@ -27,10 +28,4 @@ public class KotlinCoreException extends RuntimeException {
     public String getMessage() {
         return e.getMessage();
     }
-
-    @Override
-    public Throwable fillInStackTrace() {
-        return null;
-    }
-
 }
