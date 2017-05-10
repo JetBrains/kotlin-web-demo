@@ -284,6 +284,7 @@ project("kotlin.web.demo.server") {
             include 'kotlin.web.demo.frontend.js'
         }
         from("${project(':kotlin.web.demo.frontend').projectDir}/index.html")
+        from("${rootProject.projectDir}/build.txt")
         for (kotlinVersion in kotlinVersions) {
             def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
             from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) }) {
