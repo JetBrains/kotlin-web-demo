@@ -1,1 +1,1 @@
-%build.number%
+build.number
