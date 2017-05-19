@@ -44,7 +44,7 @@ public class AuthorizationFacebookHelper extends AuthorizationHelper {
     public String getAuthorizationUrl() {
         try {
             facebookService = new ServiceBuilder()
-                    .provider(FacebookApi.class)
+                    .provider(Facebook21Api.class)
                     .apiKey(ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.KEY)
                     .apiSecret(ApplicationSettings.FACEBOOK_OAUTH_CREDENTIALS.SECRET)
                     .callback(getCallbackUrl())
