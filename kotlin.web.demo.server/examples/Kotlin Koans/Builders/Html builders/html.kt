@@ -6,14 +6,14 @@ open class Tag(val name: String) {
 
     override fun toString(): String {
         return "<$name" +
-            (if (attributes.isEmpty()) "" else attributes.joinToString(separator = "", prefix = " ")) + ">" +
+            (if (attributes.isEmpty()) "" else attributes.joinToString(separator = " ", prefix = " ")) + ">" +
             (if (children.isEmpty()) "" else children.joinToString(separator = "")) +
             "</$name>"
     }
 }
 
 class Attribute(val name : String, val value : String) {
-    override fun toString() = """$name="$value" """
+    override fun toString() = """$name="$value""""
 }
 
 fun <T: Tag> T.set(name: String, value: String?): T {
