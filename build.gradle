@@ -36,6 +36,7 @@ ext.kotlinVersions = kotlinConfigs.collect { it.version }
 
 allprojects {
     repositories {
+        jcenter()
         maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
     }
 }
@@ -122,6 +123,9 @@ for (config in kotlinConfigs) {
             kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
             if (config.hasScriptJar) {
                 kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
+            }
+            if(!version.startsWith("1.0")) {
+                kotlin "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.14"
             }
             if(config.stdlibVersion) {
                 kotlin group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: config.stdlibVersion
