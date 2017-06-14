@@ -1,15 +1,9 @@
 [
   {
-    "version": "1.0.5",
-    "buildType": "Kotlin_105_CompilerAndPlugin_NoTests",
-    "build": "1.0.5-release-134",
-    "pluginBuild": "1.0.5-release-IJ2016.3-2"
-  },
-  {
-    "version": "1.0.6",
-    "buildType": "Kotlin_106_CompilerAndPlugin_NoTests",
-    "build": "1.0.6-release-127",
-    "pluginBuild": "1.0.6-release-IJ2016.3-1"
+    "version": "1.0.7",
+    "buildType": "Kotlin_107_CompilerAndPlugin_NoTests",
+    "build": "1.0.7-release-1",
+    "pluginBuild": "1.0.7-release-IJ2016.3-1"
   },
   {
     "version": "1.1.1",
