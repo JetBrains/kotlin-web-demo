@@ -107,6 +107,7 @@ public class EnvironmentManager {
 
         configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
+        configuration.put(JVMConfigurationKeys.JDK_HOME, new File(CommonSettings.JAVA_HOME));
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "kotlinWebDemo");
 
         KotlinCoreEnvironment environment = KotlinCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
