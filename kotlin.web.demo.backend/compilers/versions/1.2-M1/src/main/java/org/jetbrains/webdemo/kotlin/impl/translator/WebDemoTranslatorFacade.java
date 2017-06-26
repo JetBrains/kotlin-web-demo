@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.js.facade.MainCallParameters;
 import org.jetbrains.kotlin.js.facade.TranslationResult;
 import org.jetbrains.kotlin.js.facade.exceptions.TranslationException;
 import org.jetbrains.kotlin.psi.KtFile;
+import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor;
 import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException;
 import org.jetbrains.webdemo.kotlin.impl.WrapperSettings;
@@ -78,17 +79,19 @@ public final class WebDemoTranslatorFacade {
 
         JsConfig config = new JsConfig(currentProject, configuration);
         K2JSTranslator translator = new K2JSTranslator(config);
-        TranslationResult result = translator.translate(new JsConfig.Reporter() {
+        JsConfig.Reporter reporter = new JsConfig.Reporter() {
             @Override
             public void error(@NotNull String message) {
-                super.error(message);
+                ErrorWriter.log.error(message);
             }
 
             @Override
             public void warning(@NotNull String message) {
-                super.warning(message);
+                ErrorWriter.log.warn(message);
             }
-        }, files, MainCallParameters.mainWithArguments(Arrays.asList(arguments)));
+        };
+        TranslationResult result = translator.translate(reporter, files,
+                MainCallParameters.mainWithArguments(Arrays.asList(arguments)));
         if (result instanceof TranslationResult.Success) {
             TranslationResult.Success success = ((TranslationResult.Success) result);
 
