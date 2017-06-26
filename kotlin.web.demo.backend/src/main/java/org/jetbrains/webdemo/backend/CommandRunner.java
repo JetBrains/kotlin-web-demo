@@ -27,7 +27,7 @@ public class CommandRunner {
         if (value.isEmpty()) {
             System.err.println("Empty value for setting: " + setting);
         } else if (setting.equals("java_home")) {
-            BackendSettings.JAVA_HOME = value;
+            CommonSettings.JAVA_HOME = value;
         } else if (setting.equals("java_execute")) {
             BackendSettings.JAVA_EXECUTE = value;
         } else if (setting.equals("timeout")) {

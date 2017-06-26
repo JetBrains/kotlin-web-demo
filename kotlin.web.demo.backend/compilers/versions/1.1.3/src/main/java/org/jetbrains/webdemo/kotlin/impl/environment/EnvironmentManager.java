@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,16 +48,19 @@ import org.jetbrains.kotlin.config.CommonConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.config.JVMConfigurationKeys;
 import org.jetbrains.kotlin.config.LanguageVersion;
+import org.jetbrains.kotlin.config.TargetPlatformVersion;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
 import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
 import org.jetbrains.kotlin.resolve.diagnostics.SuppressStringProvider;
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
+import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.kotlin.idea.DummyCodeStyleManager;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 
 public class EnvironmentManager {
@@ -83,8 +86,8 @@ public class EnvironmentManager {
     }
 
     @NotNull
-    public static LanguageVersion getLanguageVersion() {
-        return LanguageVersion.KOTLIN_1_1;
+    public static TargetPlatformVersion getLanguageVersion() {
+        return TargetPlatformVersion.NoVersion.INSTANCE;
     }
 
     @NotNull
@@ -116,6 +119,11 @@ public class EnvironmentManager {
             @Override
             public boolean isNotNull(@NotNull PsiModifierListOwner owner, boolean checkBases) {
                 return true;
+            }
+
+            @Override
+            public List<String> getPredefinedNotNulls() {
+                return Collections.emptyList();
             }
 
             @Override
@@ -152,7 +160,7 @@ public class EnvironmentManager {
     @NotNull
     private static List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments, List<Path> libraries) {
         List<File> classpath = Lists.newArrayList();
-        classpath.addAll(PathUtil.getJdkClassesRoots());
+        classpath.addAll(PathUtil.getJdkClassesRoots(new File(CommonSettings.JAVA_HOME)));
         for(Path library : libraries){
             classpath.add(library.toFile());
         }

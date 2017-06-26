@@ -89,7 +89,7 @@ public class BackendHttpServlet extends HttpServlet {
                 CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
             } catch (NamingException e) {
                 String executable = isWindows() ? "java.exe" : "java";
-                CommandRunner.setServerSettingFromTomcatConfig("java_execute", BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + executable);
+                CommandRunner.setServerSettingFromTomcatConfig("java_execute", CommonSettings.JAVA_HOME + File.separator + "bin" + File.separator + executable);
             }
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", (String) envCtx.lookup("app_output_dir"));
