@@ -361,8 +361,38 @@
 
 .conference-banner {
     position: absolute;
-    top: -10px;
-    right: -200px;
+    top: 0;
+    right: 50px;
+}
+@media (max-width:1400px) {
+    .conference-banner {
+        right: 0;
+    }
+}
+
+@media (max-width:1300px) {
+    .conference-banner {
+        right: -50px;
+    }
+}
+
+@media (max-width:1200px) {
+    .conference-banner {
+        right: -100px;
+    }
+}
+
+@media (max-width:1100px) {
+    .conference-banner {
+        right: -150px;
+    }
+}
+
+@media (max-width:1000px) {
+    .conference-banner {
+        left: 950px;
+        right: initial;
+    }
 }
 
 .conference-banner img {

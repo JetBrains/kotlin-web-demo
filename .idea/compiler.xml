@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <resourceExtensions />
     <wildcardResourcePatterns />
-    <annotationProcessing>
-      <profile default="true" name="Default" enabled="false">
-        <processorPath useClasspath="true" />
-      </profile>
-    </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="1.0.1-2_main" target="1.7" />
       <module name="1.0.1-2_test" target="1.7" />
       <module name="1.0.2_main" target="1.7" />
       <module name="1.0.2_test" target="1.7" />
+      <module name="1.0.5_main" target="1.7" />
+      <module name="1.0.5_test" target="1.7" />
+      <module name="1.0.6_main" target="1.7" />
+      <module name="1.0.6_test" target="1.7" />
+      <module name="1.0.7_main" target="1.7" />
+      <module name="1.0.7_test" target="1.7" />
+      <module name="1.1.1_main" target="1.7" />
+      <module name="1.1.1_test" target="1.7" />
+      <module name="1.1.2_main" target="1.7" />
+      <module name="1.1.2_test" target="1.7" />
+      <module name="1.1.3_main" target="1.7" />
+      <module name="1.1.3_test" target="1.7" />
       <module name="compilers_main" target="1.7" />
       <module name="compilers_test" target="1.7" />
       <module name="kotlin-web-demo_main" target="1.7" />
