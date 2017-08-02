@@ -316,7 +316,7 @@ project('kotlin.web.demo.test') {
         test.dependsOn(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion:classes")
     }
     test.dependsOn(":kotlin.web.demo.executors:jar")
-    test.dependsOn(":copyKotlinLibs")
+//    test.dependsOn(":copyKotlinLibs")
 }
 
 project(':kotlin.web.demo.backend:compilers:versions').jar { onlyIf { false } }
