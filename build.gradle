@@ -125,7 +125,7 @@ for (config in kotlinConfigs) {
                 kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
             }
             if(!version.startsWith("1.0")) {
-                kotlin "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.14"
+                kotlin "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.17"
             }
             if(config.stdlibVersion) {
                 kotlin group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: config.stdlibVersion

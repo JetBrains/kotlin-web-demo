@@ -134,7 +134,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     private List<Path> getCompileTimeLibraries (){
         List<Path> libraries = new ArrayList<>();
         libraries.add(jarsFolder.resolve("annotations-13.0.jar"));
-        libraries.add(jarsFolder.resolve("kotlinx-coroutines-core-0.14.jar"));
+        libraries.add(jarsFolder.resolve("kotlinx-coroutines-core-0.17.jar"));
         libraries.add(jarsFolder.resolve("kotlin-stdlib-" + stdlibVersion + ".jar"));
         libraries.add(jarsFolder.resolve("kotlin-stdlib-jre7-" + stdlibVersion + ".jar"));
         libraries.add(jarsFolder.resolve("kotlin-stdlib-jre8-" + stdlibVersion + ".jar"));
