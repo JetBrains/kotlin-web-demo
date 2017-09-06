@@ -1,6 +1,8 @@
+[![official JetBrains project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+
 This is the source for [try.kotl.in]( http://try.kotlinlang.org/)
 
-# Filling Bugs
+# Filing Bugs
 We use [YouTrack](http://youtrack.jetbrains.com/issues/KT#) for bug reports and suggestions on improving the Web Demo. 
 [Click here to report an issue.](https://youtrack.jetbrains.com/newIssue?project=KT&clearDraft=true&c=Subsystems+Web+Site&c=subtask+of+KT-2555) If you need help with compiling or running the project locally, please join the #kontributors channel in the [Kotlin Slack](http://slack.kotlinlang.org), and we'll be happy to help you there.
 
