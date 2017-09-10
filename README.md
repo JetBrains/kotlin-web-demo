@@ -14,7 +14,7 @@ and copy jar file to tomcat libraries.
 try.kotl.in frontend part uses bower as a dependency manager. To fetch this dependencies you have to install
  [node](https://nodejs.org/) and run `npm install` in kotlin.web.demo.frontend folder.
 
-You need MySql database to launch try.kotl.in, schema can be found [here](kotlin.web.demo.server/resources/db_schema.sql)
+You need MySql database to launch try.kotl.in, schema can be found [here](kotlin.web.demo.server/resources/db_schema.sql).
 
 ## Building
 try.kotl.in is IDEA project. 
