@@ -59,6 +59,8 @@ import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.kotlin.idea.DummyCodeStyleManager;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
@@ -78,11 +80,23 @@ public class EnvironmentManager {
     }
 
     public static void reinitializeJavaEnvironment(){
-        ApplicationManager.setApplication(
-                KotlinCoreEnvironment.Companion.getApplicationEnvironment().getApplication(),
-                registry,
-                disposable
-        );
+        try {
+            Method method = environment.getClass().getDeclaredMethod("getApplicationEnvironment");
+            method.setAccessible(true);
+            CoreApplicationEnvironment applicationEnvironment = (CoreApplicationEnvironment) method.invoke(environment);
+
+            ApplicationManager.setApplication(
+                    applicationEnvironment.getApplication(),
+                    registry,
+                    disposable
+            );
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @NotNull
