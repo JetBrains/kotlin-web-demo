@@ -24,6 +24,15 @@
     "latestStable": true
   },
   {
+    "version": "1.1.50",
+    "stdlibVersion": "1.1.50",
+    "buildType": "Kotlin_1150_CompilerAndPlugin_NoTests",
+    "build": "1.1.50-release-34",
+    "pluginBuild": "1.1.50-release-IJ2017.3-1",
+    "hasScriptJar": true,
+    "latestStable": true
+  },
+  {
     "version": "1.2-M1",
     "stdlibVersion": "1.2-M1-eap-62",
     "buildType": "Kotlin_12M1_CompilerAndPlugin_NoTests",

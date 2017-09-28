@@ -21,6 +21,8 @@
       <module name="1.1.3_test" target="1.7" />
       <module name="1.1.4_main" target="1.7" />
       <module name="1.1.4_test" target="1.7" />
+      <module name="1.1.50_main" target="1.7" />
+      <module name="1.1.50_test" target="1.7" />
       <module name="1.2-M1_main" target="1.7" />
       <module name="1.2-M1_test" target="1.7" />
       <module name="compilers_main" target="1.7" />
