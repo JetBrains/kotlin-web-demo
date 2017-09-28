@@ -30,5 +30,13 @@
     "build": "1.2-M1-release-86",
     "pluginBuild": "1.2-M1-release-IJ2017.1-1",
     "hasScriptJar": true
+  },
+  {
+    "version": "1.2-Beta",
+    "stdlibVersion": "1.2-Beta-eap-28",
+    "buildType": "Kotlin_12Beta_CompilerAndPlugin_NoTests",
+    "build": "1.2-Beta-eap-28",
+    "pluginBuild": "1.2-Beta-eap-28-IJ2017.3-1",
+    "hasScriptJar": true
   }
 ]

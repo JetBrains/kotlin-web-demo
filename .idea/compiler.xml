@@ -25,6 +25,8 @@
       <module name="1.1.50_test" target="1.7" />
       <module name="1.2-M1_main" target="1.7" />
       <module name="1.2-M1_test" target="1.7" />
+      <module name="1.2-Beta_main" target="1.7" />
+      <module name="1.2-Beta_test" target="1.7" />
       <module name="compilers_main" target="1.7" />
       <module name="compilers_test" target="1.7" />
       <module name="kotlin-web-demo_main" target="1.7" />
