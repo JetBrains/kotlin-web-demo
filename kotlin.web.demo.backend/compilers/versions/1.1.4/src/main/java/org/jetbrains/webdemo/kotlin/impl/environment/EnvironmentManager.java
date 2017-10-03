@@ -51,6 +51,7 @@ import org.jetbrains.kotlin.config.LanguageVersion;
 import org.jetbrains.kotlin.config.TargetPlatformVersion;
 import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
 import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
+import org.jetbrains.kotlin.js.config.JSConfigurationKeys;
 import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
 import org.jetbrains.kotlin.resolve.diagnostics.SuppressStringProvider;
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
@@ -122,7 +123,10 @@ public class EnvironmentManager {
         configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions);
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions);
         configuration.put(JVMConfigurationKeys.JDK_HOME, new File(CommonSettings.JAVA_HOME));
+
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "kotlinWebDemo");
+
+        configuration.put(JSConfigurationKeys.TYPED_ARRAYS_ENABLED, true);
 
         KotlinCoreEnvironment environment = KotlinCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES);
         ((MockProject) environment.getProject()).registerService(NullableNotNullManager.class, new NullableNotNullManager() {
