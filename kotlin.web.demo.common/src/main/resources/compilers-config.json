@@ -3,7 +3,8 @@
     "version": "1.0.7",
     "buildType": "Kotlin_107_CompilerAndPlugin_NoTests",
     "build": "1.0.7-release-1",
-    "pluginBuild": "1.0.7-release-IJ2016.3-1"
+    "pluginBuild": "1.0.7-release-IJ2016.3-1",
+    "useOriginalVersion": true
   },
   {
     "version": "1.1.4",
@@ -12,7 +13,8 @@
     "build": "1.1.4-release-97",
     "pluginBuild": "1.1.4-release-IJ2017.2-3",
     "hasScriptJar": true,
-    "latestStable": true
+    "latestStable": true,
+    "useOriginalVersion": true
   },
   {
     "version": "1.1.50",
@@ -21,7 +23,8 @@
     "build": "1.1.50-release-34",
     "pluginBuild": "1.1.50-release-IJ2017.2-1",
     "hasScriptJar": true,
-    "latestStable": true
+    "latestStable": true,
+    "useOriginalVersion": true
   },
   {
     "version": "1.2-M1",
@@ -29,7 +32,8 @@
     "buildType": "Kotlin_12M1_CompilerAndPlugin_NoTests",
     "build": "1.2-M1-release-86",
     "pluginBuild": "1.2-M1-release-IJ2017.1-1",
-    "hasScriptJar": true
+    "hasScriptJar": true,
+    "useOriginalVersion": true
   },
   {
     "version": "1.2-Beta",
@@ -37,14 +41,18 @@
     "buildType": "Kotlin_12Beta_CompilerAndPlugin_NoTests",
     "build": "1.2-Beta-eap-28",
     "pluginBuild": "1.2-Beta-eap-28-IJ2017.2-1",
-    "hasScriptJar": true
+    "hasScriptJar": true,
+    "useOriginalVersion": true
   },
   {
     "version": "1.2-Beta2",
     "stdlibVersion": "1.2.0-beta-88",
-    "buildType": "Kotlin_12Beta2_CompilerAllPlugins",
-    "build": "1.2.0-beta-88",
+    "buildType": "Kotlin_Compiler172forWebdemo",
+    "build": "1.2.0-beta-89",
     "pluginBuild": "1.2.0-beta-88-IJ2017.2-1",
-    "hasScriptJar": true
+    "pluginBuildType": "Kotlin_12Beta2_CompilerAllPlugins",
+    "kotlinPluginBuild": "1.2.0-beta-88",
+    "hasScriptJar": true,
+    "useOriginalVersion": false
   }
 ]

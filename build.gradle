@@ -115,15 +115,32 @@ for (config in kotlinConfigs) {
 
         dependencies {
             compile project(":kotlin.web.demo.backend:compilers")
-            kotlin tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-runtime.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
+
+            def root = config.useOriginalVersion ?
+                    "$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib" :
+                    "$buildType:$build:kotlin-compiler-${build}.zip!/kotlinc/lib"
+
+            kotlin tc("$root/kotlin-runtime.jar")
+            kotlin tc("$root/kotlin-reflect.jar")
+            kotlin tc("$root/kotlin-test.jar")
+            kotlin tc("$root/kotlin-jslib.jar")
+
             if (config.hasScriptJar) {
-                kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
+                kotlin tc("$root/kotlin-script-runtime.jar")
             }
+
+            kotlinJS tc("$root/kotlin-jslib.jar")
+
+            if (!config.useOriginalVersion) {
+                kotlin tc("$root/kotlin-compiler.jar")
+                kotlin tc("${config.pluginBuildType}:${config.kotlinPluginBuild}:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
+            }
+            else {
+                kotlin tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
+                kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
+            }
+
+
             if(!version.startsWith("1.0")) {
                 kotlin "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.17"
             }
@@ -131,7 +148,6 @@ for (config in kotlinConfigs) {
                 kotlin group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: config.stdlibVersion
             }
 
-            kotlinJS tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
             compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
         }
     }
