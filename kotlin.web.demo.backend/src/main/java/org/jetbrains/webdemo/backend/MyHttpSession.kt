@@ -56,9 +56,9 @@ class MyHttpSession {
             val javaCode = request.getParameter("text")
             val kotlinCode = wrapper.translateJavaToKotlin(javaCode)
             response.sendResponse(HttpServletResponse.SC_OK, kotlinCode)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorWriter.log.error("Eerror during java to kotlin translation", e)
+            ErrorWriter.log.error("Error during java to kotlin translation", e)
         }
 
     }
