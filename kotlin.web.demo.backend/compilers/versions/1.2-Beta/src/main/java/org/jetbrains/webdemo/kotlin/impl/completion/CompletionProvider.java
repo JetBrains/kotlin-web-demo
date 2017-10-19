@@ -25,6 +25,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
+import kotlin.text.StringsKt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.analyzer.AnalysisResult;
 import org.jetbrains.kotlin.container.ComponentProvider;
@@ -222,8 +223,8 @@ public class CompletionProvider {
                 } else {
                     prefix = element.getParent().getText();
                 }
-                prefix = StringUtil.substringBefore(prefix, "IntellijIdeaRulezzz");
-                if (prefix == null || prefix.endsWith(".")) {
+                prefix = StringsKt.substringBefore(prefix, "IntellijIdeaRulezzz", prefix);
+                if (prefix.endsWith(".")) {
                     prefix = "";
                 }
 

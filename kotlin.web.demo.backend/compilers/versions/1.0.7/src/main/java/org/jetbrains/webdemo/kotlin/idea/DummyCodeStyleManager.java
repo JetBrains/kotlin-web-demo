@@ -141,7 +141,6 @@ public class DummyCodeStyleManager extends CodeStyleManager {
 
     @Override
     public <T extends Throwable> void performActionWithFormatterDisabled(ThrowableRunnable<T> throwableRunnable) throws T {
-       throwableRunnable.run();
     }
 
     @Override
