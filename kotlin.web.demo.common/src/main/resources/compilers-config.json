@@ -7,16 +7,6 @@
     "useOriginalVersion": true
   },
   {
-    "version": "1.1.4",
-    "stdlibVersion": "1.1.4-3",
-    "buildType": "Kotlin_114_CompilerAndPlugin_NoTests",
-    "build": "1.1.4-release-97",
-    "pluginBuild": "1.1.4-release-IJ2017.2-3",
-    "hasScriptJar": true,
-    "latestStable": true,
-    "useOriginalVersion": true
-  },
-  {
     "version": "1.1.50",
     "stdlibVersion": "1.1.50",
     "buildType": "Kotlin_1150_CompilerAndPlugin_NoTests",
@@ -24,24 +14,6 @@
     "pluginBuild": "1.1.50-release-IJ2017.2-1",
     "hasScriptJar": true,
     "latestStable": true,
-    "useOriginalVersion": true
-  },
-  {
-    "version": "1.2-M1",
-    "stdlibVersion": "1.2-M1-eap-62",
-    "buildType": "Kotlin_12M1_CompilerAndPlugin_NoTests",
-    "build": "1.2-M1-release-86",
-    "pluginBuild": "1.2-M1-release-IJ2017.1-1",
-    "hasScriptJar": true,
-    "useOriginalVersion": true
-  },
-  {
-    "version": "1.2-Beta",
-    "stdlibVersion": "1.2-Beta-eap-28",
-    "buildType": "Kotlin_12Beta_CompilerAndPlugin_NoTests",
-    "build": "1.2-Beta-eap-28",
-    "pluginBuild": "1.2-Beta-eap-28-IJ2017.2-1",
-    "hasScriptJar": true,
     "useOriginalVersion": true
   },
   {
