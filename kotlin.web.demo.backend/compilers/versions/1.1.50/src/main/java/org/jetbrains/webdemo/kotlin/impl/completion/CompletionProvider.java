@@ -36,6 +36,7 @@ import org.jetbrains.kotlin.idea.codeInsight.ReferenceVariantsHelper;
 import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers;
 import org.jetbrains.kotlin.lexer.KtKeywordToken;
 import org.jetbrains.kotlin.lexer.KtTokens;
+import org.jetbrains.kotlin.name.FqNameUnsafe;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.KtExpression;
 import org.jetbrains.kotlin.psi.KtFile;
@@ -67,12 +68,11 @@ public class CompletionProvider {
             descriptorRendererOptions.setClassifierNamePolicy(ClassifierNamePolicy.SHORT.INSTANCE);
             descriptorRendererOptions.setTypeNormalizer(IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES);
             descriptorRendererOptions.setParameterNameRenderingPolicy(ParameterNameRenderingPolicy.NONE);
-            descriptorRendererOptions.setRenderDefaultValues(false);
             descriptorRendererOptions.setTypeNormalizer(new Function1<KotlinType, KotlinType>() {
                 @Override
                 public KotlinType invoke(KotlinType kotlinType) {
                     if (FlexibleTypesKt.isFlexible(kotlinType)) {
-                        return FlexibleTypesKt.flexibility(kotlinType).getUpperBound();
+                        return FlexibleTypesKt.asFlexibleType(kotlinType).getUpperBound();
                     }
                     return kotlinType;
                 }
@@ -182,7 +182,8 @@ public class CompletionProvider {
                     bindingContext,
                     new KotlinResolutionFacade(containerProvider),
                     analysisResult.getModuleDescriptor(),
-                    VISIBILITY_FILTER
+                    VISIBILITY_FILTER,
+                    Collections.<FqNameUnsafe>emptySet()
             );
 
             if (element instanceof KtSimpleNameExpression) {

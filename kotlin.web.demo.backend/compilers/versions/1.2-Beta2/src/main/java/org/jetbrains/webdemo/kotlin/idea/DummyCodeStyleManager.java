@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.codeStyle.ChangedRangesInfo;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.Indent;
 import com.intellij.util.IncorrectOperationException;
@@ -69,6 +70,11 @@ public class DummyCodeStyleManager extends CodeStyleManager {
 
     @Override
     public void reformatText(@NotNull PsiFile psiFile, @NotNull Collection<TextRange> collection) throws IncorrectOperationException {
+
+    }
+
+    @Override
+    public void reformatTextWithContext(@NotNull PsiFile psiFile, @NotNull ChangedRangesInfo changedRangesInfo) throws IncorrectOperationException {
 
     }
 
@@ -141,6 +147,7 @@ public class DummyCodeStyleManager extends CodeStyleManager {
 
     @Override
     public <T extends Throwable> void performActionWithFormatterDisabled(ThrowableRunnable<T> throwableRunnable) throws T {
+        throwableRunnable.run();
     }
 
     @Override

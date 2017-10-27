@@ -1,6 +1,6 @@
 <Context>
     <!-- All environment variables in this context are optional -->
-    <Environment name="java_execute" value="/docker-java-home/jre/bin/java" type="java.lang.String"
+    <Environment name="java_home" value="/usr/lib/jvm/java-8-openjdk-amd64" type="java.lang.String"
                  override="false"/>
     <Environment name="app_output_dir" value="/logs/" type="java.lang.String" override="false"/>
     <Environment name="timeout" type="java.lang.String" value="5000" override="false"/>

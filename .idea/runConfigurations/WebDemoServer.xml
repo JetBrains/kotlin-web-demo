@@ -93,6 +93,7 @@
     </ConfigurationWrapper>
     <method>
       <option name="Make" enabled="false" />
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="clean" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
       <option name="Gradle.BeforeRunTask" enabled="true" tasks="build" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="-x test" />
     </method>
   </configuration>
