@@ -17,6 +17,7 @@
 package views.tabs
 
 import application.makeReference
+import kotlinx.html.classes
 import kotlinx.html.dom.append
 import kotlinx.html.js.span
 import org.w3c.dom.HTMLElement

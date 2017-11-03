@@ -17,8 +17,7 @@
 package views.tree
 
 import application.Application
-import kotlinx.html.colorInput
-import kotlinx.html.div
+import kotlinx.html.classes
 import kotlinx.html.dom.append
 import kotlinx.html.dom.create
 import kotlinx.html.js.div
@@ -27,13 +26,15 @@ import model.Folder
 import model.LevelInfo
 import model.Project
 import model.Task
+import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import utils.jquery.circleProgress
 import utils.jquery.jq
 import views.dialogs.TweetDialog
 import kotlin.browser.document
 import kotlin.dom.addClass
+import kotlin.js.Math
+import kotlin.js.json
 
 
 class FolderViewWithProgress(parentNode: HTMLElement,
@@ -95,7 +96,7 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         text.textContent = "Completed!"
         dialogElement.appendChild(text)
 
-        val button = document.createElement("button") as HTMLDivElement
+        val button = document.createElement("button") as HTMLButtonElement
         button.className = "next-task button"
         button.innerHTML = "Start next task"
         dialogElement.appendChild(button)
@@ -120,9 +121,7 @@ class FolderViewWithProgress(parentNode: HTMLElement,
                     }
                 }
         )
-        close.onclick = {
-            Event -> dialogCloseFun?.invoke()
-        }
+        close.onclick = { dialogCloseFun?.invoke() }
     }
 
     private fun getNextFolder(folderViewWithProgress: FolderViewWithProgress): FolderViewWithProgress? {

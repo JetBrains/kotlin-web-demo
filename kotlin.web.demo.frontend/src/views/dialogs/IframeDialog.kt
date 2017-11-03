@@ -16,9 +16,11 @@
 
 package views.dialogs
 
+import kotlinx.html.classes
 import kotlinx.html.dom.append
 import kotlinx.html.iframe
 import kotlinx.html.js.div
+import kotlinx.html.title
 import org.w3c.dom.HTMLIFrameElement
 import utils.jquery.ui.Dialog
 import kotlin.browser.document

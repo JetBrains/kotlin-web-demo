@@ -16,8 +16,6 @@
 
 package model
 
-import java.util.*
-
 
 class PublicLink(
         id: String,

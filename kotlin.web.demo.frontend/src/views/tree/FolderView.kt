@@ -17,18 +17,15 @@
 package views.tree
 
 import application.Application
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
+import kotlinx.html.classes
+import kotlinx.html.dom.append
+import kotlinx.html.id
+import kotlinx.html.js.div
 import model.Folder
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.jquery.jq
-import utils.jquery.ui.accordion
-import views.tree.ProjectView
-import kotlin.browser.document
-import kotlin.browser.window
-import kotlin.dom.addClass
+import kotlin.js.json
 
 open class FolderView(parentNode: HTMLElement,
                       val content: Folder,

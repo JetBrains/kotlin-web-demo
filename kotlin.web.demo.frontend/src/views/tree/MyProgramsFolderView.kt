@@ -17,21 +17,20 @@
 package views.tree
 
 import application.Application
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
+import kotlinx.html.classes
+import kotlinx.html.div
+import kotlinx.html.dom.append
+import kotlinx.html.id
+import kotlinx.html.js.a
+import kotlinx.html.js.div
+import kotlinx.html.js.onClickFunction
 import model.Folder
-import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import utils.jquery.find
 import utils.jquery.jq
-import utils.jquery.on
 import views.dialogs.AdventOfCodeInput
 import views.dialogs.AdventOfCodeInputDialog
 import views.dialogs.InputDialogView
 import views.dialogs.ValidationResult
-import views.tree.FolderView
-import views.tree.ProjectView
 
 class MyProgramsFolderView(parentNode: HTMLElement,
                            content: Folder,

@@ -20,7 +20,6 @@ import utils.Listenable
 import utils.VarListener
 import utils.addKotlinExtension
 import views.dialogs.ValidationResult
-import java.util.*
 
 
 open class UserProject(

@@ -16,6 +16,8 @@
 
 package providers
 
+import kotlin.js.json
+
 class ConverterProvider(){
     fun convert(text: String, onSuccess: (String) -> Unit, onFail: (dynamic) -> Unit, onComplete: () -> Unit) {
         ajax(

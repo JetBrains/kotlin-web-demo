@@ -18,7 +18,6 @@ package views.dialogs
 
 import org.w3c.dom.HTMLElement
 import utils.jquery.JQuery
-import utils.jquery.find
 import utils.jquery.jq
 
 fun getDialogButton(dialogElement: HTMLElement, number: Int): JQuery {

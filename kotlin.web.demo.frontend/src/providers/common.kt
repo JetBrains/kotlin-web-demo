@@ -21,6 +21,8 @@ import model.Project
 import utils.Object
 import utils.jquery.JQuery
 import views.editor.Diagnostic
+import kotlin.js.Json
+import kotlin.js.json
 
 fun checkDataForNull(data: dynamic): Boolean = data != null
 

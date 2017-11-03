@@ -16,20 +16,20 @@
 
 package views.dialogs
 
-import org.w3c.dom.events.Event
+import kotlinx.html.dom.append
+import kotlinx.html.id
+import kotlinx.html.js.div
+import kotlinx.html.js.textArea
+import kotlinx.html.title
 import providers.ConverterProvider
 import utils.KeyCode
+import utils.codemirror.CodeMirror
+import utils.jquery.jq
 import utils.jquery.ui.Dialog
 import utils.jquery.ui.DialogButton
-import utils.codemirror.CodeMirror
-import utils.jquery.ui.button
-import utils.jquery.ui.resizable
 import kotlin.browser.document
 import kotlin.browser.window
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
-import utils.jquery.*
+import kotlin.js.json
 
 
 class ConverterView(converterProvider: ConverterProvider) {

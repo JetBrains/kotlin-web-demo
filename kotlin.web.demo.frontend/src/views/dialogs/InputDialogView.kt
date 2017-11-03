@@ -16,19 +16,15 @@
 
 package views.dialogs
 
-import kotlinx.html.InputType
-import kotlinx.html.div
+import kotlinx.html.*
 import kotlinx.html.dom.create
-import kotlinx.html.input
 import kotlinx.html.js.div
-import kotlinx.html.span
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
 import utils.KeyCode
-import utils.jquery.*
+import utils.jquery.jq
 import utils.jquery.ui.Dialog
 import utils.jquery.ui.DialogButton
-import utils.jquery.ui.button
 import kotlin.browser.document
 
 

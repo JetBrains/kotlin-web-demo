@@ -17,23 +17,21 @@
 package views.tree
 
 import application.Application
+import kotlinx.html.classes
+import kotlinx.html.div
+import kotlinx.html.dom.append
+import kotlinx.html.id
+import kotlinx.html.js.div
+import kotlinx.html.js.span
+import kotlinx.html.title
+import model.*
 import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLSpanElement
-import utils.addKotlinExtension
 import utils.getFileIdFromUrl
-import utils.jquery.slideDown
-import views.dialogs.InputDialogView
-import views.dialogs.ValidationResult
+import utils.jquery.jq
 import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
-import model.*
-import org.w3c.dom.HTMLElement
-import utils.jquery.jq
 
 open class ProjectView(
         header: ProjectHeader,

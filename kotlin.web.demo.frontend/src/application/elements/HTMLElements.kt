@@ -22,13 +22,11 @@ import org.w3c.dom.HTMLInputElement
 import utils.IncompleteActionManager
 import utils.jquery.jq
 import utils.parseBoolean
-import utils.jquery.ui.selectmenu
-import views.dialogs.AskDialog
 import views.dialogs.InputDialogView
 import views.dialogs.ShortcutsDialogView
 import kotlin.browser.document
 import kotlin.browser.localStorage
-import kotlin.dom.onClick
+import kotlin.js.json
 
 
 internal object Elements{

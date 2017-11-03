@@ -16,15 +16,10 @@
 
 package views.dialogs
 
-import kotlinx.html.InputType
+import kotlinx.html.*
 import kotlin.browser.document
 import kotlinx.html.dom.create
-import kotlinx.html.div
-import kotlinx.html.input
-import kotlinx.html.textArea
-import kotlinx.html.label
 import kotlinx.html.js.div
-import kotlinx.html.span
 import org.w3c.dom.HTMLTextAreaElement
 import kotlin.text.Regex
 

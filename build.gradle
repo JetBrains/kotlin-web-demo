@@ -26,8 +26,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "com.moowork.gradle:gradle-node-plugin:0.11"
-        classpath "gradle.plugin.com.github.jk1:tcdeps:0.9.1"
+        classpath "gradle.plugin.com.github.jk1:tcdeps:0.15"
     }
 }
 
@@ -109,7 +108,7 @@ for (config in kotlinConfigs) {
             }
         }
         configurations {
-            kotlin
+            kotlinJVM
             kotlinJS
         }
 
@@ -119,29 +118,29 @@ for (config in kotlinConfigs) {
             def root = "$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib"
 
             if (config.useCompilerBeforeShrink) {
-                kotlin tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
+                kotlinJVM tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
             }
             else {
-                kotlin tc("$root/kotlin-compiler.jar")
+                kotlinJVM tc("$root/kotlin-compiler.jar")
             }
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
+            kotlinJVM tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
 
-            kotlin tc("$root/kotlin-runtime.jar")
-            kotlin tc("$root/kotlin-reflect.jar")
-            kotlin tc("$root/kotlin-test.jar")
-            kotlin tc("$root/kotlin-jslib.jar")
+            kotlinJVM tc("$root/kotlin-runtime.jar")
+            kotlinJVM tc("$root/kotlin-reflect.jar")
+            kotlinJVM tc("$root/kotlin-test.jar")
+            kotlinJVM tc("$root/kotlin-jslib.jar")
 
             if (config.hasScriptJar) {
-                kotlin tc("$root/kotlin-script-runtime.jar")
+                kotlinJVM tc("$root/kotlin-script-runtime.jar")
             }
 
             kotlinJS tc("$root/kotlin-jslib.jar")
 
             if(!version.startsWith("1.0")) {
-                kotlin "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.17"
+                kotlinJVM "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.17"
             }
             if(config.stdlibVersion) {
-                kotlin group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: config.stdlibVersion
+                kotlinJVM group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: config.stdlibVersion
             }
 
             compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
@@ -155,7 +154,7 @@ task copyKotlinLibs() {
     for (kotlinVersion in kotlinVersions) {
         def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
         copy {
-            from wrapperProject.configurations.kotlin
+            from wrapperProject.configurations.kotlinJVM
             into wrapperProject.projectDir.toString() + File.separator + "kotlin"
         }
         copy {
@@ -189,7 +188,7 @@ project("kotlin.web.demo.backend") {
             from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) }) {
                 into "WEB-INF/kotlin-wrappers/$kotlinVersion/js"
             }
-            from(wrapperProject.configurations['kotlin']) {
+            from(wrapperProject.configurations['kotlinJVM']) {
                 into "WEB-INF/kotlin-wrappers/$kotlinVersion/kotlin"
             }
         }
@@ -206,69 +205,6 @@ project("kotlin.web.demo.executors") {
         from configurations.compile
     }
     jar.dependsOn(copyToLib)
-}
-
-project(':kotlin.web.demo.frontend') {
-    apply plugin: 'kotlin2js'
-    apply plugin: 'com.moowork.node'
-
-    repositories {
-        mavenCentral()
-        maven {
-            url "http://dl.bintray.com/kotlinx/kotlinx"
-        }
-    }
-
-    dependencies {
-        compile "org.jetbrains.kotlin:kotlin-js-library:$kotlinVersion"
-        compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.12"
-    }
-
-    sourceSets {
-        main {
-            kotlin {
-                srcDir 'src'
-            }
-        }
-    }
-
-    compileKotlin2Js{
-        kotlinOptions.outputFile = "${buildDir}/kotlin.web.demo.frontend.js"
-        kotlinOptions.moduleKind='commonjs'
-    }
-
-    task bowerInstall(type: NodeTask, dependsOn: npmInstall) {
-        script = file('node_modules/bower/bin/bower')
-        args = ['install']
-    }
-    build.dependsOn('bowerInstall')
-
-    node {
-        version = '4.0.0'
-        download = true
-    }
-
-    task copyJsFilesFromDependencies(dependsOn: 'compileKotlin2Js') {
-        configurations.compile.each { File file ->
-            copy {
-                includeEmptyDirs = false
-
-                from zipTree(file.absolutePath)
-                into "${buildDir}/libs"
-                include { fileTreeElement ->
-                    def path = fileTreeElement.path
-                    path.endsWith(".js") && !path.endsWith(".meta.js") &&
-                            (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
-                }
-            }
-        }
-    }
-
-    task buildAssets(type: NpmTask, dependsOn: 'copyJsFilesFromDependencies') {
-        args=['run', 'build']
-    }
-
-    build.dependsOn 'buildAssets'
 }
 
 project("kotlin.web.demo.server") {
@@ -321,7 +257,7 @@ project('kotlin.web.demo.test') {
         testCompile project(':kotlin.web.demo.backend:compilers')
         testCompile project(':kotlin.web.demo.backend')
         testCompile project(':kotlin.web.demo.server')
-        testCompile group: 'org.jetbrains.kotlin', 'name': 'kotlin-test', 'version': '1.0.1-2'
+        testCompile group: 'org.jetbrains.kotlin', 'name': 'kotlin-test', 'version': '1.1.51'
         testCompile group: 'junit', 'name': 'junit', 'version': '4.12'
     }
     for (kotlinVersion in kotlinVersions) {

@@ -16,8 +16,8 @@
 
 package utils
 
-import org.w3c.dom.*
-import utils.jquery.isCheck
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.Window
 import utils.jquery.jq
 import kotlin.browser.document
 import kotlin.browser.window
@@ -148,17 +148,12 @@ fun unBlockContent() {
     (document.getElementById("global-overlay") as HTMLElement).style.display = "none"
 }
 
-@native
-val Object: dynamic = noImpl
+external val Object: dynamic = definedExternally
 
-@native
-fun Window.eval(code: String): dynamic = noImpl
+inline fun Window.eval(code: String): dynamic = asDynamic().eval(code)
 
-@native
-fun Window.getSelection(): dynamic = noImpl
+inline fun Window.getSelection(): dynamic = asDynamic().getSelection()
 
-@native
-fun decodeURI(uri: String): String = noImpl
+external fun decodeURI(uri: String): String = definedExternally
 
-@native
-fun encodeURIComponent(component: String): String = noImpl
+external fun encodeURIComponent(component: String): String = definedExternally

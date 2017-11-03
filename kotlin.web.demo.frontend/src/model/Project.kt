@@ -19,7 +19,8 @@ package model
 import application.Application
 import utils.Listenable
 import utils.VarListener
-import java.util.ArrayList
+import kotlin.js.Json
+import kotlin.js.json
 
 abstract class Project(
         val type: ProjectType,

@@ -28,6 +28,7 @@ import utils.jquery.*
 import views.editor.Diagnostic
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.js.json
 
 
 class ProblemsView(

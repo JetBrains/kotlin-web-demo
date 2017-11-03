@@ -16,15 +16,19 @@
 
 package views.editor
 
-import kotlinx.html.dom.*
-import kotlinx.html.js.*
-import kotlinx.html.*
 import application.Application
+import kotlinx.html.classes
+import kotlinx.html.code
+import kotlinx.html.div
+import kotlinx.html.dom.append
+import kotlinx.html.dom.create
+import kotlinx.html.js.div
+import kotlinx.html.js.onClickFunction
+import kotlinx.html.js.pre
+import kotlinx.html.title
 import model.File
 import model.FileType
 import model.Task
-import org.w3c.dom.HTMLButtonElement
-import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.KeyboardEvent
@@ -33,13 +37,11 @@ import providers.HelpProvider
 import utils.KeyCode
 import utils.codemirror.*
 import utils.jquery.JQuery
-import utils.jquery.find
-import utils.jquery.hide
 import utils.jquery.jq
-import utils.jquery.ui.toggle
 import utils.unEscapeString
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.js.json
 
 public class Editor(
         private val helpProvider: HelpProvider

@@ -22,6 +22,7 @@ import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
 import kotlin.browser.localStorage
+import kotlin.js.json
 
 class ProjectProvider(
         private val onProjectLoaded: () -> Unit,

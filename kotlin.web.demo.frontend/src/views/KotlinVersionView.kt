@@ -17,14 +17,11 @@
 package views
 
 import application.KotlinWrapperConfig
-import org.w3c.dom.HTMLSelectElement
 import kotlinx.html.dom.append
 import kotlinx.html.option
-import org.w3c.dom.events.Event
+import org.w3c.dom.HTMLSelectElement
 import utils.jquery.jq
-import utils.jquery.on
-import utils.jquery.ui.selectmenu
-import utils.jquery.value
+import kotlin.js.json
 import kotlin.properties.Delegates
 
 class KotlinVersionView(

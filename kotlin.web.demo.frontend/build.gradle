@@ -1,0 +1,71 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}
+
+plugins {
+    id "com.moowork.node" version "1.2.0"
+}
+apply plugin: 'kotlin2js'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion"
+    compile 'org.jetbrains.kotlinx:kotlinx-html-js:0.6.4'
+}
+
+sourceSets {
+    main {
+        kotlin {
+            srcDir 'src'
+        }
+    }
+}
+
+compileKotlin2Js {
+    kotlinOptions.outputFile = "${buildDir}/kotlin.web.demo.frontend.js"
+    kotlinOptions.moduleKind = 'commonjs'
+    kotlinOptions.metaInfo = false
+}
+
+task bowerInstall(type: NodeTask, dependsOn: npmInstall) {
+    script = file('node_modules/bower/bin/bower')
+    args = ['install']
+}
+assemble.dependsOn('bowerInstall')
+
+node {
+    version = '8.9.0'
+    download = true
+}
+
+task copyJsFilesFromDependencies(dependsOn: 'classes') {
+    configurations.compile.each { File file ->
+        copy {
+            includeEmptyDirs = false
+
+            from zipTree(file.absolutePath)
+            into "${buildDir}/libs"
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                path.endsWith(".js") && !path.endsWith(".meta.js") &&
+                        (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+            }
+        }
+    }
+}
+
+task buildAssets(type: NpmTask, dependsOn: 'copyJsFilesFromDependencies') {
+    args = ['run', 'build']
+}
+
+assemble.dependsOn 'buildAssets'
+
+jar { onlyIf { false } }

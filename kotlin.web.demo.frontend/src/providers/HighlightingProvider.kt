@@ -19,6 +19,7 @@ package providers
 import model.File
 import model.Project
 import views.editor.Diagnostic
+import kotlin.js.json
 
 class HighlightingProvider(
         private val onSuccess: (Map<File, List<Diagnostic>>) -> Unit,

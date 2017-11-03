@@ -19,6 +19,7 @@ import model.Project
 import utils.codemirror.Position
 import utils.jquery.JQuery
 import views.ActionStatusMessage
+import kotlin.js.json
 
 class CompletionProvider(
         var onSuccess: () -> Unit,

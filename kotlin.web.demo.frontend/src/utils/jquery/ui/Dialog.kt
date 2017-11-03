@@ -20,7 +20,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import utils.KeyCode
 import utils.jquery.jq
-import utils.jquery.keydown
+import kotlin.js.json
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 

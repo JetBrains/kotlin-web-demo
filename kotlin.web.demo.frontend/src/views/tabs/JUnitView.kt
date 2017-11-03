@@ -17,22 +17,27 @@
 package views.tabs
 
 import application.Application
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
-import org.w3c.dom.*
+import kotlinx.html.classes
+import kotlinx.html.div
+import kotlinx.html.dom.create
+import kotlinx.html.id
+import kotlinx.html.js.div
+import kotlinx.html.js.onClickFunction
+import kotlinx.html.span
+import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLUListElement
 import providers.Status
 import providers.TestResult
-import utils.*
-import utils.jquery.*
-import utils.jquery.ui.tabs
-import views.tabs.OutputView
+import utils.a11yTree
+import utils.jquery.JQuery
+import utils.jquery.jq
+import utils.unEscapeString
 import views.dialogs.DifferenceDialog
-import java.util.*
 import kotlin.browser.document
-import kotlin.dom.addClass
+import kotlin.collections.set
 import kotlin.dom.hasClass
-import kotlin.text.Regex
+import kotlin.js.json
 
 class JUnitView(
         private val element: HTMLElement,
@@ -311,5 +316,5 @@ data class ParsedAssertionMessage(
         val actual: String
 )
 
-@native
-fun Double.toFixed(noOfDigits: Int): Double = noImpl
+@Suppress("NOTHING_TO_INLINE")
+inline fun Double.toFixed(noOfDigits: Int): Double = asDynamic().toFixed(noOfDigits)

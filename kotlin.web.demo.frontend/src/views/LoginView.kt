@@ -16,14 +16,13 @@
 
 package views
 
-import jquery.ui.dialog
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event
 import providers.LoginProvider
-import utils.*
-import utils.jquery.*
-import utils.jquery.ui.dialog
+import utils.decodeURI
+import utils.jquery.jq
 import kotlin.browser.document
+import kotlin.js.json
 
 class LoginView(val loginModel: LoginProvider) {
     var isLoggedIn = false
@@ -72,8 +71,8 @@ class LoginView(val loginModel: LoginProvider) {
 
     init {
 
-        jq(".login-icons").children().click({
-            login(this.getAttribute("login-type") as String)
+        jq(".login-icons").children().click({ e ->
+            login(e.target.getAttribute("login-type") as String)
         })
 
         (document.getElementById("logout-button") as HTMLDivElement).onclick = { event ->

@@ -16,24 +16,22 @@
 
 package views.dialogs
 
+import kotlinx.html.classes
 import kotlinx.html.dom.append
 import kotlinx.html.js.div
+import kotlinx.html.title
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import utils.KeyCode
 import utils.jquery.jq
-import utils.jquery.keydown
-import utils.jquery.outerHeight
 import utils.jquery.ui.Dialog
-import utils.jquery.ui.dialog
 import kotlin.browser.document
 import kotlin.dom.addClass
 
 
-@native
-object  difflib {
+external object  difflib {
     class SequenceMatcher(baseTextLines: Array<String>, newTextLines: Array<String>){
-        fun get_opcodes(): Array<dynamic> = noImpl
+        fun get_opcodes(): Array<dynamic> = definedExternally
     }
 }
 

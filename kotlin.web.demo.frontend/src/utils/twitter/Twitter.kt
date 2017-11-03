@@ -16,21 +16,19 @@
 
 package utils.twitter
 
-@native("twttr")
-object Twitter{
-    @native("txt")
-    val text: TwitterText = noImpl
+@JsName("twttr")
+external object Twitter{
+    @JsName("txt")
+    val text: TwitterText = definedExternally
 }
 
-@native
-class TwitterText{
-    fun extractUrlsWithIndices(tweet: String): Array<URLObject> = noImpl
-    fun getTweetLength(value: String): Int = noImpl
+external class TwitterText{
+    fun extractUrlsWithIndices(tweet: String): Array<URLObject> = definedExternally
+    fun getTweetLength(value: String): Int = definedExternally
 }
 
-@native
-class URLObject{
-    val indices: Array<Int> = noImpl
-    val url: String = noImpl
+external class URLObject{
+    val indices: Array<Int> = definedExternally
+    val url: String = definedExternally
 }
 

@@ -18,8 +18,7 @@ package views.editor
 
 import utils.codemirror.Position
 
-@native
-interface Diagnostic {
+external interface Diagnostic {
     val className: String
     val interval: Interval
     val message: String

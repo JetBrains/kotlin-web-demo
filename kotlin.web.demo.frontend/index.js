@@ -1,4 +1,3 @@
 require('kotlin');
-require('kotlinx.html.js');
-require('kotlinx.html.shared');
+require('kotlinx-html-js');
 require('./build/kotlin.web.demo.frontend');

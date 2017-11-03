@@ -20,10 +20,7 @@ import kotlinx.html.*
 import kotlinx.html.dom.append
 import kotlinx.html.js.div
 import kotlinx.html.js.onInputFunction
-import kotlinx.html.js.onSubmitFunction
 import org.w3c.dom.*
-import utils.jquery.find
-import utils.jquery.get
 import utils.jquery.jq
 import utils.jquery.ui.Dialog
 import utils.twitter.Twitter

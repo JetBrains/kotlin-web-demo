@@ -21,17 +21,15 @@ import model.File
 import model.Project
 import model.ProjectType
 import model.UserProject
-import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import utils.*
+import utils.IncompleteActionManager
+import utils.getProjectIdFromUrl
+import utils.isUserProjectInUrl
 import utils.jquery.jq
-import utils.jquery.ui.accordion
-import utils.jquery.unbind
-import views.*
-import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
 import kotlin.dom.removeClass
+import kotlin.js.json
 import kotlin.properties.Delegates
 
 class AccordionView(

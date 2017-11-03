@@ -21,17 +21,11 @@ import model.File
 import model.ProjectType
 import model.Task
 import model.UserProject
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLSelectElement
-import org.w3c.dom.StorageEvent
+import org.w3c.dom.*
 import org.w3c.dom.events.KeyboardEvent
 import providers.*
 import utils.*
 import utils.jquery.jq
-import utils.jquery.on
-import utils.jquery.trigger
-import utils.jquery.ui.tabs
 import views.*
 import views.dialogs.ConverterView
 import views.dialogs.IframeDialog
@@ -44,7 +38,6 @@ import views.tabs.GeneratedCodeView
 import views.tabs.JUnitView
 import views.tabs.ProblemsView
 import views.tree.AccordionView
-import java.util.*
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
@@ -55,8 +48,8 @@ object Application {
                     "org.jetbrains.web.demo.run" to Shortcut(arrayOf("Ctrl", "F9"), { event ->
                         event.keyCode == KeyCode.F9.code && event.ctrlKey
                     }),
-                    "org.jetbrains.web.demo.reformat" to Shortcut(arrayOf("Ctrl", "Alt", "L"), { event -> false }),
-                    "org.jetbrains.web.demo.autocomplete" to Shortcut(arrayOf("Ctrl", "Space"), { event -> false }),
+                    "org.jetbrains.web.demo.reformat" to Shortcut(arrayOf("Ctrl", "Alt", "L"), { false }),
+                    "org.jetbrains.web.demo.autocomplete" to Shortcut(arrayOf("Ctrl", "Space"), { false }),
                     "org.jetbrains.web.demo.save" to Shortcut(arrayOf("Ctrl", "S"), { event ->
                         event.keyCode == KeyCode.S.code && event.ctrlKey
                     })
@@ -65,8 +58,8 @@ object Application {
                     "org.jetbrains.web.demo.run" to Shortcut(arrayOf("Ctrl", "R"), { event ->
                         event.keyCode == KeyCode.R.code && event.ctrlKey
                     }),
-                    "org.jetbrains.web.demo.reformat" to Shortcut(arrayOf("Cmd", "Alt", "L"), { event -> false }),
-                    "org.jetbrains.web.demo.autocomplete" to Shortcut(arrayOf("Ctrl", "Space"), { event -> false }),
+                    "org.jetbrains.web.demo.reformat" to Shortcut(arrayOf("Cmd", "Alt", "L"), { false }),
+                    "org.jetbrains.web.demo.autocomplete" to Shortcut(arrayOf("Ctrl", "Space"), { false }),
                     "org.jetbrains.web.demo.save" to Shortcut(arrayOf("Cmd", "S"), { event ->
                         event.keyCode == KeyCode.S.code && event.metaKey
                     })
@@ -91,7 +84,7 @@ object Application {
             return storedArray.toSet()
         }
         set(value) {
-            localStorage.set("completedProjects", JSON.stringify(value.toTypedArray()))
+            localStorage["completedProjects"] = JSON.stringify(value.toTypedArray())
         }
 
     val accordion: AccordionView = AccordionView(
@@ -207,7 +200,7 @@ object Application {
                 }
                 statusBarView.setStatus(ActionStatusMessage.run_java_ok)
             },
-            processTranslateToJSResult = { translationResult, project ->
+            processTranslateToJSResult = { translationResult, _ ->
                 if (!isOnlyWarnings(translationResult.errors)) {
                     jq("#result-tabs").tabs("option", "active", 0)
                 } else {
@@ -339,7 +332,7 @@ object Application {
                 statusBarView.setStatus(ActionStatusMessage.get_highlighting_ok,
                         getNumberOfErrorsAndWarnings(data).toString())
             },
-            { error, status ->
+            { error, _ ->
                 unBlockContent()
                 consoleView.writeException(error)
                 statusBarView.setStatus(ActionStatusMessage.get_highlighting_fail)
@@ -421,7 +414,7 @@ object Application {
     })
 
     private fun getNumberOfErrorsAndWarnings(diagnostics: Map<File, List<Diagnostic>>): Int {
-        return diagnostics.values.fold(0, { noOfDiagnostics, diagnostics -> noOfDiagnostics + diagnostics.size })
+        return diagnostics.values.fold(0, { noOfDiagnostics, fileDiagnostics -> noOfDiagnostics + fileDiagnostics.size })
     }
 
     fun init() {
@@ -521,7 +514,7 @@ object Application {
     }
 }
 
-@native interface KotlinWrapperConfig {
+external interface KotlinWrapperConfig {
     val version: String
     val latestStable: Boolean
     val obsolete: Boolean

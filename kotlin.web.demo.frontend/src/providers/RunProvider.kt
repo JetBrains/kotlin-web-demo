@@ -26,8 +26,7 @@ import views.Configuration
 import views.ConfigurationType
 import views.ConfigurationTypeRunner
 import views.editor.Diagnostic
-import java.util.*
-import kotlin.js.native
+import kotlin.js.json
 
 class RunProvider(
         private val beforeRun: () -> Unit,
@@ -165,14 +164,14 @@ class JavaRunResult(
         val exception: ExceptionDescriptor?
 ) : RunResult(errors)
 
-@native interface ExceptionDescriptor {
+external interface ExceptionDescriptor {
     val message: String
     val fullName: String
     val stackTrace: List<StackTraceElement>
     val cause: ExceptionDescriptor
 }
 
-@native interface StackTraceElement {
+external interface StackTraceElement {
     val declaringClass: String
     val methodName: String
     val fileName: String
@@ -195,8 +194,7 @@ class JunitExecutionResult(
     }
 }
 
-@native
-interface TestResult {
+external interface TestResult {
     val output: String
     val sourceFileName: String
     val className: String
@@ -208,7 +206,7 @@ interface TestResult {
     val status: String
 }
 
-@native interface ComparisonFailureDescriptor : ExceptionDescriptor {
+external interface ComparisonFailureDescriptor : ExceptionDescriptor {
     val expected: String
     val actual: String
 }

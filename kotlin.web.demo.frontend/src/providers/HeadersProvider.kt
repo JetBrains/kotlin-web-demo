@@ -19,12 +19,14 @@ package providers
 import model.Folder
 import model.LevelInfo
 import model.ProjectType
+import org.w3c.dom.get
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
 import views.tree.ProjectHeader
 import views.tree.TaskHeader
 import kotlin.browser.localStorage
+import kotlin.js.json
 
 class HeadersProvider(
         private val onFail: (String, ActionStatusMessage) -> Unit,
@@ -141,8 +143,7 @@ class HeadersProvider(
     }
 }
 
-@native
-interface FolderContent {
+external interface FolderContent {
     val name: String
     val id: String
     val projects: Array<ProjectInfo>
@@ -151,8 +152,7 @@ interface FolderContent {
     val levels: Array<LevelInfo>?
 }
 
-@native
-interface ProjectInfo {
+external interface ProjectInfo {
     val name: String
     val publicId: String
     val modified: Boolean

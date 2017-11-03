@@ -16,13 +16,13 @@
 
 package views.tabs
 
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
+import kotlinx.html.classes
+import kotlinx.html.dom.append
+import kotlinx.html.js.div
 import org.w3c.dom.HTMLDivElement
 import providers.JavaRunResult
-import views.tabs.OutputView
-import kotlin.text.js.RegExp
+import kotlin.js.RegExp
+import kotlin.js.json
 
 class ConsoleView(
         private val element: HTMLDivElement,

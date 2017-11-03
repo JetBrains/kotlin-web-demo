@@ -22,121 +22,99 @@ import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
-import org.w3c.dom.events.MouseEvent
+import kotlin.js.Json
 
 
-@native("$")
-class JQuery {
+@JsName("$")
+external class JQuery {
     companion object JQuery {
-        fun ajax(parameters: Json): Promise = noImpl
-        fun parseHTML(html: String): Array<HTMLElement>? = noImpl
+        fun ajax(parameters: Json): Promise = definedExternally
+        fun parseHTML(html: String): Array<HTMLElement>? = definedExternally
     }
 
     class Promise {
-        fun then(callback: Function<Unit>): Unit = noImpl
-        fun done(callback: Function<Unit>): Unit = noImpl
-        fun fail(): Unit = noImpl
-        fun always(): Unit = noImpl
-        fun pipe(): Unit = noImpl
-        fun progress(): Unit = noImpl
-        fun state(): Unit = noImpl
-        fun promise(): Unit = noImpl
+        fun then(callback: Function<Unit>): Unit = definedExternally
+        fun done(callback: Function<Unit>): Unit = definedExternally
+        fun fail(): Unit = definedExternally
+        fun always(): Unit = definedExternally
+        fun pipe(): Unit = definedExternally
+        fun progress(): Unit = definedExternally
+        fun state(): Unit = definedExternally
+        fun promise(): Unit = definedExternally
     }
 
-    fun html(s: String): Unit = noImpl
-    fun removeClass(className: String): Unit = noImpl
-    fun addClass(className: String): Unit = noImpl
-    fun height(): Number = noImpl
-    fun height(value: Int): Unit = noImpl
-    fun width(): Number = noImpl
-    fun width(value: Int): Unit = noImpl
-    fun hasClass(className: String): Boolean = noImpl
-    fun text(text: String): Unit = noImpl
-    fun click(): Unit = noImpl
-    fun click(handler: Element.(MouseClickEvent) -> Unit): utils.jquery.JQuery = noImpl
-    fun slideUp(): Unit = noImpl
-    fun parent(): utils.jquery.JQuery = noImpl
-    fun attr(name: String, value: String): Unit = noImpl
-    fun append(any: String): Unit = noImpl
+    fun html(s: String): Unit = definedExternally
+    fun removeClass(className: String): Unit = definedExternally
+    fun addClass(className: String): Unit = definedExternally
+    fun height(): Number = definedExternally
+    fun height(value: Int): Unit = definedExternally
+    fun width(): Number = definedExternally
+    fun width(value: Int): Unit = definedExternally
+    fun hasClass(className: String): Boolean = definedExternally
+    fun text(text: String): Unit = definedExternally
+    fun click(): Unit = definedExternally
+    fun click(handler: (dynamic) -> Unit): utils.jquery.JQuery = definedExternally
+    fun slideUp(): Unit = definedExternally
+    fun parent(): utils.jquery.JQuery = definedExternally
+    fun attr(name: String, value: String): Unit = definedExternally
+    fun append(any: String): Unit = definedExternally
+
+    fun slideDown(): Unit = definedExternally
+    fun children(selector: String): utils.jquery.JQuery = definedExternally
+    fun outerHeight(includeMargin: Boolean = definedExternally): Int = definedExternally
+    fun outerWidth(includeMargin: Boolean = definedExternally): Int = definedExternally
+    fun hide(): Unit = definedExternally
+    fun show(): Unit = definedExternally
+    fun children(): utils.jquery.JQuery = definedExternally
+    fun unbind(s: String): Unit = definedExternally
+    fun on(s: String, onClose: (Event) -> Unit): Unit = definedExternally
+    fun css(key: String, value: dynamic): Unit = definedExternally
+
+    @JsName("val")
+    fun value(): String = definedExternally
+
+    @JsName("val")
+    fun value(s: String): Unit = definedExternally
+
+    fun circleProgress(options: Json): Unit = definedExternally
+    fun on(action: String, selector: String, callback: (event: Event) -> Unit): Unit = definedExternally
+    fun keydown(callback: (KeyboardEvent) -> Unit): Unit = definedExternally
+    fun find(selector: String): utils.jquery.JQuery = definedExternally
+    fun trigger(action: String): Unit = definedExternally
+    fun focus(): Unit = definedExternally
+    operator fun get(index: Int): Element = definedExternally
+
+
+    fun toggle(): Unit = definedExternally
+    fun resizable(parameters: Json): Unit = definedExternally
+    fun resizable(mode: String, param: String, value: Any?): Unit = definedExternally
+    fun selectmenu(parameters: Json): Unit = definedExternally
+    fun selectmenu(command: String): Unit = definedExternally
+    fun tabs(): Unit = definedExternally
+    fun button(command: String): utils.jquery.JQuery = definedExternally
+    fun button(parameters: Json): utils.jquery.JQuery = definedExternally
+    fun dialog(command: String): utils.jquery.JQuery = definedExternally
+    fun dialog(parameters: Json): utils.jquery.JQuery = definedExternally
+    fun dialog(mode: String, param: String, value: Any?): Unit = definedExternally
+    fun accordion(params: Json): utils.jquery.JQuery = definedExternally
+    fun accordion(command: String): utils.jquery.JQuery = definedExternally
+    fun accordion(command: String, name: String, value: Any): utils.jquery.JQuery = definedExternally
+    fun button(mode: String, param: String, value: Any?): utils.jquery.JQuery = definedExternally
+    fun tabs(mode: String, param: String, value: Any?): utils.jquery.JQuery = definedExternally
+
+    fun toArray(): Array<HTMLElement> = definedExternally
+    @JsName("is")
+    fun isCheck(s: String): Boolean
 }
 
-@native
-public fun JQuery.slideDown(): Unit = noImpl
+@JsName("$")
+external fun jq(document: Document): utils.jquery.JQuery = definedExternally
 
-@native
-public fun JQuery.height(height: Int): Unit = noImpl
+@JsName("$")
+external fun jq(selector: String): utils.jquery.JQuery = definedExternally
 
-@native
-public fun JQuery.width(width: Int): Unit = noImpl
+@JsName("$")
+external fun jq(element: Element): utils.jquery.JQuery = definedExternally
 
-@native
-public fun JQuery.children(selector: String): JQuery = noImpl
-
-@native
-public fun JQuery.outerHeight(includeMargin: Boolean = false): Int = noImpl
-
-@native
-public fun JQuery.outerWidth(includeMargin: Boolean = false): Int = noImpl
-
-@native
-public fun JQuery.toArray(): Array<HTMLElement> = noImpl
-
-@native("is")
-public fun JQuery.isCheck(s: String): Boolean = noImpl
-
-@native
-fun JQuery.hide(): Unit = noImpl
-
-@native
-fun JQuery.show(): Unit = noImpl
-
-@native
-fun JQuery.children(): JQuery = noImpl
-
-@native
-fun JQuery.unbind(s: String): Unit = noImpl
-
-@native
-fun JQuery.on(s: String, onClose: (Event) -> Unit): Unit = noImpl
-
-@native
-fun JQuery.css(key: String, value: dynamic): Unit = noImpl
-
-@native("val")
-fun JQuery.value(): String = noImpl
-
-@native("val")
-fun JQuery.value(s: String): Unit = noImpl
-
-@native("$")
-fun jq(document: Document): JQuery = noImpl
-
-@native("$")
-fun jq(selector: String): JQuery = noImpl
-
-@native("$")
-fun jq(element: Element): JQuery = noImpl
-
-@native("$")
-fun jq(jq: JQuery): JQuery = noImpl
-
-@native
-fun JQuery.circleProgress(options: Json): Unit = noImpl
-
-@native
-fun JQuery.on(action: String, selector: String, callback: (event: Event) -> Unit): Unit = noImpl
-
-@native
-fun JQuery.keydown(callback: (KeyboardEvent) -> Unit): Unit = noImpl
-
-@native
-fun JQuery.find(selector: String): JQuery = noImpl
-
-@native
-fun JQuery.trigger(action: String): Unit = noImpl
-
-@native
-fun JQuery.focus(): Unit = noImpl
-
-@native
-operator fun JQuery.get(index: Int): Element = noImpl
+@JsName("$")
+external fun jq(jq: JQuery): utils.jquery.JQuery = definedExternally

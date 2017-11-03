@@ -17,14 +17,15 @@
 package providers
 
 import model.File
-import model.Project
 import model.ProjectType
 import model.UserProject
+import org.w3c.dom.set
 import utils.addKotlinExtension
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
 import kotlin.browser.localStorage
+import kotlin.js.json
 
 class FileProvider(
         private val onFail: (String, ActionStatusMessage) -> Unit,
@@ -240,7 +241,7 @@ class FileProvider(
                     complete = ::unBlockContent
             )
         } else {
-            localStorage.set(file.id, JSON.stringify(json(
+            localStorage[file.id] = JSON.stringify(json(
                     "name" to file.name,
                     "text" to file.text,
                     "userText" to file.userText,
@@ -250,7 +251,7 @@ class FileProvider(
                     "revertible" to file.isRevertible,
                     "taskWindows" to file.taskWindows.toTypedArray(),
                     "solutions" to file.solutions
-            )))
+            ))
         }
     }
 }

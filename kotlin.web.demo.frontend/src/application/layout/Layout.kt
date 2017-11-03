@@ -19,14 +19,14 @@ package application.layout
 import application.Application
 import application.elements.Elements
 import org.w3c.dom.HTMLElement
-import utils.*
-import utils.jquery.*
-import utils.jquery.ui.resizable
-import utils.jquery.find
+import utils.isVisible
+import utils.jquery.jq
+import utils.toggleClass
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
 import kotlin.dom.hasClass
+import kotlin.js.json
 
 
 object Layout {
@@ -148,7 +148,7 @@ object Layout {
     }
 
     private fun updateProjectTreeMaxWidth() {
-        jq(resizableProjectTreeHolder).resizable("option", "maxWidth", jq("#grid-top").width().toInt() - parseInt(toolbox.style.minWidth))
+        jq(resizableProjectTreeHolder).resizable("option", "maxWidth", jq("#grid-top").width().toInt() - toolbox.style.minWidth.substringBefore("px").toInt())
     }
 
 

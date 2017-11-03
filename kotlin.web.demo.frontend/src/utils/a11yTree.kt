@@ -17,7 +17,6 @@
 package utils
 
 import utils.jquery.JQuery
+import kotlin.js.Json
 
-
-@native
-public fun JQuery.a11yTree(parameters: Json) : JQuery = noImpl
+inline fun JQuery.a11yTree(parameters: Json) : JQuery = asDynamic().a11yTree(parameters)
