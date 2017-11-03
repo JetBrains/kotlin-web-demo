@@ -25,5 +25,15 @@
     "kotlinPluginBuild": "1.2.0-beta-91",
     "hasScriptJar": true,
     "useCompilerBeforeShrink": false
+  },
+  {
+    "version": "1.2-RC",
+    "stdlibVersion": "1.2.0-rc-39",
+    "buildType": "Kotlin_120_CompilerAllPlugins",
+    "build": "1.2.0-rc-39",
+    "pluginBuild": "1.2.0-rc-39-IJ2017.2-3",
+    "kotlinPluginBuild": "1.2.0-rc-39",
+    "hasScriptJar": true,
+    "useCompilerBeforeShrink": false
   }
 ]
