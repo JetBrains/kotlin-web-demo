@@ -198,8 +198,9 @@ project("kotlin.web.demo.backend") {
 
     dependencies {
 
-        /*
+
         compile "net.corda:corda-core:$corda_release_version"
+        /*
         compile "net.corda:corda-finance:$corda_release_version"
         compile "net.corda:corda-jackson:$corda_release_version"
         compile "net.corda:corda-rpc:$corda_release_version"
