@@ -1,0 +1,12 @@
+{
+    "name": "Corda Intro",
+    "files": [
+        {
+            "modifiable": "true",
+            "filename" : "CordaIntro.kt"
+        }
+    ],
+    "args": "2 3",
+    "confType": "java",
+    "expectedOutput": "6"
+}

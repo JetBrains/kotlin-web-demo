@@ -1,0 +1,33 @@
+{
+  "sequential": false,
+  "files": [
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "Shop.kt",
+      "type": "kotlin-test"
+    },
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "TestShop.kt",
+      "type": "kotlin-test"
+    }
+  ],
+  "examples": [
+    "Introduction",
+    "Filter map",
+    "All Any and other predicates",
+    "FlatMap",
+    "Max min",
+    "Sort",
+    "Sum",
+    "GroupBy",
+    "Partition",
+    "Fold",
+    "Compound tasks",
+    "Get used to new style"
+  ]
+}

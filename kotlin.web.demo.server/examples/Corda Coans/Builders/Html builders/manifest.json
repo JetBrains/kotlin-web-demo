@@ -1,0 +1,29 @@
+{
+  "confType": "junit",
+  "files": [
+    {
+      "modifiable": false,
+      "hidden": true,
+      "skipInTestVersion": true,
+      "confType": "canvas",
+      "filename": "main.kt"
+    },
+    {
+      "modifiable": false,
+      "confType": "junit",
+      "filename": "Test.kt"
+    },
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "data.kt"
+    },
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "html.kt"
+    }
+  ]
+}

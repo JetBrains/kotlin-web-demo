@@ -1,0 +1,12 @@
+{
+    "name": "Use a for-loop",
+    "files": [
+        {
+            "modifiable": "true",
+            "filename": "Use a for-loop.kt"
+        }
+    ],
+    "args": "guest1 guest2 guest3",
+    "confType": "java",
+    "expectedOutput": "guest1</br>guest2</br>guest3</br></br>guest1</br>guest2</br>guest3</br>"
+}

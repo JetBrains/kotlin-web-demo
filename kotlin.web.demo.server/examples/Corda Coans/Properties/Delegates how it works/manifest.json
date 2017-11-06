@@ -1,0 +1,11 @@
+{
+  "confType": "junit",
+  "files": [
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "MyDate.kt"
+    }
+  ]
+}

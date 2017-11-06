@@ -1,0 +1,12 @@
+{
+    "name": "Use when",
+    "files": [
+        {
+            "modifiable": "true",
+            "filename": "Use when.kt"
+        }
+    ],
+    "args": "",
+    "confType": "java",
+    "expectedOutput": "Greeting</br>One</br>Long</br>Not a string</br>Unknown</br>"
+}
