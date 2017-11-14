@@ -13,8 +13,17 @@
     "build": "1.1.50-release-34",
     "pluginBuild": "1.1.50-release-IJ2017.2-1",
     "hasScriptJar": true,
-    "latestStable": true,
     "useCompilerBeforeShrink": true
+  },
+  {
+    "version": "1.1.60",
+    "stdlibVersion": "1.1.60",
+    "buildType": "Kotlin_1160_CompilerAllPlugins",
+    "build": "1.1.60-release-55",
+    "pluginBuild": "1.1.60-release-IJ2017.2-1",
+    "hasScriptJar": true,
+    "latestStable": true,
+    "useCompilerBeforeShrink": false
   },
   {
     "version": "1.2-Beta2",
@@ -32,15 +41,6 @@
     "buildType": "Kotlin_120_CompilerAllPlugins",
     "build": "1.2.0-rc-51",
     "pluginBuild": "1.2.0-rc-51-IJ2017.2-1",
-    "hasScriptJar": true,
-    "useCompilerBeforeShrink": false
-  },
-  {
-    "version": "1.1.60",
-    "stdlibVersion": "1.1.60",
-    "buildType": "Kotlin_1160_CompilerAllPlugins",
-    "build": "1.1.60-release-55",
-    "pluginBuild": "1.1.60-release-IJ2017.2-1",
     "hasScriptJar": true,
     "useCompilerBeforeShrink": false
   }
