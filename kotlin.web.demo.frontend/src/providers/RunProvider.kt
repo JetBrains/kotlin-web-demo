@@ -120,7 +120,7 @@ class RunProvider(
                             }
                             val out: String = iframeDialog.iframe.contentWindow!!.eval(data.jsCode)
                             translationResult = TranslationResult(errors, data.jsCode, out, null)
-                        } catch (e: Throwable) {
+                        } catch (e: dynamic) {
                             translationResult = TranslationResult(errors, data.jsCode, null, e)
                         } finally {
                             if (runConfiguration == "js") {
