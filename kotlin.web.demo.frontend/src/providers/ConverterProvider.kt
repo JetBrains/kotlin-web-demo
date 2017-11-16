@@ -18,13 +18,11 @@ package providers
 
 import kotlin.js.json
 
-class ConverterProvider(){
+class ConverterProvider {
     fun convert(text: String, onSuccess: (String) -> Unit, onFail: (dynamic) -> Unit, onComplete: () -> Unit) {
         ajax(
                 url = generateAjaxUrl("convertToKotlin"),
-                success = { data: String ->
-                    onSuccess(data);
-                },
+                success = onSuccess,
                 dataType = DataType.TEXT,
                 type = HTTPRequestType.POST,
                 data = json("text" to text),
