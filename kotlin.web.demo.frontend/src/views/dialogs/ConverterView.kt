@@ -111,18 +111,6 @@ class ConverterView(converterProvider: ConverterProvider) {
 
 
     init {
-        jq(leftHalf).resizable(json(
-                "handles" to 'e',
-                "resize" to {
-                    val rightHalfWidth = (jq(dialogElement).width() as Int - jq(leftHalf).outerWidth(true)) * 100 / jq(dialogElement).width() as Int
-                    rightHalf.style.width = rightHalfWidth.toString() + "%"
-                    leftHalf.style.width = (100 - rightHalfWidth).toString() + "%"
-                },
-                "stop" to {
-                    kotlinEditor.refresh()
-                    javaEditor.refresh()
-                }
-        ))
         jq(dialogElement).keydown({ event ->
             if (event.keyCode == KeyCode.ENTER.code && (event.ctrlKey || event.metaKey)) {
                 jq(dialogElement).parent().find("button:eq(1):enabled").click()
