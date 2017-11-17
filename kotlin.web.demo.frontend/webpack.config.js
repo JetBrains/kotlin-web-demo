@@ -11,7 +11,7 @@ var webpackConfig = {
     },
     resolve: {
         extensions: ['', '.js'],
-        modulesDirectories: ['node_modules', './build/libs']
+        modulesDirectories: ['node_modules', 'build/libs']
     },
     module: {
         loaders: [
