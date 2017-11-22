@@ -1,0 +1,10 @@
+{
+    "name": "States",
+    "folder": "States",
+    "examples": [
+        "My First State",
+        "More advanced States",
+        "Linear States",
+        "Ownable States"
+    ]
+}

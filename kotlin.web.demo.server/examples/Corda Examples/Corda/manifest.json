@@ -1,0 +1,14 @@
+{
+    "name": "Basic syntax walk-through",
+    "folder": "Basic syntax walk-through",
+    "examples": [
+        "Use a conditional expression",
+        "Null-checks",
+        "is-checks and smart casts",
+        "Use a while-loop",
+        "Use a for-loop",
+        "Use ranges and in",
+        "Use when",
+        "Corda Intro"
+    ]
+}

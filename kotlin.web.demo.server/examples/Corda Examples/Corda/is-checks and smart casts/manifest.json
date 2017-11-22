@@ -1,0 +1,12 @@
+{
+    "name": "is-checks and smart casts",
+    "files": [
+        {
+            "filename": "is-checks and smart casts.kt",
+            "modifiable": "true"
+        }
+    ],
+    "args": "",
+    "confType": "java",
+    "expectedOutput": "3</br>null</br>"
+}
