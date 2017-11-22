@@ -36,7 +36,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class BackendHttpServlet extends HttpServlet {
     private static Log log = LogFactory.getLog(BackendHttpServlet.class);
@@ -58,7 +60,14 @@ public class BackendHttpServlet extends HttpServlet {
 
         Path wrappersDir = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "WEB-INF", "kotlin-wrappers");
         Path junitLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
-        KotlinWrappersManager.INSTANCE.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("classes"));
+        Path cordaLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-core-1.0.0.jar");
+
+        List<Path> paths = new ArrayList<Path>();
+        paths.add(junitLib);
+        paths.add(cordaLib);
+
+        //KotlinWrappersManager.INSTANCE.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("classes"));
+        KotlinWrappersManager.INSTANCE.init(wrappersDir, paths, Paths.get("classes"));
         LogWriter.init();
         ErrorWriter.getInstance();
 

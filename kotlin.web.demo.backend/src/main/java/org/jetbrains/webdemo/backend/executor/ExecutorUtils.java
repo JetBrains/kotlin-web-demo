@@ -17,7 +17,6 @@
 package org.jetbrains.webdemo.backend.executor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.executor.result.ExecutionResult;
@@ -33,11 +32,22 @@ import java.util.Map;
 import java.util.Random;
 
 public class ExecutorUtils {
+
+    private static String jackson_version = "2.8.5";
+    private static String jackson_version_old = "2.7.4";
+
     private static List<Path> jarFiles = Arrays.asList(
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "kotlin.web.demo.executors.jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-databind-2.7.4.jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-core-2.7.4.jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-annotations-2.7.4.jar")
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-databind-"+jackson_version+".jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-core-"+jackson_version+".jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-annotations-"+jackson_version+".jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-1.0.0.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-core-1.0.0.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-finance-1.0.0.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-rpc-1.0.0.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-node-api-1.0.0.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-webserver-impl-1.0.0.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-webserver-1.0.0.jar")
     );
     private static Path junit = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
     private static Path hamcrest = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "hamcrest-core-1.3.jar");
@@ -56,8 +66,9 @@ public class ExecutorUtils {
             JavaExecutorBuilder executorBuilder = new JavaExecutorBuilder()
                     .enableAssertions()
                     .setMemoryLimit(32)
-                    .enableSecurityManager()
-                    .setPolicyFile(executorsPolicy)
+                    // TODO: RAG - re-enable security manager when finalised list of jars
+                    //.enableSecurityManager()
+                    //.setPolicyFile(executorsPolicy)
                     .addToClasspath(kotlinRuntimeJars)
                     .addToClasspath(jarFiles)
                     .addToClasspath(codeDirectory);
@@ -77,6 +88,10 @@ public class ExecutorUtils {
             }
 
             ProgramOutput output = executorBuilder.build().execute();
+
+            System.out.println(output.getErrorOutput());
+            System.out.println(output.getStandardOutput());
+
             return parseOutput(output.getStandardOutput(), isJunit);
         } finally {
             try {

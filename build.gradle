@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright 2000-2016 JetBrains s.r.o.
  *
@@ -20,6 +22,10 @@ buildscript {
     ext.corda_release_version = '1.0.0'
     ext.corda_gradle_plugins_version = '1.0.0'
     ext.quasar_version = '0.7.6'
+
+ //   ext.jackson_version_kwd = '2.7.4'
+    ext.jackson_version_kwd = '2.8.5'
+    ext.jackson_version_corda = '2.8.5'
 
     apply from: 'versions.gradle'
     repositories {
@@ -61,8 +67,6 @@ apply plugin: 'net.corda.plugins.publish-utils'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
-
-
 configure(allprojects.findAll({
     it.name != 'kotlin.web.demo.frontend'
 })) {
@@ -83,9 +87,15 @@ configure(allprojects.findAll({
     }
 
     dependencies {
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4', transitive: true
+        compile "com.fasterxml.jackson.core:jackson-core:$jackson_version_kwd"
+        compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version_kwd"
+        compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version_kwd"
+
+//        compile "com.fasterxml.jackson.core:jackson-core:$jackson_version_kwd:transitive:true"
+//        compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version_kwd:transitive:true"
+//        compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version_kwd:transitive:true"
+
+
         compile 'commons-logging:commons-logging:1.2'
     }
 }
@@ -101,7 +111,7 @@ configure([
     apply plugin: 'kotlin'
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4"
+        compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version_kwd"
     }
 }
 
@@ -193,12 +203,18 @@ project("kotlin.web.demo.backend") {
     apply plugin: 'war'
 
     repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
         maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
     }
 
     dependencies {
 
-/*
+        // RAG Note.
+        // Uncommenting the below enables corda libraries to be included for syntax parsing, but then introduces "output error"
+
         compile "net.corda:corda-core:$corda_release_version"
 
         compile "net.corda:corda-finance:$corda_release_version"
@@ -208,9 +224,11 @@ project("kotlin.web.demo.backend") {
         compile "net.corda:corda-webserver-impl:$corda_release_version"
         compile "net.corda:corda:$corda_release_version"
         compile "net.corda:corda-webserver:$corda_release_version"
-*/
-       // compile "net.corda:corda-test-utils:$corda_release_version" // -> gives crash error
-       // compile "net.corda:corda-node-driver:$corda_release_version"
+
+        // RAG Note:
+        // Uncommenting below gives the crashell error
+        // compile "net.corda:corda-test-utils:$corda_release_version" // -> gives crash error
+        compile "net.corda:corda-node-driver:$corda_release_version"
 
 
         compile project(":kotlin.web.demo.backend:compilers")
@@ -243,7 +261,7 @@ project("kotlin.web.demo.backend") {
 project("kotlin.web.demo.executors") {
     dependencies {
         compile group: 'junit', 'name': 'junit', 'version': '4.12'
-      //  compile "net.corda:corda-core:$corda_release_version"
+        compile "net.corda:corda-core:$corda_release_version"
     }
 
     task copyToLib(type: Copy) {
@@ -266,6 +284,7 @@ project(':kotlin.web.demo.frontend') {
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-js-library:$kotlinVersion"
+        //compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion"
         compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.12"
     }
 
@@ -368,7 +387,7 @@ project('kotlin.web.demo.test') {
         testCompile project(':kotlin.web.demo.server')
         testCompile group: 'org.jetbrains.kotlin', 'name': 'kotlin-test', 'version': '1.0.1-2'
         testCompile group: 'junit', 'name': 'junit', 'version': '4.12'
-        testCompile "net.corda:corda-core:$corda_release_version"
+       // testCompile "net.corda:corda-core:$corda_release_version"
 
     }
     for (kotlinVersion in kotlinVersions) {
