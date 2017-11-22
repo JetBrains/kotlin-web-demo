@@ -14,33 +14,17 @@
  * limitations under the License.
  */
 
-import org.junit.Assert
-import org.junit.Test
-
-class TestStart {
-    @Test fun testOk() {
-        Assert.assertEquals("OK", start())
-    }
-}
-
 package net.corda.training.state
 
+import org.junit.Assert
 import net.corda.core.contracts.*
 import net.corda.core.identity.Party
-import net.corda.finance.*
-import net.corda.testing.*
 import org.junit.Test
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-class IOUStateTests {
-    /**
-     * Task 1.
-     * TODO: Add an 'amount' property of type [Amount] to the [IOUState] class to get this test to pass.
-     * Hint: [Amount] is a template class that takes a class parameter of the token you would like an [Amount] of.
-     * As we are dealing with cash lent from one Party to another a sensible token to use would be [Currency].
-     */
+class TestStart {
     @Test
     fun testHasIOUAmountFieldOfCorrectType() {
         // Does the amount field exist?
@@ -48,4 +32,22 @@ class IOUStateTests {
         // Is the amount field of the correct type?
         assertEquals(IOUState::class.java.getDeclaredField("amount").type, Amount::class.java)
     }
+
+    @Test
+    fun hasLenderFieldOfCorrectType() {
+        // Does the lender field exist?
+        IOUState::class.java.getDeclaredField("lender")
+        // Is the lender field of the correct type?
+        assertEquals(IOUState::class.java.getDeclaredField("lender").type, Party::class.java)
+    }
+
+    @Test
+    fun hasBorrowerFieldOfCorrectType() {
+        // Does the borrower field exist?
+        IOUState::class.java.getDeclaredField("borrower")
+        // Is the borrower field of the correct type?
+        assertEquals(IOUState::class.java.getDeclaredField("borrower").type, Party::class.java)
+    }
+
 }
+
