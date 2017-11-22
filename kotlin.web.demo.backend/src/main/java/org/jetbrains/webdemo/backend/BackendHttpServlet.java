@@ -60,11 +60,30 @@ public class BackendHttpServlet extends HttpServlet {
 
         Path wrappersDir = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "WEB-INF", "kotlin-wrappers");
         Path junitLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
-        Path cordaLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-core-1.0.0.jar");
+        List<String> cordaLibs = new ArrayList<String>();
+        cordaLibs.add("corda-core-1.0.0.jar");
+        cordaLibs.add("corda-finance-1.0.0.jar");
+        cordaLibs.add("corda-jackson-1.0.0.jar");
+        cordaLibs.add("corda-mock-1.0.0.jar");
+        cordaLibs.add("corda-node-1.0.0.jar");
+        cordaLibs.add("corda-node-api-1.0.0.jar");
+        cordaLibs.add("corda-node-driver-1.0.0.jar");
+        cordaLibs.add("corda-rpc-1.0.0.jar");
+        cordaLibs.add("corda-test-common-1.0.0.jar");
+        cordaLibs.add("corda-test-utils-1.0.0.jar");
+        cordaLibs.add("corda-webserver-1.0.0.jar");
+        cordaLibs.add("corda-webserver-impl-1.0.0.jar");
+
+//        Path cordaLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-core-1.0.0.jar");
 
         List<Path> paths = new ArrayList<Path>();
         paths.add(junitLib);
-        paths.add(cordaLib);
+
+        for(String s: cordaLibs) {
+            paths.add(Paths.get(BackendSettings.EXECUTORS_LIBS_DIR,s));
+        }
+
+//        paths.add(cordaLib);
 
         //KotlinWrappersManager.INSTANCE.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("classes"));
         KotlinWrappersManager.INSTANCE.init(wrappersDir, paths, Paths.get("classes"));

@@ -49,8 +49,6 @@ buildscript {
 }
 
 
-
-
 ext.kotlinConfigs = gradle.ext.kotlinConfigs
 ext.kotlinVersions = kotlinConfigs.collect { it.version }
 
@@ -58,6 +56,12 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+      //      jvmTarget = "1.8"
+        }
     }
 }
 
@@ -71,8 +75,15 @@ configure(allprojects.findAll({
     it.name != 'kotlin.web.demo.frontend'
 })) {
     apply plugin: 'java'
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+//    sourceCompatibility = 1.7
+//    targetCompatibility = 1.7
+
+    // RG Amended above.
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+
 
     repositories {
         mavenCentral()
@@ -110,6 +121,7 @@ configure([
 ]) {
     apply plugin: 'kotlin'
     dependencies {
+        //compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version_kwd"
     }
@@ -398,3 +410,4 @@ project('kotlin.web.demo.test') {
 }
 
 project(':kotlin.web.demo.backend:compilers:versions').jar { onlyIf { false } }
+

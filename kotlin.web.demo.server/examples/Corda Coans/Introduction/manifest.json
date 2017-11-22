@@ -2,6 +2,7 @@
   "sequential": false,
   "examples": [
     "Hello, Corda!",
+    "Corda Contracts",
     "Hello, world!",
     "Java to Kotlin conversion",
     "Named arguments",
