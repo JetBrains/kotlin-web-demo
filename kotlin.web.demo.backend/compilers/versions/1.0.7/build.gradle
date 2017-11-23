@@ -1,0 +1,33 @@
+plugins {
+    id "com.github.jk1.tcdeps" version "0.15"
+}
+
+repositories {
+    teamcityServer {
+        url = 'http://teamcity.jetbrains.com'
+    }
+}
+
+configurations {
+    kotlinJVM
+    kotlinJS
+}
+
+dependencies {
+    compile project(":kotlin.web.demo.backend:compilers")
+
+    def prefix = "$kotlinBuildType:$kotlinBuild:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib"
+    kotlinJVM tc("$kotlinBuildType:$kotlinBuild:internal/kotlin-compiler-before-shrink.jar")
+    kotlinJVM tc("$kotlinBuildType:$kotlinBuild:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
+    kotlinJVM tc("$prefix/kotlin-runtime.jar")
+    kotlinJVM tc("$prefix/kotlin-reflect.jar")
+    kotlinJVM tc("$prefix/kotlin-test.jar")
+    kotlinJVM tc("$prefix/kotlin-jslib.jar")
+    kotlinJS tc("$prefix/kotlin-jslib.jar")
+    compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
+}
+
+task copyKotlinLibs(type: Copy) {
+    from configurations.kotlinJVM
+    into projectDir.toString() + File.separator + "kotlin"
+}

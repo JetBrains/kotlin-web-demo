@@ -1,5 +1,4 @@
 import groovy.json.JsonSlurper
-import java.nio.file.Paths
 
 JsonSlurper slurper = new JsonSlurper()
 file('kotlin.web.demo.common/src/main/resources/compilers-config.json').toPath().withReader { reader ->

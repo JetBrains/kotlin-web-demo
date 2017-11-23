@@ -26,7 +26,6 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "gradle.plugin.com.github.jk1:tcdeps:0.15"
     }
 }
 
@@ -93,106 +92,10 @@ configure([
     }
 }
 
-for (config in kotlinConfigs) {
-    def build = config.build
-    def version = config.version
-    def buildType = config.buildType ?: "bt345"
-    def pluginBuild = config.pluginBuild ?: config.build
-    def projectsName = ":kotlin.web.demo.backend:compilers:versions:$version"
-    project(projectsName) {
-        apply plugin: 'com.github.jk1.tcdeps'
+task copyKotlinLibs() {}
 
-        repositories {
-            teamcityServer {
-                url = 'http://teamcity.jetbrains.com'
-            }
-        }
-        configurations {
-            kotlinJVM
-            kotlinJS
-        }
-
-        dependencies {
-            compile project(":kotlin.web.demo.backend:compilers")
-
-            def root = "$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib"
-
-            if (config.useCompilerBeforeShrink) {
-                kotlinJVM tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
-            }
-            else {
-                kotlinJVM tc("$root/kotlin-compiler.jar")
-            }
-            kotlinJVM tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
-
-            kotlinJVM tc("$root/kotlin-runtime.jar")
-            kotlinJVM tc("$root/kotlin-reflect.jar")
-            kotlinJVM tc("$root/kotlin-test.jar")
-            kotlinJVM tc("$root/kotlin-jslib.jar")
-
-            if (config.hasScriptJar) {
-                kotlinJVM tc("$root/kotlin-script-runtime.jar")
-            }
-
-            kotlinJS tc("$root/kotlin-jslib.jar")
-
-            if(!version.startsWith("1.0")) {
-                kotlinJVM "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.17"
-            }
-            if(config.stdlibVersion) {
-                kotlinJVM group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: config.stdlibVersion
-            }
-
-            compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
-        }
-    }
-}
-
-// Idea can't resolve tc dependencies, so we have to download them
-// into folder and add all jars from this folder as dependencies.
-task copyKotlinLibs() {
-    for (kotlinVersion in kotlinVersions) {
-        def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
-        copy {
-            from wrapperProject.configurations.kotlinJVM
-            into wrapperProject.projectDir.toString() + File.separator + "kotlin"
-        }
-        copy {
-            from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) })
-            into wrapperProject.projectDir.toString() + File.separator + "js"
-        }
-    }
-}
-
-project("kotlin.web.demo.backend") {
-    apply plugin: 'war'
-
-    dependencies {
-        compile project(":kotlin.web.demo.backend:compilers")
-        compile project(":kotlin.web.demo.executors")
-        providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
-    }
-
-    war {
-        archiveName "WebDemoBackend.war"
-
-        from(project(':kotlin.web.demo.executors').projectDir) {
-            include 'executors.policy.template'
-        }
-
-        for (kotlinVersion in kotlinVersions) {
-            def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
-            from(wrapperProject.sourceSets.main.output) {
-                into("WEB-INF/kotlin-wrappers/$kotlinVersion/classes")
-            }
-            from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) }) {
-                into "WEB-INF/kotlin-wrappers/$kotlinVersion/js"
-            }
-            from(wrapperProject.configurations['kotlinJVM']) {
-                into "WEB-INF/kotlin-wrappers/$kotlinVersion/kotlin"
-            }
-        }
-    }
+for (kotlinVersion in kotlinVersions) {
+    copyKotlinLibs.dependsOn(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion:copyKotlinLibs")
 }
 
 project("kotlin.web.demo.executors") {
@@ -206,51 +109,6 @@ project("kotlin.web.demo.executors") {
     }
     jar.dependsOn(copyToLib)
 }
-
-project("kotlin.web.demo.server") {
-    apply plugin: 'war'
-
-    dependencies {
-        compile group: 'org.scribe', name: 'scribe', version: '1.3.7'
-        compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
-        compile 'org.twitter4j:twitter4j-core:4.0.4'
-        compile 'com.nimbusds:nimbus-jose-jwt:3.9'
-        compile 'org.pegdown:pegdown:1.5.0'
-        runtime 'org.tuckey:urlrewritefilter:4.0.4'
-        providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
-    }
-
-    war {
-        dependsOn ':kotlin.web.demo.frontend:build'
-        archiveName "WebDemoWar.war"
-
-        from('examples') {
-            into 'examples'
-        }
-        from('help')
-        from("${project(':kotlin.web.demo.frontend').projectDir}/static") {
-            into 'static'
-        }
-        from("${project(':kotlin.web.demo.frontend').buildDir}") {
-            into 'static'
-            include 'kotlin.web.demo.frontend.js'
-        }
-        from("${project(':kotlin.web.demo.frontend').projectDir}/index.html")
-        from("${rootProject.projectDir}/build.txt")
-        for (kotlinVersion in kotlinVersions) {
-            def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
-            from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) }) {
-                include "kotlin.js"
-                into "static/kotlin/${kotlinVersion}"
-            }
-            from(project(":kotlin.web.demo.frontend").projectDir.absolutePath + File.separator + "static") {
-                include "iframe.html"
-                into "static/kotlin/${kotlinVersion}"
-            }
-        }
-    }
-}
-
 
 project('kotlin.web.demo.test') {
     dependencies {

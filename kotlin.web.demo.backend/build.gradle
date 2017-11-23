@@ -1,0 +1,32 @@
+apply plugin: 'war'
+
+dependencies {
+    compile project(":kotlin.web.demo.backend:compilers")
+    compile project(":kotlin.web.demo.executors")
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
+}
+
+for (kotlinVersion in kotlinVersions) {
+    evaluationDependsOn(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
+}
+
+war {
+    archiveName "WebDemoBackend.war"
+
+    from(project(':kotlin.web.demo.executors').projectDir) {
+        include 'executors.policy.template'
+    }
+
+    for (kotlinVersion in kotlinVersions) {
+        def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
+        from(wrapperProject.sourceSets.main.output) {
+            into("WEB-INF/kotlin-wrappers/$kotlinVersion/classes")
+        }
+        from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) }) {
+            into "WEB-INF/kotlin-wrappers/$kotlinVersion/js"
+        }
+        from(wrapperProject.configurations['kotlinJVM']) {
+            into "WEB-INF/kotlin-wrappers/$kotlinVersion/kotlin"
+        }
+    }
+}

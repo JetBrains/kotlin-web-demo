@@ -1,0 +1,45 @@
+apply plugin: 'war'
+
+dependencies {
+    compile group: 'org.scribe', name: 'scribe', version: '1.3.7'
+    compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
+    compile 'org.twitter4j:twitter4j-core:4.0.4'
+    compile 'com.nimbusds:nimbus-jose-jwt:3.9'
+    compile 'org.pegdown:pegdown:1.5.0'
+    runtime 'org.tuckey:urlrewritefilter:4.0.4'
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
+}
+
+for (kotlinVersion in kotlinVersions) {
+    evaluationDependsOn(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
+}
+
+war {
+    dependsOn ':kotlin.web.demo.frontend:build'
+    archiveName "WebDemoWar.war"
+
+    from('examples') {
+        into 'examples'
+    }
+    from('help')
+    from("${project(':kotlin.web.demo.frontend').projectDir}/static") {
+        into 'static'
+    }
+    from("${project(':kotlin.web.demo.frontend').buildDir}") {
+        into 'static'
+        include 'kotlin.web.demo.frontend.js'
+    }
+    from("${project(':kotlin.web.demo.frontend').projectDir}/index.html")
+    from("${rootProject.projectDir}/build.txt")
+    for (kotlinVersion in kotlinVersions) {
+        def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
+        from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) }) {
+            include "kotlin.js"
+            into "static/kotlin/${kotlinVersion}"
+        }
+        from(project(":kotlin.web.demo.frontend").projectDir.absolutePath + File.separator + "static") {
+            include "iframe.html"
+            into "static/kotlin/${kotlinVersion}"
+        }
+    }
+}
