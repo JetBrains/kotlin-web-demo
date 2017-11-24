@@ -22,8 +22,10 @@ fun main(args: Array<String>) {
 // Whenever you want to interact with another network participant, you'll using this datatype.
 // But for testing purposes, we've provided a few for you.
 
-    println("Hi, I'm ${ALICE.name.organisation}")
-    println("And I'm ${BOB.name.organisation}")
+    // TODO: RG - fix bouncy castle
+
+//    println("Hi, I'm ${ALICE.name.organisation}")
+//    println("And I'm ${BOB.name.organisation}")
 
 // We're not going to delve too deeply into what exactly is meaning of £100 or $100 in a distributed ledger
 // but for getting started, you can use these helpful kotlin extensions to create something that represents cash
