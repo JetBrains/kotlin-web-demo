@@ -41,7 +41,7 @@ public class ExecutorUtils {
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-databind-"+jackson_version+".jar"),
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-core-"+jackson_version+".jar"),
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-annotations-"+jackson_version+".jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-1.0.0.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "*"), // TODO: RAG ??!!
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-test-common-1.0.0.jar"),
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-test-utils-1.0.0.jar"),
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-core-1.0.0.jar"),
