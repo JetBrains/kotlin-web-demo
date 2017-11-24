@@ -11,18 +11,26 @@ package education
 import net.corda.core.contracts.Amount
 import net.corda.core.contracts.LinearState
 import net.corda.core.contracts.UniqueIdentifier
+import net.corda.core.identity.AbstractParty
 import net.corda.core.identity.Party
-
+import net.corda.finance.POUNDS
+import net.corda.testing.ALICE
+import net.corda.testing.BOB
+import org.junit.Test
+import java.util.Currency
 
 data class IOUState(val lender: Party,
                     val borrower: Party,
                     val amount: Amount<Currency>,
-                    override val linearId: UniqueIdentifier = UniqueIdentifier())): LinearState {
+                    override val linearId: UniqueIdentifier = UniqueIdentifier()): LinearState {
 
     override val participants: List<AbstractParty> get() = listOf()
+
+
 }
 
 fun main(args: Array<String>) {
-    val myFirstState = IOUState( )
-    println(myFirstState) // Would be a waste just to destroy it straight away...
+    val myFirstLinearState = IOUState(ALICE, BOB, 100.POUNDS)
+    println(myFirstLinearState) // Would be a waste just to destroy it straight away...
 }
+
