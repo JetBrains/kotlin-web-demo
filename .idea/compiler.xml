@@ -25,14 +25,6 @@
       <module name="1.1.50_test" target="1.7" />
       <module name="1.1.60_main" target="1.7" />
       <module name="1.1.60_test" target="1.7" />
-      <module name="1.2-M1_main" target="1.7" />
-      <module name="1.2-M1_test" target="1.7" />
-      <module name="1.2-Beta_main" target="1.7" />
-      <module name="1.2-Beta_test" target="1.7" />
-      <module name="1.2-Beta2_main" target="1.7" />
-      <module name="1.2-Beta2_test" target="1.7" />
-      <module name="1.2-RC_main" target="1.7" />
-      <module name="1.2-RC_test" target="1.7" />
       <module name="1.2.0_main" target="1.7" />
       <module name="1.2.0_test" target="1.7" />
       <module name="compilers_main" target="1.7" />
