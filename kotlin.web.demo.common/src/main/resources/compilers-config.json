@@ -43,5 +43,14 @@
     "pluginBuild": "1.2.0-rc-51-IJ2017.2-1",
     "hasScriptJar": true,
     "useCompilerBeforeShrink": false
+  },
+  {
+    "version": "1.2.0",
+    "stdlibVersion": "1.2.0-rc-83",
+    "buildType": "Kotlin_120_CompilerAllPlugins",
+    "build": "1.2.0-release-87",
+    "pluginBuild": "1.2.0-release-IJ2017.2-1",
+    "hasScriptJar": true,
+    "useCompilerBeforeShrink": false
   }
 ]
