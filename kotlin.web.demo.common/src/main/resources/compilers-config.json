@@ -15,17 +15,6 @@
     "hasScriptJar": true,
     "latestStable": true,
     "useOriginalVersion": true
-  },
-  {
-    "version": "1.2-Beta2",
-    "stdlibVersion": "1.2.0-beta-88",
-    "buildType": "Kotlin_Compiler172forWebdemo",
-    "build": "1.2.0-beta-89",
-    "pluginBuild": "1.2.0-beta-88-IJ2017.2-1",
-    "pluginBuildType": "Kotlin_12Beta2_CompilerAllPlugins",
-    "kotlinPluginBuild": "1.2.0-beta-88",
-    "hasScriptJar": true,
-    "useOriginalVersion": false
   }
 ]
 
