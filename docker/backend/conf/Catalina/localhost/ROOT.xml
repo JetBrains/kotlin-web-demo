@@ -3,6 +3,6 @@
     <Environment name="java_home" value="/usr/lib/jvm/java-8-openjdk-amd64" type="java.lang.String"
                  override="false"/>
     <Environment name="app_output_dir" value="/logs/" type="java.lang.String" override="false"/>
-    <Environment name="timeout" type="java.lang.String" value="5000" override="false"/>
+    <Environment name="timeout" type="java.lang.String" value="30000" override="false"/>
     <Environment name="is_test_version" value="true" type="java.lang.String" override="false"/>
 </Context>

@@ -19,3 +19,5 @@ services:
     depends_on:
         - db
         - backend
+  node:
+    build: docker/node

@@ -224,9 +224,6 @@ project("kotlin.web.demo.backend") {
 
     dependencies {
 
-        // RAG Note.
-        // Uncommenting the below enables corda libraries to be included for syntax parsing, but then introduces "output error"
-
         compile "net.corda:corda-core:$corda_release_version"
 
         compile "net.corda:corda-finance:$corda_release_version"
@@ -241,6 +238,17 @@ project("kotlin.web.demo.backend") {
         // Uncommenting below gives the crashell error
         // compile "net.corda:corda-test-utils:$corda_release_version" // -> gives crash error
         compile "net.corda:corda-node-driver:$corda_release_version"
+
+        compile "org.apache.activemq:artemis-core-client:2.1.0"
+        compile "org.apache.activemq:artemis-amqp-protocol:2.1.0"
+        compile "org.apache.activemq:artemis-commons:2.1.0"
+        compile "org.apache.activemq:artemis-core-client:2.1.0"
+        compile "org.apache.activemq:artemis-jdbc-store:2.1.0"
+        compile "org.apache.activemq:artemis-jms-client:2.1.0"
+        compile "org.apache.activemq:artemis-journal:2.1.0"
+        compile "org.apache.activemq:artemis-native:2.1.0"
+        compile "org.apache.activemq:artemis-selector:2.1.0"
+        compile "org.apache.activemq:artemis-server:2.1.0"
 
 
         compile project(":kotlin.web.demo.backend:compilers")
