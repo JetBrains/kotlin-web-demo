@@ -24,7 +24,7 @@
 
     <!--Server independent-->
     <Environment name="is_test_version" value="false" type="java.lang.String" override="false"/>
-    <Environment name="google_key" value=".apps.googleusercontent.com" type="java.lang.String" override="false"/>
+    <Environment name="google_key" value="" type="java.lang.String" override="false"/>
     <Environment name="google_secret" value="" type="java.lang.String" override="false"/>
 
     <Environment name="twitter_key" value="" type="java.lang.String" override="false"/>

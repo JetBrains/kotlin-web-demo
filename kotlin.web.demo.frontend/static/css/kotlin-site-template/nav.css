@@ -358,3 +358,45 @@
 .tree-leaf-title.is_active {
     font-weight: bold;
     color: #333333; }
+
+.conference-banner {
+    position: absolute;
+    top: 0;
+    right: 50px;
+}
+@media (max-width:1400px) {
+    .conference-banner {
+        right: 0;
+    }
+}
+
+@media (max-width:1300px) {
+    .conference-banner {
+        right: -50px;
+    }
+}
+
+@media (max-width:1200px) {
+    .conference-banner {
+        right: -100px;
+    }
+}
+
+@media (max-width:1100px) {
+    .conference-banner {
+        right: -150px;
+    }
+}
+
+@media (max-width:1000px) {
+    .conference-banner {
+        left: 950px;
+        right: initial;
+    }
+}
+
+.conference-banner img {
+    width: 194px;
+    height: 102px;
+}
+>>>>>>> f935a693e51dc46de92c3eb6874ce3946b8cbc18
