@@ -1,0 +1,12 @@
+{
+    "name": "Linear State",
+    "files": [
+        {
+            "filename": "Linear State.kt",
+            "modifiable": "true"
+        }
+    ],
+    "args": "",
+    "confType": "java",
+    "expectedOutput": "Hello, world!</br>"
+}

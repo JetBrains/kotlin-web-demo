@@ -40,6 +40,13 @@ public class JavaExecutor {
     public ProgramOutput execute() throws Exception {
         Process process = null;
         try {
+//            args
+            System.out.println(args);
+
+            for (String a : args) {
+                System.out.println(a);
+            }
+
             process = Runtime.getRuntime().exec(args);
             process.getOutputStream().close();
 

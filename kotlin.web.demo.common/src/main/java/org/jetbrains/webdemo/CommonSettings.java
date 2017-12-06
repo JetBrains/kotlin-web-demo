@@ -22,4 +22,6 @@ public class CommonSettings {
     public static String HELP_DIRECTORY = "help";
     public static String LOGS_DIRECTORY = "logs";
     public static String WEBAPP_ROOT_DIRECTORY = "";
+
+    public static String JAVA_HOME = "";
 }

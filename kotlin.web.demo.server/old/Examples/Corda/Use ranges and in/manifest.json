@@ -1,0 +1,12 @@
+{
+    "name": "Use ranges and in",
+    "files": [
+        {
+            "modifiable": "true",
+            "filename": "Use ranges and in.kt"
+        }
+    ],
+    "args": "4",
+    "confType": "java",
+    "expectedOutput": "OK</br>1 2 3 4 5 </br>Out: array has only 3 elements. x = 4</br>Yes: array contains aaa</br>No: array doesn't contains ddd</br>"
+}

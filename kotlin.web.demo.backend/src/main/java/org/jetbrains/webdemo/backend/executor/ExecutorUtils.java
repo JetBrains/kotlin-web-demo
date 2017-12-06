@@ -17,28 +17,38 @@
 package org.jetbrains.webdemo.backend.executor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.webdemo.CommonSettings;
+import net.corda.node.Corda;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.executor.result.ExecutionResult;
 import org.jetbrains.webdemo.backend.executor.result.JavaExecutionResult;
 import org.jetbrains.webdemo.backend.executor.result.JunitExecutionResult;
+import org.jetbrains.webdemo.executors.CordaLibraries;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class ExecutorUtils {
+
+    private static String jackson_version = "2.8.5";
+    private static String jackson_version_old = "2.7.4";
+
+
+    private static List<String> jarFileString = Arrays.asList("abc","def");
+
+    // Can't add wildcard due to colliding package versions (netty)
     private static List<Path> jarFiles = Arrays.asList(
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "kotlin.web.demo.executors.jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-databind-2.7.4.jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-core-2.7.4.jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-annotations-2.7.4.jar")
-    );
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-databind-"+jackson_version+".jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-core-"+jackson_version+".jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-annotations-"+jackson_version+".jar")
+         );
+
+    private static List <Path> cordaJarFiles = new ArrayList<Path>();
+
     private static Path junit = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
     private static Path hamcrest = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "hamcrest-core-1.3.jar");
 
@@ -56,11 +66,17 @@ public class ExecutorUtils {
             JavaExecutorBuilder executorBuilder = new JavaExecutorBuilder()
                     .enableAssertions()
                     .setMemoryLimit(32)
-                    .enableSecurityManager()
-                    .setPolicyFile(executorsPolicy)
+                    // TODO: RAG - re-enable security manager when finalised list of jars
+                    //.enableSecurityManager()
+                    //.setPolicyFile(executorsPolicy)
                     .addToClasspath(kotlinRuntimeJars)
                     .addToClasspath(jarFiles)
                     .addToClasspath(codeDirectory);
+
+            for ( String libraryName : CordaLibraries.cordaLibraries) {
+                executorBuilder.addToClasspath(Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, libraryName));
+            }
+
             if (isJunit) {
                 executorBuilder.addToClasspath(junit);
                 executorBuilder.addToClasspath(hamcrest);
@@ -77,6 +93,10 @@ public class ExecutorUtils {
             }
 
             ProgramOutput output = executorBuilder.build().execute();
+
+            System.out.println(output.getErrorOutput());
+            System.out.println(output.getStandardOutput());
+
             return parseOutput(output.getStandardOutput(), isJunit);
         } finally {
             try {
@@ -89,7 +109,7 @@ public class ExecutorUtils {
 
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                            Files.delete(file);
+                           // Files.delete(file); // TODO: RAG  - add deletion back
                             return FileVisitResult.CONTINUE;
                         }
 
@@ -100,7 +120,7 @@ public class ExecutorUtils {
 
                         @Override
                         public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                            Files.delete(dir);
+                            // Files.delete(dir); // TODO: RAG  - add deletion back
                             return FileVisitResult.CONTINUE;
                         }
                     });

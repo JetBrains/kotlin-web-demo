@@ -1,0 +1,12 @@
+{
+    "name": "Use a while-loop",
+    "files": [
+        {
+            "modifiable": "true",
+            "filename": "Use a while-loop.kt"
+        }
+    ],
+    "args": "guest1 guest2 guest3 guest4",
+    "confType": "java",
+    "expectedOutput": "guest1</br>guest2</br>guest3</br>guest4</br>"
+}

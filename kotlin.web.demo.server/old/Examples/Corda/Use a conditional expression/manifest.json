@@ -1,0 +1,12 @@
+{
+    "name": "Use a conditional expression",
+    "files": [
+        {
+            "modifiable": "true",
+            "filename":"Use a conditional expression.kt"
+        }
+    ],
+    "args": "10 20",
+    "confType": "java",
+    "expectedOutput": "20</br>"
+}

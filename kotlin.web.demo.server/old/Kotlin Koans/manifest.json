@@ -1,0 +1,41 @@
+{
+  "taskFolder": true,
+  "levels": [
+    {
+      "projectsNeeded": 8,
+      "color": "#409BCB"
+    },
+    {
+      "projectsNeeded": 16,
+      "color": "#6A855B"
+    },
+    {
+      "projectsNeeded": 24,
+      "color": "#FDC474"
+    },
+    {
+      "projectsNeeded": 32,
+      "color": "#C9783A"
+    },
+    {
+      "projectsNeeded": 42,
+      "color": "#9976A9"
+    }
+  ],
+  "folders": [
+    "Introduction",
+    "Conventions",
+    "Collections",
+    "Properties",
+    "Builders",
+    "Generics"
+  ],
+  "files": [
+    {
+      "modifiable": false,
+      "hidden": true,
+      "skipInTestVersion": false,
+      "filename": "koansTestUtil.kt"
+    }
+  ]
+}

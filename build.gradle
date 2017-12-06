@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright 2000-2016 JetBrains s.r.o.
  *
@@ -16,6 +18,15 @@
 
 
 buildscript {
+
+    ext.corda_release_version = '1.0.0'
+    ext.corda_gradle_plugins_version = '1.0.0'
+    ext.quasar_version = '0.7.6'
+
+ //   ext.jackson_version_kwd = '2.7.4'
+    ext.jackson_version_kwd = '2.8.5'
+    ext.jackson_version_corda = '2.8.5'
+
     apply from: 'versions.gradle'
     repositories {
         mavenCentral()
@@ -23,29 +34,56 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        jcenter()
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.moowork.gradle:gradle-node-plugin:0.11"
         classpath "gradle.plugin.com.github.jk1:tcdeps:0.9.1"
+
+        classpath "net.corda.plugins:publish-utils:$corda_gradle_plugins_version"
+        classpath "net.corda.plugins:cordformation:$corda_gradle_plugins_version"
+        classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
     }
 }
+
 
 ext.kotlinConfigs = gradle.ext.kotlinConfigs
 ext.kotlinVersions = kotlinConfigs.collect { it.version }
 
 allprojects {
     repositories {
+        jcenter()
         maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
     }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+      //      jvmTarget = "1.8"
+        }
+    }
 }
+
+apply plugin: 'kotlin'
+apply plugin: 'idea'
+apply plugin: 'net.corda.plugins.publish-utils'
+apply plugin: 'net.corda.plugins.cordformation'
+apply plugin: 'net.corda.plugins.quasar-utils'
 
 configure(allprojects.findAll({
     it.name != 'kotlin.web.demo.frontend'
 })) {
     apply plugin: 'java'
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+//    sourceCompatibility = 1.7
+//    targetCompatibility = 1.7
+
+    // RG Amended above.
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+
 
     repositories {
         mavenCentral()
@@ -60,9 +98,15 @@ configure(allprojects.findAll({
     }
 
     dependencies {
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.4', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.4', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.4', transitive: true
+        compile "com.fasterxml.jackson.core:jackson-core:$jackson_version_kwd"
+        compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version_kwd"
+        compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version_kwd"
+
+//        compile "com.fasterxml.jackson.core:jackson-core:$jackson_version_kwd:transitive:true"
+//        compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version_kwd:transitive:true"
+//        compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version_kwd:transitive:true"
+
+
         compile 'commons-logging:commons-logging:1.2'
     }
 }
@@ -77,8 +121,9 @@ configure([
 ]) {
     apply plugin: 'kotlin'
     dependencies {
+        //compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4"
+        compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version_kwd"
     }
 }
 
@@ -114,20 +159,37 @@ for (config in kotlinConfigs) {
 
         dependencies {
             compile project(":kotlin.web.demo.backend:compilers")
-            kotlin tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-runtime.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
+
+            def root = config.useOriginalVersion ?
+                    "$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib" :
+                    "$buildType:$build:kotlin-compiler-${build}.zip!/kotlinc/lib"
+
+            if (config.useOriginalVersion) {
+                kotlin tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
+                kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
+            } else {
+                kotlin tc("$root/kotlin-compiler.jar")
+                kotlin tc("${config.pluginBuildType}:${config.kotlinPluginBuild}:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
+            }
+
+            kotlin tc("$root/kotlin-runtime.jar")
+            kotlin tc("$root/kotlin-reflect.jar")
+            kotlin tc("$root/kotlin-test.jar")
+            kotlin tc("$root/kotlin-jslib.jar")
+
             if (config.hasScriptJar) {
-                kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
+                kotlin tc("$root/kotlin-script-runtime.jar")
+            }
+
+            kotlinJS tc("$root/kotlin-jslib.jar")
+
+            if(!version.startsWith("1.0")) {
+                kotlin "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.17"
             }
             if(config.stdlibVersion) {
                 kotlin group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: config.stdlibVersion
             }
 
-            kotlinJS tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
             compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
         }
     }
@@ -152,7 +214,43 @@ task copyKotlinLibs() {
 project("kotlin.web.demo.backend") {
     apply plugin: 'war'
 
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
+    }
+
     dependencies {
+
+        compile "net.corda:corda-core:$corda_release_version"
+
+        compile "net.corda:corda-finance:$corda_release_version"
+        compile "net.corda:corda-jackson:$corda_release_version"
+        compile "net.corda:corda-rpc:$corda_release_version"
+        compile "net.corda:corda-node-api:$corda_release_version"
+        compile "net.corda:corda-webserver-impl:$corda_release_version"
+        compile "net.corda:corda:$corda_release_version"
+        compile "net.corda:corda-webserver:$corda_release_version"
+
+        // RAG Note:
+        // Uncommenting below gives the crashell error
+        // compile "net.corda:corda-test-utils:$corda_release_version" // -> gives crash error
+        compile "net.corda:corda-node-driver:$corda_release_version"
+
+        compile "org.apache.activemq:artemis-core-client:2.1.0"
+        compile "org.apache.activemq:artemis-amqp-protocol:2.1.0"
+        compile "org.apache.activemq:artemis-commons:2.1.0"
+        compile "org.apache.activemq:artemis-core-client:2.1.0"
+        compile "org.apache.activemq:artemis-jdbc-store:2.1.0"
+        compile "org.apache.activemq:artemis-jms-client:2.1.0"
+        compile "org.apache.activemq:artemis-journal:2.1.0"
+        compile "org.apache.activemq:artemis-native:2.1.0"
+        compile "org.apache.activemq:artemis-selector:2.1.0"
+        compile "org.apache.activemq:artemis-server:2.1.0"
+
+
         compile project(":kotlin.web.demo.backend:compilers")
         compile project(":kotlin.web.demo.executors")
         providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
@@ -183,6 +281,7 @@ project("kotlin.web.demo.backend") {
 project("kotlin.web.demo.executors") {
     dependencies {
         compile group: 'junit', 'name': 'junit', 'version': '4.12'
+        compile "net.corda:corda-core:$corda_release_version"
     }
 
     task copyToLib(type: Copy) {
@@ -205,6 +304,7 @@ project(':kotlin.web.demo.frontend') {
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-js-library:$kotlinVersion"
+        //compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion"
         compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.12"
     }
 
@@ -307,12 +407,15 @@ project('kotlin.web.demo.test') {
         testCompile project(':kotlin.web.demo.server')
         testCompile group: 'org.jetbrains.kotlin', 'name': 'kotlin-test', 'version': '1.0.1-2'
         testCompile group: 'junit', 'name': 'junit', 'version': '4.12'
+       // testCompile "net.corda:corda-core:$corda_release_version"
+
     }
     for (kotlinVersion in kotlinVersions) {
         test.dependsOn(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion:classes")
     }
     test.dependsOn(":kotlin.web.demo.executors:jar")
-    test.dependsOn(":copyKotlinLibs")
+//    test.dependsOn(":copyKotlinLibs")
 }
 
 project(':kotlin.web.demo.backend:compilers:versions').jar { onlyIf { false } }
+

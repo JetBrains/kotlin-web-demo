@@ -358,14 +358,3 @@
 .tree-leaf-title.is_active {
     font-weight: bold;
     color: #333333; }
-
-.conference-banner {
-    position: absolute;
-    top: -10px;
-    right: -200px;
-}
-
-.conference-banner img {
-    width: 126px;
-    height: 95px;
-}

@@ -1,0 +1,18 @@
+{
+  "confType": "junit",
+  "files": [
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "MyDate.kt"
+    },
+    {
+      "modifiable": false,
+      "hidden": false,
+      "skipInTestVersion": false,
+      "filename": "DateUtil.kt",
+      "type": "kotlin-test"
+    }
+  ]
+}

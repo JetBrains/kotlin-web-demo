@@ -1,0 +1,10 @@
+{
+  "sequential": false,
+  "examples": [
+    "Function literals with receiver",
+    "String and map builders",
+    "The function apply",
+    "Html builders",
+    "Builders how it works"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+    "name": "Null-checks",
+    "files": [
+        {
+            "modifiable": "true",
+            "filename" : "Null-checks.kt"
+        }
+    ],
+    "args": "2 3",
+    "confType": "java",
+    "expectedOutput": "6"
+}

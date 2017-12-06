@@ -47,12 +47,12 @@ public class JavaExecutor {
                 } catch (InvocationTargetException e) {
                     outputObj.exception = e.getCause();
                 } catch (NoSuchMethodException e) {
-                    System.err.println("No main method found in project.");
+                    System.err.println("No main method found in project (NSM).");
                 } catch (ClassNotFoundException e) {
-                    System.err.println("No main method found in project.");
+                    System.err.println("No main method found in project (CNF).");
                 }
             } else {
-                System.err.println("No main method found in project.");
+                System.err.println("No main method found in project (args=0).");
             }
 
             System.out.flush();

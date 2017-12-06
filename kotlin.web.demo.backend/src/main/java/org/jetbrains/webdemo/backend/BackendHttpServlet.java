@@ -36,7 +36,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class BackendHttpServlet extends HttpServlet {
     private static Log log = LogFactory.getLog(BackendHttpServlet.class);
@@ -58,7 +60,33 @@ public class BackendHttpServlet extends HttpServlet {
 
         Path wrappersDir = Paths.get(CommonSettings.WEBAPP_ROOT_DIRECTORY, "WEB-INF", "kotlin-wrappers");
         Path junitLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
-        KotlinWrappersManager.INSTANCE.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("classes"));
+        List<String> cordaLibs = new ArrayList<String>();
+        cordaLibs.add("corda-core-1.0.0.jar");
+        cordaLibs.add("corda-finance-1.0.0.jar");
+        cordaLibs.add("corda-jackson-1.0.0.jar");
+        cordaLibs.add("corda-mock-1.0.0.jar");
+        cordaLibs.add("corda-node-1.0.0.jar");
+        cordaLibs.add("corda-node-api-1.0.0.jar");
+        cordaLibs.add("corda-node-driver-1.0.0.jar");
+        cordaLibs.add("corda-rpc-1.0.0.jar");
+        cordaLibs.add("corda-test-common-1.0.0.jar");
+        cordaLibs.add("corda-test-utils-1.0.0.jar");
+        cordaLibs.add("corda-webserver-1.0.0.jar");
+        cordaLibs.add("corda-webserver-impl-1.0.0.jar");
+
+//        Path cordaLib = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "corda-core-1.0.0.jar");
+
+        List<Path> paths = new ArrayList<Path>();
+        paths.add(junitLib);
+
+        for(String s: cordaLibs) {
+            paths.add(Paths.get(BackendSettings.EXECUTORS_LIBS_DIR,s));
+        }
+
+//        paths.add(cordaLib);
+
+        //KotlinWrappersManager.INSTANCE.init(wrappersDir, Collections.singletonList(junitLib), Paths.get("classes"));
+        KotlinWrappersManager.INSTANCE.init(wrappersDir, paths, Paths.get("classes"));
         LogWriter.init();
         ErrorWriter.getInstance();
 
@@ -89,7 +117,7 @@ public class BackendHttpServlet extends HttpServlet {
                 CommandRunner.setServerSettingFromTomcatConfig("java_execute", (String) envCtx.lookup("java_execute"));
             } catch (NamingException e) {
                 String executable = isWindows() ? "java.exe" : "java";
-                CommandRunner.setServerSettingFromTomcatConfig("java_execute", BackendSettings.JAVA_HOME + File.separator + "bin" + File.separator + executable);
+                CommandRunner.setServerSettingFromTomcatConfig("java_execute", CommonSettings.JAVA_HOME + File.separator + "bin" + File.separator + executable);
             }
             try {
                 CommandRunner.setServerSettingFromTomcatConfig("app_output_dir", (String) envCtx.lookup("app_output_dir"));
