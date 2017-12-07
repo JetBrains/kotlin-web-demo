@@ -115,7 +115,7 @@
     box-sizing: border-box;
     padding: 8px 0;
     height: 60px;
-    background-color: #49525E; }
+    background-color: #000000; }
 .global-header-panel:after {
     display: block;
     clear: both;
@@ -135,10 +135,10 @@
     float: left;
     width: 103px;
     height: 22px;
-    background: url("/static/images/logos-sprite.png") no-repeat;
+    background: url("/static/images/cexplore.png") no-repeat;
     font-size: 0;
     text-decoration: none; }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .global-header-logo {
-        background-image: url("/static/images/logos-sprite@2x.png");
+        background-image: url("/static/images/cexplore.png");
         background-size: 200px 100px; } }

@@ -51,16 +51,19 @@
     display: inline-block;
     margin-right: 32px;
     color: #d1d1d1;
-    font-size: 14px;
+    /*font-size: 14px;*/
+    font-size: 18px;
     font-weight: 300;
     line-height: 43px;
     letter-spacing: 0.02em;
     text-decoration: none;
-    text-transform: uppercase; }
+/*    text-transform: uppercase;*/
+}
 .global-nav .nav-item:hover {
-    color: #fff; }
+    color: #f8f8ff!important; }
+/*    color: #fff; } */
 .global-nav .nav-item.is_active {
-    color: #7d838b; }
+    color: #FF0000; }
 .global-nav .extra-nav {
     display: inline-block;
     top: 0;

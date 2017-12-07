@@ -89,6 +89,43 @@
 </div>
 <div class="global-layout" fullscreen-sensible>
     <header class="global-header" fullscreen-sensible>
+<!--
+        <mat-toolbar-row class="mat-toolbar-row">
+            <a _ngcontent-c1="" routerlink=".." href="/"><img _ngcontent-c1="" class="toolbar-logo-img"
+                                                              src="assets/images/logos/cexplore.png"></a>
+            <span _ngcontent-c1="" class="toolbar-spacer"></span>
+
+            <span _ngcontent-c1="" class="square">
+                <a _ngcontent-c1="" class="tenth before after white" routerlink="../store" href="/store">Explore</a>
+  </span>
+
+            <span _ngcontent-c1="" class="square">
+    <a _ngcontent-c1="" class="tenth before after white" routerlink="../signin" href="/signin">Develop</a>
+  </span>
+
+            <span _ngcontent-c1="" class="square redbg">
+    <a _ngcontent-c1="" class="red" routerlink="../signin" href="/signin">Connect</a>
+  </span>
+        </mat-toolbar-row> -->
+
+
+        <div class="global-header-panel">
+            <div class="g-layout">
+                <a class="global-header-logo" href="//kotlinlang.org">Kotlin</a>
+                <nav role="navigation" class="global-nav">
+                    <a href="/" class="nav-item ">Explore</a>
+                    <a href="/" class="nav-item ">Develop</a>
+                    <a href="/" class="nav-item">Connect</a>
+                    <a class="nav-item is_active">Try</a>
+                </nav>
+            </div>
+            <!--<a class="conference-banner" href="https://kotlinconf.com/?utm_source=kotlinlang&utm_medium=web&utm_campaign=superearlybird">
+                <img src="/static/images/kotlinconf_banner.svg"/> -->
+            </a>
+        </div>
+
+
+<!--
         <div class="global-header-panel">
             <div class="g-layout">
                 <a class="global-header-logo" href="//kotlinlang.org">Kotlin</a>
@@ -102,17 +139,18 @@
                 <img src="/static/images/kotlinconf_banner.svg"/>
             </a>
         </div>
+-->
     </header>
 
     <div class="global-toolbox">
         <div class="g-layout" fullscreen-sensible>
             <div class="global-toolbox-left" fullscreen-sensible>
                 <div id="login" class="login-icons">
-                    <div class="icon facebook" title="Log in with Facebook" login-type="facebook"></div>
+                  <!--  <div class="icon facebook" title="Log in with Facebook" login-type="facebook"></div> -->
                     <div class="icon google" title="Log in with Google" login-type="google"></div>
-                    <div class="icon twitter" title="Log in with Twitter" login-type="twitter"></div>
+                  <!--  <div class="icon twitter" title="Log in with Twitter" login-type="twitter"></div> -->
                     <div class="icon github" title="Log in with GitHub" login-type="github"></div>
-                    <div class="icon jba" title="Log in with JetBrains account" login-type="jba"></div>
+                  <!--  <div class="icon jba" title="Log in with JetBrains account" login-type="jba"></div> -->
                 </div>
 
                 <div id="logout">
@@ -128,11 +166,12 @@
                     <div class="icon"></div>
                     <div class="text">Shortcuts</div>
                 </div>
-
+<!--
                 <div id="java2kotlin-button" class="button default-button">
                     <div class="icon"></div>
                     <div class="text">Convert from Java</div>
                 </div>
+                -->
 
                 <div id="fullscreen-button" class="button default-button" fullscreen-sensible>
                     <div class="icon"></div>
@@ -179,11 +218,10 @@
                             <div class="toolbox-right">
                                 <select id="runMode">
                                     <option value="java">JVM</option>
-                                    <option value="js">JavaScript</option>
-                                    <option value="canvas">JavaScript(Canvas)</option>
                                     <option value="junit">JUnit</option>
+<!--                                    <option value="js">JavaScript</option>
+                                    <option value="canvas">JavaScript(Canvas)</option> -->
                                 </select>
-
                                 <div id="runButton" class="buttonWrapper"
                                      title="Run file (@shortcut@) using run configuration">
                                     <div class="icon"></div>

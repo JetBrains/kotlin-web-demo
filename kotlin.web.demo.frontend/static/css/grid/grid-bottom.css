@@ -74,9 +74,9 @@
 }
 
 .ui-tabs .ui-tabs-nav li {
-    color: #000000;
     font-size: 14px;
-    background-color: #f0f0f0;
+    /*background-color: #f0f0f0;*/
+    background-color: #cccccc;
     padding: 0 6px;
     line-height: 22px;
     border: 0 solid #969696;
@@ -102,7 +102,7 @@
 
 .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
     padding: 0;
-    color: #000000;
+    color: darkgray;
     text-decoration: none;
 }
 

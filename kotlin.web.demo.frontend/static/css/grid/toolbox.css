@@ -15,7 +15,8 @@
  */
 
 #toolbox {
-    background-color: #e8e8e8;
+/*    background-color: #e8e8e8; */
+    background-color: darkgray;
     line-height: 1;
     width: 100%;
     overflow: hidden;
@@ -25,7 +26,8 @@
     float: left;
     padding: 5px 6px 5px 5px;
     margin-top: 6px;
-    background-color: #969696;
+/*    background-color: darkgray; */
+
     cursor: pointer;
     border-bottom-right-radius: 3px;
     border-top-right-radius: 3px;
