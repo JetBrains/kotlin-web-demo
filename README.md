@@ -1,3 +1,10 @@
+Adapted from the below - but now integrates with Corda libraries for interactive online Corda development
+
+
+
+
+--------------
+
 [![official JetBrains project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 
 This is the source for [try.kotl.in]( http://try.kotlinlang.org/)
