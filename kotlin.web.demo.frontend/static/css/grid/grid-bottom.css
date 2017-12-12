@@ -122,12 +122,8 @@
 
 #statusBarWrapper {
     font-family: menlo, consolas, monospace;
-    background-image: -moz-linear-gradient(#f7f7f7, #f0f0f0);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f7f7f7), to(#f0f0f0));
-    background-image: -webkit-linear-gradient(#f7f7f7, #f0f0f0);
-    background-image: -o-linear-gradient(#f7f7f7, #f0f0f0);
-    background-color: #f7f7f7;
     border-top: 1px solid #969696;
+    border-bottom: 1px solid #969696;
 }
 
 #statusBar {

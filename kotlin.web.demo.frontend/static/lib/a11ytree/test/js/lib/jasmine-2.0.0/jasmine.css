@@ -1,4 +1,13 @@
-body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
+body { 
+    background-color: #eeeeee;
+    padding: 0;
+    margin: 5px;
+    overflow-y: scroll;
+    background: -moz-radial-gradient(center, ellipse cover, rgba(204,204,204,1) 0%, rgba(204,204,204,0.64) 23%, rgba(204,204,204,0.53) 30%, rgba(60,71,73,0.14) 55%, rgba(54,66,68,0.16) 56%, rgba(54,66,68,1) 100%);
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(204,204,204,1) 0%,rgba(204,204,204,0.64) 23%,rgba(204,204,204,0.53) 30%,rgba(60,71,73,0.14) 55%,rgba(54,66,68,0.16) 56%,rgba(54,66,68,1) 100%);
+    background: radial-gradient(ellipse at center, rgba(204,204,204,1) 0%,rgba(204,204,204,0.64) 23%,rgba(204,204,204,0.53) 30%,rgba(60,71,73,0.14) 55%,rgba(54,66,68,0.16) 56%,rgba(54,66,68,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#364244',GradientType=1 );
+}
 
 .html-reporter { font-size: 11px; font-family: Monaco, "Lucida Console", monospace; line-height: 14px; color: #333333; }
 .html-reporter a { text-decoration: none; }
