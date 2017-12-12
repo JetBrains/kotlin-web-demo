@@ -36,6 +36,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
+        maven { url "https://kotlin.bintray.com/kotlin-eap-1.2" }
     }
 }
 
