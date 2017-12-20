@@ -99,9 +99,14 @@ class ConsoleView(
         }
     }
 
-    fun showJsException(stackTrace: String?) {
+    fun showJsException(exception: dynamic) {
         val outputView = prepareTab()
-        outputView.printErrorLine("Unhandled JavaScript exception: \n" + stackTrace)
+        if (exception.stack != null) {
+            val userStackTrace = exception.stack.toString().substringBefore("at eval (<anonymous>)")
+            outputView.printErrorLine("Unhandled JavaScript exception: \n" + userStackTrace)
+        } else {
+            outputView.printErrorLine("Unhandled JavaScript exception")
+        }
     }
 
     fun showUnmarkedText(text: String) {

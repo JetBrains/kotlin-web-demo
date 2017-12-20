@@ -119,16 +119,16 @@ class RunProvider(
                                 iframeDialog.open()
                             }
                             val out: String = iframeDialog.iframe.contentWindow!!.eval(data.jsCode)
-                            translationResult = TranslationResult(errors, data.jsCode, out, null, null)
+                            translationResult = TranslationResult(errors, data.jsCode, out, null)
                         } catch (e: dynamic) {
-                            translationResult = TranslationResult(errors, data.jsCode, null, e, e.stack)
+                            translationResult = TranslationResult(errors, data.jsCode, null, e)
                         } finally {
                             if (runConfiguration == "js") {
                                 iframeDialog.iframe.contentWindow!!.location.reload()
                             }
                         }
                     } else {
-                        translationResult = TranslationResult(errors, null, null, null, null)
+                        translationResult = TranslationResult(errors, null, null, null)
                     }
                     processTranslateToJSResult(translationResult, project)
                 },
@@ -221,7 +221,6 @@ class TranslationResult(
         errors: Map<File, List<Diagnostic>>,
         val jsCode: String?,
         val output: String?,
-        val exception: Throwable?,
-        var stack: String?
+        val exception: dynamic
 ) : RunResult(errors);
 
