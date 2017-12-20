@@ -212,7 +212,7 @@ object Application {
                     generatedCodeView.showGeneratedCode(translationResult.jsCode)
                 }
                 if (translationResult.exception != null) {
-                    consoleView.showJsException(translationResult.exception)
+                    consoleView.showJsException(translationResult.stack)
                 }
                 if (translationResult.output != null) {
                     consoleView.showUnmarkedText(translationResult.output)

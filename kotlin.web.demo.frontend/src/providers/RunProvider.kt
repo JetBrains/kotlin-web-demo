@@ -64,8 +64,8 @@ class RunProvider(
     }
 
     private fun runJava(project: Project, file: File) {
-        val requestData = json ("project" to JSON.stringify(project), "filename" to file.name)
-        if(project is Example) {
+        val requestData = json("project" to JSON.stringify(project), "filename" to file.name)
+        if (project is Example) {
             requestData["searchForMain"] = project.searchForMain
         }
         ajax(
@@ -119,16 +119,16 @@ class RunProvider(
                                 iframeDialog.open()
                             }
                             val out: String = iframeDialog.iframe.contentWindow!!.eval(data.jsCode)
-                            translationResult = TranslationResult(errors, data.jsCode, out, null)
+                            translationResult = TranslationResult(errors, data.jsCode, out, null, null)
                         } catch (e: dynamic) {
-                            translationResult = TranslationResult(errors, data.jsCode, null, e)
+                            translationResult = TranslationResult(errors, data.jsCode, null, e, e.stack)
                         } finally {
                             if (runConfiguration == "js") {
                                 iframeDialog.iframe.contentWindow!!.location.reload()
                             }
                         }
                     } else {
-                        translationResult = TranslationResult(errors, null, null, null)
+                        translationResult = TranslationResult(errors, null, null, null, null)
                     }
                     processTranslateToJSResult(translationResult, project)
                 },
@@ -179,8 +179,8 @@ external interface StackTraceElement {
 }
 
 class JunitExecutionResult(
-    errors: Map<File, List<Diagnostic>>,
-    testResults: dynamic
+        errors: Map<File, List<Diagnostic>>,
+        testResults: dynamic
 ) : RunResult(errors) {
     val testResults = HashMap<String, List<TestResult>>()
 
@@ -221,6 +221,7 @@ class TranslationResult(
         errors: Map<File, List<Diagnostic>>,
         val jsCode: String?,
         val output: String?,
-        val exception: Throwable?
+        val exception: Throwable?,
+        var stack: String?
 ) : RunResult(errors);
 
