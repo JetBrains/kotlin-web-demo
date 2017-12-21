@@ -79,7 +79,7 @@ class OutputView(val element: HTMLElement) {
                             if (currentException.message != null) {
                                 "Access control exception due to security reasons in web playground: \n " + currentException.message
                             } else {
-                                "ccess control exception due to security reasons in web playground"
+                                "Access control exception due to security reasons in web playground"
                             }
                     )
                 printLastStackTraceLine(currentException.stackTrace)
