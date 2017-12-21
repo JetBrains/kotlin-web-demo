@@ -40,8 +40,8 @@ class OutputView(val element: HTMLElement) {
     }
 
     public fun printError(s: String): HTMLSpanElement = element.append.span {
-            +s.replace("</br>", "\n").replace("<br/>", "\n")
-            classes = setOf("error-output")
+        +s.replace("</br>", "\n").replace("<br/>", "\n")
+        classes = setOf("error-output")
     }
 
     public fun printErrorLine(s: String = "") {
@@ -50,14 +50,14 @@ class OutputView(val element: HTMLElement) {
 
     fun printMarkedText(text: String) {
         var unprocessedFragment = unEscapeString(text)
-        while (unprocessedFragment.isNotBlank()){
+        while (unprocessedFragment.isNotBlank()) {
             val spanElement = document.createElement("span") as HTMLSpanElement
-            if(unprocessedFragment.startsWith("<outStream>")){
+            if (unprocessedFragment.startsWith("<outStream>")) {
                 unprocessedFragment = unprocessedFragment.substringAfter("<outStream>")
                 spanElement.className = "standard-output"
                 spanElement.textContent = unprocessedFragment.substringBefore("</outStream>")
                 unprocessedFragment = unprocessedFragment.substringAfter("</outStream>")
-            } else{
+            } else {
                 unprocessedFragment = unprocessedFragment.substringAfter("<errStream>")
                 spanElement.className = "error-output"
                 spanElement.textContent = unprocessedFragment.substringBefore("</errStream>")
@@ -69,42 +69,70 @@ class OutputView(val element: HTMLElement) {
 
     fun printException(exception: dynamic) {
         printErrorLine()
-        printErrorLine(
-                if (exception.message != null) {
-                    "Exception in thread \"main\" " + exception.fullName + ": " + unEscapeString(exception.message)
-                } else {
-                    "Exception in thread \"main\" " + exception.fullName
-                }
-        )
-        printExceptionBody(exception)
+        var currentException = exception
+        var isSecurityException = false
+        val accessControlException = "java.security.AccessControlException"
+        while (currentException != null) {
+            if (currentException.fullName != null && currentException.fullName === accessControlException) {
+                if (currentException.stackTrace != null)
+                    printErrorLine(
+                            if (currentException.message != null) {
+                                "Access control exception due to security reasons in web playground: \n " + currentException.message
+                            } else {
+                                "ccess control exception due to security reasons in web playground"
+                            }
+                    )
+                printLastStackTraceLine(currentException.stackTrace)
+                isSecurityException = true
+                break
+            }
+            currentException = currentException.cause
+        }
+        if (!isSecurityException) {
+            printErrorLine(
+                    if (exception.message != null) {
+                        "Exception in thread \"main\" " + exception.fullName + ": " + unEscapeString(exception.message)
+                    } else {
+                        "Exception in thread \"main\" " + exception.fullName
+                    }
+            )
+            printExceptionBody(exception)
+        }
     }
 
     fun printExceptionBody(exception: dynamic) {
-        printStackTrace(exception.stackTrace)
+        printFullStackTrace(exception.stackTrace)
         printExceptionCause(exception)
         printErrorLine()
     }
 
-    private fun printStackTrace(stackTrace: Array<dynamic>){
-        for (stackTraceElement in stackTrace) {
-            if (stackTraceElement.className.startsWith("sun.reflect")) {
-                break
-            }
-            val element = printError("    at " + stackTraceElement.className + '.' + stackTraceElement.methodName + '(')
-            element.appendChild(makeReference(stackTraceElement.fileName, stackTraceElement.lineNumber))
-            printErrorLine(")")
+    private fun printLastStackTraceLine(stackTrace: Array<dynamic>) {
+        if (stackTrace.isNotEmpty()) {
+            printStackTrace(stackTrace.last())
         }
     }
 
-    private fun printExceptionCause(exception: dynamic){
-        if(exception.cause != null) {
+    private fun printFullStackTrace(stackTrace: Array<dynamic>) {
+        stackTrace
+                .takeWhile { !it.className.startsWith("sun.reflect") }
+                .forEach { printStackTrace(it) }
+    }
+
+    private fun printStackTrace(stackTrace: dynamic) {
+        val element = printError("    at " + stackTrace.className + '.' + stackTrace.methodName + '(')
+        element.appendChild(makeReference(stackTrace.fileName, stackTrace.lineNumber))
+        printErrorLine(")")
+    }
+
+    private fun printExceptionCause(exception: dynamic) {
+        if (exception.cause != null) {
             var cause = exception.cause
-            if(cause.message != null) {
+            if (cause.message != null) {
                 printErrorLine("Caused by: " + cause.fullName + ": " + unEscapeString(cause.message) + '\n')
-            } else{
+            } else {
                 printErrorLine("Caused by: " + cause.fullName + '\n')
             }
-            printStackTrace(cause.stackTrace)
+            printFullStackTrace(cause.stackTrace)
             printExceptionCause(cause)
         }
     }
