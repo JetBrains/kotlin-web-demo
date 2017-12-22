@@ -70,6 +70,7 @@ object Application {
             onChange = { newValue ->
                 val project = accordion.selectedProjectView!!.project
                 project.compilerVersion = newValue
+                updateKotlinFrame(newValue)
                 project.save()
                 editor.removeStyles()
                 problemsView.clear()
@@ -374,7 +375,7 @@ object Application {
      * Map of current iFrames.
      * Kotlin version -> Iframe.
      */
-    private val iframeDialogs = HashMap<String, IframeDialog>()
+    val iframeDialogs = HashMap<String, IframeDialog>()
 
     /**
      * Setting list of available Kotlin.js version in web IDE
@@ -424,11 +425,19 @@ object Application {
                     versionView.init(kotlinVersions)
                     kotlinVersions.forEach { wrapperConfig ->
                         val version = wrapperConfig.version
-                        iframeDialogs[version] = IframeDialog(version)
                         availableKotlinVersions.add(version)
                     }
                 }
         )
+    }
+
+    /**
+     * Load new Kotlin version if it is still not loaded
+     */
+    private fun updateKotlinFrame(newVersion: String) {
+        if (iframeDialogs[newVersion] == null && newVersion in Application.availableKotlinVersions) {
+            iframeDialogs[newVersion] = IframeDialog(newVersion)
+        }
     }
 
     val generatedCodeView = GeneratedCodeView(document.getElementById("generated-code") as HTMLElement)
