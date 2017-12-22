@@ -64,8 +64,8 @@ class RunProvider(
     }
 
     private fun runJava(project: Project, file: File) {
-        val requestData = json ("project" to JSON.stringify(project), "filename" to file.name)
-        if(project is Example) {
+        val requestData = json("project" to JSON.stringify(project), "filename" to file.name)
+        if (project is Example) {
             requestData["searchForMain"] = project.searchForMain
         }
         ajax(
@@ -108,7 +108,7 @@ class RunProvider(
                     var translationResult: TranslationResult;
                     val errors = getErrorsMapFromObject(data.errors, project)
                     if (data.jsCode != null) {
-                        val kotlinVersion = project.compilerVersion ?: Application.versionView.defaultVersion
+                        val kotlinVersion = project.compilerVersion
                         val iframeDialog = Application.getIframeDialog(kotlinVersion)
 
                         try {
@@ -179,8 +179,8 @@ external interface StackTraceElement {
 }
 
 class JunitExecutionResult(
-    errors: Map<File, List<Diagnostic>>,
-    testResults: dynamic
+        errors: Map<File, List<Diagnostic>>,
+        testResults: dynamic
 ) : RunResult(errors) {
     val testResults = HashMap<String, List<TestResult>>()
 
