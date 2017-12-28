@@ -21,9 +21,10 @@ import org.apache.commons.logging.LogFactory;
 import org.jetbrains.webdemo.*;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examples.ExamplesFolder;
-import org.jetbrains.webdemo.examples.ExamplesLoader;
 import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.help.HelpLoader;
+import org.jetbrains.webdemo.loader.ExamplesLoader;
+import org.jetbrains.webdemo.loader.KotlinKoansLoader;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -64,6 +65,8 @@ public class KotlinHttpServlet extends HttpServlet {
             new File(CommonSettings.LOGS_DIRECTORY).mkdirs();
             LogWriter.init();
             ExamplesLoader.loadAllExamples();
+            KotlinKoansLoader kotlinKoansLoader = new KotlinKoansLoader();
+            kotlinKoansLoader.loadKotlinKoansStructure();
             HelpLoader.getInstance();
             MySqlConnector.getInstance();
             MySqlConnector.getInstance().createTaskList(getTaskList(ExamplesFolder.ROOT_FOLDER));

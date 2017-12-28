@@ -64,7 +64,7 @@ class JUnitView(
         wrapper.appendChild(statistic)
         wrapper.appendChild(consoleElement)
 
-        if (testResults.size != 0) {
+        if (testResults.isNotEmpty()) {
             createStatistics(testResults)
             navTree.appendChild(createTestTree(testResults, outputView))
         } else {

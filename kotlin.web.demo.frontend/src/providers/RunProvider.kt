@@ -64,8 +64,9 @@ class RunProvider(
     }
 
     private fun runJava(project: Project, file: File) {
-        val requestData = json("project" to JSON.stringify(project), "filename" to file.name)
-        if (project is Example) {
+        project.files = ArrayList(project.files.filter { it.name.matches(".kt$") })
+        val requestData = json ("project" to JSON.stringify(project), "filename" to file.name)
+        if(project is Example) {
             requestData["searchForMain"] = project.searchForMain
         }
         ajax(
@@ -179,8 +180,8 @@ external interface StackTraceElement {
 }
 
 class JunitExecutionResult(
-        errors: Map<File, List<Diagnostic>>,
-        testResults: dynamic
+    errors: Map<File, List<Diagnostic>>,
+    testResults: dynamic
 ) : RunResult(errors) {
     val testResults = HashMap<String, List<TestResult>>()
 
@@ -221,6 +222,6 @@ class TranslationResult(
         errors: Map<File, List<Diagnostic>>,
         val jsCode: String?,
         val output: String?,
-        val exception: dynamic
+        val exception: Throwable?
 ) : RunResult(errors);
 

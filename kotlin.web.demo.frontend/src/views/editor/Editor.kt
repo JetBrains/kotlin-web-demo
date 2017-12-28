@@ -295,7 +295,7 @@ public class Editor(
                 val answer = document.create.pre {
                     classes = setOf("task-answer")
                     code {
-                        attributes.put("data-lang", "text/x-kotlin");
+                        attributes.put("data-lang", "text/x-kotlin")
                         +it
                     }
                 }

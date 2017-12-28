@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,20 @@ package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jetbrains.annotations.Nullable;
+import lombok.Getter;
 import org.jetbrains.webdemo.Project;
 import org.jetbrains.webdemo.ProjectFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Example extends Project{
-    private List<ProjectFile> hiddenFiles = new ArrayList<>();
+public class Example extends Project {
+    private List<ProjectFile> hiddenFiles;
     @JsonIgnore
     public ExamplesFolder parent;
+
+    @Getter
     private String help;
+
     private boolean searchForMain;
 
     public Example(
@@ -51,20 +53,16 @@ public class Example extends Project{
     }
 
     @JsonIgnore
-    public List<ProjectFile> getHiddenFiles(){
+    public List<ProjectFile> getHiddenFiles() {
         return hiddenFiles;
     }
 
     @JsonProperty("searchForMain")
-    public boolean shouldSearchForMain(){
+    public boolean shouldSearchForMain() {
         return searchForMain;
     }
 
-    public String getHelp() {
-        return help;
-    }
-
-    public String toString(){
+    public String toString() {
         return name + " (" + id.replaceAll("%20", " ") + ')';
     }
 }

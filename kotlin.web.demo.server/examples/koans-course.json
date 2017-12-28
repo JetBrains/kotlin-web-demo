@@ -1,0 +1,2037 @@
+{
+  "lessons": [
+    {
+      "id": 0,
+      "title": "Introduction",
+      "task_list": [
+        {
+          "name": "Hello, world!",
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun start(): String = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 22,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "\"OK\"",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\n\nclass TestStart {\n    @Test fun testOk() {\n        Assert.assertEquals(\"OK\", start())\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Simple Functions</h2>\n<p>Take a look at <a href=\"http://kotlinlang.org/docs/reference/basic-syntax.html#defining-functions\">function syntax</a> and make the function <code>start</code> return the string <code>&quot;OK&quot;</code>.</p>\n<p>In the tasks the function <code>TODO()</code> is used that throws an exception. Your job during the koans will be to replace this function invocation with a meaningful code according to the problem.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Java to Kotlin conversion",
+          "stepic_id": 0,
+          "task_files": {
+            "JavaCode.java": {
+              "name": "JavaCode.java",
+              "text": "import java.util.Collection;\nimport java.util.Iterator;\n\npublic class JavaCode {\n    public String toJSON(Collection<Integer> collection) {\n        StringBuilder sb = new StringBuilder();\n        sb.append(\"[\");\n        Iterator<Integer> iterator = collection.iterator();\n        while (iterator.hasNext()) {\n            Integer element = iterator.next();\n            sb.append(element);\n            if (iterator.hasNext()) {\n                sb.append(\", \");\n            }\n        }\n        sb.append(\"]\");\n        return sb.toString();\n    }\n}",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun toJSON(collection: Collection<Int>): String = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 0,
+                  "length": 56,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "fun toJSON(collection: Collection<Int>): String {\n    val sb = StringBuilder()\n    sb.append(\"[\")\n    val iterator = collection.iterator()\n    while (iterator.hasNext())\n    {\n        val element = iterator.next()\n        sb.append(element)\n        if (iterator.hasNext())\n        {\n            sb.append(\", \")\n        }\n    }\n    sb.append(\"]\")\n    return sb.toString()\n}",
+                      "placeholder_text": "fun toJSON(collection: Collection<Int>): String = TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\nimport koans.util.toMessageInEquals\n\nclass TestFunctions() {\n    @Test fun collection() {\n        Assert.assertEquals(\"toJSON\".toMessageInEquals(), \"[1, 2, 3, 42, 555]\", toJSON(listOf(1, 2, 3, 42, 555)))\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Java to Kotlin conversion</h2>\n<p>We have a handy tool for Java developers: Java to Kotlin converter. To become familiar with it, please convert the java function <code>toJSON</code> in the file <code>JavaCode.java</code>. You can just copy-paste the code to Kotlin file and agree to automatically convert it to Kotlin.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Named arguments",
+          "stepic_id": 0,
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\nimport koans.util.toMessageInEquals\n\nclass TestNamedArguments() {\n\n    @Test fun testJoinToString() {\n        Assert.assertEquals(\"joinOptions\".toMessageInEquals(), \"[yes, no, may be]\", joinOptions(listOf(\"yes\", \"no\", \"may be\")))\n    }\n\n}"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun joinOptions(options: Collection<String>) = options.joinToString(TODO())\n",
+              "placeholders": [
+                {
+                  "offset": 68,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "prefix = \"[\", postfix = \"]\"",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_texts": {
+            "task": "<h2>Named arguments</h2>\n<p><a href=\"http://kotlinlang.org/docs/reference/functions.html#default-arguments\">Default and named</a> arguments help to minimize the number of overloads and improve the readability of the function invocation. The library function <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/join-to-string.html\"><code>joinToString</code></a> is declared with default values for parameters:</p><pre><code data-lang=\"text/x-kotlin\">fun joinToString(\n    separator: String = &quot;, &quot;,\n    prefix: String = &quot;&quot;,\n    postfix: String = &quot;&quot;,\n    /* ... */\n): String\n</code></pre>\n<p>It can be called on a collection of Strings. Specifying only two arguments make the function <code>joinOptions()</code> return the list in a JSON format (e.g., \"[a, b, c]\")</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Default arguments",
+          "stepic_id": 0,
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\n\nclass TestDefaultAndNamedParams() {\n\n    @Test fun testDefaultAndNamedParams() {\n        Assert.assertEquals(listOf(\"a42\", \"b1\", \"C42\", \"D2\"), useFoo())\n    }\n}"
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun foo(name: String, number: Int, toUpperCase: Boolean) =\n        (if (toUpperCase) name.toUpperCase() else name) + number\n\nfun useFoo() = listOf(\n        foo(\"a\"),\n        foo(\"b\", number = 1),\n        foo(\"c\", toUpperCase = true),\n        foo(name = \"d\", number = 2, toUpperCase = true)\n)\n",
+              "placeholders": [
+                {
+                  "offset": 0,
+                  "length": 56,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "fun foo(name: String, number: Int = 42, toUpperCase: Boolean = false)",
+                      "placeholder_text": "fun foo(name: String, number: Int, toUpperCase: Boolean)",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_texts": {
+            "task": "<h2>Default arguments</h2>\n<p>There are several overloads of 'foo()' in Java:</p><pre><code data-lang=\"text/x-java\">public String foo(String name, int number, boolean toUpperCase) {\n    return (toUpperCase ? name.toUpperCase() : name) + number;\n}\npublic String foo(String name, int number) {\n    return foo(name, number, false);\n}\npublic String foo(String name, boolean toUpperCase) {\n    return foo(name, 42, toUpperCase);\n}\npublic String foo(String name) {\n    return foo(name, 42);\n}\n</code></pre>\n<p>All these Java overloads can be replaced with one function in Kotlin. Change the declaration of the function <code>foo</code> in a way that makes the code using <code>foo</code> compile. Use <a href=\"http://kotlinlang.org/docs/reference/functions.html#default-arguments\">default and named</a> arguments.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Lambdas",
+          "stepic_id": 0,
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\n\nclass TestLambdas() {\n    @Test fun contains() {\n        Assert.assertTrue(\"The result should be true if the collection contains an even number\", containsEven(listOf(1, 2, 3, 126, 555)))\n    }\n\n    @Test fun notContains() {\n        Assert.assertFalse(\"The result should be false if the collection doesn't contain an even number\", containsEven(listOf(43, 33)))\n    }\n}"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun containsEven(collection: Collection<Int>): Boolean = collection.any { TODO() }\n",
+              "placeholders": [
+                {
+                  "offset": 74,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "it % 2 == 0",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_texts": {
+            "task": "<h2>Lambdas</h2>\n<p>Kotlin supports a functional style of programming. Read about <a href=\"http://kotlinlang.org/docs/reference/lambdas.html\">higher-order functions and function literals (lambdas)</a> in Kotlin.</p>\n<p>Pass a lambda to <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/any.html\"><code>any</code></a> function to check if the collection contains an even number. The function <code>any</code> gets a predicate as an argument and returns true if there is at least one element satisfying the predicate.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Strings",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "val month = \"(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\"\n\nfun getPattern(): String = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 92,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "\"\"\"\\d{2} ${month} \\d{4}\"\"\"",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\nimport java.util.regex.Pattern\n\nclass TestStringTemplates() {\n    private fun testMatch(date: String) = Assert.assertTrue(\"The pattern should match $date\", date.matches(getPattern().toRegex()))\n    private fun testMismatch(date: String) = Assert.assertFalse(\"The pattern shouldn't match $date\", date.matches(getPattern().toRegex()))\n\n    @Test fun match() {\n        testMatch(\"11 MAR 1952\")\n    }\n\n    @Test fun match1() {\n        testMatch(\"24 AUG 1957\")\n    }\n\n    @Test fun doNotMatch() {\n        testMismatch(\"24 RRR 1957\")\n    }}"
+          },
+          "task_texts": {
+            "task": "<h2>Strings</h2>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/basic-types.html#string-literals\">different string literals and string templates</a> in Kotlin.</p>\n<p>Raw strings are useful for writing regex patterns, you don't need to escape a backslash by a backslash. Below there is a pattern that matches a date in format <code>13.06.1992</code> (two digits, a dot, two digits, a dot, four digits):</p><pre><code data-lang=\"text/x-kotlin\">fun getPattern() = &quot;&quot;&quot;\\d{2}\\.\\d{2}\\.\\d{4}&quot;&quot;&quot;\n</code></pre>\n<p>Using <code>month</code> variable rewrite this pattern in such a way that it matches the date in format <code>13 JUN 1992</code> (two digits, a whitespace, a month abbreviation, a whitespace, four digits).</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Data classes",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\n\n\nclass TestDataClasses {\n    @Test fun testListOfPeople() {\n        Assert.assertEquals(\"[Person(name=Alice, age=29), Person(name=Bob, age=31)]\", getPeople().toString())\n    }\n}"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "class Person\n\nfun getPeople(): List<Person> {\n    return listOf(Person(\"Alice\", 29), Person(\"Bob\", 31))\n}\n",
+              "placeholders": [
+                {
+                  "offset": 0,
+                  "length": 12,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "data class Person(val name: String, val age: Int)",
+                      "placeholder_text": "class Person",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_texts": {
+            "task": "<h2>Data classes</h2>\n<p>Rewrite the following Java code to Kotlin:</p><pre><code data-lang=\"text/x-java\">public class Person {\n    private final String name;\n    private final int age;\n\n    public Person(String name, int age) {\n        this.name = name;\n        this.age = age;\n    }\n\n    public String getName() {\n        return name;\n    }\n\n    public int getAge() {\n        return age;\n    }\n}\n</code></pre>\n<p>Then add an annotation <code>data</code> to the resulting class. This annotation means the compiler will generate a bunch of useful methods in this class: <code>equals</code>/<code>hashCode</code>, <code>toString</code> and some others. The <code>getPeople</code> function should start to compile.</p>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/classes.html\">classes</a>, <a href=\"http://kotlinlang.org/docs/reference/properties.html\">properties</a> and <a href=\"https://kotlinlang.org/docs/reference/data-classes.html\">data classes</a>.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Nullable types",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\n\nclass TestNullableTypes {\n    fun testSendMessageToClient(\n            client: Client?,\n            message: String?,\n            expectedEmail: String? = null,\n            shouldBeInvoked: Boolean = false\n    ) {\n        var invoked = false\n        val expectedMessage = message\n        sendMessageToClient(client, message, object : Mailer {\n            override fun sendMessage(email: String, message: String) {\n                invoked = true\n                Assert.assertEquals(\"The message is not as expected:\",\n                        expectedMessage, message)\n                Assert.assertEquals(\"The email is not as expected:\",\n                        expectedEmail, email)\n            }\n        })\n        Assert.assertEquals(\"The function 'sendMessage' should${if (shouldBeInvoked) \"\" else \"n't\"} be invoked\",\n                shouldBeInvoked, invoked)\n    }\n\n    @Test fun everythingIsOk() {\n        testSendMessageToClient(Client(PersonalInfo(\"bob@gmail.com\")),\n                \"Hi Bob! We have an awesome proposition for you...\",\n                \"bob@gmail.com\",\n                true)\n    }\n\n    @Test fun noMessage() {\n        testSendMessageToClient(Client(PersonalInfo(\"bob@gmail.com\")), null)\n    }\n\n    @Test fun noEmail() {\n        testSendMessageToClient(Client(PersonalInfo(null)), \"Hi Bob! We have an awesome proposition for you...\")\n    }\n\n    @Test fun noPersonalInfo() {\n        testSendMessageToClient(Client(null), \"Hi Bob! We have an awesome proposition for you...\")\n    }\n\n    @Test fun noClient() {\n        testSendMessageToClient(null, \"Hi Bob! We have an awesome proposition for you...\")\n    }\n}"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun sendMessageToClient(\n        client: Client?, message: String?, mailer: Mailer\n){\n    TODO()\n}\n\nclass Client (val personalInfo: PersonalInfo?)\nclass PersonalInfo (val email: String?)\ninterface Mailer {\n    fun sendMessage(email: String, message: String)\n}\n",
+              "placeholders": [
+                {
+                  "offset": 90,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "val email = client?.personalInfo?.email\n    if (email != null && message != null) {\n        mailer.sendMessage(email, message)\n    }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_texts": {
+            "task": "<h2>Nullable types</h2>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/null-safety.html\">null safety and safe calls</a> in Kotlin and rewrite the following Java code using only one <code>if</code> expression:</p><pre><code data-lang=\"text/x-java\">public void sendMessageToClient(\n    @Nullable Client client,\n    @Nullable String message,\n    @NotNull Mailer mailer\n) {\n    if (client == null || message == null) return;\n\n    PersonalInfo personalInfo = client.getPersonalInfo();\n    if (personalInfo == null) return;\n\n    String email = personalInfo.getEmail();\n    if (email == null) return;\n\n    mailer.sendMessage(email, message);\n}\n</code></pre>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Smart casts",
+          "stepic_id": 0,
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\n\nclass TestSmartCasts {\n    @Test fun testNum() {\n        Assert.assertEquals(\"'eval' on Num should work:\", 2, eval(Num(2)))\n    }\n\n    @Test fun testSum() {\n        Assert.assertEquals(\"'eval' on Sum should work:\", 3, eval(Sum(Num(2), Num(1))))\n    }\n\n    @Test fun testRecursion() {\n        Assert.assertEquals(\"'eval' should work:\", 6, eval(Sum(Sum(Num(1), Num(2)), Num(3))))\n    }\n}"
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun eval(expr: Expr): Int =\n        when (expr) {\n            is Num -> TODO()\n            is Sum -> TODO()\n            else -> throw IllegalArgumentException(\"Unknown expression\")\n        }\n\ninterface Expr\nclass Num(val value: Int) : Expr\nclass Sum(val left: Expr, val right: Expr) : Expr\n",
+              "placeholders": [
+                {
+                  "offset": 72,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "expr.value",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 101,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "eval(expr.left) + eval(expr.right)",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_texts": {
+            "task": "<h2>Smart casts</h2>\n<p>Rewrite the following Java code using <a href=\"http://kotlinlang.org/docs/reference/typecasts.html#smart-casts\">smart casts</a> and <a href=\"http://kotlinlang.org/docs/reference/control-flow.html#when-expression\">when</a> expression:</p><pre><code data-lang=\"text/x-java\">public int eval(Expr expr) {\n    if (expr instanceof Num) {\n        return ((Num) expr).getValue();\n    }\n    if (expr instanceof Sum) {\n        Sum sum = (Sum) expr;\n        return eval(sum.getLeft()) + eval(sum.getRight());\n    }\n    throw new IllegalArgumentException(&quot;Unknown expression&quot;);\n}\n</code></pre>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Extension functions",
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun Int.r(): RationalNumber = TODO()\nfun Pair<Int, Int>.r(): RationalNumber = TODO()\n\ndata class RationalNumber(val numerator: Int, val denominator: Int)\n",
+              "placeholders": [
+                {
+                  "offset": 30,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "RationalNumber(this, 1)",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 78,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "RationalNumber(first, second)",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\n\nclass TestExtensionFunctions() {\n    @Test fun testIntExtension() {\n        Assert.assertEquals(\"Rational number creation error: \", RationalNumber(4, 1), 4.r())\n    }\n\n    @Test fun testPairExtension() {\n        Assert.assertEquals(\"Rational number creation error: \", RationalNumber(2, 3), Pair(2, 3).r())\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Extension functions</h2>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/extensions.html\">extension functions</a>. Then implement extension functions <code>Int.r()</code> and <code>Pair.r()</code> and make them convert Int and Pair to <code>RationalNumber</code>.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Object expressions",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "import java.util.*\n\nfun getList(): List<Int> {\n    val arrayList = arrayListOf(1, 5, 2)\n    Collections.sort(arrayList, object {})\n    return arrayList\n}\n",
+              "placeholders": [
+                {
+                  "offset": 120,
+                  "length": 9,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "object : Comparator<Int> {\n    override fun compare(x: Int, y: Int) = y - x\n}",
+                      "placeholder_text": "object {}",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\nimport koans.util.toMessageInEquals\n\nclass TestObjectExpressions {\n    @Test fun testSort() {\n        Assert.assertEquals(\"getList\".toMessageInEquals(), listOf(5, 2, 1), getList())\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Object expressions</h2>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/object-declarations.html\">object expressions</a> that play the same role in Kotlin as anonymous classes in Java.</p>\n<p>Add an object expression that provides a comparator to sort a list in a descending order using java.util.Collections class. In Kotlin you use Kotlin library extensions instead of java.util.Collections, but this example is still a good demonstration of mixing Kotlin and Java code.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "SAM conversions",
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "import java.util.*\n\nfun getList(): List<Int> {\n    val arrayList = arrayListOf(1, 5, 2)\n    Collections.sort(arrayList, { x, y -> TODO() })\n    return arrayList\n}\n",
+              "placeholders": [
+                {
+                  "offset": 130,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "y - x",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\nimport koans.util.toMessageInEquals\n\nclass TestSamConversions {\n    @Test fun testSort() {\n        Assert.assertEquals(\"getList\".toMessageInEquals(), listOf(5, 2, 1), getList())\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>SAM conversions</h2>\n<p>When an object implements a SAM interface (one with a Single Abstract Method), you can pass a lambda instead. Read more about <a href=\"https://kotlinlang.org/docs/reference/java-interop.html#sam-conversions\">SAM-conversions</a>.</p>\n<p>In the previous example change an object expression to a lambda.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Extensions on collections",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun getList(): List<Int> {\n    return arrayListOf(1, 5, 2)//TODO(\"return the list sorted in descending order\")\n}\n",
+              "placeholders": [
+                {
+                  "offset": 58,
+                  "length": 52,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": ".sortedDescending()",
+                      "placeholder_text": "//TODO(\"return the list sorted in descending order\")",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\n\nclass TestExtensionsOnCollections {\n    @Test fun testSort() {\n        Assert.assertEquals(listOf(5, 2, 1), getList())\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Extension functions on collections</h2>\n<p>Kotlin code can be easily mixed with Java code. Thus in Kotlin we don't introduce our own collections, but use standard Java ones (slightly improved). Read about <a href=\"http://blog.jetbrains.com/kotlin/2012/09/kotlin-m3-is-out/#Collections\">read-only and mutable views on Java collections</a>.</p>\n<p>In <a href=\"http://kotlinlang.org/api/latest/jvm/stdlib/kotlin/\">Kotlin standard library</a> there are lots of extension functions that make the work with collections more convenient. Rewrite the previous example once more using an extension function <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/sorted-descending.html\"><code>sortedDescending</code></a>.</p>"
+          },
+          "task_type": "edu"
+        }
+      ]
+    },
+    {
+      "id": 0,
+      "title": "Conventions",
+      "task_list": [
+        {
+          "name": "Comparison",
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int) : Comparable<MyDate> {\n    /* TODO */\n}\n\nfun compare(date1: MyDate, date2: MyDate) = date1 < date2\n",
+              "placeholders": [
+                {
+                  "offset": 97,
+                  "length": 10,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "override fun compareTo(other: MyDate) = when {\n        year != other.year -> year - other.year\n        month != other.month -> month - other.month\n        else -> dayOfMonth - other.dayOfMonth\n    }",
+                      "placeholder_text": "/* TODO */",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestComparison {\n\n    @Test fun testBefore() {\n        val first = MyDate(2014, 5, 10)\n        val second = MyDate(2014, 7, 11)\n        Assert.assertTrue(\"compareTo\".toMessage() + \": ${first} should go before ${second}\", first < second)\n    }\n\n    @Test fun testAfter() {\n        val first = MyDate(2014, 10, 20)\n        val second = MyDate(2014, 7, 11)\n        Assert.assertTrue(\"compareTo\".toMessage() + \": ${first} should go after ${second}\", first > second)\n    }\n}"
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_texts": {
+            "task": "<h2>Comparison</h2>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/operator-overloading.html\">operator overloading</a> to learn how different conventions for operations like <code>==</code>, <code>&lt;</code>, <code>+</code> work in Kotlin. Add the function <code>compareTo</code> to the class MyDate to make it comparable. After that the code below <code>date1 &lt; date2</code> will start to compile.</p>\n<p>In Kotlin when you override a member, the modifier <a href=\"http://kotlinlang.org/docs/reference/classes.html#overriding-members\"><code>override</code></a> is mandatory.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "In range",
+          "stepic_id": 0,
+          "task_files": {
+            "MyDate.kt": {
+              "name": "MyDate.kt",
+              "text": "data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int) : Comparable<MyDate>{\n    override fun compareTo(other: MyDate): Int{\n        if(year != other.year) return year - other.year\n        if(month != other.month) return month - other.month\n        return dayOfMonth - other.dayOfMonth\n    }\n}",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "class DateRange(val start: MyDate, val endInclusive: MyDate)/* TODO */\n\nfun checkInRange(date: MyDate, first: MyDate, last: MyDate): Boolean {\n    return date in DateRange(first, last)\n}\n",
+              "placeholders": [
+                {
+                  "offset": 60,
+                  "length": 10,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": " {\n    operator fun contains(item: MyDate): Boolean = start <= item && item <= endInclusive\n}",
+                      "placeholder_text": "/* TODO */",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.inEquals\n\nclass TestInRange {\n    fun doTest(date: MyDate, first: MyDate, last: MyDate, shouldBeInRange: Boolean) {\n        val message = \"${date} should${if (shouldBeInRange) \"\" else \"n't\"} be in ${DateRange(first, last)}\".inEquals()\n        Assert.assertEquals(message, shouldBeInRange, checkInRange(date, first, last))\n    }\n\n    @Test fun testInRange() {\n        doTest(MyDate(2014, 3, 22), MyDate(2014, 1, 1), MyDate(2015, 1, 1), shouldBeInRange = true)\n    }\n\n    @Test fun testBefore() {\n        doTest(MyDate(2013, 3, 22), MyDate(2014, 1, 1), MyDate(2015, 1, 1), shouldBeInRange = false)\n    }\n\n    @Test fun testAfter() {\n        doTest(MyDate(2015, 3, 22), MyDate(2014, 1, 1), MyDate(2015, 1, 1), shouldBeInRange = false)\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>In range</h2>\n<p>In Kotlin <code>in</code> checks are translated to the corresponding <code>contains</code> calls:</p><pre><code data-lang=\"text/x-kotlin\">val list = listOf(&quot;a&quot;, &quot;b&quot;)\n&quot;a&quot; in list  // list.contains(&quot;a&quot;)\n&quot;a&quot; !in list // !list.contains(&quot;a&quot;)\n</code></pre>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/ranges.html\">ranges</a>. Add a method <code>fun contains(d: MyDate)</code> to the class <code>DateRange</code> to allow <code>in</code> checks with a range of dates.</p>"
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Range to",
+          "stepic_id": 0,
+          "task_files": {
+            "MyDate.kt": {
+              "name": "MyDate.kt",
+              "text": "data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int) : Comparable<MyDate>{\n    override fun compareTo(other: MyDate): Int{\n        if(year != other.year) return year - other.year\n        if(month != other.month) return month - other.month\n        return dayOfMonth - other.dayOfMonth\n    }\n}",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "operator fun MyDate.rangeTo(other: MyDate) = TODO()\n\nclass DateRange(override val start: MyDate, override val endInclusive: MyDate): ClosedRange<MyDate>\n\nfun checkInRange(date: MyDate, first: MyDate, last: MyDate): Boolean {\n    return date in first..last\n}\n",
+              "placeholders": [
+                {
+                  "offset": 45,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "DateRange(this, other)",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport java.util.ArrayList\nimport koans.util.inEquals\n\nclass TestRangeTo {\n    fun doTest(date: MyDate, first: MyDate, last: MyDate, shouldBeInRange: Boolean) {\n        val message = \"${date} should${if (shouldBeInRange) \"\" else \"n't\"} be in range: ${first}..${last}\".inEquals()\n        Assert.assertEquals(message, shouldBeInRange, checkInRange(date, first, last))\n    }\n\n    @Test fun testInRange() {\n        doTest(MyDate(2014, 3, 22), MyDate(2014, 1, 1), MyDate(2015, 1, 1), shouldBeInRange = true)\n    }\n}"
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_texts": {
+            "task": "<h2>Range to</h2>\n<p>Implement the function <code>MyDate.rangeTo()</code>. This allows you to create a range of dates using the following syntax:</p><pre><code data-lang=\"text/x-kotlin\">MyDate(2015, 5, 11)..MyDate(2015, 5, 12)\n</code></pre>\n<p>Note that now the class <code>DateRange</code> implements the standard <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.ranges/kotlin.-closed-range/index.html\"><code>ClosedRange</code></a> interface and inherits <code>contains</code> method implementation.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "For loop",
+          "stepic_id": 0,
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.inEquals\n\nclass TestForLoop {\n    @Test fun testIterateOverDateRange() {\n        val actualDateRange = arrayListOf<MyDate>()\n        iterateOverDateRange(MyDate(2016, 5, 1), MyDate(2016, 5, 5), {\n            date-> actualDateRange.add(date)\n        })\n        val expectedDateRange = arrayListOf(\n                MyDate(2016, 5, 1), MyDate(2016, 5, 2), MyDate(2016, 5, 3), MyDate(2016, 5, 4), MyDate(2016, 5, 5))\n        Assert.assertEquals(\"Incorrect iteration over five nice spring dates\".inEquals(),\n                expectedDateRange, actualDateRange)\n    }\n\n    @Test fun testIterateOverEmptyRange() {\n        var invoked = false\n        iterateOverDateRange(MyDate(2016, 1, 1), MyDate(2015, 1, 1), { invoked = true })\n        Assert.assertFalse(\"Handler was invoked on an empty range\".inEquals(), invoked)\n    }\n}"
+          },
+          "task_files": {
+            "DateUtil.kt": {
+              "name": "DateUtil.kt",
+              "text": "import java.util.Calendar\n\nfun MyDate.nextDay() = addTimeIntervals(TimeInterval.DAY, 1)\n\nenum class TimeInterval {\n    DAY,\n    WEEK,\n    YEAR\n}\n\nfun MyDate.addTimeIntervals(timeInterval: TimeInterval, number: Int): MyDate {\n    val c = Calendar.getInstance()\n    c.set(year + if (timeInterval == TimeInterval.YEAR) number else 0, month, dayOfMonth)\n    var timeInMillis = c.getTimeInMillis()\n    val millisecondsInADay = 24 * 60 * 60 * 1000L\n    timeInMillis += number * when (timeInterval) {\n        TimeInterval.DAY -> millisecondsInADay\n        TimeInterval.WEEK -> 7 * millisecondsInADay\n        TimeInterval.YEAR -> 0L\n    }\n    val result = Calendar.getInstance()\n    result.setTimeInMillis(timeInMillis)\n    return MyDate(result.get(Calendar.YEAR), result.get(Calendar.MONTH), result.get(Calendar.DATE))\n}",
+              "placeholders": []
+            },
+            "MyDate.kt": {
+              "name": "MyDate.kt",
+              "text": "data class MyDate(val year: Int, val month: Int, val dayOfMonth: Int) : Comparable<MyDate>{\n    override fun compareTo(other: MyDate): Int{\n        if(year != other.year) return year - other.year\n        if(month != other.month) return month - other.month\n        return dayOfMonth - other.dayOfMonth\n    }\n}\n\noperator fun MyDate.rangeTo(other: MyDate) = DateRange(this, other)\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "class DateRange(val start: MyDate, val end: MyDate)\n\nfun iterateOverDateRange(firstDate: MyDate, secondDate: MyDate, handler: (MyDate) -> Unit) {\n    for (date in firstDate..secondDate) {\n        handler(date)\n    }\n}\n",
+              "placeholders": [
+                {
+                  "offset": 0,
+                  "length": 51,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "class DateRange(val start: MyDate, val end: MyDate): Iterable<MyDate>{\n    override fun iterator(): Iterator<MyDate> = DateIterator(this)\n}\n\nclass DateIterator(val dateRange:DateRange) : Iterator<MyDate> {\n    var current: MyDate = dateRange.start\n    override fun next(): MyDate {\n        val result = current\n        current = current.nextDay()\n        return result\n    }\n    override fun hasNext(): Boolean = current <= dateRange.end\n}",
+                      "placeholder_text": "class DateRange(val start: MyDate, val end: MyDate)",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_texts": {
+            "task": "<h2>For loop</h2>\n<p>Kotlin <a href=\"http://kotlinlang.org/docs/reference/control-flow.html#for-loops\">for loop</a> iterates through anything that provides an iterator. Make the class <code>DateRange</code> implement <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/\"><code>Iterable&lt;MyDate&gt;</code></a>, so that it could be iterated over. You can use the function <code>MyDate.nextDay()</code> defined in <code>DateUtil.kt</code></p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Operators overloading",
+          "stepic_id": 0,
+          "task_files": {
+            "DateUtil.kt": {
+              "name": "DateUtil.kt",
+              "text": "import java.util.Calendar\n\nfun MyDate.addTimeIntervals(timeInterval: TimeInterval, number: Int): MyDate {\n    val c = Calendar.getInstance()\n    c.set(year + if (timeInterval == TimeInterval.YEAR) number else 0, month, dayOfMonth)\n    var timeInMillis = c.getTimeInMillis()\n    val millisecondsInADay = 24 * 60 * 60 * 1000L\n    timeInMillis += number * when (timeInterval) {\n        TimeInterval.DAY -> millisecondsInADay\n        TimeInterval.WEEK -> 7 * millisecondsInADay\n        TimeInterval.YEAR -> 0L\n    }\n    val result = Calendar.getInstance()\n    result.setTimeInMillis(timeInMillis)\n    return MyDate(result.get(Calendar.YEAR), result.get(Calendar.MONTH), result.get(Calendar.DATE))\n}",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "import TimeInterval.*\n\ndata class MyDate(val year: Int, val month: Int, val dayOfMonth: Int)\n\nenum class TimeInterval { DAY, WEEK, YEAR }\n\noperator fun MyDate.plus(timeInterval: TimeInterval): MyDate = TODO()\n\nfun task1(today: MyDate): MyDate {\n    return today + YEAR + WEEK\n}\n\nfun task2(today: MyDate): MyDate {\n    TODO(\"Uncomment\") //return today + YEAR * 2 + WEEK * 3 + DAY * 5\n}\n",
+              "placeholders": [
+                {
+                  "offset": 139,
+                  "length": 69,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "\noperator fun MyDate.plus(timeInterval: TimeInterval) = addTimeIntervals(timeInterval, 1)\n\nclass RepeatedTimeInterval(val timeInterval: TimeInterval, val number: Int)\noperator fun TimeInterval.times(number: Int) = RepeatedTimeInterval(this, number)\n\noperator fun MyDate.plus(timeIntervals: RepeatedTimeInterval) = addTimeIntervals(timeIntervals.timeInterval, timeIntervals.number)\n",
+                      "placeholder_text": "operator fun MyDate.plus(timeInterval: TimeInterval): MyDate = TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 318,
+                  "length": 64,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "return today + YEAR * 2 + WEEK * 3 + DAY * 5",
+                      "placeholder_text": "TODO(\"Uncomment\") //return today + YEAR * 2 + WEEK * 3 + DAY * 5",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessageInEquals\n\nclass TestOperatorsOverloading {\n    @Test fun testAddOneTimeInterval() {\n        Assert.assertEquals(\"task1\".toMessageInEquals(), MyDate(2015, 5, 8), task1(MyDate(2014, 5, 1)))\n    }\n\n    @Test fun testOneMonth() {\n        Assert.assertEquals(\"task2\".toMessageInEquals(), MyDate(2016, 0, 27), task2(MyDate(2014, 0, 1)))\n    }\n\n    @Test fun testMonthChange() {\n        Assert.assertEquals(\"task2\".toMessageInEquals(), MyDate(2016, 1, 20), task2(MyDate(2014, 0, 25)))\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Operators overloading</h2>\n<p>Implement a kind of date arithmetic. Support adding years, weeks and days to a date. You could be able to write the code like this: <code>date + YEAR * 2 + WEEK * 3 + DAY * 15</code>.</p>\n<p>At first, add an extension function 'plus()' to MyDate, taking a TimeInterval as an argument. Use an utility function <code>MyDate.addTimeIntervals()</code> declared in <code>DateUtil.kt</code></p>\n<p>Then, try to support adding several time intervals to a date. You may need an extra class.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Destructuring declarations",
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "/* TODO */class MyDate(val year: Int, val month: Int, val dayOfMonth: Int)\n\nfun isLeapDay(date: MyDate): Boolean {\n\n    val (year, month, dayOfMonth) = date\n\n    // 29 February of a leap year\n    return year % 4 == 0 && month == 2 && dayOfMonth == 29\n}\n",
+              "placeholders": [
+                {
+                  "offset": 0,
+                  "length": 10,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "data ",
+                      "placeholder_text": "/* TODO */",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\n\nclass TestMultiAssignment {\n    @Test fun testIsLeapDay() {\n        Assert.assertTrue(\"The test failed\", isLeapDay(MyDate(2016, 2, 29)))\n        Assert.assertFalse(\"The test failed\", isLeapDay(MyDate(2015, 2, 29)))\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Destructuring declarations</h2>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/multi-declarations.html\">destructuring declarations</a> and make the following code compile by adding one word.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Invoke",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "class Invokable {\n    var numberOfInvocations: Int = 0\n        private set\n    operator fun invoke(): Invokable {\n        TODO()\n    }\n}\n\nfun invokeTwice(invokable: Invokable) = invokable()()\n",
+              "placeholders": [
+                {
+                  "offset": 122,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "numberOfInvocations++\n        return this",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.inEquals\n\nclass TestInvoke {\n    @Test fun testInvokeTwice() = testInvokable(2, ::invokeTwice)\n\n    private fun testInvokable(numberOfInvocations: Int, invokeSeveralTimes: (Invokable) -> Invokable) {\n        val invokable = Invokable()\n        val message = \"The number of invocations is incorrect\".inEquals()\n        Assert.assertEquals(message, numberOfInvocations, invokeSeveralTimes(invokable).numberOfInvocations)\n    }\n\n    @Test fun testNumberOfInvocations() {\n        testInvokable(1) { it() }\n        testInvokable(5) { it()()()()() }\n        testInvokable(0) { it }\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Invoke</h2>\n<p>Objects with <code>invoke()</code> method can be invoked as a function.</p>\n<p>You can add <code>invoke</code> extension for any class, but it's better not to overuse it:</p><pre><code data-lang=\"text/x-kotlin\">fun Int.invoke() { println(this) }\n\n1() //huh?..\n</code></pre>\n<p>Implement the function <code>Invokable.invoke()</code> so it would count a number of invocations.</p>"
+          },
+          "task_type": "edu"
+        }
+      ]
+    },
+    {
+      "id": 0,
+      "title": "Collections",
+      "task_list": [
+        {
+          "name": "Introduction",
+          "stepic_id": 0,
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun Shop.getSetOfCustomers(): Set<Customer> = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 46,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.toSet()",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestIntroduction {\n    @Test fun testSetOfCustomers(){\n        Assert.assertTrue(\"getSetOfCustomers\".toMessage(),\n                shop.getSetOfCustomers() == customers.values.toSet())\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Introduction</h2>\n<p>This part was inspired by <a href=\"https://github.com/goldmansachs/gs-collections-kata\">GS Collections Kata</a>.</p>\n<p>Default collections in Kotlin are Java collections, but there are lots of useful extension functions for them. For example, operations that transform a collection to another one, starting with 'to': <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/to-set.html\"><code>toSet</code></a> or <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/to-list.html\"><code>toList</code></a>.</p>\n<p>Implement an extension function <code>Shop.getSetOfCustomers()</code>. The class <code>Shop</code> and all related classes can be found at <code>Shop.kt</code>.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Filter map",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return the set of cities the customers are from\nfun Shop.getCitiesCustomersAreFrom(): Set<City> = TODO()\n\n// Return a list of the customers who live in the given city\nfun Shop.getCustomersFrom(city: City): List<Customer> = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 101,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.map { it.city }.toSet()",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 226,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.filter { it.city == city }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestFilterMap {\n    @Test fun testCitiesCustomersAreFrom() {\n        Assert.assertTrue(\"getCitiesCustomersAreFrom\".toMessage(),\n                setOf(Canberra, Vancouver, Budapest, Ankara, Tokyo) == shop.getCitiesCustomersAreFrom())\n    }\n\n    @Test fun testCustomersFromCity() {\n        Assert.assertTrue(\"getCustomersFrom\".toMessage(),\n                listOf(customers[lucas], customers[cooper]) == shop.getCustomersFrom(Canberra))\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Filter; map</h2>\n<p>Implement extension functions <code>Shop.getCitiesCustomersAreFrom()</code> and <code>Shop.getCustomersFrom()</code> using functions <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/map.html\"><code>map</code></a> and <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/filter.html\"><code>filter</code></a>.</p><pre><code data-lang=\"text/x-kotlin\">val numbers = listOf(1, -1, 2)\nnumbers.filter { it &gt; 0 } == listOf(1, 2)\nnumbers.map { it * it } == listOf(1, 1, 4)\n</code></pre>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "All Any and other predicates",
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "stepic_id": 0,
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return true if all customers are from the given city\nfun Shop.checkAllCustomersAreFrom(city: City): Boolean = TODO()\n\n// Return true if there is at least one customer from the given city\nfun Shop.hasCustomerFrom(city: City): Boolean = TODO()\n\n// Return the number of customers from the given city\nfun Shop.countCustomersFrom(city: City): Int = TODO()\n\n// Return a customer who lives in the given city, or null if there is none\nfun Shop.findAnyCustomerFrom(city: City): Customer? = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 113,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.all { it.city == city }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 238,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.any { it.city == city }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 347,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.count { it.city == city }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 484,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.find { it.city == city }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestAllAnyAndOtherPredicates {\n\n    @Test fun testAllCustomersAreFromCity() {\n        Assert.assertFalse(\"checkAllCustomersAreFrom\".toMessage(), shop.checkAllCustomersAreFrom(Canberra))\n    }\n\n    @Test fun testAnyCustomerIsFromCity() {\n        Assert.assertTrue(\"hasCustomerFrom\".toMessage(), shop.hasCustomerFrom(Canberra))\n    }\n\n    @Test fun testCountCustomersFromCity() {\n        Assert.assertTrue(\"countCustomersFrom\".toMessage(), 2 == shop.countCustomersFrom(Canberra))\n    }\n\n    @Test fun testAnyCustomerFromCity() {\n        Assert.assertTrue(\"findAnyCustomerFrom\".toMessage(), customers[lucas] == shop.findAnyCustomerFrom(Canberra))\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>All, Any and other predicates</h2>\n<p>Implement all the functions below using <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/all.html\"><code>all</code></a>, <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/any.html\"><code>any</code></a>, <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/count.html\"><code>count</code></a>, <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/find.html\"><code>find</code></a>.</p><pre><code data-lang=\"text/x-kotlin\">val numbers = listOf(-1, 0, 2)\nval isZero: (Int) -&gt; Boolean = { it == 0 }\nnumbers.any(isZero) == true\nnumbers.all(isZero) == false\nnumbers.count(isZero) == 1\nnumbers.find { it &gt; 0 } == 2\n</code></pre>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "FlatMap",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return all products this customer has ordered\nfun Customer.getOrderedProducts(): Set<Product> = TODO()\n\n// Return all products that were ordered by at least one customer\nfun Shop.getAllOrderedProducts(): Set<Product> = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 99,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "orders.flatMap { it.products }.toSet()",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 222,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.flatMap { it.getOrderedProducts() }.toSet()",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestFlatMap {\n    @Test fun testGetOrderedProductsSet() {\n        Assert.assertTrue(\"getOrderedProducts\".toMessage(),\n                setOf(idea) == customers[reka]!!.getOrderedProducts())\n    }\n\n    @Test fun testGetAllOrderedProducts() {\n        Assert.assertTrue(\"getAllOrderedProducts\".toMessage(),\n                orderedProducts == shop.getAllOrderedProducts())\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>FlatMap</h2>\n<p>Implement <code>Customer.getOrderedProducts()</code> and <code>Shop.getAllOrderedProducts()</code> using <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/flat-map.html\"><code>flatMap</code></a>.</p><pre><code data-lang=\"text/x-kotlin\">val result = listOf(&quot;abc&quot;, &quot;12&quot;).flatMap { it.toCharList() }\nresult == listOf(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;1&#39;, &#39;2&#39;)\n</code></pre>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Max min",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return a customer whose order count is the highest among all customers\nfun Shop.getCustomerWithMaximumNumberOfOrders(): Customer? = TODO()\n\n// Return the most expensive product which has been ordered\nfun Customer.getMostExpensiveOrderedProduct(): Product? = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 135,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.maxBy { it.orders.size }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 261,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "orders.flatMap { it.products }.maxBy { it.price }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestMaxMin {\n    @Test fun testCustomerWithMaximumNumberOfOrders() {\n        Assert.assertTrue(\"getCustomerWithMaximumNumberOfOrders\".toMessage(),\n                customers[reka] == shop.getCustomerWithMaximumNumberOfOrders())\n    }\n\n    @Test fun testTheMostExpensiveOrderedProduct() {\n        Assert.assertTrue(\"getMostExpensiveOrderedProduct\".toMessage(),\n                rubyMine == customers[nathan]!!.getMostExpensiveOrderedProduct())\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Max; min</h2>\n<p>Implement <code>Shop.getCustomerWithMaximumNumberOfOrders()</code> and <code>Customer.getMostExpensiveOrderedProduct()</code> using <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/max.html\"><code>max</code></a>, <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/min.html\"><code>min</code></a>, <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/max-by.html\"><code>maxBy</code></a>, or <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/min-by.html\"><code>minBy</code></a>.</p><pre><code data-lang=\"text/x-kotlin\">listOf(1, 42, 4).max() == 42\nlistOf(&quot;a&quot;, &quot;ab&quot;).minBy { it.length } == &quot;a&quot;\n</code></pre>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Sort",
+          "stepic_id": 0,
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return a list of customers, sorted by the ascending number of orders they made\nfun Shop.getCustomersSortedByNumberOfOrders(): List<Customer> = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 146,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.sortedBy { it.orders.size }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestSort {\n    @Test fun testGetCustomersSortedByNumberOfOrders() {\n        Assert.assertTrue(\"getCustomersSortedByNumberOfOrders\".toMessage(), sortedCustomers == shop.getCustomersSortedByNumberOfOrders())\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Sort</h2>\n<p>Implement <code>Shop.getCustomersSortedByNumberOfOrders()</code> using <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/sorted.html\"><code>sorted</code></a> or <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/sorted-by.html\"><code>sortedBy</code></a>.</p><pre><code data-lang=\"text/x-kotlin\">listOf(&quot;bbb&quot;, &quot;a&quot;, &quot;cc&quot;).sorted() == listOf(&quot;a&quot;, &quot;bbb&quot;, &quot;cc&quot;)\nlistOf(&quot;bbb&quot;, &quot;a&quot;, &quot;cc&quot;).sortedBy { it.length } == listOf(&quot;a&quot;, &quot;cc&quot;, &quot;bbb&quot;)\n</code></pre>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Sum",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return the sum of prices of all products that a customer has ordered.\n// Note: the customer may order the same product for several times.\nfun Customer.getTotalOrderPrice(): Double = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 185,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "orders.flatMap { it.products }.sumByDouble { it.price }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestSum {\n    @Test fun testGetTotalOrderPrice() {\n        Assert.assertTrue(\"getTotalOrderPrice\".toMessage(), customers[nathan]!!.getTotalOrderPrice() == 148.0)\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Sum</h2>\n<p>Implement <code>Customer.getTotalOrderPrice()</code> using <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/sum.html\"><code>sum</code></a> or <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/sum-by.html\"><code>sumBy</code></a>.</p><pre><code data-lang=\"text/x-kotlin\">listOf(1, 5, 3).sum() == 9\nlistOf(&quot;a&quot;, &quot;b&quot;, &quot;cc&quot;).sumBy { it.length() } == 4\n</code></pre>\n<p>If you want to sum the double values, use <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/sum-by-double.html\"><code>sumByDouble</code></a>.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "GroupBy",
+          "stepic_id": 0,
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return a map of the customers living in each city\nfun Shop.groupCustomersByCity(): Map<City, List<Customer>> = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 114,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.groupBy { it.city }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestGroupBy {\n    @Test fun testGroupCustomersByCity() {\n        Assert.assertTrue(\"groupCustomersByCity\".toMessage(),\n                groupedByCities == shop.groupCustomersByCity())\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Group By</h2>\n<p>Implement <code>Shop.groupCustomersByCity()</code> using <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/group-by.html\"><code>groupBy</code></a>.</p><pre><code data-lang=\"text/x-kotlin\">val result = listOf(&quot;a&quot;, &quot;b&quot;, &quot;ba&quot;, &quot;ccc&quot;, &quot;ad&quot;).groupBy { it.length() }\nresult == mapOf(1 to listOf(&quot;a&quot;, &quot;b&quot;), 2 to listOf(&quot;ba&quot;, &quot;ad&quot;), 3 to listOf(&quot;ccc&quot;))\n</code></pre>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Partition",
+          "stepic_id": 0,
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return customers who have more undelivered orders than delivered\nfun Shop.getCustomersWithMoreUndeliveredOrdersThanDelivered(): Set<Customer> = TODO()\n",
+              "placeholders": [
+                {
+                  "offset": 147,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "customers.filter {\n    val (delivered, undelivered) = it.orders.partition { it.isDelivered }\n    undelivered.size > delivered.size\n}.toSet()",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestPartition {\n    @Test fun testGetCustomersWhoHaveMoreUndeliveredOrdersThanDelivered() {\n        Assert.assertTrue(\"getCustomerWithMaximumNumberOfOrders\".toMessage(),\n                setOf(customers[reka]) == shop.getCustomersWithMoreUndeliveredOrdersThanDelivered())\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Partition</h2>\n<p>Implement <code>Shop.getCustomersWithMoreUndeliveredOrdersThanDelivered()</code> using <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/partition.html\"><code>partition</code></a>.</p><pre><code data-lang=\"text/x-kotlin\">val numbers = listOf(1, 3, -4, 2, -11)\nval (positive, negative) = numbers.partition { it &gt; 0 }\npositive == listOf(1, 3, 2)\nnegative == listOf(-4, -11)\n</code></pre>\n<p>Note that <a href=\"http://kotlinlang.org/docs/reference/multi-declarations.html\">destructuring declaration</a> syntax is used in this example.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Fold",
+          "stepic_id": 0,
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return the set of products that were ordered by every customer\nfun Shop.getSetOfProductsOrderedByEveryCustomer(): Set<Product> {\n    TODO()\n}\n",
+              "placeholders": [
+                {
+                  "offset": 136,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "val allProducts = customers.flatMap { it.orders.flatMap { it.products }}.toSet()\n    return customers.fold(allProducts, {\n        orderedByAll, customer ->\n        orderedByAll.intersect(customer.orders.flatMap { it.products }.toSet())\n    })",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass TestFold {\n    @Test fun testGetProductsOrderedByAllCustomers() {\n        val testShop = shop(\"test shop for 'fold'\",\n                customer(lucas, Canberra,\n                        order(idea),\n                        order(webStorm)\n                ),\n                customer(reka, Budapest,\n                        order(idea),\n                        order(youTrack)\n                )\n        )\n        Assert.assertTrue(\"getSetOfProductsOrderedByEveryCustomer\".toMessage(),\n                setOf(idea) == testShop.getSetOfProductsOrderedByEveryCustomer())\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Fold</h2>\n<p>Implement <code>Shop.getProductsOrderedByAllCustomers()</code> using <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/fold.html\"><code>fold</code></a>.</p><pre><code data-lang=\"text/x-kotlin\">listOf(1, 2, 3, 4).fold(1, {\n    partProduct, element -&gt;\n    element * partProduct\n}) == 24\n</code></pre>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Compound tasks",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "// Return the most expensive product among all delivered products\n// (use the Order.isDelivered flag)\nfun Customer.getMostExpensiveDeliveredProduct(): Product? {\n    TODO()\n}\n\n// Return how many times the given product was ordered.\n// Note: a customer may order the same product for several times.\nfun Shop.getNumberOfTimesProductWasOrdered(product: Product): Int {\n    TODO()\n}\n\n/* TODO */\n",
+              "placeholders": [
+                {
+                  "offset": 166,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "return orders.filter { it.isDelivered }.flatMap { it.products }.maxBy { it.price }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 370,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "return customers.flatMap { it.getOrderedProductsList() }.count { it == product }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 380,
+                  "length": 10,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "fun Customer.getOrderedProductsList(): List<Product> {\n    return orders.flatMap { it.products }\n}",
+                      "placeholder_text": "/* TODO */",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.toMessage\n\nclass K_Compound_Tasks {\n\n    @Test fun testMostExpensiveDeliveredProduct() {\n        val testShop = shop(\"test shop for 'most expensive delivered product'\",\n                customer(lucas, Canberra,\n                        order(isDelivered = false, products = idea),\n                        order(reSharper)\n                )\n        )\n        Assert.assertTrue(\"getMostExpensiveDeliveredProduct\".toMessage(), reSharper == testShop.customers[0].getMostExpensiveDeliveredProduct())\n    }\n\n    @Test fun testNumberOfTimesEachProductWasOrdered() {\n        Assert.assertTrue(\"getNumberOfTimesProductWasOrdered\".toMessage(), 3 == shop.getNumberOfTimesProductWasOrdered(reSharper))\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Compound tasks</h2>\n<p>Implement <code>Customer.getMostExpensiveDeliveredProduct()</code> and <code>Shop.getNumberOfTimesProductWasOrdered()</code> using functions from the Kotlin standard library.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Get used to new style",
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "stepic_id": 0,
+          "task_files": {
+            "Shop.kt": {
+              "name": "Shop.kt",
+              "text": "data class Shop(val name: String, val customers: List<Customer>)\n\ndata class Customer(val name: String, val city: City, val orders: List<Order>) {\n    override fun toString() = \"$name from ${city.name}\"\n}\n\ndata class Order(val products: List<Product>, val isDelivered: Boolean)\n\ndata class Product(val name: String, val price: Double) {\n    override fun toString() = \"'$name' for $price\"\n}\n\ndata class City(val name: String) {\n    override fun toString() = name\n}",
+              "placeholders": []
+            },
+            "TestShop.kt": {
+              "name": "TestShop.kt",
+              "text": "//products\nval idea = Product(\"IntelliJ IDEA Ultimate\", 199.0)\nval reSharper = Product(\"ReSharper\", 149.0)\nval dotTrace = Product(\"DotTrace\", 159.0)\nval dotMemory = Product(\"DotTrace\", 129.0)\nval dotCover = Product(\"DotCover\", 99.0)\nval appCode = Product(\"AppCode\", 99.0)\nval phpStorm = Product(\"PhpStorm\", 99.0)\nval pyCharm = Product(\"PyCharm\", 99.0)\nval rubyMine = Product(\"RubyMine\", 99.0)\nval webStorm = Product(\"WebStorm\", 49.0)\nval teamCity = Product(\"TeamCity\", 299.0)\nval youTrack = Product(\"YouTrack\", 500.0)\n\n//customers\nval lucas = \"Lucas\"\nval cooper = \"Cooper\"\nval nathan = \"Nathan\"\nval reka = \"Reka\"\nval bajram = \"Bajram\"\nval asuka = \"Asuka\"\n\n//cities\nval Canberra = City(\"Canberra\")\nval Vancouver = City(\"Vancouver\")\nval Budapest = City(\"Budapest\")\nval Ankara = City(\"Ankara\")\nval Tokyo = City(\"Tokyo\")\n\nfun customer(name: String, city: City, vararg orders: Order) = Customer(name, city, orders.toList())\nfun order(vararg products: Product, isDelivered: Boolean = true) = Order(products.toList(), isDelivered)\nfun shop(name: String, vararg customers: Customer) = Shop(name, customers.toList())\n\nval shop = shop(\"jb test shop\",\n        customer(lucas, Canberra,\n                order(reSharper),\n                order(reSharper, dotMemory, dotTrace)\n        ),\n        customer(cooper, Canberra),\n        customer(nathan, Vancouver,\n                order(rubyMine, webStorm)\n        ),\n        customer(reka, Budapest,\n                order(idea, isDelivered = false),\n                order(idea, isDelivered = false),\n                order(idea)\n        ),\n        customer(bajram, Ankara,\n                order(reSharper)\n        ),\n        customer(asuka, Tokyo,\n                order(idea)\n        )\n)\n\nval customers: Map<String, Customer> = shop.customers.map { Pair(it.name, it) }.toMap()\n\nval orderedProducts = setOf(idea, reSharper, dotTrace, dotMemory, rubyMine, webStorm)\n\nval sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, reka).map { customers[it] }\n\nval groupedByCities = mapOf(\n        Canberra to listOf(lucas, cooper),\n        Vancouver to listOf(nathan),\n        Budapest to listOf(reka),\n        Ankara to listOf(bajram),\n        Tokyo to listOf(asuka)\n).mapValues { it.value.map { name -> customers[name] } }\n",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun doSomethingStrangeWithCollection(collection: Collection<String>): Collection<String>? {\n\n    val groupsByLength = collection. groupBy { s -> TODO() }\n\n    val maximumSizeOfGroup = groupsByLength.values.map { group -> TODO() }.max()\n\n    return groupsByLength.values.firstOrNull { group -> TODO() }\n}\n",
+              "placeholders": [
+                {
+                  "offset": 145,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "s.length",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 221,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "group.size",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 293,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "group.size == maximumSizeOfGroup",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\nimport koans.util.inEquals\n\nclass TestExtensionsOnCollections {\n    @Test fun testCollectionOfOneElement() {\n        doTest(listOf(\"a\"), listOf(\"a\"))\n    }\n\n    @Test fun testSimpleCollection() {\n        doTest(listOf(\"a\", \"c\"), listOf(\"a\", \"bb\", \"c\"))\n    }\n\n    @Test fun testCollectionWithEmptyStrings() {\n        doTest(listOf(\"\", \"\", \"\", \"\"), listOf(\"\", \"\", \"\", \"\", \"a\", \"bb\", \"ccc\", \"dddd\"))\n    }\n\n    @Test fun testCollectionWithTwoGroupsOfMaximalSize() {\n        doTest(listOf(\"a\", \"c\"), listOf(\"a\", \"bb\", \"c\", \"dd\"))\n    }\n\n    private fun doTest(expected: Collection<String>?, argument: Collection<String>) {\n        Assert.assertEquals(\"The function 'doSomethingStrangeWithCollection' should do at least something with a collection\".inEquals(),\n                expected, doSomethingStrangeWithCollection(argument))\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Get used to new style</h2>\n<p>Rewrite the following Java function to Kotlin.</p><pre><code data-lang=\"text/x-java\">public Collection&lt;String&gt; doSomethingStrangeWithCollection(\n        Collection&lt;String&gt; collection\n) {\n    Map&lt;Integer, List&lt;String&gt;&gt; groupsByLength = Maps.newHashMap();\n    for (String s : collection) {\n        List&lt;String&gt; strings = groupsByLength.get(s.length());\n        if (strings == null) {\n            strings = Lists.newArrayList();\n            groupsByLength.put(s.length(), strings);\n        }\n        strings.add(s);\n    }\n\n    int maximumSizeOfGroup = 0;\n    for (List&lt;String&gt; group : groupsByLength.values()) {\n        if (group.size() &gt; maximumSizeOfGroup) {\n            maximumSizeOfGroup = group.size();\n        }\n    }\n\n    for (List&lt;String&gt; group : groupsByLength.values()) {\n        if (group.size() == maximumSizeOfGroup) {\n            return group;\n        }\n    }\n    return null;\n}\n</code></pre>"
+          },
+          "task_type": "edu"
+        }
+      ]
+    },
+    {
+      "id": 0,
+      "title": "Properties",
+      "task_list": [
+        {
+          "name": "Properties",
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "class PropertyExample() {\n    var counter = 0\n    var propertyWithCounter: Int? = null\n        set\n}\n",
+              "placeholders": [
+                {
+                  "offset": 95,
+                  "length": 3,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "set(v: Int?) {\n            field = v\n            counter++\n        }",
+                      "placeholder_text": "set",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\n\nclass TestProperties {\n    @Test fun testPropertyWithCounter() {\n        val q = PropertyExample()\n        q.propertyWithCounter = 14\n        q.propertyWithCounter = 21\n        q.propertyWithCounter = 32\n        Assert.assertTrue(\"The property 'changeCounter' should contain the number of assignments to 'propertyWithCounter'\",\n                3 == q.counter)\n        // Here we have to use !! due to false smart cast impossible\n        Assert.assertTrue(\"The property 'propertyWithCounter' should be set\", 32 == q.propertyWithCounter!!)\n    }\n\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Properties</h2>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/properties.html#properties-and-fields\">properties</a> in Kotlin.</p>\n<p>Add a custom setter to PropertyExample.propertyWithCounter so that the <code>counter</code> property is incremented every time <code>propertyWithCounter</code> is assigned to.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Lazy property",
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "class LazyProperty(val initializer: () -> Int) {\n    /* TODO */\n    val lazy: Int\n        get() {\n            TODO()\n        }\n}\n",
+              "placeholders": [
+                {
+                  "offset": 53,
+                  "length": 10,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "var value: Int? = null",
+                      "placeholder_text": "/* TODO */",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 110,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "if (value == null) {\n                value = initializer()\n            }\n            return value!!",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\n\nclass TetLazyProperty {\n    @Test fun testLazy() {\n        var initialized = false\n        val lazyProperty = LazyProperty({ initialized = true; 42 })\n        Assert.assertFalse(\"Property shouldn't be initialized before access\", initialized)\n        val result: Int = lazyProperty.lazy\n        Assert.assertTrue(\"Property should be initialized after access\", initialized)\n        Assert.assertEquals(42, result)\n    }\n\n    @Test fun initializedOnce() {\n        var initialized = 0\n        val lazyProperty = LazyProperty( { initialized++; 42 })\n        lazyProperty.lazy\n        lazyProperty.lazy\n        Assert.assertEquals(\"Lazy property should be initialized once\", 1, initialized)\n\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Lazy property</h2>\n<p>Add a custom getter to make the 'lazy' val really lazy. It should be initialized by the invocation of 'initializer()' at the moment of the first access.</p>\n<p>You can add as many additional properties as you need.</p>\n<p>Do not use delegated properties!</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Delegates examples",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "class LazyProperty(val initializer: () -> Int) {\n    val lazyValue: Int by TODO()\n}\n\n",
+              "placeholders": [
+                {
+                  "offset": 75,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "lazy(initializer)",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport java.util.HashMap\n\nclass TestDelegatesExamples {\n    @Test fun testLazy() {\n        var initialized = false\n        val lazyProperty = LazyProperty({ initialized = true; 42 })\n        Assert.assertFalse(\"Property shouldn't be initialized before access\", initialized)\n        val result: Int = lazyProperty.lazyValue\n        Assert.assertTrue(\"Property should be initialized after access\", initialized)\n        Assert.assertEquals(42, result)\n    }\n\n    @Test fun initializedOnce() {\n        var initialized = 0\n        val lazyProperty = LazyProperty( { initialized++; 42 })\n        lazyProperty.lazyValue\n        lazyProperty.lazyValue\n        Assert.assertEquals(\"Lazy property should be initialized once\", 1, initialized)\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Delegates example</h2>\n<p>Read about <a href=\"http://kotlinlang.org/docs/reference/delegated-properties.html\">delegated properties</a> and make the property lazy by using delegates.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Delegates how it works",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "MyDate.kt": {
+              "name": "MyDate.kt",
+              "text": "import java.util.Calendar\n\ndata class MyDate(val year: Int, val month: Int, val dayOfMonth: Int)\n\nfun MyDate.toMillis(): Long {\n    val c = Calendar.getInstance()\n    c.set(year, month, dayOfMonth)\n    return c.getTimeInMillis()\n}\n\nfun Long.toDate(): MyDate {\n    val c = Calendar.getInstance()\n    c.setTimeInMillis(this)\n    return MyDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE))\n}",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "import kotlin.properties.ReadWriteProperty\nimport kotlin.reflect.KProperty\n\nclass D {\n    var date: MyDate by EffectiveDate()\n}\n\nclass EffectiveDate<R> : ReadWriteProperty<R, MyDate> {\n\n    var timeInMillis: Long? = null\n\n    override fun getValue(thisRef: R, property: KProperty<*>): MyDate {\n        TODO()\n    }\n\n    override fun setValue(thisRef: R, property: KProperty<*>, value: MyDate) {\n        TODO()\n    }\n}\n\n",
+              "placeholders": [
+                {
+                  "offset": 302,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "return timeInMillis!!.toDate()",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 403,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "timeInMillis = value.toMillis()",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\n\nclass TestDelegatesHowItWorks {\n    @Test fun testDate() {\n        val d = D()\n        d.date = MyDate(2014, 1, 13)\n        val message = \"The methods 'getValue' and 'setValue' are implemented incorrectly\"\n        Assert.assertTrue(message, 2014 == d.date.year)\n        Assert.assertTrue(message, 1 == d.date.month)\n        Assert.assertTrue(message, 13 == d.date.dayOfMonth)\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Delegates</h2>\n<p>You may declare your own <a href=\"https://kotlinlang.org/docs/reference/delegated-properties.html#property-delegate-requirements\">delegates</a>. Implement the methods of the class 'EffectiveDate' so it can be delegated to. Store only the time in milliseconds in 'timeInMillis' property.</p>\n<p>Use the extension functions <code>MyDate.toMillis()</code> and <code>Long.toDate()</code>, defined at <code>MyDate.kt</code></p>"
+          },
+          "task_type": "edu"
+        }
+      ]
+    },
+    {
+      "id": 0,
+      "title": "Builders",
+      "task_list": [
+        {
+          "name": "Function literals with receiver",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun task(): List<Boolean> {\n    val isEven: Int.() -> Boolean = { TODO() }\n    val isOdd: Int.() -> Boolean = { TODO() }\n\n    return listOf(42.isOdd(), 239.isOdd(), 294823098.isEven())\n}\n",
+              "placeholders": [
+                {
+                  "offset": 66,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "this % 2 == 0",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 112,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "this % 2 != 0",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.inEquals\n\nclass TestExtensionFunctionLiterals {\n    @Test fun testIsOddAndIsEven() {\n        Assert.assertEquals(\"The functions 'isOdd' and 'isEven' should be implemented correctly\".inEquals(),\n                listOf(false, true, true), task())\n\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Extension function literals</h2>\n<p>Read about <a href=\"https://kotlinlang.org/docs/reference/lambdas.html#function-literals-with-receiver\">function literals with receiver</a>.</p>\n<p>You can declare <code>isEven</code> and <code>isOdd</code> as values, that can be called as extension functions. Complete the declarations below.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "String and map builders",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "import java.util.HashMap\n\n/* TODO */\n\nfun usage(): Map<Int, String> {\n    return buildMap {\n        put(0, \"0\")\n        for (i in 1..10) {\n            put(i, \"$i\")\n        }\n    }\n}\n",
+              "placeholders": [
+                {
+                  "offset": 26,
+                  "length": 10,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "fun <K, V> buildMap(build: HashMap<K, V>.() -> Unit): Map<K, V> {\n    val map = HashMap<K, V>()\n    map.build()\n    return map\n}",
+                      "placeholder_text": "/* TODO */",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport koans.util.inEquals\n\nclass TestStringAndMapBuilders {\n    @Test fun testBuildMap() {\n        val map: Map<Int, String> = buildMap {\n            put(0, \"0\")\n            for (i in 1..10) {\n                put(i, \"$i\")\n            }\n        }\n        val expected = hashMapOf<Int, String>()\n        for (i in 0..10) {\n            expected[i] = \"$i\"\n        }\n        Assert.assertEquals(\"Map should be filled with the right values\".inEquals(), expected, map)\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>String and map builders</h2>\n<p>Extension function literals are very useful for creating builders, e.g.:</p><pre><code data-lang=\"text/x-kotlin\">fun buildString(build: StringBuilder.() -&gt; Unit): String {\n    val stringBuilder = StringBuilder()\n    stringBuilder.build()\n    return stringBuilder.toString()\n}\n\nval s = buildString {\n    this.append(&quot;Numbers: &quot;)\n    for (i in 1..3) {\n        // &#39;this&#39; can be omitted\n        append(i)\n    }\n}\n\ns == &quot;Numbers: 123&quot;\n</code></pre>\n<p>Add and implement the function 'buildMap' with one parameter (of type extension function) creating a new HashMap, building it and returning it as a result. The usage of this function is shown below.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "The function apply",
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun <T> T.myApply(f: T.() -> Unit): T { TODO() }\n\nfun createString(): String {\n    return StringBuilder().myApply {\n        append(\"Numbers: \")\n        for (i in 1..10) {\n            append(i)\n        }\n    }.toString()\n}\n\nfun createMap(): Map<Int, String> {\n    return hashMapOf<Int, String>().myApply {\n        put(0, \"0\")\n        for (i in 1..10) {\n            put(i, \"$i\")\n        }\n    }\n}\n",
+              "placeholders": [
+                {
+                  "offset": 40,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "f(); return this",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport java.util.HashMap\nimport koans.util.inEquals\n\nclass TestTheFunctionWith {\n    @Test fun testCreateString() {\n        val s = createString()\n        val sb = StringBuilder()\n        sb.append(\"Numbers: \")\n        for (i in 1..10) {\n            sb.append(i)\n        }\n        Assert.assertEquals(\"String should be built\".inEquals(), sb.toString(), s)\n    }\n\n    @Test fun testCreateMap() {\n        val map = createMap()\n        val expected = HashMap<Int, String>()\n        for (i in 0..10) {\n            expected[i] = \"$i\"\n        }\n        Assert.assertEquals(\"Map should be filled with the right values\".inEquals(), expected, map)\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>The function apply</h2>\n<p>The previous examples can be rewritten using the library function <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/apply.html\"><code>apply</code></a> (see examples below). Write your own implementation of this function named 'myApply'.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Html builders",
+          "stepic_id": 0,
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "task_files": {
+            "data.kt": {
+              "name": "data.kt",
+              "text": "data class Product(val description: String, val price: Double, val popularity: Int)\n\nval cactus = Product(\"cactus\", 11.2, 13)\nval cake = Product(\"cake\", 3.2, 111)\nval camera = Product(\"camera\", 134.5, 2)\nval car = Product(\"car\", 30000.0, 0)\nval carrot = Product(\"carrot\", 1.34, 5)\nval cellPhone = Product(\"cell phone\", 129.9, 99)\nval chimney = Product(\"chimney\", 190.0, 2)\nval certificate = Product(\"certificate\", 99.9, 1)\nval cigar = Product(\"cigar\", 8.0, 51)\nval coffee = Product(\"coffee\", 8.0, 67)\nval coffeeMaker = Product(\"coffee maker\", 201.2, 1)\nval cola = Product(\"cola\", 4.0, 67)\nval cranberry = Product(\"cranberry\", 4.1, 39)\nval crocs = Product(\"crocs\", 18.7, 10)\nval crocodile = Product(\"crocodile\", 20000.2, 1)\nval cushion = Product(\"cushion\", 131.0, 0)\n\nfun getProducts() = listOf(cactus, cake, camera, car, carrot, cellPhone, chimney, certificate, cigar, coffee, coffeeMaker,\n        cola, cranberry, crocs, crocodile, cushion)",
+              "placeholders": []
+            },
+            "demo.kt": {
+              "name": "demo.kt",
+              "web": false,
+              "text": "import javax.swing.JFrame\nimport javax.swing.JLabel\nimport javax.swing.JScrollPane\nimport javax.swing.SwingConstants.CENTER\n\nfun main(args: Array<String>) {\n    with (JFrame(\"Product popularity\")) {\n        setSize(600, 600)\n        defaultCloseOperation = JFrame.EXIT_ON_CLOSE\n        add(JScrollPane(JLabel(renderProductTable(), CENTER)))\n        isVisible = true\n    }\n}",
+              "placeholders": []
+            },
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "fun renderProductTable(): String {\n    return html {\n        table {\n            tr /* TODO */{\n                td {\n                    text(\"Product\")\n                }\n                td {\n                    text(\"Price\")\n                }\n                td {\n                    text(\"Popularity\")\n                }\n            }\n            val products = getProducts()\n            TODO()\n        }\n    }.toString()\n}\n\nfun getTitleColor() = \"#b9c9fe\"\nfun getCellColor(index: Int, row: Int) = if ((index + row) %2 == 0) \"#dce4ff\" else \"#eff2ff\"\n",
+              "placeholders": [
+                {
+                  "offset": 84,
+                  "length": 10,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "(color = getTitleColor())",
+                      "placeholder_text": "/* TODO */",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                },
+                {
+                  "offset": 389,
+                  "length": 6,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "for ((index, product) in products.withIndex()) {\n                tr {\n                    td (color = getCellColor(index, 0)) {\n                        text(product.description)\n                    }\n                    td (color = getCellColor(index, 1)) {\n                        text(product.price)\n                    }\n                    td (color = getCellColor(index, 2)) {\n                        text(product.popularity)\n                    }\n                }\n            }",
+                      "placeholder_text": "TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            },
+            "html.kt": {
+              "name": "html.kt",
+              "text": "import java.util.ArrayList\n\nopen class Tag(val name: String) {\n    val children: MutableList<Tag> = ArrayList()\n    val attributes: MutableList<Attribute> = ArrayList()\n\n    override fun toString(): String {\n        return \"<$name\" +\n            (if (attributes.isEmpty()) \"\" else attributes.joinToString(separator = \"\", prefix = \" \")) + \">\" +\n            (if (children.isEmpty()) \"\" else children.joinToString(separator = \"\")) +\n            \"</$name>\"\n    }\n}\n\nclass Attribute(val name : String, val value : String) {\n    override fun toString() = \"\"\"$name=\"$value\" \"\"\"\n}\n\nfun <T: Tag> T.set(name: String, value: String?): T {\n    if (value != null) {\n        attributes.add(Attribute(name, value))\n    }\n    return this\n}\n\nfun <T: Tag> Tag.doInit(tag: T, init: T.() -> Unit): T {\n    tag.init()\n    children.add(tag)\n    return tag\n}\n\nclass Html: Tag(\"html\")\nclass Table: Tag(\"table\")\nclass Center: Tag(\"center\")\nclass TR: Tag(\"tr\")\nclass TD: Tag(\"td\")\nclass Text(val text: String): Tag(\"b\") {\n    override fun toString() = text\n}\n\nfun html(init: Html.() -> Unit): Html = Html().apply(init)\n\nfun Html.table(init : Table.() -> Unit) = doInit(Table(), init)\nfun Html.center(init : Center.() -> Unit) = doInit(Center(), init)\n\nfun Table.tr(color: String? = null, init : TR.() -> Unit) = doInit(TR(), init).set(\"bgcolor\", color)\n\nfun TR.td(color: String? = null, align : String = \"left\", init : TD.() -> Unit) = doInit(TD(), init).set(\"align\", align).set(\"bgcolor\", color)\n\nfun Tag.text(s : Any?) = doInit(Text(s.toString()), {})\n\n",
+              "placeholders": []
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\n\nclass TestHtmlBuilders {\n    @Test fun productTableIsFilled() {\n        val result = renderProductTable()\n        Assert.assertTrue(\"Product table should contain the corresponding data\", result.contains(\"cactus\"))\n    }\n\n    @Test fun productTableIsColored() {\n        val result = renderProductTable()\n        Assert.assertTrue(\"Product table should be colored\", result.contains(\"bgcolor\"))\n    }\n}\n"
+          },
+          "task_texts": {
+            "task": "<h2>Html builder</h2>\n<p><em>1.</em> Fill the table with the proper values from the product list. The products are declared in <code>data.kt</code>.</p>\n<p><em>2.</em> Color the table like a chess board (using getTitleColor() and getCellColor() functions above). Pass a color as an argument to the functions <code>tr</code>, <code>td</code>.</p>\n<p>Open the file <code>demo.kt</code> and run the main function there to see the rendered table.</p>"
+          },
+          "task_type": "edu"
+        },
+        {
+          "name": "Builders how it works",
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "import Answer.*\n\nenum class Answer { a, b, c }\n\nval answers = mapOf<Int, Answer?>(\n        1 to null, 2 to null, 3 to null, 4 to null\n)\n",
+              "placeholders": [
+                {
+                  "offset": 91,
+                  "length": 42,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "1 to c, 2 to b, 3 to b, 4 to c",
+                      "placeholder_text": "1 to null, 2 to null, 3 to null, 4 to null",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Test\nimport org.junit.Assert\nimport Answer.*\n\nclass TestBuildersHowItWorks {\n    @Test fun testBuildersQuiz() {\n        if (answers.values.toSet() == setOf(null)) {\n            Assert.fail(\"Please specify your answers!\")\n        }\n        val correctAnswers = mapOf(22 - 20 to b, 1 + 3 to c, 11 - 8 to b, 79 - 78 to c)\n        if (correctAnswers != answers) {\n            val incorrect = (1..4).filter { answers[it] != correctAnswers[it] }\n            Assert.fail(\"Your answers are incorrect! $incorrect\")\n        }\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Builders: how it works</h2>\n<p>Look at the questions below and give your answers</p>\n<p><strong>1. In the Kotlin code</strong></p><pre><code data-lang=\"text/x-kotlin\">tr {\n    td {\n        text(&quot;Product&quot;)\n    }\n    td {\n        text(&quot;Popularity&quot;)\n    }\n}\n</code></pre>\n<p><strong>'td' is:</strong></p>\n<p>a. special built-in syntactic construct</p>\n<p>b. function declaration</p>\n<p>c. function invocation</p>\n<hr/>\n<p><strong>2. In the Kotlin code</strong></p><pre><code data-lang=\"text/x-kotlin\">tr (color = &quot;yellow&quot;) {\n    td {\n        text(&quot;Product&quot;)\n    }\n    td {\n        text(&quot;Popularity&quot;)\n    }\n}\n</code></pre>\n<p><strong>'color' is:</strong></p>\n<p>a. new variable declaration</p>\n<p>b. argument name</p>\n<p>c. argument value</p>\n<hr/>\n<p><strong>3. The block</strong></p><pre><code data-lang=\"text/x-kotlin\">{\n    text(&quot;Product&quot;)\n}\n</code></pre>\n<p><strong>from the previous question is:</strong></p>\n<p>a. block inside built-in syntax construction <code>td</code></p>\n<p>b. function literal (or \"lambda\")</p>\n<p>c. something mysterious</p>\n<hr/>\n<p><strong>4. For the code</strong></p><pre><code data-lang=\"text/x-kotlin\">tr (color = &quot;yellow&quot;) {\n    this.td {\n        text(&quot;Product&quot;)\n    }\n    td {\n        text(&quot;Popularity&quot;)\n    }\n}\n</code></pre>\n<p><strong>which of the following is true:</strong></p>\n<p>a. this code doesn't compile</p>\n<p>b. <code>this</code> refers to an instance of an outer class</p>\n<p>c. <code>this</code> refers to a receiver parameter TR of the function literal:</p><pre><code data-lang=\"text/x-kotlin\">tr (color = &quot;yellow&quot;) { TR.(): Unit -&gt;\n      this.td {\n          text(&quot;Product&quot;)\n      }\n}\n</code></pre>"
+          },
+          "task_type": "edu"
+        }
+      ]
+    },
+    {
+      "id": 0,
+      "title": "Generics",
+      "task_list": [
+        {
+          "name": "Generic functions",
+          "stepic_id": 0,
+          "task_files": {
+            "Task.kt": {
+              "name": "Task.kt",
+              "text": "import java.util.*\n\nfun partitionTo() = TODO()\n\nfun partitionWordsAndLines() {\n    val (words, lines) = listOf(\"a\", \"a b\", \"c\", \"d e\").\n            partitionTo(ArrayList<String>(), ArrayList()) { s -> !s.contains(\" \") }\n    words == listOf(\"a\", \"c\")\n    lines == listOf(\"a b\", \"d e\")\n}\n\nfun partitionLettersAndOtherSymbols() {\n    val (letters, other) = setOf('a', '%', 'r', '}').\n            partitionTo(HashSet<Char>(), HashSet()) { c -> c in 'a'..'z' || c in 'A'..'Z'}\n    letters == setOf('a', 'r')\n    other == setOf('%', '}')\n}\n",
+              "placeholders": [
+                {
+                  "offset": 20,
+                  "length": 26,
+                  "subtask_infos": {
+                    "0": {
+                      "hints": [
+                        ""
+                      ],
+                      "possible_answer": "fun <T, C: MutableCollection<T>> Collection<T>.partitionTo(first: C, second: C, predicate: (T) -> Boolean): Pair<C, C> {\n    for (element in this) {\n        if (predicate(element)) {\n            first.add(element)\n        } else {\n            second.add(element)\n        }\n    }\n    return Pair(first, second)\n}",
+                      "placeholder_text": "fun partitionTo() = TODO()",
+                      "has_frame": true,
+                      "need_insert_text": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "task_utils": {
+            "koansTestUtil.kt": "package koans.util\n\nfun String.toMessage() = \"The function '$this' is implemented incorrectly\"\n\nfun String.toMessageInEquals() = toMessage().inEquals()\n\nfun String.inEquals() = this + \":\" + if (mode == Mode.WEB_DEMO) \" \" else \"<br><br>\"\n\nprivate enum class Mode { WEB_DEMO, EDUCATIONAL_PLUGIN }\nprivate val mode = Mode.WEB_DEMO\n"
+          },
+          "test_files": {
+            "Test.kt": "import org.junit.Assert\nimport org.junit.Test\nimport java.util.*\nimport koans.util.toMessageInEquals\n\nclass TestGenericFunctions {\n    @Test fun testPartitionWordsAndLines() {\n        partitionWordsAndLines()\n\n        val (words, lines) = listOf(\"a\", \"a b\", \"c\", \"d e\").\n                partitionTo(ArrayList<String>(), ArrayList()) { s -> !s.contains(\" \") }\n        Assert.assertEquals(\"partitionTo\".toMessageInEquals(), listOf(\"a\", \"c\"), words)\n        Assert.assertEquals(\"partitionTo\".toMessageInEquals(), listOf(\"a b\", \"d e\"), lines)\n    }\n\n    @Test fun testPartitionLettersAndOtherSymbols() {\n        partitionLettersAndOtherSymbols()\n\n        val (letters, other) = setOf('a', '%', 'r', '}').\n                partitionTo(HashSet<Char>(), HashSet()) { c -> c in 'a'..'z' || c in 'A'..'Z'}\n        Assert.assertEquals(\"partitionTo\".toMessageInEquals(), setOf('a', 'r'), letters)\n        Assert.assertEquals(\"partitionTo\".toMessageInEquals(), setOf('%', '}'), other)\n    }\n}"
+          },
+          "task_texts": {
+            "task": "<h2>Generic functions</h2>\n<p>Make the following code compile by implementing a <code>partitionTo</code> function that splits a collection into two collections according to the predicate.</p>\n<p>There is a <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/partition.html\"><code>partition()</code></a> function in the standard library that always returns two newly created lists. You should write a function that splits the collection into two collections given as arguments. The signature of the <a href=\"https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/kotlin.-iterable/to-collection.html\"><code>toCollection()</code></a>  function from the standard library may help you.</p>"
+          },
+          "task_type": "edu"
+        }
+      ]
+    },
+    {
+      "id": 0,
+      "title": "Edu additional materials",
+      "task_list": [
+        {
+          "name": "Edu additional materials",
+          "stepic_id": 0,
+          "task_files": {},
+          "test_files": {},
+          "task_texts": {},
+          "task_type": "edu"
+        }
+      ]
+    }
+  ],
+  "summary": "This tutorial walks you through a series of exercises to get familiar with Kotlin. Kotlin Koans are a series of exercises to get you familiar with the Kotlin Syntax. \nOfficial Kotlin website – https://kotlinlang.org",
+  "title": "Kotlin Koans",
+  "programming_language": "kotlin"
+}

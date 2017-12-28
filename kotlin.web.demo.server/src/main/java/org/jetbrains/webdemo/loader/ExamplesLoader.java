@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.examples;
+package org.jetbrains.webdemo.loader;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.JsonUtils;
 import org.jetbrains.webdemo.ProjectFile;
-import org.pegdown.LinkRenderer;
+import org.jetbrains.webdemo.examples.*;
 import org.pegdown.PegDownProcessor;
-import org.pegdown.ToHtmlSerializer;
-import org.pegdown.ast.VerbatimNode;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -34,8 +32,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class ExamplesLoader {
@@ -50,14 +46,13 @@ public class ExamplesLoader {
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
             String name = new File(path).getName();
-            List<ObjectNode> commonFiles = new ArrayList<>();
-            commonFiles.addAll(parentCommonFiles);
-            boolean taskFolder = manifest.has("taskFolder") ? manifest.get("taskFolder").asBoolean() : false;
+            List<ObjectNode> commonFiles = new ArrayList<>(parentCommonFiles);
+            boolean taskFolder = manifest.has("taskFolder") && manifest.get("taskFolder").asBoolean();
 
             List<LevelInfo> levels = null;
-            if(manifest.has("levels")){
+            if (manifest.has("levels")) {
                 levels = new ArrayList<>();
-                for (JsonNode level : manifest.get("levels")){
+                for (JsonNode level : manifest.get("levels")) {
                     levels.add(new LevelInfo(level.get("projectsNeeded").asInt(), level.get("color").asText()));
                 }
             }
@@ -113,7 +108,7 @@ public class ExamplesLoader {
             String parentUrl,
             boolean loadTestVersion,
             List<ObjectNode> commonFilesManifests
-    ) throws IOException {
+    ) {
         File manifestFile = new File(path + File.separator + "manifest.json");
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(manifestFile))) {
             ObjectNode manifest = (ObjectNode) JsonUtils.getObjectMapper().readTree(reader);
@@ -122,7 +117,7 @@ public class ExamplesLoader {
             String id = (parentUrl + name).replaceAll(" ", "%20");
             String args = manifest.has("args") ? manifest.get("args").asText() : "";
             String runConfiguration = manifest.get("confType").asText();
-            boolean searchForMain = manifest.has("searchForMain") ? manifest.get("searchForMain").asBoolean() : true;
+            boolean searchForMain = !manifest.has("searchForMain") || manifest.get("searchForMain").asBoolean();
             String expectedOutput;
             List<String> readOnlyFileNames = new ArrayList<>();
             List<ProjectFile> files = new ArrayList<>();
@@ -144,8 +139,8 @@ public class ExamplesLoader {
             }
 
             List<JsonNode> fileManifests = new ArrayList<JsonNode>();
-            if(manifest.has("files")) {
-                for(JsonNode fileManifest : manifest.get("files")){
+            if (manifest.has("files")) {
+                for (JsonNode fileManifest : manifest.get("files")) {
                     fileManifests.add(fileManifest);
                 }
             }
@@ -229,11 +224,11 @@ public class ExamplesLoader {
         return false;
     }
 
-    private static ExampleFile loadExampleFile(String path, String projectUrl, JsonNode fileManifest) throws IOException {
+    private static ExampleFile loadExampleFile(String path, String projectUrl, JsonNode fileManifest) {
         try {
             String fileName = fileManifest.get("filename").textValue();
             boolean modifiable = fileManifest.get("modifiable").asBoolean();
-            boolean hidden = fileManifest.has("hidden") ? fileManifest.get("hidden").asBoolean() : false;
+            boolean hidden = fileManifest.has("hidden") && fileManifest.get("hidden").asBoolean();
             String confType = fileManifest.has("confType") ? fileManifest.get("confType").asText() : null;
             File file = new File(path);
             String fileContent = new String(Files.readAllBytes(file.toPath())).replaceAll("\r\n", "\n");
@@ -256,30 +251,4 @@ public class ExamplesLoader {
     }
 }
 
-class GFMNodeSerializer extends ToHtmlSerializer {
-    public GFMNodeSerializer() {
-        super(new LinkRenderer());
-    }
 
-    public void visit(VerbatimNode node) {
-        String codeMirrorType;
-        switch (node.getType()) {
-            case "kotlin":
-                codeMirrorType = "text/x-kotlin";
-                break;
-            case "java":
-                codeMirrorType = "text/x-java";
-                break;
-            default:
-                codeMirrorType = "text/x-kotlin";
-                break;
-        }
-        if (!codeMirrorType.equals("")) {
-            printer.print("<pre><code data-lang=\"" + codeMirrorType + "\">");
-        } else {
-            printer.print("<pre><code>");
-        }
-        printer.printEncoded(node.getText());
-        printer.print("</code></pre>");
-    }
-}

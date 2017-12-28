@@ -25,18 +25,13 @@ import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
-import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 
 public class MyHttpSession {

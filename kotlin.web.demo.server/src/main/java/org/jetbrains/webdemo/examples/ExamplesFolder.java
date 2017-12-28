@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package org.jetbrains.webdemo.examples;
 
+import lombok.Getter;
+
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,13 +27,23 @@ import java.util.Map;
  * Created by Semyon.Atamas on 8/11/2014.
  */
 public class ExamplesFolder {
+
     public static ExamplesFolder ROOT_FOLDER;
+
+    @Getter
     private String id;
+
+    @Getter
     private String name;
-    private Map<String, Example> examples;
-    private Map<String, ExamplesFolder> childFolders;
-    private Boolean taskFolder;
+
+    @Getter
     private List<LevelInfo> levels;
+
+    private Boolean taskFolder;
+
+    private Map<String, Example> examples;
+
+    private Map<String, ExamplesFolder> childFolders;
 
     public ExamplesFolder(String name,
                           String id,
@@ -43,7 +55,7 @@ public class ExamplesFolder {
         this.examples = new LinkedHashMap<>();
         this.childFolders = new LinkedHashMap<>();
         this.levels = levels;
-        for(Example example : examples.values()){
+        for (Example example : examples.values()) {
             example.parent = this;
         }
     }
@@ -64,46 +76,19 @@ public class ExamplesFolder {
         return examples.get(name);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getId(){
-        return id;
-    }
-
     public Boolean isTaskFolder() {
         return taskFolder;
     }
 
-    public void addChildFolder(ExamplesFolder childFolder){
+    public void addChildFolder(ExamplesFolder childFolder) {
         childFolders.put(childFolder.name, childFolder);
     }
 
-    public void addExample(Example example){
+    public void addExample(Example example) {
         examples.put(example.name, example);
     }
 
-    public List<LevelInfo> getLevels() {
-        return levels;
-    }
 }
 
-class LevelInfo {
-    private int projectsNeeded;
-    private String color;
 
-    LevelInfo(int projectsNeeded, String color) {
-        this.projectsNeeded = projectsNeeded;
-        this.color = color;
-    }
-
-    public int getProjectsNeeded() {
-        return projectsNeeded;
-    }
-
-    public String getColor() {
-        return color;
-    }
-}
 

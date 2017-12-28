@@ -16,7 +16,7 @@
 
 package org.jetbrains.webdemo;
 
-public class ApplicationSettings {
+public final class ApplicationSettings {
     public static final String DATABASE_VERSION = "1.0";
     public static String BACKEND_URL = "";
     public static String EXAMPLES_DIRECTORY = "examples";

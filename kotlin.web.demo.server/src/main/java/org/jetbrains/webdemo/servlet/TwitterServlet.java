@@ -18,13 +18,9 @@ package org.jetbrains.webdemo.servlet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jetbrains.webdemo.ApplicationSettings;
 import org.jetbrains.webdemo.CommonSettings;
-import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.examples.Example;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
-import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.RequestToken;
 
@@ -35,7 +31,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.net.URLDecoder;
 
 public class TwitterServlet extends HttpServlet {
     private static Log log = LogFactory.getLog(TwitterServlet.class);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,27 @@
 package org.jetbrains.webdemo.examples;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ProjectFile;
-import org.jetbrains.webdemo.ResponseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExampleFile extends ProjectFile {
+
     private boolean hidden;
+
     @Nullable
     private String confType;
 
     @Nullable
     private String userText;
 
-    private List<TextRange> taskWindows;
+    @Getter
+    private List<TestRange> taskWindows;
 
-    protected ExampleFile(ExampleFile other){
+    ExampleFile(ExampleFile other) {
         super(other);
         hidden = other.hidden;
         confType = other.confType;
@@ -50,8 +53,8 @@ public class ExampleFile extends ProjectFile {
         userText = null;
     }
 
-    private List<TextRange> getTaskWindowsFromText() {
-        List<TextRange> textRanges = new ArrayList<>();
+    private List<TestRange> getTaskWindowsFromText() {
+        List<TestRange> textRanges = new ArrayList<>();
         String[] fileContentLines = text.split("\\r?\\n");
         for (int i = 0; i < fileContentLines.length; i++) {
             String line = fileContentLines[i];
@@ -60,14 +63,14 @@ public class ExampleFile extends ProjectFile {
                 line = line.replace("<taskWindow>", "");
                 int taskWindowEnd = line.indexOf("</taskWindow>");
                 line = line.replace("</taskWindow>", "");
-                textRanges.add(new TextRange(i, taskWindowStart, taskWindowEnd - taskWindowStart));
+                textRanges.add(new TestRange(i, taskWindowStart, taskWindowEnd - taskWindowStart));
             }
         }
         text = text.replaceAll("<taskWindow>", "").replaceAll("</taskWindow>", "");
         return textRanges;
     }
 
-    public ExampleFile copy(){
+    public ExampleFile copy() {
         return new ExampleFile(this);
     }
 
@@ -82,10 +85,6 @@ public class ExampleFile extends ProjectFile {
         return confType;
     }
 
-    public List<TextRange> getTaskWindows() {
-        return taskWindows;
-    }
-
     @Nullable
     public String getUserText() {
         return userText;
@@ -96,80 +95,3 @@ public class ExampleFile extends ProjectFile {
     }
 }
 
-class TaskFile extends ExampleFile {
-    private List<String> solutions;
-
-    protected TaskFile(TaskFile that){
-        super(that);
-        solutions = that.solutions;
-    }
-
-    public TaskFile(String text, String solution, String id) {
-        super("Task.kt", text, id, Type.KOTLIN_FILE, null, true, false);
-        this.solutions = getSolutionsFromText(solution);
-    }
-
-    private List<String> getSolutionsFromText(String text) {
-        List<String> solutions = new ArrayList<String>();
-        String solution = ResponseUtils.substringBetween(text, "<answer>", "</answer>");
-        while (!solution.equals("")) {
-            solutions.add(solution);
-            text = text.replaceFirst("<answer>", "").replaceFirst("</answer>", "");
-            solution = ResponseUtils.substringBetween(text, "<answer>", "</answer>");
-        }
-        if (solutions.isEmpty()) solutions.add(text);
-        return solutions;
-    }
-
-    @Override
-    public ExampleFile copy() {
-        return new TaskFile(this);
-    }
-
-    public List<String> getSolutions() {
-        return solutions;
-    }
-}
-
-class TestFile extends ExampleFile {
-    public TestFile(String text, String id) {
-        super("Test.kt", text, id, Type.KOTLIN_TEST_FILE, null, false, false);
-    }
-}
-
-class SolutionFile extends ExampleFile {
-    public SolutionFile(String text, String id) {
-        super(
-                "Solution.kt",
-                text.replaceAll("<answer>", "").replaceAll("</answer>", ""),
-                id,
-                Type.SOLUTION_FILE,
-                null,
-                false,
-                false);
-    }
-}
-
-class TextRange {
-    private int line;
-    private int start;
-    private int length;
-
-    public TextRange(int line, int start, int length) {
-        this.line = line;
-        this.start = start;
-        this.length = length;
-    }
-
-    public int getLine() {
-        return line;
-    }
-
-    public int getStart() {
-        return start;
-    }
-
-    public int getLength() {
-        return length;
-    }
-}
