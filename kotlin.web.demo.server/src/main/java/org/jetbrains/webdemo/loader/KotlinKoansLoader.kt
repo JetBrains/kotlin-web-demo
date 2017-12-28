@@ -217,10 +217,9 @@ class KotlinKoansLoader {
         if (node.size() > 0) {
             val mapOfAnswers = HashMap<String, List<String>>()
             (0 until node.size())
-                    .filter { node.get(it).has(SUB_TASK_INFO) }
-                    .filter { node.get(it).get(SUB_TASK_INFO).has("0") }
-                    .filter { node.get(it).get(SUB_TASK_INFO).get("0").has(PLACEHOLDER_TEXT) &&
-                              node.get(it).get(SUB_TASK_INFO).get("0").has(POSSIBLE_ANSWER) }
+                    .filter { node.get(it).has(SUB_TASK_INFO) && node.get(it).get(SUB_TASK_INFO).has("0")
+                            && node.get(it).get(SUB_TASK_INFO).get("0").has(PLACEHOLDER_TEXT)
+                            && node.get(it).get(SUB_TASK_INFO).get("0").has(POSSIBLE_ANSWER) }
                     .forEach {
                         val key = node.get(it).get(SUB_TASK_INFO).get("0").get(PLACEHOLDER_TEXT).asText()
                         val value = node.get(it).get(SUB_TASK_INFO).get("0").get(POSSIBLE_ANSWER).asText()
