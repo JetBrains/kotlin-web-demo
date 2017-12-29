@@ -136,7 +136,6 @@ enum class ProjectType {
     EXAMPLE,
     TASK,
     USER_PROJECT,
-    ADVENT_OF_CODE_PROJECT,
     PUBLIC_LINK;
 
     fun toJSON(): String{

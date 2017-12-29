@@ -39,13 +39,13 @@ class HeadersProvider(
             val modified = it.modified || localStorage.getItem(it.publicId) != null
             val completedProjects = JSON.parse<Array<String>>(localStorage["completedProjects"] ?: "[]")
             val completed = (it.completed ?: false) || (it.publicId in completedProjects)
-            if(type == ProjectType.TASK){
+            if (type == ProjectType.TASK) {
                 TaskHeader(it.name, it.publicId, type, modified, completed)
             } else {
                 ProjectHeader(it.name, it.publicId, type, modified)
             }
         }
-        val childFolders = content.childFolders.map {  createFolder(it, type) }
+        val childFolders = content.childFolders.map { createFolder(it, type) }
         val levels = content.levels?.asList() ?: emptyList<LevelInfo>()
         val folder = Folder(content.name, content.id, projects, childFolders, content.isTaskFolder, levels)
         return folder
@@ -83,9 +83,8 @@ class HeadersProvider(
                         foldersContent.mapTo(folders, {
                             val type = when {
                                 it.name == "My programs" -> ProjectType.USER_PROJECT
-                                it.id == "advent%20of%20code" -> ProjectType.ADVENT_OF_CODE_PROJECT
                                 it.isTaskFolder -> ProjectType.TASK
-                                else  -> ProjectType.EXAMPLE
+                                else -> ProjectType.EXAMPLE
                             }
                             createFolder(it, type)
                         })

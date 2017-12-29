@@ -21,14 +21,10 @@ import kotlinx.html.classes
 import kotlinx.html.div
 import kotlinx.html.dom.append
 import kotlinx.html.id
-import kotlinx.html.js.a
 import kotlinx.html.js.div
 import kotlinx.html.js.onClickFunction
 import model.Folder
 import org.w3c.dom.HTMLElement
-import utils.jquery.jq
-import views.dialogs.AdventOfCodeInput
-import views.dialogs.AdventOfCodeInputDialog
 import views.dialogs.InputDialogView
 import views.dialogs.ValidationResult
 
@@ -44,17 +40,6 @@ class MyProgramsFolderView(parentNode: HTMLElement,
 
 
     init {
-        if(type == "ADVENT_OF_CODE_PROJECT"){
-            container.append.a {
-                href = "http://adventofcode.com/"
-                classes = setOf("advent-of-code-link")
-                div {
-                    classes = setOf("advent-of-code-icon")
-                }
-            }
-        }
-
-        jq(container).find(".advent-of-code-link").on("click", { e -> e.stopPropagation()})
 
         folderNameElement.style.display = "inline-block"
         if (!Application.loginView.isLoggedIn) {
@@ -75,29 +60,14 @@ class MyProgramsFolderView(parentNode: HTMLElement,
                     classes = setOf("new-project", "icon")
                     onClickFunction = { event ->
                         event.stopPropagation()
-                        if (type == "ADVENT_OF_CODE_PROJECT") {
-                            AdventOfCodeInputDialog(
-                                    dialogTitle = "Add new \"Advent of Code\" project",
-                                    inputLabel = "Project name:",
-                                    okButtonCaption = "Add",
-                                    defaultValue = "Advent",
-                                    validate = { name -> validateNewProjectName(name) },
-                                    callback = { userInput ->
-                                        userInput as AdventOfCodeInput
-                                        Application.projectProvider.addAdventOfCodeProject(userInput.value, userInput.codeInput)
-                                    }
-                            )
-                        } else {
-                            InputDialogView(
-                                    dialogTitle = "Add new project",
-                                    inputLabel = "Project name:",
-                                    okButtonCaption = "Add",
-                                    defaultValue = "Untitled",
-                                    validate = { name -> validateNewProjectName(name) },
-                                    callback = { userInput -> Application.projectProvider.addNewProject(userInput.value) }
-                            )
-
-                        }
+                        InputDialogView(
+                                dialogTitle = "Add new project",
+                                inputLabel = "Project name:",
+                                okButtonCaption = "Add",
+                                defaultValue = "Untitled",
+                                validate = { name -> validateNewProjectName(name) },
+                                callback = { userInput -> Application.projectProvider.addNewProject(userInput.value) }
+                        )
                     }
                 }
             }

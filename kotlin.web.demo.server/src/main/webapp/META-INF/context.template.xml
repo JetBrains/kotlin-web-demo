@@ -27,6 +27,6 @@
             />
     
     <!-- OPTIONAL -->
-    <Environment name="app_home" value="C:\\development\\kotlin-web-demo\" type="java.lang.String" override="false"/>
+    <Environment name="app_home" value="/Users/prendota/source/kotlin-web-demo" type="java.lang.String" override="false"/>
     <Environment name="is_test_version" value="true" type="java.lang.String" override="false"/>
 </Context>
