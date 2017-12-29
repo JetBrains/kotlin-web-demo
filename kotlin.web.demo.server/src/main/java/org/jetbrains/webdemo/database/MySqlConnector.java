@@ -317,22 +317,6 @@ public class MySqlConnector {
         }
     }
 
-    public String addAdventOfCodeProject(UserInfo userInfo, String name, String inputFileContent) throws DatabaseOperationException {
-        try {
-            String projectId = addProject(userInfo, new Project(name, "", "java"), "ADVENT_OF_CODE_PROJECT", null);
-            String fileId = addFileToProject(userInfo, projectId, name, "fun main(args: Array<String>) {\n//your input stored in the `input` variable\n}");
-            String inputFileId = addFileToProject(userInfo, projectId, "Input.kt", inputFileContent);
-
-            ObjectNode response = new ObjectNode(JsonNodeFactory.instance);
-            response.put("projectId", projectId);
-            response.put("fileId", fileId);
-            response.put("inputFileId", inputFileId);
-            return objectMapper.writeValueAsString(response);
-        } catch (IOException e) {
-            throw new DatabaseOperationException("IO exception");
-        }
-    }
-
     public String addProject(UserInfo userInfo, Project project, String type) throws DatabaseOperationException {
         return addProject(userInfo, project, type, null);
     }
@@ -866,7 +850,7 @@ public class MySqlConnector {
             for (ProjectFile file : solution.files) {
                 saveFile(solutionId, file);
             }
-            String projectType = completed ?  "KOANS_TASK" : "INCOMPLETE_KOANS_TASK";
+            String projectType = completed ? "KOANS_TASK" : "INCOMPLETE_KOANS_TASK";
             saveProject(userInfo, solutionId, solution, projectType);
         }
     }
@@ -904,7 +888,7 @@ public class MySqlConnector {
 
     public void deleteSolution(UserInfo userInfo, String taskId) throws DatabaseOperationException {
         String solutionId = getSolutionId(userInfo, taskId);
-        if(solutionId != null) deleteProject(userInfo, solutionId);
+        if (solutionId != null) deleteProject(userInfo, solutionId);
     }
 
     private final class IdentifierGenerator {

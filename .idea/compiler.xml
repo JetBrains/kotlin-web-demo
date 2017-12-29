@@ -2,6 +2,9 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <wildcardResourcePatterns />
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="1.0.1-2_main" target="1.7" />
       <module name="1.0.1-2_test" target="1.7" />

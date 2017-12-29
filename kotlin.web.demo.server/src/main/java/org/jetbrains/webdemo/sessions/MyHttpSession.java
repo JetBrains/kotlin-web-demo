@@ -81,9 +81,6 @@ public class MyHttpSession {
                 case ("addProject"):
                     sendAddProjectResult();
                     break;
-                case ("addAdventOfCodeProject"):
-                    sendAddAdventOfCodeProjectResult();
-                    break;
                 case ("addFile"):
                     sendAddFileResult();
                     break;
@@ -277,19 +274,6 @@ public class MyHttpSession {
         }
     }
 
-    private void sendAddAdventOfCodeProjectResult() {
-        try {
-            String inputFileContent = request.getParameter("inputFileContent");
-            String name = request.getParameter("name");
-            String publicIds = MySqlConnector.getInstance().addAdventOfCodeProject(sessionInfo.getUserInfo(), name, inputFileContent);
-            writeResponse(publicIds, HttpServletResponse.SC_OK);
-        } catch (NullPointerException e) {
-            writeResponse("Can't get parameters", HttpServletResponse.SC_BAD_REQUEST);
-        } catch (DatabaseOperationException e) {
-            writeResponse(e.getMessage(), HttpServletResponse.SC_FORBIDDEN);
-        }
-    }
-
     private void sendRenameFileResult() {
         try {
             String publicId = request.getParameter("publicId");
@@ -310,16 +294,6 @@ public class MyHttpSession {
             Map<String, Boolean> taskStatuses = MySqlConnector.getInstance().getUserTaskStatuses(sessionInfo.getUserInfo());
             for (ExamplesFolder folder : ExamplesFolder.ROOT_FOLDER.getChildFolders()) {
                 addFolderContent(responseBody, folder, taskStatuses);
-            }
-
-            ObjectNode adventOfCodeContent = responseBody.addObject();
-            adventOfCodeContent.put("name", "Advent of Code");
-            adventOfCodeContent.put("id", "advent%20of%20code");
-            adventOfCodeContent.putArray("childFolders");
-            if (sessionInfo.getUserInfo().isLogin()) {
-                adventOfCodeContent.set("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo(), "ADVENT_OF_CODE_PROJECT"));
-            } else {
-                adventOfCodeContent.putArray("projects");
             }
 
             ObjectNode myProgramsContent = responseBody.addObject();
@@ -390,7 +364,7 @@ public class MyHttpSession {
             String id = request.getParameter("publicId");
             Project result = MySqlConnector.getInstance().getProjectContent(id);
             if (result != null) {
-                if(!KotlinVersionsManager.INSTANCE.getKotlinVersions().contains(result.getCompilerVersion())){
+                if (!KotlinVersionsManager.INSTANCE.getKotlinVersions().contains(result.getCompilerVersion())) {
                     result.setCompilerVersion(KotlinVersionsManager.INSTANCE.getLatestStableVersion());
                 }
                 writeResponse(objectMapper.writeValueAsString(result), HttpServletResponse.SC_OK);
@@ -482,7 +456,7 @@ public class MyHttpSession {
             response.addHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(statusCode);
-            if(!responseBody.equals("")) {
+            if (!responseBody.equals("")) {
                 try (PrintWriter writer = response.getWriter()) {
                     writer.write(responseBody);
                 }

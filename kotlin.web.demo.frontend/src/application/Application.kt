@@ -114,8 +114,7 @@ object Application {
             },
             onSelectFile = { previousFile, currentFile ->
                 if (previousFile != null) {
-                    if (previousFile.project.type != ProjectType.USER_PROJECT &&
-                            previousFile.project.type != ProjectType.ADVENT_OF_CODE_PROJECT) {
+                    if (previousFile.project.type != ProjectType.USER_PROJECT) {
                         previousFile.project.save()
                     } else {
                         Application.fileProvider.saveFile(previousFile)
@@ -169,7 +168,7 @@ object Application {
 
     fun getSelectedProjectView() = accordion.selectedProjectView!!
 
-    public val runProvider = RunProvider(
+    val runProvider = RunProvider(
             beforeRun = {
                 runButton.disable()
                 consoleView.clear()
@@ -306,9 +305,6 @@ object Application {
             },
             onNewProjectAdded = { name, projectId, fileId ->
                 accordion.addNewProject(name, projectId, fileId)
-            },
-            onAdventOfCodeProjectAdded = { name, projectId, fileId, inputFileId, inputFileContent ->
-                accordion.addAdventOfCodeProject(name, projectId, fileId, inputFileId, inputFileContent)
             },
             onFail = { message, status ->
                 statusBarView.setStatus(status)
