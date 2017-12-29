@@ -45,23 +45,6 @@ class RunProvider(
         }
     }
 
-    private fun checkDataForErrors(data: Array<dynamic>): Boolean {
-        val hasErrors = data.any { element ->
-            if (element.type == "errors") {
-                var containsErrors = false
-                for (fileName in Object.keys(element.errors)) {
-                    var fileErrorsAndWarnings: Array<dynamic> = element.errors[fileName]
-                    containsErrors = fileErrorsAndWarnings.any({
-                        it.severity == "ERROR"
-                    })
-                }
-                containsErrors
-            } else {
-                false
-            }
-        }
-        return !hasErrors
-    }
 
     private fun runJava(project: Project, file: File) {
         project.files = ArrayList(project.files.filter { it.name.matches(".kt$") })

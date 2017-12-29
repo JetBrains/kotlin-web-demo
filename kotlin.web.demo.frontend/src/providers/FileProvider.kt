@@ -214,7 +214,7 @@ class FileProvider(
         )
     }
 
-    public fun saveFile(file: File) {
+    fun saveFile(file: File) {
         if (file.project.type == ProjectType.USER_PROJECT || file.project.type == ProjectType.ADVENT_OF_CODE_PROJECT) {
             if (!file.isModified) return
             blockContent()
