@@ -44,15 +44,6 @@ public class ErrorWriter {
         return ERROR_WRITER;
     }
 
-    public void writeException(String moreInfo) {
-
-        log.error(moreInfo);
-    }
-
-    public void writeInfo(String message) {
-        log.info(message);
-    }
-
     public void writeExceptionToExceptionAnalyzer(Throwable e, String type) {
         log.error(type, e);
     }

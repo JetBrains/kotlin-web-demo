@@ -16,8 +16,12 @@
 
 package org.jetbrains.webdemo.session;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.webdemo.TimeManager;
 
+@Getter
+@Setter
 public class SessionInfo {
     private final TimeManager timeManager = new TimeManager();
     private String id;
@@ -26,49 +30,12 @@ public class SessionInfo {
     private UserInfo userInfo = new UserInfo();
     private String originUrl = null;
 
-    public SessionInfo(String sessionId, TypeOfRequest typeOfRequest) {
-        this.id = sessionId;
-        this.type = typeOfRequest;
-    }
-
     public SessionInfo(String sessionId) {
-        this.id = sessionId;
-    }
-
-    public void setType(TypeOfRequest typeOfRequest) {
-        this.type = typeOfRequest;
-    }
-
-    public TimeManager getTimeManager() {
-        return timeManager;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String sessionId) {
         this.id = sessionId;
     }
 
     public String getType() {
         return type.name();
-    }
-
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
-
-    public RunConfiguration getRunConfiguration() {
-        return runConfiguration;
-    }
-
-    public void setRunConfiguration(RunConfiguration runConfiguration) {
-        this.runConfiguration = runConfiguration;
     }
 
     public void setRunConfiguration(String runConfiguration) {
@@ -78,43 +45,20 @@ public class SessionInfo {
             this.runConfiguration = RunConfiguration.JS;
         } else if ("canvas".equals(runConfiguration)) {
             this.runConfiguration = RunConfiguration.CANVAS;
-        } else if("junit".equals(runConfiguration)){
+        } else if ("junit".equals(runConfiguration)) {
             this.runConfiguration = RunConfiguration.JUNIT;
         } else {
             this.runConfiguration = RunConfiguration.JAVA;
         }
     }
 
-    public String getOriginUrl() {
-        return originUrl;
-    }
-
-    public void setOriginUrl(String originUrl) {
-        this.originUrl = originUrl;
-    }
-
     public enum TypeOfRequest {
         DELETE_FILE,
         DELETE_PROJECT,
-        LOAD_ROOT,
-        HIGHLIGHT,
-        COMPLETE,
-        RUN,
         LOAD_EXAMPLE,
-        SEND_USER_DATA,
-        GET_LOGS_LIST,
-        DOWNLOAD_LOG,
-        GET_EXAMPLES_LIST,
-        GET_HELP_FOR_EXAMPLES,
-        GET_HELP_FOR_WORDS,
-        WRITE_LOG, GET_RESOURCE,
-        ANALYZE_LOG,
-        INC_NUMBER_OF_REQUESTS,
-        CONVERT_TO_KOTLIN,
-        CONVERT_TO_JS,
-        SAVE_PROGRAM,
+        GET_RESOURCE,
         AUTHORIZATION,
-        SEND_MAIL, WORK_WITH_DATABASE
+        WORK_WITH_DATABASE
     }
 
     public enum RunConfiguration {

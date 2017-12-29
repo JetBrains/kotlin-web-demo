@@ -119,8 +119,7 @@ class KotlinKoansLoader {
 
         val name = if (node.has(NAME)) node.get(NAME).asText() else ""
         val hiddenFiles = loadHiddenFiles(node, id)
-        val files = ArrayList<ProjectFile>()
-        files.addAll(loadFiles(node, id))
+        val files = ArrayList<ProjectFile>(loadFiles(node, id))
         files.add(loadTestFile(node, id))
 
         val readOnlyFiles = files.filter { it.name != TASK_KT }.mapTo(ArrayList()) { it.name }

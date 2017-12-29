@@ -16,8 +16,13 @@
 
 package org.jetbrains.webdemo.session;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 
+@Getter
+@Setter
 public class UserInfo implements Serializable {
     private String name = "";
     private String id = "";
@@ -33,24 +38,6 @@ public class UserInfo implements Serializable {
 
     public boolean isLogin() {
         return isLogged;
-    }
-
-    public void logout() {
-        name = "";
-        id = "";
-        isLogged = false;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getType() {
-        return type;
     }
 
 }
