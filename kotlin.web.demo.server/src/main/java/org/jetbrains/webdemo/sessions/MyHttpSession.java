@@ -25,18 +25,13 @@ import org.jetbrains.webdemo.database.DatabaseOperationException;
 import org.jetbrains.webdemo.database.MySqlConnector;
 import org.jetbrains.webdemo.examples.ExamplesFolder;
 import org.jetbrains.webdemo.examples.ExamplesUtils;
-import org.jetbrains.webdemo.handlers.ServerHandler;
 import org.jetbrains.webdemo.session.SessionInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 
 public class MyHttpSession {
@@ -322,7 +317,7 @@ public class MyHttpSession {
             adventOfCodeContent.put("id", "advent%20of%20code");
             adventOfCodeContent.putArray("childFolders");
             if (sessionInfo.getUserInfo().isLogin()) {
-                adventOfCodeContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo(), "ADVENT_OF_CODE_PROJECT"));
+                adventOfCodeContent.set("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo(), "ADVENT_OF_CODE_PROJECT"));
             } else {
                 adventOfCodeContent.putArray("projects");
             }
@@ -332,7 +327,7 @@ public class MyHttpSession {
             myProgramsContent.put("id", "My%20programs");
             myProgramsContent.putArray("childFolders");
             if (sessionInfo.getUserInfo().isLogin()) {
-                myProgramsContent.put("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo(), "USER_PROJECT"));
+                myProgramsContent.set("projects", MySqlConnector.getInstance().getProjectHeaders(sessionInfo.getUserInfo(), "USER_PROJECT"));
             } else {
                 myProgramsContent.putArray("projects");
             }
@@ -349,7 +344,7 @@ public class MyHttpSession {
         ObjectNode folderContent = arrayNode.addObject();
         folderContent.put("name", folder.getName());
         folderContent.put("id", folder.getId());
-        if (folder.isTaskFolder()) folderContent.put("levels", objectMapper.valueToTree(folder.getLevels()));
+        if (folder.isTaskFolder()) folderContent.set("levels", objectMapper.valueToTree(folder.getLevels()));
         folderContent.put("isTaskFolder", folder.isTaskFolder());
         ArrayNode exampleHeaders = folderContent.putArray("projects");
         for (Project example : folder.getExamples()) {
