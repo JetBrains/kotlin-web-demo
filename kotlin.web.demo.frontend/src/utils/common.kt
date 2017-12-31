@@ -51,12 +51,27 @@ private val tagsToReplace = hashMapOf(
         " " to "%20"
 )
 
+private val htmlTagsMap = hashMapOf(
+        "<" to "&lt;",
+        ">" to "&gt;",
+        "<=" to "&le;",
+        ">=" to "&ge;"
+)
+
 var userProjectPrefix = "/UserProjects/"
 
 
 fun unEscapeString(s: String): String {
     var unEscapedString = s
     for (tagEntry in tagsToReplace) {
+        unEscapedString = unEscapedString.replace(tagEntry.value, tagEntry.key)
+    }
+    return unEscapedString
+}
+
+fun htmlTagsConvertToString(s: String): String {
+    var unEscapedString = s
+    for (tagEntry in htmlTagsMap) {
         unEscapedString = unEscapedString.replace(tagEntry.value, tagEntry.key)
     }
     return unEscapedString

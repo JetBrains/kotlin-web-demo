@@ -30,6 +30,7 @@ import org.w3c.dom.HTMLUListElement
 import providers.Status
 import providers.TestResult
 import utils.a11yTree
+import utils.htmlTagsConvertToString
 import utils.jquery.JQuery
 import utils.jquery.jq
 import utils.unEscapeString
@@ -53,24 +54,24 @@ class JUnitView(
         element.appendChild(navTree)
 
 
-        var consoleElement = document.createElement("div") as HTMLDivElement
+        val consoleElement = document.createElement("div") as HTMLDivElement
         consoleElement.className = "consoleOutput"
         val outputView = OutputView(consoleElement)
 
-        var wrapper = document.createElement("div")
+        val wrapper = document.createElement("div")
         wrapper.id = "test-wrapper"
         element.appendChild(wrapper)
         val statistic = createStatistics(testResults)
         wrapper.appendChild(statistic)
         wrapper.appendChild(consoleElement)
 
-        if (testResults.size != 0) {
+        if (testResults.isNotEmpty()) {
             createStatistics(testResults)
             navTree.appendChild(createTestTree(testResults, outputView))
         } else {
             Application.consoleView.writeException("No test method found")
         }
-        jq(consoleElement).height(jq(wrapper).height().toInt() - jq(statistic).outerHeight(true).toInt())
+        jq(consoleElement).height(jq(wrapper).height().toInt() - jq(statistic).outerHeight(true))
     }
 
     fun clear() {
@@ -85,23 +86,20 @@ class JUnitView(
         while (firstPackage.size > j && lastPackage.size > j && firstPackage[j] == lastPackage[j]) {
             ++j
         }
-        return firstPackage.slice(0..j - 1)
+        return firstPackage.slice(0 until j)
     }
 
-    fun createTestTree(data: List<TestResult>, outputView: OutputView): HTMLElement {
-        var testsData = hashMapOf<String, TestResult>()
+    private fun createTestTree(data: List<TestResult>, outputView: OutputView): HTMLElement {
+        val testsData = hashMapOf<String, TestResult>()
         for (testResult in data) {
             testsData[testResult.className + '.' + testResult.methodName] = testResult
         }
 
-        var classNames = arrayListOf<String>()
-        for (testResult in data) {
-            classNames.add(testResult.className)
-        }
-        var commonPackage = findCommonPackage(classNames)
+        val classNames = data.map { it.className }
+        val commonPackage = findCommonPackage(classNames)
 
-        var commonPackageFullName: String
-        var rootNode: dynamic =
+        val commonPackageFullName: String
+        val rootNode: dynamic =
                 if (!commonPackage.isEmpty()) {
                     commonPackageFullName = commonPackage.joinToString(".")
                     json(
@@ -124,11 +122,11 @@ class JUnitView(
             for (testResult in data) {
                 val testNode = json(
                         "children" to arrayOf<dynamic>(),
-                        "name" to  getClassNameWithoutAPackage(testResult.methodName),
-                        "icon" to  testResult.status.toLowerCase(),
-                        "sourceFileName" to  testResult.sourceFileName,
-                        "methodPosition" to  testResult.methodPosition,
-                        "id" to  testResult.className + '.' + testResult.methodName
+                        "name" to getClassNameWithoutAPackage(testResult.methodName),
+                        "icon" to testResult.status.toLowerCase(),
+                        "sourceFileName" to testResult.sourceFileName,
+                        "methodPosition" to testResult.methodPosition,
+                        "id" to testResult.className + '.' + testResult.methodName
                 )
                 rootNode.children.push(testNode)
                 if (testResult.status == Status.ERROR.name) {
@@ -138,22 +136,22 @@ class JUnitView(
                 }
             }
         } else {
-            var classNodes = hashMapOf<String, dynamic>()
+            val classNodes = hashMapOf<String, dynamic>()
             for (testResult in data) {
                 if (classNodes[testResult.className] == null) {
                     classNodes[testResult.className] = json(
-                            "children" to  arrayOf<dynamic>(),
-                            "name" to  getClassNameWithoutAPackage(testResult.className),
-                            "icon" to  testResult.status.toString().toLowerCase(),
-                            "id" to  testResult.className
+                            "children" to arrayOf<dynamic>(),
+                            "name" to getClassNameWithoutAPackage(testResult.className),
+                            "icon" to testResult.status.toLowerCase(),
+                            "id" to testResult.className
                     )
                     rootNode.children.push(classNodes[testResult.className])
                 }
                 val classNode = classNodes[testResult.className]
-                var testNode = json(
+                val testNode = json(
                         "children" to arrayOf<dynamic>(),
                         "name" to testResult.methodName,
-                        "icon" to testResult.status.toString().toLowerCase(),
+                        "icon" to testResult.status.toLowerCase(),
                         "sourceFileName" to testResult.sourceFileName,
                         "methodPosition" to testResult.methodPosition,
                         "id" to testResult.className + '.' + testResult.methodName
@@ -169,8 +167,7 @@ class JUnitView(
                 }
             }
         }
-
-        var tree = document.createElement("ul") as HTMLUListElement
+        val tree = document.createElement("ul") as HTMLUListElement
         tree.id = "test-tree"
         displayTreeNode(rootNode, tree)
 
@@ -185,12 +182,15 @@ class JUnitView(
                             parseAssertionErrorMessage(unEscapeString(testData.comparisonFailure!!.message))?.message ?: "",
                             testData.comparisonFailure!!.expected,
                             testData.comparisonFailure!!.actual)
-                    outputView.printErrorLine(comparisonFailure.fullName + ": " + parsedMessage.message)
-                    outputView.printErrorLine("")
-                    outputView.print("Expected: ")
-                    outputView.printErrorLine(parsedMessage.expected)
-                    outputView.print("Actual: ")
-                    outputView.printErrorLine(parsedMessage.actual)
+                    outputView.printErrorLine(comparisonFailure.fullName)
+                    if (parsedMessage.actual != parsedMessage.expected) {
+                        outputView.print("Expected: ")
+                        outputView.printErrorLine(parsedMessage.expected)
+                        outputView.print("Actual: ")
+                        outputView.printErrorLine(parsedMessage.actual)
+                    } else {
+                        outputView.printErrorLine(htmlTagsConvertToString(unEscapeString(testData.comparisonFailure!!.message)))
+                    }
                     outputView.printError("    ")
                     outputView.element.appendChild(createDifferenceReference(parsedMessage.expected, parsedMessage.actual))
                     outputView.println("")
@@ -198,7 +198,7 @@ class JUnitView(
                     outputView.printExceptionBody(testData.comparisonFailure)
                 }
 
-                if(testData.exception != null){
+                if (testData.exception != null) {
                     outputView.printException(testData.exception)
                 }
             } else {
@@ -220,31 +220,31 @@ class JUnitView(
         return tree
     }
 
-    fun displayTreeNode(node: dynamic, parentElement: HTMLElement) {
-        var nodeElement = document.createElement("li")
+    private fun displayTreeNode(node: dynamic, parentElement: HTMLElement) {
+        val nodeElement = document.createElement("li")
         nodeElement.className = "tree-node"
         nodeElement.id = node.id
         parentElement.appendChild(nodeElement)
 
-        var nodeElementHeader = document.createElement("div") as HTMLDivElement
+        val nodeElementHeader = document.createElement("div") as HTMLDivElement
         nodeElementHeader.className = "tree-node-header"
         nodeElement.appendChild(nodeElementHeader)
 
-        var img = document.createElement("div")
+        val img = document.createElement("div")
         img.className = "icon " + node.icon
         nodeElementHeader.appendChild(img)
 
-        var text = document.createElement("div")
+        val text = document.createElement("div")
         text.className = "text"
         text.textContent = node.name
         nodeElementHeader.appendChild(text)
 
         if (node.children.length > 0) {
-            var toggle = document.createElement("div")
+            val toggle = document.createElement("div")
             toggle.className = "toggle-arrow"
             nodeElementHeader.insertBefore(toggle, nodeElementHeader.firstChild)
 
-            var childrenNode = document.createElement("ul") as HTMLUListElement
+            val childrenNode = document.createElement("ul") as HTMLUListElement
             for (child in node.children) {
                 displayTreeNode(child, childrenNode)
             }
@@ -259,34 +259,33 @@ class JUnitView(
     }
 
 
-    fun getClassNameWithoutAPackage(fullClassName: String): String = fullClassName.split('.').last()
+    private fun getClassNameWithoutAPackage(fullClassName: String): String = fullClassName.split('.').last()
 
-    fun parseAssertionErrorMessage(message: String): ParsedAssertionMessage? {
-        var possibleRegExps = arrayOf(
+    private fun parseAssertionErrorMessage(message: String): ParsedAssertionMessage? {
+        val possibleRegExps = arrayOf(
                 Regex("(.*)\\.\\s*Expected\\s*<(.*)>\\s*actual\\s*<(.*)>"),
                 Regex("(.*)\\s*expected:\\s*<(.*)>\\s*but was:\\s*<(.*)>")
         )
-        for (regExp in  possibleRegExps) {
-            var regExpExecResult = regExp.find(message.replace("\n", "</br>"))
-            if (regExpExecResult != null) {
-                return ParsedAssertionMessage(
-                        regExpExecResult.groups[1]!!.value,
-                        regExpExecResult.groups[2]!!.value,
-                        regExpExecResult.groups[3]!!.value
-                )
-            }
-        }
+        possibleRegExps
+                .mapNotNull { it.find(message.replace("\n", "</br>")) }
+                .forEach {
+                    return ParsedAssertionMessage(
+                            it.groups[1]!!.value,
+                            it.groups[2]!!.value,
+                            it.groups[3]!!.value
+                    )
+                }
         return null
     }
 
-    fun createStatistics(data: List<TestResult>): HTMLDivElement {
-        val totalTime = data.fold (0.0) { time, testResult -> time + testResult.executionTime / 1000.0 }
+    private fun createStatistics(data: List<TestResult>): HTMLDivElement {
+        val totalTime = data.fold(0.0) { time, testResult -> time + testResult.executionTime / 1000.0 }
         val noOfFailedTest = data.count { it.status != Status.OK.name }
         val status = if (noOfFailedTest > 0) Status.FAIL else Status.OK
         val message = if (noOfFailedTest == 0) {
             "All tests passed in ${totalTime.toFixed(3)}s"
         } else {
-            "Failed: ${noOfFailedTest} of ${data.size} in ${totalTime.toFixed(3)}s"
+            "Failed: $noOfFailedTest of ${data.size} in ${totalTime.toFixed(3)}s"
         }
         return document.create.div {
             id = "unit-test-statistic"
@@ -300,7 +299,7 @@ class JUnitView(
         }
     }
 
-    fun createDifferenceReference(expected: String, actual: String): HTMLDivElement = document.create.div {
+    private fun createDifferenceReference(expected: String, actual: String): HTMLDivElement = document.create.div {
         +"<click to see a difference>"
         classes = setOf("link")
         onClickFunction = { event ->
