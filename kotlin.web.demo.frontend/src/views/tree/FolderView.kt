@@ -45,21 +45,19 @@ open class FolderView(parentNode: HTMLElement,
         id = content.id
     }
 
-    val container = headerElement.append.div{
+    val container = headerElement.append.div {
         classes = setOf("container")
     }
 
     protected val folderNameElement: HTMLDivElement = container.append.div {
-        + content.name
+        +content.name
         classes = setOf("text")
     }
 
-    val contentElement = parentNode.append.div{}
+    val contentElement = parentNode.append.div {}
 
     init {
-        for (projectHeader in content.projects) {
-            projects.add(createProject(projectHeader))
-        }
+        content.projects.mapTo(projects) { createProject(it) }
         initializeChildFolders()
         if (!childFolders.isEmpty()) {
             jq(contentElement).accordion(json(
@@ -67,7 +65,7 @@ open class FolderView(parentNode: HTMLElement,
                     "collapsible" to true,
                     "navigation" to true,
                     "active" to 0,
-                    "icons" to json (
+                    "icons" to json(
                             "activeHeader" to "examples-open-folder-icon",
                             "header" to "examples-closed-folder-icon"
                     )
@@ -79,7 +77,7 @@ open class FolderView(parentNode: HTMLElement,
         FolderView(contentElement, it, this, onProjectDeleted, onProjectHeaderClick, onProjectSelected, onProjectCreated)
     })
 
-    public open fun createProject(header: ProjectHeader): ProjectView{
+    open fun createProject(header: ProjectHeader): ProjectView {
         val projectView = ProjectView(
                 header,
                 this,
@@ -90,19 +88,19 @@ open class FolderView(parentNode: HTMLElement,
         return projectView
     }
 
-    fun deleteProject(projectView: ProjectView){
+    fun deleteProject(projectView: ProjectView) {
         projects.remove(projectView)
         contentElement.removeChild(projectView.headerElement)
         contentElement.removeChild(projectView.contentElement)
         onProjectDeleted(projectView)
     }
 
-    fun selectFolder(folder: FolderView){
+    fun selectFolder(folder: FolderView) {
         jq(contentElement).accordion("option", "active", childFolders.indexOf(folder))
     }
 
     fun select() {
-        if(parent != null) {
+        if (parent != null) {
             parent.selectFolder(this)
             parent.select()
         } else {

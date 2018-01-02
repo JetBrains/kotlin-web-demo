@@ -16,9 +16,9 @@
 
 package views.editor
 
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
+import kotlinx.html.classes
+import kotlinx.html.dom.append
+import kotlinx.html.js.div
 import org.w3c.dom.HTMLElement
 import providers.CompletionProposal
 import utils.codemirror.CodeMirror
@@ -46,7 +46,7 @@ internal class CustomizedCompletionView(private val proposal: CompletionProposal
     }
 
     override fun hint(cm: CodeMirror, self: dynamic, data: dynamic) {
-        var cur = cm.getCursor()
+        val cur = cm.getCursor()
         val token = cm.getTokenAt(cm.getCursor())
 
         val from = Position(cur.line, token.start)

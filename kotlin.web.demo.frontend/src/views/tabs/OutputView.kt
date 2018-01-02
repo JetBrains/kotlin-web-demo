@@ -28,36 +28,36 @@ import kotlin.browser.document
 
 class OutputView(val element: HTMLElement) {
 
-    public fun print(s: String) {
+    fun print(s: String) {
         element.append.span {
             +s.replace("</br>", "\n").replace("<br/>", "\n")
             classes = setOf("standard-output")
         }
     }
 
-    public fun println(s: String) {
+    fun println(s: String) {
         print(s + '\n')
     }
 
-    public fun printError(s: String): HTMLSpanElement = element.append.span {
-            +s.replace("</br>", "\n").replace("<br/>", "\n")
-            classes = setOf("error-output")
+    fun printError(s: String): HTMLSpanElement = element.append.span {
+        +s.replace("</br>", "\n").replace("<br/>", "\n")
+        classes = setOf("error-output")
     }
 
-    public fun printErrorLine(s: String = "") {
+    fun printErrorLine(s: String = "") {
         printError(s + '\n')
     }
 
     fun printMarkedText(text: String) {
         var unprocessedFragment = unEscapeString(text)
-        while (unprocessedFragment.isNotBlank()){
+        while (unprocessedFragment.isNotBlank()) {
             val spanElement = document.createElement("span") as HTMLSpanElement
-            if(unprocessedFragment.startsWith("<outStream>")){
+            if (unprocessedFragment.startsWith("<outStream>")) {
                 unprocessedFragment = unprocessedFragment.substringAfter("<outStream>")
                 spanElement.className = "standard-output"
                 spanElement.textContent = unprocessedFragment.substringBefore("</outStream>")
                 unprocessedFragment = unprocessedFragment.substringAfter("</outStream>")
-            } else{
+            } else {
                 unprocessedFragment = unprocessedFragment.substringAfter("<errStream>")
                 spanElement.className = "error-output"
                 spanElement.textContent = unprocessedFragment.substringBefore("</errStream>")
@@ -85,7 +85,7 @@ class OutputView(val element: HTMLElement) {
         printErrorLine()
     }
 
-    private fun printStackTrace(stackTrace: Array<dynamic>){
+    private fun printStackTrace(stackTrace: Array<dynamic>) {
         for (stackTraceElement in stackTrace) {
             if (stackTraceElement.className.startsWith("sun.reflect")) {
                 break
@@ -96,12 +96,12 @@ class OutputView(val element: HTMLElement) {
         }
     }
 
-    private fun printExceptionCause(exception: dynamic){
-        if(exception.cause != null) {
-            var cause = exception.cause
-            if(cause.message != null) {
+    private fun printExceptionCause(exception: dynamic) {
+        if (exception.cause != null) {
+            val cause = exception.cause
+            if (cause.message != null) {
                 printErrorLine("Caused by: " + cause.fullName + ": " + unEscapeString(cause.message) + '\n')
-            } else{
+            } else {
                 printErrorLine("Caused by: " + cause.fullName + '\n')
             }
             printStackTrace(cause.stackTrace)

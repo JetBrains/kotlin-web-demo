@@ -30,7 +30,7 @@ class GeneratedCodeView(private val element: HTMLElement) {
 
     fun setOutput(data: dynamic) {
         element.innerHTML = ""
-        var generatedCode = document.createElement("p") as HTMLParagraphElement
+        val generatedCode = document.createElement("p") as HTMLParagraphElement
         generatedCode.className = "consoleViewInfo"
         generatedCode.innerHTML = unEscapeString(data.text)
         element.appendChild(generatedCode)
@@ -38,7 +38,7 @@ class GeneratedCodeView(private val element: HTMLElement) {
 
     fun showGeneratedCode(code: String) {
         element.innerHTML = ""
-        var generatedCode = document.createElement("p") as HTMLParagraphElement
+        val generatedCode = document.createElement("p") as HTMLParagraphElement
         generatedCode.className = "cm-s-default"
         generatedCode.innerHTML = unEscapeString(code)
         CodeMirror.runMode(code, "javascript", generatedCode)
