@@ -18,15 +18,15 @@ package utils
 
 import kotlin.browser.window
 
-public class ActionManager(
+class ActionManager(
         private val defaultActionShortcutMap: Map<String, Shortcut>,
         private val macActionShortcutMap: Map<String, Shortcut>
 ) {
 
     private val NEVER_PRESSED_SHORTCUT = Shortcut(arrayOf(""), { false })
 
-    val shortcutMap = if (window.navigator.appVersion.indexOf("Mac") != -1) macActionShortcutMap else defaultActionShortcutMap
+    private val shortcutMap = if (window.navigator.appVersion.indexOf("Mac") != -1) macActionShortcutMap else defaultActionShortcutMap
 
     fun getShortcut(id: String): Shortcut =
-            shortcutMap.get(id) ?: NEVER_PRESSED_SHORTCUT
+            shortcutMap[id] ?: NEVER_PRESSED_SHORTCUT
 }
