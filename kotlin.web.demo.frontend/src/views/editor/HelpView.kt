@@ -16,14 +16,14 @@
 
 package views.editor
 
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
-import providers.HelpProvider
+import kotlinx.html.classes
+import kotlinx.html.dom.append
+import kotlinx.html.js.div
+import kotlinx.html.style
 import utils.ElementPosition
 import kotlin.browser.document
 
-object HelpViewForWords{
+object HelpViewForWords {
     private val element = document.body!!.append.div {
         classes = setOf("words-help")
         style = "display: none"
@@ -33,14 +33,14 @@ object HelpViewForWords{
         classes = setOf("text")
     }
 
-    public fun show(text: String, pos: ElementPosition) {
+    fun show(text: String, pos: ElementPosition) {
         element.style.left = (pos.left + 2).toString() + "px"
         element.style.top = (pos.top + 15).toString() + "px"
         element.style.display = "block"
         textElement.innerHTML = text
     }
 
-    public fun hide() {
+    fun hide() {
         element.style.display = "none"
     }
 }

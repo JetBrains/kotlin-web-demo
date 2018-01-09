@@ -78,7 +78,7 @@ object TweetDialog {
         tweetForm.onsubmit = {
             if(Twitter.text.getTweetLength(tweetContentInput.value) > MAX_TWEET_LENGTH){
                 window.alert("Tweet message can't be longer than $MAX_TWEET_LENGTH characters.")
-                false;
+                false
             } else{
                 undefined
             }
