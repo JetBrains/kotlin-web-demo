@@ -30,7 +30,6 @@ import org.w3c.dom.HTMLUListElement
 import providers.Status
 import providers.TestResult
 import utils.a11yTree
-import utils.htmlTagsConvertToString
 import utils.jquery.JQuery
 import utils.jquery.jq
 import utils.unEscapeString
@@ -189,7 +188,7 @@ class JUnitView(
                         outputView.print("Actual: ")
                         outputView.printErrorLine(parsedMessage.actual)
                     } else {
-                        outputView.printErrorLine(htmlTagsConvertToString(unEscapeString(testData.comparisonFailure!!.message)))
+                        outputView.printErrorLine(unEscapeString(testData.comparisonFailure!!.message))
                     }
                     outputView.printError("    ")
                     outputView.element.appendChild(createDifferenceReference(parsedMessage.expected, parsedMessage.actual))
