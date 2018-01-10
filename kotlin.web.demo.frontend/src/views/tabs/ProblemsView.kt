@@ -16,15 +16,22 @@
 
 package views.tabs
 
-import kotlinx.html.*
-import kotlinx.html.js.*
-import kotlinx.html.dom.*
+import kotlinx.html.classes
+import kotlinx.html.div
+import kotlinx.html.dom.append
+import kotlinx.html.id
+import kotlinx.html.js.li
+import kotlinx.html.js.onDoubleClickFunction
+import kotlinx.html.js.onKeyUpFunction
+import kotlinx.html.js.ul
+import kotlinx.html.tabIndex
 import model.File
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import utils.*
-import utils.jquery.*
+import utils.jquery.JQuery
+import utils.jquery.jq
 import views.editor.Diagnostic
 import kotlin.browser.document
 import kotlin.browser.window

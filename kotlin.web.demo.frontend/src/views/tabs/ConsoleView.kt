@@ -35,7 +35,7 @@ class ConsoleView(
     fun writeException(data: dynamic) {
         val outputView = prepareTab()
         if (data != undefined && data[0] != undefined && data[0].exception != undefined) {
-            var output = arrayListOf<dynamic>()
+            val output = arrayListOf<dynamic>()
             for (exception in data) {
                 exception.stackTrace = (exception.stackTrace ?: "")
                 output.add(json(
@@ -49,12 +49,10 @@ class ConsoleView(
             }
         } else if (data == undefined || data == null) {
         } else {
-            if (data == "") {
-                outputView.printErrorLine("Unknown exception.")
-            } else if (data == "timeout : timeout") {
-                outputView.printErrorLine("Server didn't respond for 10 seconds.")
-            } else {
-                outputView.printErrorLine(data)
+            when (data) {
+                "" -> outputView.printErrorLine("Unknown exception.")
+                "timeout : timeout" -> outputView.printErrorLine("Server didn't respond for 10 seconds.")
+                else -> outputView.printErrorLine(data)
             }
         }
     }
@@ -67,7 +65,7 @@ class ConsoleView(
         }
     }
 
-    fun setOutput(data: dynamic) {
+    private fun setOutput(data: dynamic) {
         val outputView = prepareTab()
         if (data.type == "jsException") {
             if (data.exception.stack != null && data.exception.stack != "") {
@@ -83,7 +81,7 @@ class ConsoleView(
         } else if (data.type == "jsOut") {
             outputView.print(data.text)
         } else if (data.type == "err") {
-            var message = data.text
+            val message = data.text
             if (message == "") {
                 outputView.printErrorLine("Unknown exception.")
             } else if (message == "timeout : timeout") {

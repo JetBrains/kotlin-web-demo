@@ -30,13 +30,13 @@ import kotlin.js.json
 
 
 object Layout {
-    val resizableProjectTreeHolder = document.getElementById("examples-list-resizer") as HTMLElement
-    val projectTreeDisplayButton = document.getElementById("accordion-display-button") as HTMLElement
-    val gridElement = document.getElementById("g-grid") as HTMLElement
-    val gridTopElement = document.getElementById("grid-top") as HTMLElement
-    val fullscreenButton = document.getElementById("fullscreen-button") as HTMLElement
-    val toolbox = document.getElementById("toolbox") as HTMLElement
-    val argumentsButton = document.getElementById("argumentsButton") as HTMLElement
+    private val resizableProjectTreeHolder = document.getElementById("examples-list-resizer") as HTMLElement
+    private val projectTreeDisplayButton = document.getElementById("accordion-display-button") as HTMLElement
+    private val gridElement = document.getElementById("g-grid") as HTMLElement
+    private val gridTopElement = document.getElementById("grid-top") as HTMLElement
+    private val fullscreenButton = document.getElementById("fullscreen-button") as HTMLElement
+    private val toolbox = document.getElementById("toolbox") as HTMLElement
+    private val argumentsButton = document.getElementById("argumentsButton") as HTMLElement
 
     init {
         projectTreeDisplayButton.onclick = {
@@ -153,7 +153,7 @@ object Layout {
 
 
     private fun updateGridConfigurationInLocalStorage() {
-        var gridConfiguration = json(
+        val gridConfiguration = json(
                 "examplesWidth" to jq(resizableProjectTreeHolder).width().toInt(),
                 "gridBottomHeight" to jq("#grid-bottom").height().toInt(),
                 "fullscreenMode" to isFullscreenMode(),

@@ -45,11 +45,11 @@ fun addKotlinExtension(filename: String): String = if (filename.endsWith(".kt"))
 fun removeKotlinExtension(filename: String): String = filename.removeSuffix(".kt")
 
 private val tagsToReplace = hashMapOf(
-        "&" to "&amp;",
         "<" to "&amp;lt;",
         ">" to "&amp;gt;",
         " " to "%20"
 )
+
 
 var userProjectPrefix = "/UserProjects/"
 
@@ -59,7 +59,7 @@ fun unEscapeString(s: String): String {
     for (tagEntry in tagsToReplace) {
         unEscapedString = unEscapedString.replace(tagEntry.value, tagEntry.key)
     }
-    return unEscapedString
+    return unEscapedString.replace("&amp;", "&")
 }
 
 fun escapeString(s: String): String {
@@ -67,7 +67,7 @@ fun escapeString(s: String): String {
     for (tagEntry in tagsToReplace) {
         escapedString = escapedString.replace(tagEntry.key, tagEntry.value)
     }
-    return escapedString
+    return escapedString.replace("&", "&amp;")
 }
 
 fun getProjectIdFromUrl(): String {

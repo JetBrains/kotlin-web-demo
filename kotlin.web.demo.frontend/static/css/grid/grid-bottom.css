@@ -196,7 +196,7 @@
 }
 
 .error-output {
-    white-space: pre;
+    white-space: pre-wrap;
     color: #ff0000 !important;
     min-height: 1.4em;
     margin: 0;

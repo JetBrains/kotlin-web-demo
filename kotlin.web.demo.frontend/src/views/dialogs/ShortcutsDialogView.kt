@@ -32,11 +32,11 @@ import utils.jquery.ui.Dialog
 import kotlin.browser.document
 
 object ShortcutsDialogView {
-    val dialogElement = document.body!!.append.div {
+    private val dialogElement = document.body!!.append.div {
         title = "Help"
     }
 
-    val shortcutsHelpElement = dialogElement.append.div {
+    private val shortcutsHelpElement = dialogElement.append.div {
         id = "shortcuts-help"
     }
 
@@ -72,22 +72,22 @@ object ShortcutsDialogView {
         }
     }
 
-    private fun createKeyCombinationElement(keyNames: Array<out String>): HTMLElement{
+    private fun createKeyCombinationElement(keyNames: Array<out String>): HTMLElement {
         val wrapper = document.create.td {
             classes = setOf("shortcutKeyCombinationWrapper")
         }
-        val shortcutKeyCombinationElement = wrapper.append.div{
+        val shortcutKeyCombinationElement = wrapper.append.div {
             classes = setOf("shortcutKeyCombination")
         }
 
-        for (keyName in  keyNames) {
+        for (keyName in keyNames) {
             shortcutKeyCombinationElement.append {
                 div {
                     +keyName
                     classes = setOf("shortcutKeyName")
                 }
                 div {
-                    + "+"
+                    +"+"
                     classes = setOf("shortcutSeparator")
                 }
             }

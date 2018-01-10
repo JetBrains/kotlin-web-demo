@@ -41,9 +41,9 @@ class AccordionView(
 ) {
     private val DEFAULT_PROJECT_ID = "/Examples/Hello,%20world!/Simplest%20version"
     private val projectViews = hashMapOf<String, ProjectView>()
-    public var selectedProjectView: ProjectView? = null
+    var selectedProjectView: ProjectView? = null
         private set
-    public var selectedFileView: FileView? = null
+    var selectedFileView: FileView? = null
         private set
     private var myProgramsFolder: MyProgramsFolderView by Delegates.notNull()
     private var adventOfCodeFolder: MyProgramsFolderView by Delegates.notNull()
@@ -96,44 +96,47 @@ class AccordionView(
         selectedFileView = null
         Application.headersProvider.getAllHeaders { folders ->
             childFolders = folders.map { folder ->
-                if (folder.name == "My programs") {
-                    myProgramsFolder = MyProgramsFolderView(
-                            parentNode = element,
-                            content = folder,
-                            parent = null,
-                            type = "USER_PROJECT",
-                            onProjectDeleted = onProjectDeleted,
-                            onProjectHeaderClick = onProjectHeaderClick,
-                            onProjectSelected = onProjectSelected,
-                            onProjectCreated = onProjectCreated
-                    );
-                    myProgramsFolder
-                } else if (folder.id == "advent%20of%20code") {
-                    adventOfCodeFolder = MyProgramsFolderView(
-                            parentNode = element,
-                            content = folder,
-                            parent = null,
-                            type = "ADVENT_OF_CODE_PROJECT",
-                            onProjectDeleted = onProjectDeleted,
-                            onProjectHeaderClick = onProjectHeaderClick,
-                            onProjectSelected = onProjectSelected,
-                            onProjectCreated = onProjectCreated
-                    );
-                    adventOfCodeFolder
-                } else if (folder.name == "Public links") {
-                    val folderView = FolderView(
-                            parentNode = element,
-                            content = folder,
-                            parent = null,
-                            onProjectDeleted = onProjectDeleted,
-                            onProjectHeaderClick = onProjectHeaderClick,
-                            onProjectSelected = onProjectSelected,
-                            onProjectCreated = onProjectCreated
-                    )
-                    publicLinksFolder = folderView
-                    folderView
-                } else if (folder.isTaskFolder) {
-                    FolderViewWithProgress(
+                when {
+                    folder.name == "My programs" -> {
+                        myProgramsFolder = MyProgramsFolderView(
+                                parentNode = element,
+                                content = folder,
+                                parent = null,
+                                type = "USER_PROJECT",
+                                onProjectDeleted = onProjectDeleted,
+                                onProjectHeaderClick = onProjectHeaderClick,
+                                onProjectSelected = onProjectSelected,
+                                onProjectCreated = onProjectCreated
+                        )
+                        myProgramsFolder
+                    }
+                    folder.id == "advent%20of%20code" -> {
+                        adventOfCodeFolder = MyProgramsFolderView(
+                                parentNode = element,
+                                content = folder,
+                                parent = null,
+                                type = "ADVENT_OF_CODE_PROJECT",
+                                onProjectDeleted = onProjectDeleted,
+                                onProjectHeaderClick = onProjectHeaderClick,
+                                onProjectSelected = onProjectSelected,
+                                onProjectCreated = onProjectCreated
+                        )
+                        adventOfCodeFolder
+                    }
+                    folder.name == "Public links" -> {
+                        val folderView = FolderView(
+                                parentNode = element,
+                                content = folder,
+                                parent = null,
+                                onProjectDeleted = onProjectDeleted,
+                                onProjectHeaderClick = onProjectHeaderClick,
+                                onProjectSelected = onProjectSelected,
+                                onProjectCreated = onProjectCreated
+                        )
+                        publicLinksFolder = folderView
+                        folderView
+                    }
+                    folder.isTaskFolder -> FolderViewWithProgress(
                             parentNode = element,
                             content = folder,
                             parent = null,
@@ -143,8 +146,7 @@ class AccordionView(
                             onProjectSelected = onProjectSelected,
                             onProjectCreated = onProjectCreated
                     )
-                } else {
-                    FolderView(
+                    else -> FolderView(
                             parentNode = element,
                             content = folder,
                             parent = null,
@@ -204,7 +206,7 @@ class AccordionView(
     }
 
     fun onBeforeUnload() {
-        var publicLinks = publicLinksFolder?.projects?.map {
+        val publicLinks = publicLinksFolder?.projects?.map {
             json(
                     "name" to it.project.name,
                     "publicId" to it.project.id
@@ -218,7 +220,7 @@ class AccordionView(
     fun selectFile(fileView: FileView) {
         if (selectedFileView !== fileView) {
             if (selectedProjectView == fileView.projectView) {
-                var previousFileView = selectedFileView
+                val previousFileView = selectedFileView
                 selectedFileView = fileView
 
                 var previousFile: File? = null
@@ -240,10 +242,10 @@ class AccordionView(
     fun loadFirstItem() {
         var projectId = getProjectIdFromUrl()
         if (projectId == "") {
-            if (localStorage.getItem("openedItemId") != null) {
-                projectId = localStorage.getItem("openedItemId")!!
+            projectId = if (localStorage.getItem("openedItemId") != null) {
+                localStorage.getItem("openedItemId")!!
             } else {
-                projectId = DEFAULT_PROJECT_ID
+                DEFAULT_PROJECT_ID
             }
         }
         localStorage.removeItem("openedItemId")

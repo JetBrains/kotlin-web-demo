@@ -29,7 +29,7 @@ import kotlin.browser.document
 import kotlin.dom.addClass
 
 
-external object  difflib {
+external object difflib {
     class SequenceMatcher(baseTextLines: Array<String>, newTextLines: Array<String>){
         fun get_opcodes(): Array<dynamic> = definedExternally
     }
@@ -39,9 +39,9 @@ object DifferenceDialog{
     fun open(baseText: String, newText: String) {
         leftLineElements.clear()
         rightLineElements.clear()
-        var baseTextLines = baseText.split("</br>")
-        var newTextLines = newText.split("</br>")
-        var sequenceMatcher = difflib.SequenceMatcher(baseTextLines.toTypedArray(), newTextLines.toTypedArray())
+        val baseTextLines = baseText.split("</br>")
+        val newTextLines = newText.split("</br>")
+        val sequenceMatcher = difflib.SequenceMatcher(baseTextLines.toTypedArray(), newTextLines.toTypedArray())
         createDialogContent(baseTextLines, newTextLines, sequenceMatcher.get_opcodes())
         jq(dialogElement).dialog("open")
         jq(differenceElement).height(jq(dialogElement).height().toInt() - jq(colorsHelp).outerHeight(true).toInt())
@@ -55,7 +55,7 @@ object DifferenceDialog{
         title = "Comparison failure"
     }
 
-    val differenceElement  = dialogElement.append.div {}
+    val differenceElement = dialogElement.append.div {}
 
     val colorsHelp = dialogElement.append.div{
         classes = setOf("colors-help")
@@ -84,31 +84,31 @@ object DifferenceDialog{
         })
     }
 
-    fun createDialogContent(expectedLines: List<String>, actualLines: List<String>, opCodes: Array<dynamic>){
+    private fun createDialogContent(expectedLines: List<String>, actualLines: List<String>, opCodes: Array<dynamic>) {
         differenceElement.innerHTML = ""
         differenceElement.className = "difference-dialog-content"
         differenceElement.appendChild(createDifferenceElement(expectedLines, opCodes, false))
         differenceElement.appendChild(createDifferenceElement(actualLines, opCodes, true))
     }
 
-    fun createDifferenceElement(lines: List<String>, opCodes: Array<dynamic>, isRightElement: Boolean): HTMLDivElement{
-        var element = document.createElement("div") as HTMLDivElement
+    private fun createDifferenceElement(lines: List<String>, opCodes: Array<dynamic>, isRightElement: Boolean): HTMLDivElement {
+        val element = document.createElement("div") as HTMLDivElement
         element.className = "diff"
-        var glutter = createGlutterElement()
+        val glutter = createGlutterElement()
         element.appendChild(glutter)
 
-        var outputElement = document.createElement("div")
+        val outputElement = document.createElement("div")
         outputElement.className = "diff-output"
         element.appendChild(outputElement)
 
-        var lineElements = if(isRightElement) rightLineElements else leftLineElements
-        for(i in 0..lines.size - 1){
-            var lineNumber = document.createElement("div")
+        val lineElements = if (isRightElement) rightLineElements else leftLineElements
+        for (i in 0 until lines.size) {
+            val lineNumber = document.createElement("div")
             lineNumber.className = "diff-lineNumber"
             lineNumber.innerHTML = i.toString() + ""
             glutter.appendChild(lineNumber)
 
-            var line = document.createElement("div") as HTMLDivElement
+            val line = document.createElement("div") as HTMLDivElement
             line.className = "diff-line"
             line.innerHTML = lines[i]
             outputElement.appendChild(line)
@@ -116,20 +116,20 @@ object DifferenceDialog{
             lineElements.add(line)
         }
 
-        for(i in 0..opCodes.size - 1){
-            var code = opCodes[i]
-            var change = code[0]
-            var b = (code[1] as Number).toInt()
-            var be = (code[2] as Number).toInt()
-            var n = (code[3] as Number).toInt()
-            var ne = (code[4] as Number).toInt()
+        for (i in 0 until opCodes.size) {
+            val code = opCodes[i]
+            val change = code[0]
+            val b = (code[1] as Number).toInt()
+            val be = (code[2] as Number).toInt()
+            val n = (code[3] as Number).toInt()
+            val ne = (code[4] as Number).toInt()
 
-            if(!isRightElement) {
-                for (j in b..be - 1) {
+            if (!isRightElement) {
+                for (j in b until be) {
                     lineElements[j].addClass(change + "-color")
                 }
-            } else{
-                for (j in n..ne - 1) {
+            } else {
+                for (j in n until ne) {
                     lineElements[j].addClass(change + "-color")
                 }
             }
@@ -137,18 +137,18 @@ object DifferenceDialog{
         return element
     }
 
-    fun createGlutterElement(): HTMLDivElement{
-        var glutterElement = document.createElement("div") as HTMLDivElement
+    private fun createGlutterElement(): HTMLDivElement {
+        val glutterElement = document.createElement("div") as HTMLDivElement
         glutterElement.className = "diff-glutters"
         return glutterElement
     }
 
-    fun createColorHelp(name: String) {
-        var insertColor = document.createElement("div")
-        insertColor.className = "color-help " + name + "-color"
+    private fun createColorHelp(name: String) {
+        val insertColor = document.createElement("div")
+        insertColor.className = "color-help $name-color"
         colorsHelp.appendChild(insertColor)
 
-        var insertText = document.createElement("span")
+        val insertText = document.createElement("span")
         insertText.className = "text"
         insertText.innerHTML = if (name.endsWith("e")) name + "d" else name + "ed"
         colorsHelp.appendChild(insertText)

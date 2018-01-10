@@ -28,23 +28,24 @@ import kotlin.browser.document
 
 class OutputView(val element: HTMLElement) {
 
-    public fun print(s: String) {
+    fun print(s: String) {
         element.append.span {
             +s.replace("</br>", "\n").replace("<br/>", "\n")
             classes = setOf("standard-output")
         }
     }
 
-    public fun println(s: String) {
+    fun println(s: String) {
         print(s + '\n')
     }
 
     public fun printError(s: String): HTMLSpanElement = element.append.span {
+
         +s.replace("</br>", "\n").replace("<br/>", "\n")
         classes = setOf("error-output")
     }
 
-    public fun printErrorLine(s: String = "") {
+    fun printErrorLine(s: String = "") {
         printError(s + '\n')
     }
 
@@ -121,7 +122,7 @@ class OutputView(val element: HTMLElement) {
         printExceptionCause(exception)
         printErrorLine()
     }
-
+  
     private fun printLastStackTraceLine(stackTrace: Array<dynamic>) {
         if (stackTrace.isNotEmpty()) {
             printStackTraceLine(stackTrace.last())
