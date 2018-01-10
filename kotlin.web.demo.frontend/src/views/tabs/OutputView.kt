@@ -69,6 +69,43 @@ class OutputView(val element: HTMLElement) {
 
     fun printException(exception: dynamic) {
         printErrorLine()
+        var currentException = exception
+        var isSecurityException = false
+        val accessControlException = "java.security.AccessControlException"
+        while (currentException != null) {
+            if (currentException.fullName == accessControlException) {
+                printSecurityException(currentException)
+                isSecurityException = true
+                break
+            }
+            currentException = currentException.cause
+        }
+        if (!isSecurityException) {
+            printSimpleException(exception)
+        }
+    }
+
+    /**
+     * Print security exception
+     * Print the last line in stack trace for showing line with exception in user code
+     */
+    private fun printSecurityException(exception: dynamic) {
+        if (exception.stackTrace != null) {
+            printErrorLine(
+                    if (exception.message != null) {
+                        "Access control exception due to security reasons in web playground: \n " + exception.message
+                    } else {
+                        "Access control exception due to security reasons in web playground"
+                    }
+            )
+            printLastStackTraceLine(exception.stackTrace)
+        }
+    }
+
+    /**
+     * Print simple exception with full stack trace and exception body
+     */
+    private fun printSimpleException(exception: dynamic) {
         printErrorLine(
                 if (exception.message != null) {
                     "Exception in thread \"main\" " + exception.fullName + ": " + unEscapeString(exception.message)
@@ -80,32 +117,38 @@ class OutputView(val element: HTMLElement) {
     }
 
     fun printExceptionBody(exception: dynamic) {
-        printStackTrace(exception.stackTrace)
+        printFullStackTrace(exception.stackTrace)
         printExceptionCause(exception)
         printErrorLine()
     }
-
-    private fun printStackTrace(stackTrace: Array<dynamic>) {
-        for (stackTraceElement in stackTrace) {
-            if (stackTraceElement.className.startsWith("sun.reflect")) {
-                break
-            }
-            val element = printError("    at " + stackTraceElement.className + '.' + stackTraceElement.methodName + '(')
-            element.appendChild(makeReference(stackTraceElement.fileName, stackTraceElement.lineNumber))
-            printErrorLine(")")
+  
+    private fun printLastStackTraceLine(stackTrace: Array<dynamic>) {
+        if (stackTrace.isNotEmpty()) {
+            printStackTraceLine(stackTrace.last())
         }
     }
 
+    private fun printFullStackTrace(stackTrace: Array<dynamic>) {
+        stackTrace
+                .takeWhile { !it.className.startsWith("sun.reflect") }
+                .forEach { printStackTraceLine(it) }
+    }
+
+    private fun printStackTraceLine(stackTrace: dynamic) {
+        val element = printError("    at " + stackTrace.className + '.' + stackTrace.methodName + '(')
+        element.appendChild(makeReference(stackTrace.fileName, stackTrace.lineNumber))
+        printErrorLine(")")
+    }
+
     private fun printExceptionCause(exception: dynamic) {
-        if (exception.cause != null) {
-            val cause = exception.cause
-            if (cause.message != null) {
-                printErrorLine("Caused by: " + cause.fullName + ": " + unEscapeString(cause.message) + '\n')
-            } else {
-                printErrorLine("Caused by: " + cause.fullName + '\n')
-            }
-            printStackTrace(cause.stackTrace)
-            printExceptionCause(cause)
+        if (exception.cause == null) return
+        val cause = exception.cause
+        if (cause.message != null) {
+            printErrorLine("Caused by: " + cause.fullName + ": " + unEscapeString(cause.message) + '\n')
+        } else {
+            printErrorLine("Caused by: " + cause.fullName + '\n')
         }
+        printFullStackTrace(cause.stackTrace)
+        printExceptionCause(cause)
     }
 }
