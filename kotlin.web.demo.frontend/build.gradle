@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core-js:0.21'
     compile 'org.jetbrains.kotlinx:kotlinx-html-js:0.6.4'
 }
 
@@ -67,3 +68,8 @@ task buildAssets(type: NpmTask, dependsOn: 'copyJsFilesFromDependencies') {
 assemble.dependsOn 'buildAssets'
 
 jar { onlyIf { false } }
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}

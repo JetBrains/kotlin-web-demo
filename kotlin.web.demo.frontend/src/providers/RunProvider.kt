@@ -17,6 +17,8 @@
 package providers
 
 import application.Application
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import model.Example
 import model.File
 import model.Project
@@ -25,6 +27,7 @@ import utils.eval
 import views.Configuration
 import views.ConfigurationType
 import views.ConfigurationTypeRunner
+import views.dialogs.IframeDialog
 import views.editor.Diagnostic
 import kotlin.js.json
 
@@ -36,7 +39,7 @@ class RunProvider(
         private val onFail: (String) -> Unit
 ) {
     fun run(configuration: Configuration, project: Project, file: File) {
-        if (project.files.isEmpty()) return;
+        if (project.files.isEmpty()) return
         beforeRun()
         if (configuration.type.runner == ConfigurationTypeRunner.JAVA) {
             runJava(project, file)
@@ -70,7 +73,7 @@ class RunProvider(
         }
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
-                url = generateAjaxUrl("run", hashMapOf("runConf" to project.confType)),
+                url = generateAjaxUrl("run", mapOf("runConf" to project.confType)),
                 success = { data: dynamic ->
                     val errors = getErrorsMapFromObject(data.errors, project)
                     if (project.confType == "junit") {
@@ -99,38 +102,72 @@ class RunProvider(
 
     }
 
-    fun loadJsFromServer(project: Project) {
-        var runConfiguration = project.confType
+
+    /**
+     * Set kotlin version.
+     * If version is not supported => set default kotlin version
+     * @param kotlinVersion - version for validation
+     *
+     * @return - String Kotlin version
+     */
+    private fun checkKotlinVersion(kotlinVersion: String?): String {
+        return if (kotlinVersion != null && kotlinVersion in Application.availableKotlinVersions) {
+            kotlinVersion
+        } else {
+            Application.versionView.defaultVersion
+        }
+    }
+
+    /**
+     * Getting current IfameDialog by current kotlin version
+     *
+     * Can be async because getting new Iframe it's too long operation
+     *
+     * @param kotlinVersion - string kotlin version
+     * @return IframeDialog
+     */
+    private suspend fun getIframeDialog(kotlinVersion: String): IframeDialog {
+        if (Application.iframeDialogs[kotlinVersion] == null && kotlinVersion in Application.availableKotlinVersions) {
+            Application.iframeDialogs[kotlinVersion] = IframeDialog(kotlinVersion)
+            return Application.iframeDialogs[kotlinVersion]!!
+        }
+        return Application.iframeDialogs[kotlinVersion]!!
+    }
+
+    private fun loadJsFromServer(project: Project) {
+        val runConfiguration = project.confType
+        val kotlinVersion = checkKotlinVersion(project.compilerVersion)
+        val loadedFrame = async { getIframeDialog(kotlinVersion) }
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
-                url = generateAjaxUrl("run", hashMapOf("runConf" to runConfiguration)),
+                url = generateAjaxUrl("run", mapOf("runConf" to runConfiguration)),
                 success = { data: dynamic ->
-                    var translationResult: TranslationResult;
-                    val errors = getErrorsMapFromObject(data.errors, project)
-                    if (data.jsCode != null) {
-                        val kotlinVersion = project.compilerVersion ?: Application.versionView.defaultVersion
-                        val iframeDialog = Application.getIframeDialog(kotlinVersion)
-
-                        try {
-                            //Placed here because of firefox bug
-                            //(error modifying context of canvas in invisible iframe)
-                            if (runConfiguration ==
-                                    ConfigurationType.CANVAS.name.toLowerCase()) {
-                                iframeDialog.open()
+                    launch {
+                        val iframeDialog = loadedFrame.await()
+                        var translationResult: TranslationResult
+                        val errors = getErrorsMapFromObject(data.errors, project)
+                        if (data.jsCode != null) {
+                            try {
+                                //Placed here because of firefox bug
+                                //(error modifying context of canvas in invisible iframe)
+                                if (runConfiguration ==
+                                        ConfigurationType.CANVAS.name.toLowerCase()) {
+                                    iframeDialog.open()
+                                }
+                                val out: String = iframeDialog.iframe.contentWindow!!.eval(data.jsCode)
+                                translationResult = TranslationResult(errors, data.jsCode, out, null)
+                            } catch (e: dynamic) {
+                                translationResult = TranslationResult(errors, data.jsCode, null, e)
+                            } finally {
+                                if (runConfiguration == "js") {
+                                    iframeDialog.iframe.contentWindow!!.location.reload()
+                                }
                             }
-                            val out: String = iframeDialog.iframe.contentWindow!!.eval(data.jsCode)
-                            translationResult = TranslationResult(errors, data.jsCode, out, null)
-                        } catch (e: dynamic) {
-                            translationResult = TranslationResult(errors, data.jsCode, null, e)
-                        } finally {
-                            if (runConfiguration == "js") {
-                                iframeDialog.iframe.contentWindow!!.location.reload()
-                            }
+                        } else {
+                            translationResult = TranslationResult(errors, null, null, null)
                         }
-                    } else {
-                        translationResult = TranslationResult(errors, null, null, null)
+                        processTranslateToJSResult(translationResult, project)
                     }
-                    processTranslateToJSResult(translationResult, project)
                 },
                 dataType = DataType.JSON,
                 type = HTTPRequestType.POST,
