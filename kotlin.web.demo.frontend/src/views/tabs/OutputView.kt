@@ -39,8 +39,7 @@ class OutputView(val element: HTMLElement) {
         print(s + '\n')
     }
 
-    public fun printError(s: String): HTMLSpanElement = element.append.span {
-
+    fun printError(s: String): HTMLSpanElement = element.append.span {
         +s.replace("</br>", "\n").replace("<br/>", "\n")
         classes = setOf("error-output")
     }
@@ -142,15 +141,14 @@ class OutputView(val element: HTMLElement) {
     }
 
     private fun printExceptionCause(exception: dynamic) {
-        if (exception.cause != null) {
-            var cause = exception.cause
-            if (cause.message != null) {
-                printErrorLine("Caused by: " + cause.fullName + ": " + unEscapeString(cause.message) + '\n')
-            } else {
-                printErrorLine("Caused by: " + cause.fullName + '\n')
-            }
-            printFullStackTrace(cause.stackTrace)
-            printExceptionCause(cause)
+        if (exception.cause == null) return
+        val cause = exception.cause
+        if (cause.message != null) {
+            printErrorLine("Caused by: " + cause.fullName + ": " + unEscapeString(cause.message) + '\n')
+        } else {
+            printErrorLine("Caused by: " + cause.fullName + '\n')
         }
+        printFullStackTrace(cause.stackTrace)
+        printExceptionCause(cause)
     }
 }
