@@ -16,25 +16,27 @@
 
 package views
 
+import application.Application
 import application.KotlinWrapperConfig
 import kotlinx.html.dom.append
 import kotlinx.html.option
 import org.w3c.dom.HTMLSelectElement
 import utils.jquery.jq
+import views.dialogs.IframeDialog
 import kotlin.js.json
 import kotlin.properties.Delegates
 
 class KotlinVersionView(
-    val element: HTMLSelectElement,
-    val onChange: (String) -> dynamic
+        val element: HTMLSelectElement,
+        val onChange: (String) -> dynamic
 ) {
     var defaultVersion by Delegates.notNull<String>()
     var select = jq(element)
 
     init {
         select.selectmenu(json(
-            "icons" to json("button" to "selectmenu-arrow-icon"),
-            "position" to json("my" to "bottom", "at" to "top")
+                "icons" to json("button" to "selectmenu-arrow-icon"),
+                "position" to json("my" to "bottom", "at" to "top")
         ))
         select.on("selectmenuchange", { event ->
             val newValue = (event.currentTarget as HTMLSelectElement).value
@@ -46,6 +48,10 @@ class KotlinVersionView(
         kotlinVersions.forEach {
             if (it.latestStable) {
                 defaultVersion = it.version
+                /*
+                 Init default Kotlin JS version
+                 */
+                Application.iframeDialogs[defaultVersion] = IframeDialog(defaultVersion)
             }
             element.append.option {
                 +("v. " + it.version)

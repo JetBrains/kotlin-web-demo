@@ -43,8 +43,8 @@ import kotlin.browser.localStorage
 import kotlin.browser.window
 
 object Application {
-    val actionManager = ActionManager(
-            hashMapOf(
+    private val actionManager = ActionManager(
+            mapOf(
                     "org.jetbrains.web.demo.run" to Shortcut(arrayOf("Ctrl", "F9"), { event ->
                         event.keyCode == KeyCode.F9.code && event.ctrlKey
                     }),
@@ -54,7 +54,7 @@ object Application {
                         event.keyCode == KeyCode.S.code && event.ctrlKey
                     })
             ),
-            hashMapOf(
+            mapOf(
                     "org.jetbrains.web.demo.run" to Shortcut(arrayOf("Ctrl", "R"), { event ->
                         event.keyCode == KeyCode.R.code && event.ctrlKey
                     }),
@@ -160,16 +160,16 @@ object Application {
                 }
             },
             onSelectedFileDeleted = {
-                var project = getSelectedProjectView().project
+                val project = getSelectedProjectView().project
                 navBarView.onSelectedFileDeleted()
                 replaceState(userProjectPrefix + project.id, project.name)
                 editor.closeFile()
             }
     )
 
-    fun getSelectedProjectView() = accordion.selectedProjectView!!
+    private fun getSelectedProjectView() = accordion.selectedProjectView!!
 
-    public val runProvider = RunProvider(
+    val runProvider = RunProvider(
             beforeRun = {
                 runButton.disable()
                 consoleView.clear()
@@ -188,7 +188,7 @@ object Application {
                             if (completed) {
                                 projectProvider.saveSolution(project, completed)
                                 project.completed = true
-                                completedProjects = (completedProjects + project.id).toSet();
+                                completedProjects = (completedProjects + project.id).toSet()
                             }
                         }
                         junitView.setOutput(output.testResults.values.flatten())
@@ -234,7 +234,7 @@ object Application {
         }
     }
 
-    val runButton: Button = Button(
+    private val runButton: Button = Button(
             Elements.runButton,
             onClick = {
                 runProvider.run(configurationManager.getConfiguration(),
@@ -244,7 +244,7 @@ object Application {
             }
     )
 
-    val saveButton: Button = Button(
+    private val saveButton: Button = Button(
             Elements.saveButton,
             onClick = {
                 val selectedProject = accordion.selectedProjectView!!.project
@@ -261,11 +261,16 @@ object Application {
     private val converterProvider = ConverterProvider()
     private val converterView = ConverterView(converterProvider)
 
-    private val iframeDialogs = HashMap<String, IframeDialog>()
-    fun getIframeDialog(kotlinVersion: String): IframeDialog {
-        val iframeDialog = iframeDialogs.get(kotlinVersion) ?: throw Throwable("No such kotlin version: $kotlinVersion")
-        return iframeDialog
-    }
+    /**
+     * Map of current iFrames.
+     * Kotlin version -> Iframe.
+     */
+    val iframeDialogs = HashMap<String, IframeDialog>()
+
+    /**
+     * List of available Kotlin.js version in web IDE
+     */
+    val availableKotlinVersions = arrayListOf<String>()
 
     val fileProvider = FileProvider(
             { error, status ->
@@ -339,16 +344,16 @@ object Application {
             }
     )
 
-    val statusBarView = StatusBarView(document.getElementById("statusBar") as HTMLElement)
+    private val statusBarView = StatusBarView(document.getElementById("statusBar") as HTMLElement)
 
-    val helpProvider = HelpProvider({ error, status ->
+    private val helpProvider = HelpProvider({ error, status ->
         consoleView.writeException(error)
         statusBarView.setStatus(status)
     })
 
     val editor: Editor = Editor(helpProvider)
 
-    val loginProvider: LoginProvider = LoginProvider(
+    private val loginProvider: LoginProvider = LoginProvider(
             beforeLogout = {
                 accordion.selectedFileView?.let { Application.fileProvider.saveFile(it.file) }
                 accordion.selectedProjectView!!.project.save()
@@ -387,7 +392,7 @@ object Application {
                     versionView.init(kotlinVersions)
                     kotlinVersions.forEach { wrapperConfig ->
                         val version = wrapperConfig.version
-                        iframeDialogs[version] = IframeDialog(version)
+                        availableKotlinVersions.add(version)
                     }
                 }
         )
@@ -403,8 +408,6 @@ object Application {
         editor.setCursor(line, ch)
         editor.focus()
     }
-
-//    val progress = Progress(Elements.progressBar)
 
     val configurationManager = ConfigurationManager({ configuration ->
         accordion.selectedProjectView!!.project.confType = configuration.type.name.toLowerCase()
