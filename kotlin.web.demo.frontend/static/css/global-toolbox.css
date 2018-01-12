@@ -38,7 +38,7 @@
     display: inline-block;
     cursor: pointer;
     position: relative;
-    margin-left: 16px;
+    margin-left: 20px;
     height: 20px;
     width: 22px;
     font-size: 0;
@@ -49,24 +49,24 @@
 }
 
 .icon.facebook {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -0px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -200px -0px;
 }
 
 .icon.google {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -50px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -200px -46px;
 }
 
 .icon.twitter {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -100px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -200px -99px;
 }
 
 .icon.github {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -150px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -200px -150px;
 }
 
 .icon.jba {
     top: 4px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -200px -200px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -200px -200px;
 }
 
 #logout {
@@ -109,18 +109,18 @@
 }
 
 #fullscreen-button .icon {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -450px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -100px -450px;
 }
 
 #fullscreen-button.fullscreen .icon {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -500px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -100px -500px;
 }
 
 #java2kotlin-button .icon {
     height: 16px;
     width: 17px;
     margin-top: 4px;
-    background: url("/static/images/icons_all_sprite.png") -100px -300px;
+    background: url("/static/images/icons_all_sprite.svg") -100px -300px;
 }
 
 #java2kotlin-button .text {
@@ -128,7 +128,7 @@
 }
 
 #shortcuts-button .icon {
-    width: 13px;
-    height: 11px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -400px;
+    width: 15px;
+    height: 15px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -100px -400px;
 }

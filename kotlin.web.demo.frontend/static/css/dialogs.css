@@ -42,7 +42,7 @@
     font-size: 0;
     height: 12px;
     width: 12px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -300px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -300px;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
@@ -113,15 +113,15 @@
 }
 
 .facebook_23px {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px 0;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px 0;
 }
 
 .google_23px {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -50px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -50px;
 }
 
 .twitter_23px {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -100px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -100px;
 }
 
 .tweet-dialog .tweet-form {

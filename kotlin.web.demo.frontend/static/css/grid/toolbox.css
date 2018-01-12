@@ -34,7 +34,7 @@
 #accordion-display-button .icon{
     height: 11px;
     width: 6px;
-    background: url("/static/images/icons_all_sprite.png") -100px -600px;
+    background: url("/static/images/icons_all_sprite.svg") -100px -600px;
 }
 
 #accordion-display-button.accordion-hidden .icon{
@@ -81,7 +81,7 @@
     height: 12px;
     width: 12px;
     margin: 2px auto;
-    background: url("/static/images/icons_all_sprite.png") -100px -50px;
+    background: url("/static/images/icons_all_sprite.svg") -100px -50px;
 }
 
 #saveAsButton .icon {
@@ -90,7 +90,7 @@
     position: relative;
     top: 1px;
     margin: 0 auto;
-    background: url("/static/images/icons_all_sprite.png") -100px -150px;
+    background: url("/static/images/icons_all_sprite.svg") -100px -150px;
 }
 
 .argumentsButtonWrapper {
@@ -126,7 +126,7 @@
     width: 13px;
     height: 11px;
     margin: 3px auto;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -250px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -100px -250px;
 }
 
 #argumentsButton .arrow {
@@ -134,11 +134,11 @@
     width: 7px;
     height: 4px;
     margin: auto auto 5px 5px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -750px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -100px -750px;
 }
 
 #argumentsButton.active .arrow {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -700px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -100px -700px;
 }
 
 #runMode {
@@ -167,7 +167,7 @@
     height: 4px;
     float: right;
     margin-top: 3px;
-    background: url("/static/images/icons_all_sprite.png") -100px -750px;
+    background: url("/static/images/icons_all_sprite.svg") -100px -750px;
 }
 
 .ui-selectmenu-button span.ui-selectmenu-text {
@@ -203,7 +203,7 @@
     height: 13px;
     width: 11px;
     margin: 2px auto;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -100px -350px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -100px -350px;
 }
 
 #runButton .ui-button-text {

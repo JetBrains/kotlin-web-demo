@@ -172,14 +172,14 @@
     height: 12px;
     width: 12px;
     margin-top: 2px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -500px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -500px;
 }
 
 .WARNINGgutter {
     height: 12px;
     width: 12px;
     margin-top: 2px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -600px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -600px;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
@@ -249,7 +249,7 @@
     width: 16px;
     height: 16px;
     top: 3px;
-    background: url("/static/images/icons_all_sprite.png") -100px -650px;
+    background: url("/static/images/icons_all_sprite.svg") -100px -650px;
 }
 
 .next-task-dialog .text {
@@ -278,7 +278,7 @@
     width: 16px;
     height: 16px;
     top: 6px;
-    background: url("/static/images/icons_all_sprite.png") -100px -550px;
+    background: url("/static/images/icons_all_sprite.svg") -100px -550px;
 }
 
 .CodeMirror-gutter-wrapper {
