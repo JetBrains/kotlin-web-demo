@@ -70,6 +70,7 @@ object Application {
             onChange = { newValue ->
                 val project = accordion.selectedProjectView!!.project
                 project.compilerVersion = newValue
+                updateKotlinFrame(newValue)
                 project.save()
                 editor.removeStyles()
                 problemsView.clear()
@@ -261,12 +262,6 @@ object Application {
     private val converterProvider = ConverterProvider()
     private val converterView = ConverterView(converterProvider)
 
-    private val iframeDialogs = HashMap<String, IframeDialog>()
-    fun getIframeDialog(kotlinVersion: String): IframeDialog {
-        val iframeDialog = iframeDialogs.get(kotlinVersion) ?: throw Throwable("No such kotlin version: $kotlinVersion")
-        return iframeDialog
-    }
-
     val fileProvider = FileProvider(
             { error, status ->
                 consoleView.writeException(error)
@@ -376,7 +371,50 @@ object Application {
 
     var navBarView = NavBarView(document.getElementById("grid-nav") as HTMLDivElement)
 
+    /**
+     * Map of current iFrames.
+     * Kotlin version -> Iframe.
+     */
+    val iframeDialogs = HashMap<String, IframeDialog>()
 
+    /**
+     * Setting list of available Kotlin.js version in web IDE
+     */
+    private val availableKotlinVersions = arrayListOf<String>()
+
+
+    /**
+     * Getting current IfameDialog by current kotlin version
+     *
+     * @param kotlinVersion - string kotlin version
+     * @return IframeDialog
+     */
+    fun getIframeDialog(kotlinVersion: String?): IframeDialog {
+        val iframeDialog = iframeDialogs.get(checkKotlinVersion(kotlinVersion))
+        return iframeDialog!!
+    }
+
+    /**
+     * Set kotlin version.
+     * If version is not supported => set default kotlin version
+     * @param kotlinVersion - version for validation
+     *
+     * @return - String Kotlin version
+     */
+    private fun checkKotlinVersion(kotlinVersion: String?): String {
+        return if (kotlinVersion != null && kotlinVersion in Application.availableKotlinVersions) {
+            kotlinVersion
+        } else {
+            Application.versionView.defaultVersion
+        }
+    }
+
+    /**
+     * Getting list of available Kotlin version
+     * Loading kotlin JS version to iframeDialogs HashMap
+     *
+     * @see IframeDialog - loading kotlin version
+     */
     private fun setKotlinVersions() {
         ajax(
                 url = generateAjaxUrl(REQUEST_TYPE.GET_KOTLIN_VERSIONS),
@@ -387,10 +425,19 @@ object Application {
                     versionView.init(kotlinVersions)
                     kotlinVersions.forEach { wrapperConfig ->
                         val version = wrapperConfig.version
-                        iframeDialogs[version] = IframeDialog(version)
+                        availableKotlinVersions.add(version)
                     }
                 }
         )
+    }
+
+    /**
+     * Load new Kotlin version if it is still not loaded
+     */
+    private fun updateKotlinFrame(newVersion: String) {
+        if (iframeDialogs[newVersion] == null && newVersion in Application.availableKotlinVersions) {
+            iframeDialogs[newVersion] = IframeDialog(newVersion)
+        }
     }
 
     val generatedCodeView = GeneratedCodeView(document.getElementById("generated-code") as HTMLElement)
