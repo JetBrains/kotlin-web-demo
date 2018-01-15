@@ -20,9 +20,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Project;
@@ -869,7 +869,7 @@ public class MySqlConnector {
             for (ProjectFile file : solution.files) {
                 saveFile(solutionId, file);
             }
-            String projectType = completed ?  "KOANS_TASK" : "INCOMPLETE_KOANS_TASK";
+            String projectType = completed ? "KOANS_TASK" : "INCOMPLETE_KOANS_TASK";
             saveProject(userInfo, solutionId, solution, projectType);
         }
     }
@@ -907,7 +907,7 @@ public class MySqlConnector {
 
     public void deleteSolution(UserInfo userInfo, String taskId) throws DatabaseOperationException {
         String solutionId = getSolutionId(userInfo, taskId);
-        if(solutionId != null) deleteProject(userInfo, solutionId);
+        if (solutionId != null) deleteProject(userInfo, solutionId);
     }
 
     private final class IdentifierGenerator {
