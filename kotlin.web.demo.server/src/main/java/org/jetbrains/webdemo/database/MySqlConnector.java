@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.Project;
@@ -155,13 +156,14 @@ public class MySqlConnector {
     }
 
     public void saveFile(UserInfo userInfo, ProjectFile file) throws DatabaseOperationException {
+        String text = StringEscapeUtils.escapeJava(file.getText());
         try (Connection connection = dataSource.getConnection();
              PreparedStatement st = connection.prepareStatement("UPDATE files JOIN " +
                      "projects ON files.project_id = projects.id JOIN " +
                      "users ON projects.owner_id = users.id SET" +
                      " files.content = ? WHERE" +
                      " users.client_id = ? AND users.provider = ? AND files.public_id = ?  ")) {
-            st.setString(1, file.getText());
+            st.setString(1, text);
             st.setString(2, userInfo.getId());
             st.setString(3, userInfo.getType());
             st.setString(4, file.getPublicId());
@@ -489,7 +491,8 @@ public class MySqlConnector {
                 st.setString(1, rs.getInt("id") + "");
                 rs = st.executeQuery();
                 while (rs.next()) {
-                    ProjectFile file = new ProjectFile(unEscape(rs.getString("name")), rs.getString("content"), true, rs.getString("public_id"), ProjectFile.Type.KOTLIN_FILE);
+                    String contentOfFile = StringEscapeUtils.unescapeJava(rs.getString("content"));
+                    ProjectFile file = new ProjectFile(unEscape(rs.getString("name")), contentOfFile, true, rs.getString("public_id"), ProjectFile.Type.KOTLIN_FILE);
                     project.files.add(file);
                 }
                 return project;
@@ -866,7 +869,7 @@ public class MySqlConnector {
             for (ProjectFile file : solution.files) {
                 saveFile(solutionId, file);
             }
-            String projectType = completed ?  "KOANS_TASK" : "INCOMPLETE_KOANS_TASK";
+            String projectType = completed ? "KOANS_TASK" : "INCOMPLETE_KOANS_TASK";
             saveProject(userInfo, solutionId, solution, projectType);
         }
     }
@@ -904,7 +907,7 @@ public class MySqlConnector {
 
     public void deleteSolution(UserInfo userInfo, String taskId) throws DatabaseOperationException {
         String solutionId = getSolutionId(userInfo, taskId);
-        if(solutionId != null) deleteProject(userInfo, solutionId);
+        if (solutionId != null) deleteProject(userInfo, solutionId);
     }
 
     private final class IdentifierGenerator {

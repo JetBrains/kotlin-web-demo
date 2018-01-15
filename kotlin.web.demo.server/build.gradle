@@ -7,6 +7,7 @@ dependencies {
     compile 'com.nimbusds:nimbus-jose-jwt:3.9'
     compile 'org.pegdown:pegdown:1.5.0'
     runtime 'org.tuckey:urlrewritefilter:4.0.4'
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.2'
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
 }
 

@@ -44,8 +44,8 @@ configure(allprojects.findAll({
     it.name != 'kotlin.web.demo.frontend'
 })) {
     apply plugin: 'java'
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     repositories {
         mavenCentral()
