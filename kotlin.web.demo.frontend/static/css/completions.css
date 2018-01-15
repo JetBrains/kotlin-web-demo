@@ -55,21 +55,21 @@ li.CodeMirror-hint-active{
 }
 
 .icon.class{
-    background: url("/static/images/completion_icons.png") no-repeat 0 0;
+    background: url("/static/images/completion_class.svg");
 }
 
 .icon.package{
-    background: url("/static/images/completion_icons.png") no-repeat -16px -16px;
+    background: url("/static/images/completion_package.svg");
 }
 
 .icon.method{
-    background: url("/static/images/completion_icons.png") no-repeat 0 -16px;
+    background: url("/static/images/completion_method.svg");
 }
 
 .icon.genericValue{
-    background: url("/static/images/completion_icons.png") no-repeat -16px 0;
+    background: url("/static/images/completion_generic.svg")
 }
 
 .icon.property{
-    background: url("/static/images/completion_icons.png") no-repeat -33px 0;
+    background: url("/static/images/completion_property.svg");
 }
