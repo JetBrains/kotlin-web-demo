@@ -224,30 +224,7 @@
     vertical-align: top;
 }
 
-.problemsView-filename-header span, .problemsView-expanded-filename-header span {
-    position: relative;
-    padding-left: 2px;
-}
 
-.problemsView-filename-header, .problemsView-expanded-filename-header {
-    position: relative;
-}
-
-.problemsView-filename-header .arrow {
-    display: inline-block;
-    margin: 2px 4px 1px;
-    height: 9px;
-    width: 7px;
-    background: url("/static/images/testTabIcons.png") -10px 0;
-}
-
-.problemsView-expanded-filename-header .arrow {
-    display: inline-block;
-    margin: 3px 3px 1px;
-    height: 7px;
-    width: 9px;
-    background: url("/static/images/testTabIcons.png");
-}
 
 #problems-tree {
     outline: none;
@@ -446,20 +423,6 @@ li[aria-expanded="false"] > ul {
 .tree-node-header .toggle-arrow {
     float: left;
     display: inline-block;
-}
-
-li[aria-expanded="false"] > .tree-node-header .toggle-arrow {
-    margin: 2px 4px 1px;
-    height: 9px;
-    width: 7px;
-    background: url("/static/images/testTabIcons.png") -10px 0;
-}
-
-li[aria-expanded="true"] > .tree-node-header .toggle-arrow {
-    margin: 3px 3px 1px;
-    height: 7px;
-    width: 9px;
-    background: url("/static/images/testTabIcons.png");
 }
 
 .tree-node-header .text {
