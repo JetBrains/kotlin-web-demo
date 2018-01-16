@@ -434,5 +434,5 @@ li[aria-expanded="false"] > ul {
 .tree-node .kotlin-file-icon {
     height: 14px;
     width: 14px;
-    background: url("/static/images/kotlin_file.png");
+    background: url("/static/images/kotlin_file.svg");
 }

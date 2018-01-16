@@ -425,9 +425,9 @@ a.advent-of-code-link {
     width: 14px;
     height: 14px;
     display: inline-block;
-    background-image: url("/static/images/star.png");
+    background-image: url("/static/images/star.svg");
 }
 
 .advent-of-code-icon:hover {
-    background-image: url("/static/images/starHover.png");
+    background-image: url("/static/images/starHover.svg");
 }
