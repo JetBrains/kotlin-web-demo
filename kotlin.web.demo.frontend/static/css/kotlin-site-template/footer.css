@@ -17,49 +17,69 @@
 .global-footer {
     height: 90px;
     background-color: #1a1a1a;
-    color: #b2b2b2; }
+    color: #b2b2b2;
+}
+
 .global-footer .header {
     font-family: "GraublauSlab Regular", Georgia, serif;
     font-size: 24px;
     color: #7c7979;
-    margin-bottom: 24px; }
+    margin-bottom: 24px;
+}
 
 .global-footer-terms {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 24px 0; }
+    padding: 24px 0;
+}
+
 .global-footer-terms:after {
     display: block;
     clear: both;
     height: 0;
-    content: ''; }
+    content: '';
+}
+
 .global-footer-terms .terms-copyright {
     float: left;
     line-height: 40px;
-    height: 40px; }
+    height: 40px;
+}
+
 .global-footer-terms .terms-copyright a {
-    color: #fff; }
+    color: #fff;
+}
+
 .global-footer-terms .terms-copyright a:hover {
-    color: #f47810; }
+    color: #f47810;
+}
+
 .global-footer-terms .terms-sponsor {
     position: relative;
     float: right;
     right: 0;
     line-height: 40px;
-    height: 40px; }
+    height: 40px;
+}
+
 .global-footer-terms .terms-sponsor .sponsor_jetbrains {
     opacity: 0.7;
     display: inline-block;
     vertical-align: middle;
     margin-left: 3px;
-    width: 48px;
-    height: 48px;
-    background: url("/static/images/logos-sprite.png") no-repeat 0 -50px;
-    font-size: 0; }
+    width: 50px;
+    height: 50px;
+    background: url("/static/images/JB_logo.svg");
+    font-size: 0;
+}
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .global-footer-terms .terms-sponsor .sponsor_jetbrains {
-        background-image: url("/static/images/logos-sprite@2x.png");
-        background-size: 200px 100px; } }
+        background-image: url("/static/images/JB_logo.svg");
+    }
+}
+
 .global-footer-terms .terms-sponsor .sponsor_jetbrains:hover {
-    opacity: 0.9; }
+    opacity: 0.9;
+}
