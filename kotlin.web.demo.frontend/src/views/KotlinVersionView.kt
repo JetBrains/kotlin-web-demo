@@ -16,11 +16,13 @@
 
 package views
 
+import application.Application
 import application.KotlinWrapperConfig
 import kotlinx.html.dom.append
 import kotlinx.html.option
 import org.w3c.dom.HTMLSelectElement
 import utils.jquery.jq
+import views.dialogs.IframeDialog
 import kotlin.js.json
 import kotlin.properties.Delegates
 
@@ -46,6 +48,10 @@ class KotlinVersionView(
         kotlinVersions.forEach {
             if (it.latestStable) {
                 defaultVersion = it.version
+                /*
+                Init default Kotlin JS version
+                 */
+                Application.iframeDialogs[defaultVersion] = IframeDialog(defaultVersion)
             }
             element.append.option {
                 +("v. " + it.version)
