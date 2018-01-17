@@ -33,25 +33,32 @@
     text-align: center;
     text-decoration: none;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent; }
+    -webkit-tap-highlight-color: transparent;
+}
+
 .page_index .global-header .get-kotlin-button {
     font-size: 18px;
     line-height: 52px;
     height: 54px;
-    padding: 0 32px; }
+    padding: 0 32px;
+}
 
 .global-header .try-kotlin-button::-moz-focus-inner, .global-header .get-kotlin-button::-moz-focus-inner, .page_index .global-header .get-kotlin-button::-moz-focus-inner {
     border: none;
-    padding: 0 1px; }
+    padding: 0 1px;
+}
 
 .global-header .try-kotlin-button, .global-header .get-kotlin-button {
     position: relative;
     border-radius: 3px;
     box-shadow: 2px 2px 0 0 rgba(0, 0, 0, 0.1);
     background-color: #bcc0c6;
-    color: #49525e; }
+    color: #49525e;
+}
+
 .global-header .try-kotlin-button:hover, .global-header .get-kotlin-button:hover {
-    background-color: #D7D9DB; }
+    background-color: #D7D9DB;
+}
 
 .page_index .global-header .get-kotlin-button {
     position: relative;
@@ -59,11 +66,16 @@
     box-shadow: 2px 2px 0 0 rgba(0, 0, 0, 0.1);
     background-color: #ee9529;
     color: #fff;
-    font-weight: normal; }
+    font-weight: normal;
+}
+
 .page_index .global-header .get-kotlin-button {
-    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.1); }
+    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.1);
+}
+
 .page_index .global-header .get-kotlin-button:hover {
-    background-color: #FFB62D; }
+    background-color: #FFB62D;
+}
 
 .global-header {
     background-image: -moz-linear-gradient(#6481a1, #4e7196);
@@ -73,57 +85,83 @@
     background-color: #6481A1;
     background-position: center top;
     background-repeat: no-repeat;
-    background-size: cover; }
+    background-size: cover;
+}
+
 .global-header:after {
     display: block;
     clear: both;
     height: 0;
-    content: ''; }
+    content: '';
+}
+
 .global-header .g-layout {
-    position: relative; }
+    position: relative;
+}
+
 .global-header .try-kotlin-button {
-    top: -1px; }
+    top: -1px;
+}
+
 .global-header .get-kotlin-button {
-    top: -2px; }
+    top: -2px;
+}
+
 .global-header .get-kotlin-button .version {
-    font-size: 12px; }
+    font-size: 12px;
+}
+
 .global-header .kotlin-info {
     padding-top: 120px;
-    text-align: left; }
+    text-align: left;
+}
+
 .global-header .kotlin-info-description {
     margin-bottom: 24px;
     color: #fff;
     font-size: 48px;
     line-height: 50px;
     font-family: "GraublauSlab Regular", Georgia, serif;
-    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2), -1px 2px 1px rgba(0, 0, 0, 0.2); }
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2), -1px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
 .global-header .kotlin-info-description-extra {
     position: relative;
     margin-bottom: 72px;
     font-size: 16px;
     line-height: 16px;
     color: #fff;
-    text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.4); }
+    text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.4);
+}
+
 @media (max-width: 810px) {
     .global-header .kotlin-info-description-extra {
-        margin-bottom: 40px; } }
+        margin-bottom: 40px;
+    }
+}
 
 .page_index .global-header .get-kotlin-button {
-    text-transform: uppercase; }
+    text-transform: uppercase;
+}
 
 .global-header-panel {
     box-sizing: border-box;
     padding: 8px 0;
     height: 60px;
-    background-color: #49525E; }
+    background-color: #49525E;
+}
+
 .global-header-panel:after {
     display: block;
     clear: both;
     height: 0;
-    content: ''; }
+    content: '';
+}
+
 .page_index .global-header-panel {
     background-color: #182333;
-    background-color: rgba(24, 35, 51, 0.7); }
+    background-color: rgba(24, 35, 51, 0.7);
+}
 
 .global-header-logo {
     -webkit-transition: 0.3s all;
@@ -133,12 +171,15 @@
     position: relative;
     top: 12px;
     float: left;
-    width: 103px;
-    height: 22px;
-    background: url("/static/images/logos-sprite.png") no-repeat;
+    width: 105px;
+    height: 25px;
+    background: url("/static/images/kotlin_logo.svg");
     font-size: 0;
-    text-decoration: none; }
+    text-decoration: none;
+}
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .global-header-logo {
-        background-image: url("/static/images/logos-sprite@2x.png");
-        background-size: 200px 100px; } }
+        background-image: url("/static/images/kotlin_logo.svg");
+    }
+}

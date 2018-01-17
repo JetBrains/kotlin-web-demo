@@ -38,7 +38,7 @@
     width: 5px;
     min-width: 7px;
     height: 10px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -550px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -50px -550px;
     position: relative;
     top: 3px;
 }
@@ -76,7 +76,7 @@
     width: 7px;
     min-width: 7px;
     height: 7px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -600px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -50px -600px;
     top: 6px;
     position: relative;
 }
@@ -161,11 +161,11 @@
     position: absolute;
     width: 15px;
     height: 13px;
-    background: url("/static/images/icons_all_sprite.png") -50px -0px;
+    background: url("/static/images/icons_all_sprite.svg") -50px -0px;
 }
 
 .examples-project-name.modified>.icon {
-    background: url("/static/images/icons_all_sprite.png") -50px -50px;
+    background: url("/static/images/icons_all_sprite.svg") -50px -50px;
 }
 
 #examples-list .ui-icon {
@@ -214,11 +214,11 @@
     height: 13px;
     width: 13px;
     margin-right: 4px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -250px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -50px -250px;
 }
 
 .new-file.icon:hover{
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -300px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -50px -300px;
 }
 
 .selected.modified .revert.icon {
@@ -230,23 +230,23 @@
     width: 10px;
     top: 1px;
     margin-right: 4px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -350px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -350px;
 }
 
 .selected.modified .revert.icon:hover {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -400px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -400px;
 }
 
 .progress-folder-content .examples-project-name.modified > .icon {
     width: 18px;
     height: 15px;
-    background: url("/static/images/icons_all_sprite.png") -50px -150px;
+    background: url("/static/images/icons_all_sprite.svg") -50px -150px;
 }
 
 .progress-folder-content .examples-project-name.completed > .icon {
     width: 18px;
     height: 15px;
-    background: url("/static/images/icons_all_sprite.png") -50px -100px;
+    background: url("/static/images/icons_all_sprite.svg") -50px -100px;
 }
 
 .delete.icon {
@@ -255,11 +255,11 @@
     height: 13px;
     width: 13px;
     margin-right: 6px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -350px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -50px -350px;
 }
 
 .delete.icon:hover {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -400px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -50px -400px;
 }
 
 .rename.icon {
@@ -268,11 +268,11 @@
     height: 13px;
     width: 13px;
     margin-right: 4px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -450px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -50px -450px;
 }
 
 .rename.icon:hover {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -500px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -50px -500px;
 }
 
 .file-header-wrapper{
@@ -326,32 +326,32 @@
 }
 
 .icon.kotlin {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -300px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -0px -300px;
 }
 
 .icon.java.unmodifiable {
     width: 23px;
     height: 16px;
     margin-left: -10px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -800px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -0px -800px;
 }
 
 .icon.kotlin.unmodifiable {
     width: 23px;
     height: 16px;
     margin-left: -10px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -500px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -0px -500px;
 }
 
 .file-header.modified>.icon.kotlin {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -350px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -0px -350px;
 }
 
 .icon.kotlin-test.unmodifiable {
     width: 23px;
     height: 19px;
     margin-left: -10px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -0px -550px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -0px -550px;
 }
 
 .new-project.icon {
@@ -361,7 +361,7 @@
     margin-top: 7px;
     margin-right: 3px;
     display: inline-block;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -50px -200px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -50px -200px;
 }
 
 .progressbar {
@@ -425,9 +425,9 @@ a.advent-of-code-link {
     width: 14px;
     height: 14px;
     display: inline-block;
-    background-image: url("/static/images/star.png");
+    background-image: url("/static/images/star.svg");
 }
 
 .advent-of-code-icon:hover {
-    background-image: url("/static/images/starHover.png");
+    background-image: url("/static/images/starHover.svg");
 }

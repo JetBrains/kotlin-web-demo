@@ -69,7 +69,7 @@ class FolderViewWithProgress(parentNode: HTMLElement,
         } else {
             container.appendChild(radialProgressBar)
             container.appendChild(radialProgressBar)
-            radialProgressBar.append.img(src = "/static/images/ok.png")
+            radialProgressBar.append.img(src = "/static/images/ok.svg")
             jq(radialProgressBar).circleProgress(json(
                     "size" to 18,
                     "startAngle" to -Math.PI / 2,

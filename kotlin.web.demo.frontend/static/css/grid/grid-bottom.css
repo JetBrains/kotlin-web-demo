@@ -224,30 +224,7 @@
     vertical-align: top;
 }
 
-.problemsView-filename-header span, .problemsView-expanded-filename-header span {
-    position: relative;
-    padding-left: 2px;
-}
 
-.problemsView-filename-header, .problemsView-expanded-filename-header {
-    position: relative;
-}
-
-.problemsView-filename-header .arrow {
-    display: inline-block;
-    margin: 2px 4px 1px;
-    height: 9px;
-    width: 7px;
-    background: url("/static/images/testTabIcons.png") -10px 0;
-}
-
-.problemsView-expanded-filename-header .arrow {
-    display: inline-block;
-    margin: 3px 3px 1px;
-    height: 7px;
-    width: 9px;
-    background: url("/static/images/testTabIcons.png");
-}
 
 #problems-tree {
     outline: none;
@@ -277,7 +254,7 @@
     margin-right: 4px;
     margin-left: 0;
     top: 1px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -500px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -500px;
 }
 
 #problems-tree .tree-node .warning.icon {
@@ -285,7 +262,7 @@
     margin-left: 0;
     margin-right: 4px;
     top: 1px;
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -600px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -600px;
 }
 
 #console, #generated-code {
@@ -432,34 +409,20 @@ li[aria-expanded="false"] > ul {
 }
 
 .tree-node-header .icon.ok {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -450px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -450px;
 }
 
 .tree-node-header .icon.error {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -500px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -500px;
 }
 
 .tree-node-header .icon.fail {
-    background: url("/static/images/icons_all_sprite.png") no-repeat -150px -550px;
+    background: url("/static/images/icons_all_sprite.svg") no-repeat -150px -550px;
 }
 
 .tree-node-header .toggle-arrow {
     float: left;
     display: inline-block;
-}
-
-li[aria-expanded="false"] > .tree-node-header .toggle-arrow {
-    margin: 2px 4px 1px;
-    height: 9px;
-    width: 7px;
-    background: url("/static/images/testTabIcons.png") -10px 0;
-}
-
-li[aria-expanded="true"] > .tree-node-header .toggle-arrow {
-    margin: 3px 3px 1px;
-    height: 7px;
-    width: 9px;
-    background: url("/static/images/testTabIcons.png");
 }
 
 .tree-node-header .text {
@@ -471,5 +434,5 @@ li[aria-expanded="true"] > .tree-node-header .toggle-arrow {
 .tree-node .kotlin-file-icon {
     height: 14px;
     width: 14px;
-    background: url("/static/images/kotlin_file.png");
+    background: url("/static/images/kotlin_file.svg");
 }
