@@ -380,7 +380,7 @@ object Application {
     /**
      * Setting list of available Kotlin.js version in web IDE
      */
-    private val availableKotlinVersions = arrayListOf<String>()
+    private lateinit var availableKotlinVersions: List<String>
 
 
     /**
@@ -389,9 +389,8 @@ object Application {
      * @param kotlinVersion - string kotlin version
      * @return IframeDialog
      */
-    fun getIframeDialog(kotlinVersion: String?): IframeDialog {
-        val iframeDialog = iframeDialogs.get(checkKotlinVersion(kotlinVersion))
-        return iframeDialog!!
+    fun getIframeDialog(kotlinVersion: String): IframeDialog {
+        return iframeDialogs.getValue(checkKotlinVersion(kotlinVersion))
     }
 
     /**
@@ -401,9 +400,9 @@ object Application {
      *
      * @return - String Kotlin version
      */
-    private fun checkKotlinVersion(kotlinVersion: String?): String {
-        return if (kotlinVersion != null && kotlinVersion in Application.availableKotlinVersions) {
-            kotlinVersion
+     fun checkKotlinVersion(kotlinVersion: String?): String {
+        return if (kotlinVersion in Application.availableKotlinVersions) {
+            kotlinVersion!!
         } else {
             Application.versionView.defaultVersion
         }
@@ -423,10 +422,7 @@ object Application {
                 timeout = 1000,
                 success = { kotlinVersions: Array<KotlinWrapperConfig> ->
                     versionView.init(kotlinVersions)
-                    kotlinVersions.forEach { wrapperConfig ->
-                        val version = wrapperConfig.version
-                        availableKotlinVersions.add(version)
-                    }
+                    availableKotlinVersions = kotlinVersions.map { it.version }
                 }
         )
     }
@@ -435,7 +431,7 @@ object Application {
      * Load new Kotlin version if it is still not loaded
      */
     private fun updateKotlinFrame(newVersion: String) {
-        if (iframeDialogs[newVersion] == null && newVersion in Application.availableKotlinVersions) {
+        if (!iframeDialogs.containsKey(newVersion) && newVersion in Application.availableKotlinVersions) {
             iframeDialogs[newVersion] = IframeDialog(newVersion)
         }
     }

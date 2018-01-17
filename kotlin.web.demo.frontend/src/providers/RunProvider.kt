@@ -100,7 +100,7 @@ class RunProvider(
     }
 
     fun loadJsFromServer(project: Project) {
-        var runConfiguration = project.confType
+        val runConfiguration = project.confType
         ajax(
                 //runConf is unused parameter. It's added to url for useful access logs
                 url = generateAjaxUrl("run", hashMapOf("runConf" to runConfiguration)),
@@ -108,7 +108,7 @@ class RunProvider(
                     var translationResult: TranslationResult;
                     val errors = getErrorsMapFromObject(data.errors, project)
                     if (data.jsCode != null) {
-                        val kotlinVersion = project.compilerVersion
+                        val kotlinVersion = Application.checkKotlinVersion(project.compilerVersion)
                         val iframeDialog = Application.getIframeDialog(kotlinVersion)
 
                         try {
