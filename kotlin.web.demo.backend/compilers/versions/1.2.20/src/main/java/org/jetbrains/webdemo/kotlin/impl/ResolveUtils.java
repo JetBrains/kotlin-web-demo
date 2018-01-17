@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2017 JetBrains s.r.o.
+ * Copyright 2000-2018 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import kotlin.jvm.functions.Function2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.analyzer.AnalysisResult;
 import org.jetbrains.kotlin.cli.jvm.compiler.CliLightClassGenerationSupport;
-import org.jetbrains.kotlin.cli.jvm.compiler.JvmPackagePartProvider;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM;
 import org.jetbrains.kotlin.codegen.ClassBuilderFactories;
@@ -51,12 +50,7 @@ import org.jetbrains.kotlin.js.config.JsConfig;
 import org.jetbrains.kotlin.js.resolve.JsPlatform;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.kotlin.resolve.AnnotationResolverImpl;
-import org.jetbrains.kotlin.resolve.BindingContext;
-import org.jetbrains.kotlin.resolve.BindingTrace;
-import org.jetbrains.kotlin.resolve.CompilerEnvironment;
-import org.jetbrains.kotlin.resolve.LazyTopDownAnalyzer;
-import org.jetbrains.kotlin.resolve.TopDownAnalysisMode;
+import org.jetbrains.kotlin.resolve.*;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension;
 import org.jetbrains.kotlin.resolve.lazy.FileScopeProviderImpl;
@@ -86,14 +80,14 @@ public class ResolveUtils {
 
     public static GenerationState getGenerationState(@NotNull List<KtFile> files, Project project, CompilerConfiguration compilerConfiguration) {
         AnalysisResult analyzeExhaust = analyzeFileForJvm(files, project).getFirst();
-        return new GenerationState(
+        return new GenerationState.Builder(
                 project,
                 ClassBuilderFactories.binaries(false),
                 analyzeExhaust.getModuleDescriptor(),
                 analyzeExhaust.getBindingContext(),
                 files,
                 compilerConfiguration
-        );
+        ).build();
     }
 
     public static Pair<AnalysisResult, ComponentProvider> analyzeFileForJvm(@NotNull List<KtFile> files, Project project) {

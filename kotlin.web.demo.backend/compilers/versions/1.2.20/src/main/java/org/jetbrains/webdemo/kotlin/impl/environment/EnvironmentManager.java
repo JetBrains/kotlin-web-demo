@@ -47,14 +47,8 @@ import org.jetbrains.kotlin.cli.jvm.config.JvmContentRootsKt;
 import org.jetbrains.kotlin.config.CommonConfigurationKeys;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 import org.jetbrains.kotlin.config.JVMConfigurationKeys;
-import org.jetbrains.kotlin.config.LanguageVersion;
 import org.jetbrains.kotlin.config.TargetPlatformVersion;
-import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages;
-import org.jetbrains.kotlin.js.analyze.SuppressUnusedParameterForJsNative;
 import org.jetbrains.kotlin.js.config.JSConfigurationKeys;
-import org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs;
-import org.jetbrains.kotlin.resolve.diagnostics.SuppressStringProvider;
-import org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm;
 import org.jetbrains.kotlin.utils.PathUtil;
 import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.kotlin.idea.DummyCodeStyleManager;
@@ -76,11 +70,11 @@ public class EnvironmentManager {
         }
     };
 
-    public static void init(List<Path> libraries){
+    public static void init(List<Path> libraries) {
         environment = createEnvironment(libraries);
     }
 
-    public static void reinitializeJavaEnvironment(){
+    public static void reinitializeJavaEnvironment() {
         try {
             Method method = environment.getClass().getDeclaredMethod("getApplicationEnvironment");
             method.setAccessible(true);
@@ -153,9 +147,6 @@ public class EnvironmentManager {
         });
         project.registerService(CodeStyleManager.class, new DummyCodeStyleManager());
 
-
-        Extensions.getRootArea().getExtensionPoint(SuppressStringProvider.Companion.getEP_NAME()).registerExtension(new SuppressUnusedParameterForJsNative());
-
         registerExtensionPoints(Extensions.getRootArea());
 
         registry = FileTypeRegistry.ourInstanceGetter;
@@ -179,7 +170,7 @@ public class EnvironmentManager {
     private static List<File> getClasspath(@NotNull K2JVMCompilerArguments arguments, List<Path> libraries) {
         List<File> classpath = Lists.newArrayList();
         classpath.addAll(PathUtil.getJdkClassesRoots(new File(CommonSettings.JAVA_HOME)));
-        for(Path library : libraries){
+        for (Path library : libraries) {
             classpath.add(library.toFile());
         }
         if (arguments.getClasspath() != null) {
