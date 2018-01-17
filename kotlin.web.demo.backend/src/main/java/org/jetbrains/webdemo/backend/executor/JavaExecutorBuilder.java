@@ -31,6 +31,7 @@ public class JavaExecutorBuilder {
     private Integer memoryLimit = null;
     private List<Path> classPath = new ArrayList<>();
     private List<String> arguments = new ArrayList<>();
+    private String javaAgent = null;
 
     public JavaExecutorBuilder enableAssertions() {
         enableAssertions = true;
@@ -72,12 +73,21 @@ public class JavaExecutorBuilder {
         return this;
     }
 
+    public JavaExecutorBuilder addJavaAgent(String agent) {
+        this.javaAgent = agent;
+        return this;
+    }
+
     public JavaExecutor build() {
         List<String> arguments = new ArrayList<>();
 
         arguments.add(BackendSettings.JAVA_EXECUTE);
         if (enableAssertions) {
             arguments.add("-ea");
+        }
+
+        if (javaAgent != null) {
+            arguments.add("-javaagent:"+ javaAgent);
         }
 
         if (memoryLimit != null) {

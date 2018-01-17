@@ -65,13 +65,15 @@ public class ExecutorUtils {
             codeDirectory = storeFilesInTemporaryDirectory(files);
             JavaExecutorBuilder executorBuilder = new JavaExecutorBuilder()
                     .enableAssertions()
-                    .setMemoryLimit(32)
+                    .setMemoryLimit(512) // TODO RAG - isn't this a bit high .... (was 32)
                     // TODO: RAG - re-enable security manager when finalised list of jars
                     //.enableSecurityManager()
                     //.setPolicyFile(executorsPolicy)
                     .addToClasspath(kotlinRuntimeJars)
                     .addToClasspath(jarFiles)
                     .addToClasspath(codeDirectory);
+
+            executorBuilder.addJavaAgent("/usr/local/tomcat/webapps/ROOT/WEB-INF/lib/quasar-core-0.7.9-jdk8.jar");
 
             for ( String libraryName : CordaLibraries.cordaLibraries) {
                 executorBuilder.addToClasspath(Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, libraryName));
