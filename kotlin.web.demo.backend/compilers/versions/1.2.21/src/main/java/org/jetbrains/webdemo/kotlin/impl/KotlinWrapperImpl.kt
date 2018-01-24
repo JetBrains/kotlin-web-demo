@@ -120,10 +120,6 @@ class KotlinWrapperImpl : KotlinWrapper {
     }
 
     private fun createPsiFiles(files: Map<String, String>): MutableList<KtFile> {
-        val result = ArrayList<KtFile>()
-        for (fileName in files.keys) {
-            result.add(JetPsiFactoryUtil.createFile(EnvironmentManager.getEnvironment().project, fileName, files[fileName]!!))
-        }
-        return result
+        return files.keys.mapTo(ArrayList()) { JetPsiFactoryUtil.createFile(EnvironmentManager.getEnvironment().project, it, files[it]!!) }
     }
 }

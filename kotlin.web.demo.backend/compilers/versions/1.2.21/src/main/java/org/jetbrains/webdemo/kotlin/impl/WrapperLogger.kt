@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2018 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.kotlin.impl;
+package org.jetbrains.webdemo.kotlin.impl
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 
-public class WrapperLogger {
-    private static Log log;
+object WrapperLogger {
+    private var log: Log? = null
 
-    public static void init(String kotlinVersion) {
-        log = LogFactory.getLog("wrapper-" + kotlinVersion);
+    fun init(kotlinVersion: String) {
+        log = LogFactory.getLog("wrapper-" + kotlinVersion)
     }
 
-    public static void reportException(String message, Throwable e){
-        log.error(message, e);
+    fun reportException(message: String, e: Throwable) {
+        log!!.error(message, e)
     }
 }

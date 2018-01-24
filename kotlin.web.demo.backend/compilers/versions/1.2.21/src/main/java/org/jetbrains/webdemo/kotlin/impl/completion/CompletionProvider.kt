@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.renderer.ClassifierNamePolicy
-import org.jetbrains.kotlin.renderer.DescriptorRendererOptions
 import org.jetbrains.kotlin.renderer.ParameterNameRenderingPolicy
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorUtils
@@ -138,10 +137,10 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
 
             if (descriptors != null) {
                 var prefix: String
-                if (isTipsManagerCompletion) {
-                    prefix = element.text
-                } else {
+                if (!isTipsManagerCompletion) {
                     prefix = element.parent.text
+                } else {
+                    prefix = element.text
                 }
                 prefix = prefix.substringBefore("IntellijIdeaRulezzz", prefix)
                 if (prefix.endsWith(".")) {
@@ -241,24 +240,21 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
     }
 
     private fun keywordsCompletionVariants(keywords: TokenSet, prefix: String): List<CompletionVariant> {
-        val result = keywords.types
+        return keywords.types
                 .map { (it as KtKeywordToken).value }
                 .filter { it.startsWith(prefix) }
-                .mapTo(ArrayList<CompletionVariant>()) { CompletionVariant(it, it, "", "") }
-        return result
+                .mapTo(ArrayList()) { CompletionVariant(it, it, "", "") }
     }
 
 
     private val RENDERER = IdeDescriptorRenderers.SOURCE_CODE.withOptions {
-        fun invoke(descriptorRendererOptions: DescriptorRendererOptions) {
-            descriptorRendererOptions.classifierNamePolicy = ClassifierNamePolicy.SHORT
-            descriptorRendererOptions.typeNormalizer = IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES
-            descriptorRendererOptions.parameterNameRenderingPolicy = ParameterNameRenderingPolicy.NONE
-            descriptorRendererOptions.typeNormalizer = { kotlinType: KotlinType ->
-                if (kotlinType.isFlexible()) {
-                    kotlinType.asFlexibleType().upperBound
-                } else kotlinType
-            }
+        classifierNamePolicy = ClassifierNamePolicy.SHORT
+        typeNormalizer = IdeDescriptorRenderers.APPROXIMATE_FLEXIBLE_TYPES
+        parameterNameRenderingPolicy = ParameterNameRenderingPolicy.NONE
+        typeNormalizer = { kotlinType: KotlinType ->
+            if (kotlinType.isFlexible()) {
+                kotlinType.asFlexibleType().upperBound
+            } else kotlinType
         }
     }
 
@@ -270,7 +266,7 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
     }
 
     // see DescriptorLookupConverter.createLookupElement
-    fun getPresentableText(descriptor: DeclarationDescriptor): Pair<String, String> {
+    private fun getPresentableText(descriptor: DeclarationDescriptor): Pair<String, String> {
         var presentableText = descriptor.name.asString()
         var typeText = ""
         var tailText = ""
