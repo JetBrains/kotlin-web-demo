@@ -31,6 +31,7 @@ dependencies {
 
     compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
 }
+apply plugin: 'kotlin'
 
 task copyKotlinLibs(type: Copy) {
     from configurations.kotlinJVM

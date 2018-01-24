@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-
 buildscript {
-    apply from: 'versions.gradle'
     repositories {
         mavenCentral()
         maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
@@ -24,11 +22,8 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
     }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    }
 }
-
+ext.kotlinVersion = kotlin_version
 ext.kotlinConfigs = gradle.ext.kotlinConfigs
 ext.kotlinVersions = kotlinConfigs.collect { it.version }
 
@@ -44,8 +39,8 @@ configure(allprojects.findAll({
     it.name != 'kotlin.web.demo.frontend'
 })) {
     apply plugin: 'java'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = java_version
+    targetCompatibility = java_version
 
     repositories {
         mavenCentral()
@@ -75,7 +70,6 @@ configure([
         project(':kotlin.web.demo.backend:compilers'),
         project(':kotlin.web.demo.test')
 ]) {
-    apply plugin: 'kotlin'
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4"
