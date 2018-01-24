@@ -69,7 +69,7 @@ public class ErrorAnalyzer {
             for (Diagnostic diagnostic : diagnostics) {
                 //fix for errors in js library files
                 VirtualFile virtualFile = diagnostic.getPsiFile().getVirtualFile();
-                if (virtualFile == null || virtualFile.getPresentableUrl().startsWith(WrapperSettings.JS_LIB_ROOT.toString())) {
+                if (virtualFile == null || virtualFile.getPresentableUrl().startsWith(WrapperSettings.INSTANCE.getJS_LIB_ROOT().toString())) {
                     continue;
                 }
                 String render = DefaultErrorMessages.render(diagnostic);

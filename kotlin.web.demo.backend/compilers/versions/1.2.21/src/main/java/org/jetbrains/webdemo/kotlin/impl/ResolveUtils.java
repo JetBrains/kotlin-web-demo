@@ -135,7 +135,7 @@ public class ResolveUtils {
         KotlinCoreEnvironment environment = EnvironmentManager.getEnvironment();
 
         CompilerConfiguration configuration = environment.getConfiguration().copy();
-        configuration.put(JSConfigurationKeys.LIBRARIES, Collections.singletonList(WrapperSettings.JS_LIB_ROOT.toString()));
+        configuration.put(JSConfigurationKeys.LIBRARIES, Collections.singletonList(WrapperSettings.INSTANCE.getJS_LIB_ROOT().toString()));
         JsConfig config = new JsConfig(project, configuration);
 
         MutableModuleContext module = ContextKt.ContextForNewModule(

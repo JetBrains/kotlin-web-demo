@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.kotlin.impl;
+package org.jetbrains.webdemo.kotlin.impl
 
-import java.nio.file.Path;
+import java.nio.file.Path
 
-public class WrapperSettings {
-    public static Path JS_LIB_ROOT;
+object WrapperSettings {
+    public var JS_LIB_ROOT: Path? = null
 
 }
