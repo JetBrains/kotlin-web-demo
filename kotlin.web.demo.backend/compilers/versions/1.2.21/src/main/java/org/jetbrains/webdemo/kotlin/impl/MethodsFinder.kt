@@ -29,12 +29,12 @@ object MethodsFinder {
 
         classReader.accept(
                 object : ClassVisitor(Opcodes.ASM5) {
-                    override fun visitSource(source: String, debug: String) {
+                    override fun visitSource(source: String?, debug: String?) {
                         sourceFileName[0] = source
                     }
 
                     override fun visitMethod(
-                            access: Int, name: String, desc: String, signature: String, exceptions: Array<String>
+                            access: Int, name: String, desc: String?, signature: String?, exceptions: Array<String>?
                     ): MethodVisitor {
                         return object : MethodVisitor(Opcodes.ASM5) {
                             override fun visitLineNumber(line: Int, start: Label) {
