@@ -56,7 +56,11 @@ internal class CustomizedCompletionView(private val proposal: CompletionProposal
             //Insert string
             cm.replaceRange(text, to)
         } else {
-            cm.replaceRange(text, from, to)
+            val cursorInStringIndex = cur.ch - token.start
+            val sentenceIndex = token.string.substring(0, cursorInStringIndex).lastIndexOf('$')
+            val firstSentence = token.string.substring(0, sentenceIndex + 1)
+            val completionText = firstSentence + text + token.string.substring(cursorInStringIndex, token.string.length)
+            cm.replaceRange(completionText, from, to)
             if (text.endsWith('(')) {
                 cm.replaceRange(")", Position(cur.line, token.start + text.length))
                 cm.execCommand("goCharLeft")
