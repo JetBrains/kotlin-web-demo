@@ -33,10 +33,6 @@ import java.util.*
 
 object WebDemoTranslatorFacade {
 
-    val LIBRARY_FILES = listOf(WrapperSettings.JS_LIB_ROOT.toString())
-
-    private val EXCEPTION = "exception="
-
     fun translateProjectWithCallToMain(files: List<KtFile>, arguments: Array<String>): org.jetbrains.webdemo.kotlin.datastructures.TranslationResult {
         try {
             return doTranslate(files, arguments)
@@ -70,9 +66,8 @@ object WebDemoTranslatorFacade {
                 reporter,
                 files,
                 MainCallParameters.mainWithArguments(Arrays.asList(*arguments)))
-        if (result is TranslationResult.Success) {
-
-            return org.jetbrains.webdemo.kotlin.datastructures.TranslationResult(
+        return if (result is TranslationResult.Success) {
+            org.jetbrains.webdemo.kotlin.datastructures.TranslationResult(
                     "kotlin.kotlin.io.output.flush();\n" + result.getCode() + "\n" + "kotlin.kotlin.io.output.buffer;\n")
 
         } else {
@@ -80,10 +75,9 @@ object WebDemoTranslatorFacade {
             for (psiFile in files) {
                 errors.put(psiFile.name, ArrayList())
             }
-            val errorDescriptors = ArrayList<ErrorDescriptor>()
             val errorAnalyzer = ErrorAnalyzer(files, currentProject)
             errorAnalyzer.getErrorsFromDiagnostics(result.diagnostics.all(), errors)
-            return org.jetbrains.webdemo.kotlin.datastructures.TranslationResult(errors)
+            org.jetbrains.webdemo.kotlin.datastructures.TranslationResult(errors)
         }
     }
 

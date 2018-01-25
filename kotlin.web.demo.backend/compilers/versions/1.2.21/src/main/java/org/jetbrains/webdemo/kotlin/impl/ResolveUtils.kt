@@ -130,9 +130,7 @@ object ResolveUtils {
     private fun computeDependencies(module: ModuleDescriptorImpl, config: JsConfig): List<ModuleDescriptorImpl> {
         val allDependencies = ArrayList<ModuleDescriptorImpl>()
         allDependencies.add(module)
-        for (jsModuleDescriptor in config.moduleDescriptors) {
-            allDependencies.add(jsModuleDescriptor.data)
-        }
+        config.moduleDescriptors.mapTo(allDependencies) { it.data }
         allDependencies.add(JsPlatform.builtIns.builtInsModule)
         return allDependencies
     }

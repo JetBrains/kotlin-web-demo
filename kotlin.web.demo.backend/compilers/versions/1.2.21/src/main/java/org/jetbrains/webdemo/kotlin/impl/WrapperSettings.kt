@@ -19,6 +19,6 @@ package org.jetbrains.webdemo.kotlin.impl
 import java.nio.file.Path
 
 object WrapperSettings {
-    public var JS_LIB_ROOT: Path? = null
+    var JS_LIB_ROOT: Path? = null
 
 }
