@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-.CodeMirror-hints{
+.CodeMirror-hints {
+    min-width: 350px;
     border: 1px solid #969696;
     border-radius: 4px;
     padding: 0;
@@ -30,7 +31,7 @@
     line-height: 18px;
 }
 
-li.CodeMirror-hint-active{
+li.CodeMirror-hint-active {
     background-color: #d8d8d8;
     color: #000000;
 }
@@ -54,22 +55,22 @@ li.CodeMirror-hint-active{
     margin-right: 10px;
 }
 
-.icon.class{
+.icon.class {
     background: url("/static/images/completion_class.svg");
 }
 
-.icon.package{
+.icon.package {
     background: url("/static/images/completion_package.svg");
 }
 
-.icon.method{
+.icon.method {
     background: url("/static/images/completion_method.svg");
 }
 
-.icon.genericValue{
+.icon.genericValue {
     background: url("/static/images/completion_generic.svg")
 }
 
-.icon.property{
+.icon.property {
     background: url("/static/images/completion_property.svg");
 }
