@@ -18,7 +18,7 @@ dependencies {
 }
 
 for (kotlinVersion in kotlinVersions) {
-    evaluationDependsOn(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
+    evaluationDependsOn(":versions:$kotlinVersion")
 }
 
 war {
@@ -29,7 +29,7 @@ war {
     }
 
     for (kotlinVersion in kotlinVersions) {
-        def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
+        def wrapperProject = project(":versions:$kotlinVersion")
         from(wrapperProject.sourceSets.main.output) {
             into("WEB-INF/kotlin-wrappers/$kotlinVersion/classes")
         }

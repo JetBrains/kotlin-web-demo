@@ -23,7 +23,7 @@ dependencies {
 }
 
 for (kotlinVersion in kotlinVersions) {
-    evaluationDependsOn(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
+    evaluationDependsOn(":versions:$kotlinVersion")
 }
 
 war {
@@ -44,7 +44,7 @@ war {
     from("${project(':kotlin.web.demo.frontend').projectDir}/index.html")
     from("${rootProject.projectDir}/build.txt")
     for (kotlinVersion in kotlinVersions) {
-        def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
+        def wrapperProject = project(":versions:$kotlinVersion")
         from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) }) {
             include "kotlin.js"
             into "static/kotlin/${kotlinVersion}"

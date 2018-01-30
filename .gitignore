@@ -6,9 +6,9 @@ statistics
 .idea/*
 !.idea/runConfigurations/
 !.idea/vcs.xml
-kotlin.web.demo.backend/compilers/versions/*/js
-kotlin.web.demo.backend/compilers/versions/*/kotlin
-kotlin.web.demo.backend/compilers/versions/*/executors.policy
+versions/*/js
+versions/*/kotlin
+versions/*/executors.policy
 *.iml
 context.xml
 kotlin.web.demo.executors/executors.policy
