@@ -320,11 +320,11 @@
 }
 
 #tests-status-bar .background.ok {
-    background: url("/static/images/testProgressBar.png") repeat-x 0 -11px;
+    background: url("/static/images/progressbar-ok.svg") repeat-x;
 }
 
 #tests-status-bar .background.fail {
-    background: url("/static/images/testProgressBar.png") repeat-x 0 0;
+    background: url("/static/images/progressBar-fail.svg") repeat-x;
 }
 
 #unit-test-statistic {
