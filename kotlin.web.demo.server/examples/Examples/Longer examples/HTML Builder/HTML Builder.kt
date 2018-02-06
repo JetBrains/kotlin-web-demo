@@ -13,11 +13,11 @@ fun main(args: Array<String>) {
     val result =
             html {
                 head {
-                    title { +"XML encoding with Kotlin" }
+                    title { +"HTML encoding with Kotlin" }
                 }
                 body {
-                    h1 { +"XML encoding with Kotlin" }
-                    p { +"this format can be used as an alternative markup to XML" }
+                    h1 { +"HTML encoding with Kotlin" }
+                    p { +"this format can be used as an alternative markup to HTML" }
 
                     // an element with attributes and text content
                     a(href = "http://jetbrains.com/kotlin") { +"Kotlin" }
