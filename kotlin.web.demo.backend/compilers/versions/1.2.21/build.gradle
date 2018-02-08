@@ -26,7 +26,7 @@ dependencies {
     kotlinJVM tc("$root/kotlin-jslib.jar")
     kotlinJVM tc("$root/kotlin-script-runtime.jar")
     kotlinJS tc("$root/kotlin-jslib.jar")
-    kotlinJVM "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.17"
+    kotlinJVM "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.1"
     kotlinJVM group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: stdlibVersion
 
     compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
