@@ -4,6 +4,6 @@ JsonSlurper slurper = new JsonSlurper()
 file('kotlin.web.demo.common/src/main/resources/compilers-config.json').toPath().withReader { reader ->
     gradle.ext.kotlinConfigs = slurper.parse(reader)
 }
-def kotlinWrappers = gradle.ext.kotlinConfigs.collect({ ':kotlin.web.demo.backend:compilers:versions:' + it.version });
+def kotlinWrappers = gradle.ext.kotlinConfigs.collect({ ':versions:' + it.version });
 include(kotlinWrappers as String[])
 include ':kotlin.web.demo.executors', ':kotlin.web.demo.server', ':kotlin.web.demo.common', ':kotlin.web.demo.backend:compilers', ':kotlin.web.demo.frontend', 'kotlin.web.demo.test'

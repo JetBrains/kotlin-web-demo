@@ -69,7 +69,7 @@ open class UserProject(
         if (fileName == "") {
             return ValidationResult(false, "File name can't be empty")
         }
-        if (fileName.size >= 95) {
+        if (fileName.length >= 95) {
             return ValidationResult(false, "File name is too long")
         }
         if (!fileName.matches("^[a-zA-Z0-9,_\\- ]+$")) {
