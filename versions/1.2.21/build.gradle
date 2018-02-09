@@ -1,11 +1,5 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    }
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.21"
 }
 
 plugins {
@@ -41,7 +35,6 @@ dependencies {
 
     compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
 }
-apply plugin: 'kotlin'
 
 task copyKotlinLibs(type: Copy) {
     from configurations.kotlinJVM
