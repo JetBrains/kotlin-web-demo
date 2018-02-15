@@ -26,6 +26,7 @@ import org.jetbrains.webdemo.kotlin.impl.compiler.KotlinCompilerWrapper
 import org.jetbrains.webdemo.kotlin.impl.completion.CompletionProvider
 import org.jetbrains.webdemo.kotlin.impl.converter.WebDemoJavaToKotlinConverter
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager
+import org.jetbrains.webdemo.kotlin.impl.filter.JarLibraryFileFilter
 import org.jetbrains.webdemo.kotlin.impl.translator.WebDemoTranslatorFacade
 import java.nio.file.Path
 import java.util.*
@@ -36,17 +37,7 @@ class KotlinWrapperImpl : KotlinWrapper {
     private var kotlinBuild: String? = null
     private var wrapperFolder: Path? = null
     private var stdlibVersion: String? = null
-
-    private val compileTimeLibraries: List<Path>
-        get() {
-            val libraries = ArrayList<Path>()
-            libraries.add(jarsFolder!!.resolve("annotations-13.0.jar"))
-            libraries.add(jarsFolder!!.resolve("kotlinx-coroutines-core-0.22.1.jar"))
-            libraries.add(jarsFolder!!.resolve("kotlin-stdlib-$stdlibVersion.jar"))
-            libraries.add(jarsFolder!!.resolve("kotlin-stdlib-jre7-$stdlibVersion.jar"))
-            libraries.add(jarsFolder!!.resolve("kotlin-stdlib-jre8-$stdlibVersion.jar"))
-            return libraries
-        }
+    private var userLibFolder: Path? = null
 
     override fun init(javaLibraries: List<Path>, config: KotlinVersionConfig) {
         this.kotlinVersion = config.version
@@ -55,8 +46,9 @@ class KotlinWrapperImpl : KotlinWrapper {
         WrapperLogger.init(kotlinVersion!!)
         wrapperFolder = KotlinWrappersManager.wrappersDir.resolve(kotlinVersion)
         jarsFolder = wrapperFolder!!.resolve("kotlin")
+        userLibFolder = wrapperFolder!!.resolve("libraries")
         WrapperSettings.JS_LIB_ROOT = wrapperFolder!!.resolve("js")
-        val libraries = kotlinRuntimeLibraries
+        val libraries = kotlinLibraries
         libraries.addAll(javaLibraries)
         EnvironmentManager.init(libraries)
     }
@@ -90,12 +82,16 @@ class KotlinWrapperImpl : KotlinWrapper {
         return compilerWrapper.compile(files, environment.project, environment.configuration, fileName!!, searchForMain)
     }
 
-    override fun getKotlinRuntimeLibraries(): MutableList<Path> {
+    /**
+     * Get user jar-libraries from 'libraries' folder
+     * For adding user-library please add dependencies to build.gradle
+     * Use 'kotlinLibs' task for downloading dependency
+     *
+     * @return list of [Path] to library
+     */
+    override fun getKotlinLibraries(): MutableList<Path> {
         val libraries = ArrayList<Path>()
-        libraries.add(jarsFolder!!.resolve("kotlin-runtime-$kotlinBuild.jar"))
-        libraries.add(jarsFolder!!.resolve("kotlin-reflect-$kotlinBuild.jar"))
-        libraries.add(jarsFolder!!.resolve("kotlin-test-$kotlinBuild.jar"))
-        libraries.addAll(compileTimeLibraries)
+        userLibFolder!!.toFile().listFiles(JarLibraryFileFilter())?.forEach { libraries.add(it.toPath()) }
         return libraries
     }
 

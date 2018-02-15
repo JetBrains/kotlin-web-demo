@@ -26,28 +26,33 @@ import org.jetbrains.webdemo.kotlin.impl.compiler.KotlinCompilerWrapper;
 import org.jetbrains.webdemo.kotlin.impl.completion.CompletionProvider;
 import org.jetbrains.webdemo.kotlin.impl.converter.WebDemoJavaToKotlinConverter;
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager;
+import org.jetbrains.webdemo.kotlin.impl.filter.JarLibraryFileFilter;
 import org.jetbrains.webdemo.kotlin.impl.translator.WebDemoTranslatorFacade;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class KotlinWrapperImpl implements KotlinWrapper {
     private Path jarsFolder;
     private String kotlinVersion;
     private String kotlinBuild;
     private Path wrapperFolder;
+    private Path userLibraries;
 
     @Override
     public void init(List<Path> javaLibraries, KotlinVersionConfig config) {
         this.kotlinVersion = config.getVersion();
         this.kotlinBuild = config.getBuild();
         WrapperLogger.init(kotlinVersion);
-        jarsFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion).resolve("kotlin");
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
-        WrapperSettings.JS_LIB_ROOT = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion).resolve("js");
-        List<Path> libraries = getKotlinRuntimeLibraries();
+        jarsFolder = wrapperFolder.resolve("kotlin");
+        userLibraries = wrapperFolder.resolve("libraries");
+        WrapperSettings.JS_LIB_ROOT = wrapperFolder.resolve("js");
+        List<Path> libraries = getKotlinLibraries();
         libraries.addAll(javaLibraries);
         EnvironmentManager.init(libraries);
     }
@@ -84,18 +89,26 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         return compilerWrapper.compile(files, EnvironmentManager.getEnvironment().getProject(), fileName, searchForMain);
     }
 
+    /**
+     * Get user jar-libraries from 'libraries' folder
+     * For adding user-library please add dependencies to build.gradle
+     * Use 'kotlinLibs' task for downloading dependency
+     *
+     * @return list of {@link Path} to library
+     */
     @Override
-    public List<Path> getKotlinRuntimeLibraries() {
+    public List<Path> getKotlinLibraries() {
         List<Path> libraries = new ArrayList<>();
-        libraries.add(jarsFolder.resolve("kotlin-runtime-" + kotlinBuild + ".jar"));
-        libraries.add(jarsFolder.resolve("kotlin-reflect-" + kotlinBuild + ".jar"));
-        libraries.add(jarsFolder.resolve("kotlin-test-" + kotlinBuild + ".jar"));
+        File[] files = userLibraries.toFile().listFiles(new JarLibraryFileFilter());
+        if (files != null) {
+            Stream.of(files).forEach(libName -> libraries.add(libName.toPath()));
+        }
         return libraries;
     }
 
     @Override
     public Path getKotlinRuntimeJar() {
-        return jarsFolder.resolve("kotlin-runtime-" + kotlinBuild + ".jar");
+        return userLibraries.resolve("kotlin-runtime-" + kotlinBuild + ".jar");
     }
 
     @Override
@@ -110,8 +123,8 @@ public class KotlinWrapperImpl implements KotlinWrapper {
 
     @Override
     public MethodPositions getMethodPositions(Map<String, byte[]> classFiles) {
-        MethodPositions methodPositions= new MethodPositions();
-        for(String key : classFiles.keySet()){
+        MethodPositions methodPositions = new MethodPositions();
+        for (String key : classFiles.keySet()) {
             methodPositions.addClassMethodPositions(key, MethodsFinder.readClassMethodPositions(classFiles.get(key), key));
         }
         return methodPositions;
