@@ -37,7 +37,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class KotlinWrapperImpl implements KotlinWrapper {
-    private Path jarsFolder;
     private String kotlinVersion;
     private String kotlinBuild;
     private Path wrapperFolder;
@@ -49,7 +48,6 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         this.kotlinBuild = config.getBuild();
         WrapperLogger.init(kotlinVersion);
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
-        jarsFolder = wrapperFolder.resolve("kotlin");
         userLibraries = wrapperFolder.resolve("libraries");
         WrapperSettings.JS_LIB_ROOT = wrapperFolder.resolve("js");
         List<Path> libraries = getKotlinLibraries();
