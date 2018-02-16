@@ -66,8 +66,3 @@ task copyKotlinLibs(type: Copy) {
     from configurations.kotlinJVM
     into projectDir.toString() + File.separator + "kotlin"
 }
-
-task copyLibs(type: Copy) {
-    from configurations.kotlinLibs
-    into projectDir.toString() + File.separator + "libraries"
-}

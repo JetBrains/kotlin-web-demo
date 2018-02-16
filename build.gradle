@@ -88,11 +88,9 @@ configure([
 }
 
 task copyKotlinLibs() {}
-task copyLibs() {}
 
 for (kotlinVersion in kotlinVersions) {
     copyKotlinLibs.dependsOn(":versions:$kotlinVersion:copyKotlinLibs")
-    copyLibs.dependsOn(":versions:$kotlinVersion:copyLibs")
 }
 
 project("kotlin.web.demo.executors") {
