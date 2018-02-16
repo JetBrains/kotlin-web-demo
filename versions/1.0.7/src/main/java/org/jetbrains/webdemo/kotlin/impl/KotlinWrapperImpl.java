@@ -40,7 +40,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     private String kotlinVersion;
     private String kotlinBuild;
     private Path wrapperFolder;
-    private Path userLibraries;
+    private Path userCodeLibraries;
 
     @Override
     public void init(List<Path> javaLibraries, KotlinVersionConfig config) {
@@ -48,7 +48,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         this.kotlinBuild = config.getBuild();
         WrapperLogger.init(kotlinVersion);
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
-        userLibraries = wrapperFolder.resolve("libraries");
+        userCodeLibraries = wrapperFolder.resolve("libraries");
         WrapperSettings.JS_LIB_ROOT = wrapperFolder.resolve("js");
         List<Path> libraries = getKotlinLibraries();
         libraries.addAll(javaLibraries);
@@ -97,7 +97,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
     public List<Path> getKotlinLibraries() {
         List<Path> libraries = new ArrayList<>();
-        File[] files = userLibraries.toFile().listFiles(new JarLibraryFileFilter());
+        File[] files = userCodeLibraries.toFile().listFiles(new JarLibraryFileFilter());
         if (files != null) {
             Stream.of(files).forEach(libName -> libraries.add(libName.toPath()));
         }
@@ -106,7 +106,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
 
     @Override
     public Path getKotlinRuntimeJar() {
-        return userLibraries.resolve("kotlin-runtime-" + kotlinBuild + ".jar");
+        return userCodeLibraries.resolve("kotlin-runtime-" + kotlinBuild + ".jar");
     }
 
     @Override

@@ -43,7 +43,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     private String kotlinBuild;
     private Path wrapperFolder;
     private String stdlibVersion;
-    private Path userLibraries;
+    private Path userCodeLibraries;
 
     @Override
     public void init(List<Path> javaLibraries, KotlinVersionConfig config) {
@@ -53,7 +53,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         WrapperLogger.init(kotlinVersion);
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
         jarsFolder = wrapperFolder.resolve("kotlin");
-        userLibraries = wrapperFolder.resolve("libraries");
+        userCodeLibraries = wrapperFolder.resolve("libraries");
         WrapperSettings.JS_LIB_ROOT = wrapperFolder.resolve("js");
         List<Path> libraries = getKotlinLibraries();
         libraries.addAll(javaLibraries);
@@ -103,7 +103,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
     public List<Path> getKotlinLibraries() {
         List<Path> libraries = new ArrayList<>();
-        File[] files = userLibraries.toFile().listFiles(new JarLibraryFileFilter());
+        File[] files = userCodeLibraries.toFile().listFiles(new JarLibraryFileFilter());
         if (files != null) {
             Stream.of(files).forEach(libName -> libraries.add(libName.toPath()));
         }
