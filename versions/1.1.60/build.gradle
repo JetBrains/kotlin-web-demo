@@ -38,7 +38,7 @@ dependencies {
      *
      * For example:
      *
-     * kotlinUserLibs "your dependency from maven"
+     * kotlinLibs "your dependency from maven"
      *
      * FYI: Pay attention if yor library has got reflections, work with files and etc
      * Please configure the 'executors.policy.template' in web-demo-backend.
