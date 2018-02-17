@@ -32,12 +32,12 @@ import java.nio.file.Path
 import java.util.*
 
 class KotlinWrapperImpl : KotlinWrapper {
-    private var jarsFolder: Path? = null
+    private lateinit var jarsFolder: Path
     private var kotlinVersion: String? = null
     private var kotlinBuild: String? = null
-    private var wrapperFolder: Path? = null
+    private lateinit var wrapperFolder: Path
     private var stdlibVersion: String? = null
-    private var userLibFolder: Path? = null
+    private lateinit var userLibFolder: Path
 
     override fun init(javaLibraries: List<Path>, config: KotlinVersionConfig) {
         this.kotlinVersion = config.version
@@ -45,9 +45,9 @@ class KotlinWrapperImpl : KotlinWrapper {
         stdlibVersion = config.stdlibVersion
         WrapperLogger.init(kotlinVersion!!)
         wrapperFolder = KotlinWrappersManager.wrappersDir.resolve(kotlinVersion)
-        jarsFolder = wrapperFolder!!.resolve("kotlin")
-        userLibFolder = wrapperFolder!!.resolve("libraries")
-        WrapperSettings.JS_LIB_ROOT = wrapperFolder!!.resolve("js")
+        jarsFolder = wrapperFolder.resolve("kotlin")
+        userLibFolder = wrapperFolder.resolve("libraries")
+        WrapperSettings.JS_LIB_ROOT = wrapperFolder.resolve("js")
         val libraries = kotlinLibraries
         libraries.addAll(javaLibraries)
         EnvironmentManager.init(libraries)
@@ -91,12 +91,12 @@ class KotlinWrapperImpl : KotlinWrapper {
      */
     override fun getKotlinLibraries(): MutableList<Path> {
         val libraries = ArrayList<Path>()
-        userLibFolder!!.toFile().listFiles(JarLibraryFileFilter())?.forEach { libraries.add(it.toPath()) }
+        userLibFolder.toFile().listFiles(JarLibraryFileFilter())?.forEach { libraries.add(it.toPath()) }
         return libraries
     }
 
     override fun getKotlinRuntimeJar(): Path {
-        return jarsFolder!!.resolve("kotlin-runtime-$kotlinBuild.jar")
+        return jarsFolder.resolve("kotlin-runtime-$kotlinBuild.jar")
     }
 
     override fun getWrapperFolder(): Path? {
