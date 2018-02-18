@@ -35,13 +35,11 @@ class KotlinWrapperImpl : KotlinWrapper {
     private var kotlinVersion: String? = null
     private var kotlinBuild: String? = null
     private lateinit var wrapperFolder: Path
-    private var stdlibVersion: String? = null
     private lateinit var userLibFolder: Path
 
     override fun init(javaLibraries: List<Path>, config: KotlinVersionConfig) {
         this.kotlinVersion = config.version
         this.kotlinBuild = config.build
-        stdlibVersion = config.stdlibVersion
         WrapperLogger.init(kotlinVersion!!)
         wrapperFolder = KotlinWrappersManager.wrappersDir.resolve(kotlinVersion)
         jarsFolder = wrapperFolder.resolve("kotlin")

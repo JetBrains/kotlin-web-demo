@@ -41,14 +41,12 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     private String kotlinVersion;
     private String kotlinBuild;
     private Path wrapperFolder;
-    private String stdlibVersion;
     private Path userCodeLibraries;
 
     @Override
     public void init(List<Path> javaLibraries, KotlinVersionConfig config) {
         this.kotlinVersion = config.getVersion();
         this.kotlinBuild = config.getBuild();
-        stdlibVersion = config.getStdlibVersion();
         WrapperLogger.init(kotlinVersion);
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
         jarsFolder = wrapperFolder.resolve("kotlin");
