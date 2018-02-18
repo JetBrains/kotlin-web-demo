@@ -26,7 +26,6 @@ import org.jetbrains.webdemo.kotlin.impl.compiler.KotlinCompilerWrapper
 import org.jetbrains.webdemo.kotlin.impl.completion.CompletionProvider
 import org.jetbrains.webdemo.kotlin.impl.converter.WebDemoJavaToKotlinConverter
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager
-import org.jetbrains.webdemo.kotlin.impl.filter.JarLibraryFileFilter
 import org.jetbrains.webdemo.kotlin.impl.translator.WebDemoTranslatorFacade
 import java.nio.file.Path
 import java.util.*
@@ -91,7 +90,8 @@ class KotlinWrapperImpl : KotlinWrapper {
      */
     override fun getKotlinLibraries(): MutableList<Path> {
         val libraries = ArrayList<Path>()
-        userLibFolder.toFile().listFiles(JarLibraryFileFilter())?.forEach { libraries.add(it.toPath()) }
+        userLibFolder.toFile().listFiles({pathname -> pathname.absolutePath.matches(Regex(".*\\.jar$"))})
+                ?.forEach { libraries.add(it.toPath()) }
         return libraries
     }
 
