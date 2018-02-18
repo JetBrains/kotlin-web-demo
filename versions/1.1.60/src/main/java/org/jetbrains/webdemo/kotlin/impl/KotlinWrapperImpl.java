@@ -27,7 +27,6 @@ import org.jetbrains.webdemo.kotlin.impl.compiler.KotlinCompilerWrapper;
 import org.jetbrains.webdemo.kotlin.impl.completion.CompletionProvider;
 import org.jetbrains.webdemo.kotlin.impl.converter.WebDemoJavaToKotlinConverter;
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager;
-import org.jetbrains.webdemo.kotlin.impl.filter.JarLibraryFileFilter;
 import org.jetbrains.webdemo.kotlin.impl.translator.WebDemoTranslatorFacade;
 
 import java.io.File;
@@ -103,7 +102,7 @@ public class KotlinWrapperImpl implements KotlinWrapper {
     @Override
     public List<Path> getKotlinLibraries() {
         List<Path> libraries = new ArrayList<>();
-        File[] files = userCodeLibraries.toFile().listFiles(new JarLibraryFileFilter());
+        File[] files = userCodeLibraries.toFile().listFiles(pathname -> pathname.getAbsolutePath().matches(".*\\.jar$"));
         if (files != null) {
             Stream.of(files).forEach(libName -> libraries.add(libName.toPath()));
         }
