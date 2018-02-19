@@ -2,9 +2,9 @@
 
 This is the source for [try.kotl.in]( http://try.kotlinlang.org/)
 
-## Manual installation
+## Manual installation :whale:
 
-Start with command :whale: :
+Start with command:
 
 ```bash
 docker-compose up
