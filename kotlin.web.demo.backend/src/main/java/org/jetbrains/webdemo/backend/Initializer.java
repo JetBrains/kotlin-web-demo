@@ -16,23 +16,22 @@
 
 package org.jetbrains.webdemo.backend;
 
-import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.kotlin.KotlinWrapper;
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Initializer {
     public static void initializeExecutorsPolicyFile(Path templateFilePath) throws IOException {
         for (KotlinWrapper wrapper : KotlinWrappersManager.INSTANCE.getAllWrappers()) {
             String templateFileContent = new String(Files.readAllBytes(templateFilePath));
+            String wrapperPath = wrapper.getWrapperFolder() + "/libraries";
             String policyFileContent = templateFileContent.replaceAll("@LIBS_DIR@", BackendSettings.EXECUTORS_LIBS_DIR.replaceAll("\\\\", "/"));
             policyFileContent = policyFileContent.replaceAll("@KOTLIN_RUNTIME@", wrapper.getKotlinRuntimeJar().toString().replaceAll("\\\\", "/"));
+            policyFileContent = policyFileContent.replaceAll("@WRAPPERS_LIB@", wrapperPath.replaceAll("\\\\", "/"));
             try (PrintWriter policyFile = new PrintWriter(wrapper.getWrapperFolder().resolve("executors.policy").toFile())) {
                 policyFile.write(policyFileContent);
             }

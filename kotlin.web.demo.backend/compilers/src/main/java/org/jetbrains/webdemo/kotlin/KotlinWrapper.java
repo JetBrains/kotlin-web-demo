@@ -37,7 +37,7 @@ public interface KotlinWrapper {
 
     CompilationResult compileCorrectFiles(Map<String, String> projectFiles, @Nullable String filename, boolean searchForMain);
 
-    List<Path> getKotlinRuntimeLibraries();
+    List<Path> getKotlinLibraries();
 
     MethodPositions getMethodPositions(Map<String, byte[]> classFiles);
 

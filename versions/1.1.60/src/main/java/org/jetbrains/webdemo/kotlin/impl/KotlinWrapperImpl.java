@@ -29,28 +29,30 @@ import org.jetbrains.webdemo.kotlin.impl.converter.WebDemoJavaToKotlinConverter;
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager;
 import org.jetbrains.webdemo.kotlin.impl.translator.WebDemoTranslatorFacade;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class KotlinWrapperImpl implements KotlinWrapper {
     private Path jarsFolder;
     private String kotlinVersion;
     private String kotlinBuild;
     private Path wrapperFolder;
-    private String stdlibVersion;
+    private Path userCodeLibraries;
 
     @Override
     public void init(List<Path> javaLibraries, KotlinVersionConfig config) {
         this.kotlinVersion = config.getVersion();
         this.kotlinBuild = config.getBuild();
-        stdlibVersion = config.getStdlibVersion();
         WrapperLogger.init(kotlinVersion);
         wrapperFolder = KotlinWrappersManager.INSTANCE.getWrappersDir().resolve(kotlinVersion);
         jarsFolder = wrapperFolder.resolve("kotlin");
+        userCodeLibraries = wrapperFolder.resolve("libraries");
         WrapperSettings.JS_LIB_ROOT = wrapperFolder.resolve("js");
-        List<Path> libraries = getKotlinRuntimeLibraries();
+        List<Path> libraries = getKotlinLibraries();
         libraries.addAll(javaLibraries);
         EnvironmentManager.init(libraries);
     }
@@ -88,13 +90,20 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         return compilerWrapper.compile(files, environment.getProject(), environment.getConfiguration(), fileName, searchForMain);
     }
 
+    /**
+     * Get user jar-libraries from 'libraries' folder
+     * For adding user-library please add dependencies to build.gradle
+     * Use 'kotlinLibs' task for downloading dependency
+     *
+     * @return list of {@link Path} to library
+     */
     @Override
-    public List<Path> getKotlinRuntimeLibraries() {
+    public List<Path> getKotlinLibraries() {
         List<Path> libraries = new ArrayList<>();
-        libraries.add(jarsFolder.resolve("kotlin-runtime-" + kotlinBuild + ".jar"));
-        libraries.add(jarsFolder.resolve("kotlin-reflect-" + kotlinBuild + ".jar"));
-        libraries.add(jarsFolder.resolve("kotlin-test-" + kotlinBuild + ".jar"));
-        libraries.addAll(getCompileTimeLibraries());
+        File[] files = userCodeLibraries.toFile().listFiles(pathname -> pathname.getAbsolutePath().matches(".*\\.jar$"));
+        if (files != null) {
+            Stream.of(files).forEach(libName -> libraries.add(libName.toPath()));
+        }
         return libraries;
     }
 
@@ -115,8 +124,8 @@ public class KotlinWrapperImpl implements KotlinWrapper {
 
     @Override
     public MethodPositions getMethodPositions(Map<String, byte[]> classFiles) {
-        MethodPositions methodPositions= new MethodPositions();
-        for(String key : classFiles.keySet()){
+        MethodPositions methodPositions = new MethodPositions();
+        for (String key : classFiles.keySet()) {
             methodPositions.addClassMethodPositions(key, MethodsFinder.readClassMethodPositions(classFiles.get(key), key));
         }
         return methodPositions;
@@ -130,13 +139,4 @@ public class KotlinWrapperImpl implements KotlinWrapper {
         return result;
     }
 
-    private List<Path> getCompileTimeLibraries (){
-        List<Path> libraries = new ArrayList<>();
-        libraries.add(jarsFolder.resolve("annotations-13.0.jar"));
-        libraries.add(jarsFolder.resolve("kotlinx-coroutines-core-0.17.jar"));
-        libraries.add(jarsFolder.resolve("kotlin-stdlib-" + stdlibVersion + ".jar"));
-        libraries.add(jarsFolder.resolve("kotlin-stdlib-jre7-" + stdlibVersion + ".jar"));
-        libraries.add(jarsFolder.resolve("kotlin-stdlib-jre8-" + stdlibVersion + ".jar"));
-        return libraries;
-    }
 }

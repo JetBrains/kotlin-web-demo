@@ -70,7 +70,7 @@ class MyHttpSession {
             kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
 
             val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
-            if(wrapper == null) {
+            if (wrapper == null) {
                 response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Unsupported kotlin version: $kotlinVersion")
                 return
             }
@@ -88,7 +88,7 @@ class MyHttpSession {
                     executionResult = ExecutorUtils.executeCompiledFiles(
                             compilationResult.files,
                             compilationResult.mainClass,
-                            wrapper.kotlinRuntimeLibraries,
+                            wrapper.kotlinLibraries,
                             currentProject.args,
                             wrapper.wrapperFolder.resolve("executors.policy"),
                             currentProject.confType == "junit")
@@ -151,7 +151,7 @@ class MyHttpSession {
             val currentProject = objectMapper.readValue(request.getParameter("project"), Project::class.java)
             kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
             val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
-            if(wrapper == null) {
+            if (wrapper == null) {
                 response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Unsupported kotlin version: $kotlinVersion")
                 return
             }
