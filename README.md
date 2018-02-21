@@ -42,7 +42,43 @@ For example:
      5. manifest.json - with 'junit' [configuration](https://github.com/JetBrains/kotlin-web-demo/blob/master/kotlin.web.demo.server/examples/Kotlin%20Koans/Introduction/Hello%2C%20world!/manifest.json)
      
    See example [Kotlin-Koans](https://github.com/JetBrains/kotlin-web-demo/tree/master/kotlin.web.demo.server/examples/Kotlin%20Koans) course.
-   
+  
+## How to add your dependencies to kotlin compiler :books:
+
+How Kotlin-Web-Demo supports 3 compiler version:
+
+ 1. 1.2.21 version
+ 2. 1.1.60 version
+ 3. 1.0.7  version
+ 
+In order to add your libraries you should append dependencies to gradle.build. 
+For example, you may add your dependency with the help of gradle-task called `kotlinLibs ` 
+to [gradle.build](https://github.com/JetBrains/kotlin-web-demo/blob/master/versions/1.2.21/build.gradle) 
+in compiler 1.2.21 like this:
+```gradle
+ kotlinLibs "your dependency"
+```
+
+FYI: Pay attention if yor library has got reflections, work with files and etc.
+Please configure the [executors.policy.template](https://github.com/JetBrains/kotlin-web-demo/blob/master/kotlin.web.demo.backend/src/main/resources/executors.policy.template) 
+in web-demo-backend.
+[Follow the link](https://docs.oracle.com/javase/7/docs/technotes/guides/security/PolicyFiles.html)
+for getting more information about *Java Security Police*.
+
+**How to set Java Security Police in `executors.policy.template`**
+
+If you want to add own dependency please use marker  `@WRAPPERS_LIB@`
+
+For example:
+```     
+grant codeBase "file:@WRAPPERS_LIB@/junit-4.12.jar" {
+  permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+  permission java.lang.RuntimePermission "setIO";
+  permission java.io.FilePermission "<<ALL FILES>>", "read";
+  permission java.lang.RuntimePermission "accessDeclaredMembers";
+};
+```    
+
 ## Current development status :construction_worker:
 We try to make the try.kotl.in more easier for adding your own courses. 
 If you have some ideas and suggestions for improving the Kotlin-Web-Demo please create the 
