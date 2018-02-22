@@ -1,0 +1,98 @@
+###################
+# Server port app #
+###################
+server:
+  port: 4040
+
+###################
+# Server port app #
+###################
+client:
+  home: YOUR CLIENT APP URL
+
+##########################
+# Database configuration #
+##########################
+spring:
+    datasource:
+        password: PASSWORD DB
+        url: DB URL
+        username: DB NAME
+
+#############################
+# file with kotlin versions #
+#############################
+compilers:
+    config:
+        file: compilers-config.json
+
+###############################
+# Kotlin compiler backend API #
+###############################
+backend:
+    url: YOUR KOTLIN COMPILER URL
+    run: run
+    complete: complete
+    convert: convertToKotlin
+
+#######################
+# OAuth2 Facebook API #
+#######################
+facebook:
+  client:
+    clientId: YOUR CLIENT ID
+    clientSecret: YOUR SECRET KEY
+    accessTokenUri: https://graph.facebook.com/oauth/access_token
+    userAuthorizationUri: https://www.facebook.com/dialog/oauth
+    tokenName: oauth_token
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://graph.facebook.com/me
+
+#####################
+# OAuth2 GitHub API #
+#####################
+github:
+  client:
+    clientId: YOUR CLIENT ID
+    clientSecret: YOUR SECRET KEY
+    accessTokenUri: https://github.com/login/oauth/access_token
+    userAuthorizationUri: https://github.com/login/oauth/authorize
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://api.github.com/user
+
+#####################
+# OAuth2 Google API #
+#####################
+google:
+  client:
+    clientId: YOUR CLIENT ID
+    clientSecret: YOUR SECRET KEY
+    accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+    userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+    clientAuthenticationScheme: form
+    scope:
+        - openid
+        - email
+        - profile
+  resource:
+    userInfoUri:  https://www.googleapis.com/oauth2/v3/userinfo
+    preferTokenInfo: true
+
+#####################
+# OAuth2 Stepik API #
+#####################
+stepic:
+  client:
+    clientId: YOUR CLIENT ID
+    clientSecret: YOUR SECRET KEY
+    accessTokenUri: https://stepik.org/oauth2/token/
+    userAuthorizationUri: https://stepik.org/oauth2/authorize/
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://stepik.org/api/stepics/1
+
+
+
