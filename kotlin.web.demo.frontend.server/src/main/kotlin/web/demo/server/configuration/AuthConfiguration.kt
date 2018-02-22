@@ -1,0 +1,132 @@
+package web.demo.server.configuration
+
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.web.servlet.FilterRegistrationBean
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.oauth2.client.OAuth2ClientContext
+import org.springframework.security.oauth2.client.OAuth2RestTemplate
+import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter
+import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import org.springframework.web.filter.CompositeFilter
+import javax.servlet.Filter
+
+
+/**
+ * Auth class for getting permit to URLs
+ *
+ * @author Alexander Prendota on 2/16/18 JetBrains.
+ */
+@Configuration
+@EnableOAuth2Client
+class AuthConfiguration : WebSecurityConfigurerAdapter() {
+
+
+    @Value("\${client.home}")
+    lateinit var clientHomeUrl: String
+
+    @Autowired
+    @Qualifier("oauth2ClientContext")
+    lateinit var oauth2ClientContext: OAuth2ClientContext
+
+
+    @Throws(Exception::class)
+    override fun configure(http: HttpSecurity) {
+        http.antMatcher("/**")
+                .addFilterBefore(ssoFilter(), BasicAuthenticationFilter::class.java)
+                .authorizeRequests()
+                .antMatchers("/",
+                        "/login**",
+                        "/webjars/**",
+                        "/runKotlin",
+                        "/completeKotlin",
+                        "/convertToKotlin",
+                        "/kotlinVersions")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .logout().logoutSuccessUrl(clientHomeUrl).permitAll().and().csrf().disable()
+    }
+
+    /**
+     * Getting github auth parameters from configuration file
+     */
+    @Bean
+    @ConfigurationProperties("github")
+    fun github(): ClientResources {
+        return ClientResources()
+    }
+
+    /**
+     * Getting facebook auth parameters from configuration file
+     */
+    @Bean
+    @ConfigurationProperties("facebook")
+    fun facebook(): ClientResources {
+        return ClientResources()
+    }
+
+    /**
+     * Getting google auth parameters from configuration file
+     */
+    @Bean
+    @ConfigurationProperties("google")
+    fun google(): ClientResources {
+        return ClientResources()
+    }
+
+
+    /**
+     * Getting stepic auth parameters from configuration file
+     */
+    @Bean
+    @ConfigurationProperties("stepic")
+    fun stepic(): ClientResources {
+        return ClientResources()
+    }
+
+
+    @Bean
+    fun oauth2ClientFilterRegistration(
+            filter: OAuth2ClientContextFilter): FilterRegistrationBean {
+        val registration = FilterRegistrationBean()
+        registration.filter = filter
+        registration.order = -100
+        return registration
+    }
+
+    private fun ssoFilter(): Filter {
+        val filter = CompositeFilter()
+        val filters = ArrayList<Filter>()
+        filters.add(ssoFilter(facebook(), "/login/facebook"))
+        filters.add(ssoFilter(github(), "/login/github"))
+        filters.add(ssoFilter(google(), "/login/google"))
+        filters.add(ssoFilter(stepic(), "/login/stepic"))
+        filter.setFilters(filters)
+        return filter
+    }
+
+    private fun ssoFilter(client: ClientResources, path: String): Filter {
+        val filter = OAuth2ClientAuthenticationProcessingFilter(path)
+        val template = OAuth2RestTemplate(client.client, oauth2ClientContext)
+        filter.setRestTemplate(template)
+        val tokenServices = UserInfoTokenServices(
+                client.resource.userInfoUri, client.client.clientId)
+        tokenServices.setRestTemplate(template)
+        filter.setTokenServices(tokenServices)
+        filter.setAuthenticationSuccessHandler(
+                SimpleUrlAuthenticationSuccessHandler(clientHomeUrl))
+        return filter
+    }
+
+}
