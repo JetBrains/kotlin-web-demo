@@ -7,6 +7,6 @@ import web.demo.server.entity.User
  *
  * @author Alexander Prendota on 2/26/18 JetBrains.
  */
-data class UserDto(var id: Int,
-                   var name: String,
-                   var clientId: String)
+data class UserDto(var id: Int = 0,
+                   var username: String = "",
+                   var clientId: String = "")
