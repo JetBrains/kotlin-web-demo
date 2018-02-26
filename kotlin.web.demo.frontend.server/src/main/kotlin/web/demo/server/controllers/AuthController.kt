@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse
  * @author Alexander Prendota on 2/19/18 JetBrains.
  */
 @Controller
-class LogoutController {
-    @GetMapping("/exit")
+class AuthController {
+    @GetMapping("/logout")
     fun exit(request: HttpServletRequest, response: HttpServletResponse) {
         SecurityContextLogoutHandler().logout(request, null, null)
         try {
