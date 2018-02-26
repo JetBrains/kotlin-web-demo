@@ -44,12 +44,6 @@ For example:
    See example [Kotlin-Koans](https://github.com/JetBrains/kotlin-web-demo/tree/master/kotlin.web.demo.server/examples/Kotlin%20Koans) course.
   
 ## How to add your dependencies to kotlin compiler :books:
-
-How Kotlin-Web-Demo supports 3 compiler version:
-
- 1. 1.2.21 version
- 2. 1.1.60 version
- 3. 1.0.7  version
  
 In order to add your libraries you should append dependencies to gradle.build. 
 For example, you may add your dependency with the help of gradle-task called `kotlinLibs ` 
