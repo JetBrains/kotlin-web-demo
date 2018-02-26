@@ -1,6 +1,10 @@
 package web.demo.server.dtos
 
+import web.demo.server.entity.Project
+
 /**
+ * POJO for [Project]
+ *
  * @author Alexander Prendota on 2/7/18 JetBrains.
  */
 data class ProjectDto(var id: String?,
