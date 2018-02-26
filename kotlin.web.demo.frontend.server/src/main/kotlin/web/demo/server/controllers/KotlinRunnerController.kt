@@ -5,9 +5,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import web.demo.server.common.PathsConstants
-import web.demo.server.dtos.CompleteCodeDto
+import web.demo.server.dtos.ExecuteKotlinCodeDto
 import web.demo.server.dtos.ProjectDto
-import web.demo.server.dtos.RunCodeDto
 import web.demo.server.service.api.KotlinRunnerService
 
 /**
@@ -52,7 +51,7 @@ class KotlinRunnerController {
     /**
      * Rest interface for running code form [ProjectDto]
      *
-     * @param project       - [RunCodeDto]
+     * @param executeKotlinCodeDto       - [ExecuteKotlinCodeDto]
      * searchForMain        - if true -> search main function in file with code
      * fileName             - name of file with code
      *
@@ -63,14 +62,16 @@ class KotlinRunnerController {
      * <errStream> - for error output
      */
     @PostMapping(PathsConstants.RUN_KOTLIN)
-    fun runKotlinCodeController(@RequestBody runCodeDto: RunCodeDto): ResponseEntity<*> {
-        return ResponseEntity(service.runKotlinCode(runCodeDto.project, runCodeDto.filename, runCodeDto.searchForMain), HttpStatus.OK)
+    fun runKotlinCodeController(@RequestBody executeKotlinCodeDto: ExecuteKotlinCodeDto): ResponseEntity<*> {
+        return ResponseEntity(service.runKotlinCode(executeKotlinCodeDto.project,
+                executeKotlinCodeDto.filename,
+                executeKotlinCodeDto.searchForMain), HttpStatus.OK)
     }
 
     /**
      * Get complete Kotlin code by cursor position
      *
-     * @param project   - [CompleteCodeDto]
+     * @param executeKotlinCodeDto   - [ExecuteKotlinCodeDto]
      * project   - [ProjectDto]
      * fileName  - name of file with code
      * line      - line cursor position
@@ -80,12 +81,12 @@ class KotlinRunnerController {
      * [{"text":"toInt()","displayText":"toInt()","tail":"Int","icon":"method"}]
      */
     @PostMapping(PathsConstants.COMPLETE_KOTLIN)
-    fun completeKotlinCodeController(@RequestBody completeCodeDto: CompleteCodeDto): ResponseEntity<*> {
+    fun completeKotlinCodeController(@RequestBody executeKotlinCodeDto: ExecuteKotlinCodeDto): ResponseEntity<*> {
         return ResponseEntity(service.completeKotlinCode(
-                completeCodeDto.project,
-                completeCodeDto.filename,
-                completeCodeDto.line,
-                completeCodeDto.ch), HttpStatus.OK)
+                executeKotlinCodeDto.project,
+                executeKotlinCodeDto.filename,
+                executeKotlinCodeDto.line,
+                executeKotlinCodeDto.ch), HttpStatus.OK)
     }
 
 }
