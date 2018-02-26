@@ -10,5 +10,6 @@ enum class ProviderType {
     facebook,
     jba,
     google,
-    github
+    github,
+    stepic
 }
