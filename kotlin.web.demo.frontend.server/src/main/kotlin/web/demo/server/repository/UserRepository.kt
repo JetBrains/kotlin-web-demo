@@ -9,5 +9,5 @@ import web.demo.server.entity.User
  */
 @Repository
 interface UserRepository: CrudRepository<User, Int> {
-    fun findByClientId(clientId: String): User
+    fun findByClientId(clientId: String): User?
 }
