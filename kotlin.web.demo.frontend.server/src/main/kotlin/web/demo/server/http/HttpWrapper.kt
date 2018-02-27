@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 
+
 /**
  *
  * HTTP Request component
@@ -36,7 +37,7 @@ class HttpWrapper {
         val builder = UriComponentsBuilder.fromUriString(url)
         parameters.forEach { builder.queryParam(it.key, it.value) }
         val requestEntity = HttpEntity<String>("", headers)
-        val responseEntity = rest.exchange(builder.build().toUri(),
+        val responseEntity = rest.exchange(builder.build().encode("UTF-8").toUri(),
                 HttpMethod.GET,
                 requestEntity,
                 typeResponse)
@@ -63,7 +64,7 @@ class HttpWrapper {
         val builder = UriComponentsBuilder.fromUriString(url)
         parameters.forEach { builder.queryParam(it.key, it.value) }
         val requestEntity = HttpEntity<String>(body, headers)
-        val responseEntity = rest.exchange(builder.build().toUri(),
+        val responseEntity = rest.exchange(builder.build().encode("UTF-8").toUri(),
                 HttpMethod.POST,
                 requestEntity,
                 typeResponse)
@@ -90,7 +91,7 @@ class HttpWrapper {
         val builder = UriComponentsBuilder.fromUriString(url)
         parameters.forEach { builder.queryParam("ids[]", it) }
         val requestEntity = HttpEntity<String>("", headers)
-        val responseEntity = rest.exchange(builder.build().toUri(),
+        val responseEntity = rest.exchange(builder.build().encode("UTF-8").toUri(),
                 HttpMethod.GET,
                 requestEntity,
                 typeResponse)
