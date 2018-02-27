@@ -49,6 +49,7 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
                         "/webjars/**",
                         "/runKotlin",
                         "/completeKotlin",
+                        "/kotlinServer",
                         "/convertToKotlin",
                         "/kotlinVersions")
                 .permitAll()

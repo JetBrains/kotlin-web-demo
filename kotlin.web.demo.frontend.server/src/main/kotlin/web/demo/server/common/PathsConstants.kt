@@ -25,4 +25,9 @@ object PathsConstants {
      * Path for getting completion of kotlin code
      */
     const val COMPLETE_KOTLIN = "/completeKotlin"
+
+    /**
+     * Legacy path for supporting old API for running, getting versions and getting completion
+     */
+    const val KOTLIN_SERVER = "/kotlinServer"
 }
