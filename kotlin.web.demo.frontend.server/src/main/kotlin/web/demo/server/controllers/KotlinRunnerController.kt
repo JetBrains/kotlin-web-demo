@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import web.demo.server.common.PathsConstants
+import web.demo.server.common.ActionPathsConstants
 import web.demo.server.dtos.ExecuteKotlinCodeDto
 import web.demo.server.dtos.ProjectDto
 import web.demo.server.exceptions.OperationNotFoundException
@@ -34,7 +34,7 @@ class KotlinRunnerController {
      * Rest interface for getting kotlin version from config file
      * See application.properties file for getting location of config file with supported kotlin versions
      */
-    @GetMapping(PathsConstants.KOTLIN_VERSIONS)
+    @GetMapping(ActionPathsConstants.KOTLIN_VERSIONS)
     fun getKotlinVersionController(): ResponseEntity<*> {
         return ResponseEntity(service.getAvailableKotlinVersions(), HttpStatus.OK)
     }
@@ -46,7 +46,7 @@ class KotlinRunnerController {
      *
      * @return string kotlin code
      */
-    @GetMapping(PathsConstants.CONVERT_TO_KOTLIN)
+    @GetMapping(ActionPathsConstants.CONVERT_TO_KOTLIN)
     fun convertJavaToKotlinController(@RequestParam("text") code: String): ResponseEntity<*> {
         return ResponseEntity(service.convertToKotlinCode(code), HttpStatus.OK)
     }
@@ -65,7 +65,7 @@ class KotlinRunnerController {
      * <outStream> - for correct result
      * <errStream> - for error output
      */
-    @PostMapping(PathsConstants.RUN_KOTLIN)
+    @PostMapping(ActionPathsConstants.RUN_KOTLIN)
     fun runKotlinCodeController(@RequestBody executeKotlinCodeDto: ExecuteKotlinCodeDto): ResponseEntity<*> {
         return ResponseEntity(service.runKotlinCode(executeKotlinCodeDto.project,
                 executeKotlinCodeDto.filename,
@@ -84,7 +84,7 @@ class KotlinRunnerController {
      * @return string output like:
      * [{"text":"toInt()","displayText":"toInt()","tail":"Int","icon":"method"}]
      */
-    @PostMapping(PathsConstants.COMPLETE_KOTLIN)
+    @PostMapping(ActionPathsConstants.COMPLETE_KOTLIN)
     fun completeKotlinCodeController(@RequestBody executeKotlinCodeDto: ExecuteKotlinCodeDto): ResponseEntity<*> {
         return ResponseEntity(service.completeKotlinCode(
                 executeKotlinCodeDto.project,
@@ -109,7 +109,7 @@ class KotlinRunnerController {
      * 2 - type = complete          -> [completeKotlinCodeController]
      * 3 - type = getKotlinVersions -> [getKotlinVersionController]
      */
-    @RequestMapping(value = [(PathsConstants.KOTLIN_SERVER)], method = [RequestMethod.POST, RequestMethod.GET])
+    @RequestMapping(value = [(ActionPathsConstants.KOTLIN_SERVER)], method = [RequestMethod.POST, RequestMethod.GET])
     fun multipleController(@RequestParam("type") type: String,
                            @RequestParam("runConf", required = false) runConf: String?,
                            request: HttpServletRequest): ResponseEntity<*> {

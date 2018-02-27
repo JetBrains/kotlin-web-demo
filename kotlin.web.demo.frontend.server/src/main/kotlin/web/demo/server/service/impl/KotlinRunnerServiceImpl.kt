@@ -6,7 +6,7 @@ import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import web.demo.server.common.PathsConstantsBackend
+import web.demo.server.common.BackendPathsConstants
 import web.demo.server.dtos.KotlinVersionDto
 import web.demo.server.dtos.ProjectDto
 import web.demo.server.http.HttpWrapper
@@ -31,7 +31,7 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
     lateinit var modelMapper: ModelMapper
 
     @Autowired
-    lateinit var pathsBackend: PathsConstantsBackend
+    lateinit var pathsBackend: BackendPathsConstants
 
     @Autowired
     lateinit var http: HttpWrapper

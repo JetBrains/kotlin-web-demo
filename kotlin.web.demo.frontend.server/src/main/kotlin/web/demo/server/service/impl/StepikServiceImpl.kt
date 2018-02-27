@@ -2,7 +2,7 @@ package web.demo.server.service.impl
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import web.demo.server.common.PathsStepik
+import web.demo.server.common.StepikPathsConstants
 import web.demo.server.dtos.stepic.CourseDto
 import web.demo.server.dtos.stepic.LessonDto
 import web.demo.server.dtos.stepic.ProgressContainerDto
@@ -49,7 +49,7 @@ class StepikServiceImpl : StepikService {
         val stepsIdToRequest = prepareTaskIdToRequest(stepsFromCourse)
         val headers = mapOf("Authorization" to "Bearer " + tokenValue,
                 "Content-Type" to "application/json")
-        val url = PathsStepik.STEPIK_API_URL + PathsStepik.STEPIK_PROGRESSES
+        val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_PROGRESSES
         var progressContainer = emptyList<ProgressContainerDto>()
         var iterator = 0
         while (iterator < stepsIdToRequest.size) {
@@ -89,7 +89,7 @@ class StepikServiceImpl : StepikService {
                 "Content-Type" to "application/json")
         val queryParameters = mapOf(
                 "course" to courseId)
-        val url = PathsStepik.STEPIK_API_URL + PathsStepik.STEPIK_LESSONS
+        val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_LESSONS
         val course = httpWrapper.doGet(url, queryParameters, headers, CourseDto::class.java)
         return course.lessons
     }

@@ -1,6 +1,6 @@
 package web.demo.server.common
 
-object PathsStepik {
+object StepikPathsConstants {
 
     /**
      * Path to Stepik main sever.

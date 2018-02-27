@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
  * @author Alexander Prendota on 2/7/18 JetBrains.
  */
 @Component
-class PathsConstantsBackend {
+class BackendPathsConstants {
 
     /**
      * Server main path

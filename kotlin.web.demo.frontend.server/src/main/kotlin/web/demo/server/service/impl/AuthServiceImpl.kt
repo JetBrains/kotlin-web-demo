@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.stereotype.Service
-import web.demo.server.common.AuthConstants
+import web.demo.server.common.AuthPathsConstants
 import web.demo.server.dtos.UserDto
 import web.demo.server.entity.User
 import web.demo.server.exceptions.AuthorizationProviderException
@@ -32,7 +32,7 @@ class AuthServiceImpl : AuthService {
 
     /**
      * Define the auth provider.
-     * See [AuthConstants] for getting client id and user name from [OAuth2Authentication] object
+     * See [AuthPathsConstants] for getting client id and user name from [OAuth2Authentication] object
      *
      * @param detail - object with client detail map
      *
@@ -42,13 +42,13 @@ class AuthServiceImpl : AuthService {
         if (detail is LinkedHashMap<*, *>) {
             val name: String
             val clientId: String
-            if (detail[AuthConstants.GOOGLE_CLIENT_ID] != null && detail[AuthConstants.GOOGLE_USER_NAME] != null) {
-                clientId = detail[AuthConstants.GOOGLE_CLIENT_ID] as String
-                name = detail[AuthConstants.GOOGLE_USER_NAME] as String
+            if (detail[AuthPathsConstants.GOOGLE_CLIENT_ID] != null && detail[AuthPathsConstants.GOOGLE_USER_NAME] != null) {
+                clientId = detail[AuthPathsConstants.GOOGLE_CLIENT_ID] as String
+                name = detail[AuthPathsConstants.GOOGLE_USER_NAME] as String
                 return registrationGoogleUser(clientId, name)
-            } else if (detail[AuthConstants.FACEBOOK_CLIENT_ID] != null && detail[AuthConstants.FACEBOOK_USER_NAME] != null) {
-                clientId = detail[AuthConstants.FACEBOOK_CLIENT_ID] as String
-                name = detail[AuthConstants.FACEBOOK_USER_NAME] as String
+            } else if (detail[AuthPathsConstants.FACEBOOK_CLIENT_ID] != null && detail[AuthPathsConstants.FACEBOOK_USER_NAME] != null) {
+                clientId = detail[AuthPathsConstants.FACEBOOK_CLIENT_ID] as String
+                name = detail[AuthPathsConstants.FACEBOOK_USER_NAME] as String
                 return registrationFacebookUser(clientId, name)
             } else if (detail["users"] != null) {
                 val listStepicAuthUsers = detail["users"] as ArrayList<*>
@@ -82,15 +82,15 @@ class AuthServiceImpl : AuthService {
      * Registration user if not exist.
      * Getting list of users from Stepik details.
      * Use for authorization only first user.
-     * See [AuthConstants] for getting client id and user name
+     * See [AuthPathsConstants] for getting client id and user name
      *
      * @return authenticated user [UserDto]
      */
     private fun registrationStepicUser(listOfAuthUsers: ArrayList<*>): UserDto {
         if (listOfAuthUsers.isNotEmpty()) {
             val firstStepicUser = listOfAuthUsers[0] as LinkedHashMap<*, *>
-            val clientId = firstStepicUser[AuthConstants.STEPIK_CLIENT_ID] as Int?
-            val name = firstStepicUser[AuthConstants.STEPIK_USER_NAME] as String?
+            val clientId = firstStepicUser[AuthPathsConstants.STEPIK_CLIENT_ID] as Int?
+            val name = firstStepicUser[AuthPathsConstants.STEPIK_USER_NAME] as String?
             if (clientId != null && name != null) {
                 return saveUser(clientId.toString(), name, ProviderType.stepic)
             }

@@ -5,7 +5,7 @@ package web.demo.server.common
  *
  * @author Alexander Prendota on 2/5/18 JetBrains.
  */
-object PathsConstants {
+object ActionPathsConstants {
     /**
      * Path for getting kotlin version from server
      */

@@ -5,7 +5,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication
 /**
  * Paths to client ID and user name from [OAuth2Authentication]
  */
-object AuthConstants {
+object AuthPathsConstants {
 
     /**
      * Google constants
