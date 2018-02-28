@@ -38,10 +38,10 @@ open class Project {
 
     @ManyToOne
     @JoinColumn(name = "OWNER_ID")
-    var owner_id: User? = null
+    var ownerId: User? = null
 
     @Column(name = "PUBLIC_ID", nullable = false, unique = true)
-    var public_id: String = ""
+    var publicId: String = ""
 
 }
 
