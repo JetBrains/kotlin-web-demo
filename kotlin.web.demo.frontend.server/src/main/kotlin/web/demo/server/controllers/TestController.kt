@@ -16,7 +16,7 @@ class TestController {
     @Autowired
     lateinit var stepikService: StepikService
 
-    @GetMapping("/user")
+    @GetMapping("/test")
     fun testController(authentication: OAuth2Authentication): OAuth2Authentication {
         var token = (authentication.details as OAuth2AuthenticationDetails).tokenValue
         stepikService.getCourseProgress("4222", token)

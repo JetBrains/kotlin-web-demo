@@ -9,4 +9,5 @@ import web.demo.server.entity.User
  */
 data class UserDto(var id: Int = 0,
                    var username: String = "",
-                   var clientId: String = "")
+                   var clientId: String = "",
+                   var provider: String = "")

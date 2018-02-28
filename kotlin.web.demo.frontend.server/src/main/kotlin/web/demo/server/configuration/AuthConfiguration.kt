@@ -15,9 +15,9 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.web.filter.CompositeFilter
+import web.demo.server.common.ProviderPathsConstants
 import javax.servlet.Filter
 
 
@@ -92,7 +92,7 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
      */
     @Bean
     @ConfigurationProperties("stepic")
-    fun stepic(): ClientResources {
+    fun stepik(): ClientResources {
         return ClientResources()
     }
 
@@ -109,10 +109,10 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
     private fun ssoFilter(): Filter {
         val filter = CompositeFilter()
         val filters = ArrayList<Filter>()
-        filters.add(ssoFilter(facebook(), "/login/facebook"))
-        filters.add(ssoFilter(github(), "/login/github"))
-        filters.add(ssoFilter(google(), "/login/google"))
-        filters.add(ssoFilter(stepic(), "/login/stepic"))
+        filters.add(ssoFilter(facebook(), ProviderPathsConstants.FACEBOOK))
+        filters.add(ssoFilter(github(), ProviderPathsConstants.GITHUB))
+        filters.add(ssoFilter(google(), ProviderPathsConstants.GOOGLE))
+        filters.add(ssoFilter(stepik(), ProviderPathsConstants.STEPIK))
         filter.setFilters(filters)
         return filter
     }
@@ -125,8 +125,7 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
                 client.resource.userInfoUri, client.client.clientId)
         tokenServices.setRestTemplate(template)
         filter.setTokenServices(tokenServices)
-        filter.setAuthenticationSuccessHandler(
-                SimpleUrlAuthenticationSuccessHandler(clientHomeUrl))
+        filter.setAuthenticationSuccessHandler(AuthenticationSuccessHandlerProvider())
         return filter
     }
 
