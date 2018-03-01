@@ -37,6 +37,7 @@ class ProjectServiceImpl : ProjectService {
      *
      * @param clientId - id from [User]
      *
+     * @throws [SourceNotFoundException] if user is not exist
      * @return list of [ProjectDto]
      */
     override fun getAllProjectByUser(clientId: String): List<ProjectDto> {
@@ -63,6 +64,7 @@ class ProjectServiceImpl : ProjectService {
      *
      * @param publicId - id from [Project]
      *
+     * @throws [SourceNotFoundException] if project is not exist
      * @return [ProjectDto] with [Project] fields
      */
     override fun getProjectByPublicId(publicId: String): ProjectDto {
@@ -106,6 +108,8 @@ class ProjectServiceImpl : ProjectService {
      * @param clientId  - [User] id
      * @param publicId  - id from [Project]
      * @param newName   - new name
+     *
+     * @throws [SourceNotFoundException] if project or user is not exist
      */
     override fun renameProject(clientId: String, publicId: String, newName: String) {
         val user = userService.defineUser(clientId)
@@ -126,6 +130,8 @@ class ProjectServiceImpl : ProjectService {
      *
      * @param clientId  - [User] id
      * @param publicId  - id from [Project]
+     *
+     * @throws [SourceNotFoundException] if project or user is not exist
      */
     override fun deleteProject(clientId: String, publicId: String) {
         val user = userService.defineUser(clientId)
