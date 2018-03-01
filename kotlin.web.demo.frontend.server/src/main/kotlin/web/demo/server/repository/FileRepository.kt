@@ -8,4 +8,6 @@ import web.demo.server.entity.File
  * @author Alexander Prendota on 2/8/18 JetBrains.
  */
 @Repository
-interface FileRepository: CrudRepository<File, Int>
+interface FileRepository : CrudRepository<File, Int> {
+    fun findByPublicId(publicId: String): File?
+}
