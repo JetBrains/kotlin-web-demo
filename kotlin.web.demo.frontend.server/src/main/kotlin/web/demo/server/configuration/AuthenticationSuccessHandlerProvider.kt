@@ -72,7 +72,7 @@ class AuthenticationSuccessHandlerProvider : AuthenticationSuccessHandler {
     /**
      * Getting stepik user details: client id and user name
      * Use for authorization only first user.
-     * See [AuthPathsConstants] for getting client id and user name
+     * See [ProviderPathsConstants] for getting client id and user name
      *
      * @param details - map from [OAuth2Authentication]
      * @return [UserDto]
