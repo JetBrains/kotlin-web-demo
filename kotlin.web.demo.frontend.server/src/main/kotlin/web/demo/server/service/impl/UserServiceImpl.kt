@@ -1,10 +1,12 @@
 package web.demo.server.service.impl
 
 import org.modelmapper.ModelMapper
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import web.demo.server.dtos.UserDto
 import web.demo.server.entity.User
+import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.model.ProviderType
 import web.demo.server.repository.UserRepository
 import web.demo.server.service.api.UserService
@@ -12,11 +14,13 @@ import web.demo.server.service.api.UserService
 @Service
 class UserServiceImpl : UserService {
 
-    @Autowired
-    lateinit var userRepository: UserRepository
+    private val logger = LoggerFactory.getLogger(UserServiceImpl::class.java)
 
     @Autowired
-    lateinit var modelMapper: ModelMapper
+    private lateinit var userRepository: UserRepository
+
+    @Autowired
+    private lateinit var modelMapper: ModelMapper
 
     /**
      * Registration user if not exist
@@ -35,6 +39,19 @@ class UserServiceImpl : UserService {
         newUser.username = userDto.username
         newUser.provider = ProviderType.valueOf(userDto.provider)
         return convertUserToDto(userRepository.save(newUser))
+    }
+
+    /**
+     * Define user in storage
+     * @param clientId  - client [User] id
+     *
+     * @throws [SourceNotFoundException] if user is not exist
+     */
+    override fun defineUser(clientId: String): User {
+        val user = userRepository.findByClientId(clientId)
+        if (user != null) return user
+        logger.error("Can not rename project 'cause user is not found. User: $clientId")
+        throw SourceNotFoundException("Can not rename project 'cause user is not found")
     }
 
     /**
