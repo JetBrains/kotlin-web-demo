@@ -33,6 +33,21 @@ class ProjectServiceImpl : ProjectService {
     private lateinit var idGenerator: IdentifierGeneratorService
 
     /**
+     * Getting all user projects
+     *
+     * @param clientId - id from [User]
+     *
+     * @return list of [ProjectDto]
+     */
+    override fun getAllProjectByUser(clientId: String): List<ProjectDto> {
+        val user = userService.defineUser(clientId)
+        val userProjects = projectRepository.findByOwnerId(user)
+                .orEmpty()
+                .map { convertProjectToDto(it) }.toList()
+        return userProjects
+    }
+
+    /**
      * Check Is the project exist
      * @param publicId - id from [Project]
      *

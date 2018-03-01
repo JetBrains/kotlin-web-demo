@@ -8,6 +8,7 @@ import web.demo.server.dtos.ProjectDto
 import web.demo.server.dtos.UserDto
 import web.demo.server.entity.Project
 import web.demo.server.exceptions.SourceNotFoundException
+import web.demo.server.exceptions.ValidationException
 import web.demo.server.service.api.ProjectService
 import javax.servlet.http.HttpSession
 
@@ -31,6 +32,17 @@ class ProjectController {
     fun getProjectByPublicId(@RequestParam("publicId") publicId: String): ResponseEntity<*> {
         val projectDto = projectService.getProjectByPublicId(publicId)
         return ResponseEntity.ok(projectDto)
+    }
+    /**
+     * Getting all user projects
+     *
+     * @param session   - for getting info about user
+     */
+    @GetMapping(GeneralPathsConstants.ALL)
+    fun getAllUserProjects(session: HttpSession): ResponseEntity<*> {
+        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val projects = projectService.getAllProjectByUser(user.clientId)
+        return ResponseEntity.ok(projects)
     }
 
     /**
@@ -77,6 +89,15 @@ class ProjectController {
         return ResponseEntity.ok("Project was deleted successfully")
     }
 
+    /**
+     * Save Project to storage
+     *
+     * @param session   - for getting info about user
+     * @param projectDto - project for saving
+     *
+     * @throws [SourceNotFoundException] if user is not exist
+     * @throws [ValidationException] if user has two projects with the same names
+     */
     @PostMapping(GeneralPathsConstants.SAVE)
     fun saveProject(session: HttpSession,
                     @RequestBody projectDto: ProjectDto): ResponseEntity<*> {

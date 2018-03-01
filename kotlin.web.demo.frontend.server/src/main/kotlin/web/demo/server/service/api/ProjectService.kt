@@ -7,6 +7,8 @@ import web.demo.server.dtos.ProjectDto
  */
 interface ProjectService {
 
+    fun getAllProjectByUser(clientId: String): List<ProjectDto>
+
     fun isExistProject(publicId: String): Boolean
 
     fun getProjectByPublicId(publicId: String): ProjectDto

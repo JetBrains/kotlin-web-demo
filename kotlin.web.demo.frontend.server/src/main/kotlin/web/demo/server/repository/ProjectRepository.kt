@@ -13,4 +13,5 @@ interface ProjectRepository : CrudRepository<Project, Int> {
     fun findByPublicId(publicId: String): Project?
     fun findByPublicIdAndOwnerId(publicId: String, ownerId: User): Project?
     fun findByNameAndOwnerId(name: String, ownerId: User): Project?
+    fun findByOwnerId(ownerId: User): List<Project>?
 }

@@ -21,6 +21,7 @@ object GeneralPathsConstants {
     const val SAVE = "save/"
     const val ADD = "add/"
     const val RENAME = "rename/"
+    const val ALL = "all/"
 
     /**
      * Path constants for operation with [File]
