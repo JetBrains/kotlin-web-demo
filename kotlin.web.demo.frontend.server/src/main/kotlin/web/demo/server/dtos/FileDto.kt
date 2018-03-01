@@ -9,6 +9,7 @@ import web.demo.server.entity.File
  */
 data class FileDto(var modifiable: Boolean?,
                    var publicId: String?,
+                   var projectId: String?,
                    var text: String?,
                    var name: String?,
                    var type: String?)
