@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.ResponseStatus
 /**
  * @author Alexander Prendota on 2/28/18 JetBrains.
  */
-@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Validation exception")
-class ValidationException(override var message: String) : Exception(message)
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Source not found")
+class SourceNotFoundException(override var message: String) : Exception(message)
