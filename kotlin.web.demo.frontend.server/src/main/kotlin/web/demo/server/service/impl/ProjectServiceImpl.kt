@@ -125,6 +125,7 @@ class ProjectServiceImpl : ProjectService {
      * @param newName   - new name
      *
      * @throws [SourceNotFoundException] if project or user is not exist
+     * @throws [ValidationException] if user has two projects with the same names
      */
     override fun renameProject(clientId: String, publicId: String, newName: String) {
         val user = userService.defineUser(clientId)
@@ -165,14 +166,14 @@ class ProjectServiceImpl : ProjectService {
      * @param publicId  - id from [Project]
      * @param user - [User] entity
      *
-     * @throws [ValidationException] - can not find project by params
+     * @throws [SourceNotFoundException] - can not find project by params
      * @return [Project]
      */
     override fun getProjectByPublicIdAndUser(publicId: String, user: User): Project {
         val project = projectRepository.findByPublicIdAndOwnerId(publicId, user)
         if (project != null) return project
         logger.error("Can not find project with id: $publicId and user: ${user.clientId}.")
-        throw ValidationException("Can not find project by public id and owner")
+        throw SourceNotFoundException("Can not find project by public id and owner")
     }
 
     /**
