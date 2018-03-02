@@ -54,6 +54,22 @@ class FileServiceImpl : FileService {
     }
 
     /**
+     * Getting file by publicId
+     *
+     * @param publicId - id from [File]
+     *
+     * @throws [SourceNotFoundException] if file is not exist
+     * @return [File] fields
+     */
+    override fun getFileEntityByPublicId(publicId: String): File {
+        val file = fileRepository.findByPublicId(publicId)
+        if (file != null) return file
+        logger.error("Can not find file by public id. public id: $publicId")
+        throw SourceNotFoundException("Can not find file by public id.")
+    }
+
+
+    /**
      * Check Is the file exist
      *
      * @param publicId - id from [File]
@@ -95,14 +111,9 @@ class FileServiceImpl : FileService {
         val user = userService.defineUser(clientId)
         val project = projectService.getProjectByPublicIdAndUser(projectId, user)
         checkFileWithTheSameName(project, newName)
-        val file = fileRepository.findByPublicId(publicId)
-        if (file != null) {
-            file.name = validateFileName(newName)
-            fileRepository.save(file)
-        } else {
-            logger.error("Can not rename file in your project. File is not found.Project id: $projectId, file id: $publicId, name: $clientId")
-            throw SourceNotFoundException("Can not rename file in your project. File is not found")
-        }
+        val file = getFileEntityByPublicId(publicId)
+        file.name = validateFileName(newName)
+        fileRepository.save(file)
     }
 
     /**
@@ -143,7 +154,7 @@ class FileServiceImpl : FileService {
         if (projectId != null) {
             val project = projectService.getProjectByPublicIdAndUser(projectId, user)
             val countFiles = fileRepository.countByProjectId(project)
-            if (countFiles > 100) throw ValidationException("You can't save more than 100 projects")
+            if (countFiles > 100) throw ValidationException("You can't save more than 100 files")
             if (text != null && name != null) {
                 checkFileWithTheSameName(project, name)
                 addFileToProject(project, text, name)
@@ -164,17 +175,61 @@ class FileServiceImpl : FileService {
      * @param text    - file content
      * @param name    - name of file
      */
-    override fun addFileToProject(project: Project, text: String, name: String) {
+    override fun addFileToProject(project: Project, text: String, name: String): File {
         val file = File()
         file.name = validateFileName(name)
         file.projectId = project
         file.publicId = idGenerator.nextFileId()
         file.text = text
-        fileRepository.save(file)
+        return fileRepository.save(file)
     }
 
-    override fun saveFile() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    /**
+     * Update and save file
+     *
+     * @param fileDto - [FileDto]
+     * @param clientId  - id from [User]
+     *
+     * @throws [SourceNotFoundException] if file is not found
+     */
+    override fun saveFile(clientId: String, fileDto: FileDto) {
+        val user = userService.defineUser(clientId)
+        val projectId = fileDto.projectId
+        if (projectId != null) {
+            val project = projectService.getProjectByPublicIdAndUser(projectId, user)
+            if (fileDto.publicId != null) {
+                val file = getFileByPublicIdAndProjectId(fileDto.publicId!!, project)
+                file.text = fileDto.text
+                fileRepository.save(file)
+                return
+            }
+        }
+        throw SourceNotFoundException("Can not save file in your project. File is not found")
+    }
+
+    /**
+     * Converter from [File] to [FileDto]
+     *
+     * @param file - [File]
+     * @return [FileDto]
+     */
+    override fun convertFileToDto(file: File): FileDto {
+        return modelMapper.map(file, FileDto::class.java)
+    }
+
+    /**
+     * Getting file by id and project
+     *
+     * @param project - [Project]
+     * @param publicId - id from [File]
+     *
+     * @throws [SourceNotFoundException] - Can not find file, project, user
+     *
+     * @return [File]
+     */
+    private fun getFileByPublicIdAndProjectId(publicId: String, project: Project): File {
+        return fileRepository.findByPublicIdAndProjectId(publicId, project)
+                ?: throw SourceNotFoundException("File is not found by public id and project")
     }
 
     /**
@@ -195,16 +250,6 @@ class FileServiceImpl : FileService {
      */
     private fun validateFileName(name: String): String {
         return if (name.endsWith(".kt")) name else "$name.kt"
-    }
-
-    /**
-     * Converter from [File] to [FileDto]
-     *
-     * @param file - [File]
-     * @return [FileDto]
-     */
-    private fun convertFileToDto(file: File): FileDto {
-        return modelMapper.map(file, FileDto::class.java)
     }
 
 }

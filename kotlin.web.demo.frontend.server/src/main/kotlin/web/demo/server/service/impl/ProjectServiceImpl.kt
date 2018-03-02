@@ -12,6 +12,7 @@ import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.exceptions.ValidationException
 import web.demo.server.model.ConfType
 import web.demo.server.repository.ProjectRepository
+import web.demo.server.service.api.FileService
 import web.demo.server.service.api.ProjectService
 import web.demo.server.service.api.UserService
 
@@ -31,6 +32,9 @@ class ProjectServiceImpl : ProjectService {
 
     @Autowired
     private lateinit var idGenerator: IdentifierGeneratorService
+
+    @Autowired
+    private lateinit var fileService: FileService
 
     /**
      * Getting all user projects
@@ -93,28 +97,26 @@ class ProjectServiceImpl : ProjectService {
      * Save the project.
      * Generate publicId by [IdentifierGeneratorService]
      *
-     * @param clientId  - [User] id
+     * @param clientId    - [User] id
      * @param projectDto  - [ProjectDto] project for saving
      *
      * @throws [SourceNotFoundException] if user is not exist
-     * @throws [ValidationException] if user has two projects with the same names
+     * @throws [ValidationException] if can not find public id in project for saving
      */
     override fun saveProject(clientId: String, projectDto: ProjectDto) {
         val user = userService.defineUser(clientId)
         val nameOfProject = projectDto.name ?: GeneralPathsConstants.DEFAULT_PROJECT_NAME
         checkProjectWithTheSameName(nameOfProject, user)
-        val id = idGenerator.nextProjectId()
-        val project = Project()
-        project.publicId = id
-        project.ownerId = user
-        project.name = nameOfProject
-        project.args = projectDto.args ?: ""
-        project.confType = ConfType.valueOf(projectDto.confType ?: "java")
-        project.compilerVersion = projectDto.compilerVersion
-        project.originUrl = projectDto.originUrl
-        project.type = GeneralPathsConstants.USER_PROJECT_TYPE
-        project.readOnlyFileNames = projectDto.readOnlyFileNames.toString()
-        projectRepository.save(project)
+        val projectId = projectDto.publicId
+        if (projectId != null) {
+            val project = getProjectEntityByPublicId(projectId)
+            project.args = projectDto.args ?: ""
+            project.confType = ConfType.valueOf(projectDto.confType ?: "java")
+            project.compilerVersion = projectDto.compilerVersion
+            projectRepository.save(project)
+            return
+        }
+        throw ValidationException("Can not find public id in project for saving")
     }
 
     /**
@@ -130,15 +132,9 @@ class ProjectServiceImpl : ProjectService {
     override fun renameProject(clientId: String, publicId: String, newName: String) {
         val user = userService.defineUser(clientId)
         checkProjectWithTheSameName(newName, user)
-        val project = projectRepository.findByPublicIdAndOwnerId(publicId, user)
-        if (project != null) {
-            project.name = newName
-            projectRepository.save(project)
-            return
-        }
-        logger.error("Can not rename project 'cause project is not found. public id: $publicId")
-        throw SourceNotFoundException("Can not rename project 'cause project is not found")
-
+        val project = getProjectByPublicIdAndUser(publicId, user)
+        project.name = newName
+        projectRepository.save(project)
     }
 
     /**
@@ -151,20 +147,15 @@ class ProjectServiceImpl : ProjectService {
      */
     override fun deleteProject(clientId: String, publicId: String) {
         val user = userService.defineUser(clientId)
-        val project = projectRepository.findByPublicIdAndOwnerId(publicId, user)
-        if (project != null) {
-            projectRepository.delete(project)
-            return
-        }
-        logger.error("Can not delete project 'cause project is not found. Client: $clientId, Project: $project")
-        throw SourceNotFoundException("Can not delete project 'cause project is not found")
+        val project = getProjectByPublicIdAndUser(publicId, user)
+        projectRepository.delete(project)
     }
 
     /**
      * Getting project by public Id and [User]
      *
      * @param publicId  - id from [Project]
-     * @param user - [User] entity
+     * @param user      - [User] entity
      *
      * @throws [SourceNotFoundException] - can not find project by params
      * @return [Project]
@@ -185,6 +176,36 @@ class ProjectServiceImpl : ProjectService {
         projectRepository.findByNameAndOwnerId(name, user) ?: return
         logger.error("Can not validate project with id: ${user.clientId} and name: $name. Project name already exist")
         throw ValidationException("Can not validate project with id and name. Project name already exist")
+    }
+
+    /**
+     * Add new project with file
+     *
+     * @param clientId  - [User] id
+     * @param name      - project name
+     *
+     * @throws [SourceNotFoundException] if user is not exist
+     * @throws [ValidationException] if user saves more than 100 projects
+     *
+     * @return [ProjectDto] with files
+     */
+    override fun addProject(clientId: String, name: String): ProjectDto {
+        val user = userService.defineUser(clientId)
+        val countOfProjects = projectRepository.countByOwnerId(user)
+        if (countOfProjects > 100) throw ValidationException("You can't save more than 100 projects")
+        checkProjectWithTheSameName(name, user)
+        var project = Project()
+        project.name = name
+        project.type = GeneralPathsConstants.USER_PROJECT_TYPE
+        project.ownerId = user
+        project.args = ""
+        project.publicId = idGenerator.nextProjectId()
+        project.readOnlyFileNames = "[]" // string list of file
+        project = projectRepository.save(project)
+        val file = fileService.addFileToProject(project, GeneralPathsConstants.FILE_DEFAULT_CONTENT, project.name)
+        val projectDto = convertProjectToDto(project)
+        projectDto.files = listOf(fileService.convertFileToDto(file))
+        return projectDto
     }
 
     /**

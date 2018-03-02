@@ -25,4 +25,6 @@ interface ProjectService {
 
     fun getProjectByPublicIdAndUser(publicId: String, user: User): Project
 
+    fun addProject(clientId: String, name: String): ProjectDto
+
 }

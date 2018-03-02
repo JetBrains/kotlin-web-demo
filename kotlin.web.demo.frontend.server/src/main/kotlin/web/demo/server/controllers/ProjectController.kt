@@ -33,6 +33,7 @@ class ProjectController {
         val projectDto = projectService.getProjectByPublicId(publicId)
         return ResponseEntity.ok(projectDto)
     }
+
     /**
      * Getting all user projects
      *
@@ -92,7 +93,7 @@ class ProjectController {
     /**
      * Save Project to storage
      *
-     * @param session   - for getting info about user
+     * @param session    - for getting info about user
      * @param projectDto - project for saving
      *
      * @throws [SourceNotFoundException] if user is not exist
@@ -105,4 +106,25 @@ class ProjectController {
         projectService.saveProject(user.clientId, projectDto)
         return ResponseEntity.ok("Project ${projectDto.name} saved successfully")
     }
+
+    /**
+     * Add new project with file
+     *
+     * @param session   - for getting info about user
+     * @param name      - project name
+     *
+     * @throws [SourceNotFoundException] if user is not exist
+     * @throws [ValidationException] if user has two projects with the same names
+     *
+     * @return [ProjectDto] with files
+     */
+    @PostMapping(GeneralPathsConstants.ADD)
+    fun addProject(session: HttpSession,
+                   @RequestParam("name") name: String): ResponseEntity<*> {
+        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val project = projectService.addProject(user.clientId, name)
+        return ResponseEntity.ok(project)
+
+    }
+
 }

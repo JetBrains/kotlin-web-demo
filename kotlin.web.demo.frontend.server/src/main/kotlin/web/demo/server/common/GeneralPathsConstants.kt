@@ -27,6 +27,7 @@ object GeneralPathsConstants {
      * Path constants for operation with [File]
      */
     const val API_FILE = "api/file/"
+    const val FILE_DEFAULT_CONTENT = "fun main(args: Array<String>) {\n\n}"
 
     /**
      * Path constants for operation with [Project]

@@ -7,9 +7,8 @@ import web.demo.server.entity.File
  *
  * @author Alexander Prendota on 2/7/18 JetBrains.
  */
-data class FileDto(var modifiable: Boolean?,
-                   var publicId: String?,
-                   var projectId: String?,
-                   var text: String?,
-                   var name: String?,
-                   var type: String?)
+data class FileDto(var modifiable: Boolean? = true,
+                   var publicId: String? = "",
+                   var projectId: String? = "",
+                   var text: String? = "",
+                   var name: String? = "")

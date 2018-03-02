@@ -11,7 +11,7 @@ import web.demo.server.entity.Project
  */
 interface FileService {
 
-    fun saveFile()
+    fun saveFile(clientId: String, fileDto: FileDto)
 
     fun deleteFile(publicId: String, projectId: String, clientId: String)
 
@@ -19,12 +19,16 @@ interface FileService {
 
     fun getFileByPublicId(publicId: String): FileDto
 
+    fun getFileEntityByPublicId(publicId: String): File
+
     fun isFileExist(publicId: String): Boolean
 
     fun getAllFileByProjectPublicId(publicId: String): List<FileDto>
 
     fun renameFile(publicId: String, projectId: String, newName: String, clientId: String)
 
-    fun addFileToProject(project: Project, text: String, name: String)
+    fun addFileToProject(project: Project, text: String, name: String): File
+
+    fun convertFileToDto(file: File): FileDto
 
 }

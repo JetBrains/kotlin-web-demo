@@ -103,8 +103,8 @@ class FileController {
     /**
      * Add file
      *
-     * @param file - file with fields
-     * @param session   - for getting info about user
+     * @param file    - file with fields
+     * @param session - for getting info about user
      *
      * @throws [SourceNotFoundException] - Can not find file, project, user
      * @throws [ValidationException]     - if count of file in project more than 100
@@ -117,12 +117,19 @@ class FileController {
         return ResponseEntity.ok("File was added successfully ")
     }
 
+    /**
+     * Update and save file
+     *
+     * @param session - for getting info about user
+     * @param file    - [FileDto] for updating
+     * @throws [SourceNotFoundException] if file is not found
+     */
     @PostMapping(GeneralPathsConstants.SAVE)
     fun saveFile(session: HttpSession,
                  @RequestBody file: FileDto): ResponseEntity<*> {
         val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        fileService.saveFile(user.clientId, file)
         return ResponseEntity.ok("File ${file.name} saved successfully")
     }
-
 
 }
