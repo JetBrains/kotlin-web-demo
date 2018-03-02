@@ -75,6 +75,21 @@ class ProjectServiceImpl : ProjectService {
     }
 
     /**
+     * Getting project by publicId
+     *
+     * @param publicId - id from [Project]
+     *
+     * @throws [SourceNotFoundException] if project is not exist
+     * @return [Project] fields
+     */
+    override fun getProjectEntityByPublicId(publicId: String): Project {
+        val project = projectRepository.findByPublicId(publicId)
+        if (project != null) return project
+        logger.error("Can not find project by public id. public id: $publicId")
+        throw SourceNotFoundException("Can not find project by public id.")
+    }
+
+    /**
      * Save the project.
      * Generate publicId by [IdentifierGeneratorService]
      *
@@ -142,6 +157,22 @@ class ProjectServiceImpl : ProjectService {
         }
         logger.error("Can not delete project 'cause project is not found. Client: $clientId, Project: $project")
         throw SourceNotFoundException("Can not delete project 'cause project is not found")
+    }
+
+    /**
+     * Getting project by public Id and [User]
+     *
+     * @param publicId  - id from [Project]
+     * @param user - [User] entity
+     *
+     * @throws [ValidationException] - can not find project by params
+     * @return [Project]
+     */
+    override fun getProjectByPublicIdAndUser(publicId: String, user: User): Project {
+        val project = projectRepository.findByPublicIdAndOwnerId(publicId, user)
+        if (project != null) return project
+        logger.error("Can not find project with id: $publicId and user: ${user.clientId}.")
+        throw ValidationException("Can not find project by public id and owner")
     }
 
     /**
