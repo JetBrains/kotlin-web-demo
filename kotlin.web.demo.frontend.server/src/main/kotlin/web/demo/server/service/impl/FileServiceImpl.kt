@@ -121,6 +121,7 @@ class FileServiceImpl : FileService {
         if (file != null) {
             fileRepository.delete(file)
         } else {
+            logger.error("Can not delete the file. File is not found.Project id: $projectId, file id: $publicId, name: $clientId")
             throw SourceNotFoundException("Can not delete file in your project. File is not found")
         }
 
@@ -147,11 +148,11 @@ class FileServiceImpl : FileService {
                 checkFileWithTheSameName(project, name)
                 addFileToProject(project, text, name)
             } else {
-                logger.error("Can not add file. Empty parameters — name: $name, text: $text ")
+                logger.error("Can not add file. Empty parameters — name: $name, text: $text. client: $clientId ")
                 throw SourceNotFoundException("Can not add file. Empty parameters")
             }
         } else {
-            logger.error("Can not add file. Project: $projectId is not found ")
+            logger.error("Can not add file. Project: $projectId is not found. client: $clientId ")
             throw SourceNotFoundException("Can not add file. Project is not found")
         }
     }
