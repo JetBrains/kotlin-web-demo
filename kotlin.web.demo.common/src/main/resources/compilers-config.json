@@ -16,13 +16,6 @@
     "useCompilerBeforeShrink": false
   },
   {
-    "version": "1.2.21",
-    "stdlibVersion": "1.2.21",
-    "buildType": "Kotlin_1220_CompilerAllPlugins",
-    "build": "1.2.21-release-88",
-    "pluginBuild": "1.2.21-release-IJ2018.1-1"
-  },
-  {
     "version": "1.2.30",
     "stdlibVersion": "1.2.30",
     "buildType": "Kotlin_1230_CompilerAllPlugins",
