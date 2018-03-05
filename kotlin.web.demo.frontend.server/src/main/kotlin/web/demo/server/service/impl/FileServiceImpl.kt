@@ -241,7 +241,7 @@ class FileServiceImpl : FileService {
     private fun checkFileWithTheSameName(project: Project, name: String) {
         val newNameOfFile = validateFileName(name)
         val fileWithTheSameName = fileRepository.findByProjectIdAndName(project, newNameOfFile)
-        if (fileWithTheSameName != null) throw ValidationException("Can not do operation with file. File name already exist")
+                ?: throw ValidationException("Can not do operation with file. File name already exist")
     }
 
     /**
