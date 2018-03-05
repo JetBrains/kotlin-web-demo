@@ -48,6 +48,7 @@ dependencies {
 	compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
 	compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.9.4'
 	testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
+	testCompile 'org.assertj:assertj-core:3.9.0'
 
 	compile group: 'org.webjars', name: 'bootstrap', version: '3.3.5'
 	compile group: 'org.webjars', name: 'jquery', version: '3.2.1'
