@@ -28,15 +28,15 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
     lateinit var jsonConfigFolder: String
 
     @Autowired
-    lateinit var modelMapper: ModelMapper
+    private lateinit var modelMapper: ModelMapper
 
     @Autowired
-    lateinit var pathsBackend: BackendPathsConstants
+    private lateinit var pathsBackend: BackendPathsConstants
 
     @Autowired
-    lateinit var http: HttpWrapper
+    private lateinit var http: HttpWrapper
 
-    lateinit var headers: Map<String, String>
+    private lateinit var headers: Map<String, String>
 
     /**
      * Property with available kotlin version. Getting from config file

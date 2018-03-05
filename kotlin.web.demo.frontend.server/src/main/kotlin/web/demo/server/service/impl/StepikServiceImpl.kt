@@ -29,7 +29,7 @@ class StepikServiceImpl : StepikService {
     private val MAX_REQUEST_PARAMS = 100
 
     @Autowired
-    lateinit var httpWrapper: HttpWrapper
+    private lateinit var httpWrapper: HttpWrapper
 
     /**
      * Getting user progress of course from Stepik
