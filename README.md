@@ -47,8 +47,8 @@ For example:
  
 In order to add your libraries you should append dependencies to gradle.build. 
 For example, you may add your dependency with the help of gradle-task called `kotlinLibs ` 
-to [gradle.build](https://github.com/JetBrains/kotlin-web-demo/blob/master/versions/1.2.21/build.gradle) 
-in compiler 1.2.21 like this:
+to [gradle.build](https://github.com/JetBrains/kotlin-web-demo/blob/master/versions/1.1.60/build.gradle) 
+in compiler 1.1.60 like this:
 ```gradle
  kotlinLibs "your dependency"
 ```
