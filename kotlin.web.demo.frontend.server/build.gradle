@@ -43,7 +43,7 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-
+	compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: '2.0.0.RELEASE'
 	compile group: 'org.modelmapper', name: 'modelmapper', version: '1.1.2'
 	compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
 	compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.9.4'

@@ -19,12 +19,15 @@ spring:
         url: DB URL
         username: DB NAME
 
-#############################
-# file with kotlin versions #
-#############################
+####################
+## kotlin versions #
+####################
 compilers:
-    config:
-        file: compilers-config.json
+      versions:
+        - 1.1.60
+        - 1.0.7
+        - 1.2.21
+      latestStable: 1.2.21
 
 ###############################
 # Kotlin compiler backend API #

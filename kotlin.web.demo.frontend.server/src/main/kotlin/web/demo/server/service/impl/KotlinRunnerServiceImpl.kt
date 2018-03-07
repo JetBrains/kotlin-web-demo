@@ -1,18 +1,15 @@
 package web.demo.server.service.impl
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import web.demo.server.common.BackendPathsConstants
+import web.demo.server.configuration.KotlinVersion
 import web.demo.server.dtos.KotlinVersionDto
 import web.demo.server.dtos.ProjectDto
+import web.demo.server.exceptions.ValidationException
 import web.demo.server.http.HttpWrapper
-import web.demo.server.model.KotlinVersionConfig
 import web.demo.server.service.api.KotlinRunnerService
-import java.io.File
 import java.io.IOException
 import javax.annotation.PostConstruct
 
@@ -24,11 +21,8 @@ import javax.annotation.PostConstruct
 @Service
 class KotlinRunnerServiceImpl : KotlinRunnerService {
 
-    @Value("\${compilers.config.file}")
-    lateinit var jsonConfigFolder: String
-
     @Autowired
-    private lateinit var modelMapper: ModelMapper
+    lateinit var kotlinVersions: KotlinVersion
 
     @Autowired
     private lateinit var pathsBackend: BackendPathsConstants
@@ -39,13 +33,13 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
     private lateinit var headers: Map<String, String>
 
     /**
-     * Property with available kotlin version. Getting from config file
+     * Property with available kotlin version. Getting from application.yml
      * Init on @PostConstruct method
      */
-    lateinit var availableKotlinVersionConfigs: List<KotlinVersionConfig>
+    private var availableKotlinVersionConfigs: List<KotlinVersionDto> = emptyList()
 
     /**
-     * Init kotlin version from configuration file
+     * Init kotlin version from application.yml
      * Init headers for requests
      * @throws IOException - exception
      */
@@ -56,16 +50,16 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
                 "Content-Type" to "application/json",
                 "Accept" to "*/*"
         )
-        availableKotlinVersionConfigs = jacksonObjectMapper().readValue(File(jsonConfigFolder))
+        initKotlinVersions()
     }
 
     /**
-     * Get kotlin version from configuration file in application properties 'compilers.configuration.file'
+     * Get kotlin version from configuration file in application properties
      *
      * @return list [KotlinVersionDto]
      */
     override fun getAvailableKotlinVersions(): List<KotlinVersionDto> {
-        return availableKotlinVersionConfigs.map { convertKotlinVersionToDto(it) }.toList()
+        return availableKotlinVersionConfigs
     }
 
 
@@ -130,13 +124,17 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
     }
 
     /**
-     * Converter from [KotlinVersionConfig] to [KotlinVersionDto]
+     * Getting kotlin versions.
+     * Map to [KotlinVersionDto]
      *
-     * @param kotlinVersionConfig - [KotlinVersionConfig]
-     * @return [KotlinVersionDto]
+     * @throws [ValidationException] if no the latest stable kotlin version
      */
-    private fun convertKotlinVersionToDto(kotlinVersionConfig: KotlinVersionConfig): KotlinVersionDto {
-        return modelMapper.map(kotlinVersionConfig, KotlinVersionDto::class.java)
+    private fun initKotlinVersions() {
+        val latestVersion = kotlinVersions.latestStable
+                ?: throw ValidationException("No the latest stable kotlin version in application.yml file")
+        kotlinVersions.versions.map {
+            availableKotlinVersionConfigs = availableKotlinVersionConfigs.plus(KotlinVersionDto(it, latestVersion == it))
+        }
     }
 
 }
