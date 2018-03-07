@@ -19,3 +19,19 @@ services:
     depends_on:
         - db
         - backend
+  server:
+    build: docker/server
+    ports:
+        - 4040:4040
+    depends_on:
+        - db
+        - backend
+    links:
+        - db
+    volumes:
+        - ./kotlin.web.demo.frontend.server/build/libs/kotlin.web.demo.frontend.server-0.0.1-SNAPSHOT.jar:/app/kotlin.web.demo.frontend.server-0.0.1-SNAPSHOT.jar
+    environment:
+        - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/kotlin_webdemo
+        - SPRING_DATASOURCE_USERNAME=root
+        - SPRING_DATASOURCE_PASSWORD=root
+        - SERVER_PORT=4040
