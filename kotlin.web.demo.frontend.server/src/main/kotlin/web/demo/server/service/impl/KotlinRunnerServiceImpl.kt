@@ -48,7 +48,9 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
     fun init() {
         headers = mapOf(
                 "Content-Type" to "application/json",
-                "Accept" to "*/*"
+                "Accept" to "*/*",
+                "Cache-Control" to "no-cache",
+                "Access-Control-Allow-Origin" to "*"
         )
         initKotlinVersions()
     }
