@@ -108,7 +108,7 @@ public class ExamplesTest extends BaseTest {
         return ExecutorUtils.executeCompiledFiles(
                 compilationResult.getFiles(),
                 compilationResult.getMainClass(),
-                kotlinWrapper.getKotlinRuntimeLibraries(),
+                kotlinWrapper.getKotlinLibraries(),
                 args,
                 kotlinWrapper.getWrapperFolder().resolve("executors.policy"),
                 isJunit

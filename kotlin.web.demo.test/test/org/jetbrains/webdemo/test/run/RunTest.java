@@ -26,7 +26,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.security.AccessControlException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RunWith(Parameterized.class)
 public class RunTest extends BaseTest {
@@ -108,7 +109,7 @@ public class RunTest extends BaseTest {
         return (JavaExecutionResult) ExecutorUtils.executeCompiledFiles(
                 compilationResult.getFiles(),
                 compilationResult.getMainClass(),
-                kotlinWrapper.getKotlinRuntimeLibraries(),
+                kotlinWrapper.getKotlinLibraries(),
                 args,
                 kotlinWrapper.getWrapperFolder().resolve("executors.policy"),
                 false
