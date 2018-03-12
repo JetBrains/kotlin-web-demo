@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.web.filter.CompositeFilter
 import web.demo.server.common.ProviderPathsConstants
+import web.demo.server.configuration.resourses.ClientResources
 import javax.servlet.Filter
 
 

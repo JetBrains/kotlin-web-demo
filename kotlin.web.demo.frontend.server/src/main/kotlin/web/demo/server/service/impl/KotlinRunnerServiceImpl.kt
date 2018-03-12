@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import web.demo.server.common.BackendPathsConstants
-import web.demo.server.configuration.KotlinVersion
+import web.demo.server.configuration.resourses.KotlinVersion
 import web.demo.server.dtos.KotlinVersionDto
 import web.demo.server.dtos.ProjectDto
 import web.demo.server.exceptions.ValidationException

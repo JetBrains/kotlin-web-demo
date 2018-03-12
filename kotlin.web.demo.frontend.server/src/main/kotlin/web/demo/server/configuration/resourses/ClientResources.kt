@@ -1,4 +1,4 @@
-package web.demo.server.configuration
+package web.demo.server.configuration.resourses
 
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
