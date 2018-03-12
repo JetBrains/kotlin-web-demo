@@ -44,7 +44,6 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
      * @throws IOException - exception
      */
     @PostConstruct
-    @Throws(IOException::class)
     fun init() {
         headers = mapOf(
                 "Content-Type" to "application/json",
