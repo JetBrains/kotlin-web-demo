@@ -92,7 +92,7 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
      * Getting stepic auth parameters from configuration file
      */
     @Bean
-    @ConfigurationProperties("stepic")
+    @ConfigurationProperties("stepik")
     fun stepik(): ClientResources {
         return ClientResources()
     }

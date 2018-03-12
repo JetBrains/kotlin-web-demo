@@ -87,7 +87,7 @@ google:
 #####################
 # OAuth2 Stepik API #
 #####################
-stepic:
+stepik:
   client:
     clientId: YOUR CLIENT ID
     clientSecret: YOUR SECRET KEY
