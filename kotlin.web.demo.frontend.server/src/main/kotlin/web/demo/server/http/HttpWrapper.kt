@@ -1,5 +1,6 @@
 package web.demo.server.http
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -17,7 +18,8 @@ import org.springframework.web.util.UriComponentsBuilder
 @Component
 class HttpWrapper {
 
-    private val rest: RestTemplate = RestTemplate()
+    @Autowired
+    lateinit var rest: RestTemplate
 
     /**
      * Method for evaluating HTTP GET request
