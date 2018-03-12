@@ -3,10 +3,10 @@ package web.demo.server.service.impl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import web.demo.server.common.StepikPathsConstants
-import web.demo.server.dtos.stepic.CourseDto
-import web.demo.server.dtos.stepic.LessonDto
-import web.demo.server.dtos.stepic.ProgressContainerDto
-import web.demo.server.dtos.stepic.ProgressDto
+import web.demo.server.dtos.stepik.CourseDto
+import web.demo.server.dtos.stepik.LessonDto
+import web.demo.server.dtos.stepik.ProgressContainerDto
+import web.demo.server.dtos.stepik.ProgressDto
 import web.demo.server.http.HttpWrapper
 import web.demo.server.service.api.StepikService
 
