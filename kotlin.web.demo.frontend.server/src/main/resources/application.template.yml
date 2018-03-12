@@ -14,29 +14,29 @@ client:
 # Database configuration #
 ##########################
 spring:
-    datasource:
-        password: PASSWORD DB
-        url: DB URL
-        username: DB NAME
+  datasource:
+    password: PASSWORD DB
+    url: DB URL
+    username: DB NAME
 
 ####################
 ## kotlin versions #
 ####################
 compilers:
-      versions:
-        - 1.1.60
-        - 1.0.7
-        - 1.2.21
-      latestStable: 1.2.21
+  versions:
+    - 1.1.60
+    - 1.0.7
+    - 1.2.21
+  latestStable: 1.2.21
 
 ###############################
 # Kotlin compiler backend API #
 ###############################
 backend:
-    url: YOUR KOTLIN COMPILER URL
-    run: run
-    complete: complete
-    convert: convertToKotlin
+  url: YOUR KOTLIN COMPILER URL
+  run: run
+  complete: complete
+  convert: convertToKotlin
 
 #######################
 # OAuth2 Facebook API #
