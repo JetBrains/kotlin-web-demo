@@ -11,5 +11,5 @@ enum class ProviderType {
     jba,
     google,
     github,
-    stepic
+    stepik
 }

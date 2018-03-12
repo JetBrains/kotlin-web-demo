@@ -85,7 +85,7 @@ class AuthenticationSuccessHandlerProvider : AuthenticationSuccessHandler {
                 val clientId = firstStepicUser[ProviderPathsConstants.STEPIK_CLIENT_ID]
                 val name = firstStepicUser[ProviderPathsConstants.STEPIK_USER_NAME]
                 if (clientId != null && name != null) {
-                    return UserDto(0,name.toString(), clientId.toString(), ProviderType.stepic.name)
+                    return UserDto(0,name.toString(), clientId.toString(), ProviderType.stepik.name)
                 }
             }
         }
