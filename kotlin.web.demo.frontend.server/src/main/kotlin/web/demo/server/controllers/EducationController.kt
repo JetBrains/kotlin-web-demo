@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import web.demo.server.common.GeneralPathsConstants
 import web.demo.server.dtos.UserDto
@@ -34,9 +34,9 @@ class EducationController {
      * @throws [UnsupportedOperationException] - if provider is not [ProviderType.stepik]
      * @return list of [ProgressDto]
      */
-    @GetMapping(GeneralPathsConstants.PROGRESS)
-    fun getUserProject(authentication: OAuth2Authentication, session: HttpSession,
-                       @RequestParam("course") id: String): ResponseEntity<*> {
+    @GetMapping("${GeneralPathsConstants.PROGRESS}/{id}")
+    fun getUserCourseProgress(authentication: OAuth2Authentication, session: HttpSession,
+                       @PathVariable id: String): ResponseEntity<*> {
         val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
         if (user.provider != ProviderType.stepik.name)
             throw UnsupportedOperationException("Can not get course progress for ${user.provider} provider")
