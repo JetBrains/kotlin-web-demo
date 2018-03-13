@@ -3,12 +3,11 @@ package web.demo.server.service.impl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import web.demo.server.common.StepikPathsConstants
-import web.demo.server.dtos.stepik.CourseDto
-import web.demo.server.dtos.stepik.LessonDto
-import web.demo.server.dtos.stepik.ProgressContainerDto
-import web.demo.server.dtos.stepik.ProgressDto
+import web.demo.server.configuration.resourses.EducationCourse
+import web.demo.server.dtos.stepik.*
 import web.demo.server.http.HttpWrapper
 import web.demo.server.service.api.StepikService
+import javax.annotation.PostConstruct
 
 /**
  * Implementation of [StepikService]
@@ -31,11 +30,21 @@ class StepikServiceImpl : StepikService {
     @Autowired
     private lateinit var httpWrapper: HttpWrapper
 
+    @Autowired
+    private lateinit var educationCourse: EducationCourse
+
+    private var listOfCourse: List<Course> = emptyList()
+
+    @PostConstruct
+    fun init() {
+        initCourses()
+    }
+
     /**
      * Getting user progress of course from Stepik
      *
      * Add prefix '77-' [PROGRESS_ID_PREFIX] to step id: it's Stepik hac for getting steps by id.
-     * Get progress by chunk = 100 [PROGRESS_ID_PREFIX] because it's a Stepik constraints for request.
+     * Get progress by chunk = 100 [PROGRESS_ID_PREFIX] because of a Stepik constraints for request.
      * After getting the [ProgressContainerDto] remove the '77-' prefix [PROGRESS_ID_PREFIX].
      *
      * @see <a href="https://stepik.org/api/docs/#!/progresses">Stepik API progress</a>
@@ -58,6 +67,14 @@ class StepikServiceImpl : StepikService {
             iterator += MAX_REQUEST_PARAMS
         }
         return progressContainer.flatMap { it.progresses }.map { ProgressDto(it.id.removePrefix("77-"), it.is_passed) }.toList()
+    }
+
+    /**
+     * Getting list of loaded courses
+     */
+    override fun getCourses(): List<Course> {
+        return listOfCourse
+
     }
 
     /**
@@ -84,13 +101,13 @@ class StepikServiceImpl : StepikService {
      *
      * @return list of [LessonDto]
      */
-    private fun getLessonsByCourse(courseId: String, tokenValue: String): List<LessonDto> {
+    private fun getLessonsByCourse(courseId: String, tokenValue: String): List<Lesson> {
         val headers = mapOf("Authorization" to "Bearer " + tokenValue,
                 "Content-Type" to "application/json")
         val queryParameters = mapOf(
                 "course" to courseId)
         val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_LESSONS
-        val course = httpWrapper.doGet(url, queryParameters, headers, CourseDto::class.java)
+        val course = httpWrapper.doGet(url, queryParameters, headers, Course::class.java)
         return course.lessons
     }
 
@@ -105,4 +122,33 @@ class StepikServiceImpl : StepikService {
     private fun prepareTaskIdToRequest(taskIds: List<String>): List<String> {
         return taskIds.map { "$PROGRESS_ID_PREFIX$it" }
     }
+
+    /**
+     * Init course from stepic.
+     * Getting course list of ID from application.yml
+     * Loading course information from Stepik
+     * @see [EducationCourse]
+     */
+    private fun initCourses() {
+        val coursesIds = educationCourse.courses
+        coursesIds.forEach({ createCourse(it) })
+    }
+
+    /**
+     * Loading course from Stepik and put it to [listOfCourse]
+     * Set empty string to token value -> no need a token for request
+     * @param courseId - pk course from Stepik
+     */
+    private fun createCourse(courseId: String) {
+        val headers = mapOf("Content-Type" to "application/json")
+        val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_STEPS
+        val lessons = getLessonsByCourse(courseId, "")
+        lessons.forEach {
+            val lessonSteps = it.steps
+            val stepsDetails = httpWrapper.doGetToStepik(url, lessonSteps, headers, StepsContainer::class.java)
+            it.task = stepsDetails.steps.map { it.block }.map { it.options }
+        }
+        listOfCourse = listOfCourse.plus(Course(courseId, lessons))
+    }
+
 }

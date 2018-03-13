@@ -1,5 +1,10 @@
 package web.demo.server.common
 
+/**
+ * Stepik path
+ *
+ * @see <a href="https://stepik.org/api/docs/">Stepik API</a>
+ */
 object StepikPathsConstants {
 
     /**
@@ -21,5 +26,10 @@ object StepikPathsConstants {
      * Path to Stepik lessons
      */
     const val STEPIK_LESSONS = "/lessons/"
+
+    /**
+     * Path to Stepik steps
+     */
+    const val STEPIK_STEPS = "/steps/"
 
 }

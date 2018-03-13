@@ -1,5 +1,6 @@
 package web.demo.server.service.api
 
+import web.demo.server.dtos.stepik.Course
 import web.demo.server.dtos.stepik.ProgressDto
 
 /**
@@ -7,4 +8,5 @@ import web.demo.server.dtos.stepik.ProgressDto
  */
 interface StepikService {
     fun getCourseProgress(courseId: String, tokenValue: String): List<ProgressDto>
+    fun getCourses(): List<Course>
 }

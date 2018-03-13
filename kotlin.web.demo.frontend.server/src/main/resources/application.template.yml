@@ -98,4 +98,12 @@ stepik:
     userInfoUri: https://stepik.org/api/stepics/1
 
 
+######################################################
+# EDUCATIONAL COURSES (pk of the course) FROM STEPIK #
+######################################################
+education:
+  courses:
+    - 4222
+
+
 
