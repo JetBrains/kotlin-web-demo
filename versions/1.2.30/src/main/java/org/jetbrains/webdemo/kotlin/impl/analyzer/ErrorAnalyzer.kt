@@ -34,7 +34,6 @@ import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException
 import org.jetbrains.webdemo.kotlin.impl.ResolveUtils
 import org.jetbrains.webdemo.kotlin.impl.WrapperSettings
 import java.util.*
-import kotlin.collections.HashMap
 
 class ErrorAnalyzer(private val currentPsiFiles: List<KtFile>, private val currentProject: Project) {
 
@@ -45,7 +44,8 @@ class ErrorAnalyzer(private val currentPsiFiles: List<KtFile>, private val curre
                 errors.put(psiFile.name, getErrorsByVisitor(psiFile))
             }
             val bindingContext = ResolveUtils.getBindingContext(currentPsiFiles, currentProject, isJs)
-            getErrorsFromDiagnostics(bindingContext.diagnostics.all(), errors)
+            val diagnosticErrors = getErrorsFromDiagnostics(bindingContext.diagnostics.all(), errors)
+            errors.putAll(diagnosticErrors)
             return errors
         } catch (e: Throwable) {
             throw KotlinCoreException(e)
@@ -53,8 +53,8 @@ class ErrorAnalyzer(private val currentPsiFiles: List<KtFile>, private val curre
 
     }
 
-    fun getErrorsFromDiagnostics(diagnostics: Collection<Diagnostic>, errors: Map<String, List<ErrorDescriptor>>) {
-        val errorsMap: MutableMap<String, List<ErrorDescriptor>> = errors.toMutableMap()
+    fun getErrorsFromDiagnostics(diagnostics: Collection<Diagnostic>, errors: Map<String, List<ErrorDescriptor>>): Map<String, List<ErrorDescriptor>> {
+        val diagnosticErrors: MutableMap<String, List<ErrorDescriptor>> = errors.toMutableMap()
         try {
             for (diagnostic in diagnostics) {
                 //fix for errors in js library files
@@ -78,15 +78,14 @@ class ErrorAnalyzer(private val currentPsiFiles: List<KtFile>, private val curre
                         className = "red_wavy_line"
                     }
                     val interval = getInterval(firstRange.startOffset, firstRange.endOffset,
-                            Objects.requireNonNull<Document>(diagnostic.psiFile.viewProvider.document))
-                    val listErrors = errorsMap[diagnostic.psiFile.name]!!
-                            .plus(ErrorDescriptor(interval, render, convertSeverity(diagnostic.severity), className))
-                    errorsMap += diagnostic.psiFile.name to listErrors
+                            diagnostic.psiFile.viewProvider.document!!)
+                    val currentError = diagnosticErrors[diagnostic.psiFile.name]!!.plus(ErrorDescriptor(interval, render, convertSeverity(diagnostic.severity), className))
+                    diagnosticErrors[diagnostic.psiFile.name] = currentError
                 }
             }
 
-            for (key in errorsMap.keys) {
-                Collections.sort(errorsMap[key], Comparator { o1, o2 ->
+            for (key in diagnosticErrors.keys) {
+                Collections.sort(diagnosticErrors[key], Comparator { o1, o2 ->
                     when {
                         o1.interval.start.line > o2.interval.start.line -> return@Comparator 1
                         o1.interval.start.line < o2.interval.start.line -> return@Comparator -1
@@ -104,7 +103,7 @@ class ErrorAnalyzer(private val currentPsiFiles: List<KtFile>, private val curre
         } catch (e: Throwable) {
             throw KotlinCoreException(e)
         }
-
+        return diagnosticErrors
     }
 
     private fun getErrorsByVisitor(psiFile: PsiFile): List<ErrorDescriptor> {
@@ -125,7 +124,7 @@ class ErrorAnalyzer(private val currentPsiFiles: List<KtFile>, private val curre
         for (errorElement in errorElements) {
             val start = errorElement.textRange.startOffset
             val end = errorElement.textRange.endOffset
-            val interval = getInterval(start, end, Objects.requireNonNull<Document>(psiFile.viewProvider.document))
+            val interval = getInterval(start, end, psiFile.viewProvider.document!!)
             errors.add(ErrorDescriptor(interval, errorElement.errorDescription,
                     convertSeverity(Severity.ERROR), "red_wavy_line"))
         }
