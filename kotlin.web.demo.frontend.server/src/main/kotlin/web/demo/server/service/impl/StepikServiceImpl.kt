@@ -33,7 +33,7 @@ class StepikServiceImpl : StepikService {
     @Autowired
     private lateinit var educationCourse: EducationCourse
 
-    private var listOfCourse: List<Course> = emptyList()
+    private var educationCourses: List<Course> = emptyList()
 
     @PostConstruct
     fun init() {
@@ -54,7 +54,7 @@ class StepikServiceImpl : StepikService {
      * @return list of [ProgressDto]
      */
     override fun getCourseProgress(courseId: String, tokenValue: String): List<ProgressDto> {
-        val stepsFromCourse = getStepsFromCourse(courseId, tokenValue)
+        val stepsFromCourse = educationCourses.first { it.id == courseId }.lessons.flatMap { it.steps }
         val stepsIdToRequest = prepareTaskIdToRequest(stepsFromCourse)
         val headers = mapOf("Authorization" to "Bearer " + tokenValue,
                 "Content-Type" to "application/json")
@@ -73,8 +73,7 @@ class StepikServiceImpl : StepikService {
      * Getting list of loaded courses
      */
     override fun getCourses(): List<Course> {
-        return listOfCourse
-
+        return educationCourses
     }
 
     /**
@@ -135,7 +134,7 @@ class StepikServiceImpl : StepikService {
     }
 
     /**
-     * Loading course from Stepik and put it to [listOfCourse]
+     * Loading course from Stepik and put it to [educationCourses]
      * Set empty string to token value -> no need a token for request
      * @param courseId - pk course from Stepik
      */
@@ -148,7 +147,7 @@ class StepikServiceImpl : StepikService {
             val stepsDetails = httpWrapper.doGetToStepik(url, lessonSteps, headers, StepsContainer::class.java)
             it.task = stepsDetails.steps.map { it.block }.map { it.options }
         }
-        listOfCourse = listOfCourse.plus(Course(courseId, lessons))
+        educationCourses = educationCourses.plus(Course(courseId, lessons))
     }
 
 }
