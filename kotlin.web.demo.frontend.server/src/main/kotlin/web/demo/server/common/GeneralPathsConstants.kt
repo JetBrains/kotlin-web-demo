@@ -16,24 +16,30 @@ object GeneralPathsConstants {
     /**
      * Basic operations
      */
-    const val EXIST = "exist/"
-    const val DELETE = "delete/"
-    const val SAVE = "save/"
-    const val ADD = "add/"
-    const val RENAME = "rename/"
-    const val ALL = "all/"
+    const val EXIST = "/exist"
+    const val DELETE = "/delete"
+    const val SAVE = "/save"
+    const val ADD = "/add"
+    const val RENAME = "/rename"
+    const val ALL = "/all"
 
     /**
-     * Path constants for operation with [File]
+     * Paths constants for operation with [File]
      */
-    const val API_FILE = "api/file/"
+    const val API_FILE = "/api/file"
     const val FILE_DEFAULT_CONTENT = "fun main(args: Array<String>) {\n\n}"
 
     /**
-     * Path constants for operation with [Project]
+     * Paths constants for operation with [Project]
      */
-    const val API_PROJECT = "api/project/"
+    const val API_PROJECT = "/api/project"
     const val USER_PROJECT_TYPE = "USER_PROJECT"
     const val DEFAULT_PROJECT_NAME = "Project"
 
+    /**
+     * Paths for operation with stepik courses
+     */
+    const val API_EDU = "/api/edu"
+    const val PROGRESS = "/progress"
+    const val COURSES = "/courses"
 }
