@@ -132,7 +132,24 @@ class StepikServiceImpl : StepikService {
             val stepsDetails = httpWrapper.doGetToStepik(url, lessonSteps, headers, StepsContainer::class.java)
             it.task = stepsDetails.steps.map { it.block }.map { it.options }
         }
-        educationCourses = educationCourses.plus(Course(courseId, lessons))
+        val course = getCourseInfo(courseId)
+        course.lessons = lessons
+        educationCourses = educationCourses.plus(course)
+    }
+
+    /**
+     * Getting detail about course from Stepik
+     * Stepik return list of courses by request.
+     * Because of sending single request -> get first course from list.
+     *
+     * @param courseId - pk of the course. Sending by @PathParams
+     *
+     * @return [Course]
+     */
+    private fun getCourseInfo(courseId: String): Course {
+        val headers = mapOf("Content-Type" to "application/json")
+        val url = "${StepikPathsConstants.STEPIK_API_URL}${StepikPathsConstants.STEPIK_COURSE}$courseId"
+        return httpWrapper.doGet(url, emptyMap(), headers, CourseContainer::class.java).courses.first()
     }
 
 }

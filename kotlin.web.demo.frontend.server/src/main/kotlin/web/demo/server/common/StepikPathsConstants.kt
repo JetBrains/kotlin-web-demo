@@ -32,4 +32,9 @@ object StepikPathsConstants {
      */
     const val STEPIK_STEPS = "/steps/"
 
+    /**
+     * Path to Stepik course
+     */
+    const val STEPIK_COURSE = "/courses/"
+
 }
