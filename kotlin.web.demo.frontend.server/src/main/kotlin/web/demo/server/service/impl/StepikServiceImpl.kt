@@ -77,21 +77,6 @@ class StepikServiceImpl : StepikService {
     }
 
     /**
-     * Method for getting step ids from Stepik
-     *
-     * Use [getLessonsByCourse] for getting [Lesson] with step ids
-     *
-     * @param courseId - string course id from Stepik
-     * @param tokenValue - user token after auth
-     *
-     * @return list of string steps id
-     */
-    private fun getStepsFromCourse(courseId: String, tokenValue: String): List<String> {
-        val lessons = getLessonsByCourse(courseId, tokenValue)
-        return lessons.flatMap { it.steps }.toList()
-    }
-
-    /**
      * Method for getting all lessons called [Lesson] by course id
      *
      * @see <a href="https://stepik.org/api/docs/#!/lessons">Stepik API lessons</a>
