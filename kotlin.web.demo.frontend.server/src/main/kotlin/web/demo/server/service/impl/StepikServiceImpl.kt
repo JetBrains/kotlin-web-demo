@@ -79,7 +79,7 @@ class StepikServiceImpl : StepikService {
     /**
      * Method for getting step ids from Stepik
      *
-     * Use [getLessonsByCourse] for getting [LessonDto] with step ids
+     * Use [getLessonsByCourse] for getting [Lesson] with step ids
      *
      * @param courseId - string course id from Stepik
      * @param tokenValue - user token after auth
@@ -92,13 +92,13 @@ class StepikServiceImpl : StepikService {
     }
 
     /**
-     * Method for getting all lessons called [LessonDto] by course id
+     * Method for getting all lessons called [Lesson] by course id
      *
      * @see <a href="https://stepik.org/api/docs/#!/lessons">Stepik API lessons</a>
      * @param courseId - string course id from Stepik
      * @param tokenValue - user token after auth
      *
-     * @return list of [LessonDto]
+     * @return list of [Lesson]
      */
     private fun getLessonsByCourse(courseId: String, tokenValue: String): List<Lesson> {
         val headers = mapOf("Authorization" to "Bearer " + tokenValue,
