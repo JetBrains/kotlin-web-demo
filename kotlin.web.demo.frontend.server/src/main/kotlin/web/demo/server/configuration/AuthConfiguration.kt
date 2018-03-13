@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilt
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.web.filter.CompositeFilter
+import web.demo.server.common.ActionPathsConstants
 import web.demo.server.common.ProviderPathsConstants
 import web.demo.server.configuration.resourses.ClientResources
 import javax.servlet.Filter
@@ -48,11 +49,11 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
                 .antMatchers("/",
                         "/login**",
                         "/webjars/**",
-                        "/runKotlin",
-                        "/completeKotlin",
-                        "/kotlinServer",
-                        "/convertToKotlin",
-                        "/kotlinVersions")
+                        ActionPathsConstants.RUN_KOTLIN,
+                        ActionPathsConstants.COMPLETE_KOTLIN,
+                        ActionPathsConstants.KOTLIN_SERVER,
+                        ActionPathsConstants.CONVERT_TO_KOTLIN,
+                        ActionPathsConstants.KOTLIN_VERSIONS)
                 .permitAll()
                 .anyRequest()
                 .authenticated()
