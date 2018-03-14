@@ -17,7 +17,7 @@ To change the port number, tweak 'docker-compose.yml':
       - "your_port:8080"
 ```
 
-If you'd like to log in to JetBrains account via Google, Facebook, GitHub, or Twitter, add corresponding keys to
+If you'd like to log in to JetBrains account, Google, Facebook, GitHub, or Twitter, add corresponding keys to
 this [configuration file](https://github.com/JetBrains/kotlin-web-demo/blob/master/docker/frontend/conf/Catalina/localhost/ROOT.xml):
 
 ```xml
