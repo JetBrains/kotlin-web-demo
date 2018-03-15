@@ -46,5 +46,6 @@ object GeneralPathsConstants {
      */
     const val API_EDU = "/api/edu"
     const val PROGRESS = "/progress"
-    const val COURSES = "/courses"
+    const val COURSE = "/course"
+    const val TITLE = "/title"
 }
