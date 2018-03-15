@@ -7,9 +7,12 @@ import web.demo.server.model.ConfType
 
 
 /**
+ * Convert [StepikCourse] to [Course]
+ * Convert Stepik course format to Web-Demo format
+ * @see <a href="https://stepik.org/api/docs/">Stepik API</a>
+ *
  * @author Alexander Prendota on 3/14/18 JetBrains.
  */
-
 @Component
 class CourseConverter {
 
