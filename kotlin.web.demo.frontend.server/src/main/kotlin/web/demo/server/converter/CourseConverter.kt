@@ -17,7 +17,7 @@ import web.demo.server.model.ConfType
 @Component
 class CourseConverter {
 
-    lateinit var additionalFiles: List<CourseFile>
+    private lateinit var additionalFiles: List<CourseFile>
 
     /**
      * Convert raw [StepikCourse] object to [Course] object.
