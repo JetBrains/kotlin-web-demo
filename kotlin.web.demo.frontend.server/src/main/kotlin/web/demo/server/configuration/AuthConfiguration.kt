@@ -50,7 +50,7 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
                 .antMatchers("/",
                         "/login**",
                         "/webjars/**",
-                        GeneralPathsConstants.API_EDU + GeneralPathsConstants.COURSES,
+                        "${GeneralPathsConstants.API_EDU}${GeneralPathsConstants.COURSE}/**",
                         GeneralPathsConstants.API_FILE,
                         GeneralPathsConstants.API_PROJECT,
                         ActionPathsConstants.RUN_KOTLIN,
