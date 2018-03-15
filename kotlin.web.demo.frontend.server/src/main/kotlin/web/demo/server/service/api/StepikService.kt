@@ -9,4 +9,6 @@ import web.demo.server.dtos.stepik.ProgressDto
 interface StepikService {
     fun getCourseProgress(courseId: String, tokenValue: String): List<ProgressDto>
     fun getCourses(): List<Course>
+    fun getCoursesTitles(): List<Course>
+    fun getCourseById(id: String): Course
 }

@@ -8,6 +8,7 @@ import web.demo.server.converter.CourseConverter
 import web.demo.server.dtos.course.Course
 import web.demo.server.dtos.course.Lesson
 import web.demo.server.dtos.stepik.*
+import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.http.HttpWrapper
 import web.demo.server.service.api.StepikService
 import javax.annotation.PostConstruct
@@ -82,6 +83,25 @@ class StepikServiceImpl : StepikService {
      */
     override fun getCourses(): List<Course> {
         return educationCourses
+    }
+
+    /**
+     * Getting [Course.id] and [Course.title] from [educationCourses]
+     * @return list [Course] with only id and title
+     */
+    override fun getCoursesTitles(): List<Course> {
+        return educationCourses.map { Course(it.id, it.title, emptyList()) }
+    }
+
+    /**
+     * Getting full course by id
+     *
+     * @throws [SourceNotFoundException] - if course not found
+     * @return [Course]
+     */
+    override fun getCourseById(id: String): Course {
+        return educationCourses.firstOrNull { it.id == id }
+                ?: throw SourceNotFoundException("Could not find course with id: $id")
     }
 
     /**
