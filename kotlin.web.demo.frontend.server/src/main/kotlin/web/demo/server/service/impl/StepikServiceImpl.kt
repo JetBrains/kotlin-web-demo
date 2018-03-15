@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import web.demo.server.common.StepikPathsConstants
 import web.demo.server.configuration.resourses.EducationCourse
+import web.demo.server.converter.CourseConverter
+import web.demo.server.dtos.course.Course
+import web.demo.server.dtos.course.Lesson
 import web.demo.server.dtos.stepik.*
 import web.demo.server.http.HttpWrapper
 import web.demo.server.service.api.StepikService
@@ -33,6 +36,9 @@ class StepikServiceImpl : StepikService {
     @Autowired
     private lateinit var educationCourse: EducationCourse
 
+    @Autowired
+    private lateinit var courceConverter: CourseConverter
+
     private var educationCourses: List<Course> = emptyList()
 
     @PostConstruct
@@ -54,7 +60,9 @@ class StepikServiceImpl : StepikService {
      * @return list of [ProgressDto]
      */
     override fun getCourseProgress(courseId: String, tokenValue: String): List<ProgressDto> {
-        val stepsFromCourse = educationCourses.first { it.id == courseId }.lessons.flatMap { it.steps }
+        val stepsFromCourse = educationCourses.first { it.id == courseId }.lessons
+                .flatMap { it.task }
+                .map { it.id }
         val stepsIdToRequest = prepareTaskIdToRequest(stepsFromCourse)
         val headers = mapOf("Authorization" to "Bearer " + tokenValue,
                 "Content-Type" to "application/json")
@@ -77,21 +85,21 @@ class StepikServiceImpl : StepikService {
     }
 
     /**
-     * Method for getting all lessons called [Lesson] by course id
+     * Method for getting all lessons called [StepikLesson] by course id
      *
      * @see <a href="https://stepik.org/api/docs/#!/lessons">Stepik API lessons</a>
      * @param courseId - string course id from Stepik
      * @param tokenValue - user token after auth
      *
-     * @return list of [Lesson]
+     * @return list of [StepikLesson]
      */
-    private fun getLessonsByCourse(courseId: String, tokenValue: String): List<Lesson> {
+    private fun getLessonsByCourse(courseId: String, tokenValue: String): List<StepikLesson> {
         val headers = mapOf("Authorization" to "Bearer " + tokenValue,
                 "Content-Type" to "application/json")
         val queryParameters = mapOf(
                 "course" to courseId)
         val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_LESSONS
-        val course = httpWrapper.doGet(url, queryParameters, headers, Course::class.java)
+        val course = httpWrapper.doGet(url, queryParameters, headers, StepikCourse::class.java)
         return course.lessons
     }
 
@@ -121,6 +129,11 @@ class StepikServiceImpl : StepikService {
     /**
      * Loading course from Stepik and put it to [educationCourses]
      * Set empty string to token value -> no need a token for request
+     *
+     * Setting [StepikCourse] from [StepikStepsContainer] because of uselessness [StepikBlock], [StepikSteps] objects
+     * List of [StepikSteps] id are located in [StepikLesson] object and will be convert to [Lesson] id in [CourseConverter]
+     * That's why there's no need to convert them to [StepikOptions] object
+     * Use [CourseConverter] for mapping [StepikCourse] to [Course]
      * @param courseId - pk course from Stepik
      */
     private fun createCourse(courseId: String) {
@@ -129,11 +142,12 @@ class StepikServiceImpl : StepikService {
         val lessons = getLessonsByCourse(courseId, "")
         lessons.forEach {
             val lessonSteps = it.steps
-            val stepsDetails = httpWrapper.doGetToStepik(url, lessonSteps, headers, StepsContainer::class.java)
+            val stepsDetails = httpWrapper.doGetToStepik(url, lessonSteps, headers, StepikStepsContainer::class.java)
             it.task = stepsDetails.steps.map { it.block }.map { it.options }
         }
-        val course = getCourseInfo(courseId)
-        course.lessons = lessons
+        val stepikCourse = getCourseInfo(courseId)
+        stepikCourse.lessons = lessons
+        val course = courceConverter.covertCourseFromStepikFormat(stepikCourse)
         educationCourses = educationCourses.plus(course)
     }
 
@@ -144,12 +158,12 @@ class StepikServiceImpl : StepikService {
      *
      * @param courseId - pk of the course. Sending by @PathParams
      *
-     * @return [Course]
+     * @return [StepikCourse]
      */
-    private fun getCourseInfo(courseId: String): Course {
+    private fun getCourseInfo(courseId: String): StepikCourse {
         val headers = mapOf("Content-Type" to "application/json")
         val url = "${StepikPathsConstants.STEPIK_API_URL}${StepikPathsConstants.STEPIK_COURSE}$courseId"
-        return httpWrapper.doGet(url, emptyMap(), headers, CourseContainer::class.java).courses.first()
+        return httpWrapper.doGet(url, emptyMap(), headers, StepikCourseContainer::class.java).courses.first()
     }
 
 }

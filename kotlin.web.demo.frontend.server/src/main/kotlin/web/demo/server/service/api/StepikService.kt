@@ -1,6 +1,6 @@
 package web.demo.server.service.api
 
-import web.demo.server.dtos.stepik.Course
+import web.demo.server.dtos.course.Course
 import web.demo.server.dtos.stepik.ProgressDto
 
 /**
