@@ -14,6 +14,11 @@ object GeneralPathsConstants {
     const val CURRENT_USER = "userInfo"
 
     /**
+     * Constants for Additaional materials for course from Stepik
+     */
+    const val ADDITIONAL_MATERIALS = "PyCharm additional materials"
+
+    /**
      * Basic operations
      */
     const val EXIST = "/exist"

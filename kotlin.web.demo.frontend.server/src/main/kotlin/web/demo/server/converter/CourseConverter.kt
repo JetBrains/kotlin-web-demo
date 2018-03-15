@@ -1,6 +1,7 @@
 package web.demo.server.converter
 
 import org.springframework.stereotype.Component
+import web.demo.server.common.GeneralPathsConstants
 import web.demo.server.dtos.course.*
 import web.demo.server.dtos.stepik.*
 import web.demo.server.model.ConfType
@@ -16,14 +17,13 @@ import web.demo.server.model.ConfType
 @Component
 class CourseConverter {
 
-    val ADDITIONAL_MATERIALS = "PyCharm additional materials"
     lateinit var additionalFiles: List<CourseFile>
 
     /**
      * Convert raw [StepikCourse] object to [Course] object.
-     * Use [ADDITIONAL_MATERIALS] title in [StepikLesson] for filling [additionalFiles]
+     * Use [GeneralPathsConstants.ADDITIONAL_MATERIALS] title in [StepikLesson] for filling [additionalFiles]
      *
-     * NOTE: Converter does not process the lesson with title [ADDITIONAL_MATERIALS]
+     * NOTE: Converter does not process the lesson with title [GeneralPathsConstants.ADDITIONAL_MATERIALS]
      * @param stepikCourse - [StepikCourse]
      * @return [Course]
      */
@@ -31,7 +31,7 @@ class CourseConverter {
         val lessons = stepikCourse.lessons
         createAdditionalFiles(lessons)
         val chapters = lessons
-                .filter { it.title != ADDITIONAL_MATERIALS }
+                .filter { it.title != GeneralPathsConstants.ADDITIONAL_MATERIALS }
                 .map { createChapter(it) }
         return Course(stepikCourse.id, stepikCourse.title, chapters)
     }
@@ -140,13 +140,13 @@ class CourseConverter {
     /**
      * Getting additions course files
      *
-     * NOTE: All additional files from [Course] are located in one of the course lessons with title [ADDITIONAL_MATERIALS]
+     * NOTE: All additional files from [Course] are located in one of the course lessons with title [GeneralPathsConstants.ADDITIONAL_MATERIALS]
      * Add `test` and `files` with hidden modifier to [additionalFiles]
      *
      * @param lessons - list of course lessons
      */
     private fun createAdditionalFiles(lessons: List<StepikLesson>) {
-        val lesson = lessons.find { it.title == ADDITIONAL_MATERIALS }
+        val lesson = lessons.find { it.title == GeneralPathsConstants.ADDITIONAL_MATERIALS }
         if (lesson != null) {
             additionalFiles = emptyList()
             val files = lesson.task.map { it.files }.map { createTaskFiles(it, hidden = true) }.flatten()
