@@ -48,7 +48,7 @@ Just put whatever you need as dependencies to [gradle.build](https://github.com/
  library "your dependency"
 ```
 
-NOTEL: If the library you're adding uses reflection, accesses the file system, or performs any other type of security-sensitive operations, don't forget to
+NOTE: If the library you're adding uses reflection, accesses the file system, or performs any other type of security-sensitive operations, don't forget to
 configure the [executors.policy.template](https://github.com/JetBrains/kotlin-web-demo/blob/master/kotlin.web.demo.backend/src/main/resources/executors.policy.template)
 in `web-demo-backend`. [Click here](https://docs.oracle.com/javase/7/docs/technotes/guides/security/PolicyFiles.html) for more information about *Java Security Police*
 
