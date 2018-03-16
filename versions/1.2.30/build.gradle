@@ -31,7 +31,7 @@ repositories {
 configurations {
     kotlinJVM
     kotlinJS
-    kotlinLibs
+    library
 }
 
 dependencies {
@@ -45,19 +45,19 @@ dependencies {
     kotlinJVM tc("$kotlinBuildType:$kotlinBuild:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
     kotlinJS tc("$root/kotlin-jslib.jar")
 
-    kotlinLibs tc("$root/kotlin-reflect.jar")
-    kotlinLibs tc("$root/kotlin-test.jar")
-    kotlinLibs group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: stdlibVersion
-    kotlinLibs "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.1"
+    library tc("$root/kotlin-reflect.jar")
+    library tc("$root/kotlin-test.jar")
+    library group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: stdlibVersion
+    library "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.1"
 
     /**
      * ADD DEPENDENCIES TO KOTLIN 1.2.30 COMPILER
      *
-     * If you want to add some another dependencies to kotlin-compiler you can use 'kotlinLibs' task.
+     * If you want to add some another dependencies to kotlin-compiler you can use 'library' task.
      *
      * For example:
      *
-     * kotlinLibs "your dependency from maven"
+     * library "your dependency from maven"
      *
      * FYI: Pay attention if yor library has got reflections, work with files and etc
      * Please configure the 'executors.policy.template' in web-demo-backend.

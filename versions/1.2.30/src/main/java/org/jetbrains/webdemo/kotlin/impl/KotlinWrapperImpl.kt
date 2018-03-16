@@ -82,7 +82,7 @@ class KotlinWrapperImpl : KotlinWrapper {
     /**
      * Get user jar-libraries from 'libraries' folder
      * For adding user-library please add dependencies to build.gradle
-     * Use 'kotlinLibs' task for downloading dependency
+     * Use 'library' task for downloading dependency
      *
      * @return list of [Path] to library
      */

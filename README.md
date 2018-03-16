@@ -42,10 +42,10 @@ this [configuration file](https://github.com/JetBrains/kotlin-web-demo/blob/mast
 
 ## How to add your dependencies to kotlin compiler :books:
 
-Just put whatever you need as dependencies to [gradle.build](https://github.com/JetBrains/kotlin-web-demo/blob/master/versions/1.1.60/build.gradle) via gradle task called `kotlinLibs`:
+Just put whatever you need as dependencies to [gradle.build](https://github.com/JetBrains/kotlin-web-demo/blob/master/versions/1.1.60/build.gradle) via gradle task called `library`:
 
 ```gradle
- kotlinLibs "your dependency"
+ library "your dependency"
 ```
 
 NOTEL: If the library you're adding uses reflection, accesses the file system, or performs any other type of security-sensitive operations, don't forget to

@@ -11,7 +11,7 @@ repositories {
 configurations {
     kotlinJVM
     kotlinJS
-    kotlinLibs
+    library
 }
 
 dependencies {
@@ -22,19 +22,19 @@ dependencies {
     kotlinJVM tc("$kotlinBuildType:$kotlinBuild:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
     kotlinJS tc("$prefix/kotlin-jslib.jar")
 
-    kotlinLibs tc("$prefix/kotlin-runtime.jar")
-    kotlinLibs tc("$prefix/kotlin-reflect.jar")
-    kotlinLibs tc("$prefix/kotlin-test.jar")
-    kotlinLibs tc("$prefix/kotlin-jslib.jar")
+    library tc("$prefix/kotlin-runtime.jar")
+    library tc("$prefix/kotlin-reflect.jar")
+    library tc("$prefix/kotlin-test.jar")
+    library tc("$prefix/kotlin-jslib.jar")
 
     /**
      * ADD DEPENDENCIES TO KOTLIN 1.0.7 COMPILER
      *
-     * If you want to add some another dependencies to kotlin-compiler you can use 'kotlinLibs' task.
+     * If you want to add some another dependencies to kotlin-compiler you can use 'library' task.
      *
      * For example:
      *
-     * kotlinLibs "your dependency from maven"
+     * library "your dependency from maven"
      *
      * FYI: Pay attention if yor library has got reflections, work with files and etc
      * Please configure the 'executors.policy.template' in web-demo-backend.

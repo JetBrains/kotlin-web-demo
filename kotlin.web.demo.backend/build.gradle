@@ -39,7 +39,7 @@ war {
         from(wrapperProject.configurations['kotlinJVM']) {
             into "WEB-INF/kotlin-wrappers/$kotlinVersion/kotlin"
         }
-        from(wrapperProject.configurations['kotlinLibs']) {
+        from(wrapperProject.configurations['library']) {
             into "WEB-INF/kotlin-wrappers/$kotlinVersion/libraries"
         }
     }
