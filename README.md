@@ -3,11 +3,17 @@
 This repository contains sources for [try.kotl.in]( http://try.kotlinlang.org/)
 
 ## Manual installation :whale:
+Before starting the Kotlin-Web-Demo execute two gradle tasks: `copyKotlinLibs` for downloading kotlin libraries for compiler and 
+`war` for building war-archive from IDE or terminal: 
+```bash
+$ gradlew ::copyKotlinLibs
+$ gradlew war
+```
 
 By default `try.kotl.in` uses port 8080, and if that's OK, just make it available at `http://localhost:8080` via this command:
 
 ```bash
-docker-compose up
+$ docker-compose up
 ```
 
 To change the port number, tweak 'docker-compose.yml':
