@@ -3,10 +3,8 @@ package web.demo.server.controllers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.oauth2.provider.OAuth2Authentication
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails
 import org.springframework.web.bind.annotation.*
 import web.demo.server.common.GeneralPathsConstants
-import web.demo.server.dtos.UserDto
 import web.demo.server.dtos.course.Course
 import web.demo.server.dtos.course.CourseFile
 import web.demo.server.dtos.stepik.ProgressDto
@@ -21,7 +19,7 @@ import javax.servlet.http.HttpSession
  */
 @RestController
 @RequestMapping(GeneralPathsConstants.API_EDU)
-class EducationController {
+class EducationController: BaseController {
 
     @Autowired
     private lateinit var stepikService: StepikService
@@ -89,20 +87,4 @@ class EducationController {
         return ResponseEntity.ok(stepikService.getCourseSolutions(stepikTasksId, token))
     }
 
-
-    /**
-     * Getting token from request
-     * Needed for synchronizing the user course information
-     * @see <a href="https://stepik.org">Stepik Course</a>
-     * @param authentication - for getting token for request to stepik
-     * @param session        - for getting info about user
-     *
-     * @throws [UnsupportedOperationException] - if provider is not [ProviderType.stepik]
-     */
-    private fun getStepikToken(authentication: OAuth2Authentication, session: HttpSession): String {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
-        if (user.provider != ProviderType.stepik.name)
-            throw UnsupportedOperationException("Can not get course materials for ${user.provider} provider. Use Stepik authentication.")
-        return (authentication.details as OAuth2AuthenticationDetails).tokenValue
-    }
 }

@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import web.demo.server.common.GeneralPathsConstants
 import web.demo.server.dtos.ProjectDto
-import web.demo.server.dtos.UserDto
 import web.demo.server.entity.Project
+import web.demo.server.exceptions.AuthorizationProviderException
 import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.exceptions.ValidationException
 import web.demo.server.service.api.ProjectService
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession
  */
 @RestController
 @RequestMapping(GeneralPathsConstants.API_PROJECT)
-class ProjectController {
+class ProjectController : BaseController {
 
     @Autowired
     lateinit var projectService: ProjectService
@@ -38,10 +38,11 @@ class ProjectController {
      * Getting all user projects
      *
      * @param session   - for getting info about user
+     * @throws [AuthorizationProviderException] if no user in session
      */
     @GetMapping(GeneralPathsConstants.ALL)
     fun getAllUserProjects(session: HttpSession): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val user = getCurrentUserFromSession(session)
         val projects = projectService.getAllProjectByUser(user.clientId)
         return ResponseEntity.ok(projects)
     }
@@ -64,12 +65,13 @@ class ProjectController {
      * @param newName   - new project name
      *
      * @throws [SourceNotFoundException] if user is not exist or project is not found
+     * @throws [AuthorizationProviderException] if no user in session
      */
     @PostMapping(GeneralPathsConstants.RENAME)
     fun renameProject(session: HttpSession,
                       @RequestParam("publicId") publicId: String,
                       @RequestParam("newName") newName: String): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val user = getCurrentUserFromSession(session)
         projectService.renameProject(user.clientId, publicId, newName)
         return ResponseEntity.ok("Project $newName renamed successfully")
     }
@@ -81,11 +83,12 @@ class ProjectController {
      * @param publicId  - id project from [Project]
      *
      * @throws [SourceNotFoundException] if user is not exist or project is not found
+     * @throws [AuthorizationProviderException] if no user in session
      */
     @DeleteMapping(GeneralPathsConstants.DELETE)
     fun deleteProject(session: HttpSession,
                       @RequestParam("publicId") publicId: String): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val user = getCurrentUserFromSession(session)
         projectService.deleteProject(user.clientId, publicId)
         return ResponseEntity.ok("Project was deleted successfully")
     }
@@ -98,11 +101,12 @@ class ProjectController {
      *
      * @throws [SourceNotFoundException] if user is not exist
      * @throws [ValidationException] if user has two projects with the same names
+     * @throws [AuthorizationProviderException] if no user in session
      */
     @PostMapping(GeneralPathsConstants.SAVE)
     fun saveProject(session: HttpSession,
                     @RequestBody projectDto: ProjectDto): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val user = getCurrentUserFromSession(session)
         projectService.saveProject(user.clientId, projectDto)
         return ResponseEntity.ok("Project ${projectDto.name} saved successfully")
     }
@@ -115,13 +119,14 @@ class ProjectController {
      *
      * @throws [SourceNotFoundException] if user is not exist
      * @throws [ValidationException] if user has two projects with the same names
+     * @throws [AuthorizationProviderException] if no user in session
      *
      * @return [ProjectDto] with files
      */
     @PostMapping(GeneralPathsConstants.ADD)
     fun addProject(session: HttpSession,
                    @RequestParam("name") name: String): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val user = getCurrentUserFromSession(session)
         val project = projectService.addProject(user.clientId, name)
         return ResponseEntity.ok(project)
 

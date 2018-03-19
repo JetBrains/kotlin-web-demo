@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import web.demo.server.common.GeneralPathsConstants
 import web.demo.server.dtos.FileDto
-import web.demo.server.dtos.UserDto
 import web.demo.server.entity.File
 import web.demo.server.entity.Project
+import web.demo.server.exceptions.AuthorizationProviderException
 import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.exceptions.ValidationException
 import web.demo.server.service.api.FileService
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession
  */
 @RestController
 @RequestMapping(GeneralPathsConstants.API_FILE)
-class FileController {
+class FileController : BaseController {
 
     @Autowired
     lateinit var fileService: FileService
@@ -71,13 +71,14 @@ class FileController {
      *
      * @throws [SourceNotFoundException]    - Can not find file, project, user
      * @throws [ValidationException]        - name already exist
+     * @throws [AuthorizationProviderException] if no user in session
      */
     @PostMapping(GeneralPathsConstants.RENAME)
     fun renameFile(session: HttpSession,
                    @RequestParam("publicId") publicId: String,
                    @RequestParam("projectId") projectId: String,
                    @RequestParam("newName") newName: String): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val user = getCurrentUserFromSession(session)
         fileService.renameFile(publicId, projectId, newName, user.clientId)
         return ResponseEntity.ok("File $newName renamed successfully")
     }
@@ -89,13 +90,14 @@ class FileController {
      * @param projectId - id from [Project]
      * @param session   - for getting info about user
      *
+     * @throws [AuthorizationProviderException] if no user in session
      * @throws [SourceNotFoundException]    - Can not find file, project, user
      */
     @DeleteMapping(GeneralPathsConstants.DELETE)
     fun deleteFile(session: HttpSession,
                    @RequestParam("publicId") publicId: String,
                    @RequestParam("projectId") projectId: String): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val user = getCurrentUserFromSession(session)
         fileService.deleteFile(publicId, projectId, user.clientId)
         return ResponseEntity.ok("File was deleted successfully")
     }
@@ -108,11 +110,12 @@ class FileController {
      *
      * @throws [SourceNotFoundException] - Can not find file, project, user
      * @throws [ValidationException]     - if count of file in project more than 100
+     * @throws [AuthorizationProviderException] if no user in session
      */
     @PostMapping(GeneralPathsConstants.ADD)
     fun addFile(session: HttpSession,
                 @RequestBody file: FileDto): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val user = getCurrentUserFromSession(session)
         fileService.addFile(user.clientId, file.projectId, file.text, file.name)
         return ResponseEntity.ok("File was added successfully ")
     }
@@ -123,11 +126,12 @@ class FileController {
      * @param session - for getting info about user
      * @param file    - [FileDto] for updating
      * @throws [SourceNotFoundException] if file is not found
+     * @throws [AuthorizationProviderException] if no user in session
      */
     @PostMapping(GeneralPathsConstants.SAVE)
     fun saveFile(session: HttpSession,
                  @RequestBody file: FileDto): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        val user = getCurrentUserFromSession(session)
         fileService.saveFile(user.clientId, file)
         return ResponseEntity.ok("File ${file.name} saved successfully")
     }
