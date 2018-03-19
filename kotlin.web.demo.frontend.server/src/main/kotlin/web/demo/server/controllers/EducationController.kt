@@ -4,14 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import web.demo.server.common.GeneralPathsConstants
 import web.demo.server.dtos.UserDto
 import web.demo.server.dtos.course.Course
+import web.demo.server.dtos.course.CourseFile
 import web.demo.server.dtos.stepik.ProgressDto
+import web.demo.server.dtos.stepik.StepikSolution
 import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.model.ProviderType
 import web.demo.server.service.api.StepikService
@@ -39,10 +38,7 @@ class EducationController {
     @GetMapping("${GeneralPathsConstants.PROGRESS}/{id}")
     fun getUserCourseProgress(authentication: OAuth2Authentication, session: HttpSession,
                               @PathVariable id: String): ResponseEntity<*> {
-        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
-        if (user.provider != ProviderType.stepik.name)
-            throw UnsupportedOperationException("Can not get course progress for ${user.provider} provider")
-        val token = (authentication.details as OAuth2AuthenticationDetails).tokenValue
+        val token = getStepikToken(authentication, session)
         val progress = stepikService.getCourseProgress(id, token)
         return ResponseEntity.ok(progress)
     }
@@ -75,5 +71,38 @@ class EducationController {
     @GetMapping("${GeneralPathsConstants.COURSE}/{id}")
     fun getCourseById(@PathVariable id: String): ResponseEntity<*> {
         return ResponseEntity.ok(stepikService.getCourseById(id))
+    }
+
+    /**
+     * Getting [StepikSolution] of the [CourseFile]
+     * Use [StepikSolution.name] = 'Task.kt' for getting last current task solution
+     * Work only [ProviderType.stepik]
+     *
+     * @param stepikTasksId   - id from [CourseFile]
+     * @param authentication - for getting token for request to stepik
+     * @param session        - for getting info about user
+     */
+    @GetMapping(GeneralPathsConstants.SOLUTIONS)
+    fun getCourseSolutions(authentication: OAuth2Authentication, session: HttpSession,
+                           @RequestBody stepikTasksId: List<String>): ResponseEntity<*> {
+        val token = getStepikToken(authentication, session)
+        return ResponseEntity.ok(stepikService.getCourseSolutions(stepikTasksId, token))
+    }
+
+
+    /**
+     * Getting token from request
+     * Needed for synchronizing the user course information
+     * @see <a href="https://stepik.org">Stepik Course</a>
+     * @param authentication - for getting token for request to stepik
+     * @param session        - for getting info about user
+     *
+     * @throws [UnsupportedOperationException] - if provider is not [ProviderType.stepik]
+     */
+    private fun getStepikToken(authentication: OAuth2Authentication, session: HttpSession): String {
+        val user = session.getAttribute(GeneralPathsConstants.CURRENT_USER) as UserDto
+        if (user.provider != ProviderType.stepik.name)
+            throw UnsupportedOperationException("Can not get course materials for ${user.provider} provider. Use Stepik authentication.")
+        return (authentication.details as OAuth2AuthenticationDetails).tokenValue
     }
 }
