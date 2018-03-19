@@ -48,4 +48,5 @@ object GeneralPathsConstants {
     const val PROGRESS = "/progress"
     const val COURSE = "/course"
     const val TITLE = "/title"
+    const val SOLUTIONS = "/solutions"
 }
