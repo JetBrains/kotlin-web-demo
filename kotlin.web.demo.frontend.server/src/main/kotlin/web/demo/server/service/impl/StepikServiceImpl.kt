@@ -105,8 +105,8 @@ class StepikServiceImpl : StepikService {
                     .map { it.reply }
                     .map { it.solution }
                     .flatten()
-                    .first { it.name == "Task.kt" }
-            solutions = solutions.plus(solution)
+                    .firstOrNull { it.name == "Task.kt" }
+            if (solution != null) solutions = solutions.plus(solution)
         }
         return solutions
     }
