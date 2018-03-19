@@ -6,6 +6,7 @@ import web.demo.server.common.StepikPathsConstants
 import web.demo.server.configuration.resourses.EducationCourse
 import web.demo.server.converter.CourseConverter
 import web.demo.server.dtos.course.Course
+import web.demo.server.dtos.course.CourseFile
 import web.demo.server.dtos.course.Lesson
 import web.demo.server.dtos.stepik.*
 import web.demo.server.exceptions.SourceNotFoundException
@@ -55,7 +56,7 @@ class StepikServiceImpl : StepikService {
      * After getting the [ProgressContainerDto] remove the '77-' prefix [PROGRESS_ID_PREFIX].
      *
      * @see <a href="https://stepik.org/api/docs/#!/progresses">Stepik API progress</a>
-     * @param courseId - string course id from Stepik
+     * @param courseId   - string course id from Stepik
      * @param tokenValue - user token after auth
      *
      * @return list of [ProgressDto]
@@ -76,6 +77,38 @@ class StepikServiceImpl : StepikService {
             iterator += MAX_REQUEST_PARAMS
         }
         return progressContainer.flatMap { it.progresses }.map { ProgressDto(it.id.removePrefix("77-"), it.is_passed) }.toList()
+    }
+
+    /**
+     * Getting [StepikSolution] of the [CourseFile]
+     * Use [StepikSubmissionContainer] structure for getting [StepikSolution]
+     * Get first element in list of solutions in response with name 'Task.kt'
+     *
+     * @param tasksIds   - id from [CourseFile]
+     * @param tokenValue - user token after auth
+     *
+     * @return list of [StepikSolution]
+     */
+    override fun getCourseSolutions(tasksIds: List<String>, tokenValue: String): List<StepikSolution> {
+        val headers = mapOf("Authorization" to "Bearer " + tokenValue,
+                "Content-Type" to "application/json")
+        val queryParameters = mutableMapOf(
+                "status" to "correct",
+                "page" to "1",
+                "order" to "desc")
+        val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_SUBMISSIONS
+        var solutions = emptyList<StepikSolution>()
+        tasksIds.forEach {
+            queryParameters["step"] = it
+            val solution = httpWrapper.doGet(url, queryParameters, headers, StepikSubmissionContainer::class.java)
+                    .submissions
+                    .map { it.reply }
+                    .map { it.solution }
+                    .flatten()
+                    .first { it.name == "Task.kt" }
+            solutions = solutions.plus(solution)
+        }
+        return solutions
     }
 
     /**
