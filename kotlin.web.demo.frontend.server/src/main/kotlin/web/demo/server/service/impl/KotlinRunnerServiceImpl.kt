@@ -9,6 +9,10 @@ import web.demo.server.dtos.KotlinVersionDto
 import web.demo.server.dtos.ProjectDto
 import web.demo.server.exceptions.ValidationException
 import web.demo.server.http.HttpWrapper
+import web.demo.server.model.ConfType
+import web.demo.server.model.output.ExecutionResult
+import web.demo.server.model.output.JUnitExecutionResult
+import web.demo.server.model.output.KotlinExecutionResult
 import web.demo.server.service.api.KotlinRunnerService
 import java.io.IOException
 import javax.annotation.PostConstruct
@@ -88,7 +92,7 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
      *
      * @return string json response
      */
-    override fun runKotlinCode(project: ProjectDto, fileName: String, searchForMain: String): String {
+    override fun runKotlinCode(project: ProjectDto, fileName: String, searchForMain: String): ExecutionResult {
         val typeOfCode = project.confType ?: "java"
         val projectAsString = jacksonObjectMapper().writeValueAsString(project)
         val queryParameters = mapOf(
@@ -97,7 +101,10 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
                 "project" to projectAsString,
                 "filename" to fileName,
                 "searchForMain" to searchForMain)
-        return http.doGet(pathsBackend.SERVER_PATH, queryParameters, headers, String::class.java)
+        return when (project.confType) {
+            ConfType.junit.name -> runTestCode(queryParameters)
+            else -> runCode(queryParameters)
+        }
     }
 
 
@@ -136,6 +143,26 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
         kotlinVersions.versions.map {
             availableKotlinVersionConfigs = availableKotlinVersionConfigs.plus(KotlinVersionDto(it, latestVersion == it))
         }
+    }
+
+    /**
+     * Compiling code for [ConfType.junit]
+     *
+     * @param queryParameters - map with query parameters for request
+     * @return [JUnitExecutionResult]
+     */
+    private fun runTestCode(queryParameters: Map<String, String>): JUnitExecutionResult {
+        return http.doGet(pathsBackend.SERVER_PATH, queryParameters, headers, JUnitExecutionResult::class.java)
+    }
+
+    /**
+     * Compiling code for [ConfType.java] and [ConfType.js]
+     *
+     * @param queryParameters - map with query parameters for request
+     * @return [KotlinExecutionResult]
+     */
+    private fun runCode(queryParameters: Map<String, String>): KotlinExecutionResult {
+        return http.doGet(pathsBackend.SERVER_PATH, queryParameters, headers, KotlinExecutionResult::class.java)
     }
 
 }
