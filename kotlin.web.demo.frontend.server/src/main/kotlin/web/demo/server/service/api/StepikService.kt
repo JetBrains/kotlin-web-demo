@@ -1,5 +1,6 @@
 package web.demo.server.service.api
 
+import web.demo.server.dtos.ProjectDto
 import web.demo.server.dtos.course.Course
 import web.demo.server.dtos.stepik.ProgressDto
 import web.demo.server.dtos.stepik.StepikSolution
@@ -13,4 +14,5 @@ interface StepikService {
     fun getCoursesTitles(): List<Course>
     fun getCourseById(id: String): Course
     fun getCourseSolutions(tasksIds: List<String>, tokenValue: String): List<StepikSolution>
+    fun postSolution(project: ProjectDto, token: String)
 }

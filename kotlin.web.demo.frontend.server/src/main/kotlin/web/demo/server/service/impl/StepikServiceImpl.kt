@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import web.demo.server.common.StepikPathsConstants
 import web.demo.server.configuration.resourses.EducationCourse
 import web.demo.server.converter.CourseConverter
+import web.demo.server.dtos.ProjectDto
 import web.demo.server.dtos.course.Course
 import web.demo.server.dtos.course.CourseFile
 import web.demo.server.dtos.course.Lesson
@@ -39,7 +40,7 @@ class StepikServiceImpl : StepikService {
     private lateinit var educationCourse: EducationCourse
 
     @Autowired
-    private lateinit var courceConverter: CourseConverter
+    private lateinit var courseConverter: CourseConverter
 
     private var educationCourses: List<Course> = emptyList()
 
@@ -109,6 +110,12 @@ class StepikServiceImpl : StepikService {
             if (solution != null) solutions = solutions.plus(solution)
         }
         return solutions
+    }
+
+    // TODO: 1 - get attempt. 2 - post submission. 3 - generate placeholders
+    override fun postSolution(project: ProjectDto, token: String) {
+        val attempt = postAttempt("234720", token)
+        TODO("not implemented")
     }
 
     /**
@@ -200,7 +207,7 @@ class StepikServiceImpl : StepikService {
         }
         val stepikCourse = getCourseInfo(courseId)
         stepikCourse.lessons = lessons
-        val course = courceConverter.covertCourseFromStepikFormat(stepikCourse)
+        val course = courseConverter.covertCourseFromStepikFormat(stepikCourse)
         educationCourses = educationCourses.plus(course)
     }
 
@@ -217,6 +224,41 @@ class StepikServiceImpl : StepikService {
         val headers = mapOf("Content-Type" to "application/json")
         val url = "${StepikPathsConstants.STEPIK_API_URL}${StepikPathsConstants.STEPIK_COURSE}$courseId"
         return httpWrapper.doGet(url, emptyMap(), headers, StepikCourseContainer::class.java).courses.first()
+    }
+
+    /**
+     * Create attempt by step id;
+     * NOTE:
+     * Attempt resource. To pass a quiz, user needs to create an attempt and then a submission for the attempt.
+     * Attempts are only allowed on quiz steps.
+     *
+     * Why get first element?
+     * - Current attempt with status `active` always first element in list of attempts
+     *
+     * @param stepId - [Lesson.id] for creating attempt
+     * @param token  - user token after auth
+     *
+     * @return [StepikAttempt]
+     */
+    private fun postAttempt(stepId: String, token: String): StepikAttempt {
+        val headers = mapOf("Authorization" to "Bearer " + token,
+                "Content-Type" to "application/json")
+        val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_ATTEMPTS
+        val queryParameters = mapOf(
+                "step" to stepId)
+        val attempts = httpWrapper.doGet(url, queryParameters, headers, StepikAttemptContainer::class.java).attempts
+        if (attempts.isEmpty()) throw SourceNotFoundException("Can not get attempt for stepId: $stepId")
+        return attempts[0]
+    }
+
+    private fun postSolution(passed: Boolean, attempt: StepikAttempt,
+                             solution: List<StepikSolution>, project: ProjectDto, token: String) {
+        val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_SUBMISSIONS
+        val score = if (passed) "1" else "0"
+        /*
+        Needed SubmissionWrapper
+         */
+        TODO("not implemented")
     }
 
 }
