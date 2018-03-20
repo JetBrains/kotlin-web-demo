@@ -44,12 +44,3 @@ class StepikTask(name: String,
 data class StepikPlaceholders(var subtask_infos: List<StepikSubtaskInfos>)
 
 data class StepikSubtaskInfos(var possible_answer: String, var placeholder_text: String)
-
-data class StepikSubmissionContainer(var submissions: List<StepikSubmission>)
-
-data class StepikSubmission(var reply: StepikReply)
-
-data class StepikReply(var solution: List<StepikSolution>)
-
-data class StepikSolution(var name: String,
-                          var text: String)
