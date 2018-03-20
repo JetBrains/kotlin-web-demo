@@ -2,9 +2,9 @@ package web.demo.server.converter
 
 import org.springframework.stereotype.Component
 import web.demo.server.common.GeneralPathsConstants
-import web.demo.server.dtos.course.*
-import web.demo.server.dtos.stepik.*
 import web.demo.server.model.ConfType
+import web.demo.server.model.course.*
+import web.demo.server.model.stepik.*
 
 
 /**

@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.web.bind.annotation.*
 import web.demo.server.common.GeneralPathsConstants
-import web.demo.server.dtos.course.Course
-import web.demo.server.dtos.course.CourseFile
-import web.demo.server.dtos.stepik.ProgressDto
-import web.demo.server.dtos.stepik.StepikSolution
 import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.model.ProviderType
+import web.demo.server.model.course.Course
+import web.demo.server.model.course.CourseFile
+import web.demo.server.model.stepik.ProgressDto
+import web.demo.server.model.stepik.StepikSolution
 import web.demo.server.service.api.StepikService
 import javax.servlet.http.HttpSession
 

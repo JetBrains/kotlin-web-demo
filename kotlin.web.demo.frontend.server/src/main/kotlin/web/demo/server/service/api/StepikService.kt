@@ -1,9 +1,9 @@
 package web.demo.server.service.api
 
 import web.demo.server.dtos.ProjectDto
-import web.demo.server.dtos.course.Course
-import web.demo.server.dtos.stepik.ProgressDto
-import web.demo.server.dtos.stepik.StepikSolution
+import web.demo.server.model.course.Course
+import web.demo.server.model.stepik.ProgressDto
+import web.demo.server.model.stepik.StepikSolution
 
 /**
  * @author Alexander Prendota on 2/20/18 JetBrains.

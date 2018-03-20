@@ -6,12 +6,12 @@ import web.demo.server.common.StepikPathsConstants
 import web.demo.server.configuration.resourses.EducationCourse
 import web.demo.server.converter.CourseConverter
 import web.demo.server.dtos.ProjectDto
-import web.demo.server.dtos.course.Course
-import web.demo.server.dtos.course.CourseFile
-import web.demo.server.dtos.course.Lesson
-import web.demo.server.dtos.stepik.*
 import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.http.HttpWrapper
+import web.demo.server.model.course.Course
+import web.demo.server.model.course.CourseFile
+import web.demo.server.model.course.Lesson
+import web.demo.server.model.stepik.*
 import web.demo.server.service.api.StepikService
 import javax.annotation.PostConstruct
 

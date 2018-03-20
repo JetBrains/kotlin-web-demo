@@ -1,4 +1,4 @@
-package web.demo.server.dtos.stepik
+package web.demo.server.model.stepik
 
 /**
  *

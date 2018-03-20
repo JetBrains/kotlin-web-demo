@@ -4,8 +4,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import web.demo.server.common.GeneralPathsConstants
-import web.demo.server.dtos.course.TaskFile
-import web.demo.server.dtos.stepik.*
+import web.demo.server.model.course.TaskFile
+import web.demo.server.model.stepik.*
 
 /**
  * Test for [CourseConverter]

@@ -1,4 +1,4 @@
-package web.demo.server.dtos.course
+package web.demo.server.model.course
 
 /**
  * @author Alexander Prendota on 3/14/18 JetBrains.
