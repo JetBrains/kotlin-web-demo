@@ -10,6 +10,9 @@ import web.demo.server.dtos.ExecuteKotlinCodeDto
 import web.demo.server.dtos.ProjectDto
 import web.demo.server.exceptions.OperationNotFoundException
 import web.demo.server.model.ConfType
+import web.demo.server.model.output.ExecutionResult
+import web.demo.server.model.output.JUnitExecutionResult
+import web.demo.server.model.output.KotlinExecutionResult
 import web.demo.server.service.api.KotlinRunnerService
 import javax.servlet.http.HttpServletRequest
 
@@ -59,11 +62,13 @@ class KotlinRunnerController {
      * searchForMain        - if true -> search main function in file with code
      * fileName             - name of file with code
      *
-     * @return string output like:
-     *
+     * @return [ExecutionResult] output like:
+     * [KotlinExecutionResult] - structure:
      * '{"text":"<outStream>Hello, world!\n</outStream>","exception":null,"errors":{"File.kt":[]}}'
      * <outStream> - for correct result
      * <errStream> - for error output
+     * OR
+     * [JUnitExecutionResult] - structure if the [ProjectDto.confType] == [ConfType.junit]
      */
     @PostMapping(ActionPathsConstants.RUN_KOTLIN)
     fun runKotlinCodeController(@RequestBody executeKotlinCodeDto: ExecuteKotlinCodeDto): ResponseEntity<*> {
