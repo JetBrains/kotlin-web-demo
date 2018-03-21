@@ -10,6 +10,7 @@ import web.demo.server.common.ActionPathsConstants
 import web.demo.server.dtos.ExecuteKotlinCodeDto
 import web.demo.server.dtos.ProjectDto
 import web.demo.server.exceptions.OperationNotFoundException
+import web.demo.server.model.ConfType
 import web.demo.server.model.output.ExecutionResult
 import web.demo.server.model.output.JUnitExecutionResult
 import web.demo.server.model.output.KotlinExecutionResult
@@ -117,9 +118,9 @@ class KotlinRunnerController : BaseController {
 
     /**
      * Controller for supporting old web-demo API.
-     * Needed for obsolete versions the Kotlin-Run-Code and other client applications that support the old version API.
+     * Needed for obsolete versions the Kotlin Playground and other client applications that support the old version API.
      *
-     * @see <a href="https://github.com/JetBrains/kotlin-runcode">Kotlin-Run-Code</a>
+     * @see <a href="https://github.com/JetBrains/kotlin-playground">Kotlin Playground</a>
      *
      * @param type      - type of operation
      * @param runConf   - running platform [ConfType]
