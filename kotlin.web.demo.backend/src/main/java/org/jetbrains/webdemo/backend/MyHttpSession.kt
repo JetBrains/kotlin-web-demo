@@ -67,7 +67,7 @@ class MyHttpSession {
         var kotlinVersion: String? = null
         try {
             val currentProject = objectMapper.readValue<Project>(request.getParameter("project"))
-            kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
+            kotlinVersion = getAvailableKotlinVersion(currentProject.compilerVersion)
 
             val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
             if (wrapper == null) {
@@ -195,6 +195,11 @@ class MyHttpSession {
             ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't analyze project", e)
         }
 
+    }
+
+    private fun getAvailableKotlinVersion(version: String?): String {
+        val isActualVersion = KotlinWrappersManager.getKotlinVersions().contains(version)
+        return if (isActualVersion && version != null) version else KotlinWrappersManager.defaultWrapper.wrapperVersion
     }
 
     private fun getFilesContentFromProject(project: Project): Map<String, String> {
