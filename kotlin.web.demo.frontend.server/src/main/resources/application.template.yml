@@ -36,6 +36,7 @@ backend:
   url: YOUR KOTLIN COMPILER URL
   run: run
   complete: complete
+  highlight: highlight
   convert: convertToKotlin
 
 #######################

@@ -55,6 +55,18 @@ class KotlinRunnerController : BaseController {
         return ResponseEntity(service.convertToKotlinCode(code), HttpStatus.OK)
     }
 
+    /**
+     * Rest interface for getting kotlin code from java code
+     *
+     * @param executeKotlinCodeDto - [ExecuteKotlinCodeDto]
+     *
+     * @return string of Map<String, List<ErrorDescriptor>>
+     */
+    @PostMapping(ActionPathsConstants.HIGHLIGHT)
+    fun checkHighlighting(@RequestBody executeKotlinCodeDto: ExecuteKotlinCodeDto): ResponseEntity<*> {
+        return ResponseEntity(service.getHighlighting(executeKotlinCodeDto.project), HttpStatus.OK)
+    }
+
 
     /**
      * Rest interface for running code form [ProjectDto]
@@ -118,6 +130,7 @@ class KotlinRunnerController : BaseController {
      * 1 - type = run               -> [runKotlinCodeController]
      * 2 - type = complete          -> [completeKotlinCodeController]
      * 3 - type = getKotlinVersions -> [getKotlinVersionController]
+     * 4 - type = highlight         -> [checkHighlighting]
      */
     @RequestMapping(value = [(ActionPathsConstants.KOTLIN_SERVER)], method = [RequestMethod.POST, RequestMethod.GET])
     fun multipleController(@RequestParam("type") type: String,
@@ -128,6 +141,7 @@ class KotlinRunnerController : BaseController {
             "run" -> runKotlinCodeController(buildObjectsForOldRequests(request), session, authentication = null)
             "complete" -> completeKotlinCodeController(buildObjectsForOldRequests(request))
             "getKotlinVersions" -> getKotlinVersionController()
+            "highlight" -> checkHighlighting(buildObjectsForOldRequests(request))
             else -> throw OperationNotFoundException("Can not find operation - $type")
         }
     }

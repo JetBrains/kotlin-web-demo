@@ -55,6 +55,7 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
                         GeneralPathsConstants.API_PROJECT,
                         ActionPathsConstants.RUN_KOTLIN,
                         ActionPathsConstants.COMPLETE_KOTLIN,
+                        ActionPathsConstants.HIGHLIGHT,
                         ActionPathsConstants.KOTLIN_SERVER,
                         ActionPathsConstants.CONVERT_TO_KOTLIN,
                         ActionPathsConstants.KOTLIN_VERSIONS)

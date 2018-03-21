@@ -140,6 +140,22 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
     }
 
     /**
+     * Getting highlighting
+     *
+     * @param project - [ProjectDto] for get highlighting
+     *
+     * @return string of Map<String, List<ErrorDescriptor>>
+     * Do not need cast to Map<String, List<ErrorDescriptor>> because no operation after getting highlighting
+     */
+    override fun getHighlighting(project: ProjectDto): String {
+        val projectAsString = jacksonObjectMapper().writeValueAsString(project)
+        val queryParameters = mapOf(
+                "type" to pathsBackend.HIGHLIGHT_KOTLIN,
+                "project" to projectAsString)
+        return http.doGet(pathsBackend.SERVER_PATH, queryParameters, headers, String::class.java)
+    }
+
+    /**
      * Getting kotlin versions.
      * Map to [KotlinVersionDto]
      *

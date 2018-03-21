@@ -35,4 +35,10 @@ class BackendPathsConstants {
     @Value("\${backend.complete}")
     lateinit var COMPLETE_KOTLIN: String
 
+    /**
+     * Path for getting highlighting on ba
+     */
+    @Value("\${backend.highlight}")
+    lateinit var HIGHLIGHT_KOTLIN: String
+
 }

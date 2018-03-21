@@ -22,6 +22,11 @@ object ActionPathsConstants {
     const val RUN_KOTLIN = "/runKotlin"
 
     /**
+     * Path for getting highlighting from backend side
+     */
+    const val HIGHLIGHT = "/highlight"
+
+    /**
      * Path for getting completion of kotlin code
      */
     const val COMPLETE_KOTLIN = "/completeKotlin"

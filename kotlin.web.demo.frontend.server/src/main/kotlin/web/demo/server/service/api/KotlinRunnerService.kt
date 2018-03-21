@@ -16,6 +16,8 @@ interface KotlinRunnerService {
 
     fun runKotlinCode(project: ProjectDto, fileName: String, searchForMain: String, user: UserDto?, token: String?): ExecutionResult
 
+    fun getHighlighting(project: ProjectDto): String
+
     fun completeKotlinCode(project: ProjectDto, fileName: String, line: String, ch: String): String
 
 }
