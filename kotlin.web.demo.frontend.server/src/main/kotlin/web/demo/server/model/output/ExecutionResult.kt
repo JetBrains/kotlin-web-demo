@@ -38,12 +38,12 @@ class ComparisonFailureDescriptor(message: String,
                                   var expected: String?,
                                   var actual: String?) : ExceptionDescriptor(message, fullName, stackTrace, cause)
 
-class ErrorDescriptor(var intervar: TextIntervar?,
+class ErrorDescriptor(var intervar: TextInterval?,
                       var message: String?,
                       var severity: Severity,
                       var className: String? = null)
 
-class TextIntervar(var start: TextPosition?,
+class TextInterval(var start: TextPosition?,
                    var end: TextPosition?)
 
 class TextPosition(var line: Int?,
