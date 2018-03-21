@@ -149,7 +149,7 @@ class MyHttpSession {
             val line = Integer.parseInt(request.getParameter("line"))
             val ch = Integer.parseInt(request.getParameter("ch"))
             val currentProject = objectMapper.readValue(request.getParameter("project"), Project::class.java)
-            kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
+            kotlinVersion = getAvailableKotlinVersion(currentProject.compilerVersion)
             val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
             if (wrapper == null) {
                 response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Unsupported kotlin version: $kotlinVersion")
@@ -175,7 +175,7 @@ class MyHttpSession {
         var kotlinVersion: String? = null
         try {
             val currentProject: Project = objectMapper.readValue<Project>(request.getParameter("project"))
-            kotlinVersion = currentProject.compilerVersion ?: KotlinWrappersManager.defaultWrapper.wrapperVersion
+            kotlinVersion = getAvailableKotlinVersion(currentProject.compilerVersion)
             val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
             if (wrapper == null) {
                 response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Unsupported kotlin version: $kotlinVersion")
