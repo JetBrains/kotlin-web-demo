@@ -7,13 +7,18 @@ import web.demo.server.common.BackendPathsConstants
 import web.demo.server.configuration.resourses.KotlinVersion
 import web.demo.server.dtos.KotlinVersionDto
 import web.demo.server.dtos.ProjectDto
+import web.demo.server.dtos.UserDto
 import web.demo.server.exceptions.ValidationException
 import web.demo.server.http.HttpWrapper
 import web.demo.server.model.ConfType
+import web.demo.server.model.ProjectType
+import web.demo.server.model.ProviderType
 import web.demo.server.model.output.ExecutionResult
 import web.demo.server.model.output.JUnitExecutionResult
 import web.demo.server.model.output.KotlinExecutionResult
+import web.demo.server.model.output.Status
 import web.demo.server.service.api.KotlinRunnerService
+import web.demo.server.service.api.StepikService
 import java.io.IOException
 import javax.annotation.PostConstruct
 
@@ -30,6 +35,9 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
 
     @Autowired
     private lateinit var pathsBackend: BackendPathsConstants
+
+    @Autowired
+    private lateinit var stepikService: StepikService
 
     @Autowired
     private lateinit var http: HttpWrapper
@@ -92,7 +100,7 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
      *
      * @return string json response
      */
-    override fun runKotlinCode(project: ProjectDto, fileName: String, searchForMain: String): ExecutionResult {
+    override fun runKotlinCode(project: ProjectDto, fileName: String, searchForMain: String, user: UserDto?, token: String?): ExecutionResult {
         val typeOfCode = project.confType ?: "java"
         val projectAsString = jacksonObjectMapper().writeValueAsString(project)
         val queryParameters = mapOf(
@@ -102,7 +110,7 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
                 "filename" to fileName,
                 "searchForMain" to searchForMain)
         return when (project.confType) {
-            ConfType.junit.name -> runTestCode(queryParameters)
+            ConfType.junit.name -> runTestCode(queryParameters, project, user, token)
             else -> runCode(queryParameters)
         }
     }
@@ -147,12 +155,29 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
 
     /**
      * Compiling code for [ConfType.junit]
+     * Share tests results with Stepik.
+     * NOTE:
+     * Needed for sharing with stepik:
+     * - User [UserDto.provider] should be [ProviderType.stepik]
+     * - Project [ProjectDto.type] should be [ProjectType.LESSON_TASK]
+     * - Auth with Stepik
      *
      * @param queryParameters - map with query parameters for request
+     * @param user            - for checking [UserDto.provider]
+     * @param token           - token from auth
+     * @param project         - [ProjectDto] for request last solution to Stepik
+     *
      * @return [JUnitExecutionResult]
      */
-    private fun runTestCode(queryParameters: Map<String, String>): JUnitExecutionResult {
-        return http.doGet(pathsBackend.SERVER_PATH, queryParameters, headers, JUnitExecutionResult::class.java)
+    private fun runTestCode(queryParameters: Map<String, String>, project: ProjectDto, user: UserDto?, token: String?): JUnitExecutionResult {
+        val testResult = http.doGet(pathsBackend.SERVER_PATH, queryParameters, headers, JUnitExecutionResult::class.java)
+        val passed = isTestsPassed(testResult)
+        if (user !== null && token != null
+                && user.provider == ProviderType.stepik.name
+                && project.type == ProjectType.LESSON_TASK.name) {
+            stepikService.postSolution(project, token, passed)
+        }
+        return testResult
     }
 
     /**
@@ -163,6 +188,19 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
      */
     private fun runCode(queryParameters: Map<String, String>): KotlinExecutionResult {
         return http.doGet(pathsBackend.SERVER_PATH, queryParameters, headers, KotlinExecutionResult::class.java)
+    }
+
+    /**
+     * Checking test results.
+     *
+     * @param testResult - [JUnitExecutionResult]
+     * @return
+     * If [Status.ERROR] or [Status.FAIL] => not passed
+     * If [Status.OK] => passed
+     */
+    private fun isTestsPassed(testResult: JUnitExecutionResult): Boolean {
+        val statuses = testResult.testResults.flatMap { it.value }.map { it.status }
+        return !(statuses.contains(Status.ERROR) || statuses.contains(Status.FAIL))
     }
 
 }

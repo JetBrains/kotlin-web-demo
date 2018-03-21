@@ -4,17 +4,18 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.web.bind.annotation.*
 import web.demo.server.common.ActionPathsConstants
 import web.demo.server.dtos.ExecuteKotlinCodeDto
 import web.demo.server.dtos.ProjectDto
 import web.demo.server.exceptions.OperationNotFoundException
-import web.demo.server.model.ConfType
 import web.demo.server.model.output.ExecutionResult
 import web.demo.server.model.output.JUnitExecutionResult
 import web.demo.server.model.output.KotlinExecutionResult
 import web.demo.server.service.api.KotlinRunnerService
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpSession
 
 /**
  * Rest API for regular operation with Kotlin code
@@ -28,7 +29,7 @@ import javax.servlet.http.HttpServletRequest
  *
  */
 @RestController
-class KotlinRunnerController {
+class KotlinRunnerController : BaseController {
 
     @Autowired
     lateinit var service: KotlinRunnerService
@@ -71,10 +72,14 @@ class KotlinRunnerController {
      * [JUnitExecutionResult] - structure if the [ProjectDto.confType] == [ConfType.junit]
      */
     @PostMapping(ActionPathsConstants.RUN_KOTLIN)
-    fun runKotlinCodeController(@RequestBody executeKotlinCodeDto: ExecuteKotlinCodeDto): ResponseEntity<*> {
+    fun runKotlinCodeController(@RequestBody executeKotlinCodeDto: ExecuteKotlinCodeDto,
+                                session: HttpSession,
+                                authentication: OAuth2Authentication?): ResponseEntity<*> {
+        val user = getCurrentUserFromSessionOrNull(session)
+        val token = if (authentication == null) null else getStepikToken(authentication, session)
         return ResponseEntity(service.runKotlinCode(executeKotlinCodeDto.project,
                 executeKotlinCodeDto.filename,
-                executeKotlinCodeDto.searchForMain), HttpStatus.OK)
+                executeKotlinCodeDto.searchForMain, user, token), HttpStatus.OK)
     }
 
     /**
@@ -117,9 +122,10 @@ class KotlinRunnerController {
     @RequestMapping(value = [(ActionPathsConstants.KOTLIN_SERVER)], method = [RequestMethod.POST, RequestMethod.GET])
     fun multipleController(@RequestParam("type") type: String,
                            @RequestParam("runConf", required = false) runConf: String?,
+                           session: HttpSession,
                            request: HttpServletRequest): ResponseEntity<*> {
         return when (type) {
-            "run" -> runKotlinCodeController(buildObjectsForOldRequests(request))
+            "run" -> runKotlinCodeController(buildObjectsForOldRequests(request), session, authentication = null)
             "complete" -> completeKotlinCodeController(buildObjectsForOldRequests(request))
             "getKotlinVersions" -> getKotlinVersionController()
             else -> throw OperationNotFoundException("Can not find operation - $type")

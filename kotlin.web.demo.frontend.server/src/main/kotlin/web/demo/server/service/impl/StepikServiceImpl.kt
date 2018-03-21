@@ -113,7 +113,7 @@ class StepikServiceImpl : StepikService {
     }
 
     // TODO: 1 - get attempt. 2 - post submission. 3 - generate placeholders
-    override fun postSolution(project: ProjectDto, token: String) {
+    override fun postSolution(project: ProjectDto, token: String, passed: Boolean) {
         val attempt = postAttempt("234720", token)
         TODO("not implemented")
     }

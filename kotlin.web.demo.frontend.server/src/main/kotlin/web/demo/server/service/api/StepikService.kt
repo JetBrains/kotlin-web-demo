@@ -14,5 +14,5 @@ interface StepikService {
     fun getCoursesTitles(): List<Course>
     fun getCourseById(id: String): Course
     fun getCourseSolutions(tasksIds: List<String>, tokenValue: String): List<StepikSolution>
-    fun postSolution(project: ProjectDto, token: String)
+    fun postSolution(project: ProjectDto, token: String, passed: Boolean)
 }

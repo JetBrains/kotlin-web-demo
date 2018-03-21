@@ -16,6 +16,7 @@ data class Lesson(
         var id: String,
         var title: String,
         var text: String,
+        var type: String,
         var confType: String,
         var args: String,
         var compilerVersion: String,

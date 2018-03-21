@@ -3,6 +3,7 @@ package web.demo.server.converter
 import org.springframework.stereotype.Component
 import web.demo.server.common.GeneralPathsConstants
 import web.demo.server.model.ConfType
+import web.demo.server.model.ProjectType
 import web.demo.server.model.course.*
 import web.demo.server.model.stepik.*
 
@@ -76,7 +77,7 @@ class CourseConverter {
             val courseFiles = listOf(additionalFiles,
                     createTestFiles(option.test, hidden = false),
                     createTaskFiles(option.files, hidden = false)).flatten()
-            val lesson = Lesson(id, title, textLesson, confType, emptyArgs, "", false, readOnlyFilesNames, courseFiles)
+            val lesson = Lesson(id, title, textLesson, ProjectType.LESSON_TASK.name, confType, emptyArgs, "", false, readOnlyFilesNames, courseFiles)
             lessons = lessons.plus(lesson)
         }
         return lessons
