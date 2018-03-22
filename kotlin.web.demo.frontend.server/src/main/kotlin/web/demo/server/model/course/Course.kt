@@ -25,15 +25,15 @@ data class Lesson(
         var courseFiles: List<CourseFile>)
 
 open class CourseFile(var name: String,
-                      var modifyAble: Boolean,
+                      var modifiable: Boolean,
                       var text: String,
                       var hidden: Boolean)
 
 class TaskFile(name: String,
-               modifyAble: Boolean,
+               modifiable: Boolean,
                text: String,
                var placeholderAnswers: List<PlaceholderAnswer>,
-               hidden: Boolean) : CourseFile(name, modifyAble, text, hidden)
+               hidden: Boolean) : CourseFile(name, modifiable, text, hidden)
 
 data class PlaceholderAnswer(
         var text: String,

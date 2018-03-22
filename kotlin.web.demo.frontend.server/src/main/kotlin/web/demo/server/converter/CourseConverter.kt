@@ -86,7 +86,7 @@ class CourseConverter {
     /**
      * Create [TaskFile] from [StepikTask] object
      *
-     * NOTE: property [TaskFile.modifyAble] depends on list of [PlaceholderAnswer] size
+     * NOTE: property [TaskFile.modifiable] depends on list of [PlaceholderAnswer] size
      * @param stepikTasks - list of task files for creating [StepikTask] objects
      * @param hidden      - [CourseFile.hidden] property
      *
@@ -104,7 +104,7 @@ class CourseConverter {
 
     /**
      * Create test files from [StepikText] object
-     * NOTE: All test files have [CourseFile.modifyAble] = false property
+     * NOTE: All test files have [CourseFile.modifiable] = false property
      *
      * @param stepikTests - list of test files for creating [CourseFile] objects
      * @param hidden      - [CourseFile.hidden] property
@@ -112,8 +112,8 @@ class CourseConverter {
      * @return list of [CourseFile]
      */
     private fun createTestFiles(stepikTests: List<StepikText>, hidden: Boolean): List<CourseFile> {
-        val modifyAble = false
-        return stepikTests.map { CourseFile(it.name, modifyAble, it.text, hidden) }
+        val modifiable = false
+        return stepikTests.map { CourseFile(it.name, modifiable, it.text, hidden) }
     }
 
     /**

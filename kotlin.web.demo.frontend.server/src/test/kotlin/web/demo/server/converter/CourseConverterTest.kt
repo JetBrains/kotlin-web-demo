@@ -50,7 +50,7 @@ class CourseConverterTest {
         Assert.assertEquals(stepikCourse.lessons[0].task[0].title, course.lessons[0].task[0].title)
         Assert.assertEquals(stepikCourse.lessons[0].task[0].text[0].text, course.lessons[0].task[0].text)
         Assert.assertTrue(course.lessons[0].task[0].courseFiles.map { it.name }.contains("Task.kt"))
-        Assert.assertTrue(course.lessons[0].task[0].courseFiles.first { it is TaskFile }.modifyAble)
+        Assert.assertTrue(course.lessons[0].task[0].courseFiles.first { it is TaskFile }.modifiable)
         Assert.assertTrue(course.lessons[0].task[0].courseFiles.map { it.name }.contains("test.kt"))
         Assert.assertTrue(course.lessons[0].task[0].courseFiles.map { it.name }.contains("unit.kt"))
         Assert.assertTrue(course.lessons[0].task[0].readOnlyFileNames.size == 2)
