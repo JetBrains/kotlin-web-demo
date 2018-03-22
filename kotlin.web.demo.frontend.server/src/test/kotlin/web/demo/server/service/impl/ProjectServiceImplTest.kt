@@ -17,6 +17,7 @@ import web.demo.server.entity.Project
 import web.demo.server.entity.User
 import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.exceptions.ValidationException
+import web.demo.server.model.ProjectType
 import web.demo.server.model.ProviderType
 import web.demo.server.repository.ProjectRepository
 import web.demo.server.service.api.FileService
@@ -68,8 +69,8 @@ class ProjectServiceImplTest {
         project.publicId = PROJECT_ID
         project.compilerVersion = "1.0.0"
 
-        projectDto = ProjectDto(1234, "Test", "", "java", "",
-                PROJECT_ID, user.clientId, "", "1.0.0", emptyList(), emptyList())
+        projectDto = ProjectDto(1234, "Test", "", "java",
+                PROJECT_ID, ProjectType.USER_PROJECT.name, "", "1.0.0", emptyList(), emptyList())
     }
 
     @Test
@@ -213,12 +214,12 @@ class ProjectServiceImplTest {
     @Test
     fun saveProjectThrow() {
         val badObject = ProjectDto(1234, "Test", "", "java", "",
-                null, user.clientId, "", "1.0.0", emptyList(), emptyList())
+                ProjectType.USER_PROJECT.name, "", "1.0.0", emptyList(), emptyList())
         Mockito.`when`(userService.defineUser(USER_ID)).thenReturn(user)
         Mockito.`when`(projectRepository.findByNameAndOwnerId("Test", user)).thenReturn(null)
-        Assertions.assertThatExceptionOfType(ValidationException::class.java)
+        Assertions.assertThatExceptionOfType(SourceNotFoundException::class.java)
                 .isThrownBy { service.saveProject(USER_ID, badObject) }
-                .withMessageContaining("Can not find public id in project for saving")
+                .withMessageContaining("Can not find project by public id")
     }
 
 

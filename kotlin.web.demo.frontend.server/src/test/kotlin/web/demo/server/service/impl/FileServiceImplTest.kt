@@ -223,12 +223,12 @@ class FileServiceImplTest {
 
     @Test
     fun saveFileThrow() {
-        val badDto = FileDto(true, FILE_ID, null, "text", "filename")
+        val badDto = FileDto(true, FILE_ID, "09876", "text", "filename")
         Mockito.`when`(userService.defineUser(USER_ID)).thenReturn(user)
 
         Assertions.assertThatExceptionOfType(SourceNotFoundException::class.java)
                 .isThrownBy { service.saveFile(USER_ID, badDto) }
-                .withMessageContaining("Can not save file in your project. File is not found")
+                .withMessageContaining("File is not found by public id and project")
 
         Mockito.verify(userService).defineUser(user.clientId!!)
 
