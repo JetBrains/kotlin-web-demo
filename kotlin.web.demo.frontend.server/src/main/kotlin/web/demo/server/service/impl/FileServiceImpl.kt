@@ -190,21 +190,14 @@ class FileServiceImpl : FileService {
      * @param fileDto - [FileDto]
      * @param clientId  - id from [User]
      *
-     * @throws [SourceNotFoundException] if file is not found
      */
     override fun saveFile(clientId: String, fileDto: FileDto) {
         val user = userService.defineUser(clientId)
         val projectId = fileDto.projectId
-        if (projectId != null) {
-            val project = projectService.getProjectByPublicIdAndUser(projectId, user)
-            if (fileDto.publicId != null) {
-                val file = getFileByPublicIdAndProjectId(fileDto.publicId!!, project)
-                file.text = fileDto.text
-                fileRepository.save(file)
-                return
-            }
-        }
-        throw SourceNotFoundException("Can not save file in your project. File is not found")
+        val project = projectService.getProjectByPublicIdAndUser(projectId, user)
+        val file = getFileByPublicIdAndProjectId(fileDto.publicId, project)
+        file.text = fileDto.text
+        fileRepository.save(file)
     }
 
     /**

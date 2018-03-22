@@ -125,7 +125,7 @@ class FileController : BaseController {
      *
      * @param session - for getting info about user
      * @param file    - [FileDto] for updating
-     * @throws [SourceNotFoundException] if file is not found
+     *
      * @throws [AuthorizationProviderException] if no user in session
      */
     @PostMapping(GeneralPathsConstants.SAVE)
