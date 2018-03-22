@@ -216,6 +216,7 @@ fun HttpServletResponse.sendResponse(statusCode: Int, message: String = "") {
     try {
         characterEncoding = "UTF-8"
         status = statusCode
+        contentType = "application/json"
         if (message != "") {
             writer.use { it.write(message) }
         }
