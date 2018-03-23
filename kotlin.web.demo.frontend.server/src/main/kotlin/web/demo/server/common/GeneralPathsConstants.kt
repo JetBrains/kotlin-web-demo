@@ -14,6 +14,12 @@ object GeneralPathsConstants {
     const val CURRENT_USER = "userInfo"
 
     /**
+     * Name of task from Course lesson.
+     * Task is modifiable
+     */
+    const val TASK_NAME = "Task.kt"
+
+    /**
      * Constants for Additaional materials for course from Stepik
      */
     const val ADDITIONAL_MATERIALS = "PyCharm additional materials"
