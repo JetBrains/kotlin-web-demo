@@ -50,22 +50,22 @@ class HttpWrapper {
      * Method for evaluating HTTP POST request
      *
      * @param url           - string URL
-     * @param body          - string objects for request
+     * @param body          - objects for request
      * @param parameters    - query parameters for request
      * @param headersMap    - headers for request
      * @param typeResponse  - response type
      *
      * @return - [T] object
      */
-    fun <T> doPost(url: String,
-                   parameters: Map<String, String>,
-                   headersMap: Map<String, String>,
-                   body: String,
-                   typeResponse: Class<T>): T {
+    fun <T, E> doPost(url: String,
+                      parameters: Map<String, String>,
+                      headersMap: Map<String, String>,
+                      body: E,
+                      typeResponse: Class<T>): T {
         val headers = appendHeaders(headersMap)
         val builder = UriComponentsBuilder.fromUriString(url)
         parameters.forEach { builder.queryParam(it.key, it.value) }
-        val requestEntity = HttpEntity<String>(body, headers)
+        val requestEntity = HttpEntity<E>(body, headers)
         val responseEntity = rest.exchange(builder.build().encode("UTF-8").toUri(),
                 HttpMethod.POST,
                 requestEntity,
