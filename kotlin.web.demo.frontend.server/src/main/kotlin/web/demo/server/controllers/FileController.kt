@@ -108,7 +108,6 @@ class FileController : BaseController {
      * @param file    - file with fields
      * @param session - for getting info about user
      *
-     * @throws [SourceNotFoundException] - Can not find file, project, user
      * @throws [ValidationException]     - if count of file in project more than 100
      * @throws [AuthorizationProviderException] if no user in session
      */

@@ -15,7 +15,7 @@ interface FileService {
 
     fun deleteFile(publicId: String, projectId: String, clientId: String)
 
-    fun addFile(clientId: String, projectId: String?, text: String?, name: String?)
+    fun addFile(clientId: String, projectId: String, text: String, name: String)
 
     fun getFileByPublicId(publicId: String): FileDto
 

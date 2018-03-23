@@ -146,26 +146,15 @@ class FileServiceImpl : FileService {
      * @param projectId - id from [Project]
      * @param clientId  - id from [User]
      *
-     * @throws [SourceNotFoundException] - Can not find file, project, user
      * @throws [ValidationException]     - if count of file in project more than 100
      */
-    override fun addFile(clientId: String, projectId: String?, text: String?, name: String?) {
-        if (projectId != null) {
-            val user = userService.defineUser(clientId)
-            val project = projectService.getProjectByPublicIdAndUser(projectId, user)
-            val countFiles = fileRepository.countByProjectId(project)
-            if (countFiles > 100) throw ValidationException("You can't save more than 100 files")
-            if (text != null && name != null) {
-                checkFileWithTheSameName(project, name)
-                addFileToProject(project, text, name)
-            } else {
-                logger.error("Can not add file. Empty parameters — name: $name, text: $text. client: $clientId ")
-                throw SourceNotFoundException("Can not add file. Empty parameters")
-            }
-        } else {
-            logger.error("Can not add file. Project: $projectId is not found. client: $clientId ")
-            throw SourceNotFoundException("Can not add file. Project is not found")
-        }
+    override fun addFile(clientId: String, projectId: String, text: String, name: String) {
+        val user = userService.defineUser(clientId)
+        val project = projectService.getProjectByPublicIdAndUser(projectId, user)
+        val countFiles = fileRepository.countByProjectId(project)
+        if (countFiles > 100) throw ValidationException("You can't save more than 100 files")
+        checkFileWithTheSameName(project, name)
+        addFileToProject(project, text, name)
     }
 
     /**

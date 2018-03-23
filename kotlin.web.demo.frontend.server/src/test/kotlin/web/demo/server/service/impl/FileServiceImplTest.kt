@@ -268,28 +268,4 @@ class FileServiceImplTest {
         Mockito.verify(fileRepository).countByProjectId(project)
     }
 
-    @Test
-    fun addFileThrow2() {
-        Mockito.`when`(userService.defineUser(USER_ID)).thenReturn(user)
-        Mockito.`when`(projectService.getProjectByPublicIdAndUser(PROJECT_ID, user)).thenReturn(project)
-        Mockito.`when`(fileRepository.countByProjectId(project)).thenReturn(1)
-
-        Assertions.assertThatExceptionOfType(SourceNotFoundException::class.java)
-                .isThrownBy { service.addFile(USER_ID, PROJECT_ID, null, "NAME") }
-                .withMessageContaining("Can not add file. Empty parameters")
-
-        Mockito.verify(projectService).getProjectByPublicIdAndUser(PROJECT_ID, user)
-        Mockito.verify(userService).defineUser(user.clientId!!)
-        Mockito.verify(fileRepository).countByProjectId(project)
-    }
-
-    @Test
-    fun addFileThrow3() {
-        Assertions.assertThatExceptionOfType(SourceNotFoundException::class.java)
-                .isThrownBy { service.addFile(USER_ID, null, null, "NAME") }
-                .withMessageContaining("Can not add file. Project is not found")
-
-    }
-
-
 }
