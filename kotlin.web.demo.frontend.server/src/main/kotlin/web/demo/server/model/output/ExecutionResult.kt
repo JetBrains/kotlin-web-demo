@@ -38,7 +38,7 @@ class ComparisonFailureDescriptor(message: String,
                                   var expected: String?,
                                   var actual: String?) : ExceptionDescriptor(message, fullName, stackTrace, cause)
 
-class ErrorDescriptor(var intervar: TextInterval?,
+class ErrorDescriptor(var interval: TextInterval?,
                       var message: String?,
                       var severity: Severity,
                       var className: String? = null)
