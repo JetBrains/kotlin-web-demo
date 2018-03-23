@@ -10,7 +10,6 @@ import web.demo.server.entity.Project
 import web.demo.server.entity.User
 import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.exceptions.ValidationException
-import web.demo.server.model.ConfType
 import web.demo.server.repository.ProjectRepository
 import web.demo.server.service.api.FileService
 import web.demo.server.service.api.ProjectService
@@ -101,22 +100,17 @@ class ProjectServiceImpl : ProjectService {
      * @param projectDto  - [ProjectDto] project for saving
      *
      * @throws [SourceNotFoundException] if user is not exist
-     * @throws [ValidationException] if can not find public id in project for saving
      */
     override fun saveProject(clientId: String, projectDto: ProjectDto) {
         val user = userService.defineUser(clientId)
-        val nameOfProject = projectDto.name ?: GeneralPathsConstants.DEFAULT_PROJECT_NAME
+        val nameOfProject = projectDto.name
         checkProjectWithTheSameName(nameOfProject, user)
         val projectId = projectDto.publicId
-        if (projectId != null) {
-            val project = getProjectEntityByPublicId(projectId)
-            project.args = projectDto.args ?: ""
-            project.confType = ConfType.valueOf(projectDto.confType ?: "java")
-            project.compilerVersion = projectDto.compilerVersion
-            projectRepository.save(project)
-            return
-        }
-        throw ValidationException("Can not find public id in project for saving")
+        val project = getProjectEntityByPublicId(projectId)
+        project.args = projectDto.args
+        project.confType = projectDto.confType
+        project.compilerVersion = projectDto.compilerVersion
+        projectRepository.save(project)
     }
 
     /**

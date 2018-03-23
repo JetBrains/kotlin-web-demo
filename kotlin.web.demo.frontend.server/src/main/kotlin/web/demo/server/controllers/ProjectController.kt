@@ -100,7 +100,6 @@ class ProjectController : BaseController {
      * @param projectDto - project for saving
      *
      * @throws [SourceNotFoundException] if user is not exist
-     * @throws [ValidationException] if user has two projects with the same names
      * @throws [AuthorizationProviderException] if no user in session
      */
     @PostMapping(GeneralPathsConstants.SAVE)

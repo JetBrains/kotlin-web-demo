@@ -17,6 +17,7 @@ import web.demo.server.entity.Project
 import web.demo.server.entity.User
 import web.demo.server.exceptions.SourceNotFoundException
 import web.demo.server.exceptions.ValidationException
+import web.demo.server.model.ConfType
 import web.demo.server.model.ProjectType
 import web.demo.server.model.ProviderType
 import web.demo.server.repository.ProjectRepository
@@ -69,8 +70,8 @@ class ProjectServiceImplTest {
         project.publicId = PROJECT_ID
         project.compilerVersion = "1.0.0"
 
-        projectDto = ProjectDto(1234, "Test", "", "java",
-                PROJECT_ID, ProjectType.USER_PROJECT.name, "", "1.0.0", emptyList(), emptyList())
+        projectDto = ProjectDto(1234, "Test", "", ConfType.java,
+                PROJECT_ID, ProjectType.USER_PROJECT, "", "1.0.0", emptyList(), emptyList())
     }
 
     @Test
@@ -213,8 +214,8 @@ class ProjectServiceImplTest {
 
     @Test
     fun saveProjectThrow() {
-        val badObject = ProjectDto(1234, "Test", "", "java", "",
-                ProjectType.USER_PROJECT.name, "", "1.0.0", emptyList(), emptyList())
+        val badObject = ProjectDto(1234, "Test", "", ConfType.java, "",
+                ProjectType.USER_PROJECT, "", "1.0.0", emptyList(), emptyList())
         Mockito.`when`(userService.defineUser(USER_ID)).thenReturn(user)
         Mockito.`when`(projectRepository.findByNameAndOwnerId("Test", user)).thenReturn(null)
         Assertions.assertThatExceptionOfType(SourceNotFoundException::class.java)

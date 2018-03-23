@@ -101,7 +101,7 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
      * @return string json response
      */
     override fun runKotlinCode(project: ProjectDto, fileName: String, searchForMain: String, user: UserDto?, token: String?): ExecutionResult {
-        val typeOfCode = project.confType ?: "java"
+        val typeOfCode = project.confType.name
         val projectAsString = jacksonObjectMapper().writeValueAsString(project)
         val queryParameters = mapOf(
                 "type" to pathsBackend.RUN_KOTLIN,
@@ -110,7 +110,7 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
                 "filename" to fileName,
                 "searchForMain" to searchForMain)
         return when (project.confType) {
-            ConfType.junit.name -> runTestCode(queryParameters, project, user, token)
+            ConfType.junit -> runTestCode(queryParameters, project, user, token)
             else -> runCode(queryParameters)
         }
     }
@@ -127,7 +127,7 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
      * @return string json response
      */
     override fun completeKotlinCode(project: ProjectDto, fileName: String, line: String, ch: String): String {
-        val typeOfCode = project.confType ?: "java"
+        val typeOfCode = project.confType.name
         val projectAsString = jacksonObjectMapper().writeValueAsString(project)
         val queryParameters = mapOf(
                 "type" to pathsBackend.COMPLETE_KOTLIN,
@@ -190,7 +190,7 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
         val passed = isTestsPassed(testResult)
         if (user !== null && token != null
                 && user.provider == ProviderType.stepik.name
-                && project.type == ProjectType.LESSON_TASK.name) {
+                && project.type == ProjectType.LESSON_TASK) {
             stepikService.postSolution(project, token, passed)
         }
         return testResult
