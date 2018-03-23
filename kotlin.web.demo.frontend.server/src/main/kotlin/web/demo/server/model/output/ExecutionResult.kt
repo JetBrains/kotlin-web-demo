@@ -10,7 +10,7 @@ package web.demo.server.model.output
 open class ExecutionResult(var errors: Map<String, List<ErrorDescriptor>> = emptyMap())
 
 
-class JUnitExecutionResult(var testResults: MutableMap<String, List<TestRunInfo>>,
+class JUnitExecutionResult(var testResults: MutableMap<String, List<TestRunInfo>>?,
                            errors: Map<String, List<ErrorDescriptor>>) : ExecutionResult(errors)
 
 class KotlinExecutionResult(var text: String, var exception: ExceptionDescriptor?,

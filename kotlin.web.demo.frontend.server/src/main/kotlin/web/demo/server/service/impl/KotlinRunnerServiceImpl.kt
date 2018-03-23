@@ -214,8 +214,9 @@ class KotlinRunnerServiceImpl : KotlinRunnerService {
      * If [Status.ERROR] or [Status.FAIL] => not passed
      * If [Status.OK] => passed
      */
-    private fun isTestsPassed(testResult: JUnitExecutionResult): Boolean {
-        val statuses = testResult.testResults.flatMap { it.value }.map { it.status }
+    private fun isTestsPassed(testResult: JUnitExecutionResult?): Boolean {
+        if (testResult == null) return false
+        val statuses = testResult.testResults!!.flatMap { it.value }.map { it.status }
         return !(statuses.contains(Status.ERROR) || statuses.contains(Status.FAIL))
     }
 
