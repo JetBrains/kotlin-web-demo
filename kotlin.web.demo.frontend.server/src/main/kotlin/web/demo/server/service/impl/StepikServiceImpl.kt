@@ -2,6 +2,7 @@ package web.demo.server.service.impl
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import web.demo.server.common.GeneralPathsConstants
 import web.demo.server.common.StepikPathsConstants
 import web.demo.server.configuration.resourses.EducationCourse
 import web.demo.server.converter.CourseConverter
@@ -67,8 +68,7 @@ class StepikServiceImpl : StepikService {
                 .flatMap { it.task }
                 .map { it.id }
         val stepsIdToRequest = prepareTaskIdToRequest(stepsFromCourse)
-        val headers = mapOf("Authorization" to "Bearer " + tokenValue,
-                "Content-Type" to "application/json")
+        val headers = prepareHeaders(tokenValue)
         val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_PROGRESSES
         var progressContainer = emptyList<ProgressContainerDto>()
         var iterator = 0
@@ -91,8 +91,7 @@ class StepikServiceImpl : StepikService {
      * @return list of [StepikSolution]
      */
     override fun getCourseSolutions(tasksIds: List<String>, tokenValue: String): List<StepikSolution> {
-        val headers = mapOf("Authorization" to "Bearer " + tokenValue,
-                "Content-Type" to "application/json")
+        val headers = prepareHeaders(tokenValue)
         val queryParameters = mutableMapOf(
                 "status" to "correct",
                 "page" to "1",
@@ -110,12 +109,6 @@ class StepikServiceImpl : StepikService {
             if (solution != null) solutions = solutions.plus(solution)
         }
         return solutions
-    }
-
-    // TODO: 1 - get attempt. 2 - post submission. 3 - generate placeholders
-    override fun postSolution(project: ProjectDto, token: String, passed: Boolean) {
-        val attempt = postAttempt("234720", token)
-        TODO("not implemented")
     }
 
     /**
@@ -145,17 +138,42 @@ class StepikServiceImpl : StepikService {
     }
 
     /**
+     * Post solution into Stepik
+     * Get first task file with name [GeneralPathsConstants.TASK_NAME] and sent file content to Stepik
+     * NOTE:
+     * Stepik API structure need only list of solutions
+     */
+    override fun postSolution(project: ProjectDto, token: String, passed: Boolean) {
+        val attempt = postAttempt(project.id.toString(), token)
+        val taskFile = project.files.orEmpty().first { it.name == GeneralPathsConstants.TASK_NAME }
+        val solutions = listOf(StepikSolution(taskFile.name, taskFile.text))
+        postSubmission(passed, attempt, solutions, token)
+    }
+
+    /**
+     * Post submission to Stepik
+     * Use [SubmissionWrapper] structure for send request to Stepik
+     * Set [StepikReply.score] 1 - passed task 0 - no passed
+     */
+    private fun postSubmission(passed: Boolean, attempt: StepikAttempt,
+                               solution: List<StepikSolution>, token: String) {
+        val headers = prepareHeaders(token)
+        val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_SUBMISSIONS
+        val score = if (passed) "1" else "0"
+        val stepikSubmission = SubmissionWrapper(StepikSubmission(StepikReply(solution, score), attempt.id))
+        httpWrapper.doPost(url, emptyMap(), headers, stepikSubmission, String::class.java)
+    }
+
+    /**
      * Method for getting all lessons called [StepikLesson] by course id
      *
      * @see <a href="https://stepik.org/api/docs/#!/lessons">Stepik API lessons</a>
      * @param courseId - string course id from Stepik
-     * @param tokenValue - user token after auth
      *
      * @return list of [StepikLesson]
      */
-    private fun getLessonsByCourse(courseId: String, tokenValue: String): List<StepikLesson> {
-        val headers = mapOf("Authorization" to "Bearer " + tokenValue,
-                "Content-Type" to "application/json")
+    private fun getLessonsByCourse(courseId: String): List<StepikLesson> {
+        val headers = mapOf("Content-Type" to "application/json")
         val queryParameters = mapOf(
                 "course" to courseId)
         val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_LESSONS
@@ -199,7 +217,7 @@ class StepikServiceImpl : StepikService {
     private fun createCourse(courseId: String) {
         val headers = mapOf("Content-Type" to "application/json")
         val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_STEPS
-        val lessons = getLessonsByCourse(courseId, "")
+        val lessons = getLessonsByCourse(courseId)
         lessons.forEach {
             val lessonSteps = it.steps
             val stepsDetails = httpWrapper.doGetToStepik(url, lessonSteps, headers, StepikStepsContainer::class.java)
@@ -227,7 +245,8 @@ class StepikServiceImpl : StepikService {
     }
 
     /**
-     * Create attempt by step id;
+     * Create attempt by step [Lesson.id] id
+     *
      * NOTE:
      * Attempt resource. To pass a quiz, user needs to create an attempt and then a submission for the attempt.
      * Attempts are only allowed on quiz steps.
@@ -235,30 +254,33 @@ class StepikServiceImpl : StepikService {
      * Why get first element?
      * - Current attempt with status `active` always first element in list of attempts
      *
+     * Why [StepikAttempt.id] in [AttemptWrapper] is empty string?
+     * - No need to send attempt id. It's request for creating new attempt for solution
+     *
      * @param stepId - [Lesson.id] for creating attempt
      * @param token  - user token after auth
      *
      * @return [StepikAttempt]
      */
     private fun postAttempt(stepId: String, token: String): StepikAttempt {
-        val headers = mapOf("Authorization" to "Bearer " + token,
-                "Content-Type" to "application/json")
+        val headers = prepareHeaders(token)
         val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_ATTEMPTS
-        val queryParameters = mapOf(
-                "step" to stepId)
-        val attempts = httpWrapper.doGet(url, queryParameters, headers, StepikAttemptContainer::class.java).attempts
+        val body = AttemptWrapper(StepikAttempt("", stepId))
+        val attempts = httpWrapper.doPost(url, emptyMap(), headers, body, StepikAttemptContainer::class.java).attempts
         if (attempts.isEmpty()) throw SourceNotFoundException("Can not get attempt for stepId: $stepId")
         return attempts[0]
     }
 
-    private fun postSolution(passed: Boolean, attempt: StepikAttempt,
-                             solution: List<StepikSolution>, project: ProjectDto, token: String) {
-        val url = StepikPathsConstants.STEPIK_API_URL + StepikPathsConstants.STEPIK_SUBMISSIONS
-        val score = if (passed) "1" else "0"
-        /*
-        Needed SubmissionWrapper
-         */
-        TODO("not implemented")
+    /**
+     * Setting Content-Type - application/json header
+     * and
+     * Authorization -  Bearer + token
+     * @param token - string token for Authorization header
+     * @return map of headers
+     */
+    private fun prepareHeaders(token: String): Map<String, String> {
+        return mapOf("Authorization" to "Bearer " + token,
+                "Content-Type" to "application/json")
     }
 
 }
