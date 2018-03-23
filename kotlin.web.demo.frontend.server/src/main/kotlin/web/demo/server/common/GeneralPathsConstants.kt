@@ -20,7 +20,7 @@ object GeneralPathsConstants {
     const val TASK_NAME = "Task.kt"
 
     /**
-     * Constants for Additaional materials for course from Stepik
+     * Constants for Additional materials for course from Stepik
      */
     const val ADDITIONAL_MATERIALS = "PyCharm additional materials"
 
@@ -45,7 +45,6 @@ object GeneralPathsConstants {
      */
     const val API_PROJECT = "/api/project"
     const val USER_PROJECT_TYPE = "USER_PROJECT"
-    const val DEFAULT_PROJECT_NAME = "Project"
 
     /**
      * Paths for operation with stepik courses
