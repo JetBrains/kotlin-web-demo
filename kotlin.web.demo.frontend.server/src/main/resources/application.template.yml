@@ -5,7 +5,7 @@ server:
   port: 4040
 
 ###################
-# Server port app #
+# Client home app #
 ###################
 client:
   home: YOUR CLIENT APP URL
