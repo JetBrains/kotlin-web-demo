@@ -145,7 +145,7 @@ class StepikServiceImpl : StepikService {
      */
     override fun postSolution(project: ProjectDto, token: String, passed: Boolean) {
         val attempt = postAttempt(project.id.toString(), token)
-        val taskFile = project.files.orEmpty().first { it.name == GeneralPathsConstants.TASK_NAME }
+        val taskFile = project.files.first { it.name == GeneralPathsConstants.TASK_NAME }
         val solutions = listOf(StepikSolution(taskFile.name, taskFile.text))
         postSubmission(passed, attempt, solutions, token)
     }
