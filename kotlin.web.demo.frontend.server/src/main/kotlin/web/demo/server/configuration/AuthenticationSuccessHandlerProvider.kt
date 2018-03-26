@@ -1,5 +1,6 @@
 package web.demo.server.configuration
 
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
 import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse
  * @author Alexander Prendota on 2/27/18 JetBrains.
  */
 class AuthenticationSuccessHandlerProvider : AuthenticationSuccessHandler {
+
+    private val logger = LoggerFactory.getLogger(AuthenticationSuccessHandlerProvider::class.java)
 
     /**
      * Method is called after successful authorization.
@@ -51,6 +54,7 @@ class AuthenticationSuccessHandlerProvider : AuthenticationSuccessHandler {
         if (clientId != null && userName != null) {
             return UserDto(0, userName.toString(), clientId.toString(), ProviderType.facebook.name)
         }
+        logger.error("Facebook authorization exception. Can not parse user details")
         throw AuthorizationProviderException("Facebook authorization exception. Can not parse user details")
     }
 
@@ -67,6 +71,7 @@ class AuthenticationSuccessHandlerProvider : AuthenticationSuccessHandler {
         if (clientId != null && userName != null) {
             return UserDto(0, userName.toString(), clientId.toString(), ProviderType.google.name)
         }
+        logger.error("Google authorization exception. Can not parse user details")
         throw AuthorizationProviderException("Google authorization exception. Can not parse user details")
     }
 
@@ -83,6 +88,7 @@ class AuthenticationSuccessHandlerProvider : AuthenticationSuccessHandler {
         if (clientId != null && userName != null) {
             return UserDto(0, userName.toString(), clientId.toString(), ProviderType.github.name)
         }
+        logger.error("GitHub authorization exception. Can not parse user details")
         throw AuthorizationProviderException("GitHub authorization exception. Can not parse user details")
     }
 
@@ -106,6 +112,7 @@ class AuthenticationSuccessHandlerProvider : AuthenticationSuccessHandler {
                 }
             }
         }
+        logger.error("Stepik authorization exception. Can not parse user details")
         throw AuthorizationProviderException("Stepik authorization exception. Can not parse user details")
     }
 }
