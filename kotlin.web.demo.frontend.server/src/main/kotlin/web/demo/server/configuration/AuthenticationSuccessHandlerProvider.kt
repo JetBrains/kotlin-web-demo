@@ -32,6 +32,7 @@ class AuthenticationSuccessHandlerProvider : AuthenticationSuccessHandler {
             ProviderPathsConstants.FACEBOOK -> request.session.setAttribute(GeneralPathsConstants.CURRENT_USER, getFacebookDetails(details))
             ProviderPathsConstants.GOOGLE   -> request.session.setAttribute(GeneralPathsConstants.CURRENT_USER, getGoogleDetails(details))
             ProviderPathsConstants.STEPIK   -> request.session.setAttribute(GeneralPathsConstants.CURRENT_USER, getStepikDetails(details))
+            ProviderPathsConstants.GITHUB   -> request.session.setAttribute(GeneralPathsConstants.CURRENT_USER, getGitHubDetails(details))
             else -> throw AuthorizationProviderException("No authorization provider detected")
         }
         response!!.sendRedirect("/authorization")
@@ -67,6 +68,22 @@ class AuthenticationSuccessHandlerProvider : AuthenticationSuccessHandler {
             return UserDto(0, userName.toString(), clientId.toString(), ProviderType.google.name)
         }
         throw AuthorizationProviderException("Google authorization exception. Can not parse user details")
+    }
+
+    /**
+     * Getting GitHub user details: client id and user name
+     *
+     * @param details - map from [OAuth2Authentication]
+     *
+     * @return [UserDto]
+     */
+    private fun getGitHubDetails(details: LinkedHashMap<*, *>): UserDto {
+        val clientId = details[ProviderPathsConstants.GITHUB_CLIENT_ID]
+        val userName = details[ProviderPathsConstants.GITHUB_USER_NAME]
+        if (clientId != null && userName != null) {
+            return UserDto(0, userName.toString(), clientId.toString(), ProviderType.github.name)
+        }
+        throw AuthorizationProviderException("GitHub authorization exception. Can not parse user details")
     }
 
     /**

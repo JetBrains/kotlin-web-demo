@@ -31,5 +31,7 @@ object ProviderPathsConstants {
      * GitHub constants
      */
     const val GITHUB = "/login/github"
+    const val GITHUB_USER_NAME = "name"
+    const val GITHUB_CLIENT_ID = "id"
 
 }
