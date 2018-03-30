@@ -9,13 +9,14 @@ import web.demo.server.dtos.UserDto
 import web.demo.server.service.api.UserService
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.HttpSession
 
 
 /**
  * @author Alexander Prendota on 2/19/18 JetBrains.
  */
 @Controller
-class AuthController {
+class AuthController: BaseController {
 
     @Value("\${client.home}")
     lateinit var clientHomeUrl: String
@@ -37,8 +38,8 @@ class AuthController {
      * Getting current user from session
      */
     @GetMapping("/user")
-    fun getUser(request: HttpServletRequest): ResponseEntity<*> {
-        val user = request.session.getAttribute("userInfo") as UserDto
+    fun getUser(session: HttpSession): ResponseEntity<*> {
+        val user = getCurrentUserFromSessionOrNull(session)
         return ResponseEntity.ok(user)
     }
 }

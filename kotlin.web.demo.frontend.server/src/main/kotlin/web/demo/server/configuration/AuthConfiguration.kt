@@ -49,6 +49,7 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
                 .authorizeRequests()
                 .antMatchers("/",
                         "/login**",
+                        "/user",
                         "/webjars/**",
                         "${GeneralPathsConstants.API_EDU}${GeneralPathsConstants.COURSE}/**",
                         GeneralPathsConstants.API_FILE,
