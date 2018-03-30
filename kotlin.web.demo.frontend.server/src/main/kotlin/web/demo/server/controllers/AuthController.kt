@@ -39,7 +39,7 @@ class AuthController: BaseController {
      */
     @GetMapping("/user")
     fun getUser(session: HttpSession): ResponseEntity<*> {
-        val user = getCurrentUserFromSessionOrNull(session)
+        val user = getCurrentUserFromSessionOrNull(session) ?: UserDto()
         return ResponseEntity.ok(user)
     }
 }
