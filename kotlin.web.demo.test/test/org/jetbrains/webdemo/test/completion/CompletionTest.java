@@ -16,7 +16,6 @@
 
 package org.jetbrains.webdemo.test.completion;
 
-import org.jetbrains.webdemo.kotlin.KotlinWrappersManager;
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant;
 import org.jetbrains.webdemo.test.BaseTest;
 import org.jetbrains.webdemo.test.TestUtils;
@@ -25,7 +24,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(Parameterized.class)
 public class CompletionTest extends BaseTest {
@@ -52,8 +54,8 @@ public class CompletionTest extends BaseTest {
         expectedVariants.add(new CompletionVariant(
                 "out",
                 "out",
-                "PrintStream?",
-                "property"
+                "",
+                ""
         ));
         compareResult(1, 10, expectedVariants, false);
     }
@@ -65,7 +67,7 @@ public class CompletionTest extends BaseTest {
                 "str",
                 "str",
                 "String",
-                "property"
+                ""
         ));
         compareResult(14, 23, expectedVariants, false);
         compareResult(14, 23, expectedVariants, true);
@@ -119,12 +121,6 @@ public class CompletionTest extends BaseTest {
         expectedVariants.add(new CompletionVariant(
                 "println(",
                 "println(Any?)",
-                "Unit",
-                "method"
-        ));
-        expectedVariants.add(new CompletionVariant(
-                "println(",
-                "println(String?)",
                 "Unit",
                 "method"
         ));
