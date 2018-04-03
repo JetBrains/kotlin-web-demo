@@ -74,7 +74,7 @@ grant codeBase "file:@WRAPPERS_LIB@/junit-4.12.jar" {
 ## Feedback and Issue reporting :construction_worker:
 
 We're constantly working on making it easier to add your own courses to `try.kotl.in` and would appreciate ideas, suggestions,
-and other feedback, so if you have any, please [use our issue tracker](https://youtrack.jetbrains.com/newIssue?project=KT&clearDraft=true&c=Subsystems+Web+Site&c=subtask+of+KT-2555) to share it with us.
+and other feedback, so if you have any, please [use our issue tracker](https://youtrack.jetbrains.com/issues/KT#newissue=25-1925867) to share it with us.
 
-And, of course, if you have any bug reports, you can [file them as well](https://youtrack.jetbrains.com/newIssue?project=KT&clearDraft=true&c=Subsystems+Web+Site&c=subtask+of+KT-2555)
+And, of course, if you have any bug reports, you can [file them as well](https://youtrack.jetbrains.com/issues/KT#newissue=25-1925867)
 If you need any help with compiling or running the project locally, join the `#kontributors` channel in the [Kotlin Slack](http://slack.kotlinlang.org), and we'll be happy to help you out.
