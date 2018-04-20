@@ -19,7 +19,7 @@ package org.jetbrains.webdemo.kotlin.impl
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Pair
 import org.jetbrains.kotlin.analyzer.AnalysisResult
-import org.jetbrains.kotlin.cli.jvm.compiler.CliLightClassGenerationSupport
+import org.jetbrains.kotlin.cli.jvm.compiler.CliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.codegen.ClassBuilderFactories
 import org.jetbrains.kotlin.codegen.state.GenerationState
@@ -74,8 +74,7 @@ object ResolveUtils {
 
     fun analyzeFileForJvm(files: List<KtFile>, project: Project): Pair<AnalysisResult, ComponentProvider> {
         val environment = EnvironmentManager.getEnvironment()
-        val trace = CliLightClassGenerationSupport.CliBindingTrace()
-
+        val trace = CliBindingTrace()
         val configuration = environment.configuration
         configuration.put(JVMConfigurationKeys.ADD_BUILT_INS_FROM_COMPILER_TO_DEPENDENCIES, true)
 
@@ -116,7 +115,7 @@ object ResolveUtils {
         )
         module.setDependencies(computeDependencies(module.module, config))
 
-        val trace = CliLightClassGenerationSupport.CliBindingTrace()
+        val trace = CliBindingTrace()
 
         val providerFactory = FileBasedDeclarationProviderFactory(module.storageManager, files)
 
