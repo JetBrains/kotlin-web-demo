@@ -277,6 +277,7 @@ public class ServerHandler {
         try {
             response.addHeader("Cache-Control", "no-cache");
             response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(statusCode);
             if (!responseBody.equals("")) {

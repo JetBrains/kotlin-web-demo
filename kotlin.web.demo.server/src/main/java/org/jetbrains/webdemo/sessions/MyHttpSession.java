@@ -480,6 +480,7 @@ public class MyHttpSession {
     private void writeResponse(String responseBody, int statusCode) {
         try {
             response.addHeader("Cache-Control", "no-cache");
+            response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(statusCode);
             if(!responseBody.equals("")) {
