@@ -16,6 +16,6 @@ data class ProjectDto(var id: Int = 0,
                       var publicId: String = "",
                       var type: ProjectType = ProjectType.USER_PROJECT,
                       var expectedOutput: String = "",
-                      var compilerVersion: String = "",
+                      var compilerVersion: String? = "",
                       var files: List<FileDto> = emptyList(),
                       var readOnlyFileNames: List<String> = emptyList())
