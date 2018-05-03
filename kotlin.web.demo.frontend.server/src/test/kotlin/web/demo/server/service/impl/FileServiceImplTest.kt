@@ -140,14 +140,14 @@ class FileServiceImplTest {
         Mockito.`when`(fileRepository.findByPublicId(FILE_ID)).thenReturn(file)
         Mockito.`when`(projectService.getProjectByPublicIdAndUser(PROJECT_ID, user)).thenReturn(project)
         Mockito.`when`(fileRepository.save(file)).thenReturn(file)
-        Mockito.`when`(fileRepository.findByProjectIdAndName(project, "NAME.kt")).thenReturn(file)
+        Mockito.`when`(fileRepository.findByProjectIdAndName(project, "rename.kt")).thenReturn(null)
 
-        service.renameFile(FILE_ID, PROJECT_ID, "NAME", USER_ID)
+        service.renameFile(FILE_ID, PROJECT_ID, "rename", USER_ID)
 
         Mockito.verify(projectService).getProjectByPublicIdAndUser(PROJECT_ID, user)
         Mockito.verify(userService).defineUser(user.clientId!!)
         Mockito.verify(fileRepository).findByPublicId(FILE_ID)
-        Mockito.verify(fileRepository).findByProjectIdAndName(project, "NAME.kt")
+        Mockito.verify(fileRepository).findByProjectIdAndName(project, "rename.kt")
         Mockito.verify(fileRepository, Mockito.times(1)).save(file)
     }
 
@@ -155,8 +155,7 @@ class FileServiceImplTest {
     fun renameFileThrow() {
         Mockito.`when`(userService.defineUser(USER_ID)).thenReturn(user)
         Mockito.`when`(projectService.getProjectByPublicIdAndUser(PROJECT_ID, user)).thenReturn(project)
-        Mockito.`when`(fileRepository.findByProjectIdAndName(project, "NAME")).thenReturn(null)
-
+        Mockito.`when`(fileRepository.findByProjectIdAndName(project, "NAME.kt")).thenReturn(file)
 
         Assertions.assertThatExceptionOfType(ValidationException::class.java)
                 .isThrownBy { service.renameFile(FILE_ID, PROJECT_ID, "NAME", USER_ID) }
@@ -239,7 +238,7 @@ class FileServiceImplTest {
         Mockito.`when`(userService.defineUser(USER_ID)).thenReturn(user)
         Mockito.`when`(projectService.getProjectByPublicIdAndUser(PROJECT_ID, user)).thenReturn(project)
         Mockito.`when`(fileRepository.countByProjectId(project)).thenReturn(1)
-        Mockito.`when`(fileRepository.findByProjectIdAndName(project, "NAME.kt")).thenReturn(file)
+        Mockito.`when`(fileRepository.findByProjectIdAndName(project, "NAME.kt")).thenReturn(null)
         Mockito.`when`(idGenerator.nextFileId()).thenReturn("id_random")
         Mockito.`when`(fileRepository.save(Mockito.any(File::class.java))).thenReturn(file)
 
