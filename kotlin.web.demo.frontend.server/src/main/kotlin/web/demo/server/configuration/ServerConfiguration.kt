@@ -7,9 +7,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import org.springframework.web.filter.CorsFilter
 import javax.sql.DataSource
 
 
@@ -39,27 +36,6 @@ class ServerConfiguration {
     @Bean
     fun restTemplate(): RestTemplate {
         return RestTemplate()
-    }
-
-
-    /**
-     * Cors bean configuration
-     *
-     * @return [CorsFilter]
-     */
-    @Bean
-    fun corsFilter(): CorsFilter {
-        val source = UrlBasedCorsConfigurationSource()
-        val config = CorsConfiguration()
-        config.allowCredentials = true
-        config.addAllowedOrigin("*")
-        config.addAllowedHeader("*")
-        config.addAllowedMethod("GET")
-        config.addAllowedMethod("PUT")
-        config.addAllowedMethod("POST")
-        config.addAllowedMethod("DELETE")
-        source.registerCorsConfiguration("/**", config)
-        return CorsFilter(source)
     }
 
     /**

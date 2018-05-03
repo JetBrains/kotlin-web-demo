@@ -16,7 +16,10 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticat
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CompositeFilter
+import org.springframework.web.filter.CorsFilter
 import web.demo.server.common.ActionPathsConstants
 import web.demo.server.common.GeneralPathsConstants
 import web.demo.server.common.ProviderPathsConstants
@@ -41,11 +44,11 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
     @Qualifier("oauth2ClientContext")
     lateinit var oauth2ClientContext: OAuth2ClientContext
 
-
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http.antMatcher("/**")
                 .addFilterBefore(ssoFilter(), BasicAuthenticationFilter::class.java)
+                .addFilter(corsFilter())
                 .authorizeRequests()
                 .antMatchers("/",
                         "/login**",
@@ -104,6 +107,25 @@ class AuthConfiguration : WebSecurityConfigurerAdapter() {
         return ClientResources()
     }
 
+    /**
+     * Cors bean configuration
+     *
+     * @return [CorsFilter]
+     */
+    @Bean
+    fun corsFilter(): CorsFilter {
+        val source = UrlBasedCorsConfigurationSource()
+        val config = CorsConfiguration()
+        config.allowCredentials = true
+        config.addAllowedOrigin("*")
+        config.addAllowedHeader("*")
+        config.addAllowedMethod("GET")
+        config.addAllowedMethod("PUT")
+        config.addAllowedMethod("POST")
+        config.addAllowedMethod("DELETE")
+        source.registerCorsConfiguration("/**", config)
+        return CorsFilter(source)
+    }
 
     @Bean
     fun oauth2ClientFilterRegistration(
