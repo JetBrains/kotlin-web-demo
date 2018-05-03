@@ -93,7 +93,7 @@ class ProjectServiceImpl : ProjectService {
     }
 
     /**
-     * Save the project.
+     * Save the project with all files.
      * Generate publicId by [IdentifierGeneratorService]
      *
      * @param clientId    - [User] id
@@ -110,6 +110,7 @@ class ProjectServiceImpl : ProjectService {
         project.args = projectDto.args
         project.confType = projectDto.confType
         project.compilerVersion = projectDto.compilerVersion
+        projectDto.files.forEach { fileService.saveFile(user.clientId!!, it) }
         projectRepository.save(project)
     }
 
