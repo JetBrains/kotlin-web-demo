@@ -63,7 +63,7 @@ class KotlinResolutionFacade(private val provider: ComponentProvider?) : Resolut
         throw UnsupportedOperationException()
     }
 
-    override fun analyzeFullyAndGetResult(elements: Collection<KtElement>): AnalysisResult {
+    override fun analyzeWithAllCompilerChecks(elements: Collection<KtElement>): AnalysisResult {
         throw UnsupportedOperationException()
     }
 
