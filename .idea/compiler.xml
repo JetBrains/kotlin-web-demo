@@ -39,6 +39,8 @@
       <module name="1.2.41_test" target="1.8" />
       <module name="1.2.50_main" target="1.8" />
       <module name="1.2.50_test" target="1.8" />
+      <module name="1.2.51_main" target="1.8" />
+      <module name="1.2.51_test" target="1.8" />
       <module name="compilers_main" target="1.8" />
       <module name="compilers_test" target="1.8" />
       <module name="kotlin-web-demo_main" target="1.8" />
