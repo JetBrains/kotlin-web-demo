@@ -127,7 +127,8 @@ class MyHttpSession {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         } catch (e: Exception) {
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't run project", e)
+            val projectStringObject = request.getParameter("project")
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't run project\n Project: $projectStringObject", e)
         }
     }
 
@@ -192,7 +193,8 @@ class MyHttpSession {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         } catch (e: Throwable) {
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't analyze project", e)
+            val projectStringObject = request.getParameter("project")
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't analyze project. Project: $projectStringObject", e)
         }
 
     }
