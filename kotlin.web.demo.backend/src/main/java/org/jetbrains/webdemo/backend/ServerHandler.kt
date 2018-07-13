@@ -20,8 +20,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.jetbrains.webdemo.ErrorWriter
 import org.jetbrains.webdemo.Project
-import org.jetbrains.webdemo.backend.executor.ExecutorUtils
-import org.jetbrains.webdemo.backend.executor.result.JavaExecutionResult
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager
 import java.io.IOException
 import javax.servlet.http.HttpServletRequest
@@ -34,7 +32,7 @@ class ServerHandler {
     @Throws(IOException::class)
     fun handle(request: HttpServletRequest, response: HttpServletResponse) {
 
-        if (request.queryString != null && request.queryString == "test") {
+        if (request.requestURI == "/health") {
             try {
                 val wrapper = KotlinWrappersManager.defaultWrapper
                 val projectString = "{\"compilerVersion\":null,\"id\":\"/Examples/Hello,%20world!/Simplest%20version\",\"originUrl\":\"/Examples/Hello,%20world!/Simplest%20version\",\"name\":\"Simplest version\",\"args\":\"\",\"confType\":\"java\",\"files\":[{\"name\":\"Simplest version.kt\",\"text\":\"fun main(args: Array<String>) {\\n    println(\\\"Hello, world!\\\")\\n}\",\"publicId\":\"/Examples/Hello,%20world!/Simplest%20version/Simplest%20version.kt\",\"modifiable\":true,\"type\":\"KOTLIN_FILE\"}],\"readOnlyFileNames\":[],\"expectedOutput\":null}"
@@ -43,18 +41,7 @@ class ServerHandler {
                 project.files.forEach { files[it.name] = it.text }
 
                 val errors = wrapper.getErrors(files, false)
-                val filename = "Simplest version.kt"
-                val searchForMain = true
-                val compilationResult = wrapper.compileCorrectFiles(files, filename, searchForMain)
-                val executionResult = ExecutorUtils.executeCompiledFiles(
-                        compilationResult.files,
-                        compilationResult.mainClass,
-                        wrapper.kotlinLibraries,
-                        project.args,
-                        wrapper.wrapperFolder.resolve("executors.policy"),
-                        false)
-
-                val isServerWork = (executionResult as JavaExecutionResult).text.contains("Hello, world")
+                val isServerWork = errors["Simplest version.kt"]?.size == 0
 
                 if (isServerWork) {
                     response.sendResponse(HttpServletResponse.SC_OK, "All is fine")
