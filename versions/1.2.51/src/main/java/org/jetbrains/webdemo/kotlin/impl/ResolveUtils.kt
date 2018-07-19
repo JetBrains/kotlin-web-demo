@@ -72,6 +72,7 @@ object ResolveUtils {
         ).build()
     }
 
+    @Synchronized
     fun analyzeFileForJvm(files: List<KtFile>, project: Project): Pair<AnalysisResult, ComponentProvider> {
         val environment = EnvironmentManager.getEnvironment()
         val trace = CliBindingTrace()
