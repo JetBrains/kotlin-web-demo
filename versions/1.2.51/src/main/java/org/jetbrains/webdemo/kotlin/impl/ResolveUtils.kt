@@ -102,6 +102,7 @@ object ResolveUtils {
                 container)
     }
 
+    @Synchronized
     fun analyzeFileForJs(files: List<KtFile>, project: Project): Pair<AnalysisResult, ComponentProvider> {
         val environment = EnvironmentManager.getEnvironment()
 
