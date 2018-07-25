@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+@file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl.translator
 
 import org.jetbrains.kotlin.config.CommonConfigurationKeys

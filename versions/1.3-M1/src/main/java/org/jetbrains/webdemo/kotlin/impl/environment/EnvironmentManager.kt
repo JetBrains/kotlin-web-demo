@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+@file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl.environment
 
 import com.google.common.collect.Lists

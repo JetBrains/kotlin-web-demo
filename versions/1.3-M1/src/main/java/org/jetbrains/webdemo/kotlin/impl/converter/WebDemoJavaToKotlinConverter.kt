@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+@file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl.converter
 
 import com.intellij.lang.java.JavaLanguage
 import com.intellij.psi.*
+import org.jetbrains.kotlin.j2k.ConverterSettings
+import org.jetbrains.kotlin.j2k.EmptyJavaToKotlinServices
+import org.jetbrains.kotlin.j2k.JavaToKotlinConverter
+import org.jetbrains.kotlin.j2k.JavaToKotlinTranslator
 import org.jetbrains.webdemo.kotlin.impl.ResolveUtils
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager
 import java.lang.reflect.InvocationTargetException
