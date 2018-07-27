@@ -29,6 +29,8 @@ import java.util.concurrent.TimeoutException;
 
 public class JavaExecutor {
     private static Timer timer = new Timer(true);
+    private static final String LONG_OUTPUT_MESSAGE =
+            "{\"text\":\"<errStream>Your program produces too much output!\\n</errStream>\",\"exception\":null}";
     private String[] args;
     private volatile boolean isTimeoutException = false;
     private volatile boolean outputIsTooLong = false;
@@ -118,7 +120,7 @@ public class JavaExecutor {
             }
 
             if (outputIsTooLong) {
-                throw new Exception("Your program produces too much output.");
+                return new ProgramOutput("", ResponseUtils.escapeString(LONG_OUTPUT_MESSAGE));
             } else if (isTimeoutException) {
                 throw new TimeoutException("Program was terminated after " + BackendSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
             } else {
