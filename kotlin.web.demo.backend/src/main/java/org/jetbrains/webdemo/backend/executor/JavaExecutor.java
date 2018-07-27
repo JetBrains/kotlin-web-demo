@@ -65,6 +65,7 @@ public class JavaExecutor {
                             if (outStream.length() > BackendSettings.MAX_OUTPUT_SIZE) {
                                 outputIsTooLong = true;
                                 finalProcess.destroy();
+                                return;
                             }
                         }
                     } catch (Throwable e) {
