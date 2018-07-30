@@ -17,22 +17,23 @@
 package org.jetbrains.webdemo.backend.executor;
 
 import org.jetbrains.webdemo.ErrorWriter;
+import org.jetbrains.webdemo.JsonUtils;
 import org.jetbrains.webdemo.ResponseUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
+import org.jetbrains.webdemo.backend.executor.result.JavaExecutionResult;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeoutException;
 
 public class JavaExecutor {
     private static Timer timer = new Timer(true);
-    private static final String LONG_OUTPUT_MESSAGE =
-            "{\"text\":\"<errStream>Your program produces too much output!\\n</errStream>\",\"exception\":null}";
+    private static final String TIME_OUT_RESULT = JsonUtils.toJson(new JavaExecutionResult(BackendSettings.KOTLIN_TIMEOUT_MESSAGE, null));
+    private static final String LONG_OUTPUT_RESULT = JsonUtils.toJson(new JavaExecutionResult(BackendSettings.KOTLIN_LONG_OUTPUT_MESSAGE, null));
     private String[] args;
-    private volatile boolean isTimeoutException = false;
+    private volatile boolean isTimeout = false;
     private volatile boolean outputIsTooLong = false;
 
     JavaExecutor(String[] args) {
@@ -99,7 +100,7 @@ public class JavaExecutor {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    isTimeoutException = true;
+                    isTimeout = true;
                     stdReader.interrupt();
                     stdErrReader.interrupt();
                     finalProcess.destroy();
@@ -121,9 +122,9 @@ public class JavaExecutor {
             }
 
             if (outputIsTooLong) {
-                return new ProgramOutput("", ResponseUtils.escapeString(LONG_OUTPUT_MESSAGE));
-            } else if (isTimeoutException) {
-                throw new TimeoutException("Program was terminated after " + BackendSettings.TIMEOUT_FOR_EXECUTION / 1000 + "s.");
+                return new ProgramOutput("", ResponseUtils.escapeString(LONG_OUTPUT_RESULT));
+            } else if (isTimeout) {
+                return new ProgramOutput("", ResponseUtils.escapeString(TIME_OUT_RESULT));
             } else {
                 return new ProgramOutput(errStream.toString(), outStream.toString());
             }

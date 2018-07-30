@@ -26,7 +26,8 @@ public class BackendSettings {
     public static String CLASS_PATH = "";
     public static String EXECUTORS_LIBS_DIR = "";
     public static String KOTLIN_LIBS_DIR = "";
-    public static String KOTLIN_ERROR_MESSAGE = "Exception in Kotlin kotlin: a bug was reported to developers.";
+    public static String KOTLIN_TIMEOUT_MESSAGE = "<errStream>Program was terminated after 10s.</errStream>";
+    public static String KOTLIN_LONG_OUTPUT_MESSAGE = "<errStream>Your program produces too much output!</errStream>";
     public static int TIMEOUT_FOR_EXECUTION = 10000; //seconds
     public static int MAX_OUTPUT_SIZE = 100 * 1024;
 
