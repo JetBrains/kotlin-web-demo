@@ -17,7 +17,6 @@
 package org.jetbrains.webdemo.backend.executor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.webdemo.CommonSettings;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.executor.result.ExecutionResult;
@@ -77,7 +76,7 @@ public class ExecutorUtils {
             }
 
             ProgramOutput output = executorBuilder.build().execute();
-            return parseOutput(output.getStandardOutput(), isJunit);
+            return parseOutput(output, isJunit);
         } finally {
             try {
                 if (codeDirectory != null) {
@@ -111,12 +110,12 @@ public class ExecutorUtils {
         }
     }
 
-    private static ExecutionResult parseOutput(String standardOutput, boolean isJunit) {
+    private static ExecutionResult parseOutput(ProgramOutput programOutput, boolean isJunit) {
         try {
-            if(!isJunit) {
-                return new ObjectMapper().readValue(standardOutput, JavaExecutionResult.class);
+            if(!isJunit || programOutput.getRestriction()) {
+                return new ObjectMapper().readValue(programOutput.getStandardOutput(), JavaExecutionResult.class);
             } else {
-                return new ObjectMapper().readValue(standardOutput, JunitExecutionResult.class);
+                return new ObjectMapper().readValue(programOutput.getStandardOutput(), JunitExecutionResult.class);
             }
         } catch (IOException e) {
             ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Can't parse project run output");

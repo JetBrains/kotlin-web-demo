@@ -74,9 +74,13 @@ class RunProvider(
                 success = { data: dynamic ->
                     val errors = getErrorsMapFromObject(data.errors, project)
                     if (project.confType == "junit") {
-                        onSuccess(JunitExecutionResult(errors, data.testResults), project)
+                        if (data.testResults == null) {
+                            onSuccess(JavaRunResult(errors, data.text, data.exception), project)
+                        } else {
+                            onSuccess(JunitExecutionResult(errors, data.testResults), project)
+                        }
                     } else {
-                        onSuccess(JavaRunResult(errors, data.text, data.exception), project);
+                        onSuccess(JavaRunResult(errors, data.text, data.exception), project)
                     }
                 },
                 dataType = DataType.JSON,

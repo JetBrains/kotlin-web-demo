@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.backend.executor.result;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import junit.framework.TestResult;
 
 import java.util.HashMap;
 import java.util.List;

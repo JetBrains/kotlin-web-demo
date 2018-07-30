@@ -19,18 +19,20 @@ package org.jetbrains.webdemo.backend.executor;
 public class ProgramOutput {
     private String errorOutput;
     private String standardOutput;
+    private Boolean restriction;
 
 
-    public ProgramOutput(String errorOutput, String standardOutput) {
+    ProgramOutput(String errorOutput, String standardOutput, Boolean restriction) {
         this.errorOutput = errorOutput;
         this.standardOutput = standardOutput;
+        this.restriction = restriction;
     }
 
-    public String getErrorOutput() {
-        return errorOutput;
-    }
-
-    public String getStandardOutput() {
+    String getStandardOutput() {
         return standardOutput;
+    }
+
+    Boolean getRestriction() {
+        return restriction;
     }
 }

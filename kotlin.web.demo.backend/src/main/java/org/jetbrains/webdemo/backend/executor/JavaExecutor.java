@@ -122,11 +122,11 @@ public class JavaExecutor {
             }
 
             if (outputIsTooLong) {
-                return new ProgramOutput("", ResponseUtils.escapeString(LONG_OUTPUT_RESULT));
+                return new ProgramOutput("", ResponseUtils.escapeString(LONG_OUTPUT_RESULT), true);
             } else if (isTimeout) {
-                return new ProgramOutput("", ResponseUtils.escapeString(TIME_OUT_RESULT));
+                return new ProgramOutput("", ResponseUtils.escapeString(TIME_OUT_RESULT), true);
             } else {
-                return new ProgramOutput(errStream.toString(), outStream.toString());
+                return new ProgramOutput(errStream.toString(), outStream.toString(), false);
             }
         } finally {
             if (process != null) {
