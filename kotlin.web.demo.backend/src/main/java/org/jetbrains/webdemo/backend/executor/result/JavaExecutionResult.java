@@ -17,13 +17,10 @@
 package org.jetbrains.webdemo.backend.executor.result;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.net.URL;
-import java.util.List;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JavaExecutionResult extends ExecutionResult {
     private String text;
     private ExceptionDescriptor exception;

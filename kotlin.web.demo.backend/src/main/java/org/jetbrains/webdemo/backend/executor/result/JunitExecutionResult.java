@@ -17,12 +17,14 @@
 package org.jetbrains.webdemo.backend.executor.result;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JunitExecutionResult extends ExecutionResult {
     private Map<String, List<TestRunInfo>> testResults;
 
