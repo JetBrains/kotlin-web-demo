@@ -44,6 +44,7 @@ object WebDemoTranslatorFacade {
     }
 
     @Throws(TranslationException::class)
+    @Synchronized
     private fun doTranslate(
             files: List<KtFile>,
             arguments: Array<String>
