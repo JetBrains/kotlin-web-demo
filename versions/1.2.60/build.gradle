@@ -38,8 +38,10 @@ dependencies {
     compile project(":kotlin.web.demo.backend:compilers")
 
     def root = "$kotlinBuildType:$kotlinBuild:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib"
+    def j2k = "$kotlinBuildType:$kotlinBuild:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib"
 
     kotlinJVM tc("$root/kotlin-compiler.jar")
+    kotlinJVM tc("$j2k/j2k.jar")
     kotlinJVM tc("$root/kotlin-script-runtime.jar")
     kotlinJVM tc("$root/kotlin-runtime.jar")
     kotlinJVM tc("$kotlinBuildType:$kotlinBuild:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
@@ -47,11 +49,11 @@ dependencies {
 
     library tc("$root/kotlin-reflect.jar")
     library tc("$root/kotlin-test.jar")
-    library group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: stdlibVersion
+    library tc("$root/kotlin-stdlib-jre8.jar")
     library "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.1"
 
     /**
-     * ADD DEPENDENCIES TO KOTLIN 1.2.51 COMPILER
+     * ADD DEPENDENCIES TO KOTLIN 1.2.60 COMPILER
      *
      * If you want to add some another dependencies to kotlin-compiler you can use 'library' task.
      *
