@@ -28,6 +28,8 @@ import java.lang.reflect.InvocationTargetException
 import java.util.*
 
 object WebDemoJavaToKotlinConverter {
+
+    @Synchronized
     fun getResult(code: String): String {
         val project = EnvironmentManager.getEnvironment().project
         val converter = JavaToKotlinConverter(
