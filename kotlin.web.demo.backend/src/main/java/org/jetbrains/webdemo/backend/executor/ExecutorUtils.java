@@ -18,7 +18,6 @@ package org.jetbrains.webdemo.backend.executor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.webdemo.ErrorWriter;
-import org.jetbrains.webdemo.JsonUtils;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.executor.result.ExecutionResult;
 import org.jetbrains.webdemo.backend.executor.result.JavaExecutionResult;
@@ -119,7 +118,7 @@ public class ExecutorUtils {
                 return new ObjectMapper().readValue(programOutput.getStandardOutput(), JunitExecutionResult.class);
             }
         } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Can't parse project run output: " + JsonUtils.toJson(programOutput));
+            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Can't parse project run output: " + programOutput.getStandardOutput());
             return null;
         }
     }
