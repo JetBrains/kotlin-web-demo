@@ -26,6 +26,7 @@ repositories {
     teamcityServer {
         url = 'http://teamcity.jetbrains.com'
     }
+    mavenCentral()
 }
 
 configurations {
@@ -47,6 +48,7 @@ dependencies {
     kotlinJVM tc("$kotlinBuildType:$kotlinBuild:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
     kotlinJS tc("$root/kotlin-jslib.jar")
 
+    library "org.jetbrains.kotlin:kotlin-stdlib:${stdlibVersion}"
     library tc("$root/kotlin-reflect.jar")
     library tc("$root/kotlin-test.jar")
     library tc("$root/kotlin-stdlib-jre8.jar")
