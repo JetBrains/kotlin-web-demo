@@ -27,7 +27,7 @@
     "version": "1.3-M1",
     "stdlibVersion": "1.3-M1",
     "buildType": "Kotlin_13M1_CompilerAllPlugins",
-    "build": "1.3-M1-release-96",
+    "build": "1.3-M1-release-100",
     "pluginBuild": "1.3-M1-release-IJ2018.2-1"
   }
 ]
