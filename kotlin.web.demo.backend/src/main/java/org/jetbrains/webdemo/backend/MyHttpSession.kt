@@ -51,22 +51,23 @@ class MyHttpSession {
     }
 
     private fun sendConversionResult(request: HttpServletRequest, response: HttpServletResponse) {
+        val javaCode = request.getParameter("text")
         try {
             val wrapper = KotlinWrappersManager.defaultWrapper
-            val javaCode = request.getParameter("text")
             val kotlinCode = wrapper.translateJavaToKotlin(javaCode)
             response.sendResponse(HttpServletResponse.SC_OK, kotlinCode)
         } catch (e: Throwable) {
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorWriter.log.error("Error during java to kotlin translation", e)
+            ErrorWriter.log.error("Error during java to kotlin translation. Code: $javaCode ", e)
         }
 
     }
 
     private fun sendExecutorResult(request: HttpServletRequest, response: HttpServletResponse) {
         var kotlinVersion: String? = null
+        val projectString = request.getParameter("project")
         try {
-            val currentProject = objectMapper.readValue<Project>(request.getParameter("project"))
+            val currentProject = objectMapper.readValue<Project>(projectString)
             kotlinVersion = getAvailableKotlinVersion(currentProject.compilerVersion)
 
             val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
@@ -122,13 +123,13 @@ class MyHttpSession {
                 response.sendResponse(HttpServletResponse.SC_OK, objectMapper.writeValueAsString(translationResult))
             }
         } catch (e: IOException) {
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: Can't parse project. Project: $projectString", e)
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
         } catch (e: NullPointerException) {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         } catch (e: Exception) {
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            val projectStringObject = request.getParameter("project")
-            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't run project\n Project: $projectStringObject", e)
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't run project. Project: $projectString", e)
         }
     }
 
@@ -145,11 +146,12 @@ class MyHttpSession {
 
     fun sendCompletionResult(request: HttpServletRequest, response: HttpServletResponse) {
         var kotlinVersion: String? = null
+        val projectString = request.getParameter("project")
         try {
             val fileName = request.getParameter("filename")
             val line = Integer.parseInt(request.getParameter("line"))
             val ch = Integer.parseInt(request.getParameter("ch"))
-            val currentProject = objectMapper.readValue(request.getParameter("project"), Project::class.java)
+            val currentProject = objectMapper.readValue(projectString, Project::class.java)
             kotlinVersion = getAvailableKotlinVersion(currentProject.compilerVersion)
             val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
             if (wrapper == null) {
@@ -162,20 +164,22 @@ class MyHttpSession {
             val completionVariants = wrapper.getCompletionVariants(files, fileName, line, ch, isJs)
             response.sendResponse(HttpServletResponse.SC_OK, objectMapper.writeValueAsString(completionVariants))
         } catch (e: IOException) {
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: Can't parse project. Project: $projectString", e)
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
         } catch (e: NullPointerException) {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         } catch (e: Throwable) {
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't get completion variants", e)
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't get completion variants. Project: $projectString", e)
         }
 
     }
 
     fun sendHighlightingResult(request: HttpServletRequest, response: HttpServletResponse) {
         var kotlinVersion: String? = null
+        val projectString = request.getParameter("project")
         try {
-            val currentProject: Project = objectMapper.readValue<Project>(request.getParameter("project"))
+            val currentProject: Project = objectMapper.readValue<Project>(projectString)
             kotlinVersion = getAvailableKotlinVersion(currentProject.compilerVersion)
             val wrapper = KotlinWrappersManager.getKotlinWrapper(kotlinVersion)
             if (wrapper == null) {
@@ -188,13 +192,13 @@ class MyHttpSession {
             val result = objectMapper.writeValueAsString(analysisResult)
             response.sendResponse(HttpServletResponse.SC_OK, result.replace("\\n".toRegex(), ""))
         } catch (e: IOException) {
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: Can't parse project. Project: $projectString", e)
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
         } catch (e: NullPointerException) {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         } catch (e: Throwable) {
             response.sendResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            val projectStringObject = request.getParameter("project")
-            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't analyze project. Project: $projectStringObject", e)
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: can't analyze project. Project: $projectString", e)
         }
 
     }

@@ -70,8 +70,8 @@ public class ExecutorUtils {
                 executorBuilder.addArgument(mainClass);
             }
 
-            for(String argument : arguments.split(" ")) {
-                if(argument.trim().isEmpty()) continue;
+            for (String argument : arguments.split(" ")) {
+                if (argument.trim().isEmpty()) continue;
                 executorBuilder.addArgument(argument);
             }
 
@@ -110,16 +110,11 @@ public class ExecutorUtils {
         }
     }
 
-    private static ExecutionResult parseOutput(ProgramOutput programOutput, boolean isJunit) {
-        try {
-            if(!isJunit || programOutput.getRestriction()) {
-                return new ObjectMapper().readValue(programOutput.getStandardOutput(), JavaExecutionResult.class);
-            } else {
-                return new ObjectMapper().readValue(programOutput.getStandardOutput(), JunitExecutionResult.class);
-            }
-        } catch (IOException e) {
-            ErrorWriter.ERROR_WRITER.writeExceptionToExceptionAnalyzer(e, "Can't parse project run output: " + programOutput.getStandardOutput());
-            return null;
+    private static ExecutionResult parseOutput(ProgramOutput programOutput, boolean isJunit) throws IOException {
+        if (!isJunit || programOutput.getRestriction()) {
+            return new ObjectMapper().readValue(programOutput.getStandardOutput(), JavaExecutionResult.class);
+        } else {
+            return new ObjectMapper().readValue(programOutput.getStandardOutput(), JunitExecutionResult.class);
         }
     }
 
