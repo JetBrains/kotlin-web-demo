@@ -16,15 +16,14 @@
 
 package org.jetbrains.webdemo;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,15 +52,8 @@ public class ResponseUtils {
             if (string.contains("&")) {
                 string = string.replaceAll("&", "&amp;");
             }
-            /* if (string.contains("\"")) {
-                string = string.replaceAll("\"", "'");
-            }*/
         }
         return string;
-    }
-
-    public static String generateRequestString(String type, String args) {
-        return "/kotlinServer?sessionId=-1&type=" + type + "&args=" + args;
     }
 
     public static String substringAfter(String str, String before) {
@@ -73,23 +65,6 @@ public class ResponseUtils {
             return str.substring(pos + before.length());
         }
         return "";
-    }
-
-    //Substring str and return all str if before string not found
-    public static String substringAfterReturnAll(String str, String before) {
-        int pos = str.indexOf(before);
-        if (pos != -1) {
-            return str.substring(pos + before.length());
-        }
-        return str;
-    }
-
-    public static String substringBefore(String str, String after) {
-        int pos = str.indexOf(after);
-        if (pos != -1) {
-            return str.substring(0, pos);
-        }
-        return str;
     }
 
     public static String substringBetween(String str, String before, String after) {
@@ -111,104 +86,8 @@ public class ResponseUtils {
         return "<br/>";
     }
 
-    public static String readData(InputStream is) throws IOException {
-        InputStreamReader reader = new InputStreamReader(is);
-        StringBuilder response = new StringBuilder();
-        BufferedReader bufferedReader = new BufferedReader(reader);
-
-        String tmp;
-        while ((tmp = bufferedReader.readLine()) != null) {
-            response.append(tmp);
-        }
-
-        reader.close();
-        return response.toString();
-    }
-
-    public static String readData(Reader reader, boolean addNewLine) throws IOException {
-        StringBuilder response = new StringBuilder();
-        BufferedReader bufferedReader = new BufferedReader(reader);
-
-        String tmp;
-        while ((tmp = bufferedReader.readLine()) != null) {
-            response.append(tmp);
-            if (addNewLine) {
-                response.append("\n");
-            }
-        }
-        bufferedReader.close();
-        return response.toString();
-    }
-
-    public static String readData(InputStream is, boolean addNewLine) throws IOException {
-        InputStreamReader reader = new InputStreamReader(is);
-        StringBuilder response = new StringBuilder();
-        BufferedReader bufferedReader = new BufferedReader(reader);
-
-        String tmp;
-        while ((tmp = bufferedReader.readLine()) != null) {
-            response.append(tmp);
-            if (addNewLine) {
-                response.append("\n");
-            }
-        }
-        reader.close();
-        return response.toString();
-    }
-
-    public static String generateTag(String tagName, String content) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<");
-        builder.append(tagName);
-        builder.append(">");
-        builder.append(content);
-        builder.append("</");
-        builder.append(tagName);
-        builder.append(">");
-        return builder.toString();
-
-    }
-
-    public static String generateTag(String tagName, String content, String attrName, String attrValue) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<");
-        builder.append(tagName);
-        builder.append(" ");
-        builder.append(attrName);
-        builder.append("=\"");
-        builder.append(attrValue);
-        builder.append("\" class=\"internal\"");
-//        builder.append("\" title=\"En/Dehydra\" class=\"internal\"");
-        builder.append(">");
-        builder.append(content);
-        builder.append("</");
-        builder.append(tagName);
-        builder.append(">");
-        return builder.toString();
-
-    }
-
     public static String getErrorInJson(String error) {
         return "[{\"text\":\"" + error + "\",\"type\":\"err\"}]";
-    }
-
-    public static ObjectNode getErrorAsJsonNode(String error) {
-        ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
-        result.put("type", "err");
-        result.put("exception", error);
-        return result;
-    }
-
-    public static String getErrorWithStackTraceInJson(String error, String stackTrace) {
-        return "[{\"text\":\"" + error + "\",\"stackTrace\":\"" + stackTrace + "\",\"type\":\"err\"}]";
-    }
-
-    public static ObjectNode getErrorWithStackTraceAsJsonNode(String error, String stackTrace) {
-        ObjectNode result = new ObjectNode(JsonNodeFactory.instance);
-        result.put("type", "err");
-        result.put("exception", error);
-        result.put("stackTrace", stackTrace);
-        return result;
     }
 
     public static Document getXmlDocument(File file) {
@@ -235,20 +114,8 @@ public class ResponseUtils {
         return document;
     }
 
-    public static String escapeURL(String input) {
-        return input.replaceAll(" ", "%20");
-    }
-
     public static String unEscapeURL(String input) {
         return input.replaceAll("%20", " ");
-    }
-
-    public static String getExampleOrProgramNameByUrl(String url) {
-        return ResponseUtils.substringAfter(url, "&name=").replaceAll("%20", " ");
-    }
-
-    public static String getExampleFolderByUrl(String url) {
-        return ResponseUtils.substringBefore(url, "&name").replaceAll("%20", " ");
     }
 
     public static String[] splitArguments(String arguments) {
