@@ -60,7 +60,7 @@ in `web-demo-backend`. [Click here](https://docs.oracle.com/javase/7/docs/techno
 
 **How to set Java Security Police in `executors.policy.template`**
 
-If you want to a customm dependency, use the marker `@WRAPPERS_LIB@`:
+If you want to configure a custom dependency, use the marker `@WRAPPERS_LIB@`:
 
 ```
 grant codeBase "file:@WRAPPERS_LIB@/junit-4.12.jar" {
