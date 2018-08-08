@@ -19,6 +19,7 @@ package org.jetbrains.webdemo.backend.executor;
 import org.jetbrains.webdemo.ErrorWriter;
 import org.jetbrains.webdemo.JsonUtils;
 import org.jetbrains.webdemo.ResponseUtils;
+import org.jetbrains.webdemo.backend.BackendOutputMessages;
 import org.jetbrains.webdemo.backend.BackendSettings;
 import org.jetbrains.webdemo.backend.executor.result.JavaExecutionResult;
 
@@ -30,8 +31,8 @@ import java.util.TimerTask;
 
 public class JavaExecutor {
     private static Timer timer = new Timer(true);
-    private static final String TIME_OUT_RESULT = JsonUtils.toJson(new JavaExecutionResult(BackendSettings.KOTLIN_TIMEOUT_MESSAGE, null));
-    private static final String LONG_OUTPUT_RESULT = JsonUtils.toJson(new JavaExecutionResult(BackendSettings.KOTLIN_LONG_OUTPUT_MESSAGE, null));
+    private static final String TIME_OUT_RESULT = JsonUtils.toJson(new JavaExecutionResult(BackendOutputMessages.KOTLIN_TIMEOUT_MESSAGE, null));
+    private static final String LONG_OUTPUT_RESULT = JsonUtils.toJson(new JavaExecutionResult(BackendOutputMessages.KOTLIN_LONG_OUTPUT_MESSAGE, null));
     private String[] args;
     private volatile boolean isTimeout = false;
     private volatile boolean outputIsTooLong = false;

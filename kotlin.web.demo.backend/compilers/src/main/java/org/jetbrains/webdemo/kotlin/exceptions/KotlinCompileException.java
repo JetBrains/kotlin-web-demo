@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2018 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package org.jetbrains.webdemo.backend;
+package org.jetbrains.webdemo.kotlin.exceptions;
 
 
-/**
- * Created by Semyon.Atamas on 2/11/2015.
- */
-public class BackendSettings {
-    public static String JAVA_HOME = null;
-    public static String JAVA_EXECUTE = "";
-    public static String CLASS_PATH = "";
-    public static String EXECUTORS_LIBS_DIR = "";
-    public static String KOTLIN_LIBS_DIR = "";
-    public static int TIMEOUT_FOR_EXECUTION = 10000; //seconds
-    public static int MAX_OUTPUT_SIZE = 100 * 1024;
+public class KotlinCompileException extends RuntimeException {
+    private final Throwable e;
 
-    public static String OUTPUT_DIRECTORY = "out";
+    public KotlinCompileException(Throwable e) {
+        super(e);
+        this.e = e;
+    }
+
+    @Override
+    public String getMessage() {
+        return e.getMessage();
+    }
 }

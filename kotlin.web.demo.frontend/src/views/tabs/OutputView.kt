@@ -17,8 +17,11 @@
 package views.tabs
 
 import application.makeReference
+import kotlinx.html.a
 import kotlinx.html.classes
 import kotlinx.html.dom.append
+import kotlinx.html.dom.create
+import kotlinx.html.js.div
 import kotlinx.html.js.span
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLSpanElement
@@ -60,7 +63,18 @@ class OutputView(val element: HTMLElement) {
             } else {
                 unprocessedFragment = unprocessedFragment.substringAfter("<errStream>")
                 spanElement.className = "error-output"
-                spanElement.textContent = unprocessedFragment.substringBefore("</errStream>")
+                val errorText = unprocessedFragment.substringBefore("</errStream>")
+                if (errorText.startsWith("BUG")) {
+                    val element = document.create.div {
+                        classes = setOf("error-output")
+                        +"Hey! It seems you just found a bug! \uD83D\uDC1E \n Please click "
+                        a(href = "https://youtrack.jetbrains.com/newIssue?draftId=25-2077811", target = "_blank") { +"here" }
+                        +" to submit it to the issue tracker and one day we fix it, hopefully \uD83D\uDE09\n✅ Don't forget to attach code to the issue"
+                    }
+                    spanElement.append(element)
+                } else {
+                    spanElement.textContent = unprocessedFragment.substringBefore("</errStream>")
+                }
                 unprocessedFragment = unprocessedFragment.substringAfter("</errStream>")
             }
             element.appendChild(spanElement)
@@ -121,7 +135,7 @@ class OutputView(val element: HTMLElement) {
         printExceptionCause(exception)
         printErrorLine()
     }
-  
+
     private fun printLastStackTraceLine(stackTrace: Array<dynamic>) {
         if (stackTrace.isNotEmpty()) {
             printStackTraceLine(stackTrace.last())

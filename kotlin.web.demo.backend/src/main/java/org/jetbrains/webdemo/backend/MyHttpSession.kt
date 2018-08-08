@@ -23,10 +23,12 @@ import org.jetbrains.webdemo.Project
 import org.jetbrains.webdemo.ResponseUtils
 import org.jetbrains.webdemo.backend.executor.ExecutorUtils
 import org.jetbrains.webdemo.backend.executor.result.ExecutionResult
+import org.jetbrains.webdemo.backend.executor.result.JavaExecutionResult
 import org.jetbrains.webdemo.backend.executor.result.JunitExecutionResult
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor
 import org.jetbrains.webdemo.kotlin.datastructures.TranslationResult
+import org.jetbrains.webdemo.kotlin.exceptions.KotlinCompileException
 import java.io.IOException
 import java.util.*
 import javax.servlet.http.HttpServletRequest
@@ -125,6 +127,11 @@ class MyHttpSession {
         } catch (e: IOException) {
             ErrorWriter.log.error("Kotlin v.$kotlinVersion: Can't parse project. Project: $projectString", e)
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't parse project")
+        } catch (e: KotlinCompileException) {
+            val message = objectMapper.writeValueAsString(JavaExecutionResult(BackendOutputMessages
+                    .buildKotlinCompilerErrorMessage(e.localizedMessage), null))
+            ErrorWriter.log.error("Kotlin v.$kotlinVersion: Compiler Exception. Project: $projectString", e)
+            response.sendResponse(HttpServletResponse.SC_OK, message)
         } catch (e: NullPointerException) {
             response.sendResponse(HttpServletResponse.SC_BAD_REQUEST, "Can't get parameters")
         } catch (e: Exception) {

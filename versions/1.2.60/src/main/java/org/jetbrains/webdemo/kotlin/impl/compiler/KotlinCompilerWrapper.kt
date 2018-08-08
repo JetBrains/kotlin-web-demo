@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.load.kotlin.PackagePartClassUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult
-import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException
+import org.jetbrains.webdemo.kotlin.exceptions.KotlinCompileException
 import org.jetbrains.webdemo.kotlin.impl.ResolveUtils
 import org.jetbrains.webdemo.kotlin.impl.WrapperLogger
 import java.util.*
@@ -43,7 +43,7 @@ class KotlinCompilerWrapper {
             }
             return CompilationResult(files, mainClass)
         } catch (e: Throwable) {
-            throw KotlinCoreException(e)
+            throw KotlinCompileException(e)
         }
 
     }
