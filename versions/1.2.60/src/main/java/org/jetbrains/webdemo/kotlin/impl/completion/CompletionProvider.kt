@@ -137,10 +137,10 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
 
             if (descriptors != null) {
                 var prefix: String
-                if (!isTipsManagerCompletion) {
-                    prefix = element.parent.text
+                prefix = if (!isTipsManagerCompletion) {
+                    element.parent.text
                 } else {
-                    prefix = element.text
+                    element.text
                 }
                 prefix = prefix.substringBefore("IntellijIdeaRulezzz", prefix)
                 if (prefix.endsWith(".")) {
@@ -151,11 +151,11 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
                     descriptors = ArrayList(descriptors)
                 }
 
-                Collections.sort((descriptors as ArrayList<DeclarationDescriptor>?)!!) { d1, d2 ->
+                (descriptors as ArrayList<DeclarationDescriptor>?)?.sortWith(Comparator { d1, d2 ->
                     val d1PresText = getPresentableText(d1)
                     val d2PresText = getPresentableText(d2)
                     (d1PresText.getFirst() + d1PresText.getSecond()).compareTo(d2PresText.getFirst() + d2PresText.getSecond(), ignoreCase = true)
-                }
+                })
 
                 for (descriptor in descriptors) {
                     val presentableText = getPresentableText(descriptor)
