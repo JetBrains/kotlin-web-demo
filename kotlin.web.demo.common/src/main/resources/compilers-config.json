@@ -20,7 +20,7 @@
     "stdlibVersion": "1.2.60",
     "buildType": "Kotlin_1260_CompilerAllPlugins",
     "build": "1.2.60-release-76",
-    "pluginBuild": "1.2.60-release-IJ2018.2-1",
+    "pluginBuild": "1.2.60-release-76-IJ2018.2-1",
     "latestStable": true
   },
   {
