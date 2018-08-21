@@ -16,6 +16,17 @@
 
 package org.jetbrains.webdemo.kotlin.impl.analyzer
 
+import com.intellij.openapi.editor.Document
+import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.PsiErrorElement
+import com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.diagnostics.Diagnostic
+import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.diagnostics.Severity
+import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor
 import org.jetbrains.webdemo.kotlin.datastructures.TextInterval
 import org.jetbrains.webdemo.kotlin.datastructures.TextPosition

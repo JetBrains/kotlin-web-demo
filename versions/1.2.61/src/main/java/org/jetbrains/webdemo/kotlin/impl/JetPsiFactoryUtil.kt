@@ -15,6 +15,13 @@
  */
 
 package org.jetbrains.webdemo.kotlin.impl
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.CharsetToolkit
+import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.impl.PsiFileFactoryImpl
+import com.intellij.testFramework.LightVirtualFile
+import org.jetbrains.kotlin.idea.KotlinLanguage
+import org.jetbrains.kotlin.psi.KtFile
 
 object JetPsiFactoryUtil {
 
