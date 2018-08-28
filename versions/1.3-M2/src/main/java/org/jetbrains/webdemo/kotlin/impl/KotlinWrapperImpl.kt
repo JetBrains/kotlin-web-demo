@@ -97,7 +97,7 @@ class KotlinWrapperImpl : KotlinWrapper {
     }
 
     override fun getKotlinRuntimeJar(): Path {
-        return jarsFolder.resolve("kotlin-stdlib-$kotlinBuild.jar")
+        return userLibFolder.resolve("kotlin-stdlib-$kotlinBuild.jar")
     }
 
     override fun getWrapperFolder(): Path? {
