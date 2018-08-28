@@ -27,11 +27,8 @@ import org.jetbrains.kotlin.psi.KtFile
 object JetPsiFactoryUtil {
 
     fun createFile(project: Project, name: String, text: String): KtFile {
-        var name = name
-        if (!name.endsWith(".kt")) {
-            name += ".kt"
-        }
-        val virtualFile = LightVirtualFile(name, KotlinLanguage.INSTANCE, text)
+        val nameWithExtension = if (name.endsWith(".kt")) name else "$name.kt"
+        val virtualFile = LightVirtualFile(nameWithExtension, KotlinLanguage.INSTANCE, text)
         virtualFile.charset = CharsetToolkit.UTF8_CHARSET
         return (PsiFileFactory.getInstance(project) as PsiFileFactoryImpl).trySetupPsiForFile(virtualFile, KotlinLanguage.INSTANCE, true, false) as KtFile
     }

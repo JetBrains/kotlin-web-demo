@@ -91,13 +91,13 @@ class KotlinWrapperImpl : KotlinWrapper {
      */
     override fun getKotlinLibraries(): MutableList<Path> {
         val libraries = ArrayList<Path>()
-        userLibFolder.toFile().listFiles({pathname -> pathname.absolutePath.matches(Regex(".*\\.jar$"))})
+        userLibFolder.toFile().listFiles { pathname -> pathname.absolutePath.matches(Regex(".*\\.jar$"))}
                 ?.forEach { libraries.add(it.toPath()) }
         return libraries
     }
 
     override fun getKotlinRuntimeJar(): Path {
-        return jarsFolder.resolve("kotlin-runtime-$kotlinBuild.jar")
+        return jarsFolder.resolve("kotlin-stdlib-$kotlinBuild.jar")
     }
 
     override fun getWrapperFolder(): Path? {
