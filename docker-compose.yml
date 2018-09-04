@@ -4,7 +4,7 @@ services:
     image: mysql:5.7.22
     build: docker/db
     environment:
-        MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
     ports:
       - 3306:3306
   backend:
@@ -12,7 +12,7 @@ services:
   frontend:
     build: docker/frontend
     ports:
-        - 8080:8080
-     depends_on:
-        - db
-        - backend
+      - 8080:8080
+    depends_on:
+      - db
+      - backend
