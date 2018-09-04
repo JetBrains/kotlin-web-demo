@@ -104,6 +104,25 @@ dependencies {
      * };
      */
 
+    def arrowKtVersion = System.getenv('ARROW_VERSION')
+
+    library group: 'io.arrow-kt', name: 'arrow-core', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-syntax', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-typeclasses', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-data', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-instances-core', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-instances-data', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-annotations-processor', version: arrowKtVersion
+
+    library group: 'io.arrow-kt', name: 'arrow-free', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-mtl', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-effects', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-effects-rx2', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-effects-kotlinx-coroutines', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-optics', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-generic', version: arrowKtVersion
+    library group: 'io.arrow-kt', name: 'arrow-recursion', version: arrowKtVersion
+
     compile fileTree(dir: projectDir.toString() + File.separator + "kotlin", include: '*.jar')
 }
 
