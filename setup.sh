@@ -33,11 +33,9 @@ sudo apt install -y gradle
 
 gradle wrapper
 
-sh gradlew
-
 git clone https://github.com/47deg/try.arrow-kt.io
 
-cd kotlin-web-demo/
+cd try.arrow-kt.io/
 
 sh gradlew
 
