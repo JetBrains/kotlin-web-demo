@@ -1,6 +1,7 @@
 version: '3'
 services:
   db:
+    image: mysql:5.7.22
     build: docker/db
     environment:
         MYSQL_ROOT_PASSWORD: root
@@ -8,14 +9,10 @@ services:
       - 3306:3306
   backend:
     build: docker/backend
-    volumes:
-        - ./kotlin.web.demo.backend/build/libs/WebDemoBackend.war:/usr/local/tomcat/webapps/ROOT.war
   frontend:
     build: docker/frontend
     ports:
         - 8080:8080
-    volumes:
-        - ./kotlin.web.demo.server/build/libs/WebDemoWar.war:/usr/local/tomcat/webapps/ROOT.war
-    depends_on:
+     depends_on:
         - db
         - backend

@@ -1,0 +1,10 @@
+branches:
+  only:
+   - master
+
+before_script:
+- openssl aes-256-cbc -pass "pass:$TRAVIS_CI_SECRET" -in ./.secret -out ./try.arrow-kt.pem -d -a
+- chmod 400 ./try.arrow-kt.pem
+
+script:
+- ssh -o "StrictHostKeyChecking no" -q -i ./try.arrow-kt.pem $EC2 'cd try.arrow-kt.io; sh deploy.sh; exit'

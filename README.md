@@ -30,6 +30,59 @@ this [configuration file](https://github.com/JetBrains/kotlin-web-demo/blob/mast
     <Environment name="github_key" value="YOUR-KEY" type="java.lang.String" override="false"/>
     <Environment name="github_secret" value="YOUR-SECRET-KEY" type="java.lang.String" override="false"/>
 ```
+## Deploy to AWS:
+
+- Create instance in ec2 console (Ubuntu Server, t2.small recommended with 16 GB storage)
+- Download private key and save as `try.arrow-kt.pem` file (or other name of you choice)
+- ```cp try.arrow-kt.pem ~/.ssh```
+- ```chmod 400 ~/.ssh/try.arrow-kt.pem```
+- Copy setup.sh: ```scp setup.sh <user>@<instance's public dns>:```
+- ```ssh -i ~/.ssh/try.arrow-kt.pem <user>@<instance's public dns>```
+- Run ```sh setup.sh```
+
+- For a manual deployment:
+    - ```cd try.arrow-kt```
+    - run ```sh deploy.sh```
+
+- For an automatic deployment with `travis`:
+    - Go back to your local machine and run:
+    - ```export TRAVIS_CI_SECRET=`cat /dev/urandom | head -c 10000 | openssl sha1` ```
+    - ```openssl aes-256-cbc -pass "pass:$TRAVIS_CI_SECRET" -in ~/.ssh/try.arrow-kt.pem -out ./.secret -a```
+    - Commit `.secret` file and upload changes.
+    - Create env var in travis for `$TRAVIS_CI_SECRET`
+    - Create env var in travis for `$EC2 = <user>@<instance's public dns>`
+    - This has already been included in the .travis.yml file for this to work:
+    ```before_script
+       - openssl aes-256-cbc -pass "pass:$TRAVIS_CI_SECRET" -in ./.secret -out ./try.arrow-kt.pem -d -a
+       - chmod 400 ./try.arrow-kt.pem```
+
+## Deploy to AWS using docker-machine and docker-compose:
+
+ - Install docker in your localhost. [Installation link](https://docs.docker.com/engine/installation/)
+ - Install docker-machine in your localhost. [Installation link](https://docs.docker.com/machine/install-machine/)
+ - Set up your AWS credentials in your localhost. [docker-machine + aws](https://docs.docker.com/machine/drivers/aws/)
+ - Create AWS EC2 instance only the first time:
+ ```bash
+docker-machine create --driver amazonec2 <your-instance-name>
+ ```
+ - Connect to your AWS EC2 instance using:
+```bash
+docker-machine ssh <your-instance-name>
+```
+ - We recommend to use ```screen -D -RR```
+ - Clone this repo:
+```bash
+git clone https://github.com/dominv/kotlin-web-demo
+```
+ - Go to kotlin-web-demo directory and run ```sh deploy.sh``` script.
+ - When it finishes, run:
+```bash
+sudo docker-compose build
+```
+ - And finally:
+ ```bash
+ sudo docker-compose up
+ ```
 
 ## How to add your own courses :memo:
 
