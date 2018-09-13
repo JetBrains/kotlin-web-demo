@@ -68,7 +68,7 @@ class Editor(
 
     init {
         var timeoutId: Int? = null
-        codeMirror.on("change", { codeMirror ->
+        codeMirror.on("change") { codeMirror ->
             helpWidget?.let {
                 if (it.line.lineNo() != 0) {
                     it.clear()
@@ -89,9 +89,9 @@ class Editor(
                 }
             }
 
-        })
+        }
 
-        codeMirror.on("mousedown", { instance: CodeMirror, event: MouseEvent ->
+        codeMirror.on("mousedown") { instance: CodeMirror, event: MouseEvent ->
             val position = instance.coordsChar(Coordinates(event.pageX, event.pageY))
 
             //Hack to ignore widget clicks
@@ -106,7 +106,7 @@ class Editor(
                     event.preventDefault()
                 }
             }
-        })
+        }
 
         codeMirror.on("keydown", { instance: CodeMirror, event: KeyboardEvent ->
             when (event.keyCode) {

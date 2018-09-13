@@ -18,6 +18,7 @@ package org.jetbrains.webdemo.kotlin.impl.environment
 
 import com.google.common.collect.Lists
 import com.intellij.codeInsight.ContainerProvider
+import com.intellij.codeInsight.NullabilityAnnotationInfo
 import com.intellij.codeInsight.NullableNotNullManager
 import com.intellij.codeInsight.runner.JavaMainMethodProvider
 import com.intellij.core.CoreApplicationEnvironment
@@ -30,7 +31,7 @@ import com.intellij.openapi.fileTypes.FileTypeExtensionPoint
 import com.intellij.openapi.fileTypes.FileTypeRegistry
 import com.intellij.openapi.util.Getter
 import com.intellij.psi.FileContextProvider
-import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiAnnotation
 import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.augment.PsiAugmentProvider
 import com.intellij.psi.codeStyle.CodeStyleManager
@@ -38,7 +39,9 @@ import com.intellij.psi.compiled.ClassFileDecompilers
 import com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy
 import com.intellij.psi.meta.MetaDataContributor
 import com.intellij.psi.stubs.BinaryFileStubBuilders
+import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
+import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
@@ -99,7 +102,7 @@ object EnvironmentManager {
         val configuration = CompilerConfiguration()
 
         configuration.addJvmClasspathRoots(getClasspath(arguments, libraries))
-
+        configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
         configuration.put(JVMConfigurationKeys.DISABLE_PARAM_ASSERTIONS, arguments.noParamAssertions)
         configuration.put(JVMConfigurationKeys.DISABLE_CALL_ASSERTIONS, arguments.noCallAssertions)
         configuration.put(JVMConfigurationKeys.JDK_HOME, File(CommonSettings.JAVA_HOME))
@@ -111,6 +114,41 @@ object EnvironmentManager {
         val environment = KotlinCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
         val project = environment.project as MockProject
         project.registerService(NullableNotNullManager::class.java, object : NullableNotNullManager(project) {
+
+            override fun setInstrumentedNotNulls(p0: MutableList<String>) {}
+
+            override fun getInstrumentedNotNulls(): MutableList<String> {
+                return mutableListOf()
+            }
+
+            override fun isJsr305Default(p0: PsiAnnotation, p1: Array<out PsiAnnotation.TargetType>): NullabilityAnnotationInfo? {
+                return null
+            }
+
+            override fun setNullables(vararg p0: String?) {}
+
+            override fun getDefaultNotNull(): String {
+                return ""
+            }
+
+            override fun getNotNulls(): MutableList<String> {
+                return mutableListOf()
+            }
+
+            override fun getDefaultNullable(): String {
+                return ""
+            }
+
+            override fun setDefaultNotNull(p0: String) {}
+
+            override fun setNotNulls(vararg p0: String?) {}
+
+            override fun getNullables(): MutableList<String> {
+                return mutableListOf()
+            }
+
+            override fun setDefaultNullable(p0: String) {}
+
             override fun isNullable(owner: PsiModifierListOwner, checkBases: Boolean): Boolean {
                 return false
             }
@@ -119,13 +157,6 @@ object EnvironmentManager {
                 return true
             }
 
-            override fun getPredefinedNotNulls(): List<String> {
-                return emptyList()
-            }
-
-            override fun hasHardcodedContracts(element: PsiElement?): Boolean {
-                return false
-            }
         })
         project.registerService(CodeStyleManager::class.java, DummyCodeStyleManager())
 

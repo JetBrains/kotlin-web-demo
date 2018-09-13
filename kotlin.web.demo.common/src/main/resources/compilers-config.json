@@ -16,11 +16,11 @@
     "useCompilerBeforeShrink": false
   },
   {
-    "version": "1.2.61",
-    "stdlibVersion": "1.2.61",
-    "buildType": "Kotlin_1260_CompilerAllPlugins",
-    "build": "1.2.89-release-89",
-    "pluginBuild": "1.2.61-release-IJ2018.2-1",
+    "version": "1.2.70",
+    "stdlibVersion": "1.2.70",
+    "buildType": "Kotlin_1270_CompilerAllPlugins",
+    "build": "1.2.70-release-54",
+    "pluginBuild": "1.2.70-release-IJ2018.3-1",
     "latestStable": true
   },
   {
