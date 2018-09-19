@@ -8,7 +8,8 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document
 import kotlin.browser.window
-import kotlin.js.Math
+import kotlin.random.*
+import kotlin.math.*
 
 val canvas = initializeCanvas()
 fun initializeCanvas(): HTMLCanvasElement {
@@ -38,8 +39,8 @@ val height: Int
 
 // class representing a floating text
 class HelloKotlin() {
-    var relX = 0.2 + 0.2 * Math.random()
-    var relY = 0.4 + 0.2 * Math.random()
+    var relX = Random.nextDouble(0.2, 0.4)
+    var relY = Random.nextDouble(0.4, 0.6)
 
     val absX: Double
         get() = (relX * width)
@@ -72,22 +73,19 @@ class HelloKotlin() {
 
     fun move() {
         val relTextWidth = textWidthInPixels / width
-        if (relX > (1.0 - relTextWidth - relXVelocity.abs) || relX < relXVelocity.abs) {
+        if (relX > (1.0 - relTextWidth - relXVelocity.absoluteValue) || relX < relXVelocity.absoluteValue) {
             relXVelocity *= -1
         }
         val relTextHeight = textHeightInPixels / height
-        if (relY > (1.0 - relYVelocity.abs) || relY < relYVelocity.abs + relTextHeight) {
+        if (relY > (1.0 - relYVelocity.absoluteValue) || relY < relYVelocity.absoluteValue + relTextHeight) {
             relYVelocity *= -1
         }
         relX += relXVelocity
         relY += relYVelocity
     }
 
-    fun randomVelocity() = 0.03 * Math.random() * (if (Math.random() < 0.5) 1 else -1)
+    fun randomVelocity() = Random.nextDouble(-0.03, 0.03)
 
-
-    val Double.abs: Double
-        get() = if (this > 0) this else -this
 }
 
 fun renderBackground() {
