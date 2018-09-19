@@ -21,7 +21,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3-M2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.0-rc-46"
     }
 }
 
@@ -78,7 +78,7 @@ dependencies {
     }
 
     /**
-     * ADD DEPENDENCIES TO KOTLIN 1.3-M1 COMPILER
+     * ADD DEPENDENCIES TO KOTLIN 1.3-RC COMPILER
      *
      * If you want to add some another dependencies to kotlin-compiler you can use 'library' task.
      *

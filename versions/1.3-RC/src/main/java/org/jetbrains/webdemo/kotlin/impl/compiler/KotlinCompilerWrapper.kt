@@ -19,6 +19,7 @@ package org.jetbrains.webdemo.kotlin.impl.compiler
 import com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.codegen.KotlinCodegenFacade
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.jetbrains.kotlin.idea.MainFunctionDetector
 import org.jetbrains.kotlin.load.kotlin.PackagePartClassUtils
 import org.jetbrains.kotlin.psi.KtFile
@@ -49,7 +50,7 @@ class KotlinCompilerWrapper {
     }
 
     private fun findMainClass(bindingContext: BindingContext, files: List<KtFile>, fileName: String, searchForMain: Boolean): String {
-        val mainFunctionDetector = MainFunctionDetector(bindingContext)
+        val mainFunctionDetector = MainFunctionDetector(bindingContext, LanguageVersionSettingsImpl.DEFAULT)
         files
                 .filter { it.name.contains(fileName) && (!searchForMain || mainFunctionDetector.hasMain(it.declarations)) }
                 .forEach { return getMainClassName(it) }
