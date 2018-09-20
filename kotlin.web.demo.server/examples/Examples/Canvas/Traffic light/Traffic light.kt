@@ -1,4 +1,4 @@
-/*
+/**
  * In this example you can see a crossroads. Traffic light change color by timer,
  * but you can change it manually using controls at the right part of screen.
  */
@@ -6,10 +6,12 @@ package traffic
 
 import jquery.*
 import org.w3c.dom.*
+import org.w3c.dom.HTMLCanvasElement
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLImageElement
 import kotlin.browser.document
 import kotlin.browser.window
-import kotlin.math.*
-import kotlin.random.*
+import kotlin.js.Math
 import kotlin.js.Date
 
 fun getImage(path: String): HTMLImageElement {
@@ -37,7 +39,19 @@ val context: CanvasRenderingContext2D
 val PATH_TO_IMAGES = "http://try.kotlinlang.org/static/images/canvas/"
 
 
-val state: CanvasState by lazy { CanvasState(canvas) }
+var _state: CanvasState? = null
+val state: CanvasState
+    get() {
+        if (_state == null) {
+            _state = CanvasState(canvas)
+        }
+        return _state!!
+    }
+
+val colors: Colors
+    get() {
+        return Colors()
+    }
 
 var trafficLightUp = TrafficLight(v(180.0, 181.0), "up", "red")
 var trafficLightDown = TrafficLight(v(100.0, 77.0), "down", "red")
@@ -126,12 +140,12 @@ class Border() : Shape() {
     override var pos = Vector(4.0, 4.0);
 
     override fun draw() {
-        state.context.fillStyle = Colors.white
+        state.context.fillStyle = colors.white
         state.context.fillRect(2.0, 4.0, 10.0, 292.0)
         state.context.fillRect(330.0, 4.0, 370.0, 292.0)
         state.context.fillRect(2.0, 2.0, 330.0, 10.0)
         state.context.fillRect(4.0, 265.0, 340.0, 380.0)
-        state.context.strokeStyle = Colors.black
+        state.context.strokeStyle = colors.black
         state.context.lineWidth = 4.0
         state.context.strokeRect(0.0, 0.0, state.width.toDouble(), state.height.toDouble())
     }
@@ -146,7 +160,7 @@ class Timer(override var pos: Vector) : Shape() {
     override fun draw() {
         timeLeftForChangeColor = ("" + (timerLength - (Date().getTime() - timeStartLastChangeColor) / 1000)).get(0)
         state.context.font = "bold 9px Arial, serif"
-        state.context.fillStyle = Colors.black
+        state.context.fillStyle = colors.black
         state.context.fillText("" + timeLeftForChangeColor, pos.x, pos.y)
     }
 
@@ -157,7 +171,7 @@ class Timer(override var pos: Vector) : Shape() {
 }
 
 //Colors constants
-object Colors {
+class Colors() {
     val black: String = "#000000"
     val white = "#FFFFFF"
     val grey = "#C0C0C0"
@@ -285,8 +299,7 @@ class TrafficLightItem(override var pos: Vector, val imageSrc: String) : Shape()
 
 class Car(override var pos: Vector, val direction: String, val color: String) : Shape() {
     val imageSize = v(25.0, 59.0)
-    fun randomSpeed() = Random.nextDouble(2.0, 10.0)
-    var speed = randomSpeed()
+    var speed = getRandomArbitary(2, 10);
 
     override fun draw() {
         if (direction == "up" || direction == "down") {
@@ -297,7 +310,7 @@ class Car(override var pos: Vector, val direction: String, val color: String) : 
             if ((!isNearStopLine()) || (trafficLightUp.canMove() && isNearStopLine()) ) {
                 move()
             } else {
-                speed = randomSpeed()
+                speed = getRandomArbitary(2, 10)
             }
         } else {
             state.context.drawImage(getImage(PATH_TO_IMAGES + color + "_car.png"), 0.0, 0.0,
@@ -307,7 +320,7 @@ class Car(override var pos: Vector, val direction: String, val color: String) : 
             if ((!isNearStopLine()) || (trafficLightLeft.canMove() && isNearStopLine()) ) {
                 move()
             } else {
-                speed = randomSpeed()
+                speed = getRandomArbitary(2, 10)
             }
 
         }
@@ -444,7 +457,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
     }
 
     fun clear() {
-        context.fillStyle = Colors.white
+        context.fillStyle = colors.white
         context.fillRect(0.0, 0.0, width.toDouble(), height.toDouble())
     }
 }
@@ -477,10 +490,10 @@ class Vector(val x: Double = 0.0, val y: Double = 0.0) {
     operator fun plus(v: Vector) = v(x + v.x, y + v.y)
     operator fun minus(v: Vector) = v(x - v.x, y - v.y)
     operator fun times(koef: Double) = v(x * koef, y * koef)
-    fun distanceTo(v: Vector) = sqrt((this - v).sqr)
+    fun distanceTo(v: Vector) = Math.sqrt((this - v).sqr)
     fun rotatedBy(theta: Double): Vector {
-        val sin = sin(theta)
-        val cos = cos(theta)
+        val sin = Math.sin(theta)
+        val cos = Math.cos(theta)
         return v(x * cos - y * sin, x * sin + y * cos)
     }
 
@@ -490,6 +503,9 @@ class Vector(val x: Double = 0.0, val y: Double = 0.0) {
     val sqr: Double
         get() = x * x + y * y
     val normalized: Vector
-        get() = this * (1.0 / sqrt(sqr))
+        get() = this * (1.0 / Math.sqrt(sqr))
 }
 
+fun getRandomArbitary(min: Int, max: Int): Double {
+    return Math.random() * (max - min) + min;
+}

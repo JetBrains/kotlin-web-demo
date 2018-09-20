@@ -1,4 +1,4 @@
-/*
+/**
  * In this example strange creatures are watching the kotlin logo.
  * You can drag'n'drop them as well as the logo. Doubleclick to add
  * more creatures but be careful. They may be watching you!
@@ -9,7 +9,7 @@ import jquery.*
 import org.w3c.dom.*
 import kotlin.browser.document
 import kotlin.browser.window
-import kotlin.math.*
+import kotlin.js.Math
 
 
 fun getImage(path: String): HTMLImageElement {
@@ -122,7 +122,7 @@ class Creature(override var pos: Vector, val state: CanvasState) : Shape() {
 
     // defining more nice extension functions
     fun CanvasRenderingContext2D.circlePath(position: Vector, rad: Double) {
-        arc(position.x, position.y, rad, 0.0, 2 * PI, false)
+        arc(position.x, position.y, rad, 0.0, 2 * Math.PI, false)
     }
 
     //notice we can use an extension function we just defined inside another extension function
@@ -163,7 +163,7 @@ class Creature(override var pos: Vector, val state: CanvasState) : Shape() {
         val tailDirection = -directionToLogo
         val tailPos = position + tailDirection * radius * 1.0
         val tailSize = radius * 1.6
-        val angle = PI / 6.0
+        val angle = Math.PI / 6.0
         val p1 = tailPos + tailDirection.rotatedBy(angle) * tailSize
         val p2 = tailPos + tailDirection.rotatedBy(-angle) * tailSize
         val middlePoint = position + tailDirection * radius * 1.0
@@ -276,7 +276,7 @@ class CanvasState(val canvas: HTMLCanvasElement) {
         if (valid) return
 
         clear()
-        for (shape in shapes.asReversed()) {
+        for (shape in shapes.reversed()) {
             shape.draw(this)
         }
         Kotlin.draw(this)
@@ -315,10 +315,10 @@ class Vector(val x: Double = 0.0, val y: Double = 0.0) {
     operator fun unaryMinus() = v(-x, -y)
     operator fun minus(v: Vector) = v(x - v.x, y - v.y)
     operator fun times(koef: Double) = v(x * koef, y * koef)
-    infix fun distanceTo(v: Vector) = sqrt((this - v).sqr)
+    infix fun distanceTo(v: Vector) = Math.sqrt((this - v).sqr)
     fun rotatedBy(theta: Double): Vector {
-        val sin = sin(theta)
-        val cos = cos(theta)
+        val sin = Math.sin(theta)
+        val cos = Math.cos(theta)
         return v(x * cos - y * sin, x * sin + y * cos)
     }
 
@@ -328,7 +328,7 @@ class Vector(val x: Double = 0.0, val y: Double = 0.0) {
     val sqr: Double
         get() = x * x + y * y
     val normalized: Vector
-        get() = this * (1.0 / sqrt(sqr))
+        get() = this * (1.0 / Math.sqrt(sqr))
 }
 
 fun main(args: Array<String>) {
@@ -342,5 +342,14 @@ fun main(args: Array<String>) {
             Unit
         }, 1000)
     }
+}
+
+fun <T> List<T>.reversed(): List<T> {
+    val result = mutableListOf<T>()
+    var i = size
+    while (i > 0) {
+        result.add(get(--i))
+    }
+    return result
 }
 
