@@ -52,7 +52,7 @@ dependencies {
     library tc("$root/kotlin-reflect.jar")
     library tc("$root/kotlin-test.jar")
     library tc("$root/kotlin-stdlib-jre8.jar")
-    library "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.1"
+    library "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.26.1"
 
     /**
      * ADD DEPENDENCIES TO KOTLIN 1.2.70 COMPILER
