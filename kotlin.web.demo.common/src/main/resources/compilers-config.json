@@ -20,14 +20,14 @@
     "stdlibVersion": "1.2.70",
     "buildType": "Kotlin_1270_CompilerAllPlugins",
     "build": "1.2.70-release-54",
-    "pluginBuild": "1.2.70-release-IJ2018.3-1",
-    "latestStable": true
+    "pluginBuild": "1.2.70-release-IJ2018.3-1"
   },
   {
     "version": "1.3-RC",
     "stdlibVersion": "1.3-rc",
     "buildType": "Kotlin_130_CompilerAllPlugins",
     "build": "1.3.0-rc-51",
-    "pluginBuild": "1.3.0-rc-51-IJ2018.3-1"
+    "pluginBuild": "1.3.0-rc-51-IJ2018.3-1",
+    "latestStable": true
   }
 ]
