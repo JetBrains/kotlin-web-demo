@@ -19,38 +19,8 @@
       <module name="1.1.2_test" target="1.7" />
       <module name="1.1.3_main" target="1.7" />
       <module name="1.1.3_test" target="1.7" />
-      <module name="1.1.4_main" target="1.7" />
-      <module name="1.1.4_test" target="1.7" />
-      <module name="1.1.50_main" target="1.7" />
-      <module name="1.1.50_test" target="1.7" />
-      <module name="1.1.60_main" target="1.8" />
-      <module name="1.1.60_test" target="1.8" />
-      <module name="1.2.10_main" target="1.7" />
-      <module name="1.2.10_test" target="1.7" />
-      <module name="1.2.21_main" target="1.8" />
-      <module name="1.2.21_test" target="1.8" />
-      <module name="1.2.30_main" target="1.8" />
-      <module name="1.2.30_test" target="1.8" />
-      <module name="1.2.31_main" target="1.8" />
-      <module name="1.2.31_test" target="1.8" />
-      <module name="1.2.40_main" target="1.8" />
-      <module name="1.2.40_test" target="1.8" />
-      <module name="1.2.41_main" target="1.8" />
-      <module name="1.2.41_test" target="1.8" />
-      <module name="1.2.50_main" target="1.8" />
-      <module name="1.2.50_test" target="1.8" />
-      <module name="1.2.51_main" target="1.8" />
-      <module name="1.2.51_test" target="1.8" />
-      <module name="1.2.60_main" target="1.8" />
-      <module name="1.2.60_test" target="1.8" />
-      <module name="1.2.61_main" target="1.8" />
-      <module name="1.2.61_test" target="1.8" />
-      <module name="1.2.70_main" target="1.8" />
-      <module name="1.2.70_test" target="1.8" />
-      <module name="1.3-M1_main" target="1.8" />
-      <module name="1.3-M1_test" target="1.8" />
-      <module name="1.3-M2_main" target="1.8" />
-      <module name="1.3-M2_test" target="1.8" />
+      <module name="1.2.71_main" target="1.8" />
+      <module name="1.2.71_test" target="1.8" />
       <module name="1.3-RC_main" target="1.8" />
       <module name="1.3-RC_test" target="1.8" />
       <module name="compilers_main" target="1.8" />
