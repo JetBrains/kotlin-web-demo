@@ -111,6 +111,9 @@ public class ExecutorUtils {
     }
 
     private static ExecutionResult parseOutput(ProgramOutput programOutput, boolean isJunit) throws IOException {
+        // skip result before '{'. Coroutines can produce invalid input.
+        int indexOfRightBracket = programOutput.getStandardOutput().indexOf("{");
+        programOutput.setStandardOutput(programOutput.getStandardOutput().substring(indexOfRightBracket));
         if (!isJunit || programOutput.getRestriction()) {
             return new ObjectMapper().readValue(programOutput.getStandardOutput(), JavaExecutionResult.class);
         } else {
