@@ -66,6 +66,7 @@ dependencies {
     kotlinJVM tc("$root/kotlin-stdlib-jdk7.jar")
     kotlinJVM tc("$root/kotlin-stdlib-jdk8.jar")
     kotlinJVM tc("$kotlinBuildType:$kotlinBuild:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
+    kotlinJVM tc("$root/kotlin-reflect.jar")
     kotlinJS tc("$root/kotlin-stdlib-js.jar")
 
     library tc("$root/kotlin-reflect.jar")
