@@ -43,14 +43,12 @@ import com.intellij.psi.meta.MetaDataContributor
 import com.intellij.psi.stubs.BinaryFileStubBuilders
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
+import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
-import org.jetbrains.kotlin.config.CommonConfigurationKeys
-import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.config.JVMConfigurationKeys
-import org.jetbrains.kotlin.config.TargetPlatformVersion
+import org.jetbrains.kotlin.config.*
 import org.jetbrains.kotlin.js.config.JSConfigurationKeys
 import org.jetbrains.kotlin.utils.PathUtil
 import org.jetbrains.webdemo.CommonSettings
@@ -63,6 +61,21 @@ object EnvironmentManager {
     private var registry: Getter<FileTypeRegistry>? = null
     private var environment: KotlinCoreEnvironment? = null
     private val disposable = Disposable { }
+
+    /**
+     * This list allows to configure behavior of webdemo compiler. Its effect is equivalent
+     * to passing this list of string to CLI compiler.
+     *
+     * See [org.jetbrains.kotlin.cli.common.arguments.CommonCompilerArguments] and
+     * [org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments] for list of possible flags
+     */
+    private val additionalCompilerArguments: List<String> = listOf(
+            "-Xuse-experimental=kotlin.Experimental",
+            "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes",
+            "-Xuse-experimental=kotlin.contracts.ExperimentalContracts",
+            "-Xuse-experimental=kotlin.experimental.ExperimentalTypeInference",
+            "-XXLanguage:+InlineClasses"
+    )
 
     val languageVersion: TargetPlatformVersion
         get() = TargetPlatformVersion.NoVersion
@@ -101,6 +114,7 @@ object EnvironmentManager {
 
     private fun createEnvironment(libraries: List<Path>): KotlinCoreEnvironment {
         val arguments = K2JVMCompilerArguments()
+        parseCommandLineArguments(additionalCompilerArguments, arguments)
         val configuration = CompilerConfiguration()
 
         configuration.addJvmClasspathRoots(getClasspath(arguments, libraries))
@@ -114,6 +128,9 @@ object EnvironmentManager {
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "kotlinWebDemo")
 
         configuration.put(JSConfigurationKeys.TYPED_ARRAYS_ENABLED, true)
+
+        configuration.languageVersionSettings =
+                arguments.configureLanguageVersionSettings(configuration[CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY]!!)
 
         val environment = KotlinCoreEnvironment.createForTests(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
         val project = environment.project as MockProject

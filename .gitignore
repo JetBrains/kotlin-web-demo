@@ -25,3 +25,5 @@ kotlin.web.demo.test/resources/js
 lib/kotlin-plugin/Kotlin
 /kotlin.web.demo.frontend/static/index.js
 build
+.gradle
+package-lock.json
