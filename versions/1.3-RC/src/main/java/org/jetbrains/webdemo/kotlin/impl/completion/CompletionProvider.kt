@@ -299,7 +299,10 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
 
     // see DescriptorLookupConverter.createLookupElement
     private fun getPresentableText(descriptor: DeclarationDescriptor): Pair<String, String> {
-        var presentableText = descriptor.name.asString()
+        var presentableText = if (descriptor is ConstructorDescriptor)
+            descriptor.constructedClass.name.asString()
+        else
+            descriptor.name.asString()
         var typeText = ""
         var tailText = ""
 
