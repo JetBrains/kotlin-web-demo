@@ -261,8 +261,8 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
     private val VISIBILITY_FILTER = fun(descriptor: DeclarationDescriptor): Boolean {
         return true
     }
-    private val NAME_FILTER = fun(name: Name): Boolean {
-        return true
+    private val NAME_FILTER = { name: Name ->
+        !name.isSpecial
     }
 
     // see DescriptorLookupConverter.createLookupElement
