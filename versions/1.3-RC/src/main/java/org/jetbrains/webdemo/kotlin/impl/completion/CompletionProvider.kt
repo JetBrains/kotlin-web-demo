@@ -157,7 +157,7 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
                 })
 
                 for (descriptor in descriptors) {
-                    val presentableText = getPresentableText(descriptor)
+                    val presentableText = getPresentableText(descriptor, element.isCallableReference())
 
                     val fullName = formatName(presentableText.getFirst(), NUMBER_OF_CHAR_IN_COMPLETION_NAME)
                     var completionText = fullName
@@ -298,7 +298,10 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
     }
 
     // see DescriptorLookupConverter.createLookupElement
-    private fun getPresentableText(descriptor: DeclarationDescriptor): Pair<String, String> {
+    private fun getPresentableText(
+            descriptor: DeclarationDescriptor,
+            isCallableReferenceCompletion: Boolean = false
+    ): Pair<String, String> {
         var presentableText = if (descriptor is ConstructorDescriptor)
             descriptor.constructedClass.name.asString()
         else
@@ -309,7 +312,9 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
         if (descriptor is FunctionDescriptor) {
             val returnType = descriptor.returnType
             typeText = if (returnType != null) RENDERER.renderType(returnType) else ""
-            presentableText += RENDERER.renderFunctionParameters(descriptor)
+
+            if (!isCallableReferenceCompletion)
+                presentableText += RENDERER.renderFunctionParameters(descriptor)
 
             val extensionFunction = descriptor.extensionReceiverParameter != null
             val containingDeclaration = descriptor.containingDeclaration
@@ -333,6 +338,9 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
             Pair(presentableText, typeText)
         }
     }
+
+    private fun KtElement.isCallableReference() =
+            parent is KtCallableReferenceExpression && this == (parent as KtCallableReferenceExpression).callableReference
 
     companion object {
         private val excludedFromCompletion: List<String> = listOf(
