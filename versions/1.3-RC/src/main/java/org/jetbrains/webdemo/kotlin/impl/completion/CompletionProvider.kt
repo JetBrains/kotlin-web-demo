@@ -78,29 +78,24 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
     fun getResult(isJs: Boolean): List<CompletionVariant> {
         try {
             addExpressionAtCaret()
-            val analysisResult: AnalysisResult
-            val bindingContext: BindingContext
-            val containerProvider: ComponentProvider
-            if (!isJs) {
-                val resolveResult = ResolveUtils.analyzeFileForJvm(psiFiles, currentProject)
-                analysisResult = resolveResult.first
-                bindingContext = analysisResult.bindingContext
+            val resolveResult = if (!isJs)
+                ResolveUtils.analyzeFileForJvm(psiFiles, currentProject)
+            else
+                ResolveUtils.analyzeFileForJs(psiFiles, currentProject)
 
-                containerProvider = resolveResult.getSecond()
-            } else {
-                val resolveResult = ResolveUtils.analyzeFileForJs(psiFiles, currentProject)
-                analysisResult = resolveResult.first
-                bindingContext = analysisResult.bindingContext
-                containerProvider = resolveResult.getSecond()
-            }
+            val analysisResult = resolveResult.first
+            val containerProvider = resolveResult.second
+            val bindingContext = analysisResult.bindingContext
+            val moduleDescriptor = analysisResult.moduleDescriptor
 
             val element = expressionForScope ?: return emptyList()
             var descriptors: Collection<DeclarationDescriptor>? = null
             var isTipsManagerCompletion = true
+            val resolutionFacade = KotlinResolutionFacade(containerProvider, moduleDescriptor)
 
             val helper = ReferenceVariantsHelper(
                     bindingContext,
-                    KotlinResolutionFacade(containerProvider),
+                    resolutionFacade,
                     analysisResult.moduleDescriptor,
                     VISIBILITY_FILTER,
                     emptySet()
