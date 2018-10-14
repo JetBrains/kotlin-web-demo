@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager
 
-class KotlinResolutionFacade(private val provider: ComponentProvider?) : ResolutionFacade {
+class KotlinResolutionFacade(private val provider: ComponentProvider?, override val moduleDescriptor: ModuleDescriptor) : ResolutionFacade {
 
     override fun <T : Any> getFrontendService(element: PsiElement, serviceClass: Class<T>): T {
         throw UnsupportedOperationException()
@@ -55,9 +55,6 @@ class KotlinResolutionFacade(private val provider: ComponentProvider?) : Resolut
 
     override val project: Project
         get() = EnvironmentManager.getEnvironment().project
-
-    override val moduleDescriptor: ModuleDescriptor
-        get() = throw UnsupportedOperationException()
 
     override fun analyze(element: KtElement, bodyResolveMode: BodyResolveMode): BindingContext {
         throw UnsupportedOperationException()
