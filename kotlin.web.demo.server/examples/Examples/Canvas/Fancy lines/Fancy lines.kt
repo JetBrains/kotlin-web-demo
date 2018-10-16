@@ -6,13 +6,12 @@ Note that only a subset of the api is supported for now.
 
 package fancylines
 
-
 import jquery.*
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document
 import kotlin.browser.window
-import kotlin.js.Math
+import kotlin.random.*
 
 fun main(args: Array<String>) {
     jq {
@@ -32,27 +31,29 @@ fun initalizeCanvas(): HTMLCanvasElement {
 
 class FancyLines() {
     val context = canvas.getContext("2d") as CanvasRenderingContext2D
-    val height = canvas.height
-    val width = canvas.width
-    var x = width * Math.random()
-    var y = height * Math.random()
-    var hue = 0;
+    val height = canvas.height.toDouble()
+    val width = canvas.width.toDouble()
+    fun nextX() = Random.nextDouble(width)
+    fun nextY() = Random.nextDouble(height)
+    var x = nextX()
+    var y = nextY()
+    var hue = 0
 
     fun line() {
         context.save();
 
         context.beginPath();
 
-        context.lineWidth = 20.0 * Math.random();
+        context.lineWidth = Random.nextDouble(20.0)
         context.moveTo(x, y);
 
-        x = width * Math.random();
-        y = height * Math.random();
+        x = nextX()
+        y = nextY()
 
-        context.bezierCurveTo(width * Math.random(), height * Math.random(),
-                width * Math.random(), height * Math.random(), x, y);
+        context.bezierCurveTo(nextX(), nextY(),
+                nextX(), nextY(), x, y)
 
-        hue += (Math.random() * 10).toInt();
+        hue += Random.nextInt(10)
 
         context.strokeStyle = "hsl($hue, 50%, 50%)";
 
@@ -66,7 +67,7 @@ class FancyLines() {
 
     fun blank() {
         context.fillStyle = "rgba(255,255,1,0.1)";
-        context.fillRect(0.0, 0.0, width.toDouble(), height.toDouble());
+        context.fillRect(0.0, 0.0, width, height);
     }
 
     fun run() {

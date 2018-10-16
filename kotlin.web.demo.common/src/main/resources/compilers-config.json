@@ -16,18 +16,18 @@
     "useCompilerBeforeShrink": false
   },
   {
-    "version": "1.2.61",
-    "stdlibVersion": "1.2.61",
-    "buildType": "Kotlin_1260_CompilerAllPlugins",
-    "build": "1.2.89-release-89",
-    "pluginBuild": "1.2.61-release-IJ2018.2-1",
+    "version": "1.2.71",
+    "stdlibVersion": "1.2.71",
+    "buildType": "Kotlin_1270_CompilerAllPlugins",
+    "build": "1.2.71-release-64",
+    "pluginBuild": "1.2.71-release-IJ2018.3-1",
     "latestStable": true
   },
   {
-    "version": "1.3-M2",
-    "stdlibVersion": "1.3-M2",
-    "buildType": "Kotlin_13M2_CompilerAllPlugins",
-    "build": "1.3-M2-release-165",
-    "pluginBuild": "1.3-M2-release-IJ2018.2-1"
+    "version": "1.3-RC",
+    "stdlibVersion": "1.3-rc",
+    "buildType": "Kotlin_130_CompilerAllPlugins",
+    "build": "1.3.0-rc-51",
+    "pluginBuild": "1.3.0-rc-51-IJ2018.3-1"
   }
 ]

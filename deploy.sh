@@ -6,6 +6,8 @@ git checkout master
 
 git pull
 
+sh gradlew ::copyKotlinLibs
+
 sh gradlew clean
 
 sh gradlew war

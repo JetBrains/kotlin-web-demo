@@ -39,8 +39,6 @@ cd try.arrow-kt.io/
 
 sh gradlew
 
-sh gradlew ::copyKotlinLibs
-
 mkdir ./docker/frontend/war/
 
 mkdir ./docker/backend/war/

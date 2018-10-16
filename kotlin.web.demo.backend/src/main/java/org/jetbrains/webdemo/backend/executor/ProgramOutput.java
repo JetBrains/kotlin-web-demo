@@ -28,6 +28,10 @@ public class ProgramOutput {
         this.restriction = restriction;
     }
 
+    public void setStandardOutput(String standardOutput) {
+        this.standardOutput = standardOutput;
+    }
+
     String getStandardOutput() {
         return standardOutput;
     }

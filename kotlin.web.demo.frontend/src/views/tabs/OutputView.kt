@@ -68,7 +68,7 @@ class OutputView(val element: HTMLElement) {
                     val element = document.create.div {
                         classes = setOf("error-output")
                         +"Hey! It seems you just found a bug! \uD83D\uDC1E \nPlease click "
-                        a(href = "https://youtrack.jetbrains.com/newIssue?draftId=25-2077811", target = "_blank") { +"here" }
+                        a(href = "http://kotl.in/issue", target = "_blank") { +"here" }
                         +" to submit it to the issue tracker and one day we fix it, hopefully \uD83D\uDE09\n✅ Don't forget to attach code to the issue"
                     }
                     spanElement.append(element)
