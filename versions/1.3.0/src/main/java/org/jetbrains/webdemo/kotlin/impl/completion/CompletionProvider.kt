@@ -76,6 +76,7 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
         this.currentDocument = currentPsiFile!!.viewProvider.document
     }
 
+    @Synchronized
     fun getResult(isJs: Boolean): List<CompletionVariant> {
         try {
             addExpressionAtCaret()
