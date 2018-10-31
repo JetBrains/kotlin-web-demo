@@ -53,6 +53,7 @@ import java.util.*
 
 class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: String, private val lineNumber: Int, private val charNumber: Int) {
     private val NUMBER_OF_CHAR_IN_COMPLETION_NAME = 40
+    private val NUMBER_OF_CHAR_IN_TAIL = 60
     private val currentProject: Project
     private var currentPsiFile: KtFile? = null
     private var currentDocument: Document? = null
@@ -180,7 +181,9 @@ class CompletionProvider(private val psiFiles: MutableList<KtFile>, filename: St
                     }
 
                     if (prefix.isEmpty() || fullName.startsWith(prefix)) {
-                        val completionVariant = CompletionVariant(completionText, fullName, presentableText.getSecond(), getIconFromDescriptor(descriptor))
+                        val completionVariant = CompletionVariant(completionText, fullName,
+                                formatName(presentableText.getSecond(), NUMBER_OF_CHAR_IN_TAIL),
+                                getIconFromDescriptor(descriptor))
                         result.add(completionVariant)
                     }
                 }
