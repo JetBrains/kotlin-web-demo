@@ -75,7 +75,7 @@ dependencies {
     library tc("$root/kotlin-stdlib-jdk7.jar")
     library tc("$root/kotlin-stdlib-jdk8.jar")
     library tc("$root/kotlin-test.jar")
-    library("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.26.1-eap13") {
+    library("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0") {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
     }
     /**
