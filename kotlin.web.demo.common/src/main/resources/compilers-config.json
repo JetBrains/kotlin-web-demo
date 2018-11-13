@@ -29,12 +29,5 @@
     "build": "1.3.10-release-253",
     "pluginBuild": "1.3.10-release-IJ2018.3-1",
     "latestStable": true
-  },
-  {
-    "version": "1.3.0",
-    "stdlibVersion": "1.3.0",
-    "buildType": "Kotlin_130_CompilerAllPlugins",
-    "build": "1.3.0-release-208",
-    "pluginBuild": "1.3.0-release-IJ2018.3-1"
   }
 ]

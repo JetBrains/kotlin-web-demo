@@ -16,6 +16,17 @@
 @file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl
 
+import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analyzer.AnalysisResult
+import org.jetbrains.kotlin.container.ComponentProvider
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.descriptors.ModuleDescriptor
+import org.jetbrains.kotlin.idea.resolve.ResolutionFacade
+import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager
 
 class KotlinResolutionFacade(private val provider: ComponentProvider?, override val moduleDescriptor: ModuleDescriptor) : ResolutionFacade {
