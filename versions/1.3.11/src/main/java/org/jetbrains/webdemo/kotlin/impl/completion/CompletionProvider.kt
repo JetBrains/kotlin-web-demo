@@ -16,6 +16,34 @@
 @file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl.completion
 
+import com.intellij.openapi.editor.Document
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Pair
+import com.intellij.psi.PsiElement
+import com.intellij.psi.tree.TokenSet
+import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
+import org.jetbrains.kotlin.descriptors.impl.TypeParameterDescriptorImpl
+import org.jetbrains.kotlin.idea.codeInsight.ReferenceVariantsHelper
+import org.jetbrains.kotlin.idea.core.isVisible
+import org.jetbrains.kotlin.idea.imports.importableFqName
+import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers
+import org.jetbrains.kotlin.idea.util.getResolutionScope
+import org.jetbrains.kotlin.lexer.KtKeywordToken
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.renderer.ClassifierNamePolicy
+import org.jetbrains.kotlin.renderer.ParameterNameRenderingPolicy
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.DescriptorUtils
+import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
+import org.jetbrains.kotlin.resolve.scopes.LexicalScope
+import org.jetbrains.kotlin.resolve.scopes.MemberScope
+import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.asFlexibleType
+import org.jetbrains.kotlin.types.expressions.KotlinTypeInfo
+import org.jetbrains.kotlin.types.isFlexible
 import org.jetbrains.webdemo.kotlin.datastructures.CompletionVariant
 import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException
 import org.jetbrains.webdemo.kotlin.impl.JetPsiFactoryUtil
