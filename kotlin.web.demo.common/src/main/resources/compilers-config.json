@@ -23,11 +23,11 @@
     "pluginBuild": "1.2.71-release-IJ2018.3-1"
   },
   {
-    "version": "1.3.11",
-    "stdlibVersion": "1.3.11",
-    "buildType": "Kotlin_130_CompilerAllPlugins",
-    "build": "1.3.11-release-272",
-    "pluginBuild": "1.3.10-release-IJ2018.3-1",
+    "version": "1.3.20",
+    "stdlibVersion": "1.3.20",
+    "buildType": "Kotlin_1320_CompilerAllPlugins",
+    "build": "1.3.20-release-114",
+    "pluginBuild": "1.3.20-release-IJ2018.3-1",
     "latestStable": true
   }
 ]
