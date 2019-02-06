@@ -19,7 +19,6 @@
 package org.jetbrains.webdemo.kotlin.impl
 
 
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.webdemo.KotlinVersionConfig
 import org.jetbrains.webdemo.kotlin.KotlinWrapper
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager

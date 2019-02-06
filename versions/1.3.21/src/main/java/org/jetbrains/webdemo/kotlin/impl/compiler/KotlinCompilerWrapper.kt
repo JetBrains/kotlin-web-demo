@@ -16,14 +16,6 @@
 @file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl.compiler
 
-import com.intellij.openapi.project.Project
-import org.jetbrains.kotlin.codegen.KotlinCodegenFacade
-import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
-import org.jetbrains.kotlin.idea.MainFunctionDetector
-import org.jetbrains.kotlin.load.kotlin.PackagePartClassUtils
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.webdemo.kotlin.datastructures.CompilationResult
 import org.jetbrains.webdemo.kotlin.exceptions.KotlinCompileException
 import org.jetbrains.webdemo.kotlin.impl.ResolveUtils

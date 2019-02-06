@@ -16,20 +16,13 @@
 @file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl.translator
 
-import org.jetbrains.kotlin.config.CommonConfigurationKeys
-import org.jetbrains.kotlin.js.config.JSConfigurationKeys
-import org.jetbrains.kotlin.js.config.JsConfig
-import org.jetbrains.kotlin.js.facade.K2JSTranslator
-import org.jetbrains.kotlin.js.facade.MainCallParameters
-import org.jetbrains.kotlin.js.facade.TranslationResult
-import org.jetbrains.kotlin.js.facade.exceptions.TranslationException
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor
 import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException
 import org.jetbrains.webdemo.kotlin.impl.WrapperSettings
 import org.jetbrains.webdemo.kotlin.impl.analyzer.ErrorAnalyzer
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager
 import java.util.*
+
 object WebDemoTranslatorFacade {
 
     fun translateProjectWithCallToMain(files: List<KtFile>, arguments: Array<String>): org.jetbrains.webdemo.kotlin.datastructures.TranslationResult {
