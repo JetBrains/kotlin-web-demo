@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2018 JetBrains s.r.o.
+ * Copyright 2000-2019 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,40 @@
 
 package org.jetbrains.webdemo.kotlin.impl.environment
 
+import com.google.common.collect.Lists
+import com.intellij.codeInsight.ContainerProvider
+import com.intellij.codeInsight.NullabilityAnnotationInfo
+import com.intellij.codeInsight.NullableNotNullManager
+import com.intellij.codeInsight.runner.JavaMainMethodProvider
+import com.intellij.core.CoreApplicationEnvironment
+import com.intellij.mock.MockProject
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.extensions.Extensions
+import com.intellij.openapi.extensions.ExtensionsArea
+import com.intellij.openapi.fileTypes.FileTypeExtensionPoint
+import com.intellij.openapi.fileTypes.FileTypeRegistry
+import com.intellij.openapi.util.Getter
+import com.intellij.psi.FileContextProvider
+import com.intellij.psi.PsiAnnotation
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiModifierListOwner
+import com.intellij.psi.augment.PsiAugmentProvider
+import com.intellij.psi.codeStyle.CodeStyleManager
+import com.intellij.psi.compiled.ClassFileDecompilers
+import com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy
+import com.intellij.psi.meta.MetaDataContributor
+import com.intellij.psi.stubs.BinaryFileStubBuilders
+import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
+import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
+import org.jetbrains.kotlin.cli.common.messages.MessageCollector
+import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
+import org.jetbrains.kotlin.config.*
+import org.jetbrains.kotlin.js.config.JSConfigurationKeys
+import org.jetbrains.kotlin.utils.PathUtil
 import org.jetbrains.webdemo.CommonSettings
 import org.jetbrains.webdemo.kotlin.idea.DummyCodeStyleManager
 import java.io.File

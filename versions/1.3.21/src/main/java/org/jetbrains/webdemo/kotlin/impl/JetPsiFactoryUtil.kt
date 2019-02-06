@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2018 JetBrains s.r.o.
+ * Copyright 2000-2019 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,14 @@
  */
 @file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl
+
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.CharsetToolkit
+import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.impl.PsiFileFactoryImpl
+import com.intellij.testFramework.LightVirtualFile
+import org.jetbrains.kotlin.idea.KotlinLanguage
+import org.jetbrains.kotlin.psi.KtFile
 
 object JetPsiFactoryUtil {
 

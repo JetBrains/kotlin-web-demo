@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2018 JetBrains s.r.o.
+ * Copyright 2000-2019 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,12 @@
 
 package org.jetbrains.webdemo.kotlin.impl.converter
 
+import com.intellij.lang.java.JavaLanguage
+import com.intellij.psi.*
+import org.jetbrains.kotlin.j2k.ConverterSettings
+import org.jetbrains.kotlin.j2k.EmptyJavaToKotlinServices
+import org.jetbrains.kotlin.j2k.JavaToKotlinConverter
+import org.jetbrains.kotlin.j2k.JavaToKotlinTranslator
 import org.jetbrains.webdemo.kotlin.impl.ResolveUtils
 import org.jetbrains.webdemo.kotlin.impl.environment.EnvironmentManager
 import java.lang.reflect.InvocationTargetException

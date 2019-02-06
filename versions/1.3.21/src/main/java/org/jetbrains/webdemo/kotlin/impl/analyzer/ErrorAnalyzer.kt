@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2018 JetBrains s.r.o.
+ * Copyright 2000-2019 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,17 @@
 @file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl.analyzer
 
+import com.intellij.openapi.editor.Document
+import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.PsiErrorElement
+import com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.diagnostics.Diagnostic
+import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.diagnostics.Severity
+import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor
 import org.jetbrains.webdemo.kotlin.datastructures.TextInterval
 import org.jetbrains.webdemo.kotlin.datastructures.TextPosition

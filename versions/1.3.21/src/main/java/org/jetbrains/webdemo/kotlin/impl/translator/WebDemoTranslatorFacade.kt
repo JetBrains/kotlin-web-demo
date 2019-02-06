@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2018 JetBrains s.r.o.
+ * Copyright 2000-2019 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,14 @@
 @file:Suppress("PRE_RELEASE_CLASS")
 package org.jetbrains.webdemo.kotlin.impl.translator
 
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
+import org.jetbrains.kotlin.js.config.JSConfigurationKeys
+import org.jetbrains.kotlin.js.config.JsConfig
+import org.jetbrains.kotlin.js.facade.K2JSTranslator
+import org.jetbrains.kotlin.js.facade.MainCallParameters
+import org.jetbrains.kotlin.js.facade.TranslationResult
+import org.jetbrains.kotlin.js.facade.exceptions.TranslationException
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.webdemo.kotlin.datastructures.ErrorDescriptor
 import org.jetbrains.webdemo.kotlin.exceptions.KotlinCoreException
 import org.jetbrains.webdemo.kotlin.impl.WrapperSettings

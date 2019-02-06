@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2018 JetBrains s.r.o.
+ * Copyright 2000-2019 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 package org.jetbrains.webdemo.kotlin.impl
 
 
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.webdemo.KotlinVersionConfig
 import org.jetbrains.webdemo.kotlin.KotlinWrapper
 import org.jetbrains.webdemo.kotlin.KotlinWrappersManager
@@ -64,17 +65,6 @@ class KotlinWrapperImpl : KotlinWrapper {
 
     override fun compileKotlinToJS(files: Map<String, String>, args: Array<String>): TranslationResult {
         val ktFiles = createPsiFiles(files)
-//        runBlocking {
-//            repeat(100) { // launch a lot of coroutines
-//                launch {
-//                    try {
-//                        WebDemoTranslatorFacade.translateProjectWithCallToMain(ktFiles, args)
-//                    } catch (e: Exception) {
-//                        println(e)
-//                    }
-//                }
-//            }
-//        }
         return WebDemoTranslatorFacade.translateProjectWithCallToMain(ktFiles, args)
     }
 
