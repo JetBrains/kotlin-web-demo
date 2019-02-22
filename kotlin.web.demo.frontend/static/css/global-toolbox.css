@@ -49,7 +49,7 @@
 }
 
 .icon.facebook {
-    background: url("/static/images/icons_all_sprite.svg") no-repeat -200px -0px;
+    background: url("/static/images/fb_icon.svg") no-repeat;
 }
 
 .icon.google {
