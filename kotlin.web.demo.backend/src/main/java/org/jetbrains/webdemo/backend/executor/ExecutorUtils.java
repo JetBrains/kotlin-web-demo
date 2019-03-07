@@ -34,9 +34,9 @@ import java.util.Random;
 public class ExecutorUtils {
     private static List<Path> jarFiles = Arrays.asList(
             Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "kotlin.web.demo.executors.jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-databind-2.9.5.jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-core-2.9.5.jar"),
-            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-annotations-2.9.5.jar")
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-databind-2.9.8.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-core-2.9.8.jar"),
+            Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "jackson-annotations-2.9.8.jar")
     );
     private static Path junit = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "junit-4.12.jar");
     private static Path hamcrest = Paths.get(BackendSettings.EXECUTORS_LIBS_DIR, "hamcrest-core-1.3.jar");

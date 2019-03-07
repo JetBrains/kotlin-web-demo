@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2019 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-/**
- * Created by Semyon.Atamas on 8/12/2014.
- */
 package org.jetbrains.webdemo.executors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Test;
-import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Request;
@@ -31,7 +26,6 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
 import java.io.*;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,13 +45,13 @@ public class JunitExecutor {
             List<Class> classes = getAllClassesFromTheDir(new File(args[0]));
             for (Class cl : classes) {
                 boolean hasTestMethods = false;
-                for(Method method : cl.getMethods()) {
-                    if(method.isAnnotationPresent(Test.class)){
+                for (Method method : cl.getMethods()) {
+                    if (method.isAnnotationPresent(Test.class)) {
                         hasTestMethods = true;
                         break;
                     }
                 }
-                if(!hasTestMethods) continue;
+                if (!hasTestMethods) continue;
 
                 Request request = Request.aClass(cl);
                 jUnitCore.run(request);

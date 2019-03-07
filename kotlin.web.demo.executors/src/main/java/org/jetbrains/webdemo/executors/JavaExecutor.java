@@ -1,5 +1,6 @@
-package org.jetbrains.webdemo.executors;/*
- * Copyright 2000-2014 JetBrains s.r.o.
+package org.jetbrains.webdemo.executors;
+/*
+ * Copyright 2000-2019 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +24,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-/**
- * Created by Semyon.Atamas on 11/27/2014.
- */
 public class JavaExecutor {
     private static ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private static ErrorStream errorOutputStream = new ErrorStream(outputStream);
@@ -68,7 +66,8 @@ public class JavaExecutor {
             System.out.print(objectMapper.writeValueAsString(outputObj));
         } catch (Throwable e) {
             System.setOut(defaultOutputStream);
-            System.out.println("{\"text\":\"<errStream>" + e.getClass().getName() + ": " + e.getMessage());
+            System.out.println("{\"text\":\"<errStream>" + e.getClass().getName() + ": " + e.getMessage() + e.getCause().toString());
+            e.printStackTrace();
             System.out.print("</errStream>\"}");
         }
 

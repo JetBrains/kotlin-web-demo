@@ -1,5 +1,6 @@
-package org.jetbrains.webdemo.executors;/*
- * Copyright 2000-2014 JetBrains s.r.o.
+package org.jetbrains.webdemo.executors;
+/*
+ * Copyright 2000-2019 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +16,15 @@ package org.jetbrains.webdemo.executors;/*
  */
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 
-/**
- * Created by Semyon.Atamas on 11/27/2014.
- */
-
 public class ThrowableSerializer extends JsonSerializer<Throwable> {
 
     @Override
-    public void serialize(Throwable throwable, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(Throwable throwable, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("message", throwable.getMessage());
         jsonGenerator.writeStringField("fullName", throwable.getClass().getName());

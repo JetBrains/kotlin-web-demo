@@ -55,9 +55,9 @@ configure(allprojects.findAll({
     }
 
     dependencies {
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.5', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5', transitive: true
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.5', transitive: true
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8', transitive: true
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8', transitive: true
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8', transitive: true
         compile 'commons-logging:commons-logging:1.2'
     }
 }
@@ -72,7 +72,7 @@ configure([
 ]) {
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.5"
+        compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
     }
 }
 
