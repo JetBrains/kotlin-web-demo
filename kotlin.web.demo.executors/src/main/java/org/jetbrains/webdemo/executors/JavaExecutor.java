@@ -66,7 +66,7 @@ public class JavaExecutor {
             System.out.print(objectMapper.writeValueAsString(outputObj));
         } catch (Throwable e) {
             System.setOut(defaultOutputStream);
-            System.out.println("{\"text\":\"<errStream>" + e.getClass().getName() + ": " + e.getMessage() + e.getCause().toString());
+            System.out.println("{\"text\":\"<errStream>" + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
             System.out.print("</errStream>\"}");
         }
