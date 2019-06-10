@@ -19,7 +19,7 @@ package views
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.events.Event
 import providers.LoginProvider
-import utils.decodeURI
+import utils.decodeURIComponent
 import utils.jquery.jq
 import kotlin.browser.document
 import kotlin.js.json
@@ -33,7 +33,7 @@ class LoginView(val loginModel: LoginProvider) {
             jq("#logout").show()
 
             isLoggedIn = true
-            var decodedUserName = decodeURI(userName)
+            var decodedUserName = decodeURIComponent(userName)
             decodedUserName = decodedUserName.replace("+", " ")
 
             jq("#username").text(decodedUserName)

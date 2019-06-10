@@ -37,4 +37,9 @@
     <Environment name="github_secret" value="" type="java.lang.String" override="false"/>
 
     <Environment name="jba_secret" value="" type="java.lang.String" override="false"/>
+
+    <Environment name="azure_key" value="" type="java.lang.String" override="false"/>
+    <Environment name="azure_secret" value="" type="java.lang.String" override="false"/>
+    <Environment name="azure_tenant" value="" type="java.lang.String" override="false"/>
+
 </Context>

@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS dbinfo (
 CREATE TABLE IF NOT EXISTS users (
   id        INT                                    NOT NULL PRIMARY KEY AUTO_INCREMENT,
   client_id VARCHAR(45)                            NOT NULL,
-  provider  ENUM ('google', 'twitter', 'facebook', 'github', 'jba') NOT NULL,
+  provider  ENUM ('google', 'twitter', 'facebook', 'github', 'jba', 'azure') NOT NULL,
   username VARCHAR(100) NOT NULL             DEFAULT '',
   CONSTRAINT client_id UNIQUE (client_id, provider)
 );

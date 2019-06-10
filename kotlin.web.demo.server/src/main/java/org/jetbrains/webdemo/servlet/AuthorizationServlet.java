@@ -57,6 +57,9 @@ public class AuthorizationServlet extends HttpServlet {
         try {
             InitialContext initialContext = new InitialContext();
             Context envCtx = (Context) initialContext.lookup("java:comp/env");
+            CommandRunner.setServerSettingFromTomcatConfig("azure_key", (String) envCtx.lookup("azure_key"));
+            CommandRunner.setServerSettingFromTomcatConfig("azure_secret", (String) envCtx.lookup("azure_secret"));
+            CommandRunner.setServerSettingFromTomcatConfig("azure_tenant", (String) envCtx.lookup("azure_tenant"));
             CommandRunner.setServerSettingFromTomcatConfig("google_key", (String) envCtx.lookup("google_key"));
             CommandRunner.setServerSettingFromTomcatConfig("google_secret", (String) envCtx.lookup("google_secret"));
             CommandRunner.setServerSettingFromTomcatConfig("twitter_key", (String) envCtx.lookup("twitter_key"));

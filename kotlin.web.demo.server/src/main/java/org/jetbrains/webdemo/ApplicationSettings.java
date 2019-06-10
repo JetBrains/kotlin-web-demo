@@ -27,6 +27,7 @@ public class ApplicationSettings {
     public static OauthCredentials FACEBOOK_OAUTH_CREDENTIALS = new OauthCredentials();
     public static OauthCredentials TWITTER_OAUTH_CREDENTIALS = new OauthCredentials();
     public static OauthCredentials JET_ACCOUNT_CREDENTIALS = new OauthCredentials();
+    public static AzureCredentials AZURE_OAUTH_CREDENTIALS = new AzureCredentials();
 
 
     private ApplicationSettings() {
@@ -38,5 +39,8 @@ public class ApplicationSettings {
         public String SECRET = "";
     }
 
+    public static class AzureCredentials extends OauthCredentials {
+        public String TENANT = "";
+    }
 
 }
