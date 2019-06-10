@@ -154,6 +154,6 @@ inline fun Window.eval(code: String): dynamic = asDynamic().eval(code)
 
 inline fun Window.getSelection(): dynamic = asDynamic().getSelection()
 
-external fun decodeURI(uri: String): String = definedExternally
+external fun decodeURIComponent(uri: String): String = definedExternally
 
 external fun encodeURIComponent(component: String): String = definedExternally
